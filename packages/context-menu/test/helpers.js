@@ -7,12 +7,7 @@ export function activateItem(target, event = isTouch ? 'click' : 'mouseover') {
 }
 
 export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') {
-  let menu = target.closest('vaadin-context-menu');
-  if (!menu) {
-    // If the target is a menu item, get reference to the submenu.
-    const overlay = target.closest('vaadin-context-menu-overlay');
-    menu = overlay.querySelector('vaadin-context-menu');
-  }
+  const menu = target.closest('vaadin-context-menu');
   // Disable logic that delays opening submenu
   menu.__openListenerActive = true;
   activateItem(target, event);
@@ -20,16 +15,16 @@ export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') 
 }
 
 export function getMenuItems(menu) {
-  return [...menu._overlayElement.querySelectorAll('[role="menu"] > :not([role="separator]"')];
+  return [...menu.querySelectorAll(':scope > [slot="overlay"] [role="menu"] > :not([role="separator]"')];
 }
 
 export function getSubMenu(menu) {
-  return menu._overlayElement.querySelector('vaadin-context-menu');
+  return menu.querySelector(':scope > vaadin-context-menu[slot="submenu"]');
 }
 
 export async function openSubMenus(menu) {
   await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
-  const itemElement = menu._overlayElement.querySelector('[aria-haspopup="true"]');
+  const itemElement = menu.querySelector(':scope > [slot="overlay"] [aria-haspopup="true"]');
   if (itemElement) {
     itemElement.dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
     const subMenu = getSubMenu(menu);

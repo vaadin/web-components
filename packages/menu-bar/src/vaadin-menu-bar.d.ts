@@ -65,7 +65,7 @@ export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
  * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
  * - `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
- * - `<vaadin-menu-bar-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-menu-bar-submenu>` - has the same API as [`<vaadin-context-menu>`](#/elements/vaadin-context-menu).
  *
  * The `<vaadin-menu-bar-item>` sub-menu elements have the following additional state attributes
  * on top of the built-in `<vaadin-item>` state attributes:
@@ -73,9 +73,6 @@ export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
  * Attribute  | Description
  * ---------- |-------------
  * `expanded` | Expanded parent item.
- *
- * Note: the `theme` attribute value set on `<vaadin-menu-bar>` is
- * propagated to the internal components listed above.
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */

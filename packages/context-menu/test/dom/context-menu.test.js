@@ -12,7 +12,7 @@ function createComponent(textContent, { className }) {
 }
 
 describe('context-menu', () => {
-  let menu, overlay;
+  let menu;
 
   const SNAPSHOT_CONFIG = {
     // Some inline CSS styles related to the overlay's position
@@ -64,7 +64,6 @@ describe('context-menu', () => {
       </vaadin-context-menu>
     `);
     await nextRender();
-    overlay = menu._overlayElement;
   });
 
   it('items', async () => {
@@ -74,7 +73,7 @@ describe('context-menu', () => {
     await nextUpdate(menu);
     await nextRender();
 
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(menu).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('items nested', async () => {
@@ -84,11 +83,11 @@ describe('context-menu', () => {
     await openSubMenus(menu);
     await nextRender();
 
-    const subMenu = overlay.querySelector('vaadin-context-menu');
-    await expect(subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    const subMenu = menu.querySelector('vaadin-context-menu');
+    await expect(subMenu).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('items overlay class', async () => {
+  it('overlay class', async () => {
     menu.overlayClass = 'context-menu-overlay custom';
     menu.items = ITEMS;
 
@@ -99,7 +98,7 @@ describe('context-menu', () => {
     await expect(menu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('items overlay class nested', async () => {
+  it('overlay class nested', async () => {
     menu.overlayClass = 'context-menu-overlay custom';
     menu.items = ITEMS;
 
@@ -107,7 +106,7 @@ describe('context-menu', () => {
     await openSubMenus(menu);
     await nextRender();
 
-    const subMenu = overlay.querySelector('vaadin-context-menu');
+    const subMenu = menu.querySelector('vaadin-context-menu');
     await expect(subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

@@ -31,6 +31,7 @@ export const ContextMenuMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           readOnly: true,
@@ -185,6 +186,7 @@ export const ContextMenuMixin = (superClass) =>
       // Create an overlay in the constructor to use in observers before `ready()`
       const overlay = document.createElement(`${this._tagNamePrefix}-overlay`);
       overlay.owner = this;
+      overlay.setAttribute('exportparts', 'backdrop, overlay, content');
 
       overlay.addEventListener('opened-changed', (e) => {
         this._onOverlayOpened(e);
@@ -194,6 +196,15 @@ export const ContextMenuMixin = (superClass) =>
         this._onVaadinOverlayOpen(e);
       });
 
+      const overlaySlot = document.createElement('slot');
+      overlaySlot.name = 'overlay';
+      overlay.append(overlaySlot);
+
+      const subMenuSlot = document.createElement('slot');
+      subMenuSlot.name = 'submenu';
+      subMenuSlot.slot = 'submenu';
+      overlay.append(subMenuSlot);
+
       this._overlayElement = overlay;
     }
 
@@ -201,8 +212,13 @@ export const ContextMenuMixin = (superClass) =>
      * Runs before overlay is fully rendered
      * @private
      */
-    _onOverlayOpened(e) {
-      const opened = e.detail.value;
+    _onOverlayOpened(event) {
+      // Ignore events from submenus
+      if (event.target !== this._overlayElement) {
+        return;
+      }
+
+      const opened = event.detail.value;
       this._setOpened(opened);
       if (opened) {
         this.__alignOverlayPosition();
@@ -213,7 +229,12 @@ export const ContextMenuMixin = (superClass) =>
      * Runs after overlay is fully rendered
      * @private
      */
-    _onVaadinOverlayOpen() {
+    _onVaadinOverlayOpen(event) {
+      // Ignore events from submenus
+      if (event.target !== this._overlayElement) {
+        return;
+      }
+
       this.__alignOverlayPosition();
       this._overlayElement.style.visibility = '';
       this.__forwardFocus();
@@ -393,6 +414,11 @@ export const ContextMenuMixin = (superClass) =>
      * @param {!Event | undefined} e used as the context for the menu. Overlay coordinates are taken from this event.
      */
     open(e) {
+      // Ignore events from the overlay
+      if (this._overlayElement && e.composedPath().includes(this._overlayElement)) {
+        return;
+      }
+
       if (e && !this.opened) {
         this._context = {
           detail: e.detail,
@@ -671,7 +697,11 @@ export const ContextMenuMixin = (superClass) =>
           // Dispatch another contextmenu at the same coordinates after the overlay is closed
           this._overlayElement.addEventListener(
             'vaadin-overlay-closed',
-            () => this.__contextMenuAt(e.clientX, e.clientY),
+            (closeEvent) => {
+              if (closeEvent.target === this._overlayElement) {
+                this.__contextMenuAt(e.clientX, e.clientY);
+              }
+            },
             {
               once: true,
             },

@@ -18,9 +18,4 @@ export declare class MenuOverlayMixinClass {
    * Returns the adjusted boundaries of the overlay.
    */
   getBoundaries(): { xMax: number; xMin: number; yMax: number };
-
-  /**
-   * Returns the first element in the overlay content.
-   */
-  getFirstChild(): HTMLElement;
 }

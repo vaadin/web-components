@@ -93,7 +93,7 @@ describe('a11y', () => {
   });
 
   describe('focus restoration', () => {
-    let menuBar, overlay, buttons;
+    let menuBar, subMenu, overlay, buttons;
 
     beforeEach(async () => {
       menuBar = fixtureSync(`<vaadin-menu-bar></vaadin-menu-bar>`);
@@ -110,7 +110,8 @@ describe('a11y', () => {
         },
       ];
       await nextRender();
-      overlay = menuBar._subMenu._overlayElement;
+      subMenu = menuBar._subMenu;
+      overlay = subMenu._overlayElement;
       buttons = menuBar.querySelectorAll('vaadin-menu-bar-button');
       buttons[0].focus();
     });
@@ -163,7 +164,7 @@ describe('a11y', () => {
       await nextRender();
       // Open Item 0/1
       arrowRight(getDeepActiveElement());
-      const nestedSubMenu = overlay.querySelector('vaadin-menu-bar-submenu');
+      const nestedSubMenu = subMenu.querySelector('vaadin-menu-bar-submenu');
       await oneEvent(nestedSubMenu._overlayElement, 'vaadin-overlay-open');
       // Select Item 0/1/0
       enter(getDeepActiveElement());

@@ -360,7 +360,7 @@ describe('overlay', () => {
     it('should close on menu contextmenu', () => {
       // Dispatch a contextmenu event on the overlay content
       const { left, top } = content.getBoundingClientRect();
-      const e = contextmenu(left, top, false, overlay);
+      const e = contextmenu(left, top, false, overlay._contentRoot);
       expect(e.defaultPrevented).to.be.true;
       expect(menu.opened).to.be.false;
     });
@@ -525,6 +525,17 @@ describe('overlay', () => {
       contextmenu(left, top, false, document.documentElement);
       await nextFrame();
       expect(contextmenuSpy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('exportparts', () => {
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
     });
   });
 });
