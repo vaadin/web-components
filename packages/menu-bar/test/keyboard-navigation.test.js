@@ -193,7 +193,7 @@ describe('keyboard navigation', () => {
   });
 
   describe('submenu items', () => {
-    let subMenu, overlay;
+    let subMenu;
 
     beforeEach(async () => {
       menu.items = [
@@ -211,7 +211,6 @@ describe('keyboard navigation', () => {
       await nextUpdate(menu);
       buttons = menu._buttons;
       subMenu = menu._subMenu;
-      overlay = subMenu._overlayElement;
     });
 
     describe('default mode', () => {
@@ -221,7 +220,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to previous button with submenu
         await sendKeys({ press: 'ArrowLeft' });
@@ -237,7 +236,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to previous button without submenu
         await sendKeys({ press: 'ArrowLeft' });
@@ -253,7 +252,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to next button with submenu
         await sendKeys({ press: 'ArrowRight' });
@@ -269,7 +268,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to next button without submenu
         await sendKeys({ press: 'ArrowRight' });
@@ -285,7 +284,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         await sendKeys({ press: 'ArrowLeft' });
         await nextRender();
@@ -303,7 +302,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         await sendKeys({ press: 'ArrowRight' });
         await nextRender();
@@ -327,7 +326,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab to next button with submenu
         await sendKeys({ press: 'Tab' });
@@ -343,7 +342,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Shift Tab to previous button with submenu
         await sendKeys({ press: 'Shift+Tab' });
@@ -359,7 +358,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab to next button without submenu
         await sendKeys({ press: 'Tab' });
@@ -375,7 +374,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab to next button without submenu
         await sendKeys({ press: 'Shift+Tab' });
@@ -391,7 +390,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab outside the menu bar
         await sendKeys({ press: 'Tab' });
@@ -407,7 +406,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Shift + Tab outside the menu bar
         await sendKeys({ press: 'Shift+Tab' });
@@ -425,7 +424,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab outside the menu bar (since next button is disabled)
         await sendKeys({ press: 'Tab' });
@@ -444,7 +443,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab outside the menu bar (since previous buttons are disabled)
         await sendKeys({ press: 'Shift+Tab' });

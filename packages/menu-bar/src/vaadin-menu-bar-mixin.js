@@ -300,7 +300,7 @@ export const MenuBarMixin = (superClass) =>
           menu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
 
           const overlay = menu._overlayElement;
-          overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
+          overlay._contentRoot.addEventListener('keydown', this.__boundOnContextMenuKeydown);
 
           this._subMenu = menu;
         },
@@ -745,6 +745,34 @@ export const MenuBarMixin = (superClass) =>
     /**
      * Override method inherited from `FocusMixin`
      *
+     * @override
+     * @protected
+     */
+    _shouldSetFocus(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return false;
+      }
+      return super._shouldSetFocus(event);
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     *
+     * @override
+     * @protected
+     */
+    _shouldRemoveFocus(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return false;
+      }
+      return super._shouldRemoveFocus(event);
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     *
      * @param {boolean} focused
      * @override
      * @protected
@@ -824,6 +852,16 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _onKeyDown(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return;
+      }
+
+      this._handleKeyDown(event);
+    }
+
+    /** @private */
+    _handleKeyDown(event) {
       switch (event.key) {
         case 'ArrowDown':
           this._onArrowDown(event);
@@ -838,11 +876,16 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * @param {!MouseEvent} e
+     * @param {!MouseEvent} event
      * @protected
      */
-    _onMouseOver(e) {
-      const button = this._getButtonFromEvent(e);
+    _onMouseOver(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return;
+      }
+
+      const button = this._getButtonFromEvent(event);
       if (!button) {
         // Hide tooltip on mouseover to disabled button
         this._hideTooltip();
@@ -874,11 +917,11 @@ export const MenuBarMixin = (superClass) =>
         if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
-          this._onKeyDown(e);
+          this._handleKeyDown(e);
         }
 
         if (e.key === 'Tab' && this.tabNavigation) {
-          this._onKeyDown(e);
+          this._handleKeyDown(e);
         }
       }
     }
@@ -961,13 +1004,13 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _focusFirstItem() {
-      const list = this._subMenu._overlayElement.firstElementChild;
+      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
       list.focus();
     }
 
     /** @private */
     _focusLastItem() {
-      const list = this._subMenu._overlayElement.firstElementChild;
+      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
       const item = list.items[list.items.length - 1];
       if (item) {
         item.focus();
