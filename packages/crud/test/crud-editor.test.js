@@ -163,13 +163,15 @@ describe('crud editor', () => {
         await nextRender();
 
         // Get the elementFromPoint of the editor header
+        const headerPart = crud.shadowRoot.querySelector('[part="header"]');
         const header = crud.querySelector(':scope > [slot=header]');
-        const headerRect = header.getBoundingClientRect();
+        const headerRect = headerPart.getBoundingClientRect();
         const x = headerRect.left + headerRect.width / 2;
         const y = headerRect.top + headerRect.height / 2;
-        const elementFromPoint = document.elementFromPoint(x, y);
+        const elementFromPoint = crud.shadowRoot.elementFromPoint(x, y);
 
-        expect(elementFromPoint).to.equal(header);
+        // Base styles set display: contents on the slotted editor
+        expect(elementFromPoint).to.be.oneOf([header, headerPart]);
       });
     });
   });
