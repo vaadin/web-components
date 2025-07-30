@@ -15,7 +15,7 @@ describe('position', () => {
     popover.target = target;
     await nextRender();
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
-    // The default offset in base styles is 4px + 0.1px for rounding
+    // The default offset is 0px in core styles and 4px in base styles + 0.1px for rounding
     defaultOffset = 0.1 + parseInt(getComputedStyle(overlay).getPropertyValue('--_default-offset'));
   });
 
