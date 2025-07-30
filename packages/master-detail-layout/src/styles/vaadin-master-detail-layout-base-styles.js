@@ -142,11 +142,8 @@ export const masterDetailLayoutStyles = css`
     background: var(--vaadin-master-detail-layout-backdrop, rgba(0, 0, 0, 0.2));
   }
 
-  [part='detail'] {
-    background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
-  }
-
   :host(:is([drawer], [stack])) [part='detail'] {
+    background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
   }
 
