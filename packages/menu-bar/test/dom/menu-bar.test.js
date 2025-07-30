@@ -39,6 +39,12 @@ describe('menu-bar', () => {
     await expect(menu).dom.to.equalSnapshot();
   });
 
+  it('opened', async () => {
+    menu._buttons[1].click();
+    await nextRender();
+    await expect(menu).dom.to.equalSnapshot();
+  });
+
   it('overlay', async () => {
     menu._buttons[1].click();
     await nextRender();
