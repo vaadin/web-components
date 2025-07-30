@@ -15,10 +15,6 @@
     --vaadin-charts-grid-line: var(--lumo-contrast-20pct);
     --vaadin-charts-disabled-label: var(--lumo-disabled-text-color);
     --vaadin-charts-contrast: var(--lumo-contrast);
-    --vaadin-charts-contrast-5pct: var(--lumo-contrast-5pct);
-    --vaadin-charts-contrast-10pct: var(--lumo-contrast-10pct);
-    --vaadin-charts-contrast-20pct: var(--lumo-contrast-20pct);
-    --vaadin-charts-contrast-60pct: var(--lumo-contrast-60pct);
     --vaadin-charts-tooltip-background: var(--lumo-base-color);
     --vaadin-charts-tooltip-border-color: inherit;
     --vaadin-charts-button-label: var(--lumo-primary-text-color);
@@ -26,6 +22,7 @@
     --vaadin-charts-button-hover-background: var(--lumo-primary-color-10pct);
     --vaadin-charts-button-active-label: var(--lumo-primary-contrast-color);
     --vaadin-charts-button-active-background: var(--lumo-primary-color);
+    --vaadin-charts-button-border-radius: 2px;
     --vaadin-charts-xaxis-line-width: 0;
     --vaadin-charts-tooltip-background-opacity: 1;
     --vaadin-charts-color-0: #5ac2f7;
