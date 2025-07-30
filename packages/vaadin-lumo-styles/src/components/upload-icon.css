@@ -4,11 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_upload-icon {
+  :host {
+    display: inline-block;
+  }
+
   :host::before {
     content: var(--lumo-icons-upload);
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
     vertical-align: -0.25em;
+    background-color: transparent;
+    mask-image: none;
   }
 }
