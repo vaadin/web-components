@@ -46,7 +46,6 @@ export class UserTags extends PolylitMixin(LitElement) {
     return html`
       <vaadin-user-tags-overlay
         id="overlay"
-        popover="manual"
         exportparts="overlay:user-tags-overlay, content:user-tags-content"
         modeless
         .opened="${this.opened}"

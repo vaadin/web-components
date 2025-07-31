@@ -6,6 +6,7 @@
 import '@vaadin/component-base/src/style-props.js';
 import { css, unsafeCSS } from 'lit';
 
+// postcss-lit-disable-next-line
 export const checkable = (part, propName = part) => css`
   :host {
     align-items: center;

@@ -219,7 +219,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
       <vaadin-combo-box-overlay
         id="overlay"
-        popover="manual"
         exportparts="overlay, content, loader"
         .owner="${this}"
         .dir="${this.dir}"

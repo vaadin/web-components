@@ -45,22 +45,6 @@ class AvatarGroupOverlay extends PositionMixin(
       </div>
     `;
   }
-
-  /**
-   * @protected
-   * @override
-   */
-  _attachOverlay() {
-    this.showPopover();
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _detachOverlay() {
-    this.hidePopover();
-  }
 }
 
 defineCustomElement(AvatarGroupOverlay);

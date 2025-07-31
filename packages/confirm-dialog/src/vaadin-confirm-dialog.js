@@ -90,7 +90,6 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
     return html`
       <vaadin-confirm-dialog-overlay
         id="overlay"
-        popover="manual"
         .owner="${this}"
         .opened="${this.opened}"
         theme="${ifDefined(this._theme)}"

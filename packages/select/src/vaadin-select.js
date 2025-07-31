@@ -177,7 +177,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
 
       <vaadin-select-overlay
         id="overlay"
-        popover="manual"
         .owner="${this}"
         .positionTarget="${this._inputContainer}"
         .opened="${this.opened}"

@@ -82,7 +82,6 @@ class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(Themabl
     return html`
       <vaadin-login-overlay-wrapper
         id="overlay"
-        popover="manual"
         .owner="${this}"
         .opened="${this.opened}"
         .description="${this.description}"
