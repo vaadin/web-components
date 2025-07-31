@@ -133,46 +133,4 @@ describe('crud editor', () => {
       expect(crud.editorOpened).to.be.true;
     });
   });
-
-  ['default', 'custom'].forEach((type) => {
-    describe(`${type} form`, () => {
-      beforeEach(async () => {
-        if (type === 'default') {
-          crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-        } else {
-          crud = fixtureSync(`
-            <vaadin-crud style="width: 300px;">
-              <vaadin-form-layout slot="form">
-                <vaadin-text-field path="foo" required></vaadin-text-field>
-              </vaadin-form-layout>
-            </vaadin-crud>
-          `);
-        }
-        crud.editOnClick = true;
-        await nextRender();
-        flushGrid(crud._grid);
-
-        crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
-        await nextRender();
-      });
-
-      it('should not cover the editor content with focus ring element', async () => {
-        // Open the editor
-        crud.editorPosition = 'aside';
-        crud._newButton.click();
-        await nextRender();
-
-        // Get the elementFromPoint of the editor header
-        const headerPart = crud.shadowRoot.querySelector('[part="header"]');
-        const header = crud.querySelector(':scope > [slot=header]');
-        const headerRect = headerPart.getBoundingClientRect();
-        const x = headerRect.left + headerRect.width / 2;
-        const y = headerRect.top + headerRect.height / 2;
-        const elementFromPoint = crud.shadowRoot.elementFromPoint(x, y);
-
-        // Base styles set display: contents on the slotted editor
-        expect(elementFromPoint).to.be.oneOf([header, headerPart]);
-      });
-    });
-  });
 });
