@@ -1,8 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
-import '@vaadin/vaadin-lumo-styles/components/horizontal-layout.css';
-import '../../../vaadin-horizontal-layout.js';
+import '../../../src/vaadin-horizontal-layout.js';
 
 describe('horizontal-layout', () => {
   let div, element;
