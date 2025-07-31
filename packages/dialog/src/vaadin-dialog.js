@@ -120,7 +120,6 @@ class Dialog extends DialogSizeMixin(
     return html`
       <vaadin-dialog-overlay
         id="overlay"
-        popover="manual"
         .owner="${this}"
         .opened="${this.opened}"
         .headerTitle="${this.headerTitle}"

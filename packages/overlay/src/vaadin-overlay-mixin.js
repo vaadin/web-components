@@ -117,8 +117,11 @@ export const OverlayMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    firstUpdated() {
+      super.firstUpdated();
+
+      // Set popover in firstUpdated before opened observers are called
+      this.popover = 'manual';
 
       // Need to add dummy click listeners to this and the backdrop or else
       // the document click event listener (_outsideClickListener) may never

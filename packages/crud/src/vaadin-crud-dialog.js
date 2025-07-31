@@ -127,7 +127,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
-        popover="manual"
         .owner="${this.crudElement}"
         .opened="${this.opened}"
         @opened-changed="${this._onOverlayOpened}"

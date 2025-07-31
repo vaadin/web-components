@@ -211,7 +211,6 @@ class DatePicker extends DatePickerMixin(
 
       <vaadin-date-picker-overlay
         id="overlay"
-        popover="manual"
         .owner="${this}"
         ?fullscreen="${this._fullscreen}"
         theme="${ifDefined(this._theme)}"

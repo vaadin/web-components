@@ -57,7 +57,6 @@ export const MenuOverlayMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.popover = 'manual';
       this.restoreFocusOnClose = true;
 
       this.addEventListener('keydown', (e) => {

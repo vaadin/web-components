@@ -77,7 +77,6 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
     return html`
       <vaadin-tooltip-overlay
         id="overlay"
-        popover="manual"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
         .opened="${this._isConnected && (this.manual ? this.opened : this._autoOpened)}"
