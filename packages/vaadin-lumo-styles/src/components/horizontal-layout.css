@@ -31,8 +31,4 @@
   :host([theme~='spacing-xl']) {
     gap: var(--lumo-space-xl);
   }
-
-  :host([theme~='wrap']) {
-    flex-wrap: wrap;
-  }
 }
