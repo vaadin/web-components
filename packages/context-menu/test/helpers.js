@@ -7,7 +7,16 @@ export function activateItem(target, event = isTouch ? 'click' : 'mouseover') {
 }
 
 export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') {
-  const menu = target.closest('vaadin-context-menu');
+  // Try to find a submenu first
+  let menu;
+  const overlayContent = target.closest('[slot="overlay"]');
+  if (overlayContent) {
+    menu = overlayContent.parentElement.querySelector('[slot="submenu"]');
+  }
+  // If no submenu is found, use the closest context menu
+  if (!menu) {
+    menu = target.closest('vaadin-context-menu');
+  }
   // Disable logic that delays opening submenu
   menu.__openListenerActive = true;
   activateItem(target, event);

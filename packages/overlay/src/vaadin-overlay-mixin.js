@@ -175,12 +175,15 @@ export const OverlayMixin = (superClass) =>
      * @param {Event=} sourceEvent
      */
     close(sourceEvent) {
+      // Dispatch the event on the overlay. Not using bubbles or composed, as that could have side effects when nesting
+      // overlays
       const evt = new CustomEvent('vaadin-overlay-close', {
-        bubbles: true,
         cancelable: true,
         detail: { sourceEvent },
       });
       this.dispatchEvent(evt);
+      // To allow listening for the event globally, also dispatch it on the document body
+      document.body.dispatchEvent(evt);
       if (!evt.defaultPrevented) {
         this.opened = false;
       }
@@ -308,7 +311,12 @@ export const OverlayMixin = (superClass) =>
           setTimeout(() => {
             this._trapFocus();
 
-            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true, composed: true }));
+            // Dispatch the event on the overlay. Not using bubbles or composed, as that could have side effects when nesting
+            // overlays
+            const event = new CustomEvent('vaadin-overlay-open');
+            this.dispatchEvent(event);
+            // To allow listening for the event globally, also dispatch it on the document body
+            document.body.dispatchEvent(event);
           });
         });
 
@@ -493,7 +501,6 @@ export const OverlayMixin = (superClass) =>
       }
 
       const evt = new CustomEvent('vaadin-overlay-outside-click', {
-        bubbles: true,
         cancelable: true,
         detail: { sourceEvent: event },
       });
@@ -520,7 +527,6 @@ export const OverlayMixin = (superClass) =>
 
       if (event.key === 'Escape') {
         const evt = new CustomEvent('vaadin-overlay-escape-press', {
-          bubbles: true,
           cancelable: true,
           detail: { sourceEvent: event },
         });

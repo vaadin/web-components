@@ -35,6 +35,35 @@ describe('vaadin-overlay', () => {
       await aTimeout(0);
       expect(spy).to.not.be.called;
     });
+
+    it('should not propagate through the DOM', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+
+      expect(spy.firstCall.args[0].bubbles).to.be.false;
+      expect(spy.firstCall.args[0].composed).to.be.false;
+    });
+
+    describe('global', () => {
+      let globalSpy;
+
+      beforeEach(() => {
+        globalSpy = sinon.spy();
+        document.body.addEventListener('vaadin-overlay-open', globalSpy);
+      });
+
+      afterEach(() => {
+        document.body.removeEventListener('vaadin-overlay-open', globalSpy);
+      });
+
+      it('should fire a global event on the document body when opened', async () => {
+        overlay.opened = true;
+        await nextFrame();
+        await aTimeout(0);
+        expect(globalSpy).to.be.called;
+      });
+    });
   });
 
   describe('moving overlay', () => {
