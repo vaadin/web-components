@@ -1,6 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
-snapshots["context-menu items"] =
+
+snapshots["context-menu items"] = 
 `<vaadin-context-menu opened="">
   <div>
     Target
@@ -64,7 +65,7 @@ snapshots["context-menu items"] =
 `;
 /* end snapshot context-menu items */
 
-snapshots["context-menu items nested"] =
+snapshots["context-menu items nested"] = 
 `<vaadin-context-menu
   modeless=""
   opened=""
@@ -153,10 +154,11 @@ snapshots["context-menu items nested"] =
 `;
 /* end snapshot context-menu items nested */
 
-snapshots["context-menu overlay class"] =
+snapshots["context-menu overlay class"] = 
 `<vaadin-context-menu-overlay
   class="context-menu-overlay custom"
   exportparts="backdrop, overlay, content"
+  id="overlay"
   opened=""
   popover="manual"
 >
@@ -171,10 +173,11 @@ snapshots["context-menu overlay class"] =
 `;
 /* end snapshot context-menu overlay class */
 
-snapshots["context-menu overlay class nested"] =
+snapshots["context-menu overlay class nested"] = 
 `<vaadin-context-menu-overlay
   class="context-menu-overlay custom"
   exportparts="backdrop, overlay, content"
+  id="overlay"
   modeless=""
   opened=""
   popover="manual"
@@ -191,3 +194,4 @@ snapshots["context-menu overlay class nested"] =
 </vaadin-context-menu-overlay>
 `;
 /* end snapshot context-menu overlay class nested */
+

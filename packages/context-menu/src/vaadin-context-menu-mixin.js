@@ -32,6 +32,7 @@ export const ContextMenuMixin = (superClass) =>
         opened: {
           type: Boolean,
           reflectToAttribute: true,
+          observer: '_openedChanged',
           value: false,
           notify: true,
           readOnly: true,
@@ -124,21 +125,14 @@ export const ContextMenuMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_openedChanged(opened)',
         '_targetOrOpenOnChanged(listenOn, openOn)',
         '_rendererChanged(renderer, items)',
         '_fullscreenChanged(_fullscreen)',
-        '_overlayContextChanged(_overlayElement, _context)',
-        '_overlayModelessChanged(_overlayElement, _modeless)',
-        '_overlayPhoneChanged(_overlayElement, _phone)',
-        '_overlayThemeChanged(_overlayElement, _theme)',
       ];
     }
 
     constructor() {
       super();
-
-      this._createOverlay();
 
       this._boundOpen = this.open.bind(this);
       this._boundClose = this.close.bind(this);
@@ -171,41 +165,16 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    firstUpdated() {
+      super.firstUpdated();
+
+      this._overlayElement = this.$.overlay;
 
       this.addController(
         new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
           this._fullscreen = matches;
         }),
       );
-    }
-
-    /** @private */
-    _createOverlay() {
-      // Create an overlay in the constructor to use in observers before `ready()`
-      const overlay = document.createElement(`${this._tagNamePrefix}-overlay`);
-      overlay.owner = this;
-      overlay.setAttribute('exportparts', 'backdrop, overlay, content');
-
-      overlay.addEventListener('opened-changed', (e) => {
-        this._onOverlayOpened(e);
-      });
-
-      overlay.addEventListener('vaadin-overlay-open', (e) => {
-        this._onVaadinOverlayOpen(e);
-      });
-
-      const overlaySlot = document.createElement('slot');
-      overlaySlot.name = 'overlay';
-      overlay.append(overlaySlot);
-
-      const subMenuSlot = document.createElement('slot');
-      subMenuSlot.name = 'submenu';
-      subMenuSlot.slot = 'submenu';
-      overlay.append(subMenuSlot);
-
-      this._overlayElement = overlay;
     }
 
     /**
@@ -238,39 +207,6 @@ export const ContextMenuMixin = (superClass) =>
       this.__alignOverlayPosition();
       this._overlayElement.style.visibility = '';
       this.__forwardFocus();
-    }
-
-    /** @private */
-    _overlayContextChanged(overlay, context) {
-      if (overlay) {
-        overlay.model = context;
-      }
-    }
-
-    /** @private */
-    _overlayModelessChanged(overlay, modeless) {
-      if (overlay) {
-        overlay.modeless = modeless;
-      }
-    }
-
-    /** @private */
-    _overlayPhoneChanged(overlay, phone) {
-      if (overlay) {
-        overlay.toggleAttribute('phone', phone);
-        overlay.withBackdrop = phone;
-      }
-    }
-
-    /** @private */
-    _overlayThemeChanged(overlay, theme) {
-      if (overlay) {
-        if (theme) {
-          overlay.setAttribute('theme', theme);
-        } else {
-          overlay.removeAttribute('theme');
-        }
-      }
     }
 
     /** @private */
@@ -339,17 +275,14 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _openedChanged(opened) {
+    _openedChanged(opened, oldOpened) {
       if (opened) {
         document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
-      } else {
+      } else if (oldOpened) {
         document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
       }
 
       this.__setListenOnUserSelect(opened);
-
-      // Has to be set after instance has been created
-      this._overlayElement.opened = opened;
     }
 
     /**
@@ -383,11 +316,7 @@ export const ContextMenuMixin = (superClass) =>
         if (this.closeOn === 'click') {
           this.closeOn = '';
         }
-
-        renderer = this.__itemsRenderer;
       }
-
-      this._overlayElement.renderer = renderer;
     }
 
     /**

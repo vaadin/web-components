@@ -31,8 +31,8 @@ export const SubMenuMixin = (superClass) =>
     /**
      * Overriding the observer to not add global "contextmenu" listener.
      */
-    _openedChanged(opened) {
-      this._overlayElement.opened = opened;
+    _openedChanged() {
+      // Do nothing
     }
 
     /**

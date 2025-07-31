@@ -1,6 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
-snapshots["menu-bar basic"] =
+
+snapshots["menu-bar basic"] = 
 `<vaadin-menu-bar role="menubar">
   <vaadin-menu-bar-submenu
     is-root=""
@@ -65,7 +66,7 @@ snapshots["menu-bar basic"] =
 `;
 /* end snapshot menu-bar basic */
 
-snapshots["menu-bar opened"] =
+snapshots["menu-bar opened"] = 
 `<vaadin-menu-bar
   role="menubar"
   style="pointer-events: auto;"
@@ -165,9 +166,10 @@ snapshots["menu-bar opened"] =
 `;
 /* end snapshot menu-bar opened */
 
-snapshots["menu-bar overlay"] =
+snapshots["menu-bar overlay"] = 
 `<vaadin-menu-bar-overlay
   exportparts="backdrop, overlay, content"
+  id="overlay"
   opened=""
   popover="manual"
   start-aligned=""
@@ -184,10 +186,11 @@ snapshots["menu-bar overlay"] =
 `;
 /* end snapshot menu-bar overlay */
 
-snapshots["menu-bar overlay class"] =
+snapshots["menu-bar overlay class"] = 
 `<vaadin-menu-bar-overlay
   class="custom menu-bar-overlay"
   exportparts="backdrop, overlay, content"
+  id="overlay"
   opened=""
   popover="manual"
   start-aligned=""
@@ -203,3 +206,4 @@ snapshots["menu-bar overlay class"] =
 </vaadin-menu-bar-overlay>
 `;
 /* end snapshot menu-bar overlay class */
+
