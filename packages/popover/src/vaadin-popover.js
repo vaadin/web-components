@@ -469,7 +469,6 @@ class Popover extends PopoverPositionMixin(
     return html`
       <vaadin-popover-overlay
         id="overlay"
-        popover="manual"
         .renderer="${this.renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"

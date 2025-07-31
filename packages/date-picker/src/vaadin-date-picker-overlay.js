@@ -56,22 +56,6 @@ class DatePickerOverlay extends DatePickerOverlayMixin(
   get _contentRoot() {
     return this.owner._overlayContent;
   }
-
-  /**
-   * @protected
-   * @override
-   */
-  _attachOverlay() {
-    this.showPopover();
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _detachOverlay() {
-    this.hidePopover();
-  }
 }
 
 defineCustomElement(DatePickerOverlay);

@@ -82,22 +82,6 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
-
-  /**
-   * @protected
-   * @override
-   */
-  _attachOverlay() {
-    this.showPopover();
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _detachOverlay() {
-    this.hidePopover();
-  }
 }
 
 defineCustomElement(CrudDialogOverlay);
@@ -143,7 +127,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
-        popover="manual"
         .owner="${this.crudElement}"
         .opened="${this.opened}"
         @opened-changed="${this._onOverlayOpened}"

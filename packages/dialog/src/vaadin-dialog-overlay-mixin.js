@@ -78,22 +78,6 @@ export const DialogOverlayMixin = (superClass) =>
       });
     }
 
-    /**
-     * @protected
-     * @override
-     */
-    _attachOverlay() {
-      this.showPopover();
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _detachOverlay() {
-      this.hidePopover();
-    }
-
     /** @private */
     __createContainer(slot) {
       const container = document.createElement('div');

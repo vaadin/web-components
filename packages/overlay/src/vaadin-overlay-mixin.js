@@ -117,8 +117,11 @@ export const OverlayMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    firstUpdated() {
+      super.firstUpdated();
+
+      // Set popover in firstUpdated before opened observers are called
+      this.popover = 'manual';
 
       // Need to add dummy click listeners to this and the backdrop or else
       // the document click event listener (_outsideClickListener) may never
@@ -407,9 +410,7 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _attachOverlay() {
-      this._placeholder = document.createComment('vaadin-overlay-placeholder');
-      this.parentNode.insertBefore(this._placeholder, this);
-      document.body.appendChild(this);
+      this.showPopover();
     }
 
     /** @private */
@@ -448,8 +449,7 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _detachOverlay() {
-      this._placeholder.parentNode.insertBefore(this, this._placeholder);
-      this._placeholder.parentNode.removeChild(this._placeholder);
+      this.hidePopover();
     }
 
     /** @private */
