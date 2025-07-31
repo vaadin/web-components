@@ -6,7 +6,7 @@ import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/notification/src/vaadin-notification.js';
 
 describe('notification and dialog', () => {
-  let dialog, notification, input;
+  let dialog, dialogInput, notification, notificationInput;
 
   beforeEach(async () => {
     const container = fixtureSync(`
@@ -17,7 +17,11 @@ describe('notification and dialog', () => {
     `);
     dialog = container.querySelector('vaadin-dialog');
     dialog.renderer = (root) => {
-      root.innerHTML = 'Dialog content';
+      if (root.firstElementChild) {
+        return;
+      }
+      dialogInput = document.createElement('input');
+      root.append(dialogInput);
     };
     dialog.opened = true;
 
@@ -26,8 +30,8 @@ describe('notification and dialog', () => {
       if (root.firstElementChild) {
         return;
       }
-      input = document.createElement('input');
-      root.append(input);
+      notificationInput = document.createElement('input');
+      root.append(notificationInput);
     };
     notification.opened = true;
 
@@ -35,21 +39,21 @@ describe('notification and dialog', () => {
   });
 
   it('should prevent the dialog from closing when pressing Escape in the notification', async () => {
-    input.focus();
+    notificationInput.focus();
     await sendKeys({ press: 'Escape' });
 
     expect(dialog.opened).to.be.true;
   });
 
-  it('should allow the dialog open when pressing Escape outside', async () => {
-    document.body.focus();
+  it('should allow the dialog to close when pressing Escape in the dialog', async () => {
+    dialogInput.focus();
     await sendKeys({ press: 'Escape' });
 
     expect(dialog.opened).to.be.false;
   });
 
   it('should prevent the dialog from closing when clicking in the notification', () => {
-    input.click();
+    notificationInput.click();
 
     expect(dialog.opened).to.be.true;
   });
