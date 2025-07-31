@@ -11,10 +11,7 @@ const attachedInstances = new Set();
  * Returns all attached overlays in visual stacking order.
  * @private
  */
-const getAttachedInstances = () =>
-  [...attachedInstances].filter(
-    (el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'),
-  );
+const getAttachedInstances = () => [...attachedInstances].filter((el) => !el.hasAttribute('closing'));
 
 /**
  * Returns true if all the instances on top of the overlay are nested overlays.
@@ -51,12 +48,6 @@ export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
  */
 export const OverlayStackMixin = (superClass) =>
   class OverlayStackMixin extends superClass {
-    constructor() {
-      super();
-
-      this._hasOverlayStackMixin = true;
-    }
-
     /**
      * Returns true if this is the last one in the opened overlays stack.
      *
