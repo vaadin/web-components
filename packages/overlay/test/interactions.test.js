@@ -158,13 +158,12 @@ describe('interactions', () => {
         e.preventDefault();
       };
 
-      it('should not propagate through the DOM', () => {
+      it('should not propagate through shadow roots', () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-close', spy);
 
         click(parent);
 
-        expect(spy.firstCall.args[0].bubbles).to.be.false;
         expect(spy.firstCall.args[0].composed).to.be.false;
       });
 
@@ -178,11 +177,11 @@ describe('interactions', () => {
 
       describe('global', () => {
         beforeEach(() => {
-          document.body.addEventListener('vaadin-overlay-close', preventDefaultListener);
+          document.addEventListener('vaadin-overlay-close', preventDefaultListener);
         });
 
         afterEach(() => {
-          document.body.removeEventListener('vaadin-overlay-close', preventDefaultListener);
+          document.removeEventListener('vaadin-overlay-close', preventDefaultListener);
         });
 
         it('should prevent closing the overlay if the global event was prevented', async () => {

@@ -178,16 +178,17 @@ export const OverlayMixin = (superClass) =>
      * @param {Event=} sourceEvent
      */
     close(sourceEvent) {
-      // Dispatch the event on the overlay. Not using bubbles or composed, as that could have side effects when nesting
-      // overlays
-      const evt = new CustomEvent('vaadin-overlay-close', {
+      // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots could have
+      // side effects when nesting overlays
+      const event = new CustomEvent('vaadin-overlay-close', {
+        bubbles: true,
         cancelable: true,
         detail: { sourceEvent },
       });
-      this.dispatchEvent(evt);
+      this.dispatchEvent(event);
       // To allow listening for the event globally, also dispatch it on the document body
-      document.body.dispatchEvent(evt);
-      if (!evt.defaultPrevented) {
+      document.body.dispatchEvent(event);
+      if (!event.defaultPrevented) {
         this.opened = false;
       }
     }
@@ -314,9 +315,9 @@ export const OverlayMixin = (superClass) =>
           setTimeout(() => {
             this._trapFocus();
 
-            // Dispatch the event on the overlay. Not using bubbles or composed, as that could have side effects when nesting
-            // overlays
-            const event = new CustomEvent('vaadin-overlay-open');
+            // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots
+            // could have side effects when nesting overlays
+            const event = new CustomEvent('vaadin-overlay-open', { bubbles: true });
             this.dispatchEvent(event);
             // To allow listening for the event globally, also dispatch it on the document body
             document.body.dispatchEvent(event);

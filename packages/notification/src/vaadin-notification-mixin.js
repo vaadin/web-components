@@ -62,7 +62,7 @@ export const NotificationContainerMixin = (superClass) =>
       if (opened) {
         document.body.appendChild(this);
         this.showPopover();
-        document.body.addEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
+        document.addEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
         if (this._boundIosResizeListener) {
           this._detectIosNavbar();
           window.addEventListener('resize', this._boundIosResizeListener);
@@ -70,7 +70,7 @@ export const NotificationContainerMixin = (superClass) =>
       } else {
         document.body.removeChild(this);
         this.hidePopover();
-        document.body.removeEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
+        document.removeEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
         if (this._boundIosResizeListener) {
           window.removeEventListener('resize', this._boundIosResizeListener);
         }
