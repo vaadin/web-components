@@ -163,7 +163,7 @@ describe('selecting items', () => {
       await sendMouse({ type: 'click', position: [400, 400] });
 
       await sendKeys({ press: 'ArrowDown' });
-      await oneEvent(comboBox, 'vaadin-overlay-open');
+      await oneEvent(comboBox._overlayElement, 'vaadin-overlay-open');
 
       const item = getFirstItem(comboBox);
       expect(item.hasAttribute('focused')).to.be.false;

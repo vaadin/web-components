@@ -136,34 +136,6 @@ describe('vaadin-notification', () => {
       expect(hidePopoverSpy.calledBefore(showPopoverSpy)).to.be.true;
     });
 
-    it('should cancel vaadin-overlay-close events when the source event occurred within the container', (done) => {
-      listenOnce(document, 'click', (clickEvent) => {
-        const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
-          cancelable: true,
-          detail: { sourceEvent: clickEvent },
-        });
-        document.dispatchEvent(overlayCloseEvent);
-
-        expect(overlayCloseEvent.defaultPrevented).to.be.true;
-        done();
-      });
-      notification._card.click();
-    });
-
-    it('should not cancel vaadin-overlay-close events when the source event occurred outside of the container', (done) => {
-      listenOnce(document, 'click', (clickEvent) => {
-        const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
-          cancelable: true,
-          detail: { sourceEvent: clickEvent },
-        });
-        document.dispatchEvent(overlayCloseEvent);
-
-        expect(overlayCloseEvent.defaultPrevented).to.be.false;
-        done();
-      });
-      document.body.click();
-    });
-
     (isIOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
       let container;
 

@@ -70,6 +70,7 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
   render() {
     return html`
       <vaadin-rich-text-editor-popup-overlay
+        id="overlay"
         .owner="${this}"
         .opened="${this.opened}"
         .positionTarget="${this.target}"

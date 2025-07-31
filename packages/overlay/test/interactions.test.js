@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
+  aTimeout,
   click,
   enterKeyDown,
   escKeyDown,
@@ -153,16 +154,42 @@ describe('interactions', () => {
     });
 
     describe('vaadin-overlay-close event', () => {
-      it('should prevent closing the overlay if the event was prevented', (done) => {
-        overlay.addEventListener('vaadin-overlay-close', (e) => {
-          e.preventDefault();
+      const preventDefaultListener = (e) => {
+        e.preventDefault();
+      };
 
-          setTimeout(() => {
-            expect(overlay.opened).to.be.true;
-            done();
-          }, 1);
-        });
+      it('should not propagate through shadow roots', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-close', spy);
+
         click(parent);
+
+        expect(spy.firstCall.args[0].composed).to.be.false;
+      });
+
+      it('should prevent closing the overlay if the event was prevented', async () => {
+        overlay.addEventListener('vaadin-overlay-close', preventDefaultListener);
+        click(parent);
+        await aTimeout(1);
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      describe('global', () => {
+        beforeEach(() => {
+          document.addEventListener('vaadin-overlay-close', preventDefaultListener);
+        });
+
+        afterEach(() => {
+          document.removeEventListener('vaadin-overlay-close', preventDefaultListener);
+        });
+
+        it('should prevent closing the overlay if the global event was prevented', async () => {
+          click(parent);
+          await aTimeout(1);
+
+          expect(overlay.opened).to.be.true;
+        });
       });
     });
 
