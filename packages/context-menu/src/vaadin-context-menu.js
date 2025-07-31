@@ -8,6 +8,7 @@ import './vaadin-context-menu-item.js';
 import './vaadin-context-menu-list-box.js';
 import './vaadin-context-menu-overlay.js';
 import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -233,17 +234,26 @@ class ContextMenu extends ContextMenuMixin(
 
   /** @protected */
   render() {
-    return html`<slot id="slot"></slot>`;
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    root.appendChild(this._overlayElement);
-    return root;
+    return html`
+      <slot id="slot"></slot>
+      <vaadin-context-menu-overlay
+        id="overlay"
+        .owner="${this}"
+        .opened="${this.opened}"
+        .model="${this._context}"
+        .modeless="${this._modeless}"
+        .renderer="${this.items ? this.__itemsRenderer : this.renderer}"
+        .withBackdrop="${this._phone}"
+        ?phone="${this._phone}"
+        theme="${ifDefined(this._theme)}"
+        exportparts="backdrop, overlay, content"
+        @opened-changed="${this._onOverlayOpened}"
+        @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
+      >
+        <slot name="overlay"></slot>
+        <slot name="submenu" slot="submenu"></slot>
+      </vaadin-context-menu-overlay>
+    `;
   }
 
   /**

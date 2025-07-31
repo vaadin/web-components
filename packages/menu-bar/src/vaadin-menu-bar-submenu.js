@@ -7,6 +7,7 @@ import './vaadin-menu-bar-item.js';
 import './vaadin-menu-bar-list-box.js';
 import './vaadin-menu-bar-overlay.js';
 import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -40,17 +41,25 @@ class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitEle
 
   /** @protected */
   render() {
-    return html`<slot id="slot"></slot>`;
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    root.appendChild(this._overlayElement);
-    return root;
+    return html`
+      <vaadin-menu-bar-overlay
+        id="overlay"
+        .owner="${this}"
+        .opened="${this.opened}"
+        .model="${this._context}"
+        .modeless="${this._modeless}"
+        .renderer="${this.__itemsRenderer}"
+        .withBackdrop="${this._phone}"
+        ?phone="${this._phone}"
+        theme="${ifDefined(this._theme)}"
+        exportparts="backdrop, overlay, content"
+        @opened-changed="${this._onOverlayOpened}"
+        @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
+      >
+        <slot name="overlay"></slot>
+        <slot name="submenu" slot="submenu"></slot>
+      </vaadin-menu-bar-overlay>
+    `;
   }
 }
 
