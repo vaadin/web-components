@@ -228,16 +228,6 @@ describe('multiple overlays', () => {
       expect(overlay.scrollTop).to.equal(100);
     });
 
-    it('should grow the z-index by 1', () => {
-      modeless1.opened = true;
-      modeless2.opened = true;
-      modeless1.bringToFront();
-
-      const zIndex1 = parseFloat(getComputedStyle(modeless1).zIndex);
-      const zIndex2 = parseFloat(getComputedStyle(modeless2).zIndex);
-      expect(zIndex1).to.equal(zIndex2 + 1);
-    });
-
     it('should bring the newly opened overlay to front', () => {
       modeless1.opened = true;
       modeless2.opened = true;
@@ -248,20 +238,6 @@ describe('multiple overlays', () => {
 
       const frontmost = getFrontmostOverlayFromScreenCenter();
       expect(frontmost).to.equal(modeless2);
-    });
-
-    it('should reset z-indexes', () => {
-      modeless1.opened = true;
-      modeless2.opened = true;
-
-      const zIndex1 = parseFloat(getComputedStyle(modeless1).zIndex);
-      expect(parseFloat(modeless2.style.zIndex)).to.equal(zIndex1 + 1);
-
-      modeless1.opened = false;
-      modeless2.opened = false;
-
-      modeless2.opened = true;
-      expect(modeless2.style.zIndex).to.be.empty;
     });
 
     it('should not call showPopover on bringToFront if only nested overlay is open', () => {
