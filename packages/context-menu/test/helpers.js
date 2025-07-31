@@ -24,7 +24,7 @@ export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') 
 }
 
 export function getMenuItems(menu) {
-  return [...menu.querySelectorAll(':scope > [slot="overlay"] [role="menu"] > :not([role="separator]"')];
+  return [...menu.querySelectorAll(':scope > [slot="overlay"] [role="menu"] > *')];
 }
 
 export function getSubMenu(menu) {
