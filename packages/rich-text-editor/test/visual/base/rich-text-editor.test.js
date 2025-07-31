@@ -103,7 +103,7 @@ describe('rich-text-editor', () => {
     it('color popup', async () => {
       element.style.minHeight = '200px';
       element.shadowRoot.querySelector('[part~="toolbar-button-color"]').click();
-      await oneEvent(element, 'vaadin-overlay-open');
+      await oneEvent(element._overlayElement, 'vaadin-overlay-open');
       return visualDiff(div, 'color-popup');
     });
   });
