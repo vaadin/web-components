@@ -126,13 +126,6 @@ declare class Dialog extends DialogSizeMixin(
     ),
   ),
 ) {
-  /**
-   * Set the `aria-label` attribute for assistive technologies like
-   * screen readers. An empty string value for this property (the
-   * default) means that the `aria-label` attribute is not present.
-   */
-  ariaLabel: string;
-
   addEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,
