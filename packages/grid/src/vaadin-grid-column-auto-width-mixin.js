@@ -59,9 +59,15 @@ export const ColumnAutoWidthMixin = (superClass) =>
     }
 
     /** @private */
-    __flatSizeChangedAutoWidth() {
+    __flatSizeChangedAutoWidth(flatSize) {
       // Flat size changed, recalculate column widths if pending (asynchronously, to allow grid to render row elements first)
-      requestAnimationFrame(() => this.__tryToRecalculateColumnWidthsIfPending());
+      requestAnimationFrame(() => {
+        if (!!flatSize && !this.__hasHadRenderedRowsForColumnWidthCalculation) {
+          this.recalculateColumnWidths();
+        } else {
+          this.__tryToRecalculateColumnWidthsIfPending();
+        }
+      });
     }
 
     /**
