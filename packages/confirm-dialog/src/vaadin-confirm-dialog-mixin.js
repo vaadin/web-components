@@ -220,10 +220,6 @@ export const ConfirmDialogMixin = (superClass) =>
       this.__reject = this.__reject.bind(this);
     }
 
-    get __slottedNodes() {
-      return [this._headerNode, ...this._messageNodes, this._cancelButton, this._confirmButton, this._rejectButton];
-    }
-
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
