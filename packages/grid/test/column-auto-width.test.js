@@ -353,6 +353,26 @@ describe('column auto-width', () => {
     expect(parseFloat(lastColumn.width)).not.to.be.lessThan(getCellIntrinsicWidth(frozenToEndHeaderCell));
   });
 
+  it('should recalculate column widths on initial item load without data provider change', async () => {
+    let items = [];
+    grid.dataProvider = (_, cb) => cb(items, items.length);
+    await nextFrame();
+
+    // Should recalculate once on initial load of items
+    spy.resetHistory();
+    items = [testItems[0], testItems[1]];
+    grid.size = items.length;
+    await nextFrame();
+    expect(spy.callCount).to.equal(1);
+
+    // Should not recalculate on further update of items
+    spy.resetHistory();
+    items = [...items, testItems[2]];
+    grid.size = items.length;
+    await nextFrame();
+    expect(spy.called).to.be.false;
+  });
+
   describe('focusButtonMode column', () => {
     beforeEach(async () => {
       const column = document.createElement('vaadin-grid-column');
