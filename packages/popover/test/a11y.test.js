@@ -67,11 +67,23 @@ describe('a11y', () => {
   });
 
   describe('ARIA attributes', () => {
-    it('should set role attribute on the host element to dialog', () => {
+    it('should set role attribute to dialog', () => {
       expect(popover.getAttribute('role')).to.equal('dialog');
     });
 
-    it('should change role attribute on the host element based on overlayRole', async () => {
+    it('should allow setting role declaratively', () => {
+      popover = fixtureSync('<vaadin-popover role="menu"></vaadin-popover>');
+      expect(popover.role).to.equal('menu');
+      expect(popover.getAttribute('role')).to.equal('menu');
+    });
+
+    it('should change role attribute when setting role', async () => {
+      popover.role = 'alertdialog';
+      await nextUpdate(popover);
+      expect(popover.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should change role attribute based on overlayRole', async () => {
       popover.overlayRole = 'alertdialog';
       await nextUpdate(popover);
       expect(popover.getAttribute('role')).to.equal('alertdialog');
@@ -97,10 +109,22 @@ describe('a11y', () => {
           expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
         });
 
+        it(`should keep aria-haspopup attribute on the ${prop} when role is set to alertdialog`, async () => {
+          popover.role = 'alertdialog';
+          await nextUpdate(popover);
+          expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
+        });
+
         it(`should keep aria-haspopup attribute on the ${prop} when overlayRole is set to alertdialog`, async () => {
           popover.overlayRole = 'alertdialog';
           await nextUpdate(popover);
           expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
+        });
+
+        it(`should update aria-haspopup attribute on the ${prop} when role is set to different value`, async () => {
+          popover.role = 'menu';
+          await nextUpdate(popover);
+          expect(element.getAttribute('aria-haspopup')).to.equal('true');
         });
 
         it(`should update aria-haspopup attribute on the ${prop} when overlayRole is set to different value`, async () => {
