@@ -48,15 +48,6 @@ export declare class InputFieldMixinClass {
   autocomplete: string | undefined;
 
   /**
-   * This is a property supported by Safari that is used to control whether
-   * autocorrection should be enabled when the user is entering/editing the text.
-   * Possible values are:
-   * on: Enable autocorrection.
-   * off: Disable autocorrection.
-   */
-  autocorrect: 'off' | 'on' | undefined;
-
-  /**
    * This is a property supported by Safari and Chrome that is used to control whether
    * autocapitalization should be enabled when the user is entering/editing the text.
    * Possible values are:
