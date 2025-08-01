@@ -31,17 +31,22 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    it('should enforce display: none to hide the host element', () => {
-      dialog.style.display = 'block';
+    it('should use display: none when not opened', () => {
       expect(getComputedStyle(dialog).display).to.equal('none');
     });
 
     ['opened', 'opening', 'closing'].forEach((state) => {
-      it(`should enforce display: contents when ${state} attribute is set`, () => {
-        dialog.style.display = 'block';
+      it(`should use display: contents when ${state} attribute is set`, () => {
         dialog.setAttribute(state, '');
         expect(getComputedStyle(dialog).display).to.equal('contents');
       });
+    });
+
+    it('should use display: none when hidden while opened', async () => {
+      dialog.opened = true;
+      dialog.hidden = true;
+      await nextRender();
+      expect(getComputedStyle(dialog).display).to.equal('none');
     });
   });
 

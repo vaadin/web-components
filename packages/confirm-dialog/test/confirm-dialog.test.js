@@ -31,17 +31,22 @@ describe('vaadin-confirm-dialog', () => {
       confirm = fixtureSync('<vaadin-confirm-dialog></vaadin-confirm-dialog>');
     });
 
-    it('should enforce display: none to hide the host element', () => {
-      confirm.style.display = 'block';
+    it('should use display: none when not opened', () => {
       expect(getComputedStyle(confirm).display).to.equal('none');
     });
 
     ['opened', 'opening', 'closing'].forEach((state) => {
-      it(`should enforce display: contents when ${state} attribute is set`, () => {
-        confirm.style.display = 'block';
+      it(`should use display: contents when ${state} attribute is set`, () => {
         confirm.setAttribute(state, '');
         expect(getComputedStyle(confirm).display).to.equal('contents');
       });
+    });
+
+    it('should use display: none when hidden while opened', async () => {
+      confirm.opened = true;
+      confirm.hidden = true;
+      await nextRender();
+      expect(getComputedStyle(confirm).display).to.equal('none');
     });
   });
 
