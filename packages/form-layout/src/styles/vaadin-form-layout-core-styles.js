@@ -90,6 +90,7 @@ export const formLayoutStyles = css`
     grid-auto-columns: 0;
 
     justify-items: start;
+    align-items: baseline;
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
 
     /*

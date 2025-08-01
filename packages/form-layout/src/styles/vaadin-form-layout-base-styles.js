@@ -89,6 +89,7 @@ export const formLayoutStyles = css`
 
     grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
     justify-items: start;
+    align-items: baseline;
 
     /*
       Firefox requires min-width on both :host and #layout to allow the layout
