@@ -315,13 +315,21 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
+       * The `role` attribute value to be set on the popover.
+       * When not specified, defaults to 'dialog'.
+       */
+      role: {
+        type: String,
+        reflectToAttribute: true,
+      },
+
+      /**
        * The `role` attribute value to be set on the overlay.
        *
        * @attr {string} overlay-role
        */
       overlayRole: {
         type: String,
-        value: 'dialog',
       },
 
       /**
@@ -413,7 +421,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   static get observers() {
-    return ['__sizeChanged(width, height, _overlayElement)', '__updateAriaAttributes(opened, overlayRole, target)'];
+    return ['__sizeChanged(width, height, _overlayElement)', '__updateAriaAttributes(opened, role, target)'];
   }
 
   /**
@@ -520,15 +528,24 @@ class Popover extends PopoverPositionMixin(
     super.ready();
 
     this._overlayElement = this.$.overlay;
+
+    if (!this.hasAttribute('role')) {
+      this.role = 'dialog';
+    }
+  }
+
+  /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('overlayRole')) {
+      this.role = this.overlayRole;
+    }
   }
 
   /** @protected */
   updated(props) {
     super.updated(props);
-
-    if (props.has('overlayRole')) {
-      this.setAttribute('role', this.overlayRole);
-    }
 
     if (props.has('accessibleName')) {
       if (this.accessibleName) {
@@ -610,7 +627,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __updateAriaAttributes(opened, overlayRole, target) {
+  __updateAriaAttributes(opened, role, target) {
     if (this.__oldTarget) {
       const oldEffectiveTarget = this.__oldTarget.ariaTarget || this.__oldTarget;
       oldEffectiveTarget.removeAttribute('aria-haspopup');
@@ -621,7 +638,7 @@ class Popover extends PopoverPositionMixin(
     if (target) {
       const effectiveTarget = target.ariaTarget || target;
 
-      const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
+      const isDialog = role === 'dialog' || role === 'alertdialog';
       effectiveTarget.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
 
       effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
