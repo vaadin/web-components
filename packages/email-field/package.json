@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/email-field",
-  "version": "25.0.0-alpha8",
+  "version": "25.0.0-alpha9",
   "publishConfig": {
     "access": "public"
   },
@@ -36,15 +36,15 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-alpha8",
-    "@vaadin/text-field": "25.0.0-alpha8",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha8",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha8",
+    "@vaadin/component-base": "25.0.0-alpha9",
+    "@vaadin/text-field": "25.0.0-alpha9",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha9",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha9",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha8",
-    "@vaadin/test-runner-commands": "25.0.0-alpha8",
+    "@vaadin/chai-plugins": "25.0.0-alpha9",
+    "@vaadin/test-runner-commands": "25.0.0-alpha9",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^18.0.0"
   },

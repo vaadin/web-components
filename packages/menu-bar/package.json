@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/menu-bar",
-  "version": "25.0.0-alpha8",
+  "version": "25.0.0-alpha9",
   "publishConfig": {
     "access": "public"
   },
@@ -37,21 +37,21 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/a11y-base": "25.0.0-alpha8",
-    "@vaadin/button": "25.0.0-alpha8",
-    "@vaadin/component-base": "25.0.0-alpha8",
-    "@vaadin/context-menu": "25.0.0-alpha8",
-    "@vaadin/item": "25.0.0-alpha8",
-    "@vaadin/list-box": "25.0.0-alpha8",
-    "@vaadin/overlay": "25.0.0-alpha8",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha8",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha8",
+    "@vaadin/a11y-base": "25.0.0-alpha9",
+    "@vaadin/button": "25.0.0-alpha9",
+    "@vaadin/component-base": "25.0.0-alpha9",
+    "@vaadin/context-menu": "25.0.0-alpha9",
+    "@vaadin/item": "25.0.0-alpha9",
+    "@vaadin/list-box": "25.0.0-alpha9",
+    "@vaadin/overlay": "25.0.0-alpha9",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha9",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha9",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha8",
-    "@vaadin/icon": "25.0.0-alpha8",
-    "@vaadin/test-runner-commands": "25.0.0-alpha8",
+    "@vaadin/chai-plugins": "25.0.0-alpha9",
+    "@vaadin/icon": "25.0.0-alpha9",
+    "@vaadin/test-runner-commands": "25.0.0-alpha9",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^18.0.0"
   },
