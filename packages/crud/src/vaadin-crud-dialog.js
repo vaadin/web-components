@@ -97,8 +97,7 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
 
   static get styles() {
     return css`
-      :host,
-      [hidden] {
+      :host {
         display: none !important;
       }
 
@@ -106,6 +105,10 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
       :host([opening]),
       :host([closing]) {
         display: contents !important;
+      }
+
+      :host([hidden]) {
+        display: none !important;
       }
     `;
   }

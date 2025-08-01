@@ -102,8 +102,7 @@ class Dialog extends DialogSizeMixin(
 
   static get styles() {
     return css`
-      :host,
-      [hidden] {
+      :host {
         display: none !important;
       }
 
@@ -111,6 +110,10 @@ class Dialog extends DialogSizeMixin(
       :host([opening]),
       :host([closing]) {
         display: contents !important;
+      }
+
+      :host([hidden]) {
+        display: none !important;
       }
     `;
   }

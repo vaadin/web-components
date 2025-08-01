@@ -72,8 +72,7 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
 
   static get styles() {
     return css`
-      :host,
-      [hidden] {
+      :host {
         display: none !important;
       }
 
@@ -81,6 +80,10 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
       :host([opening]),
       :host([closing]) {
         display: contents !important;
+      }
+
+      :host([hidden]) {
+        display: none !important;
       }
     `;
   }
