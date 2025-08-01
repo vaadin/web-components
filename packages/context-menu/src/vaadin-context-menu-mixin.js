@@ -624,17 +624,9 @@ export const ContextMenuMixin = (superClass) =>
           // Prevent having the previously focused node auto-focus after closing the overlay
           this._overlayElement.__focusRestorationController.focusNode = null;
           // Dispatch another contextmenu at the same coordinates after the overlay is closed
-          this._overlayElement.addEventListener(
-            'vaadin-overlay-closed',
-            (closeEvent) => {
-              if (closeEvent.target === this._overlayElement) {
-                this.__contextMenuAt(e.clientX, e.clientY);
-              }
-            },
-            {
-              once: true,
-            },
-          );
+          setTimeout(() => {
+            this.__contextMenuAt(e.clientX, e.clientY);
+          });
         }
 
         e.preventDefault();
