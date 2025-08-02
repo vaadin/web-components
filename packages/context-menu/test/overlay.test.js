@@ -394,6 +394,14 @@ describe('overlay', () => {
       expect(menu.opened).to.eql(true);
     });
 
+    it('should dispatch closed event when the overlay is closed', async () => {
+      const closedSpy = sinon.spy();
+      menu.addEventListener('closed', closedSpy);
+      fire(document.body, 'click');
+      await nextRender();
+      expect(closedSpy.calledOnce).to.be.true;
+    });
+
     describe('with shift key', () => {
       it('should not close on menu contextmenu', () => {
         const e = contextmenu(0, 0, true, overlay);
