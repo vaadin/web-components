@@ -52,6 +52,7 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
+ * @fires {CustomEvent} closed - Fired when the overlay is closed.
  *
  * @customElement
  * @extends HTMLElement
@@ -90,6 +91,7 @@ class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(Themabl
         theme="${ifDefined(this._theme)}"
         @vaadin-overlay-escape-press="${this._preventClosingLogin}"
         @vaadin-overlay-outside-click="${this._preventClosingLogin}"
+        @vaadin-overlay-closed="${this.__handleOverlayClosed}"
         @opened-changed="${this._onOpenedChanged}"
         exportparts="backdrop, overlay, content, card, brand, description, form-wrapper"
       >
