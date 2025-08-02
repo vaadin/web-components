@@ -85,6 +85,14 @@ describe('login overlay', () => {
     const usernameElement = login._userNameField;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
+
+  it('should dispatch closed event when the overlay is closed', async () => {
+    const closedSpy = sinon.spy();
+    login.addEventListener('closed', closedSpy);
+    login.opened = false;
+    await nextRender();
+    expect(closedSpy.calledOnce).to.be.true;
+  });
 });
 
 describe('no autofocus', () => {

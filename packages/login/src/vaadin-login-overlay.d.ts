@@ -34,6 +34,11 @@ export type LoginOverlayLoginEvent = CustomEvent<{
   custom?: Record<string, unknown>;
 }>;
 
+/**
+ * Fired when the login overlay is closed.
+ */
+export type LoginOverlayClosedEvent = CustomEvent;
+
 export interface LoginOverlayCustomEventMap {
   'description-changed': LoginOverlayDescriptionChangedEvent;
 
@@ -44,6 +49,8 @@ export interface LoginOverlayCustomEventMap {
   'forgot-password': Event;
 
   login: LoginOverlayLoginEvent;
+
+  closed: LoginOverlayClosedEvent;
 }
 
 export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayCustomEventMap {}
@@ -81,6 +88,7 @@ export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayC
  * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
+ * @fires {CustomEvent} closed - Fired when the overlay is closed.
  */
 declare class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
   addEventListener<K extends keyof LoginOverlayEventMap>(
