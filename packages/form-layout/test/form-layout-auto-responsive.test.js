@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-item.js';
 import '../src/vaadin-form-row.js';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { assertFormLayoutGrid, assertFormLayoutLabelPosition } from './helpers.js';
 
 describe('form-layout auto responsive', () => {
@@ -285,7 +286,8 @@ describe('form-layout auto responsive', () => {
       rows = [...layout.children];
     });
 
-    it('should update layout after adding a field to a row', async () => {
+    // There is a Safari bug that leads to incorrect calculation for baseline alignment of inputs
+    (isSafari ? it.skip : it)('should update layout after adding a field to a row', async () => {
       const newField = document.createElement('input');
       rows[0].appendChild(newField);
       await nextFrame();
