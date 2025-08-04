@@ -35,7 +35,7 @@ export type LoginOverlayLoginEvent = CustomEvent<{
 }>;
 
 /**
- * Fired when the login overlay is closed.
+ * Fired when the overlay is closed.
  */
 export type LoginOverlayClosedEvent = CustomEvent;
 
