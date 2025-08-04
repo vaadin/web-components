@@ -161,6 +161,7 @@ declare class Popover extends PopoverPositionMixin(
    * The `role` attribute value to be set on the overlay.
    *
    * @attr {string} overlay-role
+   * @deprecated Use standard `role` attribute on the popover instead
    */
   overlayRole: string;
 

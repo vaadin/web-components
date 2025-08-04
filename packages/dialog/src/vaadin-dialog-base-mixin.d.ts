@@ -36,6 +36,7 @@ export declare class DialogBaseMixinClass {
    * The `role` attribute value to be set on the dialog. Defaults to "dialog".
    *
    * @attr {string} overlay-role
+   * @deprecated Use standard `role` attribute on the dialog instead
    */
   overlayRole: string;
 
