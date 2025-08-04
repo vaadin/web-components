@@ -115,6 +115,11 @@ export const LoginOverlayMixin = (superClass) =>
     }
 
     /** @private */
+    __handleOverlayClosed() {
+      this.dispatchEvent(new CustomEvent('closed'));
+    }
+
+    /** @private */
     _openedChanged(opened, oldOpened) {
       if (oldOpened) {
         this._userNameField.value = '';
@@ -127,4 +132,10 @@ export const LoginOverlayMixin = (superClass) =>
         document.body.style.pointerEvents = this.$.overlay._previousDocumentPointerEvents;
       }
     }
+
+    /**
+     * Fired when the overlay is closed.
+     *
+     * @event closed
+     */
   };
