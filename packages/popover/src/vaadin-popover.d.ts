@@ -93,6 +93,7 @@ declare class Popover extends PopoverPositionMixin(
    * String used to label the popover to screen reader users.
    *
    * @attr {string} accessible-name
+   * @deprecated Use `aria-label` attribute on the popover instead
    */
   accessibleName: string | null | undefined;
 
@@ -100,6 +101,7 @@ declare class Popover extends PopoverPositionMixin(
    * Id of the element used as label of the popover to screen reader users.
    *
    * @attr {string} accessible-name-ref
+   * @deprecated Use `aria-labelledby` attribute on the popover instead
    */
   accessibleNameRef: string | null | undefined;
 
