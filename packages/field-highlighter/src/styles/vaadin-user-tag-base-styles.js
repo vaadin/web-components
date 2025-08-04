@@ -3,39 +3,33 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/user-colors.js';
 import { css } from 'lit';
 
 export const userTagStyles = css`
   :host {
-    display: block;
+    display: inline-block;
     box-sizing: border-box;
-    margin: 0 0 var(--vaadin-user-tag-offset);
     opacity: 0;
-    height: 1.3rem;
-    transition: opacity 0.2s ease-in-out;
+    padding: var(--vaadin-user-tag-padding, 0.3em);
     background-color: var(--vaadin-user-tag-color);
-    color: #fff;
+    color: oklch(from var(--vaadin-user-tag-color) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    font-size: var(--vaadin-user-tag-font-size, 0.75em);
+    font-weight: var(--vaadin-user-tag-font-weight, 500);
+    line-height: var(--vaadin-user-tag-line-height, 1);
+    border: var(--vaadin-user-tag-border-width, 0) solid var(--vaadin-user-tag-border-color, var(--vaadin-border-color));
+    border-radius: var(--vaadin-user-tag-border-radius, var(--vaadin-radius-m));
     cursor: default;
-    -webkit-user-select: none;
-    user-select: none;
-    --vaadin-user-tag-offset: 4px;
   }
 
   :host(.show) {
     opacity: 1;
   }
 
-  :host(:last-of-type) {
-    margin-bottom: 0;
-  }
-
   [part='name'] {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    box-sizing: border-box;
-    padding: 2px 4px;
-    height: 1.3rem;
-    font-size: 13px;
   }
 `;

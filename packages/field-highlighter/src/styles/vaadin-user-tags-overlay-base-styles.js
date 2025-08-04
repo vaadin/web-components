@@ -8,37 +8,17 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-st
 
 const userTagsOverlay = css`
   [part='overlay'] {
-    position: relative;
-    left: -4px;
-    padding: 4px;
-    outline: none;
-    overflow: visible;
+    all: initial;
+    display: block;
+    font: inherit;
+    color: inherit;
   }
 
   [part='content'] {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  :host([dir='rtl']) [part='overlay'] {
-    left: auto;
-    right: -4px;
-  }
-
-  :host([opening]),
-  :host([closing]) {
-    animation: 0.14s user-tags-overlay-dummy-animation;
-  }
-
-  @keyframes user-tags-overlay-dummy-animation {
-    0% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 1;
-    }
+    flex-wrap: wrap;
+    gap: var(--vaadin-user-tag-overlay-gap, 0.2em);
+    padding: 0.5em 0;
   }
 `;
 
