@@ -524,7 +524,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    */
   async _finishTransition() {
     // Detect new layout mode after DOM has been updated
-    this.__detectLayoutMode();
+    queueMicrotask(() => this.__detectLayoutMode());
 
     if (!this.__transition) {
       return Promise.resolve();
