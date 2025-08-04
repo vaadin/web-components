@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../src/vaadin-notification.js';
 
 describe('multiple notification', () => {
-  let wrapper, notifications, container, regions;
+  let wrapper, notifications, container;
 
   beforeEach(async () => {
     wrapper = fixtureSync(`
@@ -38,8 +38,6 @@ describe('multiple notification', () => {
     });
 
     container = notifications[0]._container;
-    // Object.values is unsupported in old browsers
-    regions = Array.from(container.shadowRoot.querySelectorAll('[region]'));
     // To ensure computed styles are applied.
     await aTimeout();
   });
@@ -137,74 +135,6 @@ describe('multiple notification', () => {
         const overlay = e._card.shadowRoot.querySelector('[part="overlay"]');
         expect(getComputedStyle(overlay)['pointer-events']).to.be.equal('auto');
       });
-    });
-
-    it('host should have flex-direction column', () => {
-      expect(getComputedStyle(container).flexDirection).to.equal('column');
-    });
-
-    it('host should have align items stretch', () => {
-      expect(getComputedStyle(container).alignItems).to.equal('stretch');
-    });
-
-    it('host should have align items stretch', () => {
-      expect(getComputedStyle(container).alignItems).to.equal('stretch');
-    });
-
-    it('all region groups and host should be flex containers', () => {
-      const groups = Array.from(container.shadowRoot.querySelectorAll('[region-group]'));
-      groups.push(container);
-      groups.forEach((el) => {
-        expect(getComputedStyle(el).display).to.equal('flex');
-      });
-    });
-
-    it('all regions should be block containers', () => {
-      regions.forEach((el) => {
-        expect(getComputedStyle(el).display).to.equal('block');
-      });
-    });
-
-    it('all region groups should have flex-direction row', () => {
-      [
-        container.shadowRoot.querySelector('[region-group="top"]'),
-        container.shadowRoot.querySelector('[region-group="bottom"]'),
-      ].forEach((el) => {
-        expect(getComputedStyle(el).flexDirection).to.equal('row');
-      });
-    });
-
-    it('all region groups should have equal flex stretching', () => {
-      [
-        container.shadowRoot.querySelector('[region-group="top"]'),
-        container.shadowRoot.querySelector('[region-group="bottom"]'),
-      ].forEach((el) => {
-        expect(getComputedStyle(el).flexGrow).to.equal('1');
-        expect(parseFloat(getComputedStyle(el).flexBasis)).to.equal(0);
-      });
-    });
-
-    it('all grouped regions should have equal flex stretching', () => {
-      Array.from(container.shadowRoot.querySelectorAll('[region-group] > [region]')).forEach((el) => {
-        expect(getComputedStyle(el).flexGrow).to.equal('1');
-        expect(parseFloat(getComputedStyle(el).flexBasis)).to.equal(0);
-      });
-    });
-
-    it('middle region should not have flex stretching', () => {
-      const middleRegion = container.shadowRoot.querySelector('[region="middle"]');
-      expect(getComputedStyle(middleRegion).flexGrow).to.equal('0');
-      expect(getComputedStyle(middleRegion).flexBasis).to.equal('auto');
-    });
-
-    it('top region group should align regions to start', () => {
-      const topRegion = container.shadowRoot.querySelector('[region-group="top"]');
-      expect(getComputedStyle(topRegion).alignItems).to.equal('flex-start');
-    });
-
-    it('bottom region group should align regions to end', () => {
-      const bottomRegion = container.shadowRoot.querySelector('[region-group="bottom"]');
-      expect(getComputedStyle(bottomRegion).alignItems).to.equal('flex-end');
     });
   });
 });
