@@ -239,9 +239,6 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * ---------- |-------------
  * `expanded` | Expanded parent item.
  *
- * Note: the `theme` attribute value set on `<vaadin-context-menu>` is
- * propagated to the internal components listed above.
- *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  * @fires {CustomEvent} closed - Fired when the context menu is closed.

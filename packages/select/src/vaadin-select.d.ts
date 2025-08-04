@@ -26,8 +26,7 @@ export type SelectChangeEvent = Event & {
  * Function for rendering the content of the `<vaadin-select>`.
  * Receives two arguments:
  *
- * - `root` The `<vaadin-select-overlay>` internal container
- *   DOM element. Append your content to it.
+ * - `root` The internal container DOM element. Append your content to it.
  * - `select` The reference to the `<vaadin-select>` element.
  */
 export type SelectRenderer = (root: HTMLElement, select: Select) => void;
@@ -160,12 +159,9 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-select-value-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the button.
- *
- * Note: the `theme` attribute value set on `<vaadin-select>` is
- * propagated to the internal components listed above.
+ * - `<vaadin-select-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-select-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

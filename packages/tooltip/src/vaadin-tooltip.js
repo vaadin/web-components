@@ -35,9 +35,6 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * -----------------|----------------------------------------
  * `position`       | Reflects the `position` property value.
  *
- * Note: the `theme` attribute value set on `<vaadin-tooltip>` is
- * propagated to the internal `<vaadin-tooltip-overlay>` component.
- *
  * ### Custom CSS Properties
  *
  * The following custom CSS properties are available on the `<vaadin-tooltip>` element:

@@ -48,7 +48,6 @@ export { AvatarGroupI18n, AvatarGroupItem, AvatarI18n };
  * In addition to `<vaadin-avatar-group>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  */
