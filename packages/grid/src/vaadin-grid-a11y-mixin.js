@@ -38,14 +38,14 @@ export const A11yMixin = (superClass) =>
     }
 
     /** @private */
-    _a11yUpdateGridSize(size, _columnTree, __emptyState) {
+    _a11yUpdateGridSize(size, _columnTree, emptyState) {
       if (size === undefined || _columnTree === undefined) {
         return;
       }
 
       const headerRowsCount = this._a11yGetHeaderRowCount(_columnTree);
       const footerRowsCount = this._a11yGetFooterRowCount(_columnTree);
-      const bodyRowsCount = __emptyState ? 1 : size;
+      const bodyRowsCount = emptyState ? 1 : size;
       const rowsCount = bodyRowsCount + headerRowsCount + footerRowsCount;
 
       this.$.table.setAttribute('aria-rowcount', rowsCount);
@@ -53,7 +53,7 @@ export const A11yMixin = (superClass) =>
       const bodyColumns = _columnTree[_columnTree.length - 1];
       // If no header and footer rows while the empty state is active, count as one column
       // Otherwise, use the number of body columns, if present
-      const columnsCount = __emptyState && rowsCount === 1 ? 1 : (rowsCount && bodyColumns && bodyColumns.length) || 0;
+      const columnsCount = emptyState && rowsCount === 1 ? 1 : (rowsCount && bodyColumns && bodyColumns.length) || 0;
       this.$.table.setAttribute('aria-colcount', columnsCount);
 
       this._a11yUpdateHeaderRows();
