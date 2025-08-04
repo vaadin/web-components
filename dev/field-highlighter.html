@@ -10,38 +10,76 @@
   </head>
 
   <body>
-    <vaadin-checkbox-group label="Language of contact">
-      <vaadin-checkbox value="en" label="English"></vaadin-checkbox>
-      <vaadin-checkbox value="fr" label="Français"></vaadin-checkbox>
-      <vaadin-checkbox value="de" label="Deutsch"></vaadin-checkbox>
-    </vaadin-checkbox-group>
+    <section class="section">
+      <h2 class="heading">Fields</h2>
+      <vaadin-text-field label="User name"></vaadin-text-field>
+      <vaadin-text-area
+        label="Comment"
+        value="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam sunt repudiandae, fugit, voluptatum voluptate distinctio accusamus cum ducimus quia similique earum quis totam, quod aperiam! Sint nam neque officia! Delectus."
+        style="max-height: 150px"
+      ></vaadin-text-area>
+    </section>
 
-    <!--
-    <vaadin-date-time-picker></vaadin-date-time-picker>
+    <section class="section">
+      <h2 class="heading">Pickers</h2>
+      <vaadin-date-picker label="Date"></vaadin-date-picker>
+      <vaadin-date-time-picker label="Date and time"></vaadin-date-time-picker>
+    </section>
 
-    <vaadin-text-area></vaadin-text-area>
-    -->
+    <section class="section" style="column-gap: 100px">
+      <h2 class="heading">Groups</h2>
+      <vaadin-checkbox-group theme="vertical">
+        <vaadin-checkbox name="user" value="1" label="Option 1"></vaadin-checkbox>
+        <vaadin-checkbox name="user" value="2" label="Option 2"></vaadin-checkbox>
+        <vaadin-checkbox name="user" value="3" label="Option 3"></vaadin-checkbox>
+        <vaadin-checkbox name="user" value="4" label="Option 4"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+
+      <vaadin-radio-group theme="vertical">
+        <vaadin-radio-button name="user" value="1" label="Option 1"></vaadin-radio-button>
+        <vaadin-radio-button name="user" value="2" label="Option 2"></vaadin-radio-button>
+        <vaadin-radio-button name="user" value="3" label="Option 3"></vaadin-radio-button>
+        <vaadin-radio-button name="user" value="4" label="Option 4"></vaadin-radio-button>
+      </vaadin-radio-group>
+
+      <vaadin-list-box>
+        <vaadin-item>Option one</vaadin-item>
+        <vaadin-item>Option two</vaadin-item>
+        <vaadin-item>Option three</vaadin-item>
+        <vaadin-item>Option four</vaadin-item>
+      </vaadin-list-box>
+    </section>
 
     <script type="module">
       import '@vaadin/checkbox-group';
-      // import '@vaadin/date-time-picker';
-      // import '@vaadin/text-area';
+      import '@vaadin/date-picker';
+      import '@vaadin/date-time-picker';
+      import '@vaadin/item';
+      import '@vaadin/list-box';
+      import '@vaadin/radio-group';
+      import '@vaadin/text-area';
+      import '@vaadin/text-field';
       import { FieldHighlighter } from '@vaadin/field-highlighter';
 
-      const field = document.querySelector('vaadin-checkbox-group');
-      FieldHighlighter.init(field);
+      const fields = [...document.querySelectorAll('.section')].reduce((acc, el) => {
+        return acc.concat([...el.children].filter((el) => el.localName.startsWith('vaadin')));
+      }, []);
 
-      window.requestAnimationFrame(() => {
-        const users = [
-          { id: 'a', name: 'User', colorIndex: 0, fieldIndex: 0 },
-          { id: 'b', name: 'Moderator', colorIndex: 1, fieldIndex: 1 },
-          { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 1 },
-        ];
+      fields.forEach((field) => {
+        FieldHighlighter.init(field);
 
-        // Mimic focus to show highlight and badges
-        field.dispatchEvent(new CustomEvent('mouseenter'));
+        window.requestAnimationFrame(() => {
+          const users = [
+            { id: 'a', name: 'User', colorIndex: 0, fieldIndex: 0 },
+            { id: 'b', name: 'Moderator', colorIndex: 1, fieldIndex: 1 },
+            { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 1 },
+          ];
 
-        FieldHighlighter.setUsers(field, users);
+          // Mimic focus to show highlight and badges
+          field.dispatchEvent(new CustomEvent('mouseenter'));
+
+          FieldHighlighter.setUsers(field, users);
+        });
       });
     </script>
   </body>
