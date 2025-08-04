@@ -96,9 +96,8 @@ export const notificationContainerStyles = css`
   }
 
   [region-group] > [region$='center'] {
-    inset-inline-start: 50%;
+    left: 50%;
     translate: -50%;
-    margin-inline: 0;
   }
 
   [region-group] > [region$='end'] {

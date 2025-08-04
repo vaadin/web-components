@@ -18,22 +18,34 @@ describe('notification', () => {
     element.opened = false;
   });
 
-  [
-    'top-stretch',
-    'top-start',
-    'top-center',
-    'top-end',
-    'middle',
-    'bottom-start',
-    'bottom-center',
-    'bottom-end',
-    'bottom-stretch',
-  ].forEach((position) => {
-    it(position, async () => {
-      element.position = position;
-      element.opened = true;
-      await nextRender();
-      await visualDiff(document.body, `${position}`);
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      [
+        'top-stretch',
+        'top-start',
+        'top-center',
+        'top-end',
+        'middle',
+        'bottom-start',
+        'bottom-center',
+        'bottom-end',
+        'bottom-stretch',
+      ].forEach((position) => {
+        it(position, async () => {
+          element.position = position;
+          element.opened = true;
+          await nextRender();
+          await visualDiff(document.body, `${dir}-${position}`);
+        });
+      });
     });
   });
 });
