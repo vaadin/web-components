@@ -55,7 +55,15 @@ export function enforceThemePlugin(theme) {
         body = body.replace('../../global.css', '../autoload.js');
       }
 
-      if (['base', 'legacy-lumo'].includes(theme) && context.response.is('html', 'js')) {
+      if (theme === 'aura' && context.response.is('html')) {
+        // For dev pages: replace link to CSS stylesheet with JS autoload script
+        body = body.replace(
+          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
+          '<link rel="stylesheet" href="/packages/aura/aura.css" />',
+        );
+      }
+
+      if (['base', 'legacy-lumo', 'aura'].includes(theme) && context.response.is('html', 'js')) {
         // Remove all not transformed CSS imports
         body = body.replaceAll(/^.+(vaadin-lumo-styles|\.\.)\/.+\.css.+$/gmu, '');
       }
@@ -63,7 +71,7 @@ export function enforceThemePlugin(theme) {
       return body;
     },
     transformImport({ source, context }) {
-      if (theme === 'base' || theme === 'ported-lumo') {
+      if (theme === 'base' || theme === 'ported-lumo' || theme === 'aura') {
         source = source.replace('/theme/lumo/', '/src/');
 
         const baseStylesResolvedPath = path.resolve(
@@ -138,5 +146,9 @@ export default {
     // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
     theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
     theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+
+    // yarn start --theme=aura
+    theme === 'aura' && enforceThemePlugin('aura'),
+    theme === 'aura' && cssImportPlugin(),
   ].filter(Boolean),
 };

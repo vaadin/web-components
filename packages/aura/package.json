@@ -16,6 +16,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/web-components/issues"
   },
+  "main": "aura.css",
   "type": "module",
   "files": [
     "*.css"
