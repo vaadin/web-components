@@ -1,47 +1,45 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import {
   ContextMenu,
-  type ContextMenuElement,
   type ContextMenuItem,
   type ContextMenuReactRendererProps,
 } from '../packages/react-components/src/ContextMenu.js';
 import { Item } from '../packages/react-components/src/Item.js';
 import { ListBox } from '../packages/react-components/src/ListBox.js';
 import catchRender from './utils/catchRender.js';
-import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 import { nextRender } from './utils/nextRender.js';
 import sinon from 'sinon';
 
-const overlayTag = 'vaadin-context-menu-overlay';
+const menuTag = 'vaadin-context-menu';
 const menuItemTag = 'vaadin-context-menu-item';
 
-async function until(predicate: () => boolean) {
-  while (!predicate()) {
-    await new Promise((r) => setTimeout(r, 10));
-  }
-}
-
-async function menuAnimationComplete() {
-  await until(() => !document.querySelector(`${overlayTag}[opening]`));
+async function overlayOpened(): Promise<void> {
+  return new Promise((resolve) => {
+    document.addEventListener(
+      'vaadin-overlay-open',
+      () => {
+        resolve();
+      },
+      { once: true },
+    );
+  });
 }
 
 async function openContextMenu(target: EventTarget) {
   // Emulate right mouse click
   target.dispatchEvent(new PointerEvent('contextmenu', { bubbles: true }));
-  await menuAnimationComplete();
+  await overlayOpened();
   await nextRender();
 }
 
 async function openSubMenu(parentItem: EventTarget) {
   parentItem.dispatchEvent(new PointerEvent('mouseover', { bubbles: true }));
-  await menuAnimationComplete();
+  await overlayOpened();
   await nextRender();
 }
 
 describe('ContextMenu', () => {
-  const [ref, catcher] = createOverlayCloseCatcher<ContextMenuElement>(overlayTag, (ref) => ref.close());
-
   const items: Array<ContextMenuItem> = [{ text: 'Bar' }];
 
   function Renderer({ context }: ContextMenuReactRendererProps) {
@@ -59,19 +57,18 @@ describe('ContextMenu', () => {
   async function assert(container: HTMLDivElement) {
     await openContextMenu(container);
 
-    const menu = document.querySelector(overlayTag);
+    const menu = container.closest(menuTag);
     expect(menu).to.exist;
 
     await catchRender(menu!, isListBoxRendered);
 
-    expect(menu).to.have.text('Bar');
+    const content = menu!.querySelector('[slot="overlay"]');
+    expect(content).to.have.text('Bar');
   }
-
-  afterEach(catcher);
 
   it('should use children if no renderer property set', async () => {
     const { container } = render(
-      <ContextMenu ref={ref} items={items}>
+      <ContextMenu items={items}>
         <div id="actor">Foo</div>
       </ContextMenu>,
     );
@@ -81,7 +78,7 @@ describe('ContextMenu', () => {
 
   it('should use renderer property if set', async () => {
     const { container } = render(
-      <ContextMenu ref={ref} renderer={Renderer}>
+      <ContextMenu renderer={Renderer}>
         <div id="actor">Bar</div>
       </ContextMenu>,
     );
@@ -91,7 +88,7 @@ describe('ContextMenu', () => {
 
   it('should render the given text as an item', async () => {
     const { container } = render(
-      <ContextMenu ref={ref} items={[{ text: 'foo' }]}>
+      <ContextMenu items={[{ text: 'foo' }]}>
         <div id="target">target</div>
       </ContextMenu>,
     );
@@ -99,14 +96,14 @@ describe('ContextMenu', () => {
     const target = container.querySelector<HTMLDivElement>('#target')!;
     await openContextMenu(target);
 
-    const item = document.querySelector(`${overlayTag} ${menuItemTag}`);
+    const item = document.querySelector(`${menuTag} ${menuItemTag}`);
     expect(item?.firstElementChild).not.to.exist;
     expect(item).to.have.text('foo');
   });
 
   it('should render the given ReactElement as an item', async () => {
     const { container } = render(
-      <ContextMenu ref={ref} items={[{ component: <span>foo</span> }]}>
+      <ContextMenu items={[{ component: <span>foo</span> }]}>
         <div id="target">target</div>
       </ContextMenu>,
     );
@@ -114,13 +111,13 @@ describe('ContextMenu', () => {
     const target = container.querySelector<HTMLDivElement>('#target')!;
     await openContextMenu(target);
 
-    const item = document.querySelector(`${overlayTag} ${menuItemTag} > span`);
+    const item = document.querySelector(`${menuTag} ${menuItemTag} > span`);
     expect(item).to.have.text('foo');
   });
 
   it('should render the given ReactElement in a hierarchical menu as an item', async () => {
     const { container } = render(
-      <ContextMenu ref={ref} items={[{ text: 'parent', children: [{ component: <span>foo</span> }] }]}>
+      <ContextMenu items={[{ text: 'parent', children: [{ component: <span>foo</span> }] }]}>
         <div id="target">target</div>
       </ContextMenu>,
     );
@@ -128,10 +125,10 @@ describe('ContextMenu', () => {
     const target = container.querySelector<HTMLDivElement>('#target')!;
     await openContextMenu(target);
 
-    const rootItem = document.querySelector(`${overlayTag} ${menuItemTag}`)!;
+    const rootItem = document.querySelector(`${menuTag} ${menuItemTag}`)!;
     await openSubMenu(rootItem);
 
-    const item = document.querySelector(`${overlayTag} ${menuItemTag} > span`);
+    const item = document.querySelector(`${menuTag} ${menuItemTag} > span`);
     expect(item).to.have.text('foo');
   });
 
@@ -141,7 +138,7 @@ describe('ContextMenu', () => {
     const spy = sinon.spy();
 
     const { container } = render(
-      <ContextMenu ref={ref} items={items} onItemSelected={spy}>
+      <ContextMenu items={items} onItemSelected={spy}>
         <div id="target">target</div>
       </ContextMenu>,
     );
@@ -149,7 +146,7 @@ describe('ContextMenu', () => {
     const target = container.querySelector<HTMLDivElement>('#target')!;
     await openContextMenu(target);
 
-    const rootItem = document.querySelector<HTMLElement>(`${overlayTag} ${menuItemTag}`)!;
+    const rootItem = document.querySelector<HTMLElement>(`${menuTag} ${menuItemTag}`)!;
     rootItem.click();
 
     expect(spy.called).to.be.true;

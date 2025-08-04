@@ -3,7 +3,7 @@ import { render } from 'vitest-browser-react';
 import { MenuBar, MenuBarElement } from '../packages/react-components/src/MenuBar.js';
 import sinon from 'sinon';
 
-const overlayTag = 'vaadin-menu-bar-overlay';
+const subMenuTag = 'vaadin-menu-bar-submenu';
 const menuItemTag = 'vaadin-menu-bar-item';
 const menuButtonTag = 'vaadin-menu-bar-button';
 
@@ -13,16 +13,21 @@ async function until(predicate: () => boolean) {
   }
 }
 
-async function menuAnimationComplete() {
-  await new Promise((r) => requestAnimationFrame(r));
-  await until(
-    () => !document.querySelector(`${overlayTag}[opening]`) && !!document.querySelector(`${overlayTag}[opened]`),
-  );
+async function overlayOpened(): Promise<void> {
+  return new Promise((resolve) => {
+    document.addEventListener(
+      'vaadin-overlay-open',
+      () => {
+        resolve();
+      },
+      { once: true },
+    );
+  });
 }
 
 async function openRootItemSubMenu(rootMenuItem: EventTarget) {
   rootMenuItem.dispatchEvent(new PointerEvent('click', { bubbles: true }));
-  await menuAnimationComplete();
+  await overlayOpened();
 }
 
 describe('MenuBar', () => {
@@ -58,7 +63,7 @@ describe('MenuBar', () => {
     const rootItem = menuBar.querySelector(menuButtonTag)!;
     await openRootItemSubMenu(rootItem);
 
-    const item = document.querySelector(`${overlayTag} ${menuItemTag} > span`);
+    const item = document.querySelector(`${subMenuTag} ${menuItemTag} > span`);
     expect(item).to.have.text('foo');
   });
 

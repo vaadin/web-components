@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import sinon from 'sinon';
 import { Dialog } from '../packages/react-components/src/Dialog.js';
@@ -6,14 +6,10 @@ import { nextRender } from './utils/nextRender.js';
 import { useState } from 'react';
 
 describe('Dialog', () => {
-  const overlayTag = 'vaadin-dialog-overlay';
-
-  afterEach(() => {
-    document.querySelector('vaadin-dialog-overlay')?.remove();
-  });
+  const dialogTag = 'vaadin-dialog';
 
   function assert() {
-    const dialog = document.querySelector(overlayTag);
+    const dialog = document.querySelector(dialogTag);
     expect(dialog).to.exist;
 
     const childNodes = Array.from(dialog!.childNodes);
