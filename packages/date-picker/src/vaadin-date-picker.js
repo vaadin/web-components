@@ -66,13 +66,11 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-date-picker-month-scroller>`
  * - `<vaadin-date-picker-year-scroller>`
  * - `<vaadin-date-picker-year>`
  * - `<vaadin-month-calendar>`
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
  * In order to style the overlay content, use `<vaadin-date-picker-overlay-content>` shadow DOM parts:
  *

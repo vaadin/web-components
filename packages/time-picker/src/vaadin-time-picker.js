@@ -62,12 +62,7 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * In addition to `<vaadin-time-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-time-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-time-picker-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
- *
- * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
- * propagated to the internal components listed above.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

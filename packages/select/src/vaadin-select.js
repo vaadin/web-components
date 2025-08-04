@@ -114,12 +114,9 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-select-value-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the button.
- *
- * Note: the `theme` attribute value set on `<vaadin-select>` is
- * propagated to the internal components listed above.
+ * - `<vaadin-select-list-box>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-list-box).
+ * - `<vaadin-select-item>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-item).
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

@@ -72,8 +72,7 @@ export const SelectBaseMixin = (superClass) =>
          * Custom function for rendering the content of the `<vaadin-select>`.
          * Receives two arguments:
          *
-         * - `root` The `<vaadin-select-overlay>` internal container
-         *   DOM element. Append your content to it.
+         * - `root` The internal container DOM element. Append your content to it.
          * - `select` The reference to the `<vaadin-select>` element.
          * @type {!SelectRenderer | undefined}
          */
