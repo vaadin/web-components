@@ -7,6 +7,5 @@
 
 :is(:root, :host)::before {
   --vaadin-button-lumo-inject: 1;
-  --vaadin-button-lumo-inject-modules:
-    lumo_components_button;
+  --vaadin-button-lumo-inject-modules: lumo_components_button;
 }
