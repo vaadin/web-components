@@ -205,7 +205,7 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
- * @fires {CustomEvent} closed - Fired when the overlay is closed.
+ * @fires {CustomEvent} closed - Fired when the context menu is closed.
  *
  * @customElement
  * @extends HTMLElement
