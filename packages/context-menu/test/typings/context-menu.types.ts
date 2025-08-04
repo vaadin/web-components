@@ -7,6 +7,7 @@ import type { ContextMenuItem } from '../../src/vaadin-context-menu-item.js';
 import type { ContextMenuListBox } from '../../src/vaadin-context-menu-list-box.js';
 import type {
   ContextMenu,
+  ContextMenuClosedEvent,
   ContextMenuItem as MenuItem,
   ContextMenuItemSelectedEvent,
   ContextMenuOpenedChangedEvent,
@@ -34,6 +35,10 @@ menu.addEventListener('opened-changed', (event) => {
 menu.addEventListener('item-selected', (event) => {
   assertType<ContextMenuItemSelectedEvent>(event);
   assertType<MenuItem>(event.detail.value);
+});
+
+menu.addEventListener('closed', (event) => {
+  assertType<ContextMenuClosedEvent>(event);
 });
 
 const renderer: ContextMenuRenderer = (root, contextMenu, context) => {

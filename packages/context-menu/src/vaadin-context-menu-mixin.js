@@ -209,6 +209,14 @@ export const ContextMenuMixin = (superClass) =>
       this.__forwardFocus();
     }
 
+    /**
+     * Runs after overlay's closing animation is finished
+     * @private
+     */
+    _onVaadinOverlayClosed() {
+      this.dispatchEvent(new CustomEvent('closed'));
+    }
+
     /** @private */
     _targetOrOpenOnChanged(listenOn, openOn) {
       if (this._oldListenOn && this._oldOpenOn) {
@@ -641,4 +649,10 @@ export const ContextMenuMixin = (superClass) =>
         this.close();
       }
     }
+
+    /**
+     * Fired when the context menu is closed.
+     *
+     * @event closed
+     */
   };
