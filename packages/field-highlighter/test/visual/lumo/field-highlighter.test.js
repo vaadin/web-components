@@ -219,21 +219,15 @@ describe('field-highlighter', () => {
       await visualDiff(div, 'text-field');
     });
 
-    it('focused', async () => {
+    it('focus-ring', async () => {
       await sendKeys({ press: 'Tab' });
       await nextFrame();
-      await visualDiff(div, 'text-field-focused');
+      await visualDiff(div, 'text-field-focus-ring');
     });
 
-    it('pointer focus-ring disabled', async () => {
+    it('pointer focus', async () => {
       await sendMouseToElement({ type: 'click', element });
-      await visualDiff(div, 'text-field-pointer-focus-ring-disabled');
-    });
-
-    it('pointer focus-ring enabled', async () => {
-      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
-      await sendMouseToElement({ type: 'click', element });
-      await visualDiff(div, 'text-field-pointer-focus-ring-enabled');
+      await visualDiff(div, 'text-field-pointer-focus');
     });
   });
 });
