@@ -23,4 +23,8 @@ export const fieldOutlineStyles = css`
   :host([has-active-user]) {
     opacity: 1;
   }
+
+  :host([context$='item']) {
+    inset: 2px;
+  }
 `;
