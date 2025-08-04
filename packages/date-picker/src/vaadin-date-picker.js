@@ -111,9 +111,6 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * `year-number`         | Year number
  * `year-separator`      | Year separator
  *
- * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
- * propagated to the internal components listed above.
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Change events

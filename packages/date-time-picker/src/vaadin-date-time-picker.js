@@ -60,9 +60,6 @@ import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
  * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
  * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
  *
- * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
- * propagated to these components.
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Change events
