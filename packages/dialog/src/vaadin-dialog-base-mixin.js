@@ -80,6 +80,7 @@ export const DialogBaseMixin = (superClass) =>
          * The `role` attribute value to be set on the dialog. Defaults to "dialog".
          *
          * @attr {string} overlay-role
+         * @deprecated Use standard `role` attribute on the dialog instead
          */
         overlayRole: {
           type: String,
