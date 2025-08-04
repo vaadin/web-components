@@ -99,12 +99,14 @@ const getAllVisualPackages = () => {
 };
 
 /**
- * Get all available packages with visual tests for base styles.
+ * Get all available packages with visual tests for given theme.
  */
-const getAllBasePackages = () => {
+const getAllThemePackages = (theme) => {
   return fs
     .readdirSync('packages')
-    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/base`));
+    .filter(
+      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/${theme}`),
+    );
 };
 
 /**
@@ -266,7 +268,9 @@ const createUnitTestsConfig = (config) => {
 const createVisualTestsConfig = (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
-    visualPackages = getAllBasePackages();
+    visualPackages = getAllThemePackages('base');
+  } else if (theme === 'aura') {
+    visualPackages = getAllThemePackages('aura');
   } else {
     visualPackages = getAllVisualPackages();
   }
