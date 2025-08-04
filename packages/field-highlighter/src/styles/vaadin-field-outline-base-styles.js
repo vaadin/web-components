@@ -15,6 +15,7 @@ export const fieldOutlineStyles = css`
     opacity: 0;
     --_active-user-color: transparent;
     outline: 3px solid var(--_active-user-color);
+    outline-offset: -1px;
     /* TODO doesn't inherit correctly from vaadin-input-container for some reason, so we use the internal _radius property */
     border-radius: var(--_radius, inherit);
   }
