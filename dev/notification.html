@@ -7,24 +7,153 @@
     <title>Notification</title>
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/checkbox';
+      import '@vaadin/select';
+      import '@vaadin/text-field';
+      import { html } from 'lit';
+      import { Notification } from '@vaadin/notification';
+
+      function generateRandomSentence() {
+        const words = [
+          'the',
+          'quick',
+          'brown',
+          'fox',
+          'jumps',
+          'over',
+          'lazy',
+          'dog',
+          'and',
+          'runs',
+          'into',
+          'forest',
+          'with',
+          'great',
+          'speed',
+          'before',
+          'sunset',
+          'on',
+          'a',
+          'quiet',
+          'evening',
+          'while',
+          'birds',
+          'sing',
+          'softly',
+          'near',
+          'river',
+          'under',
+          'trees',
+          'gently',
+          'swaying',
+        ];
+
+        const sentenceLength = Math.floor(Math.random() * 45) + 3;
+        const sentence = [];
+
+        for (let i = 0; i < sentenceLength; i++) {
+          const word = words[Math.floor(Math.random() * words.length)];
+          sentence.push(word);
+        }
+
+        sentence[0] = sentence[0].charAt(0).toUpperCase() + sentence[0].slice(1);
+        return sentence.join(' ') + '.';
+      }
+
+      const positionSelect = document.querySelector('#position');
+      positionSelect.items = [
+        { label: 'All', value: 'all' },
+        { label: 'Random', value: 'random' },
+        { component: 'hr' },
+        { label: 'Top Stretch', value: 'top-stretch' },
+        { label: 'Top Start', value: 'top-start' },
+        { label: 'Top Center', value: 'top-center' },
+        { label: 'Top End', value: 'top-end' },
+        { label: 'Middle', value: 'middle' },
+        { label: 'Bottom Start', value: 'bottom-start' },
+        { label: 'Bottom Center', value: 'bottom-center' },
+        { label: 'Bottom End', value: 'bottom-end' },
+        { label: 'Bottom Stretch', value: 'bottom-stretch' },
+      ];
+      positionSelect.value = 'random';
+
+      const durationInput = document.querySelector('#duration');
+
+      function showNotification(position) {
+        const duration = durationInput.value !== '' ? parseInt(durationInput.value) * 1000 : 1000 + Math.random() * 6000;
+        const notification = Notification.show(html`${generateRandomSentence()} <vaadin-button>Close</vaadin-button>`, {
+          position,
+          duration,
+        });
+        notification._card.querySelector('vaadin-button').addEventListener('click', () => {
+          notification.close();
+        });
+      }
+
+      document.querySelector('#show-notification').addEventListener('click', () => {
+        let position = positionSelect.value;
+
+        const posOptions = positionSelect.items.slice(3);
+        if (position === 'all') {
+          posOptions.forEach(({ value }) => {
+            showNotification(value);
+          });
+        } else {
+          if (position === 'random') {
+            position = posOptions[parseInt(Math.random() * posOptions.length)].value;
+          }
+          showNotification(position);
+        }
+      });
+    </script>
+
+    <style>
+      .section {
+        padding-top: 30vh;
+        gap: 1em;
+        /* TODO remove once baseline alignment works */
+        align-items: end;
+        justify-content: center;
+      }
+
+      /* TODO should be a built-in variant */
+      #duration input {
+        text-align: end;
+      }
+
+      #duration {
+        width: 7em;
+      }
+
+      vaadin-notification-card::part(content) {
+        display: grid;
+        grid-template-columns: 1fr minmax(0, auto);
+        align-items: center;
+        gap: 1em;
+      }
+
+      vaadin-notification-card > * {
+        grid-column: 1;
+      }
+
+      vaadin-notification-card > vaadin-button {
+        grid-column: 2;
+      }
+    </style>
   </head>
 
   <body>
-    <vaadin-notification position="middle" duration="0" theme="primary"></vaadin-notification>
+    <section class="section">
+      <vaadin-select label="Position" id="position"></vaadin-select>
 
-    <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/notification';
+      <vaadin-text-field label="Duration" id="duration" placeholder="0–7">
+        <span slot="suffix">sec</span>
+      </vaadin-text-field>
 
-      const notification = document.querySelector('vaadin-notification');
-      notification.renderer = (root) => {
-        root.innerHTML = `
-          Operation completed
-          <vaadin-button theme="primary">Undo</vaadin-button>
-          <vaadin-button>Close</vaadin-button>
-        `;
-      };
-      notification.open();
-    </script>
+      <vaadin-button id="show-notification">Show</vaadin-button>
+    </section>
   </body>
 </html>
