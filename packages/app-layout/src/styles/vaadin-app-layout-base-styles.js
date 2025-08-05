@@ -116,7 +116,7 @@ export const appLayoutStyles = css`
     visibility: hidden;
     display: flex;
     flex-direction: column;
-    background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
+    background: var(--vaadin-app-layout-drawer-background, transparent);
   }
 
   :host([drawer-opened]) [part='drawer'] {
@@ -146,6 +146,7 @@ export const appLayoutStyles = css`
     top: 0;
     bottom: 0;
     box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+    background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
   }
 
   :host([overlay]) [part='drawer'],
