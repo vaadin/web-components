@@ -239,6 +239,19 @@ describe('accessibility', () => {
         await nextFrame();
         expect(grid.$.table.getAttribute('aria-colcount')).to.equal('4');
       });
+
+      it('should update aria-colcount when grid is empty with empty-state and no header/footer rendered', async () => {
+        const emptyStateText = document.createElement('span');
+        emptyStateText.setAttribute('slot', 'empty-state');
+        grid.appendChild(emptyStateText);
+        grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+          col.headerRenderer = null;
+          col.footerRenderer = null;
+        });
+        grid.items = [];
+        await nextFrame();
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('1');
+      });
     });
 
     describe('row details in use', () => {
@@ -312,6 +325,26 @@ describe('accessibility', () => {
 
       // 10 item rows + header row + footer row = 12 in total
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
+    });
+
+    it('should count the footer rows correctly as part of the aria-rowcount', async () => {
+      // Remove the header renderers
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.headerRenderer = null;
+      });
+
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
+    });
+
+    it('should count the header rows correctly as part of the aria-rowcount', async () => {
+      // Remove the footer renderers
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.footerRenderer = null;
+      });
+
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
     });
   });
 
