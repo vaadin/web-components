@@ -208,8 +208,7 @@ describe('grid-pro custom editor', () => {
         expect(TODAY_DATE).to.be.equal(cell._content.textContent);
       });
 
-      // FIXME: restore after updating to use base styles by default
-      it.skip('should restore previous cell content if overlay is closed', async () => {
+      it('should restore previous cell content if overlay is closed', async () => {
         const previousContent = cell._content.textContent;
 
         dblclick(cell);
