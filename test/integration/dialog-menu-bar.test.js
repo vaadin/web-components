@@ -12,14 +12,7 @@ describe('menu-bar in dialog', () => {
   let dialog, menuBar;
 
   beforeEach(async () => {
-    fixtureSync(`
-      <style>
-        vaadin-dialog::part(content) {
-          padding: 0;
-        }
-      </style>
-    `);
-    dialog = fixtureSync(`<vaadin-dialog width="650px"></vaadin-dialog>`);
+    dialog = fixtureSync(`<vaadin-dialog width="650px" theme="no-padding"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
