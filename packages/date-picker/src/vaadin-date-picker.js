@@ -271,7 +271,7 @@ class DatePicker extends DatePickerMixin(
   /** @private */
   _onVaadinOverlayClose(e) {
     // Prevent closing the overlay on label element click
-    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
+    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this._labelNode)) {
       e.preventDefault();
     }
   }

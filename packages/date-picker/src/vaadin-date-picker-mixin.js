@@ -1032,8 +1032,9 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     _onClick(event) {
-      // Ignore click events bubbling from the overlay
-      if (event.composedPath().includes(this._overlayContent)) {
+      // Ignore click events bubbling from the overlay or backdrop
+      const path = event.composedPath();
+      if (path.includes(this._overlayContent) || path.includes(this._overlayElement)) {
         return;
       }
 

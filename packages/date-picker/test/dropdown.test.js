@@ -46,6 +46,16 @@ describe('dropdown', () => {
     expect(overlay.opened).to.be.false;
   });
 
+  it('should close overlay on backdrop element click', async () => {
+    await open(datePicker);
+
+    datePicker.setAttribute('fullscreen', '');
+    overlay.shadowRoot.querySelector('[part="backdrop"]').click();
+
+    expect(datePicker.opened).to.be.false;
+    expect(overlay.opened).to.be.false;
+  });
+
   describe('toggle button', () => {
     let toggleButton;
 
