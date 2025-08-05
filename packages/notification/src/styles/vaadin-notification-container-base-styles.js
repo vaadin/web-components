@@ -51,11 +51,13 @@ export const notificationContainerStyles = css`
 
   [region='top-stretch'] {
     grid-row: 1;
+    z-index: 2;
     --vaadin-notification-width: 100%;
   }
 
   [region='bottom-stretch'] {
     grid-row: 3;
+    z-index: 2;
     --vaadin-notification-width: 100%;
   }
 
