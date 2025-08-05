@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-notification card"] = 
 `<vaadin-notification-card
   aria-live="polite"
+  opening=""
   role="alert"
   slot="bottom-start"
 >
@@ -15,6 +16,7 @@ snapshots["vaadin-notification card"] =
 snapshots["vaadin-notification card theme"] = 
 `<vaadin-notification-card
   aria-live="polite"
+  opening=""
   role="alert"
   slot="bottom-start"
   theme="custom"
@@ -28,6 +30,7 @@ snapshots["vaadin-notification card class"] =
 `<vaadin-notification-card
   aria-live="polite"
   class="custom"
+  opening=""
   role="alert"
   slot="bottom-start"
 >
@@ -39,6 +42,7 @@ snapshots["vaadin-notification card class"] =
 snapshots["vaadin-notification assertive"] = 
 `<vaadin-notification-card
   aria-live="assertive"
+  opening=""
   role="alert"
   slot="bottom-start"
 >
