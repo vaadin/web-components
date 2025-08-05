@@ -13,7 +13,6 @@ import { cssImportPlugin, enforceThemePlugin } from './web-dev-server.config.js'
 dotenv.config();
 
 const argv = minimist(process.argv.slice(2));
-const hasPortedParam = process.argv.includes('--ported');
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
@@ -337,11 +336,8 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       theme === 'base' && enforceThemePlugin('base'),
 
       // yarn test:lumo (uses legacy lumo styles defined in js files)
-      theme === 'lumo' && !hasPortedParam && enforceThemePlugin('legacy-lumo'),
-
-      // yarn test:lumo --ported (uses base styles and lumo styles defined in css files)
-      theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
-      theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+      theme === 'lumo' && enforceThemePlugin('lumo'),
+      theme === 'lumo' && cssImportPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(),
