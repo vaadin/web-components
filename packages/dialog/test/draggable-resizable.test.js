@@ -1,27 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './draggable-resizable-styles.js';
 import '../src/vaadin-dialog.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-const style = document.createElement('style');
-style.textContent = css`
-  /* Disable safe area */
-  vaadin-dialog-overlay {
-    inset: 0;
-  }
-
-  /* Disable optical centering */
-  vaadin-dialog-overlay::after {
-    flex-grow: 1;
-  }
-
-  /* Disable content padding */
-  vaadin-dialog-overlay::part(content) {
-    padding: 0;
-  }
-`;
-document.head.append(style);
 
 customElements.define(
   'internally-draggable',
