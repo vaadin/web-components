@@ -76,6 +76,11 @@ export const DialogOverlayMixin = (superClass) =>
       this.$.content.addEventListener('scroll', () => {
         this.__updateOverflow();
       });
+
+      // Update overflow attribute on content change
+      this.shadowRoot.addEventListener('slotchange', () => {
+        this.__updateOverflow();
+      });
     }
 
     /** @private */
@@ -230,18 +235,14 @@ export const DialogOverlayMixin = (superClass) =>
     __updateOverflow() {
       let overflow = '';
 
-      // Only set "overflow" attribute if the dialog has a header, title or footer.
-      // Check for state attributes as extending components might not use renderers.
-      if (this.hasAttribute('has-header') || this.hasAttribute('has-footer') || this.headerTitle) {
-        const content = this.$.content;
+      const content = this.$.content;
 
-        if (content.scrollTop > 0) {
-          overflow += ' top';
-        }
+      if (content.scrollTop > 0) {
+        overflow += ' top';
+      }
 
-        if (content.scrollTop < content.scrollHeight - content.clientHeight) {
-          overflow += ' bottom';
-        }
+      if (content.scrollTop < content.scrollHeight - content.clientHeight) {
+        overflow += ' bottom';
       }
 
       const value = overflow.trim();
