@@ -37,6 +37,7 @@
     "@vaadin/icon": "25.0.0-alpha10"
   },
   "devDependencies": {
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "cheerio": "^1.0.0",
     "gulp": "^5.0.1",
     "gulp-cli": "^3.1.0",
