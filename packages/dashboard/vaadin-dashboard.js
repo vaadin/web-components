@@ -1,3 +1,3 @@
-import './theme/lumo/vaadin-dashboard.js';
+import './src/vaadin-dashboard.js';
 
 export * from './src/vaadin-dashboard.js';

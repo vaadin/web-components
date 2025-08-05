@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-notification.js';
+import './src/vaadin-notification.js';
 export * from './src/vaadin-notification.js';

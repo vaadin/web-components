@@ -1,3 +1,3 @@
-import './theme/lumo/vaadin-button.js';
+import './src/vaadin-button.js';
 
 export * from './src/vaadin-button.js';

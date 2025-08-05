@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-checkbox.js';
+import './src/vaadin-checkbox.js';
 export * from './src/vaadin-checkbox.js';
