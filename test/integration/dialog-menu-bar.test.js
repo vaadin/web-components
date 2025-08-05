@@ -19,7 +19,7 @@ describe('menu-bar in dialog', () => {
         }
       </style>
     `);
-    dialog = fixtureSync(`<vaadin-dialog width="700px"></vaadin-dialog>`);
+    dialog = fixtureSync(`<vaadin-dialog width="650px"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
