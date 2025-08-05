@@ -16,8 +16,8 @@
  *
  * License: www.highcharts.com/license
  */
-import '@vaadin/component-base/src/style-props.js';
-import '@vaadin/component-base/src/user-colors.js';
+import '@vaadin/component-base/src/styles/style-props.js';
+import '@vaadin/component-base/src/styles/user-colors.js';
 import { css, unsafeCSS } from 'lit';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 

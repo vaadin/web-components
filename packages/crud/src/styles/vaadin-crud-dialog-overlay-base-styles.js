@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-base-styles.js';
 
