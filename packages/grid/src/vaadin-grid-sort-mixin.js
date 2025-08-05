@@ -162,7 +162,7 @@ export const SortMixin = (superClass) =>
         this.__debounceClearCache();
       }
 
-      this._a11yUpdateSorters();
+      this.__a11yUpdateSorters();
 
       this._previousSorters = this._mapSorters();
     }

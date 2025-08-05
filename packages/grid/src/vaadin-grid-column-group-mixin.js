@@ -314,13 +314,13 @@ export const GridColumnGroupMixin = (superClass) =>
       if (headerCell) {
         headerCell.setAttribute('colspan', colSpan);
         if (this._grid) {
-          this._grid._a11yUpdateCellColspan(headerCell, colSpan);
+          this._grid.__a11yUpdateCellColspan(headerCell, colSpan);
         }
       }
       if (footerCell) {
         footerCell.setAttribute('colspan', colSpan);
         if (this._grid) {
-          this._grid._a11yUpdateCellColspan(footerCell, colSpan);
+          this._grid.__a11yUpdateCellColspan(footerCell, colSpan);
         }
       }
     }
