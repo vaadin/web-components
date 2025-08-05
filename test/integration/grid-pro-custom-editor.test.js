@@ -22,16 +22,6 @@ describe('grid-pro custom editor', () => {
       </vaadin-gri-pro>
     `);
 
-    // FIXME: remove when switching to base styles.
-    // Ensure grid cells have some height.
-    fixtureSync(`
-      <style>
-        vaadin-grid-pro::part(cell) {
-          min-height: 36px;
-        }
-      </style>
-    `);
-
     const column = grid.querySelector(`[path="${path}"]`);
     switch (path) {
       case 'date':
