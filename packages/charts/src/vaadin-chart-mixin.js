@@ -33,7 +33,7 @@ import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
-import { deepMerge, inflateFunctions } from './helpers.js';
+import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './helpers.js';
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
@@ -1202,55 +1202,12 @@ export const ChartMixin = (superClass) =>
             // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
             // Hook into beforePrint and beforeExport to ensure correct styling
             if (['beforePrint', 'beforeExport'].indexOf(event.type) >= 0) {
-              // Guard against another print 'before print' event coming before
-              // the 'after print' event.
-              if (!self.tempBodyStyle) {
-                let effectiveCss = '';
-
-                // PolymerElement uses `<style>` tags for adding styles
-                [...self.shadowRoot.querySelectorAll('style')].forEach((style) => {
-                  effectiveCss += style.textContent;
-                });
-
-                // LitElement uses `adoptedStyleSheets` for adding styles
-                if (self.shadowRoot.adoptedStyleSheets) {
-                  self.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
-                    effectiveCss += [...sheet.cssRules].map((rule) => rule.cssText).join('\n');
-                  });
-                }
-
-                // Strip off host selectors that target individual instances
-                effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
-                  const selector = match.substr(6, match.length - 7);
-                  return self.matches(selector) ? '' : match;
-                });
-
-                // Zoom out a bit to avoid clipping the chart's edge on paper
-                effectiveCss =
-                  `${effectiveCss}body {` +
-                  `    -moz-transform: scale(0.9, 0.9);` + // Mozilla
-                  `    zoom: 0.9;` + // Others
-                  `    zoom: 90%;` + // Webkit
-                  `}`;
-
-                self.tempBodyStyle = document.createElement('style');
-                self.tempBodyStyle.textContent = effectiveCss;
-                document.body.appendChild(self.tempBodyStyle);
-                if (self.options.chart.styledMode) {
-                  document.body.setAttribute('styled-mode', '');
-                }
-              }
+              prepareExport(self);
             }
 
             // Hook into afterPrint and afterExport to revert changes made before
             if (['afterPrint', 'afterExport'].indexOf(event.type) >= 0) {
-              if (self.tempBodyStyle) {
-                document.body.removeChild(self.tempBodyStyle);
-                delete self.tempBodyStyle;
-                if (self.options.chart.styledMode) {
-                  document.body.removeAttribute('styled-mode');
-                }
-              }
+              cleanupExport(self);
             }
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));

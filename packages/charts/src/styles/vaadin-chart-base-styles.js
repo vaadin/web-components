@@ -81,6 +81,10 @@ export const chartStyles = css`
     display: block;
     width: 100%;
     overflow: hidden;
+  }
+
+  :host,
+  :root {
     font-size: var(--vaadin-charts-font-size, 0.75rem);
     line-height: normal;
 
