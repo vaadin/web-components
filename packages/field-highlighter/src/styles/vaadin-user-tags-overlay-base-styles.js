@@ -20,6 +20,21 @@ const userTagsOverlay = css`
     gap: var(--vaadin-user-tag-overlay-gap, 0.2em);
     padding: 0.5em 0;
   }
+
+  :host([opening]),
+  :host([closing]) {
+    animation: 0.14s user-tags-overlay-dummy-animation;
+  }
+
+  @keyframes user-tags-overlay-dummy-animation {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 
 export const userTagsOverlayStyles = [overlayStyles, userTagsOverlay];
