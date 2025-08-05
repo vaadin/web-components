@@ -207,10 +207,8 @@ describe('vaadin-dialog', () => {
     it('should have min-width when not explicitly sized', async () => {
       dialog.opened = true;
       await nextRender();
-      const contentMinWidth = parseFloat(getComputedStyle(dialog.$.overlay.$.content).minWidth);
-      // TODO change to this with new base styles
-      // const contentMinWidth = parseFloat(getComputedStyle(dialog.$.overlay.$.overlay).minWidth);
-      expect(contentMinWidth).to.be.gt(0);
+      const contentMinWidth = getComputedStyle(dialog.$.overlay.$.overlay).minWidth;
+      expect(contentMinWidth).to.be.equal('min(64px, 100%)');
     });
   });
 

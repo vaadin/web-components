@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './draggable-resizable-styles.js';
 import '../src/vaadin-dialog.js';
@@ -245,18 +245,15 @@ describe('resizable', () => {
     expect(container.offsetHeight).to.equal(resizeContainer.offsetHeight);
   });
 
-  it('should scroll if the content overflows', () => {
+  it('should scroll if the content overflows', async () => {
     // Fill the content with a lot of text so that it overflows the viewport
     dialog.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
+    await nextResize(dialog.firstElementChild);
+    await nextRender();
 
-    const resizeContainer = dialog.$.overlay.$.resizerContainer;
-    resizeContainer.scrollTop = 1;
-    expect(resizeContainer.scrollTop).to.equal(1);
-
-    // TODO change to this with base styles
-    // const content = dialog.$.overlay.$.content;
-    // content.scrollTop = 1;
-    // expect(content.scrollTop).to.equal(1);
+    const content = dialog.$.overlay.$.content;
+    content.scrollTop = 1;
+    expect(content.scrollTop).to.equal(1);
   });
 
   it('should expand content with relative height', () => {
@@ -301,7 +298,6 @@ describe('resizable', () => {
   });
 
   it('should be able to resize dialog to be wider than window', async () => {
-    dialog.$.overlay.$.content.style.padding = '20px';
     dx = 20;
     dialog.$.overlay.setBounds({ left: -dx });
     dx = Math.floor(window.innerWidth - bounds.width + 5);
@@ -566,14 +562,17 @@ describe('draggable', () => {
 
   it('should not reset scroll position on dragstart', async () => {
     dialog.modeless = true;
-    button.style.marginBottom = '200px';
-    dialog.$.overlay.setBounds({ height: '100px' });
-    await nextUpdate(dialog);
-    // TODO use dialog.$.overlay.$.content.scrollTop with base styles
-    container.scrollTop = 100;
-    expect(container.scrollTop).to.equal(100);
+    dialog.height = '100px';
+    await nextRender();
+
+    const contentElement = dialog.firstElementChild;
+    contentElement.style.minHeight = '200px';
+    await nextResize(contentElement);
+    await nextRender();
+
+    dialog.$.overlay.$.content.scrollTop = 100;
     drag(container);
-    expect(container.scrollTop).to.equal(100);
+    expect(dialog.$.overlay.$.content.scrollTop).to.equal(100);
   });
 
   it('should update "top" and "left" properties on drag', async () => {
@@ -855,13 +854,9 @@ describe('overflowing content', () => {
     dialog.$.overlay.setBounds({ height: 200 });
     await nextFrame();
     overlay.$.content.style.padding = '20px';
-    container.scrollTop = 100;
-    // TODO change to this with new base styles
-    // overlay.$.content.scrollTop = 100;
+    overlay.$.content.scrollTop = 100;
     resize(overlayPart.querySelector('.s'), 0, -50);
     await nextFrame();
-    expect(container.scrollTop).to.equal(100);
-    // TODO change to this with new base styles
-    // expect(overlay.$.content.scrollTop).to.equal(100);
+    expect(overlay.$.content.scrollTop).to.equal(100);
   });
 });
