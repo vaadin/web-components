@@ -54,7 +54,6 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    // chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
     clickExportingButton();
 
     // Simulate a PNG export
