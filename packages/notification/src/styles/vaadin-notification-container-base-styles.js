@@ -79,8 +79,12 @@ export const notificationContainerStyles = css`
     padding: var(--_paint-area);
   }
 
+  [region]:not([region='middle'], [region$='center']):where(:hover, :focus-within) {
+    margin-inline: calc(var(--_paint-area) * -1);
+  }
+
   [region]:not([region='middle']):where(:hover, :focus-within) {
-    margin: calc(var(--_paint-area) * -1);
+    margin-block: calc(var(--_paint-area) * -1);
   }
 
   [region-group='top'] > [region] {
