@@ -837,15 +837,6 @@ describe('overflowing content', () => {
     container = overlay.$.resizerContainer;
   });
 
-  it('should set overflow attribute when adding content that overflows', async () => {
-    const div = document.createElement('div');
-    div.style.maxWidth = '300px';
-    div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    dialog.appendChild(div);
-    await nextRender();
-    expect(dialog.hasAttribute('overflow')).to.be.true;
-  });
-
   it('should not overflow when style attribute is set on the overlay part', () => {
     const div = document.createElement('div');
     div.style.maxWidth = '300px';

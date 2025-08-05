@@ -68,7 +68,9 @@ export const DialogOverlayMixin = (superClass) =>
 
       // Update overflow attribute on resize
       this.__resizeObserver = new ResizeObserver(() => {
-        this.__updateOverflow();
+        requestAnimationFrame(() => {
+          this.__updateOverflow();
+        });
       });
       this.__resizeObserver.observe(this.$.resizerContainer);
 
