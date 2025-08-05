@@ -40,7 +40,6 @@
     "@vaadin/checkbox": "25.0.0-alpha10",
     "@vaadin/component-base": "25.0.0-alpha10",
     "@vaadin/field-base": "25.0.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "@vaadin/vaadin-themable-mixin": "25.0.0-alpha10",
     "lit": "^3.0.0"
   },
