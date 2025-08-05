@@ -9,7 +9,7 @@
  * license.
  */
 import { css } from 'lit';
-import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-core-styles.js';
+import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-base-styles.js';
 
 const dashboardButton = css`
   :host {

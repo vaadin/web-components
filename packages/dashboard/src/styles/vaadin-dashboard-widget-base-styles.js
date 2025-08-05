@@ -10,7 +10,7 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-core-styles.js';
+import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-base-styles.js';
 
 const widgetStyles = css`
   :host {
