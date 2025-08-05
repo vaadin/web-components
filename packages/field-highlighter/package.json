@@ -21,7 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js"
   ],
@@ -36,7 +35,6 @@
     "@vaadin/a11y-base": "25.0.0-alpha10",
     "@vaadin/component-base": "25.0.0-alpha10",
     "@vaadin/overlay": "25.0.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "@vaadin/vaadin-themable-mixin": "25.0.0-alpha10",
     "lit": "^3.0.0"
   },
@@ -55,6 +53,7 @@
     "@vaadin/text-area": "25.0.0-alpha10",
     "@vaadin/text-field": "25.0.0-alpha10",
     "@vaadin/time-picker": "25.0.0-alpha10",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "sinon": "^18.0.0"
   }
 }

@@ -21,7 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "web-types.json",

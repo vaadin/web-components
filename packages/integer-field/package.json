@@ -21,7 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "web-types.json",
@@ -35,13 +34,13 @@
   ],
   "dependencies": {
     "@vaadin/component-base": "25.0.0-alpha10",
-    "@vaadin/number-field": "25.0.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10"
+    "@vaadin/number-field": "25.0.0-alpha10"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "25.0.0-alpha10",
     "@vaadin/test-runner-commands": "25.0.0-alpha10",
     "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "sinon": "^18.0.0"
   },
   "web-types": [

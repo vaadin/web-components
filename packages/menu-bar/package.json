@@ -23,7 +23,6 @@
     "src",
     "!src/styles/*-base-styles.d.ts",
     "!src/styles/*-base-styles.js",
-    "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "web-types.json",
@@ -44,7 +43,6 @@
     "@vaadin/item": "25.0.0-alpha10",
     "@vaadin/list-box": "25.0.0-alpha10",
     "@vaadin/overlay": "25.0.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "@vaadin/vaadin-themable-mixin": "25.0.0-alpha10",
     "lit": "^3.0.0"
   },
@@ -53,6 +51,7 @@
     "@vaadin/icon": "25.0.0-alpha10",
     "@vaadin/test-runner-commands": "25.0.0-alpha10",
     "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha10",
     "sinon": "^18.0.0"
   },
   "web-types": [
