@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-base-styles.js';
 

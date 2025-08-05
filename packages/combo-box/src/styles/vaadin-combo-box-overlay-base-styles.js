@@ -3,9 +3,9 @@
  * Copyright (c) 2015 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { loaderStyles } from '@vaadin/component-base/src/loader-styles.js';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 
 export const comboBoxOverlayStyles = [
   loaderStyles,
