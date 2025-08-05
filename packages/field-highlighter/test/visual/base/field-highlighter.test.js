@@ -1,26 +1,16 @@
-import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
-import '@vaadin/vaadin-lumo-styles/components/field-highlighter.css';
-import '@vaadin/vaadin-lumo-styles/components/checkbox.css';
-import '@vaadin/vaadin-lumo-styles/components/checkbox-group.css';
-import '@vaadin/vaadin-lumo-styles/components/date-time-picker.css';
-import '@vaadin/vaadin-lumo-styles/components/list-box.css';
-import '@vaadin/vaadin-lumo-styles/components/item.css';
-import '@vaadin/vaadin-lumo-styles/components/radio-group.css';
-import '@vaadin/vaadin-lumo-styles/components/text-area.css';
-import '@vaadin/vaadin-lumo-styles/components/text-field.css';
 import '../common.js';
-import '@vaadin/checkbox';
-import '@vaadin/checkbox-group';
-import '@vaadin/date-time-picker';
-import '@vaadin/item';
-import '@vaadin/list-box';
-import '@vaadin/radio-group';
-import '@vaadin/text-area';
-import '@vaadin/text-field';
-import '../../../vaadin-field-highlighter.js';
+import '@vaadin/checkbox/src/vaadin-checkbox.js';
+import '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
+import '@vaadin/date-time-picker/src/vaadin-date-time-picker.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
+import '@vaadin/radio-group/src/vaadin-radio-group.js';
+import '@vaadin/text-area/src/vaadin-text-area.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '../../../src/vaadin-field-highlighter.js';
 import { setUsers } from '../helpers.js';
 
 describe('field-highlighter', () => {
@@ -219,15 +209,10 @@ describe('field-highlighter', () => {
       await visualDiff(div, 'text-field');
     });
 
-    it('focus-ring', async () => {
+    it('focused', async () => {
       await sendKeys({ press: 'Tab' });
       await nextFrame();
-      await visualDiff(div, 'text-field-focus-ring');
-    });
-
-    it('pointer focus', async () => {
-      await sendMouseToElement({ type: 'click', element });
-      await visualDiff(div, 'text-field-pointer-focus');
+      await visualDiff(div, 'text-field-focused');
     });
   });
 });

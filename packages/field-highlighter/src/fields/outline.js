@@ -48,12 +48,7 @@ export const initOutline = (field) => {
 
     const style = document.createElement('style');
     style.textContent = `
-      :host([focused]) [part="outline"] {
-        opacity: calc(1 - var(--lumo-input-field-pointer-focus-visible, 0));
-      }
-
-      :host([active]) [part="outline"],
-      :host([focus-ring]) [part="outline"] {
+      :host(:is([active], [focused])) [part="outline"] {
         display: none;
       }
     `;

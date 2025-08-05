@@ -17,6 +17,7 @@
  * License: www.highcharts.com/license
  */
 import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/user-colors.js';
 import { css, unsafeCSS } from 'lit';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
@@ -85,59 +86,31 @@ export const chartStyles = css`
 
     /* Needs to be a color, not a background image */
     --_bg: var(--vaadin-charts-background, var(--vaadin-background-color));
-    --_hue-scale: 180;
-    --_accent: var(--vaadin-charts-accent, #4172d5);
-    --_accent-0: var(--vaadin-charts-color-0, var(--_accent));
-    --_accent-1: var(
-      --vaadin-charts-color-1,
-      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 1))
-    );
-    --_accent-2: var(
-      --vaadin-charts-color-2,
-      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 2))
-    );
-    --_accent-3: var(
-      --vaadin-charts-color-3,
-      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 3))
-    );
-    --_accent-4: var(
-      --vaadin-charts-color-4,
-      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 4))
-    );
-    --_accent-5: var(
-      --vaadin-charts-color-5,
-      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 5))
-    );
-    --_accent-6: var(
-      --vaadin-charts-color-6,
-      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 6))
-    );
-    --_accent-7: var(
-      --vaadin-charts-color-7,
-      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 7))
-    );
-    --_accent-8: var(
-      --vaadin-charts-color-8,
-      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 8))
-    );
-    --_accent-9: var(
-      --vaadin-charts-color-9,
-      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 9))
-    );
 
-    --_accent-0-label: oklch(from var(--_accent-0) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-1-label: oklch(from var(--_accent-1) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-2-label: oklch(from var(--_accent-2) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-3-label: oklch(from var(--_accent-3) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-4-label: oklch(from var(--_accent-4) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-5-label: oklch(from var(--_accent-5) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-6-label: oklch(from var(--_accent-6) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-7-label: oklch(from var(--_accent-7) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-8-label: oklch(from var(--_accent-8) clamp(0, (0.62 - l) * 1000, 1) 0 0);
-    --_accent-9-label: oklch(from var(--_accent-9) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-0: var(--vaadin-charts-color-0, var(--vaadin-user-color-0));
+    --_color-1: var(--vaadin-charts-color-1, var(--vaadin-user-color-1));
+    --_color-2: var(--vaadin-charts-color-2, var(--vaadin-user-color-2));
+    --_color-3: var(--vaadin-charts-color-3, var(--vaadin-user-color-3));
+    --_color-4: var(--vaadin-charts-color-4, var(--vaadin-user-color-4));
+    --_color-5: var(--vaadin-charts-color-5, var(--vaadin-user-color-5));
+    --_color-6: var(--vaadin-charts-color-6, var(--vaadin-user-color-6));
+    --_color-7: var(--vaadin-charts-color-7, var(--vaadin-user-color-7));
+    --_color-8: var(--vaadin-charts-color-8, var(--vaadin-user-color-8));
+    --_color-9: var(--vaadin-charts-color-9, var(--vaadin-user-color-9));
 
-    --_accent-positive: light-dark(#19b156, #1ccc62);
-    --_accent-negative: light-dark(#dc0611, #f7353f);
+    --_color-0-label: oklch(from var(--_color-0) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-1-label: oklch(from var(--_color-1) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-2-label: oklch(from var(--_color-2) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-3-label: oklch(from var(--_color-3) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-4-label: oklch(from var(--_color-4) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-5-label: oklch(from var(--_color-5) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-6-label: oklch(from var(--_color-6) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-7-label: oklch(from var(--_color-7) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-8-label: oklch(from var(--_color-8) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_color-9-label: oklch(from var(--_color-9) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+
+    --_color-positive: light-dark(#19b156, #1ccc62);
+    --_color-negative: light-dark(#dc0611, #f7353f);
 
     --_label: var(--vaadin-charts-label, var(--vaadin-color));
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-color-subtle));
@@ -285,7 +258,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-crosshair-category {
-    stroke: var(--_accent-0);
+    stroke: var(--_color-0);
     stroke-opacity: 0.25;
   }
 
@@ -308,7 +281,7 @@ export const chartStyles = css`
   ${unsafeCSS(tooltipStyles(':where([styled-mode])'))};
 
   :where([styled-mode]) .highcharts-selection-marker {
-    fill: var(--_accent-0);
+    fill: var(--_color-0);
     fill-opacity: 0.25;
   }
 
@@ -365,103 +338,103 @@ export const chartStyles = css`
   /* vaadin-charts custom properties */
   /* Use of :where() function to avoid setting classes with high specificity */
   :where([styled-mode]) .highcharts-color-0 {
-    fill: var(--_accent-0);
-    stroke: var(--_accent-0);
-    color: var(--_accent-0-label);
+    fill: var(--_color-0);
+    stroke: var(--_color-0);
+    color: var(--_color-0-label);
   }
 
   :where([styled-mode]) .highcharts-color-1 {
-    fill: var(--_accent-1);
-    stroke: var(--_accent-1);
-    color: var(--_accent-1-label);
+    fill: var(--_color-1);
+    stroke: var(--_color-1);
+    color: var(--_color-1-label);
   }
 
   :where([styled-mode]) .highcharts-color-2 {
-    fill: var(--_accent-2);
-    stroke: var(--_accent-2);
-    color: var(--_accent-2-label);
+    fill: var(--_color-2);
+    stroke: var(--_color-2);
+    color: var(--_color-2-label);
   }
 
   :where([styled-mode]) .highcharts-color-3 {
-    fill: var(--_accent-3);
-    stroke: var(--_accent-3);
-    color: var(--_accent-2-label);
+    fill: var(--_color-3);
+    stroke: var(--_color-3);
+    color: var(--_color-2-label);
   }
 
   :where([styled-mode]) .highcharts-color-4 {
-    fill: var(--_accent-4);
-    stroke: var(--_accent-4);
-    color: var(--_accent-4-label);
+    fill: var(--_color-4);
+    stroke: var(--_color-4);
+    color: var(--_color-4-label);
   }
 
   :where([styled-mode]) .highcharts-color-5 {
-    fill: var(--_accent-5);
-    stroke: var(--_accent-5);
-    color: var(--_accent-5-label);
+    fill: var(--_color-5);
+    stroke: var(--_color-5);
+    color: var(--_color-5-label);
   }
 
   :where([styled-mode]) .highcharts-color-6 {
-    fill: var(--_accent-6);
-    stroke: var(--_accent-6);
-    color: var(--_accent-6-label);
+    fill: var(--_color-6);
+    stroke: var(--_color-6);
+    color: var(--_color-6-label);
   }
 
   :where([styled-mode]) .highcharts-color-7 {
-    fill: var(--_accent-7);
-    stroke: var(--_accent-7);
-    color: var(--_accent-7-label);
+    fill: var(--_color-7);
+    stroke: var(--_color-7);
+    color: var(--_color-7-label);
   }
 
   :where([styled-mode]) .highcharts-color-8 {
-    fill: var(--_accent-8);
-    stroke: var(--_accent-8);
-    color: var(--_accent-8-label);
+    fill: var(--_color-8);
+    stroke: var(--_color-8);
+    color: var(--_color-8-label);
   }
 
   :where([styled-mode]) .highcharts-color-9 {
-    fill: var(--_accent-9);
-    stroke: var(--_accent-9);
-    color: var(--_accent-9-label);
+    fill: var(--_color-9);
+    stroke: var(--_color-9);
+    color: var(--_color-9-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-0 {
-    color: var(--_accent-0-label);
+    color: var(--_color-0-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-1 {
-    color: var(--_accent-1-label);
+    color: var(--_color-1-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-2 {
-    color: var(--_accent-2-label);
+    color: var(--_color-2-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-3 {
-    color: var(--_accent-3-label);
+    color: var(--_color-3-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-4 {
-    color: var(--_accent-4-label);
+    color: var(--_color-4-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-5 {
-    color: var(--_accent-5-label);
+    color: var(--_color-5-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-6 {
-    color: var(--_accent-6-label);
+    color: var(--_color-6-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-7 {
-    color: var(--_accent-7-label);
+    color: var(--_color-7-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-8 {
-    color: var(--_accent-8-label);
+    color: var(--_color-8-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-color-9 {
-    color: var(--_accent-9-label);
+    color: var(--_color-9-label);
   }
 
   :where([styled-mode]) [class*='highcharts-data-label-color-'] {
@@ -832,7 +805,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-navigator-mask-inside {
-    fill: var(--_accent-0);
+    fill: var(--_color-0);
     /* navigator.maskFill option */
     fill-opacity: 0.2;
     cursor: ew-resize;
@@ -850,8 +823,8 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-navigator-series {
-    fill: var(--_accent-1);
-    stroke: var(--_accent-1);
+    fill: var(--_color-1);
+    stroke: var(--_color-1);
   }
 
   :where([styled-mode]) .highcharts-navigator-series .highcharts-graph {
@@ -991,11 +964,11 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-candlestick-series .highcharts-point-up {
-    fill: var(--_accent-positive);
+    fill: var(--_color-positive);
   }
 
   :where([styled-mode]) .highcharts-candlestick-series .highcharts-point-down {
-    fill: var(--_accent-negative);
+    fill: var(--_color-negative);
   }
 
   :where([styled-mode]) .highcharts-ohlc-series .highcharts-point-hover {
