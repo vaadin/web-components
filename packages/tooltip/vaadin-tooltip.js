@@ -1,3 +1,3 @@
-import './theme/lumo/vaadin-tooltip.js';
+import './src/vaadin-tooltip.js';
 
 export * from './src/vaadin-tooltip.js';

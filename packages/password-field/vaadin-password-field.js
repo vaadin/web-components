@@ -1,3 +1,3 @@
-import './theme/lumo/vaadin-password-field.js';
+import './src/vaadin-password-field.js';
 
 export * from './src/vaadin-password-field.js';

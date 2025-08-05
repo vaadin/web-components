@@ -1,3 +1,3 @@
-import './theme/lumo/vaadin-card.js';
+import './src/vaadin-card.js';
 
 export * from './src/vaadin-card.js';

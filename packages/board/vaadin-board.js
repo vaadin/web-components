@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-board.js';
+import './src/vaadin-board.js';
 export * from './src/vaadin-board.js';

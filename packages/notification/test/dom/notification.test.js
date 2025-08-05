@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-notification.js';
 
 describe('vaadin-notification', () => {
@@ -13,7 +13,7 @@ describe('vaadin-notification', () => {
       root.textContent = 'content';
     };
     notification.opened = true;
-    await oneEvent(card, 'animationend');
+    await nextRender();
   });
 
   it('card', async () => {

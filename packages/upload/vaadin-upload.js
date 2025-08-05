@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-upload.js';
+import './src/vaadin-upload.js';
 export * from './src/vaadin-upload.js';

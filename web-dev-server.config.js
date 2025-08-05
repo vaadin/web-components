@@ -72,8 +72,6 @@ export function enforceThemePlugin(theme) {
     },
     transformImport({ source, context }) {
       if (theme === 'base' || theme === 'ported-lumo' || theme === 'aura') {
-        source = source.replace('/theme/lumo/', '/src/');
-
         const baseStylesResolvedPath = path.resolve(
           path.dirname(context.url),
           source.replace('-core-styles', '-base-styles'),

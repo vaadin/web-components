@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '../grid-test-styles.js';
 import '../../vaadin-grid.js';
 import { users } from '../visual/users.js';
 
