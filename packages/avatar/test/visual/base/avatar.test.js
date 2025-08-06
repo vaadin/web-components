@@ -2,9 +2,16 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-avatar.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('avatar', () => {
   let div, element;
+
+  before(() => {
+    Tooltip.setDefaultFocusDelay(0);
+    Tooltip.setDefaultHoverDelay(0);
+    Tooltip.setDefaultHideDelay(0);
+  });
 
   beforeEach(() => {
     div = document.createElement('div');
