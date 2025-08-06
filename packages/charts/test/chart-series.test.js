@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './chart-no-animation-styles.js';
 import '../src/vaadin-chart.js';
 
 describe('vaadin-chart-series', () => {
@@ -93,37 +94,32 @@ describe('vaadin-chart-series', () => {
         series = chart.querySelector('vaadin-chart-series');
       });
 
-      it('should have markers by default for widespread data', async () => {
+      it('should have markers by default for widespread data', () => {
         series.values = [10, 20, 10, 30, 50];
-        await nextRender();
         expect(markersVisible(chartContainer)).to.be.true;
       });
 
-      it('should not have markers by default for dense data', async () => {
+      it('should not have markers by default for dense data', () => {
         series.values = new Array(400).fill(10);
-        await nextRender();
         expect(markersVisible(chartContainer)).to.be.false;
       });
 
-      it('should have markers when set to shown', async () => {
+      it('should have markers when set to shown', () => {
         series.markers = 'shown';
         series.values = new Array(400).fill(10);
-        await nextRender();
         expect(markersVisible(chartContainer)).to.be.true;
       });
 
-      it('should not have markers when set to hidden', async () => {
+      it('should not have markers when set to hidden', () => {
         series.markers = 'hidden';
         series.values = [10, 20, 10, 30, 50];
-        await nextRender();
         expect(markersVisible(chartContainer)).to.be.false;
       });
 
       it('should not have markers when options are set', async () => {
         series.values = [10, 20, 10, 30, 50];
-        await nextRender();
         chart.additionalOptions = { plotOptions: { series: { marker: { enabled: false } } } };
-        await aTimeout(50);
+        await oneEvent(chart, 'chart-redraw');
         expect(markersVisible(chartContainer)).to.be.false;
       });
     });
