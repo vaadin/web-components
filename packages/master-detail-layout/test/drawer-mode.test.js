@@ -200,7 +200,7 @@ describe('drawer mode', () => {
       expect(detailContent.shadowRoot.activeElement).to.equal(input);
     });
 
-    it('should immediately switch to drawer mode when custom wide detail is added at narrow width', async () => {
+    it('should immediately switch to drawer mode when wide LitElement detail is added at narrow width', async () => {
       layout = fixtureSync(`
     <vaadin-master-detail-layout>
       <div><input/></div>
