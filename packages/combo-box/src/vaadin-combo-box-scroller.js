@@ -6,7 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { comboBoxScrollerStyles } from './styles/vaadin-combo-box-scroller-core-styles.js';
+import { comboBoxScrollerStyles } from './styles/vaadin-combo-box-scroller-base-styles.js';
 import { ComboBoxScrollerMixin } from './vaadin-combo-box-scroller-mixin.js';
 
 /**

@@ -7,10 +7,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { datePickerOverlayStyles } from './styles/vaadin-date-picker-overlay-core-styles.js';
+import { datePickerOverlayStyles } from './styles/vaadin-date-picker-overlay-base-styles.js';
 import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
 
 /**

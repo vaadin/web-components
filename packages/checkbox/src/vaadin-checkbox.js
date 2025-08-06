@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { checkboxStyles } from './styles/vaadin-checkbox-core-styles.js';
+import { checkboxStyles } from './styles/vaadin-checkbox-base-styles.js';
 import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
 
 /**

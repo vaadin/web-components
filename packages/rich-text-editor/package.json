@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/styles/*-base-styles.d.ts",
-    "!src/styles/*-base-styles.js",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "vendor",

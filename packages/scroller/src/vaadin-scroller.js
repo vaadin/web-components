@@ -10,7 +10,7 @@ import { OverflowController } from '@vaadin/component-base/src/overflow-controll
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { scrollerStyles } from './styles/vaadin-scroller-core-styles.js';
+import { scrollerStyles } from './styles/vaadin-scroller-base-styles.js';
 import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
 /**

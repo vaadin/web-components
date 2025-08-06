@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateTimePickerStyles } from './styles/vaadin-date-time-picker-core-styles.js';
+import { dateTimePickerStyles } from './styles/vaadin-date-time-picker-base-styles.js';
 import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
 
 /**

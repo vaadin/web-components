@@ -6,10 +6,10 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { selectOverlayStyles } from './styles/vaadin-select-overlay-core-styles.js';
+import { selectOverlayStyles } from './styles/vaadin-select-overlay-base-styles.js';
 import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
 /**

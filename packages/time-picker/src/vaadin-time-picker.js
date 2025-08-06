@@ -15,7 +15,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { timePickerStyles } from './styles/vaadin-time-picker-core-styles.js';
+import { timePickerStyles } from './styles/vaadin-time-picker-base-styles.js';
 import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
 
 /**

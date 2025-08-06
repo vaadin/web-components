@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { uploadIconStyles } from './styles/vaadin-upload-icon-core-styles.js';
+import { uploadIconStyles } from './styles/vaadin-upload-icon-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-upload>`. Not intended to be used separately.

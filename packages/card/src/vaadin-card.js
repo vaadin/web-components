@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { cardStyles } from './styles/vaadin-card-core-styles.js';
+import { cardStyles } from './styles/vaadin-card-base-styles.js';
 
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.

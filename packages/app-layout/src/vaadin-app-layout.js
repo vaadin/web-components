@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { appLayoutStyles } from './styles/vaadin-app-layout-core-styles.js';
+import { appLayoutStyles } from './styles/vaadin-app-layout-base-styles.js';
 import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
 
 /**

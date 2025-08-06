@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-core-styles.js';
+import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.

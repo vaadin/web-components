@@ -13,7 +13,7 @@ import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { location } from './location.js';
-import { sideNavItemStyles } from './styles/vaadin-side-nav-item-core-styles.js';
+import { sideNavItemStyles } from './styles/vaadin-side-nav-item-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 /**

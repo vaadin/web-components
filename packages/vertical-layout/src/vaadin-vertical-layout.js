@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-core-styles.js';
+import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-base-styles.js';
 
 /**
  * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.

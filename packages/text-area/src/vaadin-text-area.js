@@ -13,7 +13,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { textAreaStyles } from './styles/vaadin-text-area-core-styles.js';
+import { textAreaStyles } from './styles/vaadin-text-area-base-styles.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
 
 /**

@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { overlayStyles } from './styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from './styles/vaadin-overlay-base-styles.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
 
 /**
