@@ -332,12 +332,11 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         update: process.env.TEST_ENV === 'update',
       }),
 
-      // yarn test:base
-      theme === 'base' && enforceThemePlugin('base'),
+      // Used by all themes
+      enforceThemePlugin(theme),
 
-      // yarn test:lumo (uses legacy lumo styles defined in js files)
-      theme === 'lumo' && enforceThemePlugin('lumo'),
-      theme === 'lumo' && cssImportPlugin(),
+      // Lumo / Aura CSS
+      ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(),

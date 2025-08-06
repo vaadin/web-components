@@ -108,15 +108,10 @@ export default {
     },
     esbuildPlugin({ ts: true }),
 
-    // yarn start
-    theme === 'base' && enforceThemePlugin('base'),
+    // Used by all themes
+    enforceThemePlugin(theme),
 
-    // yarn start --theme=lumo
-    theme === 'lumo' && enforceThemePlugin('lumo'),
-    theme === 'lumo' && cssImportPlugin(),
-
-    // yarn start --theme=aura
-    theme === 'aura' && enforceThemePlugin('aura'),
-    theme === 'aura' && cssImportPlugin(),
+    // Lumo / Aura CSS
+    ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
   ].filter(Boolean),
 };
