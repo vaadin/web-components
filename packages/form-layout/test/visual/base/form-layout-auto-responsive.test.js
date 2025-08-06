@@ -441,4 +441,21 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'fields-with-explicit-width-expand-fields');
     });
   });
+
+  it('baseline alignment', async () => {
+    element = fixtureSync(
+      `
+        <vaadin-form-layout auto-responsive>
+          <vaadin-form-row>
+            <label style="height: 20px; line-height: 20px; margin: 10px;">Subscribe</label>
+            <input type="checkbox" style="width: 20px; height: 20px; margin: 20px;" />
+            <textarea placeholder="Comments" style="height: 60px; padding: 8px;"></textarea>
+          </vaadin-form-row>
+        </vaadin-form-layout>
+      `,
+      container,
+    );
+    await nextResize(element);
+    await visualDiff(container, 'baseline-alignment');
+  });
 });
