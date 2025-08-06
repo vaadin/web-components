@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './chart-no-animation-styles.js';
+import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
 
 describe('vaadin-chart-series', () => {
