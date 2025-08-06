@@ -70,7 +70,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:lumo --ported
+          command: yarn test:lumo
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
