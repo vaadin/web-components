@@ -842,7 +842,7 @@ describe('overflowing content', () => {
     div.style.maxWidth = '300px';
     div.style.overflow = 'auto';
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.appendChild(div);
+    dialog.appendChild(div);
     // Emulate removing "pointer-events: none"
     overlayPart.setAttribute('style', '');
     expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
@@ -851,7 +851,7 @@ describe('overflowing content', () => {
   it('should not reset scroll position on resize', async () => {
     const div = document.createElement('div');
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.appendChild(div);
+    dialog.appendChild(div);
     dialog.$.overlay.setBounds({ height: 200 });
     await nextFrame();
     overlay.$.content.style.padding = '20px';

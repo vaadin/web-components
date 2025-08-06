@@ -17,7 +17,8 @@
   }
 
   .resizer-container {
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     border-radius: inherit; /* prevent child elements being drawn outside part=overlay */
   }
