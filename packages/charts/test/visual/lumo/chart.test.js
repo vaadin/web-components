@@ -2,6 +2,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/charts.css';
+import '../../chart-not-animated-styles.js';
 import '../../../vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { cleanupExport, prepareExport } from '../../../src/helpers.js';
