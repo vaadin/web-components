@@ -1,5 +1,4 @@
-import { nextFrame } from '@vaadin/testing-helpers';
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
