@@ -64,11 +64,6 @@ export function prepareExport(chart) {
   if (!chart.tempBodyStyle) {
     let effectiveCss = '';
 
-    // PolymerElement uses `<style>` tags for adding styles
-    [...chart.shadowRoot.querySelectorAll('style')].forEach((style) => {
-      effectiveCss += `${style.textContent}\n`;
-    });
-
     // LitElement uses `adoptedStyleSheets` for adding styles
     if (chart.shadowRoot.adoptedStyleSheets) {
       chart.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
@@ -92,7 +87,6 @@ export function prepareExport(chart) {
 
     chart.tempBodyStyle = document.createElement('style');
     chart.tempBodyStyle.textContent = effectiveCss;
-    // console.log(effectiveCss);
     document.body.appendChild(chart.tempBodyStyle);
     if (chart.options.chart.styledMode) {
       document.body.setAttribute('styled-mode', '');
