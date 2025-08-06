@@ -72,4 +72,13 @@ describe('avatar', () => {
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-ring');
   });
+
+  it('tooltip', async () => {
+    div.style.width = '90px';
+    div.style.height = '75px';
+    div.style.textAlign = 'center';
+    element.withTooltip = true;
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'tooltip');
+  });
 });

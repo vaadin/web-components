@@ -9,6 +9,7 @@ import { css } from 'lit';
 export const tooltipOverlayStyles = css`
   :host {
     --_vaadin-tooltip-default-offset: 4px;
+    line-height: normal;
   }
 
   [part='overlay'] {
