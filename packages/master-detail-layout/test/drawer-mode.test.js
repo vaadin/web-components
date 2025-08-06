@@ -4,6 +4,7 @@ import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+import { html, LitElement } from 'lit';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -197,6 +198,35 @@ describe('drawer mode', () => {
 
       const input = detailContent.shadowRoot.querySelector('input');
       expect(detailContent.shadowRoot.activeElement).to.equal(input);
+    });
+
+    it('should immediately switch to drawer mode when wide LitElement detail is added at narrow width', async () => {
+      layout = fixtureSync(`
+    <vaadin-master-detail-layout>
+      <div><input/></div>
+      <div slot="detail"><input/></div>
+    </vaadin-master-detail-layout>
+  `);
+      await nextRender();
+
+      await setViewport({ width: 335, height });
+      await nextResize(layout);
+
+      class CustomDetailsElement extends LitElement {
+        createRenderRoot() {
+          return this;
+        }
+
+        render() {
+          return html` <button style="width: 250px">Long button description</button> `;
+        }
+      }
+      customElements.define('custom-details-element', CustomDetailsElement);
+
+      const detail = document.createElement('custom-details-element');
+      await layout._setDetail(detail);
+
+      expect(layout.hasAttribute('drawer')).to.be.true;
     });
   });
 

@@ -211,7 +211,7 @@ describe('View transitions', () => {
       expect(updateCallbackResolved).to.be.false;
 
       // Finish transition
-      layout._finishTransition();
+      await layout._finishTransition();
       expect(detectLayoutModeSpy.calledOnce).to.be.true;
       await aTimeout(0);
       expect(updateCallbackResolved).to.be.true;
