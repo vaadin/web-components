@@ -38,7 +38,7 @@ class AvatarGroupOverlay extends PositionMixin(
   /** @protected */
   render() {
     return html`
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <div part="content" id="content">
           <slot></slot>
         </div>
