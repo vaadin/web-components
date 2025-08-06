@@ -9,18 +9,7 @@ describe('avatar-group', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
-    element = fixtureSync(
-      `<vaadin-avatar-group></vaadin-avatar-group>
-      <style>
-        html {
-          --vaadin-user-color-0: royalblue;
-          --vaadin-user-color-1: green;
-          --vaadin-user-color-2: orange;
-          --vaadin-user-color-3: purple;
-        }
-      </style>`,
-      div,
-    );
+    element = fixtureSync('<vaadin-avatar-group></vaadin-avatar-group>', div);
   });
 
   it('basic', async () => {
