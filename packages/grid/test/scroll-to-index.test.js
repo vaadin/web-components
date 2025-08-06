@@ -81,7 +81,7 @@ describe('scroll to index', () => {
         const index = grid.size / 2;
         grid.scrollToIndex(index);
         flushGrid(grid);
-        grid.scrollTop += 1; // Scroll a little to validate the test
+        grid.$.table.scrollTop += 5; // Scroll a little to validate the test
         let row = Array.from(grid.$.items.children).find((r) => r.index === index);
         const rowTop = row.getBoundingClientRect().top;
 
