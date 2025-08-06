@@ -523,7 +523,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * @protected
    */
   async _finishTransition() {
-    // Detect new layout mode after DOM has been updated
+    // Detect new layout mode after DOM has been updated.
+    // The detection is wrapped in queueMicroTask in order to allow custom Lit elements to render before measurement.
+    // https://github.com/vaadin/web-components/issues/8969
     queueMicrotask(() => this.__detectLayoutMode());
 
     if (!this.__transition) {
