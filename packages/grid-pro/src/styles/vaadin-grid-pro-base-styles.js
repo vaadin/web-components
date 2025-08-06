@@ -23,7 +23,7 @@ const gridPro = css`
     display: flex;
     align-items: inherit;
     align-self: stretch;
-    flex: 1;
+    flex-grow: 1;
     min-width: 0;
     cursor: var(--vaadin-clickable-cursor);
     outline: 0;
