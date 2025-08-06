@@ -1,6 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
-import path from 'node:path';
 
 const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base';
 
@@ -50,24 +49,12 @@ export function enforceThemePlugin(theme) {
         );
       }
 
-      if (['base', 'legacy-lumo', 'aura'].includes(theme) && context.response.is('html', 'js')) {
+      if (['base', 'aura'].includes(theme) && context.response.is('html', 'js')) {
         // Remove all not transformed CSS imports
         body = body.replaceAll(/^.+(vaadin-lumo-styles|\.\.)\/.+\.css.+$/gmu, '');
       }
 
       return body;
-    },
-    transformImport({ source, context }) {
-      // TODO: remove after replacing core styles with base styles
-      const baseStylesResolvedPath = path.resolve(
-        path.dirname(context.url),
-        source.replace('-core-styles', '-base-styles'),
-      );
-      if (fs.existsSync(`.${baseStylesResolvedPath}`)) {
-        source = source.replace('-core-styles', '-base-styles');
-      }
-
-      return source;
     },
   };
 }

@@ -15,7 +15,7 @@ import '@vaadin/grid/src/vaadin-grid-sorter.js';
 import './vaadin-crud-edit-column.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
-import { crudGridStyles } from './styles/vaadin-crud-grid-core-styles.js';
+import { crudGridStyles } from './styles/vaadin-crud-grid-base-styles.js';
 import { CrudGridMixin } from './vaadin-crud-grid-mixin.js';
 
 /**

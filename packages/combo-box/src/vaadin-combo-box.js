@@ -20,7 +20,7 @@ import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { comboBoxStyles } from './styles/vaadin-combo-box-core-styles.js';
+import { comboBoxStyles } from './styles/vaadin-combo-box-base-styles.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 

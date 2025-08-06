@@ -16,7 +16,7 @@ import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { richTextEditorPopupOverlayStyles } from './styles/vaadin-rich-text-editor-popup-overlay-core-styles.js';
+import { richTextEditorPopupOverlayStyles } from './styles/vaadin-rich-text-editor-popup-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.

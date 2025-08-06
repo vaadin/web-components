@@ -8,11 +8,11 @@ import { ComboBoxOverlayMixin } from '@vaadin/combo-box/src/vaadin-combo-box-ove
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { multiSelectComboBoxOverlayStyles } from './styles/vaadin-multi-select-combo-box-overlay-core-styles.js';
+import { multiSelectComboBoxOverlayStyles } from './styles/vaadin-multi-select-combo-box-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.

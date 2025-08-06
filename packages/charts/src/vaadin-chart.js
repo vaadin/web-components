@@ -15,7 +15,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { chartStyles } from './styles/vaadin-chart-core-styles.js';
+import { chartStyles } from './styles/vaadin-chart-base-styles.js';
 import { ChartMixin } from './vaadin-chart-mixin.js';
 
 /**

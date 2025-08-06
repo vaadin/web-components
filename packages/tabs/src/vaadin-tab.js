@@ -11,7 +11,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabStyles } from './styles/vaadin-tab-core-styles.js';
+import { tabStyles } from './styles/vaadin-tab-base-styles.js';
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.

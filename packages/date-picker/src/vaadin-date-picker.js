@@ -18,7 +18,7 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { datePickerStyles } from './styles/vaadin-date-picker-core-styles.js';
+import { datePickerStyles } from './styles/vaadin-date-picker-base-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 
 /**

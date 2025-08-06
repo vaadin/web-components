@@ -10,7 +10,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabsStyles } from './styles/vaadin-tabs-core-styles.js';
+import { tabsStyles } from './styles/vaadin-tabs-base-styles.js';
 import { TabsMixin } from './vaadin-tabs-mixin.js';
 
 /**

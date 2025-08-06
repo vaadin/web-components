@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { menuBarItemStyles } from './styles/vaadin-menu-bar-item-core-styles.js';
+import { menuBarItemStyles } from './styles/vaadin-menu-bar-item-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.

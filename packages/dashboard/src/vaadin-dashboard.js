@@ -17,7 +17,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dashboardStyles } from './styles/vaadin-dashboard-core-styles.js';
+import { dashboardStyles } from './styles/vaadin-dashboard-base-styles.js';
 import {
   getElementItem,
   getItemsArrayOfItem,

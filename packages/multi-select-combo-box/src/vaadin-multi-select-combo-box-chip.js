@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { multiSelectComboBoxChipStyles } from './styles/vaadin-multi-select-combo-box-chip-core-styles.js';
+import { multiSelectComboBoxChipStyles } from './styles/vaadin-multi-select-combo-box-chip-base-styles.js';
 
 /**
  * An element used by `<vaadin-multi-select-combo-box>` to display selected items.

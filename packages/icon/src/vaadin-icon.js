@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { iconStyles } from './styles/vaadin-icon-core-styles.js';
+import { iconStyles } from './styles/vaadin-icon-base-styles.js';
 import { IconMixin } from './vaadin-icon-mixin.js';
 import { ensureSvgLiteral } from './vaadin-icon-svg.js';
 

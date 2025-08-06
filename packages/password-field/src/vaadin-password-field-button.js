@@ -10,7 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { passwordFieldButton } from './styles/vaadin-password-field-button-core-styles.js';
+import { passwordFieldButton } from './styles/vaadin-password-field-button-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-password-field>`. Not intended to be used separately.

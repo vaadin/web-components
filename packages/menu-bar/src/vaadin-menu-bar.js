@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { menuBarStyles } from './styles/vaadin-menu-bar-core-styles.js';
+import { menuBarStyles } from './styles/vaadin-menu-bar-base-styles.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 /**

@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { gridTreeToggleStyles } from './styles/vaadin-grid-tree-toggle-core-styles.js';
+import { gridTreeToggleStyles } from './styles/vaadin-grid-tree-toggle-base-styles.js';
 import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 
 /**

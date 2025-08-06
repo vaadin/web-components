@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { uploadFileListStyles } from './styles/vaadin-upload-file-list-core-styles.js';
+import { uploadFileListStyles } from './styles/vaadin-upload-file-list-base-styles.js';
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 
 /**

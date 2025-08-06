@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { gridSorterStyles } from './styles/vaadin-grid-sorter-core-styles.js';
+import { gridSorterStyles } from './styles/vaadin-grid-sorter-base-styles.js';
 import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
 /**

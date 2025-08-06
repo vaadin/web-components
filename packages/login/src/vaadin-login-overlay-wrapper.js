@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper-core-styles.js';
+import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-login-overlay>`. Not intended to be used separately.
