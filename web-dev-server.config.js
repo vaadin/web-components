@@ -2,8 +2,7 @@ import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'lumo';
-const hasPortedParam = process.argv.includes('--ported');
+const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base';
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 export function cssImportPlugin() {
@@ -43,18 +42,6 @@ export function enforceThemePlugin(theme) {
     transform(context) {
       let { body } = context;
 
-      if (theme === 'legacy-lumo' && context.response.is('html', 'js')) {
-        // For dev pages: replace link to CSS stylesheet with JS autoload script
-        body = body.replace(
-          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
-          '<script type="module" src="/packages/vaadin-lumo-styles/test/autoload.js"></script>',
-        );
-
-        // For visual tests: replace import of CSS file with JS autoload script
-        body = body.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
-        body = body.replace('../../global.css', '../autoload.js');
-      }
-
       if (theme === 'aura' && context.response.is('html')) {
         // For dev pages: replace link to CSS stylesheet with JS autoload script
         body = body.replace(
@@ -71,14 +58,13 @@ export function enforceThemePlugin(theme) {
       return body;
     },
     transformImport({ source, context }) {
-      if (theme === 'base' || theme === 'ported-lumo' || theme === 'aura') {
-        const baseStylesResolvedPath = path.resolve(
-          path.dirname(context.url),
-          source.replace('-core-styles', '-base-styles'),
-        );
-        if (fs.existsSync(`.${baseStylesResolvedPath}`)) {
-          source = source.replace('-core-styles', '-base-styles');
-        }
+      // TODO: remove after replacing core styles with base styles
+      const baseStylesResolvedPath = path.resolve(
+        path.dirname(context.url),
+        source.replace('-core-styles', '-base-styles'),
+      );
+      if (fs.existsSync(`.${baseStylesResolvedPath}`)) {
+        source = source.replace('-core-styles', '-base-styles');
       }
 
       return source;
@@ -135,15 +121,12 @@ export default {
     },
     esbuildPlugin({ ts: true }),
 
-    // yarn start --theme=base
+    // yarn start
     theme === 'base' && enforceThemePlugin('base'),
 
-    // yarn start --theme=lumo (uses legacy lumo styles defined in js files)
-    theme === 'lumo' && !hasPortedParam && enforceThemePlugin('legacy-lumo'),
-
-    // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
-    theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
-    theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+    // yarn start --theme=lumo
+    theme === 'lumo' && enforceThemePlugin('lumo'),
+    theme === 'lumo' && cssImportPlugin(),
 
     // yarn start --theme=aura
     theme === 'aura' && enforceThemePlugin('aura'),

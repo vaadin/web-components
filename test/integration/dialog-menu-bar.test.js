@@ -12,14 +12,7 @@ describe('menu-bar in dialog', () => {
   let dialog, menuBar;
 
   beforeEach(async () => {
-    fixtureSync(`
-      <style>
-        vaadin-dialog::part(content) {
-          padding: 0;
-        }
-      </style>
-    `);
-    dialog = fixtureSync(`<vaadin-dialog width="700px"></vaadin-dialog>`);
+    dialog = fixtureSync(`<vaadin-dialog width="650px" theme="no-padding"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
@@ -53,8 +46,7 @@ describe('menu-bar in dialog', () => {
     expect(overflow.offsetLeft + overflow.offsetWidth).to.be.lessThan(menuBar.offsetLeft + menuBar.offsetWidth);
   });
 
-  // FIXME: restore after updating to use base styles by default
-  it.skip('should place correct elements in the overflow menu', () => {
+  it('should place correct elements in the overflow menu', () => {
     const overflow = menuBar._overflow;
     expect(overflow.item.children[0]).to.deep.equal(menuBar.items[7]);
     expect(overflow.item.children[1]).to.deep.equal(menuBar.items[8]);

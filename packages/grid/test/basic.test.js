@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -358,14 +358,12 @@ describe('flex child', () => {
     it('should have a visible header after row reorder', async () => {
       column.header = 'header';
       grid.scrollToIndex(300);
-      await aTimeout(0);
+      await oneEvent(grid.$.table, 'scroll');
       flushGrid(grid);
       const { left, top } = grid.getBoundingClientRect();
 
-      oneEvent(grid.$.table, 'scroll');
-      flushGrid(grid);
-
-      const cell = grid._cellFromPoint(left + 1, top + 1);
+      // Use 10px to account for border-radius in Firefox
+      const cell = grid._cellFromPoint(left + 10, top + 10);
       expect(grid.$.header.contains(cell)).to.be.true;
     });
 
