@@ -27,7 +27,7 @@ export const notificationCardStyles = css`
 
   @media (forced-colors: active) {
     [part='overlay'] {
-      border: 3px solid;
+      border: 3px solid !important;
     }
   }
 `;
