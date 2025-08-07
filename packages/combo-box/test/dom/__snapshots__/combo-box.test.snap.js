@@ -481,23 +481,6 @@ snapshots["vaadin-combo-box host opened overlay shadow"] =
 `;
 /* end snapshot vaadin-combo-box host opened overlay shadow */
 
-snapshots["vaadin-combo-box host opened overlay class"] = 
-`<vaadin-combo-box-overlay
-  class="combo-box-overlay custom"
-  exportparts="overlay, content, loader"
-  id="overlay"
-  no-vertical-overlap=""
-  opened=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-combo-box-overlay>
-`;
-/* end snapshot vaadin-combo-box host opened overlay class */
-
 snapshots["vaadin-combo-box host opened theme overlay"] = 
 `<vaadin-combo-box-overlay
   exportparts="overlay, content, loader"
