@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-avatar-group default"] = 
+snapshots["vaadin-avatar-group default"] =
 `<vaadin-avatar-group aria-label="Currently 0 active users">
   <vaadin-avatar-group-menu
     role="menu"
@@ -32,7 +32,7 @@ snapshots["vaadin-avatar-group default"] =
 `;
 /* end snapshot vaadin-avatar-group default */
 
-snapshots["vaadin-avatar-group items"] = 
+snapshots["vaadin-avatar-group items"] =
 `<vaadin-avatar-group aria-label="Currently 2 active users">
   <vaadin-avatar-group-menu
     aria-orientation="vertical"
@@ -112,7 +112,7 @@ Tomi Virkki
 `;
 /* end snapshot vaadin-avatar-group items */
 
-snapshots["vaadin-avatar-group theme"] = 
+snapshots["vaadin-avatar-group theme"] =
 `<vaadin-avatar-group
   aria-label="Currently 2 active users"
   theme="small"
@@ -198,7 +198,7 @@ Tomi Virkki
 `;
 /* end snapshot vaadin-avatar-group theme */
 
-snapshots["vaadin-avatar-group opened default"] = 
+snapshots["vaadin-avatar-group opened default"] =
 `<vaadin-avatar-group
   aria-label="Currently 4 active users"
   has-overflow=""
@@ -316,7 +316,7 @@ Stu Vwx
 `;
 /* end snapshot vaadin-avatar-group opened default */
 
-snapshots["vaadin-avatar-group opened overlay"] = 
+snapshots["vaadin-avatar-group opened overlay"] =
 `<vaadin-avatar-group-overlay
   exportparts="overlay, content"
   id="overlay"
@@ -330,20 +330,4 @@ snapshots["vaadin-avatar-group opened overlay"] =
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group opened overlay */
-
-snapshots["vaadin-avatar-group opened overlay class"] = 
-`<vaadin-avatar-group-overlay
-  class="avatar-group-overlay custom"
-  exportparts="overlay, content"
-  id="overlay"
-  no-vertical-overlap=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-avatar-group-overlay>
-`;
-/* end snapshot vaadin-avatar-group opened overlay class */
 

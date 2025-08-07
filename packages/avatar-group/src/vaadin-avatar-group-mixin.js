@@ -7,7 +7,6 @@ import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
@@ -29,10 +28,9 @@ const DEFAULT_I18N = {
  * @polymerMixin
  * @mixes I18nMixin
  * @mixes ResizeMixin
- * @mixes OverlayClassMixin
  */
 export const AvatarGroupMixin = (superClass) =>
-  class AvatarGroupMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(OverlayClassMixin(superClass))) {
+  class AvatarGroupMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
