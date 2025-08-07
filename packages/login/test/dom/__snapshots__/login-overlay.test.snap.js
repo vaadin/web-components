@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-login-overlay host default"] =
+snapshots["vaadin-login-overlay host default"] = 
 `<vaadin-login-overlay-wrapper
   exportparts="backdrop, overlay, content, card, brand, description, form-wrapper"
   focus-trap=""
@@ -61,7 +61,7 @@ snapshots["vaadin-login-overlay host default"] =
 `;
 /* end snapshot vaadin-login-overlay host default */
 
-snapshots["vaadin-login-overlay host i18n"] =
+snapshots["vaadin-login-overlay host i18n"] = 
 `<vaadin-login-overlay-wrapper
   exportparts="backdrop, overlay, content, card, brand, description, form-wrapper"
   focus-trap=""
@@ -121,7 +121,7 @@ snapshots["vaadin-login-overlay host i18n"] =
 `;
 /* end snapshot vaadin-login-overlay host i18n */
 
-snapshots["vaadin-login-overlay host i18n-partial"] =
+snapshots["vaadin-login-overlay host i18n-partial"] = 
 `<vaadin-login-overlay-wrapper
   exportparts="backdrop, overlay, content, card, brand, description, form-wrapper"
   focus-trap=""
@@ -181,7 +181,7 @@ snapshots["vaadin-login-overlay host i18n-partial"] =
 `;
 /* end snapshot vaadin-login-overlay host i18n-partial */
 
-snapshots["vaadin-login-overlay shadow default"] =
+snapshots["vaadin-login-overlay shadow default"] = 
 `<div
   id="backdrop"
   part="backdrop"
@@ -214,7 +214,7 @@ snapshots["vaadin-login-overlay shadow default"] =
 `;
 /* end snapshot vaadin-login-overlay shadow default */
 
-snapshots["vaadin-login-overlay shadow i18n"] =
+snapshots["vaadin-login-overlay shadow i18n"] = 
 `<div
   id="backdrop"
   part="backdrop"

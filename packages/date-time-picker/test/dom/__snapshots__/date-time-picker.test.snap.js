@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-date-time-picker host default"] =
+snapshots["vaadin-date-time-picker host default"] = 
 `<vaadin-date-time-picker role="group">
   <label
     id="label-vaadin-date-time-picker-0"
@@ -72,7 +72,7 @@ snapshots["vaadin-date-time-picker host default"] =
 `;
 /* end snapshot vaadin-date-time-picker host default */
 
-snapshots["vaadin-date-time-picker host disabled"] =
+snapshots["vaadin-date-time-picker host disabled"] = 
 `<vaadin-date-time-picker
   aria-disabled="true"
   disabled=""
@@ -159,7 +159,7 @@ snapshots["vaadin-date-time-picker host disabled"] =
 `;
 /* end snapshot vaadin-date-time-picker host disabled */
 
-snapshots["vaadin-date-time-picker host readonly"] =
+snapshots["vaadin-date-time-picker host readonly"] = 
 `<vaadin-date-time-picker
   readonly=""
   role="group"
@@ -241,7 +241,7 @@ snapshots["vaadin-date-time-picker host readonly"] =
 `;
 /* end snapshot vaadin-date-time-picker host readonly */
 
-snapshots["vaadin-date-time-picker host required"] =
+snapshots["vaadin-date-time-picker host required"] = 
 `<vaadin-date-time-picker
   aria-required="true"
   required=""
@@ -324,7 +324,7 @@ snapshots["vaadin-date-time-picker host required"] =
 `;
 /* end snapshot vaadin-date-time-picker host required */
 
-snapshots["vaadin-date-time-picker host label"] =
+snapshots["vaadin-date-time-picker host label"] = 
 `<vaadin-date-time-picker
   aria-labelledby="label-vaadin-date-time-picker-0"
   has-label=""
@@ -402,7 +402,7 @@ snapshots["vaadin-date-time-picker host label"] =
 `;
 /* end snapshot vaadin-date-time-picker host label */
 
-snapshots["vaadin-date-time-picker host helper"] =
+snapshots["vaadin-date-time-picker host helper"] = 
 `<vaadin-date-time-picker
   aria-describedby="helper-vaadin-date-time-picker-1"
   has-helper=""
@@ -483,7 +483,7 @@ snapshots["vaadin-date-time-picker host helper"] =
 `;
 /* end snapshot vaadin-date-time-picker host helper */
 
-snapshots["vaadin-date-time-picker host error"] =
+snapshots["vaadin-date-time-picker host error"] = 
 `<vaadin-date-time-picker
   aria-describedby="error-message-vaadin-date-time-picker-2"
   has-error-message=""
@@ -571,7 +571,7 @@ snapshots["vaadin-date-time-picker host error"] =
 `;
 /* end snapshot vaadin-date-time-picker host error */
 
-snapshots["vaadin-date-time-picker shadow default"] =
+snapshots["vaadin-date-time-picker shadow default"] = 
 `<div class="vaadin-date-time-picker-container">
   <div part="label">
     <slot name="label">
