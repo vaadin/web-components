@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { PopoverPositionMixinClass } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import type { PopoverTargetMixinClass } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
 
@@ -15,11 +14,7 @@ export type { PopoverPosition as TooltipPosition } from '@vaadin/popover/src/vaa
  */
 export declare function TooltipMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<OverlayClassMixinClass> &
-  Constructor<PopoverPositionMixinClass> &
-  Constructor<PopoverTargetMixinClass> &
-  Constructor<TooltipMixinClass> &
-  T;
+): Constructor<PopoverPositionMixinClass> & Constructor<PopoverTargetMixinClass> & Constructor<TooltipMixinClass> & T;
 
 export declare class TooltipMixinClass {
   /**

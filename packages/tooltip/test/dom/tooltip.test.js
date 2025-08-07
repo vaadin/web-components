@@ -53,11 +53,5 @@ describe('vaadin-tooltip', () => {
     it('overlay', async () => {
       await expect(overlay).dom.to.equalSnapshot();
     });
-
-    it('overlay class', async () => {
-      tooltip.overlayClass = 'custom tooltip-overlay';
-      await nextUpdate(tooltip);
-      await expect(overlay).dom.to.equalSnapshot();
-    });
   });
 });

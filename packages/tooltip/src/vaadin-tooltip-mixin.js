@@ -5,7 +5,6 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
@@ -224,12 +223,11 @@ class TooltipStateController {
  * A mixin providing common tooltip functionality.
  *
  * @polymerMixin
- * @mixes OverlayClassMixin
  * @mixes PopoverPositionMixin
  * @mixes PopoverTargetMixin
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(OverlayClassMixin(superClass))) {
+  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(superClass)) {
     static get properties() {
       return {
         /**
