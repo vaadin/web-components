@@ -2,6 +2,7 @@ import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/rich-text-editor.css';
+import '../common.js';
 import '../../../vaadin-rich-text-editor.js';
 
 describe('rich-text-editor', () => {
