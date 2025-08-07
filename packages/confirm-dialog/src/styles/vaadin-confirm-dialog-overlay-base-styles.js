@@ -34,11 +34,6 @@ const confirmDialogOverlay = css`
   [part='content'] {
     flex: 1;
   }
-
-  /* TODO remove this wrapper element */
-  #resizerContainer {
-    display: contents;
-  }
 `;
 
 export const confirmDialogOverlayStyles = [overlayStyles, dialogOverlayBase, confirmDialogOverlay];
