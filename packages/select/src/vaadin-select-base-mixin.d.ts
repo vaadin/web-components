@@ -10,7 +10,6 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { TabindexMixinClass } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -25,7 +24,6 @@ export declare function SelectBaseMixin<T extends Constructor<HTMLElement>>(
   Constructor<FocusMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
-  Constructor<OverlayClassMixinClass> &
   Constructor<SelectBaseMixinClass> &
   Constructor<TabindexMixinClass> &
   Constructor<ValidateMixinClass> &
