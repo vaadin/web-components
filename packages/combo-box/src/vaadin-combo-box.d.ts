@@ -9,7 +9,6 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
@@ -236,7 +235,6 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     PatternMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
-    OverlayClassMixinClass,
     InputMixinClass,
     ClearButtonMixinClass,
     InputControlMixinClass,

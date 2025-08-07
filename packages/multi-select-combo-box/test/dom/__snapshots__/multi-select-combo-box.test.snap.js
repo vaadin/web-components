@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-multi-select-combo-box host default"] = 
+snapshots["vaadin-multi-select-combo-box host default"] =
 `<vaadin-multi-select-combo-box>
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -45,7 +45,7 @@ snapshots["vaadin-multi-select-combo-box host default"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host default */
 
-snapshots["vaadin-multi-select-combo-box host label"] = 
+snapshots["vaadin-multi-select-combo-box host label"] =
 `<vaadin-multi-select-combo-box has-label="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -91,7 +91,7 @@ snapshots["vaadin-multi-select-combo-box host label"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host label */
 
-snapshots["vaadin-multi-select-combo-box host helper"] = 
+snapshots["vaadin-multi-select-combo-box host helper"] =
 `<vaadin-multi-select-combo-box has-helper="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -142,7 +142,7 @@ snapshots["vaadin-multi-select-combo-box host helper"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host helper */
 
-snapshots["vaadin-multi-select-combo-box host error"] = 
+snapshots["vaadin-multi-select-combo-box host error"] =
 `<vaadin-multi-select-combo-box
   has-error-message=""
   invalid=""
@@ -192,7 +192,7 @@ snapshots["vaadin-multi-select-combo-box host error"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host error */
 
-snapshots["vaadin-multi-select-combo-box host required"] = 
+snapshots["vaadin-multi-select-combo-box host required"] =
 `<vaadin-multi-select-combo-box required="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -237,7 +237,7 @@ snapshots["vaadin-multi-select-combo-box host required"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host required */
 
-snapshots["vaadin-multi-select-combo-box host disabled"] = 
+snapshots["vaadin-multi-select-combo-box host disabled"] =
 `<vaadin-multi-select-combo-box
   aria-disabled="true"
   disabled=""
@@ -287,7 +287,7 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host disabled */
 
-snapshots["vaadin-multi-select-combo-box host readonly"] = 
+snapshots["vaadin-multi-select-combo-box host readonly"] =
 `<vaadin-multi-select-combo-box readonly="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -333,7 +333,7 @@ snapshots["vaadin-multi-select-combo-box host readonly"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host readonly */
 
-snapshots["vaadin-multi-select-combo-box host placeholder"] = 
+snapshots["vaadin-multi-select-combo-box host placeholder"] =
 `<vaadin-multi-select-combo-box placeholder="Placeholder">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -378,7 +378,7 @@ snapshots["vaadin-multi-select-combo-box host placeholder"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host placeholder */
 
-snapshots["vaadin-multi-select-combo-box host opened default"] = 
+snapshots["vaadin-multi-select-combo-box host opened default"] =
 `<vaadin-multi-select-combo-box
   focused=""
   opened=""
@@ -426,7 +426,7 @@ snapshots["vaadin-multi-select-combo-box host opened default"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened default */
 
-snapshots["vaadin-multi-select-combo-box host opened overlay"] = 
+snapshots["vaadin-multi-select-combo-box host opened overlay"] =
 `<vaadin-multi-select-combo-box-overlay
   exportparts="overlay, content, loader"
   id="overlay"
@@ -439,21 +439,7 @@ snapshots["vaadin-multi-select-combo-box host opened overlay"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened overlay */
 
-snapshots["vaadin-multi-select-combo-box host opened overlay class"] = 
-`<vaadin-multi-select-combo-box-overlay
-  class="custom multi-select-combo-box-overlay"
-  exportparts="overlay, content, loader"
-  id="overlay"
-  no-vertical-overlap=""
-  popover="manual"
->
-  <slot name="overlay">
-  </slot>
-</vaadin-multi-select-combo-box-overlay>
-`;
-/* end snapshot vaadin-multi-select-combo-box host opened overlay class */
-
-snapshots["vaadin-multi-select-combo-box shadow default"] = 
+snapshots["vaadin-multi-select-combo-box shadow default"] =
 `<div class="vaadin-multi-select-combo-box-container">
   <div part="label">
     <slot name="label">
@@ -518,7 +504,7 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow default */
 
-snapshots["vaadin-multi-select-combo-box shadow disabled"] = 
+snapshots["vaadin-multi-select-combo-box shadow disabled"] =
 `<div class="vaadin-multi-select-combo-box-container">
   <div part="label">
     <slot name="label">
@@ -586,7 +572,7 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow disabled */
 
-snapshots["vaadin-multi-select-combo-box shadow readonly"] = 
+snapshots["vaadin-multi-select-combo-box shadow readonly"] =
 `<div class="vaadin-multi-select-combo-box-container">
   <div part="label">
     <slot name="label">
@@ -654,7 +640,7 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow readonly */
 
-snapshots["vaadin-multi-select-combo-box shadow invalid"] = 
+snapshots["vaadin-multi-select-combo-box shadow invalid"] =
 `<div class="vaadin-multi-select-combo-box-container">
   <div part="label">
     <slot name="label">

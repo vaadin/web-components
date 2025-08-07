@@ -13,7 +13,6 @@ import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadi
 import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -189,7 +188,6 @@ interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
     MultiSelectComboBoxMixinClass<TItem>,
-    OverlayClassMixinClass,
     ResizeMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,

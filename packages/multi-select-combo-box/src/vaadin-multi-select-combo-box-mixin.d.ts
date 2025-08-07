@@ -13,7 +13,6 @@ import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-
 import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -56,7 +55,6 @@ export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HT
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
   Constructor<MultiSelectComboBoxMixinClass<TItem>> &
-  Constructor<OverlayClassMixinClass> &
   Constructor<ResizeMixinClass> &
   Constructor<SlotStylesMixinClass> &
   Constructor<ValidateMixinClass> &
