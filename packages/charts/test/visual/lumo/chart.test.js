@@ -1,4 +1,4 @@
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/charts.css';
@@ -147,6 +147,8 @@ describe('chart', () => {
       const chart = Highcharts.chart(exporting, element.configuration.userOptions);
       element.configuration.series.forEach((series) => chart.addSeries(series.userOptions));
       prepareExport(element);
+
+      await aTimeout(500);
     });
 
     afterEach(() => {
