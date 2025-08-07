@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -121,9 +120,7 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  */
 declare class Dialog extends DialogSizeMixin(
   DialogDraggableMixin(
-    DialogResizableMixin(
-      DialogRendererMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))))),
-    ),
+    DialogResizableMixin(DialogRendererMixin(DialogBaseMixin(ThemePropertyMixin(ElementMixin(HTMLElement))))),
   ),
 ) {
   addEventListener<K extends keyof DialogEventMap>(
