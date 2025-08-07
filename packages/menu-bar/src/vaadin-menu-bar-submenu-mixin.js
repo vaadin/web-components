@@ -8,7 +8,6 @@ import { ContextMenuMixin } from '@vaadin/context-menu/src/vaadin-context-menu-m
 /**
  * @polymerMixin
  * @mixes ContextMenuMixin
- * @param {function(new:HTMLElement)} superClass
  */
 export const SubMenuMixin = (superClass) =>
   class SubMenuMixinClass extends ContextMenuMixin(superClass) {
