@@ -277,16 +277,6 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<h3><em>Foo</em>Bar</h3>');
     });
 
-    // FIXME: this test would not work since we use `getSemanticHTML()`
-    it.skip('should filter out ql-* class names', () => {
-      // Modify the editor content directly, as setDangerouslyHtmlValue() strips
-      // classes
-      rte.shadowRoot.querySelector('.ql-editor').innerHTML =
-        '<pre class="ql-syntax foo ql-cursor"><code>console.log("hello")</code></pre>';
-      rte.__updateHtmlValue();
-      expect(rte.htmlValue).to.equal('<pre class="foo"><code>console.log("hello")</code></pre>');
-    });
-
     it('should not filter out ql-* in content', () => {
       rte.dangerouslySetHtmlValue('<p>mysql-driver</p>');
       flushValueDebouncer();
