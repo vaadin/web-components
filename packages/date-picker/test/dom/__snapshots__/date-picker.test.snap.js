@@ -512,24 +512,6 @@ snapshots["vaadin-date-picker host opened overlay"] =
 `;
 /* end snapshot vaadin-date-picker host opened overlay */
 
-snapshots["vaadin-date-picker host opened overlay class"] = 
-`<vaadin-date-picker-overlay
-  class="custom date-picker-overlay"
-  exportparts="backdrop, overlay, content"
-  id="overlay"
-  no-vertical-overlap=""
-  opened=""
-  popover="manual"
-  restore-focus-on-close=""
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-date-picker-overlay>
-`;
-/* end snapshot vaadin-date-picker host opened overlay class */
-
 snapshots["vaadin-date-picker host opened overlay theme"] = 
 `<vaadin-date-picker-overlay
   exportparts="backdrop, overlay, content"
