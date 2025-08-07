@@ -1,5 +1,4 @@
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { PopoverPositionMixinClass } from '../../src/vaadin-popover-position-mixin.js';
 import type { PopoverTargetMixinClass } from '../../src/vaadin-popover-target-mixin.js';
@@ -17,7 +16,6 @@ const popover = document.createElement('vaadin-popover');
 
 // Mixins
 assertType<ElementMixinClass>(popover);
-assertType<OverlayClassMixinClass>(popover);
 assertType<ThemePropertyMixinClass>(popover);
 assertType<PopoverPositionMixinClass>(popover);
 assertType<PopoverTargetMixinClass>(popover);
@@ -32,7 +30,6 @@ assertType<string | null | undefined>(popover.accessibleName);
 assertType<string | null | undefined>(popover.accessibleNameRef);
 assertType<string | null>(popover.height);
 assertType<string | null>(popover.width);
-assertType<string>(popover.overlayClass);
 assertType<string>(popover.overlayRole);
 assertType<boolean>(popover.autofocus);
 assertType<boolean>(popover.opened);
