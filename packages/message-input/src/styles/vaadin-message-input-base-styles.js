@@ -13,7 +13,7 @@ export const messageInputStyles = css`
     max-height: 50vh;
     flex-shrink: 0;
     border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
     border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
   }

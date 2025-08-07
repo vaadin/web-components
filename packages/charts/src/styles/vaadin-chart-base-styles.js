@@ -963,7 +963,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-candlestick-series .highcharts-point {
-    stroke: var(--vaadin-charts-candlestick-line, var(--vaadin-border-color-strong));
+    stroke: var(--vaadin-charts-candlestick-line, var(--vaadin-border-color));
     stroke-width: 1px;
   }
 

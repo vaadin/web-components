@@ -15,7 +15,7 @@ const base = css`
   :host {
     background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
     border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
     border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
     display: flex;
