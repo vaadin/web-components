@@ -16,7 +16,6 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 const Quill = window.Quill;
 
 // Fix to add `spellcheck="false"` on the `<pre>` tag removed by Quill
-// TODO: Quill also removes `<code>` tag from the output, should add it?
 const QuillCodeBlockContainer = Quill.import('formats/code-block-container');
 
 class CodeBlockContainer extends QuillCodeBlockContainer {
