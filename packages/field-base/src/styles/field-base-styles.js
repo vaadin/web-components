@@ -38,6 +38,7 @@ export const field = css`
     color: var(--vaadin-input-field-label-color, var(--vaadin-color));
     order: var(--vaadin-input-field-helper-order);
     word-break: break-word;
+    position: relative;
   }
 
   ::slotted(label) {
