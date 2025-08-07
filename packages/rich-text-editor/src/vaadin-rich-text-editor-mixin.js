@@ -15,6 +15,8 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 const Quill = window.Quill;
 
+// There are some issues e.g. `spellcheck="false"` not preserved
+// See https://github.com/slab/quill/issues/4289
 // Fix to add `spellcheck="false"` on the `<pre>` tag removed by Quill
 const QuillCodeBlockContainer = Quill.import('formats/code-block-container');
 
@@ -699,18 +701,6 @@ export const RichTextEditorMixin = (superClass) =>
     __updateHtmlValue() {
       // We have to use this instead of `innerHTML` to get correct tags like `<pre>` etc.
       let content = this._editor.getSemanticHTML();
-
-      // TODO there are some issues e.g. `spellcheck="false"` not preserved
-      // See https://github.com/slab/quill/issues/4289
-
-      // Remove Quill classes, e.g. ql-syntax, except for align
-      content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
-        const classes = group1.split(' ').filter((className) => {
-          return !className.startsWith('ql-') || className.startsWith('ql-align');
-        });
-        return `class="${classes.join(' ')}"`;
-      });
-
       // Replace Quill align classes with inline styles
       [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
         content = content.replace(
@@ -718,9 +708,6 @@ export const RichTextEditorMixin = (superClass) =>
           ` style="text-align: ${align}"`,
         );
       });
-
-      content = content.replace(/ class=""/gu, '');
-
       this._setHtmlValue(content);
     }
 
