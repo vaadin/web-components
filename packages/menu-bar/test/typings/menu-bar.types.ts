@@ -19,7 +19,6 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 assertType<boolean | null | undefined>(menu.openOnHover);
 assertType<boolean | null | undefined>(menu.tabNavigation);
 assertType<MenuItem[]>(menu.items);
-assertType<string>(menu.overlayClass);
 
 assertType<ResizeMixinClass>(menu);
 assertType<FocusMixinClass>(menu);

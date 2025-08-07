@@ -151,15 +151,4 @@ export declare class DateTimePickerMixinClass {
    * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
    */
   i18n: DateTimePickerI18n;
-
-  /**
-   * A space-delimited list of CSS class names to set on the overlay elements
-   * of the internal components controlled by the `<vaadin-date-time-picker>`:
-   *
-   * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker#property-overlayClass)
-   * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker#property-overlayClass)
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
 }

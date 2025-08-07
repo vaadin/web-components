@@ -186,24 +186,3 @@ snapshots["menu-bar overlay"] =
 `;
 /* end snapshot menu-bar overlay */
 
-snapshots["menu-bar overlay class"] = 
-`<vaadin-menu-bar-overlay
-  class="custom menu-bar-overlay"
-  exportparts="backdrop, overlay, content"
-  id="overlay"
-  opened=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-  <slot
-    name="submenu"
-    slot="submenu"
-  >
-  </slot>
-</vaadin-menu-bar-overlay>
-`;
-/* end snapshot menu-bar overlay class */
-

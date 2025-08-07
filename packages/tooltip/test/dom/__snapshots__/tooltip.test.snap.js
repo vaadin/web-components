@@ -238,21 +238,3 @@ snapshots["vaadin-tooltip opened overlay"] =
 `;
 /* end snapshot vaadin-tooltip opened overlay */
 
-snapshots["vaadin-tooltip opened overlay class"] = 
-`<vaadin-tooltip-overlay
-  class="custom tooltip-overlay"
-  exportparts="overlay, content"
-  hidden=""
-  id="overlay"
-  modeless=""
-  no-vertical-overlap=""
-  opened=""
-  popover="manual"
-  position="bottom"
->
-  <slot name="overlay">
-  </slot>
-</vaadin-tooltip-overlay>
-`;
-/* end snapshot vaadin-tooltip opened overlay class */
-

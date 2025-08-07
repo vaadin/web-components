@@ -49,11 +49,5 @@ describe('vaadin-avatar-group', () => {
     it('overlay', async () => {
       await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
-
-    it('overlay class', async () => {
-      group.overlayClass = 'avatar-group-overlay custom';
-      await nextUpdate(group);
-      await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
   });
 });

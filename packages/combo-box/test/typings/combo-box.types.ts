@@ -5,7 +5,6 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
@@ -138,7 +137,6 @@ assertType<InputControlMixinClass>(narrowedComboBox);
 assertType<ClearButtonMixinClass>(narrowedComboBox);
 assertType<InputMixinClass>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
-assertType<OverlayClassMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
 assertType<PatternMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);

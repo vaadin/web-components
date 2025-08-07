@@ -1,6 +1,5 @@
 import '../../vaadin-login-form.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type {
   LoginFormDisabledChangedEvent,
   LoginFormErrorChangedEvent,
@@ -20,7 +19,6 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const overlay = document.createElement('vaadin-login-overlay');
 
 assertType<ElementMixinClass>(overlay);
-assertType<OverlayClassMixinClass>(overlay);
 
 assertType<number>(overlay.headingLevel);
 assertType<LoginI18n>(overlay.i18n);

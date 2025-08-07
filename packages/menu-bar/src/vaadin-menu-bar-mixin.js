@@ -155,16 +155,6 @@ export const MenuBarMixin = (superClass) =>
         },
 
         /**
-         * A space-delimited list of CSS class names
-         * to set on each sub-menu overlay element.
-         *
-         * @attr {string} overlay-class
-         */
-        overlayClass: {
-          type: String,
-        },
-
-        /**
          * If true, the submenu will open on hover (mouseover) instead of click.
          * @attr {boolean} open-on-hover
          */
@@ -346,10 +336,6 @@ export const MenuBarMixin = (superClass) =>
 
       if (props.has('items')) {
         this.__updateSubMenu();
-      }
-
-      if (props.has('overlayClass')) {
-        this._subMenu.overlayClass = this.overlayClass;
       }
 
       if (props.has('_theme')) {

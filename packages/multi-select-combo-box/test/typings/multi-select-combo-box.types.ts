@@ -12,7 +12,6 @@ import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -108,7 +107,6 @@ assertType<string | null | undefined>(narrowedComboBox.helperText);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
-assertType<string>(narrowedComboBox.overlayClass);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 
@@ -129,7 +127,6 @@ assertType<Omit<InputMixinClass, 'value'>>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
 assertType<MultiSelectComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
-assertType<OverlayClassMixinClass>(narrowedComboBox);
 assertType<SlotStylesMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);

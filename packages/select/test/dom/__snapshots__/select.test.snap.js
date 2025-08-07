@@ -570,22 +570,6 @@ snapshots["vaadin-select host opened overlay"] =
 `;
 /* end snapshot vaadin-select host opened overlay */
 
-snapshots["vaadin-select host opened overlay class"] = 
-`<vaadin-select-overlay
-  class="custom select-overlay"
-  exportparts="backdrop, overlay, content"
-  id="overlay"
-  opened=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-select-overlay>
-`;
-/* end snapshot vaadin-select host opened overlay class */
-
 snapshots["vaadin-select shadow default"] = 
 `<div class="vaadin-select-container">
   <div part="label">

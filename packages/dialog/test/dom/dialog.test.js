@@ -41,10 +41,4 @@ describe('vaadin-dialog', () => {
     await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
-
-  it('overlay class', async () => {
-    dialog.overlayClass = 'custom dialog-overlay';
-    await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-  });
 });

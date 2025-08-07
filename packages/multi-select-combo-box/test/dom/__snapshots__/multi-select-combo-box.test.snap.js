@@ -439,20 +439,6 @@ snapshots["vaadin-multi-select-combo-box host opened overlay"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened overlay */
 
-snapshots["vaadin-multi-select-combo-box host opened overlay class"] = 
-`<vaadin-multi-select-combo-box-overlay
-  class="custom multi-select-combo-box-overlay"
-  exportparts="overlay, content, loader"
-  id="overlay"
-  no-vertical-overlap=""
-  popover="manual"
->
-  <slot name="overlay">
-  </slot>
-</vaadin-multi-select-combo-box-overlay>
-`;
-/* end snapshot vaadin-multi-select-combo-box host opened overlay class */
-
 snapshots["vaadin-multi-select-combo-box shadow default"] = 
 `<div class="vaadin-multi-select-combo-box-container">
   <div part="label">

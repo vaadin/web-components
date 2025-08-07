@@ -10,7 +10,6 @@ import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import {
@@ -85,13 +84,12 @@ export const datePickerI18nDefaults = Object.freeze({
  * @mixes I18nMixin
  * @mixes InputConstraintsMixin
  * @mixes KeyboardMixin
- * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
   class DatePickerMixinClass extends I18nMixin(
     datePickerI18nDefaults,
-    OverlayClassMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))),
+    DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))),
   ) {
     static get properties() {
       return {

@@ -131,9 +131,8 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __openSubMenu(subMenu, itemElement, overlayClass) {
+    __openSubMenu(subMenu, itemElement) {
       this.__updateSubMenuForItem(subMenu, itemElement);
-      subMenu.overlayClass = overlayClass;
 
       const parent = this._overlayElement;
 
@@ -385,9 +384,7 @@ export const ItemsMixin = (superClass) =>
         if (children && children.length) {
           this.__updateExpanded(item, true);
 
-          // Forward parent overlay class
-          const { overlayClass } = this;
-          this.__openSubMenu(subMenu, item, overlayClass);
+          this.__openSubMenu(subMenu, item);
         } else if (isSubmenuFocused) {
           // If the sub-menu item was focused, focus its parent item.
           subMenu.listenOn.focus();

@@ -632,24 +632,6 @@ snapshots["vaadin-time-picker host opened overlay"] =
 `;
 /* end snapshot vaadin-time-picker host opened overlay */
 
-snapshots["vaadin-time-picker host opened overlay class"] = 
-`<vaadin-time-picker-overlay
-  class="custom time-picker-overlay"
-  dir="ltr"
-  exportparts="overlay, content"
-  id="overlay"
-  no-vertical-overlap=""
-  opened=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-time-picker-overlay>
-`;
-/* end snapshot vaadin-time-picker host opened overlay class */
-
 snapshots["vaadin-time-picker shadow default"] = 
 `<div class="vaadin-time-picker-container">
   <div part="label">

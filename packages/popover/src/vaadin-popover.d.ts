@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -68,9 +67,7 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the popover is closed.
  */
-declare class Popover extends PopoverPositionMixin(
-  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
-) {
+declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))) {
   /**
    * Sets the default focus delay to be used by all popover instances,
    * except for those that have focus delay configured using property.

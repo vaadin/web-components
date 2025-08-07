@@ -8,7 +8,6 @@ import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.j
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -21,12 +20,9 @@ import { ButtonController } from './button-controller.js';
  * @mixes DelegateStateMixin
  * @mixes FieldMixin
  * @mixes KeyboardMixin
- * @mixes OverlayClassMixin
  */
 export const SelectBaseMixin = (superClass) =>
-  class SelectBaseMixin extends OverlayClassMixin(
-    DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(superClass)))),
-  ) {
+  class SelectBaseMixin extends DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(superClass)))) {
     static get properties() {
       return {
         /**

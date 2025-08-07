@@ -88,12 +88,6 @@ describe('vaadin-time-picker', () => {
       it('overlay', async () => {
         await expect(timePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
-
-      it('overlay class', async () => {
-        timePicker.overlayClass = 'custom time-picker-overlay';
-        await nextUpdate(timePicker);
-        await expect(timePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-      });
     });
   });
 

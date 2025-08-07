@@ -7,7 +7,6 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ComboBox } from './vaadin-combo-box.js';
@@ -26,7 +25,6 @@ export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
-  Constructor<OverlayClassMixinClass> &
   Constructor<ValidateMixinClass> &
   T;
 

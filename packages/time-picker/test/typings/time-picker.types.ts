@@ -38,7 +38,6 @@ assertType<string>(timePicker.min);
 assertType<string>(timePicker.max);
 assertType<number | null | undefined>(timePicker.step);
 assertType<boolean>(timePicker.opened);
-assertType<string>(timePicker.overlayClass);
 assertType<string>(timePicker.value);
 
 // Events

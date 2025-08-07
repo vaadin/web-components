@@ -87,26 +87,7 @@ describe('context-menu', () => {
     await expect(subMenu).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('overlay class', async () => {
-    menu.overlayClass = 'context-menu-overlay custom';
-    menu.items = ITEMS;
-
-    contextmenu(menu);
-    await nextUpdate(menu);
-    await nextRender();
-
+  it('overlay', async () => {
     await expect(menu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-  });
-
-  it('overlay class nested', async () => {
-    menu.overlayClass = 'context-menu-overlay custom';
-    menu.items = ITEMS;
-
-    contextmenu(menu);
-    await openSubMenus(menu);
-    await nextRender();
-
-    const subMenu = menu.querySelector('vaadin-context-menu');
-    await expect(subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

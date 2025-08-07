@@ -48,12 +48,6 @@ describe('vaadin-login-overlay', () => {
       await nextUpdate(overlay);
       await expect(wrapper).dom.to.equalSnapshot();
     });
-
-    it('overlay class', async () => {
-      overlay.overlayClass = 'custom login-overlay';
-      await nextUpdate(overlay);
-      await expect(wrapper).dom.to.equalSnapshot();
-    });
   });
 
   describe('shadow', () => {

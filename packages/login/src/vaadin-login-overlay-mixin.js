@@ -3,15 +3,13 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { TitleController } from './title-controller.js';
 
 /**
  * @polymerMixin
- * @mixes OverlayClassMixin
  */
 export const LoginOverlayMixin = (superClass) =>
-  class LoginOverlayMixin extends OverlayClassMixin(superClass) {
+  class LoginOverlayMixin extends superClass {
     static get properties() {
       return {
         /**

@@ -50,11 +50,4 @@ describe('menu-bar', () => {
     await nextRender();
     await expect(menu._subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
-
-  it('overlay class', async () => {
-    menu.overlayClass = 'custom menu-bar-overlay';
-    menu._buttons[1].click();
-    await nextRender();
-    await expect(menu._subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-  });
 });

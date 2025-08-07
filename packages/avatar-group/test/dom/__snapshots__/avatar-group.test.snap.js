@@ -331,19 +331,3 @@ snapshots["vaadin-avatar-group opened overlay"] =
 `;
 /* end snapshot vaadin-avatar-group opened overlay */
 
-snapshots["vaadin-avatar-group opened overlay class"] = 
-`<vaadin-avatar-group-overlay
-  class="avatar-group-overlay custom"
-  exportparts="overlay, content"
-  id="overlay"
-  no-vertical-overlap=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-avatar-group-overlay>
-`;
-/* end snapshot vaadin-avatar-group opened overlay class */
-

@@ -11,7 +11,6 @@ import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
@@ -208,12 +207,9 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ContextMenuMixin
- * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  */
-class ContextMenu extends ContextMenuMixin(
-  OverlayClassMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
-) {
+class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-context-menu';
   }

@@ -571,42 +571,6 @@ snapshots["vaadin-date-time-picker host error"] =
 `;
 /* end snapshot vaadin-date-time-picker host error */
 
-snapshots["vaadin-date-time-picker host overlay class date-picker"] = 
-`<vaadin-date-picker-overlay
-  class="custom date-time-picker-overlay"
-  exportparts="backdrop, overlay, content"
-  id="overlay"
-  no-vertical-overlap=""
-  opened=""
-  popover="manual"
-  restore-focus-on-close=""
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-date-picker-overlay>
-`;
-/* end snapshot vaadin-date-time-picker host overlay class date-picker */
-
-snapshots["vaadin-date-time-picker host overlay class time-picker"] = 
-`<vaadin-time-picker-overlay
-  class="custom date-time-picker-overlay"
-  dir="ltr"
-  exportparts="overlay, content"
-  id="overlay"
-  no-vertical-overlap=""
-  opened=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-</vaadin-time-picker-overlay>
-`;
-/* end snapshot vaadin-date-time-picker host overlay class time-picker */
-
 snapshots["vaadin-date-time-picker shadow default"] = 
 `<div class="vaadin-date-time-picker-container">
   <div part="label">
