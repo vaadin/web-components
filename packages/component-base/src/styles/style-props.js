@@ -52,7 +52,6 @@ addGlobalThemeStyles(
         --vaadin-radius-s: 3px;
         --vaadin-radius-m: 6px;
         --vaadin-radius-l: 12px;
-        --vaadin-radius-full: 999px;
 
         /* Focus outline */
         --vaadin-focus-ring-width: 2px;
