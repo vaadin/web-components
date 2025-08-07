@@ -159,9 +159,11 @@ describe('TabSheet', () => {
       </TabSheet>,
     );
 
+    const tabsContainer = getTabSheet().shadowRoot!.querySelector('[part="tabs-container"]')!;
+    const tabsContainerHeight = tabsContainer.clientHeight;
     const content = getTabSheet().querySelector('#content-div');
 
     expect(content?.clientWidth).toBe(600);
-    expect(content?.clientHeight).toBe(450);
+    expect(content?.clientHeight).toBe(500 - tabsContainerHeight);
   });
 });
