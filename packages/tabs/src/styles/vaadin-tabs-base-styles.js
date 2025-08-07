@@ -28,7 +28,7 @@ export const tabsStyles = css`
     overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-tabs-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-tabs-gap, var(--vaadin-gap-s));
   }
 
   :host([orientation='horizontal']) [part='tabs'] {

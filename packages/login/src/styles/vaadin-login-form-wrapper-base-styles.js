@@ -13,8 +13,8 @@ export const loginFormWrapperStyles = css`
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
-    padding: var(--vaadin-login-form-padding, var(--vaadin-padding));
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-s));
+    padding: var(--vaadin-login-form-padding, var(--vaadin-padding-s));
     max-width: 100%;
     width: var(--vaadin-login-form-width, 360px);
   }
@@ -26,7 +26,7 @@ export const loginFormWrapperStyles = css`
   ::slotted(form) {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-s));
   }
 
   ::slotted([slot='form-title']) {
@@ -44,7 +44,7 @@ export const loginFormWrapperStyles = css`
     color: var(--vaadin-login-form-error-color, var(--vaadin-color));
     font-size: var(--vaadin-login-form-error-font-size, inherit);
     font-weight: var(--vaadin-login-form-error-font-weight, 400);
-    gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     line-height: var(--vaadin-login-form-error-line-height, inherit);
   }

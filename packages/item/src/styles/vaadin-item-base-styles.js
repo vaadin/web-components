@@ -13,7 +13,7 @@ export const itemStyles = css`
     box-sizing: border-box;
     cursor: var(--vaadin-clickable-cursor);
     display: flex;
-    gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-s));
     height: var(--vaadin-item-height, auto);
     padding: var(--vaadin-item-padding, var(--vaadin-padding-container));
   }

@@ -10,8 +10,8 @@ export const messageStyles = css`
   :host {
     display: flex;
     flex-direction: row;
-    padding: var(--vaadin-message-padding, var(--vaadin-padding));
-    gap: var(--vaadin-message-gap, var(--vaadin-gap-container-inline) var(--vaadin-gap-container-block));
+    padding: var(--vaadin-message-padding, var(--vaadin-padding-s));
+    gap: var(--vaadin-message-gap, var(--vaadin-gap-s) var(--vaadin-gap-s));
   }
 
   :host([hidden]) {

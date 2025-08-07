@@ -20,15 +20,15 @@ export const baseStyles = css`
 
   /* Theme variations */
   :host([theme~='margin']) {
-    margin: var(--vaadin-vertical-layout-margin, var(--vaadin-padding));
+    margin: var(--vaadin-vertical-layout-margin, var(--vaadin-padding-s));
   }
 
   :host([theme~='padding']) {
-    padding: var(--vaadin-vertical-layout-margin, var(--vaadin-padding));
+    padding: var(--vaadin-vertical-layout-margin, var(--vaadin-padding-s));
   }
 
   :host([theme~='spacing']) {
-    gap: var(--vaadin-vertical-layout-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-vertical-layout-gap, var(--vaadin-gap-s));
   }
 
   :host([theme~='wrap']) {

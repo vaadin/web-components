@@ -10,12 +10,12 @@ export const cardStyles = css`
   :host {
     --_content: 0;
     --_footer: 0;
-    --_gap: var(--vaadin-card-gap, var(--vaadin-gap-container-block) var(--vaadin-gap-container-inline));
+    --_gap: var(--vaadin-card-gap, var(--vaadin-gap-s));
     --_header: max(var(--_header-prefix), var(--_title), var(--_subtitle), var(--_header-suffix));
     --_header-prefix: 0;
     --_header-suffix: 0;
     --_media: 0;
-    --_padding: var(--vaadin-card-padding, var(--vaadin-padding));
+    --_padding: var(--vaadin-card-padding, var(--vaadin-padding-s));
     --_subtitle: 0;
     --_title: 0;
     background: var(--vaadin-card-background, var(--vaadin-background-container));

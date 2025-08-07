@@ -22,7 +22,7 @@ export const inputContainerStyles = css`
     box-sizing: border-box;
     cursor: text;
     padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
-    gap: var(--vaadin-input-field-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-input-field-gap, var(--vaadin-gap-s));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
     color: var(--vaadin-input-field-value-color, var(--vaadin-color));
     font-size: var(--vaadin-input-field-value-font-size, inherit);

@@ -18,15 +18,15 @@ export const baseStyles = css`
 
   /* Theme variations */
   :host([theme~='margin']) {
-    margin: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding));
+    margin: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding-s));
   }
 
   :host([theme~='padding']) {
-    padding: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding));
+    padding: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding-s));
   }
 
   :host([theme~='spacing']) {
-    gap: var(--vaadin-horizontal-layout-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-horizontal-layout-gap, var(--vaadin-gap-s));
   }
 
   :host([theme~='wrap']) {

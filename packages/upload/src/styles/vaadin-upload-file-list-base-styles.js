@@ -22,7 +22,7 @@ export const uploadFileListStyles = css`
   }
 
   ::slotted(:first-child) {
-    margin-top: var(--vaadin-upload-gap, var(--vaadin-gap-container-block));
+    margin-top: var(--vaadin-upload-gap, var(--vaadin-gap-s));
   }
 
   ::slotted(li:not(:last-of-type)) {

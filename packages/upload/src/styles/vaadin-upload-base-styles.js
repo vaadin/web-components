@@ -17,7 +17,7 @@ export const uploadStyles = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    padding: var(--vaadin-upload-padding, var(--vaadin-padding));
+    padding: var(--vaadin-upload-padding, var(--vaadin-padding-s));
     position: relative;
   }
 
@@ -37,7 +37,7 @@ export const uploadStyles = css`
   [part='primary-buttons'] {
     align-items: center;
     display: flex;
-    gap: var(--vaadin-gap-container-inline);
+    gap: var(--vaadin-gap-s);
   }
 
   [part='drop-label'] {
@@ -46,7 +46,7 @@ export const uploadStyles = css`
     display: flex;
     font-size: var(--vaadin-upload-drop-label-font-size, inherit);
     font-weight: var(--vaadin-upload-drop-label-font-weight, inherit);
-    gap: var(--vaadin-upload-drop-label-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-upload-drop-label-gap, var(--vaadin-gap-s));
     line-height: var(--vaadin-upload-drop-label-line-height, inherit);
   }
 

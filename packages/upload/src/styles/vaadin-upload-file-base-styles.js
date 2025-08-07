@@ -10,9 +10,9 @@ export const uploadFileStyles = css`
   :host {
     align-items: center;
     display: grid;
-    gap: var(--vaadin-upload-file-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-upload-file-gap, var(--vaadin-gap-s));
     grid-template-columns: var(--vaadin-icon-size, 1lh) minmax(0, 1fr) auto;
-    padding: var(--vaadin-upload-file-padding, var(--vaadin-padding));
+    padding: var(--vaadin-upload-file-padding, var(--vaadin-padding-s));
   }
 
   [hidden] {

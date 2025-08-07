@@ -98,7 +98,7 @@ const widgetStyles = css`
   }
 
   :host([editable]) header {
-    padding: var(--vaadin-dashboard-widget-header-padding, var(--vaadin-padding));
+    padding: var(--vaadin-dashboard-widget-header-padding, var(--vaadin-padding-s));
   }
 
   header:has([part~='title'][hidden]) {

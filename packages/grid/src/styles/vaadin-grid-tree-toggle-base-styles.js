@@ -36,7 +36,7 @@ export const gridTreeToggleStyles = css`
   }
 
   [part='toggle'] {
-    margin-inline-end: var(--vaadin-gap-container-inline);
+    margin-inline-end: var(--vaadin-gap-s);
   }
 
   [part='toggle']::before {

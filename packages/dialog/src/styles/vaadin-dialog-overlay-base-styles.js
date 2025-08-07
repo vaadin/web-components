@@ -49,7 +49,7 @@ export const dialogOverlayBase = css`
     flex: none;
     pointer-events: none;
     z-index: 1;
-    gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-s));
   }
 
   ::slotted(*) {
@@ -59,7 +59,7 @@ export const dialogOverlayBase = css`
   [part='header'],
   [part='content'],
   [part='footer'] {
-    padding: var(--vaadin-dialog-padding, var(--vaadin-padding));
+    padding: var(--vaadin-dialog-padding, var(--vaadin-padding-s));
   }
 
   :host([theme~='no-padding']) [part='content'] {

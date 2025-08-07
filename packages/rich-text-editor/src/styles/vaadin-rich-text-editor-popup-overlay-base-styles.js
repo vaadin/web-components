@@ -18,7 +18,7 @@ export const richTextEditorPopupOverlay = css`
 
   [part='content'] {
     display: grid;
-    gap: var(--vaadin-rich-text-editor-overlay-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-rich-text-editor-overlay-gap, var(--vaadin-gap-s));
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
