@@ -27,7 +27,7 @@ export const tabSheetStyles = [
       position: relative;
       display: flex;
       align-items: center;
-      gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-container-inline));
+      gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-s));
       padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-s));
       box-sizing: border-box;
     }

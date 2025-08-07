@@ -159,7 +159,7 @@ const toolbar = css`
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
-    gap: var(--vaadin-rich-text-editor-toolbar-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-rich-text-editor-toolbar-gap, var(--vaadin-gap-s));
     padding: var(--vaadin-rich-text-editor-toolbar-padding, var(--vaadin-padding-s));
   }
 

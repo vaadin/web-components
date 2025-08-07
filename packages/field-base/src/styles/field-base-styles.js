@@ -99,7 +99,7 @@ export const field = css`
     font-weight: var(--vaadin-input-field-error-font-weight, 400);
     color: var(--vaadin-input-field-error-color, var(--vaadin-color));
     display: flex;
-    gap: var(--vaadin-gap-container-inline);
+    gap: var(--vaadin-gap-s);
   }
 
   [part='error-message']::before {

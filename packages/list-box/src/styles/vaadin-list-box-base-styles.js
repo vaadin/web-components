@@ -26,8 +26,6 @@ export const listBoxStyles = css`
     border-color: var(--vaadin-divider-color, var(--vaadin-border-color));
     border-width: 0 0 1px;
     margin: 4px 8px;
-    margin-inline-start: calc(
-      var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--vaadin-gap-container-inline)) + 8px
-    );
+    margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--vaadin-gap-s)) + 8px);
   }
 `;

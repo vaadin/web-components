@@ -74,7 +74,7 @@ export const appLayoutStyles = css`
       var(--safe-area-inset-right)
     );
     z-index: 1;
-    gap: var(--vaadin-app-layout-navbar-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-app-layout-navbar-gap, var(--vaadin-gap-s));
     background: var(--vaadin-app-layout-navbar-background, var(--vaadin-background-container));
   }
 

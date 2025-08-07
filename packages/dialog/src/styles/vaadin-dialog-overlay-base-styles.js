@@ -49,7 +49,7 @@ export const dialogOverlayBase = css`
     flex: none;
     pointer-events: none;
     z-index: 1;
-    gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-s));
   }
 
   ::slotted(*) {

@@ -11,7 +11,7 @@ export const checkable = (part, propName = part) => css`
   :host {
     align-items: center;
     display: inline-grid;
-    gap: var(--vaadin-${unsafeCSS(propName)}-gap, 0.25lh var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-${unsafeCSS(propName)}-gap, 0.25lh var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     /*
       Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox

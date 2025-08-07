@@ -10,7 +10,7 @@ export const sharedStyles = css`
   :host {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
     cursor: default;
     -webkit-tap-highlight-color: transparent;
   }
@@ -76,7 +76,7 @@ export const sharedStyles = css`
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
   }
 
   :focus-visible {

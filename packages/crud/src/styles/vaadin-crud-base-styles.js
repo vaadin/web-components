@@ -152,7 +152,7 @@ export const crudStyles = css`
     border-top: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
     display: flex;
     flex: none;
-    gap: var(--vaadin-crud-footer-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-crud-footer-gap, var(--vaadin-gap-s));
     padding: var(--vaadin-crud-footer-padding, var(--vaadin-padding-s));
   }
 

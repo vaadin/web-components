@@ -26,7 +26,7 @@ export const baseStyles = css`
   }
 
   :host([theme~='spacing']) {
-    gap: var(--vaadin-horizontal-layout-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-horizontal-layout-gap, var(--vaadin-gap-s));
   }
 
   :host([theme~='wrap']) {

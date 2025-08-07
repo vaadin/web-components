@@ -19,7 +19,7 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
     display: flex;
     font-size: var(--${unsafeCSS(partName)}-font-size, inherit);
     font-weight: var(--${unsafeCSS(partName)}-font-weight, 500);
-    gap: var(--${unsafeCSS(partName)}-gap, 0 var(--vaadin-gap-container-inline));
+    gap: var(--${unsafeCSS(partName)}-gap, 0 var(--vaadin-gap-s));
     height: var(--${unsafeCSS(partName)}-height, auto);
     outline: calc(var(--vaadin-focus-ring-width) * var(--_focus-ring, 0)) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;

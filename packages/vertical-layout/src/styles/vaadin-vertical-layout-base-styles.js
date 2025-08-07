@@ -28,7 +28,7 @@ export const baseStyles = css`
   }
 
   :host([theme~='spacing']) {
-    gap: var(--vaadin-vertical-layout-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-vertical-layout-gap, var(--vaadin-gap-s));
   }
 
   :host([theme~='wrap']) {

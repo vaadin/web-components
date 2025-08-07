@@ -44,8 +44,9 @@ addGlobalThemeStyles(
         --vaadin-padding-container: var(--vaadin-padding-xs) var(--vaadin-padding-s);
 
         /* Gap/spacing */
-        --vaadin-gap-container-inline: 0.5em;
-        --vaadin-gap-container-block: 0.5em;
+        --vaadin-gap-s: 8px;
+        --vaadin-gap-m: 12px;
+        --vaadin-gap-l: 16px;
 
         /* Border radius */
         --vaadin-radius-s: 3px;

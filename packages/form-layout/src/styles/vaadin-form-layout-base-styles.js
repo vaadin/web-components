@@ -9,10 +9,10 @@ import { css } from 'lit';
 export const formLayoutStyles = css`
   :host {
     /* Default values */
-    --vaadin-form-layout-label-spacing: var(--vaadin-gap-container-inline);
+    --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
     --vaadin-form-layout-label-width: 8em;
-    --vaadin-form-layout-column-spacing: calc(var(--vaadin-gap-container-inline) * 2);
-    --vaadin-form-layout-row-spacing: calc(var(--vaadin-gap-container-block) * 2);
+    --vaadin-form-layout-column-spacing: calc(var(--vaadin-gap-s) * 2);
+    --vaadin-form-layout-row-spacing: calc(var(--vaadin-gap-s) * 2);
 
     align-self: stretch;
     display: block;
