@@ -46,7 +46,7 @@ const popoverOverlay = css`
     overscroll-behavior: contain;
     box-sizing: border-box;
     max-height: 100%;
-    padding: var(--vaadin-popover-padding, var(--vaadin-padding));
+    padding: var(--vaadin-popover-padding, var(--vaadin-padding-s));
   }
 
   :host([theme~='no-padding']) [part='content'] {

@@ -11,7 +11,7 @@ export const notificationContainerStyles = css`
     /* How much space to reserve for overlay box shadow, to prevent clipping it with overflow:auto */
     --_paint-area: 2em;
     /* Space between notifications and the viewport */
-    --_padding: var(--vaadin-notification-viewport-inset, var(--vaadin-padding));
+    --_padding: var(--vaadin-notification-viewport-inset, var(--vaadin-padding-s));
     /* Space between notifications */
     --_gap: var(--vaadin-notification-gap, var(--vaadin-gap-container-block));
     display: grid;

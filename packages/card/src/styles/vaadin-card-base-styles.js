@@ -15,7 +15,7 @@ export const cardStyles = css`
     --_header-prefix: 0;
     --_header-suffix: 0;
     --_media: 0;
-    --_padding: var(--vaadin-card-padding, var(--vaadin-padding));
+    --_padding: var(--vaadin-card-padding, var(--vaadin-padding-s));
     --_subtitle: 0;
     --_title: 0;
     background: var(--vaadin-card-background, var(--vaadin-background-container));

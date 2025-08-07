@@ -17,7 +17,7 @@ export const uploadStyles = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    padding: var(--vaadin-upload-padding, var(--vaadin-padding));
+    padding: var(--vaadin-upload-padding, var(--vaadin-padding-s));
     position: relative;
   }
 

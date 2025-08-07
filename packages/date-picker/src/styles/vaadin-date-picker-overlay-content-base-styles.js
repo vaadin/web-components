@@ -97,7 +97,7 @@ export const overlayContentStyles = css`
     display: flex;
     grid-area: toolbar;
     justify-content: space-between;
-    padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding));
+    padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding-s));
   }
 
   :host([fullscreen]) [part='toolbar'] {

@@ -18,7 +18,7 @@ const crudDialogOverlay = css`
     font-size: var(--vaadin-crud-dialog-header-font-size, 1em);
     font-weight: var(--vaadin-crud-dialog-header-font-weight, 600);
     line-height: var(--vaadin-crud-dialog-header-line-height, inherit);
-    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding));
+    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding-s));
   }
 
   ::slotted([slot='header']) {
@@ -31,7 +31,7 @@ const crudDialogOverlay = css`
   :host(:is(*, #id)) [part='content'] {
     overflow: auto;
     overscroll-behavior: contain;
-    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding));
+    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding-s));
   }
 
   ::slotted([slot='form']) {

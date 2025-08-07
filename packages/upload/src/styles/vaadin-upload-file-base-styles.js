@@ -12,7 +12,7 @@ export const uploadFileStyles = css`
     display: grid;
     gap: var(--vaadin-upload-file-gap, var(--vaadin-gap-container-block));
     grid-template-columns: var(--vaadin-icon-size, 1lh) minmax(0, 1fr) auto;
-    padding: var(--vaadin-upload-file-padding, var(--vaadin-padding));
+    padding: var(--vaadin-upload-file-padding, var(--vaadin-padding-s));
   }
 
   [hidden] {

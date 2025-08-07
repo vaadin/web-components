@@ -62,15 +62,15 @@ export const appLayoutStyles = css`
     top: 0;
     inset-inline: 0;
     transition: inset-inline-start var(--vaadin-app-layout-transition-duration);
-    padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding)), var(--safe-area-inset-top));
-    padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding));
+    padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s)), var(--safe-area-inset-top));
+    padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding-s));
     padding-inline-start: max(
-      var(--vaadin-app-layout-navbar-padding-inline-start, var(--vaadin-padding)),
+      var(--vaadin-app-layout-navbar-padding-inline-start, var(--vaadin-padding-s)),
       var(--safe-area-inset-left)
     );
     /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
     padding-inline-end: max(
-      var(--vaadin-app-layout-navbar-padding-inline-end, var(--vaadin-padding)),
+      var(--vaadin-app-layout-navbar-padding-inline-end, var(--vaadin-padding-s)),
       var(--safe-area-inset-right)
     );
     z-index: 1;
@@ -89,9 +89,9 @@ export const appLayoutStyles = css`
   [part='navbar'][bottom] {
     top: auto;
     bottom: 0;
-    padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding));
+    padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s));
     padding-bottom: max(
-      var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding)),
+      var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding-s)),
       var(--safe-area-inset-bottom)
     );
   }

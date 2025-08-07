@@ -123,7 +123,7 @@ export const content = css`
   blockquote {
     border-inline-start: 4px solid var(--vaadin-border-color);
     margin: var(--vaadin-padding-container);
-    padding-inline-start: var(--vaadin-padding);
+    padding-inline-start: var(--vaadin-padding-s);
   }
 
   code,
@@ -134,7 +134,7 @@ export const content = css`
 
   pre {
     white-space: pre-wrap;
-    margin-block: var(--vaadin-padding);
+    margin-block: var(--vaadin-padding-s);
     padding: var(--vaadin-padding-container);
   }
 
@@ -160,7 +160,7 @@ const toolbar = css`
     flex-shrink: 0;
     flex-wrap: wrap;
     gap: var(--vaadin-rich-text-editor-toolbar-gap, var(--vaadin-gap-container-inline));
-    padding: var(--vaadin-rich-text-editor-toolbar-padding, var(--vaadin-padding));
+    padding: var(--vaadin-rich-text-editor-toolbar-padding, var(--vaadin-padding-s));
   }
 
   [part~='toolbar-group'] {

@@ -36,8 +36,12 @@ addGlobalThemeStyles(
         --vaadin-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
-        --vaadin-padding: 8px;
-        --vaadin-padding-container: 6px 8px;
+        --vaadin-padding-xs: 6px;
+        --vaadin-padding-s: 8px;
+        --vaadin-padding-m: 12px;
+        --vaadin-padding-l: 16px;
+        --vaadin-padding-xl: 24px;
+        --vaadin-padding-container: var(--vaadin-padding-xs) var(--vaadin-padding-s);
 
         /* Gap/spacing */
         --vaadin-gap-container-inline: 0.5em;

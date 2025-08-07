@@ -18,11 +18,11 @@ export const baseStyles = css`
 
   /* Theme variations */
   :host([theme~='margin']) {
-    margin: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding));
+    margin: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding-s));
   }
 
   :host([theme~='padding']) {
-    padding: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding));
+    padding: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding-s));
   }
 
   :host([theme~='spacing']) {

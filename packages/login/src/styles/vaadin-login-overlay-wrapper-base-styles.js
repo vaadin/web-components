@@ -34,7 +34,7 @@ const loginOverlayWrapper = css`
     background: var(--vaadin-login-overlay-brand-background, var(--vaadin-background-container));
     display: flex;
     flex-direction: column;
-    padding: var(--vaadin-login-overlay-brand-padding, var(--vaadin-padding));
+    padding: var(--vaadin-login-overlay-brand-padding, var(--vaadin-padding-s));
   }
 
   ::slotted([slot='title']) {

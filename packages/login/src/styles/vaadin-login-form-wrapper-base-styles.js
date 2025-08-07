@@ -14,7 +14,7 @@ export const loginFormWrapperStyles = css`
     box-sizing: border-box;
     flex-direction: column;
     gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
-    padding: var(--vaadin-login-form-padding, var(--vaadin-padding));
+    padding: var(--vaadin-login-form-padding, var(--vaadin-padding-s));
     max-width: 100%;
     width: var(--vaadin-login-form-width, 360px);
   }
