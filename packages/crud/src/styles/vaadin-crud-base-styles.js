@@ -92,7 +92,7 @@ export const crudStyles = css`
     display: flex;
     flex-shrink: 0;
     justify-content: flex-end;
-    padding: var(--vaadin-crud-toolbar-padding, var(--vaadin-padding-s));
+    padding: var(--vaadin-crud-toolbar-padding, var(--vaadin-padding-m));
   }
 
   :host([no-toolbar]) [part='toolbar'] {
@@ -135,7 +135,7 @@ export const crudStyles = css`
     font-size: var(--vaadin-crud-header-font-size, 1em);
     font-weight: var(--vaadin-crud-header-font-weight, 600);
     line-height: var(--vaadin-crud-header-line-height, inherit);
-    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding-s));
+    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding-m));
   }
 
   ::slotted([slot='header']) {
@@ -146,7 +146,7 @@ export const crudStyles = css`
   }
 
   ::slotted([slot='form']) {
-    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding-s));
+    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding-m));
   }
 
   [part='footer'] {
@@ -156,7 +156,7 @@ export const crudStyles = css`
     display: flex;
     flex: none;
     gap: var(--vaadin-crud-footer-gap, var(--vaadin-gap-s));
-    padding: var(--vaadin-crud-footer-padding, var(--vaadin-padding-s));
+    padding: var(--vaadin-crud-footer-padding, var(--vaadin-padding-m));
   }
 
   ::slotted([slot='delete-button']) {

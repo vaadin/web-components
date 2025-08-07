@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const dashboardLayoutStyles = css`
@@ -30,12 +31,12 @@ export const dashboardLayoutStyles = css`
     box-sizing: border-box;
 
     /* Padding around dashboard edges */
-    --_default-padding: 1em;
+    --_default-padding: var(--vaadin-padding-l);
     --_padding: max(0px, var(--vaadin-dashboard-padding, var(--_default-padding)));
     padding: var(--_padding);
 
     /* Gap between widgets */
-    --_default-gap: 0.5em;
+    --_default-gap: var(--vaadin-gap-s);
     --_gap: max(0px, var(--vaadin-dashboard-gap, var(--_default-gap)));
     gap: var(--_gap);
 
