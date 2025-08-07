@@ -3,16 +3,15 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ContextMenuMixin } from '@vaadin/context-menu/src/vaadin-context-menu-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes ContextMenuMixin
- * @mixes OverlayClassMixin
+ * @param {function(new:HTMLElement)} superClass
  */
 export const SubMenuMixin = (superClass) =>
-  class SubMenuMixinClass extends ContextMenuMixin(OverlayClassMixin(superClass)) {
+  class SubMenuMixinClass extends ContextMenuMixin(superClass) {
     constructor() {
       super();
 

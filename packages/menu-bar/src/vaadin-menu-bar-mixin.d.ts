@@ -135,14 +135,6 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
   i18n: MenuBarI18n;
 
   /**
-   * A space-delimited list of CSS class names
-   * to set on each sub-menu overlay element.
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
-
-  /**
    * If true, the submenu will open on hover (mouseover) instead of click.
    * @attr {boolean} open-on-hover
    */
