@@ -14,7 +14,7 @@ const loginOverlayWrapper = css`
       var(--vaadin-overlay-background, var(--vaadin-background-color))
     );
     border: var(--vaadin-login-overlay-border-width, var(--vaadin-overlay-border-width, 1px)) solid
-      var(--vaadin-login-overlay-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color)));
+      var(--vaadin-login-overlay-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color-subtle)));
     border-radius: var(--vaadin-login-overlay-border-radius, var(--vaadin-radius-l));
     box-shadow: var(
       --vaadin-login-overlay-box-shadow,

@@ -23,12 +23,8 @@ addGlobalThemeStyles(
         );
 
         /* Border colors */
-        --vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
-        --vaadin-border-color-strong: color-mix(
-          in oklch,
-          var(--vaadin-color) 48%,
-          transparent
-        ); /* Above 3:1 contrast */
+        --vaadin-border-color-subtle: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
+        --vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
 
         /* Text colors */
         --vaadin-color-disabled: color-mix(in oklch, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */

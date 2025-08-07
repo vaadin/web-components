@@ -22,7 +22,8 @@ export const multiSelectComboBoxChipStyles = css`
     padding: 0 var(--vaadin-chip-padding, 0.3em);
     height: var(--vaadin-chip-height, calc(1lh / 0.875));
     border-radius: var(--vaadin-chip-border-radius, var(--vaadin-radius-m));
-    border: var(--vaadin-chip-border-width, 1px) solid var(--vaadin-chip-border-color, var(--vaadin-border-color));
+    border: var(--vaadin-chip-border-width, 1px) solid
+      var(--vaadin-chip-border-color, var(--vaadin-border-color-subtle));
     cursor: default;
   }
 
@@ -84,7 +85,7 @@ export const multiSelectComboBoxChipStyles = css`
     content: '';
     position: absolute;
     inset: calc(var(--vaadin-chip-border-width, 1px) * -1);
-    border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color));
+    border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color-subtle));
     border-radius: inherit;
   }
 

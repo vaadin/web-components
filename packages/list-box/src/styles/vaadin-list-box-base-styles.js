@@ -23,7 +23,7 @@ export const listBoxStyles = css`
   }
 
   [part='items'] ::slotted(hr) {
-    border-color: var(--vaadin-divider-color, var(--vaadin-border-color));
+    border-color: var(--vaadin-divider-color, var(--vaadin-border-color-subtle));
     border-width: 0 0 1px;
     margin: 4px 8px;
     margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--vaadin-gap-s)) + 8px);

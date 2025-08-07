@@ -26,14 +26,14 @@ export const progressBarStyles = css`
     background: var(--vaadin-progress-bar-background, var(--vaadin-background-container));
     border-radius: var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m));
     border: var(--vaadin-progress-bar-border-width, 1px) solid
-      var(--vaadin-progress-bar-border-color, var(--vaadin-border-color));
+      var(--vaadin-progress-bar-border-color, var(--vaadin-border-color-subtle));
   }
 
   [part='value'] {
     box-sizing: border-box;
     height: 100%;
     width: calc(var(--vaadin-progress-value) * 100%);
-    background: var(--vaadin-progress-bar-value-background, var(--vaadin-border-color-strong));
+    background: var(--vaadin-progress-bar-value-background, var(--vaadin-border-color));
     border-radius: calc(
       var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m)) - var(
           --vaadin-progress-bar-border-width,

@@ -17,7 +17,8 @@ export const crudStyles = css`
     --vaadin-grid-border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-l));
     --vaadin-crud-editor-max-height: 40%;
     --vaadin-crud-editor-max-width: 40%;
-    border: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
+    border: var(--vaadin-crud-border-width, 1px) solid
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
     border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-l));
     height: 400px;
     width: 100%;
@@ -60,7 +61,7 @@ export const crudStyles = css`
 
   :host([editor-position='aside'][editor-opened]) #main {
     border-inline-end: var(--vaadin-crud-border-width, 1px) solid
-      var(--vaadin-crud-border-color, var(--vaadin-border-color));
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
   }
 
   :host([editor-position='aside'][editor-opened]) ::slotted(vaadin-crud-grid) {
@@ -75,7 +76,7 @@ export const crudStyles = css`
 
   :host([editor-position='bottom'][editor-opened]) #main {
     border-bottom: var(--vaadin-crud-border-width, 1px) solid
-      var(--vaadin-crud-border-color, var(--vaadin-border-color));
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
   }
 
   :host([editor-position='bottom'][editor-opened]) :is(#container, [part='editor']) {
@@ -86,7 +87,8 @@ export const crudStyles = css`
   [part='toolbar'] {
     align-items: baseline;
     background: var(--vaadin-crud-toolbar-background, transparent);
-    border-top: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
+    border-top: var(--vaadin-crud-border-width, 1px) solid
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
     display: flex;
     flex-shrink: 0;
     justify-content: flex-end;
@@ -149,7 +151,8 @@ export const crudStyles = css`
 
   [part='footer'] {
     background: var(--vaadin-crud-footer-background, transparent);
-    border-top: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
+    border-top: var(--vaadin-crud-border-width, 1px) solid
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
     display: flex;
     flex: none;
     gap: var(--vaadin-crud-footer-gap, var(--vaadin-gap-s));

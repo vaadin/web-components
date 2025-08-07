@@ -42,7 +42,7 @@ export const scrollerStyles = css`
     z-index: 9999;
     height: 1px;
     margin-bottom: -1px;
-    background: var(--vaadin-scroller-border-color, var(--vaadin-border-color));
+    background: var(--vaadin-scroller-border-color, var(--vaadin-border-color-subtle));
   }
 
   :host([theme~='overflow-indicators'])::after {

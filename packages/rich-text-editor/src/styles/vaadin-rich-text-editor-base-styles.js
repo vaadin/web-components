@@ -15,7 +15,7 @@ const base = css`
   :host {
     background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
     border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
     border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
     display: flex;
@@ -121,7 +121,7 @@ export const content = css`
   /* quill core end */
 
   blockquote {
-    border-inline-start: 4px solid var(--vaadin-border-color);
+    border-inline-start: 4px solid var(--vaadin-border-color-subtle);
     margin: var(--vaadin-padding-container);
     padding-inline-start: var(--vaadin-padding-s);
   }

@@ -36,7 +36,7 @@ export const virtualListStyles = css`
     z-index: 9999;
     height: 1px;
     margin-bottom: -1px;
-    background: var(--vaadin-virtual-list-border-color, var(--vaadin-border-color));
+    background: var(--vaadin-virtual-list-border-color, var(--vaadin-border-color-subtle));
   }
 
   :host([theme~='overflow-indicators'])::after {
