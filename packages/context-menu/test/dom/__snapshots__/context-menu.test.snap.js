@@ -154,12 +154,10 @@ snapshots["context-menu items nested"] =
 `;
 /* end snapshot context-menu items nested */
 
-snapshots["context-menu overlay class"] = 
+snapshots["context-menu overlay"] = 
 `<vaadin-context-menu-overlay
-  class="context-menu-overlay custom"
   exportparts="backdrop, overlay, content"
   id="overlay"
-  opened=""
   popover="manual"
 >
   <slot name="overlay">
@@ -171,27 +169,5 @@ snapshots["context-menu overlay class"] =
   </slot>
 </vaadin-context-menu-overlay>
 `;
-/* end snapshot context-menu overlay class */
-
-snapshots["context-menu overlay class nested"] = 
-`<vaadin-context-menu-overlay
-  class="context-menu-overlay custom"
-  exportparts="backdrop, overlay, content"
-  id="overlay"
-  modeless=""
-  opened=""
-  popover="manual"
-  start-aligned=""
-  top-aligned=""
->
-  <slot name="overlay">
-  </slot>
-  <slot
-    name="submenu"
-    slot="submenu"
-  >
-  </slot>
-</vaadin-context-menu-overlay>
-`;
-/* end snapshot context-menu overlay class nested */
+/* end snapshot context-menu overlay */
 

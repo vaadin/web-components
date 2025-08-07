@@ -24,7 +24,6 @@ assertType<boolean>(menu.opened);
 assertType<string>(menu.openOn);
 assertType<string>(menu.closeOn);
 assertType<HTMLElement>(menu.listenOn);
-assertType<string>(menu.overlayClass);
 
 // Events
 menu.addEventListener('opened-changed', (event) => {

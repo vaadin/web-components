@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
 import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
@@ -259,7 +258,6 @@ declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> exten
 
 interface ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>
   extends ContextMenuMixinClass<TItem>,
-    OverlayClassMixinClass,
     ElementMixinClass,
     ThemePropertyMixinClass {}
 
