@@ -19,10 +19,10 @@ import {
   setSpacing,
 } from './helpers.js';
 
-// Corresponds to --_default-padding: 1em;
+// Corresponds to --_default-padding: var(--vaadin-padding-l); (16px)
 const defaultPadding = 16;
 
-// Corresponds to --_default-gap: 0.5em;
+// Corresponds to --_default-gap: var(--vaadin-gap-s); (8px)
 const defaultSpacing = 8;
 
 const defaultMinimumColumnWidth = (() => {
