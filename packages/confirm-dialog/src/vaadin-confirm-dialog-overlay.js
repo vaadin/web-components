@@ -50,23 +50,21 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
     return html`
       <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
-        <section id="resizerContainer" class="resizer-container">
-          <header part="header"><slot name="header"></slot></header>
-          <div part="content" id="content">
-            <div part="message"><slot></slot></div>
+        <header part="header"><slot name="header"></slot></header>
+        <div part="content" id="content">
+          <div part="message"><slot></slot></div>
+        </div>
+        <footer part="footer" role="toolbar">
+          <div part="cancel-button" ?hidden="${!this.cancelButtonVisible}">
+            <slot name="cancel-button"></slot>
           </div>
-          <footer part="footer" role="toolbar">
-            <div part="cancel-button" ?hidden="${!this.cancelButtonVisible}">
-              <slot name="cancel-button"></slot>
-            </div>
-            <div part="reject-button" ?hidden="${!this.rejectButtonVisible}">
-              <slot name="reject-button"></slot>
-            </div>
-            <div part="confirm-button">
-              <slot name="confirm-button"></slot>
-            </div>
-          </footer>
-        </section>
+          <div part="reject-button" ?hidden="${!this.rejectButtonVisible}">
+            <slot name="reject-button"></slot>
+          </div>
+          <div part="confirm-button">
+            <slot name="confirm-button"></slot>
+          </div>
+        </footer>
       </div>
     `;
   }
