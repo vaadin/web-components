@@ -59,7 +59,10 @@ export const monthCalendarStyles = css`
     content: '';
     height: 1px;
     flex: 1;
-    background: var(--vaadin-date-picker-week-divider-color, var(--vaadin-divider-color, var(--vaadin-border-color)));
+    background: var(
+      --vaadin-date-picker-week-divider-color,
+      var(--vaadin-divider-color, var(--vaadin-border-color-subtle))
+    );
   }
 
   [part~='weekday'],

@@ -43,7 +43,7 @@ const tooltipStyles = (scope) => css`
 
   ${unsafeCSS(scope)} .highcharts-tooltip-box {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-tooltip-border, var(--vaadin-border-color));
+    stroke: var(--vaadin-charts-tooltip-border, var(--vaadin-border-color-subtle));
     fill: var(--vaadin-charts-tooltip-background, var(--vaadin-background-color));
     fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
   }
@@ -51,7 +51,7 @@ const tooltipStyles = (scope) => css`
   ${unsafeCSS(scope)} .highcharts-tooltip-box .highcharts-label-box {
     fill: var(--vaadin-charts-tooltip-background, var(--vaadin-background-color));
     fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
-    stroke: var(--vaadin-charts-tooltip-border, var(--vaadin-border-color));
+    stroke: var(--vaadin-charts-tooltip-border, var(--vaadin-border-color-subtle));
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip-header {
@@ -120,13 +120,13 @@ export const chartStyles = css`
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-color-subtle));
     --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
     --_point-border: var(--vaadin-charts-point-border, var(--_bg));
-    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color));
+    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-subtle));
     --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
     --_axis-label: var(--vaadin-charts-axis-label, var(--_secondary-label));
-    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color));
+    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color-subtle));
     --_minor-grid-line: var(
       --vaadin-charts-minor-grid-line,
-      color-mix(in srgb, var(--vaadin-border-color) 60%, transparent)
+      color-mix(in srgb, var(--vaadin-border-color-subtle) 60%, transparent)
     );
     --_data-label: var(--vaadin-charts-data-label, var(--_label));
   }
@@ -1046,7 +1046,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-null-point {
     fill: transparent;
-    stroke: var(--vaadin-border-color);
+    stroke: var(--vaadin-border-color-subtle);
   }
 
   /* 3d charts */
