@@ -580,6 +580,13 @@ describe('vaadin-confirm-dialog', () => {
     describe('default', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
+        fixtureSync(`
+          <style>
+            vaadin-confirm-dialog::part(overlay) {
+              border: none;
+            }
+          </style>
+        `);
         await nextRender();
         overlay = confirm.$.overlay;
       });

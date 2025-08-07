@@ -12,6 +12,11 @@ registerStyles(
       flex-grow: 1;
     }
 
+    /* Disable default border */
+    [part='overlay'] {
+      border: none;
+    }
+
     /* Disable content padding */
     [part='content'] {
       padding: 0;
