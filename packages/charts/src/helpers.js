@@ -57,3 +57,49 @@ export function deepMerge(target, source) {
 
   return target;
 }
+
+export function prepareExport(chart) {
+  // Guard against another print 'before print' event coming before
+  // the 'after print' event.
+  if (!chart.tempBodyStyle) {
+    let effectiveCss = '';
+
+    // LitElement uses `adoptedStyleSheets` for adding styles
+    if (chart.shadowRoot.adoptedStyleSheets) {
+      chart.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
+        effectiveCss += `${[...sheet.cssRules].map((rule) => rule.cssText).join('\n')}\n`;
+      });
+    }
+
+    // Strip off host selectors that target individual instances
+    effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
+      const selector = match.substr(6, match.length - 7);
+      return chart.matches(selector) ? '' : match;
+    });
+
+    // Zoom out a bit to avoid clipping the chart's edge on paper
+    effectiveCss =
+      `${effectiveCss}body {` +
+      `    -moz-transform: scale(0.9, 0.9);` + // Mozilla
+      `    zoom: 0.9;` + // Others
+      `    zoom: 90%;` + // Webkit
+      `}`;
+
+    chart.tempBodyStyle = document.createElement('style');
+    chart.tempBodyStyle.textContent = effectiveCss;
+    document.body.appendChild(chart.tempBodyStyle);
+    if (chart.options.chart.styledMode) {
+      document.body.setAttribute('styled-mode', '');
+    }
+  }
+}
+
+export function cleanupExport(chart) {
+  if (chart.tempBodyStyle) {
+    document.body.removeChild(chart.tempBodyStyle);
+    delete chart.tempBodyStyle;
+    if (chart.options.chart.styledMode) {
+      document.body.removeAttribute('styled-mode');
+    }
+  }
+}

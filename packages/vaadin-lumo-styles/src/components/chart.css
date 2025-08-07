@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_chart {
-  :host {
+  :host,
+  :root {
     --vaadin-charts-background: var(--lumo-base-color);
     --vaadin-charts-title-label: var(--lumo-header-text-color);
     --vaadin-charts-axis-title: var(--lumo-secondary-text-color);
