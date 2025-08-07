@@ -49,7 +49,6 @@ export default [
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
-      'packages/**/theme/**/*.d.ts',
     ],
   },
   ...typescript,
