@@ -28,7 +28,7 @@ export const tabSheetStyles = [
       display: flex;
       align-items: center;
       gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-s));
-      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-s));
+      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-m));
       box-sizing: border-box;
     }
 
@@ -42,7 +42,7 @@ export const tabSheetStyles = [
       position: relative;
       flex: 1;
       box-sizing: border-box;
-      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-s));
+      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-l));
       border-top: var(--vaadin-tabsheet-border-width, 1px) solid transparent;
       margin-top: calc(var(--vaadin-tabsheet-border-width, 1px) * -1);
     }

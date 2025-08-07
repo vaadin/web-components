@@ -13,8 +13,8 @@ export const loginFormWrapperStyles = css`
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-s));
-    padding: var(--vaadin-login-form-padding, var(--vaadin-padding-s));
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-l));
+    padding: var(--vaadin-login-form-padding, var(--vaadin-padding-l));
     max-width: 100%;
     width: var(--vaadin-login-form-width, 360px);
   }
@@ -26,7 +26,7 @@ export const loginFormWrapperStyles = css`
   ::slotted(form) {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-s));
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-m));
   }
 
   ::slotted([slot='form-title']) {
