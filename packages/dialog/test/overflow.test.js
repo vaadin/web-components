@@ -8,6 +8,13 @@ describe('overflow', () => {
 
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog theme="no-padding"></vaadin-dialog>');
+    fixtureSync(`
+      <style>
+        vaadin-dialog::part(overlay) {
+          border: none;
+        }
+      </style>
+    `);
     await nextRender();
     overlay = dialog.$.overlay;
   });
