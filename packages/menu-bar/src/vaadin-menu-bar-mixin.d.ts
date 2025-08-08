@@ -10,6 +10,7 @@ import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { MenuBarButton } from './vaadin-menu-bar-button.js';
 
 export type MenuBarItem<TItemData extends object = object> = {
   /**
@@ -159,11 +160,11 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    */
   close(): void;
 
-  protected readonly _buttons: HTMLElement[];
+  protected readonly _buttons: MenuBarButton[];
 
   protected readonly _container: HTMLElement;
 
-  protected readonly _overflow: HTMLElement;
+  protected readonly _overflow: MenuBarButton;
 
   protected _hasOverflow: boolean;
 }

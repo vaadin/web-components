@@ -10,19 +10,19 @@ import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ContextMenuMixin } from '@vaadin/context-menu/src/vaadin-context-menu-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
  * @customElement
  * @extends HTMLElement
- * @mixes SubMenuMixin
+ * @mixes ContextMenuMixin
  * @mixes ThemePropertyMixin
  * @protected
  */
-class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
+class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-menu-bar-submenu';
   }
@@ -37,6 +37,21 @@ class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitEle
         display: none !important;
       }
     `;
+  }
+
+  constructor() {
+    super();
+
+    this.openOn = 'opensubmenu';
+  }
+
+  /**
+   * Tag name prefix used by overlay, list-box and items.
+   * @protected
+   * @return {string}
+   */
+  get _tagNamePrefix() {
+    return 'vaadin-menu-bar';
   }
 
   /** @protected */
@@ -61,6 +76,45 @@ class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitEle
       </vaadin-menu-bar-overlay>
     `;
   }
+
+  /**
+   * Overriding the observer to not add global "contextmenu" listener.
+   * @override
+   */
+  _openedChanged() {
+    // Do nothing
+  }
+
+  /**
+   * Overriding the public method to reset expanded button state.
+   */
+  close() {
+    super.close();
+
+    // Only handle 1st level submenu
+    if (this.hasAttribute('is-root')) {
+      this.parentElement._close();
+    }
+  }
+
+  /**
+   * Override method from `ContextMenuMixin` to prevent closing
+   * sub-menu on the same click event that was used to open it.
+   *
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldCloseOnOutsideClick(event) {
+    if (this.hasAttribute('is-root') && event.composedPath().includes(this.listenOn)) {
+      return false;
+    }
+
+    return super._shouldCloseOnOutsideClick(event);
+  }
 }
 
 defineCustomElement(MenuBarSubmenu);
+
+export { MenuBarSubmenu };

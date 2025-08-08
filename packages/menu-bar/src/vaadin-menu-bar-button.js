@@ -54,3 +54,5 @@ class MenuBarButton extends Button {
 }
 
 defineCustomElement(MenuBarButton);
+
+export { MenuBarButton };
