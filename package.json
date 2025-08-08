@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js",
+    "cem": "cem analyze --globs \"packages/dashboard/src/*.js\"  --litelement --dev",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
@@ -37,6 +38,7 @@
     "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.10.0",
     "@polymer/iron-component-page": "^4.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/mocha": "^10.0.7",
