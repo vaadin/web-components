@@ -30,9 +30,9 @@ export class TypeContext {
   constructor(elementSchema: any) {
     this.elementSchema = elementSchema;
 
-    const modulePath = `./${elementSchema.path}`;
+    const modulePath = `../${elementSchema.path}`;
     const className = elementSchema.name;
-    const configPath = ts.findConfigFile('./', ts.sys.fileExists, 'tsconfig.json');
+    const configPath = ts.findConfigFile('../', ts.sys.fileExists, 'tsconfig.json');
     if (!configPath) throw new Error('tsconfig.json not found');
 
     const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
