@@ -37,14 +37,14 @@
 
   /* prettier-ignore */
   :host([theme~='highlight-read-only-cells']) [tabindex]:not([part~='editable-cell']):not([part~='header-cell']):not([part~='footer-cell']) {
-      background-image: repeating-linear-gradient(
-        135deg,
-        transparent,
-        transparent 6px,
-        var(--lumo-contrast-5pct) 6px,
-        var(--lumo-contrast-5pct) 14px
-      );
-    }
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 6px,
+      var(--lumo-contrast-5pct) 6px,
+      var(--lumo-contrast-5pct) 14px
+    );
+  }
 
   /* Loading editor cell styles are used by Flow GridPro */
   :host([loading-editor]) [part~='focused-cell']::before {
@@ -80,5 +80,11 @@
     100% {
       background-position: max(300%, 8em) 0;
     }
+  }
+
+  :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content),
+  [part~='updating-cell'] ::slotted(vaadin-grid-cell-content) {
+    opacity: 0;
+    pointer-events: none;
   }
 }

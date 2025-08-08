@@ -12,21 +12,6 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helpers.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-registerStyles(
-  'vaadin-grid-pro',
-  css`
-    :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content),
-    [part~='updating-cell'] ::slotted(vaadin-grid-cell-content) {
-      opacity: 0;
-      pointer-events: none;
-    }
-  `,
-  {
-    moduleId: 'vaadin-grid-pro-styles',
-  },
-);
 
 /**
  * @polymerMixin
