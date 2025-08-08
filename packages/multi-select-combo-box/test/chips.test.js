@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import './multi-select-combo-box-test-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
 
 describe('chips', () => {
@@ -11,7 +12,7 @@ describe('chips', () => {
   const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
   beforeEach(async () => {
-    comboBox = fixtureSync(`<vaadin-multi-select-combo-box style="line-height: 1.25"></vaadin-multi-select-combo-box>`);
+    comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
     comboBox.selectedItems = ['orange'];
     await nextRender();
@@ -180,7 +181,7 @@ describe('chips', () => {
       });
 
       it('should update overflow chip on clear button state change', async () => {
-        comboBox.style.width = '335px';
+        comboBox.style.width = '370px';
         await nextResize(comboBox);
 
         comboBox.clearButtonVisible = true;
