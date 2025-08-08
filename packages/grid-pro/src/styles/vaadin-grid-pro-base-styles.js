@@ -48,7 +48,6 @@ const gridPro = css`
 
   /* Indicate read-only cells */
 
-  /* prettier-ignore */
   :host([theme~='highlight-read-only-cells']) [part~='body-cell']:not(:has([part~='editable-cell'])) {
     --vaadin-grid-cell-background-hover: repeating-linear-gradient(
       -45deg,
@@ -95,6 +94,12 @@ const gridPro = css`
     100% {
       background-position: max(300%, 8em) 0;
     }
+  }
+
+  :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content),
+  [part~='updating-cell'] ::slotted(vaadin-grid-cell-content) {
+    opacity: 0;
+    pointer-events: none;
   }
 `;
 
