@@ -840,7 +840,7 @@ export const GridMixin = (superClass) =>
       return {
         index: row.index,
         item: row._item,
-        level: this._getIndexLevel(row.index),
+        level: this.__getRowLevel(row),
         expanded: this._isExpanded(row._item),
         selected: this._isSelected(row._item),
         detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item),

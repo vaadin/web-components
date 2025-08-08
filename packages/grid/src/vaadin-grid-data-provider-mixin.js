@@ -182,6 +182,12 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /** @private */
+    __getRowLevel(row) {
+      const { level } = this._dataProviderController.getFlatIndexContext(row.index);
+      return level;
+    }
+
+    /** @private */
     __getRowItem(row) {
       const { item } = this._dataProviderController.getFlatIndexContext(row.index);
       return item;
@@ -252,16 +258,6 @@ export const DataProviderMixin = (superClass) =>
       if (this._isExpanded(item)) {
         this.expandedItems = this.expandedItems.filter((i) => !this._itemsEqual(i, item));
       }
-    }
-
-    /**
-     * @param {number} index
-     * @return {number}
-     * @protected
-     */
-    _getIndexLevel(index = 0) {
-      const { level } = this._dataProviderController.getFlatIndexContext(index);
-      return level;
     }
 
     /** @protected */
