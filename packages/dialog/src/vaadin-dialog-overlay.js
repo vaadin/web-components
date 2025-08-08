@@ -15,7 +15,7 @@ import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-dialog-overlay
  * @extends HTMLElement
  * @mixes DialogOverlayMixin
  * @mixes DirMixin

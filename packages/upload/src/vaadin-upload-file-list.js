@@ -75,7 +75,7 @@ import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-upload-file-list
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes UploadFileListMixin

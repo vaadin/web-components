@@ -35,7 +35,7 @@ import { BoardRow } from './vaadin-board-row.js';
  * </vaadin-board>
  * ```
  *
- * @customElement
+ * @customElement vaadin-board
  * @extends HTMLElement
  * @mixes ElementMixin
  * @deprecated `<vaadin-board>` is deprecated and will be removed in Vaadin 26.

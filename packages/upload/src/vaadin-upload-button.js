@@ -70,7 +70,7 @@ import { UploadManager } from './vaadin-upload-manager.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-upload-button
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes ElementMixin

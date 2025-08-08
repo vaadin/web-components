@@ -42,7 +42,7 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-message
  * @extends HTMLElement
  * @mixes MessageMixin
  * @mixes ThemableMixin
