@@ -12,10 +12,6 @@ import { css } from 'lit';
 import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-base-styles.js';
 
 const dashboardButton = css`
-  :host {
-    min-width: 1em;
-  }
-
   :host([theme~='tertiary']) {
     color: var(--vaadin-dashboard-button-text-color, var(--vaadin-color-subtle));
   }
