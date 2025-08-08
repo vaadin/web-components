@@ -96,19 +96,6 @@ function renderElement(element: any) {
       mdContent += `**Type:** ${eventTypeString}\n\n`;
       mdContent += `${sanitizeDescription(event.description)}\n\n`;
     });
-
-    // Property change events
-    const notifyingProperties = filterPublicApi(element.properties).filter(
-      (prop) => prop.metadata?.polymer?.notify === true,
-    );
-    notifyingProperties.forEach((prop: any) => {
-      const eventName = `${prop.name}-changed`;
-      const eventType = typeContext.findEventType(eventName);
-      const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name.toLowerCase()})` : '`CustomEvent`';
-      mdContent += `### ${eventName}\n\n`;
-      mdContent += `**Type:** ${eventTypeString}\n\n`;
-      mdContent += `Fired when the \`${prop.name}\` property changes.\n\n`;
-    });
   }
 
   // Related types
