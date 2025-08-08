@@ -18,7 +18,7 @@ import { overlayContentStyles } from './styles/vaadin-date-picker-overlay-conten
 import { DatePickerOverlayContentMixin } from './vaadin-date-picker-overlay-content-mixin.js';
 
 /**
- * @customElement
+ * @customElement vaadin-date-picker-overlay-content
  * @extends HTMLElement
  * @private
  */

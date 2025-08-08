@@ -180,7 +180,7 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item.
  * @fires {CustomEvent} cancel - Fired when user discards edition.
  *
- * @customElement
+ * @customElement vaadin-crud
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

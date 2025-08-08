@@ -32,7 +32,7 @@ import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-base-style
  * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
  * `theme="wrap"` | Items wrap to the next row when they exceed the layout height
  *
- * @customElement
+ * @customElement vaadin-vertical-layout
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

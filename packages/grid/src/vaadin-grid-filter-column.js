@@ -21,7 +21,7 @@ import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
  *    ...
  * ```
  *
- * @customElement
+ * @customElement vaadin-grid-filter-column
  * @extends GridColumn
  * @mixes GridFilterColumnMixin
  */

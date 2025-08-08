@@ -42,7 +42,7 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-avatar
  * @extends HTMLElement
  * @mixes AvatarMixin
  * @mixes ElementMixin

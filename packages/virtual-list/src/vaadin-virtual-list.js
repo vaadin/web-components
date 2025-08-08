@@ -34,7 +34,7 @@ import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
- * @customElement
+ * @customElement vaadin-virtual-list
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

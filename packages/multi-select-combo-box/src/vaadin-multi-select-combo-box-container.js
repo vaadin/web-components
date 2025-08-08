@@ -10,7 +10,7 @@ import { InputContainer } from '@vaadin/input-container/src/vaadin-input-contain
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-multi-select-combo-box-container
  * @extends InputContainer
  * @private
  */

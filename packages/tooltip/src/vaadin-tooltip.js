@@ -50,7 +50,7 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * @fires {CustomEvent} content-changed - Fired when the tooltip text content is changed.
  *
- * @customElement
+ * @customElement vaadin-tooltip
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin

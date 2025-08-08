@@ -17,7 +17,7 @@ import { multiSelectComboBoxOverlayStyles } from './styles/vaadin-multi-select-c
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-multi-select-combo-box-overlay
  * @extends HTMLElement
  * @mixes ComboBoxOverlayMixin
  * @mixes DirMixin

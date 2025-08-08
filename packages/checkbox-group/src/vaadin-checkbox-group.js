@@ -57,7 +57,7 @@ import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-checkbox-group
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

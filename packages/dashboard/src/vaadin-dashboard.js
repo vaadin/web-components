@@ -100,7 +100,7 @@ const DEFAULT_I18N = getDefaultI18n();
  * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  *
- * @customElement
+ * @customElement vaadin-dashboard
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes DashboardLayoutMixin

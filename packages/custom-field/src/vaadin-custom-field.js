@@ -56,7 +56,7 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-custom-field
  * @extends HTMLElement
  * @mixes CustomFieldMixin
  * @mixes ElementMixin

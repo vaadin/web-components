@@ -37,7 +37,7 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-message-input
  * @extends HTMLElement
  * @mixes MessageInputMixin
  * @mixes ThemableMixin

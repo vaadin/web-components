@@ -34,7 +34,7 @@ import { tabStyles } from './styles/vaadin-tab-base-styles.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-tab
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ItemMixin

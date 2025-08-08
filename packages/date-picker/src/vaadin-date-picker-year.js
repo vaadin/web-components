@@ -13,7 +13,7 @@ import { datePickerYearStyles } from './styles/vaadin-date-picker-year-base-styl
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-date-picker-year
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @private

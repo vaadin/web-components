@@ -16,7 +16,7 @@ import { userTagsOverlayStyles } from './styles/vaadin-user-tags-overlay-base-st
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-user-tags-overlay
  * @extends HTMLElement
  * @mixes PositionMixin
  * @mixes OverlayMixin

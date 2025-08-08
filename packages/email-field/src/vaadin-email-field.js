@@ -53,7 +53,7 @@ import { emailFieldStyles } from './styles/vaadin-email-field-base-styles.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-email-field
  * @extends TextField
  */
 export class EmailField extends TextField {

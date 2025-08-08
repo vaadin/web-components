@@ -47,7 +47,7 @@ import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *
- * @customElement
+ * @customElement vaadin-radio-button
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

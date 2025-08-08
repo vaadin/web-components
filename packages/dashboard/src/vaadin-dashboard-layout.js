@@ -51,7 +51,7 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-dashboard-layout
  * @extends HTMLElement
  * @mixes DashboardLayoutMixin
  * @mixes ElementMixin

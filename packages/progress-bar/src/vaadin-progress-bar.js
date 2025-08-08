@@ -43,7 +43,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * ----------------|-------------------------------------
  * `indeterminate` | Set to an indeterminate progress bar
  *
- * @customElement
+ * @customElement vaadin-progress-bar
  * @extends HTMLElement
  * @mixes ProgressMixin
  * @mixes ThemableMixin

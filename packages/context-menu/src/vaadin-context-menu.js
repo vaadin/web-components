@@ -214,7 +214,7 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  * @fires {CustomEvent} closed - Fired when the context menu is closed.
  *
- * @customElement
+ * @customElement vaadin-context-menu
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ContextMenuMixin

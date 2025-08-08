@@ -72,7 +72,7 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-integer-field
  * @extends NumberField
  */
 export class IntegerField extends NumberField {

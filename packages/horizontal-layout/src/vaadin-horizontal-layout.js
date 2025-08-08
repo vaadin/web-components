@@ -43,7 +43,7 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * `middle`           | Slot for the content placed in the middle
  * `end`              | Slot for the content placed at the end
  *
- * @customElement
+ * @customElement vaadin-horizontal-layout
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

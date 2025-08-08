@@ -59,7 +59,7 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the confirm dialog is closed.
  *
- * @customElement
+ * @customElement vaadin-confirm-dialog
  * @extends HTMLElement
  * @mixes ConfirmDialogMixin
  * @mixes ElementMixin

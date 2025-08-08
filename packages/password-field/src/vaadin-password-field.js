@@ -58,7 +58,7 @@ import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-password-field
  * @extends TextField
  * @mixes PasswordFieldMixin
  */

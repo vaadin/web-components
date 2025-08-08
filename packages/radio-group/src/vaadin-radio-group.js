@@ -56,7 +56,7 @@ import { RadioGroupMixin } from './vaadin-radio-group-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-radio-group
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

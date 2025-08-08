@@ -91,7 +91,7 @@ import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-date-time-picker
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

@@ -200,7 +200,7 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
  * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
  *
- * @customElement
+ * @customElement vaadin-form-layout
  * @extends HTMLElement
  * @mixes FormLayoutMixin
  * @mixes ElementMixin

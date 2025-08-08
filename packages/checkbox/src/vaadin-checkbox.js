@@ -55,7 +55,7 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
- * @customElement
+ * @customElement vaadin-checkbox
  * @extends HTMLElement
  * @mixes CheckboxMixin
  * @mixes ThemableMixin

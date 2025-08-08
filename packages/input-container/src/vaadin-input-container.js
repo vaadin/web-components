@@ -12,7 +12,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { inputContainerStyles } from './styles/vaadin-input-container-base-styles.js';
 
 /**
- * @customElement
+ * @customElement vaadin-input-container
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin

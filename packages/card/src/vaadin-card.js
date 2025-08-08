@@ -47,7 +47,7 @@ import { cardStyles } from './styles/vaadin-card-base-styles.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-card
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

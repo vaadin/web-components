@@ -83,7 +83,7 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-number-field
  * @extends HTMLElement
  * @mixes NumberFieldMixin
  * @mixes ElementMixin

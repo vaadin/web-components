@@ -14,7 +14,7 @@ import { userTagStyles } from './styles/vaadin-user-tag-base-styles.js';
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-user-tag
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ThemableMixin

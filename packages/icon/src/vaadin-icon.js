@@ -64,7 +64,7 @@ import { ensureSvgLiteral } from './vaadin-icon-svg.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-icon
  * @extends HTMLElement
  * @mixes IconMixin
  * @mixes ThemableMixin

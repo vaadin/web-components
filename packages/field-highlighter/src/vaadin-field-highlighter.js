@@ -153,7 +153,7 @@ export class FieldHighlighterController {
  *
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  *
- * @customElement
+ * @customElement vaadin-field-highlighter
  */
 export class FieldHighlighter extends HTMLElement {
   static get is() {

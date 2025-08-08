@@ -150,7 +150,7 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  *
- * @customElement
+ * @customElement vaadin-split-layout
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes SplitLayoutMixin

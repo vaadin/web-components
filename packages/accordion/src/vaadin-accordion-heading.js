@@ -45,7 +45,7 @@ import { accordionHeading } from './styles/vaadin-accordion-heading-base-styles.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-accordion-heading
  * @extends HTMLElement
  * @mixes ActiveMixin
  * @mixes DirMixin

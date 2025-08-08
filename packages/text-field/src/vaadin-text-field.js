@@ -81,7 +81,7 @@ import { TextFieldMixin } from './vaadin-text-field-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
- * @customElement
+ * @customElement vaadin-text-field
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

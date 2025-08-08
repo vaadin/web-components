@@ -14,7 +14,7 @@ import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 /**
  * An element used internally by `<vaadin-upload>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-upload-file-list
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes UploadFileListMixin

@@ -199,7 +199,7 @@ const isLastOverlay = (overlay) => {
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the popover is closed.
  *
- * @customElement
+ * @customElement vaadin-popover
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes PopoverPositionMixin

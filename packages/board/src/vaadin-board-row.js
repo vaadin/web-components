@@ -48,7 +48,7 @@ import { BoardRowMixin } from './vaadin-board-row-mixin.js';
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
  *
- * @customElement
+ * @customElement vaadin-board-row
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes BoardRowMixin

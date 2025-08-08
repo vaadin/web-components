@@ -30,7 +30,7 @@ import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.j
  *
  * __The default content can also be overridden__
  *
- * @customElement
+ * @customElement vaadin-grid-selection-column
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  * @extends GridColumn
  * @mixes GridSelectionColumnMixin

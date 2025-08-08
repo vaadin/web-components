@@ -42,7 +42,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-button
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes ElementMixin

@@ -23,7 +23,7 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-base-styles.js';
  * </vaadin-app-layout>
  * ```
  *
- * @customElement
+ * @customElement vaadin-drawer-toggle
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes DirMixin

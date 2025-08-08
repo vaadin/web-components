@@ -21,7 +21,7 @@ import { crudEditStyles } from './styles/vaadin-crud-edit-base-styles.js';
  * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
  * a `<vaadin-crud>` to enable editing.
  *
- * @customElement
+ * @customElement vaadin-crud-edit
  * @extends Button
  */
 class CrudEdit extends Button {

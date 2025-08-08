@@ -15,7 +15,7 @@ import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-base-st
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-context-menu-item
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ItemMixin
