@@ -55,7 +55,7 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-horizontal-layout
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

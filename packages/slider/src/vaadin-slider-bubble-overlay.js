@@ -16,7 +16,7 @@ import { sliderBubbleOverlayStyles } from './styles/vaadin-slider-bubble-overlay
 /**
  * An element used internally by `<vaadin-slider>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-slider-bubble-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes OverlayMixin

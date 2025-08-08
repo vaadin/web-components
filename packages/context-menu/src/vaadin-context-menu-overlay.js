@@ -16,7 +16,7 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-context-menu-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes MenuOverlayMixin

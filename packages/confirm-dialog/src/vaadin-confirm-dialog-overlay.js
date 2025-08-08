@@ -15,7 +15,7 @@ import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overl
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-confirm-dialog-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes OverlayMixin
