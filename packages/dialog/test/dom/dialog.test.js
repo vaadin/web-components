@@ -26,19 +26,23 @@ describe('vaadin-dialog', () => {
     await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('overlay', async () => {
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  it('shadow', async () => {
+    await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('overlay modeless', async () => {
+  it('modeless', async () => {
     dialog.modeless = true;
     await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('overlay theme', async () => {
+  it('theme', async () => {
     dialog.setAttribute('theme', 'custom');
     await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
+  it('overlay', async () => {
+    await expect(overlay).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });
