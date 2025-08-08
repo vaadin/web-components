@@ -13,7 +13,7 @@
         </svg>
         <span>Copy as MD</span>
       </button>
-      <a href={"/" + Astro.locals.starlightRoute.entry.slug + ".txt"} target="_blank">
+      <a href={"/" + Astro.locals.starlightRoute.entry.slug + ".md"} target="_blank">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -71,7 +71,7 @@
   const copyButton = document.getElementById("copy-markdown");
   copyButton?.addEventListener("click", () => {
     const currentUrl = window.location.href;
-    const plainTextUrl = currentUrl.replace(/\/$/, "") + ".txt";
+    const plainTextUrl = currentUrl.replace(/\/$/, "") + ".md";
 
     fetch(plainTextUrl)
       .then(res => res.text())

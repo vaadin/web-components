@@ -154,7 +154,7 @@ function generate() {
   const publicElements = filterPublicApi(schema.elements);
   publicElements.forEach((element: any) => {
     const docFile = join(docsPath, `${element.tagname}.md`);
-    const plainTextFile = join(plainTextPath, `${element.tagname}.txt`);
+    const plainTextFile = join(plainTextPath, `${element.tagname}.md`);
     const mdContent = renderElement(element);
 
     try {
