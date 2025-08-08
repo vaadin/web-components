@@ -7,6 +7,7 @@
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js",
     "api-docs:start": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs start",
     "api-docs:build": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs build",
+    "cem": "cem analyze --globs \"packages/**/src/*\"  --litelement",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dev:build": "yarn workspace dev build",
@@ -38,6 +39,7 @@
     "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.10.0",
     "@types/mocha": "^10.0.7",
     "@types/sinon": "^17.0.4",
     "@ungap/structured-clone": "^1.3.0",
