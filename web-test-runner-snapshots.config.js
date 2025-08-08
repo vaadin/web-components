@@ -1,7 +1,8 @@
 import { playwrightLauncher } from '@web/test-runner-playwright';
+import devServerConfig from './web-dev-server.config.js';
 import { createSnapshotTestsConfig } from './wtr-utils.js';
 
-export default createSnapshotTestsConfig({
+const snapshotsConfig = createSnapshotTestsConfig({
   browsers: [
     playwrightLauncher({
       product: 'chromium',
@@ -12,3 +13,8 @@ export default createSnapshotTestsConfig({
     }),
   ],
 });
+
+export default {
+  ...snapshotsConfig,
+  ...devServerConfig,
+};
