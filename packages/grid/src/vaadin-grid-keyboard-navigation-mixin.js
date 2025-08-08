@@ -7,7 +7,6 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { get } from '@vaadin/component-base/src/path-utils.js';
 
 function isRow(element) {
   return element instanceof HTMLTableRowElement;
@@ -286,10 +285,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     __isRowExpandable(row) {
-      if (this.itemHasChildrenPath) {
-        const item = row._item;
-        return !!(item && get(this.itemHasChildrenPath, item) && !this._isExpanded(item));
-      }
+      return this._isExpandable(row._item) && !this._isExpanded(row._item);
     }
 
     /** @private */

@@ -222,6 +222,15 @@ export const DataProviderMixin = (superClass) =>
       return this.__expandedKeys && this.__expandedKeys.has(this.getItemId(item));
     }
 
+    /**
+     * @param {!GridItem} item
+     * @return {boolean}
+     * @protected
+     */
+    _isExpandable(item) {
+      return this.itemHasChildrenPath && item && !!get(this.itemHasChildrenPath, item);
+    }
+
     /** @private */
     _expandedItemsChanged() {
       this._dataProviderController.recalculateFlatSize();

@@ -111,6 +111,7 @@ describe('renderers', () => {
           level: 0,
           expanded: false,
           selected: false,
+          expandable: false,
           detailsOpened: true,
           item: grid.items[0],
         });

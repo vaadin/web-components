@@ -843,6 +843,7 @@ export const GridMixin = (superClass) =>
         level: this.__getRowLevel(row),
         expanded: this._isExpanded(row._item),
         selected: this._isSelected(row._item),
+        expandable: this._isExpandable(row._item),
         detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item),
       };
     }
