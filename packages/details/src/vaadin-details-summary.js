@@ -36,7 +36,7 @@ import { detailsSummary } from './styles/vaadin-details-summary-base-styles.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-details-summary
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes DirMixin

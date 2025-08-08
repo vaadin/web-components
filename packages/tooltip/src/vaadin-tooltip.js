@@ -48,7 +48,7 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-tooltip
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin

@@ -29,7 +29,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * `focused`    | Set when the element is focused.
  * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
- * @customElement
+ * @customElement vaadin-scroller
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

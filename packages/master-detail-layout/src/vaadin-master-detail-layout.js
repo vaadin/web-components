@@ -44,7 +44,7 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  *
- * @customElement
+ * @customElement vaadin-master-detail-layout
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

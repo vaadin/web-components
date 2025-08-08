@@ -12,7 +12,7 @@ import { timePickerScrollerStyles } from './styles/vaadin-time-picker-scroller-b
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-time-picker-scroller
  * @extends HTMLElement
  * @mixes ComboBoxScrollerMixin
  * @private

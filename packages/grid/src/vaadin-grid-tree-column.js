@@ -20,7 +20,7 @@ import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
  *  <vaadin-grid-column>
  *    ...
  * ```
- * @customElement
+ * @customElement vaadin-grid-tree-column
  * @extends GridColumn
  * @mixes GridTreeColumnMixin
  */

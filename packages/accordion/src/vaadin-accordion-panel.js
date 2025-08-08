@@ -36,7 +36,7 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
- * @customElement
+ * @customElement vaadin-accordion-panel
  * @extends HTMLElement
  * @mixes AccordionPanelMixin
  * @mixes ThemableMixin

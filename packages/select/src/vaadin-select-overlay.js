@@ -15,7 +15,7 @@ import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-select-overlay
  * @extends HTMLElement
  * @mixes SelectOverlayMixin
  * @mixes ThemableMixin

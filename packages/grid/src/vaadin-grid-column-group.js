@@ -38,7 +38,7 @@ export * from './vaadin-grid-column-group-mixin.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  *
- * @customElement
+ * @customElement vaadin-grid-column-group
  * @extends HTMLElement
  * @mixes GridColumnGroupMixin
  */

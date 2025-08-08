@@ -15,7 +15,7 @@ import { GridProEditSelectMixin } from './vaadin-grid-pro-edit-select-mixin.js';
 /**
  * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-grid-pro-edit-select
  * @extends Select
  * @mixes GridProEditSelectMixin
  * @private

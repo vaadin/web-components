@@ -21,7 +21,7 @@ import { richTextEditorPopupOverlayStyles } from './styles/vaadin-rich-text-edit
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-rich-text-editor-popup
  * @extends HTMLElement
  * @private
  */
@@ -134,7 +134,7 @@ export { RichTextEditorPopup };
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-rich-text-editor-popup-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ThemableMixin

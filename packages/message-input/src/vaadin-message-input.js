@@ -26,7 +26,7 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
- * @customElement
+ * @customElement vaadin-message-input
  * @extends HTMLElement
  * @mixes MessageInputMixin
  * @mixes ThemableMixin

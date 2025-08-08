@@ -34,7 +34,7 @@ import { BoardRow } from './vaadin-board-row.js';
  * </vaadin-board>
  * ```
  *
- * @customElement
+ * @customElement vaadin-board
  * @extends HTMLElement
  * @mixes ElementMixin
  */

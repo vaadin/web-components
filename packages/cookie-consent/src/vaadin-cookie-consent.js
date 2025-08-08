@@ -40,7 +40,7 @@ import { CookieConsentMixin } from './vaadin-cookie-consent-mixin.js';
  * `cc-btn`        | Dismiss cookie button
  * `cc-link`       | Learn more link element
  *
- * @customElement
+ * @customElement vaadin-cookie-consent
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes CookieConsentMixin

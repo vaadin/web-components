@@ -54,7 +54,7 @@ import { ensureSvgLiteral } from './vaadin-icon-svg.js';
  * }
  * ```
  *
- * @customElement
+ * @customElement vaadin-icon
  * @extends HTMLElement
  * @mixes IconMixin
  * @mixes ThemableMixin
