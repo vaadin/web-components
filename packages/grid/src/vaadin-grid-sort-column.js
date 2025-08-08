@@ -23,7 +23,7 @@ import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  *
- * @customElement
+ * @customElement vaadin-grid-sort-column
  * @extends GridColumn
  * @mixes GridSortColumnMixin
  */

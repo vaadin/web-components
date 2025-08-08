@@ -9,7 +9,7 @@ import { IconsetMixin } from './vaadin-iconset-mixin.js';
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  *
- * @customElement
+ * @customElement vaadin-iconset
  * @extends HTMLElement
  * @mixes IconsetMixin
  */

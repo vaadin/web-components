@@ -14,7 +14,7 @@ import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 /**
  * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-grid-pro-edit-text-field
  * @extends TextField
  * @private
  */

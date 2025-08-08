@@ -30,7 +30,7 @@ import { GridProEditColumnMixin } from './vaadin-grid-pro-edit-column-mixin.js';
  *    ...
  * ```
  *
- * @customElement
+ * @customElement vaadin-grid-pro-edit-column
  * @extends GridColumn
  * @mixes GridProEditColumnMixin
  */
