@@ -950,7 +950,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     // Restore pointer-events set when opening on hover.
-    if (this.modal && this.target.style.pointerEvents) {
+    if (this.modal && this.target && this.target.style.pointerEvents) {
       this.target.style.pointerEvents = '';
     }
 

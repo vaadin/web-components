@@ -148,6 +148,21 @@ describe('popover', () => {
 
       expect(document.activeElement).to.not.equal(target);
     });
+
+    it('should not throw when target is removed', async () => {
+      popover.modal = true;
+
+      // Clear target
+      popover.target = null;
+      await nextUpdate(popover);
+
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // No error should be thrown
+      popover.opened = false;
+      await oneEvent(popover, 'closed');
+    });
   });
 
   describe('for', () => {
