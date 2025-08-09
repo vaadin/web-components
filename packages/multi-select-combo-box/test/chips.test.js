@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
-import './multi-select-combo-box-test-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
 
 describe('chips', () => {
@@ -13,6 +12,14 @@ describe('chips', () => {
 
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+    fixtureSync(`
+      <style>
+        vaadin-multi-select-combo-box {
+          line-height: 1.25;
+          font-family: -apple-system, 'system-ui', Roboto, 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+      </style>
+    `);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
     comboBox.selectedItems = ['orange'];
     await nextRender();

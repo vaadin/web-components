@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './multi-select-combo-box-test-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem } from './helpers.js';
