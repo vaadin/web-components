@@ -118,6 +118,41 @@ export const content = css`
   .ql-align-right {
     text-align: right;
   }
+
+  .ql-code-block-container {
+    font-family: monospace;
+    background-color: var(--vaadin-background-container);
+    border-radius: var(--vaadin-radius-s);
+    white-space: pre-wrap;
+    margin-block: var(--vaadin-padding);
+    padding: var(--vaadin-padding-container);
+  }
+
+  .ql-editor li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  .ql-editor li > .ql-ui::before {
+    display: inline-block;
+    margin-left: -1.5em;
+    margin-right: 0.3em;
+    text-align: right;
+    white-space: nowrap;
+    width: 1.2em;
+  }
+
+  .ql-editor li[data-list='bullet'] {
+    list-style-type: disc;
+  }
+
+  .ql-editor li[data-list='ordered'] {
+    counter-increment: list-0;
+  }
+
+  .ql-editor li[data-list='ordered'] > .ql-ui::before {
+    content: counter(list-0, decimal) '. ';
+  }
   /* quill core end */
 
   blockquote {
@@ -126,20 +161,16 @@ export const content = css`
     padding-inline-start: var(--vaadin-padding-s);
   }
 
-  code,
-  pre {
+  code {
     background-color: var(--vaadin-background-container);
     border-radius: var(--vaadin-radius-s);
+    padding: 0.125rem 0.25rem;
   }
 
   pre {
     white-space: pre-wrap;
     margin-block: var(--vaadin-padding-s);
     padding: var(--vaadin-padding-container);
-  }
-
-  code {
-    padding: 0.125rem 0.25rem;
   }
 
   img {

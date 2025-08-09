@@ -426,25 +426,51 @@
   .ql-align-right {
     text-align: right;
   }
-  /* quill core end */
 
-  blockquote {
-    padding-left: 1em;
-  }
-
-  code,
-  pre {
+  .ql-code-block-container {
+    font-family: monospace;
     background-color: var(--lumo-contrast-10pct);
-  }
-
-  pre {
+    border-radius: var(--lumo-border-radius-m);
     white-space: pre-wrap;
     margin-bottom: 0.3125em;
     margin-top: 0.3125em;
     padding: 0.3125em 0.625em;
   }
 
+  .ql-editor li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  .ql-editor li > .ql-ui::before {
+    display: inline-block;
+    margin-left: -1.5em;
+    margin-right: 0.3em;
+    text-align: right;
+    white-space: nowrap;
+    width: 1.2em;
+  }
+
+  .ql-editor li[data-list='bullet'] {
+    list-style-type: disc;
+  }
+
+  .ql-editor li[data-list='ordered'] {
+    counter-increment: list-0;
+  }
+
+  .ql-editor li[data-list='ordered'] > .ql-ui::before {
+    content: counter(list-0, decimal) '. ';
+  }
+
+  /* quill core end */
+
+  blockquote {
+    padding-left: 1em;
+  }
+
   code {
+    background-color: var(--lumo-contrast-10pct);
     font-size: 85%;
     padding: 0.125em 0.25em;
   }
