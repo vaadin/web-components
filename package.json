@@ -8,7 +8,8 @@
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
-    "docs": "yarn analyze && web-dev-server --node-resolve --open",
+    "api-docs:start": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs start",
+    "api-docs:build": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs build",
     "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
@@ -94,6 +95,7 @@
   },
   "workspaces": [
     "test/*",
-    "packages/*"
+    "packages/*",
+    "api-docs"
   ]
 }
