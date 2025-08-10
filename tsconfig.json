@@ -13,8 +13,6 @@
   },
   "include": [
     "packages/**/test/typings",
-    "test/typings",
-    // Dummy JSX type declaration needed for type-checking @types/mdx, which is used by Astro
-    "api-docs/jsx.d.ts"
+    "test/typings"
   ]
 }

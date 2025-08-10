@@ -1,0 +1,21 @@
+<input type="checkbox" name="navigation" id="navigation" class="visually-hidden" />
+
+<div class="app-layout__sidebar">
+  <div class="app-layout__sidebar-inner">
+
+    <nav class="nav-section">
+      <h3 class="nav-section__title">
+        Elements
+      </h3>
+      <ul role="list" class="nav-list">
+        {% for doc in collections.elements  %}
+          <li>
+            <a href="{{ doc.url }}" class="nav-list__link">
+              {{ doc.data.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</div>
