@@ -1,0 +1,30 @@
+{% if collections.elements %}
+  {% set previousDoc = collections.elements | getPreviousCollectionItem(page) %}
+  {% set nextDoc = collections.elements | getNextCollectionItem(page) %}
+
+  {% if nextDoc or previousDoc %}
+    <dl class="page-nav">
+      {% if previousDoc %}
+        <a href="{{ previousDoc.url | url }}" class="page-nav__link" data-type="prev">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1.125em" height="1.125em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="page-nav__icon">
+            <path d="m12 19-7-7 7-7"></path>
+            <path d="M19 12H5"></path>
+          </svg>
+          <span class="page-nav__type">Previous</span>
+          <span class="page-nav__label">{{ previousDoc.data.title }}</span>
+        </a>
+      {% endif %}
+
+      {% if nextDoc %}
+        <a href="{{ nextDoc.url | url }}" class="page-nav__link" data-type="next">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1.125em" height="1.125em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="page-nav__icon">
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+          <span class="page-nav__type">Next</span>
+          <span class="page-nav__label">{{ nextDoc.data.title }}</span>
+        </a>
+      {% endif %}
+    </dl>
+  {% endif %}
+{% endif %}

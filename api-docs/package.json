@@ -2,21 +2,21 @@
   "name": "api-docs",
   "version": "25.0.0-alpha12",
   "private": true,
-  "description": "Astro-based documentation site for Vaadin web components API",
+  "description": "Documentation site for Vaadin web components API",
   "license": "Apache-2.0",
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
+    "start": "eleventy --serve",
+    "build": "eleventy",
     "generate": "tsx generate.ts"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.34.3",
-    "astro": "^5.6.1",
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "node-html-parser": "^7.0.1",
     "tsx": "^4.20.3"
   }
 }

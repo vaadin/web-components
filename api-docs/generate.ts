@@ -35,7 +35,7 @@ function renderElement(element: any) {
   mdContent += `---\n`;
   mdContent += `title: ${element.name}\n`;
   mdContent += `description: ${element.name}\n`;
-  mdContent += "pageType: 'element-docs'\n";
+  mdContent += `element: ${element.tagname}\n`;
   mdContent += `---\n\n`;
 
   // Description
@@ -131,7 +131,7 @@ function generate() {
     process.exit(1);
   }
 
-  const docsPath = resolve(process.cwd(), 'src', 'content', 'docs', 'elements');
+  const docsPath = resolve(process.cwd(), 'content', 'elements');
   if (!existsSync(docsPath)) {
     try {
       mkdirSync(docsPath, { recursive: true });
@@ -141,25 +141,13 @@ function generate() {
     }
   }
 
-  const plainTextPath = resolve(process.cwd(), 'public', 'elements');
-  if (!existsSync(plainTextPath)) {
-    try {
-      mkdirSync(plainTextPath, { recursive: true });
-    } catch (error) {
-      console.error(`Error creating directory ${plainTextPath}:`, error);
-      process.exit(1);
-    }
-  }
-
   const publicElements = filterPublicApi(schema.elements);
   publicElements.forEach((element: any) => {
     const docFile = join(docsPath, `${element.tagname}.md`);
-    const plainTextFile = join(plainTextPath, `${element.tagname}.md`);
     const mdContent = renderElement(element);
 
     try {
       writeFileSync(docFile, mdContent, 'utf-8');
-      writeFileSync(plainTextFile, mdContent, 'utf-8');
 
       console.log(`Generated: ${docFile}`);
     } catch (error) {
