@@ -87,6 +87,7 @@ export const formLayoutStyles = css`
     */
     grid-auto-columns: 0;
 
+    align-self: start;
     grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
     place-items: baseline start;
 
