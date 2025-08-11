@@ -1,0 +1,35 @@
+html {
+  --vaadin-side-nav-item-font-weight: 600;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  vaadin-side-nav[collapsed]::part(children),
+  vaadin-side-nav-item::part(children) {
+    transition:
+      display 200ms,
+      height 200ms;
+    transition-behavior: allow-discrete;
+    interpolate-size: allow-keywords;
+    /* overflow: hidden; */
+    height: 0;
+
+    @starting-style {
+      height: 0;
+    }
+  }
+
+  vaadin-side-nav-item:not([collapsed])::part(children),
+  vaadin-side-nav-item[expanded]::part(children) {
+    height: auto;
+  }
+}
+
+vaadin-side-nav-item[current]::part(content) {
+  --vaadin-side-nav-item-background: var(--aura-accent-gradient);
+  border: 1px solid var(--vaadin-border-color);
+}
+
+/* TODO bug in component/base styles: hide label part if no label is provided */
+vaadin-side-nav:not(:has([slot='label']))::part(label) {
+  display: none;
+}
