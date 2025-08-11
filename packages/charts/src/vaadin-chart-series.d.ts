@@ -19,15 +19,15 @@ export * from './vaadin-chart-series-mixin.js';
  * To use `<vaadin-chart-series>`, add it inside a `<vaadin-chart>` element:
  *
  * ```html
- *  <vaadin-chart>
- *    <vaadin-chart-series></vaadin-chart-series>
- *  </vaadin-chart>
+ * <vaadin-chart>
+ *   <vaadin-chart-series></vaadin-chart-series>
+ * </vaadin-chart>
  * ```
  *
  * `<vaadin-chart-series>` accepts `values` as an array attribute, so you can add it to your element definition:
  *
  * ```html
- *  <vaadin-chart-series values="[10,20,30,40,50]"></vaadin-chart-series>
+ * <vaadin-chart-series values="[10, 20, 30, 40, 50]"></vaadin-chart-series>
  * ```
  *
  * which will add a new line series, where each value will be a data point.
@@ -40,18 +40,18 @@ export * from './vaadin-chart-series-mixin.js';
  * To create a new series, call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:
  *
  * ```js
- *  const chart = \* a <vaadin-chart> reference *\
- *  const newSeries = document.createElement('vaadin-chart-series');
- *  newSeries.values = [10,20,30,40,50];
- *  chart.appendChild(newSeries);
+ * const chart = document.querySelector('vaadin-chart');
+ * const newSeries = document.createElement('vaadin-chart-series');
+ * newSeries.values = [10, 20, 30, 40, 50];
+ * chart.appendChild(newSeries);
  * ```
  *
  * In order to remove it, you should use the series to be removed as a reference for the `#removeChild()` call:
  *
  * ```js
- *  const chart = \* a <vaadin-chart> reference *\
- *  const seriesToBeRemoved = \* a <vaadin-chart-series> reference to remove*\
- *  chart.removeChild(seriesToBeRemoved);
+ * const chart = document.querySelector('vaadin-chart');
+ * const seriesToBeRemoved = chart.querySelector('vaadin-chart-series');
+ * chart.removeChild(seriesToBeRemoved);
  * ```
  */
 declare class ChartSeries extends ChartSeriesMixin(HTMLElement) {}
