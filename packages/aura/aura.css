@@ -1,3 +1,102 @@
+@import './src/aura-view.css';
+@import './src/color-scheme.css';
+@import './src/color.css';
+@import './src/icons.css';
+@import './src/typography.css';
+
+@import './src/components/app-layout.css';
+@import './src/components/badge.css';
+@import './src/components/card.css';
+@import './src/components/form-layout.css';
+@import './src/components/notification.css';
+@import './src/components/side-nav.css';
+
 html {
-  /* Global custom properties */
+  --aura-radius-s: 4px;
+  --aura-radius-m: 8px;
+  --aura-radius-l: 14px;
+  --vaadin-radius-s: var(--aura-radius-s);
+  --vaadin-radius-m: var(--aura-radius-m);
+  --vaadin-radius-l: var(--aura-radius-l);
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+/* TODO this would be nice to add (avoid snapshotting the whole viewport) but then the backdrop-filter on things like notifications doesn't work correctly in Chrome */
+/* :root {
+  view-transition-name: none;
+} */
+
+html,
+body,
+vaadin-app-layout,
+vaadin-app-layout > vaadin-master-detail-layout {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+[theme] {
+  --app-layout-radius: clamp(0px, var(--app-layout-inset) * 3, var(--aura-radius-l));
+}
+
+vaadin-app-layout > vaadin-master-detail-layout {
+  background: var(--aura-accent-gradient);
+  background-origin: border-box;
+  border-radius: var(--app-layout-radius);
+  overflow: visible;
+}
+
+vaadin-app-layout > vaadin-master-detail-layout::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  border: min(1px, var(--app-layout-inset)) solid var(--aura-border-color-subtle);
+  pointer-events: none;
+}
+
+/* TODO could be a built-in variant */
+vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
+  margin: calc(var(--app-layout-inset) / 2);
+  border-radius: var(--app-layout-radius);
+  background: transparent;
+  position: relative;
+  -webkit-backdrop-filter: blur(12px) saturate(0.8) brightness(1.1);
+  backdrop-filter: blur(12px) saturate(0.8) brightness(1.1);
+}
+
+vaadin-master-detail-layout > vaadin-master-detail-layout,
+vaadin-master-detail-layout:not([drawer])::part(detail) {
+  background: var(--aura-surface-background);
+  border-start-end-radius: var(--app-layout-radius);
+  border-end-end-radius: var(--app-layout-radius);
+}
+
+::view-transition-group(vaadin-mdl-backdrop),
+::view-transition-group(vaadin-mdl-master),
+::view-transition-group(vaadin-mdl-detail) {
+  border-radius: var(--app-layout-radius);
+  overflow: hidden;
+}
+
+/* ::view-transition-group(vaadin-mdl-detail.viewport) {
+  border-radius: 0;
+  overflow: visible;
+} */
+
+vaadin-scroller[slot='drawer'] {
+  scrollbar-width: thin;
+}
+
+vaadin-grid::part(active-nav-item) {
+  --vaadin-grid-cell-background: var(--vaadin-background-container-strong);
+}
+
+::part(input-field) {
+  background-clip: padding-box;
 }

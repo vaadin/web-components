@@ -1,0 +1,24 @@
+.aura-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.aura-view > :not(header, footer) {
+  flex: 1;
+}
+
+.aura-view > :is(header, footer) {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aura-view > :is(header, footer) :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  padding: var(--vaadin-padding-container);
+  font-size: var(--aura-font-size-l);
+  font-weight: 600;
+  color: var(--vaadin-color);
+}

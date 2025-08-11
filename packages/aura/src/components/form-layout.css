@@ -1,0 +1,3 @@
+vaadin-form-layout[theme~='padding'] {
+  padding: var(--vaadin-padding-l);
+}

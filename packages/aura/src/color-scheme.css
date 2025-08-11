@@ -1,0 +1,21 @@
+html {
+  --color-scheme: light dark;
+  --nav-color-scheme: dark;
+  --notification-color-scheme: light dark;
+
+  color-scheme: var(--color-scheme);
+  background: var(--vaadin-background-color);
+}
+
+vaadin-app-layout {
+  color-scheme: var(--nav-color-scheme);
+  background: var(--vaadin-background-color);
+}
+
+vaadin-master-detail-layout {
+  color-scheme: var(--color-scheme);
+}
+
+vaadin-notification-container {
+  color-scheme: var(--notification-color-scheme);
+}
