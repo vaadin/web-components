@@ -59,7 +59,7 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-group-heading`              | The group for heading controls
  * `toolbar-group-style`                | The group for style controls
  * `toolbar-group-glyph-transformation` | The group for glyph transformation controls
- * `toolbar-group-group-list`           | The group for group list controls
+ * `toolbar-group-list`                 | The group for list controls
  * `toolbar-group-alignment`            | The group for alignment controls
  * `toolbar-group-rich-text`            | The group for rich text controls
  * `toolbar-group-block`                | The group for preformatted block controls
