@@ -78,16 +78,6 @@ describe('rich-text-editor', () => {
       return visualDiff(div, 'rich-content-text-alignment');
     });
 
-    it('lists', () => {
-      element.value = JSON.stringify([
-        { insert: 'Ordered list item 1\n', attributes: { list: 'ordered' } },
-        { insert: 'Ordered list item 2\n', attributes: { list: 'ordered' } },
-        { insert: 'Unordered list item 1\n', attributes: { list: 'bullet' } },
-        { insert: 'Unordered list item 2\n', attributes: { list: 'bullet' } },
-      ]);
-      return visualDiff(div, 'rich-content-lists');
-    });
-
     it('blocks', () => {
       element.value = JSON.stringify([
         { insert: 'This is a blockquote\n', attributes: { blockquote: true } },
@@ -96,6 +86,48 @@ describe('rich-text-editor', () => {
         { insert: '</body>\n', attributes: { 'code-block': true } },
       ]);
       return visualDiff(div, 'rich-content-blocks');
+    });
+  });
+
+  describe('lists', () => {
+    it('basic', () => {
+      element.value = JSON.stringify([
+        { insert: 'Ordered list item 1\n', attributes: { list: 'ordered' } },
+        { insert: 'Ordered list item 2\n', attributes: { list: 'ordered' } },
+        { insert: 'Unordered list item 1\n', attributes: { list: 'bullet' } },
+        { insert: 'Unordered list item 2\n', attributes: { list: 'bullet' } },
+      ]);
+      return visualDiff(div, 'list-basic');
+    });
+
+    it('bullet-indent', () => {
+      element.value = JSON.stringify([
+        { insert: 'A\n', attributes: { list: 'bullet', indent: 0 } },
+        { insert: 'B\n', attributes: { list: 'bullet', indent: 1 } },
+        { insert: 'C\n', attributes: { list: 'bullet', indent: 2 } },
+        { insert: 'D\n', attributes: { list: 'bullet', indent: 3 } },
+        { insert: 'E\n', attributes: { list: 'bullet', indent: 4 } },
+        { insert: 'F\n', attributes: { list: 'bullet', indent: 5 } },
+        { insert: 'G\n', attributes: { list: 'bullet', indent: 6 } },
+        { insert: 'H\n', attributes: { list: 'bullet', indent: 7 } },
+        { insert: 'I\n', attributes: { list: 'bullet', indent: 8 } },
+      ]);
+      return visualDiff(div, 'list-bullet-indent');
+    });
+
+    it('ordered-indent', () => {
+      element.value = JSON.stringify([
+        { insert: 'A\n', attributes: { list: 'ordered', indent: 0 } },
+        { insert: 'B\n', attributes: { list: 'ordered', indent: 1 } },
+        { insert: 'C\n', attributes: { list: 'ordered', indent: 2 } },
+        { insert: 'D\n', attributes: { list: 'ordered', indent: 3 } },
+        { insert: 'E\n', attributes: { list: 'ordered', indent: 4 } },
+        { insert: 'F\n', attributes: { list: 'ordered', indent: 5 } },
+        { insert: 'G\n', attributes: { list: 'ordered', indent: 6 } },
+        { insert: 'H\n', attributes: { list: 'ordered', indent: 7 } },
+        { insert: 'I\n', attributes: { list: 'ordered', indent: 8 } },
+      ]);
+      return visualDiff(div, 'list-ordered-indent');
     });
   });
 
