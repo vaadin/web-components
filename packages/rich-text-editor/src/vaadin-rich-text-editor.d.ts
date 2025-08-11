@@ -60,6 +60,7 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-group-style`                | The group for style controls
  * `toolbar-group-glyph-transformation` | The group for glyph transformation controls
  * `toolbar-group-list`                 | The group for list controls
+ * `toolbar-group-indent`               | The group for indentation controls
  * `toolbar-group-alignment`            | The group for alignment controls
  * `toolbar-group-rich-text`            | The group for rich text controls
  * `toolbar-group-block`                | The group for preformatted block controls
@@ -81,6 +82,8 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-button-superscript`         | The "superscript" button
  * `toolbar-button-list-ordered`        | The "ordered list" button
  * `toolbar-button-list-bullet`         | The "bullet list" button
+ * `toolbar-button-outdent`             | The "decrease indentation" button
+ * `toolbar-button-indent`              | The "increase indentation" button
  * `toolbar-button-align-left`          | The "left align" button
  * `toolbar-button-align-center`        | The "center align" button
  * `toolbar-button-align-right`         | The "right align" button

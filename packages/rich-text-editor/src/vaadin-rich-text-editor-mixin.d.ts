@@ -27,6 +27,8 @@ export interface RichTextEditorI18n {
   superscript?: string;
   listOrdered?: string;
   listBullet?: string;
+  outdent?: string;
+  indent?: string;
   alignLeft?: string;
   alignCenter?: string;
   alignRight?: string;

@@ -77,6 +77,8 @@ const DEFAULT_I18N = {
   superscript: 'superscript',
   listOrdered: 'list ordered',
   listBullet: 'list bullet',
+  outdent: 'outdent',
+  indent: 'indent',
   alignLeft: 'align left',
   alignCenter: 'align center',
   alignRight: 'align right',

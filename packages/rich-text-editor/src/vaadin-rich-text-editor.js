@@ -58,6 +58,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * `toolbar-group-style`                | The group for style controls
  * `toolbar-group-glyph-transformation` | The group for glyph transformation controls
  * `toolbar-group-list`                 | The group for list controls
+ * `toolbar-group-indent`               | The group for indentation controls
  * `toolbar-group-alignment`            | The group for alignment controls
  * `toolbar-group-rich-text`            | The group for rich text controls
  * `toolbar-group-block`                | The group for preformatted block controls
@@ -79,6 +80,8 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * `toolbar-button-superscript`         | The "superscript" button
  * `toolbar-button-list-ordered`        | The "ordered list" button
  * `toolbar-button-list-bullet`         | The "bullet list" button
+ * `toolbar-button-outdent`             | The "decrease indentation" button
+ * `toolbar-button-indent`              | The "increase indentation" button
  * `toolbar-button-align-left`          | The "left align" button
  * `toolbar-button-align-center`        | The "center align" button
  * `toolbar-button-align-right`         | The "right align" button
@@ -256,6 +259,27 @@ class RichTextEditor extends RichTextEditorMixin(
               value="bullet"
               part="toolbar-button toolbar-button-list-bullet"
               aria-label="${this.__effectiveI18n.listBullet}"
+            ></button>
+          </span>
+
+          <span part="toolbar-group toolbar-group-indent">
+            <!-- Decrease -->
+            <button
+              id="btn-outdent"
+              type="button"
+              class="ql-indent"
+              value="-1"
+              part="toolbar-button toolbar-button-outdent"
+              aria-label="${this.__effectiveI18n.outdent}"
+            ></button>
+            <!-- Increase -->
+            <button
+              id="btn-indent"
+              type="button"
+              class="ql-indent"
+              value="+1"
+              part="toolbar-button toolbar-button-indent"
+              aria-label="${this.__effectiveI18n.indent}"
             ></button>
           </span>
 

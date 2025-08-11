@@ -598,6 +598,30 @@ snapshots["vaadin-rich-text-editor shadow"] =
       >
       </button>
     </span>
+    <span part="toolbar-group toolbar-group-indent">
+      <button
+        aria-label="outdent"
+        aria-pressed="false"
+        class="ql-indent"
+        id="btn-outdent"
+        part="toolbar-button toolbar-button-outdent"
+        tabindex="-1"
+        type="button"
+        value="-1"
+      >
+      </button>
+      <button
+        aria-label="indent"
+        aria-pressed="false"
+        class="ql-indent"
+        id="btn-indent"
+        part="toolbar-button toolbar-button-indent"
+        tabindex="-1"
+        type="button"
+        value="+1"
+      >
+      </button>
+    </span>
     <span part="toolbar-group toolbar-group-alignment">
       <button
         aria-label="align left"
