@@ -124,7 +124,7 @@ export const content = css`
     background-color: var(--vaadin-background-container);
     border-radius: var(--vaadin-radius-s);
     white-space: pre-wrap;
-    margin-block: var(--vaadin-padding);
+    margin-block: var(--vaadin-padding-s);
     padding: var(--vaadin-padding-container);
   }
 
