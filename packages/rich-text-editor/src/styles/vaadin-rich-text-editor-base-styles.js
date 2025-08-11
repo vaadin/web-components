@@ -51,6 +51,12 @@ const base = css`
 `;
 
 export const content = css`
+  :host {
+    --_item-indent: var(--vaadin-padding-l);
+    --_marker-indent: calc(var(--vaadin-padding-s) / 2);
+    --_list-indent: calc(var(--_item-indent) + var(--_marker-indent));
+  }
+
   [part='content'] {
     box-sizing: border-box;
     display: flex;
@@ -130,9 +136,6 @@ export const content = css`
 
   /* lists */
   .ql-editor ol {
-    --_item-indent: var(--vaadin-padding-l);
-    --_marker-indent: calc(var(--vaadin-padding-s) / 2);
-    --_list-indent: calc(var(--_item-indent) + var(--_marker-indent));
     padding-inline-start: var(--_list-indent);
   }
 
@@ -282,41 +285,73 @@ export const content = css`
   }
 
   /* indent 1 */
+  .ql-editor .ql-indent-1 {
+    padding-inline-start: calc(var(--_item-indent) * 2);
+  }
+
   .ql-editor li.ql-indent-1 {
     padding-inline-start: calc(var(--_list-indent) + var(--_item-indent) * 2);
   }
 
   /* indent 2 */
+  .ql-editor .ql-indent-2 {
+    padding-inline-start: calc(var(--_item-indent) * 4);
+  }
+
   .ql-editor li.ql-indent-2 {
     padding-inline-start: calc(var(--_list-indent) * 2 + var(--_item-indent) * 3);
   }
 
   /* indent 3 */
+  .ql-editor .ql-indent-3 {
+    padding-inline-start: calc(var(--_item-indent) * 6);
+  }
+
   .ql-editor li.ql-indent-3 {
     padding-inline-start: calc(var(--_list-indent) * 3 + var(--_item-indent) * 4);
   }
 
   /* indent 4 */
+  .ql-editor .ql-indent-4 {
+    padding-inline-start: calc(var(--_item-indent) * 8);
+  }
+
   .ql-editor li.ql-indent-4 {
     padding-inline-start: calc(var(--_list-indent) * 4 + var(--_item-indent) * 5);
   }
 
   /* indent 5 */
+  .ql-editor .ql-indent-5 {
+    padding-inline-start: calc(var(--_item-indent) * 10);
+  }
+
   .ql-editor li.ql-indent-5 {
     padding-inline-start: calc(var(--_list-indent) * 5 + var(--_item-indent) * 6);
   }
 
   /* indent 6 */
+  .ql-editor .ql-indent-6 {
+    padding-inline-start: calc(var(--_item-indent) * 12);
+  }
+
   .ql-editor li.ql-indent-6 {
     padding-inline-start: calc(var(--_list-indent) * 6 + var(--_item-indent) * 7);
   }
 
   /* indent 7 */
+  .ql-editor .ql-indent-7 {
+    padding-inline-start: calc(var(--_item-indent) * 14);
+  }
+
   .ql-editor li.ql-indent-7 {
     padding-inline-start: calc(var(--_list-indent) * 7 + var(--_item-indent) * 8);
   }
 
   /* indent 8 */
+  .ql-editor .ql-indent-8 {
+    padding-inline-start: calc(var(--_item-indent) * 16);
+  }
+
   .ql-editor li.ql-indent-8 {
     padding-inline-start: calc(var(--_list-indent) * 8 + var(--_item-indent) * 9);
   }
