@@ -456,6 +456,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-emphasis">
       <button
         aria-label="bold"
+        aria-pressed="false"
         class="ql-bold"
         id="btn-bold"
         part="toolbar-button toolbar-button-bold"
@@ -465,6 +466,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="italic"
+        aria-pressed="false"
         class="ql-italic"
         id="btn-italic"
         part="toolbar-button toolbar-button-italic"
@@ -474,6 +476,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="underline"
+        aria-pressed="false"
         class="ql-underline"
         id="btn-underline"
         part="toolbar-button toolbar-button-underline"
@@ -483,6 +486,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="strike"
+        aria-pressed="false"
         class="ql-strike"
         id="btn-strike"
         part="toolbar-button toolbar-button-strike"
@@ -514,6 +518,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-heading">
       <button
         aria-label="h1"
+        aria-pressed="false"
         class="ql-header"
         id="btn-h1"
         part="toolbar-button toolbar-button-h1"
@@ -524,6 +529,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="h2"
+        aria-pressed="false"
         class="ql-header"
         id="btn-h2"
         part="toolbar-button toolbar-button-h2"
@@ -534,6 +540,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="h3"
+        aria-pressed="false"
         class="ql-header"
         id="btn-h3"
         part="toolbar-button toolbar-button-h3"
@@ -546,6 +553,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-glyph-transformation">
       <button
         aria-label="subscript"
+        aria-pressed="false"
         class="ql-script"
         id="btn-subscript"
         part="toolbar-button toolbar-button-subscript"
@@ -556,6 +564,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="superscript"
+        aria-pressed="false"
         class="ql-script"
         id="btn-superscript"
         part="toolbar-button toolbar-button-superscript"
@@ -568,6 +577,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-list">
       <button
         aria-label="list ordered"
+        aria-pressed="false"
         class="ql-list"
         id="btn-ol"
         part="toolbar-button toolbar-button-list-ordered"
@@ -578,6 +588,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="list bullet"
+        aria-pressed="false"
         class="ql-list"
         id="btn-ul"
         part="toolbar-button toolbar-button-list-bullet"
@@ -590,6 +601,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-alignment">
       <button
         aria-label="align left"
+        aria-pressed="false"
         class="ql-align"
         id="btn-left"
         part="toolbar-button toolbar-button-align-left"
@@ -600,6 +612,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="align center"
+        aria-pressed="false"
         class="ql-align"
         id="btn-center"
         part="toolbar-button toolbar-button-align-center"
@@ -610,6 +623,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="align right"
+        aria-pressed="false"
         class="ql-align"
         id="btn-right"
         part="toolbar-button toolbar-button-align-right"
@@ -630,6 +644,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="link"
+        aria-pressed="false"
         id="btn-link"
         part="toolbar-button toolbar-button-link"
         tabindex="-1"
@@ -640,6 +655,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-block">
       <button
         aria-label="blockquote"
+        aria-pressed="false"
         class="ql-blockquote"
         id="btn-blockquote"
         part="toolbar-button toolbar-button-blockquote"
@@ -649,6 +665,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
       </button>
       <button
         aria-label="code block"
+        aria-pressed="false"
         class="ql-code-block"
         id="btn-code"
         part="toolbar-button toolbar-button-code-block"
@@ -660,6 +677,7 @@ snapshots["vaadin-rich-text-editor shadow"] =
     <span part="toolbar-group toolbar-group-format">
       <button
         aria-label="clean"
+        aria-pressed="false"
         class="ql-clean"
         id="btn-clean"
         part="toolbar-button toolbar-button-clean"
@@ -682,18 +700,11 @@ snapshots["vaadin-rich-text-editor shadow"] =
       aria-multiline="true"
       class="ql-blank ql-editor"
       contenteditable="true"
-      data-gramm="false"
       role="textbox"
     >
       <p>
         <br>
       </p>
-    </div>
-    <div
-      class="ql-clipboard"
-      contenteditable="true"
-      tabindex="-1"
-    >
     </div>
   </div>
   <div
