@@ -304,6 +304,14 @@
     content: var(--lumo-icons-unordered-list);
   }
 
+  [part~='toolbar-button-outdent']::before {
+    content: var(--lumo-icons-outdent);
+  }
+
+  [part~='toolbar-button-indent']::before {
+    content: var(--lumo-icons-indent);
+  }
+
   [part~='toolbar-button-align-left']::before {
     content: var(--lumo-icons-align-left);
   }
