@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura</title>
+    <link rel="stylesheet" href="/packages/aura/aura.css">
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+
+      import '@vaadin/app-layout';
+      import '@vaadin/app-layout/vaadin-drawer-toggle.js';
+      import '@vaadin/scroller';
+      import '@vaadin/button';
+      import '@vaadin/card';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/side-nav';
+      import '@vaadin/master-detail-layout';
+      import '@vaadin/form-layout';
+      import '@vaadin/text-field';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/number-field';
+      import '@vaadin/grid/all-imports';
+      import { html } from 'lit';
+      import { Notification } from '@vaadin/notification';
+
+      const notification = Notification.show(
+        html`<vaadin-card theme="horizontal footer-end no-frame">
+          <vaadin-icon icon="uui:chat" slot="media"></vaadin-icon>
+          <div slot="title">New Message from Olivia</div>
+          <div>The AI chat UI is evolving with the integration of components…</div>
+          <vaadin-button slot="footer">Show</vaadin-button>
+          <vaadin-button slot="footer">Dismiss</vaadin-button>
+        </vaadin-card>`,
+        { duration: 0, position: 'top-end' },
+      );
+      notification._overlayElement
+        .querySelectorAll('vaadin-button')
+        .forEach((button) => button.addEventListener('click', () => notification.close()));
+
+      const generateItems = (count) => {
+        return Array.from({ length: count }, (_, i) => ({
+          name: `First Lastname ${i + 1}`,
+          email: `first.lastname${i + 1}@example.com`,
+          address: `${i + 1} Main Street`,
+          city: `City ${i + 1}`,
+          country: `Country ${i + 1}`,
+        }));
+      };
+
+      const mdl = document.querySelector('vaadin-master-detail-layout > vaadin-master-detail-layout');
+      const detailView = document.querySelector('#detail-view').content.firstElementChild.cloneNode(true);
+      detailView.addEventListener('click', (e) => {
+        if (e.target.localName === 'vaadin-button') {
+          grid.activeItem = null;
+        }
+      });
+
+      mdl.addEventListener('backdrop-click', () => {
+        grid.activeItem = null;
+      });
+
+      const grid = document.querySelector('vaadin-grid');
+      grid.items = generateItems(100);
+
+      grid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        if (item) {
+          mdl._setDetail(detailView);
+        } else {
+          mdl._setDetail(null);
+        }
+        // This triggers the cell part generator
+        grid.selectedItems = [];
+      });
+
+      grid.cellPartNameGenerator = (column, model) => {
+        let parts = 'nav-item';
+        if (model.item === grid.activeItem) {
+          parts += ' active-nav-item';
+        }
+        return parts;
+      };
+    </script>
+  </head>
+  <body>
+    <vaadin-app-layout primary-section="navbar">
+      <header slot="drawer">
+        <vaadin-button>
+          <vaadin-icon icon="vaadin:caret-square-left-o"></vaadin-icon>
+        </vaadin-button>
+      </header>
+      <vaadin-scroller slot="drawer" theme="overflow-indicators">
+        <vaadin-side-nav collapsible>
+          <span slot="label">Main menu</span>
+
+          <vaadin-side-nav-item path="/dev/aura.html">
+            Home
+            <span theme="badge" slot="suffix" aria-label="(2 new items)">1</span>
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item path="/dev" expanded>
+            Dev pages
+            <span theme="badge" slot="suffix" aria-label="(2 new items)">99+</span>
+
+            <vaadin-side-nav-item path="/dev/grid.html" slot="children">Grid</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/select.html" slot="children">Select</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/button.html" slot="children">Button</vaadin-side-nav-item>
+
+            <vaadin-side-nav-item slot="children" expanded>
+              Layouts
+
+              <vaadin-side-nav-item path="/dev/app-layout.html" slot="children"> App Layout </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/form-layout.html" slot="children"> Form Layout </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/master-detail-layout.html" slot="children">
+                Master-Detail Layout
+                <span theme="badge" slot="suffix" aria-label="(2 new items)">2</span>
+              </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/split-layout.html" slot="children"> Split Layout </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/horizontal-layout.html" slot="children">
+                Horizontal Layout
+              </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/vertical-layout.html" slot="children">
+                Vertical Layout
+              </vaadin-side-nav-item>
+            </vaadin-side-nav-item>
+
+            <vaadin-side-nav-item slot="children" disabled data-disabled expanded>
+              Form Fields
+
+              <vaadin-side-nav-item path="/dev/combo-box.html" slot="children"> Combo Box </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/date-picker.html" slot="children"> Date Picker </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/checkbox.html" slot="children"> Checkbox </vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/text-field.html" slot="children"> Text Field </vaadin-side-nav-item>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item> Label only (no path) </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      </vaadin-scroller>
+      <footer slot="drawer">
+        <a href="">Sign in</a>
+      </footer>
+
+      <vaadin-master-detail-layout theme master-min-size="14em" master-size="25%" detail-min-size="30em">
+        <div class="aura-view">
+          <header>
+            <vaadin-drawer-toggle></vaadin-drawer-toggle>
+            <h1>Aura</h1>
+          </header>
+          <vaadin-side-nav>
+            <vaadin-side-nav-item path="/">
+              <vaadin-icon icon="uui:home" slot="prefix"></vaadin-icon>
+              <span>Home</span>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/">
+              <vaadin-icon icon="uui:chart-bar" slot="prefix"></vaadin-icon>
+              <span>Dashboard</span>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/">
+              <vaadin-icon icon="uui:layout-vertical" slot="prefix"></vaadin-icon>
+              <span>Projects</span>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/">
+              <vaadin-icon icon="uui:chart-pie" slot="prefix"></vaadin-icon>
+              <span>Reporting</span>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/">
+              <vaadin-icon icon="uui:cog" slot="prefix"></vaadin-icon>
+              <span>Settings</span>
+            </vaadin-side-nav-item><vaadin-side-nav-item path="/">
+              <vaadin-icon icon="uui:chat" slot="prefix"></vaadin-icon>
+              <span>Support</span>
+              <span theme="badge positive">Online</span>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav>
+        </div>
+
+        <vaadin-master-detail-layout slot="detail" containment="viewport" theme="inset-drawer" force-overlay>
+          <div class="aura-view">
+            <header>
+              <h1>Contacts</h1>
+            </header>
+            <vaadin-grid multi-sort column-reordering-allowed theme="no-border">
+              <vaadin-grid-selection-column></vaadin-grid-selection-column>
+
+              <vaadin-grid-column-group header="Personal Information">
+                <vaadin-grid-sort-column path="name" header="Name"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column path="email" header="Email"></vaadin-grid-sort-column>
+              </vaadin-grid-column-group>
+
+              <vaadin-grid-column-group header="Contact Information">
+                <vaadin-grid-filter-column path="address" header="Address"></vaadin-grid-filter-column>
+                <vaadin-grid-sort-column path="city" header="City"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column path="country" header="Country"></vaadin-grid-sort-column>
+              </vaadin-grid-column-group>
+
+              <span slot="empty-state">No items</span>
+            </vaadin-grid>
+          </div>
+        </vaadin-master-detail-layout>
+      </vaadin-master-detail-layout>
+    </vaadin-app-layout>
+
+    <template id="detail-view">
+      <div slot="detail" class="aura-view">
+        <header>
+          <h3>My App</h3>
+        </header>
+        <vaadin-scroller theme="overflow-indicators">
+          <vaadin-form-layout auto-responsive theme="padding">
+            <vaadin-text-field label="Application Name" value="My App"></vaadin-text-field>
+            <vaadin-text-field label="Image" value="my-app:latest"></vaadin-text-field>
+            <vaadin-text-field label="Hostname" value="my-app.local">
+              <span slot="prefix">https://</span>
+            </vaadin-text-field>:
+            <vaadin-text-field label="Port" value="8080"></vaadin-text-field>
+            <vaadin-checkbox label="Secure Connection" checked></vaadin-checkbox>
+            <vaadin-number-field label="Replicas" step-buttons-visible value="1"></vaadin-number-field>
+            <hr>
+            <vaadin-checkbox-group label="Features">
+              <vaadin-checkbox label="User Management" value="user-management" checked></vaadin-checkbox>
+              <vaadin-checkbox label="Localization" value="localization"></vaadin-checkbox>
+            </vaadin-checkbox-group>
+          </vaadin-form-layout>
+        </vaadin-scroller>
+        <footer>
+          <vaadin-button>Cancel</vaadin-button>
+          <vaadin-button theme="primary">Save</vaadin-button>
+        </footer>
+      </div>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+html {
+  --aura-contrast: 0;
+
+  --_color-base: light-dark(rgba(0, 0, 0, 0.9), #fff);
+  --aura-text-color: color-mix(in srgb, var(--_color-base) calc(95% + 5% * var(--aura-contrast)), transparent);
+  --aura-text-color-subtle: light-dark(
+    color-mix(in srgb, var(--_color-base) calc(65% + 20% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_color-base) calc(75% + 20% * var(--aura-contrast)), transparent)
+  );
+  --aura-text-color-disabled: color-mix(
+    in srgb,
+    var(--_color-base) calc(40% + 10% * var(--aura-contrast)),
+    transparent
+  );
+
+  --aura-border-color: color-mix(in srgb, var(--_color-base) calc(25% + 15% * var(--aura-contrast)), transparent);
+  --aura-border-color-subtle: light-dark(
+    color-mix(in srgb, var(--_color-base) calc(7% + 10% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_color-base) calc(10% + 10% * var(--aura-contrast)), transparent)
+  );
+
+  --aura-surface-background: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.07));
+
+  --aura-accent-color-1: light-dark(#ffeeb7, #504a34);
+  --aura-accent-color-2: light-dark(#c2f3fe, #243337);
+
+  accent-color: var(--aura-accent-color-1);
+
+  /* Map to base style props */
+  --vaadin-background-color: light-dark(#fff, #111);
+  --vaadin-color: var(--aura-text-color);
+  --vaadin-color-subtle: var(--aura-text-color-subtle);
+  --vaadin-color-disabled: var(--aura-text-color-disabled);
+  --vaadin-border-color: var(--aura-border-color);
+  --vaadin-border-color-subtle: var(--aura-border-color-subtle);
+
+  /* Component overrides */
+  --vaadin-input-field-background: light-dark(rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.1));
+  --vaadin-checkbox-background: var(--vaadin-input-field-background);
+}
+
+[theme] {
+  --aura-accent-gradient: radial-gradient(circle at 25% 0%, var(--aura-accent-color-1), var(--aura-accent-color-2));
+}
+
+/* html[theme] {
+  background: var(--gradient), var(--bg);
+  background-size: 100% 100svh;
+  background-attachment: fixed;
+} */
