@@ -32,6 +32,16 @@ describe('popover', () => {
     it('should set display: contents on the host element by default', () => {
       expect(getComputedStyle(popover).display).to.equal('contents');
     });
+
+    it('should reflect opened property to attribute', async () => {
+      popover.opened = true;
+      await nextUpdate(popover);
+      expect(popover.hasAttribute('opened')).to.be.true;
+
+      popover.opened = false;
+      await nextUpdate(popover);
+      expect(popover.hasAttribute('opened')).to.be.false;
+    });
   });
 
   describe('renderer', () => {
