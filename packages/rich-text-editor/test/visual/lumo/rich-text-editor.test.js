@@ -91,17 +91,34 @@ describe('rich-text-editor', () => {
     });
   });
 
-  describe('lists', () => {
-    ['ltr', 'rtl'].forEach((dir) => {
-      describe(`${dir}`, () => {
-        before(() => {
-          document.documentElement.setAttribute('dir', dir);
-        });
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(`${dir}`, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
 
-        after(() => {
-          document.documentElement.removeAttribute('dir');
-        });
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
 
+      describe('indent', () => {
+        it('basic', () => {
+          element.value = JSON.stringify([
+            { insert: 'A\n', attributes: { indent: 0 } },
+            { insert: 'B\n', attributes: { indent: 1 } },
+            { insert: 'C\n', attributes: { indent: 2 } },
+            { insert: 'D\n', attributes: { indent: 3 } },
+            { insert: 'E\n', attributes: { indent: 4 } },
+            { insert: 'F\n', attributes: { indent: 5 } },
+            { insert: 'G\n', attributes: { indent: 6 } },
+            { insert: 'H\n', attributes: { indent: 7 } },
+            { insert: 'I\n', attributes: { indent: 8 } },
+          ]);
+          return visualDiff(div, `${dir}-indent`);
+        });
+      });
+
+      describe('lists', () => {
         it('basic', () => {
           element.value = JSON.stringify([
             { insert: 'Ordered list item 1\n', attributes: { list: 'ordered' } },
