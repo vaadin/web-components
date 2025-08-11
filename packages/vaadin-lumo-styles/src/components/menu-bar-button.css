@@ -95,19 +95,19 @@
 
   /* prettier-ignore */
   :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix']::after {
-  font-family: lumo-icons;
-  content: var(--lumo-icons-dropdown);
-}
+    font-family: lumo-icons;
+    content: var(--lumo-icons-dropdown);
+  }
 
   /* prettier-ignore */
   :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary'][aria-haspopup]) [part='suffix'] {
-  inset-inline-start: 0.05em;
-}
+    inset-inline-start: 0.05em;
+  }
 
   /* prettier-ignore */
   :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary-inline'][aria-haspopup]) [part='suffix'] {
-  inset-inline-start: 0;
-}
+    inset-inline-start: 0;
+  }
 
   /* RTL styles */
   :host([dir='rtl']) {
