@@ -160,7 +160,7 @@
 
         render() {
           return html`
-            <vaadin-master-detail-layout>
+            <vaadin-master-detail-layout @backdrop-click=${this.closeDetail}>
               <div class="master">
                 <header>
                   <vaadin-button
