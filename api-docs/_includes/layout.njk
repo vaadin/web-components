@@ -3,13 +3,15 @@ toc: true
 ---
 
 <!doctype html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-  <title>{{ title if title else metadata.title }}</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
-  <link href="/css/index.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ description or metadata.description }}" />
+  <title>{{ title or metadata.title }}</title>
+  <meta name="generator" content="{{ eleventy.generator }}" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link href="/css/index.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -29,26 +31,7 @@ toc: true
               </h1>
 
               {% if toc %}
-                <div class="actions">
-                  <button id="copy-markdown" class="actions__btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-                      <path d="M7 15v-6l2 2l2 -2v6" />
-                      <path d="M14 13l2 2l2 -2m-2 2v-6" />
-                    </svg>
-                    <span>Copy as MD</span>
-                  </button>
-                  <a class="actions__btn" href="/markdown/{{ element | slugify }}.md" target="_blank">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-                      <path d="M11 13l9 -9" />
-                      <path d="M15 4h5v5" />
-                    </svg>
-                    <span>View as MD</span>
-                  </a>
-                </div>
+                {% include "partials/actions.njk" %}
               {% endif %}
               </div>
 
