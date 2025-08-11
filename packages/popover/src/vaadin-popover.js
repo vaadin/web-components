@@ -311,6 +311,7 @@ class Popover extends PopoverPositionMixin(
         type: Boolean,
         value: false,
         notify: true,
+        reflectToAttribute: true,
         observer: '__openedChanged',
       },
 

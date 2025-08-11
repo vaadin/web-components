@@ -5,6 +5,7 @@ snapshots["vaadin-popover host"] =
 `<vaadin-popover
   id="vaadin-popover-0"
   modeless=""
+  opened=""
   role="dialog"
 >
   content
