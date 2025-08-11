@@ -37,7 +37,7 @@ export const GridTreeColumnMixin = (superClass) =>
      *
      * @private
      */
-    __defaultRenderer(root, _column, { item, expanded, level, expandable }) {
+    __defaultRenderer(root, _column, { item, expanded, level, hasChildren }) {
       let toggle = root.firstElementChild;
       if (!toggle) {
         toggle = document.createElement('vaadin-grid-tree-toggle');
@@ -48,7 +48,7 @@ export const GridTreeColumnMixin = (superClass) =>
       toggle.__item = item;
       toggle.__rendererExpanded = expanded;
       toggle.expanded = expanded;
-      toggle.leaf = !expandable;
+      toggle.leaf = !hasChildren;
       toggle.textContent = this.__getToggleContent(this.path, item);
       toggle.level = level;
     }

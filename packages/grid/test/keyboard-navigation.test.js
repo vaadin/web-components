@@ -1671,7 +1671,7 @@ describe('keyboard navigation', () => {
         column: grid.querySelector('vaadin-grid-column'),
         detailsOpened: false,
         expanded: false,
-        expandable: false,
+        hasChildren: false,
         index: 0,
         item: 'foo',
         level: 0,
@@ -2129,7 +2129,7 @@ describe('lazy data provider', () => {
     const expectedContext = {
       column: grid.querySelector('vaadin-grid-column'),
       detailsOpened: false,
-      expandable: false,
+      hasChildren: false,
       expanded: false,
       index: 999,
       item: { name: 'name-999' },

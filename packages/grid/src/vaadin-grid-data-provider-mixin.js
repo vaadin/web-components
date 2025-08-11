@@ -227,7 +227,7 @@ export const DataProviderMixin = (superClass) =>
      * @return {boolean}
      * @protected
      */
-    _isExpandable(item) {
+    _hasChildren(item) {
       return this.itemHasChildrenPath && item && !!get(this.itemHasChildrenPath, item);
     }
 
