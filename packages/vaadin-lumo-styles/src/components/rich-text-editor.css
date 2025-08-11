@@ -439,9 +439,10 @@
 
   /* lists */
   .ql-editor ol {
-    --_item-indent: 1.5em;
-    --_list-indent: calc(2 * var(--_item-indent));
-    padding-inline-start: var(--_item-indent);
+    --_item-indent: var(--lumo-space-m);
+    --_marker-indent: var(--lumo-space-xs);
+    --_list-indent: calc(var(--_item-indent) + var(--_marker-indent));
+    padding-inline-start: var(--_list-indent);
   }
 
   .ql-editor li {
@@ -452,16 +453,16 @@
 
   .ql-editor li > .ql-ui::before {
     display: inline-block;
-    margin-left: -1.5em;
-    margin-right: 0.3em;
+    width: var(--vaadin-padding-l);
+    margin-left: calc(var(--_item-indent) * -1);
+    margin-right: calc(var(--vaadin-padding-s) / 2);
     text-align: right;
     white-space: nowrap;
-    width: 1.2em;
   }
 
   .ql-editor li[data-list='bullet'] > .ql-ui::before {
     content: '\2022';
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     line-height: 1rem;
     align-self: baseline;
     vertical-align: text-top;
@@ -600,156 +601,84 @@
   }
 
   /* indent 1 */
-  .ql-editor .ql-indent-1:not(.ql-direction-rtl) {
-    padding-left: var(--_list-indent);
-  }
-
   .ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-1.ql-direction-rtl.ql-align-right {
-    padding-right: var(--_list-indent);
+    padding-left: calc(var(--_list-indent) + var(--_item-indent) * 2);
   }
 
   .ql-editor li.ql-indent-1.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) + var(--_item-indent) * 2);
   }
 
   /* indent 2 */
-  .ql-editor .ql-indent-2:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 2);
-  }
-
   .ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 2 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-2.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 2);
+    padding-left: calc(var(--_list-indent) * 2 + var(--_item-indent) * 3);
   }
 
   .ql-editor li.ql-indent-2.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 2 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 2 + var(--_item-indent) * 3);
   }
 
   /* indent 3 */
-  .ql-editor .ql-indent-3:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 3);
-  }
-
   .ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 3 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-3.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 3);
+    padding-left: calc(var(--_list-indent) * 3 + var(--_item-indent) * 4);
   }
 
   .ql-editor li.ql-indent-3.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 3 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 3 + var(--_item-indent) * 4);
   }
 
   /* indent 4 */
-  .ql-editor .ql-indent-4:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 4);
-  }
-
   .ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 4 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-4.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 4);
+    padding-left: calc(var(--_list-indent) * 4 + var(--_item-indent) * 5);
   }
 
   .ql-editor li.ql-indent-4.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 4 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 4 + var(--_item-indent) * 5);
   }
 
   /* indent 5 */
-  .ql-editor .ql-indent-5:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 5);
-  }
-
   .ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 5 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-5.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 5);
+    padding-left: calc(var(--_list-indent) * 5 + var(--_item-indent) * 6);
   }
 
   .ql-editor li.ql-indent-5.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 5 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 5 + var(--_item-indent) * 6);
   }
 
   /* indent 6 */
-  .ql-editor .ql-indent-6:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 6);
-  }
-
   .ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 6 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-6.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 6);
+    padding-left: calc(var(--_list-indent) * 6 + var(--_item-indent) * 7);
   }
 
   .ql-editor li.ql-indent-6.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 6 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 6 + var(--_item-indent) * 7);
   }
 
   /* indent 7 */
-  .ql-editor .ql-indent-7:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 7);
-  }
-
   .ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 7 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-7.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 7);
+    padding-left: calc(var(--_list-indent) * 7 + var(--_item-indent) * 8);
   }
 
   .ql-editor li.ql-indent-7.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 7 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 7 + var(--_item-indent) * 8);
   }
 
   /* indent 8 */
-  .ql-editor .ql-indent-8:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 8);
-  }
-
   .ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 8 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-8.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 8);
+    padding-left: calc(var(--_list-indent) * 8 + var(--_item-indent) * 9);
   }
 
   .ql-editor li.ql-indent-8.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 8 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 8 + var(--_item-indent) * 9);
   }
 
-  /* indent 8 */
-  .ql-editor .ql-indent-9:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 9);
-  }
-
+  /* indent 9 */
   .ql-editor li.ql-indent-9:not(.ql-direction-rtl) {
-    padding-left: calc(var(--_list-indent) * 9 + var(--_item-indent));
-  }
-
-  .ql-editor .ql-indent-9.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 9);
+    padding-left: calc(var(--_list-indent) * 9 + var(--_item-indent) * 10);
   }
 
   .ql-editor li.ql-indent-9.ql-direction-rtl.ql-align-right {
-    padding-right: calc(var(--_list-indent) * 9 + var(--_item-indent));
+    padding-right: calc(var(--_list-indent) * 9 + var(--_item-indent) * 10);
   }
 
   .ql-editor li.ql-direction-rtl {
@@ -757,8 +686,8 @@
   }
 
   .ql-editor li.ql-direction-rtl > .ql-ui::before {
-    margin-left: 0.3em;
-    margin-right: -1.5em;
+    margin-left: var(--_marker-indent);
+    margin-right: calc(var(--_item-indent) * -1);
     text-align: left;
   }
 
