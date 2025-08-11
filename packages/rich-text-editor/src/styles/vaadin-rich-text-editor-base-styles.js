@@ -281,15 +281,6 @@ export const content = css`
     counter-set: list-9;
   }
 
-  /* 9 */
-  .ql-editor li[data-list='ordered'].ql-indent-9 {
-    counter-increment: list-9;
-  }
-
-  .ql-editor li[data-list='ordered'].ql-indent-9 > .ql-ui::before {
-    content: counter(list-9, decimal) '. ';
-  }
-
   /* indent 1 */
   .ql-editor li.ql-indent-1 {
     padding-inline-start: calc(var(--_list-indent) + var(--_item-indent) * 2);
@@ -328,11 +319,6 @@ export const content = css`
   /* indent 8 */
   .ql-editor li.ql-indent-8 {
     padding-inline-start: calc(var(--_list-indent) * 8 + var(--_item-indent) * 9);
-  }
-
-  /* indent 9 */
-  .ql-editor li.ql-indent-9 {
-    padding-inline-start: calc(var(--_list-indent) * 9 + var(--_item-indent) * 10);
   }
   /* quill core end */
 
