@@ -88,7 +88,14 @@ export const transitionStyles = css`
     ::view-transition-new(vaadin-mdl-master),
     ::view-transition-old(vaadin-mdl-master) {
       object-fit: none;
-      object-position: max(0%, var(--_vaadin-mdl-dir-multiplier) * -100%) 0;
+      object-position: 0% 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    :dir(rtl)::view-transition-new(vaadin-mdl-master),
+    :dir(rtl)::view-transition-old(vaadin-mdl-master) {
+      object-position: 100% 0;
     }
 
     ::view-transition-new(vaadin-mdl-master.stack-remove),
