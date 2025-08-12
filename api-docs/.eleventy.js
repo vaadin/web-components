@@ -35,7 +35,7 @@ export default function (config) {
 
   config.addPassthroughCopy('css');
   config.addPassthroughCopy('js');
-  config.addPassthroughCopy({ 'img/favicon.ico': '/' });
+  config.addPassthroughCopy({ img: '/' });
 
   // Copy markdown files for "view as MD"
   config.addPassthroughCopy({ 'content/elements': 'markdown' });
