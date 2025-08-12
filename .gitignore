@@ -40,7 +40,7 @@ scripts/check-releases.html
 tsconfig.build.tsbuildinfo
 
 # API docs output
-public
+api-docs/public
 
 # Generated markdown files
 api-docs/content/elements
