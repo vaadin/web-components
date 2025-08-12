@@ -15,6 +15,8 @@ function sanitizeDescription(description: string) {
   description = description.replace(/#\/elements\//gu, '/elements/');
   // Fix links to properties (e.g. #property-dataProvider to #dataprovider)
   description = description.replace(/#property-([a-zA-Z]+)/gu, (_, name) => `#${name.toLowerCase()}`);
+  // Fix links to methods (e.g. #method-updateConfiguration to #updateconfiguration)
+  description = description.replace(/#method-([a-zA-Z]+)/gu, (_, name) => `#${name.toLowerCase()}`);
 
   return description;
 }
