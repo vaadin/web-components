@@ -21,8 +21,8 @@ html {
 
   --aura-surface-background: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.07));
 
-  --aura-accent-color-1: light-dark(#ffeeb7, #504a34);
-  --aura-accent-color-2: light-dark(#c2f3fe, #243337);
+  --aura-accent-color-1: light-dark(#e5e8ea, #242526);
+  --aura-accent-color-2: light-dark(#f1f6f8, #181819);
 
   accent-color: var(--aura-accent-color-1);
 
