@@ -8,6 +8,7 @@
 @import './src/components/badge.css';
 @import './src/components/card.css';
 @import './src/components/form-layout.css';
+@import './src/components/grid.css';
 @import './src/components/notification.css';
 @import './src/components/side-nav.css';
 
@@ -50,13 +51,18 @@ vaadin-app-layout > vaadin-master-detail-layout {
   overflow: visible;
 }
 
+/* TODO move to base styles */
+vaadin-app-layout > vaadin-master-detail-layout::part(backdrop) {
+  border-radius: inherit;
+}
+
 vaadin-app-layout > vaadin-master-detail-layout::before {
   content: '';
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   inset: 0;
   border-radius: inherit;
-  border: min(1px, var(--app-layout-inset)) solid var(--aura-border-color-subtle);
+  border: var(--mdl-border, 1px) solid var(--aura-border-color-subtle);
   pointer-events: none;
 }
 
@@ -73,6 +79,7 @@ vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
 vaadin-master-detail-layout > vaadin-master-detail-layout,
 vaadin-master-detail-layout:not([drawer])::part(detail) {
   background: var(--aura-surface-background);
+  background-clip: padding-box;
   border-start-end-radius: var(--app-layout-radius);
   border-end-end-radius: var(--app-layout-radius);
 }
