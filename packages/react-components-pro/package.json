@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/react-components-pro",
-  "version": "25.0.0-alpha13",
+  "version": "25.0.0-alpha14",
   "publishConfig": {
     "access": "public"
   },
@@ -26,15 +26,15 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.7",
-    "@vaadin/board": "25.0.0-alpha13",
-    "@vaadin/charts": "25.0.0-alpha13",
-    "@vaadin/cookie-consent": "25.0.0-alpha13",
-    "@vaadin/crud": "25.0.0-alpha13",
-    "@vaadin/dashboard": "25.0.0-alpha13",
-    "@vaadin/grid-pro": "25.0.0-alpha13",
-    "@vaadin/map": "25.0.0-alpha13",
-    "@vaadin/react-components": "25.0.0-alpha13",
-    "@vaadin/rich-text-editor": "25.0.0-alpha13"
+    "@vaadin/board": "25.0.0-alpha14",
+    "@vaadin/charts": "25.0.0-alpha14",
+    "@vaadin/cookie-consent": "25.0.0-alpha14",
+    "@vaadin/crud": "25.0.0-alpha14",
+    "@vaadin/dashboard": "25.0.0-alpha14",
+    "@vaadin/grid-pro": "25.0.0-alpha14",
+    "@vaadin/map": "25.0.0-alpha14",
+    "@vaadin/react-components": "25.0.0-alpha14",
+    "@vaadin/rich-text-editor": "25.0.0-alpha14"
   },
   "author": "Vaadin Ltd.",
   "license": "SEE LICENSE IN LICENSE",
