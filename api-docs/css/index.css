@@ -479,62 +479,6 @@ hr {
   color: var(--color-neutral-text);
 }
 
-/* Prev / next page */
-.page-nav {
-  justify-content: space-between;
-  gap: var(--space-7);
-  margin-block-start: var(--space-6);
-  display: flex;
-}
-
-.page-nav__link {
-  align-items: center;
-  column-gap: var(--space-3);
-  outline-offset: var(--space-2);
-  color: var(--color-neutral-text);
-  flex: 1 1 0;
-  text-decoration: none;
-  display: grid;
-}
-
-.page-nav__link[data-type='prev'] {
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas:
-    'icon labels'
-    'icon labels';
-}
-
-.page-nav__link[data-type='next'] {
-  text-align: end;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'labels icon'
-    'labels icon';
-}
-
-.page-nav__icon {
-  opacity: 0.8;
-  grid-area: icon;
-}
-
-.page-nav__type {
-  color: var(--color-neutral-text);
-  font-size: var(--font-size-sm);
-}
-
-.page-nav__label {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-primary-text);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-a:hover .page-nav__label {
-  text-underline-offset: 5px;
-  text-decoration: underline;
-}
-
 /* Navigation */
 .nav-list__link-with-toggle {
   grid-template-columns: minmax(0, 1fr);
