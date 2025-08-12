@@ -39,8 +39,6 @@ scripts/check-releases.html
 # TypeScript output
 tsconfig.build.tsbuildinfo
 
-# API docs output
-api-docs/public
-
-# Generated markdown files
+# API docs generated files
+api-docs/dist
 api-docs/content/elements
