@@ -87,8 +87,6 @@ export const dashboardWidgetAndSectionStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask-image: var(--icon);
-    /* TODO not sure why this is needed. Probably something wrong with the --_vaadin-icon-drag SVG */
-    mask-size: 100%;
   }
 
   #focus-button-wrapper,
