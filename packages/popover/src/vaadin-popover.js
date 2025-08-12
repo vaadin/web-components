@@ -468,7 +468,6 @@ class Popover extends PopoverPositionMixin(
 
     this.__overlayId = `vaadin-popover-${generateUniqueId()}`;
 
-    this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
@@ -540,17 +539,8 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    document.documentElement.addEventListener('click', this.__onGlobalClick, true);
-  }
-
-  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-
-    document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
 
     // Automatically close popover when it is removed from DOM
     // Avoid closing if the popover is just moved in the DOM
@@ -623,23 +613,6 @@ class Popover extends PopoverPositionMixin(
     }
   }
 
-  /**
-   * Overlay's global outside click listener doesn't work when
-   * the overlay is modeless, so we use a separate listener.
-   * @private
-   */
-  __onGlobalClick(event) {
-    if (
-      this.opened &&
-      !this.modal &&
-      !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
-      !this.noCloseOnOutsideClick &&
-      isLastOverlay(this._overlayElement)
-    ) {
-      this._openedStateController.close(true);
-    }
-  }
-
   /** @private */
   __onTargetClick() {
     if (this.__hasTrigger('click')) {
@@ -660,15 +633,9 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onGlobalKeyDown(event) {
-    // Modal popover uses overlay logic for Esc key and focus trap.
+    // Modal popover uses overlay logic focus trap.
     if (this.modal) {
       return;
-    }
-
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && isLastOverlay(this._overlayElement)) {
-      // Prevent closing parent overlay (e.g. dialog)
-      event.stopPropagation();
-      this._openedStateController.close(true);
     }
 
     // Include popover content in the Tab order after the target.
