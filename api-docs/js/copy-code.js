@@ -15,7 +15,7 @@
     `;
 
     button.addEventListener('click', () => {
-      navigator.clipboard.writeText(pre.textContent);
+      navigator.clipboard.writeText(pre.textContent.trim());
       button.classList.add('copied');
 
       setTimeout(() => {
