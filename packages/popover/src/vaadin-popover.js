@@ -670,15 +670,9 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onGlobalKeyDown(event) {
-    // Modal popover uses overlay logic for Esc key and focus trap.
+    // Modal popover uses overlay logic focus trap.
     if (this.modal) {
       return;
-    }
-
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && isLastOverlay(this._overlayElement)) {
-      // Prevent closing parent overlay (e.g. dialog)
-      event.stopPropagation();
-      this._openedStateController.close(true);
     }
 
     // Include popover content in the Tab order after the target.

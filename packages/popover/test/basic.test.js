@@ -385,6 +385,25 @@ describe('popover', () => {
         await nextRender();
         expect(overlay.opened).to.be.true;
       });
+
+      it('should not close on global Escape press if overlay close event was prevented', async () => {
+        document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close on global Escape press if overlay close event was prevented when modal', async () => {
+        popover.modal = true;
+        await nextUpdate(popover);
+
+        document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
     });
 
     describe('nested popovers', () => {
