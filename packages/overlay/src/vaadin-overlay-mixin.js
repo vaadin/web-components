@@ -250,11 +250,11 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _addGlobalListeners() {
-      if (this.__useGlobalListeners) {
+      if (this.__hasGlobalListeners) {
         return;
       }
 
-      this.__useGlobalListeners = true;
+      this.__hasGlobalListeners = true;
 
       document.addEventListener('mousedown', this._boundMouseDownListener);
       document.addEventListener('mouseup', this._boundMouseUpListener);
@@ -265,11 +265,11 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _removeGlobalListeners() {
-      if (!this.__useGlobalListeners) {
+      if (!this.__hasGlobalListeners) {
         return;
       }
 
-      this.__useGlobalListeners = false;
+      this.__hasGlobalListeners = false;
 
       document.removeEventListener('mousedown', this._boundMouseDownListener);
       document.removeEventListener('mouseup', this._boundMouseUpListener);
