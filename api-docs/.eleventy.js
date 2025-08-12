@@ -1,3 +1,4 @@
+import { HtmlBasePlugin } from '@11ty/eleventy';
 import syntaxHighlightPlugin from '@11ty/eleventy-plugin-syntaxhighlight';
 import markdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
@@ -27,6 +28,7 @@ export default function (config) {
     }),
   );
 
+  config.addPlugin(HtmlBasePlugin);
   config.addPlugin(syntaxHighlightPlugin, {
     preAttributes: {
       class: ({ language }) => `code-block language-${language}`,
