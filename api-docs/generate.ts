@@ -2,8 +2,12 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { TypeContext } from './types.ts';
 
+function sortByName(items: any[]) {
+  return items.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function filterPublicApi(items: any[]) {
-  return items.filter((item) => item.privacy === 'public');
+  return sortByName(items.filter((item) => item.privacy === 'public'));
 }
 
 function sanitizeDescription(description: string) {
@@ -89,7 +93,7 @@ function renderElement(element: any) {
     mdContent += `## Events\n\n`;
 
     // Custom events
-    element.events.forEach((event: any) => {
+    sortByName(element.events).forEach((event: any) => {
       const eventType = typeContext.findEventType(event.name);
       const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name.toLowerCase()})` : '`CustomEvent`';
       mdContent += `### ${event.name}\n\n`;
@@ -102,7 +106,7 @@ function renderElement(element: any) {
   const relatedTypes = typeContext.getRelatedTypes();
   if (relatedTypes.length > 0) {
     mdContent += `## Types\n\n`;
-    relatedTypes.forEach((type) => {
+    sortByName(relatedTypes).forEach((type) => {
       mdContent += `### ${type.name}\n\n`;
       mdContent += '```ts\n';
       mdContent += `${type.declarationText.trim()}\n`;
