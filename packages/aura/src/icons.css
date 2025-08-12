@@ -23,6 +23,10 @@ vaadin-icon[icon^='lucide:'] {
   mask-image: var(--lucide-icon-arrow-back);
 }
 
+[icon='lucide:arrow-back']:dir(rtl) {
+  scale: -1 1;
+}
+
 [icon='lucide:calendar'] {
   mask-image: var(--lucide-icon-calendar);
 }
