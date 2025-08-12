@@ -13,6 +13,7 @@ export interface GridEventContext<TItem> {
   index?: number;
   selected?: boolean;
   detailsOpened?: boolean;
+  hasChildren?: boolean;
   expanded?: boolean;
   level?: number;
 }
@@ -34,6 +35,7 @@ export declare class EventContextMixinClass<TItem> {
    * - `detailsOpened`: whether the row details are open for the item
    * - `expanded`: the expanded state of the tree toggle
    * - `level`: the tree hierarchy level
+   * - `hasChildren`: whether the item has children
    *
    * The returned object is populated only when a grid cell, header, footer or row details is found in `event.composedPath()`.
    * This means mostly mouse and keyboard events. If such a grid part is not found in the path, an empty object is returned.
