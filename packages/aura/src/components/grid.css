@@ -1,0 +1,9 @@
+vaadin-grid[theme~='no-border']::part(first-column-cell) {
+  /* TODO can't use --vaadin-grid-cell-padding, it only works on the host */
+  /* quite difficult to override the cell padding when it’s on the slotted vaadin-grid-cell-content element */
+  --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s) var(--vaadin-padding-xs) var(--vaadin-padding-l);
+}
+
+vaadin-grid[theme~='no-border']::part(last-column-cell) {
+  --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs) var(--vaadin-padding-s);
+}
