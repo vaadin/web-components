@@ -228,6 +228,12 @@ const bodyRenderer: GridBodyRenderer<TestGridItem> = (root, column, model) => {
   assertType<HTMLElement>(root);
   assertType<GridColumn>(column);
   assertType<TestGridItem>(model.item);
+  assertType<number>(model.index);
+  assertType<number | undefined>(model.level);
+  assertType<boolean | undefined>(model.hasChildren);
+  assertType<boolean | undefined>(model.expanded);
+  assertType<boolean | undefined>(model.selected);
+  assertType<boolean | undefined>(model.detailsOpened);
 };
 genericColumn.renderer = bodyRenderer;
 

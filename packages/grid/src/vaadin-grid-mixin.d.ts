@@ -62,6 +62,7 @@ export interface GridItemModel<TItem> {
   expanded?: boolean;
   level?: number;
   detailsOpened?: boolean;
+  hasChildren?: boolean;
 }
 
 /**
