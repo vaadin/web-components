@@ -76,7 +76,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         id="overlay"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
-        .opened="${this._isConnected && (this.manual ? this.opened : this._autoOpened)}"
+        .opened="${this._isConnected && this.opened}"
         .positionTarget="${this.target}"
         .position="${effectivePosition}"
         ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(effectivePosition)}"

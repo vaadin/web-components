@@ -68,8 +68,9 @@ export declare class TooltipMixinClass {
   manual: boolean;
 
   /**
-   * When true, the tooltip is opened programmatically.
-   * Only works if `manual` is set to `true`.
+   * When true, the tooltip is opened.
+   * In manual mode, this can be set programmatically.
+   * In automatic mode, this is set automatically by internal logic.
    */
   opened: boolean;
 
