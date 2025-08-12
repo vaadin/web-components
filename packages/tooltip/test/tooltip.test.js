@@ -282,13 +282,14 @@ describe('vaadin-tooltip', () => {
 
       it('should still target correct element after sorting the items differently', async () => {
         const container = fixtureSync('<div></div>');
+
         function renderTooltips(items) {
           render(
             html`
               ${items.map(
                 (item) => html`
                   <vaadin-tooltip for="${item}"></vaadin-tooltip>
-                  <div id=${item}></div>
+                  <div id="${item}"></div>
                 `,
               )}
             `,
@@ -581,6 +582,18 @@ describe('vaadin-tooltip', () => {
 
       expect(overlay.opened).to.be.false;
     });
+
+    it('should reflect opened attribute', async () => {
+      mouseenter(target);
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.true;
+      expect(overlay.opened).to.be.true;
+
+      mouseleave(target);
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.false;
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('inside a scrollable container', () => {
@@ -864,6 +877,16 @@ describe('vaadin-tooltip', () => {
       await nextRender();
 
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should reflect opened attribute', async () => {
+      tooltip.opened = true;
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.true;
+
+      tooltip.opened = false;
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.false;
     });
   });
 

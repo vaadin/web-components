@@ -45,11 +45,6 @@ class TooltipStateController {
   }
 
   /** @private */
-  get openedProp() {
-    return this.host.manual ? 'opened' : '_autoOpened';
-  }
-
-  /** @private */
   get focusDelay() {
     const tooltip = this.host;
     return tooltip.focusDelay != null && tooltip.focusDelay >= 0 ? tooltip.focusDelay : defaultFocusDelay;
@@ -114,12 +109,12 @@ class TooltipStateController {
 
   /** @private */
   _isOpened() {
-    return this.host[this.openedProp];
+    return this.host.opened;
   }
 
   /** @private */
   _setOpened(opened) {
-    this.host[this.openedProp] = opened;
+    this.host.opened = opened;
   }
 
   /** @private */
@@ -300,12 +295,15 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
-         * When true, the tooltip is opened programmatically.
-         * Only works if `manual` is set to `true`.
+         * When true, the tooltip is opened.
+         * In manual mode, this can be set programmatically.
+         * In automatic mode, this is set automatically by internal logic.
          */
         opened: {
           type: Boolean,
           value: false,
+          reflectToAttribute: true,
+          observer: '__openedChanged',
           sync: true,
         },
 
@@ -328,17 +326,6 @@ export const TooltipMixin = (superClass) =>
          */
         text: {
           type: String,
-        },
-
-        /**
-         * Set to true when the overlay is opened using auto-added
-         * event listeners: mouseenter and focusin (keyboard only).
-         * @protected
-         */
-        _autoOpened: {
-          type: Boolean,
-          observer: '__autoOpenedChanged',
-          sync: true,
         },
 
         /**
@@ -432,7 +419,7 @@ export const TooltipMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      if (this._autoOpened) {
+      if (this.opened && !this.manual) {
         this._stateController.close(true);
       }
       this._isConnected = false;
@@ -467,7 +454,7 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __autoOpenedChanged(opened, oldOpened) {
+    __openedChanged(opened, oldOpened) {
       if (opened) {
         document.addEventListener('keydown', this.__onKeyDown, true);
       } else if (oldOpened) {
@@ -530,7 +517,7 @@ export const TooltipMixin = (superClass) =>
 
       this.__focusInside = true;
 
-      if (!this.__isTargetHidden && (!this.__hoverInside || !this._autoOpened)) {
+      if (!this.__isTargetHidden && (!this.__hoverInside || !this.opened)) {
         this._stateController.open({ focus: true });
       }
     }
@@ -555,6 +542,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onKeyDown(event) {
+      if (this.manual) {
+        return;
+      }
+
       if (event.key === 'Escape') {
         event.stopPropagation();
         this._stateController.close(true);
@@ -587,7 +578,7 @@ export const TooltipMixin = (superClass) =>
 
       this.__hoverInside = true;
 
-      if (!this.__isTargetHidden && (!this.__focusInside || !this._autoOpened)) {
+      if (!this.__isTargetHidden && (!this.__focusInside || !this.opened)) {
         this._stateController.open({ hover: true });
       }
     }
@@ -647,6 +638,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onTargetVisibilityChange(isVisible) {
+      if (this.manual) {
+        return;
+      }
+
       const oldHidden = this.__isTargetHidden;
       this.__isTargetHidden = !isVisible;
 
@@ -657,7 +652,7 @@ export const TooltipMixin = (superClass) =>
       }
 
       // Close the overlay when the target is no longer fully visible.
-      if (!isVisible && this._autoOpened) {
+      if (!isVisible && this.opened) {
         this._stateController.close(true);
       }
     }
