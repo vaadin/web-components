@@ -461,7 +461,6 @@ class Popover extends PopoverPositionMixin(
 
     this.__generatedId = `vaadin-popover-${generateUniqueId()}`;
 
-    this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
@@ -574,15 +573,11 @@ class Popover extends PopoverPositionMixin(
     if (!this.id) {
       this.id = this.__generatedId;
     }
-
-    document.documentElement.addEventListener('click', this.__onGlobalClick, true);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-
-    document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
 
     // Automatically close popover when it is removed from DOM
     // Avoid closing if the popover is just moved in the DOM
@@ -652,23 +647,6 @@ class Popover extends PopoverPositionMixin(
       }
 
       this.__oldTarget = target;
-    }
-  }
-
-  /**
-   * Overlay's global outside click listener doesn't work when
-   * the overlay is modeless, so we use a separate listener.
-   * @private
-   */
-  __onGlobalClick(event) {
-    if (
-      this.opened &&
-      !this.modal &&
-      !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
-      !this.noCloseOnOutsideClick &&
-      isLastOverlay(this._overlayElement)
-    ) {
-      this._openedStateController.close(true);
     }
   }
 
