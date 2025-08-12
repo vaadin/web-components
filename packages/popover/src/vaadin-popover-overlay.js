@@ -75,6 +75,17 @@ class PopoverOverlay extends PopoverOverlayMixin(
   get _modalRoot() {
     return this.owner;
   }
+
+  /**
+   * Override method from `OverlayMixin` to always add outside
+   * click listener so that it can be used by modeless popover.
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldAddGlobalListeners() {
+    return true;
+  }
 }
 
 defineCustomElement(PopoverOverlay);
