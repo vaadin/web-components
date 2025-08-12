@@ -551,6 +551,14 @@ export const ChartMixin = (superClass) =>
          * @param {Object} chart Chart object where the event was sent from
          */
         selection: 'chart-selection',
+
+        /**
+         * Fired when the chart finishes resizing
+         * @event chart-end-resize
+         * @param {Object} detail.originalEvent object with details about the event sent
+         * @param {Object} chart Chart object where the event was sent from
+         */
+        endResize: 'chart-end-resize',
       };
     }
 
