@@ -6,7 +6,7 @@ import { parse } from 'node-html-parser';
 export default function (config) {
   // See https://www.11ty.dev/docs/config/
   config.setInputDirectory('content');
-  config.setOutputDirectory('../public');
+  config.setOutputDirectory('public');
   config.setDataDirectory('../_data');
   config.setIncludesDirectory('../_includes');
 
