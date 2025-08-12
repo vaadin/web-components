@@ -165,7 +165,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @protected */
-    _initControllers() {
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.setAttribute('role', 'dialog');
+
       this.addController(
         new MediaQueryController(this._desktopMediaQuery, (matches) => {
           this._desktopMode = matches;

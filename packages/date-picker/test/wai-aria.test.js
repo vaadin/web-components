@@ -29,6 +29,24 @@ describe('WAI-ARIA', () => {
         expect(calendar.getAttribute('aria-hidden')).to.equal(focusable ? null : 'true');
       });
     });
+
+    it('should not set aria-modal attribute on the overlay content on open by default', async () => {
+      await open(datePicker);
+      const content = datePicker._overlayContent;
+
+      expect(content.hasAttribute('aria-modal')).to.be.false;
+    });
+
+    it('should toggle aria-modal attribute on the overlay content on open if fullscreen', async () => {
+      datePicker._fullscreen = true;
+
+      await open(datePicker);
+      const content = datePicker._overlayContent;
+      expect(content.getAttribute('aria-modal')).to.equal('true');
+
+      datePicker.close();
+      expect(content.hasAttribute('aria-modal')).to.be.false;
+    });
   });
 
   describe('overlay contents', () => {
@@ -82,41 +100,6 @@ describe('WAI-ARIA', () => {
       await nextFrame();
       const todayElement = monthCalendar.shadowRoot.querySelector('[part~="today"]');
       expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/u);
-    });
-  });
-
-  describe('aria-hidden', () => {
-    let wrapper, datePicker, input, button;
-
-    beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div>
-          <button>Button</button>
-          <vaadin-date-picker></vaadin-date-picker>
-          <input placeholder="input" />
-        </div>
-      `);
-      await nextRender();
-      [button, datePicker, input] = wrapper.children;
-    });
-
-    it('should set aria-hidden on other elements when overlay is opened', async () => {
-      await open(datePicker);
-      expect(button.getAttribute('aria-hidden')).to.equal('true');
-      expect(input.getAttribute('aria-hidden')).to.equal('true');
-    });
-
-    it('should not set aria-hidden on slotted input and overlay element', async () => {
-      await open(datePicker);
-      expect(datePicker.inputElement.hasAttribute('aria-hidden')).to.be.false;
-      expect(datePicker.$.overlay.hasAttribute('aria-hidden')).to.be.false;
-    });
-
-    it('should remove aria-hidden from other elements when overlay is closed', async () => {
-      await open(datePicker);
-      datePicker.close();
-      expect(button.hasAttribute('aria-hidden')).to.be.false;
-      expect(input.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 });

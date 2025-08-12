@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
@@ -461,6 +460,15 @@ export const DatePickerMixin = (subclass) =>
         // Currently only supported for locales that start the week on Monday.
         this.toggleAttribute('week-numbers', this.showWeekNumbers && this.__effectiveI18n.firstDayOfWeek === 1);
       }
+
+      if ((props.has('opened') || props.has('_noInput')) && this._overlayContent) {
+        if (this.opened && this._noInput) {
+          // Mark as modal on mobile if the input can not be accessed
+          this._overlayContent.setAttribute('aria-modal', 'true');
+        } else {
+          this._overlayContent.removeAttribute('aria-modal');
+        }
+      }
     }
 
     /** @protected */
@@ -910,9 +918,6 @@ export const DatePickerMixin = (subclass) =>
         input.blur();
         this._overlayContent.focusDateElement();
       }
-
-      const focusables = this._noInput ? content : [input, content];
-      this.__showOthers = hideOthers(focusables);
     }
 
     /** @private */
@@ -959,11 +964,6 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
-      // Reset `aria-hidden` state.
-      if (this.__showOthers) {
-        this.__showOthers();
-        this.__showOthers = null;
-      }
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
       if (this._closedByEscape) {

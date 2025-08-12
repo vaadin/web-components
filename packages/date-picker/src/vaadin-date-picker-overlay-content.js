@@ -53,15 +53,6 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
       </div>
     `;
   }
-
-  /** @protected */
-  firstUpdated() {
-    super.firstUpdated();
-
-    this.setAttribute('role', 'dialog');
-
-    this._initControllers();
-  }
 }
 
 defineCustomElement(DatePickerOverlayContent);
