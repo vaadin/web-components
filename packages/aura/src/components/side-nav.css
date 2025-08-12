@@ -1,5 +1,24 @@
 html {
-  --vaadin-side-nav-item-font-weight: 600;
+  --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
+  --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
+  --vaadin-side-nav-item-border-width: 1px;
+  /* TODO add var(--vaadin-gap-xs) */
+  --vaadin-side-nav-items-gap: 6px;
+  --side-nav-padding: var(--vaadin-padding-m);
+}
+
+vaadin-side-nav {
+  padding: var(--side-nav-padding);
+  padding-top: 0;
+}
+
+vaadin-side-nav-item[current] {
+  --vaadin-side-nav-item-background: var(--aura-accent-gradient);
+  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
+}
+
+vaadin-side-nav-item::part(content) {
+  background-clip: padding-box;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -22,11 +41,6 @@ html {
   vaadin-side-nav-item[expanded]::part(children) {
     height: auto;
   }
-}
-
-vaadin-side-nav-item[current]::part(content) {
-  --vaadin-side-nav-item-background: var(--aura-accent-gradient);
-  border: 1px solid var(--vaadin-border-color);
 }
 
 /* TODO bug in component/base styles: hide label part if no label is provided */

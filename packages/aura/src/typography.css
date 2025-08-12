@@ -1,7 +1,12 @@
 @import './font/InstrumentSans.css';
+@import './font/Inter.css';
 
 html {
-  --aura-font-family: 'Instrument Sans';
+  --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
+  --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
+  --aura-font-family-inter: 'Inter', var(--aura-font-family-system);
+
+  --aura-font-family: var(--aura-font-family-instrument-sans);
 
   --aura-font-size-xs: calc(11 / 16 * 1rem);
   --aura-font-size-s: calc(12 / 16 * 1rem);
@@ -9,17 +14,18 @@ html {
   --aura-font-size-l: calc(16 / 16 * 1rem);
   --aura-font-size-xl: calc(18 / 16 * 1rem);
 
+  --aura-line-height-xs: calc(16 / 16 * 1rem);
   --aura-line-height-s: calc(18 / 16 * 1rem);
   --aura-line-height-m: calc(20 / 16 * 1rem);
   --aura-line-height-l: calc(22 / 16 * 1rem);
 
   --aura-font-weight: 400;
-  --aura-font-weight-emphasis: 500;
-  --aura-font-weight-strong: 600;
+  --aura-font-weight-emphasis: 560;
+  --aura-font-weight-strong: 640;
 }
 
 body {
-  font-family: 'Instrument Sans';
+  font-family: var(--aura-font-family);
   font-optical-sizing: auto;
   font-style: normal;
   font-size: var(--aura-font-size-m);

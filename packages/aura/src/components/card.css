@@ -1,7 +1,7 @@
 vaadin-card[theme~='no-frame'] {
   --vaadin-card-padding: 0px;
   --vaadin-card-background: transparent;
-  --vaadin-card-title-font-weight: 600;
+  --vaadin-card-title-font-weight: var(--aura-font-weight-emphasis);
 }
 
 /* TODO could be a built-in variant */
