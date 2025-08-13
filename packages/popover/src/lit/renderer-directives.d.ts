@@ -51,6 +51,7 @@ export class PopoverRendererDirective extends LitRendererDirective<Popover, Popo
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add content elements as children of the popover using default slot
  */
 export declare function popoverRenderer(
   renderer: PopoverLitRenderer,
