@@ -6,6 +6,7 @@ snapshots["vaadin-rich-text-editor host"] =
   <vaadin-confirm-dialog
     aria-description=""
     aria-label="Link address"
+    aria-modal="true"
     cancel-button-visible=""
     reject-theme="error"
     role="alertdialog"
