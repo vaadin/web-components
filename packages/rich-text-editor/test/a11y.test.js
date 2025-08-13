@@ -84,7 +84,7 @@ describe('accessibility', () => {
     });
   });
 
-  describe('keyboard navigation', () => {
+  describe('toolbar navigation', () => {
     beforeEach(async () => {
       rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
       await nextRender();
@@ -162,172 +162,203 @@ describe('accessibility', () => {
       const result = buttons[0].dispatchEvent(e);
       expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
     });
+  });
 
-    it('should change indentation and prevent shift-tab keydown in the code block', () => {
+  describe('lists', () => {
+    const getListItems = () => rte.shadowRoot.querySelectorAll('.ql-editor li');
+
+    const getListItemsWithIndent = (indentLevel) =>
+      rte.shadowRoot.querySelectorAll(`.ql-editor li.ql-indent-${indentLevel}`);
+
+    beforeEach(async () => {
+      rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+      await nextRender();
+      editor = rte._editor;
+      content = rte.shadowRoot.querySelector('[contenteditable]');
+    });
+
+    it('should create new list item on enter', async () => {
+      editor.focus();
+      await sendKeys({ type: 'Item 1' });
+      editor.format('list', 'bullet');
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ type: 'Item 2' });
+      flushValueDebouncer();
+
+      expect(getListItems()).to.have.length(2);
+      expect(rte.htmlValue).to.include('Item 1');
+      expect(rte.htmlValue).to.include('Item 2');
+      expect(rte.htmlValue).to.equal('<ul><li>Item 1</li><li>Item 2</li></ul>');
+    });
+
+    it('should exit list on double enter', async () => {
+      editor.focus();
+      await sendKeys({ type: 'Item 1' });
+      editor.format('list', 'bullet');
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ type: 'Some input' });
+      flushValueDebouncer();
+
+      expect(getListItems()).to.have.length(1);
+      expect(rte.htmlValue).to.equal('<ul><li>Item 1</li></ul><p>Some input</p>');
+    });
+
+    it('should increase list indentation with Tab', async () => {
+      editor.focus();
+      await sendKeys({ type: 'Item 1' });
+      editor.format('list', 'bullet');
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ type: 'Item 2' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ type: 'Item 3' });
+      flushValueDebouncer();
+
+      for (let indentLevel = 1; indentLevel < 3; indentLevel++) {
+        const indentedItems = getListItemsWithIndent(indentLevel);
+        expect(indentedItems).to.have.length(1);
+        expect(indentedItems[0].textContent.trim()).to.equal(`Item ${indentLevel + 1}`);
+        expect(indentedItems[0].classList.contains(`ql-indent-${indentLevel}`)).to.be.true;
+      }
+      expect(rte.htmlValue).to.equal('<ul><li>Item 1<ul><li>Item 2<ul><li>Item 3</li></ul></li></ul></li></ul>');
+    });
+
+    it('should decrease list indentation with Shift + Tab', async () => {
+      editor.focus();
+      await sendKeys({ type: 'Item 1' });
+      editor.format('list', 'bullet');
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ type: 'Item 2' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ type: 'Item 3' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Shift+Tab' });
+      await sendKeys({ type: 'Item 4' });
+      flushValueDebouncer();
+
+      const indentedItems = getListItemsWithIndent(1);
+      expect(indentedItems).to.have.length(2);
+      expect(indentedItems[0].textContent.trim()).to.equal('Item 2');
+      expect(indentedItems[0].classList.contains('ql-indent-1')).to.be.true;
+      expect(indentedItems[1].textContent.trim()).to.equal('Item 4');
+      expect(indentedItems[1].classList.contains('ql-indent-1')).to.be.true;
+      expect(rte.htmlValue).to.equal(
+        '<ul><li>Item 1<ul><li>Item 2<ul><li>Item 3</li></ul></li><li>Item 4</li></ul></li></ul>',
+      );
+    });
+
+    it('should focus the toolbar on Shift + Tab at the end of the list item', async () => {
+      const button = rte.shadowRoot.querySelector('[part=toolbar] button');
+      const spy = sinon.stub(button, 'focus');
+      rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
+      editor.focus();
+      editor.setSelection(3, 0);
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(spy).to.be.calledOnce;
+    });
+  });
+
+  describe('indent', () => {
+    beforeEach(async () => {
+      rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+      await nextRender();
+      editor = rte._editor;
+      buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
+      content = rte.shadowRoot.querySelector('[contenteditable]');
+    });
+
+    it('should represent indentation correctly', () => {
+      rte.value = JSON.stringify([
+        { insert: 'Indent 1\n', attributes: { indent: 1 } },
+        { insert: 'Indent 2\n', attributes: { indent: 2 } },
+      ]);
+      expect(content.innerHTML).to.equal('<p class="ql-indent-1">Indent 1</p><p class="ql-indent-2">Indent 2</p>');
+    });
+
+    it('should convert ql-indent-* classes to tabs in htmlValue', () => {
+      rte.value = JSON.stringify([
+        { insert: 'Indent 1\n', attributes: { indent: 1 } },
+        { insert: 'Indent 2\n', attributes: { indent: 2 } },
+      ]);
+      expect(rte.htmlValue).to.equal('<p>\tIndent 1</p><p>\t\tIndent 2</p>');
+    });
+
+    it('should handle empty indented elements', () => {
+      rte.value = JSON.stringify([
+        { insert: 'Before\n' },
+        { insert: '\n', attributes: { indent: 1 } },
+        { insert: '\n', attributes: { indent: 2 } },
+        { insert: 'After\n' },
+      ]);
+      expect(rte.htmlValue).to.equal('<p>Before</p><p>\t</p><p>\t\t</p><p>After</p>');
+    });
+
+    it('should handle indentation with alignment', () => {
+      rte.value = JSON.stringify([
+        { insert: 'Normal\n' },
+        { insert: 'Indented and aligned\n', attributes: { indent: 1, align: 'center' } },
+        { insert: 'More indented\n', attributes: { indent: 2 } },
+      ]);
+      expect(rte.htmlValue).to.equal(
+        '<p>Normal</p><p style="text-align: center">\tIndented and aligned</p><p>\t\tMore indented</p>',
+      );
+    });
+
+    it('should preserve existing tab characters in content', () => {
+      rte.dangerouslySetHtmlValue('<p>Already has\ttab</p><p class="ql-indent-1">Needs indent</p>');
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.include('Already has\ttab');
+      expect(rte.htmlValue).to.include('\tNeeds indent');
+      expect(rte.htmlValue).to.not.include('ql-indent');
+    });
+
+    it('should handle high indentation levels', () => {
+      rte.value = JSON.stringify([
+        { insert: 'Level 7\n', attributes: { indent: 7 } },
+        { insert: 'Level 8\n', attributes: { indent: 8 } },
+      ]);
+      expect(rte.htmlValue).to.include(`${'\t'.repeat(7)}Level 7`);
+      expect(rte.htmlValue).to.include(`${'\t'.repeat(8)}Level 8`);
+    });
+
+    it('should handle nested elements with indentation', () => {
+      rte.value = JSON.stringify([
+        { insert: 'Normal\n' },
+        { insert: 'Indented with ', attributes: { indent: 1 } },
+        { insert: 'nested', attributes: { bold: true, indent: 1 } },
+        { insert: ' content\n', attributes: { indent: 1 } },
+      ]);
+      expect(rte.htmlValue).to.equal('<p>Normal</p><p>\tIndented with <strong>nested</strong> content</p>');
+    });
+  });
+
+  describe('code block', () => {
+    beforeEach(async () => {
+      rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+      await nextRender();
+      editor = rte._editor;
+      content = rte.shadowRoot.querySelector('[contenteditable]');
+    });
+
+    it('should change indentation on Tab in the code block', async () => {
+      rte.value = '[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
+      editor.focus();
+      await sendKeys({ press: 'Tab' });
+      flushValueDebouncer();
+      expect(rte.value).to.equal('[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
+    });
+
+    it('should change indentation on Shift + Tab in the code block', async () => {
       rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
       editor.focus();
       editor.setSelection(2, 0);
-      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
-      content.dispatchEvent(e);
+      await sendKeys({ press: 'Shift+Tab' });
       flushValueDebouncer();
       expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
-      expect(e.defaultPrevented).to.be.true;
-    });
-
-    describe('lists', () => {
-      const getListItems = () => rte.shadowRoot.querySelectorAll('.ql-editor li');
-
-      const getListItemsWithIndent = (indentLevel) =>
-        rte.shadowRoot.querySelectorAll(`.ql-editor li.ql-indent-${indentLevel}`);
-
-      it('should focus the toolbar on shift-tab at the end of the list', (done) => {
-        sinon.stub(buttons[0], 'focus').callsFake(() => {
-          expect(editor.getSelection()).to.deep.equal({ index: 3, length: 0 });
-          done();
-        });
-        rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
-        editor.focus();
-        editor.setSelection(3, 0);
-        const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
-        content.dispatchEvent(e);
-      });
-
-      it('should create new list item on enter', async () => {
-        editor.focus();
-        await sendKeys({ type: 'Item 1' });
-        editor.format('list', 'bullet');
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ type: 'Item 2' });
-        flushValueDebouncer();
-
-        expect(getListItems()).to.have.length(2);
-        expect(rte.htmlValue).to.include('Item 1');
-        expect(rte.htmlValue).to.include('Item 2');
-        expect(rte.htmlValue).to.equal('<ul><li>Item 1</li><li>Item 2</li></ul>');
-      });
-
-      it('should exit list on double enter', async () => {
-        editor.focus();
-        await sendKeys({ type: 'Item 1' });
-        editor.format('list', 'bullet');
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ type: 'Some input' });
-        flushValueDebouncer();
-
-        expect(getListItems()).to.have.length(1);
-        expect(rte.htmlValue).to.equal('<ul><li>Item 1</li></ul><p>Some input</p>');
-      });
-
-      it('should increase indentation with tab in list', async () => {
-        editor.focus();
-        await sendKeys({ type: 'Item 1' });
-        editor.format('list', 'bullet');
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ type: 'Item 2' });
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ type: 'Item 3' });
-        flushValueDebouncer();
-
-        for (let indentLevel = 1; indentLevel < 3; indentLevel++) {
-          const indentedItems = getListItemsWithIndent(indentLevel);
-          expect(indentedItems).to.have.length(1);
-          expect(indentedItems[0].textContent.trim()).to.equal(`Item ${indentLevel + 1}`);
-          expect(indentedItems[0].classList.contains(`ql-indent-${indentLevel}`)).to.be.true;
-        }
-        expect(rte.htmlValue).to.equal('<ul><li>Item 1<ul><li>Item 2<ul><li>Item 3</li></ul></li></ul></li></ul>');
-      });
-
-      it('should decrease indentation with shift+tab in list', async () => {
-        editor.focus();
-        await sendKeys({ type: 'Item 1' });
-        editor.format('list', 'bullet');
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ type: 'Item 2' });
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ type: 'Item 3' });
-        await sendKeys({ press: 'Enter' });
-        await sendKeys({ press: 'Shift+Tab' });
-        await sendKeys({ type: 'Item 4' });
-        flushValueDebouncer();
-
-        const indentedItems = getListItemsWithIndent(1);
-        expect(indentedItems).to.have.length(2);
-        expect(indentedItems[0].textContent.trim()).to.equal('Item 2');
-        expect(indentedItems[0].classList.contains('ql-indent-1')).to.be.true;
-        expect(indentedItems[1].textContent.trim()).to.equal('Item 4');
-        expect(indentedItems[1].classList.contains('ql-indent-1')).to.be.true;
-        expect(rte.htmlValue).to.equal(
-          '<ul><li>Item 1<ul><li>Item 2<ul><li>Item 3</li></ul></li><li>Item 4</li></ul></li></ul>',
-        );
-      });
-    });
-
-    describe('indent', () => {
-      it('should represent indentation correctly', () => {
-        rte.value =
-          '[{ "insert": "Indent 0\\n"}, { "insert": "Indent 1\\n", "attributes": { "indent": 1 } }, { "insert": "Indent 2\\n", "attributes": { "indent": 2 } }]';
-        for (let indentLevel = 1; indentLevel < 3; indentLevel++) {
-          const textWithIndent = rte.shadowRoot.querySelectorAll(`.ql-editor p.ql-indent-${indentLevel}`);
-          expect(textWithIndent).to.have.length(1);
-          expect(textWithIndent[0].textContent.trim()).to.equal(`Indent ${indentLevel}`);
-          expect(textWithIndent[0].classList.contains(`ql-indent-${indentLevel}`)).to.be.true;
-        }
-      });
-
-      it('should convert ql-indent-* classes to tabs in htmlValue', () => {
-        rte.value =
-          '[{ "insert": "Indent 0\\n"}, { "insert": "Indent 1\\n", "attributes": { "indent": 1 } }, { "insert": "Indent 2\\n", "attributes": { "indent": 2 } }]';
-        expect(rte.htmlValue).to.equal('<p>Indent 0</p><p>\tIndent 1</p><p>\t\tIndent 2</p>');
-      });
-
-      it('should handle empty indented elements', () => {
-        rte.value =
-          '[{ "insert": "Before\\n"}, { "insert": "\\n", "attributes": { "indent": 1 } }, { "insert": "\\n", "attributes": { "indent": 2 } }, { "insert": "After\\n" }]';
-        expect(rte.htmlValue).to.include('<p>Before</p>');
-        expect(rte.htmlValue).to.include('<p>\t</p>');
-        expect(rte.htmlValue).to.include('<p>\t\t</p>');
-        expect(rte.htmlValue).to.include('<p>After</p>');
-        expect(rte.htmlValue).to.not.include('ql-indent');
-      });
-
-      it('should handle indentation with alignment', () => {
-        rte.value =
-          '[{ "insert": "Normal\\n"}, { "insert": "Indented and aligned\\n", "attributes": { "indent": 1, "align": "center" } }, { "insert": "More indented\\n", "attributes": { "indent": 2 } }]';
-        expect(rte.htmlValue).to.include('<p>Normal</p>');
-        expect(rte.htmlValue).to.include('\tIndented and aligned');
-        expect(rte.htmlValue).to.include('style="text-align: center"');
-        expect(rte.htmlValue).to.include('\t\tMore indented');
-        expect(rte.htmlValue).to.not.include('ql-indent');
-      });
-
-      it('should preserve existing tab characters in content', () => {
-        rte.dangerouslySetHtmlValue('<p>Already has\ttab</p><p class="ql-indent-1">Needs indent</p>');
-        flushValueDebouncer();
-        expect(rte.htmlValue).to.include('Already has\ttab');
-        expect(rte.htmlValue).to.include('\tNeeds indent');
-        expect(rte.htmlValue).to.not.include('ql-indent');
-      });
-
-      it('should handle high indentation levels', () => {
-        rte.value =
-          '[{ "insert": "Level 7\\n", "attributes": { "indent": 7 } }, { "insert": "Level 8\\n", "attributes": { "indent": 8 } }]';
-        expect(rte.htmlValue).to.include(`${'\t'.repeat(7)}Level 7`);
-        expect(rte.htmlValue).to.include(`${'\t'.repeat(8)}Level 8`);
-      });
-
-      it('should handle nested elements with indentation', () => {
-        rte.value =
-          '[{ "insert": "Normal\\n"}, { "insert": "Indented with ", "attributes": { "indent": 1 } }, { "insert": "nested", "attributes": { "bold": true, "indent": 1 } }, { "insert": " content\\n", "attributes": { "indent": 1 } }]';
-        expect(rte.htmlValue).to.include('\tIndented with ');
-        expect(rte.htmlValue).to.include('<strong>nested</strong>');
-        expect(rte.htmlValue).to.include(' content');
-        expect(rte.htmlValue).to.not.include('ql-indent');
-      });
     });
   });
 
