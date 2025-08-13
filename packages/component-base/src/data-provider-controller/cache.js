@@ -48,7 +48,7 @@ export class Cache {
    * @type {Record<number, Cache>}
    * @private
    */
-  __subCacheByIndex = {};
+  #subCacheByIndex = {};
 
   /**
    * The number of items.
@@ -56,7 +56,7 @@ export class Cache {
    * @type {number}
    * @private
    */
-  __size = 0;
+  #size = 0;
 
   /**
    * The total number of items, including items from expanded sub-caches.
@@ -64,7 +64,7 @@ export class Cache {
    * @type {number}
    * @private
    */
-  __flatSize = 0;
+  #flatSize = 0;
 
   /**
    * @param {Cache['context']} context
@@ -79,7 +79,7 @@ export class Cache {
     this.size = size;
     this.parentCache = parentCache;
     this.parentCacheIndex = parentCacheIndex;
-    this.__flatSize = size || 0;
+    this.#flatSize = size || 0;
   }
 
   /**
@@ -98,7 +98,7 @@ export class Cache {
    * @return {Cache[]}
    */
   get subCaches() {
-    return Object.values(this.__subCacheByIndex);
+    return Object.values(this.#subCacheByIndex);
   }
 
   /**
@@ -120,7 +120,7 @@ export class Cache {
    * @return {number}
    */
   get flatSize() {
-    return this.__flatSize;
+    return this.#flatSize;
   }
 
   /**
@@ -129,7 +129,7 @@ export class Cache {
    * @return {number}
    */
   get size() {
-    return this.__size;
+    return this.#size;
   }
 
   /**
@@ -138,12 +138,12 @@ export class Cache {
    * @param {number} size
    */
   set size(size) {
-    const oldSize = this.__size;
+    const oldSize = this.#size;
     if (oldSize === size) {
       return;
     }
 
-    this.__size = size;
+    this.#size = size;
 
     if (this.context.placeholder !== undefined) {
       this.items.length = size || 0;
@@ -164,7 +164,7 @@ export class Cache {
    * Recalculates the flattened size for the cache and its descendant caches recursively.
    */
   recalculateFlatSize() {
-    this.__flatSize =
+    this.#flatSize =
       !this.parentItem || this.context.isExpanded(this.parentItem)
         ? this.size +
           this.subCaches.reduce((total, subCache) => {
@@ -199,7 +199,7 @@ export class Cache {
    * @return {Cache | undefined}
    */
   getSubCache(index) {
-    return this.__subCacheByIndex[index];
+    return this.#subCacheByIndex[index];
   }
 
   /**
@@ -209,14 +209,14 @@ export class Cache {
    * @param {number} index
    */
   removeSubCache(index) {
-    delete this.__subCacheByIndex[index];
+    delete this.#subCacheByIndex[index];
   }
 
   /**
    * Removes all sub-caches.
    */
   removeSubCaches() {
-    this.__subCacheByIndex = {};
+    this.#subCacheByIndex = {};
   }
 
   /**
@@ -228,7 +228,7 @@ export class Cache {
    */
   createSubCache(index) {
     const subCache = new Cache(this.context, this.pageSize, 0, this, index);
-    this.__subCacheByIndex[index] = subCache;
+    this.#subCacheByIndex[index] = subCache;
     return subCache;
   }
 
