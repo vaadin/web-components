@@ -163,19 +163,6 @@ describe('accessibility', () => {
       expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
     });
 
-    // TODO: add tests for changing indentation in lists
-    it('should focus the toolbar on shift-tab at the end of the list', (done) => {
-      sinon.stub(buttons[0], 'focus').callsFake(() => {
-        expect(editor.getSelection()).to.deep.equal({ index: 3, length: 0 });
-        done();
-      });
-      rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
-      editor.focus();
-      editor.setSelection(3, 0);
-      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
-      content.dispatchEvent(e);
-    });
-
     it('should change indentation and prevent shift-tab keydown in the code block', () => {
       rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
       editor.focus();
@@ -185,6 +172,99 @@ describe('accessibility', () => {
       flushValueDebouncer();
       expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
       expect(e.defaultPrevented).to.be.true;
+    });
+
+    describe('lists', () => {
+      const getListItems = () => rte.shadowRoot.querySelectorAll('.ql-editor li');
+
+      const getListItemsWithIndent = (indentLevel) =>
+        rte.shadowRoot.querySelectorAll(`.ql-editor li.ql-indent-${indentLevel}`);
+
+      it('should focus the toolbar on shift-tab at the end of the list', (done) => {
+        sinon.stub(buttons[0], 'focus').callsFake(() => {
+          expect(editor.getSelection()).to.deep.equal({ index: 3, length: 0 });
+          done();
+        });
+        rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
+        editor.focus();
+        editor.setSelection(3, 0);
+        const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
+        content.dispatchEvent(e);
+      });
+
+      it('should create new list item on enter', async () => {
+        editor.focus();
+        await sendKeys({ type: 'Item 1' });
+        editor.format('list', 'bullet');
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ type: 'Item 2' });
+        flushValueDebouncer();
+
+        expect(getListItems()).to.have.length(2);
+        expect(rte.htmlValue).to.include('Item 1');
+        expect(rte.htmlValue).to.include('Item 2');
+        expect(rte.htmlValue).to.equal('<ul><li>Item 1</li><li>Item 2</li></ul>');
+      });
+
+      it('should exit list on double enter', async () => {
+        editor.focus();
+        await sendKeys({ type: 'Item 1' });
+        editor.format('list', 'bullet');
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ type: 'Some input' });
+        flushValueDebouncer();
+
+        expect(getListItems()).to.have.length(1);
+        expect(rte.htmlValue).to.equal('<ul><li>Item 1</li></ul><p>Some input</p>');
+      });
+
+      it('should increase indentation with tab in list', async () => {
+        editor.focus();
+        await sendKeys({ type: 'Item 1' });
+        editor.format('list', 'bullet');
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ type: 'Item 2' });
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ type: 'Item 3' });
+        flushValueDebouncer();
+
+        for (let indentLevel = 1; indentLevel < 3; indentLevel++) {
+          const indentedItems = getListItemsWithIndent(indentLevel);
+          expect(indentedItems).to.have.length(1);
+          expect(indentedItems[0].textContent.trim()).to.equal(`Item ${indentLevel + 1}`);
+          expect(indentedItems[0].classList.contains(`ql-indent-${indentLevel}`)).to.be.true;
+        }
+        expect(rte.htmlValue).to.equal('<ul><li>Item 1<ul><li>Item 2<ul><li>Item 3</li></ul></li></ul></li></ul>');
+      });
+
+      it('should decrease indentation with shift+tab in list', async () => {
+        editor.focus();
+        await sendKeys({ type: 'Item 1' });
+        editor.format('list', 'bullet');
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ type: 'Item 2' });
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ type: 'Item 3' });
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Shift+Tab' });
+        await sendKeys({ type: 'Item 4' });
+        flushValueDebouncer();
+
+        const indentedItems = getListItemsWithIndent(1);
+        expect(indentedItems).to.have.length(2);
+        expect(indentedItems[0].textContent.trim()).to.equal('Item 2');
+        expect(indentedItems[0].classList.contains('ql-indent-1')).to.be.true;
+        expect(indentedItems[1].textContent.trim()).to.equal('Item 4');
+        expect(indentedItems[1].classList.contains('ql-indent-1')).to.be.true;
+        expect(rte.htmlValue).to.equal(
+          '<ul><li>Item 1<ul><li>Item 2<ul><li>Item 3</li></ul></li><li>Item 4</li></ul></li></ul>',
+        );
+      });
     });
   });
 
