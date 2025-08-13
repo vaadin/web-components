@@ -45,8 +45,7 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
   owner: TOwner;
 
   /**
-   * Set true to prevent the overlay from opening automatically.
-   * @attr {boolean} auto-open-disabled
+   * Function used to render the content of every combo-box item.
    */
   renderer: ComboBoxItemRenderer<TItem, TOwner> | null | undefined;
 
