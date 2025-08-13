@@ -695,6 +695,15 @@ export const RichTextEditorMixin = (superClass) =>
     __updateHtmlValue() {
       // We have to use this instead of `innerHTML` to get correct tags like `<pre>` etc.
       let content = this._editor.getSemanticHTML();
+      // Remove Quill classes, e.g. ql-syntax, except for align
+      content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
+        const classes = group1.split(' ').filter((className) => {
+          return !className.startsWith('ql-') || className.startsWith('ql-align');
+        });
+        return `class="${classes.join(' ')}"`;
+      });
+      // Remove meta spans, e.g. cursor which are empty after Quill classes removed
+      content = content.replace(/<span[^>]*><\/span>/gu, '');
       // Replace Quill align classes with inline styles
       [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
         content = content.replace(
@@ -702,6 +711,7 @@ export const RichTextEditorMixin = (superClass) =>
           ` style="text-align: ${align}"`,
         );
       });
+      content = content.replace(/ class=""/gu, '');
       this._setHtmlValue(content);
     }
 
