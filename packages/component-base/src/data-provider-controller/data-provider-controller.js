@@ -226,6 +226,17 @@ export class DataProviderController extends EventTarget {
     this.__loadCachePage(this.rootCache, 0);
   }
 
+  /**
+   * Override to prevent loading of the cache page under certain conditions.
+   *
+   * @param {Cache} cache
+   * @param {number} page
+   * @protected
+   */
+  _shouldLoadCachePage(_cache, _page) {
+    return true;
+  }
+
   /** @private */
   __createRootCache(size) {
     return new Cache(this.__cacheContext, this.pageSize, size);
@@ -233,7 +244,7 @@ export class DataProviderController extends EventTarget {
 
   /** @private */
   __loadCachePage(cache, page) {
-    if (!this.dataProvider || cache.pendingRequests[page]) {
+    if (!this.dataProvider || cache.pendingRequests[page] || !this._shouldLoadCachePage(cache, page)) {
       return;
     }
 
