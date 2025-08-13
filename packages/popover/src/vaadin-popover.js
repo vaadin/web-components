@@ -305,7 +305,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * True if the popover is opened, false otherwise.
+       * True if the popover is visible and available for interaction.
        */
       opened: {
         type: Boolean,

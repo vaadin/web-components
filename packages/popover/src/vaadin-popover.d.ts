@@ -152,7 +152,7 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   hoverDelay: number;
 
   /**
-   * True if the popover is opened, false otherwise.
+   * True if the popover is visible and available for interaction.
    */
   opened: boolean;
 
