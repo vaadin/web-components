@@ -264,6 +264,7 @@ describe('popover', () => {
       target.click();
       await nextRender();
       expect(overlay.opened).to.be.false;
+      expect(popover.opened).to.be.false;
     });
 
     it('should close overlay on outside click by default', async () => {
