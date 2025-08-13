@@ -714,36 +714,29 @@ export const RichTextEditorMixin = (superClass) =>
       // Process only elements with align or indent classes
       const elementsToProcess = tempDiv.querySelectorAll('[class*="ql-align"], [class*="ql-indent"]');
       elementsToProcess.forEach((element) => {
-        const { needsStyleUpdate, styleText } = this.__processQuillAlignmentClasses(element);
-        this.__processQuillIndentationClasses(element);
-        if (needsStyleUpdate) {
-          element.setAttribute('style', styleText);
-        }
-        if (element.classList.length === 0) {
-          element.removeAttribute('class');
-        }
+        this.__processAlignClasses(element);
+        this.__processIndentClasses(element);
+        element.removeAttribute('class');
       });
       return tempDiv.innerHTML;
     }
 
     /** @private */
-    __processQuillAlignmentClasses(element) {
-      let needsStyleUpdate = false;
+    __processAlignClasses(element) {
       let styleText = element.getAttribute('style') || '';
       const alignments = [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'];
       alignments.forEach((align) => {
         if (element.classList.contains(`ql-align-${align}`)) {
           const newStyle = `text-align: ${align}`;
           styleText = styleText ? `${styleText}; ${newStyle}` : newStyle;
-          needsStyleUpdate = true;
+          element.setAttribute('style', styleText);
           element.classList.remove(`ql-align-${align}`);
         }
       });
-      return { needsStyleUpdate, styleText };
     }
 
     /** @private */
-    __processQuillIndentationClasses(element) {
+    __processIndentClasses(element) {
       const indentClass = Array.from(element.classList).find((className) => className.startsWith('ql-indent-'));
       if (indentClass) {
         const level = parseInt(indentClass.replace('ql-indent-', '').trim(), 10);
