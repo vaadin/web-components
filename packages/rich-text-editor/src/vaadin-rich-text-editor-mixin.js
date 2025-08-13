@@ -704,8 +704,6 @@ export const RichTextEditorMixin = (superClass) =>
       });
       // Process align and indent classes
       content = this.__processQuillClasses(content);
-      // Clean up empty class attributes
-      content = content.replace(/ class=""/gu, '');
       this._setHtmlValue(content);
     }
 
