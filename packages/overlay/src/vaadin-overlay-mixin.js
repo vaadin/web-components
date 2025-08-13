@@ -183,7 +183,7 @@ export const OverlayMixin = (superClass) =>
       const event = new CustomEvent('vaadin-overlay-close', {
         bubbles: true,
         cancelable: true,
-        detail: { sourceEvent },
+        detail: { overlay: this, sourceEvent },
       });
       this.dispatchEvent(event);
       // To allow listening for the event globally, also dispatch it on the document body
@@ -347,7 +347,7 @@ export const OverlayMixin = (superClass) =>
 
             // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots
             // could have side effects when nesting overlays
-            const event = new CustomEvent('vaadin-overlay-open', { bubbles: true });
+            const event = new CustomEvent('vaadin-overlay-open', { detail: { overlay: this }, bubbles: true });
             this.dispatchEvent(event);
             // To allow listening for the event globally, also dispatch it on the document body
             document.body.dispatchEvent(event);
