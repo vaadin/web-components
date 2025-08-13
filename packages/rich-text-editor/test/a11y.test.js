@@ -263,27 +263,35 @@ describe('accessibility', () => {
   });
 
   describe('indent', () => {
+    let indent;
+
     beforeEach(async () => {
       rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
       await nextRender();
       editor = rte._editor;
-      buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
+      indent = rte.shadowRoot.querySelector('#btn-indent');
       content = rte.shadowRoot.querySelector('[contenteditable]');
     });
 
-    it('should represent indentation correctly', () => {
-      rte.value = JSON.stringify([
-        { insert: 'Indent 1\n', attributes: { indent: 1 } },
-        { insert: 'Indent 2\n', attributes: { indent: 2 } },
-      ]);
-      expect(content.innerHTML).to.equal('<p class="ql-indent-1">Indent 1</p><p class="ql-indent-2">Indent 2</p>');
-    });
+    it('should represent indentation correctly', async () => {
+      editor.focus();
+      indent.click();
 
-    it('should convert ql-indent-* classes to tabs in htmlValue', () => {
-      rte.value = JSON.stringify([
-        { insert: 'Indent 1\n', attributes: { indent: 1 } },
-        { insert: 'Indent 2\n', attributes: { indent: 2 } },
-      ]);
+      await sendKeys({ type: 'Indent 1' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ type: 'Indent 2' });
+      flushValueDebouncer();
+
+      expect(rte.value).to.equal(
+        JSON.stringify([
+          { insert: 'Indent 1' },
+          { attributes: { indent: 1 }, insert: '\n' },
+          { insert: 'Indent 2' },
+          { attributes: { indent: 2 }, insert: '\n' },
+        ]),
+      );
+      expect(content.innerHTML).to.equal('<p class="ql-indent-1">Indent 1</p><p class="ql-indent-2">Indent 2</p>');
       expect(rte.htmlValue).to.equal('<p>\tIndent 1</p><p>\t\tIndent 2</p>');
     });
 

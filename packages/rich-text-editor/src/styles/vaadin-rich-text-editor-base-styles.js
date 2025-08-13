@@ -515,6 +515,14 @@ const toolbar = css`
     mask-image: var(--_vaadin-icon-list-bullet);
   }
 
+  [part~='toolbar-button-outdent']::before {
+    mask-image: var(--_vaadin-icon-outdent);
+  }
+
+  [part~='toolbar-button-indent']::before {
+    mask-image: var(--_vaadin-icon-indent);
+  }
+
   [part~='toolbar-button-align-left']::before {
     mask-image: var(--_vaadin-icon-align-left);
   }

@@ -95,6 +95,28 @@ describe('toolbar controls', () => {
       });
     });
 
+    it('should increase indentation when clicking the "toolbar-button-indent" part', () => {
+      btn = getButton('indent');
+
+      btn.click();
+      expect(editor.getFormat(0).indent).to.be.equal(1);
+
+      btn.click();
+      expect(editor.getFormat(0).indent).to.be.equal(2);
+    });
+
+    it('should decrease indentation when clicking the "toolbar-button-outdent" part', () => {
+      rte.value = JSON.stringify([{ insert: 'Indent 2\n', attributes: { indent: 2 } }]);
+
+      btn = getButton('outdent');
+
+      btn.click();
+      expect(editor.getFormat(0).indent).to.be.equal(1);
+
+      btn.click();
+      expect(editor.getFormat(0).indent).to.be.not.ok;
+    });
+
     [1, 2].forEach((level) => {
       it(`should create <h${level}> header when clicking the "toolbar-button-h${level}" part`, () => {
         btn = getButton(`h${level}`);
