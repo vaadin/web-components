@@ -246,6 +246,7 @@ export const ConfirmDialogMixin = (superClass) =>
       super.ready();
 
       this.role = 'alertdialog';
+      this.setAttribute('aria-modal', 'true');
 
       this._headerController = new SlotController(this, 'header', 'h3', {
         initializer: (node) => {

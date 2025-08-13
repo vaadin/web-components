@@ -5,6 +5,7 @@ snapshots["vaadin-confirm-dialog host"] =
 `<vaadin-confirm-dialog
   aria-description="Do you want to save or discard the changes?"
   aria-label="Unsaved changes"
+  aria-modal="true"
   header="Unsaved changes"
   opened=""
   role="alertdialog"
