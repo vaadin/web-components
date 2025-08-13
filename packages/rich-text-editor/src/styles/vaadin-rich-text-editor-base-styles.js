@@ -430,7 +430,7 @@ const toolbar = css`
     z-index: 1;
   }
 
-  [part~='toolbar-button'][on],
+  [part~='toolbar-button-pressed'],
   [part~='toolbar-button'][aria-expanded='true'] {
     --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container-strong);
   }
@@ -560,11 +560,11 @@ const toolbar = css`
       background: CanvasText;
     }
 
-    [part~='toolbar-button'][on] {
+    [part~='toolbar-button-pressed'] {
       background: Highlight;
     }
 
-    [part~='toolbar-button'][on]::before {
+    [part~='toolbar-button-pressed']::before {
       background: HighlightText;
     }
   }
