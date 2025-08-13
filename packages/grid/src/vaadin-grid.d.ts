@@ -93,6 +93,7 @@ export type GridDefaultItem = any;
  * `expanded` | Boolean | True if the item's tree sublevel is expanded.
  * `selected` | Boolean | True if the item is selected.
  * `detailsOpened` | Boolean | True if the item's row details are open.
+ * `hasChildren` | Boolean | True if the item has children
  *
  * The following helper elements can be used for further customization:
  * - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)

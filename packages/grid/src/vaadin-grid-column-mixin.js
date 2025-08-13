@@ -885,6 +885,7 @@ export const GridColumnMixin = (superClass) =>
          *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
          *   - `model.selected` Selected state.
          *   - `model.detailsOpened` Details opened state.
+         *   - `model.hasChildren` Whether the item has children.
          *
          * @type {GridBodyRenderer | null | undefined}
          */

@@ -21,89 +21,67 @@ export * from './vaadin-chart-mixin.js';
  * There are two ways of configuring your `<vaadin-chart>` element: **HTML API**, **JS API** and **JSON API**.
  * Note that you can make use of all APIs in your element.
  *
- * #### Configuring your chart using HTML API
+ * #### Using HTML API
  *
  * `vaadin-chart` has a set of attributes to make it easier for you to customize your chart.
  *
  * ```html
- *  <vaadin-chart title="The chart title" subtitle="The chart subtitle">
- *    <vaadin-chart-series
- *          type="column"
- *          title="The series title"
- *          values="[10,20,30]">
- *    </vaadin-chart-series>
- *  </vaadin-chart>
+ * <vaadin-chart title="The chart title" subtitle="The chart subtitle">
+ *   <vaadin-chart-series
+ *     type="column"
+ *     title="The series title"
+ *     values="[10, 20, 30]"
+ *   ></vaadin-chart-series>
+ * </vaadin-chart>
  * ```
  *
  * > Note that while you can set type for each series individually, for some types, such as `'bar'`, `'gauge'` and `'solidgauge'`, you
  * > have to set it as the default series type on `<vaadin-chart>` in order to work properly.
  *
- * #### Configuring your chart using JS API
+ * #### Using JS API
  *
- * 1. Set an id for the `<vaadin-chart>` in the template
- * ```html
- *     <vaadin-chart id="mychart"></vaadin-chart>
- * ```
- * 1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data
+ * Use [`configuration`](#/elements/vaadin-chart#property-configuration) property to set chart title, categories and data:
+ *
  * ```js
- * initChartWithJSApi() {
- *     requestAnimationFrame(() => {
- *        const configuration = this.$.mychart.configuration;
- *        configuration.setTitle({ text: 'The chart title' });
- *        // By default there is one X axis, it is referenced by configuration.xAxis[0].
- *        configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
- *        configuration.addSeries({
- *            type: 'column',
- *            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
- *        });
- *     });
- * }
+ * const chart = document.querySelector('vaadin-chart');
+ *
+ * // Wait for default configuration to be ready
+ * requestAnimationFrame(() => {
+ *   const configuration = chart.configuration;
+ *   configuration.setTitle({ text: 'The chart title' });
+ *   // By default there is one X axis, it is referenced by configuration.xAxis[0].
+ *   configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+ *   configuration.addSeries({
+ *     type: 'column',
+ *     data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+ *   });
+ * });
  * ```
- * 1. Call that function from connectedCallback (when the element is added to a document)
+ *
+ * #### Using JS JSON API
+ *
+ * Use [`updateConfiguration`](#/elements/vaadin-chart#method-updateConfiguration) method to set chart title, categories and data:
+ *
  * ```js
- * connectedCallback() {
- *     super.connectedCallback();
- *     this.initChartWithJSApi();
- * }
+ * const chart = document.querySelector('vaadin-chart');
+ * chart.updateConfiguration({
+ *   title: {
+ *     text: 'The chart title'
+ *   },
+ *   subtitle: {
+ *     text: 'Subtitle'
+ *   },
+ *   xAxis: {
+ *     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+ *   },
+ *   series: [{
+ *     type: 'column',
+ *     data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+ *   }]
+ * });
  * ```
  *
- * #### Configuring your chart using JS JSON API
- *
- * JS JSON API is a simple alternative to the JS API.
- *
- * 1. Set an id for the `<vaadin-chart>` in the template
- * ```html
- *     <vaadin-chart id="mychart"></vaadin-chart>
- * ```
- * 1. Add a function that uses `updateConfiguration` method (JS JSON Api) to set chart title, categories and data
- * ```js
- * initChartWithJSJSONApi() {
- *     this.$.mychart.updateConfiguration({
- *       title: {
- *         text: 'The chart title'
- *       },
- *       subtitle: {
- *         text: 'Subtitle'
- *       },
- *       xAxis: {
- *         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
- *       },
- *       series: [{
- *         type: 'column',
- *         data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
- *       }]
- *     });
- * }
- * ```
- * 1. Call that function from connectedCallback (when the element is added to a document)
- * ```js
- * connectedCallback() {
- *     super.connectedCallback();
- *     this.initChartWithJSJSONApi();
- * }
- * ```
- *
- * It should be noted that chart style customization cannot be done via the JS or JSON API.
+ * **Note:** chart style customization cannot be done via the JS or JSON API.
  * Styling properties in the JSON configuration will be ignored. The following section discusses chart styling.
  *
  * ### CSS Styling
