@@ -93,8 +93,7 @@ export const content = css`
     outline: none;
     overflow-y: auto;
     padding: var(--vaadin-rich-text-editor-editor-padding, var(--vaadin-padding-container));
-    tab-size: 4;
-    -moz-tab-size: 4;
+    tab-size: calc(var(--_item-indent) * 2);
     text-align: left;
     white-space: pre-wrap;
     word-wrap: break-word;
