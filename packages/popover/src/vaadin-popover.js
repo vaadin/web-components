@@ -305,7 +305,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * True if the popover overlay is opened, false otherwise.
+       * True if the popover is opened, false otherwise.
        */
       opened: {
         type: Boolean,
@@ -325,7 +325,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * The `role` attribute value to be set on the overlay.
+       * The `role` attribute value to be set on the popover.
        *
        * @attr {string} overlay-role
        * @deprecated Use standard `role` attribute on the popover instead
@@ -335,7 +335,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Custom function for rendering the content of the overlay.
+       * Custom function for rendering the content of the popover.
        * Receives two arguments:
        *
        * - `root` The root container DOM element. Append your content to it.
@@ -358,7 +358,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set to true to disable closing popover overlay on outside click.
+       * Set to true to disable closing popover on outside click.
        *
        * @attr {boolean} no-close-on-outside-click
        */
@@ -368,10 +368,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set to true to disable closing popover overlay on Escape press.
-       * When the popover is modal, pressing Escape anywhere in the
-       * document closes the overlay. Otherwise, only Escape press
-       * from the popover itself or its target closes the overlay.
+       * Set to true to disable closing popover on Escape press.
        *
        * @attr {boolean} no-close-on-esc
        */
@@ -381,15 +378,15 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Popover trigger mode, used to configure how the overlay is opened or closed.
+       * Popover trigger mode, used to configure how the popover is opened or closed.
        * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
        *
        * Supported values:
        * - `click` (default) - opens and closes on target click.
        * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
-       * to the popover overlay content keeps the overlay opened.
+       * to the popover content keeps the popover opened.
        * - `focus` - opens on target focus, closes on target blur. Moving focus to the
-       * popover overlay content keeps the overlay opened.
+       * popover content keeps the popover opened.
        *
        * In addition to the behavior specified by `trigger`, the popover can be closed by:
        * - pressing Escape key (unless `noCloseOnEsc` property is true)
@@ -405,7 +402,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * When true, the overlay has a backdrop (modality curtain) on top of the
+       * When true, the popover has a backdrop (modality curtain) on top of the
        * underlying page content, covering the whole viewport.
        *
        * @attr {boolean} with-backdrop
