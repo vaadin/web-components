@@ -105,13 +105,14 @@ before(() => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`
         <${tagName}>
           ${children}
           <vaadin-tooltip slot="tooltip" text="Tooltip text"></vaadin-tooltip>
         </${tagName}>
       `);
+      await nextRender();
       tooltip = element.querySelector('vaadin-tooltip');
       tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
     });
@@ -143,6 +144,16 @@ before(() => {
         mouseenter(tooltip.target);
         expect(tooltipOverlay.opened).to.be.false;
       }
+    });
+
+    it('should set has-tooltip attribute on the element', () => {
+      expect(element.hasAttribute('has-tooltip')).to.be.true;
+    });
+
+    it('should remove has-tooltip attribute from the element when tooltip is removed', async () => {
+      tooltip.remove();
+      await nextRender();
+      expect(element.hasAttribute('has-tooltip')).to.be.false;
     });
   });
 });

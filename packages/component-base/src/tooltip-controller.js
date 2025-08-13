@@ -51,6 +51,7 @@ export class TooltipController extends SlotController {
       tooltipNode.shouldShow = this.shouldShow;
     }
 
+    this.host.setAttribute('has-tooltip', '');
     this.__notifyChange(tooltipNode);
     tooltipNode.addEventListener('content-changed', this.__onContentChange);
   }
@@ -64,7 +65,7 @@ export class TooltipController extends SlotController {
    */
   teardownNode(tooltipNode) {
     tooltipNode.removeEventListener('content-changed', this.__onContentChange);
-
+    this.host.removeAttribute('has-tooltip');
     this.__notifyChange(null);
   }
 

@@ -27,6 +27,10 @@ describe('TooltipController', () => {
       host.addController(controller);
     });
 
+    it('should set has-tooltip attribute on the host', () => {
+      expect(host.hasAttribute('has-tooltip')).to.be.true;
+    });
+
     it('should set tooltip target to the host itself by default', () => {
       expect(tooltip.target).to.eql(host);
     });
@@ -210,6 +214,22 @@ describe('TooltipController', () => {
       fire(tooltip, 'content-changed');
       await nextFrame();
       expect(spy).to.be.not.called;
+    });
+
+    it('should set has-tooltip attribute on the host when tooltip is added', async () => {
+      expect(host.hasAttribute('has-tooltip')).to.be.false;
+      host.appendChild(tooltip);
+      await nextFrame();
+      expect(host.hasAttribute('has-tooltip')).to.be.true;
+    });
+
+    it('should remove has-tooltip attribute from the host when tooltip is removed', async () => {
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      host.removeChild(tooltip);
+      await nextFrame();
+      expect(host.hasAttribute('has-tooltip')).to.be.false;
     });
   });
 });

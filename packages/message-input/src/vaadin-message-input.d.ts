@@ -32,6 +32,17 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * ```html
  * <vaadin-message-input></vaadin-message-input>
  * ```
+ *
+ * ### Styling
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|---------------------------------
+ * `disabled`     | Set when the element is disabled
+ * `has-tooltip`  | Set when the element has a slotted tooltip
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class MessageInput extends MessageInputMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof MessageInputEventMap>(
