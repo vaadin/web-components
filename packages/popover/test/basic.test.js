@@ -13,10 +13,6 @@ describe('popover', () => {
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
 
-  afterEach(async () => {
-    await resetMouse();
-  });
-
   describe('custom element definition', () => {
     let tagName;
 
@@ -254,6 +250,10 @@ describe('popover', () => {
       target = fixtureSync('<button>Target</button>');
       popover.target = target;
       await nextUpdate(popover);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
     });
 
     it('should open overlay on target click by default', async () => {
