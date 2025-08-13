@@ -77,6 +77,7 @@
     min-width: 12em; /* matches the default <vaadin-text-field> width */
     padding: var(--lumo-space-l);
     flex: 1;
+    min-height: 0;
   }
 
   :host([overflow]) [part='content'] {
