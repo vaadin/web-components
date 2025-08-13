@@ -12,7 +12,7 @@ export const DialogBaseMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * True if the overlay is currently displayed.
+         * True if the dialog is visible and available for interaction.
          * @type {boolean}
          */
         opened: {

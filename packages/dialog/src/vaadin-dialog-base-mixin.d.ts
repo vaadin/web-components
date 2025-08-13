@@ -11,7 +11,7 @@ export declare function DialogBaseMixin<T extends Constructor<HTMLElement>>(
 
 export declare class DialogBaseMixinClass {
   /**
-   * True if the overlay is currently displayed.
+   * True if the dialog is visible and available for interaction.
    */
   opened: boolean;
 

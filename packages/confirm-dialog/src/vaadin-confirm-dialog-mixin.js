@@ -16,7 +16,7 @@ export const ConfirmDialogMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * Sets the `aria-describedby` attribute of the overlay element.
+         * Sets the `aria-describedby` attribute of the dialog.
          *
          * By default, the text contents of all elements inside the message area
          * are combined into the `aria-description` attribute. However, there are
@@ -30,7 +30,7 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * True if the overlay is currently displayed.
+         * True if the dialog is visible and available for interaction.
          * @type {boolean}
          */
         opened: {
