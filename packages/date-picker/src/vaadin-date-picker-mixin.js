@@ -461,8 +461,8 @@ export const DatePickerMixin = (subclass) =>
         this.toggleAttribute('week-numbers', this.showWeekNumbers && this.__effectiveI18n.firstDayOfWeek === 1);
       }
 
-      if ((props.has('opened') || props.has('_noInput')) && this._overlayContent) {
-        if (this.opened && this._noInput) {
+      if ((props.has('opened') || props.has('_fullscreen')) && this._overlayContent) {
+        if (this.opened && this._fullscreen) {
           // Mark as modal on mobile if the input can not be accessed
           this._overlayContent.setAttribute('aria-modal', 'true');
         } else {
