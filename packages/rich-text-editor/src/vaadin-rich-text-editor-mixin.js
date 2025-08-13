@@ -695,24 +695,75 @@ export const RichTextEditorMixin = (superClass) =>
     __updateHtmlValue() {
       // We have to use this instead of `innerHTML` to get correct tags like `<pre>` etc.
       let content = this._editor.getSemanticHTML();
-      // Remove Quill classes, e.g. ql-syntax, except for align
+      // Remove Quill classes, e.g. ql-syntax, except for align and indent
       content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
         const classes = group1.split(' ').filter((className) => {
-          return !className.startsWith('ql-') || className.startsWith('ql-align');
+          return !className.startsWith('ql-') || className.startsWith('ql-align') || className.startsWith('ql-indent');
         });
         return `class="${classes.join(' ')}"`;
       });
       // Remove meta spans, e.g. cursor which are empty after Quill classes removed
       content = content.replace(/<span[^>]*><\/span>/gu, '');
-      // Replace Quill align classes with inline styles
-      [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
-        content = content.replace(
-          new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'gu'),
-          ` style="text-align: ${align}"`,
-        );
-      });
+      // Process align and indent classes
+      content = this.__processQuillClasses(content);
+      // Clean up empty class attributes
       content = content.replace(/ class=""/gu, '');
       this._setHtmlValue(content);
+    }
+
+    /** @private */
+    __processQuillClasses(content) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = content;
+      // Process only elements with align or indent classes
+      const elementsToProcess = tempDiv.querySelectorAll('[class*="ql-align"], [class*="ql-indent"]');
+      elementsToProcess.forEach((element) => {
+        const { needsStyleUpdate, styleText } = this.__processQuillAlignmentClasses(element);
+        this.__processQuillIndentationClasses(element);
+        if (needsStyleUpdate) {
+          element.setAttribute('style', styleText);
+        }
+        if (element.classList.length === 0) {
+          element.removeAttribute('class');
+        }
+      });
+      return tempDiv.innerHTML;
+    }
+
+    /** @private */
+    __processQuillAlignmentClasses(element) {
+      let needsStyleUpdate = false;
+      let styleText = element.getAttribute('style') || '';
+      const alignments = [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'];
+      alignments.forEach((align) => {
+        if (element.classList.contains(`ql-align-${align}`)) {
+          const newStyle = `text-align: ${align}`;
+          styleText = styleText ? `${styleText}; ${newStyle}` : newStyle;
+          needsStyleUpdate = true;
+          element.classList.remove(`ql-align-${align}`);
+        }
+      });
+      return { needsStyleUpdate, styleText };
+    }
+
+    /** @private */
+    __processQuillIndentationClasses(element) {
+      const indentClass = Array.from(element.classList).find((className) => className.startsWith('ql-indent-'));
+      if (indentClass) {
+        const level = parseInt(indentClass.replace('ql-indent-', '').trim(), 10);
+        const tabs = '\t'.repeat(level);
+        // Add tabs to content
+        const firstChild = element.firstChild;
+        if (firstChild && firstChild.nodeType === Node.TEXT_NODE) {
+          firstChild.textContent = tabs + firstChild.textContent;
+        } else if (element.childNodes.length > 0) {
+          const tabNode = document.createTextNode(tabs);
+          element.insertBefore(tabNode, element.firstChild);
+        } else {
+          element.textContent = tabs;
+        }
+        element.classList.remove(indentClass);
+      }
     }
 
     /**

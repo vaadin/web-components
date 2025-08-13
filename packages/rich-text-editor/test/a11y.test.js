@@ -266,6 +266,69 @@ describe('accessibility', () => {
         );
       });
     });
+
+    describe('indent', () => {
+      it('should represent indentation correctly', () => {
+        rte.value =
+          '[{ "insert": "Indent 0\\n"}, { "insert": "Indent 1\\n", "attributes": { "indent": 1 } }, { "insert": "Indent 2\\n", "attributes": { "indent": 2 } }]';
+        for (let indentLevel = 1; indentLevel < 3; indentLevel++) {
+          const textWithIndent = rte.shadowRoot.querySelectorAll(`.ql-editor p.ql-indent-${indentLevel}`);
+          expect(textWithIndent).to.have.length(1);
+          expect(textWithIndent[0].textContent.trim()).to.equal(`Indent ${indentLevel}`);
+          expect(textWithIndent[0].classList.contains(`ql-indent-${indentLevel}`)).to.be.true;
+        }
+      });
+
+      it('should convert ql-indent-* classes to tabs in htmlValue', () => {
+        rte.value =
+          '[{ "insert": "Indent 0\\n"}, { "insert": "Indent 1\\n", "attributes": { "indent": 1 } }, { "insert": "Indent 2\\n", "attributes": { "indent": 2 } }]';
+        expect(rte.htmlValue).to.equal('<p>Indent 0</p><p>\tIndent 1</p><p>\t\tIndent 2</p>');
+      });
+
+      it('should handle empty indented elements', () => {
+        rte.value =
+          '[{ "insert": "Before\\n"}, { "insert": "\\n", "attributes": { "indent": 1 } }, { "insert": "\\n", "attributes": { "indent": 2 } }, { "insert": "After\\n" }]';
+        expect(rte.htmlValue).to.include('<p>Before</p>');
+        expect(rte.htmlValue).to.include('<p>\t</p>');
+        expect(rte.htmlValue).to.include('<p>\t\t</p>');
+        expect(rte.htmlValue).to.include('<p>After</p>');
+        expect(rte.htmlValue).to.not.include('ql-indent');
+      });
+
+      it('should handle indentation with alignment', () => {
+        rte.value =
+          '[{ "insert": "Normal\\n"}, { "insert": "Indented and aligned\\n", "attributes": { "indent": 1, "align": "center" } }, { "insert": "More indented\\n", "attributes": { "indent": 2 } }]';
+        expect(rte.htmlValue).to.include('<p>Normal</p>');
+        expect(rte.htmlValue).to.include('\tIndented and aligned');
+        expect(rte.htmlValue).to.include('style="text-align: center"');
+        expect(rte.htmlValue).to.include('\t\tMore indented');
+        expect(rte.htmlValue).to.not.include('ql-indent');
+      });
+
+      it('should preserve existing tab characters in content', () => {
+        rte.dangerouslySetHtmlValue('<p>Already has\ttab</p><p class="ql-indent-1">Needs indent</p>');
+        flushValueDebouncer();
+        expect(rte.htmlValue).to.include('Already has\ttab');
+        expect(rte.htmlValue).to.include('\tNeeds indent');
+        expect(rte.htmlValue).to.not.include('ql-indent');
+      });
+
+      it('should handle high indentation levels', () => {
+        rte.value =
+          '[{ "insert": "Level 7\\n", "attributes": { "indent": 7 } }, { "insert": "Level 8\\n", "attributes": { "indent": 8 } }]';
+        expect(rte.htmlValue).to.include(`${'\t'.repeat(7)}Level 7`);
+        expect(rte.htmlValue).to.include(`${'\t'.repeat(8)}Level 8`);
+      });
+
+      it('should handle nested elements with indentation', () => {
+        rte.value =
+          '[{ "insert": "Normal\\n"}, { "insert": "Indented with ", "attributes": { "indent": 1 } }, { "insert": "nested", "attributes": { "bold": true, "indent": 1 } }, { "insert": " content\\n", "attributes": { "indent": 1 } }]';
+        expect(rte.htmlValue).to.include('\tIndented with ');
+        expect(rte.htmlValue).to.include('<strong>nested</strong>');
+        expect(rte.htmlValue).to.include(' content');
+        expect(rte.htmlValue).to.not.include('ql-indent');
+      });
+    });
   });
 
   describe('Tab behavior', () => {
