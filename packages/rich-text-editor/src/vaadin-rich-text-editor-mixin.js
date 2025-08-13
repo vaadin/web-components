@@ -541,15 +541,9 @@ export const RichTextEditorMixin = (superClass) =>
       };
 
       const keyboard = this._editor.keyboard;
-      const bindings = keyboard.bindings.Tab;
 
-      // Exclude Quill shift-tab bindings, except for code block,
-      // as some of those are breaking when on a newline in the list
-      // https://github.com/vaadin/vaadin-rich-text-editor/issues/67
-      const originalBindings = bindings.filter((b) => !b.shiftKey || (b.format && b.format['code-block']));
-      const moveFocusBinding = { key: 'Tab', shiftKey: true, handler: focusToolbar };
-
-      keyboard.bindings.Tab = [...originalBindings, moveFocusBinding];
+      // Shift + Tab focuses a toolbar button unless we are in list / code block
+      keyboard.addBinding({ key: 'Tab', shiftKey: true, handler: focusToolbar });
 
       // Alt-f10 focuses a toolbar button
       keyboard.addBinding({ key: 'F10', altKey: true, handler: focusToolbar });
@@ -701,14 +695,64 @@ export const RichTextEditorMixin = (superClass) =>
     __updateHtmlValue() {
       // We have to use this instead of `innerHTML` to get correct tags like `<pre>` etc.
       let content = this._editor.getSemanticHTML();
-      // Replace Quill align classes with inline styles
-      [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
-        content = content.replace(
-          new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'gu'),
-          ` style="text-align: ${align}"`,
-        );
+      // Remove Quill classes, e.g. ql-syntax, except for align and indent
+      content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
+        const classes = group1.split(' ').filter((className) => {
+          return !className.startsWith('ql-') || className.startsWith('ql-align') || className.startsWith('ql-indent');
+        });
+        return `class="${classes.join(' ')}"`;
       });
+      // Process align and indent classes
+      content = this.__processQuillClasses(content);
       this._setHtmlValue(content);
+    }
+
+    /** @private */
+    __processQuillClasses(content) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = content;
+      // Process only elements with align or indent classes
+      const elementsToProcess = tempDiv.querySelectorAll('[class*="ql-align"], [class*="ql-indent"]');
+      elementsToProcess.forEach((element) => {
+        this.__processAlignClasses(element);
+        this.__processIndentClasses(element);
+        element.removeAttribute('class');
+      });
+      return tempDiv.innerHTML;
+    }
+
+    /** @private */
+    __processAlignClasses(element) {
+      let styleText = element.getAttribute('style') || '';
+      const alignments = [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'];
+      alignments.forEach((align) => {
+        if (element.classList.contains(`ql-align-${align}`)) {
+          const newStyle = `text-align: ${align}`;
+          styleText = styleText ? `${styleText}; ${newStyle}` : newStyle;
+          element.setAttribute('style', styleText);
+          element.classList.remove(`ql-align-${align}`);
+        }
+      });
+    }
+
+    /** @private */
+    __processIndentClasses(element) {
+      const indentClass = Array.from(element.classList).find((className) => className.startsWith('ql-indent-'));
+      if (indentClass) {
+        const level = parseInt(indentClass.replace('ql-indent-', '').trim(), 10);
+        const tabs = '\t'.repeat(level);
+        // Add tabs to content
+        const firstChild = element.firstChild;
+        if (firstChild && firstChild.nodeType === Node.TEXT_NODE) {
+          firstChild.textContent = tabs + firstChild.textContent;
+        } else if (element.childNodes.length > 0) {
+          const tabNode = document.createTextNode(tabs);
+          element.insertBefore(tabNode, element.firstChild);
+        } else {
+          element.textContent = tabs;
+        }
+        element.classList.remove(indentClass);
+      }
     }
 
     /**

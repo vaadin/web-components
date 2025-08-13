@@ -51,6 +51,12 @@ const base = css`
 `;
 
 export const content = css`
+  :host {
+    --_item-indent: var(--vaadin-padding-l);
+    --_marker-indent: calc(var(--vaadin-padding-s) / 2);
+    --_list-indent: calc(var(--_item-indent) + var(--_marker-indent));
+  }
+
   [part='content'] {
     box-sizing: border-box;
     display: flex;
@@ -87,8 +93,7 @@ export const content = css`
     outline: none;
     overflow-y: auto;
     padding: var(--vaadin-rich-text-editor-editor-padding, var(--vaadin-padding-container));
-    tab-size: 4;
-    -moz-tab-size: 4;
+    tab-size: calc(var(--_item-indent) * 2);
     text-align: left;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -128,30 +133,226 @@ export const content = css`
     padding: var(--vaadin-padding-container);
   }
 
+  /* lists */
+  .ql-editor ol {
+    padding-inline-start: var(--_list-indent);
+  }
+
   .ql-editor li {
     list-style-type: none;
     position: relative;
+    padding-inline-start: var(--_item-indent);
   }
 
   .ql-editor li > .ql-ui::before {
     display: inline-block;
-    margin-left: -1.5em;
-    margin-right: 0.3em;
-    text-align: right;
+    width: var(--_item-indent);
+    margin-inline: calc(var(--_item-indent) * -1) var(--_marker-indent);
+    text-align: end;
     white-space: nowrap;
-    width: 1.2em;
   }
 
-  .ql-editor li[data-list='bullet'] {
-    list-style-type: disc;
+  .ql-editor li[data-list='bullet'] > .ql-ui::before {
+    content: '\\2022';
+    font-size: 1.5rem;
+    line-height: 1rem;
+    align-self: baseline;
+    vertical-align: text-top;
   }
 
+  .ql-editor p,
+  .ql-editor h1,
+  .ql-editor h2,
+  .ql-editor h3,
+  .ql-editor h4,
+  .ql-editor h5,
+  .ql-editor h6 {
+    counter-set: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+  }
+
+  /* 0 */
   .ql-editor li[data-list='ordered'] {
     counter-increment: list-0;
   }
 
   .ql-editor li[data-list='ordered'] > .ql-ui::before {
     content: counter(list-0, decimal) '. ';
+  }
+
+  /* 1 */
+  .ql-editor li[data-list='ordered'].ql-indent-1 {
+    counter-increment: list-1;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-1 > .ql-ui::before {
+    content: counter(list-1, lower-alpha) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-1 {
+    counter-set: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+  }
+
+  /* 2 */
+  .ql-editor li[data-list='ordered'].ql-indent-2 {
+    counter-increment: list-2;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-2 > .ql-ui::before {
+    content: counter(list-2, lower-roman) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-2 {
+    counter-set: list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+  }
+
+  /* 3 */
+  .ql-editor li[data-list='ordered'].ql-indent-3 {
+    counter-increment: list-3;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-3 > .ql-ui::before {
+    content: counter(list-3, decimal) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-3 {
+    counter-set: list-4 list-5 list-6 list-7 list-8 list-9;
+  }
+
+  /* 4 */
+  .ql-editor li[data-list='ordered'].ql-indent-4 {
+    counter-increment: list-4;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-4 > .ql-ui::before {
+    content: counter(list-4, lower-alpha) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-4 {
+    counter-set: list-5 list-6 list-7 list-8 list-9;
+  }
+
+  /* 5 */
+  .ql-editor li[data-list='ordered'].ql-indent-5 {
+    counter-increment: list-5;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-5 > .ql-ui::before {
+    content: counter(list-5, lower-roman) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-5 {
+    counter-set: list-6 list-7 list-8 list-9;
+  }
+
+  /* 6 */
+  .ql-editor li[data-list='ordered'].ql-indent-6 {
+    counter-increment: list-6;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-6 > .ql-ui::before {
+    content: counter(list-6, decimal) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-6 {
+    counter-set: list-7 list-8 list-9;
+  }
+
+  /* 7 */
+  .ql-editor li[data-list='ordered'].ql-indent-7 {
+    counter-increment: list-7;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-7 > .ql-ui::before {
+    content: counter(list-7, lower-alpha) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-7 {
+    counter-set: list-8 list-9;
+  }
+
+  /* 8 */
+  .ql-editor li[data-list='ordered'].ql-indent-8 {
+    counter-increment: list-8;
+  }
+
+  .ql-editor li[data-list='ordered'].ql-indent-8 > .ql-ui::before {
+    content: counter(list-8, lower-roman) '. ';
+  }
+
+  .ql-editor li[data-list].ql-indent-8 {
+    counter-set: list-9;
+  }
+
+  /* indent 1 */
+  .ql-editor .ql-indent-1 {
+    padding-inline-start: calc(var(--_item-indent) * 2);
+  }
+
+  .ql-editor li.ql-indent-1 {
+    padding-inline-start: calc(var(--_list-indent) + var(--_item-indent) * 2);
+  }
+
+  /* indent 2 */
+  .ql-editor .ql-indent-2 {
+    padding-inline-start: calc(var(--_item-indent) * 4);
+  }
+
+  .ql-editor li.ql-indent-2 {
+    padding-inline-start: calc(var(--_list-indent) * 2 + var(--_item-indent) * 3);
+  }
+
+  /* indent 3 */
+  .ql-editor .ql-indent-3 {
+    padding-inline-start: calc(var(--_item-indent) * 6);
+  }
+
+  .ql-editor li.ql-indent-3 {
+    padding-inline-start: calc(var(--_list-indent) * 3 + var(--_item-indent) * 4);
+  }
+
+  /* indent 4 */
+  .ql-editor .ql-indent-4 {
+    padding-inline-start: calc(var(--_item-indent) * 8);
+  }
+
+  .ql-editor li.ql-indent-4 {
+    padding-inline-start: calc(var(--_list-indent) * 4 + var(--_item-indent) * 5);
+  }
+
+  /* indent 5 */
+  .ql-editor .ql-indent-5 {
+    padding-inline-start: calc(var(--_item-indent) * 10);
+  }
+
+  .ql-editor li.ql-indent-5 {
+    padding-inline-start: calc(var(--_list-indent) * 5 + var(--_item-indent) * 6);
+  }
+
+  /* indent 6 */
+  .ql-editor .ql-indent-6 {
+    padding-inline-start: calc(var(--_item-indent) * 12);
+  }
+
+  .ql-editor li.ql-indent-6 {
+    padding-inline-start: calc(var(--_list-indent) * 6 + var(--_item-indent) * 7);
+  }
+
+  /* indent 7 */
+  .ql-editor .ql-indent-7 {
+    padding-inline-start: calc(var(--_item-indent) * 14);
+  }
+
+  .ql-editor li.ql-indent-7 {
+    padding-inline-start: calc(var(--_list-indent) * 7 + var(--_item-indent) * 8);
+  }
+
+  /* indent 8 */
+  .ql-editor .ql-indent-8 {
+    padding-inline-start: calc(var(--_item-indent) * 16);
+  }
+
+  .ql-editor li.ql-indent-8 {
+    padding-inline-start: calc(var(--_list-indent) * 8 + var(--_item-indent) * 9);
   }
   /* quill core end */
 
