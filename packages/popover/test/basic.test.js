@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { esc, fixtureSync, nextRender, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-popover.js';
@@ -251,6 +252,10 @@ describe('popover', () => {
       await nextUpdate(popover);
     });
 
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should open overlay on target click by default', async () => {
       target.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -261,7 +266,10 @@ describe('popover', () => {
       target.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      target.click();
+      // Use browser command here to test for possible side effects between the outside click listener and the
+      // target opened toggle behavior. Using browser commands for opening the popover doesn't work consistently as
+      // the opened event might fire before the click promise resolves.
+      await sendMouseToElement({ type: 'click', element: target });
       await nextRender();
       expect(overlay.opened).to.be.false;
     });

@@ -86,6 +86,20 @@ class PopoverOverlay extends PopoverOverlayMixin(
   _shouldAddGlobalListeners() {
     return true;
   }
+
+  /**
+   * Override method from `OverlayMixin` to prevent closing when clicking on target.
+   * Clicking the target will already close the popover when using the click trigger.
+   *
+   * @override
+   * @protected
+   */
+  _shouldCloseOnOutsideClick(event) {
+    if (event.composedPath().includes(this.positionTarget)) {
+      return false;
+    }
+    return super._shouldCloseOnOutsideClick(event);
+  }
 }
 
 defineCustomElement(PopoverOverlay);
