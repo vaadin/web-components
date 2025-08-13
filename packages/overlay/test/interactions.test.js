@@ -206,20 +206,30 @@ describe('interactions', () => {
         expect(overlay.opened).to.be.true;
       });
 
+      it('should provide reference to the overlay in the event detail', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-close', spy);
+        click(parent);
+        const event = spy.firstCall.args[0];
+        expect(event.detail.overlay).to.equal(overlay);
+      });
+
       describe('global', () => {
-        beforeEach(() => {
-          document.addEventListener('vaadin-overlay-close', preventDefaultListener);
-        });
-
-        afterEach(() => {
-          document.removeEventListener('vaadin-overlay-close', preventDefaultListener);
-        });
-
         it('should prevent closing the overlay if the global event was prevented', async () => {
+          document.addEventListener('vaadin-overlay-close', preventDefaultListener, { once: true });
+
           click(parent);
           await aTimeout(1);
 
           expect(overlay.opened).to.be.true;
+        });
+
+        it('should provide reference to the overlay in the global event detail', () => {
+          const globalSpy = sinon.spy();
+          document.addEventListener('vaadin-overlay-close', globalSpy, { once: true });
+          click(parent);
+          const event = globalSpy.firstCall.args[0];
+          expect(event.detail.overlay).to.equal(overlay);
         });
       });
     });

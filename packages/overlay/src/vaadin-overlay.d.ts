@@ -17,13 +17,13 @@ export type OverlayOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 /**
  * Fired after the overlay is opened.
  */
-export type OverlayOpenEvent = CustomEvent;
+export type OverlayOpenEvent = CustomEvent<{ overlay: HTMLElement }>;
 
 /**
  * Fired when the opened overlay is about to be closed.
  * Calling `preventDefault()` on the event cancels the closing.
  */
-export type OverlayCloseEvent = CustomEvent;
+export type OverlayCloseEvent = CustomEvent<{ overlay: HTMLElement }>;
 
 /**
  * Fired after the overlay is closed.

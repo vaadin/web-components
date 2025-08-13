@@ -28,6 +28,14 @@ describe('vaadin-overlay', () => {
       expect(spy).to.be.calledOnce;
     });
 
+    it('should provide reference to the overlay in the event detail', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+      const event = spy.firstCall.args[0];
+      expect(event.detail.overlay).to.equal(overlay);
+    });
+
     it('should not fire when immediately setting opened property back to false', async () => {
       overlay.opened = true;
       overlay.opened = false;
@@ -61,6 +69,15 @@ describe('vaadin-overlay', () => {
         await nextFrame();
         await aTimeout(0);
         expect(globalSpy).to.be.called;
+        expect(globalSpy.firstCall.args);
+      });
+
+      it('should provide reference to the overlay in the global event detail', async () => {
+        overlay.opened = true;
+        await nextFrame();
+        await aTimeout(0);
+        const event = globalSpy.firstCall.args[0];
+        expect(event.detail.overlay).to.equal(overlay);
       });
     });
   });
