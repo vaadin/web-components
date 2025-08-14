@@ -54,7 +54,7 @@ export function enforceThemePlugin(theme) {
         body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
       }
 
-      if (['base', 'aura'].includes(theme) && context.response.is('html', 'js')) {
+      if (theme === 'base' && context.response.is('html', 'js')) {
         // Remove all not transformed CSS imports
         body = body.replaceAll(/^.+(vaadin-lumo-styles|\.\.)\/.+\.css.+$/gmu, '');
       }
