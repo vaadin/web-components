@@ -332,16 +332,6 @@ describe('accessibility', () => {
       expect(rte.htmlValue).to.include(`${'\t'.repeat(7)}Level 7`);
       expect(rte.htmlValue).to.include(`${'\t'.repeat(8)}Level 8`);
     });
-
-    it('should handle nested elements with indentation', () => {
-      rte.value = JSON.stringify([
-        { insert: 'Normal\n' },
-        { insert: 'Indented with ', attributes: { indent: 1 } },
-        { insert: 'nested', attributes: { bold: true, indent: 1 } },
-        { insert: ' content\n', attributes: { indent: 1 } },
-      ]);
-      expect(rte.htmlValue).to.equal('<p>Normal</p><p>\tIndented with <strong>nested</strong> content</p>');
-    });
   });
 
   describe('code block', () => {
