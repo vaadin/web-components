@@ -39,11 +39,10 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `disabled`   | Set to a disabled text editor | :host
- * `readonly`   | Set to a readonly text editor | :host
- * `on`         | Set to a toolbar button applied to the selected text | toolbar-button
+ * Attribute    | Description
+ * -------------|------------------------------
+ * `disabled`   | Set to a disabled text editor
+ * `readonly`   | Set to a readonly text editor
  *
  * The following shadow DOM parts are available for styling:
  *
@@ -52,7 +51,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * `content`                            | The content wrapper
  * `toolbar`                            | The toolbar wrapper
  * `toolbar-group`                      | The group for toolbar controls
- * `toolbar-group-history`              | The group for histroy controls
+ * `toolbar-group-history`              | The group for history controls
  * `toolbar-group-emphasis`             | The group for emphasis controls
  * `toolbar-group-heading`              | The group for heading controls
  * `toolbar-group-style`                | The group for style controls

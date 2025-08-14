@@ -191,16 +191,7 @@ describe('toolbar controls', () => {
       expect(editor.getFormat(0)).to.deep.equal({});
     });
 
-    describe('on state attribute', () => {
-      it('should toggle "on" attribute when the format button is clicked', () => {
-        btn = getButton('bold');
-
-        btn.click();
-        expect(btn.hasAttribute('on')).to.be.true;
-        btn.click();
-        expect(btn.hasAttribute('on')).to.be.false;
-      });
-
+    describe('pressed button', () => {
       it('should toggle "toolbar-button-pressed" part value when the format button is clicked', () => {
         btn = getButton('bold');
 
@@ -210,7 +201,7 @@ describe('toolbar controls', () => {
         expect(btn.part.contains('toolbar-button-pressed')).to.be.false;
       });
 
-      it('should toggle "on" attribute for corresponding buttons when selection is changed', () => {
+      it('should toggle "toolbar-button-pressed" part value for corresponding buttons when selection is changed', () => {
         const delta = new window.Quill.imports.delta([
           { attributes: { bold: true }, insert: 'Foo\n' },
           { attributes: { italic: true }, insert: 'Bar\n' },
@@ -223,19 +214,19 @@ describe('toolbar controls', () => {
         const linkBtn = getButton('link');
 
         editor.setSelection(0, 1);
-        expect(boldBtn.hasAttribute('on')).to.be.true;
-        expect(italicBtn.hasAttribute('on')).to.be.false;
-        expect(linkBtn.hasAttribute('on')).to.be.false;
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.true;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
+        expect(linkBtn.part.contains('toolbar-button-pressed')).to.be.false;
 
         editor.setSelection(4, 1);
-        expect(boldBtn.hasAttribute('on')).to.be.false;
-        expect(italicBtn.hasAttribute('on')).to.be.true;
-        expect(linkBtn.hasAttribute('on')).to.be.false;
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.true;
+        expect(linkBtn.part.contains('toolbar-button-pressed')).to.be.false;
 
         editor.setSelection(8, 1);
-        expect(boldBtn.hasAttribute('on')).to.be.false;
-        expect(italicBtn.hasAttribute('on')).to.be.false;
-        expect(linkBtn.hasAttribute('on')).to.be.true;
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
+        expect(linkBtn.part.contains('toolbar-button-pressed')).to.be.true;
       });
     });
 
