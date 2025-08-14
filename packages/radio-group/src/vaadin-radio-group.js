@@ -38,16 +38,16 @@ import { RadioGroupMixin } from './vaadin-radio-group-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|------------
- * `disabled`          | Set when the element is disabled          | :host
- * `readonly`          | Set when the element is readonly          | :host
- * `invalid`           | Set when the element is invalid           | :host
- * `focused`           | Set when the element is focused           | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
+ * Attribute           | Description
+ * --------------------|---------------------------------
+ * `disabled`          | Set when the element is disabled
+ * `readonly`          | Set when the element is readonly
+ * `invalid`           | Set when the element is invalid
+ * `focused`           | Set when the element is focused
+ * `has-label`         | Set when the element has a label
+ * `has-value`         | Set when the element has a value
+ * `has-helper`        | Set when the element has helper text
+ * `has-error-message` | Set when the element has an error message
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

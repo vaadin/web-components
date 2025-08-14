@@ -39,9 +39,9 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute       | Description | Part name
- * ----------------|-------------|------------
- * `indeterminate` | Set to an indeterminate progress bar | :host
+ * Attribute       | Description
+ * ----------------|-------------------------------------
+ * `indeterminate` | Set to an indeterminate progress bar
  *
  * @customElement
  * @extends HTMLElement

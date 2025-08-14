@@ -189,10 +189,10 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute | Description | Part name
- * ----------|-------------|------------
- * `opened`  | Set when the combo box dropdown is open | :host
- * `loading` | Set when new items are expected | :host
+ * Attribute | Description
+ * ----------|----------------------------------------
+ * `opened`  | Set when the combo box dropdown is open
+ * `loading` | Set when new items are expected
  *
  * ### Internal components
  *

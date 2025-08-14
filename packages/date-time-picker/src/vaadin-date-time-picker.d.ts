@@ -69,17 +69,17 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|------------
- * `disabled`          | Set when the element is disabled          | :host
- * `focused`           | Set when the element is focused           | :host
- * `focus-ring`        | Set when the element is keyboard focused  | :host
- * `readonly`          | Set when the element is readonly          | :host
- * `invalid`           | Set when the element is invalid           | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
+ * Attribute           | Description
+ * --------------------|---------------------------------
+ * `disabled`          | Set when the element is disabled
+ * `focused`           | Set when the element is focused
+ * `focus-ring`        | Set when the element is keyboard focused
+ * `readonly`          | Set when the element is readonly
+ * `invalid`           | Set when the element is invalid
+ * `has-label`         | Set when the element has a label
+ * `has-value`         | Set when the element has a value
+ * `has-helper`        | Set when the element has helper text
+ * `has-error-message` | Set when the element has an error message
  *
  * ### Internal components
  *
