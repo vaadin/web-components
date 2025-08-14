@@ -529,7 +529,6 @@ export const RichTextEditorMixin = (superClass) =>
         toolbar.controls.forEach((pair) => {
           const input = pair[1];
           const isActive = input.classList.contains('ql-active');
-          input.toggleAttribute('on', isActive);
           input.part.toggle('toolbar-button-pressed', isActive);
         });
       };
