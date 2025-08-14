@@ -36,14 +36,14 @@ registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-cus
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|------------
- * `invalid`           | Set when the element is invalid           | :host
- * `focused`           | Set when the element is focused           | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
+ * Attribute           | Description
+ * --------------------|--------------------------------
+ * `invalid`           | Set when the element is invalid
+ * `focused`           | Set when the element is focused
+ * `has-label`         | Set when the element has a label
+ * `has-value`         | Set when the element has a value
+ * `has-helper`        | Set when the element has helper text
+ * `has-error-message` | Set when the element has an error message
  *
  * You may also manually set `disabled` or `readonly` attribute on this component to make the label
  * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.

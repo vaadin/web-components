@@ -44,10 +44,10 @@ export * from './vaadin-grid-tree-toggle-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * ---|---|---
- * `expanded` | When present, the toggle is expanded | :host
- * `leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
+ * Attribute  | Description
+ * -----------|-------------------------------------
+ * `expanded` | When present, the toggle is expanded
+ * `leaf`     | When present, the toggle is not expandable, i. e., the current item is a leaf
  *
  * The following custom CSS properties are available on
  * the `<vaadin-grid-tree-toggle>` element:

@@ -51,10 +51,10 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
- * `overflow` | It's set to `start`, `end`, none or both. | :host
+ * Attribute      | Description
+ * ---------------|--------------------------------------
+ * `orientation`  | Tabs disposition, valid values are `horizontal` and `vertical`
+ * `overflow`     | It's set to `start`, `end`, none or both.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

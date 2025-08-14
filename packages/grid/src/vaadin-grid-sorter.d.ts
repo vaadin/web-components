@@ -41,9 +41,9 @@ export * from './vaadin-grid-sorter-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `direction` | Sort direction of a sorter | :host
+ * Attribute    | Description
+ * -------------|---------------------------
+ * `direction`  | Sort direction of a sorter
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
