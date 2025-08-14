@@ -44,6 +44,7 @@ describe('vaadin-confirm-dialog', () => {
 
     it('should use display: none when hidden while opened', async () => {
       confirm.opened = true;
+      await oneEvent(confirm.$.overlay, 'vaadin-overlay-open');
       confirm.hidden = true;
       await nextRender();
       expect(getComputedStyle(confirm).display).to.equal('none');
