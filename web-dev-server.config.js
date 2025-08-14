@@ -41,12 +41,17 @@ export function enforceThemePlugin(theme) {
     transform(context) {
       let { body } = context;
 
-      if (theme === 'aura' && context.response.is('html')) {
-        // For dev pages: replace link to CSS stylesheet with JS autoload script
+      if (theme === 'lumo' && context.response.is('html')) {
+        // For dev pages: add Lumo stylesheet
         body = body.replace(
-          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
-          '<link rel="stylesheet" href="/packages/aura/aura.css" />',
+          '</title>',
+          '</title><link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
         );
+      }
+
+      if (theme === 'aura' && context.response.is('html')) {
+        // For dev pages: add Aura Stylesheet
+        body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
       }
 
       if (['base', 'aura'].includes(theme) && context.response.is('html', 'js')) {
