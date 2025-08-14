@@ -319,16 +319,12 @@ snapshots["vaadin-date-picker host opened default"] =
   top-aligned=""
 >
   <label
-    aria-hidden="true"
-    data-aria-hidden="true"
     for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
   </label>
   <div
-    aria-hidden="true"
-    data-aria-hidden="true"
     hidden=""
     id="error-message-vaadin-date-picker-2"
     slot="error-message"

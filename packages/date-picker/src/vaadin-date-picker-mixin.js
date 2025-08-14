@@ -911,7 +911,7 @@ export const DatePickerMixin = (subclass) =>
         this._overlayContent.focusDateElement();
       }
 
-      const focusables = this._noInput ? content : [input, content];
+      const focusables = this._noInput ? content : this;
       this.__showOthers = hideOthers(focusables);
     }
 
