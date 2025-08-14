@@ -11,6 +11,7 @@ snapshots["vaadin-rich-text-editor host"] =
     reject-theme="error"
     role="alertdialog"
     slot="link-dialog"
+    tabindex="0"
     with-backdrop=""
   >
     <vaadin-text-field style="width: 100%;">

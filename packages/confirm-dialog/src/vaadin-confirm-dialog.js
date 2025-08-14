@@ -83,6 +83,10 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
       :host([hidden]) {
         display: none !important;
       }
+
+      :host(:focus) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      }
     `;
   }
 

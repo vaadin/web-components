@@ -9,6 +9,7 @@ snapshots["vaadin-confirm-dialog host"] =
   header="Unsaved changes"
   opened=""
   role="alertdialog"
+  tabindex="0"
   with-backdrop=""
 >
   Do you want to save or discard the changes?
@@ -132,7 +133,6 @@ snapshots["vaadin-confirm-dialog overlay"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <header part="header">
     <slot name="header">

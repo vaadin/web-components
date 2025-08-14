@@ -14,6 +14,7 @@ snapshots["vaadin-crud host default"] =
     confirm-theme="primary"
     role="alertdialog"
     slot="confirm-cancel"
+    tabindex="0"
     with-backdrop=""
   >
     <h3 slot="header">
@@ -56,6 +57,7 @@ snapshots["vaadin-crud host default"] =
     confirm-theme="primary error"
     role="alertdialog"
     slot="confirm-delete"
+    tabindex="0"
     with-backdrop=""
   >
     <h3 slot="header">
