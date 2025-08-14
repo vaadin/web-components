@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaadin charts | area range</title>
+    <script defer>
+      fetch('./demo-data/temperature-date-min-max.json')
+        .then((response) => response.json())
+        .then((data) => {
+          const series = document.querySelector('vaadin-chart-series');
+          series.values = data;
+        });
+    </script>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import './theme-switcher.js';
+    </script>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
+
+    <vaadin-chart
+      type="arearange"
+      title="Temperature variation by day"
+      additional-options='{
+        "chart": {
+          "zoomType": "x"
+        },
+        "xAxis": {
+          "type": "datetime"
+        },
+        "tooltip": {
+          "crosshairs": true,
+          "shared": true,
+          "valueSuffix": "°C"
+        }
+      }'
+    >
+      <vaadin-chart-series title="Temperatures"></vaadin-chart-series>
+    </vaadin-chart>
+  </body>
+</html>
