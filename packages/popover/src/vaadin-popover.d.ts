@@ -170,6 +170,8 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
    *
    * - `root` The root container DOM element. Append your content to it.
    * - `popover` The reference to the `vaadin-popover` element (overlay host).
+   *
+   * @deprecated Add content elements as children of the popover using default slot
    */
   renderer: PopoverRenderer | null | undefined;
 
@@ -231,6 +233,8 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   *
+   * @deprecated Add content elements as children of the popover using default slot
    */
   requestContentUpdate(): void;
 
