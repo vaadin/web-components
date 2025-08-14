@@ -45,7 +45,7 @@ export default [
     ignores: [
       'coverage/**/*.js',
       'dist/**/*.js',
-      'api-docs/dist/**/*.js',
+      '**/dist/**/*',
       'packages/**/vendor/*.js',
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
