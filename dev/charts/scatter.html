@@ -8,11 +8,11 @@
     <script type="module" src="../../common.js"></script>
     <script type="module">
       import '@vaadin/charts';
-      import '../theme-switcher.js';
+      import './theme-switcher.js';
     </script>
     <script defer>
       // female data
-      fetch('../demo-data/female-height-weight.json')
+      fetch('./demo-data/female-height-weight.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series[title="Female"]');
@@ -20,7 +20,7 @@
         });
 
       // male data
-      fetch('../demo-data/male-height-weight.json')
+      fetch('./demo-data/male-height-weight.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series[title="Male"]');

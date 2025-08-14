@@ -1,37 +1,40 @@
 <!doctype html>
 <html>
   <head>
-    <title>Vaadin charts | column range</title>
+    <title>Vaadin charts | area range</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
-    <script type="module" src="../../common.js"></script>
-    <script type="module">
-      import '@vaadin/charts';
-      import '../theme-switcher.js';
-    </script>
     <script defer>
-      fetch('../demo-data/temperature-date-min-max.json')
+      fetch('./demo-data/temperature-date-min-max.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series');
           series.values = data;
         });
-      const series = document.querySelector('vaadin-chart-series');
+    </script>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
+    <script type="module" src="../../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import './theme-switcher.js';
     </script>
   </head>
   <body>
     <theme-switcher></theme-switcher>
 
     <vaadin-chart
-      type="columnrange"
+      type="arearange"
       title="Temperature variation by day"
-      timeline
       additional-options='{
-        "rangeSelector": {
-          "selected": 2
+        "chart": {
+          "zoomType": "x"
+        },
+        "xAxis": {
+          "type": "datetime"
         },
         "tooltip": {
+          "crosshairs": true,
+          "shared": true,
           "valueSuffix": "°C"
         }
       }'

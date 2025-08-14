@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
   <head>
-    <title>Vaadin charts | candle stick</title>
+    <title>Vaadin charts | ohlc</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="../../common.js"></script>
     <script type="module">
       import '@vaadin/charts';
-      import '../theme-switcher.js';
+      import './theme-switcher.js';
     </script>
     <script defer>
-      fetch('../demo-data/aapl-date-ohlc.json')
+      fetch('./demo-data/aapl-date-ohlc.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series');
@@ -21,19 +21,9 @@
   </head>
   <body>
     <theme-switcher></theme-switcher>
-
-    <vaadin-chart
-      title="AAPL Stock Price"
-      tooltip
-      timeline
-      additional-options='{
-        "rangeSelector": {
-          "selected": 4
-        }
-      }'
-    >
+    <vaadin-chart title="AAPL Stock Price" timeline>
       <vaadin-chart-series
-        type="candlestick"
+        type="ohlc"
         title="AAPL Stock Price"
         additional-options='{
           "dataGrouping": {

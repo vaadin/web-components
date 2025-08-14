@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
   <head>
-    <title>Vaadin charts | area spline range</title>
+    <title>Vaadin charts | candle stick</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="../../common.js"></script>
     <script type="module">
       import '@vaadin/charts';
-      import '../theme-switcher.js';
+      import './theme-switcher.js';
     </script>
     <script defer>
-      fetch('../demo-data/temperature-date-min-max.json')
+      fetch('./demo-data/aapl-date-ohlc.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series');
@@ -23,17 +23,27 @@
     <theme-switcher></theme-switcher>
 
     <vaadin-chart
-      type="areasplinerange"
-      title="Temperature variation by day"
-      timeline
+      title="AAPL Stock Price"
       tooltip
+      timeline
       additional-options='{
-        "tooltip": {
-          "valueSuffix": "°C"
+        "rangeSelector": {
+          "selected": 4
         }
       }'
     >
-      <vaadin-chart-series title="Temperatures"></vaadin-chart-series>
+      <vaadin-chart-series
+        type="candlestick"
+        title="AAPL Stock Price"
+        additional-options='{
+          "dataGrouping": {
+            "units": [
+              ["week", [1]],
+              ["month", [1, 2, 3, 4, 6]]
+            ]
+          }
+        }'
+      ></vaadin-chart-series>
     </vaadin-chart>
   </body>
 </html>

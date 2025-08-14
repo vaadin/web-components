@@ -1,17 +1,17 @@
 <!doctype html>
 <html>
   <head>
-    <title>Vaadin charts | ohlc</title>
+    <title>Vaadin charts | area spline range</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="../../common.js"></script>
     <script type="module">
       import '@vaadin/charts';
-      import '../theme-switcher.js';
+      import './theme-switcher.js';
     </script>
     <script defer>
-      fetch('../demo-data/aapl-date-ohlc.json')
+      fetch('./demo-data/temperature-date-min-max.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series');
@@ -21,19 +21,19 @@
   </head>
   <body>
     <theme-switcher></theme-switcher>
-    <vaadin-chart title="AAPL Stock Price" timeline>
-      <vaadin-chart-series
-        type="ohlc"
-        title="AAPL Stock Price"
-        additional-options='{
-          "dataGrouping": {
-            "units": [
-              ["week", [1]],
-              ["month", [1, 2, 3, 4, 6]]
-            ]
-          }
-        }'
-      ></vaadin-chart-series>
+
+    <vaadin-chart
+      type="areasplinerange"
+      title="Temperature variation by day"
+      timeline
+      tooltip
+      additional-options='{
+        "tooltip": {
+          "valueSuffix": "°C"
+        }
+      }'
+    >
+      <vaadin-chart-series title="Temperatures"></vaadin-chart-series>
     </vaadin-chart>
   </body>
 </html>

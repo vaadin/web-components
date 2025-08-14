@@ -8,10 +8,10 @@
     <script type="module" src="../../common.js"></script>
     <script type="module">
       import '@vaadin/charts';
-      import '../theme-switcher.js';
+      import './theme-switcher.js';
     </script>
     <script defer>
-      fetch('../demo-data/height-weight.json')
+      fetch('./demo-data/height-weight.json')
         .then((response) => response.json())
         .then((data) => {
           const series = document.querySelector('vaadin-chart-series[type="scatter"]');
