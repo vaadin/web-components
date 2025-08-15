@@ -29,7 +29,7 @@ export function generateListing(html, dir) {
           .readdirSync(dir || '.')
           .filter((file) => file !== 'index.html')
           .filter((file) => file.endsWith('.html'))
-          .map((file) => `<li><a href="${dir || ''}${file}">${file}</a></li>`)
+          .map((file) => `<li><a href="${dir ? `${dir}/` : ''}${file}">${file}</a></li>`)
           .join('')}
       </ul>`;
 
