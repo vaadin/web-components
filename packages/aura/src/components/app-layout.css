@@ -1,0 +1,41 @@
+html {
+  --app-layout-inset: 1.5vmin;
+}
+
+/* Aligned with App Layout overlay breakpoint */
+@media (width <= 800px), (height <= 600px) {
+  html {
+    --app-layout-inset: 0px;
+    --mdl-border: 0px;
+  }
+}
+
+vaadin-app-layout {
+  padding-block: var(--app-layout-inset);
+  padding-inline-end: var(--app-layout-inset);
+}
+
+vaadin-app-layout[overlay] {
+  padding-inline-start: var(--app-layout-inset);
+}
+
+vaadin-app-layout::part(drawer) {
+  padding: var(--app-layout-inset);
+}
+
+vaadin-app-layout > [slot='drawer'] {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+vaadin-app-layout > header[slot='drawer'] {
+  grid-row: 1;
+}
+
+vaadin-app-layout > footer[slot='drawer'] {
+  grid-row: 3;
+}
+
+vaadin-app-layout > [slot='drawer'] vaadin-side-nav {
+  padding-inline: calc(var(--side-nav-padding) - var(--app-layout-inset));
+}
