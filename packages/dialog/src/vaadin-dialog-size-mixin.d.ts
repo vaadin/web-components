@@ -11,13 +11,13 @@ export declare function DialogSizeMixin<T extends Constructor<HTMLElement>>(
 
 export declare class DialogSizeMixinClass {
   /**
-   * Set the width of the overlay.
+   * Set the width of the dialog.
    * If a unitless number is provided, pixels are assumed.
    */
   width: string | null;
 
   /**
-   * Set the height of the overlay.
+   * Set the height of the dialog.
    * If a unitless number is provided, pixels are assumed.
    */
   height: string | null;

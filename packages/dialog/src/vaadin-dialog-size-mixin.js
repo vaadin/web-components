@@ -12,7 +12,7 @@ export const DialogSizeMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * Set the width of the overlay.
+         * Set the width of the dialog.
          * If a unitless number is provided, pixels are assumed.
          */
         width: {
@@ -20,7 +20,7 @@ export const DialogSizeMixin = (superClass) =>
         },
 
         /**
-         * Set the height of the overlay.
+         * Set the height of the dialog.
          * If a unitless number is provided, pixels are assumed.
          */
         height: {

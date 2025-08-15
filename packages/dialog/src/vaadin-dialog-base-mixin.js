@@ -53,24 +53,22 @@ export const DialogBaseMixin = (superClass) =>
         },
 
         /**
-         * Set the distance of the overlay from the top of its container.
+         * Set the distance of the dialog from the top of the viewport.
          * If a unitless number is provided, pixels are assumed.
          *
-         * Note that the overlay top edge may not be the same as the viewport
-         * top edge (e.g. the Lumo theme defines some spacing to prevent the
-         * overlay from stretching all the way to the top of the viewport).
+         * Note that the dialog uses an internal container that has some
+         * additional spacing, which can be overridden by the theme.
          */
         top: {
           type: String,
         },
 
         /**
-         * Set the distance of the overlay from the left of its container.
+         * Set the distance of the dialog from the left of the viewport.
          * If a unitless number is provided, pixels are assumed.
          *
-         * Note that the overlay left edge may not be the same as the viewport
-         * left edge (e.g. the Lumo theme defines some spacing to prevent the
-         * overlay from stretching all the way to the left of the viewport).
+         * Note that the dialog uses an internal container that has some
+         * additional spacing, which can be overridden by the theme.
          */
         left: {
           type: String,
