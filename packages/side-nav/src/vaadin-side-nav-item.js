@@ -9,12 +9,34 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { location } from './location.js';
 import { sideNavItemStyles } from './styles/vaadin-side-nav-item-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+
+class ContentController extends SlotController {
+  constructor(host) {
+    super(host, '', 'span');
+  }
+
+  initNode(node) {
+    let content = node;
+    if (node !== this.defaultNode) {
+      // Wrap text node with a span
+      if (node.nodeType === Node.TEXT_NODE) {
+        const defaultNode = this.attachDefaultNode();
+        defaultNode.appendChild(node);
+        content = defaultNode;
+      }
+    }
+
+    this.dispatchEvent(new CustomEvent('content-changed', { detail: { node: content }}));
+  }
+}
 
 /**
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
@@ -204,6 +226,18 @@ class SideNavItem extends SideNavChildrenMixin(
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'listitem');
     }
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setTarget(this.$.content);
+
+    this._contentController = new ContentController(this);
+    this._contentController.addEventListener('content-changed', (e) => {
+      console.warn(e.detail.node);
+      this._tooltipController.setAriaTarget(e.detail.node);
+    });
+
+    this.addController(this._contentController);
+    this.addController(this._tooltipController);
   }
 
   /**
@@ -246,7 +280,7 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @protected */
   render() {
     return html`
-      <div part="content" @click="${this._onContentClick}">
+      <div id="content" part="content" @click="${this._onContentClick}">
         <a
           id="link"
           ?disabled="${this.disabled}"
@@ -274,6 +308,8 @@ class SideNavItem extends SideNavChildrenMixin(
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
