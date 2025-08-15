@@ -16,7 +16,7 @@ export default {
         (html) => appendStyles(html),
         (html, { htmlFileName }) => {
           const folderPath = htmlFileName === 'charts/index.html' ? '/charts' : '';
-          return generateListing(html, `.${folderPath}`, folderPath);
+          return generateListing(html, `.${folderPath}`);
         },
       ],
       transformAsset: [
