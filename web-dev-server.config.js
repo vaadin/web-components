@@ -78,6 +78,8 @@ export default {
           // Index page listing
           if (['/dev/index.html', '/dev', '/dev/'].includes(context.path)) {
             body = generateListing(body, './dev', context.path);
+          } else if (['/dev/charts/index.html', '/dev/charts', '/dev/charts/'].includes(context.path)) {
+            body = generateListing(body, './dev/charts', context.path);
           }
 
           return { body };
