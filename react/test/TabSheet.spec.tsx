@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { TabSheet, TabSheetTab, tab } from '../packages/react-components/src/TabSheet.js';
+import { TabSheet, TabSheetTab } from '../packages/react-components/src/TabSheet.js';
 import type { TabElement } from '../packages/react-components/src/Tab.js';
-import sinon from 'sinon';
 import { useState } from 'react';
 
 function getTabSheet() {
@@ -141,13 +140,6 @@ describe('TabSheet', () => {
 
     const suffix = getTabSheet().querySelector('[slot="suffix"]');
     expect(suffix).to.have.text('SUFFIX');
-  });
-
-  it('should warn when using the tab helper', async () => {
-    const stub = sinon.stub(console, 'warn');
-    tab('Tab 1');
-    expect(stub.calledOnce).to.be.true;
-    stub.restore();
   });
 
   it('should expand content element to full size', async () => {

@@ -1,7 +1,5 @@
 import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
-import { Tab } from '../../packages/react-components/src/Tab.js';
-import { Tabs } from '../../packages/react-components/src/Tabs.js';
-import { tab, TabSheet } from '../../packages/react-components/src/TabSheet.js';
+import { TabSheet, TabSheetTab } from '../../packages/react-components/src/TabSheet.js';
 
 export default function Row10() {
   return (
@@ -10,17 +8,17 @@ export default function Row10() {
         <div slot="prefix">Prefix</div>
         <div slot="suffix">Suffix</div>
 
-        <Tabs slot="tabs">
-          <Tab id="tab-1">Tab 1</Tab>
-          <Tab id="tab-2">Tab 2</Tab>
-          <Tab id="tab-3">Tab 3</Tab>
-        </Tabs>
+        <TabSheetTab label="Tab 1">
+          <div>Panel 1</div>
+        </TabSheetTab>
 
-        <div {...tab('tab-1')}>Panel 1</div>
-        {/* @ts-expect-error TS2322: "tab" is not an HTML standard attribute */}
-        <div tab="tab-2">Panel 2</div>
-        {/* @ts-expect-error TS2322: "tab" is not an HTML standard attribute */}
-        <div tab="tab-3">Panel 3</div>
+        <TabSheetTab label="Tab 2">
+          <div>Panel 2</div>
+        </TabSheetTab>
+
+        <TabSheetTab label="Tab 3">
+          <div>Panel 3</div>
+        </TabSheetTab>
       </TabSheet>
     </BoardRow>
   );
