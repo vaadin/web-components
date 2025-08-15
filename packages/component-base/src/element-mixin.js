@@ -48,9 +48,10 @@ export const ElementMixin = (superClass) =>
         window.Vaadin.registrations.push(this);
         registered.add(is);
 
-        if (window.Vaadin.developmentModeCallback) {
+        const callback = window.Vaadin.developmentModeCallback;
+        if (callback) {
           statsJob = Debouncer.debounce(statsJob, idlePeriod, () => {
-            window.Vaadin.developmentModeCallback['vaadin-usage-statistics']();
+            callback['vaadin-usage-statistics']();
           });
           enqueueDebouncer(statsJob);
         }

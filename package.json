@@ -9,6 +9,8 @@
     "api-docs:build": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs build",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
+    "dev:build": "yarn workspace dev build",
+    "dev:start": "yarn workspace dev start",
     "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
@@ -16,7 +18,6 @@
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky",
-    "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
@@ -90,6 +91,7 @@
   "workspaces": [
     "test/*",
     "packages/*",
-    "api-docs"
+    "api-docs",
+    "dev"
   ]
 }

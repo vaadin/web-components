@@ -1,5 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
-import fs from 'node:fs';
+import { appendStyles, generateListing } from './wds-utils.js';
 
 const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base';
 
@@ -64,23 +64,6 @@ export function enforceThemePlugin(theme) {
   };
 }
 
-const preventFouc = `
-  <style>
-    body:not(.resolved) {
-      opacity: 0;
-    }
-
-    body {
-      transition: opacity 0.2s;
-    }
-  </style>
-
-  <script type="module">
-    // It's important to use type module for the script so the timing is correct
-    document.body.classList.add('resolved');
-  </script>
-`;
-
 export default {
   plugins: [
     {
@@ -90,21 +73,11 @@ export default {
           let body = context.body;
 
           // Fouc prevention
-          body = body.replace(/<\/body>/u, `${preventFouc}\n</body>`);
+          body = appendStyles(body);
 
           // Index page listing
           if (['/dev/index.html', '/dev', '/dev/'].includes(context.path)) {
-            const listing = `
-              <ul id="listing">
-                ${fs
-                  .readdirSync('./dev')
-                  .filter((file) => file !== 'index.html')
-                  .filter((file) => file.endsWith('.html'))
-                  .map((file) => `<li><a href="/dev/${file}">${file}</a></li>`)
-                  .join('')}
-              </ul>`;
-
-            body = body.replace(/<ul id="listing">.*<\/ul>/u, listing);
+            body = generateListing(body, './dev', context.path);
           }
 
           return { body };
