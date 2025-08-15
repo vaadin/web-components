@@ -57,7 +57,7 @@ Pointer.prototype.onDocumentMouseMove = function (e) {
   // If we're outside, hide the tooltip
   if (
     chartPosition &&
-    (!tooltip || !tooltip.isStickyOnContact()) &&
+    (!tooltip || !tooltip.isSticky) &&
     !chart.isInsidePlot(pEvt.chartX - chart.plotLeft, pEvt.chartY - chart.plotTop, {
       visiblePlotOnly: true,
     }) &&
