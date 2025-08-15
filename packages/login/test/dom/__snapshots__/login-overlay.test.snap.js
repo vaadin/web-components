@@ -4,8 +4,10 @@ export const snapshots = {};
 snapshots["vaadin-login-overlay host default"] = 
 `<vaadin-login-overlay
   aria-labelledby="title-vaadin-login-overlay-8"
+  aria-modal="true"
   opened=""
   role="dialog"
+  tabindex="0"
   with-backdrop=""
 >
   <form
@@ -126,8 +128,10 @@ snapshots["vaadin-login-overlay host default"] =
 snapshots["vaadin-login-overlay host i18n"] = 
 `<vaadin-login-overlay
   aria-labelledby="title-vaadin-login-overlay-8"
+  aria-modal="true"
   opened=""
   role="dialog"
+  tabindex="0"
   with-backdrop=""
 >
   <form
@@ -248,8 +252,10 @@ snapshots["vaadin-login-overlay host i18n"] =
 snapshots["vaadin-login-overlay host i18n-partial"] = 
 `<vaadin-login-overlay
   aria-labelledby="title-vaadin-login-overlay-8"
+  aria-modal="true"
   opened=""
   role="dialog"
+  tabindex="0"
   with-backdrop=""
 >
   <form
@@ -436,7 +442,6 @@ snapshots["vaadin-login-overlay shadow wrapper"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <div
     id="content"
@@ -469,7 +474,6 @@ snapshots["vaadin-login-overlay shadow i18n"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <div
     id="content"

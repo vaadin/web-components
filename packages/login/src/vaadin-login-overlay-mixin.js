@@ -49,6 +49,8 @@ export const LoginOverlayMixin = (superClass) =>
       super.firstUpdated();
 
       this.setAttribute('role', 'dialog');
+      this.setAttribute('aria-modal', 'true');
+      this.setAttribute('tabindex', '0');
 
       this.__titleController = new TitleController(this);
       this.addController(this.__titleController);

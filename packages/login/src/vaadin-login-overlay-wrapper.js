@@ -49,11 +49,29 @@ class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMix
     return this.owner;
   }
 
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * @protected
+   * @override
+   */
+  get _focusTrapRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to not set `aria-hidden`
+   * @protected
+   * @override
+   */
+  get _useAriaHidden() {
+    return false;
+  }
+
   /** @protected */
   render() {
     return html`
       <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <div part="content" id="content">
           <section part="card">
             <div part="brand">
