@@ -3,6 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-side-nav-item.js';
 import '../src/vaadin-side-nav.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('accessibility', () => {
   describe('ARIA roles', () => {
@@ -92,8 +93,8 @@ describe('accessibility', () => {
         <div>
           <input />
           <vaadin-side-nav collapsible>
-            <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/bar">Bar</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar"><span>Bar</span></vaadin-side-nav-item>
           </vaadin-side-nav>
         </div>
       `);
@@ -131,11 +132,11 @@ describe('accessibility', () => {
     beforeEach(async () => {
       sideNav = fixtureSync(`
         <vaadin-side-nav>
-          <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
           <vaadin-side-nav-item path="/bar">
-            Bar
-            <vaadin-side-nav-item path="/bar/baz" slot="children">Baz</vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/bar/qux" slot="children">Qux</vaadin-side-nav-item>
+            <span>Bar</span>
+            <vaadin-side-nav-item path="/bar/baz" slot="children"><span>Baz</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children"><span>Qux</span></vaadin-side-nav-item>
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       `);
@@ -167,11 +168,11 @@ describe('accessibility', () => {
     beforeEach(async () => {
       sideNav = fixtureSync(`
         <vaadin-side-nav>
-          <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
           <vaadin-side-nav-item path="/bar">
-            Bar
-            <vaadin-side-nav-item path="/bar/baz" slot="children">Baz</vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/bar/qux" slot="children">Qux</vaadin-side-nav-item>
+            <span>Bar</span>
+            <vaadin-side-nav-item path="/bar/baz" slot="children"><span>Baz</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children"><span>Qux</span></vaadin-side-nav-item>
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       `);
@@ -210,6 +211,41 @@ describe('accessibility', () => {
       await nextRender();
 
       expect(link.getAttribute('href')).to.equal('/foo');
+    });
+  });
+
+  describe('tooltip', () => {
+    let sideNav, describedLabel;
+
+    beforeEach(async () => {
+      sideNav = fixtureSync(`
+        <vaadin-side-nav>
+          <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/bar">
+            <span id="label-for-item-with-children">Bar</span>
+            <vaadin-tooltip text="Simple tooltip for side nav item" slot="tooltip"></vaadin-tooltip>
+            <vaadin-side-nav-item path="/bar/baz" slot="children"><span>Baz</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children"><span>Qux</span></vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      `);
+      await nextRender();
+      describedLabel = sideNav.querySelector('#label-for-item-with-children');
+    });
+
+    it('attached tooltip should be used in reference for label span aria-describedby attribute', async () => {
+      await nextRender();
+
+      expect(describedLabel.innerText).to.eq('Bar');
+
+      const describedBy = describedLabel.getAttribute('aria-describedby');
+      expect(describedBy).to.be.not.null;
+
+      await nextRender();
+
+      const tooltipTextWrapper = sideNav.querySelector(`#${describedBy}`);
+      expect(tooltipTextWrapper).to.be.not.null;
+      expect(tooltipTextWrapper.innerText).to.eq('Simple tooltip for side nav item');
     });
   });
 });

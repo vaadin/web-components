@@ -10,8 +10,8 @@ describe('vaadin-side-nav', () => {
       `
         <vaadin-side-nav>
           <span slot="label">Main menu</span>
-          <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
-          <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
+          <vaadin-side-nav-item><span>Item 1</span></vaadin-side-nav-item>
+          <vaadin-side-nav-item><span>Item 2</span></vaadin-side-nav-item>
         </vaadin-side-nav>
             `,
     );
