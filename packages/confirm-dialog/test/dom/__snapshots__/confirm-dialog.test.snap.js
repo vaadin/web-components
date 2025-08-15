@@ -5,9 +5,11 @@ snapshots["vaadin-confirm-dialog host"] =
 `<vaadin-confirm-dialog
   aria-description="Do you want to save or discard the changes?"
   aria-label="Unsaved changes"
+  aria-modal="true"
   header="Unsaved changes"
   opened=""
   role="alertdialog"
+  tabindex="0"
   with-backdrop=""
 >
   Do you want to save or discard the changes?
@@ -131,7 +133,6 @@ snapshots["vaadin-confirm-dialog overlay"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <header part="header">
     <slot name="header">

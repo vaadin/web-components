@@ -36,14 +36,15 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     ['opened', 'opening', 'closing'].forEach((state) => {
-      it(`should use display: contents when ${state} attribute is set`, () => {
+      it(`should use display: block when ${state} attribute is set`, () => {
         confirm.setAttribute(state, '');
-        expect(getComputedStyle(confirm).display).to.equal('contents');
+        expect(getComputedStyle(confirm).display).to.equal('block');
       });
     });
 
     it('should use display: none when hidden while opened', async () => {
       confirm.opened = true;
+      await oneEvent(confirm.$.overlay, 'vaadin-overlay-open');
       confirm.hidden = true;
       await nextRender();
       expect(getComputedStyle(confirm).display).to.equal('none');

@@ -49,7 +49,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
   render() {
     return html`
       <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <header part="header"><slot name="header"></slot></header>
         <div part="content" id="content">
           <div part="message"><slot></slot></div>
@@ -97,6 +97,24 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
    */
   get _modalRoot() {
     return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * @protected
+   * @override
+   */
+  get _focusTrapRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to not set `aria-hidden`
+   * @protected
+   * @override
+   */
+  get _useAriaHidden() {
+    return false;
   }
 }
 

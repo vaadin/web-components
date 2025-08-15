@@ -9,10 +9,12 @@ snapshots["vaadin-crud host default"] =
   <vaadin-confirm-dialog
     aria-description="There are unsaved changes to this item."
     aria-label="Discard changes"
+    aria-modal="true"
     cancel-button-visible=""
     confirm-theme="primary"
     role="alertdialog"
     slot="confirm-cancel"
+    tabindex="0"
     with-backdrop=""
   >
     <h3 slot="header">
@@ -50,10 +52,12 @@ snapshots["vaadin-crud host default"] =
   <vaadin-confirm-dialog
     aria-description="Are you sure you want to delete this item? This action cannot be undone."
     aria-label="Delete item"
+    aria-modal="true"
     cancel-button-visible=""
     confirm-theme="primary error"
     role="alertdialog"
     slot="confirm-delete"
+    tabindex="0"
     with-backdrop=""
   >
     <h3 slot="header">

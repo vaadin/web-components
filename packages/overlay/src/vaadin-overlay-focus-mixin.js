@@ -81,13 +81,33 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
+     * Override to specify another element used as a focus trap root,
+     * e.g. the overlay's owner element, rather than overlay part.
+     * @protected
+     */
+    get _focusTrapRoot() {
+      return this.$.overlay;
+    }
+
+    /**
+     * Override not use a controller for setting `aria-hidden` on
+     * elements outside the overlay, e.g. when using `aria-modal`.
+     * @protected
+     */
+    _useAriaHidden() {
+      return true;
+    }
+
+    /**
      * Release focus and restore focus after the overlay is closed.
      *
      * @protected
      */
     _resetFocus() {
       if (this.focusTrap) {
-        this.__ariaModalController.close();
+        if (this._useAriaHidden) {
+          this.__ariaModalController.close();
+        }
         this.__focusTrapController.releaseFocus();
       }
 
@@ -115,8 +135,10 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _trapFocus() {
       if (this.focusTrap) {
-        this.__ariaModalController.showModal();
-        this.__focusTrapController.trapFocus(this.$.overlay);
+        if (this._useAriaHidden) {
+          this.__ariaModalController.showModal();
+        }
+        this.__focusTrapController.trapFocus(this._focusTrapRoot);
       }
     }
 
