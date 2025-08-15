@@ -86,7 +86,7 @@ export type ChartRedrawEvent = CustomEvent<{ chart: HighchartsChart; originalEve
 export type ChartSelectionEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
- * Fired when the chart finishes resizing
+ * Fired when the chart finishes resizing.
  */
 export type ChartEndResizeEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
