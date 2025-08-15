@@ -95,6 +95,26 @@ describe('login overlay', () => {
   });
 });
 
+describe('display', () => {
+  let login;
+
+  beforeEach(async () => {
+    login = fixtureSync('<vaadin-login-overlay></vaadin-login-overlay>');
+    await nextRender();
+  });
+
+  it('should use display: none when not opened', () => {
+    expect(getComputedStyle(login).display).to.equal('none');
+  });
+
+  ['opened', 'opening', 'closing'].forEach((state) => {
+    it(`should use display: block when ${state} attribute is set`, () => {
+      login.setAttribute(state, '');
+      expect(getComputedStyle(login).display).to.equal('block');
+    });
+  });
+});
+
 describe('no autofocus', () => {
   let login, overlay;
 
@@ -107,8 +127,8 @@ describe('no autofocus', () => {
   it('should not focus the username field', async () => {
     login.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    // Overlay traps focus and focuses the wrapper by default
-    expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
+    // Overlay traps focus and focuses the host by default
+    expect(getDeepActiveElement()).to.equal(login);
   });
 });
 
