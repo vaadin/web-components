@@ -33,6 +33,10 @@
     margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
   }
 
+  ::slotted([hidden]) {
+    display: none !important;
+  }
+
   [part='content'] {
     position: relative;
     flex: 1;
