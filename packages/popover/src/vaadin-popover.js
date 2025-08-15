@@ -252,7 +252,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set the height of the overlay.
+       * Set the height of the popover.
        * If a unitless number is provided, pixels are assumed.
        */
       height: {
@@ -260,7 +260,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set the width of the overlay.
+       * Set the width of the popover.
        * If a unitless number is provided, pixels are assumed.
        */
       width: {
@@ -339,9 +339,10 @@ class Popover extends PopoverPositionMixin(
        * Receives two arguments:
        *
        * - `root` The root container DOM element. Append your content to it.
-       * - `popover` The reference to the `vaadin-popover` element (overlay host).
+       * - `popover` The reference to the `vaadin-popover` element.
        *
        * @deprecated Use the content in the `vaadin-popover` via default slot
+       * - `popover` The reference to the `vaadin-popover` element.
        */
       renderer: {
         type: Object,
@@ -350,7 +351,7 @@ class Popover extends PopoverPositionMixin(
       /**
        * When true, the popover prevents interacting with background elements
        * by setting `pointer-events` style on the document body to `none`.
-       * This also enables trapping focus inside the overlay.
+       * This also enables trapping focus inside the popover.
        */
       modal: {
         type: Boolean,
