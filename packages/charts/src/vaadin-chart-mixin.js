@@ -553,7 +553,7 @@ export const ChartMixin = (superClass) =>
         selection: 'chart-selection',
 
         /**
-         * Fired when the chart finishes resizing
+         * Fired when the chart finishes resizing.
          * @event chart-end-resize
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} chart Chart object where the event was sent from

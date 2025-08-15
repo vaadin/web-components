@@ -122,7 +122,7 @@ export * from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} chart-drillupall - Fired after all the drilldown series has been drilled up.
  * @fires {CustomEvent} chart-redraw - Fired after the chart redraw.
  * @fires {CustomEvent} chart-selection - Fired when an area of the chart has been selected.
- * @fires {CustomEvent} chart-end-resize - Fired when the chart finishes resizing
+ * @fires {CustomEvent} chart-end-resize - Fired when the chart finishes resizing.
  * @fires {CustomEvent} series-after-animate - Fired when the series has finished its initial animation.
  * @fires {CustomEvent} series-checkbox-click - Fired when the checkbox next to the series' name in the legend is clicked.
  * @fires {CustomEvent} series-click - Fired when the series is clicked.
