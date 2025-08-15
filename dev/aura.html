@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aura</title>
-    <link rel="stylesheet" href="../packages/aura/aura.css">
+    <link rel="stylesheet" href="../packages/aura/aura.css" />
     <script type="module">
       window.Vaadin ||= {};
       window.Vaadin.featureFlags ||= {};
@@ -88,32 +88,43 @@
         return parts;
       };
 
-      customElements.define('mdl-back-button', class extends Button {
-        connectedCallback() {
-          super.connectedCallback();
-          this.setAttribute('theme', 'tertiary');
-          const icon = document.createElement('vaadin-icon');
-          icon.setAttribute('icon', 'lucide:arrow-back');
-          this.append(icon);
-          this.addEventListener('click', () => {
-            // TODO how to find the correct layout?
-            this.closest('vaadin-master-detail-layout').parentNode.closest('vaadin-master-detail-layout')?._setDetail(null);
-          });
-        }
-      });
+      customElements.define(
+        'mdl-back-button',
+        class extends Button {
+          connectedCallback() {
+            super.connectedCallback();
+            this.setAttribute('theme', 'tertiary');
+            const icon = document.createElement('vaadin-icon');
+            icon.setAttribute('icon', 'lucide:arrow-back');
+            this.append(icon);
+            this.addEventListener('click', () => {
+              // TODO how to find the correct layout?
+              const inner = this.closest('vaadin-master-detail-layout');
+              const outer = inner.parentNode.closest('vaadin-master-detail-layout');
+              outer?._setDetail(null);
+            });
+          }
+        },
+      );
 
       // Fake navigation: prevent actual navigation, update 'current' item manually
-      document.querySelectorAll('vaadin-side-nav').forEach((nav) => nav.addEventListener('click', (e) => {
-        const link = e.composedPath().find((el) => el.localName === 'a');
-        if (link) {
-          e.preventDefault();
-          if (link.href) {
-            link.getRootNode().host.closest('vaadin-side-nav').querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
-            const navItem = e.composedPath().find((el) => el.localName === 'vaadin-side-nav-item');
-            navItem.setAttribute('current', '');
+      document.querySelectorAll('vaadin-side-nav').forEach((nav) =>
+        nav.addEventListener('click', (e) => {
+          const link = e.composedPath().find((el) => el.localName === 'a');
+          if (link) {
+            e.preventDefault();
+            if (link.href) {
+              link
+                .getRootNode()
+                .host.closest('vaadin-side-nav')
+                .querySelectorAll('vaadin-side-nav-item')
+                .forEach((item) => item.removeAttribute('current'));
+              const navItem = e.composedPath().find((el) => el.localName === 'vaadin-side-nav-item');
+              navItem.setAttribute('current', '');
+            }
           }
-        }
-      }));
+        }),
+      );
     </script>
   </head>
   <body>
@@ -198,7 +209,8 @@
             <vaadin-side-nav-item path="/">
               <vaadin-icon icon="lucide:gear" slot="prefix"></vaadin-icon>
               <span>Settings</span>
-            </vaadin-side-nav-item><vaadin-side-nav-item path="/">
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/">
               <vaadin-icon icon="lucide:chat" slot="prefix"></vaadin-icon>
               <span>Support</span>
               <span theme="badge positive">Online</span>
@@ -244,11 +256,11 @@
             <vaadin-text-field label="Image" value="my-app:latest"></vaadin-text-field>
             <vaadin-text-field label="Hostname" value="my-app.local">
               <span slot="prefix">https://</span>
-            </vaadin-text-field>:
+            </vaadin-text-field>
             <vaadin-text-field label="Port" value="8080"></vaadin-text-field>
             <vaadin-checkbox label="Secure Connection" checked></vaadin-checkbox>
             <vaadin-number-field label="Replicas" step-buttons-visible value="1"></vaadin-number-field>
-            <hr>
+            <hr />
             <vaadin-checkbox-group label="Features">
               <vaadin-checkbox label="User Management" value="user-management" checked></vaadin-checkbox>
               <vaadin-checkbox label="Localization" value="localization"></vaadin-checkbox>
