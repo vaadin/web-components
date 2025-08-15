@@ -35,8 +35,12 @@ export function generateListing(html, dir, path) {
         ${fs
           .readdirSync(dir || '.')
           .filter((file) => file !== 'index.html')
-          .filter((file) => file.endsWith('.html'))
-          .map((file) => `<li><a href="${file}">${file}</a></li>`)
+          .filter((file) => file.endsWith('.html') || file === 'charts')
+          .map(
+            (file) => `<li>
+            <a href="${file}${file.endsWith('.html') ? '' : '/'}">${file}</a>
+          </li>`,
+          )
           .join('')}
       </ul>`;
 
