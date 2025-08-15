@@ -12,7 +12,13 @@ export default {
     nodeResolve(),
     html({
       flattenOutput: false, // Preserve "charts" folder
-      transformHtml: [(html) => appendStyles(html), (html) => generateListing(html)],
+      transformHtml: [
+        (html) => appendStyles(html),
+        (html, { htmlFileName }) => {
+          const folderPath = htmlFileName === 'charts/index.html' ? '/charts' : '';
+          return generateListing(html, `.${folderPath}`);
+        },
+      ],
       transformAsset: [
         async (content, filePath) => {
           if (filePath.endsWith('.css')) {
