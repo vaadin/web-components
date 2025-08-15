@@ -276,13 +276,13 @@ describe('vaadin-chart', () => {
       await oneEvent(chart, 'chart-load');
     });
 
-    it('should propagate height to the chart container', () => {
+    it('should propagate width to the chart container', () => {
       const rect = chart.$.chart.getBoundingClientRect();
       expect(rect.width).to.be.equal(400);
       expect(chart.configuration.chartWidth).to.be.equal(400);
     });
 
-    it('should update container height on chart resize', async () => {
+    it('should update container width on chart resize', async () => {
       chart.style.width = '300px';
       await oneEvent(chart, 'chart-end-resize');
       const rect = chart.$.chart.getBoundingClientRect();

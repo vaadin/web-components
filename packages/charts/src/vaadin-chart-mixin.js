@@ -35,12 +35,12 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './helpers.js';
 
-['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
+['exportChart', 'localExport', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
-    Highcharts.fireEvent(this, 'beforeExport');
+  Highcharts.wrap(Highcharts.Exporting.prototype, methodName, function (proceed, ...args) {
+    Highcharts.fireEvent(this.chart, 'beforeExport');
     const result = proceed.apply(this, args);
-    Highcharts.fireEvent(this, 'afterExport');
+    Highcharts.fireEvent(this.chart, 'afterExport');
     return result;
   });
   /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
@@ -57,7 +57,7 @@ Pointer.prototype.onDocumentMouseMove = function (e) {
   // If we're outside, hide the tooltip
   if (
     chartPosition &&
-    (!tooltip || !tooltip.isStickyOnContact()) &&
+    (!tooltip || !tooltip.isSticky) &&
     !chart.isInsidePlot(pEvt.chartX - chart.plotLeft, pEvt.chartY - chart.plotTop, {
       visiblePlotOnly: true,
     }) &&
@@ -301,11 +301,13 @@ export const ChartMixin = (superClass) =>
         args.forEach((arg) => inflateFunctions(arg));
         functionToCall.apply(this.configuration, args);
         if (redrawCharts) {
+          const lang = Highcharts.defaultOptions.lang;
           Highcharts.charts.forEach((c) => {
             // Ignore `undefined` values that are preserved in the array
             // after their corresponding chart instances are destroyed.
             // See https://github.com/vaadin/flow-components/issues/6607
             if (c !== undefined) {
+              c.time.lang = lang;
               c.redraw();
             }
           });
@@ -928,7 +930,7 @@ export const ChartMixin = (superClass) =>
       super.disconnectedCallback();
 
       if (this.configuration) {
-        this._jsonConfigurationBuffer = this.configuration.userOptions;
+        this._jsonConfigurationBuffer = deepMerge({}, this.configuration.userOptions);
       }
 
       queueMicrotask(() => {

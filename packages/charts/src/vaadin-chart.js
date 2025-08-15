@@ -178,7 +178,9 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   /** @protected */
   render() {
     return html`
-      <div id="chart"></div>
+      <div style="height: 100%;">
+        <div id="chart"></div>
+      </div>
       <slot id="slot"></slot>
     `;
   }
