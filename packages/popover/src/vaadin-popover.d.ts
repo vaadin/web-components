@@ -109,13 +109,13 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   autofocus: boolean;
 
   /**
-   * Set the height of the overlay.
+   * Set the height of the popover.
    * If a unitless number is provided, pixels are assumed.
    */
   height: string | null;
 
   /**
-   * Set the width of the overlay.
+   * Set the width of the popover.
    * If a unitless number is provided, pixels are assumed.
    */
   width: string | null;
@@ -152,12 +152,12 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   hoverDelay: number;
 
   /**
-   * True if the popover overlay is opened, false otherwise.
+   * True if the popover is visible and available for interaction.
    */
   opened: boolean;
 
   /**
-   * The `role` attribute value to be set on the overlay.
+   * The `role` attribute value to be set on the popover.
    *
    * @attr {string} overlay-role
    * @deprecated Use standard `role` attribute on the popover instead
@@ -165,11 +165,11 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   overlayRole: string;
 
   /**
-   * Custom function for rendering the content of the overlay.
+   * Custom function for rendering the content of the popover.
    * Receives two arguments:
    *
    * - `root` The root container DOM element. Append your content to it.
-   * - `popover` The reference to the `vaadin-popover` element (overlay host).
+   * - `popover` The reference to the `vaadin-popover` element.
    *
    * @deprecated Add content elements as children of the popover using default slot
    */
@@ -178,37 +178,34 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   /**
    * When true, the popover prevents interacting with background elements
    * by setting `pointer-events` style on the document body to `none`.
-   * This also enables trapping focus inside the overlay.
+   * This also enables trapping focus inside the popover.
    */
   modal: boolean;
 
   /**
-   * Set to true to disable closing popover overlay on outside click.
+   * Set to true to disable closing popover on outside click.
    *
    * @attr {boolean} no-close-on-outside-click
    */
   noCloseOnOutsideClick: boolean;
 
   /**
-   * Set to true to disable closing popover overlay on Escape press.
-   * When the popover is modal, pressing Escape anywhere in the
-   * document closes the overlay. Otherwise, only Escape press
-   * from the popover itself or its target closes the overlay.
+   * Set to true to disable closing popover on Escape press.
    *
    * @attr {boolean} no-close-on-esc
    */
   noCloseOnEsc: boolean;
 
   /**
-   * Popover trigger mode, used to configure how the overlay is opened or closed.
+   * Popover trigger mode, used to configure how the popover is opened or closed.
    * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
    *
    * Supported values:
    * - `click` (default) - opens and closes on target click.
    * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
-   * to the popover overlay content keeps the overlay opened.
+   * to the popover content keeps the popover opened.
    * - `focus` - opens on target focus, closes on target blur. Moving focus to the
-   * popover overlay content keeps the overlay opened.
+   * popover content keeps the popover opened.
    *
    * In addition to the behavior specified by `trigger`, the popover can be closed by:
    * - pressing Escape key (unless `noCloseOnEsc` property is true)
@@ -221,7 +218,7 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   trigger: PopoverTrigger[] | null | undefined;
 
   /**
-   * When true, the overlay has a backdrop (modality curtain) on top of the
+   * When true, the popover has a backdrop (modality curtain) on top of the
    * underlying page content, covering the whole viewport.
    *
    * @attr {boolean} with-backdrop
