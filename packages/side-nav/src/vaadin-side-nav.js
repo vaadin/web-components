@@ -21,10 +21,10 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * ```html
  * <vaadin-side-nav>
- *   <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
- *   <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
- *   <vaadin-side-nav-item>Item 3</vaadin-side-nav-item>
- *   <vaadin-side-nav-item>Item 4</vaadin-side-nav-item>
+ *   <vaadin-side-nav-item><span>Item 1</span></vaadin-side-nav-item>
+ *   <vaadin-side-nav-item><span>Item 2</span></vaadin-side-nav-item>
+ *   <vaadin-side-nav-item><span>Item 3</span></vaadin-side-nav-item>
+ *   <vaadin-side-nav-item><span>Item 4</span></vaadin-side-nav-item>
  * </vaadin-side-nav>
  * ```
  *
