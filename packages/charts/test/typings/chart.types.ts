@@ -10,6 +10,7 @@ import type {
   ChartDrilldownEvent,
   ChartDrillupallEvent,
   ChartDrillupEvent,
+  ChartEndResizeEvent,
   ChartLoadEvent,
   ChartPointClickEvent,
   ChartPointDragEvent,
@@ -109,6 +110,12 @@ chart.addEventListener('chart-redraw', (event) => {
 
 chart.addEventListener('chart-selection', (event) => {
   assertType<ChartSelectionEvent>(event);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
+});
+
+chart.addEventListener('chart-end-resize', (event) => {
+  assertType<ChartEndResizeEvent>(event);
   assertType<HighchartsChart>(event.detail.chart);
   assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
