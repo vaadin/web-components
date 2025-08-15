@@ -342,7 +342,6 @@ class Popover extends PopoverPositionMixin(
        * - `popover` The reference to the `vaadin-popover` element.
        *
        * @deprecated Use the content in the `vaadin-popover` via default slot
-       * - `popover` The reference to the `vaadin-popover` element.
        */
       renderer: {
         type: Object,
