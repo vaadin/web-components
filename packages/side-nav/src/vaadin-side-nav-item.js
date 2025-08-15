@@ -6,9 +6,11 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { SlotController } from '@vaadin/component-base';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -22,12 +24,12 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * ```html
  * <vaadin-side-nav-item>
- *   Item 1
+ *   <span>Item 1</span>
  *   <vaadin-side-nav-item path="/path1" slot="children">
- *     Child item 1
+ *     <span>Child item 1</span>
  *   </vaadin-side-nav-item>
  *   <vaadin-side-nav-item path="/path2" slot="children">
- *     Child item 2
+ *     <span>Child item 2</span>
  *   </vaadin-side-nav-item>
  * </vaadin-side-nav-item>
  * ```
@@ -46,7 +48,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * ```html
  * <vaadin-side-nav-item>
  *   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
- *   Item
+ *   <span>Item</span>
  *   <span theme="badge primary" slot="suffix">Suffix</span>
  * </vaadin-side-nav-item>
  * ```
@@ -246,7 +248,7 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @protected */
   render() {
     return html`
-      <div part="content" @click="${this._onContentClick}">
+      <div id="content" part="content" @click="${this._onContentClick}">
         <a
           id="link"
           ?disabled="${this.disabled}"
@@ -274,7 +276,30 @@ class SideNavItem extends SideNavChildrenMixin(
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
+      <slot name="tooltip"></slot>
     `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setTarget(this.$.content);
+
+    // Make sure correct aria target is used
+    this._mainSlotController = new SlotController(this, '', 'span', {
+      initializer: (field) => {
+        if (!(field instanceof HTMLElement) || field.nodeType === Node.TEXT_NODE) {
+          this._tooltipController.setAriaTarget(this);
+        } else {
+          this._tooltipController.setAriaTarget(field);
+        }
+      },
+    });
+
+    this.addController(this._mainSlotController);
+    this.addController(this._tooltipController);
   }
 
   /** @private */

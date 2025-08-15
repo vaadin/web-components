@@ -11,7 +11,9 @@ snapshots["vaadin-side-nav-item item default"] =
     slot="prefix"
   >
   </vaadin-icon>
-  Item
+  <span>
+    Item
+  </span>
   <span
     slot="suffix"
     theme="badge primary"
@@ -22,14 +24,23 @@ snapshots["vaadin-side-nav-item item default"] =
     role="listitem"
     slot="children"
   >
-    Child item 1
+    <span>
+      Child item 1
+    </span>
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    Child item 2
+    <span>
+      Child item 2
+    </span>
   </vaadin-side-nav-item>
+  <vaadin-tooltip
+    slot="tooltip"
+    text="Side nav item tooltip"
+  >
+  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item default */
@@ -45,7 +56,9 @@ snapshots["vaadin-side-nav-item item expanded"] =
     slot="prefix"
   >
   </vaadin-icon>
-  Item
+  <span>
+    Item
+  </span>
   <span
     slot="suffix"
     theme="badge primary"
@@ -56,14 +69,23 @@ snapshots["vaadin-side-nav-item item expanded"] =
     role="listitem"
     slot="children"
   >
-    Child item 1
+    <span>
+      Child item 1
+    </span>
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    Child item 2
+    <span>
+      Child item 2
+    </span>
   </vaadin-side-nav-item>
+  <vaadin-tooltip
+    slot="tooltip"
+    text="Side nav item tooltip"
+  >
+  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item expanded */
@@ -80,7 +102,9 @@ snapshots["vaadin-side-nav-item item disabled"] =
     slot="prefix"
   >
   </vaadin-icon>
-  Item
+  <span>
+    Item
+  </span>
   <span
     slot="suffix"
     theme="badge primary"
@@ -93,7 +117,9 @@ snapshots["vaadin-side-nav-item item disabled"] =
     role="listitem"
     slot="children"
   >
-    Child item 1
+    <span>
+      Child item 1
+    </span>
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     aria-disabled="true"
@@ -101,8 +127,15 @@ snapshots["vaadin-side-nav-item item disabled"] =
     role="listitem"
     slot="children"
   >
-    Child item 2
+    <span>
+      Child item 2
+    </span>
   </vaadin-side-nav-item>
+  <vaadin-tooltip
+    slot="tooltip"
+    text="Side nav item tooltip"
+  >
+  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item disabled */
@@ -119,7 +152,9 @@ snapshots["vaadin-side-nav-item item current"] =
     slot="prefix"
   >
   </vaadin-icon>
-  Item
+  <span>
+    Item
+  </span>
   <span
     slot="suffix"
     theme="badge primary"
@@ -130,14 +165,23 @@ snapshots["vaadin-side-nav-item item current"] =
     role="listitem"
     slot="children"
   >
-    Child item 1
+    <span>
+      Child item 1
+    </span>
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    Child item 2
+    <span>
+      Child item 2
+    </span>
   </vaadin-side-nav-item>
+  <vaadin-tooltip
+    slot="tooltip"
+    text="Side nav item tooltip"
+  >
+  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item current */
@@ -152,7 +196,9 @@ snapshots["vaadin-side-nav-item item path"] =
     slot="prefix"
   >
   </vaadin-icon>
-  Item
+  <span>
+    Item
+  </span>
   <span
     slot="suffix"
     theme="badge primary"
@@ -163,20 +209,32 @@ snapshots["vaadin-side-nav-item item path"] =
     role="listitem"
     slot="children"
   >
-    Child item 1
+    <span>
+      Child item 1
+    </span>
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    Child item 2
+    <span>
+      Child item 2
+    </span>
   </vaadin-side-nav-item>
+  <vaadin-tooltip
+    slot="tooltip"
+    text="Side nav item tooltip"
+  >
+  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item path */
 
 snapshots["vaadin-side-nav-item shadow default"] = 
-`<div part="content">
+`<div
+  id="content"
+  part="content"
+>
   <a
     aria-current="false"
     id="link"
@@ -213,11 +271,16 @@ snapshots["vaadin-side-nav-item shadow default"] =
 >
   Toggle child items
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow default */
 
 snapshots["vaadin-side-nav-item shadow expanded"] = 
-`<div part="content">
+`<div
+  id="content"
+  part="content"
+>
   <a
     aria-current="false"
     id="link"
@@ -253,11 +316,16 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
 >
   Toggle child items
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow expanded */
 
 snapshots["vaadin-side-nav-item shadow current"] = 
-`<div part="content">
+`<div
+  id="content"
+  part="content"
+>
   <a
     aria-current="page"
     href=""
@@ -294,11 +362,16 @@ snapshots["vaadin-side-nav-item shadow current"] =
 >
   Toggle child items
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow current */
 
 snapshots["vaadin-side-nav-item shadow path"] = 
-`<div part="content">
+`<div
+  id="content"
+  part="content"
+>
   <a
     aria-current="false"
     href="path"
@@ -336,11 +409,16 @@ snapshots["vaadin-side-nav-item shadow path"] =
 >
   Toggle child items
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow path */
 
 snapshots["vaadin-side-nav-item shadow null path"] = 
-`<div part="content">
+`<div
+  id="content"
+  part="content"
+>
   <a
     aria-current="false"
     id="link"
@@ -377,11 +455,16 @@ snapshots["vaadin-side-nav-item shadow null path"] =
 >
   Toggle child items
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow null path */
 
 snapshots["vaadin-side-nav-item shadow i18n"] = 
-`<div part="content">
+`<div
+  id="content"
+  part="content"
+>
   <a
     aria-current="false"
     id="link"
@@ -418,6 +501,8 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
 >
   Toggle children
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow i18n */
 
