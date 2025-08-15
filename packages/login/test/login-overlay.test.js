@@ -107,8 +107,8 @@ describe('no autofocus', () => {
   it('should not focus the username field', async () => {
     login.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    // Overlay traps focus and focuses the wrapper by default
-    expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
+    // Overlay traps focus and focuses the host by default
+    expect(getDeepActiveElement()).to.equal(login);
   });
 });
 

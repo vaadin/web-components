@@ -11,13 +11,17 @@
       import '@vaadin/login/vaadin-login-overlay.js';
 
       const login = document.querySelector('vaadin-login-overlay');
-      login.addEventListener('login', () => {
-        login.opened = false;
-      });
 
       const button = document.querySelector('button');
       button.addEventListener('click', () => {
+        login.disabled = false;
         login.opened = true;
+      });
+
+      login.addEventListener('login', () => {
+        login.opened = false;
+        // Login does not restore focus
+        button.focus();
       });
     </script>
   </head>
