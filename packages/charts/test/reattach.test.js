@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+// import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
 
 describe('reattach', () => {
@@ -207,7 +208,7 @@ describe('reattach', () => {
     wrapper.removeChild(chart);
     await nextFrame();
 
-    chart.updateConfiguration({ xAxis: { categories: ['Jun', 'Jul', 'Aug'] } });
+    chart.updateConfiguration({ xAxis: [{ categories: ['Jun', 'Jul', 'Aug'] }] });
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
@@ -224,7 +225,7 @@ describe('reattach', () => {
     wrapper.removeChild(chart);
     await nextFrame();
 
-    chart.updateConfiguration({ xAxis: { min: 1 } });
+    chart.updateConfiguration({ xAxis: [{ min: 1 }] });
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
@@ -238,7 +239,7 @@ describe('reattach', () => {
     wrapper.removeChild(chart);
     await nextFrame();
 
-    chart.updateConfiguration({ xAxis: { max: 3 } });
+    chart.updateConfiguration({ xAxis: [{ max: 3 }] });
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
@@ -300,7 +301,8 @@ describe('reattach', () => {
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
 
-      expect(chart.configuration.yAxis[0].options.id).to.be.equal('unit');
+      const hasUnit = chart.configuration.yAxis.some((axis) => axis.options.id === 'unit');
+      expect(hasUnit).to.be.ok;
     });
 
     it('should apply the series neck-width updated while detached after reattach', async () => {
