@@ -49,6 +49,10 @@ class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(Lit
         min-width: 8em;
       }
 
+      ::slotted([hidden]) {
+        display: none !important;
+      }
+
       [part='content'] {
         position: relative;
         flex: 1;
