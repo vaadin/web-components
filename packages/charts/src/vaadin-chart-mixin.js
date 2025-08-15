@@ -46,6 +46,17 @@ import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './hel
   /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 });
 
+['exportChart', 'localExport', 'getSVG'].forEach((methodName) => {
+  /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+  Highcharts.wrap(Highcharts.Exporting.prototype, methodName, function (proceed, ...args) {
+    Highcharts.fireEvent(this.chart, 'beforeExport');
+    const result = proceed.apply(this, args);
+    Highcharts.fireEvent(this.chart, 'afterExport');
+    return result;
+  });
+  /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+});
+
 // Monkeypatch the onDocumentMouseMove method to fix the check for the source of the event
 // Due to the fact that the event is attached to the document, the target of the event is
 // the <vaadin-chart> element, so we need to use the composedPath to get the actual target (#7107)
@@ -301,11 +312,13 @@ export const ChartMixin = (superClass) =>
         args.forEach((arg) => inflateFunctions(arg));
         functionToCall.apply(this.configuration, args);
         if (redrawCharts) {
+          const lang = Highcharts.defaultOptions.lang;
           Highcharts.charts.forEach((c) => {
             // Ignore `undefined` values that are preserved in the array
             // after their corresponding chart instances are destroyed.
             // See https://github.com/vaadin/flow-components/issues/6607
             if (c !== undefined) {
+              c.time.lang = lang;
               c.redraw();
             }
           });
@@ -928,7 +941,7 @@ export const ChartMixin = (superClass) =>
       super.disconnectedCallback();
 
       if (this.configuration) {
-        this._jsonConfigurationBuffer = this.configuration.userOptions;
+        this._jsonConfigurationBuffer = deepMerge({}, this.configuration.userOptions);
       }
 
       queueMicrotask(() => {
