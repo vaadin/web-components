@@ -24,9 +24,10 @@ export function appendStyles(html) {
 export function generateListing(html, dir, path) {
   if (html.includes('<ul id="listing">')) {
     // Add <base> to make index.html work when opening
-    // http://localhost:8000/dev without trailing slash
-    if (path && path.endsWith('/dev')) {
-      html = html.replace('<head>', '<head>\n<base href="dev/">');
+    // http://localhost:8000/dev or http://localhost:8000/dev/charts without trailing slash
+    const match = /\/(?<section>dev|charts)$/u.exec(path);
+    if (match) {
+      html = html.replace('<head>', `<head>\n<base href="${match.groups.section}/">`);
     }
 
     const listing = `
