@@ -172,7 +172,6 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
    * - `popover` The reference to the `vaadin-popover` element.
    *
    * @deprecated Add content elements as children of the popover using default slot
-   * - `popover` The reference to the `vaadin-popover` element.
    */
   renderer: PopoverRenderer | null | undefined;
 
