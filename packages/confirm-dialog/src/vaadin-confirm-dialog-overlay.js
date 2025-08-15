@@ -107,6 +107,15 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
   get _focusTrapRoot() {
     return this.owner;
   }
+
+  /**
+   * Override method from OverlayFocusMixin to not set `aria-hidden`
+   * @protected
+   * @override
+   */
+  get _useAriaHidden() {
+    return false;
+  }
 }
 
 defineCustomElement(ConfirmDialogOverlay);
