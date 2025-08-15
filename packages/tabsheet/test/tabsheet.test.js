@@ -161,6 +161,15 @@ describe('tabsheet', () => {
       expect(getPanels()[2].hidden).to.be.true;
     });
 
+    it('should override display style when panel is hidden', async () => {
+      tabsheet.selected = 1;
+      await nextFrame();
+      const panel2 = getPanels()[2];
+      panel2.style.display = 'contents';
+      const display = getComputedStyle(panel2).display;
+      expect(display).to.equal('none');
+    });
+
     it('should bind dynamically added tab and panel', async () => {
       // Create a new tab and panel
       const tab = document.createElement('vaadin-tab');

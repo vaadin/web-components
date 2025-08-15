@@ -38,6 +38,10 @@ export const tabSheetStyles = [
       min-width: 128px;
     }
 
+    ::slotted([hidden]) {
+      display: none !important;
+    }
+
     [part='content'] {
       position: relative;
       flex: 1;
