@@ -77,7 +77,7 @@ export default {
 
           // Index page listing
           if (['/dev/index.html', '/dev', '/dev/'].includes(context.path)) {
-            body = generateListing(body, './dev');
+            body = generateListing(body, './dev', context.path);
           }
 
           return { body };

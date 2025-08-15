@@ -21,15 +21,21 @@ export function appendStyles(html) {
   return html.replace(/<\/body>/u, `${preventFouc}\n</body>`);
 }
 
-export function generateListing(html, dir) {
+export function generateListing(html, dir, path) {
   if (html.includes('<ul id="listing">')) {
+    // Add <base> to make index.html work when opening
+    // http://localhost:8000/dev without trailing slash
+    if (path && path.endsWith('/dev')) {
+      html = html.replace('<head>', '<head>\n<base href="dev/">');
+    }
+
     const listing = `
       <ul id="listing">
         ${fs
           .readdirSync(dir || '.')
           .filter((file) => file !== 'index.html')
           .filter((file) => file.endsWith('.html'))
-          .map((file) => `<li><a href="${dir ? `${dir}/` : ''}${file}">${file}</a></li>`)
+          .map((file) => `<li><a href="${file}">${file}</a></li>`)
           .join('')}
       </ul>`;
 
