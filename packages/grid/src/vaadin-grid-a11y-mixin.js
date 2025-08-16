@@ -138,7 +138,7 @@ export const A11yMixin = (superClass) =>
     }
 
     /**
-     * @param {!HTMLElement} row
+     * @param {!HTMLElement} cell
      * @param {number} colspan
      * @protected
      */

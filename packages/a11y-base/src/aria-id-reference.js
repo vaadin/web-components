@@ -17,7 +17,7 @@ const attributeToTargets = new Map();
  *
  * @param {string} attr the attribute name used as key in the map
  *
- * @returns {WeakMap<HTMLElement, Set<string>} a weak map with the stored values for the elements being controlled by the helper
+ * @return {WeakMap<HTMLElement, Set<string>>} a weak map with the stored values for the elements being controlled by the helper
  */
 function getAttrMap(attr) {
   if (!attributeToTargets.has(attr)) {
@@ -32,8 +32,6 @@ function getAttrMap(attr) {
  *
  * @param {HTMLElement} target
  * @param {string} attr the attribute to be cleared
- * @param {boolean} storeValue whether or not the current value of the attribute should be stored on the map
- * @returns
  */
 function cleanAriaIDReference(target, attr) {
   if (!target) {

@@ -137,10 +137,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
       return this.__getIntrinsicWidth(innerColumn) + shareOfInnerColumnFromNecessaryExtraSpace;
     }
 
-    /**
-     * @param {!Array<!GridColumn>} cols the columns to auto size based on their content width
-     * @private
-     */
+    /** @private */
     _recalculateColumnWidths() {
       // Flush to make sure DOM is up-to-date when measuring the column widths
       this.__virtualizer.flush();

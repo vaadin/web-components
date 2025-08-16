@@ -56,7 +56,6 @@ export class TooltipController extends SlotController {
   /**
    * Override to notify the host when the tooltip is removed.
    *
-   * @param {Node} tooltipNode
    * @protected
    * @override
    */

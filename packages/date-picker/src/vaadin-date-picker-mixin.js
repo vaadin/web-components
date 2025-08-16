@@ -1119,7 +1119,7 @@ export const DatePickerMixin = (subclass) =>
     /**
      * Override an event listener from `KeyboardMixin`.
      *
-     * @param {!KeyboardEvent} _event
+     * @param {!KeyboardEvent} event
      * @protected
      * @override
      */

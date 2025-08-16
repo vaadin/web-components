@@ -55,7 +55,6 @@ function hasThemes(tagName) {
 /**
  * Flattens the styles into a single array of styles.
  * @param {CSSResultGroup} styles
- * @param {CSSResult[]} result
  * @returns {CSSResult[]}
  */
 function flattenStyles(styles = []) {

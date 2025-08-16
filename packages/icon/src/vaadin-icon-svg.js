@@ -35,7 +35,7 @@ export function isValidSvg(source) {
 /**
  * Create a valid SVG literal based on the argument.
  *
- * @param {unknown} svg
+ * @param {unknown} source
  */
 export function ensureSvgLiteral(source) {
   let result = source == null || source === '' ? nothing : source;
