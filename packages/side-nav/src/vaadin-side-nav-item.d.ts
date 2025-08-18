@@ -25,12 +25,12 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * ```html
  * <vaadin-side-nav-item>
- *   Item 1
+ *   <span>Item 1</span>
  *   <vaadin-side-nav-item path="/path1" slot="children">
- *     Child item 1
+ *     <span>Child item 1</span>
  *   </vaadin-side-nav-item>
  *   <vaadin-side-nav-item path="/path2" slot="children">
- *     Child item 2
+ *     <span>Child item 2</span>
  *   </vaadin-side-nav-item>
  * </vaadin-side-nav-item>
  * ```
@@ -49,7 +49,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * ```html
  * <vaadin-side-nav-item>
  *   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
- *   Item
+ *   <span>Item</span>
  *   <span theme="badge primary" slot="suffix">Suffix</span>
  * </vaadin-side-nav-item>
  * ```
