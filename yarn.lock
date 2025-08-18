@@ -757,6 +757,13 @@
     "@emnapi/runtime" "^1.4.3"
     "@tybys/wasm-util" "^0.9.0"
 
+"@niceties/logger@^1.1.4", "@niceties/logger@^1.1.5":
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/@niceties/logger/-/logger-1.1.13.tgz#cdc18b3db436bbbc58c42a8a7d3eadfb41217460"
+  integrity sha512-yorxAcjtpxCgZQy1o4Lq3Umr2rzwHyMN9dZCgZBKXIFkxlhsIH7olQFPSLJdvRmQC+4iaPFcPIq1WvN1ObtPBA==
+  dependencies:
+    kleur "^4.1.4"
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
@@ -1160,6 +1167,23 @@
     semver "^7.7.1"
     tar-fs "^3.0.8"
     yargs "^17.7.2"
+
+"@rollup-extras/plugin-copy@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@rollup-extras/plugin-copy/-/plugin-copy-1.11.1.tgz#e59f74c77d301007a2a156f3533e4612ee7407a5"
+  integrity sha512-2NEwJE+yDjfYFaeG/2AOqDQHNRO5UCo7SysTuBpkn69RGSONa2fSeLRPWENb9Ptuaq54dE8B11HoeFppxbz8Wg==
+  dependencies:
+    "@niceties/logger" "^1.1.4"
+    "@rollup-extras/utils" "^1.4.6"
+    glob "^10.0.0"
+    glob-parent "^6.0.2"
+
+"@rollup-extras/utils@^1.4.6":
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/@rollup-extras/utils/-/utils-1.4.6.tgz#7a6bd64c7bd6f9fc2f113466bd4ecd084098879b"
+  integrity sha512-2+mA7lztwWUr2TYjHzT694GKiFEJBuaQbGbqpqFhtlCAvsg6m9dX7FIEzvsgVE7Ih7ecOUNPuSosed1wrcPB3Q==
+  dependencies:
+    "@niceties/logger" "^1.1.5"
 
 "@rollup/plugin-node-resolve@^15.0.1":
   version "15.1.0"
@@ -7343,7 +7367,7 @@ klaw-sync@^6.0.0:
   dependencies:
     graceful-fs "^4.1.11"
 
-kleur@^4.1.5:
+kleur@^4.1.4, kleur@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.5.tgz#95106101795f7050c6c650f350c683febddb1780"
   integrity sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==
