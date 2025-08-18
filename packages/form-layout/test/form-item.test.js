@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import '../src/vaadin-form-item.js';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 
 describe('form-item', () => {
   let item, label, input;
@@ -536,6 +537,7 @@ describe('form-item', () => {
 
     afterEach(() => {
       stub.restore();
+      clearWarnings();
     });
 
     it('should not warn when a single field is placed to an item', async () => {
