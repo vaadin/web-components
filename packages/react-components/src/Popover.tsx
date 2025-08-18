@@ -17,7 +17,7 @@ export type PopoverReactRendererProps = ReactSimpleRendererProps<PopoverElement>
 
 type OmittedPopoverHTMLAttributes = Omit<
   HTMLAttributes<PopoverElement>,
-  'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot'
+  'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot' | 'role' | 'aria-label' | 'aria-labelledby'
 >;
 
 export type PopoverProps = Partial<Omit<_PopoverProps, 'children' | 'renderer' | keyof OmittedPopoverHTMLAttributes>> &
