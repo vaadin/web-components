@@ -1,51 +1,70 @@
 @import './font/InstrumentSans.css';
 @import './font/Inter.css';
 
-html {
-  --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
-  --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
-  --aura-font-family-inter: 'Inter', var(--aura-font-family-system);
+@layer vaadin.aura {
+  html {
+    --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
+    --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
+    --aura-font-family-inter: 'Inter', var(--aura-font-family-system);
 
-  --aura-font-family: var(--aura-font-family-instrument-sans);
+    --aura-font-family: var(--aura-font-family-instrument-sans);
 
-  --aura-font-size-xs: calc(11 / 16 * 1rem);
-  --aura-font-size-s: calc(12 / 16 * 1rem);
-  --aura-font-size-m: calc(14 / 16 * 1rem);
-  --aura-font-size-l: calc(16 / 16 * 1rem);
-  --aura-font-size-xl: calc(18 / 16 * 1rem);
+    --aura-font-size-xs: calc(11 / 16 * 1rem);
+    --aura-font-size-s: calc(12 / 16 * 1rem);
+    --aura-font-size-m: calc(14 / 16 * 1rem);
+    --aura-font-size-l: calc(16 / 16 * 1rem);
+    --aura-font-size-xl: calc(18 / 16 * 1rem);
 
-  --aura-line-height-xs: calc(16 / 16 * 1rem);
-  --aura-line-height-s: calc(18 / 16 * 1rem);
-  --aura-line-height-m: calc(20 / 16 * 1rem);
-  --aura-line-height-l: calc(22 / 16 * 1rem);
+    --aura-line-height-xs: calc(16 / 16 * 1rem);
+    --aura-line-height-s: calc(18 / 16 * 1rem);
+    --aura-line-height-m: calc(20 / 16 * 1rem);
+    --aura-line-height-l: calc(22 / 16 * 1rem);
 
-  --aura-font-weight: 400;
-  --aura-font-weight-emphasis: 560;
-  --aura-font-weight-strong: 640;
-}
+    --aura-font-weight: 450;
+    --aura-font-weight-emphasis: 560;
+    --aura-font-weight-strong: 640;
+  }
 
-body {
-  font-family: var(--aura-font-family);
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-size: var(--aura-font-size-m);
-  line-height: var(--aura-line-height-m);
-  font-weight: var(--aura-font-weight);
+  @media (pointer: coarse) {
+    html {
+      --aura-font-size-xs: calc(12 / 16 * 1rem);
+      --aura-font-size-s: calc(13 / 16 * 1rem);
+      --aura-font-size-m: calc(17 / 16 * 1rem);
+      --aura-font-size-l: calc(19 / 16 * 1rem);
+      --aura-font-size-xl: calc(21 / 16 * 1rem);
 
-  /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
-  -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);
-  -moz-osx-font-smoothing: var(--aura-font-smoothing, grayscale);
+      --aura-line-height-xs: calc(18 / 16 * 1rem);
+      --aura-line-height-s: calc(20 / 16 * 1rem);
+      --aura-line-height-m: calc(22 / 16 * 1rem);
+      --aura-line-height-l: calc(24 / 16 * 1rem);
+    }
+  }
 
-  cursor: default;
+  body {
+    font-family: var(--aura-font-family);
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--aura-font-size-m);
+    line-height: var(--aura-line-height-m);
+    font-weight: var(--aura-font-weight);
 
-  /* We assume apps are built with responsive layouting in mind */
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-}
+    /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
+    -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);
+    -moz-osx-font-smoothing: var(--aura-font-smoothing, grayscale);
 
-@media (pointer: coarse) {
-  :where(html) {
-    /* Support iOS dynamic text size */
-    font: -apple-system-body;
+    /* We assume apps are built with responsive layouting in mind */
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
+
+  @media (pointer: coarse) {
+    :where(html) {
+      /* Support iOS dynamic text size */
+      font: -apple-system-body;
+    }
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
   }
 }

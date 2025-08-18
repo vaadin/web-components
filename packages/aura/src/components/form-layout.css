@@ -1,3 +1,5 @@
-vaadin-form-layout[theme~='padding'] {
-  padding: var(--vaadin-padding-l);
+@layer vaadin.aura {
+  vaadin-form-layout[theme~='padding'] {
+    padding: var(--vaadin-padding-l);
+  }
 }
