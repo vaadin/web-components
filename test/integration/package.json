@@ -37,6 +37,7 @@
     "@vaadin/popover": "25.0.0-alpha16",
     "@vaadin/radio-group": "25.0.0-alpha16",
     "@vaadin/select": "25.0.0-alpha16",
+    "@vaadin/side-nav": "25.0.0-alpha16",
     "@vaadin/tabs": "25.0.0-alpha16",
     "@vaadin/test-runner-commands": "25.0.0-alpha16",
     "@vaadin/testing-helpers": "^2.0.0",
