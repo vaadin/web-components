@@ -235,18 +235,6 @@ export function registerStyles(themeFor, styles, options = {}) {
 }
 
 /**
- * Returns all registered themes. By default the themeRegistry is returned as is.
- * In case the style-modules adapter is imported, the themes are obtained from there instead
- * @returns {Theme[]}
- */
-function getAllThemes() {
-  if (window.Vaadin && window.Vaadin.styleModules) {
-    return window.Vaadin.styleModules.getAllThemes();
-  }
-  return themeRegistry;
-}
-
-/**
  * Maps the moduleName to an include priority number which is used for
  * determining the order in which styles are applied.
  * @param {string} moduleName
@@ -271,7 +259,7 @@ function getIncludedStyles(theme) {
   const includedStyles = [];
   if (theme.include) {
     [].concat(theme.include).forEach((includeModuleId) => {
-      const includedTheme = getAllThemes().find((s) => s.moduleId === includeModuleId);
+      const includedTheme = themeRegistry.find((s) => s.moduleId === includeModuleId);
       if (includedTheme) {
         includedStyles.push(...getIncludedStyles(includedTheme), ...includedTheme.styles);
       } else {
@@ -291,7 +279,7 @@ function getIncludedStyles(theme) {
 function getThemes(tagName) {
   const defaultModuleName = `${tagName}-default-theme`;
 
-  const themes = getAllThemes()
+  const themes = themeRegistry
     // Filter by matching themeFor properties
     .filter((theme) => theme.moduleId !== defaultModuleName && matchesThemeFor(theme.themeFor, tagName))
     .map((theme) => ({
@@ -308,7 +296,7 @@ function getThemes(tagName) {
     return themes;
   }
   // No theme modules found, return the default module if it exists
-  return getAllThemes().filter((theme) => theme.moduleId === defaultModuleName);
+  return themeRegistry.filter((theme) => theme.moduleId === defaultModuleName);
 }
 
 /**
@@ -380,5 +368,3 @@ export const ThemableMixin = (superClass) =>
       return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
     }
   };
-
-export { themeRegistry as __themeRegistry };
