@@ -9,6 +9,7 @@
  * license.
  */
 import 'cookieconsent/build/cookieconsent.min.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
 /**
  * @polymerMixin
@@ -121,6 +122,8 @@ export const CookieConsentMixin = (superClass) =>
         this.cookieName,
         this.position,
       );
+
+      issueWarning('`<vaadin-cookie-consent>` is deprecated and will be removed without a replacement in Vaadin 25.');
     }
 
     /** @protected */

@@ -4,6 +4,9 @@ A web component to display a banner for users to give consent to the usage of co
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Cookie Consent in your project.
 
+> [!WARNING]
+> `<vaadin-cookie-consent>` is deprecated and will be removed without a replacement in Vaadin 25.
+
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/cookie-consent)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)
