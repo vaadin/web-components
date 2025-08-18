@@ -1,0 +1,33 @@
+@layer vaadin.aura {
+  /* List all elements that are surfaces */
+  html {
+    --aura-surface-level: 3;
+    --aura-surface-opacity: 0.5;
+  }
+
+  html,
+  vaadin-master-detail-layout,
+  vaadin-master-detail-layout::part(detail),
+  ::part(overlay),
+  [theme~='surface'] {
+    --aura-surface: light-dark(
+      oklab(
+        from var(--aura-background) calc(l + (1 - l) / 4 * var(--aura-surface-level))
+          calc(a - a * 0.25 * var(--aura-surface-level)) calc(b - b * 0.25 * var(--aura-surface-level)) /
+          var(--aura-surface-opacity)
+      ),
+      oklab(
+        from var(--aura-background) max(0, max(0.23, l) + max(0.4, l) * max(0.25, l) / 4 * var(--aura-surface-level))
+          calc(a * 0.5 / max(0.01, l)) calc(b * 0.5 / max(0.01, l)) / var(--aura-surface-opacity)
+      )
+    );
+  }
+
+  [theme~='surface-level-4'] {
+    --aura-surface-level: 4;
+  }
+
+  [theme~='surface-opacity-90'] {
+    --aura-surface-opacity: 0.9;
+  }
+}

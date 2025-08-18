@@ -26,6 +26,15 @@ const sideNav = css`
     line-height: var(--vaadin-side-nav-label-line-height, inherit);
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  ::slotted([slot='label']) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
   }
 `;
 

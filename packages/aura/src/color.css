@@ -1,50 +1,61 @@
-html {
-  --aura-contrast: 0;
+@layer vaadin.aura {
+  html {
+    --aura-contrast: 1;
 
-  --_color-base: light-dark(rgba(0, 0, 0, 0.9), #fff);
-  --aura-text-color: color-mix(in srgb, var(--_color-base) calc(95% + 5% * var(--aura-contrast)), transparent);
-  --aura-text-color-subtle: light-dark(
-    color-mix(in srgb, var(--_color-base) calc(65% + 20% * var(--aura-contrast)), transparent),
-    color-mix(in srgb, var(--_color-base) calc(75% + 20% * var(--aura-contrast)), transparent)
-  );
-  --aura-text-color-disabled: color-mix(
-    in srgb,
-    var(--_color-base) calc(40% + 10% * var(--aura-contrast)),
-    transparent
-  );
+    --_color-base: light-dark(
+      oklch(from var(--aura-accent-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
+      oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c) * 2) h)
+    );
+    --vaadin-color: light-dark(
+      color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
+      color-mix(in srgb, var(--_color-base) calc(96% + 2% * var(--aura-contrast)), transparent)
+    );
+    --vaadin-color-subtle: light-dark(
+      color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
+      color-mix(in srgb, var(--_color-base) calc(60% + 10% * var(--aura-contrast)), transparent)
+    );
+    --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(40% + 10% * var(--aura-contrast)), transparent);
 
-  --aura-border-color: color-mix(in srgb, var(--_color-base) calc(25% + 15% * var(--aura-contrast)), transparent);
-  --aura-border-color-subtle: light-dark(
-    color-mix(in srgb, var(--_color-base) calc(7% + 10% * var(--aura-contrast)), transparent),
-    color-mix(in srgb, var(--_color-base) calc(10% + 10% * var(--aura-contrast)), transparent)
-  );
+    --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(10% + 15% * var(--aura-contrast)), transparent);
+    --vaadin-border-color-subtle: light-dark(
+      color-mix(in srgb, var(--_color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
+      color-mix(in srgb, var(--_color-base) max(7%, 4% + 6% * var(--aura-contrast)), transparent)
+    );
 
-  --aura-surface-background: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.07));
+    --aura-neutral-saturation: 0.2;
 
-  --aura-accent-color-1: light-dark(#e5e8ea, #242526);
-  --aura-accent-color-2: light-dark(#f1f6f8, #181819);
+    --aura-background-light: oklch(
+      from var(--aura-accent-light) min(1, l + 0.1 + 0.2) min(c * var(--_neutral-c) * 10, 0.4) h
+    );
+    --aura-background-dark: oklch(from var(--aura-accent-dark) max(0, l/2 - 0.1) min(c * var(--_neutral-c), 0.1) h);
+    --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
+    --_aura-background-alt: oklch(
+      from var(--aura-background) calc(l - 0.1 + l / 8) c calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
+    );
+    --aura-accent-background: radial-gradient(
+      circle at 25% 0%,
+      var(--aura-background) 33%,
+      var(--_aura-background-alt)
+    );
+  }
 
-  accent-color: var(--aura-accent-color-1);
+  html,
+  [theme] {
+    --_accent: var(--aura-accent-color);
+    --aura-accent-light: var(--_accent, hsl(220, 81%, 47%));
+    --aura-accent-dark: var(--_accent, hsl(218, 90%, 61%));
 
-  /* Map to base style props */
-  --vaadin-background-color: light-dark(#fff, #111);
-  --vaadin-color: var(--aura-text-color);
-  --vaadin-color-subtle: var(--aura-text-color-subtle);
-  --vaadin-color-disabled: var(--aura-text-color-disabled);
-  --vaadin-border-color: var(--aura-border-color);
-  --vaadin-border-color-subtle: var(--aura-border-color-subtle);
+    --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
+  }
 
-  /* Component overrides */
-  --vaadin-input-field-background: light-dark(rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.1));
-  --vaadin-checkbox-background: var(--vaadin-input-field-background);
+  @supports (color: hsl(0 0 0)) {
+    html {
+      --_safari-17-deg: 1;
+    }
+  }
+
+  body {
+    --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
+    accent-color: var(--aura-accent-color);
+  }
 }
-
-[theme] {
-  --aura-accent-gradient: radial-gradient(circle at 25% 0%, var(--aura-accent-color-1), var(--aura-accent-color-2));
-}
-
-/* html[theme] {
-  background: var(--gradient), var(--bg);
-  background-size: 100% 100svh;
-  background-attachment: fixed;
-} */

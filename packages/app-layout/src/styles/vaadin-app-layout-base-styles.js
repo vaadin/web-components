@@ -128,6 +128,7 @@ export const appLayoutStyles = css`
 
   [part='backdrop'] {
     background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.5));
+    forced-color-adjust: none;
   }
 
   :host(:not([drawer-opened])) [part='backdrop'] {

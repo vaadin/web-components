@@ -1,18 +1,23 @@
-vaadin-card[theme~='no-frame'] {
-  --vaadin-card-padding: 0px;
-  --vaadin-card-background: transparent;
-  --vaadin-card-title-font-weight: var(--aura-font-weight-emphasis);
-}
+@layer vaadin.aura {
+  html {
+    --vaadin-card-title-font-weight: var(--aura-font-weight-emphasis);
+  }
 
-/* TODO could be a built-in variant */
-vaadin-card[theme~='footer-end'] {
-  --_footer: 0;
-  grid-template-rows: repeat(var(--_content), auto) 1fr;
-}
+  vaadin-card[theme~='no-frame'] {
+    --vaadin-card-padding: 0px;
+    --vaadin-card-background: transparent;
+  }
 
-vaadin-card[theme~='footer-end']::part(footer) {
-  grid-column: -1;
-  grid-row: 1 / span calc(var(--_header) + var(--_content));
-  align-self: center;
-  flex-direction: column;
+  /* TODO could be a built-in variant */
+  vaadin-card[theme~='footer-end'] {
+    --_footer: 0;
+    grid-template-rows: repeat(var(--_content), auto) 1fr;
+  }
+
+  vaadin-card[theme~='footer-end']::part(footer) {
+    grid-column: -1;
+    grid-row: 1 / span calc(var(--_header) + var(--_content));
+    align-self: center;
+    flex-direction: column;
+  }
 }
