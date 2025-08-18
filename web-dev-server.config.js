@@ -1,30 +1,6 @@
 /* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
-import path from 'node:path';
-
-/** @return {import('@web/test-runner').TestRunnerPlugin} */
-function generatedLitTestsPlugin() {
-  return {
-    name: 'generated-lit-tests',
-    transformImport({ source, context }) {
-      if (context.url.includes('-lit.generated.test.')) {
-        const dependencyPath = path.resolve(path.dirname(context.url), source);
-
-        const litDependencyPath = dependencyPath
-          // /button/vaadin-button.js -> /button/vaadin-lit-button.js
-          .replace(/\/vaadin-(?!lit)([^/]+)/u, '/vaadin-lit-$1')
-          // /grid/all-imports.js -> /grid/lit-all-imports.js
-          .replace(/\/all-imports/u, '/lit-all-imports');
-
-        if (litDependencyPath !== dependencyPath && fs.existsSync(`.${litDependencyPath}`)) {
-          return litDependencyPath;
-        }
-      }
-      return source;
-    },
-  };
-}
 
 const preventFouc = `
   <style>
@@ -74,6 +50,5 @@ export default {
       },
     },
     esbuildPlugin({ ts: true }),
-    generatedLitTestsPlugin(),
-  ].filter(Boolean),
+  ],
 };
