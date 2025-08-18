@@ -1,49 +1,59 @@
-html {
-  --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
-  --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
-  --vaadin-side-nav-item-border-width: 1px;
-  /* TODO add var(--vaadin-gap-xs) */
-  --vaadin-side-nav-items-gap: 6px;
-  --side-nav-padding: var(--vaadin-padding-m);
-}
+@layer vaadin.aura {
+  html {
+    --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
+    --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
+    --vaadin-side-nav-item-border-width: 1px;
+    /* TODO add var(--vaadin-gap-xs) */
+    --vaadin-side-nav-items-gap: 6px;
+    --side-nav-padding: var(--vaadin-padding-s);
+  }
 
-vaadin-side-nav {
-  padding: var(--side-nav-padding);
-  padding-top: 0;
-}
+  vaadin-side-nav {
+    padding-inline: var(--side-nav-padding);
+  }
 
-vaadin-side-nav-item[current] {
-  --vaadin-side-nav-item-background: var(--aura-accent-gradient);
-  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
-}
+  vaadin-side-nav + vaadin-side-nav {
+    margin-top: var(--vaadin-gap-l);
+  }
 
-vaadin-side-nav-item::part(content) {
-  background-clip: padding-box;
-}
+  vaadin-side-nav-item::part(content) {
+    transition: color 120ms;
+    background-clip: padding-box;
+  }
 
-@media (prefers-reduced-motion: no-preference) {
-  vaadin-side-nav[collapsed]::part(children),
-  vaadin-side-nav-item::part(children) {
-    transition:
-      display 200ms,
-      height 200ms;
-    transition-behavior: allow-discrete;
-    interpolate-size: allow-keywords;
-    /* overflow: hidden; */
-    height: 0;
+  vaadin-side-nav-item::part(content):hover {
+    --vaadin-side-nav-item-color: var(--vaadin-color);
+  }
 
-    @starting-style {
+  vaadin-side-nav-item[current]::part(content) {
+    --vaadin-side-nav-item-background: var(--aura-surface);
+    --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    vaadin-side-nav[collapsed]::part(children),
+    vaadin-side-nav-item::part(children) {
+      transition:
+        display 200ms,
+        height 200ms;
+      transition-behavior: allow-discrete;
+      interpolate-size: allow-keywords;
+      /* overflow: hidden; */
       height: 0;
+
+      @starting-style {
+        height: 0;
+      }
+    }
+
+    vaadin-side-nav-item:not([collapsed])::part(children),
+    vaadin-side-nav-item[expanded]::part(children) {
+      height: auto;
     }
   }
 
-  vaadin-side-nav-item:not([collapsed])::part(children),
-  vaadin-side-nav-item[expanded]::part(children) {
-    height: auto;
+  /* TODO bug in component/base styles: hide label part if no label is provided */
+  vaadin-side-nav:not(:has([slot='label']))::part(label) {
+    display: none;
   }
-}
-
-/* TODO bug in component/base styles: hide label part if no label is provided */
-vaadin-side-nav:not(:has([slot='label']))::part(label) {
-  display: none;
 }

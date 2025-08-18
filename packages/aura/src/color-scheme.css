@@ -1,21 +1,34 @@
-html {
-  --color-scheme: light dark;
-  --nav-color-scheme: dark;
-  --notification-color-scheme: light dark;
+@layer vaadin.aura {
+  html {
+    --aura-color-scheme: light;
+    --aura-nav-color-scheme: inherit;
+    --aura-notification-color-scheme: inherit;
 
-  color-scheme: var(--color-scheme);
-  background: var(--vaadin-background-color);
-}
+    color-scheme: var(--aura-color-scheme);
+    background: var(--vaadin-background-color);
+    color: var(--vaadin-color);
+  }
 
-vaadin-app-layout {
-  color-scheme: var(--nav-color-scheme);
-  background: var(--vaadin-background-color);
-}
+  vaadin-app-layout {
+    color-scheme: var(--aura-nav-color-scheme);
+    background: var(--aura-accent-background);
+    color: var(--vaadin-color);
+  }
 
-vaadin-master-detail-layout {
-  color-scheme: var(--color-scheme);
-}
+  vaadin-master-detail-layout {
+    color-scheme: var(--aura-color-scheme);
+    background: var(--aura-surface);
+    background-clip: padding-box;
+    color: var(--vaadin-color);
+  }
 
-vaadin-notification-container {
-  color-scheme: var(--notification-color-scheme);
+  vaadin-app-layout > vaadin-master-detail-layout {
+    background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-accent-background);
+    background-clip: padding-box;
+  }
+
+  vaadin-notification-container {
+    color-scheme: var(--aura-notification-color-scheme);
+    color: var(--vaadin-color);
+  }
 }

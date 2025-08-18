@@ -50,6 +50,7 @@ export const iconStyles = css`
 
   .baseline {
     order: -1;
+    opacity: 0;
   }
 
   .baseline::before {

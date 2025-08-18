@@ -15,6 +15,8 @@ export const sharedStyles = css`
     gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
     cursor: default;
     -webkit-tap-highlight-color: transparent;
+    min-width: 0;
+    max-width: 100%;
   }
 
   :host([hidden]),
