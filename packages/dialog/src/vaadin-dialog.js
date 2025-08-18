@@ -103,6 +103,7 @@ class Dialog extends DialogSizeMixin(
       :host([closing]) {
         display: block !important;
         position: absolute;
+        outline: none;
       }
 
       :host,
