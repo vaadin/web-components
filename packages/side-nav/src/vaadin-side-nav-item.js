@@ -9,7 +9,6 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
@@ -24,12 +23,12 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * ```html
  * <vaadin-side-nav-item>
- *   <span>Item 1</span>
+ *   Item 1
  *   <vaadin-side-nav-item path="/path1" slot="children">
- *     <span>Child item 1</span>
+ *     Child item 1
  *   </vaadin-side-nav-item>
  *   <vaadin-side-nav-item path="/path2" slot="children">
- *     <span>Child item 2</span>
+ *     Child item 2
  *   </vaadin-side-nav-item>
  * </vaadin-side-nav-item>
  * ```
@@ -48,7 +47,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * ```html
  * <vaadin-side-nav-item>
  *   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
- *   <span>Item</span>
+ *   Item
  *   <span theme="badge primary" slot="suffix">Suffix</span>
  * </vaadin-side-nav-item>
  * ```
@@ -286,13 +285,8 @@ class SideNavItem extends SideNavChildrenMixin(
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setTarget(this.$.content);
+    this._tooltipController.setAriaTarget(this);
     this.addController(this._tooltipController);
-
-    const slot = this.shadowRoot.querySelector('slot:not([name])');
-    this.__observer = new SlotObserver(slot, ({ currentNodes }) => {
-      const contentElement = currentNodes.find((node) => node.nodeType === Node.ELEMENT_NODE);
-      this._tooltipController.setAriaTarget(contentElement || this);
-    });
   }
 
   /** @private */

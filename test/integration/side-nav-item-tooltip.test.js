@@ -6,7 +6,7 @@ import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 describe('side-nav-item with tooltip', () => {
-  let item, content, tooltip, tooltipOverlay;
+  let item, tooltip, tooltipOverlay;
 
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
@@ -17,46 +17,27 @@ describe('side-nav-item with tooltip', () => {
   beforeEach(async () => {
     item = fixtureSync(`
       <vaadin-side-nav-item path="/parent">
-        <span id="parent-content">Parent</span>
+        Parent
         <vaadin-tooltip slot="tooltip" text="Tooltip text"></vaadin-tooltip>
-        <vaadin-side-nav-item path="/parent/child" slot="children"><span>Child</span></vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/parent/child" slot="children">Child</vaadin-side-nav-item>
       </vaadin-side-nav-item>
     `);
     await nextRender();
     tooltip = item.querySelector('vaadin-tooltip');
     tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
-    content = item.querySelector('#parent-content');
   });
 
   it('should set tooltip target to the item content part', () => {
     expect(tooltip.target).to.equal(item.$.content);
   });
 
-  it('should set tooltip ariaTarget to the slotted content', () => {
-    expect(tooltip.ariaTarget).to.equal(content);
-  });
-
-  it('should set tooltip ariaTarget on the item when content is removed', async () => {
-    content.remove();
-    await nextRender();
+  it('should set tooltip ariaTarget to the item itself', () => {
     expect(tooltip.ariaTarget).to.equal(item);
-  });
-
-  it('should set tooltip ariaTarget on the item when content is added', async () => {
-    content.remove();
-    await nextRender();
-
-    const newContent = document.createElement('span');
-    newContent.textContent = 'New parent';
-    item.appendChild(newContent);
-    await nextRender();
-
-    expect(tooltip.ariaTarget).to.equal(newContent);
   });
 
   it('should set aria-describedby on the slotted content', () => {
     const label = tooltip.querySelector('[role="tooltip"]');
-    expect(content.getAttribute('aria-describedby')).to.equal(label.id);
+    expect(item.getAttribute('aria-describedby')).to.equal(label.id);
   });
 
   it('should toggle tooltip on item content mouseenter', () => {
