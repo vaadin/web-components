@@ -1,5 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, esc, fixtureSync, listenOnce, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  click,
+  esc,
+  fixtureSync,
+  listenOnce,
+  nextRender,
+  nextUpdate,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -36,14 +45,15 @@ describe('vaadin-dialog', () => {
     });
 
     ['opened', 'opening', 'closing'].forEach((state) => {
-      it(`should use display: contents when ${state} attribute is set`, () => {
+      it(`should use display: block when ${state} attribute is set`, () => {
         dialog.setAttribute(state, '');
-        expect(getComputedStyle(dialog).display).to.equal('contents');
+        expect(getComputedStyle(dialog).display).to.equal('block');
       });
     });
 
     it('should use display: none when hidden while opened', async () => {
       dialog.opened = true;
+      await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
       dialog.hidden = true;
       await nextRender();
       expect(getComputedStyle(dialog).display).to.equal('none');
@@ -235,13 +245,13 @@ describe('vaadin-dialog', () => {
 
     it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
-      await nextRender();
-      expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(getDeepActiveElement()).to.equal(dialog);
     });
 
     it('should restore focus on dialog close', async () => {
       dialog.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       dialog.opened = false;
       await nextRender();
       expect(getDeepActiveElement()).to.equal(button);

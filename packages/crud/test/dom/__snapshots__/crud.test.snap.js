@@ -281,9 +281,11 @@ snapshots["vaadin-crud shadow default"] =
   </div>
 </div>
 <vaadin-crud-dialog
+  aria-modal="true"
   exportparts="backdrop, overlay, header, content, footer"
   id="dialog"
   role="dialog"
+  tabindex="0"
 >
   <slot
     name="header"
