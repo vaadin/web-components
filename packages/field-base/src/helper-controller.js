@@ -38,7 +38,6 @@ export class HelperController extends SlotChildObserveController {
    * Override method inherited from `SlotChildObserveController`
    * to create the default helper element lazily as needed.
    *
-   * @param {Node | undefined} node
    * @protected
    * @override
    */

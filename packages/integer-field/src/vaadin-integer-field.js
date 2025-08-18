@@ -87,7 +87,7 @@ export class IntegerField extends NumberField {
   /**
    * Override an observer from `NumberField` to reset the step
    * property when an invalid step is set.
-   * @param {number} newVal
+   * @param {number} step
    * @param {HTMLElement | undefined} inputElement
    * @protected
    * @override

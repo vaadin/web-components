@@ -167,7 +167,7 @@ export const MessageListMixin = (superClass) =>
     }
 
     /**
-     * @param {number} idx
+     * @param {number} index
      * @protected
      */
     _setTabIndexesByIndex(index) {

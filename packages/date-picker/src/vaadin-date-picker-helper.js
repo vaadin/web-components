@@ -7,7 +7,7 @@
 /**
  * Get ISO 8601 week number for the given date.
  *
- * @param {!Date} Date object
+ * @param {!Date} date
  * @return {number} Week number
  */
 export function getISOWeekNumber(date) {

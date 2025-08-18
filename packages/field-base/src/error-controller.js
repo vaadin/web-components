@@ -97,7 +97,7 @@ export class ErrorController extends SlotChildObserveController {
    * Note: unlike with other controllers, this method is
    * called for both default and custom error message.
    *
-   * @param {Node | undefined} node
+   * @param {Node | undefined} errorNode
    * @protected
    * @override
    */

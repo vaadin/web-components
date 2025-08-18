@@ -22,8 +22,7 @@ import { crudEditStyles } from './styles/vaadin-crud-edit-base-styles.js';
  * a `<vaadin-crud>` to enable editing.
  *
  * @customElement
- * @extends HTMLElement
- * @mixes ThemableMixin
+ * @extends Button
  */
 class CrudEdit extends Button {
   static get is() {

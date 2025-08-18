@@ -15,7 +15,7 @@ export class SlotController extends EventTarget {
    * Ensure that every instance has unique ID.
    *
    * @param {HTMLElement} host
-   * @param {string} slotName
+   * @param {string} prefix
    * @return {string}
    * @protected
    */

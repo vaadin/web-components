@@ -16,7 +16,6 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
  * @mixes DisabledMixin
  * @mixes FieldMixin
  * @mixes FocusMixin
- * @mixes KeyboardMixin
  */
 export const CheckboxGroupMixin = (superclass) =>
   class CheckboxGroupMixinClass extends FieldMixin(FocusMixin(DisabledMixin(superclass))) {
