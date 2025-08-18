@@ -1,5 +1,13 @@
 import '../../vaadin-chart.js';
-import type { Axis, Chart as HighchartsChart, Point, Series, SeriesOptionsType } from 'highcharts';
+import type {
+  Axis,
+  Chart as HighchartsChart,
+  Legend,
+  LegendItemObject,
+  Point,
+  Series,
+  SeriesOptionsType,
+} from 'highcharts';
 import type {
   ChartAddSeriesEvent,
   ChartAfterExportEvent,
@@ -11,6 +19,7 @@ import type {
   ChartDrillupallEvent,
   ChartDrillupEvent,
   ChartEndResizeEvent,
+  ChartLegendItemClickEvent,
   ChartLoadEvent,
   ChartPointClickEvent,
   ChartPointDragEvent,
@@ -256,6 +265,15 @@ chart.addEventListener('yaxes-extremes-set', (event) => {
   assertType<number | undefined>(event.detail.originalEvent.userMax);
   assertType<number>(event.detail.originalEvent.dataMin);
   assertType<number>(event.detail.originalEvent.dataMax);
+});
+
+chart.addEventListener('legend-item-click', (event) => {
+  assertType<ChartLegendItemClickEvent>(event);
+  assertType<Legend>(event.detail.legend);
+  assertType<Legend>(event.detail.originalEvent.target);
+  assertType<PointerEvent>(event.detail.originalEvent.browserEvent);
+  assertType<Series | Point | LegendItemObject>(event.detail.originalEvent.legendItem);
+  assertType<string>(event.detail.originalEvent.type);
 });
 
 // Series properties

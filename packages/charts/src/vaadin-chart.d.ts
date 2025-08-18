@@ -142,8 +142,9 @@ export * from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} point-drag-start - Fired when starting to drag a point.
  * @fires {CustomEvent} point-drop - Fired when the point is dropped.
  * @fires {CustomEvent} point-drag - Fired while dragging a point.
- * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
- * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
+ * @fires {CustomEvent} xaxes-extremes-set - Fired when the minimum and maximum is set for the X axis.
+ * @fires {CustomEvent} yaxes-extremes-set - Fired when the minimum and maximum is set for the Y axis.
+ * @fires {CustomEvent} legend-item-click - Fired when the legend item is clicked.
  */
 declare class Chart extends ChartMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof ChartEventMap>(

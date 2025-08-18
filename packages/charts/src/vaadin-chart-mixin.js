@@ -451,7 +451,13 @@ export const ChartMixin = (superClass) =>
       return options;
     }
 
-    /**
+    get __legendEventNames() {
+      return {
+        itemClick: 'legend-item-click',
+      };
+    }
+
+    /*
      * Name of the chart events to add to the configuration and its corresponding event for the chart element
      * @private
      */
@@ -1122,6 +1128,7 @@ export const ChartMixin = (superClass) =>
       this.__initSeriesEventsListeners(configuration);
       this.__initPointsEventsListeners(configuration);
       this.__initAxisEventsListeners(configuration, true);
+      this.__initLegendEventsListeners(configuration);
       this.__initAxisEventsListeners(configuration, false);
     }
 
@@ -1140,6 +1147,10 @@ export const ChartMixin = (superClass) =>
       this.__createEventListeners(this.__pointEventNames, configuration, 'plotOptions.series.point.events', 'point');
     }
 
+    /** @private */
+    __initLegendEventsListeners(configuration) {
+      this.__createEventListeners(this.__legendEventNames, configuration, 'legend.events', 'legend');
+    }
     /** @private */
     __initAxisEventsListeners(configuration, isXAxis) {
       let eventNames, axes;
@@ -1222,7 +1233,7 @@ export const ChartMixin = (superClass) =>
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
 
-            if (event.type === 'legendItemClick' && self._visibilityTogglingDisabled) {
+            if (['legendItemClick', 'itemClick'].includes(event.type) && self._visibilityTogglingDisabled) {
               return false;
             }
           };
