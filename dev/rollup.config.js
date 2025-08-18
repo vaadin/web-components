@@ -1,5 +1,6 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
+import copy from '@rollup-extras/plugin-copy';
 import { rollupPluginHTML as html } from '@web/rollup-plugin-html';
 import postcss from 'postcss';
 import atImport from 'postcss-import';
@@ -36,5 +37,9 @@ export default {
       ],
     }),
     terser(),
+    copy([
+      { src: 'assets/*.svg', dest: 'assets' },
+      { src: 'charts/demo-data/*.json', dest: 'charts/demo-data' },
+    ]),
   ],
 };
