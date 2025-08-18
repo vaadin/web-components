@@ -1306,7 +1306,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategories(categories, config) {
-      if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories')) {
+      if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories', 'xAxis')) {
         return;
       }
 
@@ -1315,7 +1315,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategoryMax(max, config) {
-      if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max')) {
+      if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max', 'xAxis')) {
         return;
       }
 
@@ -1329,7 +1329,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategoryMin(min, config) {
-      if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min')) {
+      if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min', 'xAxis')) {
         return;
       }
 
