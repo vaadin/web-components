@@ -9,6 +9,7 @@ import { css } from 'lit';
 export const uploadFileListStyles = css`
   :host {
     display: block;
+    overflow: auto;
   }
 
   :host([hidden]) {
