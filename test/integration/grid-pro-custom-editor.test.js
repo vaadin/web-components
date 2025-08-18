@@ -15,7 +15,7 @@ import { dblclick, flushGrid, getContainerCell } from '@vaadin/grid-pro/test/hel
 describe('grid-pro custom editor', () => {
   let grid, cell;
 
-  function createGrid(path, autoOpen = false) {
+  function createGrid(path) {
     grid = fixtureSync(`
       <vaadin-grid-pro>
         <vaadin-grid-pro-edit-column path="${path}" editor-type="custom"></vaadin-grid-pro-edit-column>
@@ -25,9 +25,9 @@ describe('grid-pro custom editor', () => {
     const column = grid.querySelector(`[path="${path}"]`);
     switch (path) {
       case 'date':
-        column.editModeRenderer = (root, _, model) => {
+        column.editModeRenderer = (root, column, model) => {
           root.innerHTML = `
-            <vaadin-date-picker value="${model.item.date}" ${!autoOpen ? 'auto-open-disabled' : ''}></vaadin-date-picker>
+            <vaadin-date-picker value="${model.item.date}" ${!column.autoOpen ? 'auto-open-disabled' : ''}></vaadin-date-picker>
           `;
         };
         break;
@@ -175,8 +175,8 @@ describe('grid-pro custom editor', () => {
 
       beforeEach(async () => {
         await setViewport({ width: 420, height: 1020 });
-        grid = createGrid('date', true);
-        await nextRender();
+        // Do not set auto-open-disabled on the date-picker
+        grid.querySelector('vaadin-grid-pro-edit-column').autoOpen = true;
         cell = getContainerCell(grid.$.items, 0, 0);
         await sendMouse({ type: 'click', position: [10, 10] });
       });
@@ -215,7 +215,7 @@ describe('grid-pro custom editor', () => {
         const datePicker = cell._content.querySelector('vaadin-date-picker');
         await untilOverlayRendered(datePicker);
 
-        sendMouse({ type: 'click', position: [10, 10] });
+        await sendMouse({ type: 'click', position: [10, 10] });
         await nextRender();
         expect(cell._content.querySelector('vaadin-date-picker')).to.not.be.ok;
         expect(previousContent).to.be.equal(cell._content.textContent);
