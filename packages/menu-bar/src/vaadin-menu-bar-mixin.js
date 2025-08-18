@@ -76,10 +76,10 @@ export const MenuBarMixin = (superClass) =>
          * @property {string} text - Text to be set as the menu button component's textContent.
          * @property {string} tooltip - Text to be set as the menu button's tooltip.
          * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
-         * @property {union: string | object} component - The component to represent the button content.
+         * @property {string | HTMLElement} component - The component to represent the button content.
          * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
          * @property {boolean} disabled - If true, the button is disabled and cannot be activated.
-         * @property {union: string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
+         * @property {string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
          * @property {SubMenuItem[]} children - Array of submenu items.
          */
 
@@ -87,7 +87,7 @@ export const MenuBarMixin = (superClass) =>
          * @typedef SubMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent.
-         * @property {union: string | object} component - The component to represent the item.
+         * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected.
          * @property {boolean} checked - If true, the item shows a checkmark next to it.

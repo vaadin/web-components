@@ -76,8 +76,13 @@ export default {
           body = appendStyles(body);
 
           // Index page listing
-          if (['/dev/index.html', '/dev', '/dev/'].includes(context.path)) {
-            body = generateListing(body, './dev', context.path);
+          const devPageMatch = /^\/dev(?:\/(?<section>charts))?(?:\/index\.html|\/)?$/u.exec(context.path);
+
+          if (devPageMatch) {
+            // If a group was captured, then it's in the /dev/charts path,
+            // otherwise it should list the pages under the /dev folder
+            const dir = devPageMatch.groups.section ? './dev/charts' : './dev';
+            body = generateListing(body, dir, context.path);
           }
 
           return { body };

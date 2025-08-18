@@ -16,14 +16,14 @@ export const ItemsMixin = (superClass) =>
          * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
-         * @property {union: string | object} component - The component to represent the item.
+         * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
          * @property {boolean} checked - If true, the item shows a checkmark next to it
          * @property {boolean} keepOpen - If true, the menu will not be closed on item selection
          * @property {string} className - A space-delimited list of CSS class names to be set on the menu item component.
-         * @property {union: string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
-         * @property {MenuItem[]} children - Array of child menu items
+         * @property {string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
+         * @property {ContextMenuItem[]} children - Array of child menu items
          */
 
         /**
@@ -403,7 +403,6 @@ export const ItemsMixin = (superClass) =>
     /**
      * @param {!HTMLElement} root
      * @param {!ContextMenu} menu
-     * @param {!ContextMenuRendererContext} context
      * @protected
      */
     __itemsRenderer(root, menu) {

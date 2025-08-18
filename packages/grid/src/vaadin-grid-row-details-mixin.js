@@ -124,7 +124,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {!GridItem} item
+     * @param {boolean} detailsOpened
      * @protected
      */
     _toggleDetailsCell(row, detailsOpened) {

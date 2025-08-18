@@ -98,7 +98,7 @@ export const ItemMixin = (superClass) =>
     }
 
     /**
-     * @param {KeyboardEvent | MouseEvent} _event
+     * @param {KeyboardEvent | MouseEvent} event
      * @protected
      * @override
      */

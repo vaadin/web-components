@@ -79,7 +79,7 @@ function compare(a, b) {
  * Sorts the given array of items based on the sorting rules and returns the result.
  *
  * @param {Array<any>} items
- * @param {Array<GridSorterDefinition>} items
+ * @param {Array<GridSorterDefinition>} sortOrders
  * @return {Array<any>}
  */
 function multiSort(items, sortOrders) {
@@ -101,6 +101,7 @@ function multiSort(items, sortOrders) {
 
 /**
  * @param {!Array<!GridItem>} items
+ * @param {Array<GridFilterDefinition>} filters
  * @return {!Array<!GridItem>}
  */
 function filter(items, filters) {
@@ -120,7 +121,7 @@ function filter(items, filters) {
  * Creates a new grid compatible data provider that serves the items
  * from the given array as data when requested by the grid.
  *
- * @param {Array<any>} items
+ * @param {Array<any>} allItems
  * @return {GridDataProvider<any>}
  */
 export const createArrayDataProvider = (allItems) => {

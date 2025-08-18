@@ -68,12 +68,21 @@ class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(Themabl
 
   static get styles() {
     return css`
-      :host {
-        display: block;
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: block !important;
+        position: absolute;
+        outline: none;
       }
 
+      :host,
       :host([hidden]) {
         display: none !important;
+      }
+
+      :host(:focus) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       }
     `;
   }

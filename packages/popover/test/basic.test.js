@@ -30,8 +30,15 @@ describe('popover', () => {
   });
 
   describe('host element', () => {
-    it('should set display: contents on the host element by default', () => {
-      expect(getComputedStyle(popover).display).to.equal('contents');
+    it('should use display: none when not opened', () => {
+      expect(getComputedStyle(popover).display).to.equal('none');
+    });
+
+    ['opened', 'opening', 'closing'].forEach((state) => {
+      it(`should use display: block when ${state} attribute is set`, () => {
+        popover.setAttribute(state, '');
+        expect(getComputedStyle(popover).display).to.equal('block');
+      });
     });
 
     it('should reflect opened property to attribute', async () => {
@@ -480,7 +487,7 @@ describe('popover', () => {
         await nextUpdate(popover);
 
         target.click();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should set pointer-events on backdrop to none when non modal', () => {

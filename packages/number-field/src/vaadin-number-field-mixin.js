@@ -436,7 +436,7 @@ export const NumberFieldMixin = (superClass) =>
      * Override this method from `InputControlMixin`
      * to stop propagation of the native change event.
      *
-     * @param {Event}
+     * @param {Event} event
      * @override
      * @protected
      */

@@ -78,9 +78,7 @@ export class Virtualizer {
   /**
    * Flushes active asynchronous tasks so that the component and the DOM end up in a stable state
    *
-   * @method update
-   * @param {number | undefined} startIndex The start index of the range
-   * @param {number | undefined} endIndex The end index of the range
+   * @method flush
    */
   flush() {
     this.__adapter.flush();
