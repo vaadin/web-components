@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/field-highlighter",
-  "version": "24.8.5",
+  "version": "24.9.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -34,30 +34,30 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.8.5",
-    "@vaadin/component-base": "~24.8.5",
-    "@vaadin/overlay": "~24.8.5",
-    "@vaadin/vaadin-lumo-styles": "~24.8.5",
-    "@vaadin/vaadin-material-styles": "~24.8.5",
-    "@vaadin/vaadin-themable-mixin": "~24.8.5",
+    "@vaadin/a11y-base": "24.9.0-alpha0",
+    "@vaadin/component-base": "24.9.0-alpha0",
+    "@vaadin/overlay": "24.9.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "24.9.0-alpha0",
+    "@vaadin/vaadin-material-styles": "24.9.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "24.9.0-alpha0",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "~24.8.5",
-    "@vaadin/checkbox": "~24.8.5",
-    "@vaadin/checkbox-group": "~24.8.5",
-    "@vaadin/combo-box": "~24.8.5",
-    "@vaadin/date-picker": "~24.8.5",
-    "@vaadin/date-time-picker": "~24.8.5",
-    "@vaadin/item": "~24.8.5",
-    "@vaadin/list-box": "~24.8.5",
-    "@vaadin/radio-group": "~24.8.5",
-    "@vaadin/select": "~24.8.5",
-    "@vaadin/test-runner-commands": "~24.8.5",
+    "@vaadin/chai-plugins": "24.9.0-alpha0",
+    "@vaadin/checkbox": "24.9.0-alpha0",
+    "@vaadin/checkbox-group": "24.9.0-alpha0",
+    "@vaadin/combo-box": "24.9.0-alpha0",
+    "@vaadin/date-picker": "24.9.0-alpha0",
+    "@vaadin/date-time-picker": "24.9.0-alpha0",
+    "@vaadin/item": "24.9.0-alpha0",
+    "@vaadin/list-box": "24.9.0-alpha0",
+    "@vaadin/radio-group": "24.9.0-alpha0",
+    "@vaadin/select": "24.9.0-alpha0",
+    "@vaadin/test-runner-commands": "24.9.0-alpha0",
     "@vaadin/testing-helpers": "^1.1.0",
-    "@vaadin/text-area": "~24.8.5",
-    "@vaadin/text-field": "~24.8.5",
-    "@vaadin/time-picker": "~24.8.5",
+    "@vaadin/text-area": "24.9.0-alpha0",
+    "@vaadin/text-field": "24.9.0-alpha0",
+    "@vaadin/time-picker": "24.9.0-alpha0",
     "sinon": "^18.0.0"
   }
 }
