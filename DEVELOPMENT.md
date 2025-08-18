@@ -225,6 +225,8 @@ const getChangedPackages = () => {
 
 Create a PR to the version branch ([example](https://github.com/vaadin/web-components/pull/4432)).
 
+Update the [`check-branches.js`](https://github.com/vaadin/components-team-tasks/blob/master/release-app/check-branches.js) script of the release app to include the new version branch.
+
 ### Update the version in `main`
 
 Create a new branch from main:
@@ -248,7 +250,7 @@ node scripts/updateVersion.js
 Mark the new version with Lerna:
 
 ```sh
-lerna version 24.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
+lerna version 25.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
 ```
 
 Commit all the changes:
