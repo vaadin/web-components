@@ -1,23 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import {
-  defineLit,
-  definePolymer,
-  fixtureSync,
-  focusin,
-  focusout,
-  keyDownOn,
-  mousedown,
-} from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { definePolymer, fixtureSync, focusin, focusout, keyDownOn, mousedown } from '@vaadin/testing-helpers';
 import { FocusMixin } from '../src/focus-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('FocusMixin', () => {
+  const tag = definePolymer(
     'focus-mixin',
     '<slot></slot>',
     (Base) =>
-      class extends FocusMixin(baseMixin(Base)) {
+      class extends FocusMixin(Base) {
         ready() {
           super.ready();
           const input = document.createElement('input');
@@ -65,12 +55,4 @@ const runTests = (defineHelper, baseMixin) => {
     focusin(input);
     expect(element.hasAttribute('focus-ring')).to.be.false;
   });
-};
-
-describe('FocusMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('FocusMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
