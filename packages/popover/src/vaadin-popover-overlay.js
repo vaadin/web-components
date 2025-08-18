@@ -38,7 +38,7 @@ class PopoverOverlay extends PopoverOverlayMixin(
   render() {
     return html`
       <div id="backdrop" part="backdrop" hidden ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <div part="arrow"></div>
         <div part="content" id="content"><slot></slot></div>
       </div>
@@ -74,6 +74,24 @@ class PopoverOverlay extends PopoverOverlayMixin(
    */
   get _modalRoot() {
     return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * @protected
+   * @override
+   */
+  get _focusTrapRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to not set `aria-hidden`
+   * @protected
+   * @override
+   */
+  get _useAriaHidden() {
+    return false;
   }
 
   /**

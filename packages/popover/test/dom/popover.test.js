@@ -27,7 +27,13 @@ describe('vaadin-popover', () => {
     await expect(popover).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('modal', async () => {
+  it('modal host', async () => {
+    popover.modal = true;
+    await nextUpdate(popover);
+    await expect(popover).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
+  it('modal shadow', async () => {
     popover.modal = true;
     await nextUpdate(popover);
     await expect(popover).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
