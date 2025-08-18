@@ -289,11 +289,11 @@ class SideNavItem extends SideNavChildrenMixin(
 
     // Make sure correct aria target is used
     this._mainSlotController = new SlotController(this, '', 'span', {
-      initializer: (field) => {
-        if (!(field instanceof HTMLElement) || field.nodeType === Node.TEXT_NODE) {
+      initializer: (node) => {
+        if (!(node instanceof HTMLElement) || node.nodeType === Node.TEXT_NODE) {
           this._tooltipController.setAriaTarget(this);
         } else {
-          this._tooltipController.setAriaTarget(field);
+          this._tooltipController.setAriaTarget(node);
         }
       },
     });
