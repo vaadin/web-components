@@ -19,7 +19,7 @@ describe('side-nav-item', () => {
     let tagName;
 
     beforeEach(() => {
-      item = fixtureSync('<vaadin-side-nav-item><span>Label</span></vaadin-side-nav-item>');
+      item = fixtureSync('<vaadin-side-nav-item>Label</vaadin-side-nav-item>');
       tagName = item.tagName.toLowerCase();
     });
 
@@ -166,8 +166,8 @@ describe('side-nav-item', () => {
       beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-side-nav-item path="/another-path">
-            <vaadin-side-nav-item slot="children"><span>Child 1</span></vaadin-side-nav-item>
-            <vaadin-side-nav-item slot="children"><span>Child 2</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
           </vaadin-side-nav-item>
         `);
         await nextRender();
@@ -217,8 +217,8 @@ describe('side-nav-item', () => {
       beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-side-nav-item path="">
-            <vaadin-side-nav-item slot="children"><span>Child 1</span></vaadin-side-nav-item>
-            <vaadin-side-nav-item slot="children"><span>Child 2</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
           </vaadin-side-nav-item>
         `);
         await nextRender();
@@ -247,8 +247,8 @@ describe('side-nav-item', () => {
       beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-side-nav-item>
-            <vaadin-side-nav-item slot="children"><span>Child 1</span></vaadin-side-nav-item>
-            <vaadin-side-nav-item slot="children"><span>Child 2</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
           </vaadin-side-nav-item>
         `);
         await nextRender();

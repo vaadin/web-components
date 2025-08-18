@@ -92,8 +92,8 @@ describe('accessibility', () => {
         <div>
           <input />
           <vaadin-side-nav collapsible>
-            <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/bar"><span>Bar</span></vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar">Bar</vaadin-side-nav-item>
           </vaadin-side-nav>
         </div>
       `);
@@ -131,11 +131,11 @@ describe('accessibility', () => {
     beforeEach(async () => {
       sideNav = fixtureSync(`
         <vaadin-side-nav>
-          <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
           <vaadin-side-nav-item path="/bar">
-            <span>Bar</span>
-            <vaadin-side-nav-item path="/bar/baz" slot="children"><span>Baz</span></vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/bar/qux" slot="children"><span>Qux</span></vaadin-side-nav-item>
+            Bar
+            <vaadin-side-nav-item path="/bar/baz" slot="children">Baz</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children">Qux</vaadin-side-nav-item>
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       `);
@@ -167,11 +167,11 @@ describe('accessibility', () => {
     beforeEach(async () => {
       sideNav = fixtureSync(`
         <vaadin-side-nav>
-          <vaadin-side-nav-item path="/foo"><span>Foo</span></vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
           <vaadin-side-nav-item path="/bar">
-            <span>Bar</span>
-            <vaadin-side-nav-item path="/bar/baz" slot="children"><span>Baz</span></vaadin-side-nav-item>
-            <vaadin-side-nav-item path="/bar/qux" slot="children"><span>Qux</span></vaadin-side-nav-item>
+            Bar
+            <vaadin-side-nav-item path="/bar/baz" slot="children">Baz</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children">Qux</vaadin-side-nav-item>
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       `);

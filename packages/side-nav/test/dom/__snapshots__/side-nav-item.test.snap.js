@@ -11,9 +11,7 @@ snapshots["vaadin-side-nav-item item default"] =
     slot="prefix"
   >
   </vaadin-icon>
-  <span>
-    Item
-  </span>
+  Item
   <span
     slot="suffix"
     theme="badge primary"
@@ -24,17 +22,13 @@ snapshots["vaadin-side-nav-item item default"] =
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 1
-    </span>
+    Child item 1
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 2
-    </span>
+    Child item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;
@@ -51,9 +45,7 @@ snapshots["vaadin-side-nav-item item expanded"] =
     slot="prefix"
   >
   </vaadin-icon>
-  <span>
-    Item
-  </span>
+  Item
   <span
     slot="suffix"
     theme="badge primary"
@@ -64,17 +56,13 @@ snapshots["vaadin-side-nav-item item expanded"] =
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 1
-    </span>
+    Child item 1
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 2
-    </span>
+    Child item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;
@@ -92,9 +80,7 @@ snapshots["vaadin-side-nav-item item disabled"] =
     slot="prefix"
   >
   </vaadin-icon>
-  <span>
-    Item
-  </span>
+  Item
   <span
     slot="suffix"
     theme="badge primary"
@@ -107,9 +93,7 @@ snapshots["vaadin-side-nav-item item disabled"] =
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 1
-    </span>
+    Child item 1
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     aria-disabled="true"
@@ -117,9 +101,7 @@ snapshots["vaadin-side-nav-item item disabled"] =
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 2
-    </span>
+    Child item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;
@@ -137,9 +119,7 @@ snapshots["vaadin-side-nav-item item current"] =
     slot="prefix"
   >
   </vaadin-icon>
-  <span>
-    Item
-  </span>
+  Item
   <span
     slot="suffix"
     theme="badge primary"
@@ -150,17 +130,13 @@ snapshots["vaadin-side-nav-item item current"] =
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 1
-    </span>
+    Child item 1
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 2
-    </span>
+    Child item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;
@@ -176,9 +152,7 @@ snapshots["vaadin-side-nav-item item path"] =
     slot="prefix"
   >
   </vaadin-icon>
-  <span>
-    Item
-  </span>
+  Item
   <span
     slot="suffix"
     theme="badge primary"
@@ -189,17 +163,13 @@ snapshots["vaadin-side-nav-item item path"] =
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 1
-    </span>
+    Child item 1
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
     role="listitem"
     slot="children"
   >
-    <span>
-      Child item 2
-    </span>
+    Child item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;

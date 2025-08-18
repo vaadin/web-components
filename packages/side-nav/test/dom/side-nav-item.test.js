@@ -21,10 +21,10 @@ describe('vaadin-side-nav-item', () => {
       `
         <vaadin-side-nav-item>
           <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
-          <span>Item</span>
+          Item
           <span theme="badge primary" slot="suffix">2</span>
-          <vaadin-side-nav-item slot="children"><span>Child item 1</span></vaadin-side-nav-item>
-          <vaadin-side-nav-item slot="children"><span>Child item 2</span></vaadin-side-nav-item>
+          <vaadin-side-nav-item slot="children">Child item 1</vaadin-side-nav-item>
+          <vaadin-side-nav-item slot="children">Child item 2</vaadin-side-nav-item>
         </vaadin-side-nav-item>
             `,
     );
