@@ -6,10 +6,10 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { SlotController } from '@vaadin/component-base';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
@@ -286,20 +286,13 @@ class SideNavItem extends SideNavChildrenMixin(
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setTarget(this.$.content);
-
-    // Make sure correct aria target is used
-    this._mainSlotController = new SlotController(this, '', 'span', {
-      initializer: (node) => {
-        if (!(node instanceof HTMLElement) || node.nodeType === Node.TEXT_NODE) {
-          this._tooltipController.setAriaTarget(this);
-        } else {
-          this._tooltipController.setAriaTarget(node);
-        }
-      },
-    });
-
-    this.addController(this._mainSlotController);
     this.addController(this._tooltipController);
+
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    this.__observer = new SlotObserver(slot, ({ currentNodes }) => {
+      const contentElement = currentNodes.find((node) => node.nodeType === Node.ELEMENT_NODE);
+      this._tooltipController.setAriaTarget(contentElement || this);
+    });
   }
 
   /** @private */
