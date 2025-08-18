@@ -240,8 +240,8 @@ chart.addEventListener('xaxes-extremes-set', (event) => {
   assertType<Axis>(event.detail.originalEvent.target);
   assertType<number>(event.detail.originalEvent.min);
   assertType<number>(event.detail.originalEvent.max);
-  assertType<number>(event.detail.originalEvent.userMin);
-  assertType<number>(event.detail.originalEvent.userMax);
+  assertType<number | undefined>(event.detail.originalEvent.userMin);
+  assertType<number | undefined>(event.detail.originalEvent.userMax);
   assertType<number>(event.detail.originalEvent.dataMin);
   assertType<number>(event.detail.originalEvent.dataMax);
 });
@@ -252,8 +252,8 @@ chart.addEventListener('yaxes-extremes-set', (event) => {
   assertType<Axis>(event.detail.originalEvent.target);
   assertType<number>(event.detail.originalEvent.min);
   assertType<number>(event.detail.originalEvent.max);
-  assertType<number>(event.detail.originalEvent.userMin);
-  assertType<number>(event.detail.originalEvent.userMax);
+  assertType<number | undefined>(event.detail.originalEvent.userMin);
+  assertType<number | undefined>(event.detail.originalEvent.userMax);
   assertType<number>(event.detail.originalEvent.dataMin);
   assertType<number>(event.detail.originalEvent.dataMax);
 });
