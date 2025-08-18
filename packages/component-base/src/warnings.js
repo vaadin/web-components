@@ -8,7 +8,7 @@ const issuedWarnings = new Set();
 
 /**
  * Issues a warning in the browser console if it has not been issued before.
- * @param warning
+ * @param {string} warning
  */
 export function issueWarning(warning) {
   if (issuedWarnings.has(warning)) {
