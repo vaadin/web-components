@@ -215,8 +215,20 @@ class Popover extends PopoverPositionMixin(
 
   static get styles() {
     return css`
-      :host {
-        display: contents;
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: block !important;
+        position: absolute;
+      }
+
+      :host,
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:focus) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       }
     `;
   }
@@ -531,6 +543,16 @@ class Popover extends PopoverPositionMixin(
 
     this._overlayElement = this.$.overlay;
 
+    this.setAttribute('tabindex', '0');
+
+    this.addEventListener('focusin', (e) => {
+      this.__onFocusIn(e);
+    });
+
+    this.addEventListener('focusout', (e) => {
+      this.__onFocusOut(e);
+    });
+
     if (!this.hasAttribute('role')) {
       this.role = 'dialog';
     }
@@ -562,6 +584,14 @@ class Popover extends PopoverPositionMixin(
         this.setAttribute('aria-labelledby', this.accessibleNameRef);
       } else {
         this.removeAttribute('aria-labelledby');
+      }
+    }
+
+    if (props.has('modal')) {
+      if (this.modal) {
+        this.setAttribute('aria-modal', 'true');
+      } else {
+        this.removeAttribute('aria-modal');
       }
     }
   }
@@ -688,20 +718,18 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onGlobalTab(event) {
-    const overlayPart = this._overlayElement.$.overlay;
-
-    // Move focus to the popover content on target element Tab
+    // Move focus to the popover on target element Tab
     if (this.target && isElementFocused(this.__getTargetFocusable())) {
       event.preventDefault();
-      overlayPart.focus();
+      this.focus();
       return;
     }
 
     // Move focus to the next element after target on content Tab
-    const lastFocusable = this.__getLastFocusable(overlayPart);
+    const lastFocusable = this.__getLastFocusable(this);
     if (lastFocusable && isElementFocused(lastFocusable)) {
       const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
-      if (focusable && focusable !== overlayPart) {
+      if (focusable && focusable !== this) {
         event.preventDefault();
         focusable.focus();
         return;
@@ -711,7 +739,7 @@ class Popover extends PopoverPositionMixin(
     // Prevent focusing the popover content on previous element Tab
     const activeElement = getDeepActiveElement();
     const nextFocusable = this.__getNextBodyFocusable(activeElement);
-    if (nextFocusable === overlayPart && lastFocusable) {
+    if (nextFocusable === this && lastFocusable) {
       // Move focus to the last overlay focusable and do NOT prevent keydown
       // to move focus outside the popover content (e.g. to the URL bar).
       lastFocusable.focus();
@@ -720,16 +748,14 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onGlobalShiftTab(event) {
-    const overlayPart = this._overlayElement.$.overlay;
-
     // Prevent restoring focus after target blur on Shift + Tab
     if (this.target && isElementFocused(this.__getTargetFocusable()) && this.__shouldRestoreFocus) {
       this.__shouldRestoreFocus = false;
       return;
     }
 
-    // Move focus back to the target on overlay content Shift + Tab
-    if (this.target && isElementFocused(overlayPart)) {
+    // Move focus back to the target on popover Shift + Tab
+    if (this.target && isElementFocused(this)) {
       event.preventDefault();
       this.__getTargetFocusable().focus();
       return;
@@ -738,7 +764,7 @@ class Popover extends PopoverPositionMixin(
     // Move focus back to the popover on next element Shift + Tab
     const nextFocusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
     if (nextFocusable && isElementFocused(nextFocusable)) {
-      const lastFocusable = this.__getLastFocusable(overlayPart);
+      const lastFocusable = this.__getLastFocusable(this);
       if (lastFocusable) {
         event.preventDefault();
         lastFocusable.focus();
@@ -834,7 +860,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onOverlayFocusIn() {
+  __onFocusIn() {
     this.__focusInside = true;
 
     // When using Tab to move focus, restoring focus is reset. However, if pressing Tab
@@ -845,7 +871,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onOverlayFocusOut(event) {
+  __onFocusOut(event) {
     // Do not close the popover on overlay focusout if it's not the last one.
     // This covers the following cases of nested overlay based components:
     // 1. Moving focus to the nested overlay (e.g. vaadin-select, vaadin-menu-bar)
@@ -857,7 +883,6 @@ class Popover extends PopoverPositionMixin(
     if (
       (this.__hasTrigger('focus') && this.__mouseDownInside) ||
       event.relatedTarget === this.target ||
-      event.relatedTarget === this._overlayElement ||
       this.contains(event.relatedTarget)
     ) {
       return;
@@ -946,7 +971,7 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOverlayOpened() {
     if (this.autofocus && !this.modal) {
-      this._overlayElement.$.overlay.focus();
+      this.focus();
     }
   }
 

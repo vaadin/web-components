@@ -7,6 +7,7 @@ snapshots["vaadin-popover host"] =
   modeless=""
   opened=""
   role="dialog"
+  tabindex="0"
 >
   content
 </vaadin-popover>
@@ -29,7 +30,20 @@ snapshots["vaadin-popover shadow"] =
 `;
 /* end snapshot vaadin-popover shadow */
 
-snapshots["vaadin-popover modal"] = 
+snapshots["vaadin-popover modal host"] = 
+`<vaadin-popover
+  aria-modal="true"
+  id="vaadin-popover-2"
+  opened=""
+  role="dialog"
+  tabindex="0"
+>
+  content
+</vaadin-popover>
+`;
+/* end snapshot vaadin-popover modal host */
+
+snapshots["vaadin-popover modal shadow"] = 
 `<vaadin-popover-overlay
   exportparts="backdrop, overlay, content, arrow"
   id="overlay"
@@ -42,7 +56,7 @@ snapshots["vaadin-popover modal"] =
   </slot>
 </vaadin-popover-overlay>
 `;
-/* end snapshot vaadin-popover modal */
+/* end snapshot vaadin-popover modal shadow */
 
 snapshots["vaadin-popover theme"] = 
 `<vaadin-popover-overlay
@@ -71,7 +85,6 @@ snapshots["vaadin-popover overlay"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <div part="arrow">
   </div>
@@ -95,7 +108,6 @@ snapshots["vaadin-popover backdrop"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <div part="arrow">
   </div>
