@@ -1246,7 +1246,15 @@ export const ChartMixin = (superClass) =>
     }
 
     /** @private */
-    __hasConfigurationBuffer(path) {
+    __hasConfigurationBuffer(path, property) {
+      if (
+        property &&
+        path.startsWith(property) &&
+        this._jsonConfigurationBuffer &&
+        Array.isArray(this._jsonConfigurationBuffer[property])
+      ) {
+        return get(path.split('.')[1], this._jsonConfigurationBuffer[property][0]);
+      }
       return get(path, this._jsonConfigurationBuffer) !== undefined;
     }
 
