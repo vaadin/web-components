@@ -109,12 +109,7 @@ describe('missing imports', () => {
       });
 
       it('should not warn for present import', async () => {
-        const isLitElement = grid.performUpdate !== undefined;
-        if (isLitElement) {
-          await import(`../src/${elementName.replace('vaadin-', 'vaadin-lit-')}.js`);
-        } else {
-          await import(`../src/${elementName}.js`);
-        }
+        await import(`../src/${elementName}.js`);
         grid.appendChild(document.createElement(elementName));
         flushDebouncers();
         expect(console.warn.called).to.be.false;

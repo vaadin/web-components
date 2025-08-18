@@ -1,7 +1,6 @@
 import sinon from 'sinon';
 
 export const flushGrid = (grid) => {
-  grid.performUpdate?.();
   grid._observer.flush();
 
   [
@@ -22,7 +21,6 @@ export const flushGrid = (grid) => {
 
   grid.__virtualizer.flush();
   grid.__preventScrollerRotatingCellFocusDebouncer?.flush();
-  grid.performUpdate?.();
 };
 
 export function attributeRenderer(attributeName) {

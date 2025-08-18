@@ -977,9 +977,6 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @protected */
     _resetKeyboardNavigation() {
-      if (!this.$ && this.performUpdate) {
-        this.performUpdate();
-      }
       // Header / footer
       ['header', 'footer'].forEach((section) => {
         if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
