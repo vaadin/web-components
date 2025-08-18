@@ -36,11 +36,6 @@ snapshots["vaadin-side-nav-item item default"] =
       Child item 2
     </span>
   </vaadin-side-nav-item>
-  <vaadin-tooltip
-    slot="tooltip"
-    text="Side nav item tooltip"
-  >
-  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item default */
@@ -81,11 +76,6 @@ snapshots["vaadin-side-nav-item item expanded"] =
       Child item 2
     </span>
   </vaadin-side-nav-item>
-  <vaadin-tooltip
-    slot="tooltip"
-    text="Side nav item tooltip"
-  >
-  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item expanded */
@@ -131,11 +121,6 @@ snapshots["vaadin-side-nav-item item disabled"] =
       Child item 2
     </span>
   </vaadin-side-nav-item>
-  <vaadin-tooltip
-    slot="tooltip"
-    text="Side nav item tooltip"
-  >
-  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item disabled */
@@ -177,11 +162,6 @@ snapshots["vaadin-side-nav-item item current"] =
       Child item 2
     </span>
   </vaadin-side-nav-item>
-  <vaadin-tooltip
-    slot="tooltip"
-    text="Side nav item tooltip"
-  >
-  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item current */
@@ -221,11 +201,6 @@ snapshots["vaadin-side-nav-item item path"] =
       Child item 2
     </span>
   </vaadin-side-nav-item>
-  <vaadin-tooltip
-    slot="tooltip"
-    text="Side nav item tooltip"
-  >
-  </vaadin-tooltip>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item path */

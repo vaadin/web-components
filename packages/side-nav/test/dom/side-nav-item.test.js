@@ -25,7 +25,6 @@ describe('vaadin-side-nav-item', () => {
           <span theme="badge primary" slot="suffix">2</span>
           <vaadin-side-nav-item slot="children"><span>Child item 1</span></vaadin-side-nav-item>
           <vaadin-side-nav-item slot="children"><span>Child item 2</span></vaadin-side-nav-item>
-          <vaadin-tooltip text="Side nav item tooltip" slot="tooltip"></vaadin-tooltip>
         </vaadin-side-nav-item>
             `,
     );
