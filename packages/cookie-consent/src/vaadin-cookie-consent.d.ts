@@ -36,6 +36,8 @@ import { CookieConsentMixin } from './vaadin-cookie-consent-mixin.js';
  * `cc-dismiss`    | Dismiss cookie button
  * `cc-btn`        | Dismiss cookie button
  * `cc-link`       | Learn more link element
+ *
+ * @deprecated `<vaadin-cookie-consent>` is deprecated and will be removed without a replacement in Vaadin 25.
  */
 declare class CookieConsent extends CookieConsentMixin(ElementMixin(HTMLElement)) {}
 

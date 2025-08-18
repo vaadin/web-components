@@ -43,6 +43,7 @@ import { CookieConsentMixin } from './vaadin-cookie-consent-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes CookieConsentMixin
+ * @deprecated `<vaadin-cookie-consent>` is deprecated and will be removed without a replacement in Vaadin 25.
  */
 class CookieConsent extends CookieConsentMixin(ElementMixin(PolymerElement)) {
   static get template() {
