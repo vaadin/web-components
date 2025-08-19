@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldAriaController } from '../src/field-aria-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper('field-aria', '<slot></slot>', (Base) => class extends baseMixin(Base) {});
+describe('FieldAriaController', () => {
+  const tag = definePolymer('field-aria', '<slot></slot>', (Base) => class extends ControllerMixin(Base) {});
 
   let element, input, controller;
 
@@ -216,12 +215,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('FieldAriaController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('FieldAriaController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

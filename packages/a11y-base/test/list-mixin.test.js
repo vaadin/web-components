@@ -4,7 +4,6 @@ import {
   arrowLeft,
   arrowRight,
   arrowUp,
-  defineLit,
   definePolymer,
   end,
   fixtureSync,
@@ -15,14 +14,12 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ListMixin } from '../src/list-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
+describe('ListMixin', () => {
   let list;
 
-  const listTag = defineHelper(
+  const listTag = definePolymer(
     'list',
     `
       <style>
@@ -45,14 +42,14 @@ const runTests = (defineHelper, baseMixin) => {
       </div>
     `,
     (Base) =>
-      class extends ListMixin(baseMixin(Base)) {
+      class extends ListMixin(Base) {
         get _scrollerElement() {
           return this.$.scroll;
         }
       },
   );
 
-  const itemTag = defineHelper(
+  const itemTag = definePolymer(
     'item',
     `
       <style>
@@ -71,7 +68,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot></slot>
     `,
     (Base) =>
-      class extends baseMixin(Base) {
+      class extends Base {
         static get properties() {
           return {
             disabled: {
@@ -857,18 +854,10 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     it('should warn when creating an element without focusElement', () => {
-      const tag = defineHelper('no-scroller', '<slot></slot>', (Base) => class extends ListMixin(baseMixin(Base)) {});
+      const tag = definePolymer('no-scroller', '<slot></slot>', (Base) => class extends ListMixin(Base) {});
       const instance = document.createElement(tag);
       expect(instance._scrollerElement).to.equal(instance);
       expect(console.warn.calledOnce).to.be.true;
     });
   });
-};
-
-describe('ListMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ListMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
-  defineLit,
   definePolymer,
   enterKeyDown,
   fixtureSync,
@@ -16,12 +15,10 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '../src/vaadin-item-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper('item-mixin', '<slot></slot>', (Base) => class extends ItemMixin(baseMixin(Base)) {});
+describe('ItemMixin', () => {
+  const tag = definePolymer('item-mixin', '<slot></slot>', (Base) => class extends ItemMixin(Base) {});
 
   let item;
 
@@ -258,12 +255,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.called).to.be.false;
     });
   });
-};
-
-describe('ItemMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ItemMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

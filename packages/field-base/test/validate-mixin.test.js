@@ -1,12 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ValidateMixin } from '../src/validate-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper('validate-mixin', '<input>', (Base) => class extends ValidateMixin(baseMixin(Base)) {});
+describe('ValidateMixin', () => {
+  const tag = definePolymer('validate-mixin', '<input>', (Base) => class extends ValidateMixin(Base) {});
 
   let element;
 
@@ -165,11 +163,11 @@ const runTests = (defineHelper, baseMixin) => {
   });
 
   describe('invalid cannot be set to false', () => {
-    const tagWithShouldSetInvalid = defineHelper(
+    const tagWithShouldSetInvalid = definePolymer(
       'validate-mixin-with-should-set-invalid',
       '<input>',
       (Base) =>
-        class extends ValidateMixin(baseMixin(Base)) {
+        class extends ValidateMixin(Base) {
           _shouldSetInvalid(invalid) {
             return invalid;
           }
@@ -190,12 +188,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.invalid).to.be.true;
     });
   });
-};
-
-describe('ValidateMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ValidateMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

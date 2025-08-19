@@ -4,7 +4,6 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
-  defineLit,
   definePolymer,
   endKeyDown,
   fixtureSync,
@@ -13,11 +12,10 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { KeyboardDirectionMixin } from '../src/keyboard-direction-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('KeyboardDirectionMixin', () => {
+  const tag = definePolymer(
     'keyboard-direction-mixin',
     `
       <style>
@@ -32,7 +30,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot></slot>
     `,
     (Base) =>
-      class extends KeyboardDirectionMixin(baseMixin(Base)) {
+      class extends KeyboardDirectionMixin(ControllerMixin(Base)) {
         get _vertical() {
           return this.hasAttribute('vertical');
         }
@@ -246,12 +244,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.focused).to.not.equal(items[0]);
     });
   });
-};
-
-describe('KeyboardDirectionMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('KeyboardDirectionMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

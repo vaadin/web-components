@@ -1,16 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
-    'input-mixin',
-    '<slot name="input"></slot>',
-    (Base) => class extends InputMixin(baseMixin(Base)) {},
-  );
+describe('InputMixin', () => {
+  const tag = definePolymer('input-mixin', '<slot name="input"></slot>', (Base) => class extends InputMixin(Base) {});
 
   let element, input;
 
@@ -133,11 +128,11 @@ const runTests = (defineHelper, baseMixin) => {
       inputSpy = sinon.spy();
       changeSpy = sinon.spy();
 
-      eventsTag = defineHelper(
+      eventsTag = definePolymer(
         'input-mixin-events',
         '<slot name="input"></slot>',
         (Base) =>
-          class extends InputMixin(baseMixin(Base)) {
+          class extends InputMixin(ControllerMixin(Base)) {
             _onInput() {
               inputSpy();
             }
@@ -189,12 +184,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(changeSpy.called).to.be.false;
     });
   });
-};
-
-describe('InputMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('InputMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

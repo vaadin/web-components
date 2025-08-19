@@ -1,13 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { definePolymer, fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('CheckedMixin', () => {
+  const tag = definePolymer(
     'checked-mixin',
     `
       <div>
@@ -16,7 +15,7 @@ const runTests = (defineHelper, baseMixin) => {
       </div>
     `,
     (Base) =>
-      class extends CheckedMixin(DelegateFocusMixin(baseMixin(Base))) {
+      class extends CheckedMixin(DelegateFocusMixin(ControllerMixin(Base))) {
         constructor() {
           super();
 
@@ -113,12 +112,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('CheckedMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('CheckedMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import {
-  defineLit,
   definePolymer,
   escKeyDown,
   fixtureSync,
@@ -14,12 +13,11 @@ import {
 import sinon from 'sinon';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('InputControlMixin', () => {
+  const tag = definePolymer(
     'input-control-mixin',
     `
       <div part="label">
@@ -33,7 +31,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends InputControlMixin(baseMixin(Base)) {
+      class extends InputControlMixin(ControllerMixin(Base)) {
         get clearElement() {
           return this.$.clearButton;
         }
@@ -487,12 +485,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('InputControlMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('InputControlMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

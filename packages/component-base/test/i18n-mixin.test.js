@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { LitElement } from 'lit';
 import { I18nMixin } from '../src/i18n-mixin.js';
-import { PolylitMixin } from '../src/polylit-mixin.js';
 
 const DEFAULT_I18N = {
   foo: 'Foo',
@@ -21,19 +19,11 @@ class I18nMixinPolymerElement extends I18nMixin(DEFAULT_I18N, PolymerElement) {
 
 customElements.define(I18nMixinPolymerElement.is, I18nMixinPolymerElement);
 
-class I18nMixinLitElement extends I18nMixin(DEFAULT_I18N, PolylitMixin(LitElement)) {
-  static get is() {
-    return 'i18n-mixin-lit-element';
-  }
-}
-
-customElements.define(I18nMixinLitElement.is, I18nMixinLitElement);
-
-const runTests = (baseClass) => {
+describe('I18nMixin', () => {
   let element;
 
   beforeEach(async () => {
-    element = document.createElement(baseClass.is);
+    element = document.createElement(I18nMixinPolymerElement.is);
     document.body.appendChild(element);
     await nextRender();
   });
@@ -88,12 +78,4 @@ const runTests = (baseClass) => {
 
     expect(element.__effectiveI18n).to.equal(effectiveI18n);
   });
-};
-
-describe('I18nMixin + Polymer', () => {
-  runTests(I18nMixinPolymerElement);
-});
-
-describe('I18nMixin + Lit', () => {
-  runTests(I18nMixinLitElement);
 });
