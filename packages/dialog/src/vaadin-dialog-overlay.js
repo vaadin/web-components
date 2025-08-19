@@ -42,15 +42,6 @@ export class DialogOverlay extends DialogOverlayMixin(
     return this.owner;
   }
 
-  /**
-   * Override method from OverlayFocusMixin to not set `aria-hidden`
-   * @protected
-   * @override
-   */
-  get _useAriaHidden() {
-    return false;
-  }
-
   /** @protected */
   render() {
     return html`

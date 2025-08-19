@@ -42,29 +42,12 @@ class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMix
   }
 
   /**
-   * @protected
-   * @override
-   */
-  get _modalRoot() {
-    return this.owner;
-  }
-
-  /**
    * Override method from OverlayFocusMixin to use owner as focus trap root
    * @protected
    * @override
    */
   get _focusTrapRoot() {
     return this.owner;
-  }
-
-  /**
-   * Override method from OverlayFocusMixin to not set `aria-hidden`
-   * @protected
-   * @override
-   */
-  get _useAriaHidden() {
-    return false;
   }
 
   /** @protected */
