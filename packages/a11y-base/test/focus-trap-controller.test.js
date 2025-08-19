@@ -95,6 +95,13 @@ describe('FocusTrapController', () => {
       expect(document.activeElement).to.equal(input);
     });
 
+    it('should use focusVisible: true when focusing the first focusable element', () => {
+      const input = trap.querySelector('#trap-input-1');
+      const spy = sinon.spy(input, 'focus');
+      controller.trapFocus(trap);
+      expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: true });
+    });
+
     describe('no focusable elements', () => {
       beforeEach(() => {
         trap.querySelectorAll('input, textarea').forEach((input) => {
@@ -192,6 +199,12 @@ describe('FocusTrapController', () => {
           await tab();
           await tab();
           expect(spy.calledOnce).to.be.false;
+        });
+
+        it('should focus element with focusVisible on Tab', async () => {
+          const spy = sinon.spy(trapInput2, 'focus');
+          await tab();
+          expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: true });
         });
       });
 
