@@ -174,11 +174,11 @@ class RichTextEditorPopupOverlay extends PositionMixin(
   }
 
   /**
-   * Override method from OverlayFocusMixin to use owner as modal root
+   * Override method from OverlayFocusMixin to use owner as focus trap root
    * @protected
    * @override
    */
-  get _modalRoot() {
+  get _focusTrapRoot() {
     return this.owner;
   }
 }
