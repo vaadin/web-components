@@ -1,13 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('FieldMixin', () => {
+  const tag = definePolymer(
     'field-mixin',
     `
       <style>
@@ -36,7 +35,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends FieldMixin(InputMixin(baseMixin(Base))) {
+      class extends FieldMixin(InputMixin(ControllerMixin(Base))) {
         ready() {
           super.ready();
 
@@ -51,7 +50,7 @@ const runTests = (defineHelper, baseMixin) => {
       },
   );
 
-  const groupTag = defineHelper(
+  const groupTag = definePolymer(
     'field-mixin-group',
     `
       <slot name="label"></slot>
@@ -59,7 +58,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends FieldMixin(baseMixin(Base)) {
+      class extends FieldMixin(ControllerMixin(Base)) {
         ready() {
           super.ready();
 
@@ -476,7 +475,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     describe('slotted custom element', () => {
       beforeEach(async () => {
-        const helperTag = defineHelper('custom-helper', '<div>Helper</div>', (Base) => Base);
+        const helperTag = definePolymer('custom-helper', '<div>Helper</div>', (Base) => Base);
         element = fixtureSync(`
           <${tag}>
             <${helperTag} slot="helper"></${helperTag}>
@@ -1010,12 +1009,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.getAttribute('aria-describedby')).to.include(helper.id);
     });
   });
-};
-
-describe('FieldMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('FieldMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

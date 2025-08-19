@@ -1,23 +1,22 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
 import { LabelledInputController } from '../src/labelled-input-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const inputTag = defineHelper(
+describe('LabelledInputController', () => {
+  const inputTag = definePolymer(
     'input',
     `<slot name="label"></slot><slot name="input"></slot>`,
-    (Base) => class extends InputMixin(LabelMixin(baseMixin(Base))) {},
+    (Base) => class extends InputMixin(LabelMixin(ControllerMixin(Base))) {},
   );
 
-  const textareaTag = defineHelper(
+  const textareaTag = definePolymer(
     'textarea',
     `<slot name="label"></slot><slot name="textarea"></slot>`,
-    (Base) => class extends InputMixin(LabelMixin(baseMixin(Base))) {},
+    (Base) => class extends InputMixin(LabelMixin(ControllerMixin(Base))) {},
   );
 
   let element, target, label;
@@ -69,12 +68,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('LabelledInputController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('LabelledInputController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

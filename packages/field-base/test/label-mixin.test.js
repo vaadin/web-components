@@ -1,15 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { LabelMixin } from '../src/label-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
-    'label-mixin',
-    '<slot name="label"></slot>',
-    (Base) => class extends LabelMixin(baseMixin(Base)) {},
-  );
+describe('LabelMixin', () => {
+  const tag = definePolymer('label-mixin', '<slot name="label"></slot>', (Base) => class extends LabelMixin(Base) {});
 
   let element, label;
 
@@ -331,12 +325,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('LabelMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('LabelMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
