@@ -52,6 +52,8 @@ import { BoardRowMixin } from './vaadin-board-row-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes BoardRowMixin
+ * @deprecated `<vaadin-board-row>` is deprecated and will be removed in Vaadin 26.
+ * Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.
  */
 class BoardRow extends BoardRowMixin(ElementMixin(PolylitMixin(LitElement))) {
   static get is() {

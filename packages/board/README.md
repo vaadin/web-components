@@ -4,6 +4,9 @@ A powerful and easy to use layout web component for building responsive views.
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Board in your project.
 
+> [!WARNING]
+> `<vaadin-board>` is deprecated and will be removed in Vaadin 26. Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.
+
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/board)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/board)](https://www.npmjs.com/package/@vaadin/board)
