@@ -137,6 +137,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
           inset-inline-end: 0;
           z-index: 1;
           overflow: hidden;
+          touch-action: none;
         }
 
         :host([resizing])::after {
