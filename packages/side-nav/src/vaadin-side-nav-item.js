@@ -260,6 +260,7 @@ class SideNavItem extends SideNavChildrenMixin(
         >
           <slot name="prefix"></slot>
           <slot></slot>
+          <slot name="tooltip"></slot>
           <slot name="suffix"></slot>
         </a>
         <button
@@ -275,7 +276,6 @@ class SideNavItem extends SideNavChildrenMixin(
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
-      <slot name="tooltip"></slot>
     `;
   }
 
