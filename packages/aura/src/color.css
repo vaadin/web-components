@@ -37,6 +37,8 @@
       var(--aura-background) 33%,
       var(--_aura-background-alt)
     );
+
+    --vaadin-master-detail-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
   }
 
   html,
@@ -46,6 +48,9 @@
     --aura-accent-dark: var(--_accent, hsl(218, 90%, 61%));
 
     --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
+
+    --vaadin-background-color: var(--aura-surface);
+    --vaadin-button-background: var(--aura-surface);
   }
 
   @supports (color: hsl(0 0 0)) {

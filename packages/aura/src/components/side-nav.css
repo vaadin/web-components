@@ -17,8 +17,11 @@
   }
 
   vaadin-side-nav-item::part(content) {
-    transition: color 120ms;
+    transition:
+      color 120ms,
+      background-color 120ms;
     background-clip: padding-box;
+    --aura-surface-level: 3;
   }
 
   vaadin-side-nav-item::part(content):hover {
@@ -50,6 +53,13 @@
     vaadin-side-nav-item[expanded]::part(children) {
       height: auto;
     }
+  }
+
+  vaadin-side-nav[theme~='contrast'] vaadin-side-nav-item[current]::part(content) {
+    /* TODO this won't adapt prefix and suffix content colors */
+    /* would be great if color-scheme: light-dark(dark, light); worked */
+    background: light-dark(var(--aura-background-dark), var(--aura-background-light));
+    color: light-dark(var(--aura-background-light), var(--aura-background-dark));
   }
 
   /* TODO bug in component/base styles: hide label part if no label is provided */

@@ -1,33 +1,43 @@
 @layer vaadin.aura {
   /* List all elements that are surfaces */
   html {
-    --aura-surface-level: 3;
-    --aura-surface-opacity: 0.5;
+    --aura-surface-level: 2;
+    --aura-surface-opacity: 50%;
   }
 
   html,
+  vaadin-app-layout::part(navbar),
+  vaadin-app-layout::part(drawer),
   vaadin-master-detail-layout,
   vaadin-master-detail-layout::part(detail),
   ::part(overlay),
+  vaadin-side-nav-item::part(content),
   [theme~='surface'] {
-    --aura-surface: light-dark(
+    --aura-surface-solid: light-dark(
       oklab(
-        from var(--aura-background) calc(l + (1 - l) / 4 * var(--aura-surface-level))
-          calc(a - a * 0.25 * var(--aura-surface-level)) calc(b - b * 0.25 * var(--aura-surface-level)) /
-          var(--aura-surface-opacity)
+        from var(--aura-background) min(1, l + (1 - l) / 4 * var(--aura-surface-level))
+          min(0, a - a * 0.25 * var(--aura-surface-level)) min(0, b - b * 0.25 * var(--aura-surface-level))
       ),
       oklab(
         from var(--aura-background) max(0, max(0.23, l) + max(0.4, l) * max(0.25, l) / 4 * var(--aura-surface-level))
-          calc(a * 0.5 / max(0.01, l)) calc(b * 0.5 / max(0.01, l)) / var(--aura-surface-opacity)
+          min(0.4, a * 0.5 / max(0.01, l)) min(0.4, b * 0.5 / max(0.01, l))
       )
     );
+
+    --aura-surface: color-mix(in oklab, var(--aura-surface-solid) var(--aura-surface-opacity), transparent);
+
+    @media (prefers-reduced-transparency: reduce) {
+      --aura-surface-opacity: 100%;
+    }
   }
 
-  [theme~='surface-level-4'] {
-    --aura-surface-level: 4;
+  [slot='detail']:has(vaadin-grid)::part(master),
+  [slot='detail']:has(vaadin-grid) {
+    --aura-surface: var(--aura-surface-solid);
+    background: var(--aura-surface);
   }
 
-  [theme~='surface-opacity-90'] {
-    --aura-surface-opacity: 0.9;
+  vaadin-master-detail-layout:has(:not(vaadin-master-detail-layout) vaadin-grid)::part(detail) {
+    /* --aura-surface-opacity: .5; */
   }
 }

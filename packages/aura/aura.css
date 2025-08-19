@@ -7,23 +7,21 @@
 @import './src/components/app-layout.css';
 @import './src/components/badge.css';
 @import './src/components/card.css';
+@import './src/components/checkbox.css';
 @import './src/components/form-layout.css';
 @import './src/components/grid.css';
+@import './src/components/master-detail-layout.css';
 @import './src/components/notification.css';
 @import './src/components/select.css';
 @import './src/components/side-nav.css';
 
 @layer vaadin.aura {
   html {
-    --aura-radius-s: 4px;
-    --aura-radius-m: 8px;
-    --aura-radius-l: 14px;
-    --vaadin-radius-s: var(--aura-radius-s);
-    --vaadin-radius-m: var(--aura-radius-m);
-    --vaadin-radius-l: var(--aura-radius-l);
+    --vaadin-radius-s: 4px;
+    --vaadin-radius-m: 8px;
+    --vaadin-radius-l: 14px;
 
     cursor: default;
-    --vaadin-button-background: var(--aura-surface);
   }
 
   @media (pointer: coarse) {
@@ -50,24 +48,17 @@
   } */
 
   html,
-  body,
-  vaadin-app-layout,
-  vaadin-app-layout > vaadin-master-detail-layout {
+  body {
     width: 100%;
     height: 100%;
     margin: 0;
     box-sizing: border-box;
   }
 
-  [theme] {
-    --app-layout-radius: clamp(0px, var(--aura-app-layout-inset) * 3, var(--aura-radius-l));
-  }
-
-  vaadin-app-layout > vaadin-master-detail-layout {
-    border-radius: var(--app-layout-radius);
-    border: var(--mdl-border, 1px) solid var(--vaadin-border-color-subtle);
-    border-block-width: min(var(--aura-app-layout-inset), var(--mdl-border, 1px));
-    border-inline-end-width: min(var(--aura-app-layout-inset), var(--mdl-border, 1px));
+  ::part(overlay) {
+    --vaadin-overlay-background: var(--aura-surface);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   /* vaadin-app-layout > vaadin-master-detail-layout::before {
@@ -75,37 +66,11 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     background: linear-gradient(to bottom right, hsl(0 0 100 / 0.2), hsl(0 0 100 / 0.07), hsl(0 0 100 / 0.2)) border-box;
     mask: linear-gradient(black,black) border-box, linear-gradient(black,black) padding-box;
     mask-composite: subtract;
     pointer-events: none;
-  } */
-
-  /* TODO could be a built-in variant */
-  vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
-    margin: calc(var(--aura-app-layout-inset) / 2);
-    border-radius: var(--app-layout-radius);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-
-  vaadin-master-detail-layout > vaadin-master-detail-layout,
-  vaadin-master-detail-layout:not([drawer])::part(detail) {
-    border-start-end-radius: var(--app-layout-radius);
-    border-end-end-radius: var(--app-layout-radius);
-  }
-
-  ::view-transition-group(vaadin-mdl-backdrop),
-  ::view-transition-group(vaadin-mdl-master),
-  ::view-transition-group(vaadin-mdl-detail) {
-    border-radius: var(--app-layout-radius);
-    overflow: hidden;
-  }
-
-  /* ::view-transition-group(vaadin-mdl-detail.viewport) {
-    border-radius: 0;
-    overflow: visible;
   } */
 
   vaadin-scroller[slot='drawer'] {
@@ -122,7 +87,7 @@
   }
 
   vaadin-avatar[theme~='square'] {
-    border-radius: var(--aura-radius-m);
+    border-radius: var(--vaadin-radius-m);
   }
 
   vaadin-scroller:not([overflow]) {
@@ -135,10 +100,7 @@
   #org-select {
     --vaadin-input-field-value-font-weight: var(--aura-font-weight-strong);
     --vaadin-input-field-value-font-size: var(--aura-font-size-l);
-  }
-
-  /* TODO optical adjustment */
-  #org-select vaadin-avatar {
+    /* TODO optical adjustment */
     margin-inline-start: var(--vaadin-padding-xs);
   }
 }

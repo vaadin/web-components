@@ -1,30 +1,29 @@
 @layer vaadin.aura {
   html {
     --aura-color-scheme: light;
-    --aura-nav-color-scheme: inherit;
+    --aura-content-color-scheme: inherit;
     --aura-notification-color-scheme: inherit;
 
     color-scheme: var(--aura-color-scheme);
-    background: var(--vaadin-background-color);
-    color: var(--vaadin-color);
   }
 
+  html,
   vaadin-app-layout {
-    color-scheme: var(--aura-nav-color-scheme);
-    background: var(--aura-accent-background);
     color: var(--vaadin-color);
-  }
-
-  vaadin-master-detail-layout {
-    color-scheme: var(--aura-color-scheme);
-    background: var(--aura-surface);
-    background-clip: padding-box;
-    color: var(--vaadin-color);
+    background: var(--aura-accent-background) var(--aura-background);
+    background-size: 100vw 100vh;
+    background-attachment: fixed;
   }
 
   vaadin-app-layout > vaadin-master-detail-layout {
+    color-scheme: var(--aura-content-color-scheme);
+    color: var(--vaadin-color);
     background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-accent-background);
     background-clip: padding-box;
+  }
+
+  vaadin-app-layout > vaadin-master-detail-layout::part(detail) {
+    background: var(--aura-surface) padding-box;
   }
 
   vaadin-notification-container {
