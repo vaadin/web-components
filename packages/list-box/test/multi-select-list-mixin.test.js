@@ -1,12 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { MultiSelectListMixin } from '../src/vaadin-multi-select-list-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const listTag = defineHelper(
+describe('MultiSelectListMixin', () => {
+  const listTag = definePolymer(
     'multi-select-list-element',
     `
       <style>
@@ -29,14 +27,14 @@ const runTests = (defineHelper, baseMixin) => {
       </div>
     `,
     (Base) =>
-      class extends MultiSelectListMixin(baseMixin(Base)) {
+      class extends MultiSelectListMixin(Base) {
         get _scrollerElement() {
           return this.$.scroll;
         }
       },
   );
 
-  const itemTag = defineHelper(
+  const itemTag = definePolymer(
     'item-element',
     `
       <style>
@@ -47,7 +45,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot></slot>
     `,
     (Base) =>
-      class extends baseMixin(Base) {
+      class extends Base {
         static get properties() {
           return {
             _hasVaadinItemMixin: {
@@ -221,12 +219,4 @@ const runTests = (defineHelper, baseMixin) => {
     await nextUpdate(list);
     expect(list.items[2].selected).to.be.true;
   });
-};
-
-describe('MultiSelectListMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('MultiSelectListMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
