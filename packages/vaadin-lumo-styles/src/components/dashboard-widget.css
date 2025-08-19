@@ -120,6 +120,7 @@
     bottom: calc(-1 * var(--_resize-button-offset));
     inset-inline-end: calc(-1 * var(--_resize-button-offset));
     cursor: nwse-resize;
+    touch-action: none;
     --icon: var(--lumo-icons-resize-handle);
   }
 
