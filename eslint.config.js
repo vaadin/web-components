@@ -29,16 +29,7 @@ const PRO_LICENSE_HEADER = `
  */
 `;
 
-const PRO_COMPONENTS = [
-  'charts',
-  'board',
-  'cookie-consent',
-  'crud',
-  'dashboard',
-  'grid-pro',
-  'rich-text-editor',
-  'map',
-];
+const PRO_COMPONENTS = ['charts', 'board', 'crud', 'dashboard', 'grid-pro', 'rich-text-editor', 'map'];
 
 export default [
   {
