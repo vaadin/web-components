@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer } from '@vaadin/testing-helpers';
+import { definePolymer } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { LitElement } from 'lit';
 import { ControllerMixin } from '../src/controller-mixin.js';
 
 class SpyController {
@@ -18,8 +17,8 @@ class SpyController {
   }
 }
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper('controller-mixin', 'Content', (Base) => class extends baseMixin(Base) {});
+describe('ControllerMixin', () => {
+  const tag = definePolymer('controller-mixin', 'Content', (Base) => class extends ControllerMixin(Base) {});
 
   let element, controller;
 
@@ -70,21 +69,5 @@ const runTests = (defineHelper, baseMixin) => {
       document.body.appendChild(element);
       expect(controller.hostConnected.calledTwice).to.be.true;
     });
-  });
-};
-
-describe('ControllerMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ControllerMixin + Lit', () => {
-  runTests(defineLit, ControllerMixin);
-
-  it('should not apply ControllerMixin to LitElement-based classes', () => {
-    class TestElement extends LitElement {}
-
-    const mixinResult = ControllerMixin(TestElement);
-
-    expect(mixinResult).to.equal(TestElement);
   });
 });

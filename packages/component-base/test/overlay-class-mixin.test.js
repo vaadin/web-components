@@ -1,15 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { OverlayClassMixin } from '../src/overlay-class-mixin.js';
-import { PolylitMixin } from '../src/polylit-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('OverlayClassMixin', () => {
+  const tag = definePolymer(
     'overlay-class-mixin',
     '<slot name="overlay">',
     (Base) =>
-      class extends OverlayClassMixin(baseMixin(Base)) {
+      class extends OverlayClassMixin(Base) {
         ready() {
           super.ready();
 
@@ -169,12 +167,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(overlay.classList.contains('xyz')).to.be.true;
     });
   });
-};
-
-describe('OverlayClassMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('OverlayClassMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

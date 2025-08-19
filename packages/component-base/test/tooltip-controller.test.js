@@ -1,16 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '../src/controller-mixin.js';
-import { PolylitMixin } from '../src/polylit-mixin.js';
 import { TooltipController } from '../src/tooltip-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('TooltipController', () => {
+  const tag = definePolymer(
     'tooltip-host',
     `<slot></slot><slot name="tooltip"></slot>
     `,
-    (Base) => class extends baseMixin(Base) {},
+    (Base) => class extends ControllerMixin(Base) {},
   );
 
   let host, tooltip, controller;
@@ -186,12 +185,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy).to.be.calledTwice;
     });
   });
-};
-
-describe('TooltipController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('TooltipController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
