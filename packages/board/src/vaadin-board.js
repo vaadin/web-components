@@ -13,6 +13,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { BoardRow } from './vaadin-board-row.js';
 
 /**
@@ -37,6 +38,8 @@ import { BoardRow } from './vaadin-board-row.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @deprecated `<vaadin-board>` is deprecated and will be removed in Vaadin 26.
+ * Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.
  */
 class Board extends ElementMixin(PolylitMixin(LitElement)) {
   static get is() {
@@ -60,8 +63,17 @@ class Board extends ElementMixin(PolylitMixin(LitElement)) {
   }
 
   /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+
+    issueWarning(
+      '`<vaadin-board>` is deprecated and will be removed in Vaadin 26. Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.',
+    );
+  }
+
+  /** @protected */
   render() {
-    return html`<slot></slot>`;
+    return html` <slot></slot>`;
   }
 
   /**
