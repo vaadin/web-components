@@ -10,7 +10,7 @@
   vaadin-notification-card::part(overlay) {
     /* Needs to be set here so it is re-computed if --aura-surface-level or --aura-surface-opacity is set */
     --aura-surface-level: 3;
-    --aura-surface-opacity: 0.7;
+    --aura-surface-opacity: 70%;
     --vaadin-notification-background: var(--aura-surface);
 
     /* TODO probably should be in base styles */
