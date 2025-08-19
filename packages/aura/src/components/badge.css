@@ -4,10 +4,10 @@
     font-weight: var(--aura-font-weight-emphasis);
     line-height: var(--aura-line-height-xs);
     border: 1px solid var(--vaadin-border-color-subtle);
-    background: var(--aura-surface-background);
+    background: var(--aura-surface);
     background-clip: padding-box;
     padding: 0.1em 0.3em;
-    border-radius: var(--aura-radius-m);
+    border-radius: var(--vaadin-radius-m);
     min-width: 1em;
     text-align: center;
   }

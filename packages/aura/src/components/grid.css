@@ -8,9 +8,9 @@
   vaadin-grid[theme~='no-border']::part(last-column-cell) {
     --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs) var(--vaadin-padding-s);
   }
-}
 
-/* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
-vaadin-grid::part(active-nav-item) {
-  --vaadin-grid-cell-background: var(--vaadin-background-container-strong);
+  /* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
+  vaadin-grid::part(active-nav-item) {
+    --vaadin-grid-row-selected-background: var(--vaadin-background-container-strong);
+  }
 }
