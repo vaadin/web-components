@@ -73,7 +73,7 @@ class Board extends ElementMixin(PolylitMixin(LitElement)) {
 
   /** @protected */
   render() {
-    return html` <slot></slot>`;
+    return html`<slot></slot>`;
   }
 
   /**
