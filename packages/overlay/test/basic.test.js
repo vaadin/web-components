@@ -44,7 +44,7 @@ describe('vaadin-overlay', () => {
       expect(spy).to.not.be.called;
     });
 
-    it('should fire when immediately disconnected after setting opened to true', async () => {
+    it('should not fire when immediately disconnected after setting opened to true', async () => {
       overlay.opened = true;
       overlay.remove();
 
