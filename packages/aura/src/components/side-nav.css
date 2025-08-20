@@ -19,12 +19,13 @@
   vaadin-side-nav-item::part(content) {
     transition:
       color 120ms,
+      border-color 120ms,
       background-color 120ms;
     background-clip: padding-box;
     --aura-surface-level: 3;
   }
 
-  vaadin-side-nav-item::part(content):hover {
+  vaadin-side-nav-item:not([disabled])::part(content):hover {
     --vaadin-side-nav-item-color: var(--vaadin-color);
   }
 
@@ -33,33 +34,33 @@
     --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  /* @media (prefers-reduced-motion: no-preference) {
     vaadin-side-nav[collapsed]::part(children),
     vaadin-side-nav-item::part(children) {
-      transition:
-        display 200ms,
-        height 200ms;
+      --vaadin-side-nav-hidden-display: flex;
+      transition: 200ms;
+      transition-property: display, height, opacity;
       transition-behavior: allow-discrete;
       interpolate-size: allow-keywords;
-      /* overflow: hidden; */
+      overflow: hidden;
       height: 0;
 
       @starting-style {
         height: 0;
+        opacity: 0;
       }
     }
 
-    vaadin-side-nav-item:not([collapsed])::part(children),
+    vaadin-side-nav:not([collapsed])::part(children),
     vaadin-side-nav-item[expanded]::part(children) {
       height: auto;
     }
-  }
+  } */
 
   vaadin-side-nav[theme~='contrast'] vaadin-side-nav-item[current]::part(content) {
-    /* TODO this won't adapt prefix and suffix content colors */
-    /* would be great if color-scheme: light-dark(dark, light); worked */
-    background: light-dark(var(--aura-background-dark), var(--aura-background-light));
-    color: light-dark(var(--aura-background-light), var(--aura-background-dark));
+    color-scheme: dark;
+    background: var(--aura-surface-solid);
+    --vaadin-focus-ring-color: var(--aura-surface-solid);
   }
 
   /* TODO bug in component/base styles: hide label part if no label is provided */
