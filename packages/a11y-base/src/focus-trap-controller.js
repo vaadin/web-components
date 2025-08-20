@@ -96,9 +96,11 @@ export class FocusTrapController {
    * so that it becomes possible to tab outside the trap node.
    */
   releaseFocus() {
-    this.__trapNode = null;
+    if (instances.includes(this)) {
+      this.__trapNode = null;
 
-    instances.pop();
+      instances.pop();
+    }
   }
 
   /**
