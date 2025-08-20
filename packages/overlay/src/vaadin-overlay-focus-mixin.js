@@ -111,7 +111,11 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _trapFocus() {
       if (this.focusTrap) {
-        this.__focusTrapController.trapFocus(this._focusTrapRoot);
+        const root = this._focusTrapRoot;
+        // Ensure the focus trap root element is not hidden
+        if (getComputedStyle(root).display !== 'none') {
+          this.__focusTrapController.trapFocus(root);
+        }
       }
     }
 
