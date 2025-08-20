@@ -103,6 +103,23 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
     });
+
+    it('should fire content-changed event when text changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '' });
+    });
   });
 
   describe('generator', () => {
@@ -146,6 +163,41 @@ describe('vaadin-tooltip', () => {
       tooltip.generator = () => '';
       await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should fire content-changed event when generator changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.generator = () => 'Foo';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.generator = () => '';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '' });
+    });
+
+    it('should fire content-changed event when context changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.context = { text: 'Foo' };
+      tooltip.generator = (context) => context.text;
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.context = { text: 'Bar' };
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Bar' });
     });
   });
 

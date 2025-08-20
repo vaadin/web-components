@@ -669,6 +669,7 @@ export const TooltipMixin = (superClass) =>
     /** @private */
     __updateContent() {
       this.__contentNode.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+      this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
 
     /** @private */
@@ -692,4 +693,10 @@ export const TooltipMixin = (superClass) =>
         });
       }
     }
+
+    /**
+     * Fired when the tooltip text content is changed.
+     *
+     * @event content-changed
+     */
   };

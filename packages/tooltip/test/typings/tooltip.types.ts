@@ -1,7 +1,7 @@
 import '../../vaadin-tooltip.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { Tooltip, type TooltipPosition } from '../../vaadin-tooltip.js';
+import { Tooltip, type TooltipContentChangedEvent, type TooltipPosition } from '../../vaadin-tooltip.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -29,3 +29,9 @@ assertType<(target: HTMLElement, context?: Record<string, unknown>) => boolean>(
 assertType<(delay: number) => void>(Tooltip.setDefaultFocusDelay);
 assertType<(delay: number) => void>(Tooltip.setDefaultHideDelay);
 assertType<(delay: number) => void>(Tooltip.setDefaultHoverDelay);
+
+// Events
+tooltip.addEventListener('content-changed', (event) => {
+  assertType<TooltipContentChangedEvent>(event);
+  assertType<string>(event.detail.content);
+});
