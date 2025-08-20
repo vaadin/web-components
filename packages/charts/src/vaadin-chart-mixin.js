@@ -923,6 +923,8 @@ export const ChartMixin = (superClass) =>
       } else {
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
+
+      this.__forceResize();
     }
 
     /** @private */
@@ -1659,6 +1661,29 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __showWarn(propertyName, acceptedValues) {
       console.warn(`<vaadin-chart> Acceptable values for "${propertyName}" are ${acceptedValues}`);
+    }
+
+    /**
+     * @private
+     * Workaround for https://github.com/highcharts/highcharts/issues/23443
+     * Forces a resize in the chart to make it calculate the labels positions
+     * correctly in a chart with "organization" series
+     *
+     * TODO: Remove when the related ticket is fixed
+     */
+    __forceResize() {
+      const chart = this.configuration;
+      const { options } = chart;
+      const hasOrganizationSeries =
+        options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization');
+      if (!hasOrganizationSeries) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        chart.setSize(chart.chartWidth - 10, chart.chartHeight);
+        chart.setSize(null, null);
+      });
     }
 
     /** @private */

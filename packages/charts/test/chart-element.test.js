@@ -79,6 +79,60 @@ describe('vaadin-chart', () => {
     });
   });
 
+  describe('organization', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
+      chart.updateConfiguration(
+        {
+          chart: {
+            styledMode: true,
+            inverted: true,
+            type: 'organization',
+          },
+          title: {
+            text: 'Acme organization chart',
+          },
+          series: [
+            {
+              keys: ['from', 'to'],
+              nodes: [
+                {
+                  id: 'Acme',
+                },
+                {
+                  id: 'Head Office',
+                },
+                {
+                  id: 'Labs',
+                },
+              ],
+              name: 'Highsoft',
+              data: [
+                ['Acme', 'Head Office'],
+                ['Acme', 'Labs'],
+              ],
+            },
+          ],
+        },
+        true,
+      );
+      await oneEvent(chart, 'chart-end-resize');
+    });
+
+    it('should have labels aligned with points', () => {
+      const renderElement = chart.$.chart;
+      const point = renderElement.querySelector('path.highcharts-node.highcharts-point.highcharts-color-0');
+      const label = renderElement.querySelector('div.highcharts-data-label.highcharts-data-label-color-0');
+
+      const { left: pointLeft, width: pointWidth } = point.getBoundingClientRect();
+      const { left: labelLeft, width: labelWidth } = label.getBoundingClientRect();
+
+      expect(pointLeft + pointWidth / 2).to.be.equal(labelLeft + labelWidth / 2);
+    });
+  });
+
   describe('configuration', () => {
     const DATA = [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4];
     const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
