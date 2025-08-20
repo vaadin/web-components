@@ -15,12 +15,12 @@
   [theme~='surface'] {
     --aura-surface-solid: light-dark(
       oklab(
-        from var(--aura-background) min(1, l + (1 - l) / 4 * var(--aura-surface-level))
-          min(0, a - a * 0.25 * var(--aura-surface-level)) min(0, b - b * 0.25 * var(--aura-surface-level))
+        from var(--aura-background) min(1, l + (1 - l) * var(--aura-surface-level))
+          min(0, a - a * 0.4 * var(--aura-surface-level)) min(0, b - b * 0.4 * var(--aura-surface-level))
       ),
       oklab(
-        from var(--aura-background) max(0, max(0.23, l) + max(0.4, l) * max(0.25, l) / 4 * var(--aura-surface-level))
-          min(0.4, a * 0.5 / max(0.01, l)) min(0.4, b * 0.5 / max(0.01, l))
+        from var(--aura-background) max(0, max(0.23, l) + max(0.2, l) * max(0.2, l) / 2 * var(--aura-surface-level))
+          calc(a * 1) calc(b * 1)
       )
     );
 
@@ -35,9 +35,5 @@
   [slot='detail']:has(vaadin-grid) {
     --aura-surface: var(--aura-surface-solid);
     background: var(--aura-surface);
-  }
-
-  vaadin-master-detail-layout:has(:not(vaadin-master-detail-layout) vaadin-grid)::part(detail) {
-    /* --aura-surface-opacity: .5; */
   }
 }
