@@ -28,7 +28,6 @@
     "@lit/react": "^1.0.7",
     "@vaadin/board": "25.0.0-alpha15",
     "@vaadin/charts": "25.0.0-alpha15",
-    "@vaadin/cookie-consent": "25.0.0-alpha15",
     "@vaadin/crud": "25.0.0-alpha15",
     "@vaadin/dashboard": "25.0.0-alpha15",
     "@vaadin/grid-pro": "25.0.0-alpha15",
@@ -84,10 +83,6 @@
       "types": "./ChartSeries.d.ts",
       "default": "./ChartSeries.js"
     },
-    "./CookieConsent.js": {
-      "types": "./CookieConsent.d.ts",
-      "default": "./CookieConsent.js"
-    },
     "./Crud.js": {
       "types": "./Crud.d.ts",
       "default": "./Crud.js"
@@ -136,7 +131,6 @@
     "./BoardRow": "./BoardRow.js",
     "./Chart": "./Chart.js",
     "./ChartSeries": "./ChartSeries.js",
-    "./CookieConsent": "./CookieConsent.js",
     "./Crud": "./Crud.js",
     "./CrudEdit": "./CrudEdit.js",
     "./CrudEditColumn": "./CrudEditColumn.js",

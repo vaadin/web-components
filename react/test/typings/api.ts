@@ -17,7 +17,6 @@ import { GridProEditColumn } from '../../packages/react-components-pro/src/GridP
 import { GridColumnGroup, GridColumnGroupElement } from '../../packages/react-components/src/GridColumnGroup.js';
 import { ChartSeries, ChartSeriesElement } from '../../packages/react-components-pro/src/ChartSeries.js';
 import { ConfirmDialog, ConfirmDialogElement } from '../../packages/react-components/src/ConfirmDialog.js';
-import { CookieConsent, CookieConsentElement } from '../../packages/react-components-pro/src/CookieConsent.js';
 import { Dialog, DialogElement } from '../../packages/react-components/src/Dialog.js';
 import { DatePicker, DatePickerElement } from '../../packages/react-components/src/DatePicker.js';
 import { LoginOverlay, LoginOverlayElement } from '../../packages/react-components/src/LoginOverlay.js';
@@ -166,13 +165,6 @@ type NotificationProps = typeof notificationProps;
 assertOmitted<HTMLAttributes<NotificationElement>, NotificationProps>('style');
 assertOmitted<HTMLAttributes<NotificationElement>, NotificationProps>('contentEditable');
 assertOmitted<HTMLAttributes<NotificationElement>, NotificationProps>('onClick');
-
-const cookieConsentProps = React.createElement(CookieConsent, {}).props;
-type CookieConsentProps = typeof cookieConsentProps;
-
-assertOmitted<HTMLAttributes<CookieConsentElement>, CookieConsentProps>('style');
-assertOmitted<HTMLAttributes<CookieConsentElement>, CookieConsentProps>('contentEditable');
-assertOmitted<HTMLAttributes<CookieConsentElement>, CookieConsentProps>('onClick');
 
 const chartSeriesProps = React.createElement(ChartSeries, {}).props;
 type ChartSeriesProps = typeof chartSeriesProps;

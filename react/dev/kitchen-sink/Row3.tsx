@@ -2,7 +2,6 @@ import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
 import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
 import { ComboBox } from '../../packages/react-components/src/ComboBox.js';
 import { ContextMenu } from '../../packages/react-components/src/ContextMenu.js';
-import { CookieConsent } from '../../packages/react-components-pro/src/CookieConsent.js';
 import { Crud, crudPath } from '../../packages/react-components-pro/src/Crud.js';
 import { FormLayout } from '../../packages/react-components/src/FormLayout.js';
 import { Item } from '../../packages/react-components/src/Item.js';
@@ -20,7 +19,6 @@ export default function Row3() {
           <Item>ListBox Item</Item>
         </ListBox>
       </ContextMenu>
-      <CookieConsent position="bottom-right"></CookieConsent>
       <Crud items={crudData}>
         <FormLayout slot="form">
           <TextField label="Name" {...crudPath('name')} />
