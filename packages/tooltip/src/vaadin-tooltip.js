@@ -48,6 +48,8 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} content-changed - Fired when the tooltip text content is changed.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
