@@ -6,7 +6,7 @@ import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 describe('side-nav-item with tooltip', () => {
-  let item, tooltip, tooltipOverlay;
+  let item, tooltip, tooltipOverlay, srOnly;
 
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
@@ -25,19 +25,19 @@ describe('side-nav-item with tooltip', () => {
     await nextRender();
     tooltip = item.querySelector('vaadin-tooltip');
     tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+    srOnly = item.shadowRoot.querySelector('.sr-only');
   });
 
   it('should set tooltip target to the item content part', () => {
     expect(tooltip.target).to.equal(item.$.content);
   });
 
-  it('should set tooltip ariaTarget to the item itself', () => {
-    expect(tooltip.ariaTarget).to.equal(item);
+  it('should set tooltip ariaTarget to null', () => {
+    expect(tooltip.ariaTarget).to.be.null;
   });
 
-  it('should set aria-describedby on the slotted content', () => {
-    const label = tooltip.querySelector('[role="tooltip"]');
-    expect(item.getAttribute('aria-describedby')).to.equal(label.id);
+  it('should set aria-hidden: none on the tooltip', () => {
+    expect(tooltip.getAttribute('aria-hidden')).to.equal('true');
   });
 
   it('should toggle tooltip on item content mouseenter', () => {
@@ -48,11 +48,36 @@ describe('side-nav-item with tooltip', () => {
     expect(tooltipOverlay.opened).to.be.false;
   });
 
-  it('should not show tooltip on child item mouseenter when open', async () => {
+  it('should not show tooltip on child item mouseenter', async () => {
     item.click();
     const child = item.querySelector('vaadin-side-nav-item');
     mouseenter(child.$.content);
     await nextRender();
     expect(tooltipOverlay.opened).to.be.not.ok;
+  });
+
+  it('should use tooltip text for the sr-only element text content', async () => {
+    expect(srOnly.textContent).to.equal(tooltip.text);
+
+    tooltip.text = 'Other text';
+    await nextRender();
+
+    expect(srOnly.textContent).to.equal('Other text');
+  });
+
+  it('should use tooltip generator for the sr-only element text content', async () => {
+    expect(srOnly.textContent).to.equal(tooltip.text);
+
+    tooltip.generator = () => 'Other text';
+    await nextRender();
+
+    expect(srOnly.textContent).to.equal('Other text');
+  });
+
+  it('should clear the sr-only element content when tooltip is removed', async () => {
+    tooltip.remove();
+    await nextRender();
+
+    expect(srOnly.textContent).to.equal('');
   });
 });

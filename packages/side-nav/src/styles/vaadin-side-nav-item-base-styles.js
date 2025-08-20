@@ -5,6 +5,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { sharedStyles } from './vaadin-side-nav-shared-base-styles.js';
 
 const sideNavItem = css`
@@ -119,4 +120,4 @@ const sideNavItem = css`
   }
 `;
 
-export const sideNavItemStyles = [sharedStyles, sideNavItem];
+export const sideNavItemStyles = [sharedStyles, screenReaderOnly, sideNavItem];

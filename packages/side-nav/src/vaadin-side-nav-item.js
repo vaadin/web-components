@@ -175,6 +175,11 @@ class SideNavItem extends SideNavChildrenMixin(
         type: Boolean,
         value: false,
       },
+
+      /** @private */
+      __tooltipText: {
+        type: String,
+      },
     };
   }
 
@@ -260,7 +265,7 @@ class SideNavItem extends SideNavChildrenMixin(
         >
           <slot name="prefix"></slot>
           <slot></slot>
-          <slot name="tooltip"></slot>
+          <div class="sr-only">${this.__tooltipText}</div>
           <slot name="suffix"></slot>
         </a>
         <button
@@ -276,6 +281,7 @@ class SideNavItem extends SideNavChildrenMixin(
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -285,7 +291,16 @@ class SideNavItem extends SideNavChildrenMixin(
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setTarget(this.$.content);
-    this._tooltipController.setAriaTarget(this);
+    this._tooltipController.setAriaTarget(null);
+    this._tooltipController.addEventListener('tooltip-changed', (event) => {
+      const { node } = event.detail;
+      if (node) {
+        this.__tooltipText = node.textContent.trim();
+        node.setAttribute('aria-hidden', 'true');
+      } else {
+        this.__tooltipText = '';
+      }
+    });
     this.addController(this._tooltipController);
   }
 
