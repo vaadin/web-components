@@ -378,18 +378,9 @@ export const OverlayMixin = (superClass) =>
     }
 
     /** @private */
-    _hiddenChanged(hidden, oldHidden) {
+    _hiddenChanged(hidden) {
       if (hidden && this.hasAttribute('closing')) {
         this._flushAnimation('closing');
-      }
-
-      // Trap / release focus when toggling hidden while opened
-      if (this.opened) {
-        if (oldHidden) {
-          this._trapFocus();
-        } else if (hidden) {
-          this._resetFocus();
-        }
       }
     }
 

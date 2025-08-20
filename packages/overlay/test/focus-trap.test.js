@@ -107,34 +107,6 @@ describe('focus-trap', () => {
       focusableElements = getFocusableElements(overlayPart);
       expect(getFocusedElementIndex()).to.equal(-1);
     });
-
-    it('should not trap focus after setting hidden to true synchronously', async () => {
-      overlay.focusTrap = true;
-      overlay.opened = true;
-      overlay.hidden = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlayPart);
-      expect(getFocusedElementIndex()).to.equal(-1);
-    });
-
-    it('should trap focus after setting hidden back to false while opened', async () => {
-      overlay.focusTrap = true;
-      overlay.opened = true;
-      overlay.hidden = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-      overlay.hidden = false;
-      focusableElements = getFocusableElements(overlayPart);
-      expect(getFocusedElementIndex()).to.equal(0);
-    });
-
-    it('should release focus after setting hidden to true while opened', async () => {
-      overlay.focusTrap = true;
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-      overlay.hidden = true;
-      focusableElements = getFocusableElements(overlayPart);
-      expect(getFocusedElementIndex()).to.equal(-1);
-    });
   });
 
   describe('nested overlay', () => {
