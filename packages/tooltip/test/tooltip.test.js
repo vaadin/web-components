@@ -218,7 +218,19 @@ describe('vaadin-tooltip', () => {
       expect(ariaTarget.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
 
-    it('should remove aria-describedby when the ariaTarget is cleared', async () => {
+    it('should remove aria-describedby and set it on the target when ariaTarget is set to undefined', async () => {
+      tooltip.target = target;
+      tooltip.ariaTarget = ariaTarget;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaTarget = undefined;
+      await nextUpdate(tooltip);
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+    });
+
+    it('should remove aria-describedby and not set it on the target when ariaTarget is set to null', async () => {
       tooltip.target = target;
       tooltip.ariaTarget = ariaTarget;
       await nextUpdate(tooltip);
@@ -227,7 +239,7 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
-      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
     });
 
     it('should set aria-describedby when providing multiple elements', async () => {
