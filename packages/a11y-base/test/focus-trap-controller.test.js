@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { definePolymer, fixtureSync } from '@vaadin/testing-helpers';
+import { definePolymer, fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { FocusTrapController } from '../src/focus-trap-controller.js';
@@ -93,6 +93,23 @@ describe('FocusTrapController', () => {
       input.focus();
       controller.trapFocus(trap);
       expect(document.activeElement).to.equal(input);
+    });
+
+    it('should use focusVisible: false when focusing the first focusable element if keyboard not active', () => {
+      const input = trap.querySelector('#trap-input-1');
+      const spy = sinon.spy(input, 'focus');
+      mousedown(document.body);
+      controller.trapFocus(trap);
+      expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: false });
+    });
+
+    it('should use focusVisible: true when focusing the first focusable element if keyboard active', async () => {
+      // Mimic opening the overlay on key press
+      await sendKeys({ press: 'Enter' });
+      const input = trap.querySelector('#trap-input-1');
+      const spy = sinon.spy(input, 'focus');
+      controller.trapFocus(trap);
+      expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: true });
     });
 
     describe('no focusable elements', () => {
@@ -192,6 +209,12 @@ describe('FocusTrapController', () => {
           await tab();
           await tab();
           expect(spy.calledOnce).to.be.false;
+        });
+
+        it('should focus element with focusVisible on Tab', async () => {
+          const spy = sinon.spy(trapInput2, 'focus');
+          await tab();
+          expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: true });
         });
       });
 
