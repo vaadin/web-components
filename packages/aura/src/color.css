@@ -4,7 +4,7 @@
 
     --_color-base: light-dark(
       oklch(from var(--aura-accent-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
-      oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c) * 2) h)
+      oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c)) h)
     );
     --vaadin-color: light-dark(
       color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
@@ -12,22 +12,24 @@
     );
     --vaadin-color-subtle: light-dark(
       color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
-      color-mix(in srgb, var(--_color-base) calc(60% + 10% * var(--aura-contrast)), transparent)
+      color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent)
     );
     --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(40% + 10% * var(--aura-contrast)), transparent);
 
-    --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(10% + 15% * var(--aura-contrast)), transparent);
+    --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(8% + 15% * var(--aura-contrast)), transparent);
     --vaadin-border-color-subtle: light-dark(
       color-mix(in srgb, var(--_color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
-      color-mix(in srgb, var(--_color-base) max(7%, 4% + 6% * var(--aura-contrast)), transparent)
+      color-mix(in srgb, var(--_color-base) max(6%, 4% + 6% * var(--aura-contrast)), transparent)
     );
 
     --aura-neutral-saturation: 0.2;
 
     --aura-background-light: oklch(
-      from var(--aura-accent-light) min(1, l + 0.1 + 0.2) min(c * var(--_neutral-c) * 10, 0.4) h
+      from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) min(c * var(--_neutral-c) * 2, 0.4) h
     );
-    --aura-background-dark: oklch(from var(--aura-accent-dark) max(0, l/2 - 0.1) min(c * var(--_neutral-c), 0.1) h);
+    --aura-background-dark: oklch(
+      from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) min(c * var(--_neutral-c), 0.1) h
+    );
     --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
     --_aura-background-alt: oklch(
       from var(--aura-background) calc(l - 0.1 + l / 8) c calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
@@ -44,8 +46,8 @@
   html,
   [theme] {
     --_accent: var(--aura-accent-color);
-    --aura-accent-light: var(--_accent, hsl(220, 81%, 47%));
-    --aura-accent-dark: var(--_accent, hsl(218, 90%, 61%));
+    --aura-accent-light: var(--_accent, hsl(220, 80%, 47%));
+    --aura-accent-dark: var(--_accent, hsl(220, 75%, 56%));
 
     --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
 

@@ -29,9 +29,8 @@ export const overlayContentStyles = css`
 
   [part='years-toggle-button'] {
     display: inline-flex;
-    border: var(--vaadin-button-border, var(--vaadin-button-border-width, 1px) solid transparent);
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-button-text-color, var(--_vaadin-button-text-color));
+    color: var(--vaadin-color);
     font-size: var(--vaadin-button-font-size, inherit);
     font-weight: var(--vaadin-button-font-weight, 500);
     height: var(--vaadin-button-height, auto);

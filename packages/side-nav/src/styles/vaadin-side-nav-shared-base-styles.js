@@ -81,6 +81,10 @@ export const sharedStyles = css`
     gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
   }
 
+  [part='children'] slot {
+    --_icon-indent-2: var(--_icon-indent);
+  }
+
   :focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
