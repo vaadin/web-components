@@ -557,7 +557,7 @@ export const OverlayMixin = (superClass) =>
       }
 
       // Only close modeless overlay on Esc press when it contains focus
-      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this.$.overlay)) {
+      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusTrapRoot)) {
         return;
       }
 
