@@ -44,6 +44,16 @@ describe('vaadin-overlay', () => {
       expect(spy).to.not.be.called;
     });
 
+    it('should not fire when immediately disconnected after setting opened to true', async () => {
+      overlay.opened = true;
+      overlay.remove();
+
+      await nextFrame();
+      await aTimeout(0);
+
+      expect(spy).to.not.be.called;
+    });
+
     it('should not propagate through shadow roots', async () => {
       overlay.opened = true;
       await nextFrame();

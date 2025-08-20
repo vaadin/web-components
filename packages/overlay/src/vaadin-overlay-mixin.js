@@ -156,6 +156,11 @@ export const OverlayMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
+      if (this.__scheduledOpen) {
+        cancelAnimationFrame(this.__scheduledOpen);
+        this.__scheduledOpen = null;
+      }
+
       /* c8 ignore next 3 */
       if (this._boundIosResizeListener) {
         window.removeEventListener('resize', this._boundIosResizeListener);
