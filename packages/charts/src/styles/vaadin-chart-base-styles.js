@@ -908,7 +908,7 @@ export const chartStyles = css`
     }
 
     .highcharts-scrollbar-track {
-      fill: rcolor-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 5%, transparent);
+      fill: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 5%, transparent);
       stroke: var(--highcharts-neutral-color-20);
       stroke-width: 1px;
     }
@@ -1180,7 +1180,7 @@ export const chartStyles = css`
     }
 
     .highcharts-breadcrumbs-separator {
-      fill: var(--highcharts-neutral-color-60);
+      fill: var(--highcharts-neutral-color-60, var(--_secondary-label));
     }
 
     /* Drilldown module */
@@ -1370,12 +1370,12 @@ export const chartStyles = css`
     }
 
     .highcharts-grid-axis .highcharts-tick {
-      stroke: var(--highcharts-neutral-color-20);
+      stroke: var(--highcharts-neutral-color-20, var(--_grid-line));
       stroke-width: 1px;
     }
 
     .highcharts-grid-axis .highcharts-axis-line {
-      stroke: var(--highcharts-neutral-color-20);
+      stroke: var(--highcharts-neutral-color-20, var(--_grid-line));
       stroke-width: 1px;
     }
 
