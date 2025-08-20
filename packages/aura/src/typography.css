@@ -21,9 +21,9 @@
     --aura-line-height-l: calc(24 / 16 * 1rem);
     --aura-line-height-xl: calc(28 / 16 * 1rem);
 
-    --aura-font-weight: 450;
-    --aura-font-weight-emphasis: 560;
-    --aura-font-weight-strong: 640;
+    --aura-font-weight: 400;
+    --aura-font-weight-emphasis: 500;
+    --aura-font-weight-strong: 600;
   }
 
   body {
