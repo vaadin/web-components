@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -894,14 +895,14 @@ export const UploadMixin = (superClass) =>
     /** @private */
     _updateFocus(fileIndex) {
       if (this.files.length === 0) {
-        this._addButton.focus();
+        this._addButton.focus({ focusVisible: isKeyboardActive() });
         return;
       }
       const lastFileRemoved = fileIndex === this.files.length;
       if (lastFileRemoved) {
         fileIndex -= 1;
       }
-      this._fileList.children[fileIndex].firstElementChild.focus();
+      this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
     }
 
     /**
