@@ -88,13 +88,12 @@ export const ItemMixin = (superClass) =>
      * @protected
      * @override
      */
-    focus() {
+    focus(options) {
       if (this.disabled) {
         return;
       }
 
-      super.focus();
-      this._setFocused(true);
+      super.focus(options);
     }
 
     /**

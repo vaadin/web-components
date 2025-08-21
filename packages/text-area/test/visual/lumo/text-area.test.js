@@ -72,7 +72,7 @@ describe('text-area', () => {
   it('scrolled', async () => {
     element.style.height = '70px';
     element.value = 'a\nb\nc\nd\ne';
-    element.focus();
+    element.focus({ focusVisible: false });
     await visualDiff(div, 'scrolled');
   });
 
@@ -90,7 +90,7 @@ describe('text-area', () => {
     element.clearButtonVisible = true;
     element.style.height = '70px';
     element.value = 'a\nb\nc\nd\ne';
-    element.focus();
+    element.focus({ focusVisible: false });
     await visualDiff(div, 'scrolled-with-prefix-suffix-clear-button');
   });
 
