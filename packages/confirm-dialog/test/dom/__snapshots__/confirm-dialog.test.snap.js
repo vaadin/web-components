@@ -35,7 +35,6 @@ snapshots["vaadin-confirm-dialog host"] =
     Reject
   </vaadin-button>
   <vaadin-button
-    focus-ring=""
     focused=""
     role="button"
     slot="confirm-button"
