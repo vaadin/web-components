@@ -98,9 +98,9 @@ export const TabindexMixin = (superclass) =>
      * @protected
      * @override
      */
-    focus() {
+    focus(options) {
       if (!this.disabled || this.__shouldAllowFocusWhenDisabled()) {
-        super.focus();
+        super.focus(options);
       }
     }
 

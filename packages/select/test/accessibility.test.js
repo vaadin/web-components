@@ -360,16 +360,12 @@ describe('accessibility', () => {
     });
 
     describe('focus-ring', () => {
-      beforeEach(() => {
-        select.focus();
-      });
-
       afterEach(async () => {
         await resetMouse();
       });
 
       it('should restore focus-ring attribute on item click if it was set before opening', async () => {
-        select.setAttribute('focus-ring', '');
+        select.focus();
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
 
@@ -381,7 +377,7 @@ describe('accessibility', () => {
       });
 
       it('should restore focus-ring attribute on outside click if it was set before opening', async () => {
-        select.setAttribute('focus-ring', '');
+        select.focus();
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         await sendMouse({ type: 'click', position: [100, 100] });
@@ -390,6 +386,7 @@ describe('accessibility', () => {
       });
 
       it('should not set focus-ring attribute on item click if it was not set before opening', async () => {
+        select.focus({ focusVisible: false });
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
 
@@ -401,6 +398,7 @@ describe('accessibility', () => {
       });
 
       it('should set focus-ring attribute on item Enter if it was not set before opening', async () => {
+        select.focus({ focusVisible: false });
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
 
@@ -411,6 +409,7 @@ describe('accessibility', () => {
       });
 
       it('should set focus-ring attribute on item Escape if it was not set before opening', async () => {
+        select.focus({ focusVisible: false });
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
 
