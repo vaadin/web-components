@@ -1153,6 +1153,7 @@ export const ChartMixin = (superClass) =>
     __initLegendEventsListeners(configuration) {
       this.__createEventListeners(this.__legendEventNames, configuration, 'legend.events', 'legend');
     }
+
     /** @private */
     __initAxisEventsListeners(configuration, isXAxis) {
       let eventNames, axes;
@@ -1675,7 +1676,8 @@ export const ChartMixin = (superClass) =>
       const chart = this.configuration;
       const { options } = chart;
       const hasOrganizationSeries =
-        options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization');
+        options.chart.styledMode &&
+        (options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization'));
       if (!hasOrganizationSeries) {
         return;
       }
