@@ -38,6 +38,7 @@
     "@vaadin/popover": "24.9.0-alpha1",
     "@vaadin/radio-group": "24.9.0-alpha1",
     "@vaadin/select": "24.9.0-alpha1",
+    "@vaadin/side-nav": "24.9.0-alpha1",
     "@vaadin/tabs": "24.9.0-alpha1",
     "@vaadin/test-runner-commands": "24.9.0-alpha1",
     "@vaadin/testing-helpers": "^1.1.0",

@@ -6,9 +6,11 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { location } from './location.js';
@@ -171,11 +173,16 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
         type: Boolean,
         value: false,
       },
+
+      /** @private */
+      __tooltipText: {
+        type: String,
+      },
     };
   }
 
   static get styles() {
-    return [sideNavItemBaseStyles];
+    return [sideNavItemBaseStyles, screenReaderOnly];
   }
 
   constructor() {
@@ -243,7 +250,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   /** @protected */
   render() {
     return html`
-      <div part="content" @click="${this._onContentClick}">
+      <div id="content" part="content" @click="${this._onContentClick}">
         <a
           id="link"
           ?disabled="${this.disabled}"
@@ -256,6 +263,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
         >
           <slot name="prefix"></slot>
           <slot></slot>
+          <div class="sr-only">${this.__tooltipText}</div>
           <slot name="suffix"></slot>
         </a>
         <button
@@ -271,7 +279,28 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
+      <slot name="tooltip"></slot>
     `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setTarget(this.$.content);
+    this._tooltipController.setAriaTarget(null);
+    this._tooltipController.addEventListener('tooltip-changed', (event) => {
+      const { node } = event.detail;
+      if (node) {
+        const overlay = node._overlayElement;
+        this.__tooltipText = overlay ? overlay.textContent.trim() : '';
+        node.setAttribute('aria-hidden', 'true');
+      } else {
+        this.__tooltipText = '';
+      }
+    });
+    this.addController(this._tooltipController);
   }
 
   /** @private */
