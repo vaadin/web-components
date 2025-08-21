@@ -22,12 +22,23 @@ describe('grid-pro custom editor', () => {
       </vaadin-gri-pro>
     `);
 
-    // FIXME: remove when switching to base styles.
-    // Ensure grid cells have some height.
+    // 1. Ensure grid cells have some height.
+    // 2. Allow date-picker backdrop clicks.
     fixtureSync(`
       <style>
         vaadin-grid-pro::part(cell) {
           min-height: 36px;
+        }
+
+        vaadin-date-picker-overlay[fullscreen] {
+          inset: 0 !important;
+          justify-content: flex-end !important;
+        }
+
+        vaadin-date-picker-overlay[fullscreen]::part(overlay) {
+          width: 100%;
+          height: 70vh;
+          max-height: 70vh;
         }
       </style>
     `);
