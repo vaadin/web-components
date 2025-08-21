@@ -14,6 +14,7 @@
       window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
       import './aura-color-control.js';
+      import './aura-font-family-control.js';
       import './aura-inset-control.js';
       import './aura-number-control.js';
       import './aura-scheme-control.js';
@@ -174,7 +175,7 @@
                 <vaadin-avatar
                   theme="vaadin square"
                   has-color-index
-                  style="--vaadin-avatar-user-color: var(--aura-accent-color);"
+                  style="--vaadin-avatar-user-color: var(--aura-accent-color); color: var(--aura-accent-contrast);"
                   tabindex="-1"
                 ></vaadin-avatar>
                 <span>Aura</span>
@@ -183,7 +184,7 @@
                 <vaadin-avatar
                   theme="vaadin square"
                   has-color-index
-                  style="--vaadin-avatar-user-color: hsl(214, 100%, 48%);"
+                  style="--vaadin-avatar-user-color: hsl(214, 100%, 48%); color: #fff;"
                   tabindex="-1"
                 ></vaadin-avatar>
                 <span>Lumo</span>
@@ -202,7 +203,8 @@
       <header slot="drawer">
         <vaadin-select id="org-select" theme="subtle auto-size"></vaadin-select>
         <vaadin-button theme="tertiary">
-          <vaadin-icon icon="lucide:panel-left-close"></vaadin-icon>
+          <!-- TODO if this button isn't here, the height of the header too narrow -->
+          <vaadin-icon icon="lucide:panel-left-close" style="visibility: hidden;"></vaadin-icon>
         </vaadin-button>
       </header>
       <vaadin-scroller slot="drawer" theme="overflow-indicators">
@@ -250,9 +252,9 @@
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       </vaadin-scroller>
-      <footer slot="drawer">
+      <!-- <footer slot="drawer">
         <a href="">Sign in</a>
-      </footer>
+      </footer> -->
 
       <vaadin-master-detail-layout master-min-size="14em" detail-size="75%" detail-min-size="20em">
         <div class="aura-view">
@@ -308,28 +310,31 @@
             <h1>Theme</h1>
           </header>
           <vaadin-scroller theme="overflow-indicators">
-            <vaadin-vertical-layout theme="padding spacing">
-              <vaadin-horizontal-layout theme="wrap">
-                <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
-                <aura-scheme-control property="--aura-content-color-scheme"
-                  label="--aura-content-color-scheme"></aura-scheme-control>
-                <aura-scheme-control property="--aura-notification-color-scheme"
-                  label="--aura-notification-color-scheme"></aura-scheme-control>
-              </vaadin-horizontal-layout>
-              <vaadin-horizontal-layout theme="wrap">
-                <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
-                <aura-number-control property="--aura-neutral-saturation" min="0" max="1" step="0.01"></aura-number-control>
-                <aura-inset-control></aura-inset-control>
-              </vaadin-horizontal-layout>
-              <vaadin-horizontal-layout theme="wrap">
-                <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
-                <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
-              </vaadin-horizontal-layout>
-              <vaadin-horizontal-layout theme="wrap">
-                <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
-                <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
-              </vaadin-horizontal-layout>
-            </vaadin-vertical-layout>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+              <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
+              <aura-scheme-control property="--aura-content-color-scheme"
+                label="--aura-content-color-scheme"></aura-scheme-control>
+              <aura-scheme-control property="--aura-notification-color-scheme"
+                label="--aura-notification-color-scheme"></aura-scheme-control>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+              <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
+              <aura-number-control property="--aura-neutral-saturation" min="0" max="1" step="0.01"></aura-number-control>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+              <aura-number-control property="--aura-size-base" min="2" max="10"></aura-number-control>
+              <aura-inset-control></aura-inset-control>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+              <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
+              <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
+              <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
+              <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+              <aura-number-control property="--aura-font-size-base" label="--aura-font-size-base" min="12" max="18"></aura-number-control>
+              <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
+            </div>
           </vaadin-scroller>
         </div>
       </vaadin-master-detail-layout>

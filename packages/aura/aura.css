@@ -1,6 +1,7 @@
 @import './src/aura-view.css';
 @import './src/color-scheme.css';
 @import './src/color.css';
+@import './src/size.css';
 @import './src/surface.css';
 @import './src/typography.css';
 
@@ -17,32 +18,14 @@
 
 @layer vaadin.aura {
   html {
-    --vaadin-radius-s: 4px;
-    --vaadin-radius-m: 8px;
-    --vaadin-radius-l: 14px;
-
     cursor: default;
-  }
-
-  @media (pointer: coarse) {
-    html {
-      --vaadin-padding-xs: 9px;
-      --vaadin-padding-s: 12px;
-      --vaadin-padding-m: 16px;
-      --vaadin-padding-l: 24px;
-      --vaadin-padding-xl: 32px;
-
-      --vaadin-gap-s: 12px;
-      --vaadin-gap-m: 16px;
-      --vaadin-gap-l: 24px;
-    }
   }
 
   ::view-transition {
     pointer-events: none;
   }
 
-  /* TODO this would be nice to add (avoid snapshotting the whole viewport) but then the backdrop-filter on things like notifications doesn't work correctly in Chrome */
+  /* TODO this would be nice to add (avoid snapshotting the whole viewport) but then the backdrop-filter on things like notifications doesn"t work correctly in Chrome */
   /* :root {
     view-transition-name: none;
   } */
