@@ -6,6 +6,7 @@
       oklch(from var(--aura-accent-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
       oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c)) h)
     );
+    /* TODO make sure the dark mode version always maxes out at pure white (keep chroma low when lightness is high) */
     --vaadin-color: light-dark(
       color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
       color-mix(in srgb, var(--_color-base) calc(96% + 2% * var(--aura-contrast)), transparent)
@@ -24,6 +25,7 @@
 
     --aura-neutral-saturation: 0.2;
 
+    /* TODO these are broken in Safari 17 */
     --aura-background-light: oklch(
       from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) min(c * var(--_neutral-c) * 2, 0.4) h
     );
@@ -64,5 +66,10 @@
   body {
     --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
     accent-color: var(--aura-accent-color);
+    /* Workaround Safari 17 limitation and compute these separately for light and dark */
+    --aura-accent-contrast: light-dark(
+      oklch(from var(--aura-accent-light) clamp(0, (0.62 - l) * 1000, 1) 0 0),
+      oklch(from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0)
+    );
   }
 }

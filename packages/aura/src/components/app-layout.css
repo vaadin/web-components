@@ -40,50 +40,36 @@
   vaadin-app-layout > [slot='drawer'] {
     grid-column: 1;
     grid-row: 2;
-  }
 
-  vaadin-app-layout > :is(header, footer)[slot='drawer'] {
-    grid-row: 1;
-    padding: var(--vaadin-padding-s);
-    display: flex;
-    align-items: center;
-    gap: var(--vaadin-gap-s);
-  }
+    &:is(header, footer) {
+      grid-row: 1;
+      padding: var(--vaadin-padding-s);
+      display: flex;
+      align-items: center;
+      gap: var(--vaadin-gap-s);
+    }
 
-  vaadin-app-layout > footer[slot='drawer'] {
-    grid-row: 3;
-  }
+    &:is(footer) {
+      grid-row: 3;
+    }
 
-  vaadin-app-layout > header[slot='drawer'],
-  vaadin-app-layout > [slot='drawer'] vaadin-side-nav {
-    padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
+    &:is(header),
+    & vaadin-side-nav {
+      padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
+    }
   }
 
   vaadin-app-layout > vaadin-master-detail-layout {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    box-sizing: border-box;
     border-radius: var(--aura-app-layout-radius);
     border: var(--_aura-mdl-border) solid var(--vaadin-border-color-subtle);
     border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
     border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
-  }
 
-  vaadin-app-layout:has(> vaadin-master-detail-layout) {
-    width: 100%;
-    height: 100%;
-  }
-
-  vaadin-app-layout > vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
-    margin: calc(var(--aura-app-layout-inset) / 2);
-    border-radius: var(--aura-app-layout-radius);
-  }
-
-  vaadin-app-layout > vaadin-master-detail-layout > vaadin-master-detail-layout,
-  vaadin-app-layout > vaadin-master-detail-layout:not([drawer])::part(detail) {
-    border-start-end-radius: var(--aura-app-layout-radius);
-    border-end-end-radius: var(--aura-app-layout-radius);
+    & > vaadin-master-detail-layout,
+    &:not([drawer])::part(detail) {
+      border-start-end-radius: var(--aura-app-layout-radius);
+      border-end-end-radius: var(--aura-app-layout-radius);
+    }
   }
 
   /* ::view-transition-group(vaadin-mdl-backdrop),

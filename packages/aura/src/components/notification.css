@@ -17,8 +17,8 @@
     /* Keeps notifications on top of MDL view transitions */
     view-transition-name: vaadin-notification;
 
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
+    backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
   }
 
   ::view-transition-group(vaadin-notification) {
