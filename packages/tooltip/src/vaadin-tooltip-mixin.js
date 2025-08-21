@@ -700,6 +700,8 @@ export const TooltipMixin = (superClass) =>
 
       // Update the sr-only label text content
       this._overlayContent = root.textContent;
+
+      this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: root.textContent } }));
     }
 
     /** @private */
@@ -742,4 +744,10 @@ export const TooltipMixin = (superClass) =>
         srLabel.textContent = textContent;
       }
     }
+
+    /**
+     * Fired when the tooltip text content is changed.
+     *
+     * @event content-changed
+     */
   };
