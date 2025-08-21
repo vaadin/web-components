@@ -1,55 +1,24 @@
 @layer vaadin.aura {
   @media (pointer: fine) {
     html {
-      --aura-font-size-xs: calc(11 / 16 * 1rem);
-      --aura-font-size-s: calc(12 / 16 * 1rem);
-      --aura-font-size-m: calc(14 / 16 * 1rem);
-      --aura-font-size-l: calc(16 / 16 * 1rem);
-      --aura-font-size-xl: calc(18 / 16 * 1rem);
-
-      --aura-line-height-xs: calc(16 / 16 * 1rem);
-      --aura-line-height-s: calc(18 / 16 * 1rem);
-      --aura-line-height-m: calc(20 / 16 * 1rem);
-      --aura-line-height-l: calc(22 / 16 * 1rem);
-      --aura-line-height-xl: calc(24 / 16 * 1rem);
+      --aura-font-size-base: 14;
     }
   }
 
   @supports not (-webkit-touch-callout: none) {
     @media (pointer: coarse) {
-      /* html {
-        --aura-font-size-xs: calc(12 / 16 * 1rem);
-        --aura-font-size-s: calc(13 / 16 * 1rem);
-        --aura-font-size-m: calc(17 / 16 * 1rem);
-        --aura-font-size-l: calc(19 / 16 * 1rem);
-        --aura-font-size-xl: calc(21 / 16 * 1rem);
-
-        --aura-line-height-xs: calc(18 / 16 * 1rem);
-        --aura-line-height-s: calc(20 / 16 * 1rem);
-        --aura-line-height-m: calc(22 / 16 * 1rem);
-        --aura-line-height-l: calc(24 / 16 * 1rem);
-        --aura-line-height-xl: calc(28 / 16 * 1rem);
-      } */
+      /* Android optimizations */
     }
   }
 
   @supports (-webkit-touch-callout: none) {
     @media (pointer: coarse) {
       html {
+        /* iOS/iPadOS optimizations */
+
         /* Support iOS dynamic text size */
         font: -apple-system-body;
-
-        /* --aura-font-size-xs: calc(11 / 16 * 1rem);
-        --aura-font-size-s: calc(12 / 16 * 1rem);
-        --aura-font-size-m: calc(14 / 16 * 1rem);
-        --aura-font-size-l: calc(16 / 16 * 1rem);
-        --aura-font-size-xl: calc(18 / 16 * 1rem);
-
-        --aura-line-height-xs: calc(16 / 16 * 1rem);
-        --aura-line-height-s: calc(18 / 16 * 1rem);
-        --aura-line-height-m: calc(20 / 16 * 1rem);
-        --aura-line-height-l: calc(22 / 16 * 1rem);
-        --aura-line-height-xl: calc(24 / 16 * 1rem); */
+        --aura-font-size-base: 14;
       }
     }
   }
