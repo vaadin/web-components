@@ -1,119 +1,117 @@
-@layer vaadin.aura {
-  html {
-    --vaadin-notification-border-radius: var(--aura-radius-l);
-    --vaadin-notification-box-shadow: 0 0 0 1px hsla(0deg, 0%, 0%, 0.07), 0 6px 16px -4px hsla(0deg, 0%, 0%, 0.3);
-    /* --vaadin-notification-background: light-dark(hsla(0deg, 0%, 100%, 0.2), hsla(0deg, 0%, 0%, 0.6)); */
-    --vaadin-notification-border-color: hsla(0deg, 0%, 100%, 0.1);
-    --vaadin-ease-fluid: cubic-bezier(0.78, 0, 0.22, 1);
-  }
+html {
+  --vaadin-notification-border-radius: var(--aura-radius-l);
+  --vaadin-notification-box-shadow: 0 0 0 1px hsla(0deg, 0%, 0%, 0.07), 0 6px 16px -4px hsla(0deg, 0%, 0%, 0.3);
+  /* --vaadin-notification-background: light-dark(hsla(0deg, 0%, 100%, 0.2), hsla(0deg, 0%, 0%, 0.6)); */
+  --vaadin-notification-border-color: hsla(0deg, 0%, 100%, 0.1);
+  --vaadin-ease-fluid: cubic-bezier(0.78, 0, 0.22, 1);
+}
 
-  vaadin-notification-card::part(overlay) {
-    /* Needs to be set here so it is re-computed if --aura-surface-level or --aura-surface-opacity is set */
-    --aura-surface-level: 3;
-    --aura-surface-opacity: 70%;
-    --vaadin-notification-background: var(--aura-surface);
+vaadin-notification-card::part(overlay) {
+  /* Needs to be set here so it is re-computed if --aura-surface-level or --aura-surface-opacity is set */
+  /* --aura-surface-level: 3; */
+  --aura-surface-opacity: 70%;
+  --vaadin-notification-background: var(--aura-surface);
 
-    /* TODO probably should be in base styles */
-    /* Keeps notifications on top of MDL view transitions */
-    view-transition-name: vaadin-notification;
+  /* TODO probably should be in base styles */
+  /* Keeps notifications on top of MDL view transitions */
+  view-transition-name: vaadin-notification;
 
-    -webkit-backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
-    backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
-  }
+  -webkit-backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
+  backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
+}
 
+::view-transition-group(vaadin-notification) {
+  /* Keep on top of MDL view-transition elements */
+  z-index: 1;
+  /* The backdrop-filter from vaadin-notification-card::part(overlay) is copied here, so we need to clip it with the same border radius */
+  border-radius: var(--vaadin-notification-border-radius);
+}
+
+/* In Safari, the backdrop-filter is copied to transition-group pseudo element but also retained in the new/old pseudo elements */
+/* Removing it from the transition-group makes it look better */
+@supports (background: -webkit-named-image(i)) {
   ::view-transition-group(vaadin-notification) {
-    /* Keep on top of MDL view-transition elements */
-    z-index: 1;
-    /* The backdrop-filter from vaadin-notification-card::part(overlay) is copied here, so we need to clip it with the same border radius */
-    border-radius: var(--vaadin-notification-border-radius);
+    backdrop-filter: none;
   }
+}
 
-  /* In Safari, the backdrop-filter is copied to transition-group pseudo element but also retained in the new/old pseudo elements */
-  /* Removing it from the transition-group makes it look better */
-  @supports (background: -webkit-named-image(i)) {
-    ::view-transition-group(vaadin-notification) {
-      backdrop-filter: none;
-    }
+vaadin-notification-card vaadin-card {
+  --vaadin-card-gap: var(--vaadin-gap-s);
+  color: var(--vaadin-color-subtle);
+}
+
+/* Animations *
+vaadin-notification-card {
+  transition: 400ms var(--vaadin-ease-fluid);
+  --_inset: calc(var(--_paint-area) * -1);
+  --_clip-path: inset(var(--_inset));
+}
+
+@keyframes notification-enter {
+  0% {
+    translate: var(--_enter-translate, 0 100%);
+    margin-block: 0;
+    height: var(--_enter-height, auto);
+    max-height: var(--_enter-max-height, none);
   }
+}
 
-  vaadin-notification-card vaadin-card {
-    --vaadin-card-gap: var(--vaadin-gap-s);
-    color: var(--vaadin-color-subtle);
-  }
+vaadin-notification-card:is([opening], [closing]) {
+  animation: notification-enter 400ms var(--vaadin-ease-fluid);
+  z-index: 9999;
+}
 
-  /* Animations *
+vaadin-notification-card[closing] {
+  animation-direction: reverse;
+}
+
+vaadin-notification-card:not(:hover, :focus-within):not([style*='order: 1;']) {
+  --_inset-exclude: calc(100% - var(--_gap) - 2px);
+  --_clip-path: inset(var(--_inset-exclude) var(--_inset) var(--_inset) var(--_inset));
+}
+
+vaadin-notification-card:is([position^='bottom'], [position='middle']):not(:hover, :focus-within):not([style*='order: 1;']) {
+  --_clip-path: inset(var(--_inset) var(--_inset) var(--_inset-exclude) var(--_inset));
+  --vaadin-notification-box-shadow: none;
+}
+
+@supports (interpolate-size: allow-keywords) {
   vaadin-notification-card {
-    transition: 400ms var(--vaadin-ease-fluid);
-    --_inset: calc(var(--_paint-area) * -1);
-    --_clip-path: inset(var(--_inset));
-  }
-
-  @keyframes notification-enter {
-    0% {
-      translate: var(--_enter-translate, 0 100%);
-      margin-block: 0;
-      height: var(--_enter-height, auto);
-      max-height: var(--_enter-max-height, none);
-    }
-  }
-
-  vaadin-notification-card:is([opening], [closing]) {
-    animation: notification-enter 400ms var(--vaadin-ease-fluid);
-    z-index: 9999;
-  }
-
-  vaadin-notification-card[closing] {
-    animation-direction: reverse;
+    --_enter-height: 0;
   }
 
   vaadin-notification-card:not(:hover, :focus-within):not([style*='order: 1;']) {
-    --_inset-exclude: calc(100% - var(--_gap) - 2px);
-    --_clip-path: inset(var(--_inset-exclude) var(--_inset) var(--_inset) var(--_inset));
+    height: 0;
+    --_clip-path-duration: 450ms;
   }
-
-  vaadin-notification-card:is([position^='bottom'], [position='middle']):not(:hover, :focus-within):not([style*='order: 1;']) {
-    --_clip-path: inset(var(--_inset) var(--_inset) var(--_inset-exclude) var(--_inset));
-    --vaadin-notification-box-shadow: none;
-  }
-
-  @supports (interpolate-size: allow-keywords) {
-    vaadin-notification-card {
-      --_enter-height: 0;
-    }
-
-    vaadin-notification-card:not(:hover, :focus-within):not([style*='order: 1;']) {
-      height: 0;
-      --_clip-path-duration: 450ms;
-    }
-  }
-
-  @supports not (interpolate-size: allow-keywords) {
-    vaadin-notification-card {
-      max-height: 25em;
-      --_enter-max-height: 0;
-      --_clip-path-duration: 250ms;
-    }
-
-    vaadin-notification-card:not(:hover, :focus-within):not([style*='order: 1;']) {
-      --_clip-path-duration: 500ms;
-      max-height: 0;
-    }
-  }
-
-  vaadin-notification-card:not(:hover, :focus-within) {
-    &[style*='order: 2;'] {
-      scale: 0.94;
-    }
-
-    &[style*='order: 3;'] {
-      scale: 0.86;
-    }
-
-    &:not([style*='order: 1;'], [style*='order: 2;'], [style*='order: 3;']) {
-      scale: 0.78;
-      --_opacity: 0;
-      margin-block: 0;
-    }
-  }
-  */
 }
+
+@supports not (interpolate-size: allow-keywords) {
+  vaadin-notification-card {
+    max-height: 25em;
+    --_enter-max-height: 0;
+    --_clip-path-duration: 250ms;
+  }
+
+  vaadin-notification-card:not(:hover, :focus-within):not([style*='order: 1;']) {
+    --_clip-path-duration: 500ms;
+    max-height: 0;
+  }
+}
+
+vaadin-notification-card:not(:hover, :focus-within) {
+  &[style*='order: 2;'] {
+    scale: 0.94;
+  }
+
+  &[style*='order: 3;'] {
+    scale: 0.86;
+  }
+
+  &:not([style*='order: 1;'], [style*='order: 2;'], [style*='order: 3;']) {
+    scale: 0.78;
+    --_opacity: 0;
+    margin-block: 0;
+  }
+}
+*/

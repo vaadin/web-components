@@ -1,75 +1,71 @@
-@layer vaadin.aura {
+html {
+  --aura-contrast: 1;
+
+  --_color-base: light-dark(
+    oklch(from var(--aura-accent-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
+    oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c)) h)
+  );
+  /* TODO make sure the dark mode version always maxes out at pure white (keep chroma low when lightness is high) */
+  --vaadin-color: light-dark(
+    color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_color-base) calc(96% + 2% * var(--aura-contrast)), transparent)
+  );
+  --vaadin-color-subtle: light-dark(
+    color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent)
+  );
+  --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(40% + 10% * var(--aura-contrast)), transparent);
+
+  --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(8% + 15% * var(--aura-contrast)), transparent);
+  --vaadin-border-color-subtle: light-dark(
+    color-mix(in srgb, var(--_color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_color-base) max(6%, 4% + 6% * var(--aura-contrast)), transparent)
+  );
+
+  --aura-neutral-saturation: 0.2;
+
+  /* TODO these are broken in Safari 17 */
+  --aura-background-light: oklch(
+    from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) min(c * var(--_neutral-c) * 2, 0.4) h
+  );
+  --aura-background-dark: oklch(
+    from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) min(c * var(--_neutral-c), 0.1) h
+  );
+  --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
+  --_aura-background-alt: oklch(
+    from var(--aura-background) calc(l - 0.1 + l / 8) c calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
+  );
+  --aura-accent-background: radial-gradient(circle at 25% 0%, var(--aura-background) 33%, var(--_aura-background-alt));
+
+  --vaadin-overlay-backdrop-background: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
+  --vaadin-app-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
+  --vaadin-master-detail-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
+}
+
+html,
+[theme] {
+  --_accent: var(--aura-accent-color);
+  --aura-accent-light: var(--_accent, hsl(220, 80%, 47%));
+  --aura-accent-dark: var(--_accent, hsl(220, 75%, 56%));
+
+  --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
+
+  --vaadin-background-color: var(--aura-surface);
+  --vaadin-button-background: var(--aura-surface);
+}
+
+@supports (color: hsl(0 0 0)) {
   html {
-    --aura-contrast: 1;
-
-    --_color-base: light-dark(
-      oklch(from var(--aura-accent-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
-      oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c)) h)
-    );
-    /* TODO make sure the dark mode version always maxes out at pure white (keep chroma low when lightness is high) */
-    --vaadin-color: light-dark(
-      color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
-      color-mix(in srgb, var(--_color-base) calc(96% + 2% * var(--aura-contrast)), transparent)
-    );
-    --vaadin-color-subtle: light-dark(
-      color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
-      color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent)
-    );
-    --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(40% + 10% * var(--aura-contrast)), transparent);
-
-    --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(8% + 15% * var(--aura-contrast)), transparent);
-    --vaadin-border-color-subtle: light-dark(
-      color-mix(in srgb, var(--_color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
-      color-mix(in srgb, var(--_color-base) max(6%, 4% + 6% * var(--aura-contrast)), transparent)
-    );
-
-    --aura-neutral-saturation: 0.2;
-
-    /* TODO these are broken in Safari 17 */
-    --aura-background-light: oklch(
-      from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) min(c * var(--_neutral-c) * 2, 0.4) h
-    );
-    --aura-background-dark: oklch(
-      from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) min(c * var(--_neutral-c), 0.1) h
-    );
-    --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
-    --_aura-background-alt: oklch(
-      from var(--aura-background) calc(l - 0.1 + l / 8) c calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
-    );
-    --aura-accent-background: radial-gradient(
-      circle at 25% 0%,
-      var(--aura-background) 33%,
-      var(--_aura-background-alt)
-    );
-
-    --vaadin-master-detail-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
+    --_safari-17-deg: 1;
   }
+}
 
-  html,
-  [theme] {
-    --_accent: var(--aura-accent-color);
-    --aura-accent-light: var(--_accent, hsl(220, 80%, 47%));
-    --aura-accent-dark: var(--_accent, hsl(220, 75%, 56%));
-
-    --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
-
-    --vaadin-background-color: var(--aura-surface);
-    --vaadin-button-background: var(--aura-surface);
-  }
-
-  @supports (color: hsl(0 0 0)) {
-    html {
-      --_safari-17-deg: 1;
-    }
-  }
-
-  body {
-    --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
-    accent-color: var(--aura-accent-color);
-    /* Workaround Safari 17 limitation and compute these separately for light and dark */
-    --aura-accent-contrast: light-dark(
-      oklch(from var(--aura-accent-light) clamp(0, (0.62 - l) * 1000, 1) 0 0),
-      oklch(from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0)
-    );
-  }
+body {
+  --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
+  accent-color: var(--aura-accent-color);
+  /* Workaround Safari 17 limitation and compute these separately for light and dark */
+  --aura-accent-contrast: light-dark(
+    oklch(from var(--aura-accent-light) clamp(0, (0.62 - l) * 1000, 1) 0 0),
+    oklch(from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0)
+  );
 }

@@ -1,60 +1,58 @@
 @import './font/InstrumentSans.css';
 @import './font/Inter.css';
 
-@layer vaadin.aura {
-  html {
-    --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
-    --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
-    --aura-font-family-inter: 'Inter', var(--aura-font-family-system);
+html {
+  --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
+  --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
+  --aura-font-family-inter: 'Inter', var(--aura-font-family-system);
 
-    --aura-font-family: var(--aura-font-family-instrument-sans);
+  --aura-font-family: var(--aura-font-family-instrument-sans);
 
-    --aura-font-size-base: 16;
-    --aura-font-size-scale: 1.15;
-    --aura-line-height-base: 1.4;
+  --aura-font-size-base: 16;
+  --aura-font-size-scale: 1.15;
+  --aura-line-height-base: 1.4;
 
-    --aura-font-weight: 400;
-    --aura-font-weight-emphasis: 500;
-    --aura-font-weight-strong: 600;
-  }
+  --aura-font-weight: 400;
+  --aura-font-weight-emphasis: 500;
+  --aura-font-weight-strong: 600;
+}
 
-  html,
-  [theme] {
-    --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale));
-    --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale));
-    --aura-font-size-m: calc(var(--aura-font-size-base) / 16 * 1rem);
-    --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale));
-    --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale));
+html,
+[theme] {
+  --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale));
+  --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale));
+  --aura-font-size-m: calc(var(--aura-font-size-base) / 16 * 1rem);
+  --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale));
+  --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale));
 
-    --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-line-height-base), 0.125rem);
-    --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-line-height-base), 0.125rem);
-    --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-line-height-base), 0.125rem);
-    --aura-line-height-l: round(var(--aura-font-size-l) * var(--aura-line-height-base), 0.125rem);
-    --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-line-height-base), 0.125rem);
-  }
+  --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-line-height-base), 0.125rem);
+  --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-line-height-base), 0.125rem);
+  --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-line-height-base), 0.125rem);
+  --aura-line-height-l: round(var(--aura-font-size-l) * var(--aura-line-height-base), 0.125rem);
+  --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-line-height-base), 0.125rem);
+}
 
-  body {
-    font-family: var(--aura-font-family);
-    font-optical-sizing: auto;
-    font-style: normal;
-    font-weight: var(--aura-font-weight);
+body {
+  font-family: var(--aura-font-family);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: var(--aura-font-weight);
 
-    /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
-    -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);
-    -moz-osx-font-smoothing: var(--aura-font-smoothing, grayscale);
+  /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
+  -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);
+  -moz-osx-font-smoothing: var(--aura-font-smoothing, grayscale);
 
-    /* We assume apps are built with responsive layouting in mind */
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
-  }
+  /* We assume apps are built with responsive layouting in mind */
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
 
-  body,
-  [theme] {
-    font-size: var(--aura-font-size-m);
-    line-height: var(--aura-line-height-m);
-  }
+body,
+[theme] {
+  font-size: var(--aura-font-size-m);
+  line-height: var(--aura-line-height-m);
+}
 
-  :is(h1, h2, h3, h4, h5, h6) {
-    text-wrap: balance;
-  }
+:is(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
 }

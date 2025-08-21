@@ -1,81 +1,79 @@
-@layer vaadin.aura {
-  html {
-    --aura-app-layout-inset: 1.5vmin;
-    --aura-app-layout-radius: clamp(0px, var(--aura-app-layout-inset) * 3, var(--vaadin-radius-l));
-    --_aura-mdl-border: 1px;
-  }
-
-  /* Aligned with App Layout overlay breakpoint */
-  @media (width <= 800px), (height <= 600px) {
-    html {
-      --aura-app-layout-inset: 0px !important;
-      --_aura-mdl-border: 0px;
-    }
-  }
-
-  vaadin-app-layout {
-    padding-block: var(--aura-app-layout-inset);
-    padding-inline-end: var(--aura-app-layout-inset);
-    padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
-  }
-
-  vaadin-app-layout[overlay] {
-    padding-inline-start: var(--aura-app-layout-inset);
-  }
-
-  vaadin-app-layout::part(navbar),
-  vaadin-app-layout[overlay]::part(drawer) {
-    --vaadin-app-layout-navbar-background: var(--aura-surface);
-    --vaadin-app-layout-drawer-background: var(--aura-surface);
-    --aura-surface-level: 4;
-    --aura-surface-opacity: 90%;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
-
-  vaadin-app-layout::part(drawer) {
-    padding: var(--aura-app-layout-inset);
-  }
-
-  vaadin-app-layout > [slot='drawer'] {
-    grid-column: 1;
-    grid-row: 2;
-
-    &:is(header, footer) {
-      grid-row: 1;
-      padding: var(--vaadin-padding-s);
-      display: flex;
-      align-items: center;
-      gap: var(--vaadin-gap-s);
-    }
-
-    &:is(footer) {
-      grid-row: 3;
-    }
-
-    &:is(header),
-    & vaadin-side-nav {
-      padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
-    }
-  }
-
-  vaadin-app-layout > vaadin-master-detail-layout {
-    border-radius: var(--aura-app-layout-radius);
-    border: var(--_aura-mdl-border) solid var(--vaadin-border-color-subtle);
-    border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
-    border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
-
-    & > vaadin-master-detail-layout,
-    &:not([drawer])::part(detail) {
-      border-start-end-radius: var(--aura-app-layout-radius);
-      border-end-end-radius: var(--aura-app-layout-radius);
-    }
-  }
-
-  /* ::view-transition-group(vaadin-mdl-backdrop),
-  ::view-transition-group(vaadin-mdl-master),
-  ::view-transition-group(vaadin-mdl-detail) {
-    border-radius: var(--app-layout-radius);
-    overflow: hidden;
-  } */
+html {
+  --aura-app-layout-inset: 1.5vmin;
+  --aura-app-layout-radius: clamp(0px, var(--aura-app-layout-inset) * 3, var(--vaadin-radius-l));
+  --_aura-mdl-border: 1px;
 }
+
+/* Aligned with App Layout overlay breakpoint */
+@media (width <= 800px), (height <= 600px) {
+  html {
+    --aura-app-layout-inset: 0px !important;
+    --_aura-mdl-border: 0px;
+  }
+}
+
+vaadin-app-layout {
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline-end: var(--aura-app-layout-inset);
+  padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
+}
+
+vaadin-app-layout[overlay] {
+  padding-inline-start: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout::part(navbar),
+vaadin-app-layout[overlay]::part(drawer) {
+  --vaadin-app-layout-navbar-background: var(--aura-surface);
+  --vaadin-app-layout-drawer-background: var(--aura-surface);
+  /* --aura-surface-level: 4; */
+  --aura-surface-opacity: 90%;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+vaadin-app-layout::part(drawer) {
+  padding: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout > [slot='drawer'] {
+  grid-column: 1;
+  grid-row: 2;
+
+  &:is(header, footer) {
+    grid-row: 1;
+    padding: var(--vaadin-padding-s);
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-s);
+  }
+
+  &:is(footer) {
+    grid-row: 3;
+  }
+
+  &:is(header),
+  & vaadin-side-nav {
+    padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
+  }
+}
+
+vaadin-app-layout > vaadin-master-detail-layout {
+  border-radius: var(--aura-app-layout-radius);
+  border: var(--_aura-mdl-border) solid var(--vaadin-border-color-subtle);
+  border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+  border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+
+  & > vaadin-master-detail-layout,
+  &:not([drawer])::part(detail) {
+    border-start-end-radius: var(--aura-app-layout-radius);
+    border-end-end-radius: var(--aura-app-layout-radius);
+  }
+}
+
+/* ::view-transition-group(vaadin-mdl-backdrop),
+::view-transition-group(vaadin-mdl-master),
+::view-transition-group(vaadin-mdl-detail) {
+  border-radius: var(--app-layout-radius);
+  overflow: hidden;
+  } */

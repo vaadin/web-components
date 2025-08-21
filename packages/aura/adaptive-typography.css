@@ -1,25 +1,23 @@
-@layer vaadin.aura {
-  @media (pointer: fine) {
+@media (pointer: fine) {
+  html {
+    --aura-font-size-base: 14;
+  }
+}
+
+@supports not (-webkit-touch-callout: none) {
+  @media (pointer: coarse) {
+    /* Android optimizations */
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (pointer: coarse) {
     html {
+      /* iOS/iPadOS optimizations */
+
+      /* Support iOS dynamic text size */
+      font: -apple-system-body;
       --aura-font-size-base: 14;
-    }
-  }
-
-  @supports not (-webkit-touch-callout: none) {
-    @media (pointer: coarse) {
-      /* Android optimizations */
-    }
-  }
-
-  @supports (-webkit-touch-callout: none) {
-    @media (pointer: coarse) {
-      html {
-        /* iOS/iPadOS optimizations */
-
-        /* Support iOS dynamic text size */
-        font: -apple-system-body;
-        --aura-font-size-base: 14;
-      }
     }
   }
 }

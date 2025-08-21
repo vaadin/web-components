@@ -1,41 +1,39 @@
-@layer vaadin.aura {
+html {
+  --vaadin-radius-s: 4px;
+  --vaadin-radius-m: 8px;
+  --vaadin-radius-l: 14px;
+
+  --aura-size-base: 6;
+  --aura-size-scale: 1.4;
+}
+
+html,
+[theme] {
+  --vaadin-padding-xs: round(var(--aura-size-base) * 1px, 1px);
+  --vaadin-padding-s: round((var(--vaadin-padding-xs) * var(--aura-size-scale)), 1px);
+  --vaadin-padding-m: round((var(--vaadin-padding-s) * var(--aura-size-scale)), 1px);
+  --vaadin-padding-l: round((var(--vaadin-padding-m) * var(--aura-size-scale)), 1px);
+  --vaadin-padding-xl: round((var(--vaadin-padding-l) * var(--aura-size-scale)), 1px);
+  --vaadin-padding-container: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+
+  --vaadin-gap-xs: var(--vaadin-padding-xs);
+  --vaadin-gap-s: var(--vaadin-padding-s);
+  --vaadin-gap-m: var(--vaadin-padding-m);
+  --vaadin-gap-l: var(--vaadin-padding-l);
+  --vaadin-gap-xl: var(--vaadin-padding-xl);
+}
+
+@media (pointer: coarse) {
   html {
-    --vaadin-radius-s: 4px;
-    --vaadin-radius-m: 8px;
-    --vaadin-radius-l: 14px;
+    --aura-size-base: 9;
+    /* --vaadin-padding-xs: 9px;
+    --vaadin-padding-s: 12px;
+    --vaadin-padding-m: 16px;
+    --vaadin-padding-l: 24px;
+    --vaadin-padding-xl: 32px; */
 
-    --aura-size-base: 6;
-    --aura-size-scale: 1.4;
-  }
-
-  html,
-  [theme] {
-    --vaadin-padding-xs: round(var(--aura-size-base) * 1px, 1px);
-    --vaadin-padding-s: round((var(--vaadin-padding-xs) * var(--aura-size-scale)), 1px);
-    --vaadin-padding-m: round((var(--vaadin-padding-s) * var(--aura-size-scale)), 1px);
-    --vaadin-padding-l: round((var(--vaadin-padding-m) * var(--aura-size-scale)), 1px);
-    --vaadin-padding-xl: round((var(--vaadin-padding-l) * var(--aura-size-scale)), 1px);
-    --vaadin-padding-container: var(--vaadin-padding-xs) var(--vaadin-padding-s);
-
-    --vaadin-gap-xs: var(--vaadin-padding-xs);
-    --vaadin-gap-s: var(--vaadin-padding-s);
-    --vaadin-gap-m: var(--vaadin-padding-m);
-    --vaadin-gap-l: var(--vaadin-padding-l);
-    --vaadin-gap-xl: var(--vaadin-padding-xl);
-  }
-
-  @media (pointer: coarse) {
-    html {
-      --aura-size-base: 9;
-      /* --vaadin-padding-xs: 9px;
-      --vaadin-padding-s: 12px;
-      --vaadin-padding-m: 16px;
-      --vaadin-padding-l: 24px;
-      --vaadin-padding-xl: 32px; */
-
-      /* --vaadin-gap-s: 12px;
-      --vaadin-gap-m: 16px;
-      --vaadin-gap-l: 24px; */
-    }
+    /* --vaadin-gap-s: 12px;
+    --vaadin-gap-m: 16px;
+    --vaadin-gap-l: 24px; */
   }
 }
