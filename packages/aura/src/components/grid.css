@@ -1,16 +1,14 @@
-@layer vaadin.aura {
-  vaadin-grid[theme~='no-border']::part(first-column-cell) {
-    /* TODO can't use --vaadin-grid-cell-padding, it only works on the host */
-    /* quite difficult to override the cell padding when it’s on the slotted vaadin-grid-cell-content element */
-    --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s) var(--vaadin-padding-xs) var(--vaadin-padding-l);
-  }
+vaadin-grid[theme~='no-border']::part(first-column-cell) {
+  /* TODO can't use --vaadin-grid-cell-padding, it only works on the host */
+  /* quite difficult to override the cell padding when it’s on the slotted vaadin-grid-cell-content element */
+  --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s) var(--vaadin-padding-xs) var(--vaadin-padding-l);
+}
 
-  vaadin-grid[theme~='no-border']::part(last-column-cell) {
-    --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs) var(--vaadin-padding-s);
-  }
+vaadin-grid[theme~='no-border']::part(last-column-cell) {
+  --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs) var(--vaadin-padding-s);
+}
 
-  /* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
-  vaadin-grid::part(active-nav-item) {
-    --vaadin-grid-row-selected-background: var(--vaadin-background-container-strong);
-  }
+/* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
+vaadin-grid::part(active-nav-item) {
+  --vaadin-grid-row-selected-background: var(--vaadin-background-container-strong);
 }

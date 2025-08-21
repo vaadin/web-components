@@ -1,73 +1,71 @@
-@layer vaadin.aura {
-  html {
-    --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
-    --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
-    --vaadin-side-nav-item-border-width: 1px;
-    --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
-    --side-nav-padding: var(--vaadin-padding-s);
-  }
+html {
+  --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
+  --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
+  --vaadin-side-nav-item-border-width: 1px;
+  --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
+  --side-nav-padding: var(--vaadin-padding-s);
+}
 
-  vaadin-side-nav {
-    padding-inline: var(--side-nav-padding);
-  }
+vaadin-side-nav {
+  padding-inline: var(--side-nav-padding);
+}
 
-  vaadin-side-nav + vaadin-side-nav {
-    margin-top: var(--vaadin-gap-l);
-  }
+vaadin-side-nav + vaadin-side-nav {
+  margin-top: var(--vaadin-gap-l);
+}
 
-  vaadin-side-nav::part(toggle-button) {
-    --vaadin-icon-size: 1em;
-  }
+vaadin-side-nav::part(toggle-button) {
+  --vaadin-icon-size: 1em;
+}
 
-  vaadin-side-nav-item::part(content) {
-    transition:
-      color 120ms,
-      border-color 120ms,
-      background-color 120ms;
-    background-clip: padding-box;
-    --aura-surface-level: 3;
-  }
+vaadin-side-nav-item::part(content) {
+  transition:
+    color 120ms,
+    border-color 120ms,
+    background-color 120ms;
+  background-clip: padding-box;
+  --aura-surface-level: 3;
+}
 
-  vaadin-side-nav-item:not([disabled])::part(content):hover {
-    --vaadin-side-nav-item-color: var(--vaadin-color);
-  }
+vaadin-side-nav-item:not([disabled])::part(content):hover {
+  --vaadin-side-nav-item-color: var(--vaadin-color);
+}
 
-  vaadin-side-nav-item[current]::part(content) {
-    --vaadin-side-nav-item-background: var(--aura-surface);
-    --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
-  }
+vaadin-side-nav-item[current]::part(content) {
+  --vaadin-side-nav-item-background: var(--aura-surface);
+  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
+}
 
-  /* @media (prefers-reduced-motion: no-preference) {
-    vaadin-side-nav[collapsed]::part(children),
-    vaadin-side-nav-item::part(children) {
-      --vaadin-side-nav-hidden-display: flex;
-      transition: 200ms;
-      transition-property: display, height, opacity;
-      transition-behavior: allow-discrete;
-      interpolate-size: allow-keywords;
-      overflow: hidden;
+/* @media (prefers-reduced-motion: no-preference) {
+  vaadin-side-nav[collapsed]::part(children),
+  vaadin-side-nav-item::part(children) {
+    --vaadin-side-nav-hidden-display: flex;
+    transition: 200ms;
+    transition-property: display, height, opacity;
+    transition-behavior: allow-discrete;
+    interpolate-size: allow-keywords;
+    overflow: hidden;
+    height: 0;
+
+    @starting-style {
       height: 0;
-
-      @starting-style {
-        height: 0;
-        opacity: 0;
-      }
+      opacity: 0;
     }
-
-    vaadin-side-nav:not([collapsed])::part(children),
-    vaadin-side-nav-item[expanded]::part(children) {
-      height: auto;
-    }
-  } */
-
-  vaadin-side-nav[theme~='contrast'] vaadin-side-nav-item[current]::part(content) {
-    color-scheme: dark;
-    background: var(--aura-surface-solid);
-    --vaadin-focus-ring-color: var(--aura-surface-solid);
   }
 
-  /* TODO bug in component/base styles: hide label part if no label is provided */
-  vaadin-side-nav:not(:has([slot='label']))::part(label) {
-    display: none;
+  vaadin-side-nav:not([collapsed])::part(children),
+  vaadin-side-nav-item[expanded]::part(children) {
+    height: auto;
   }
+} */
+
+vaadin-side-nav[theme~='contrast'] vaadin-side-nav-item[current]::part(content) {
+  color-scheme: dark;
+  background: var(--aura-surface-solid);
+  --vaadin-focus-ring-color: var(--aura-surface-solid);
+}
+
+/* TODO bug in component/base styles: hide label part if no label is provided */
+vaadin-side-nav:not(:has([slot='label']))::part(label) {
+  display: none;
 }
