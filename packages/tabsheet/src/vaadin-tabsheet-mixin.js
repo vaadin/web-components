@@ -79,11 +79,9 @@ export const TabSheetMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * The list of `<vaadin-tab>`s from which a selection can be made.
+         * A read-only list of `<vaadin-tab>`s from which a selection can be made.
          * It is populated from the elements passed inside the slotted
          * `<vaadin-tabs>`, and updated dynamically when adding or removing items.
-         *
-         * Note: unlike `<vaadin-combo-box>`, this property is read-only.
          * @type {!Array<!Tab> | undefined}
          */
         items: {
