@@ -14,6 +14,7 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-rich-text-editor-popup.js';
 import { html, LitElement, render } from 'lit';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -467,7 +468,7 @@ class RichTextEditor extends RichTextEditorMixin(
       confirmDialog.$.overlay.addEventListener(
         'vaadin-overlay-open',
         () => {
-          urlField.focus();
+          urlField.focus({ focusVisible: isKeyboardActive() });
         },
         { once: true },
       );
