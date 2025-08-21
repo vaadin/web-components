@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
 
 describe('vaadin-chart', () => {
@@ -393,6 +394,7 @@ describe('vaadin-chart', () => {
 
       layout.style.width = '500px';
       await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(100);
 
       expect(layout.getBoundingClientRect().width).to.be.equal(500);
       expect(charts[0].configuration.chartWidth).to.be.equal(250);
