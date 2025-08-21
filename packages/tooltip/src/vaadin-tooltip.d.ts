@@ -11,6 +11,17 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
 export { TooltipPosition } from './vaadin-tooltip-mixin.js';
 
 /**
+ * Fired when the tooltip text content is changed.
+ */
+export type TooltipContentChangedEvent = CustomEvent<{ content: string }>;
+
+export interface TooltipCustomEventMap {
+  'content-changed': TooltipContentChangedEvent;
+}
+
+export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEventMap {}
+
+/**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  *
  * ```html
@@ -47,6 +58,8 @@ export { TooltipPosition } from './vaadin-tooltip-mixin.js';
  * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} content-changed - Fired when the tooltip text content is changed.
  */
 declare class Tooltip extends TooltipMixin(ThemePropertyMixin(ControllerMixin(ElementMixin(HTMLElement)))) {
   /**
@@ -66,6 +79,18 @@ declare class Tooltip extends TooltipMixin(ThemePropertyMixin(ControllerMixin(El
    * except for those that have hover delay configured using property.
    */
   static setDefaultHoverDelay(hoverDelay: number): void;
+
+  addEventListener<K extends keyof TooltipEventMap>(
+    type: K,
+    listener: (this: Tooltip, ev: TooltipEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof TooltipEventMap>(
+    type: K,
+    listener: (this: Tooltip, ev: TooltipEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {
