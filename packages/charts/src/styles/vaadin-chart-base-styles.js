@@ -1152,7 +1152,7 @@ export const chartStyles = css`
       background: var(--highcharts-background-color, var(--_bg));
       border-radius: 3px;
       padding: 0.5em;
-      box-shadow: 3px 3px 10px #888888;
+      box-shadow: 3px 3px 10px #888;
     }
 
     .highcharts-menu-item {
