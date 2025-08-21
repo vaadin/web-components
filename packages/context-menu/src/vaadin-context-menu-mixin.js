@@ -435,11 +435,7 @@ export const ContextMenuMixin = (superClass) =>
     /** @private */
     __focusItem(item) {
       if (item) {
-        item.focus();
-
-        if (isKeyboardActive()) {
-          item.setAttribute('focus-ring', '');
-        }
+        item.focus({ focusVisible: isKeyboardActive() });
       }
     }
 

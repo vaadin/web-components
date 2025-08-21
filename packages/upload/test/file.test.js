@@ -110,8 +110,13 @@ describe('<vaadin-upload-file> element', () => {
       expect(fileElement.hasAttribute('tabindex')).to.be.false;
     });
 
-    it('should not add focus-ring to the host on programmatic focus', () => {
+    it('should add focus-ring to the host on programmatic focus', () => {
       fileElement.focus();
+      expect(fileElement.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not add focus-ring to the host on focus() with focusVisible: false', () => {
+      fileElement.focus({ focusVisible: false });
       expect(fileElement.hasAttribute('focus-ring')).to.be.false;
     });
 
