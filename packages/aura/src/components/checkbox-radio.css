@@ -1,0 +1,40 @@
+html {
+  --vaadin-radio-button-dot-size: 6px;
+  --vaadin-checkbox-size: calc(1lh - 2px);
+  --vaadin-radio-button-size: calc(1lh - 2px);
+}
+
+vaadin-checkbox::part(checkbox),
+vaadin-radio-button::part(radio) {
+  box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.07);
+  --_shade: color-mix(in srgb, var(--vaadin-border-color-subtle) 50%, transparent);
+  background-image: linear-gradient(
+    light-dark(transparent, var(--_shade)),
+    transparent 33%,
+    transparent 66%,
+    light-dark(var(--_shade), transparent)
+  );
+  transition: background-color 80ms;
+}
+
+vaadin-checkbox:not([checked], [indeterminate])::part(checkbox) vaadin-radio-button:not([checked])::part(radio) {
+  background-clip: padding-box;
+}
+
+vaadin-checkbox:is([checked], [indeterminate]) {
+  --vaadin-checkbox-background: var(--aura-accent-color);
+  --vaadin-checkbox-color: var(--aura-accent-contrast);
+}
+
+vaadin-radio-button[checked] {
+  --vaadin-radio-button-background: var(--aura-accent-color);
+  --vaadin-radio-button-color: var(--aura-accent-contrast);
+}
+
+vaadin-checkbox:hover::part(checkbox)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--vaadin-border-color-subtle);
+}

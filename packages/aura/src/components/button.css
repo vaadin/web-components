@@ -1,0 +1,3 @@
+html {
+  --vaadin-button-background: light-dark(var(--vaadin-background-dark), var(--vaadin-background-light));
+}
