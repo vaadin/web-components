@@ -1,4 +1,0 @@
-vaadin-checkbox:is([checked], [indeterminate]) {
-  --vaadin-checkbox-background: var(--aura-accent-color);
-  --vaadin-checkbox-color: var(--aura-accent-contrast);
-}
