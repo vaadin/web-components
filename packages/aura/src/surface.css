@@ -32,6 +32,5 @@ vaadin-side-nav-item::part(content),
 
 [slot='detail']:has(vaadin-grid)::part(master),
 [slot='detail']:has(vaadin-grid) {
-  --aura-surface: var(--aura-surface-solid);
-  background: var(--aura-surface);
+  background: var(--aura-surface-solid);
 }

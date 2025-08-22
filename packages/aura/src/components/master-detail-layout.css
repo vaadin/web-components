@@ -1,12 +1,18 @@
+html {
+  --vaadin-master-detail-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
+}
+
 vaadin-master-detail-layout[drawer]::part(detail) {
   --aura-surface-level: 3;
   background: var(--aura-surface) padding-box;
   -webkit-backdrop-filter: blur(12px) brightness(1.05) saturate(1.2);
   backdrop-filter: blur(12px) brightness(1.05) saturate(1.2);
+  box-shadow: var(--aura-overlay-shadow);
 }
 
 /* TODO could be a built-in variant */
-vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
+vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail),
+vaadin-master-detail-layout[containment='viewport'][drawer]::part(detail) {
   margin: calc(var(--aura-app-layout-inset) / 2);
   border-radius: var(--_app-layout-radius);
   -webkit-backdrop-filter: blur(12px);
