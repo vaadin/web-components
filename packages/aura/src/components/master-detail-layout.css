@@ -8,7 +8,7 @@ vaadin-master-detail-layout[drawer]::part(detail) {
 /* TODO could be a built-in variant */
 vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
   margin: calc(var(--aura-app-layout-inset) / 2);
-  border-radius: var(--aura-app-layout-radius);
+  border-radius: var(--_app-layout-radius);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
@@ -16,14 +16,15 @@ vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail) {
 vaadin-master-detail-layout > vaadin-master-detail-layout,
 vaadin-master-detail-layout:not([drawer])::part(detail) {
   --aura-surface-level: 3;
-  border-start-end-radius: var(--aura-app-layout-radius);
-  border-end-end-radius: var(--aura-app-layout-radius);
+  border-start-end-radius: var(--_app-layout-radius);
+  border-end-end-radius: var(--_app-layout-radius);
 }
 
+/* TODO these end up affecting app MDLs, not just the one directly inside the App Layout */
 ::view-transition-group(vaadin-mdl-backdrop),
 ::view-transition-group(vaadin-mdl-master),
 ::view-transition-group(vaadin-mdl-detail) {
-  border-radius: var(--aura-app-layout-radius);
+  border-radius: var(--_app-layout-radius);
   overflow: hidden;
 }
 
