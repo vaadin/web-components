@@ -914,6 +914,7 @@ describe('multi selection column', () => {
         </vaadin-grid>
       `);
       grid.items = [{ name: 'Item 0' }, { name: 'Item 1' }, { name: 'Item 2' }];
+      flushGrid(grid);
       await nextRender();
 
       rows = getRows(grid.$.items);

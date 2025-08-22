@@ -55,7 +55,7 @@
     "@vaadin/text-field": "25.0.0-alpha16",
     "@vaadin/time-picker": "25.0.0-alpha16",
     "@vaadin/vaadin-lumo-styles": "25.0.0-alpha16",
-    "sinon": "^18.0.0"
+    "sinon": "^21.0.0"
   },
   "web-types": [
     "web-types.json",
