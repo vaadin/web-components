@@ -368,12 +368,6 @@ export const content = css`
     padding: 0.125rem 0.25rem;
   }
 
-  pre {
-    white-space: pre-wrap;
-    margin-block: var(--vaadin-padding-s);
-    padding: var(--vaadin-padding-container);
-  }
-
   img {
     max-width: 100%;
   }
