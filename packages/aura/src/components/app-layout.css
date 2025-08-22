@@ -1,6 +1,6 @@
 html {
   --aura-app-layout-inset: 1.5vmin;
-  --aura-app-layout-radius: clamp(0px, var(--aura-app-layout-inset) * 3, var(--vaadin-radius-l));
+  --aura-app-layout-radius: var(--vaadin-radius-l);
   --_aura-mdl-border: 1px;
 }
 
@@ -13,6 +13,7 @@ html {
 }
 
 vaadin-app-layout {
+  --_app-layout-radius: clamp(0px, var(--aura-app-layout-inset) * 4, var(--aura-app-layout-radius));
   padding-block: var(--aura-app-layout-inset);
   padding-inline-end: var(--aura-app-layout-inset);
   padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
@@ -59,15 +60,15 @@ vaadin-app-layout > [slot='drawer'] {
 }
 
 vaadin-app-layout > vaadin-master-detail-layout {
-  border-radius: var(--aura-app-layout-radius);
+  border-radius: var(--_app-layout-radius);
   border: var(--_aura-mdl-border) solid var(--vaadin-border-color-subtle);
   border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
   border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
 
   & > vaadin-master-detail-layout,
   &:not([drawer])::part(detail) {
-    border-start-end-radius: var(--aura-app-layout-radius);
-    border-end-end-radius: var(--aura-app-layout-radius);
+    border-start-end-radius: var(--_app-layout-radius);
+    border-end-end-radius: var(--_app-layout-radius);
   }
 }
 
