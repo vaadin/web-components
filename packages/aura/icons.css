@@ -32,6 +32,7 @@ vaadin-icon[icon^='lucide:'] {
 }
 
 /* RLT-aware icons */
+/* Would be great to use `mask-image: image(ltr var(--lucide-icon-arrow-back))` but Firefox lacks support */
 [icon='lucide:arrow-back']:dir(rtl) {
   scale: -1 1;
 }
