@@ -23,11 +23,11 @@ html {
 
 html,
 [theme] {
-  --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale));
-  --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale));
-  --aura-font-size-m: calc(var(--aura-font-size-base) / 16 * 1rem);
-  --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale));
-  --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale));
+  --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-m: round(var(--aura-font-size-base) / 16 * 1rem, 0.0625rem);
+  --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale), 0.0625rem);
 
   --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-line-height-base), 0.125rem);
   --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-line-height-base), 0.125rem);
