@@ -373,6 +373,7 @@ export const DateTimePickerMixin = (superClass) =>
     }
 
     /**
+     * @param {FocusOptions} options
      * @protected
      * @override
      */

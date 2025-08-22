@@ -83,8 +83,7 @@ export const ItemMixin = (superClass) =>
     }
 
     /**
-     * Override native `focus` to set focused attribute
-     * when focusing the item programmatically.
+     * @param {FocusOptions} options
      * @protected
      * @override
      */
