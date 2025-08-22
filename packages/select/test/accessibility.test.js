@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-select.js';
@@ -362,6 +362,24 @@ describe('accessibility', () => {
     describe('focus-ring', () => {
       afterEach(async () => {
         await resetMouse();
+      });
+
+      it('should not set focus-ring on the item when not opened with keyboard', async () => {
+        mousedown(select);
+        select.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        const item = listBox.querySelector('vaadin-select-item');
+        expect(item.hasAttribute('focus-ring')).to.be.false;
+      });
+
+      it('should set focus-ring on the item when opened with keyboard', async () => {
+        select.focus();
+        await sendKeys({ press: 'Enter' });
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        const item = listBox.querySelector('vaadin-select-item');
+        expect(item.hasAttribute('focus-ring')).to.be.true;
       });
 
       it('should restore focus-ring attribute on item click if it was set before opening', async () => {

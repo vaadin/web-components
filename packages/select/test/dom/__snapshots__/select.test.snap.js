@@ -511,7 +511,6 @@ snapshots["vaadin-select host opened default"] =
     >
       <vaadin-select-item
         aria-selected="false"
-        focus-ring=""
         focused=""
         role="option"
         tabindex="0"
