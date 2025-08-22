@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="../packages/aura/src/icons/lucide/lucide.css" />
     <link rel="stylesheet" href="../packages/aura/adaptive-typography.css" />
+    <link rel="stylesheet" href="./aura/components-view.css" />
     <script type="module">
       window.Vaadin ||= {};
       window.Vaadin.featureFlags ||= {};
@@ -19,12 +20,14 @@
       import './aura/aura-number-control.js';
       import './aura/aura-scheme-control.js';
       import '@vaadin/avatar';
+      import '@vaadin/avatar-group';
       import '@vaadin/app-layout';
       import '@vaadin/app-layout/vaadin-drawer-toggle.js';
       import '@vaadin/button';
       import '@vaadin/card';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
+      import '@vaadin/date-time-picker';
       import '@vaadin/icon';
       import '@vaadin/grid/all-imports';
       import '@vaadin/form-layout';
@@ -33,9 +36,24 @@
       import '@vaadin/select';
       import '@vaadin/scroller';
       import '@vaadin/side-nav';
+      import '@vaadin/tabs';
+      import '@vaadin/rich-text-editor';
+      import '@vaadin/list-box';
+      import '@vaadin/item';
+      import '@vaadin/message-list';
+      import '@vaadin/message-input';
+      import '@vaadin/upload';
+      import '@vaadin/multi-select-combo-box';
+      import '@vaadin/combo-box';
+      import '@vaadin/split-layout';
+      import '@vaadin/progress-bar';
       import '@vaadin/text-field';
       import '@vaadin/horizontal-layout';
       import '@vaadin/vertical-layout';
+      import '@vaadin/radio-group';
+      import '@vaadin/menu-bar';
+      import '@vaadin/select';
+      import '@vaadin/login/vaadin-login-form.js';
       import { html, render } from 'lit';
       import { Button } from '@vaadin/button';
       import { Notification } from '@vaadin/notification';
@@ -125,7 +143,7 @@
             icon.setAttribute('icon', 'lucide:arrow-back');
             this.append(icon);
             this.addEventListener('click', () => {
-              const inner = this.closest('vaadin-master-detail-layout');
+              const inner = this.closest('[slot="detail"]');
               const outer = inner.parentNode.closest('vaadin-master-detail-layout');
               outer?._setDetail(null);
             });
@@ -272,9 +290,9 @@
                 <vaadin-icon icon="lucide:chart-column" slot="prefix"></vaadin-icon>
                 <span>Grid View</span>
               </vaadin-side-nav-item>
-              <vaadin-side-nav-item>
+              <vaadin-side-nav-item path="#components">
                 <vaadin-icon icon="lucide:folder" slot="prefix"></vaadin-icon>
-                <span>Projects</span>
+                <span>Components</span>
               </vaadin-side-nav-item>
               <vaadin-side-nav-item>
                 <vaadin-icon icon="lucide:chart-pie" slot="prefix"></vaadin-icon>
@@ -342,7 +360,7 @@
     </template>
 
     <template id="grid-view">
-      <vaadin-master-detail-layout detail-size="20rem">
+      <vaadin-master-detail-layout detail-size="20rem" containment="viewport">
         <div class="aura-view">
           <header>
             <mdl-back-button></mdl-back-button>
@@ -369,7 +387,7 @@
     </template>
 
     <template id="form-view">
-      <div slot="detail" class="aura-view">
+      <div class="aura-view">
         <header>
           <mdl-back-button></mdl-back-button>
           <h3>My App</h3>
@@ -395,6 +413,202 @@
           <vaadin-button>Cancel</vaadin-button>
           <vaadin-button theme="primary">Save</vaadin-button>
         </footer>
+      </div>
+    </template>
+
+    <template id="components-view">
+      <div class="aura-view components-view">
+        <header>
+          <mdl-back-button></mdl-back-button>
+          <h3>Components</h3>
+        </header>
+        <vaadin-scroller theme="overflow-indicators">
+          <div class="grid">
+            <div class="component" theme="surface">
+              <div class="flex flex-wrap gap-s">
+                <vaadin-button theme="primary" class="flex-auto">Save</vaadin-button>
+                <vaadin-button class="flex-auto">Cancel</vaadin-button>
+              </div>
+            </div>
+
+            <div class="component flex-col wide gap-s" theme="surface">
+
+              <div class="flex flex-wrap gap-s justify-center">
+                <span theme="badge">Default</span>
+                <span theme="badge accent">Accent</span>
+                <span theme="badge green">Green</span>
+                <span theme="badge red">Red</span>
+                <span theme="badge yellow">Yellow</span>
+              </div>
+
+              <div class="flex flex-wrap gap-s justify-center">
+                <span theme="primary badge">Default</span>
+                <span theme="primary badge accent">Accent</span>
+                <span theme="primary badge green">Green</span>
+                <span theme="primary badge red">Red</span>
+                <span theme="primary badge yellow">Yellow</span>
+              </div>
+
+              <div class="flex flex-wrap gap-s justify-center">
+                <span theme="primary badge">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="primary badge accent">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="primary badge green">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="primary badge red">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="primary badge yellow">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+              </div>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-radio-group theme="vertical" value="1">
+                <vaadin-radio-button label="Option 1" value="1"></vaadin-radio-button>
+                <vaadin-radio-button label="Option 2" value="2"></vaadin-radio-button>
+                <vaadin-radio-button label="Option 3" value="3"></vaadin-radio-button>
+              </vaadin-radio-group>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-menu-bar></vaadin-menu-bar>
+            </div>
+
+            <div class="component tall wide" theme="surface">
+              <vaadin-login-form no-autofocus></vaadin-login-form>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-avatar-group maxItemsVisible="5" class="w-auto"></vaadin-avatar-group>
+            </div>
+
+            <div class="component wide" theme="surface">
+              <vaadin-date-time-picker style="width: 20em;"></vaadin-date-time-picker>
+            </div>
+
+            <div class="component wide" theme="surface">
+              <vaadin-tabs>
+                <vaadin-tab>Tab 1</vaadin-tab>
+                <vaadin-tab>Tab 2</vaadin-tab>
+                <vaadin-tab>Tab 3</vaadin-tab>
+              </vaadin-tabs>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-checkbox-group>
+                <vaadin-checkbox label="Option 1" value="1"></vaadin-checkbox>
+                <vaadin-checkbox label="Option 2" value="2"></vaadin-checkbox>
+                <vaadin-checkbox label="Option 3" value="3"></vaadin-checkbox>
+              </vaadin-checkbox-group>
+            </div>
+
+            <div class="component widest tall no-padding" theme="surface">
+              <vaadin-grid>
+                <vaadin-grid-selection-column></vaadin-grid-selection-column>
+                <vaadin-grid-column path="firstName"></vaadin-grid-column>
+                <vaadin-grid-column path="lastName"></vaadin-grid-column>
+                <vaadin-grid-column path="email"></vaadin-grid-column>
+              </vaadin-grid>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-combo-box  itemLabelPath="name" itemValuePath="id" label="People"></vaadin-combo-box>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-progress-bar value="0.5"></vaadin-progress-bar>
+              <vaadin-progress-bar value="0.5" indeterminate></vaadin-progress-bar>
+            </div>
+
+            <div class="component wide tall" theme="surface">
+              <vaadin-accordion>
+                <vaadin-accordion-panel summary="Personal information">
+                  <!-- TODO only the first child is considered as the panel content. Other children get aria-hidden=true -->
+                  <div class="pb-m">
+                    <div>Sophia Williams</div>
+                    <div>sophia.williams@company.com</div>
+                    <div>(501) 555-9128</div>
+                  </div>
+                </vaadin-accordion-panel>
+
+                <vaadin-accordion-panel summary="Billing address">
+                  <div class="pb-m">
+                    <div>4027 Amber Lake Canyon</div>
+                    <div>72333-5884 Cozy Nook</div>
+                    <div>Arkansas</div>
+                  </div>
+                </vaadin-accordion-panel>
+
+                <vaadin-accordion-panel summary="Payment">
+                  <div class="pb-m">
+                    <div>MasterCard</div>
+                    <div>1234 5678 9012 3456</div>
+                    <div>Expires 06/21</div>
+                  </div>
+                </vaadin-accordion-panel>
+              </vaadin-accordion>
+            </div>
+
+            <div class="component tall" theme="surface">
+              <div class="type-scale">
+                <h1>Heading</h1>
+                <h2>Heading</h2>
+                <h3>Heading</h3>
+                <h4>Heading</h4>
+                <h5>Heading</h5>
+                <h6>Heading</h6>
+                <p class="mb-0">Paragraph</p>
+                <p class="m-0 text-s text-secondary">Small text</p>
+              </div>
+            </div>
+
+            <div class="component tall wide flex-col gap-m" theme="surface">
+              <vaadin-message-list></vaadin-message-list>
+              <vaadin-message-input></vaadin-message-input>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-text-field clear-button-visible value="Projects">
+                <vaadin-icon icon="lucide:folder" slot="prefix"></vaadin-icon>
+              </vaadin-text-field>
+            </div>
+
+            <div class="component wide" theme="surface">
+              <vaadin-upload></vaadin-upload>
+            </div>
+
+            <div class="component wide" theme="surface">
+              <vaadin-multi-select-combo-box class="w-full" itemLabelPath="name" itemValuePath="id"></vaadin-multi-select-combo-box>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-split-layout class="h-full w-full">
+                <div></div>
+                <div></div>
+              </vaadin-split-layout>
+            </div>
+
+            <div class="component widest no-padding tall" theme="surface">
+              <vaadin-rich-text-editor theme="no-border" class="h-full" htmlValue='<h1>Rich Text Editor</h1><p>This is a rich text editor</p>'></vaadin-rich-text-editor>
+            </div>
+
+            <div class="component" theme="surface">
+              <vaadin-list-box multiple>
+                <vaadin-item>Option 1</vaadin-item>
+                <vaadin-item>Option 2</vaadin-item>
+                <vaadin-item>Option 3</vaadin-item>
+              </vaadin-list-box>
+            </div>
+
+            <!-- TODO Card, Select, Map?, Spreadsheet?, Icons? -->
+          </div>
+        </vaadin-scroller>
       </div>
     </template>
   </body>

@@ -8,7 +8,7 @@
 @import './src/components/app-layout.css';
 @import './src/components/badge.css';
 @import './src/components/card.css';
-@import './src/components/checkbox.css';
+@import './src/components/checkbox-radio.css';
 @import './src/components/form-layout.css';
 @import './src/components/grid.css';
 @import './src/components/master-detail-layout.css';
@@ -18,6 +18,11 @@
 
 html {
   cursor: default;
+  --aura-overlay-shadow:
+    inset 0 0 0 1px hsla(0deg, 0%, 100%, max(5%, 3% + 4% * var(--aura-contrast))),
+    0 0 0 1px hsla(0, 0%, 0%, max(5%, 3% + 4% * var(--aura-contrast))),
+    0 8px 16px -3px
+      light-dark(oklch(from var(--aura-background-light) calc(l - (1 - l) * 0.9) calc(c / 10) h), hsla(0, 0%, 0%, 0.3));
 }
 
 ::view-transition {
@@ -40,14 +45,11 @@ html:has(vaadin-app-layout) {
 }
 
 ::part(overlay) {
+  border: 0;
+  box-shadow: var(--aura-overlay-shadow);
   --vaadin-overlay-background: var(--aura-surface);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-}
-
-::part(backdrop) {
-  -webkit-backdrop-filter: blur(1px);
-  backdrop-filter: blur(1px);
 }
 
 /* vaadin-app-layout > vaadin-master-detail-layout::before {
@@ -68,6 +70,7 @@ vaadin-scroller[slot='drawer'] {
 
 ::part(input-field) {
   background-clip: padding-box;
+  box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.07);
 }
 
 vaadin-avatar[theme~='vaadin']::part(icon) {

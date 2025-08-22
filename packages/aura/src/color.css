@@ -38,20 +38,16 @@ html {
   --aura-accent-background: radial-gradient(circle at 25% 0%, var(--aura-background) 33%, var(--_aura-background-alt));
 
   --vaadin-overlay-backdrop-background: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
-  --vaadin-app-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
-  --vaadin-master-detail-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
 }
 
 html,
 [theme] {
-  --_accent: var(--aura-accent-color);
   --aura-accent-light: var(--_accent, hsl(220, 80%, 47%));
   --aura-accent-dark: var(--_accent, hsl(220, 75%, 56%));
 
   --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
 
-  --vaadin-background-color: var(--aura-surface);
-  --vaadin-button-background: var(--aura-surface);
+  --vaadin-background-color: var(--aura-surface-solid);
 }
 
 @supports (color: hsl(0 0 0)) {
@@ -62,6 +58,7 @@ html,
 
 body {
   --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
+  --vaadin-focus-ring-color: var(--aura-accent-color);
   accent-color: var(--aura-accent-color);
   /* Workaround Safari 17 limitation and compute these separately for light and dark */
   --aura-accent-contrast: light-dark(

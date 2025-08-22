@@ -1,7 +1,7 @@
 html {
-  --vaadin-radius-s: 4px;
-  --vaadin-radius-m: 8px;
-  --vaadin-radius-l: 14px;
+  --vaadin-radius-s: 5px;
+  --vaadin-radius-m: 9px;
+  --vaadin-radius-l: 15px;
 
   --aura-size-base: 6;
   --aura-size-scale: 1.4;
@@ -26,14 +26,5 @@ html,
 @media (pointer: coarse) {
   html {
     --aura-size-base: 9;
-    /* --vaadin-padding-xs: 9px;
-    --vaadin-padding-s: 12px;
-    --vaadin-padding-m: 16px;
-    --vaadin-padding-l: 24px;
-    --vaadin-padding-xl: 32px; */
-
-    /* --vaadin-gap-s: 12px;
-    --vaadin-gap-m: 16px;
-    --vaadin-gap-l: 24px; */
   }
 }
