@@ -81,6 +81,5 @@
 
   [part~='move-forward-button'] {
     inset-inline-end: calc(-1 * var(--_section-outline-offset));
-    transform: translateY(-50%);
   }
 }

@@ -46,7 +46,6 @@
 
   [part='title'] {
     color: var(--lumo-header-text-color);
-    white-space: var(--vaadin-dashboard-widget-title-wrap, wrap);
     line-height: var(--lumo-line-height-s);
     margin: 0 0 1px;
   }
