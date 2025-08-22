@@ -12,9 +12,9 @@
   }
 
   :host(:focus-visible) {
-    outline: none;
     border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1);
   }
 
   [part='status'],
@@ -49,7 +49,8 @@
   }
 
   [part$='button']:focus {
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1);
   }
 
   /* Vertically align icons / buttons with the first line of text */
