@@ -22,8 +22,6 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  *
  * Part name        | Description
  * -----------------|-------------
- * `row`            | File container
- * `info`           | Container for file status icon, file name, status and error messages
  * `done-icon`      | File done status icon
  * `warning-icon`   | File warning status icon
  * `meta`           | Container for file name, status and error messages
@@ -72,48 +70,45 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
   /** @protected */
   render() {
     return html`
-      <div part="row">
-        <div part="info">
-          <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
-          <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
+      <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
+      <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
 
-          <div part="meta">
-            <div part="name" id="name">${this.fileName}</div>
-            <div part="status" ?hidden="${!this.status}" id="status">${this.status}</div>
-            <div part="error" id="error" ?hidden="${!this.errorMessage}">${this.errorMessage}</div>
-          </div>
-        </div>
-        <div part="commands">
-          <button
-            type="button"
-            part="start-button"
-            file-event="file-start"
-            @click="${this._fireFileEvent}"
-            ?hidden="${!this.held}"
-            ?disabled="${this.disabled}"
-            aria-label="${this.i18n ? this.i18n.file.start : nothing}"
-            aria-describedby="name"
-          ></button>
-          <button
-            type="button"
-            part="retry-button"
-            file-event="file-retry"
-            @click="${this._fireFileEvent}"
-            ?hidden="${!this.errorMessage}"
-            ?disabled="${this.disabled}"
-            aria-label="${this.i18n ? this.i18n.file.retry : nothing}"
-            aria-describedby="name"
-          ></button>
-          <button
-            type="button"
-            part="remove-button"
-            file-event="file-abort"
-            @click="${this._fireFileEvent}"
-            ?disabled="${this.disabled}"
-            aria-label="${this.i18n ? this.i18n.file.remove : nothing}"
-            aria-describedby="name"
-          ></button>
-        </div>
+      <div part="meta">
+        <div part="name" id="name">${this.fileName}</div>
+        <div part="status" ?hidden="${!this.status}" id="status">${this.status}</div>
+        <div part="error" id="error" ?hidden="${!this.errorMessage}">${this.errorMessage}</div>
+      </div>
+
+      <div part="commands">
+        <button
+          type="button"
+          part="start-button"
+          file-event="file-start"
+          @click="${this._fireFileEvent}"
+          ?hidden="${!this.held}"
+          ?disabled="${this.disabled}"
+          aria-label="${this.i18n ? this.i18n.file.start : nothing}"
+          aria-describedby="name"
+        ></button>
+        <button
+          type="button"
+          part="retry-button"
+          file-event="file-retry"
+          @click="${this._fireFileEvent}"
+          ?hidden="${!this.errorMessage}"
+          ?disabled="${this.disabled}"
+          aria-label="${this.i18n ? this.i18n.file.retry : nothing}"
+          aria-describedby="name"
+        ></button>
+        <button
+          type="button"
+          part="remove-button"
+          file-event="file-abort"
+          @click="${this._fireFileEvent}"
+          ?disabled="${this.disabled}"
+          aria-label="${this.i18n ? this.i18n.file.remove : nothing}"
+          aria-describedby="name"
+        ></button>
       </div>
 
       <slot name="progress"></slot>
