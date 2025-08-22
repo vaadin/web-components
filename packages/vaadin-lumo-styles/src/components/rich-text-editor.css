@@ -11,7 +11,6 @@
     line-height: var(--lumo-line-height-m);
     background: transparent;
     border: none;
-    color: inherit;
     border-radius: 0;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
