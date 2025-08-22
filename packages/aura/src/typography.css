@@ -1,10 +1,14 @@
-@import './font/InstrumentSans.css';
-@import './font/Inter.css';
+@import './fonts/InstrumentSans/InstrumentSans.css';
+@import './fonts/Inter/Inter.css';
+@import './fonts/Metropolis/Metropolis.css';
+@import './fonts/AtkinsonHyperlegibleNext/AtkinsonHyperlegibleNext.css';
 
 html {
   --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
   --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
   --aura-font-family-inter: 'Inter', var(--aura-font-family-system);
+  --aura-font-family-metropolis: 'Metropolis', var(--aura-font-family-system);
+  --aura-font-family-atkinson: 'Atkinson Hyperlegible Next', var(--aura-font-family-system);
 
   --aura-font-family: var(--aura-font-family-instrument-sans);
 

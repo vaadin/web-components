@@ -15,6 +15,8 @@ class AuraFontFamilyControl extends HTMLElement {
   #opts = [
     { label: 'Instrument Sans', varName: '--aura-font-family-instrument-sans' },
     { label: 'Inter', varName: '--aura-font-family-inter' },
+    { label: 'Metropolis', varName: '--aura-font-family-metropolis' },
+    { label: 'Atkinson Hyperlegible Next', varName: '--aura-font-family-atkinson' },
     { label: 'System', varName: '--aura-font-family-system' },
   ];
 
