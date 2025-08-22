@@ -411,7 +411,7 @@ const toolbar = css`
   }
 
   [part~='toolbar-button']::before {
-    background: currentcolor;
+    background: currentColor;
     content: '';
     display: block;
     height: var(--vaadin-icon-size, 1lh);
