@@ -4,43 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_dashboard-widget {
-  :host {
-    display: flex;
-    flex-direction: column;
-    grid-column: var(--_item-column);
-    grid-row: var(--_item-row);
-    background: var(--_widget-background);
-    border-radius: var(--_widget-border-radius);
-    box-shadow: var(--_widget-shadow);
-    position: relative;
-  }
-
   :host::before {
-    content: '';
-    position: absolute;
     inset: calc(-1 * var(--_widget-border-width));
     border: var(--_widget-border-width) solid var(--_widget-border-color);
     border-radius: calc(var(--_widget-border-radius) + var(--_widget-border-width));
-    pointer-events: none;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  :host(:not([editable])) [part~='resize-button'] {
-    display: none;
-  }
-
-  [part~='content'] {
-    flex: 1;
-    overflow: hidden;
   }
 
   /* Widget states */
 
   :host([editable]) {
-    --vaadin-dashboard-widget-shadow: var(--_widget-editable-shadow);
     --_widget-border-color: var(--lumo-contrast-20pct);
     --_widget-border-width: 1px;
   }
@@ -51,7 +23,6 @@
   }
 
   :host([selected]) {
-    --vaadin-dashboard-widget-shadow: var(--_widget-selected-shadow);
     background: var(--lumo-primary-color-10pct);
   }
 
@@ -62,13 +33,7 @@
   }
 
   :host([resizing])::after {
-    content: '';
-    z-index: 2;
-    position: absolute;
     top: -1px;
-    width: var(--_widget-resizer-width, 0);
-    height: var(--_widget-resizer-height, 0);
-    border-radius: inherit;
     background: var(--_drop-target-background-color);
     border: var(--_drop-target-border);
   }
@@ -81,7 +46,7 @@
   }
 
   :host([editable]) header {
-    padding-inline: var(--lumo-space-xs);
+    padding: var(--lumo-space-xs);
   }
 
   [part='title'] {
@@ -113,23 +78,10 @@
   /* Resize handle */
 
   [part~='resize-button'] {
-    z-index: 1;
-    overflow: hidden;
     --_resize-button-offset: min(var(--_gap), var(--_padding), var(--lumo-space-xs));
-    position: absolute;
     bottom: calc(-1 * var(--_resize-button-offset));
     inset-inline-end: calc(-1 * var(--_resize-button-offset));
-    cursor: nwse-resize;
-    touch-action: none;
     --icon: var(--lumo-icons-resize-handle);
-  }
-
-  :host([dir='rtl']) [part~='resize-button'] {
-    cursor: sw-resize;
-  }
-
-  :host([dir='rtl']) [part~='resize-button'] .icon::before {
-    transform: scaleX(-1);
   }
 
   /* Accessible resize mode controls */
@@ -146,48 +98,11 @@
     min-width: var(--lumo-size-s);
   }
 
-  [part~='resize-shrink-width-button'] + [part~='resize-grow-width-button'] {
-    margin-left: 1px;
-  }
-
   [part~='resize-grow-height-button'],
   [part~='resize-shrink-height-button'] {
     height: var(--lumo-size-s);
     padding-right: 0;
     padding-left: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  [part~='resize-shrink-height-button'] + [part~='resize-grow-height-button'] {
-    margin-top: 1px;
-  }
-
-  :host(:not([dir='rtl'])) [part~='resize-grow-width-button'],
-  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'] {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  :host([dir='rtl']) [part~='resize-grow-width-button'],
-  :host([dir='rtl']) [part~='resize-shrink-width-button'] {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  :host([dir='rtl']) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
   }
 
   [part~='resize-grow-height-button'],

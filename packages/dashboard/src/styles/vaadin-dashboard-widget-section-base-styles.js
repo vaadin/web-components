@@ -77,7 +77,6 @@ export const dashboardWidgetAndSectionStyles = css`
 
   vaadin-dashboard-button {
     z-index: 1;
-    padding: 4px;
   }
 
   vaadin-dashboard-button .icon::before {
