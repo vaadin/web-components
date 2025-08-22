@@ -46,6 +46,6 @@
     "@vaadin/time-picker": "25.0.0-alpha16",
     "@vaadin/tooltip": "25.0.0-alpha16",
     "@vaadin/vaadin-themable-mixin": "25.0.0-alpha16",
-    "sinon": "^18.0.0"
+    "sinon": "^21.0.0"
   }
 }

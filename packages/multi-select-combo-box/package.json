@@ -52,7 +52,7 @@
     "@vaadin/test-runner-commands": "25.0.0-alpha16",
     "@vaadin/testing-helpers": "^2.0.0",
     "@vaadin/vaadin-lumo-styles": "25.0.0-alpha16",
-    "sinon": "^18.0.0"
+    "sinon": "^21.0.0"
   },
   "web-types": [
     "web-types.json",

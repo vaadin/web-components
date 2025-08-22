@@ -45,7 +45,7 @@
     "@vaadin/chai-plugins": "25.0.0-alpha16",
     "@vaadin/test-runner-commands": "25.0.0-alpha16",
     "@vaadin/testing-helpers": "^2.0.0",
-    "sinon": "^18.0.0"
+    "sinon": "^21.0.0"
   },
   "cvdlName": "vaadin-board",
   "web-types": [
