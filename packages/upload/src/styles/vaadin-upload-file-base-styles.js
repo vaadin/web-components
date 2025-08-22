@@ -24,14 +24,6 @@ export const uploadFileStyles = css`
     display: none;
   }
 
-  [part='row'] {
-    display: contents;
-  }
-
-  [part='info'] {
-    display: contents;
-  }
-
   [part='done-icon']:not([hidden]),
   [part='warning-icon']:not([hidden]) {
     display: flex;
