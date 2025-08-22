@@ -45,6 +45,11 @@ html:has(vaadin-app-layout) {
   backdrop-filter: blur(12px);
 }
 
+::part(backdrop) {
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px);
+}
+
 /* vaadin-app-layout > vaadin-master-detail-layout::before {
   content: "";
   position: absolute;
