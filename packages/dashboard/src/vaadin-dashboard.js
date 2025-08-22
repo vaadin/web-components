@@ -120,6 +120,12 @@ class Dashboard extends DashboardLayoutMixin(
     return dashboardStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   static get properties() {
     return {
       /**
