@@ -1,7 +1,5 @@
 html {
-  --vaadin-notification-border-radius: var(--aura-radius-l);
-  --vaadin-notification-box-shadow: 0 0 0 1px hsla(0deg, 0%, 0%, 0.07), 0 6px 16px -4px hsla(0deg, 0%, 0%, 0.3);
-  --vaadin-notification-border-color: hsla(0deg, 0%, 100%, 0.07);
+  --vaadin-notification-border-width: 0px;
   --vaadin-ease-fluid: cubic-bezier(0.78, 0, 0.22, 1);
 }
 

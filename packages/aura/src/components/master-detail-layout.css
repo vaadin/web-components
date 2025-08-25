@@ -1,7 +1,3 @@
-html {
-  --vaadin-master-detail-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
-}
-
 vaadin-master-detail-layout[drawer]::part(detail) {
   --aura-surface-level: 3;
   background: var(--aura-surface) padding-box;

@@ -2,7 +2,6 @@ html {
   --aura-app-layout-inset: 1.5vmin;
   --aura-app-layout-radius: var(--vaadin-radius-l);
   --_aura-mdl-border: 1px;
-  --vaadin-app-layout-backdrop: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
 }
 
 /* Aligned with App Layout overlay breakpoint */
