@@ -211,7 +211,7 @@ class Step extends DisabledMixin(DirMixin(ElementMixin(ThemableMixin(PolylitMixi
 
   /** @protected */
   render() {
-    const hasLink = !!this.href;
+    const hasLink = !!this.href && !this.disabled;
     const showConnector = !this._last;
 
     return html`
@@ -222,7 +222,7 @@ class Step extends DisabledMixin(DirMixin(ElementMixin(ThemableMixin(PolylitMixi
               target="${ifDefined(this.target)}"
               ?router-ignore="${this.routerIgnore}"
               aria-current="${this.current ? 'step' : 'false'}"
-              tabindex="${this.disabled ? '-1' : '0'}"
+              tabindex="0"
             >
               ${this._renderContent()}
             </a>

@@ -296,9 +296,11 @@ describe('vaadin-step', () => {
       expect(step.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should have tabindex -1 when disabled', () => {
+    it('should render as div when disabled', () => {
+      const div = step.shadowRoot.querySelector('div');
+      expect(div).to.exist;
       const link = step.shadowRoot.querySelector('a');
-      expect(link.getAttribute('tabindex')).to.equal('-1');
+      expect(link).to.not.exist;
     });
   });
 
