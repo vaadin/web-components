@@ -27,6 +27,7 @@
   }
 
   [part='name'] {
+    color: inherit;
     margin-inline-end: var(--lumo-space-s);
   }
 
