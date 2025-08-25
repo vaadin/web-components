@@ -9,6 +9,7 @@
  * license.
  */
 import '../vendor/vaadin-quill.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -425,13 +426,16 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     /** @private */
-    __showTooltip(event) {
-      const target = event.target;
+    __showTooltip({ type, target }) {
+      // Only show tooltip when focused with keyboard
+      if (type === 'focusin' && !isKeyboardActive()) {
+        return;
+      }
       this._tooltip.target = target;
       this._tooltip.text = target.ariaLabel;
       this._tooltip._stateController.open({
-        focus: event.type === 'focusin',
-        hover: event.type === 'mouseenter',
+        focus: type === 'focusin',
+        hover: type === 'mouseenter',
       });
     }
 
