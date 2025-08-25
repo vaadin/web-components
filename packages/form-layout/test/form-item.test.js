@@ -119,6 +119,7 @@ describe('form-item', () => {
       const spy = sinon.spy(input, 'focus');
       label.click();
       expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: false });
     });
 
     it('should click input on label click', () => {

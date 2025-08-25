@@ -56,4 +56,14 @@ describe('FocusMixin', () => {
     focusin(input);
     expect(element.hasAttribute('focus-ring')).to.be.false;
   });
+
+  it('should set focus-ring attribute when calling focus() by default', () => {
+    element.focus();
+    expect(element.hasAttribute('focus-ring')).to.be.true;
+  });
+
+  it('should not set focus-ring attribute when calling focus() with focusVisible: false', () => {
+    element.focus({ focusVisible: false });
+    expect(element.hasAttribute('focus-ring')).to.be.false;
+  });
 });

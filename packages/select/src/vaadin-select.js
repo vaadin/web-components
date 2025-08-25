@@ -10,6 +10,7 @@ import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -210,7 +211,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
   /** @private */
   _onOverlayOpen() {
     if (this._menuElement) {
-      this._menuElement.focus();
+      this._menuElement.focus({ focusVisible: isKeyboardActive() });
     }
   }
 
