@@ -1,6 +1,9 @@
 html {
   --aura-contrast: 1;
 
+  --aura-accent-light: hsl(220, 80%, 47%);
+  --aura-accent-dark: hsl(220, 75%, 56%);
+
   --_color-base: light-dark(
     oklch(from var(--aura-accent-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
     oklch(from var(--aura-accent-dark) 0.98 calc(c * var(--_neutral-c)) h)
@@ -42,11 +45,7 @@ html {
 
 html,
 [theme] {
-  --aura-accent-light: var(--_accent, hsl(220, 80%, 47%));
-  --aura-accent-dark: var(--_accent, hsl(220, 75%, 56%));
-
   --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
-
   --vaadin-background-color: var(--aura-surface-solid);
 }
 
@@ -56,7 +55,8 @@ html,
   }
 }
 
-body {
+body,
+[theme] {
   --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
   --vaadin-focus-ring-color: var(--aura-accent-color);
   accent-color: var(--aura-accent-color);
