@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vaadin-stepper</title>
+  <script type="module" src="./common.js"></script>
+  <script type="module">
+    import '../packages/vaadin-lumo-styles/all-imports.js';
+    import '../packages/stepper/vaadin-stepper.js';
+    import '../packages/stepper/vaadin-step.js';
+  </script>
+  <style>
+    .demo-section {
+      margin: 2em 0;
+      padding: 1em;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    
+    .demo-section h3 {
+      margin-top: 0;
+      margin-bottom: 1em;
+    }
+
+    .controls {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .controls button {
+      margin-right: 0.5em;
+      padding: 0.5em 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Stepper Examples</h2>
+
+  <div class="demo-section">
+    <h3>Vertical Stepper (Default)</h3>
+    <vaadin-stepper id="vertical-stepper">
+      <vaadin-step label="Shopping cart" description="Review items in your cart" href="#/cart" state="completed"></vaadin-step>
+      <vaadin-step label="Shipping & billing" description="Enter shipping and billing information" href="#/shipping" state="active"></vaadin-step>
+      <vaadin-step label="Payment method" description="Select payment method" href="#/payment"></vaadin-step>
+      <vaadin-step label="Confirmation" description="Review and confirm order" href="#/confirm"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Horizontal Stepper</h3>
+    <vaadin-stepper orientation="horizontal">
+      <vaadin-step label="Step 1" href="#/step1" state="completed"></vaadin-step>
+      <vaadin-step label="Step 2" href="#/step2" state="completed"></vaadin-step>
+      <vaadin-step label="Step 3" href="#/step3" state="active"></vaadin-step>
+      <vaadin-step label="Step 4" href="#/step4"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Small Stepper</h3>
+    <vaadin-stepper theme="small">
+      <vaadin-step label="Account setup" description="Create your account" state="completed"></vaadin-step>
+      <vaadin-step label="Profile information" description="Add your details" state="active"></vaadin-step>
+      <vaadin-step label="Preferences" description="Customize your experience"></vaadin-step>
+      <vaadin-step label="Review" description="Review and finish"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Horizontal Small Stepper</h3>
+    <vaadin-stepper orientation="horizontal" theme="small">
+      <vaadin-step label="Upload" state="completed"></vaadin-step>
+      <vaadin-step label="Process" state="completed"></vaadin-step>
+      <vaadin-step label="Review" state="active"></vaadin-step>
+      <vaadin-step label="Complete"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Stepper with Error State</h3>
+    <vaadin-stepper>
+      <vaadin-step label="Data validation" description="Validate input data" state="completed"></vaadin-step>
+      <vaadin-step label="Processing" description="Process the validated data" state="error"></vaadin-step>
+      <vaadin-step label="Generate report" description="Create summary report"></vaadin-step>
+      <vaadin-step label="Send notification" description="Notify stakeholders"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Disabled Steps</h3>
+    <vaadin-stepper>
+      <vaadin-step label="Step 1" href="#/step1" state="completed"></vaadin-step>
+      <vaadin-step label="Step 2 (Disabled)" href="#/step2" disabled state="active"></vaadin-step>
+      <vaadin-step label="Step 3" href="#/step3"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Steps without Links</h3>
+    <vaadin-stepper>
+      <vaadin-step label="Initialize" description="System initialization" state="completed"></vaadin-step>
+      <vaadin-step label="Configure" description="Apply configuration" state="completed"></vaadin-step>
+      <vaadin-step label="Deploy" description="Deploy to production" state="active"></vaadin-step>
+      <vaadin-step label="Monitor" description="Monitor system health"></vaadin-step>
+    </vaadin-stepper>
+  </div>
+
+  <div class="demo-section">
+    <h3>Interactive Stepper</h3>
+    <vaadin-stepper id="interactive-stepper">
+      <vaadin-step label="Step 1" description="First step"></vaadin-step>
+      <vaadin-step label="Step 2" description="Second step"></vaadin-step>
+      <vaadin-step label="Step 3" description="Third step"></vaadin-step>
+      <vaadin-step label="Step 4" description="Fourth step"></vaadin-step>
+    </vaadin-stepper>
+    
+    <div class="controls">
+      <button onclick="setActiveStep(0)">Activate Step 1</button>
+      <button onclick="setActiveStep(1)">Activate Step 2</button>
+      <button onclick="setActiveStep(2)">Activate Step 3</button>
+      <button onclick="setActiveStep(3)">Activate Step 4</button>
+      <button onclick="completeUpTo(2)">Complete up to Step 2</button>
+      <button onclick="setError(1)">Set Step 2 Error</button>
+      <button onclick="resetStepper()">Reset All</button>
+    </div>
+  </div>
+
+  <script>
+    const interactiveStepper = document.getElementById('interactive-stepper');
+    
+    function setActiveStep(index) {
+      interactiveStepper.reset();
+      interactiveStepper.setStepState('active', index);
+      if (index > 0) {
+        interactiveStepper.completeStepsUntil(index);
+      }
+    }
+    
+    function completeUpTo(index) {
+      interactiveStepper.completeStepsUntil(index);
+    }
+    
+    function setError(index) {
+      interactiveStepper.setStepState('error', index);
+    }
+    
+    function resetStepper() {
+      interactiveStepper.reset();
+    }
+    
+    // Set initial state
+    setActiveStep(0);
+  </script>
+</body>
+</html>
