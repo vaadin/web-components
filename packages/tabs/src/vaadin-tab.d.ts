@@ -16,7 +16,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description | Part name
+ * Attribute      | Description
  * ---------------|---------------------------------
  * `disabled`     | Set when the element is disabled
  * `focused`      | Set when the element is focused
