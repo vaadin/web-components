@@ -198,6 +198,8 @@ export const AvatarMixin = (superClass) =>
 
     /** @private */
     __withTooltipChanged(withTooltip, oldWithTooltip) {
+      this.toggleAttribute('has-tooltip', withTooltip);
+
       if (withTooltip) {
         // Create and attach tooltip
         const tooltipNode = document.createElement('vaadin-tooltip');
