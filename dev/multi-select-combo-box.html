@@ -84,6 +84,15 @@
       </vaadin-multi-select-combo-box>
     </div>
 
+    <div style="margin-top: 2rem;">
+      <h3>Object items with itemLabelGenerator</h3>
+      <vaadin-multi-select-combo-box
+        id="object-items"
+        label="Select team members"
+        placeholder="Search team members..."
+      ></vaadin-multi-select-combo-box>
+    </div>
+
     <script>
       const comboBox = document.querySelector('vaadin-multi-select-combo-box');
 
@@ -151,6 +160,25 @@
       document.getElementById('direction').addEventListener('value-changed', (e) => {
         comboBox.setAttribute('dir', e.detail.value);
       });
+
+      // Setup object items example with itemLabelGenerator
+      const objectItemsComboBox = document.getElementById('object-items');
+      objectItemsComboBox.items = [
+        { id: 1, firstName: 'John', lastName: 'Doe', department: 'Engineering', role: 'Senior Developer' },
+        { id: 2, firstName: 'Jane', lastName: 'Smith', department: 'Design', role: 'UX Designer' },
+        { id: 3, firstName: 'Bob', lastName: 'Johnson', department: 'Engineering', role: 'DevOps Engineer' },
+        { id: 4, firstName: 'Alice', lastName: 'Williams', department: 'Product', role: 'Product Manager' },
+        { id: 5, firstName: 'Charlie', lastName: 'Brown', department: 'Engineering', role: 'Junior Developer' },
+        { id: 6, firstName: 'Diana', lastName: 'Prince', department: 'Design', role: 'UI Designer' },
+        { id: 7, firstName: 'Edward', lastName: 'Norton', department: 'Sales', role: 'Account Executive' },
+        { id: 8, firstName: 'Fiona', lastName: 'Green', department: 'Marketing', role: 'Marketing Manager' },
+      ];
+      objectItemsComboBox.itemIdPath = 'id';
+      objectItemsComboBox.itemLabelGenerator = (item) => `${item.firstName} ${item.lastName} (${item.department} - ${item.role})`;
+      objectItemsComboBox.selectedItems = [
+        objectItemsComboBox.items[0],
+        objectItemsComboBox.items[2],
+      ];
 
       // Event listeners for changes
       comboBox.addEventListener('custom-value-set', (event) => {
