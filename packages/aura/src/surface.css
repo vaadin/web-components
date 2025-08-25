@@ -1,6 +1,6 @@
 html {
   --aura-surface-level: 2;
-  --aura-surface-opacity: 50%;
+  --aura-surface-opacity: 0.5;
 }
 
 /* List all elements that are surfaces */
@@ -23,10 +23,10 @@ vaadin-side-nav-item::part(content),
     )
   );
 
-  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) var(--aura-surface-opacity), transparent);
+  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--aura-surface-opacity)), transparent);
 
   @media (prefers-reduced-transparency: reduce) {
-    --aura-surface-opacity: 100%;
+    --aura-surface-opacity: 1;
   }
 }
 
