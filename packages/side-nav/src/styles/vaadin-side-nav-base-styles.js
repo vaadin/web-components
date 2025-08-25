@@ -26,17 +26,29 @@ const sideNav = css`
     line-height: var(--vaadin-side-nav-label-line-height, inherit);
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  ::slotted([slot='label']) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
   }
 `;
 
 export const sideNavStyles = [sharedStyles, sideNav];
 
 export const sideNavSlotStyles = css`
-  :where(vaadin-side-nav:has(vaadin-icon[slot='prefix'])) {
-    --_has-prefix-icon: '';
+  :where(vaadin-side-nav:has(> vaadin-side-nav-item > vaadin-icon[slot='prefix']))::part(children),
+  :where(vaadin-side-nav-item:has(> vaadin-side-nav-item[slot='children'] > vaadin-icon[slot='prefix']))::part(
+    children
+  ) {
+    --_icon-indent: calc(var(--_icon-indent-2, 0) + 1);
   }
 
-  :where(vaadin-side-nav-item:has(> vaadin-icon[slot='prefix']))::part(link) {
-    --_has-prefix-icon:;
+  :where(vaadin-side-nav-item:has(> vaadin-icon[slot='prefix']))::part(content) {
+    --_icon-indent: calc(var(--_icon-indent-2) - 1);
   }
 `;

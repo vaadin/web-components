@@ -11,7 +11,7 @@ import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 const checkbox = css`
   [part='checkbox']::after {
     inset: 0;
-    mask-image: var(--_vaadin-icon-checkmark);
+    mask: var(--_vaadin-icon-checkmark) 50% / var(--vaadin-checkbox-icon-size, 100%) no-repeat;
   }
 
   :host([readonly]) {
@@ -25,7 +25,6 @@ const checkbox = css`
   }
 
   :host([indeterminate]) [part='checkbox']::after {
-    inset: calc(var(--_border-width) * -1);
     mask-image: var(--_vaadin-icon-minus);
   }
 `;

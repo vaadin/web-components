@@ -97,7 +97,7 @@ export const checkable = (part, propName = part) => css`
   :host(:is([checked], [indeterminate])) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-color);
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-color: var(--vaadin-background-color);
+    --vaadin-${unsafeCSS(propName)}-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   }
 
   :host([disabled]) {

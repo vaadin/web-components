@@ -12,8 +12,11 @@ const sideNavItem = css`
   [part='content'] {
     display: flex;
     align-items: center;
+    min-width: 0;
+    max-width: 100%;
     padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
-    gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
+    --_gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
+    gap: var(--_gap);
     font-size: var(--vaadin-side-nav-item-font-size, 1em);
     font-weight: var(--vaadin-side-nav-item-font-weight, 500);
     line-height: var(--vaadin-side-nav-item-line-height, inherit);
@@ -69,14 +72,6 @@ const sideNavItem = css`
     flex: none;
   }
 
-  /* Reserved space for icon */
-  slot[name='prefix']::before {
-    content: var(--_has-prefix-icon);
-    display: block;
-    width: var(--vaadin-icon-size, 1lh);
-    flex: none;
-  }
-
   [part='content']:not(:has([href])):has([part='toggle-button']:focus-visible),
   [part='content']:has(:not([part='toggle-button']):focus-visible),
   [part='content']:has([href]) [part='toggle-button']:focus-visible {
@@ -90,11 +85,12 @@ const sideNavItem = css`
   /* Hierarchy indentation */
   [part='content']::before {
     content: '';
-    --_hierarchy-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-child-indent, var(--vaadin-icon-size, 1lh)));
-    --_icon-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s)));
-    width: calc(var(--_hierarchy-indent) + var(--_icon-indent));
+    width: calc(
+      var(--vaadin-side-nav-child-indent, 1em) * var(--_level, 0) + var(--_icon-indent, 0) *
+        (var(--vaadin-icon-size, 1lh) + var(--_gap))
+    );
     flex: none;
-    margin-inline-start: calc(var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s)) * -1);
+    margin-inline-start: calc(var(--_gap) * -1);
   }
 
   slot[name='children'] {
