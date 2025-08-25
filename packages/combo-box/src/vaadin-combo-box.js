@@ -136,7 +136,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * `focus-ring`         | Set when the element is keyboard focused
  * `readonly`           | Set when the element is readonly
  * `opened`             | Set when the overlay is opened
- * `loading`            | Set when new items are expected
+ * `loading`            | Set when loading items from the data provider
  *
  * ### Internal components
  *
