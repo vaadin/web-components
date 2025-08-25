@@ -11,14 +11,18 @@ describe('item-label-generator', () => {
     await nextRender();
   });
 
+  const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
+
   describe('basic functionality', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox.items = [
         { id: 1, name: 'John', surname: 'Doe', age: 30 },
         { id: 2, name: 'Jane', surname: 'Smith', age: 25 },
         { id: 3, name: 'Bob', surname: 'Johnson', age: 35 },
         { id: 4, name: 'Alice', surname: 'Williams', age: 28 },
       ];
+      comboBox.style.width = '100%';
+      await nextRender();
     });
 
     it('should generate labels using itemLabelGenerator in dropdown', async () => {
@@ -44,10 +48,10 @@ describe('item-label-generator', () => {
       ];
       await nextRender();
 
-      const chips = comboBox.querySelectorAll('vaadin-multi-select-combo-box-chip[slot="chip"]');
-      expect(chips.length).to.equal(2);
-      expect(chips[0].label).to.equal('John Doe');
-      expect(chips[1].label).to.equal('Jane Smith');
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(3); // Includes overflow chip
+      expect(chips[1].label).to.equal('John Doe');
+      expect(chips[2].label).to.equal('Jane Smith');
     });
 
     it('should filter items using generated labels', () => {
@@ -86,10 +90,10 @@ describe('item-label-generator', () => {
       ];
       await nextRender();
 
-      const chips = comboBox.querySelectorAll('vaadin-multi-select-combo-box-chip[slot="chip"]');
-      expect(chips.length).to.equal(2);
-      expect(chips[0].label).to.equal('Doe, John (30)');
-      expect(chips[1].label).to.equal('Johnson, Bob (35)');
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(3); // Includes overflow chip
+      expect(chips[1].label).to.equal('Doe, John (30)');
+      expect(chips[2].label).to.equal('Johnson, Bob (35)');
     });
 
     it('should update chips when itemLabelGenerator changes', async () => {
@@ -115,10 +119,10 @@ describe('item-label-generator', () => {
       comboBox.selectedItems = ['Apple', 'Orange'];
       await nextRender();
 
-      const chips = comboBox.querySelectorAll('vaadin-multi-select-combo-box-chip[slot="chip"]');
-      expect(chips.length).to.equal(2);
-      expect(chips[0].label).to.equal('Apple');
-      expect(chips[1].label).to.equal('Orange');
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(3); // Includes overflow chip
+      expect(chips[1].label).to.equal('Apple');
+      expect(chips[2].label).to.equal('Orange');
     });
 
     it('should handle overflow chip with generated labels', async () => {
