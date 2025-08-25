@@ -135,7 +135,7 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * Part name            | Description
  * ---------------------|----------------
  * `label`              | The label element
- * `input-field`        | The element that wraps prefix, value and suffix
+ * `input-field`        | The element that wraps prefix, value and toggle button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
  * `required-indicator` | The `required` state indicator element

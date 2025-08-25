@@ -45,7 +45,7 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * Part name            | Description
  * ---------------------|----------------
  * `label`              | The label element
- * `input-field`        | The element that wraps prefix, value and suffix
+ * `input-field`        | The element that wraps prefix, value and buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
