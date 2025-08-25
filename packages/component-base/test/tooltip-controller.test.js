@@ -231,5 +231,12 @@ describe('TooltipController', () => {
       await nextFrame();
       expect(host.hasAttribute('has-tooltip')).to.be.false;
     });
+
+    it('should not set has-tooltip attribute on the host when tooltip is added if manual', async () => {
+      controller.setManual(true);
+      host.appendChild(tooltip);
+      await nextFrame();
+      expect(host.hasAttribute('has-tooltip')).to.be.false;
+    });
   });
 });
