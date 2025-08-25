@@ -199,6 +199,7 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * `focused`            | Set when the element is focused
  * `focus-ring`         | Set when the element is keyboard focused
  * `readonly`           | Set when the element is readonly
+ * `opened`             | Set when the overlay is opened
  * `loading`            | Set when loading items from the data provider
  *
  * If you want to replace the default `<input>` and its container with a custom implementation to get full control

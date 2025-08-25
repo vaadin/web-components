@@ -98,6 +98,7 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  * `focused`            | Set when the element is focused
  * `focus-ring`         | Set when the element is keyboard focused
  * `readonly`           | Set when the element is readonly
+ * `opened`             | Set when the overlay is opened
  *
  * ### Internal components
  *
