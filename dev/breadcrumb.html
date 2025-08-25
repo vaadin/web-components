@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vaadin-breadcrumb</title>
+  <script type="module" src="./common.js"></script>
+  <script type="module">
+    import '../packages/breadcrumb/vaadin-breadcrumb.js';
+    import '../packages/breadcrumb/vaadin-breadcrumb-item.js';
+  </script>
+  <style>
+    .demo-section {
+      margin: 2em 0;
+    }
+    
+    .demo-section h3 {
+      margin-bottom: 1em;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Breadcrumb Examples</h2>
+
+  <div class="demo-section">
+    <h3>Basic Breadcrumb</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/products/laptops">Laptops</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>MacBook Pro</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
+  </div>
+
+  <div class="demo-section">
+    <h3>Short Breadcrumb</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>Settings</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
+  </div>
+
+  <div class="demo-section">
+    <h3>Breadcrumb with Target</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="https://vaadin.com" target="_blank">Vaadin (opens in new tab)</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
+  </div>
+
+  <div class="demo-section">
+    <h3>Disabled Items</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/products" disabled>Products (disabled)</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
+  </div>
+
+  <div class="demo-section">
+    <h3>Long Breadcrumb Trail</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/docs">Documentation</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/docs/components">Components</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/docs/components/navigation">Navigation</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/docs/components/navigation/breadcrumb">Breadcrumb</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>Examples</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
+  </div>
+
+  <div class="demo-section">
+    <h3>Router Ignore Example</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item href="/api" router-ignore>API (full page reload)</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
+  </div>
+</body>
+</html>
