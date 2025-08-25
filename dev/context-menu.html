@@ -10,33 +10,86 @@
     <script type="module">
       import '@vaadin/context-menu';
 
-      const menu = document.querySelector('vaadin-context-menu');
-      menu.items = [
-        { text: 'Menu Item 1' },
-        { component: 'hr' },
-        {
-          text: 'Menu Item 2',
-          children: [
-            { text: 'Menu Item 2-1' },
-            {
-              text: 'Menu Item 2-2',
-              children: [
-                { text: 'Menu Item 2-2-1' },
-                { text: 'Menu Item 2-2-2', disabled: true },
-                { component: 'hr' },
-                { text: 'Menu Item 2-2-3' },
-              ],
-            },
-          ],
-        },
-        { text: 'Menu Item 3', disabled: true },
-      ];
+      document.querySelectorAll('vaadin-context-menu').forEach((menu) => {
+        menu.items = [
+          { text: 'Menu Item 1' },
+          { component: 'hr' },
+          {
+            text: 'Menu Item 2',
+            children: [
+              { text: 'Menu Item 2-1' },
+              {
+                text: 'Menu Item 2-2',
+                children: [
+                  { text: 'Menu Item 2-2-1' },
+                  { text: 'Menu Item 2-2-2', disabled: true },
+                  { component: 'hr' },
+                  { text: 'Menu Item 2-2-3' },
+                ],
+              },
+            ],
+          },
+          { text: 'Menu Item 3', disabled: true },
+        ];
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-context-menu position="bottom" style="--vaadin-context-menu-offset-top: 20px">
-      <div style="padding: 10px; border: solid 1px black; margin: 300px">Right click me</div>
-    </vaadin-context-menu>
+    <div style="display: flex; flex-direction: row; margin: 200px 100px 20px; justify-content: center">
+      <vaadin-context-menu theme="arrow" position="top" >
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">TOP: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="top-start" style="--vaadin-context-menu-offset-bottom: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">TOP START: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="top-end" style="--vaadin-context-menu-offset-bottom: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">TOP END: Right click me</div>
+      </vaadin-context-menu>
+    </div>
+
+    <div style="display: flex; flex-direction: row; margin: 50px 100px 20px; justify-content: center">
+      <vaadin-context-menu position="bottom" style="--vaadin-context-menu-offset-top: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">BOTTOM: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="bottom-start" style="--vaadin-context-menu-offset-top: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">BOTTOM START: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="bottom-end" style="--vaadin-context-menu-offset-top: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">BOTTOM END: Right click me</div>
+      </vaadin-context-menu>
+    </div>
+
+    <div style="display: flex; flex-direction: row; margin: 50px 100px 20px; justify-content: center">
+      <vaadin-context-menu position="start" style="--vaadin-context-menu-offset-end: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">START: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="start-top" style="--vaadin-context-menu-offset-end: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">START TOP: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="start-bottom" style="--vaadin-context-menu-offset-end: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">START BOTTOM: Right click me</div>
+      </vaadin-context-menu>
+    </div>
+
+    <div style="display: flex; flex-direction: row; margin: 50px 100px 200px; justify-content: center">
+      <vaadin-context-menu position="end" style="--vaadin-context-menu-offset-start: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">END: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="end-top" style="--vaadin-context-menu-offset-start: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">END TOP: Right click me</div>
+      </vaadin-context-menu>
+
+      <vaadin-context-menu position="end-bottom" style="--vaadin-context-menu-offset-start: 10px">
+        <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">END BOTTOM: Right click me</div>
+      </vaadin-context-menu>
+    </div>
   </body>
 </html>
