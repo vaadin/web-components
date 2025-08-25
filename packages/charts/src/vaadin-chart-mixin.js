@@ -1644,18 +1644,13 @@ export const ChartMixin = (superClass) =>
 
       // If chart element is a flexible item the chartContainer should be flex too
       if (isFlex) {
-        this.$.chart.setAttribute('style', 'flex: 1; ');
-        let style = '';
-        if (this.hasAttribute('style')) {
-          style = this.getAttribute('style');
-          if (!style.endsWith(';')) {
-            style += ';';
-          }
-        }
-        style += 'display: flex;';
-        this.setAttribute('style', style);
+        this.style.display = 'flex';
+        this.$.chart.style.flex = 1;
+        this.$.wrapper.style.display = 'flex';
       } else {
-        this.$.chart.setAttribute('style', 'height:100%; width:100%;');
+        this.style.display = null;
+        this.$.chart.style.display = null;
+        this.$.wrapper.style.display = null;
       }
     }
 
