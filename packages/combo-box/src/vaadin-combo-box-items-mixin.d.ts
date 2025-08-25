@@ -50,4 +50,11 @@ export declare class ComboBoxItemsMixinClass<TItem> {
    * @attr {string} item-value-path
    */
   itemValuePath: string;
+
+  /**
+   * Function that is used to generate the label for each item.
+   * Receives one argument:
+   * - `item` The item to generate the label for.
+   */
+  itemLabelGenerator: ((item: TItem) => string) | undefined;
 }

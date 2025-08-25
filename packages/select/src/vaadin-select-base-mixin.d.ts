@@ -108,6 +108,13 @@ export declare class SelectBaseMixinClass {
   noVerticalOverlap: boolean;
 
   /**
+   * Function that is used to generate the label for each item.
+   * Receives one argument:
+   * - `item` The item to generate the label for.
+   */
+  itemLabelGenerator: ((item: SelectItem) => string) | undefined;
+
+  /**
    * Requests an update for the content of the select.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *
