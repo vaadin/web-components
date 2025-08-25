@@ -17,7 +17,8 @@ vaadin-radio-button::part(radio) {
   transition: background-color 80ms;
 }
 
-vaadin-checkbox:not([checked], [indeterminate])::part(checkbox) vaadin-radio-button:not([checked])::part(radio) {
+vaadin-checkbox:not([checked], [indeterminate])::part(checkbox),
+vaadin-radio-button:not([checked])::part(radio) {
   background-clip: padding-box;
 }
 
