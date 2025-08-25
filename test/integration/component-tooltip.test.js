@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
+import { AccordionPanel } from '@vaadin/accordion/src/vaadin-accordion-panel.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { CheckboxGroup } from '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
@@ -34,6 +35,12 @@ before(() => {
 });
 
 [
+  {
+    tagName: AccordionPanel.is,
+    children: '<vaadin-accordion-heading slot="summary"></vaadin-accordion-heading>',
+    targetSelector: '[slot="summary"]',
+    position: 'bottom-start',
+  },
   { tagName: Button.is },
   { tagName: Checkbox.is, ariaTargetSelector: 'input' },
   {
