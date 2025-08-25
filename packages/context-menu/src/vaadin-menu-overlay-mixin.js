@@ -144,15 +144,6 @@ export const MenuOverlayMixin = (superClass) =>
         // Adjust position for centering the overlay
         // Duplicated logic from vaadin-popover-overlay-mixin.js, should be cleaned up
 
-        // Copy custom properties from the owner
-        if (this.owner) {
-          const style = getComputedStyle(this.owner);
-          ['top', 'bottom', 'start', 'end'].forEach((prop) => {
-            const propertyName = `--vaadin-context-menu-offset-${prop}`;
-            this.style.setProperty(propertyName, style.getPropertyValue(propertyName));
-          });
-        }
-
         // Center the overlay horizontally
         if (this.position === 'bottom' || this.position === 'top') {
           const targetRect = this.positionTarget.getBoundingClientRect();
@@ -164,8 +155,6 @@ export const MenuOverlayMixin = (superClass) =>
             const left = overlayRect.left + offset;
             if (left > 0) {
               this.style.left = `${left}px`;
-              // Center the pointer arrow horizontally
-              this.setAttribute('arrow-centered', '');
             }
           }
 
@@ -173,8 +162,6 @@ export const MenuOverlayMixin = (superClass) =>
             const right = parseFloat(this.style.right) + offset;
             if (right > 0) {
               this.style.right = `${right}px`;
-              // Center the pointer arrow horizontally
-              this.setAttribute('arrow-centered', '');
             }
           }
         }

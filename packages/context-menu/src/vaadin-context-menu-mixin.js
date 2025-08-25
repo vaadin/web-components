@@ -384,7 +384,6 @@ export const ContextMenuMixin = (superClass) =>
             this._overlayElement.position = this.position;
 
             // Configure overlay positioning
-            // Duplicated from vaadin-popover-position-mixin.js, should be cleaned up
             this._overlayElement.noHorizontalOverlap = [
               'start-top',
               'start',
