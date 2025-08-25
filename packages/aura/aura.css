@@ -14,16 +14,12 @@
 @import './src/components/input-container.css';
 @import './src/components/master-detail-layout.css';
 @import './src/components/notification.css';
+@import './src/components/overlay.css';
 @import './src/components/select.css';
 @import './src/components/side-nav.css';
 
 html {
   cursor: default;
-  --aura-overlay-shadow:
-    inset 0 0 0 1px hsla(0deg, 0%, 100%, max(5%, 3% + 4% * var(--aura-contrast))),
-    0 0 0 1px hsla(0, 0%, 0%, max(5%, 3% + 4% * var(--aura-contrast))),
-    0 8px 16px -3px
-      light-dark(oklch(from var(--aura-background-light) calc(l - (1 - l) * 0.9) calc(c / 10) h), hsla(0, 0%, 0%, 0.3));
 }
 
 ::view-transition {
@@ -43,14 +39,6 @@ html:has(vaadin-app-layout) {
     margin: 0;
     box-sizing: border-box;
   }
-}
-
-::part(overlay) {
-  border: 0;
-  box-shadow: var(--aura-overlay-shadow);
-  --vaadin-overlay-background: var(--aura-surface);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 
 /* vaadin-app-layout > vaadin-master-detail-layout::before {
