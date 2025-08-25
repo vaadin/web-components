@@ -25,7 +25,7 @@ registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description | Part name
+ * Attribute      | Description
  * ---------------|---------------------------------
  * `disabled`     | Set when the element is disabled
  * `focused`      | Set when the element is focused
