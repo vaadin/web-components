@@ -80,6 +80,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * `has-value`         | Set when the element has a value
  * `has-helper`        | Set when the element has helper text
  * `has-error-message` | Set when the element has an error message
+ * `has-tooltip`       | Set when the element has a slotted tooltip
  *
  * ### Internal components
  *

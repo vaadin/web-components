@@ -85,6 +85,7 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  * `has-value`         | Set when the element has a value
  * `has-helper`        | Set when the element has helper text
  * `has-error-message` | Set when the element has an error message
+ * `has-tooltip`       | Set when the element has a slotted tooltip
  *
  * You may also manually set `disabled` or `readonly` attribute on this component to make the label
  * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.

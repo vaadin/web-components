@@ -39,6 +39,7 @@ registerStyles('vaadin-avatar', avatarStyles, { moduleId: 'vaadin-avatar-styles'
  * `focus-ring`      | Set when the avatar is focused using the keyboard.
  * `focused`         | Set when the avatar is focused.
  * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
+ * `has-tooltip`     | Set when the element has a slotted tooltip.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

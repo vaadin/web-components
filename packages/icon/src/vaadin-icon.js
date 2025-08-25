@@ -53,6 +53,16 @@ registerStyles('vaadin-icon', iconStyles, { moduleId: 'vaadin-icon-styles' });
  * }
  * ```
  *
+ * ### Styling
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-tooltip`  | Set when the icon has a slotted tooltip
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes IconMixin
