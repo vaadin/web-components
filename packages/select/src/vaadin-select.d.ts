@@ -132,25 +132,30 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
  * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
  *
- * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
  *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and toggle button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `toggle-button`      | The toggle button
  *
- * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ * The following state attributes are available for styling:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
- *
- * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
- *
- * Attribute | Description                 | Part name
- * ----------|-----------------------------|-----------
- * `opened`  | Set when the select is open | :host
- *
- * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
- * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
- * - the `input-prevented` state attribute is not supported by `<vaadin-select>`.
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `invalid`            | Set when the element is invalid
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
  *
  * ### Internal components
  *
