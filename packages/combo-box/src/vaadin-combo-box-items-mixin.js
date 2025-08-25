@@ -109,6 +109,18 @@ export const ComboBoxItemsMixin = (superClass) =>
           value: 'value',
           sync: true,
         },
+
+        /**
+         * Function that is used to generate the label for each item.
+         * Receives one argument:
+         * - `item` The item to generate the label for.
+         *
+         * @type {(item: ComboBoxItem) => string}
+         */
+        itemLabelGenerator: {
+          type: Function,
+          observer: '_itemLabelGeneratorChanged',
+        },
       };
     }
 
@@ -161,6 +173,11 @@ export const ComboBoxItemsMixin = (superClass) =>
      * @override
      */
     _getItemLabel(item) {
+      // Use itemLabelGenerator if available
+      if (this.itemLabelGenerator && item) {
+        return this.itemLabelGenerator(item) || '';
+      }
+
       let label = item && this.itemLabelPath ? get(this.itemLabelPath, item) : undefined;
       if (label === undefined || label === null) {
         label = item ? item.toString() : '';
@@ -181,6 +198,13 @@ export const ComboBoxItemsMixin = (superClass) =>
     _itemLabelPathChanged(itemLabelPath) {
       if (typeof itemLabelPath !== 'string') {
         console.error('You should set itemLabelPath to a valid string');
+      }
+    }
+
+    /** @private */
+    _itemLabelGeneratorChanged() {
+      if (this._scroller) {
+        this._scroller.requestContentUpdate();
       }
     }
 
