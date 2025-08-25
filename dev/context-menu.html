@@ -31,13 +31,19 @@
           },
           { text: 'Menu Item 3', disabled: true },
         ];
+
+        menu.listenOn = menu.querySelector('div');
       });
     </script>
   </head>
 
   <body>
+    <vaadin-context-menu>
+      <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">MOUSE LOCATION: Right click me</div>
+    </vaadin-context-menu>
+
     <div style="display: flex; flex-direction: row; margin: 200px 100px 20px; justify-content: center">
-      <vaadin-context-menu theme="arrow" position="top" >
+      <vaadin-context-menu position="top" style="--vaadin-context-menu-offset-bottom: 10px">
         <div style="height:200px; width: 300px; padding: 10px; border: solid 1px black; margin: 20px">TOP: Right click me</div>
       </vaadin-context-menu>
 
