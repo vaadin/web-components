@@ -28,6 +28,8 @@ import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
+import KeyboardNavigation from 'highcharts/es-modules/Accessibility/KeyboardNavigation.js';
+import HTMLUtilities from 'highcharts/es-modules/Accessibility/Utils/HTMLUtilities.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
@@ -65,6 +67,35 @@ Pointer.prototype.onDocumentMouseMove = function (e) {
     !this.inClass(pEvt.composedPath()[0], 'highcharts-tracker')
   ) {
     this.reset();
+  }
+};
+
+// As the `mouseup` event is attached to the document element, the target will reference
+// the instance of the `vaadin-chart` element instead of the element the event originated from.
+// That causes some mishbehaviors, e.g. in a drilldown series, clicking in the point does not
+// drills down the series in some cases.
+// Change to check for the first element in the composed path as the target of the event.
+// Workaround for https://github.com/highcharts/highcharts/issues/23490
+//
+// TODO: Remove this monkeypatch once the referenced issue is fixed
+const { simulatedEventTarget } = HTMLUtilities;
+KeyboardNavigation.prototype.onMouseUp = function (e) {
+  delete this.isClickingChart;
+  if (!this.keyboardReset && e.relatedTarget !== simulatedEventTarget) {
+    const chart = this.chart;
+    const target = e.composedPath()[0];
+    if (!target || !chart.container.contains(target)) {
+      const curMod = this.modules && this.modules[this.currentModuleIx || 0];
+      if (curMod && curMod.terminate) {
+        curMod.terminate();
+      }
+      this.currentModuleIx = 0;
+    }
+    if (chart.focusElement) {
+      chart.focusElement.removeFocusBorder();
+      delete chart.focusElement;
+    }
+    this.keyboardReset = true;
   }
 };
 
