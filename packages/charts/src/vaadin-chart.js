@@ -149,6 +149,7 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} point-drag - Fired while dragging a point.
  * @fires {CustomEvent} xaxes-extremes-set - Fired when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when the minimum and maximum is set for the Y axis.
+ * @fires {CustomEvent} legend-item-click - Fired when the legend item is clicked.
  *
  * @customElement
  * @extends HTMLElement
@@ -178,7 +179,9 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   /** @protected */
   render() {
     return html`
-      <div id="chart"></div>
+      <div id="wrapper" style="height: 100%; width: 100%;">
+        <div id="chart" style="height: 100%; width: 100%;"></div>
+      </div>
       <slot id="slot"></slot>
     `;
   }

@@ -50,9 +50,9 @@ describe('vaadin-chart styling', () => {
         type: 'column',
         data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
       });
-      const rects = chart.$.chart.querySelectorAll('.highcharts-series > rect');
-      expect(rects).to.have.lengthOf(12);
-      expect(getComputedStyle(rects[0]).stroke).to.equal('rgb(255, 0, 0)');
+      const point = chart.$.chart.querySelectorAll('.highcharts-series > .highcharts-point');
+      expect(point).to.have.lengthOf(12);
+      expect(getComputedStyle(point[0]).stroke).to.equal('rgb(255, 0, 0)');
     });
   });
 

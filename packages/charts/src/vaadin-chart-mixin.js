@@ -35,12 +35,12 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './helpers.js';
 
-['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
+['exportChart', 'localExport', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
-    Highcharts.fireEvent(this, 'beforeExport');
+  Highcharts.wrap(Highcharts.Exporting.prototype, methodName, function (proceed, ...args) {
+    Highcharts.fireEvent(this.chart, 'beforeExport');
     const result = proceed.apply(this, args);
-    Highcharts.fireEvent(this, 'afterExport');
+    Highcharts.fireEvent(this.chart, 'afterExport');
     return result;
   });
   /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
@@ -57,7 +57,7 @@ Pointer.prototype.onDocumentMouseMove = function (e) {
   // If we're outside, hide the tooltip
   if (
     chartPosition &&
-    (!tooltip || !tooltip.isStickyOnContact()) &&
+    (!tooltip || !tooltip.isSticky) &&
     !chart.isInsidePlot(pEvt.chartX - chart.plotLeft, pEvt.chartY - chart.plotTop, {
       visiblePlotOnly: true,
     }) &&
@@ -301,11 +301,13 @@ export const ChartMixin = (superClass) =>
         args.forEach((arg) => inflateFunctions(arg));
         functionToCall.apply(this.configuration, args);
         if (redrawCharts) {
+          const lang = Highcharts.defaultOptions.lang;
           Highcharts.charts.forEach((c) => {
             // Ignore `undefined` values that are preserved in the array
             // after their corresponding chart instances are destroyed.
             // See https://github.com/vaadin/flow-components/issues/6607
             if (c !== undefined) {
+              c.time.lang = lang;
               c.redraw();
             }
           });
@@ -449,7 +451,13 @@ export const ChartMixin = (superClass) =>
       return options;
     }
 
-    /**
+    get __legendEventNames() {
+      return {
+        itemClick: 'legend-item-click',
+      };
+    }
+
+    /*
      * Name of the chart events to add to the configuration and its corresponding event for the chart element
      * @private
      */
@@ -915,6 +923,8 @@ export const ChartMixin = (superClass) =>
       } else {
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
+
+      this.__forceResize();
     }
 
     /** @private */
@@ -928,7 +938,7 @@ export const ChartMixin = (superClass) =>
       super.disconnectedCallback();
 
       if (this.configuration) {
-        this._jsonConfigurationBuffer = this.configuration.userOptions;
+        this._jsonConfigurationBuffer = deepMerge({}, this.configuration.userOptions);
       }
 
       queueMicrotask(() => {
@@ -1120,6 +1130,7 @@ export const ChartMixin = (superClass) =>
       this.__initSeriesEventsListeners(configuration);
       this.__initPointsEventsListeners(configuration);
       this.__initAxisEventsListeners(configuration, true);
+      this.__initLegendEventsListeners(configuration);
       this.__initAxisEventsListeners(configuration, false);
     }
 
@@ -1136,6 +1147,11 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __initPointsEventsListeners(configuration) {
       this.__createEventListeners(this.__pointEventNames, configuration, 'plotOptions.series.point.events', 'point');
+    }
+
+    /** @private */
+    __initLegendEventsListeners(configuration) {
+      this.__createEventListeners(this.__legendEventNames, configuration, 'legend.events', 'legend');
     }
 
     /** @private */
@@ -1220,7 +1236,7 @@ export const ChartMixin = (superClass) =>
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
 
-            if (event.type === 'legendItemClick' && self._visibilityTogglingDisabled) {
+            if (['legendItemClick', 'itemClick'].includes(event.type) && self._visibilityTogglingDisabled) {
               return false;
             }
           };
@@ -1244,7 +1260,15 @@ export const ChartMixin = (superClass) =>
     }
 
     /** @private */
-    __hasConfigurationBuffer(path) {
+    __hasConfigurationBuffer(path, property) {
+      if (
+        property &&
+        path.startsWith(property) &&
+        this._jsonConfigurationBuffer &&
+        Array.isArray(this._jsonConfigurationBuffer[property])
+      ) {
+        return get(path.split('.')[1], this._jsonConfigurationBuffer[property][0]);
+      }
       return get(path, this._jsonConfigurationBuffer) !== undefined;
     }
 
@@ -1296,7 +1320,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategories(categories, config) {
-      if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories')) {
+      if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories', 'xAxis')) {
         return;
       }
 
@@ -1305,7 +1329,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategoryMax(max, config) {
-      if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max')) {
+      if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max', 'xAxis')) {
         return;
       }
 
@@ -1319,7 +1343,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategoryMin(min, config) {
-      if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min')) {
+      if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min', 'xAxis')) {
         return;
       }
 
@@ -1620,24 +1644,43 @@ export const ChartMixin = (superClass) =>
 
       // If chart element is a flexible item the chartContainer should be flex too
       if (isFlex) {
-        this.$.chart.setAttribute('style', 'flex: 1; ');
-        let style = '';
-        if (this.hasAttribute('style')) {
-          style = this.getAttribute('style');
-          if (!style.endsWith(';')) {
-            style += ';';
-          }
-        }
-        style += 'display: flex;';
-        this.setAttribute('style', style);
+        this.style.display = 'flex';
+        this.$.wrapper.style.display = 'flex';
+        this.$.chart.style.flex = 1;
       } else {
-        this.$.chart.setAttribute('style', 'height:100%; width:100%;');
+        this.style.display = '';
+        this.$.wrapper.style.display = '';
+        this.$.chart.style.flex = '';
       }
     }
 
     /** @private */
     __showWarn(propertyName, acceptedValues) {
       console.warn(`<vaadin-chart> Acceptable values for "${propertyName}" are ${acceptedValues}`);
+    }
+
+    /**
+     * @private
+     * Workaround for https://github.com/highcharts/highcharts/issues/23443
+     * Forces a resize in the chart to make it calculate the labels positions
+     * correctly in a chart with "organization" series
+     *
+     * TODO: Remove when the related ticket is fixed
+     */
+    __forceResize() {
+      const chart = this.configuration;
+      const { options } = chart;
+      const hasOrganizationSeries =
+        options.chart.styledMode &&
+        (options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization'));
+      if (!hasOrganizationSeries) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        chart.setSize(chart.chartWidth - 10, chart.chartHeight);
+        chart.setSize(null, null);
+      });
     }
 
     /** @private */

@@ -136,8 +136,7 @@ describe('chart', () => {
 
       await nextFrame();
 
-      const chart = Highcharts.chart(exporting, element.configuration.userOptions);
-      element.configuration.series.forEach((series) => chart.addSeries(series.userOptions));
+      Highcharts.chart(exporting, element.configuration.userOptions);
       prepareExport(element);
 
       await aTimeout(500);
