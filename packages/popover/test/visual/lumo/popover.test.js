@@ -24,35 +24,47 @@ describe('popover', () => {
     await nextRender();
   });
 
-  [
-    'top-start',
-    'top',
-    'top-end',
-    'bottom-start',
-    'bottom',
-    'bottom-end',
-    'start-top',
-    'start',
-    'start-bottom',
-    'end-top',
-    'end',
-    'end-bottom',
-  ].forEach((position) => {
-    it(position, async () => {
-      element.position = position;
-      await nextUpdate(element);
-      target.click();
-      await nextRender();
-      await visualDiff(div, position);
-    });
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
 
-    it(`${position} arrow`, async () => {
-      element.setAttribute('theme', 'arrow');
-      element.position = position;
-      await nextUpdate(element);
-      target.click();
-      await nextRender();
-      await visualDiff(div, `${position}-arrow`);
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      [
+        'top-start',
+        'top',
+        'top-end',
+        'bottom-start',
+        'bottom',
+        'bottom-end',
+        'start-top',
+        'start',
+        'start-bottom',
+        'end-top',
+        'end',
+        'end-bottom',
+      ].forEach((position) => {
+        it(position, async () => {
+          element.position = position;
+          await nextUpdate(element);
+          target.click();
+          await nextRender();
+          await visualDiff(div, `${dir}-${position}`);
+        });
+
+        it(`${position} arrow`, async () => {
+          element.setAttribute('theme', 'arrow');
+          element.position = position;
+          await nextUpdate(element);
+          target.click();
+          await nextRender();
+          await visualDiff(div, `${dir}-${position}-arrow`);
+        });
+      });
     });
   });
 
