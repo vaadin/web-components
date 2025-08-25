@@ -100,6 +100,7 @@ assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
 assertType<(item: TestComboBoxItem) => string>(narrowedComboBox.itemClassNameGenerator);
+assertType<((item: TestComboBoxItem) => string) | undefined>(narrowedComboBox.itemLabelGenerator);
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);

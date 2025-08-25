@@ -59,24 +59,47 @@
       </vaadin-combo-box>
     </section>
 
+    <section class="section">
+      <h2 class="heading">Item Label Generator</h2>
+      <vaadin-combo-box id="label-generator" label="Select product" clear-button-visible></vaadin-combo-box>
+    </section>
+
     <script type="module">
       document.querySelectorAll('vaadin-combo-box').forEach((comboBox) => {
-        comboBox.dataProvider = async (params, callback) => {
-          const index = params.page * params.pageSize;
-          const response = await fetch(
-            `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
-          );
-          if (response.ok) {
-            const { result, size } = await response.json();
-            // Emulate network latency for demo purpose
-            setTimeout(() => {
-              callback(result, size);
-            }, 1000);
-          }
-        };
+        if (comboBox.id === 'label-generator') {
+          // Example with itemLabelGenerator
+          comboBox.items = [
+            { id: 'p1', name: 'Laptop', category: 'Electronics', price: 999.99, inStock: true },
+            { id: 'p2', name: 'Mouse', category: 'Electronics', price: 29.99, inStock: true },
+            { id: 'p3', name: 'Keyboard', category: 'Electronics', price: 79.99, inStock: false },
+            { id: 'p4', name: 'Monitor', category: 'Electronics', price: 399.99, inStock: true },
+            { id: 'p5', name: 'Desk Chair', category: 'Furniture', price: 249.99, inStock: true },
+            { id: 'p6', name: 'Standing Desk', category: 'Furniture', price: 599.99, inStock: false },
+          ];
+          comboBox.itemValuePath = 'id';
+          comboBox.itemLabelGenerator = (item) => {
+            const stockStatus = item.inStock ? '✅' : '❌';
+            return `${item.name} - $${item.price} ${stockStatus}`;
+          };
+          comboBox.value = 'p1';
+        } else {
+          comboBox.dataProvider = async (params, callback) => {
+            const index = params.page * params.pageSize;
+            const response = await fetch(
+              `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
+            );
+            if (response.ok) {
+              const { result, size } = await response.json();
+              // Emulate network latency for demo purpose
+              setTimeout(() => {
+                callback(result, size);
+              }, 1000);
+            }
+          };
 
-        if (!comboBox.placeholder) {
-          comboBox.selectedItem = 'Andorra';
+          if (!comboBox.placeholder) {
+            comboBox.selectedItem = 'Andorra';
+          }
         }
       });
     </script>
