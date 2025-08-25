@@ -408,6 +408,7 @@ describe('vaadin-chart', () => {
 
       layout.style.height = '200px';
       await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(200);
 
       expect(layout.getBoundingClientRect().height).to.be.equal(200);
       expect(charts[0].configuration.chartHeight).to.be.equal(200);
