@@ -19,10 +19,10 @@ html {
   );
   --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(40% + 10% * var(--aura-contrast)), transparent);
 
-  --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(8% + 15% * var(--aura-contrast)), transparent);
+  --vaadin-border-color: color-mix(in srgb, var(--_color-base) calc(8% + 12% * var(--aura-contrast)), transparent);
   --vaadin-border-color-subtle: light-dark(
     color-mix(in srgb, var(--_color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
-    color-mix(in srgb, var(--_color-base) max(6%, 4% + 6% * var(--aura-contrast)), transparent)
+    color-mix(in srgb, var(--_color-base) max(6%, 4% + 5% * var(--aura-contrast)), transparent)
   );
 
   --aura-neutral-saturation: 0.2;
