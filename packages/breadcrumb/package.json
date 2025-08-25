@@ -1,0 +1,51 @@
+{
+  "name": "@vaadin/breadcrumb",
+  "version": "25.0.0-alpha16",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-breadcrumb",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/breadcrumb"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-breadcrumb.js",
+  "module": "vaadin-breadcrumb.js",
+  "type": "module",
+  "files": [
+    "src",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "web-types.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "breadcrumb",
+    "navigation",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
+    "@vaadin/a11y-base": "25.0.0-alpha16",
+    "@vaadin/component-base": "25.0.0-alpha16",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha16",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/chai-plugins": "25.0.0-alpha16",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha16",
+    "sinon": "^21.0.0"
+  },
+  "web-types": [
+    "web-types.json"
+  ]
+}
