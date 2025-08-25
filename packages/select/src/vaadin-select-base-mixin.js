@@ -135,6 +135,17 @@ export const SelectBaseMixin = (superClass) =>
           value: false,
         },
 
+        /**
+         * Function that is used to generate the label for each item.
+         * Receives one argument:
+         * - `item` The item to generate the label for.
+         *
+         * @type {(item: SelectItem) => string}
+         */
+        itemLabelGenerator: {
+          type: Function,
+        },
+
         /** @private */
         _phone: Boolean,
 
@@ -436,11 +447,17 @@ export const SelectBaseMixin = (superClass) =>
     __attachSelectedItem(selected) {
       let labelItem;
 
-      const label = selected.getAttribute('label');
-      if (label) {
-        labelItem = this.__createItemElement({ label });
+      // Check if we should use itemLabelGenerator
+      if (this.itemLabelGenerator && selected.__dataItem) {
+        const generatedLabel = this.itemLabelGenerator(selected.__dataItem);
+        labelItem = this.__createItemElement({ label: generatedLabel }, true);
       } else {
-        labelItem = selected.cloneNode(true);
+        const label = selected.getAttribute('label');
+        if (label) {
+          labelItem = this.__createItemElement({ label }, true);
+        } else {
+          labelItem = selected.cloneNode(true);
+        }
       }
 
       // Store reference to the original item
@@ -454,12 +471,20 @@ export const SelectBaseMixin = (superClass) =>
 
     /**
      * @param {!SelectItem} item
+     * @param {boolean} skipGenerator - Skip itemLabelGenerator to avoid double processing
      * @private
      */
-    __createItemElement(item) {
+    __createItemElement(item, skipGenerator = false) {
       const itemElement = document.createElement(item.component || 'vaadin-select-item');
-      if (item.label) {
-        itemElement.textContent = item.label;
+      let label = item.label;
+
+      // Use itemLabelGenerator if available and not skipped
+      if (this.itemLabelGenerator && item.component !== 'hr' && !skipGenerator && !item.label) {
+        label = this.itemLabelGenerator(item);
+      }
+
+      if (label) {
+        itemElement.textContent = label;
       }
       if (item.value) {
         itemElement.value = item.value;
@@ -544,7 +569,7 @@ export const SelectBaseMixin = (superClass) =>
       if (this._hasContent(selected)) {
         this.__attachSelectedItem(selected);
       } else if (this.placeholder) {
-        const item = this.__createItemElement({ label: this.placeholder });
+        const item = this.__createItemElement({ label: this.placeholder }, true);
         this.__appendValueItemElement(item, valueButton);
         valueButton.setAttribute('placeholder', '');
       }
@@ -648,7 +673,10 @@ export const SelectBaseMixin = (superClass) =>
 
       listBox.textContent = '';
       this.items.forEach((item) => {
-        listBox.appendChild(this.__createItemElement(item));
+        const itemElement = this.__createItemElement(item);
+        // Store the original data item on the element
+        itemElement.__dataItem = item;
+        listBox.appendChild(itemElement);
       });
     }
 

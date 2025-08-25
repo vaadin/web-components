@@ -40,6 +40,11 @@
     </section>
 
     <section class="section">
+      <h2 class="heading">Item Label Generator</h2>
+      <vaadin-select id="label-generator" label="Select user" value="2"></vaadin-select>
+    </section>
+
+    <section class="section">
       <h2 class="heading">States</h2>
       <vaadin-select
         label="Read-only"
@@ -85,6 +90,15 @@
               root,
             );
           };
+        } else if (select.id === 'label-generator') {
+          // Example with itemLabelGenerator
+          select.items = [
+            { value: '1', firstName: 'John', lastName: 'Doe', role: 'Admin' },
+            { value: '2', firstName: 'Jane', lastName: 'Smith', role: 'User' },
+            { value: '3', firstName: 'Bob', lastName: 'Johnson', role: 'Manager' },
+            { value: '4', firstName: 'Alice', lastName: 'Williams', role: 'User' },
+          ];
+          select.itemLabelGenerator = (item) => `${item.firstName} ${item.lastName} (${item.role})`;
         } else {
           select.items = [
             { label: 'Show all', value: 'all' },
