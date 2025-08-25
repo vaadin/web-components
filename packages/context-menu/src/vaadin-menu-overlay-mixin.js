@@ -142,7 +142,6 @@ export const MenuOverlayMixin = (superClass) =>
       } else if (this.positionTarget && this.position) {
         // This is a root overlay with custom positioning
         // Adjust position for centering the overlay
-        // Duplicated logic from vaadin-popover-overlay-mixin.js, should be cleaned up
 
         // Center the overlay horizontally
         if (this.position === 'bottom' || this.position === 'top') {
