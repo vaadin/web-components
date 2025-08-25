@@ -35,14 +35,14 @@ registerStyles('vaadin-radio-button', radioButtonStyles, { moduleId: 'vaadin-rad
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `active`     | Set when the radio button is pressed down, either with a pointer or the keyboard. | `:host`
- * `disabled`   | Set when the radio button is disabled. | `:host`
- * `focus-ring` | Set when the radio button is focused using the keyboard. | `:host`
- * `focused`    | Set when the radio button is focused. | `:host`
- * `checked`    | Set when the radio button is checked. | `:host`
- * `has-label`  | Set when the radio button has a label. | `:host`
+ * Attribute    | Description
+ * -------------|--------------------------
+ * `active`     | Set when the radio button is pressed, either with a pointer or the keyboard.
+ * `disabled`   | Set when the radio button is disabled.
+ * `focus-ring` | Set when the radio button is focused using the keyboard.
+ * `focused`    | Set when the radio button is focused.
+ * `checked`    | Set when the radio button is checked.
+ * `has-label`  | Set when the radio button has a label.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

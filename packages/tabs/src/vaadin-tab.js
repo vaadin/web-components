@@ -25,14 +25,14 @@ registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled` | Set to a disabled tab | :host
- * `focused` | Set when the element is focused | :host
- * `focus-ring` | Set when the element is keyboard focused | :host
- * `selected` | Set when the tab is selected | :host
- * `active` | Set when mousedown or enter/spacebar pressed | :host
- * `orientation` | Set to `horizontal` or `vertical` depending on the direction of items  | :host
+ * Attribute      | Description
+ * ---------------|---------------------------------
+ * `disabled`     | Set when the element is disabled
+ * `focused`      | Set when the element is focused
+ * `focus-ring`   | Set when the element is keyboard focused
+ * `selected`     | Set when the tab is selected
+ * `active`       | Set when mousedown or enter/spacebar pressed
+ * `orientation`  | Set to `horizontal` or `vertical` depending on the direction of items
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

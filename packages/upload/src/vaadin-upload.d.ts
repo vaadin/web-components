@@ -134,13 +134,13 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description | Part name
- * ---|---|---
- * `disabled` | Set when the element is disabled | `:host`
- * `nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`
- * `dragover` | A file is being dragged over the element | `:host`
- * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
- * `max-files-reached` | The maximum number of files that the user is allowed to add to the upload has been reached | `:host`
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `nodrop`             | Set when drag and drop is disabled (e.g., on touch devices)
+ * `dragover`           | Set when the file is being dragged over the element
+ * `dragover-valid`     | Set when the dragged file is valid with `maxFiles` and `accept` criteria
+ * `max-files-reached`  | Set when maximum number of files that the user is allowed to add has been reached
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

@@ -51,10 +51,10 @@ registerStyles('vaadin-overlay', overlayStyles, { moduleId: 'vaadin-overlay-styl
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description | Part
- * ---|---|---
- * `opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
- * `closing` | Applied just before the overlay is detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
+ * Attribute | Description
+ * ----------|------------
+ * `opening` | Applied just after the overlay is opened. You can apply a CSS animation for this state.
+ * `closing` | Applied just before the overlay is closed. You can apply a CSS animation for this state.
  *
  * The following custom CSS properties are available for styling:
  *

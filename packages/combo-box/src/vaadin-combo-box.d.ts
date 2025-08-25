@@ -185,10 +185,10 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute | Description | Part name
- * ----------|-------------|------------
- * `opened`  | Set when the combo box dropdown is open | :host
- * `loading` | Set when new items are expected | :host
+ * Attribute | Description
+ * ----------|----------------------------------------
+ * `opened`  | Set when the combo box dropdown is open
+ * `loading` | Set when new items are expected
  *
  * If you want to replace the default `<input>` and its container with a custom implementation to get full control
  * over the input field, consider using the [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
