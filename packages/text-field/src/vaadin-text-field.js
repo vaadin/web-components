@@ -57,18 +57,20 @@ import { TextFieldMixin } from './vaadin-text-field-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description
- * --------------------|---------------------------------
- * `disabled`          | Set when the element is disabled
- * `has-value`         | Set when the element has a value
- * `has-label`         | Set when the element has a label
- * `has-helper`        | Set when the element has helper text or slot
- * `has-error-message` | Set when the element has an error message
- * `invalid`           | Set when the element is invalid
- * `input-prevented`   | Temporarily set when invalid input is prevented
- * `focused`           | Set when the element is focused
- * `focus-ring`        | Set when the element is keyboard focused
- * `readonly`          | Set when the element is readonly
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `invalid`            | Set when the element is invalid
+ * `input-prevented`    | Temporarily set when invalid input is prevented
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ *
+ * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
