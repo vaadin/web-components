@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { defineLit, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 import { TooltipController } from '../src/tooltip-controller.js';
@@ -166,7 +166,7 @@ describe('TooltipController', () => {
       expect(tooltip._position).to.eql('top-start');
     });
 
-    it('should fire tooltip-changed event on the host when the tooltip is added', async () => {
+    it('should fire tooltip-changed event when the tooltip is added', async () => {
       const spy = sinon.spy();
       controller.addEventListener('tooltip-changed', spy);
       host.appendChild(tooltip);
@@ -174,7 +174,7 @@ describe('TooltipController', () => {
       expect(spy).to.be.calledOnce;
     });
 
-    it('should fire tooltip-changed event on the host when the tooltip is removed', async () => {
+    it('should fire tooltip-changed event when the tooltip is removed', async () => {
       const spy = sinon.spy();
       controller.addEventListener('tooltip-changed', spy);
       host.appendChild(tooltip);
@@ -183,6 +183,33 @@ describe('TooltipController', () => {
       host.removeChild(tooltip);
       await nextFrame();
       expect(spy).to.be.calledTwice;
+    });
+
+    it('should fire tooltip-changed event on tooltip content-changed', async () => {
+      const spy = sinon.spy();
+      controller.addEventListener('tooltip-changed', spy);
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      spy.resetHistory();
+      fire(tooltip, 'content-changed');
+      await nextFrame();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not fire tooltip-changed event on tooltip content-changed after removing', async () => {
+      const spy = sinon.spy();
+      controller.addEventListener('tooltip-changed', spy);
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      host.removeChild(tooltip);
+      await nextFrame();
+
+      spy.resetHistory();
+      fire(tooltip, 'content-changed');
+      await nextFrame();
+      expect(spy).to.be.not.called;
     });
   });
 });

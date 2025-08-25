@@ -105,6 +105,8 @@ export const DialogBaseMixin = (superClass) =>
       if (!this.hasAttribute('role')) {
         this.role = 'dialog';
       }
+
+      this.setAttribute('tabindex', '0');
     }
 
     /** @protected */
@@ -113,6 +115,14 @@ export const DialogBaseMixin = (superClass) =>
 
       if (props.has('overlayRole')) {
         this.role = this.overlayRole || 'dialog';
+      }
+
+      if (props.has('modeless')) {
+        if (!this.modeless) {
+          this.setAttribute('aria-modal', 'true');
+        } else {
+          this.removeAttribute('aria-modal');
+        }
       }
     }
 

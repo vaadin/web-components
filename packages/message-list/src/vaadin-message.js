@@ -57,6 +57,12 @@ class Message extends MessageMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
     return messageStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`

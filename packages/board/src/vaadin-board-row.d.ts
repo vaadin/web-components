@@ -44,6 +44,9 @@ import { BoardRowMixin } from './vaadin-board-row-mixin.js';
  * ----------------|-------------|-------------
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
+ *
+ * @deprecated `<vaadin-board-row>` is deprecated and will be removed in Vaadin 26.
+ * Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.
  */
 declare class BoardRow extends BoardRowMixin(ElementMixin(HTMLElement)) {}
 

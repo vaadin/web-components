@@ -273,7 +273,7 @@ export const FormLayoutMixin = (superClass) =>
       this.__currentLayout.disconnect();
     }
 
-    /** @override */
+    /** @protected */
     get slotStyles() {
       return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
     }

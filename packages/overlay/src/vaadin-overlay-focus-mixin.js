@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -48,7 +47,6 @@ export const OverlayFocusMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__ariaModalController = new AriaModalController(this, () => this._modalRoot);
       this.__focusTrapController = new FocusTrapController(this);
       this.__focusRestorationController = new FocusRestorationController();
     }
@@ -66,18 +64,8 @@ export const OverlayFocusMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.addController(this.__ariaModalController);
       this.addController(this.__focusTrapController);
       this.addController(this.__focusRestorationController);
-    }
-
-    /**
-     * Override to specify another element used as a modality root,
-     * e.g. the overlay's owner element, rather than overlay itself.
-     * @protected
-     */
-    get _modalRoot() {
-      return this;
     }
 
     /**
@@ -90,24 +78,12 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
-     * Override not use a controller for setting `aria-hidden` on
-     * elements outside the overlay, e.g. when using `aria-modal`.
-     * @protected
-     */
-    _useAriaHidden() {
-      return true;
-    }
-
-    /**
      * Release focus and restore focus after the overlay is closed.
      *
      * @protected
      */
     _resetFocus() {
       if (this.focusTrap) {
-        if (this._useAriaHidden) {
-          this.__ariaModalController.close();
-        }
         this.__focusTrapController.releaseFocus();
       }
 
@@ -135,9 +111,6 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _trapFocus() {
       if (this.focusTrap) {
-        if (this._useAriaHidden) {
-          this.__ariaModalController.showModal();
-        }
         this.__focusTrapController.trapFocus(this._focusTrapRoot);
       }
     }

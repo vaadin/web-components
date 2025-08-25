@@ -40,19 +40,20 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
   }
 
   /**
-   * Override method from OverlayFocusMixin to use the owner (CRUD element) as modal root
+   * Override method from OverlayFocusMixin to use dialog as focus trap root
    * @protected
    * @override
    */
-  get _modalRoot() {
-    return this.owner;
+  get _focusTrapRoot() {
+    // Do not use `owner` since that points to `vaadin-crud`
+    return this.getRootNode().host;
   }
 
   /** @protected */
   render() {
     return html`
       <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <section id="resizerContainer" class="resizer-container">
           <header part="header">
             <slot name="header"></slot>
@@ -99,12 +100,17 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
       :host([opened]),
       :host([opening]),
       :host([closing]) {
-        display: contents !important;
+        display: block !important;
+        position: absolute;
       }
 
       :host,
       :host([hidden]) {
         display: none !important;
+      }
+
+      :host(:focus) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       }
     `;
   }

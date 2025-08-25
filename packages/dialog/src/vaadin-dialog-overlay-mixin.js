@@ -53,15 +53,6 @@ export const DialogOverlayMixin = (superClass) =>
       return this.owner;
     }
 
-    /**
-     * Override method from OverlayFocusMixin to use owner as modal root
-     * @protected
-     * @override
-     */
-    get _modalRoot() {
-      return this.owner;
-    }
-
     /** @protected */
     ready() {
       super.ready();

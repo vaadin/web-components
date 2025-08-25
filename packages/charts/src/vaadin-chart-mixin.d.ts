@@ -195,7 +195,7 @@ export type ChartPointDropEvent = CustomEvent<{ point: Point; originalEvent: Cha
 export type ChartPointDragEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
- * Fired when when the minimum and maximum is set for the X axis.
+ * Fired when the minimum and maximum is set for the X axis.
  */
 export type ChartXaxesExtremesSetEvent = CustomEvent<{
   axis: Axis;
@@ -206,7 +206,7 @@ export type ChartXaxesExtremesSetEvent = CustomEvent<{
 }>;
 
 /**
- * Fired when when the minimum and maximum is set for the Y axis.
+ * Fired when the minimum and maximum is set for the Y axis.
  */
 export type ChartYaxesExtremesSetEvent = CustomEvent<{
   axis: Axis;

@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { getElementItem, itemsEqual, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 
 /**
@@ -20,6 +20,8 @@ export class WidgetResizeController {
     this.__resizedElementRemoveObserver = new MutationObserver(() => this.__restoreResizedElement());
     this.__touchMoveCancelListener = (e) => e.preventDefault();
     addListener(host, 'track', (e) => this.__onTrack(e));
+    // Do not set touch-action: none to allow scroll on mobile
+    setTouchAction(host, '');
     host.addEventListener('item-resize', (e) => this.__itemResize(e));
   }
 

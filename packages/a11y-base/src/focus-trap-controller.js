@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getFocusableElements, isElementFocused } from './focus-utils.js';
+import { getFocusableElements, isElementFocused, isKeyboardActive } from './focus-utils.js';
 
 const instances = [];
 
@@ -87,7 +87,7 @@ export class FocusTrapController {
     instances.push(this);
 
     if (this.__focusedElementIndex === -1) {
-      this.__focusableElements[0].focus();
+      this.__focusableElements[0].focus({ focusVisible: isKeyboardActive() });
     }
   }
 
@@ -147,7 +147,7 @@ export class FocusTrapController {
     const currentIndex = this.__focusedElementIndex;
     const nextIndex = (focusableElements.length + currentIndex + step) % focusableElements.length;
     const element = focusableElements[nextIndex];
-    element.focus();
+    element.focus({ focusVisible: true });
     if (element.localName === 'input') {
       element.select();
     }

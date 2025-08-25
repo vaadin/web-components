@@ -4,15 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_dashboard {
-  #grid[item-resizing] {
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  ::slotted(vaadin-dashboard-widget-wrapper) {
-    display: contents;
-  }
-
   :host {
     --_widget-opacity: 1;
   }

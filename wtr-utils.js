@@ -17,8 +17,7 @@ const argv = minimist(process.argv.slice(2));
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows, which you can specify either by setting the `size` property, or by providing it to the second argument of the `dataProvider` function `callback` call.',
-  'The Material theme is deprecated and will be removed in Vaadin 25.',
-  /^WARNING: Since Vaadin .* is deprecated.*/u,
+  /is deprecated/u,
   /Lit is in dev mode/u,
 ];
 

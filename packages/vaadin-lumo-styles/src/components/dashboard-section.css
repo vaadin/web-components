@@ -5,48 +5,21 @@
  */
 @media lumo_components_dashboard-section {
   :host {
-    display: grid;
-    position: relative;
-    grid-template-columns: subgrid;
-    --_section-column: 1 / calc(var(--_effective-col-count) + 1);
-    grid-column: var(--_section-column) !important;
     gap: var(--_gap, 1rem);
-    /* Dashboard section header height */
-    --_section-header-height: minmax(0, auto);
-    grid-template-rows: var(--_section-header-height) repeat(auto-fill, var(--_row-height));
-    grid-auto-rows: var(--_row-height);
     --_section-outline-offset: calc(min(var(--_gap), var(--_padding)) / 3);
     --_focus-ring-offset: calc((var(--_section-outline-offset) - var(--_focus-ring-width)));
     border-radius: var(--lumo-border-radius-l);
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  ::slotted(*) {
-    --_item-column: span min(var(--vaadin-dashboard-widget-colspan, 1), var(--_effective-col-count, var(--_col-count)));
-
-    grid-column: var(--_item-column);
-    --_item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
-    grid-row: var(--_item-row);
+    border: none;
+    margin: 0;
+    padding: 0;
   }
 
   header {
-    grid-column: var(--_section-column);
     margin-bottom: calc(-1 * var(--_section-outline-offset));
     line-height: var(--lumo-line-height-s);
     padding-inline: var(--lumo-space-s);
     min-height: var(--lumo-size-l);
     align-items: center;
-  }
-
-  :host::before {
-    z-index: 2 !important;
-  }
-
-  ::slotted(vaadin-dashboard-widget-wrapper) {
-    display: contents;
   }
 
   [part='title'] {
@@ -108,6 +81,5 @@
 
   [part~='move-forward-button'] {
     inset-inline-end: calc(-1 * var(--_section-outline-offset));
-    transform: translateY(-50%);
   }
 }

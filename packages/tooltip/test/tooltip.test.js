@@ -103,6 +103,23 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
     });
+
+    it('should fire content-changed event when text changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '' });
+    });
   });
 
   describe('generator', () => {
@@ -146,6 +163,41 @@ describe('vaadin-tooltip', () => {
       tooltip.generator = () => '';
       await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should fire content-changed event when generator changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.generator = () => 'Foo';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.generator = () => '';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '' });
+    });
+
+    it('should fire content-changed event when context changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.context = { text: 'Foo' };
+      tooltip.generator = (context) => context.text;
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.context = { text: 'Bar' };
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Bar' });
     });
   });
 
@@ -218,7 +270,19 @@ describe('vaadin-tooltip', () => {
       expect(ariaTarget.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
 
-    it('should remove aria-describedby when the ariaTarget is cleared', async () => {
+    it('should remove aria-describedby and set it on the target when ariaTarget is set to undefined', async () => {
+      tooltip.target = target;
+      tooltip.ariaTarget = ariaTarget;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaTarget = undefined;
+      await nextUpdate(tooltip);
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+    });
+
+    it('should remove aria-describedby and not set it on the target when ariaTarget is set to null', async () => {
       tooltip.target = target;
       tooltip.ariaTarget = ariaTarget;
       await nextUpdate(tooltip);
@@ -227,7 +291,7 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
-      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
     });
 
     it('should set aria-describedby when providing multiple elements', async () => {

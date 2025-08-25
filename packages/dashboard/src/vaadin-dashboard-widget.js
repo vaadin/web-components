@@ -115,6 +115,12 @@ class DashboardWidget extends DashboardItemMixin(
     return dashboardWidgetStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   static get properties() {
     return {
       /**

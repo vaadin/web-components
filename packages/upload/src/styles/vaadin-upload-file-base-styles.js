@@ -15,16 +15,13 @@ export const uploadFileStyles = css`
     padding: var(--vaadin-upload-file-padding, var(--vaadin-padding-s));
   }
 
+  :host(:focus-visible) {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
   [hidden] {
     display: none;
-  }
-
-  [part='row'] {
-    display: contents;
-  }
-
-  [part='info'] {
-    display: contents;
   }
 
   [part='done-icon']:not([hidden]),
@@ -95,6 +92,10 @@ export const uploadFileStyles = css`
     height: var(--vaadin-upload-file-button-height, auto);
     line-height: var(--vaadin-upload-file-button-line-height, inherit);
     padding: var(--vaadin-upload-file-button-padding, var(--vaadin-padding-container));
+  }
+
+  button:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
   [part='start-button']::before,

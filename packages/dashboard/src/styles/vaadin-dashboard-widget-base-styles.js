@@ -56,6 +56,7 @@ const widgetStyles = css`
     inset-inline-end: 0;
     z-index: 1;
     overflow: hidden;
+    touch-action: none;
     cursor: nwse-resize;
     --icon: var(--_vaadin-icon-resize);
   }

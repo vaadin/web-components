@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, esc, fixtureSync, listenOnce, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { aTimeout, click, fixtureSync, listenOnce, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -36,14 +37,15 @@ describe('vaadin-dialog', () => {
     });
 
     ['opened', 'opening', 'closing'].forEach((state) => {
-      it(`should use display: contents when ${state} attribute is set`, () => {
+      it(`should use display: block when ${state} attribute is set`, () => {
         dialog.setAttribute(state, '');
-        expect(getComputedStyle(dialog).display).to.equal('contents');
+        expect(getComputedStyle(dialog).display).to.equal('block');
       });
     });
 
     it('should use display: none when hidden while opened', async () => {
       dialog.opened = true;
+      await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
       dialog.hidden = true;
       await nextRender();
       expect(getComputedStyle(dialog).display).to.equal('none');
@@ -51,14 +53,22 @@ describe('vaadin-dialog', () => {
   });
 
   describe('opened', () => {
-    let dialog, backdrop, overlay;
+    let dialog, focusable, backdrop, overlay;
 
     beforeEach(async () => {
-      dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
+      [dialog, focusable] = fixtureSync(`
+        <div>
+          <vaadin-dialog opened></vaadin-dialog>
+          <input />
+        </div>
+      `).children;
       await nextRender();
 
       dialog.renderer = (root) => {
-        root.innerHTML = '<div>Simple dialog</div>';
+        root.innerHTML = `
+          <div>Simple dialog</div>
+          <input />
+        `;
       };
       await nextUpdate(dialog);
 
@@ -73,15 +83,35 @@ describe('vaadin-dialog', () => {
 
     describe('no-close-on-esc', () => {
       it('should close itself on ESC press by default', async () => {
-        esc(document.body);
+        await sendKeys({ press: 'Escape' });
         await nextUpdate(dialog);
         expect(dialog.opened).to.be.false;
       });
 
       it('should not close itself on ESC press when no-close-on-esc is true', async () => {
         dialog.noCloseOnEsc = true;
-        await nextUpdate(dialog);
-        esc(document.body);
+        await sendKeys({ press: 'Escape' });
+        expect(dialog.opened).to.be.true;
+      });
+
+      it('should close on Escape press when modeless and dialog itself is focused', async () => {
+        dialog.modeless = true;
+        dialog.focus();
+        await sendKeys({ press: 'Escape' });
+        expect(dialog.opened).to.be.false;
+      });
+
+      it('should close on Escape press when modeless and content element is focused', async () => {
+        dialog.modeless = true;
+        dialog.querySelector('input').focus();
+        await sendKeys({ press: 'Escape' });
+        expect(dialog.opened).to.be.false;
+      });
+
+      it('should not close on Escape press when modeless and not focused', async () => {
+        dialog.modeless = true;
+        focusable.focus();
+        await sendKeys({ press: 'Escape' });
         expect(dialog.opened).to.be.true;
       });
     });
@@ -235,13 +265,13 @@ describe('vaadin-dialog', () => {
 
     it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
-      await nextRender();
-      expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(getDeepActiveElement()).to.equal(dialog);
     });
 
     it('should restore focus on dialog close', async () => {
       dialog.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       dialog.opened = false;
       await nextRender();
       expect(getDeepActiveElement()).to.equal(button);

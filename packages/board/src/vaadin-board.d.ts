@@ -28,6 +28,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  *   </vaadin-board-row>
  * </vaadin-board>
  * ```
+ *
+ * @deprecated `<vaadin-board>` is deprecated and will be removed in Vaadin 26.
+ * Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.
  */
 declare class Board extends ElementMixin(HTMLElement) {
   /**

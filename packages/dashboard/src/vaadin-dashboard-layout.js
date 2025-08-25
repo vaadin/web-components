@@ -72,6 +72,12 @@ class DashboardLayout extends DashboardLayoutMixin(
     return dashboardLayoutStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`<div id="grid"><slot></slot></div>`;
