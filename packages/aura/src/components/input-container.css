@@ -1,0 +1,4 @@
+html,
+[theme] {
+  --vaadin-input-field-background: var(--aura-surface);
+}
