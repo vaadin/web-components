@@ -85,7 +85,7 @@ const popoverOverlay = css`
   }
 
   :host([theme~='arrow']) {
-    --_default-offset: calc(4px + var(--_arrow-size) / 2);
+    --_default-offset: var(--_arrow-size);
   }
 
   :host([theme~='arrow']) [part='arrow'] {
