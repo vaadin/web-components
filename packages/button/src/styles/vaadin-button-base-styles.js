@@ -31,10 +31,8 @@ export const buttonStyles = css`
     color: var(--vaadin-button-text-color, var(--vaadin-color));
     background: var(--vaadin-button-background, var(--vaadin-background-container));
     background-origin: border-box;
-    border: var(
-      --vaadin-button-border,
-      var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--vaadin-border-color-subtle))
-    );
+    border: var(--vaadin-button-border-width, 1px) solid
+      var(--vaadin-button-border-color, var(--vaadin-border-color-subtle));
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
   }
@@ -62,9 +60,8 @@ export const buttonStyles = css`
   }
 
   :host([theme~='tertiary']) {
-    --vaadin-button-text-color: var(--_vaadin-button-text-color);
-    --vaadin-button-background: transparent;
-    --vaadin-button-border-color: transparent;
+    background: transparent;
+    border-color: transparent;
   }
 
   :host([disabled]) {
