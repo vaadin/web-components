@@ -45,6 +45,17 @@ class UserTagsOverlay extends PositionMixin(
       </div>
     `;
   }
+
+  /**
+   * Override method inherited from `PositionMixin` to not
+   * close overlay when scrolled out of viewport, as user
+   * tags has its own logic to observe target visibility.
+   * @protected
+   * @override
+   */
+  _onTargetVisibilityChange() {
+    // Do nothing
+  }
 }
 
 defineCustomElement(UserTagsOverlay);

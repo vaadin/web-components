@@ -107,6 +107,17 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
+     * Override method inherited from `PositionMixin` to not
+     * close on position target visibility change as it does
+     * breaks when re-rendering menu items while opened.
+     * @protected
+     * @override
+     */
+    _onTargetVisibilityChange() {
+      // Do nothing
+    }
+
+    /**
      * @protected
      * @override
      */

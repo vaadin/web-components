@@ -42,6 +42,23 @@ class TooltipOverlay extends PopoverOverlayMixin(
       </div>
     `;
   }
+
+  /**
+   * Override method inherited from `PositionMixin` to handle
+   * target visibility change in the tooltip logic.
+   * @param {boolean} isIntersecting
+   * @protected
+   * @override
+   */
+  _onTargetVisibilityChange(isIntersecting) {
+    this.dispatchEvent(
+      new CustomEvent('target-visibility-change', {
+        detail: {
+          isVisible: isIntersecting,
+        },
+      }),
+    );
+  }
 }
 
 defineCustomElement(TooltipOverlay);

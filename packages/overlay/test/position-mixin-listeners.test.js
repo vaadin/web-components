@@ -215,6 +215,18 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.false;
     });
 
+    it('should close overlay when target is scrolled out of viewport', async () => {
+      target.style.position = 'static';
+      await nextFrame();
+      await nextFrame();
+
+      const scrollableAncestor = wrapper.shadowRoot.querySelector('#scrollable');
+      scrollableAncestor.scrollTop = 200;
+      await nextFrame();
+      await nextFrame();
+      expect(overlay.opened).to.be.false;
+    });
+
     ['document', 'visual viewport', 'ancestor'].forEach((name) => {
       describe(name, () => {
         let scrollableNode;
