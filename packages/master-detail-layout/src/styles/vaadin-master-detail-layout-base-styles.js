@@ -140,6 +140,7 @@ export const masterDetailLayoutStyles = css`
 
   [part='backdrop'] {
     background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
+    forced-color-adjust: none;
   }
 
   :host(:is([drawer], [stack])) [part='detail'] {
@@ -159,7 +160,11 @@ export const masterDetailLayoutStyles = css`
 
   @media (forced-colors: active) {
     :host(:is([drawer], [stack])) [part='detail'] {
-      outline: 3px solid;
+      outline: 3px solid !important;
+    }
+
+    [part='detail'] {
+      background: Canvas !important;
     }
   }
 `;
