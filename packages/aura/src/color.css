@@ -32,7 +32,7 @@ html {
     from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) min(c * var(--_neutral-c) * 2, 0.4) h
   );
   --aura-background-dark: oklch(
-    from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) min(c * var(--_neutral-c), 0.1) h
+    from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) min(c * var(--_neutral-c) * 0.75, 0.1) h
   );
   --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
   --_aura-background-alt: oklch(

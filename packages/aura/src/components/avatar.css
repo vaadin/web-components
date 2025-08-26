@@ -1,0 +1,15 @@
+html {
+  --vaadin-avatar-border-color: var(--vaadin-border-color-subtle);
+  --vaadin-avatar-background: var(--aura-border-color-subtle);
+  --vaadin-avatar-font-weight: var(--aura-font-weight-emphasis);
+  --vaadin-avatar-font-size: var(--aura-font-size-m);
+}
+
+vaadin-avatar:not([img]) {
+  /* --_shade: color-mix(in srgb, var(--vaadin-border-color) 20%, transparent); */
+  background-image: linear-gradient(
+    light-dark(transparent, var(--_shade)),
+    transparent 50%,
+    light-dark(var(--_shade), transparent)
+  );
+}
