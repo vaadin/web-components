@@ -9,6 +9,7 @@ export const menuOverlayStyles = css`
   :host {
     align-items: flex-start;
     justify-content: flex-start;
+    --_default-offset: var(--vaadin-context-menu-default-offset, 0);
   }
 
   :host([right-aligned]),
@@ -31,21 +32,21 @@ export const menuOverlayStyles = css`
 
   :host([position^='top'][top-aligned]) [part='overlay'],
   :host([position^='bottom'][top-aligned]) [part='overlay'] {
-    margin-top: var(--vaadin-context-menu-offset-top, 0);
+    margin-top: var(--vaadin-context-menu-offset-top, var(--_default-offset));
   }
 
   :host([position^='top'][bottom-aligned]) [part='overlay'],
   :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-    margin-bottom: var(--vaadin-context-menu-offset-bottom, 0);
+    margin-bottom: var(--vaadin-context-menu-offset-bottom, var(--_default-offset));
   }
 
   :host([position^='start'][start-aligned]) [part='overlay'],
   :host([position^='end'][start-aligned]) [part='overlay'] {
-    margin-inline-start: var(--vaadin-context-menu-offset-start, 0);
+    margin-inline-start: var(--vaadin-context-menu-offset-start, var(--_default-offset));
   }
 
   :host([position^='start'][end-aligned]) [part='overlay'],
   :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-context-menu-offset-end, 0);
+    margin-inline-end: var(--vaadin-context-menu-offset-end, var(--vaadin-context-menu-default-offset));
   }
 `;
