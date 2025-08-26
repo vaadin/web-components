@@ -36,7 +36,6 @@ const tooltipStyles = (scope) => css`
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)}  .highcharts-tooltip foreignObject span {
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-color)));
-    font-size: 0.8em;
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-tracker {
@@ -45,7 +44,7 @@ const tooltipStyles = (scope) => css`
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-header {
-    font-size: 0.8em;
+    font-size: 0.85em;
     color: var(--highcharts-neutral-color-60, var(--vaadin-color-subtle));
   }
 
@@ -151,12 +150,8 @@ export const chartStyles = css`
     height: 100%;
     text-align: left;
     line-height: normal;
-    z-index: 0; /* #1072 */
+    z-index: 0; /* highcharts/highcharts#1072 */
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji',
-      'Segoe UI Symbol', sans-serif;
-    font-size: 1rem;
     user-select: none;
     touch-action: manipulation;
     outline: none;
@@ -202,7 +197,6 @@ export const chartStyles = css`
 
     .highcharts-label text {
       fill: var(--highcharts-neutral-color-80, var(--_data-label));
-      font-size: 0.8em;
     }
 
     .highcharts-button-box {
@@ -226,13 +220,13 @@ export const chartStyles = css`
     /* Titles */
     .highcharts-title {
       fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-title-label, var(--_label)));
-      font-size: 1.2em;
+      font-size: 1.6em;
       font-weight: bold;
     }
 
     .highcharts-subtitle {
       fill: var(--highcharts-neutral-color-60, var(--_secondary-label));
-      font-size: 0.8em;
+      font-size: 1em;
     }
 
     /* Axes */
@@ -247,13 +241,12 @@ export const chartStyles = css`
 
     .highcharts-axis-title {
       fill: var(--highcharts-neutral-color-60, var(--_axis-title));
-      font-size: 0.8em;
+      font-size: 1em;
     }
 
     .highcharts-axis-labels {
       fill: var(--highcharts-neutral-color-80, var(--_axis-label));
       cursor: default;
-      font-size: 0.8em;
     }
 
     .highcharts-grid-line {
@@ -291,7 +284,7 @@ export const chartStyles = css`
     .highcharts-credits {
       cursor: pointer;
       fill: var(--highcharts-neutral-color-40, var(--_disabled-label));
-      font-size: 0.6em;
+      font-size: 0.7em;
       transition:
         fill 250ms,
         font-size 250ms;
@@ -299,7 +292,7 @@ export const chartStyles = css`
 
     .highcharts-credits:hover {
       fill: var(--highcharts-neutral-color-100, black);
-      font-size: 0.7em;
+      font-size: 0.8em;
     }
 
     ${unsafeCSS(tooltipStyles(''))};
@@ -495,8 +488,7 @@ export const chartStyles = css`
     .highcharts-data-label text,
     .highcharts-data-label span,
     text.highcharts-data-label {
-      font-size: 0.7em;
-      font-weight: bold;
+      font-size: 0.9em;
     }
 
     .highcharts-data-label-box {
@@ -660,7 +652,7 @@ export const chartStyles = css`
     .highcharts-legend-item > text,
     .highcharts-legend-item span {
       fill: var(--highcharts-neutral-color-80, var(--_data-label));
-      font-size: 0.8em;
+      font-size: 1em;
       cursor: pointer;
       stroke-width: 0;
     }
@@ -708,7 +700,7 @@ export const chartStyles = css`
 
     .highcharts-bubble-legend-labels {
       fill: var(--highcharts-neutral-color-80, var(--_data-label));
-      font-size: 0.7em;
+      font-size: 0.95em;
     }
 
     /* Loading */
@@ -753,7 +745,7 @@ export const chartStyles = css`
     }
 
     .highcharts-plot-line-label {
-      font-size: 0.8em;
+      font-size: 1em;
     }
 
     /* Highcharts More and modules */
@@ -877,7 +869,7 @@ export const chartStyles = css`
 
     .highcharts-navigator-xaxis.highcharts-axis-labels {
       fill: var(--highcharts-neutral-color-100, var(--_secondary-label));
-      font-size: 0.7em;
+      font-size: 0.95em;
       opacity: 0.6;
     }
 
@@ -926,7 +918,7 @@ export const chartStyles = css`
 
     .highcharts-button text {
       fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-label, var(--_label)));
-      font-size: 0.8em;
+      font-size: 1em;
     }
 
     .highcharts-button-hover {
@@ -985,7 +977,7 @@ export const chartStyles = css`
 
     .highcharts-range-input text {
       fill: var(--highcharts-neutral-color-80, var(--_data-label));
-      font-size: 0.8em;
+      font-size: 1em;
     }
 
     .highcharts-range-input {
@@ -1005,7 +997,7 @@ export const chartStyles = css`
 
     .highcharts-crosshair-label text {
       fill: var(--highcharts-background-color, var(--_bg));
-      font-size: 1.7em;
+      font-size: 0.9em;
     }
 
     .highcharts-crosshair-label .highcharts-label-box {
@@ -1160,7 +1152,7 @@ export const chartStyles = css`
       border-radius: 3px;
       color: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-label, var(--_label)));
       cursor: pointer;
-      font-size: 0.8em;
+      font-size: 1em;
       list-style-type: none;
       padding: 0.5em;
       transition:
@@ -1200,7 +1192,7 @@ export const chartStyles = css`
     /* No-data module */
     .highcharts-no-data text {
       font-weight: bold;
-      font-size: 0.8em;
+      font-size: 1em;
       fill: var(--highcharts-neutral-color-60, var(--_secondary-label));
     }
 
@@ -1309,7 +1301,7 @@ export const chartStyles = css`
 
     .highcharts-annotation-label text {
       fill: var(--highcharts-neutral-color-10, var(--_label));
-      font-size: 0.8em;
+      font-size: 1em;
     }
 
     /* A11y module */
