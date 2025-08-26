@@ -176,6 +176,21 @@
                 const viewId = link.href.split('#')[1];
                 const view = getView(viewId);
                 view.setAttribute('slot', 'detail');
+
+                if (viewId === 'components') {
+                  view.querySelector('vaadin-avatar-group').items = [
+                    { name: 'AA' },
+                    { name: 'BB' },
+                    { name: 'CC' },
+                    { name: 'DD' },
+                    { name: 'EE' },
+                    { name: 'FF' },
+                    { name: 'GG' },
+                    { name: 'HH' },
+                    { name: 'II' },
+                  ];
+                }
+
                 const mdl = e.target.closest('vaadin-master-detail-layout');
                 mdl._setDetail(view);
               }
@@ -486,7 +501,7 @@
             </div>
 
             <div class="component" theme="surface">
-              <vaadin-avatar-group maxItemsVisible="5" class="w-auto"></vaadin-avatar-group>
+              <vaadin-avatar-group></vaadin-avatar-group>
             </div>
 
             <div class="component wide" theme="surface">

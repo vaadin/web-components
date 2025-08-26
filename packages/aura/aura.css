@@ -6,6 +6,7 @@
 @import './src/typography.css';
 
 @import './src/components/app-layout.css';
+@import './src/components/avatar.css';
 @import './src/components/badge.css';
 @import './src/components/card.css';
 @import './src/components/checkbox-radio.css';
@@ -41,18 +42,6 @@ html:has(vaadin-app-layout) {
     box-sizing: border-box;
   }
 }
-
-/* vaadin-app-layout > vaadin-master-detail-layout::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid transparent;
-  background: linear-gradient(to bottom right, hsl(0 0 100 / 0.2), hsl(0 0 100 / 0.07), hsl(0 0 100 / 0.2)) border-box;
-  mask: linear-gradient(black,black) border-box, linear-gradient(black,black) padding-box;
-  mask-composite: subtract;
-  pointer-events: none;
-} */
 
 vaadin-scroller[slot='drawer'] {
   scrollbar-width: thin;
