@@ -84,7 +84,7 @@
       </vaadin-multi-select-combo-box>
     </div>
 
-    <div style="margin-top: 2rem;">
+    <div style="margin-top: 2rem">
       <h3>Object items with itemLabelGenerator</h3>
       <vaadin-multi-select-combo-box
         id="object-items"
@@ -174,11 +174,9 @@
         { id: 8, firstName: 'Fiona', lastName: 'Green', department: 'Marketing', role: 'Marketing Manager' },
       ];
       objectItemsComboBox.itemIdPath = 'id';
-      objectItemsComboBox.itemLabelGenerator = (item) => `${item.firstName} ${item.lastName} (${item.department} - ${item.role})`;
-      objectItemsComboBox.selectedItems = [
-        objectItemsComboBox.items[0],
-        objectItemsComboBox.items[2],
-      ];
+      objectItemsComboBox.itemLabelGenerator = (item) =>
+        `${item.firstName} ${item.lastName} (${item.department} - ${item.role})`;
+      objectItemsComboBox.selectedItems = [objectItemsComboBox.items[0], objectItemsComboBox.items[2]];
 
       // Event listeners for changes
       comboBox.addEventListener('custom-value-set', (event) => {
