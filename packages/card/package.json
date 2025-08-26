@@ -38,6 +38,7 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
+    "@vaadin/avatar": "25.0.0-alpha16",
     "@vaadin/chai-plugins": "25.0.0-alpha16",
     "@vaadin/test-runner-commands": "25.0.0-alpha16",
     "@vaadin/testing-helpers": "^2.0.0",
