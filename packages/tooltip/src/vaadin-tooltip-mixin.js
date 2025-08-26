@@ -396,13 +396,6 @@ export const TooltipMixin = (superClass) =>
       this.__onKeyDown = this.__onKeyDown.bind(this);
       this.__onOverlayOpen = this.__onOverlayOpen.bind(this);
 
-      this.__targetVisibilityObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => this.__onTargetVisibilityChange(entry.isIntersecting));
-        },
-        { threshold: 0 },
-      );
-
       this._stateController = new TooltipStateController(this);
     }
 
@@ -473,11 +466,6 @@ export const TooltipMixin = (superClass) =>
       target.addEventListener('focusin', this.__onFocusin);
       target.addEventListener('focusout', this.__onFocusout);
       target.addEventListener('mousedown', this.__onMouseDown);
-
-      // Wait before observing to avoid Chrome issue.
-      requestAnimationFrame(() => {
-        this.__targetVisibilityObserver.observe(target);
-      });
     }
 
     /**
@@ -491,8 +479,6 @@ export const TooltipMixin = (superClass) =>
       target.removeEventListener('focusin', this.__onFocusin);
       target.removeEventListener('focusout', this.__onFocusout);
       target.removeEventListener('mousedown', this.__onMouseDown);
-
-      this.__targetVisibilityObserver.unobserve(target);
     }
 
     /** @private */
@@ -636,12 +622,13 @@ export const TooltipMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __onTargetVisibilityChange(isVisible) {
+    /** @protected */
+    __onTargetVisibilityChange(event) {
       if (this.manual) {
         return;
       }
 
+      const { isVisible } = event.detail;
       const oldHidden = this.__isTargetHidden;
       this.__isTargetHidden = !isVisible;
 

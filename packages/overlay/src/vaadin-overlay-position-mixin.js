@@ -26,6 +26,17 @@ const targetResizeObserver = new ResizeObserver((entries) => {
   });
 });
 
+const targetVisibilityObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.target.__overlay) {
+        entry.target.__overlay._onTargetVisibilityChange(entry.isIntersecting);
+      }
+    });
+  },
+  { threshold: 0 },
+);
+
 /**
  * @polymerMixin
  */
@@ -187,11 +198,13 @@ export const PositionMixin = (superClass) =>
       if (positionTarget) {
         positionTarget.__overlay = null;
         targetResizeObserver.unobserve(positionTarget);
+        targetVisibilityObserver.unobserve(positionTarget);
 
         if (opened) {
           this.__addUpdatePositionEventListeners();
           positionTarget.__overlay = this;
           targetResizeObserver.observe(positionTarget);
+          targetVisibilityObserver.observe(positionTarget);
         }
       }
 
@@ -217,11 +230,23 @@ export const PositionMixin = (superClass) =>
     /** @private */
     __onScroll(e) {
       // If the scroll event occurred inside the overlay, ignore it.
-      if (e.target instanceof Node && this.contains(e.target)) {
+      if (e.target instanceof Node && this._contentRoot.contains(e.target)) {
         return;
       }
 
       this._updatePosition();
+    }
+
+    /**
+     * @param {boolean} isIntersecting
+     * @protected
+     */
+    _onTargetVisibilityChange(isIntersecting) {
+      if (isIntersecting) {
+        this._updatePosition();
+      } else {
+        this.opened = false;
+      }
     }
 
     _updatePosition() {
