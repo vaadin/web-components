@@ -3,7 +3,6 @@ import { click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helper
 import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
-import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart exporting', () => {
@@ -15,8 +14,8 @@ describe('vaadin-chart exporting', () => {
   }
 
   before(() => {
-    // Prevent form submit
-    sinon.stub(HttpUtilities, 'post');
+    // Prevent downloading on anchor click
+    sinon.stub(HTMLAnchorElement.prototype, 'click');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
   });
