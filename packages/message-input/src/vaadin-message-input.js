@@ -23,6 +23,17 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * ### Styling
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|---------------------------------
+ * `disabled`     | Set when the element is disabled
+ * `has-tooltip`  | Set when the element has a slotted tooltip
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes MessageInputMixin

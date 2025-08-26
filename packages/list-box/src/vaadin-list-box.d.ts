@@ -53,6 +53,12 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEvent
  * ------------------|------------------------
  * `items`           | The items container
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|---------------------------------
+ * `has-tooltip`  | Set when the element has a slotted tooltip
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.

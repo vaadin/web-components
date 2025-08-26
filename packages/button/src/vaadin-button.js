@@ -31,14 +31,15 @@ registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles'
  * `prefix`  | A slot for content before the label (e.g. an icon).
  * `suffix`  | A slot for content after the label (e.g. an icon).
  *
- * The following attributes are available for styling:
+ * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `active`     | Set when the button is pressed down, either with mouse, touch or the keyboard.
- * `disabled`   | Set when the button is disabled.
- * `focus-ring` | Set when the button is focused using the keyboard.
- * `focused`    | Set when the button is focused.
+ * Attribute      | Description
+ * ---------------|-------------
+ * `active`       | Set when the button is pressed down, either with mouse, touch or the keyboard
+ * `disabled`     | Set when the button is disabled
+ * `focus-ring`   | Set when the button is focused using the keyboard
+ * `focused`      | Set when the button is focused
+ * `has-tooltip`  | Set when the button has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

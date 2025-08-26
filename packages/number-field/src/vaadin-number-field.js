@@ -47,6 +47,7 @@ registerStyles('vaadin-number-field', [inputFieldShared, numberFieldStyles], {
  * `has-label`          | Set when the element has a label
  * `has-helper`         | Set when the element has helper text or slot
  * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
  * `invalid`            | Set when the element is invalid
  * `input-prevented`    | Temporarily set when invalid input is prevented
  * `focused`            | Set when the element is focused

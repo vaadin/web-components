@@ -283,6 +283,16 @@ describe('vaadin-avatar', () => {
         avatar.focus();
         expect(overlay.opened).to.be.true;
       });
+
+      it('should set has-tooltip attribute on the avatar', () => {
+        expect(avatar.hasAttribute('has-tooltip')).to.be.true;
+      });
+
+      it('should remove has-tooltip attribute from the avata when withTooltip is set to false ', async () => {
+        avatar.withTooltip = false;
+        await nextUpdate(avatar);
+        expect(avatar.hasAttribute('has-tooltip')).to.be.false;
+      });
     });
   });
 

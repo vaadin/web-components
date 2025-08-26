@@ -33,6 +33,7 @@ registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
  * `selected`     | Set when the tab is selected
  * `active`       | Set when mousedown or enter/spacebar pressed
  * `orientation`  | Set to `horizontal` or `vertical` depending on the direction of items
+ * `has-tooltip`  | Set when the tab has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
