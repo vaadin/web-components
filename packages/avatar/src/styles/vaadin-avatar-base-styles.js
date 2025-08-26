@@ -80,4 +80,14 @@ export const avatarStyles = css`
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc((var(--vaadin-focus-ring-width)) * -1);
   }
+
+  @media (forced-colors: active) {
+    :host {
+      border-color: Canvas !important;
+    }
+
+    [part='icon'] {
+      background: CanvasText !important;
+    }
+  }
 `;
