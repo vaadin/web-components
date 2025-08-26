@@ -384,36 +384,10 @@ export const ContextMenuMixin = (superClass) =>
             this._overlayElement.position = this.position;
 
             // Configure overlay positioning
-            this._overlayElement.noHorizontalOverlap = [
-              'start-top',
-              'start',
-              'start-bottom',
-              'end-top',
-              'end',
-              'end-bottom',
-            ].includes(this.position);
-            this._overlayElement.noVerticalOverlap = [
-              'top-start',
-              'top-end',
-              'top',
-              'bottom-start',
-              'bottom',
-              'bottom-end',
-            ].includes(this.position);
-            this._overlayElement.horizontalAlign = [
-              'top-end',
-              'bottom-end',
-              'start-top',
-              'start',
-              'start-bottom',
-            ].includes(this.position)
-              ? 'end'
-              : 'start';
-            this._overlayElement.verticalAlign = ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(
-              this.position,
-            )
-              ? 'bottom'
-              : 'top';
+            this._overlayElement.noHorizontalOverlap = this.__noHorizontalOverlap();
+            this._overlayElement.noVerticalOverlap = this.__noVerticalOverlap();
+            this._overlayElement.horizontalAlign = this.__horizontalAlign();
+            this._overlayElement.verticalAlign = this.__verticalAlign();
           }
 
           // Hide overlay until it is fully rendered and positioned
@@ -421,6 +395,30 @@ export const ContextMenuMixin = (superClass) =>
           this._setOpened(true);
         }
       }
+    }
+
+    /** @private */
+    __noHorizontalOverlap() {
+      return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(this.position);
+    }
+
+    /** @private */
+    __noVerticalOverlap() {
+      return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(this.position);
+    }
+
+    /** @private */
+    __horizontalAlign() {
+      const isExpectedPosition = ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(
+        this.position,
+      );
+      return isExpectedPosition ? 'end' : 'start';
+    }
+
+    /** @private */
+    __verticalAlign() {
+      const isExpectedPosition = ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(this.position);
+      return isExpectedPosition ? 'bottom' : 'top';
     }
 
     /** @private */
