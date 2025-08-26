@@ -22,7 +22,13 @@
   "files": [
     "src",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
