@@ -127,7 +127,7 @@ export const appLayoutStyles = css`
   }
 
   [part='backdrop'] {
-    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.5));
+    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
   }
 
   :host(:not([drawer-opened])) [part='backdrop'] {

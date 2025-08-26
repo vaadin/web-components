@@ -139,7 +139,7 @@ export const masterDetailLayoutStyles = css`
   /* Decorative/visual styles */
 
   [part='backdrop'] {
-    background: var(--vaadin-master-detail-layout-backdrop, rgba(0, 0, 0, 0.2));
+    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
   }
 
   :host(:is([drawer], [stack])) [part='detail'] {
