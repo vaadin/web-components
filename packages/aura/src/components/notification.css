@@ -4,6 +4,7 @@ html {
 }
 
 vaadin-notification-card::part(overlay) {
+  --aura-surface-level: 3;
   --aura-surface-opacity: 0.7;
   --vaadin-notification-background: var(--aura-surface);
 
