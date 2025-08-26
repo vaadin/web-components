@@ -27,6 +27,17 @@ export const avatarStyles = css`
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     position: relative;
+    font-weight: var(--vaadin-avatar-font-weight, 400);
+    font-size: var(--vaadin-avatar-font-size, inherit);
+  }
+
+  /* Overlay border on top of image and icon as well */
+  :host::before {
+    position: absolute;
+    content: '';
+    inset: 0;
+    border-radius: inherit;
+    border: var(--vaadin-avatar-border-width, 1px) solid var(--vaadin-avatar-border-color, transparent);
   }
 
   :host([role='button']) {
@@ -61,11 +72,8 @@ export const avatarStyles = css`
   }
 
   :host([has-color-index])::before {
-    position: absolute;
-    content: '';
-    inset: 0;
-    border-radius: inherit;
-    border: 2px solid var(--vaadin-avatar-user-color);
+    --vaadin-avatar-border-width: 2px;
+    --vaadin-avatar-border-color: var(--vaadin-avatar-user-color);
   }
 
   :host([focus-ring]) {
