@@ -47,19 +47,19 @@ describe('scrolling mode', () => {
   });
 
   describe('overflow attribute', () => {
-    it('bottom end right', async () => {
+    it('bottom end', async () => {
       grid.scrollToIndex(0);
       await nextFrame();
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('bottom end right');
+      expect(grid.getAttribute('overflow')).to.equal('bottom end');
     });
 
-    it('bottom start left', async () => {
+    it('bottom start', async () => {
       grid.scrollToIndex(0);
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
       await nextFrame();
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('bottom start left');
+      expect(grid.getAttribute('overflow')).to.equal('bottom start');
     });
 
     it('bottom top', async () => {
@@ -70,14 +70,6 @@ describe('scrolling mode', () => {
       expect(grid.getAttribute('overflow')).to.contain('bottom');
     });
 
-    it('left right', async () => {
-      grid.$.table.scrollLeft = 1;
-      await nextFrame();
-      flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.contain('left');
-      expect(grid.getAttribute('overflow')).to.contain('right');
-    });
-
     it('start end', async () => {
       grid.$.table.scrollLeft = 1;
       await nextFrame();
@@ -86,19 +78,19 @@ describe('scrolling mode', () => {
       expect(grid.getAttribute('overflow')).to.contain('end');
     });
 
-    it('top end right', async () => {
+    it('top end', async () => {
       scrollToEnd(grid);
       await nextFrame();
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('top end right');
+      expect(grid.getAttribute('overflow')).to.equal('top end');
     });
 
-    it('top start left', async () => {
+    it('top start', async () => {
       scrollToEnd(grid);
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
       await nextFrame();
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('top start left');
+      expect(grid.getAttribute('overflow')).to.equal('top start');
     });
 
     it('update on resize', async () => {
@@ -110,7 +102,7 @@ describe('scrolling mode', () => {
       grid.style.width = '50px';
       await nextResize(grid);
       await nextFrame();
-      expect(grid.getAttribute('overflow')).to.equal('bottom end right');
+      expect(grid.getAttribute('overflow')).to.equal('bottom end');
     });
 
     describe('RTL', () => {
