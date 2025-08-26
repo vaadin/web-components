@@ -23,7 +23,8 @@
     "src",
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "web-types.json"
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -46,6 +47,7 @@
     "sinon": "^21.0.0"
   },
   "web-types": [
-    "web-types.json"
+    "web-types.json",
+    "web-types.lit.json"
   ]
 }
