@@ -11,11 +11,15 @@ export const selectOverlayStyles = css`
     justify-content: flex-start;
   }
 
-  :host(:not([phone])) [part='overlay'] {
+  [part='overlay'] {
     min-width: var(--vaadin-select-overlay-width, var(--_vaadin-select-overlay-default-width));
   }
 
   [part='content'] {
     padding: var(--vaadin-item-overlay-padding, 4px);
+  }
+
+  [part='backdrop'] {
+    background: transparent;
   }
 `;
