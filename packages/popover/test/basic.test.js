@@ -614,6 +614,38 @@ describe('popover', () => {
     });
   });
 
+  describe('dimensions set before attach', () => {
+    beforeEach(() => {
+      popover = document.createElement('vaadin-popover');
+    });
+
+    afterEach(() => {
+      popover.remove();
+    });
+
+    it('should apply overlay width when set before attach', async () => {
+      popover.width = '300px';
+      document.body.appendChild(popover);
+      await nextRender();
+
+      popover.opened = true;
+      await oneEvent(popover.$.overlay, 'vaadin-overlay-open');
+
+      expect(getComputedStyle(popover.$.overlay.$.overlay).width).to.equal('300px');
+    });
+
+    it('should apply overlay height when set before attach', async () => {
+      popover.height = '300px';
+      document.body.appendChild(popover);
+      await nextRender();
+
+      popover.opened = true;
+      await oneEvent(popover.$.overlay, 'vaadin-overlay-open');
+
+      expect(getComputedStyle(popover.$.overlay.$.overlay).height).to.equal('300px');
+    });
+  });
+
   describe('content overflow', () => {
     let overlayHeight;
 
