@@ -8,6 +8,7 @@
 @import './src/components/app-layout.css';
 @import './src/components/avatar.css';
 @import './src/components/badge.css';
+@import './src/components/button.css';
 @import './src/components/card.css';
 @import './src/components/date-picker.css';
 @import './src/components/checkbox-radio.css';
