@@ -30,11 +30,13 @@ vaadin-radio-button:not([checked])::part(radio) {
 }
 
 vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
+  /* TODO add/use selection color */
   --vaadin-checkbox-background: var(--aura-accent-color);
   --vaadin-checkbox-color: var(--aura-accent-contrast);
 }
 
 vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
+  /* TODO add/use selection color */
   --vaadin-radio-button-background: var(--aura-accent-color);
   --vaadin-radio-button-color: var(--aura-accent-contrast);
 }
