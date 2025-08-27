@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <vaadin-grid multi-sort column-reordering-allowed>
+    <vaadin-grid multi-sort column-reordering-allowed item-id-path="id">
       <vaadin-grid-selection-column></vaadin-grid-selection-column>
 
       <vaadin-grid-column-group header="Personal Information">
@@ -116,16 +116,33 @@
       import '@vaadin/select';
       import '@vaadin/list-box';
 
+      const createItem = (id, children) => ({
+        name: `First Lastname ${id}`,
+        email: `first.lastname${id}@example.com`,
+        address: `${id} Main Street`,
+        city: `City ${id}`,
+        country: `Country ${id}`,
+        children,
+        id,
+      });
+
       // Generate sample data
       const generateItems = (count) => {
-        return Array.from({ length: count }, (_, i) => ({
-          name: `First Lastname ${i + 1}`,
-          email: `first.lastname${i + 1}@example.com`,
-          address: `${i + 1} Main Street`,
-          city: `City ${i + 1}`,
-          country: `Country ${i + 1}`,
-          children: i % 3 === 0,
-        }));
+        return Array.from({ length: count }, (_, i) => createItem(i + 1, i % 3 === 0));
+      };
+
+      const generateDataProvider = (rootLevelSize) => {
+        return ({ parentItem, page, pageSize }, cb) => {
+          if (!parentItem) {
+            const rootItems = generateItems(rootLevelSize);
+            const offset = page * pageSize;
+            cb(rootItems.slice(offset, offset + pageSize), rootItems.length);
+          } else {
+            const childId = parentItem.id + '-1';
+            const childItem = createItem(childId, parentItem.children);
+            cb([childItem], 1);
+          }
+        };
       };
 
       // Setup grid and controls
@@ -134,7 +151,7 @@
       const treeColumn = grid.querySelector('vaadin-grid-tree-column');
 
       // Initialize grid with data
-      grid.items = generateItems(100);
+      grid.dataProvider = generateDataProvider(100);
 
       // Setup row details renderer
       const rowDetailsRenderer = (root, grid, model) => {
@@ -177,15 +194,17 @@
 
       // Items Controls
       document.getElementById('items').addEventListener('value-changed', (e) => {
-        grid.items = generateItems(parseInt(e.detail.value));
+        grid.dataProvider = generateDataProvider(parseInt(e.detail.value));
       });
 
       document.getElementById('details').addEventListener('checked-changed', (e) => {
         grid.rowDetailsRenderer = e.detail.value ? rowDetailsRenderer : undefined;
+        grid.detailsOpenedItems = [];
       });
 
       document.getElementById('children').addEventListener('checked-changed', (e) => {
         grid.itemHasChildrenPath = e.detail.value ? 'children' : '';
+        grid.requestContentUpdate();
       });
 
       // Column Controls
@@ -276,8 +295,10 @@
 
       // Handle active item changes for details
       grid.addEventListener('active-item-changed', (e) => {
-        const item = e.detail.value;
-        grid.detailsOpenedItems = item ? [item] : [];
+        if (grid.rowDetailsRenderer) {
+          const item = e.detail.value;
+          grid.detailsOpenedItems = item ? [item] : [];
+        }
       });
 
       // Drag & Drop Controls
