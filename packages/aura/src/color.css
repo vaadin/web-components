@@ -39,8 +39,6 @@ html {
     from var(--aura-background) calc(l - 0.1 + l / 8) c calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
   );
   --aura-accent-background: radial-gradient(circle at 25% 0%, var(--aura-background) 33%, var(--_aura-background-alt));
-
-  --vaadin-overlay-backdrop-background: light-dark(var(--aura-surface), hsl(0deg, 0%, 0%, 0.2));
 }
 
 html,
