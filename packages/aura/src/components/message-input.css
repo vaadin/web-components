@@ -3,12 +3,12 @@ vaadin-message-input vaadin-text-area::part(input-field) {
   --vaadin-input-field-background: transparent;
 }
 
-vaadin-message-input[theme~='icon-button'] vaadin-button::before {
-  background: var(--vaadin-color-subtle);
+vaadin-message-input[theme~='icon-button'] vaadin-button {
+  color: var(--vaadin-color-subtle);
 }
 
 @media (any-hover: hover) {
-  vaadin-message-input[theme~='icon-button'] vaadin-button:hover::before {
-    background: var(--vaadin-color);
+  vaadin-message-input[theme~='icon-button'] vaadin-button:hover {
+    color: var(--vaadin-color);
   }
 }
