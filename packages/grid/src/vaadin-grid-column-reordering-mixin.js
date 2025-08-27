@@ -127,9 +127,9 @@ export const ColumnReorderingMixin = (superClass) =>
         return;
       }
 
-      // Cancel reordering if there are draggable nodes on the event path
+      // Cancel reordering if there are draggable nodes on the event path following this element
       const path = e.composedPath && e.composedPath();
-      if (path && path.some((node) => node.hasAttribute && node.hasAttribute('draggable'))) {
+      if (path && path.slice(0, Math.max(0, path.indexOf(this))).some((node) => node.draggable)) {
         return;
       }
 
