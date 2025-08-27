@@ -1,0 +1,26 @@
+html {
+  --vaadin-date-picker-year-scroller-background: transparent;
+  --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-strong);
+}
+
+/* TODO try to make accent color available on the root level */
+body {
+  /* TODO add/use selection color */
+  --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
+  --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast);
+}
+
+vaadin-date-picker-month-scroller {
+  background: var(--aura-surface);
+}
+
+vaadin-date-picker-year-scroller::before {
+  width: 12px;
+  height: 12px;
+  background-clip: padding-box;
+}
+
+vaadin-date-picker-year::part(year-number) {
+  font-size: var(--aura-font-size-s);
+  font-weight: var(--aura-font-weight-emphasis);
+}
