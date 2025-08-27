@@ -15,20 +15,20 @@ addGlobalThemeStyles(
         --vaadin-background-color: light-dark(#fff, #222);
 
         /* Container colors */
-        --vaadin-background-container: color-mix(in oklch, var(--vaadin-color) 5%, var(--vaadin-background-color));
+        --vaadin-background-container: color-mix(in oklab, var(--vaadin-color) 5%, var(--vaadin-background-color));
         --vaadin-background-container-strong: color-mix(
-          in oklch,
+          in oklab,
           var(--vaadin-color) 10%,
           var(--vaadin-background-color)
         );
 
         /* Border colors */
-        --vaadin-border-color-subtle: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
-        --vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
+        --vaadin-border-color-subtle: color-mix(in oklab, var(--vaadin-color) 24%, transparent);
+        --vaadin-border-color: color-mix(in oklab, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
 
         /* Text colors */
-        --vaadin-color-disabled: color-mix(in oklch, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
-        --vaadin-color-subtle: color-mix(in oklch, var(--vaadin-color) 68%, transparent); /* Above 4.5:1 contrast */
+        --vaadin-color-disabled: color-mix(in oklab, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
+        --vaadin-color-subtle: color-mix(in oklab, var(--vaadin-color) 68%, transparent); /* Above 4.5:1 contrast */
         --vaadin-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
