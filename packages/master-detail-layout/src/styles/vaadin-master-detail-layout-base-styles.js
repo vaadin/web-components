@@ -140,8 +140,11 @@ export const masterDetailLayoutStyles = css`
 
   [part='backdrop'] {
     background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
-    border-radius: inherit;
     forced-color-adjust: none;
+  }
+
+  :host([containment='layout']) [part='backdrop'] {
+    border-radius: inherit;
   }
 
   :host(:is([drawer], [stack])) [part='detail'] {
