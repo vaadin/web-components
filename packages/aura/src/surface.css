@@ -19,7 +19,13 @@ vaadin-side-nav-item::part(content),
     color-mix(
       in oklab,
       #fff
-        calc((var(--aura-surface-opacity) + (1 - var(--aura-surface-opacity)) / 4 * var(--aura-surface-level)) * 100%),
+        calc(
+          (
+              var(--aura-surface-opacity) / 3 * var(--aura-surface-level) + (1 - var(--aura-surface-opacity)) / 4 *
+                var(--aura-surface-level)
+            ) *
+            100%
+        ),
       var(--aura-background-light)
     ),
     oklab(
