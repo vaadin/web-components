@@ -216,6 +216,9 @@ export type ChartYaxesExtremesSetEvent = CustomEvent<{
   };
 }>;
 
+/**
+ * Fired when the legend item is clicked.
+ */
 export type ChartLegendItemClickEvent = CustomEvent<{
   legend: Legend;
   originalEvent: LegendItemClickEventObject & {

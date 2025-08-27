@@ -453,6 +453,12 @@ export const ChartMixin = (superClass) =>
 
     get __legendEventNames() {
       return {
+        /**
+         * Fired when the legend item is clicked.
+         * @event legend-item-click
+         * @param {Object} detail.originalEvent object with details about the event sent
+         * @param {Object} legend Legend object where the event was sent from
+         */
         itemClick: 'legend-item-click',
       };
     }
@@ -613,6 +619,8 @@ export const ChartMixin = (superClass) =>
          * @event series-legend-item-click
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} series Series object where the event was sent from
+         *
+         * @deprecated Since V25. Use `legend-item-click` instead.
          */
         legendItemClick: 'series-legend-item-click',
 
