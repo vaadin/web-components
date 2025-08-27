@@ -70,6 +70,14 @@ vaadin-app-layout > vaadin-master-detail-layout {
     border-start-end-radius: var(--_app-layout-radius);
     border-end-end-radius: var(--_app-layout-radius);
   }
+
+  &::part(backdrop) {
+    border-radius: calc(var(--_app-layout-radius) - var(--_aura-mdl-border));
+  }
+
+  &:is([drawer][has-detail]) {
+    border-color: var(--vaadin-border-color);
+  }
 }
 
 /* ::view-transition-group(vaadin-mdl-backdrop),
