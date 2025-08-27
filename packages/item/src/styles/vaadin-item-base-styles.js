@@ -54,4 +54,10 @@ export const itemStyles = css`
   [part='content'] {
     flex: 1;
   }
+
+  @media (forced-colors: active) {
+    [part='checkmark']::before {
+      background: CanvasText;
+    }
+  }
 `;

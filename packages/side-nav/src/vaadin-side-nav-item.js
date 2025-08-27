@@ -9,6 +9,7 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -69,6 +70,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * `disabled`     | Set when the element is disabled.
  * `expanded`     | Set when the element is expanded.
  * `has-children` | Set when the element has child items.
+ * `has-tooltip`  | Set when the element has a slotted tooltip.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -174,6 +176,11 @@ class SideNavItem extends SideNavChildrenMixin(
         type: Boolean,
         value: false,
       },
+
+      /** @private */
+      __tooltipText: {
+        type: String,
+      },
     };
   }
 
@@ -246,7 +253,7 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @protected */
   render() {
     return html`
-      <div part="content" @click="${this._onContentClick}">
+      <div id="content" part="content" @click="${this._onContentClick}">
         <a
           id="link"
           ?disabled="${this.disabled}"
@@ -259,6 +266,7 @@ class SideNavItem extends SideNavChildrenMixin(
         >
           <slot name="prefix"></slot>
           <slot></slot>
+          <div class="sr-only">${this.__tooltipText}</div>
           <slot name="suffix"></slot>
         </a>
         <button
@@ -274,7 +282,27 @@ class SideNavItem extends SideNavChildrenMixin(
         <slot name="children"></slot>
       </ul>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
+      <slot name="tooltip"></slot>
     `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setTarget(this.$.content);
+    this._tooltipController.setAriaTarget(null);
+    this._tooltipController.addEventListener('tooltip-changed', (event) => {
+      const { node } = event.detail;
+      if (node) {
+        this.__tooltipText = node.textContent.trim();
+        node.setAttribute('aria-hidden', 'true');
+      } else {
+        this.__tooltipText = '';
+      }
+    });
+    this.addController(this._tooltipController);
   }
 
   /** @private */

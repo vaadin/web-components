@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
+import { AccordionPanel } from '@vaadin/accordion/src/vaadin-accordion-panel.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { CheckboxGroup } from '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
@@ -34,6 +35,12 @@ before(() => {
 });
 
 [
+  {
+    tagName: AccordionPanel.is,
+    children: '<vaadin-accordion-heading slot="summary"></vaadin-accordion-heading>',
+    targetSelector: '[slot="summary"]',
+    position: 'bottom-start',
+  },
   { tagName: Button.is },
   { tagName: Checkbox.is, ariaTargetSelector: 'input' },
   {
@@ -105,13 +112,14 @@ before(() => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`
         <${tagName}>
           ${children}
           <vaadin-tooltip slot="tooltip" text="Tooltip text"></vaadin-tooltip>
         </${tagName}>
       `);
+      await nextRender();
       tooltip = element.querySelector('vaadin-tooltip');
       tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
     });
@@ -143,6 +151,16 @@ before(() => {
         mouseenter(tooltip.target);
         expect(tooltipOverlay.opened).to.be.false;
       }
+    });
+
+    it('should set has-tooltip attribute on the element', () => {
+      expect(element.hasAttribute('has-tooltip')).to.be.true;
+    });
+
+    it('should remove has-tooltip attribute from the element when tooltip is removed', async () => {
+      tooltip.remove();
+      await nextRender();
+      expect(element.hasAttribute('has-tooltip')).to.be.false;
     });
   });
 });

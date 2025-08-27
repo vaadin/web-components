@@ -99,86 +99,99 @@ describe('grid-pro custom editor', () => {
   });
 
   describe('date-picker', () => {
-    beforeEach(async () => {
-      grid = createGrid('date');
-      await nextRender();
-      await editFirstCell();
-    });
+    describe('desktop', () => {
+      let width, height;
 
-    it('should apply the updated date to the cell when exiting on Tab', async () => {
-      await sendKeys({ type: '1/12/1984' });
-      await sendKeys({ press: 'Tab' });
+      before(async () => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        await setViewport({ width: 800, height: 600 });
+      });
 
-      expect(cell._content.textContent).to.equal('1984-01-12');
-    });
+      beforeEach(async () => {
+        grid = createGrid('date');
+        await nextRender();
+        await editFirstCell();
+      });
 
-    it('should apply the updated date to the cell when exiting on Enter', async () => {
-      await sendKeys({ type: '1/12/1984' });
-      await sendKeys({ press: 'Enter' });
+      after(async () => {
+        await setViewport({ width, height });
+      });
 
-      expect(cell._content.textContent).to.equal('1984-01-12');
-    });
+      it('should apply the updated date to the cell when exiting on Tab', async () => {
+        await sendKeys({ type: '1/12/1984' });
+        await sendKeys({ press: 'Tab' });
 
-    it('should not stop editing on input click when focus is in the overlay', async () => {
-      // Open the overlay
-      await sendKeys({ press: 'ArrowDown' });
+        expect(cell._content.textContent).to.equal('1984-01-12');
+      });
 
-      const input = cell._content.querySelector('input');
-      await sendMouseToElement({ type: 'click', element: input });
+      it('should apply the updated date to the cell when exiting on Enter', async () => {
+        await sendKeys({ type: '1/12/1984' });
+        await sendKeys({ press: 'Enter' });
 
-      expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
-    });
+        expect(cell._content.textContent).to.equal('1984-01-12');
+      });
 
-    it('should not stop editing when clicking inside the overlay but not on focusable element', async () => {
-      // Open the overlay
-      await sendKeys({ press: 'ArrowDown' });
-      await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
+      it('should not stop editing on input click when focus is in the overlay', async () => {
+        // Open the overlay
+        await sendKeys({ press: 'ArrowDown' });
 
-      // Click between toolbar buttons
-      const overlayContent = document.querySelector('vaadin-date-picker-overlay-content');
-      const toolbar = overlayContent.shadowRoot.querySelector('[part="toolbar"]');
-      await sendMouseToElement({ type: 'click', element: toolbar });
-      await nextRender();
+        const input = cell._content.querySelector('input');
+        await sendMouseToElement({ type: 'click', element: input });
 
-      expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
-    });
+        expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
+      });
 
-    it('should not stop editing and update value when closing on outside click', async () => {
-      // Open the overlay
-      await sendKeys({ press: 'ArrowDown' });
-      await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
+      it('should not stop editing when clicking inside the overlay but not on focusable element', async () => {
+        // Open the overlay
+        await sendKeys({ press: 'ArrowDown' });
+        await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
 
-      // Move focus back to the input
-      await sendKeys({ press: 'Shift+Tab' });
+        // Click between toolbar buttons
+        const overlayContent = document.querySelector('vaadin-date-picker-overlay-content');
+        const toolbar = overlayContent.shadowRoot.querySelector('[part="toolbar"]');
+        await sendMouseToElement({ type: 'click', element: toolbar });
+        await nextRender();
 
-      // Change single digit to avoid calendar scroll
-      const input = cell._content.querySelector('input');
-      input.setSelectionRange(3, 4);
+        expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
+      });
 
-      await sendKeys({ type: '2' });
+      it('should not stop editing and update value when closing on outside click', async () => {
+        // Open the overlay
+        await sendKeys({ press: 'ArrowDown' });
+        await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
 
-      await sendMouse({ type: 'click', position: [10, 10] });
-      await nextRender();
+        // Move focus back to the input
+        await sendKeys({ press: 'Shift+Tab' });
 
-      const editor = cell._content.querySelector('vaadin-date-picker');
-      expect(editor).to.be.ok;
-      expect(editor.value).to.equal('1984-01-12');
+        // Change single digit to avoid calendar scroll
+        const input = cell._content.querySelector('input');
+        input.setSelectionRange(3, 4);
+
+        await sendKeys({ type: '2' });
+
+        await sendMouse({ type: 'click', position: [10, 10] });
+        await nextRender();
+
+        const editor = cell._content.querySelector('vaadin-date-picker');
+        expect(editor).to.be.ok;
+        expect(editor.value).to.equal('1984-01-12');
+      });
     });
 
     describe('mobile', () => {
       let width, height;
 
-      before(() => {
+      before(async () => {
         width = window.innerWidth;
         height = window.innerHeight;
+        await setViewport({ width: 420, height: 600 });
       });
 
       beforeEach(async () => {
-        await setViewport({ width: 420, height: 1020 });
         grid = createGrid('date', true);
         await nextRender();
         cell = getContainerCell(grid.$.items, 0, 0);
-        await sendMouse({ type: 'click', position: [10, 10] });
       });
 
       after(async () => {
@@ -215,7 +228,7 @@ describe('grid-pro custom editor', () => {
         const datePicker = cell._content.querySelector('vaadin-date-picker');
         await untilOverlayRendered(datePicker);
 
-        sendMouse({ type: 'click', position: [10, 10] });
+        await sendMouse({ type: 'click', position: [10, 10] });
         await nextRender();
         expect(cell._content.querySelector('vaadin-date-picker')).to.not.be.ok;
         expect(previousContent).to.be.equal(cell._content.textContent);

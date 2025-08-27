@@ -42,8 +42,6 @@ export interface UploadFileEventMap extends HTMLElementEventMap, UploadFileCusto
  *
  * Part name        | Description
  * -----------------|-------------
- * `row`            | File container
- * `info`           | Container for file status icon, file name, status and error messages
  * `done-icon`      | File done status icon
  * `warning-icon`   | File warning status icon
  * `meta`           | Container for file name, status and error messages

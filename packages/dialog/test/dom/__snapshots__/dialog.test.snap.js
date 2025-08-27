@@ -3,8 +3,10 @@ export const snapshots = {};
 
 snapshots["vaadin-dialog host"] = 
 `<vaadin-dialog
+  aria-modal="true"
   opened=""
   role="dialog"
+  tabindex="0"
   with-backdrop=""
 >
   content
@@ -115,7 +117,6 @@ snapshots["vaadin-dialog overlay"] =
 <div
   id="overlay"
   part="overlay"
-  tabindex="0"
 >
   <section
     class="resizer-container"

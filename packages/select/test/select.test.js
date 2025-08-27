@@ -651,13 +651,6 @@ describe('vaadin-select', () => {
         expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(400);
       });
 
-      it('should not set overlay part width based on the custom CSS property when phone', async () => {
-        select._phone = true;
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(overlay.$.overlay.getBoundingClientRect().width).to.not.equal(400);
-      });
-
       it('should store the select width in the custom CSS property on overlay opening', async () => {
         select.style.width = '200px';
         select.opened = true;

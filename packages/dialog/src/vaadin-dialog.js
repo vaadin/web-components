@@ -101,12 +101,18 @@ class Dialog extends DialogSizeMixin(
       :host([opened]),
       :host([opening]),
       :host([closing]) {
-        display: contents !important;
+        display: block !important;
+        position: absolute;
+        outline: none;
       }
 
       :host,
       :host([hidden]) {
         display: none !important;
+      }
+
+      :host(:focus) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       }
     `;
   }

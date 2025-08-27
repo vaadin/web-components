@@ -34,6 +34,12 @@ class PopoverOverlay extends PopoverOverlayMixin(
     return popoverOverlayStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`
@@ -69,29 +75,12 @@ class PopoverOverlay extends PopoverOverlayMixin(
   }
 
   /**
-   * @override
-   * @protected
-   */
-  get _modalRoot() {
-    return this.owner;
-  }
-
-  /**
    * Override method from OverlayFocusMixin to use owner as focus trap root
    * @protected
    * @override
    */
   get _focusTrapRoot() {
     return this.owner;
-  }
-
-  /**
-   * Override method from OverlayFocusMixin to not set `aria-hidden`
-   * @protected
-   * @override
-   */
-  get _useAriaHidden() {
-    return false;
   }
 
   /**

@@ -8,7 +8,6 @@ export const flushGrid = (grid) => {
     grid.__clearCacheDebouncer,
     grid.__updateColumnTreeDebouncer,
     grid._debounceScrolling,
-    grid._debounceOverflow,
     grid._debouncerHiddenChanged,
     grid._debouncerApplyCachedData,
     grid.__debounceUpdateFrozenColumn,

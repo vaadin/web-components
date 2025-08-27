@@ -435,7 +435,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   static get observers() {
-    return ['__sizeChanged(width, height, _overlayElement)', '__updateAriaAttributes(opened, role, target)'];
+    return ['__updateAriaAttributes(opened, role, target)'];
   }
 
   /**
@@ -571,6 +571,11 @@ class Popover extends PopoverPositionMixin(
   /** @protected */
   updated(props) {
     super.updated(props);
+
+    if (props.has('width') || props.has('height')) {
+      const { width, height } = this;
+      requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
+    }
 
     if (props.has('accessibleName')) {
       if (this.accessibleName) {
@@ -1017,13 +1022,6 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __hasTrigger(trigger) {
     return Array.isArray(this.trigger) && this.trigger.includes(trigger);
-  }
-
-  /** @private */
-  __sizeChanged(width, height, overlay) {
-    if (overlay) {
-      requestAnimationFrame(() => overlay.setBounds({ width, height }, false));
-    }
   }
 
   /**

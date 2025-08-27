@@ -22,7 +22,7 @@ export declare class TooltipMixinClass {
    * attribute. Supports array of multiple elements.
    * When not set, defaults to `target`.
    */
-  ariaTarget: HTMLElement | HTMLElement[] | undefined;
+  ariaTarget: HTMLElement | HTMLElement[] | null | undefined;
 
   /**
    * Object with properties passed to `generator` and

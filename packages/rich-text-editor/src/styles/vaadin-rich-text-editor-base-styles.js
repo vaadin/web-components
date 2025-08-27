@@ -368,12 +368,6 @@ export const content = css`
     padding: 0.125rem 0.25rem;
   }
 
-  pre {
-    white-space: pre-wrap;
-    margin-block: var(--vaadin-padding-s);
-    padding: var(--vaadin-padding-container);
-  }
-
   img {
     max-width: 100%;
   }
@@ -417,7 +411,7 @@ const toolbar = css`
   }
 
   [part~='toolbar-button']::before {
-    background: currentcolor;
+    background: currentColor;
     content: '';
     display: block;
     height: var(--vaadin-icon-size, 1lh);

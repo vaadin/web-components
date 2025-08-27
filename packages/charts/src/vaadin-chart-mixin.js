@@ -742,7 +742,7 @@ export const ChartMixin = (superClass) =>
     get __xAxesEventNames() {
       return {
         /**
-         * Fired when when the minimum and maximum is set for the x axis.
+         * Fired when the minimum and maximum is set for the x axis.
          * @event xaxes-extremes-set
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} axis Point object where the event was sent from
@@ -755,7 +755,7 @@ export const ChartMixin = (superClass) =>
     get __yAxesEventNames() {
       return {
         /**
-         * Fired when when the minimum and maximum is set for the y axis.
+         * Fired when the minimum and maximum is set for the y axis.
          * @event yaxes-extremes-set
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} axis Point object where the event was sent from

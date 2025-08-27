@@ -14,6 +14,7 @@ export class TooltipController extends SlotController {
     super(host, 'tooltip');
 
     this.setTarget(host);
+    this.__onContentChange = this.__onContentChange.bind(this);
   }
 
   /**
@@ -50,17 +51,26 @@ export class TooltipController extends SlotController {
       tooltipNode.shouldShow = this.shouldShow;
     }
 
-    this.__notifyChange();
+    if (!this.manual) {
+      this.host.setAttribute('has-tooltip', '');
+    }
+    this.__notifyChange(tooltipNode);
+    tooltipNode.addEventListener('content-changed', this.__onContentChange);
   }
 
   /**
    * Override to notify the host when the tooltip is removed.
    *
+   * @param {Node} tooltipNode
    * @protected
    * @override
    */
-  teardownNode() {
-    this.__notifyChange();
+  teardownNode(tooltipNode) {
+    if (!this.manual) {
+      this.host.removeAttribute('has-tooltip');
+    }
+    tooltipNode.removeEventListener('content-changed', this.__onContentChange);
+    this.__notifyChange(null);
   }
 
   /**
@@ -159,7 +169,12 @@ export class TooltipController extends SlotController {
   }
 
   /** @private */
-  __notifyChange() {
-    this.dispatchEvent(new CustomEvent('tooltip-changed', { detail: { node: this.node } }));
+  __onContentChange(event) {
+    this.__notifyChange(event.target);
+  }
+
+  /** @private */
+  __notifyChange(node) {
+    this.dispatchEvent(new CustomEvent('tooltip-changed', { detail: { node } }));
   }
 }

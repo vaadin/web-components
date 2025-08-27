@@ -9,6 +9,7 @@ import { css, unsafeCSS } from 'lit';
 export const group = (name = 'checkbox') => css`
   :host {
     width: fit-content;
+    gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--vaadin-gap-xs));
   }
 
   .vaadin-group-field-container {
@@ -19,11 +20,10 @@ export const group = (name = 'checkbox') => css`
   [part='group-field'] {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--vaadin-gap-s));
   }
 
   [part='group-field'] {
-    gap: 0.5lh 1.5em;
+    gap: var(--vaadin-gap-xs) var(--vaadin-gap-xl);
   }
 
   :host([theme~='horizontal']) [part='group-field'] {

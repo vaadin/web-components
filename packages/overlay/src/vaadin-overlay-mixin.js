@@ -156,6 +156,11 @@ export const OverlayMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
+      if (this.__scheduledOpen) {
+        cancelAnimationFrame(this.__scheduledOpen);
+        this.__scheduledOpen = null;
+      }
+
       /* c8 ignore next 3 */
       if (this._boundIosResizeListener) {
         window.removeEventListener('resize', this._boundIosResizeListener);
@@ -552,7 +557,7 @@ export const OverlayMixin = (superClass) =>
       }
 
       // Only close modeless overlay on Esc press when it contains focus
-      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this.$.overlay)) {
+      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusTrapRoot)) {
         return;
       }
 

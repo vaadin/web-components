@@ -82,6 +82,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * `has-label`          | Set when the checkbox has a label.
  * `has-helper`         | Set when the checkbox has helper text.
  * `has-error-message`  | Set when the checkbox has an error message.
+ * `has-tooltip`        | Set when the checkbox has a slotted tooltip.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

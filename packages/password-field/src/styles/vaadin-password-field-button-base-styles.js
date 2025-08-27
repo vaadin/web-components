@@ -10,10 +10,10 @@ import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-base-style
 const passwordFieldBase = css`
   :host {
     --vaadin-button-background: transparent;
-    --vaadin-button-border: none;
     --vaadin-button-padding: 0;
     color: var(--vaadin-input-field-button-color, inherit);
     display: block;
+    border: none;
     cursor: var(--vaadin-clickable-cursor);
   }
 

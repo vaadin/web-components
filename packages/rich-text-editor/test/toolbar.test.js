@@ -7,6 +7,7 @@ import {
   focusout,
   isDesktopSafari,
   isFirefox,
+  mousedown,
   nextRender,
   nextUpdate,
   oneEvent,
@@ -640,7 +641,10 @@ describe('toolbar controls', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should open tooltip when focusing toolbar button', () => {
+    it('should open tooltip when focusing toolbar button with keyboard', () => {
+      // Mimic keyboard focus
+      esc(rte);
+
       const undo = getButton('undo');
       undo.focus();
 
@@ -649,7 +653,18 @@ describe('toolbar controls', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should not open tooltip when focusing toolbar button with mouse', () => {
+      const undo = getButton('undo');
+      mousedown(undo);
+      undo.focus();
+
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should move tooltip when focusing other toolbar button', () => {
+      // Mimic keyboard focus
+      esc(rte);
+
       const undo = getButton('undo');
       undo.focus();
 
@@ -662,6 +677,9 @@ describe('toolbar controls', () => {
     });
 
     it('should close tooltip when focus is moved away from toolbar button', () => {
+      // Mimic keyboard focus
+      esc(rte);
+
       const undo = getButton('undo');
       undo.focus();
 
@@ -676,6 +694,24 @@ describe('toolbar controls', () => {
       undo.focus();
 
       expect(undo.hasAttribute('aria-describedby')).to.be.false;
+    });
+
+    it('should hide tooltip on color button click after mouseenter', async () => {
+      const color = getButton('color');
+      fire(color, 'mouseenter');
+      color.click();
+
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should hide tooltip on background button click after mouseenter', async () => {
+      const background = getButton('background');
+      fire(background, 'mouseenter');
+      background.click();
+
+      await nextRender();
+      expect(overlay.opened).to.be.false;
     });
   });
 });
