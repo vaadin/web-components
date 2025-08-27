@@ -1,11 +1,14 @@
 /* Avoid styling message-input button */
 vaadin-button:not([slot='button']) {
-  --vaadin-button-border-color: var(--vaadin-border-color);
-  --aura-surface-level: 4;
-  box-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
   transition:
     scale 220ms,
     filter 220ms;
+}
+
+vaadin-button:not([slot='button'], [theme~='tertiary']) {
+  --vaadin-button-border-color: var(--vaadin-border-color);
+  --aura-surface-level: 4;
+  box-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
 
 vaadin-button:not([disabled], [aria-disabled='true'])[active] {
