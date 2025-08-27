@@ -677,5 +677,23 @@ describe('toolbar controls', () => {
 
       expect(undo.hasAttribute('aria-describedby')).to.be.false;
     });
+
+    it('should hide tooltip on color button click after mouseenter', async () => {
+      const color = getButton('color');
+      fire(color, 'mouseenter');
+      color.click();
+
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should hide tooltip on background button click after mouseenter', async () => {
+      const background = getButton('background');
+      fire(background, 'mouseenter');
+      background.click();
+
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
   });
 });

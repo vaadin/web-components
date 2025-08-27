@@ -662,6 +662,7 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __onColorClick() {
+      this._tooltip.opened = false;
       this._colorEditing = true;
     }
 
@@ -678,6 +679,7 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __onBackgroundClick() {
+      this._tooltip.opened = false;
       this._backgroundEditing = true;
     }
 
