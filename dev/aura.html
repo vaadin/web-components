@@ -121,6 +121,19 @@
                 grid.activeItem = null;
               }
             });
+          } else if (id === 'components') {
+            views[id].querySelector('vaadin-avatar-group').items = [
+              { name: 'AA' },
+              { name: 'BB' },
+              { name: 'CC' },
+              { name: 'DD' },
+              { name: 'EE' },
+              { name: 'FF' },
+              { name: 'GG' },
+              { name: 'HH' },
+              { name: 'II' },
+            ];
+            views[id].querySelector('vaadin-grid').items = generateItems(20);
           }
         }
 
@@ -176,21 +189,6 @@
                 const viewId = link.href.split('#')[1];
                 const view = getView(viewId);
                 view.setAttribute('slot', 'detail');
-
-                if (viewId === 'components') {
-                  view.querySelector('vaadin-avatar-group').items = [
-                    { name: 'AA' },
-                    { name: 'BB' },
-                    { name: 'CC' },
-                    { name: 'DD' },
-                    { name: 'EE' },
-                    { name: 'FF' },
-                    { name: 'GG' },
-                    { name: 'HH' },
-                    { name: 'II' },
-                  ];
-                }
-
                 const mdl = e.target.closest('vaadin-master-detail-layout');
                 mdl._setDetail(view);
               }
@@ -525,10 +523,9 @@
             </div>
 
             <div class="component widest tall no-padding" theme="surface">
-              <vaadin-grid>
+              <vaadin-grid theme="no-border">
                 <vaadin-grid-selection-column></vaadin-grid-selection-column>
-                <vaadin-grid-column path="firstName"></vaadin-grid-column>
-                <vaadin-grid-column path="lastName"></vaadin-grid-column>
+                <vaadin-grid-column path="name"></vaadin-grid-column>
                 <vaadin-grid-column path="email"></vaadin-grid-column>
               </vaadin-grid>
             </div>
