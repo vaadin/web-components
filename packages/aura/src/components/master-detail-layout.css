@@ -1,8 +1,12 @@
-vaadin-master-detail-layout[drawer]::part(detail) {
+vaadin-master-detail-layout::part(detail) {
   --aura-surface-level: 3;
+}
+
+vaadin-master-detail-layout[drawer]::part(detail) {
+  --aura-surface-opacity: 0.7;
   background: var(--aura-surface) padding-box;
-  -webkit-backdrop-filter: blur(12px) brightness(1.05) saturate(1.2);
-  backdrop-filter: blur(12px) brightness(1.05) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) brightness(1.15) saturate(1.2);
+  backdrop-filter: blur(12px) brightness(1.15) saturate(1.25);
   box-shadow: var(--aura-overlay-shadow);
 }
 
@@ -11,13 +15,10 @@ vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail),
 vaadin-master-detail-layout[containment='viewport'][drawer]::part(detail) {
   margin: calc(var(--aura-app-layout-inset) / 2);
   border-radius: var(--_app-layout-radius);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
 }
 
 vaadin-master-detail-layout > vaadin-master-detail-layout,
 vaadin-master-detail-layout:not([drawer])::part(detail) {
-  --aura-surface-level: 3;
   border-start-end-radius: var(--_app-layout-radius);
   border-end-end-radius: var(--_app-layout-radius);
 }
