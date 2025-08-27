@@ -572,45 +572,79 @@ describe('popover', () => {
   });
 
   describe('dimensions', () => {
-    beforeEach(async () => {
-      popover.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
+    describe('default', () => {
+      beforeEach(async () => {
+        popover.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should update width after opening the popover', async () => {
+        popover.width = '300px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal('300px');
+      });
+
+      it('should update height after opening the popover', async () => {
+        popover.height = '500px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+      });
+
+      it('should reset style after setting width to null', async () => {
+        const originalWidth = getComputedStyle(overlay.$.overlay).width;
+
+        popover.width = '500px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal('500px');
+
+        popover.width = null;
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal(originalWidth);
+      });
+
+      it('should reset style after setting height to null', async () => {
+        const originalHeight = getComputedStyle(overlay.$.overlay).height;
+
+        popover.height = '500px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+
+        popover.height = null;
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+      });
     });
 
-    it('should update width after opening the popover', async () => {
-      popover.width = '300px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.equal('300px');
-    });
+    describe('set before attach', () => {
+      beforeEach(() => {
+        popover = document.createElement('vaadin-popover');
+      });
 
-    it('should update height after opening the popover', async () => {
-      popover.height = '500px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
-    });
+      afterEach(() => {
+        popover.remove();
+      });
 
-    it('should reset style after setting width to null', async () => {
-      const originalWidth = getComputedStyle(overlay.$.overlay).width;
+      it('should apply overlay width when set before attach', async () => {
+        popover.width = '300px';
+        document.body.appendChild(popover);
+        await nextRender();
 
-      popover.width = '500px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.equal('500px');
+        popover.opened = true;
+        await oneEvent(popover.$.overlay, 'vaadin-overlay-open');
 
-      popover.width = null;
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.equal(originalWidth);
-    });
+        expect(getComputedStyle(popover.$.overlay.$.overlay).width).to.equal('300px');
+      });
 
-    it('should reset style after setting height to null', async () => {
-      const originalHeight = getComputedStyle(overlay.$.overlay).height;
+      it('should apply overlay height when set before attach', async () => {
+        popover.height = '300px';
+        document.body.appendChild(popover);
+        await nextRender();
 
-      popover.height = '500px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+        popover.opened = true;
+        await oneEvent(popover.$.overlay, 'vaadin-overlay-open');
 
-      popover.height = null;
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+        expect(getComputedStyle(popover.$.overlay.$.overlay).height).to.equal('300px');
+      });
     });
   });
 
