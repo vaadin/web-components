@@ -11,7 +11,8 @@ html,
   background-clip: padding-box;
 }
 
-:not([readonly], [disabled])::part(input-field) {
+:not([readonly], [disabled])::part(input-field),
+vaadin-message-input:not([readonly], [disabled]) {
   box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.07);
 }
 
