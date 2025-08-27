@@ -35,6 +35,19 @@ class UserTagsOverlay extends PositionMixin(
     return userTagsOverlayStyles;
   }
 
+  /**
+   * Override getter from `PositionMixin` to not close overlay
+   * when position target is not in the viewport, as user tags
+   * component has its own logic to observe target visibility.
+   *
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  get _observeVisibility() {
+    return false;
+  }
+
   /** @protected */
   render() {
     return html`
@@ -44,17 +57,6 @@ class UserTagsOverlay extends PositionMixin(
         </div>
       </div>
     `;
-  }
-
-  /**
-   * Override method inherited from `PositionMixin` to not
-   * close overlay when scrolled out of viewport, as user
-   * tags has its own logic to observe target visibility.
-   * @protected
-   * @override
-   */
-  _onTargetVisibilityChange() {
-    // Do nothing
   }
 }
 

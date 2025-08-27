@@ -30,7 +30,7 @@ const targetVisibilityObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.target.__overlay) {
-        entry.target.__overlay._onTargetVisibilityChange(entry.isIntersecting);
+        entry.target.__overlay.__onTargetVisibilityChange(entry.isIntersecting);
       }
     });
   },
@@ -134,6 +134,17 @@ export const PositionMixin = (superClass) =>
       ];
     }
 
+    /**
+     * By default, position target visibility changes are observed
+     * while overlay is opened to close if is not in the viewport.
+     * Override this getter and return `false` to disable this.
+     *
+     * @protected
+     */
+    get _observeVisibility() {
+      return true;
+    }
+
     constructor() {
       super();
 
@@ -198,13 +209,18 @@ export const PositionMixin = (superClass) =>
       if (positionTarget) {
         positionTarget.__overlay = null;
         targetResizeObserver.unobserve(positionTarget);
-        targetVisibilityObserver.unobserve(positionTarget);
+
+        if (this._observeVisibility) {
+          targetVisibilityObserver.unobserve(positionTarget);
+        }
 
         if (opened) {
           this.__addUpdatePositionEventListeners();
           positionTarget.__overlay = this;
           targetResizeObserver.observe(positionTarget);
-          targetVisibilityObserver.observe(positionTarget);
+          if (this._observeVisibility) {
+            targetVisibilityObserver.observe(positionTarget);
+          }
         }
       }
 
@@ -241,7 +257,7 @@ export const PositionMixin = (superClass) =>
      * @param {boolean} isIntersecting
      * @protected
      */
-    _onTargetVisibilityChange(isIntersecting) {
+    __onTargetVisibilityChange(isIntersecting) {
       if (!isIntersecting) {
         this.opened = false;
       }

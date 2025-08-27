@@ -53,6 +53,18 @@ export const MenuOverlayMixin = (superClass) =>
       return this.__savedRoot;
     }
 
+    /**
+     * Override getter from `PositionMixin` to prevent
+     * problems when re-rendering menu while opened.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    get _observeVisibility() {
+      return false;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -104,17 +116,6 @@ export const MenuOverlayMixin = (superClass) =>
         xMin: overlayRect.left + contentRect.width,
         yMax,
       };
-    }
-
-    /**
-     * Override method inherited from `PositionMixin` to not
-     * close on position target visibility change as it does
-     * breaks when re-rendering menu items while opened.
-     * @protected
-     * @override
-     */
-    _onTargetVisibilityChange() {
-      // Do nothing
     }
 
     /**
