@@ -34,6 +34,19 @@ class TooltipOverlay extends PopoverOverlayMixin(
     return [overlayStyles, tooltipOverlayStyles];
   }
 
+  /**
+   * Override getter from `PositionMixin` to not close overlay
+   * when position target is not in the viewport, as tooltip
+   * component has its own logic to observe target visibility.
+   *
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  get _observeVisibility() {
+    return false;
+  }
+
   /** @protected */
   render() {
     return html`
@@ -41,23 +54,6 @@ class TooltipOverlay extends PopoverOverlayMixin(
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
-  }
-
-  /**
-   * Override method inherited from `PositionMixin` to handle
-   * target visibility change in the tooltip logic.
-   * @param {boolean} isIntersecting
-   * @protected
-   * @override
-   */
-  _onTargetVisibilityChange(isIntersecting) {
-    this.dispatchEvent(
-      new CustomEvent('target-visibility-change', {
-        detail: {
-          isVisible: isIntersecting,
-        },
-      }),
-    );
   }
 }
 

@@ -87,7 +87,6 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
-        @target-visibility-change="${this.__onTargetVisibilityChange}"
         modeless
         exportparts="overlay, content"
         ><slot name="overlay"></slot
