@@ -10,6 +10,8 @@ export const sharedStyles = css`
   :host {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    max-width: 100%;
     gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
     cursor: default;
     -webkit-tap-highlight-color: transparent;
@@ -77,6 +79,10 @@ export const sharedStyles = css`
     display: flex;
     flex-direction: column;
     gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
+  }
+
+  [part='children'] slot {
+    --_icon-indent-2: var(--_icon-indent);
   }
 
   :focus-visible {
