@@ -560,7 +560,7 @@ export const chartStyles = css`
     stroke: var(--highcharts-background-color, var(--_point-border));
   }
 
-  :where([styled-mode]) .highcharts-funnel-series .highcharts-point-over {
+  :where([styled-mode]) .highcharts-funnel-series .highcharts-point-hover {
     fill-opacity: 0.75;
     transition: fill-opacity 50ms;
   }
