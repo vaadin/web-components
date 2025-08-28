@@ -460,8 +460,6 @@ export const chartStyles = css`
     fill: currentColor;
   }
 
-  /* end of vaadin-charts custom properties */
-
   /* Various series-specific */
   :where([styled-mode]) .highcharts-area {
     fill-opacity: 0.75;
