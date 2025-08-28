@@ -388,14 +388,8 @@ export const ContextMenuMixin = (superClass) =>
             this._overlayElement.noVerticalOverlap = this.__computeNoVerticalOverlap(this.position);
             this._overlayElement.horizontalAlign = this.__computeHorizontalAlign(this.position);
             this._overlayElement.verticalAlign = this.__computeVerticalAlign(this.position);
-          } else {
-            // Reset to default position attributes
-            this._overlayElement.position = null;
-            //this._overlayElement.positionTarget = this._context.target;
-            this._overlayElement.noHorizontalOverlap = true;
-            this._overlayElement.noVerticalOverlap = false;
-            this._overlayElement.horizontalAlign = 'start';
-            this._overlayElement.verticalAlign = 'top';
+          } else if (this._overlayElement.position) {
+            this._overlayElement.clearPosition();
           }
 
           // Hide overlay until it is fully rendered and positioned
