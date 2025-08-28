@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { contextMenuOverlayStyles } from './styles/vaadin-context-menu-overlay-base-styles.js';
@@ -87,6 +88,25 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
         this.style.top = `${overlayRect.top + offset}px`;
       }
     }
+  }
+
+  clearPosition() {
+    if (!this.position) {
+      return;
+    }
+
+    this.position = null;
+    this.positionTarget = null;
+    this.noHorizontalOverlap = true;
+    this.noVerticalOverlap = false;
+    this.horizontalAlign = null;
+    this.verticalAlign = null;
+    this.style.justifyContent = null;
+    this.style.alignItems = null;
+    setOverlayStateAttribute(this, 'bottom-aligned', false);
+    setOverlayStateAttribute(this, 'top-aligned', false);
+    setOverlayStateAttribute(this, 'end-aligned', false);
+    setOverlayStateAttribute(this, 'start-aligned', false);
   }
 
   /** @protected */
