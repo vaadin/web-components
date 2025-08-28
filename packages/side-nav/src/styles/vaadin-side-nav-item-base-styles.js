@@ -93,11 +93,11 @@ const sideNavItem = css`
     margin-inline-start: calc(var(--_gap) * -1);
   }
 
-  slot[name='children'] {
+  [part='children'] {
     --_level: calc(var(--_level-2, 0) + 1);
   }
 
-  slot[name='children']::slotted(*) {
+  [part='children'] ::slotted(*) {
     --_level-2: var(--_level);
   }
 

@@ -51,4 +51,10 @@ export const sideNavSlotStyles = css`
   :where(vaadin-side-nav-item:has(> vaadin-icon[slot='prefix']))::part(content) {
     --_icon-indent: calc(var(--_icon-indent-2) - 1);
   }
+
+  :where(
+    vaadin-side-nav-item:has(> vaadin-icon[slot='prefix']):has(> vaadin-side-nav-item > vaadin-icon[slot='prefix'])
+  )::part(children) {
+    --_level: var(--_level-2, 0);
+  }
 `;
