@@ -190,11 +190,15 @@ describe('position mixin listeners', () => {
     });
 
     it('should update position on target move by changing style', async () => {
+      overlay.noVerticalOverlap = true;
+      await nextFrame();
+
       target.style.position = 'static';
+      await nextFrame();
       await nextFrame();
       updatePositionSpy.resetHistory();
 
-      target.marginTop = '20px';
+      target.style.marginTop = '20px';
       // Wait for intersection observer
       await nextFrame();
       await nextFrame();
@@ -209,7 +213,7 @@ describe('position mixin listeners', () => {
 
       overlay.opened = false;
 
-      target.marginTop = '20px';
+      target.style.marginTop = '20px';
       await nextFrame();
       await nextFrame();
       expect(updatePositionSpy.called).to.be.false;
