@@ -388,8 +388,6 @@ export const ContextMenuMixin = (superClass) =>
             this._overlayElement.noVerticalOverlap = this.__computeNoVerticalOverlap(this.position);
             this._overlayElement.horizontalAlign = this.__computeHorizontalAlign(this.position);
             this._overlayElement.verticalAlign = this.__computeVerticalAlign(this.position);
-          } else if (this._overlayElement.position) {
-            this._overlayElement.clearPosition();
           }
 
           // Hide overlay until it is fully rendered and positioned
