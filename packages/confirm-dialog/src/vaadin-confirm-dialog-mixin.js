@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
@@ -304,7 +303,7 @@ export const ConfirmDialogMixin = (superClass) =>
     /** @protected */
     __onDialogOpened() {
       if (this._confirmButton) {
-        this._confirmButton.focus({ focusVisible: isKeyboardActive() });
+        this._confirmButton.focus();
       }
     }
 
