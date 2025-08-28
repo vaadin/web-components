@@ -217,7 +217,7 @@ export const PositionMixin = (superClass) =>
     /** @private */
     __onScroll(e) {
       // If the scroll event occurred inside the overlay, ignore it.
-      if (e.target instanceof Node && this.contains(e.target)) {
+      if (e.target instanceof Node && this._deepContains(e.target)) {
         return;
       }
 
