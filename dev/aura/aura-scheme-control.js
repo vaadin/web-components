@@ -30,7 +30,7 @@ class AuraSchemeControl extends HTMLElement {
                 grid-auto-flow: column;
                 gap: 0;
                 border: 1px solid var(--vaadin-border-color);
-                border-radius: 10px;
+                border-radius: var(--vaadin-radius-m);
                 overflow: hidden;
               }
               .segmented input {
