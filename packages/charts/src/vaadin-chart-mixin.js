@@ -35,12 +35,12 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './helpers.js';
 
-['exportChart', 'localExport', 'getSVG'].forEach((methodName) => {
+['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-  Highcharts.wrap(Highcharts.Exporting.prototype, methodName, function (proceed, ...args) {
-    Highcharts.fireEvent(this.chart, 'beforeExport');
+  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
+    Highcharts.fireEvent(this, 'beforeExport');
     const result = proceed.apply(this, args);
-    Highcharts.fireEvent(this.chart, 'afterExport');
+    Highcharts.fireEvent(this, 'afterExport');
     return result;
   });
   /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
