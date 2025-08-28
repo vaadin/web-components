@@ -7,6 +7,7 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { ContextMenuPositionMixin } from './vaadin-context-menu-position-mixin.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
@@ -14,7 +15,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @mixes ItemsMixin
  */
 export const ContextMenuMixin = (superClass) =>
-  class ContextMenuMixinClass extends ItemsMixin(superClass) {
+  class ContextMenuMixinClass extends ContextMenuPositionMixin(ItemsMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -90,10 +91,6 @@ export const ContextMenuMixin = (superClass) =>
         renderer: {
           type: Function,
           sync: true,
-        },
-
-        position: {
-          type: String,
         },
 
         /**
@@ -346,7 +343,7 @@ export const ContextMenuMixin = (superClass) =>
         return Array.prototype.filter.call(targets, (el) => {
           return e.composedPath().indexOf(el) > -1;
         })[0];
-      } else if (this.listenOn && this.listenOn !== this) {
+      } else if (this.listenOn && this.listenOn !== this && this.position) {
         // If listenOn has been set on a different element than the context menu root, then use listenOn as the target.
         return this.listenOn;
       }
@@ -387,10 +384,18 @@ export const ContextMenuMixin = (superClass) =>
             this._overlayElement.position = this.position;
 
             // Configure overlay positioning
-            this._overlayElement.noHorizontalOverlap = this.__noHorizontalOverlap();
-            this._overlayElement.noVerticalOverlap = this.__noVerticalOverlap();
-            this._overlayElement.horizontalAlign = this.__horizontalAlign();
-            this._overlayElement.verticalAlign = this.__verticalAlign();
+            this._overlayElement.noHorizontalOverlap = super.__computeNoHorizontalOverlap(this.position);
+            this._overlayElement.noVerticalOverlap = this.__computeNoVerticalOverlap(this.position);
+            this._overlayElement.horizontalAlign = this.__computeHorizontalAlign(this.position);
+            this._overlayElement.verticalAlign = this.__computeVerticalAlign(this.position);
+          } else {
+            // Reset to default position attributes
+            this._overlayElement.position = null;
+            //this._overlayElement.positionTarget = this._context.target;
+            this._overlayElement.noHorizontalOverlap = true;
+            this._overlayElement.noVerticalOverlap = false;
+            this._overlayElement.horizontalAlign = 'start';
+            this._overlayElement.verticalAlign = 'top';
           }
 
           // Hide overlay until it is fully rendered and positioned
@@ -398,30 +403,6 @@ export const ContextMenuMixin = (superClass) =>
           this._setOpened(true);
         }
       }
-    }
-
-    /** @private */
-    __noHorizontalOverlap() {
-      return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(this.position);
-    }
-
-    /** @private */
-    __noVerticalOverlap() {
-      return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(this.position);
-    }
-
-    /** @private */
-    __horizontalAlign() {
-      const isExpectedPosition = ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(
-        this.position,
-      );
-      return isExpectedPosition ? 'end' : 'start';
-    }
-
-    /** @private */
-    __verticalAlign() {
-      const isExpectedPosition = ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(this.position);
-      return isExpectedPosition ? 'bottom' : 'top';
     }
 
     /** @private */
