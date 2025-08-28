@@ -47,6 +47,6 @@ export const menuOverlayStyles = css`
 
   :host([position^='start'][end-aligned]) [part='overlay'],
   :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-context-menu-offset-end, var(--vaadin-context-menu-default-offset));
+    margin-inline-end: var(--vaadin-context-menu-offset-end, var(--_default-offset));
   }
 `;
