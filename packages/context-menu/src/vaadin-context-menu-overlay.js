@@ -31,8 +31,62 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
     return 'vaadin-context-menu-overlay';
   }
 
+  static get properties() {
+    return {
+      /**
+       * Position of the overlay with respect to the target.
+       * Supported values: null, `top-start`, `top`, `top-end`,
+       * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+       * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+       */
+      position: {
+        type: String,
+        reflectToAttribute: true,
+      },
+    };
+  }
+
   static get styles() {
     return contextMenuOverlayStyles;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _updatePosition() {
+    super._updatePosition();
+
+    if (this.parentOverlay == null && this.positionTarget && this.position) {
+      if (this.position === 'bottom' || this.position === 'top') {
+        const targetRect = this.positionTarget.getBoundingClientRect();
+        const overlayRect = this.$.overlay.getBoundingClientRect();
+
+        const offset = targetRect.width / 2 - overlayRect.width / 2;
+
+        if (this.style.left) {
+          const left = overlayRect.left + offset;
+          if (left > 0) {
+            this.style.left = `${left}px`;
+          }
+        }
+
+        if (this.style.right) {
+          const right = parseFloat(this.style.right) + offset;
+          if (right > 0) {
+            this.style.right = `${right}px`;
+          }
+        }
+      }
+
+      if (this.position === 'start' || this.position === 'end') {
+        const targetRect = this.positionTarget.getBoundingClientRect();
+        const overlayRect = this.$.overlay.getBoundingClientRect();
+
+        const offset = targetRect.height / 2 - overlayRect.height / 2;
+        this.style.top = `${overlayRect.top + offset}px`;
+      }
+    }
   }
 
   /** @protected */

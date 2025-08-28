@@ -29,11 +29,6 @@ export const MenuOverlayMixin = (superClass) =>
           readOnly: true,
           sync: true,
         },
-
-        position: {
-          type: String,
-          reflectToAttribute: true,
-        },
       };
     }
 
@@ -121,86 +116,24 @@ export const MenuOverlayMixin = (superClass) =>
       if (this.positionTarget && this.parentOverlay) {
         // This overlay is positioned by a parent menu item,
         // adjust the position by the overlay content paddings
-        this._updatePositionByParentOverlay();
-      } else if (this.positionTarget && this.position) {
-        // This is a root overlay with custom positioning
-        // Adjust position for centering the overlay
-        this._updatePositionByPositionProperty();
-      }
-    }
+        const content = this.$.content;
+        const style = getComputedStyle(content);
 
-    /**
-     * @protected
-     * @override
-     */
-    _updatePositionByParentOverlay() {
-      const content = this.$.content;
-      const style = getComputedStyle(content);
-
-      // Horizontal adjustment
-      const isLeftAligned = !!this.style.left;
-      if (isLeftAligned) {
-        this.style.left = `${parseFloat(this.style.left) + parseFloat(style.paddingLeft)}px`;
-      } else {
-        this.style.right = `${parseFloat(this.style.right) + parseFloat(style.paddingRight)}px`;
-      }
-
-      // Vertical adjustment
-      const isBottomAligned = !!this.style.bottom;
-      if (isBottomAligned) {
-        this.style.bottom = `${parseFloat(this.style.bottom) - parseFloat(style.paddingBottom)}px`;
-      } else {
-        this.style.top = `${parseFloat(this.style.top) - parseFloat(style.paddingTop)}px`;
-      }
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _updatePositionByPositionProperty() {
-      this._handleOverlayHorizontalCentering();
-      this._handleOverlayVerticalCentering();
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _handleOverlayHorizontalCentering() {
-      if (this.position === 'bottom' || this.position === 'top') {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-
-        const offset = targetRect.width / 2 - overlayRect.width / 2;
-
-        if (this.style.left) {
-          const left = overlayRect.left + offset;
-          if (left > 0) {
-            this.style.left = `${left}px`;
-          }
+        // Horizontal adjustment
+        const isLeftAligned = !!this.style.left;
+        if (isLeftAligned) {
+          this.style.left = `${parseFloat(this.style.left) + parseFloat(style.paddingLeft)}px`;
+        } else {
+          this.style.right = `${parseFloat(this.style.right) + parseFloat(style.paddingRight)}px`;
         }
 
-        if (this.style.right) {
-          const right = parseFloat(this.style.right) + offset;
-          if (right > 0) {
-            this.style.right = `${right}px`;
-          }
+        // Vertical adjustment
+        const isBottomAligned = !!this.style.bottom;
+        if (isBottomAligned) {
+          this.style.bottom = `${parseFloat(this.style.bottom) - parseFloat(style.paddingBottom)}px`;
+        } else {
+          this.style.top = `${parseFloat(this.style.top) - parseFloat(style.paddingTop)}px`;
         }
-      }
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _handleOverlayVerticalCentering() {
-      if (this.position === 'start' || this.position === 'end') {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-
-        const offset = targetRect.height / 2 - overlayRect.height / 2;
-        this.style.top = `${overlayRect.top + offset}px`;
       }
     }
 

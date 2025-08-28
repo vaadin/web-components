@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ContextMenuRenderer } from './vaadin-context-menu.js';
+import { ContextMenuPositionMixinClass } from './vaadin-context-menu-position-mixin';
 import type { ContextMenuItem, ItemsMixinClass } from './vaadin-contextmenu-items-mixin.js';
 
 export declare function ContextMenuMixin<
@@ -12,7 +13,7 @@ export declare function ContextMenuMixin<
   TItem extends ContextMenuItem = ContextMenuItem,
 >(base: T): Constructor<ContextMenuMixinClass> & Constructor<ItemsMixinClass<TItem>> & T;
 
-export declare class ContextMenuMixinClass {
+export declare class ContextMenuMixinClass extends ContextMenuPositionMixinClass {
   /**
    * CSS selector that can be used to target any child element
    * of the context menu to listen for `openOn` events.
