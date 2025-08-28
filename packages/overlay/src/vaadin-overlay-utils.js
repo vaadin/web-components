@@ -16,10 +16,12 @@
  */
 export function observeMove(element, callback) {
   let io = null;
+  let timeout;
 
   const root = document.documentElement;
 
   function cleanup() {
+    timeout && clearTimeout(timeout);
     io && io.disconnect();
     io = null;
   }
@@ -52,27 +54,22 @@ export function observeMove(element, callback) {
     let isFirstUpdate = true;
 
     function handleObserve(entries) {
-      let ratio = entries[0].intersectionRatio;
+      const ratio = entries[0].intersectionRatio;
 
       if (ratio !== threshold) {
         if (!isFirstUpdate) {
           return refresh();
         }
 
-        // It's possible for the watched element to not be at perfect 1.0 visibility when we create
-        // the IntersectionObserver. This has a couple of causes:
-        //   - elements being on partial pixels
-        //   - elements being hidden offscreen (e.g., <html> has `overflow: hidden`)
-        //   - delays: if your DOM change occurs due to e.g., page resize, you can see elements
-        //     behind their actual position
-        //
-        // In all of these cases, refresh but with this lower ratio of threshold. When the element
-        // moves beneath _that_ new value, the user will get notified.
-        if (ratio === 0.0) {
-          ratio = 0.0000001; // Just needs to be non-zero
+        if (!ratio) {
+          // If the reference is clipped, the ratio is 0. Throttle the refresh
+          // to prevent an infinite loop of updates.
+          timeout = setTimeout(() => {
+            refresh(false, 1e-7);
+          }, 1000);
+        } else {
+          refresh(false, ratio);
         }
-
-        refresh(false, ratio);
       }
 
       isFirstUpdate = false;
