@@ -44,9 +44,4 @@ export const ContextMenuPositionMixin = (superClass) =>
     __computeVerticalAlign(position) {
       return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
     }
-
-    /** @private */
-    __computePosition(position, defaultPosition) {
-      return position || defaultPosition;
-    }
   };
