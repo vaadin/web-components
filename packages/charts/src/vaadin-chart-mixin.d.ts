@@ -111,6 +111,8 @@ export type ChartSeriesCheckboxClickEvent = CustomEvent<{ series: Series; origin
 
 /**
  * Fired when the series is clicked.
+ *
+ * @deprecated Since V25. Use `ChartSeriesLegendItemClickEvent` instead.
  */
 export type ChartSeriesClickEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
