@@ -25,7 +25,7 @@ vaadin-side-nav-item::part(content),
       #fff
         calc(
           (
-              var(--aura-surface-opacity) / 3 * var(--aura-surface-level) + (1 - var(--aura-surface-opacity)) / 4 *
+              var(--aura-surface-opacity) / 3 * var(--aura-surface-level) + (1 - var(--aura-surface-opacity)) / 3 *
                 var(--aura-surface-level)
             ) *
             100%

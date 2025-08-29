@@ -45,15 +45,27 @@ vaadin-button:not([slot='button'], [readonly], [disabled])::before {
     background-color 100ms;
 }
 
-@media (any-hover: hover) {
-  vaadin-button:hover:not([readonly], [disabled], :active)::before {
-    opacity: 0.04;
+@supports (color: hsl(0 0 0)) {
+  vaadin-button:not([slot='button'], [readonly], [disabled])::before {
+    background-color: oklch(from currentColor calc(l + 0.4) calc(c) h);
   }
 }
 
-vaadin-button[active]:not([slot='button'], [disabled], [aria-disabled='true']) {
-  scale: 0.98;
-  transition-duration: 50ms;
+@media (any-hover: hover) {
+  vaadin-button:hover:not([readonly], [disabled], :active)::before {
+    opacity: 0.05;
+  }
+
+  vaadin-button[theme~='primary']:hover:not([readonly], [disabled], :active)::before {
+    opacity: 0.12;
+  }
+}
+
+@media (min-resolution: 2x) {
+  vaadin-button[active]:not([slot='button'], [disabled], [aria-disabled='true']) {
+    scale: 0.98;
+    transition-duration: 50ms;
+  }
 }
 
 vaadin-button[active]:not([slot='button'], [readonly], [disabled])::before {

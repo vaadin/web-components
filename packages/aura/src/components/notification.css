@@ -12,8 +12,8 @@ vaadin-notification-card::part(overlay) {
   /* Keeps notifications on top of MDL view transitions */
   view-transition-name: vaadin-notification;
 
-  -webkit-backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
-  backdrop-filter: blur(16px) brightness(1.05) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) brightness(1.2) saturate(1.2);
+  backdrop-filter: blur(16px) brightness(1.2) saturate(1.2);
 }
 
 ::view-transition-group(vaadin-notification) {
@@ -32,7 +32,7 @@ vaadin-notification-card::part(overlay) {
 }
 
 vaadin-notification-card vaadin-card {
-  --vaadin-card-gap: var(--vaadin-gap-s);
+  --vaadin-card-gap: var(--vaadin-gap-xs) var(--vaadin-gap-s);
   color: var(--vaadin-color-subtle);
 }
 

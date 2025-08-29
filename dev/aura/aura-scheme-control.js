@@ -31,6 +31,7 @@ class AuraSchemeControl extends HTMLElement {
                 gap: 0;
                 border: 1px solid var(--vaadin-border-color);
                 border-radius: var(--vaadin-radius-m);
+                background: var(--aura-surface) padding-box;
                 overflow: hidden;
               }
               .segmented input {

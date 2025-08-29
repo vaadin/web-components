@@ -1,6 +1,7 @@
 html,
 [theme] {
   --vaadin-input-field-background: var(--aura-surface);
+  --vaadin-input-field-error-color: red;
   /* TODO disabled background? */
 }
 
@@ -34,10 +35,20 @@ vaadin-message-input:not([readonly], [disabled]) {
   transition: color 100ms;
 }
 
-::part(decrease-button):hover,
-::part(increase-button):hover,
-::part(toggle-button):hover,
-::part(clear-button):hover,
-::part(reveal-button):hover {
+::part(decrease-button):active,
+::part(increase-button):active,
+::part(toggle-button):active,
+::part(clear-button):active,
+::part(reveal-button):active {
   color: var(--vaadin-color);
+}
+
+@media (any-hover: hover) {
+  ::part(decrease-button):hover,
+  ::part(increase-button):hover,
+  ::part(toggle-button):hover,
+  ::part(clear-button):hover,
+  ::part(reveal-button):hover {
+    color: var(--vaadin-color);
+  }
 }
