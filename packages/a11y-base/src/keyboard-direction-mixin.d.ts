@@ -32,12 +32,12 @@ export declare class KeyboardDirectionMixinClass {
   /**
    * Focus the item at given index. Override this method to add custom logic.
    */
-  protected _focus(index: number, navigating: boolean): void;
+  protected _focus(index: number, options: FocusOptions, navigating: boolean): void;
 
   /**
    * Focus the given item. Override this method to add custom logic.
    */
-  protected _focusItem(item: Element, navigating: boolean): void;
+  protected _focusItem(item: Element, options: FocusOptions, navigating: boolean): void;
 
   /**
    * Returns whether the item is focusable. By default,
