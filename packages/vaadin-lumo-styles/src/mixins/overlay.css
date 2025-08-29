@@ -65,6 +65,8 @@
     box-shadow:
       0 0 0 1px var(--lumo-shade-5pct),
       var(--lumo-box-shadow-m);
+
+    /* CSS reset for font styles */
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
