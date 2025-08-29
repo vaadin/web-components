@@ -1,0 +1,50 @@
+html {
+  --aura-surface-level: 2;
+  --aura-surface-opacity: 0.5;
+}
+
+/* List all elements that are surfaces */
+html,
+vaadin-app-layout::part(navbar),
+vaadin-app-layout::part(drawer),
+vaadin-master-detail-layout,
+vaadin-master-detail-layout::part(detail),
+::part(overlay),
+::part(input-field),
+vaadin-message-input,
+vaadin-input-container,
+vaadin-button,
+vaadin-card,
+vaadin-checkbox::part(checkbox),
+vaadin-radio-button::part(radio),
+vaadin-side-nav-item::part(content),
+[theme~='surface'] {
+  --aura-surface-solid: light-dark(
+    color-mix(
+      in oklab,
+      #fff
+        calc(
+          (
+              var(--aura-surface-opacity) / 3 * var(--aura-surface-level) + (1 - var(--aura-surface-opacity)) / 3 *
+                var(--aura-surface-level)
+            ) *
+            100%
+        ),
+      var(--aura-background-light)
+    ),
+    oklab(
+      from var(--aura-background-dark) max(0, max(0.2, l) + max(0.2, l) * max(0.3, l) / 3 * var(--aura-surface-level))
+        calc(a * 1) calc(b * 1)
+    )
+  );
+
+  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--aura-surface-opacity)), transparent);
+
+  @media (prefers-reduced-transparency: reduce) {
+    --aura-surface-opacity: 1;
+  }
+}
+
+[theme~='surface-solid'] {
+  background-color: var(--aura-surface-solid);
+}

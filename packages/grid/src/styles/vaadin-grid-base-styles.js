@@ -159,8 +159,9 @@ export const gridStyles = css`
   [part~='cell'] {
     --_hover-background-image: var(--vaadin-grid-cell-background-hover, none);
     background:
-      var(--_hover-background-image), var(--_selection-background-image),
-      var(--vaadin-grid-cell-background, var(--vaadin-background-color));
+      var(--_hover-background-image),
+      var(--_selection-background-image) padding-box,
+      var(--vaadin-grid-cell-background, var(--vaadin-background-color)) padding-box;
   }
 
   [part~='cell']:not([part~='details-cell']) {
