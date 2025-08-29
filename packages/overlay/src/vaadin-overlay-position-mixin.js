@@ -143,7 +143,7 @@ export const PositionMixin = (superClass) =>
 
       if (props.has('opened') || props.has('positionTarget')) {
         if (!this.positionTarget && props.get('positionTarget')) {
-          this._resetPosition();
+          this.__resetPosition();
         }
 
         this.__overlayOpenedChanged(this.opened, this.positionTarget);
@@ -237,7 +237,7 @@ export const PositionMixin = (superClass) =>
     }
 
     /** @private */
-    _resetPosition() {
+    __resetPosition() {
       Object.assign(this.style, {
         justifyContent: '',
         alignItems: '',
