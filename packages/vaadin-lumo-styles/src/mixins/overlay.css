@@ -68,10 +68,15 @@
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
+    font-style: normal;
     font-weight: 400;
+    font-variant: normal;
     line-height: var(--lumo-line-height-m);
     letter-spacing: 0;
+    text-align: initial;
+    text-decoration: none;
     text-transform: none;
+    white-space: initial;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
