@@ -15,7 +15,7 @@ describe('vaadin-chart exporting', () => {
   }
 
   before(() => {
-    // Prevent form submit
+    // Prevent downloading on anchor click
     sinon.stub(HttpUtilities, 'post');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');

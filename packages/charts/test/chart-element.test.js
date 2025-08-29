@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
 
 describe('vaadin-chart', () => {
@@ -76,6 +77,60 @@ describe('vaadin-chart', () => {
 
     it('should create gantt chart with gantt type', () => {
       expect(chart.configuration.options.isGantt).to.be.ok;
+    });
+  });
+
+  describe('organization', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
+      chart.updateConfiguration(
+        {
+          chart: {
+            styledMode: true,
+            inverted: true,
+            type: 'organization',
+          },
+          title: {
+            text: 'Acme organization chart',
+          },
+          series: [
+            {
+              keys: ['from', 'to'],
+              nodes: [
+                {
+                  id: 'Acme',
+                },
+                {
+                  id: 'Head Office',
+                },
+                {
+                  id: 'Labs',
+                },
+              ],
+              name: 'Highsoft',
+              data: [
+                ['Acme', 'Head Office'],
+                ['Acme', 'Labs'],
+              ],
+            },
+          ],
+        },
+        true,
+      );
+      await oneEvent(chart, 'chart-end-resize');
+    });
+
+    it('should have labels aligned with points', () => {
+      const renderElement = chart.$.chart;
+      const point = renderElement.querySelector('path.highcharts-node.highcharts-point.highcharts-color-0');
+      const label = renderElement.querySelector('div.highcharts-data-label.highcharts-data-label-color-0');
+
+      const { left: pointLeft, width: pointWidth } = point.getBoundingClientRect();
+      const { left: labelLeft, width: labelWidth } = label.getBoundingClientRect();
+
+      expect(pointLeft + pointWidth / 2).to.be.equal(labelLeft + labelWidth / 2);
     });
   });
 
@@ -276,13 +331,13 @@ describe('vaadin-chart', () => {
       await oneEvent(chart, 'chart-load');
     });
 
-    it('should propagate height to the chart container', () => {
+    it('should propagate width to the chart container', () => {
       const rect = chart.$.chart.getBoundingClientRect();
       expect(rect.width).to.be.equal(400);
       expect(chart.configuration.chartWidth).to.be.equal(400);
     });
 
-    it('should update container height on chart resize', async () => {
+    it('should update container width on chart resize', async () => {
       chart.style.width = '300px';
       await oneEvent(chart, 'chart-end-resize');
       const rect = chart.$.chart.getBoundingClientRect();
@@ -339,6 +394,7 @@ describe('vaadin-chart', () => {
 
       layout.style.width = '500px';
       await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(100);
 
       expect(layout.getBoundingClientRect().width).to.be.equal(500);
       expect(charts[0].configuration.chartWidth).to.be.equal(250);
@@ -352,6 +408,7 @@ describe('vaadin-chart', () => {
 
       layout.style.height = '200px';
       await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(200);
 
       expect(layout.getBoundingClientRect().height).to.be.equal(200);
       expect(charts[0].configuration.chartHeight).to.be.equal(200);

@@ -57,7 +57,7 @@ Pointer.prototype.onDocumentMouseMove = function (e) {
   // If we're outside, hide the tooltip
   if (
     chartPosition &&
-    (!tooltip || !tooltip.isStickyOnContact()) &&
+    (!tooltip || !tooltip.isSticky) &&
     !chart.isInsidePlot(pEvt.chartX - chart.plotLeft, pEvt.chartY - chart.plotTop, {
       visiblePlotOnly: true,
     }) &&
@@ -301,11 +301,13 @@ export const ChartMixin = (superClass) =>
         args.forEach((arg) => inflateFunctions(arg));
         functionToCall.apply(this.configuration, args);
         if (redrawCharts) {
+          const lang = Highcharts.defaultOptions.lang;
           Highcharts.charts.forEach((c) => {
             // Ignore `undefined` values that are preserved in the array
             // after their corresponding chart instances are destroyed.
             // See https://github.com/vaadin/flow-components/issues/6607
             if (c !== undefined) {
+              c.time.lang = lang;
               c.redraw();
             }
           });
@@ -449,7 +451,7 @@ export const ChartMixin = (superClass) =>
       return options;
     }
 
-    /**
+    /*
      * Name of the chart events to add to the configuration and its corresponding event for the chart element
      * @private
      */
@@ -606,7 +608,6 @@ export const ChartMixin = (superClass) =>
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} series Series object where the event was sent from
          */
-        legendItemClick: 'series-legend-item-click',
 
         /**
          * Fired when the mouses leave the graph.
@@ -654,7 +655,6 @@ export const ChartMixin = (superClass) =>
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} point Point object where the event was sent from
          */
-        legendItemClick: 'point-legend-item-click',
 
         /**
          * Fired when the mouse leaves the area close to the point.
@@ -915,6 +915,8 @@ export const ChartMixin = (superClass) =>
       } else {
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
+
+      this.__forceResize();
     }
 
     /** @private */
@@ -928,7 +930,7 @@ export const ChartMixin = (superClass) =>
       super.disconnectedCallback();
 
       if (this.configuration) {
-        this._jsonConfigurationBuffer = this.configuration.userOptions;
+        this._jsonConfigurationBuffer = deepMerge({}, this.configuration.userOptions);
       }
 
       queueMicrotask(() => {
@@ -1120,6 +1122,7 @@ export const ChartMixin = (superClass) =>
       this.__initSeriesEventsListeners(configuration);
       this.__initPointsEventsListeners(configuration);
       this.__initAxisEventsListeners(configuration, true);
+      this.__initLegendItemClickEventListener(configuration);
       this.__initAxisEventsListeners(configuration, false);
     }
 
@@ -1136,6 +1139,39 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __initPointsEventsListeners(configuration) {
       this.__createEventListeners(this.__pointEventNames, configuration, 'plotOptions.series.point.events', 'point');
+    }
+
+    /** @private */
+    __initLegendItemClickEventListener(configuration) {
+      const eventObject = this.__ensureObjectPath(configuration, 'legend.events');
+      eventObject.itemClick = (event) => {
+        const customEvent = {
+          bubbles: false,
+          composed: true,
+          detail: {
+            originalEvent: event,
+            legend: event.target,
+          },
+        };
+
+        // `event.legendItem` might be an object of type `Highcharts.Series`, `Highcharts.Point` or
+        // `Highcharts.LegendItemObject`. We care only about the first two to dispatch either a
+        // `series-legend-item-click` or `point-legend-item-click` event.
+        const legendItemMatch = [
+          { clazz: Highcharts.Series, type: 'series' },
+          { clazz: Highcharts.Point, type: 'point' },
+        ].find(({ clazz }) => event.legendItem instanceof clazz);
+
+        if (legendItemMatch) {
+          const { type: legendItemClickType } = legendItemMatch;
+          customEvent.detail[legendItemClickType] = event.legendItem;
+          this.dispatchEvent(new CustomEvent(`${legendItemClickType}-legend-item-click`, customEvent));
+
+          if (this._visibilityTogglingDisabled) {
+            return false;
+          }
+        }
+      };
     }
 
     /** @private */
@@ -1219,10 +1255,6 @@ export const ChartMixin = (superClass) =>
             }
 
             self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
-
-            if (event.type === 'legendItemClick' && self._visibilityTogglingDisabled) {
-              return false;
-            }
           };
         }
       }
@@ -1244,7 +1276,15 @@ export const ChartMixin = (superClass) =>
     }
 
     /** @private */
-    __hasConfigurationBuffer(path) {
+    __hasConfigurationBuffer(path, property) {
+      if (
+        property &&
+        path.startsWith(property) &&
+        this._jsonConfigurationBuffer &&
+        Array.isArray(this._jsonConfigurationBuffer[property])
+      ) {
+        return get(path.split('.')[1], this._jsonConfigurationBuffer[property][0]);
+      }
       return get(path, this._jsonConfigurationBuffer) !== undefined;
     }
 
@@ -1296,7 +1336,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategories(categories, config) {
-      if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories')) {
+      if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories', 'xAxis')) {
         return;
       }
 
@@ -1305,7 +1345,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategoryMax(max, config) {
-      if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max')) {
+      if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max', 'xAxis')) {
         return;
       }
 
@@ -1319,7 +1359,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateCategoryMin(min, config) {
-      if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min')) {
+      if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min', 'xAxis')) {
         return;
       }
 
@@ -1620,24 +1660,43 @@ export const ChartMixin = (superClass) =>
 
       // If chart element is a flexible item the chartContainer should be flex too
       if (isFlex) {
-        this.$.chart.setAttribute('style', 'flex: 1; ');
-        let style = '';
-        if (this.hasAttribute('style')) {
-          style = this.getAttribute('style');
-          if (!style.endsWith(';')) {
-            style += ';';
-          }
-        }
-        style += 'display: flex;';
-        this.setAttribute('style', style);
+        this.style.display = 'flex';
+        this.$.wrapper.style.display = 'flex';
+        this.$.chart.style.flex = 1;
       } else {
-        this.$.chart.setAttribute('style', 'height:100%; width:100%;');
+        this.style.display = '';
+        this.$.wrapper.style.display = '';
+        this.$.chart.style.flex = '';
       }
     }
 
     /** @private */
     __showWarn(propertyName, acceptedValues) {
       console.warn(`<vaadin-chart> Acceptable values for "${propertyName}" are ${acceptedValues}`);
+    }
+
+    /**
+     * @private
+     * Workaround for https://github.com/highcharts/highcharts/issues/23443
+     * Forces a resize in the chart to make it calculate the labels positions
+     * correctly in a chart with "organization" series
+     *
+     * TODO: Remove when the related ticket is fixed
+     */
+    __forceResize() {
+      const chart = this.configuration;
+      const { options } = chart;
+      const hasOrganizationSeries =
+        options.chart.styledMode &&
+        (options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization'));
+      if (!hasOrganizationSeries) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        chart.setSize(chart.chartWidth - 10, chart.chartHeight);
+        chart.setSize(null, null);
+      });
     }
 
     /** @private */
