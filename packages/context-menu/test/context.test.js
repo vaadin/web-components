@@ -90,6 +90,15 @@ describe('context', () => {
     expect(menu._context.target).to.eql(target);
   });
 
+  it('should use listenOn element as target if no selector set and position is set', () => {
+    menu.selector = null;
+    menu.position = 'top-end';
+    menu.listenOn = target;
+    fire(foo, 'contextmenu');
+
+    expect(menu._context.target).to.eql(target);
+  });
+
   it('should not open if no context available', () => {
     menu.selector = 'foobar';
     fire(fooContent, 'contextmenu');
