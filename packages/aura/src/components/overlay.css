@@ -8,8 +8,8 @@ html {
     0 0 0 1px hsla(0, 0%, 0%, max(5%, 3% + 4% * var(--aura-contrast))), 0 8px 16px -3px var(--_shadow-color);
   --vaadin-overlay-border-width: 0px;
   --vaadin-overlay-backdrop-background: light-dark(
-    oklch(from var(--aura-accent-light) calc(l * 0.3) min(0.2, var(--aura-neutral-saturation) / 2) h / 0.2),
-    hsla(0deg, 0%, 0%, 0.2)
+    oklch(from var(--aura-background-light) calc(l * 0.1) min(0.2, var(--aura-neutral-saturation) / 2) h / 0.15),
+    hsla(0deg, 0%, 0%, 0.3)
   );
 }
 

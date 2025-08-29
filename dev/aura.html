@@ -19,6 +19,7 @@
       import './aura/aura-inset-control.js';
       import './aura/aura-number-control.js';
       import './aura/aura-scheme-control.js';
+      import '@vaadin/accordion';
       import '@vaadin/avatar';
       import '@vaadin/avatar-group';
       import '@vaadin/app-layout';
@@ -233,9 +234,9 @@
     <vaadin-app-layout primary-section="navbar">
       <header slot="drawer">
         <vaadin-select id="org-select" theme="subtle auto-size"></vaadin-select>
-        <vaadin-button theme="tertiary">
-          <!-- TODO if this button isn't here, the height of the header too narrow -->
-          <vaadin-icon icon="lucide:panel-left-close" style="visibility: hidden;"></vaadin-icon>
+        <!-- TODO if this button isn't here, the height of the header too narrow -->
+        <vaadin-button theme="tertiary" style="visibility: hidden;">
+          <vaadin-icon icon="lucide:panel-left-close"></vaadin-icon>
         </vaadin-button>
       </header>
       <vaadin-scroller slot="drawer" theme="overflow-indicators">

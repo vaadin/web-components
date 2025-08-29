@@ -2,9 +2,9 @@
   font-size: var(--aura-font-size-s);
   font-weight: var(--aura-font-weight-emphasis);
   line-height: var(--aura-line-height-xs);
-  border: 1px solid var(--vaadin-border-color-subtle);
-  background: var(--aura-surface);
-  background-clip: padding-box;
+  border: 1px solid color-mix(in srgb, var(--color) 10%, transparent);
+  --_bg: color-mix(in srgb, var(--color) 10%, transparent);
+  background: linear-gradient(var(--_bg), var(--_bg)) var(--aura-surface);
   padding: 0.1em 0.3em;
   border-radius: var(--vaadin-radius-m);
   min-width: 1em;

@@ -59,10 +59,45 @@ vaadin-side-nav-item[current]::part(content) {
   }
 } */
 
+/* Contrast variant */
+
 vaadin-side-nav[theme~='contrast'] vaadin-side-nav-item[current]::part(content) {
-  color-scheme: dark;
+  color-scheme: var(--_side-nav-current-item-color-scheme, dark);
   background: var(--aura-surface-solid);
-  --vaadin-focus-ring-color: var(--aura-surface-solid);
+  border-color: transparent;
+  outline-offset: 2px;
+}
+
+@container style(--aura-color-scheme: dark) {
+  [slot='drawer'] {
+    --_side-nav-current-item-color-scheme: light;
+  }
+}
+
+@container style(--aura-content-color-scheme: dark) {
+  vaadin-app-layout > :not([slot]) {
+    --_side-nav-current-item-color-scheme: light;
+  }
+}
+
+@container style(--aura-content-color-scheme: light) {
+  vaadin-app-layout > :not([slot]) {
+    --_side-nav-current-item-color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  @container style(--aura-content-color-scheme: light dark) {
+    vaadin-app-layout > :not([slot]) {
+      --_side-nav-current-item-color-scheme: light;
+    }
+  }
+
+  @container style(--aura-color-scheme: light dark) {
+    [slot='drawer'] {
+      --_side-nav-current-item-color-scheme: light;
+    }
+  }
 }
 
 /* TODO bug in component/base styles: hide label part if no label is provided */

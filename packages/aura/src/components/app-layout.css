@@ -54,8 +54,13 @@ vaadin-app-layout > [slot='drawer'] {
   }
 
   &:is(header),
-  & vaadin-side-nav {
+  vaadin-side-nav {
     padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
+  }
+
+  vaadin-side-nav-item::part(content) {
+    --aura-surface-level: calc(4 + 6 * var(--aura-neutral-saturation));
+    --aura-surface-opacity: 0.3;
   }
 }
 
