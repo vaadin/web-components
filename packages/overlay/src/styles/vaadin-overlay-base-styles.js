@@ -66,7 +66,7 @@ export const overlayStyles = css`
     pointer-events: auto;
     -webkit-tap-highlight-color: initial;
 
-    /* CSS reset for font styles*/
+    /* CSS reset for font styles */
     color: initial;
     font-family: initial;
     font-size: initial;
