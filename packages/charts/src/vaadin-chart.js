@@ -149,7 +149,6 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} point-drag - Fired while dragging a point.
  * @fires {CustomEvent} xaxes-extremes-set - Fired when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when the minimum and maximum is set for the Y axis.
- * @fires {CustomEvent} legend-item-click - Fired when the legend item is clicked.
  *
  * @customElement
  * @extends HTMLElement

@@ -9,16 +9,7 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type {
-  Axis,
-  Chart as HighchartsChart,
-  ExtremesObject,
-  Legend,
-  LegendItemClickEventObject,
-  Options,
-  Point,
-  Series,
-} from 'highcharts';
+import type { Axis, Chart as HighchartsChart, ExtremesObject, Options, Point, Series } from 'highcharts';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 export type ChartCategories = string[] | { [key: number]: string };
@@ -111,8 +102,6 @@ export type ChartSeriesCheckboxClickEvent = CustomEvent<{ series: Series; origin
 
 /**
  * Fired when the series is clicked.
- *
- * @deprecated Since V25. Use `ChartSeriesLegendItemClickEvent` instead.
  */
 export type ChartSeriesClickEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
 
@@ -218,17 +207,6 @@ export type ChartYaxesExtremesSetEvent = CustomEvent<{
   };
 }>;
 
-/**
- * Fired when the legend item is clicked.
- */
-export type ChartLegendItemClickEvent = CustomEvent<{
-  legend: Legend;
-  originalEvent: LegendItemClickEventObject & {
-    target: Legend;
-    type: string;
-  };
-}>;
-
 export interface ChartCustomEventMap {
   'chart-add-series': ChartAddSeriesEvent;
 
@@ -297,8 +275,6 @@ export interface ChartCustomEventMap {
   'xaxes-extremes-set': ChartXaxesExtremesSetEvent;
 
   'yaxes-extremes-set': ChartYaxesExtremesSetEvent;
-
-  'legend-item-click': ChartLegendItemClickEvent;
 }
 
 export type ChartEventMap = ChartCustomEventMap & HTMLElementEventMap;

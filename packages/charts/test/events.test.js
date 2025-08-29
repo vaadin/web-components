@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { click, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-chart.js';
 
@@ -128,6 +128,90 @@ describe('vaadin-chart events', () => {
       const { min, max } = e.detail.originalEvent;
       expect(min).to.be.equal(MIN);
       expect(max).to.be.equal(MAX);
+    });
+  });
+
+  describe('legend click', () => {
+    beforeEach(async () => {
+      chart = fixtureSync(`<vaadin-chart></vaadin-chart>`);
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should dispatch `series-legend-item-click` event', async () => {
+      chart.updateConfiguration(
+        {
+          series: [
+            {
+              type: 'line',
+              name: 'Series 0',
+              data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175],
+            },
+          ],
+          plotOptions: {
+            series: {
+              animation: false,
+            },
+          },
+          legend: {
+            enabled: true,
+          },
+        },
+        true,
+      );
+      await oneEvent(chart, 'chart-load');
+
+      const spy = sinon.spy();
+      chart.addEventListener('series-legend-item-click', spy);
+      const legendItem = chart.$.chart.querySelector('.highcharts-legend-item');
+      click(legendItem);
+
+      expect(spy.called).to.be.ok;
+      const e = spy.firstCall.args[0];
+      expect(e.detail.series).to.be.ok;
+      expect(e.detail.point).to.not.be.ok;
+    });
+
+    it('should dispatch `point-legend-item-click` event', async () => {
+      chart.updateConfiguration(
+        {
+          chart: {
+            type: 'pie',
+          },
+          series: [
+            {
+              name: 'Points',
+              data: [
+                {
+                  name: 'Point 0',
+                  y: 60,
+                },
+                {
+                  name: 'Point 1',
+                  y: 40,
+                },
+              ],
+            },
+          ],
+          plotOptions: {
+            pie: {
+              allowPointSelect: true,
+              showInLegend: true,
+            },
+          },
+        },
+        true,
+      );
+      await oneEvent(chart, 'chart-load');
+
+      const spy = sinon.spy();
+      chart.addEventListener('point-legend-item-click', spy);
+      const legendItem = chart.$.chart.querySelector('.highcharts-legend-item');
+      click(legendItem);
+
+      expect(spy.called).to.be.ok;
+      const e = spy.firstCall.args[0];
+      expect(e.detail.point).to.be.ok;
+      expect(e.detail.series).to.not.be.ok;
     });
   });
 });

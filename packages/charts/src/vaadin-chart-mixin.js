@@ -619,10 +619,7 @@ export const ChartMixin = (superClass) =>
          * @event series-legend-item-click
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} series Series object where the event was sent from
-         *
-         * @deprecated Since V25. Use `legend-item-click` instead.
          */
-        legendItemClick: 'series-legend-item-click',
 
         /**
          * Fired when the mouses leave the graph.
@@ -670,7 +667,6 @@ export const ChartMixin = (superClass) =>
          * @param {Object} detail.originalEvent object with details about the event sent
          * @param {Object} point Point object where the event was sent from
          */
-        legendItemClick: 'point-legend-item-click',
 
         /**
          * Fired when the mouse leaves the area close to the point.
@@ -1242,10 +1238,26 @@ export const ChartMixin = (superClass) =>
               cleanupExport(self);
             }
 
-            self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
+            if (eventType === 'legend' && event.type === 'itemClick') {
+              // `event.legendItem` might be an object of type `Highcharts.Series`, `Highcharts.Point` or
+              // `Highcharts.LegendItemObject`. We care only about the first two to dispatch either a
+              // `series-legend-item-click` or `point-legend-item-click` event.
+              const legendItemMatch = [
+                { clazz: Highcharts.Series, type: 'series' },
+                { clazz: Highcharts.Point, type: 'point' },
+              ].find(({ clazz }) => event.legendItem instanceof clazz);
 
-            if (['legendItemClick', 'itemClick'].includes(event.type) && self._visibilityTogglingDisabled) {
-              return false;
+              if (legendItemMatch) {
+                const { type: legendItemClickType } = legendItemMatch;
+                customEvent.detail[legendItemClickType] = event.legendItem;
+                self.dispatchEvent(new CustomEvent(`${legendItemClickType}-legend-item-click`, customEvent));
+
+                if (self._visibilityTogglingDisabled) {
+                  return false;
+                }
+              }
+            } else {
+              self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
             }
           };
         }
