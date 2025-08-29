@@ -116,13 +116,6 @@ export const PositionMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return [
-        '__positionSettingsChanged(horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap, requiredVerticalSpace)',
-        '__overlayOpenedChanged(opened, positionTarget)',
-      ];
-    }
-
     constructor() {
       super();
 
@@ -143,6 +136,29 @@ export const PositionMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__removeUpdatePositionEventListeners();
+    }
+
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('opened') || props.has('positionTarget')) {
+        if (!this.positionTarget && props.get('positionTarget')) {
+          this._resetPosition();
+        }
+
+        this.__overlayOpenedChanged(this.opened, this.positionTarget);
+      }
+
+      const positionProps = [
+        'horizontalAlign',
+        'verticalAlign',
+        'noHorizontalOverlap',
+        'noVerticalOverlap',
+        'requiredVerticalSpace',
+      ];
+      if (positionProps.some((prop) => props.has(prop))) {
+        this._updatePosition();
+      }
     }
 
     /** @private */
@@ -210,10 +226,6 @@ export const PositionMixin = (superClass) =>
       }
     }
 
-    __positionSettingsChanged() {
-      this._updatePosition();
-    }
-
     /** @private */
     __onScroll(e) {
       // If the scroll event occurred inside the overlay, ignore it.
@@ -222,6 +234,23 @@ export const PositionMixin = (superClass) =>
       }
 
       this._updatePosition();
+    }
+
+    /** @private */
+    _resetPosition() {
+      Object.assign(this.style, {
+        justifyContent: '',
+        alignItems: '',
+        top: '',
+        bottom: '',
+        left: '',
+        right: '',
+      });
+
+      setOverlayStateAttribute(this, 'bottom-aligned', false);
+      setOverlayStateAttribute(this, 'top-aligned', false);
+      setOverlayStateAttribute(this, 'end-aligned', false);
+      setOverlayStateAttribute(this, 'start-aligned', false);
     }
 
     _updatePosition() {
