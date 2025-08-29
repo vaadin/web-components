@@ -451,18 +451,6 @@ export const ChartMixin = (superClass) =>
       return options;
     }
 
-    get __legendEventNames() {
-      return {
-        /**
-         * Fired when the legend item is clicked.
-         * @event legend-item-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} legend Legend object where the event was sent from
-         */
-        itemClick: 'legend-item-click',
-      };
-    }
-
     /*
      * Name of the chart events to add to the configuration and its corresponding event for the chart element
      * @private
@@ -1134,7 +1122,7 @@ export const ChartMixin = (superClass) =>
       this.__initSeriesEventsListeners(configuration);
       this.__initPointsEventsListeners(configuration);
       this.__initAxisEventsListeners(configuration, true);
-      this.__initLegendEventsListeners(configuration);
+      this.__initLegendItemClickEventListener(configuration);
       this.__initAxisEventsListeners(configuration, false);
     }
 
@@ -1154,8 +1142,36 @@ export const ChartMixin = (superClass) =>
     }
 
     /** @private */
-    __initLegendEventsListeners(configuration) {
-      this.__createEventListeners(this.__legendEventNames, configuration, 'legend.events', 'legend');
+    __initLegendItemClickEventListener(configuration) {
+      const eventObject = this.__ensureObjectPath(configuration, 'legend.events');
+      eventObject.itemClick = (event) => {
+        const customEvent = {
+          bubbles: false,
+          composed: true,
+          detail: {
+            originalEvent: event,
+            legend: event.target,
+          },
+        };
+
+        // `event.legendItem` might be an object of type `Highcharts.Series`, `Highcharts.Point` or
+        // `Highcharts.LegendItemObject`. We care only about the first two to dispatch either a
+        // `series-legend-item-click` or `point-legend-item-click` event.
+        const legendItemMatch = [
+          { clazz: Highcharts.Series, type: 'series' },
+          { clazz: Highcharts.Point, type: 'point' },
+        ].find(({ clazz }) => event.legendItem instanceof clazz);
+
+        if (legendItemMatch) {
+          const { type: legendItemClickType } = legendItemMatch;
+          customEvent.detail[legendItemClickType] = event.legendItem;
+          this.dispatchEvent(new CustomEvent(`${legendItemClickType}-legend-item-click`, customEvent));
+
+          if (this._visibilityTogglingDisabled) {
+            return false;
+          }
+        }
+      };
     }
 
     /** @private */
@@ -1238,27 +1254,7 @@ export const ChartMixin = (superClass) =>
               cleanupExport(self);
             }
 
-            if (eventType === 'legend' && event.type === 'itemClick') {
-              // `event.legendItem` might be an object of type `Highcharts.Series`, `Highcharts.Point` or
-              // `Highcharts.LegendItemObject`. We care only about the first two to dispatch either a
-              // `series-legend-item-click` or `point-legend-item-click` event.
-              const legendItemMatch = [
-                { clazz: Highcharts.Series, type: 'series' },
-                { clazz: Highcharts.Point, type: 'point' },
-              ].find(({ clazz }) => event.legendItem instanceof clazz);
-
-              if (legendItemMatch) {
-                const { type: legendItemClickType } = legendItemMatch;
-                customEvent.detail[legendItemClickType] = event.legendItem;
-                self.dispatchEvent(new CustomEvent(`${legendItemClickType}-legend-item-click`, customEvent));
-
-                if (self._visibilityTogglingDisabled) {
-                  return false;
-                }
-              }
-            } else {
-              self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
-            }
+            self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
           };
         }
       }
