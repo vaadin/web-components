@@ -138,6 +138,7 @@ export const PositionMixin = (superClass) =>
       this.__removeUpdatePositionEventListeners();
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 
