@@ -183,6 +183,17 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * `overlay`        | The overlay container
  * `content`        | The overlay content
  *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available on the `<vaadin-context-menu>` element:
+ *
+ * Custom CSS property                   | Description
+ * --------------------------------------|-------------
+ * `--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target
+ * `--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target
+ * `--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target
+ * `--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
