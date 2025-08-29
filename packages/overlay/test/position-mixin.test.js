@@ -106,6 +106,18 @@ describe('position mixin', () => {
     expect(overlay.opened).to.be.false;
   });
 
+  it('should reset styles when positionTarget is reset', async () => {
+    overlay.positionTarget = null;
+    await nextRender();
+
+    expect(overlay.style.top).to.equal('');
+    expect(overlay.style.bottom).to.equal('');
+    expect(overlay.style.left).to.equal('');
+    expect(overlay.style.right).to.equal('');
+    expect(overlay.style.alignItems).to.equal('');
+    expect(overlay.style.justifyContent).to.equal('');
+  });
+
   describe('vertical align top', () => {
     beforeEach(() => {
       overlay.verticalAlign = TOP;
@@ -123,6 +135,13 @@ describe('position mixin', () => {
       expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
       expect(parent.hasAttribute('top-aligned')).to.be.true;
       expect(parent.hasAttribute('bottom-aligned')).to.be.false;
+    });
+
+    it('should remove top-aligned attribute when positionTarget is reset', async () => {
+      overlay.positionTarget = null;
+      await nextRender();
+      expect(overlay.hasAttribute('top-aligned')).to.be.false;
+      expect(parent.hasAttribute('top-aligned')).to.be.false;
     });
 
     it('should align top edges when overlay part is animated', async () => {
@@ -144,6 +163,16 @@ describe('position mixin', () => {
       expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
       expect(parent.hasAttribute('top-aligned')).to.be.false;
       expect(parent.hasAttribute('bottom-aligned')).to.be.true;
+    });
+
+    it('should bottom top-aligned attribute when positionTarget is reset', async () => {
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+
+      overlay.positionTarget = null;
+      await nextRender();
+      expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+      expect(parent.hasAttribute('bottom-aligned')).to.be.false;
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
@@ -384,6 +413,13 @@ describe('position mixin', () => {
       expect(parent.hasAttribute('end-aligned')).to.be.false;
     });
 
+    it('should remove start-aligned attribute when positionTarget is reset', async () => {
+      overlay.positionTarget = null;
+      await nextRender();
+      expect(overlay.hasAttribute('start-aligned')).to.be.false;
+      expect(parent.hasAttribute('start-aligned')).to.be.false;
+    });
+
     it('should align right edges with right-to-left', async () => {
       document.dir = 'rtl';
       await nextRender();
@@ -405,6 +441,16 @@ describe('position mixin', () => {
       expect(overlay.hasAttribute('end-aligned')).to.be.true;
       expect(parent.hasAttribute('start-aligned')).to.be.false;
       expect(parent.hasAttribute('end-aligned')).to.be.true;
+    });
+
+    it('should remove end-aligned attribute when positionTarget is reset', async () => {
+      target.style.left = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+
+      overlay.positionTarget = null;
+      await nextRender();
+      expect(overlay.hasAttribute('end-aligned')).to.be.false;
+      expect(parent.hasAttribute('end-aligned')).to.be.false;
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
