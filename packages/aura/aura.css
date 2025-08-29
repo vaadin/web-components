@@ -10,8 +10,9 @@
 @import './src/components/badge.css';
 @import './src/components/button.css';
 @import './src/components/card.css';
-@import './src/components/date-picker.css';
 @import './src/components/checkbox-radio.css';
+@import './src/components/date-picker.css';
+@import './src/components/dialog.css';
 @import './src/components/form-layout.css';
 @import './src/components/grid.css';
 @import './src/components/input-container.css';
