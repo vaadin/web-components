@@ -377,22 +377,6 @@ export const ContextMenuMixin = (superClass) =>
           this.__y = this._getEventCoordinate(e, 'y');
           this.__pageYOffset = window.pageYOffset;
 
-          // Using custom positioning
-          if (this.position) {
-            // Provide position target and position
-            this._overlayElement.positionTarget = this._context.target;
-            this._overlayElement.position = this.position;
-
-            // Configure overlay positioning
-            this._overlayElement.horizontalAlign = this.__computeHorizontalAlign(this.position);
-            this._overlayElement.verticalAlign = this.__computeVerticalAlign(this.position);
-            this._overlayElement.noHorizontalOverlap = super.__computeNoHorizontalOverlap(this.position);
-            this._overlayElement.noVerticalOverlap = this.__computeNoVerticalOverlap(this.position);
-          } else if (this._overlayElement.position) {
-            this._overlayElement.position = false;
-            this._overlayElement.positionTarget = null;
-          }
-
           // Hide overlay until it is fully rendered and positioned
           this._overlayElement.style.visibility = 'hidden';
           this._setOpened(true);

@@ -239,15 +239,23 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
 
   /** @protected */
   render() {
+    const { _context: context, position } = this;
+
     return html`
       <slot id="slot"></slot>
       <vaadin-context-menu-overlay
         id="overlay"
         .owner="${this}"
         .opened="${this.opened}"
-        .model="${this._context}"
+        .model="${context}"
         .modeless="${this._modeless}"
         .renderer="${this.items ? this.__itemsRenderer : this.renderer}"
+        .position="${position}"
+        .positionTarget="${position ? context && context.target : this._positionTarget}"
+        .horizontalAlign="${position ? this.__computeHorizontalAlign(position) : 'start'}"
+        .verticalAlign="${position ? this.__computeVerticalAlign(position) : 'top'}"
+        ?no-horizontal-overlap="${position ? this.__computeNoHorizontalOverlap(position) : !!this._positionTarget}"
+        ?no-vertical-overlap="${position ? this.__computeNoVerticalOverlap(position) : false}"
         .withBackdrop="${this._phone}"
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"

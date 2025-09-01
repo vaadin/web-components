@@ -414,7 +414,7 @@ export const MenuBarMixin = (superClass) =>
     __updateSubMenu() {
       const subMenu = this._subMenu;
       if (subMenu && subMenu.opened) {
-        const button = subMenu._overlayElement.positionTarget;
+        const button = subMenu._positionTarget;
 
         // Close sub-menu if the corresponding button is no longer in the DOM,
         // or if the item on it has been changed to no longer have children.
@@ -949,6 +949,7 @@ export const MenuBarMixin = (superClass) =>
 
       subMenu.items = items;
       subMenu.listenOn = button;
+      subMenu._positionTarget = button;
       const overlay = subMenu._overlayElement;
       overlay.noVerticalOverlap = true;
 
@@ -958,7 +959,6 @@ export const MenuBarMixin = (superClass) =>
       this._setExpanded(button, true);
 
       this.style.pointerEvents = 'auto';
-      overlay.positionTarget = button;
 
       button.dispatchEvent(
         new CustomEvent('opensubmenu', {
