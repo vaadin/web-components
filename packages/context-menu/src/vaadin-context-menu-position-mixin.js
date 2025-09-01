@@ -27,21 +27,37 @@ export const ContextMenuPositionMixin = (superClass) =>
 
     /** @protected */
     __computeHorizontalAlign(position) {
+      if (!position) {
+        return 'start';
+      }
+
       return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
     }
 
     /** @protected */
     __computeNoHorizontalOverlap(position) {
+      if (!position) {
+        return !!this._positionTarget;
+      }
+
       return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
     }
 
     /** @protected */
     __computeNoVerticalOverlap(position) {
+      if (!position) {
+        return false;
+      }
+
       return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
     }
 
     /** @protected */
     __computeVerticalAlign(position) {
+      if (!position) {
+        return 'top';
+      }
+
       return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
     }
   };
