@@ -33,7 +33,7 @@
         { text: 'Menu Item 3', disabled: true },
       ];
 
-      menu.listenOn = menu.querySelector('div');
+      menu.listenOn = menu.querySelector('#target');
 
       const radioGroup = document.querySelector('#positionGroup');
 
@@ -67,7 +67,10 @@
 
     <div style="margin: 200px">
       <vaadin-context-menu style="--vaadin-context-menu-default-offset: 10px">
-        <div style="height: 200px; border: 1px solid black; text-align: center; user-select: none;" id="basic-context-menu-target"><h2>Right click this component</h2><p>(or long touch on mobile)</p></div>
+        <div id="target" style="border: 1px solid black; text-align: center; user-select: none;">
+          <h2>Right click this component</h2>
+          <p>(or long touch on mobile)</p>
+        </div>
       </vaadin-context-menu>
     </div>
   </body>
