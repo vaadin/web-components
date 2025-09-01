@@ -296,14 +296,14 @@ export class IronListAdapter {
         // element height queue
         const filteredHeights = this.__elementHeightQueue.filter((h) => h !== undefined);
         this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
-
-        // Schedule one additional measurement cycle for async height updates
-        // https://github.com/vaadin/web-components/issues/9077
-        this.__asyncHeightUpdateDebouncer = Debouncer.debounce(this.__asyncHeightUpdateDebouncer, microTask, () => {
-          this._updateMetrics();
-          this._positionItems();
-        });
       }
+    });
+
+    // Schedule one additional measurement cycle for async height updates
+    // https://github.com/vaadin/web-components/issues/9077
+    this.__asyncHeightUpdateDebouncer = Debouncer.debounce(this.__asyncHeightUpdateDebouncer, animationFrame, () => {
+      this._updateMetrics();
+      this._positionItems();
     });
 
     if (this.__pendingScrollToIndex !== undefined && !this.__hasPlaceholders()) {
