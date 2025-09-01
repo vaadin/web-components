@@ -449,7 +449,7 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __onScroll() {
-      if (!this.opened) {
+      if (!this.opened || this.position) {
         return;
       }
 
