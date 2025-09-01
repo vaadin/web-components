@@ -218,6 +218,8 @@ snapshots["vaadin-avatar-group opened default"] =
   >
     <vaadin-avatar-group-menu-item
       aria-selected="false"
+      focus-ring=""
+      focused=""
       role="menuitem"
       tabindex="0"
     >
@@ -298,10 +300,9 @@ snapshots["vaadin-avatar-group opened default"] =
   <vaadin-avatar
     abbr="+2"
     aria-describedby="vaadin-tooltip-7"
-    aria-expanded="false"
+    aria-expanded="true"
     aria-haspopup="menu"
     aria-label="+2"
-    focused=""
     has-tooltip=""
     role="button"
     slot="overflow"
@@ -330,6 +331,7 @@ snapshots["vaadin-avatar-group opened overlay"] =
   exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
+  opened=""
   popover="manual"
   start-aligned=""
   top-aligned=""
