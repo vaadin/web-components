@@ -8,6 +8,8 @@ import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaad
 import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
 import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
 
+export type { ContextMenuPosition } from './vaadin-context-menu-position-mixin.js';
+
 export { ContextMenuItem };
 
 export interface ContextMenuRendererContext {

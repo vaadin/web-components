@@ -11,6 +11,7 @@ import type {
   ContextMenuItem as MenuItem,
   ContextMenuItemSelectedEvent,
   ContextMenuOpenedChangedEvent,
+  ContextMenuPosition,
   ContextMenuRenderer,
   ContextMenuRendererContext,
 } from '../../vaadin-context-menu.js';
@@ -24,6 +25,7 @@ assertType<boolean>(menu.opened);
 assertType<string>(menu.openOn);
 assertType<string>(menu.closeOn);
 assertType<HTMLElement>(menu.listenOn);
+assertType<ContextMenuPosition>(menu.position);
 
 // Events
 menu.addEventListener('opened-changed', (event) => {
