@@ -5,7 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ContextMenuRenderer } from './vaadin-context-menu.js';
-import { ContextMenuPositionMixinClass } from './vaadin-context-menu-position-mixin';
+import type { ContextMenuPositionMixinClass } from './vaadin-context-menu-position-mixin.js';
 import type { ContextMenuItem, ItemsMixinClass } from './vaadin-contextmenu-items-mixin.js';
 
 export declare function ContextMenuMixin<
