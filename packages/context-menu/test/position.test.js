@@ -20,8 +20,8 @@ describe('position', () => {
     await nextRender();
 
     overlay = menu._overlayElement;
-    // The default offset is 0px + 0.1px for rounding
-    defaultOffset = 0.1;
+    // The default offset is 4px in base styles + 0.1px for rounding
+    defaultOffset = 0.1 + parseInt(getComputedStyle(overlay).getPropertyValue('--_default-offset'));
   });
 
   // Overlay above the target (position="top-*")
