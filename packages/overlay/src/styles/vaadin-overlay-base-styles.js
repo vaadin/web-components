@@ -79,9 +79,6 @@ export const overlayStyles = css`
     text-decoration: none;
     text-transform: none;
     white-space: initial;
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   [part='backdrop'] {
