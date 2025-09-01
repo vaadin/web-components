@@ -134,6 +134,49 @@ describe('context-menu', () => {
           await visualDiff(document.body, `${dir}-items`);
         });
       });
+
+      describe('position', () => {
+        let wrapper;
+
+        beforeEach(async () => {
+          wrapper = fixtureSync(`
+            <div style="display: flex; width: 600px; height: 600px; justify-content: center; align-items: center">
+              <vaadin-context-menu>
+                <div id="target" style="width: 200px; height: 200px; outline: 1px solid red;">
+                  Target
+                </div>
+              </vaadin-context-menu>
+            </div>
+          `);
+          element = wrapper.firstElementChild;
+          element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+          element.listenOn = element.querySelector('#target');
+          await nextUpdate(element);
+        });
+
+        [
+          'top-start',
+          'top',
+          'top-end',
+          'bottom-start',
+          'bottom',
+          'bottom-end',
+          'start-top',
+          'start',
+          'start-bottom',
+          'end-top',
+          'end',
+          'end-bottom',
+        ].forEach((position) => {
+          it(position, async () => {
+            element.position = position;
+            await nextUpdate(element);
+            contextmenu(element);
+            await nextRender();
+            await visualDiff(wrapper, `${dir}-${position}`);
+          });
+        });
+      });
     });
   });
 });
