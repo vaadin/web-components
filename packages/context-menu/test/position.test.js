@@ -7,11 +7,11 @@ describe('position', () => {
   let menu, target, overlay, defaultOffset;
 
   beforeEach(async () => {
-    menu = fixtureSync(
-      `<vaadin-context-menu style="margin: 200px;">
-              <div id="target" style="width: 300px; height: 200px; outline: 1px solid red;"></div>
-            </vaadin-context-menu>`,
-    );
+    menu = fixtureSync(`
+      <vaadin-context-menu style="margin: 200px;">
+        <div id="target" style="width: 300px; height: 200px; outline: 1px solid red;"></div>
+      </vaadin-context-menu>
+    `);
 
     menu.items = [{ text: 'Menu Item 1' }, { component: 'hr' }, { text: 'Menu Item 2' }];
     target = menu.querySelector('#target');
