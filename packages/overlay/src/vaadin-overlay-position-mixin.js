@@ -143,11 +143,7 @@ export const PositionMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('opened') || props.has('positionTarget')) {
-        if (!this.positionTarget && props.get('positionTarget')) {
-          this.__resetPosition();
-        }
-
-        this.__overlayOpenedChanged(this.opened, this.positionTarget);
+        this.__updatePositionSettings(this.opened, this.positionTarget, props.get('positionTarget'));
       }
 
       const positionProps = [
@@ -198,8 +194,14 @@ export const PositionMixin = (superClass) =>
     }
 
     /** @private */
-    __overlayOpenedChanged(opened, positionTarget) {
+    __updatePositionSettings(opened, positionTarget, oldTarget) {
       this.__removeUpdatePositionEventListeners();
+
+      // 1. When position target is removed, always reset position settings
+      // 2. When position target is set, reset if overlay was opened before
+      if ((!positionTarget && oldTarget) || (positionTarget && !oldTarget && !!this.__margins)) {
+        this.__resetPosition();
+      }
 
       if (positionTarget) {
         positionTarget.__overlay = null;
@@ -239,6 +241,8 @@ export const PositionMixin = (superClass) =>
 
     /** @private */
     __resetPosition() {
+      this.__margins = null;
+
       Object.assign(this.style, {
         justifyContent: '',
         alignItems: '',
