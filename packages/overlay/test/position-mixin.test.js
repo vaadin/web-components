@@ -118,6 +118,30 @@ describe('position mixin', () => {
     expect(overlay.style.justifyContent).to.equal('');
   });
 
+  it('should reset styles when positionTarget is set', async () => {
+    overlay.positionTarget = null;
+    overlay.opened = false;
+    await nextRender();
+
+    overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    // Mimic context-menu logic that modifies styles
+    overlay.style.top = '100px';
+    overlay.style.bottom = '100px';
+    overlay.style.left = '100px';
+    overlay.style.right = '100px';
+
+    overlay.opened = false;
+    overlay.positionTarget = target;
+    await nextRender();
+
+    expect(overlay.style.top).to.equal('');
+    expect(overlay.style.bottom).to.equal('');
+    expect(overlay.style.left).to.equal('');
+    expect(overlay.style.right).to.equal('');
+  });
+
   describe('vertical align top', () => {
     beforeEach(() => {
       overlay.verticalAlign = TOP;
