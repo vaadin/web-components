@@ -2,7 +2,7 @@ html {
   --aura-radius-base: 3;
   --vaadin-radius-s: min(0.25lh, round(var(--aura-radius-base) * 1px + 2px, 1px));
   --vaadin-radius-m: round(var(--aura-radius-base) * 2px + 3px, 1px);
-  --vaadin-radius-l: round(var(--aura-radius-base) * 2.5px + 7px, 1px);
+  --vaadin-radius-l: round(var(--aura-radius-base) * 1.5px + 10px, 1px);
 
   --aura-size-base: 6;
   --aura-size-scale: 1.4;
