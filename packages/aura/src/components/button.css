@@ -1,11 +1,11 @@
-/* Avoid styling message-input button */
-vaadin-button:not([slot='button']) {
+/* TODO Avoid styling message-input button */
+vaadin-button:where(:not([slot='button'])) {
   transition: scale 180ms;
 }
 
-vaadin-button:not([slot='button'], [theme~='tertiary']) {
+vaadin-button:where(:not([slot='button'], [theme~='tertiary'])) {
   --vaadin-button-border-color: var(--vaadin-border-color);
-  --aura-surface-level: 4;
+  --aura-surface-level: 6;
   /* --aura-surface-opacity: 0.3; */
   box-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
@@ -24,9 +24,6 @@ vaadin-button:not([theme~='primary'], [theme~='tertiary']) {
 
 vaadin-button[theme~='primary'] {
   --vaadin-button-font-weight: var(--aura-font-weight-strong);
-  box-shadow:
-    inset 0 0 10px 0 color-mix(in srgb, var(--aura-accent-color) 30%, transparent),
-    0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
 
 vaadin-button {
@@ -37,6 +34,7 @@ vaadin-button:not([slot='button'], [readonly], [disabled])::before {
   content: '';
   position: absolute;
   inset: calc(var(--vaadin-button-border-width, 1px) * -1);
+  pointer-events: none;
   border-radius: inherit;
   background-color: currentColor;
   opacity: 0;
