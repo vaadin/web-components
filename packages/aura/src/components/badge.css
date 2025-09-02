@@ -2,11 +2,46 @@
   font-size: var(--aura-font-size-s);
   font-weight: var(--aura-font-weight-emphasis);
   line-height: var(--aura-line-height-xs);
-  border: 1px solid color-mix(in srgb, var(--color) 10%, transparent);
-  --_bg: color-mix(in srgb, var(--color) 10%, transparent);
+  border: 1px solid var(--_bg);
+  --_bg: color-mix(in srgb, var(--color) 7%, transparent);
   background: linear-gradient(var(--_bg), var(--_bg)) var(--aura-surface);
   padding: 0.1em 0.3em;
   border-radius: var(--vaadin-radius-m);
   min-width: 1em;
   text-align: center;
+  --color: var(--vaadin-color);
+  color: var(--color);
+}
+
+[theme~='badge'][theme~='accent'] {
+  --color: var(--aura-accent-color);
+}
+
+[theme~='badge'][theme~='blue'] {
+  --color: var(--aura-blue);
+}
+
+[theme~='badge'][theme~='red'] {
+  --color: var(--aura-red);
+}
+
+[theme~='badge'][theme~='green'] {
+  --color: var(--aura-green);
+}
+
+[theme~='badge'][theme~='yellow'] {
+  --color: var(--aura-yellow);
+}
+
+[theme~='badge'][theme~='orange'] {
+  --color: var(--aura-orange);
+}
+
+[theme~='badge'][theme~='purple'] {
+  --color: var(--aura-purple);
+}
+
+[theme~='badge'][theme~='filled'] {
+  background: var(--color);
+  color: oklch(from var(--color) clamp(0, (0.62 - l) * 1000, 1) 0 0);
 }
