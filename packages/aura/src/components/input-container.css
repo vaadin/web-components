@@ -1,7 +1,7 @@
 html,
 [theme] {
   --vaadin-input-field-background: var(--aura-surface);
-  --vaadin-input-field-error-color: red;
+  --vaadin-input-field-error-color: var(--aura-red);
   /* TODO disabled background? */
 }
 
