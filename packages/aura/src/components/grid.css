@@ -1,3 +1,11 @@
+html {
+  /* TODO should likely be just a color prop, not a background-image */
+  --vaadin-grid-row-selected-background: linear-gradient(
+    var(--vaadin-background-container),
+    var(--vaadin-background-container)
+  );
+}
+
 vaadin-grid[theme~='no-border']::part(first-column-cell) {
   /* TODO can't use --vaadin-grid-cell-padding, it only works on the host */
   /* quite difficult to override the cell padding when it’s on the slotted vaadin-grid-cell-content element */
@@ -10,5 +18,8 @@ vaadin-grid[theme~='no-border']::part(last-column-cell) {
 
 /* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
 vaadin-grid::part(active-nav-item) {
-  --vaadin-grid-row-selected-background: var(--vaadin-background-container-strong);
+  /* TODO should likely be just a color prop, not a background-image */
+  /* TODO need a custom prop in grid base styles that can be used to just highlight a row, which works together with row stripes, selection color, etc. */
+  --vaadin-grid-cell-background: linear-gradient(var(--vaadin-background-container), var(--vaadin-background-container))
+    var(--vaadin-background-color);
 }
