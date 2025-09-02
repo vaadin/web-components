@@ -1,6 +1,11 @@
 html {
   --aura-surface-level: 2;
   --aura-surface-opacity: 0.5;
+  --aura-surface-min-opacity: 0;
+
+  @media (prefers-reduced-transparency: reduce) {
+    --aura-surface-min-opacity: 1;
+  }
 }
 
 /* List all elements that are surfaces */
@@ -19,15 +24,14 @@ vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
 [theme~='surface'] {
+  --_opacity: max(var(--aura-surface-min-opacity), var(--aura-surface-opacity));
+
   --aura-surface-solid: light-dark(
     color-mix(
       in oklab,
       #fff
         calc(
-          (
-              var(--aura-surface-opacity) / 3 * var(--aura-surface-level) + (1 - var(--aura-surface-opacity)) / 3 *
-                var(--aura-surface-level)
-            ) *
+          (var(--_opacity) / 3 * var(--aura-surface-level) + (1 - var(--_opacity)) / 3 * var(--aura-surface-level)) *
             100%
         ),
       var(--aura-background-light)
@@ -38,11 +42,8 @@ vaadin-side-nav-item::part(content),
     )
   );
 
-  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--aura-surface-opacity)), transparent);
-
-  @media (prefers-reduced-transparency: reduce) {
-    --aura-surface-opacity: 1;
-  }
+  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--_opacity)), transparent);
+  --vaadin-background-color: var(--aura-surface-solid);
 }
 
 [theme~='surface-solid'] {
