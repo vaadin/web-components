@@ -4,10 +4,10 @@ vaadin-master-detail-layout::part(detail) {
 }
 
 vaadin-master-detail-layout[drawer]::part(detail) {
-  --aura-surface-opacity: 0.7;
+  --aura-surface-opacity: 0.8;
   background: var(--aura-surface) padding-box;
-  -webkit-backdrop-filter: blur(12px) brightness(1.15) saturate(1.2);
-  backdrop-filter: blur(12px) brightness(1.15) saturate(1.25);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
   box-shadow: var(--aura-overlay-shadow);
 }
 

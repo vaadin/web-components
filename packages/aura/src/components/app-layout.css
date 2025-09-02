@@ -29,8 +29,8 @@ vaadin-app-layout[overlay]::part(drawer) {
   --vaadin-app-layout-drawer-background: var(--aura-surface);
   /* --aura-surface-level: 4; */
   --aura-surface-opacity: 0.9;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
 vaadin-app-layout::part(drawer) {
