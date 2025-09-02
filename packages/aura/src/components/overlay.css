@@ -11,6 +11,7 @@ html {
     oklch(from var(--aura-background-light) calc(l * 0.1) min(0.2, var(--aura-neutral-saturation) / 2) h / 0.15),
     hsla(0deg, 0%, 0%, 0.3)
   );
+  --aura-overlay-backdrop-filter: blur(12px) brightness(1.2) saturate(1.2);
 }
 
 html,
@@ -20,6 +21,6 @@ html,
 
 ::part(overlay) {
   box-shadow: var(--aura-overlay-shadow);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
 }

@@ -11,9 +11,6 @@ vaadin-notification-card::part(overlay) {
   /* TODO probably should be in base styles */
   /* Keeps notifications on top of MDL view transitions */
   view-transition-name: vaadin-notification;
-
-  -webkit-backdrop-filter: blur(16px) brightness(1.2) saturate(1.2);
-  backdrop-filter: blur(16px) brightness(1.2) saturate(1.2);
 }
 
 ::view-transition-group(vaadin-notification) {
