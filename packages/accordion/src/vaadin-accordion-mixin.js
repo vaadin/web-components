@@ -31,6 +31,16 @@ export const AccordionMixin = (superClass) =>
         },
 
         /**
+         * Indicates whether all the accordion panels are closed.
+         * Setting this property to true closes all the accordion panels.
+         */
+        closed: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+        },
+
+        /**
          * The list of `<vaadin-accordion-panel>` child elements.
          * It is populated from the elements passed to the light DOM,
          * and updated dynamically when adding or removing panels.
@@ -45,7 +55,7 @@ export const AccordionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_updateItems(items, opened)'];
+      return ['_updateItems(items, opened, closed)'];
     }
 
     constructor() {
@@ -112,13 +122,21 @@ export const AccordionMixin = (superClass) =>
     }
 
     /** @private */
-    _updateItems(items, opened) {
+    _updateItems(items, opened, closed) {
       if (items) {
         this.__itemsSync = true;
-        const itemToOpen = items[opened];
-        items.forEach((item) => {
-          item.opened = item === itemToOpen;
-        });
+        if (closed) {
+          items.forEach((item) => {
+            item.opened = false;
+          });
+          this.opened = null;
+        } else {
+          const itemToOpen = items[opened];
+          items.forEach((item) => {
+            item.opened = item === itemToOpen;
+          });
+        }
+
         this.__itemsSync = false;
       }
     }
@@ -147,6 +165,7 @@ export const AccordionMixin = (superClass) =>
       if (this.__itemsSync) {
         return;
       }
+
       const target = this._filterItems(e.composedPath())[0];
       const idx = this.items.indexOf(target);
       if (e.detail.value) {
@@ -155,8 +174,12 @@ export const AccordionMixin = (superClass) =>
         }
 
         this.opened = idx;
+        this.closed = null;
       } else if (!this.items.some((item) => item.opened)) {
         this.opened = null;
+        this.closed = true;
+      } else {
+        this.closed = true;
       }
     }
   };

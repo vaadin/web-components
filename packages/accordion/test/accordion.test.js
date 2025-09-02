@@ -89,6 +89,7 @@ describe('vaadin-accordion', () => {
     it('should open the first panel by default', () => {
       expect(accordion.opened).to.equal(0);
       expect(accordion.items[0].opened).to.be.true;
+      expect(accordion.closed).to.be.null;
     });
 
     it('should reflect opened property to attribute', () => {
@@ -100,6 +101,7 @@ describe('vaadin-accordion', () => {
       await nextUpdate(accordion);
       expect(accordion.items[1].opened).to.be.true;
       expect(accordion.opened).to.equal(1);
+      expect(accordion.closed).to.be.null;
     });
 
     it('should not update opened to new index when clicking disabled panel', async () => {
@@ -108,6 +110,7 @@ describe('vaadin-accordion', () => {
       await nextUpdate(accordion);
       expect(accordion.items[1].opened).to.be.false;
       expect(accordion.opened).to.equal(0);
+      expect(accordion.closed).to.be.null;
     });
 
     it('should close currently opened panel when another one is opened', async () => {
@@ -115,19 +118,29 @@ describe('vaadin-accordion', () => {
       await nextUpdate(accordion);
       expect(accordion.items[1].opened).to.be.true;
       expect(accordion.items[0].opened).to.be.false;
+      expect(accordion.closed).to.be.null;
     });
 
-    it('should set opened to null when the opened panel is closed', async () => {
+    it('should set opened to null and add closed to true when the opened panel is closed', async () => {
       getHeading(0).click();
       await nextUpdate(accordion);
       expect(accordion.items[0].opened).to.be.false;
       expect(accordion.opened).to.equal(null);
+      expect(accordion.closed).to.be.true;
     });
 
     it('should close currently opened panel when opened set to null', async () => {
       accordion.opened = null;
       await nextUpdate(accordion);
       expect(accordion.items[0].opened).to.be.false;
+      expect(accordion.closed).to.be.true;
+    });
+
+    it('should close currently opened panel when closed set to true', async () => {
+      accordion.closed = true;
+      await nextUpdate(accordion);
+      expect(accordion.items[0].opened).to.be.false;
+      expect(accordion.closed).to.be.true;
     });
 
     it('should not change opened state if panel has been removed', async () => {
