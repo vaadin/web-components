@@ -1,6 +1,6 @@
 html {
   --vaadin-avatar-border-color: var(--vaadin-border-color-subtle);
-  --vaadin-avatar-background: var(--vaadin-border-color-subtle);
+  --vaadin-avatar-background: var(--vaadin-background-container);
   --vaadin-avatar-font-weight: var(--aura-font-weight-emphasis);
   --vaadin-avatar-font-size: var(--aura-font-size-m);
 }
