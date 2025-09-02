@@ -7,21 +7,7 @@ html {
 
   /* TODO this file should only be concerned about setting the color-scheme property, not setting background or text colors */
   color: var(--vaadin-color);
-  --_dark-accent: radial-gradient(
-    circle at 0% 0%,
-    light-dark(
-      oklch(
-        from var(--aura-accent-light) calc(l + l * var(--aura-neutral-saturation) * 0.75)
-          calc(c / 2 + var(--aura-neutral-saturation) / 20) h / var(--aura-neutral-saturation)
-      ),
-      oklch(
-        from var(--aura-accent-dark) calc(l / 2 + l / 10 * var(--aura-neutral-saturation))
-          calc(c - var(--aura-neutral-saturation) / 10) h / var(--aura-neutral-saturation)
-      )
-    ),
-    transparent calc(30% + 20% * var(--aura-neutral-saturation))
-  );
-  background: var(--_dark-accent), var(--aura-accent-background);
+  background: var(--aura-app-background);
   background-size: 100vw 100vh;
   background-attachment: fixed;
 }
@@ -29,8 +15,7 @@ html {
 vaadin-app-layout > :not([slot]) {
   color-scheme: var(--aura-content-color-scheme);
   color: var(--vaadin-color);
-  background:
-    linear-gradient(var(--aura-surface), var(--aura-surface)), var(--_dark-accent), var(--aura-accent-background);
+  background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-app-background);
   background-clip: padding-box;
   background-origin: border-box;
 }

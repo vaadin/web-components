@@ -59,8 +59,7 @@ vaadin-app-layout > [slot='drawer'] {
   }
 
   vaadin-side-nav-item::part(content) {
-    --aura-surface-level: calc(4 + 6 * var(--aura-neutral-saturation));
-    --aura-surface-opacity: 0.3;
+    --aura-surface-level: 5;
   }
 }
 

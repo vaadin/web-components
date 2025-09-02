@@ -29,6 +29,7 @@
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
       import '@vaadin/date-time-picker';
+      import '@vaadin/dialog';
       import '@vaadin/icon';
       import '@vaadin/grid/all-imports';
       import '@vaadin/form-layout';
@@ -54,6 +55,7 @@
       import '@vaadin/radio-group';
       import '@vaadin/menu-bar';
       import '@vaadin/select';
+      import '@vaadin/popover';
       import '@vaadin/login/vaadin-login-form.js';
       import { html, render } from 'lit';
       import { Button } from '@vaadin/button';
@@ -142,10 +144,10 @@
       }
 
       const rootMdl = document.querySelector('vaadin-master-detail-layout');
-      const themeView = getView('theme');
-      themeView.setAttribute('slot', 'detail');
+      const defaultView = getView('components');
+      defaultView.setAttribute('slot', 'detail');
       // Don't use _setDetail to avoid view transition
-      rootMdl.append(themeView);
+      rootMdl.append(defaultView);
 
       customElements.define(
         'mdl-back-button',
@@ -231,6 +233,36 @@
   </head>
 
   <body>
+
+    <vaadin-popover for="theme-editor-btn" position="bottom-start" opened width="300px" style="--aura-size-base: 5; --aura-font-size-base: 13;" theme>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+        <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
+        <aura-scheme-control property="--aura-content-color-scheme" label="--aura-content-color-scheme"></aura-scheme-control>
+        <aura-scheme-control property="--aura-notification-color-scheme"
+          label="--aura-notification-color-scheme"></aura-scheme-control>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+        <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
+        <aura-number-control property="--aura-surface-min-opacity" min="0" max="1" step="0.01"></aura-number-control>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+        <aura-number-control property="--aura-size-base" min="2" max="10"></aura-number-control>
+        <aura-inset-control></aura-inset-control>
+        <aura-number-control property="--aura-radius-base" min="0" max="8" step="0.5"></aura-number-control>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+        <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
+        <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
+        <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
+        <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+        <aura-number-control property="--aura-font-size-base" label="--aura-font-size-base" min="12"
+          max="18"></aura-number-control>
+        <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
+      </div>
+    </vaadin-popover>
+
     <vaadin-app-layout primary-section="navbar">
       <header slot="drawer">
         <vaadin-select id="org-select" theme="subtle auto-size"></vaadin-select>
@@ -293,20 +325,19 @@
           <header>
             <vaadin-drawer-toggle></vaadin-drawer-toggle>
             <h1>Dashboard</h1>
+            <vaadin-button theme="tertiary" id="theme-editor-btn">
+              <vaadin-icon icon="lucide:palette"></vaadin-icon>
+            </vaadin-button>
           </header>
           <vaadin-scroller theme="overflow-indicators">
             <vaadin-side-nav theme="contrast">
-              <vaadin-side-nav-item path="#theme">
+              <vaadin-side-nav-item path="#components">
                 <vaadin-icon icon="lucide:home" slot="prefix"></vaadin-icon>
-                <span>Theme</span>
+                <span>Components</span>
               </vaadin-side-nav-item>
               <vaadin-side-nav-item path="#grid">
                 <vaadin-icon icon="lucide:chart-column" slot="prefix"></vaadin-icon>
                 <span>Grid View</span>
-              </vaadin-side-nav-item>
-              <vaadin-side-nav-item path="#components">
-                <vaadin-icon icon="lucide:folder" slot="prefix"></vaadin-icon>
-                <span>Components</span>
               </vaadin-side-nav-item>
               <vaadin-side-nav-item>
                 <vaadin-icon icon="lucide:chart-pie" slot="prefix"></vaadin-icon>
@@ -333,47 +364,6 @@
           </vaadin-scroller>
         </div>
     </vaadin-app-layout>
-
-    <template id="theme-view">
-      <vaadin-master-detail-layout>
-        <div class="aura-view">
-          <header>
-            <mdl-back-button></mdl-back-button>
-            <h1>Theme</h1>
-          </header>
-          <vaadin-scroller theme="overflow-indicators">
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-              <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
-              <aura-scheme-control property="--aura-content-color-scheme"
-                label="--aura-content-color-scheme"></aura-scheme-control>
-              <aura-scheme-control property="--aura-notification-color-scheme"
-                label="--aura-notification-color-scheme"></aura-scheme-control>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-              <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
-              <aura-number-control property="--aura-neutral-saturation" min="0" max="1" step="0.01"></aura-number-control>
-              <aura-number-control property="--aura-surface-opacity" min="0.2" max="1" step="0.01"></aura-number-control>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-              <aura-number-control property="--aura-size-base" min="2" max="10"></aura-number-control>
-              <aura-inset-control></aura-inset-control>
-              <aura-number-control property="--aura-radius-base" min="0" max="8" step="0.5"></aura-number-control>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-              <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
-              <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
-              <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
-              <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-              <aura-number-control property="--aura-font-size-base" label="--aura-font-size-base" min="12" max="18"></aura-number-control>
-              <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
-            </div>
-          </vaadin-scroller>
-        </div>
-      </vaadin-master-detail-layout>
-      </vaadin-master-detail-layout>
-    </template>
 
     <template id="grid-view">
       <vaadin-master-detail-layout detail-size="20rem" containment="viewport" theme="surface-solid">
@@ -483,14 +473,32 @@
                 </span>
                 <span theme="badge blue">
                   <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="badge purple">
                   <vaadin-icon icon="lucide:home"></vaadin-icon>
                 </span>
+                <span theme="badge red">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
                 </span>
                 <span theme="badge orange">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
                 <span theme="badge yellow">
                   <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+              </div>
 
               <div class="flex flex-wrap gap-s justify-center">
+                <span theme="badge filled">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="badge filled accent">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="badge filled green">
+                  <vaadin-icon icon="lucide:home"></vaadin-icon>
+                </span>
+                <span theme="badge filled blue">
                   <vaadin-icon icon="lucide:home"></vaadin-icon>
                 </span>
                 <span theme="badge filled purple">

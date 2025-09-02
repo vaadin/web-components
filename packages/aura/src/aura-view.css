@@ -21,6 +21,7 @@
   font-size: var(--aura-font-size-l);
   font-weight: var(--aura-font-weight-strong);
   color: var(--vaadin-color);
+  flex: 1;
 }
 
 :is(vaadin-app-layout:not([overlay]), vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'])

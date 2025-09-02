@@ -5,8 +5,8 @@ html {
   --aura-accent-dark: hsl(220, 75%, 56%);
 
   --_color-base: light-dark(
-    oklch(from var(--aura-background-light) 0.1 calc(c * var(--_neutral-c) * 2) h),
-    oklch(from var(--aura-background-dark) 1 calc(c * var(--_neutral-c)) h)
+    oklch(from var(--aura-background-light) 0.1 c h),
+    oklch(from var(--aura-background-dark) 1 c h)
   );
   --vaadin-color: light-dark(
     color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
@@ -20,8 +20,8 @@ html {
 
   /* TODO base on background color instead of accent color */
   --_border-color-base: light-dark(
-    oklch(from var(--aura-background-light) 0.1 calc(c * var(--_neutral-c) * 3) h),
-    oklch(from var(--aura-background-dark) 0.98 calc((c + 0.1) * var(--_neutral-c)) h)
+    oklch(from var(--aura-background-light) 0.1 c h),
+    oklch(from var(--aura-background-dark) 0.85 c h)
   );
   --vaadin-border-color: color-mix(
     in srgb,
@@ -32,21 +32,24 @@ html {
     color-mix(in srgb, var(--_border-color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
     color-mix(in srgb, var(--_border-color-base) max(6%, 4% + 5% * var(--aura-contrast)), transparent)
   );
-
-  --aura-neutral-saturation: 0.2;
-
-  --aura-background-light: oklch(
-    from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) min(c * var(--_neutral-c) * 2, 0.4) h
-  );
-  --aura-background-dark: oklch(
-    from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) min(c * var(--_neutral-c) * 0.75, 0.1) h
-  );
+  /* TODO --vaadin-color-disabled */
+  --aura-background-light: oklch(from var(--aura-accent-light) min(1, l + (1 - l) * 0.85) calc(c * 0.05) h);
+  --aura-background-dark: oklch(from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) calc(c * 0.05) h);
   --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
-  --_aura-background-alt: oklch(
-    from var(--aura-background) calc(l - 0.1 + l / 8) calc(c * l * var(--aura-neutral-saturation) * 2)
-      calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
+
+  --_bg-alt: oklch(
+    from var(--aura-background) calc(l + l / 4) calc(c * l) calc(h + 150 * var(--_safari-17-deg, 1deg) * l)
   );
-  --aura-accent-background: var(--aura-background);
+  --_bg-accent: radial-gradient(
+    circle at 0% 0%,
+    light-dark(
+      oklch(from var(--aura-accent-light) calc(l * 2.5) calc(c * 1.5) h / 0.05),
+      oklch(from var(--aura-accent-dark) calc(l * 1.5) calc(c * 2) h / 0.05)
+    ),
+    transparent 30%
+  );
+  --aura-app-background:
+    var(--_bg-accent), radial-gradient(circle at 25% 0% in xyz, var(--aura-background) 33%, var(--_bg-alt));
 
   --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
   --vaadin-focus-ring-color: var(--aura-accent-color);
@@ -56,21 +59,26 @@ html {
     oklch(from var(--aura-accent-light) clamp(0, (0.62 - l) * 1000, 1) 0 0),
     oklch(from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0)
   );
-}
 
-html,
-[theme] {
-  --_neutral-c: calc(0.4 * var(--aura-neutral-saturation));
-  --vaadin-background-color: var(--aura-surface-solid);
+  --aura-accent-text-light: oklch(from var(--aura-accent-light) min(0.4, l) c h);
+  --aura-accent-text-dark: oklch(from var(--aura-accent-dark) max(0.8, l) c h);
+  --aura-accent-text: light-dark(var(--aura-accent-text-light), var(--aura-accent-text-dark));
+
+  --vaadin-background-container: color-mix(
+    in srgb,
+    var(--_color-base) calc(3% + min(3%, 1% * var(--aura-contrast))),
+    transparent
+  );
+
+  --vaadin-background-container-strong: color-mix(
+    in srgb,
+    var(--_color-base) calc(7% + min(8%, 1.5% * var(--aura-contrast))),
+    transparent
+  );
 }
 
 @supports (color: hsl(0 0 0)) {
   html {
     --_safari-17-deg: 1;
-    --aura-accent-background: radial-gradient(
-      circle at 25% 0% in xyz,
-      var(--aura-background) 33%,
-      var(--_aura-background-alt)
-    );
   }
 }
