@@ -1,0 +1,46 @@
+html {
+  --aura-red: light-dark(
+    oklch(
+      from var(--aura-accent-light) clamp(0.4, l, 0.8) c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20)
+    ),
+    oklch(from var(--aura-accent-dark) clamp(0.4, l, 0.8) c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20))
+  );
+  --aura-orange: light-dark(
+    oklch(
+      from var(--aura-accent-light) clamp(0.45, l + 0.05, 0.85) min(c + 0.1, 0.4)
+        clamp(80 - rem(h, 6), h, 90 + rem(h, 6))
+    ),
+    oklch(
+      from var(--aura-accent-dark) clamp(0.45, l + 0.05, 0.85) min(c + 0.1, 0.4)
+        clamp(80 - rem(h, 6), h, 90 + rem(h, 6))
+    )
+  );
+  --aura-yellow: light-dark(
+    oklch(
+      from var(--aura-accent-light) clamp(0.45, l + 0.1, 0.85) min(c + 0.1, 0.4)
+        clamp(100 - rem(h, 6), h, 105 - rem(h, 6))
+    ),
+    oklch(
+      from var(--aura-accent-dark) clamp(0.45, l + 0.1, 0.85) min(c + 0.1, 0.4)
+        clamp(100 - rem(h, 6), h, 105 - rem(h, 6))
+    )
+  );
+  --aura-green: light-dark(
+    oklch(
+      from var(--aura-accent-light) clamp(0.4, l, 0.8) min(c + 0.05, 0.4) clamp(130 - rem(h, 6), h, 160 - rem(h, 6))
+    ),
+    oklch(from var(--aura-accent-dark) clamp(0.4, l, 0.8) min(c + 0.05, 0.4) clamp(130 - rem(h, 6), h, 160 - rem(h, 6)))
+  );
+  --aura-blue: light-dark(
+    oklch(
+      from var(--aura-accent-light) clamp(0.4, l, 0.8) min(c + 0.05, 0.4) clamp(220 - rem(h, 6), h, 280 - rem(h, 6))
+    ),
+    oklch(from var(--aura-accent-dark) clamp(0.4, l, 0.8) min(c + 0.05, 0.4) clamp(220 - rem(h, 6), h, 280 - rem(h, 6)))
+  );
+  --aura-purple: light-dark(
+    oklch(
+      from var(--aura-accent-light) clamp(0.4, l, 0.8) min(c + 0.05, 0.4) clamp(280 - rem(h, 6), h, 350 - rem(h, 6))
+    ),
+    oklch(from var(--aura-accent-dark) clamp(0.4, l, 0.8) min(c + 0.05, 0.4) clamp(280 - rem(h, 6), h, 350 - rem(h, 6)))
+  );
+}
