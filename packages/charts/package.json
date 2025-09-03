@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/charts",
-  "version": "25.0.0-alpha16",
+  "version": "25.0.0-alpha17",
   "publishConfig": {
     "access": "public"
   },
@@ -34,16 +34,16 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/component-base": "25.0.0-alpha16",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha16",
+    "@vaadin/component-base": "25.0.0-alpha17",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha17",
     "highcharts": "12.2.0",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha16",
-    "@vaadin/test-runner-commands": "25.0.0-alpha16",
+    "@vaadin/chai-plugins": "25.0.0-alpha17",
+    "@vaadin/test-runner-commands": "25.0.0-alpha17",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha16",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha17",
     "sinon": "^21.0.0"
   },
   "cvdlName": "vaadin-chart",

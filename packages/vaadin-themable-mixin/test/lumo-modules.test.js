@@ -103,8 +103,13 @@ describe('Lumo modules', () => {
   });
 
   describe('adoptedStyleSheets', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+    });
+
     afterEach(() => {
       document.adoptedStyleSheets = [];
+      console.warn.restore();
     });
 
     it('should extract modules from adoptedStyleSheets', () => {
@@ -170,6 +175,25 @@ describe('Lumo modules', () => {
       document.adoptedStyleSheets = [style];
 
       expect(() => parseStyleSheets([...document.adoptedStyleSheets])).to.not.throw();
+      expect(console.warn).to.be.calledWithMatch(
+        '[LumoInjector] Browser denied to access property "cssRules" for some CSS stylesheets, so they were skipped.',
+      );
+    });
+
+    it('should not throw when rule media text is not accessible', () => {
+      const style = new CSSStyleSheet();
+      style.replaceSync('@media lumo_text-field {}');
+
+      sinon.stub(style.cssRules[0].media, 'mediaText').get(() => {
+        throw new DOMException('Permission denied to access property "mediaText"');
+      });
+
+      document.adoptedStyleSheets = [style];
+
+      expect(() => parseStyleSheets([...document.adoptedStyleSheets])).to.not.throw();
+      expect(console.warn).to.be.calledWithMatch(
+        '[LumoInjector] Browser denied to access property "mediaText" for some CSS rules, so they were skipped.',
+      );
     });
   });
 

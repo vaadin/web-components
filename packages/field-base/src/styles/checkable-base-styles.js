@@ -84,7 +84,7 @@ export const checkable = (part, propName = part) => css`
     background: var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color));
     border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--vaadin-border-color)));
     border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--vaadin-radius-s));
-    border-style: solid;
+    border-style: var(--_border-style, solid);
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
@@ -136,19 +136,27 @@ export const checkable = (part, propName = part) => css`
 
   @media (forced-colors: active) {
     :host(:is([checked], [indeterminate])) {
-      --vaadin-${unsafeCSS(propName)}-border-color: CanvasText;
+      --vaadin-${unsafeCSS(propName)}-border-color: CanvasText !important;
+    }
+
+    :host(:is([checked], [indeterminate])) [part='${unsafeCSS(part)}'] {
+      background: SelectedItem !important;
+    }
+
+    :host(:is([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
+      background: SelectedItemText !important;
     }
 
     :host([readonly]) [part='${unsafeCSS(part)}']::after {
-      background: CanvasText;
+      background: CanvasText !important;
     }
 
     :host([disabled]) {
-      --vaadin-${unsafeCSS(propName)}-border-color: GrayText;
+      --vaadin-${unsafeCSS(propName)}-border-color: GrayText !important;
     }
 
     :host([disabled]) [part='${unsafeCSS(part)}']::after {
-      background: GrayText;
+      background: GrayText !important;
     }
   }
 `;
