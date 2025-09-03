@@ -3,8 +3,32 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+
 /** @type {WeakMap<CSSStyleSheet, Record<string, Map>>} */
 const cache = new WeakMap();
+
+function getRuleMediaText(rule) {
+  try {
+    return rule.media.mediaText;
+  } catch {
+    issueWarning(
+      '[LumoInjector] Browser denied to access property "mediaText" for some CSS rules, so they were skipped.',
+    );
+    return '';
+  }
+}
+
+function getStyleSheetRules(styleSheet) {
+  try {
+    return styleSheet.cssRules;
+  } catch {
+    issueWarning(
+      '[LumoInjector] Browser denied to access property "cssRules" for some CSS stylesheets, so they were skipped.',
+    );
+    return [];
+  }
+}
 
 function parseStyleSheet(
   styleSheet,
@@ -13,20 +37,11 @@ function parseStyleSheet(
     modules: new Map(),
   },
 ) {
-  let cssRules;
-  try {
-    cssRules = styleSheet.cssRules;
-  } catch {
-    // External stylesheets may not be accessible due to CORS security restrictions.
-    cssRules = [];
-  }
-
-  for (const rule of cssRules) {
-    const { media } = rule;
-
+  for (const rule of getStyleSheetRules(styleSheet)) {
     if (rule instanceof CSSImportRule) {
-      if (media?.mediaText.startsWith('lumo_')) {
-        result.modules.set(media.mediaText, [...rule.styleSheet.cssRules]);
+      const mediaText = getRuleMediaText(rule);
+      if (mediaText.startsWith('lumo_')) {
+        result.modules.set(mediaText, [...rule.styleSheet.cssRules]);
       } else {
         parseStyleSheet(rule.styleSheet, result);
       }
@@ -35,8 +50,9 @@ function parseStyleSheet(
     }
 
     if (rule instanceof CSSMediaRule) {
-      if (media?.mediaText.startsWith('lumo_')) {
-        result.modules.set(media.mediaText, [...rule.cssRules]);
+      const mediaText = getRuleMediaText(rule);
+      if (mediaText.startsWith('lumo_')) {
+        result.modules.set(mediaText, [...rule.cssRules]);
       }
 
       continue;
