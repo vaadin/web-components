@@ -72,12 +72,12 @@ export const overlayStyles = css`
     font-size: initial;
     font-style: initial;
     font-weight: initial;
-    font-variant: normal;
+    font-variant: initial;
     line-height: initial;
     letter-spacing: initial;
     text-align: initial;
-    text-decoration: none;
-    text-transform: none;
+    text-decoration: initial;
+    text-transform: initial;
     white-space: initial;
   }
 
