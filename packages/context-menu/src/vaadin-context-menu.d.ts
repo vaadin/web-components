@@ -8,9 +8,21 @@ import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaad
 import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
 import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
 
-export type { ContextMenuPosition } from './vaadin-context-menu-position-mixin.js';
-
 export { ContextMenuItem };
+
+export type ContextMenuPosition =
+  | 'bottom-end'
+  | 'bottom-start'
+  | 'bottom'
+  | 'end-bottom'
+  | 'end-top'
+  | 'end'
+  | 'start-bottom'
+  | 'start-top'
+  | 'start'
+  | 'top-end'
+  | 'top-start'
+  | 'top';
 
 export interface ContextMenuRendererContext {
   target: HTMLElement;
@@ -256,6 +268,14 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * @fires {CustomEvent} closed - Fired when the context menu is closed.
  */
 declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> extends HTMLElement {
+  /**
+   * Position of the overlay with respect to the target.
+   * Supported values: null, `top-start`, `top`, `top-end`,
+   * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+   * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+   */
+  position: ContextMenuPosition | null | undefined;
+
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,

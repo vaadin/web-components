@@ -237,6 +237,20 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * Position of the overlay with respect to the target.
+       * Supported values: null, `top-start`, `top`, `top-end`,
+       * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+       * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+       */
+      position: {
+        type: String,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     const { _context: context, position } = this;
@@ -268,6 +282,42 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         <slot name="submenu" slot="submenu"></slot>
       </vaadin-context-menu-overlay>
     `;
+  }
+
+  /** @private */
+  __computeHorizontalAlign(position) {
+    if (!position) {
+      return 'start';
+    }
+
+    return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
+  }
+
+  /** @private */
+  __computeNoHorizontalOverlap(position) {
+    if (!position) {
+      return !!this._positionTarget;
+    }
+
+    return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
+  }
+
+  /** @private */
+  __computeNoVerticalOverlap(position) {
+    if (!position) {
+      return false;
+    }
+
+    return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
+  }
+
+  /** @private */
+  __computeVerticalAlign(position) {
+    if (!position) {
+      return 'top';
+    }
+
+    return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
   }
 
   /**

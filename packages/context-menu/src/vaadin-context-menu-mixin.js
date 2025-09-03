@@ -7,7 +7,6 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { ContextMenuPositionMixin } from './vaadin-context-menu-position-mixin.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
@@ -15,7 +14,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @mixes ItemsMixin
  */
 export const ContextMenuMixin = (superClass) =>
-  class ContextMenuMixinClass extends ContextMenuPositionMixin(ItemsMixin(superClass)) {
+  class ContextMenuMixinClass extends ItemsMixin(superClass) {
     static get properties() {
       return {
         /**
