@@ -84,7 +84,7 @@ export const checkable = (part, propName = part) => css`
     background: var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color));
     border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--vaadin-border-color)));
     border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--vaadin-radius-s));
-    border-style: solid;
+    border-style: var(--_border-style, solid);
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
