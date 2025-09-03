@@ -55,7 +55,7 @@ export const FocusMixin = dedupeMixin(
       }
 
       /**
-       * @param {FocusOptions} options
+       * @param {FocusOptions=} options
        * @protected
        * @override
        */

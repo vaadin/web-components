@@ -66,7 +66,7 @@ export const AccordionMixin = (superClass) =>
     }
 
     /**
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */

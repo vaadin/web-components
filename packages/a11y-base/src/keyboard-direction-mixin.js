@@ -39,7 +39,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     }
 
     /**
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */
@@ -154,7 +154,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      * Focus the item at given index. Override this method to add custom logic.
      *
      * @param {number} index
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      */
@@ -168,7 +168,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      * Focus the given item. Override this method to add custom logic.
      *
      * @param {Element} item
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      */

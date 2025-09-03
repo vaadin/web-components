@@ -698,7 +698,7 @@ export const MenuBarMixin = (superClass) =>
      * and open another one for the newly focused button.
      *
      * @param {Element} item
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      * @override

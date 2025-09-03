@@ -95,7 +95,7 @@ export const TabindexMixin = (superclass) =>
      * `tabindex` to -1 does not prevent the element from being
      * programmatically focusable.
      *
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */

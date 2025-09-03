@@ -83,7 +83,7 @@ export const ItemMixin = (superClass) =>
     }
 
     /**
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */

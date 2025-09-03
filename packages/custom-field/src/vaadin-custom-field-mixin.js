@@ -145,7 +145,7 @@ export const CustomFieldMixin = (superClass) =>
     }
 
     /**
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */

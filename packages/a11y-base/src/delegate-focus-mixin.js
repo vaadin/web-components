@@ -78,7 +78,7 @@ export const DelegateFocusMixin = dedupeMixin(
       }
 
       /**
-       * @param {FocusOptions} options
+       * @param {FocusOptions=} options
        * @protected
        * @override
        */

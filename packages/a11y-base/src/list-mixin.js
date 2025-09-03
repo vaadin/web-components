@@ -109,7 +109,7 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @param {FocusOptions} options
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */
