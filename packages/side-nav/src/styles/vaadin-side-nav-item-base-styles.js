@@ -102,16 +102,21 @@ const sideNavItem = css`
   }
 
   @media (forced-colors: active) {
+    [part='content'] {
+      border: 1px solid Canvas !important;
+    }
+
     :host([current]) [part='content'] {
-      color: Highlight;
+      color: Highlight !important;
+      border-color: Highlight !important;
     }
 
     :host([disabled]) [part='content'] {
-      --vaadin-side-nav-item-color: GrayText;
+      --vaadin-side-nav-item-color: GrayText !important;
     }
 
     :host([disabled]) [part='toggle-button']::before {
-      background: GrayText;
+      background: GrayText !important;
     }
   }
 `;
