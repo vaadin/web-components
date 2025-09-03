@@ -18,10 +18,7 @@ const checkbox = css`
     --vaadin-checkbox-background: transparent;
     --vaadin-checkbox-border-color: var(--vaadin-border-color);
     --vaadin-checkbox-color: var(--vaadin-color);
-  }
-
-  :host([readonly]) [part='checkbox'] {
-    border-style: dashed;
+    --_border-style: dashed;
   }
 
   :host([indeterminate]) [part='checkbox']::after {
