@@ -26,7 +26,6 @@ export const PasswordFieldMixin = (superClass) =>
          */
         revealButtonHidden: {
           type: Boolean,
-          observer: '_revealButtonHiddenChanged',
           value: false,
         },
 
@@ -38,7 +37,6 @@ export const PasswordFieldMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_passwordVisibleChanged',
           readOnly: true,
         },
 
@@ -62,10 +60,6 @@ export const PasswordFieldMixin = (superClass) =>
           },
         },
       };
-    }
-
-    static get observers() {
-      return ['__i18nChanged(i18n)'];
     }
 
     /** @override */
@@ -96,11 +90,6 @@ export const PasswordFieldMixin = (superClass) =>
     }
 
     /** @protected */
-    get _revealNode() {
-      return this._revealButtonController && this._revealButtonController.node;
-    }
-
-    /** @protected */
     ready() {
       super.ready();
 
@@ -108,7 +97,7 @@ export const PasswordFieldMixin = (superClass) =>
 
       this._revealButtonController = new SlotController(this, 'reveal', 'vaadin-password-field-button', {
         initializer: (btn) => {
-          btn.disabled = this.disabled;
+          this._revealNode = btn;
 
           btn.addEventListener('click', this.__boundRevealButtonClick);
           btn.addEventListener('mousedown', this.__boundRevealButtonMouseDown);
@@ -116,13 +105,30 @@ export const PasswordFieldMixin = (superClass) =>
       });
       this.addController(this._revealButtonController);
 
-      this.__updateAriaLabel(this.i18n);
-
-      this._updateToggleState(false);
-      this._toggleRevealHidden(this.revealButtonHidden);
-
       if (this.inputElement) {
         this.inputElement.autocapitalize = 'off';
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('disabled')) {
+        this._revealNode.disabled = this.disabled;
+      }
+
+      if (props.has('revealButtonHidden')) {
+        this._toggleRevealHidden(this.revealButtonHidden);
+      }
+
+      if (props.has('passwordVisible')) {
+        this._setType(this.passwordVisible ? 'text' : 'password');
+        this._revealNode.setAttribute('aria-pressed', this.passwordVisible ? 'true' : 'false');
+      }
+
+      if (props.has('i18n') && this.i18n && this.i18n.reveal) {
+        this._revealNode.setAttribute('aria-label', this.i18n.reveal);
       }
     }
 
@@ -189,30 +195,8 @@ export const PasswordFieldMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAriaLabel(i18n) {
-      if (i18n && i18n.reveal && this._revealNode) {
-        this._revealNode.setAttribute('aria-label', i18n.reveal);
-      }
-    }
-
-    /** @private */
-    __i18nChanged(i18n) {
-      this.__updateAriaLabel(i18n);
-    }
-
-    /** @private */
-    _revealButtonHiddenChanged(hidden) {
-      this._toggleRevealHidden(hidden);
-    }
-
-    /** @private */
-    _togglePasswordVisibility() {
-      this._setPasswordVisible(!this.passwordVisible);
-    }
-
-    /** @private */
     _onRevealButtonClick() {
-      this._togglePasswordVisibility();
+      this._setPasswordVisible(!this.passwordVisible);
     }
 
     /** @private */
@@ -237,35 +221,6 @@ export const PasswordFieldMixin = (superClass) =>
           this._revealNode.setAttribute('tabindex', '0');
           this._revealNode.removeAttribute('aria-hidden');
         }
-      }
-    }
-
-    /** @private */
-    _updateToggleState(passwordVisible) {
-      if (this._revealNode) {
-        this._revealNode.setAttribute('aria-pressed', passwordVisible ? 'true' : 'false');
-      }
-    }
-
-    /** @private */
-    _passwordVisibleChanged(passwordVisible) {
-      this._setType(passwordVisible ? 'text' : 'password');
-
-      this._updateToggleState(passwordVisible);
-    }
-
-    /**
-     * Override method inherited from `DisabledMixin` to synchronize the reveal button
-     * disabled state with the password field disabled state.
-     * @param {boolean} disabled
-     * @param {boolean} oldDisabled
-     * @protected
-     */
-    _disabledChanged(disabled, oldDisabled) {
-      super._disabledChanged(disabled, oldDisabled);
-
-      if (this._revealNode) {
-        this._revealNode.disabled = disabled;
       }
     }
   };
