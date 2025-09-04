@@ -67,9 +67,14 @@ vaadin-app-layout > [slot='drawer'] {
 
   &:is(footer) {
     grid-row: 3;
+
+    vaadin-button[theme~='tertiary'] {
+      width: 100%;
+      justify-content: start;
+    }
   }
 
-  &:is(header),
+  &:is(header, footer),
   vaadin-side-nav {
     padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
   }
@@ -106,10 +111,11 @@ vaadin-app-layout:has([slot='navbar']):has([slot='drawer']) {
   &::part(drawer) {
     padding-top: 0;
   }
+}
 
-  &:not([drawer-opened]) > vaadin-master-detail-layout {
-    border-inline-start-width: 0;
-  }
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']):not([overlay]):not([drawer-opened])
+  > vaadin-master-detail-layout {
+  border-inline-start-width: min(var(--aura-app-layout-inset), 1px);
 }
 
 vaadin-app-layout:has([slot='navbar']):has([slot='drawer'])[drawer-opened]:not([overlay])

@@ -341,8 +341,10 @@
         </vaadin-side-nav>
       </vaadin-scroller>
       <footer slot="drawer">
-        <vaadin-avatar></vaadin-avatar>
-        <span>John Doe</span>
+        <vaadin-button theme="tertiary">
+          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh;" slot="prefix"></vaadin-avatar>
+          <span>John Doe</span>
+        </vaadin-button>
       </footer>
 
       <vaadin-master-detail-layout master-min-size="14em" detail-size="75%" detail-min-size="20em">

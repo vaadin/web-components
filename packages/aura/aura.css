@@ -70,8 +70,6 @@ vaadin-scroller:not([overflow]) {
 #org-select {
   --vaadin-input-field-value-font-weight: var(--aura-font-weight-semibold);
   --vaadin-input-field-value-font-size: var(--aura-font-size-l);
-  /* TODO optical adjustment */
-  margin-inline-start: var(--vaadin-padding-xs);
 }
 
 #org-select::part(input-field) {
