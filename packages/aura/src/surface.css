@@ -1,11 +1,6 @@
 html {
   --aura-surface-level: 1;
   --aura-surface-opacity: 0.5;
-  --aura-surface-min-opacity: 0;
-
-  @media (prefers-reduced-transparency: reduce) {
-    --aura-surface-min-opacity: 1;
-  }
 }
 
 /* List all elements that are surfaces */
@@ -24,7 +19,7 @@ vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
 [theme~='surface'] {
-  --_opacity: max(var(--aura-surface-min-opacity), var(--aura-surface-opacity));
+  --_opacity: var(--aura-surface-opacity);
 
   --aura-surface-solid: light-dark(
     oklch(
