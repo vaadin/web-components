@@ -5,10 +5,8 @@ vaadin-select-item::part(content) {
 }
 
 vaadin-select[theme~='subtle']::part(input-field) {
-  --vaadin-input-field-padding: 0px;
-  --vaadin-input-field-border-width: 0px;
+  --vaadin-input-field-border-color: transparent;
   --vaadin-input-field-background: transparent;
-  outline-offset: var(--vaadin-focus-ring-width);
 }
 
 vaadin-select[theme~='subtle']::part(toggle-button) {
