@@ -5,7 +5,7 @@ html {
   --aura-accent-dark: hsl(220, 75%, 56%);
 
   --_color-base: light-dark(
-    oklch(from var(--aura-background-light) 0.1 calc(0.4 * pow(c / 0.4, 0.7)) h),
+    oklch(from var(--aura-background-light) 0.1 calc(c / 2 + c * (1 - c)) h),
     oklch(from var(--aura-background-dark) 1 c h)
   );
   --vaadin-color: light-dark(
