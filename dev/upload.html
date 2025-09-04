@@ -32,15 +32,16 @@
         }
       };
 
-      const files = [
-        { name: 'Annual Report.docx', complete: true },
-        {
-          name: 'Workflow.pdf',
-          progress: 60,
-          status: '19.7 MB: 60% (remaining time: 00:12:34)',
-        },
-        { name: 'Financials.xlsx', error: 'An error occurred' },
-      ];
+      const getFiles = (n) =>
+        new Array(n).fill().map((_, i) => {
+          if (i % 2 === 0) {
+            return { name: `File ${i}.pdf`, progress: 60 };
+          }
+
+          return { name: `File ${i}.pdf`, error: 'An error occurred' };
+        });
+
+      const files = getFiles(4000);
 
       const blobs = createFiles(files.length, 1000, 'application/unknown');
 
@@ -54,13 +55,5 @@
 
   <body>
     <vaadin-upload target="/api/fileupload"></vaadin-upload>
-    <hr style="margin-block: 24px" />
-    <vaadin-upload nodrop target="/api/fileupload"></vaadin-upload>
-    <hr style="margin-block: 24px" />
-    <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
-      <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
-      <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
-      <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
-    </vaadin-radio-group>
   </body>
 </html>
