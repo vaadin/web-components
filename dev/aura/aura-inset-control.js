@@ -17,8 +17,7 @@ class AuraInsetControl extends HTMLElement {
         <style>
           :host { display: block; }
           .control {
-            display: grid; gap: .6rem; padding: 1rem 1.25rem;
-            max-width: 560px;
+            display: grid; gap: .2rem;
           }
           label { font-weight: 600; }
           .row { display: grid; grid-template-columns: 1fr auto auto; gap: .75rem; align-items: center; }

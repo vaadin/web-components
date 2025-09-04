@@ -25,8 +25,7 @@ class AuraNumberControl extends HTMLElement {
               :host { display: block; }
               .control {
                 display: grid;
-                gap: .5rem;
-                padding: 1rem 1.25rem;
+                gap: .2rem;
               }
               label { font-weight: 600; }
               .row { display: flex; align-items: center; gap: .75rem; }

@@ -28,9 +28,7 @@ class AuraFontFamilyControl extends HTMLElement {
             :host { display: block; }
             .control {
               display: grid;
-              gap: .6rem;
-              padding: 1rem 1.25rem;
-              max-width: 560px;
+              gap: .4rem;
             }
             label { font-weight: 600; }
             .row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }

@@ -9,10 +9,10 @@
 }
 
 .aura-view > :is(header, footer) {
-  padding: 8px;
+  padding: var(--vaadin-padding-m);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--vaadin-gap-s);
 }
 
 .aura-view > header :is(h1, h2, h3, h4, h5, h6) {

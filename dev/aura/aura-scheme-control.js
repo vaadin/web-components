@@ -20,9 +20,7 @@ class AuraSchemeControl extends HTMLElement {
               :host { display: block; }
               .control {
                 display: grid;
-                gap: .6rem;
-                padding: 1rem 1.25rem;
-                max-width: 560px;
+                gap: .4rem;
               }
 
               .segmented {
@@ -50,7 +48,7 @@ class AuraSchemeControl extends HTMLElement {
 
               /* Selected state */
               .segmented input:checked + label {
-                background: var(--vaadin-border-color-subtle);
+                background: var(--vaadin-background-container);
                 color: var(--vaadin-color);
                 background-clip: padding-box;
                 font-weight: 600;
