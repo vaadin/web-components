@@ -10,6 +10,20 @@ import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
 
 export { ContextMenuItem };
 
+export type ContextMenuPosition =
+  | 'bottom-end'
+  | 'bottom-start'
+  | 'bottom'
+  | 'end-bottom'
+  | 'end-top'
+  | 'end'
+  | 'start-bottom'
+  | 'start-top'
+  | 'start'
+  | 'top-end'
+  | 'top-start'
+  | 'top';
+
 export interface ContextMenuRendererContext {
   target: HTMLElement;
   detail?: { sourceEvent: Event };
@@ -222,6 +236,17 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * `overlay`        | The overlay container
  * `content`        | The overlay content
  *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                   | Description
+ * --------------------------------------|-------------
+ * `--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target
+ * `--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target
+ * `--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target
+ * `--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
@@ -243,6 +268,14 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * @fires {CustomEvent} closed - Fired when the context menu is closed.
  */
 declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> extends HTMLElement {
+  /**
+   * Position of the overlay with respect to the target.
+   * Supported values: null, `top-start`, `top`, `top-end`,
+   * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+   * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+   */
+  position: ContextMenuPosition | null | undefined;
+
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,

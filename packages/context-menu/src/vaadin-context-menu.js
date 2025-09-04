@@ -183,6 +183,17 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * `overlay`        | The overlay container
  * `content`        | The overlay content
  *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                   | Description
+ * --------------------------------------|-------------
+ * `--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target
+ * `--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target
+ * `--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target
+ * `--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
@@ -226,17 +237,39 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * Position of the overlay with respect to the target.
+       * Supported values: null, `top-start`, `top`, `top-end`,
+       * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+       * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+       */
+      position: {
+        type: String,
+      },
+    };
+  }
+
   /** @protected */
   render() {
+    const { _context: context, position } = this;
+
     return html`
       <slot id="slot"></slot>
       <vaadin-context-menu-overlay
         id="overlay"
         .owner="${this}"
         .opened="${this.opened}"
-        .model="${this._context}"
+        .model="${context}"
         .modeless="${this._modeless}"
         .renderer="${this.items ? this.__itemsRenderer : this.renderer}"
+        .position="${position}"
+        .positionTarget="${position ? context && context.target : this._positionTarget}"
+        .horizontalAlign="${this.__computeHorizontalAlign(position)}"
+        .verticalAlign="${this.__computeVerticalAlign(position)}"
+        ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(position)}"
+        ?no-vertical-overlap="${this.__computeNoVerticalOverlap(position)}"
         .withBackdrop="${this._phone}"
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"
@@ -249,6 +282,42 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         <slot name="submenu" slot="submenu"></slot>
       </vaadin-context-menu-overlay>
     `;
+  }
+
+  /** @private */
+  __computeHorizontalAlign(position) {
+    if (!position) {
+      return 'start';
+    }
+
+    return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
+  }
+
+  /** @private */
+  __computeNoHorizontalOverlap(position) {
+    if (!position) {
+      return !!this._positionTarget;
+    }
+
+    return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
+  }
+
+  /** @private */
+  __computeNoVerticalOverlap(position) {
+    if (!position) {
+      return false;
+    }
+
+    return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
+  }
+
+  /** @private */
+  __computeVerticalAlign(position) {
+    if (!position) {
+      return 'top';
+    }
+
+    return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
   }
 
   /**

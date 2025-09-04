@@ -39,6 +39,16 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
     `;
   }
 
+  static get properties() {
+    return {
+      isRoot: {
+        type: Boolean,
+        reflectToAttribute: true,
+        sync: true,
+      },
+    };
+  }
+
   constructor() {
     super();
 
@@ -65,6 +75,8 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
         .modeless="${this._modeless}"
         .renderer="${this.__itemsRenderer}"
         .withBackdrop="${this._phone}"
+        .positionTarget="${this._positionTarget}"
+        ?no-horizontal-overlap="${!this.isRoot}"
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"
         exportparts="backdrop, overlay, content"

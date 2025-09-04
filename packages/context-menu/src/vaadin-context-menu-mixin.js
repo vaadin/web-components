@@ -342,6 +342,9 @@ export const ContextMenuMixin = (superClass) =>
         return Array.prototype.filter.call(targets, (el) => {
           return e.composedPath().indexOf(el) > -1;
         })[0];
+      } else if (this.listenOn && this.listenOn !== this && this.position) {
+        // If listenOn has been set on a different element than the context menu root, then use listenOn as the target.
+        return this.listenOn;
       }
       return e.target;
     }
@@ -445,7 +448,7 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __onScroll() {
-      if (!this.opened) {
+      if (!this.opened || this.position) {
         return;
       }
 

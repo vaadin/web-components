@@ -60,6 +60,12 @@ export const ItemsMixin = (superClass) =>
           type: Array,
           sync: true,
         },
+
+        /** @protected */
+        _positionTarget: {
+          type: Object,
+          sync: true,
+        },
       };
     }
 
@@ -137,7 +143,6 @@ export const ItemsMixin = (superClass) =>
       const parent = this._overlayElement;
 
       const subMenuOverlay = subMenu._overlayElement;
-      subMenuOverlay.noHorizontalOverlap = true;
       // Store the reference parent overlay
       subMenuOverlay._setParentOverlay(parent);
 
@@ -164,7 +169,7 @@ export const ItemsMixin = (superClass) =>
     __updateSubMenuForItem(subMenu, itemElement) {
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
-      subMenu._overlayElement.positionTarget = itemElement;
+      subMenu._positionTarget = itemElement;
     }
 
     /**
