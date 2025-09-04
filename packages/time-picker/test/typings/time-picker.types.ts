@@ -5,6 +5,7 @@ import type {
 } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
@@ -14,6 +15,7 @@ import type { TimePickerItem } from '../../src/vaadin-time-picker-item.js';
 import type {
   TimePicker,
   TimePickerChangeEvent,
+  TimePickerI18n,
   TimePickerInvalidChangedEvent,
   TimePickerOpenedChangedEvent,
   TimePickerValidatedEvent,
@@ -26,6 +28,7 @@ const timePicker = document.createElement('vaadin-time-picker');
 
 // Mixins
 assertType<ElementMixinClass>(timePicker);
+assertType<I18nMixinClass<TimePickerI18n>>(timePicker);
 assertType<InputControlMixinClass>(timePicker);
 assertType<ClearButtonMixinClass>(timePicker);
 assertType<PatternMixinClass>(timePicker);
@@ -65,6 +68,9 @@ timePicker.addEventListener('validated', (event) => {
   assertType<TimePickerValidatedEvent>(event);
   assertType<boolean>(event.detail.valid);
 });
+
+// I18n
+assertType<TimePickerI18n>({});
 
 // Item
 const item = document.createElement('vaadin-time-picker-item');

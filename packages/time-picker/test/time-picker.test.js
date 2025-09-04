@@ -352,7 +352,7 @@ describe('time-picker', () => {
 
   describe('custom functions', () => {
     it('should use custom parser if that exists', () => {
-      timePicker.i18n = { ...timePicker.i18n, parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }) };
+      timePicker.i18n = { parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }) };
       timePicker.value = '12';
       expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
       expect(timePicker.value).to.be.equal('12:00');
@@ -385,6 +385,14 @@ describe('time-picker', () => {
       };
       timePicker.value = '12:00';
       expect(inputElement.value).to.equal('1200');
+      expect(timePicker.value).to.equal('12:00');
+    });
+
+    it('should fallback to default functions if none are provided', () => {
+      timePicker.i18n = {};
+
+      timePicker.value = '12:00';
+      expect(inputElement.value).to.equal('12:00');
       expect(timePicker.value).to.equal('12:00');
     });
   });

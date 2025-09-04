@@ -108,15 +108,17 @@ describe('keyboard navigation', () => {
 
     describe('with custom parser and formatter', () => {
       beforeEach(() => {
-        timePicker.i18n.parseTime = (text) => {
-          const parts = text.split('.');
-          return {
-            hours: parts[0],
-            minutes: parts[1],
-          };
-        };
-        timePicker.i18n.formatTime = (time) => {
-          return `${time.hours}.${time.minutes}`;
+        timePicker.i18n = {
+          parseTime(text) {
+            const parts = text.split('.');
+            return {
+              hours: parts[0],
+              minutes: parts[1],
+            };
+          },
+          formatTime(time) {
+            return `${time.hours}.${time.minutes}`;
+          },
         };
       });
 
