@@ -30,7 +30,10 @@ class AuraFontFamilyControl extends HTMLElement {
               display: grid;
               gap: .4rem;
             }
-            label { font-weight: 600; }
+            label {
+              color: var(--vaadin-color);
+                font-weight: var(--aura-font-weight-medium);
+            }
             .row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
             select { padding: .4rem .6rem; border-radius: 10px; }
             #reset {

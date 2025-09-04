@@ -22,7 +22,10 @@ class AuraColorControl extends HTMLElement {
                 display: grid;
                 gap: .2rem;
               }
-              label { font-weight: 600; }
+              label {
+                color: var(--vaadin-color);
+                font-weight: var(--aura-font-weight-medium);
+              }
               .row { display: flex; align-items: center; gap: .75rem; }
               input[type="color"] { width: 3rem; height: 2rem; border: none; background: transparent; }
               output { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }

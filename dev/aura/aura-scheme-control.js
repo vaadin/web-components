@@ -22,7 +22,10 @@ class AuraSchemeControl extends HTMLElement {
                 display: grid;
                 gap: .4rem;
               }
-
+              label {
+                color: var(--vaadin-color);
+                font-weight: var(--aura-font-weight-medium);
+              }
               .segmented {
                 display: inline-grid;
                 grid-auto-flow: column;
@@ -56,7 +59,6 @@ class AuraSchemeControl extends HTMLElement {
 
               .row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
               .sr-only { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-              label.header { font-weight: 600; }
 
               #reset {
                 background: transparent;

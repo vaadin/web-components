@@ -61,4 +61,5 @@ body,
   text-wrap: balance;
   margin: 0;
   font-weight: var(--aura-font-weight-semibold);
+  color: var(--vaadin-color);
 }

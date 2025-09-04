@@ -27,7 +27,10 @@ class AuraNumberControl extends HTMLElement {
                 display: grid;
                 gap: .2rem;
               }
-              label { font-weight: 600; }
+              label {
+                color: var(--vaadin-color);
+                font-weight: var(--aura-font-weight-medium);
+              }
               .row { display: flex; align-items: center; gap: .75rem; }
               input[type="range"] { flex: 1; }
               output {
