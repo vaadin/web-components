@@ -12,9 +12,9 @@ html {
 
   --aura-font-family: var(--aura-font-family-instrument-sans);
 
-  --aura-font-size-base: 16;
+  --aura-base-font-size: 16;
   --aura-font-size-scale: 1.15;
-  --aura-line-height-base: 1.4;
+  --aura-base-line-height: 1.4;
 
   --aura-font-weight: 400;
   --aura-font-weight-emphasis: 500;
@@ -25,15 +25,15 @@ html,
 [theme] {
   --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale), 0.0625rem);
-  --aura-font-size-m: round(var(--aura-font-size-base) / 16 * 1rem, 0.0625rem);
+  --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, 0.0625rem);
   --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale), 0.0625rem);
 
-  --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-line-height-base), 0.125rem);
-  --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-line-height-base), 0.125rem);
-  --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-line-height-base), 0.125rem);
-  --aura-line-height-l: round(var(--aura-font-size-l) * var(--aura-line-height-base), 0.125rem);
-  --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-line-height-base), 0.125rem);
+  --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-l: round(var(--aura-font-size-l) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-base-line-height), 0.125rem);
 }
 
 body {

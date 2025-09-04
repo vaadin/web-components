@@ -1,6 +1,8 @@
 html {
   --vaadin-date-picker-year-scroller-background: transparent;
   --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-strong);
+  --vaadin-date-picker-date-width: calc(var(--aura-font-size-m) * 2);
+  --vaadin-date-picker-year-scroller-width: calc(var(--aura-font-size-m) * 3);
 }
 
 /* TODO try to make accent color available on the root level */

@@ -1,6 +1,6 @@
 @media (pointer: fine) {
   html {
-    --aura-font-size-base: 14;
+    --aura-base-font-size: 14;
   }
 }
 
@@ -17,7 +17,7 @@
 
       /* Support iOS dynamic text size */
       font: -apple-system-body;
-      --aura-font-size-base: 14;
+      --aura-base-font-size: 14;
     }
   }
 }

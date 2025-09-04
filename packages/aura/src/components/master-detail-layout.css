@@ -1,5 +1,5 @@
 vaadin-master-detail-layout::part(detail) {
-  --aura-surface-level: 3;
+  --aura-surface-level: 2;
   background: var(--aura-surface) padding-box;
 }
 
