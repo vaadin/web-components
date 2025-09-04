@@ -14,7 +14,7 @@ html {
   );
   --vaadin-color-subtle: light-dark(
     color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
-    color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent)
+    color-mix(in srgb, var(--_color-base) calc(57% + 10% * var(--aura-contrast)), transparent)
   );
   --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(30% + 10% * var(--aura-contrast)), transparent);
 
@@ -28,8 +28,8 @@ html {
     transparent
   );
   --vaadin-border-color-subtle: light-dark(
-    color-mix(in srgb, var(--_border-color-base) max(5%, 3% + 4% * var(--aura-contrast)), transparent),
-    color-mix(in srgb, var(--_border-color-base) max(6%, 4% + 5% * var(--aura-contrast)), transparent)
+    color-mix(in srgb, var(--_border-color-base) max(5%, 5% + 3% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 5% * var(--aura-contrast)), transparent)
   );
 
   --aura-background-light: oklch(from var(--aura-accent-light) min(1, l + (1 - l) * 0.9) calc(c * 0.05) h);

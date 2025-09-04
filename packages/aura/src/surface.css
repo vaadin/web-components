@@ -36,7 +36,7 @@ vaadin-side-nav-item::part(content),
         min(
           1,
           max(0.28 - var(--aura-surface-level) * 0.02, l) + var(--aura-surface-level) *
-            (0.06 - 0.008 * var(--aura-contrast))
+            (0.05 - 0.008 * var(--aura-contrast))
         )
         clamp(0, c * (1 + l), 0.2) h
     )
