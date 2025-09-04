@@ -19,7 +19,10 @@ class AuraInsetControl extends HTMLElement {
           .control {
             display: grid; gap: .2rem;
           }
-          label { font-weight: 600; }
+          label {
+            color: var(--vaadin-color);
+            font-weight: var(--aura-font-weight-medium);
+          }
           .row { display: grid; grid-template-columns: 1fr auto auto; gap: .75rem; align-items: center; }
           input[type="range"] { width: 100%; }
           output {
