@@ -238,7 +238,7 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  *
  * ### Custom CSS Properties
  *
- * The following custom CSS properties are available on the `<vaadin-context-menu>` element:
+ * The following custom CSS properties are available for styling:
  *
  * Custom CSS property                   | Description
  * --------------------------------------|-------------
