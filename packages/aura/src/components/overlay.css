@@ -16,6 +16,11 @@ html {
     hsla(0deg, 0%, 0%, 0.3)
   );
   --aura-overlay-backdrop-filter: blur(12px) brightness(1.2) saturate(1.2);
+  --aura-overlay-surface-opacity: 0.85;
+
+  @media (prefers-reduced-transparency: reduce) {
+    --aura-overlay-surface-opacity: 1 !important;
+  }
 }
 
 html,
@@ -25,7 +30,7 @@ html,
 
 ::part(overlay) {
   --aura-surface-level: 3;
-  --aura-surface-opacity: 0.85;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   box-shadow: var(--aura-overlay-shadow);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);

@@ -12,7 +12,6 @@ vaadin-confirm-dialog::part(overlay) {
   --vaadin-dialog-border-width: 0px;
   --vaadin-dialog-background: var(--aura-surface);
   --aura-surface-level: 4;
-  --aura-surface-opacity: 0.8;
 
   /* TODO probably should be in base styles */
   /* Keeps notifications on top of MDL view transitions */

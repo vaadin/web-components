@@ -5,7 +5,7 @@ html {
 
 vaadin-notification-card::part(overlay) {
   --aura-surface-level: 4;
-  --aura-surface-opacity: 0.85;
+
   --vaadin-notification-background: var(--aura-surface);
 
   /* TODO probably should be in base styles */
