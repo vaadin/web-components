@@ -3,7 +3,7 @@ html {
   --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
   --vaadin-side-nav-item-border-width: 1px;
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
-  --side-nav-padding: var(--vaadin-padding-s);
+  --side-nav-padding: var(--vaadin-padding-m);
 }
 
 vaadin-side-nav {
@@ -14,7 +14,8 @@ vaadin-side-nav + vaadin-side-nav {
   margin-top: var(--vaadin-gap-l);
 }
 
-vaadin-side-nav::part(toggle-button) {
+vaadin-side-nav::part(toggle-button),
+vaadin-side-nav-item::part(toggle-button) {
   --vaadin-icon-size: 1em;
 }
 

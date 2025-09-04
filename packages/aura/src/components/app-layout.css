@@ -13,7 +13,7 @@ html {
 }
 
 vaadin-app-layout {
-  --_app-layout-radius: clamp(0px, var(--aura-app-layout-inset) * 4, var(--aura-app-layout-radius));
+  --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
   padding-block: var(--aura-app-layout-inset);
   padding-inline-end: var(--aura-app-layout-inset);
   padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
@@ -27,8 +27,7 @@ vaadin-app-layout::part(navbar),
 vaadin-app-layout[overlay]::part(drawer) {
   --vaadin-app-layout-navbar-background: var(--aura-surface);
   --vaadin-app-layout-drawer-background: var(--aura-surface);
-  /* --aura-surface-level: 4; */
-  --aura-surface-opacity: 0.9;
+  --aura-surface-opacity: 0.85;
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
@@ -59,7 +58,7 @@ vaadin-app-layout > [slot='drawer'] {
   }
 
   vaadin-side-nav-item::part(content) {
-    --aura-surface-level: 5;
+    --aura-surface-level: 4;
   }
 }
 

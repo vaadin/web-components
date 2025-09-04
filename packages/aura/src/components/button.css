@@ -6,7 +6,7 @@ vaadin-button:where(:not([slot='button'])) {
 vaadin-button:where(:not([slot='button'], [theme~='tertiary'])) {
   --vaadin-button-border-color: var(--vaadin-border-color);
   --aura-surface-level: 6;
-  /* --aura-surface-opacity: 0.3; */
+  --aura-surface-opacity: 0.3;
   box-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
 
@@ -24,6 +24,11 @@ vaadin-button:not([theme~='primary'], [theme~='tertiary']) {
 
 vaadin-button[theme~='primary'] {
   --vaadin-button-font-weight: var(--aura-font-weight-strong);
+  --vaadin-button-text-color: var(--aura-background);
+}
+
+vaadin-button[disabled][theme~='primary'] {
+  --vaadin-button-text-color: var(--vaadin-color-subtle);
 }
 
 vaadin-button {

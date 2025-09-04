@@ -25,8 +25,12 @@ html,
 
 ::part(overlay) {
   --aura-surface-level: 3;
-  --aura-surface-opacity: 0.8;
+  --aura-surface-opacity: 0.85;
   box-shadow: var(--aura-overlay-shadow);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
+}
+
+vaadin-popover {
+  color-scheme: var(--aura-content-color-scheme);
 }

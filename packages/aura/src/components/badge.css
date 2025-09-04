@@ -1,44 +1,56 @@
 [theme~='badge'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vaadin-gap-xs);
   font-size: var(--aura-font-size-s);
   font-weight: var(--aura-font-weight-emphasis);
-  line-height: var(--aura-line-height-xs);
+  height: 1lh;
+  box-sizing: border-box;
   border: 1px solid var(--_bg);
-  --_bg: color-mix(in srgb, var(--color) 7%, transparent);
-  background: linear-gradient(var(--_bg), var(--_bg)) var(--aura-surface);
-  padding: 0.1em 0.3em;
-  border-radius: var(--vaadin-radius-m);
+  --_bg: color-mix(in srgb, var(--color) 12%, transparent);
+  background: var(--aura-surface-solid);
+  padding: 0.1em var(--vaadin-gap-xs);
+  border-radius: var(--vaadin-radius-l);
   min-width: 1em;
   text-align: center;
   --color: var(--vaadin-color);
-  color: var(--color);
+  color: color-mix(in srgb, var(--color) calc(60% - 15% * var(--aura-contrast)), var(--vaadin-color));
+  --vaadin-icon-size: 0.75lh;
 }
 
 [theme~='badge'][theme~='accent'] {
   --color: var(--aura-accent-color);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='blue'] {
   --color: var(--aura-blue);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='red'] {
   --color: var(--aura-red);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='green'] {
   --color: var(--aura-green);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='yellow'] {
   --color: var(--aura-yellow);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='orange'] {
   --color: var(--aura-orange);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='purple'] {
   --color: var(--aura-purple);
+  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='filled'] {

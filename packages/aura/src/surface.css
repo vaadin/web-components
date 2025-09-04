@@ -1,5 +1,5 @@
 html {
-  --aura-surface-level: 2;
+  --aura-surface-level: 1;
   --aura-surface-opacity: 0.5;
   --aura-surface-min-opacity: 0;
 
@@ -27,18 +27,18 @@ vaadin-side-nav-item::part(content),
   --_opacity: max(var(--aura-surface-min-opacity), var(--aura-surface-opacity));
 
   --aura-surface-solid: light-dark(
-    color-mix(
-      in oklab,
-      #fff
-        calc(
-          (var(--_opacity) / 3 * var(--aura-surface-level) + (1 - var(--_opacity)) / 3 * var(--aura-surface-level)) *
-            100%
-        ),
-      var(--aura-background-light)
+    oklch(
+      from var(--aura-background-light)
+        min(1, 1 + (0.9 - l) + var(--aura-surface-level) * (0.07 - 0.01 * var(--aura-contrast))) clamp(0, c - l, 0.2) h
     ),
-    oklab(
-      from var(--aura-background-dark) max(0, max(0.2, l) + max(0.2, l) * max(0.3, l) / 3 * var(--aura-surface-level))
-        calc(a * 1) calc(b * 1)
+    oklch(
+      from var(--aura-background-dark)
+        min(
+          1,
+          max(0.28 - var(--aura-surface-level) * 0.02, l) + var(--aura-surface-level) *
+            (0.06 - 0.008 * var(--aura-contrast))
+        )
+        clamp(0, c * (1 + l), 0.2) h
     )
   );
 
