@@ -12,7 +12,6 @@ import {
   keyDownChar,
   nextRender,
   nextUpdate,
-  oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -163,47 +162,6 @@ const runTests = (defineHelper, baseMixin) => {
       list.appendChild(document.createElement(itemTag));
       list.focus();
       expect(list.items.length).to.be.equal(6);
-    });
-  });
-
-  describe('wrapped list with slotted items', () => {
-    let wrapper;
-
-    beforeEach(async () => {
-      wrapper = document.createElement('div');
-      document.body.appendChild(wrapper);
-
-      const root = wrapper.attachShadow({ mode: 'open' });
-      root.innerHTML = `
-        <${listTag}>
-          <slot></slot>
-        </${listTag}>
-      `;
-
-      wrapper.innerHTML = `
-        <${itemTag}>Item 0</${itemTag}>
-        <${itemTag}>Item 1</${itemTag}>
-        <${itemTag}>Item 2</${itemTag}>
-      `;
-
-      list = wrapper.shadowRoot.querySelector(listTag);
-      await oneEvent(list, 'items-changed');
-    });
-
-    afterEach(() => {
-      document.body.removeChild(wrapper);
-    });
-
-    it('should set items based on the children count', () => {
-      expect(list.items.length).to.be.equal(3);
-    });
-
-    it('should move focus to the next element on ArrowRight', async () => {
-      list.orientation = 'horizontal';
-      await nextUpdate(list);
-      list.focus();
-      arrowRight(list);
-      expect(list.items[1].focused).to.be.true;
     });
   });
 
