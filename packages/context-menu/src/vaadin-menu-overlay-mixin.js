@@ -113,7 +113,7 @@ export const MenuOverlayMixin = (superClass) =>
     _updatePosition() {
       super._updatePosition();
 
-      if (this.positionTarget && this.parentOverlay) {
+      if (this.positionTarget && this.parentOverlay && this.opened) {
         // This overlay is positioned by a parent menu item,
         // adjust the position by the overlay content paddings
         const content = this.$.content;
