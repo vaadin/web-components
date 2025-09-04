@@ -209,7 +209,7 @@
                 <vaadin-avatar
                   theme="vaadin square"
                   has-color-index
-                  style="--vaadin-avatar-user-color: var(--aura-accent-color); color: var(--aura-accent-contrast);"
+                  style="--vaadin-avatar-size: 1.25lh; --vaadin-avatar-user-color: var(--aura-accent-color); color: var(--aura-accent-contrast);"
                   tabindex="-1"
                 ></vaadin-avatar>
                 <span>Aura</span>
@@ -218,7 +218,7 @@
                 <vaadin-avatar
                   theme="vaadin square"
                   has-color-index
-                  style="--vaadin-avatar-user-color: hsl(214, 100%, 48%); color: #fff;"
+                  style="--vaadin-avatar-size: 1.25lh; --vaadin-avatar-user-color: hsl(214, 100%, 48%); color: #fff;"
                   tabindex="-1"
                 ></vaadin-avatar>
                 <span>Lumo</span>
@@ -234,33 +234,25 @@
 
   <body>
 
-    <vaadin-popover for="theme-editor-btn" position="bottom-start" opened width="300px" style="--aura-size-base: 5; --aura-font-size-base: 13;" theme>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+    <vaadin-popover for="theme-editor-btn" position="bottom-start" opened width="320px" style="--aura-base-size: 12; --aura-base-font-size: 13;" theme>
+      <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch;">
         <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
         <aura-scheme-control property="--aura-content-color-scheme" label="--aura-content-color-scheme"></aura-scheme-control>
         <aura-scheme-control property="--aura-notification-color-scheme"
-          label="--aura-notification-color-scheme"></aura-scheme-control>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-        <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
-        <aura-number-control property="--aura-surface-min-opacity" min="0" max="1" step="0.01"></aura-number-control>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-        <aura-number-control property="--aura-size-base" min="2" max="10"></aura-number-control>
-        <aura-inset-control></aura-inset-control>
-        <aura-number-control property="--aura-radius-base" min="0" max="8" step="0.5"></aura-number-control>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
+        label="--aura-notification-color-scheme"></aura-scheme-control>
         <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
-        <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
         <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
+        <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
         <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(19em, 25%));">
-        <aura-number-control property="--aura-font-size-base" label="--aura-font-size-base" min="12"
+        <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
+        <!-- <aura-number-control property="--aura-surface-min-opacity" min="0" max="1" step="0.01"></aura-number-control> -->
+        <aura-number-control property="--aura-base-size" min="12" max="20"></aura-number-control>
+        <aura-inset-control></aura-inset-control>
+        <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
+        <aura-number-control property="--aura-base-font-size" label="--aura-base-font-size" min="12"
           max="18"></aura-number-control>
         <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
-      </div>
+      </vaadin-vertical-layout>
     </vaadin-popover>
 
     <vaadin-app-layout primary-section="navbar">
@@ -434,6 +426,24 @@
               <div class="flex flex-wrap gap-s">
                 <vaadin-button theme="primary" class="flex-auto">Save</vaadin-button>
                 <vaadin-button class="flex-auto">Cancel</vaadin-button>
+              </div>
+            </div>
+
+            <style>
+              .component .size {
+                background: currentColor;
+                height: 4px;
+                width: var(--size);
+              }
+            </style>
+
+            <div class="component" theme="surface">
+              <div class="flex flex-col gap-s">
+                <div class="size xs" style="--size: var(--vaadin-padding-xs)"></div>
+                <div class="size s" style="--size: var(--vaadin-padding-s);"></div>
+                <div class="size m" style="--size: var(--vaadin-padding-m);"></div>
+                <div class="size l" style="--size: var(--vaadin-padding-l);"></div>
+                <div class="size xl" style="--size: var(--vaadin-padding-xl);"></div>
               </div>
             </div>
 
