@@ -243,6 +243,16 @@
         clearLocalStorage();
         window.location.reload();
       };
+
+      document.all.useNavbar.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'navbar');
+          document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'navbar');
+        } else {
+          document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'drawer');
+          document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'drawer');
+        }
+      });
     </script>
   </head>
 
@@ -251,6 +261,7 @@
     <vaadin-popover for="theme-editor-btn" position="bottom-start" opened width="320px" style="--aura-base-size: 12; --aura-base-font-size: 13;" theme>
       <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch;">
         <h3>Edit Theme</h3>
+        <vaadin-checkbox label="Use Navbar" id="useNavbar"></vaadin-checkbox>
         <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
         <aura-scheme-control property="--aura-content-color-scheme" label="--aura-content-color-scheme"></aura-scheme-control>
         <aura-scheme-control property="--aura-notification-color-scheme"
@@ -277,6 +288,7 @@
 
     <vaadin-app-layout primary-section="navbar">
       <header slot="drawer">
+        <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
         <vaadin-select id="org-select" theme="subtle auto-size"></vaadin-select>
         <!-- TODO if this button isn't here, the height of the header too narrow -->
         <vaadin-button theme="tertiary" style="visibility: hidden;">
@@ -328,14 +340,15 @@
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       </vaadin-scroller>
-      <!-- <footer slot="drawer">
-        <a href="">Sign in</a>
-      </footer> -->
+      <footer slot="drawer">
+        <vaadin-avatar></vaadin-avatar>
+        <span>John Doe</span>
+      </footer>
 
       <vaadin-master-detail-layout master-min-size="14em" detail-size="75%" detail-min-size="20em">
         <div class="aura-view">
           <header>
-            <vaadin-drawer-toggle></vaadin-drawer-toggle>
+            <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
             <h1>Dashboard</h1>
             <vaadin-button theme="tertiary" id="theme-editor-btn">
               <vaadin-icon icon="lucide:palette"></vaadin-icon>
