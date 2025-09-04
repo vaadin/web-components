@@ -35,6 +35,7 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
+    "@vaadin/a11y-base": "25.0.0-alpha17",
     "@vaadin/button": "25.0.0-alpha17",
     "@vaadin/component-base": "25.0.0-alpha17",
     "@vaadin/confirm-dialog": "25.0.0-alpha17",

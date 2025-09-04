@@ -251,6 +251,15 @@ describe('ListMixin', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
+    it('should pass focus options to the item when calling focus() on the list', async () => {
+      list._setFocusable(3);
+      await nextUpdate(list);
+      const spy = sinon.spy(list.items[3], 'focus');
+      list.focus({ focusVisible: false });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0]).to.deep.equal({ focusVisible: false });
+    });
+
     it('should call focus() on the first non-disabled item if all items have tabindex -1', () => {
       list.items.forEach((item) => {
         item.tabIndex = -1;

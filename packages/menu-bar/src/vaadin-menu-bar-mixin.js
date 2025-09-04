@@ -698,17 +698,18 @@ export const MenuBarMixin = (superClass) =>
      * and open another one for the newly focused button.
      *
      * @param {Element} item
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      * @override
      */
-    _focusItem(item, navigating) {
+    _focusItem(item, options, navigating) {
       const wasExpanded = navigating && this.focused === this._expandedButton;
       if (wasExpanded) {
         this._close();
       }
 
-      super._focusItem(item, navigating);
+      super._focusItem(item, options, navigating);
 
       this._buttons.forEach((btn) => {
         this._setTabindex(btn, btn === item);
@@ -976,7 +977,8 @@ export const MenuBarMixin = (superClass) =>
           }
 
           if (options.keepFocus) {
-            this._focusItem(this._expandedButton, false);
+            const focusOptions = { focusVisible: isKeyboardActive() };
+            this._focusItem(this._expandedButton, focusOptions, false);
           }
 
           // Do not focus item when open not from keyboard
@@ -1020,7 +1022,8 @@ export const MenuBarMixin = (superClass) =>
       if (button && button.hasAttribute('expanded')) {
         this._setExpanded(button, false);
         if (restoreFocus) {
-          this._focusItem(button, false);
+          const focusOptions = { focusVisible: isKeyboardActive() };
+          this._focusItem(button, focusOptions, false);
         }
         this._expandedButton = null;
       }

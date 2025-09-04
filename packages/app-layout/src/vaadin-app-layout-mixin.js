@@ -432,7 +432,6 @@ export const AppLayoutMixin = (superclass) =>
       const toggle = this.querySelector('vaadin-drawer-toggle');
       if (toggle) {
         toggle.focus();
-        toggle.setAttribute('focus-ring', 'focus');
       }
     }
 

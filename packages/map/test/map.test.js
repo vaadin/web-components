@@ -20,8 +20,13 @@ describe('focus', () => {
     map = fixtureSync(`<vaadin-map></vaadin-map>`);
   });
 
-  it('should not add focus-ring to the host on programmatic focus', () => {
+  it('should add focus-ring to the host on programmatic focus', () => {
     map.focus();
+    expect(map.hasAttribute('focus-ring')).to.be.true;
+  });
+
+  it('should not add focus-ring to the host on focus() with focusVisible: false', () => {
+    map.focus({ focusVisible: false });
     expect(map.hasAttribute('focus-ring')).to.be.false;
   });
 

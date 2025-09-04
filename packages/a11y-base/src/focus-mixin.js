@@ -55,6 +55,21 @@ export const FocusMixin = dedupeMixin(
       }
 
       /**
+       * @param {FocusOptions=} options
+       * @protected
+       * @override
+       */
+      focus(options) {
+        super.focus(options);
+
+        // Set focus-ring attribute on programmatic focus by default
+        // unless explicitly disabled by `{ focusVisible: false }`.
+        if (!(options && options.focusVisible === false)) {
+          this.setAttribute('focus-ring', '');
+        }
+      }
+
+      /**
        * Override to change how focused and focus-ring attributes are set.
        *
        * @param {boolean} focused

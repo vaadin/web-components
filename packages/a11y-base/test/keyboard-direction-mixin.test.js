@@ -177,11 +177,6 @@ describe('KeyboardDirectionMixin', () => {
         expect(element.focused).to.be.equal(items[4]);
       });
 
-      it('should set focus-ring on the focused element on keydown', () => {
-        arrowDownKeyDown(items[0]);
-        expect(items[1].hasAttribute('focus-ring')).to.be.true;
-      });
-
       it('should not move focus on keydown with Ctrl key modifier', () => {
         const spy = sinon.spy(items[1], 'focus');
         arrowDownKeyDown(items[0], ['ctrl']);
