@@ -5,6 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import {
@@ -20,6 +21,8 @@ import { timePickerI18nDefaults } from '@vaadin/time-picker/src/vaadin-time-pick
 
 const datePickerI18nProps = Object.keys(datePickerI18nDefaults);
 const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
+
+const DEFAULT_I18N = { ...datePickerI18nDefaults, ...timePickerI18nDefaults };
 
 /**
  * A controller to initialize slotted picker.
@@ -46,7 +49,7 @@ class PickerSlotController extends SlotController {
  * @mixes FocusMixin
  */
 export const DateTimePickerMixin = (superClass) =>
-  class DateTimePickerMixinClass extends FieldMixin(FocusMixin(DisabledMixin(superClass))) {
+  class DateTimePickerMixinClass extends I18nMixin(DEFAULT_I18N, FieldMixin(FocusMixin(DisabledMixin(superClass)))) {
     static get properties() {
       return {
         /**
@@ -225,22 +228,6 @@ export const DateTimePickerMixin = (superClass) =>
         },
 
         /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * `i18n` object or just the properties you want to modify.
-         *
-         * The object is a combination of the i18n properties supported by
-         * [`<vaadin-date-picker>`](#/elements/vaadin-date-picker) and
-         * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
-         * @type {!DateTimePickerI18n}
-         */
-        i18n: {
-          type: Object,
-          sync: true,
-          value: () => ({ ...datePickerI18nDefaults, ...timePickerI18nDefaults }),
-        },
-
-        /**
          * The current slotted date picker.
          * @private
          */
@@ -274,11 +261,11 @@ export const DateTimePickerMixin = (superClass) =>
         '__invalidChanged(invalid, __datePicker, __timePicker)',
         '__disabledChanged(disabled, __datePicker, __timePicker)',
         '__readonlyChanged(readonly, __datePicker, __timePicker)',
-        '__i18nChanged(i18n, __datePicker, __timePicker)',
+        '__i18nChanged(__effectiveI18n, __datePicker, __timePicker)',
         '__autoOpenDisabledChanged(autoOpenDisabled, __datePicker, __timePicker)',
         '__themeChanged(_theme, __datePicker, __timePicker)',
         '__pickersChanged(__datePicker, __timePicker)',
-        '__labelOrAccessibleNameChanged(label, accessibleName, i18n, __datePicker, __timePicker)',
+        '__labelOrAccessibleNameChanged(label, accessibleName, __effectiveI18n, __datePicker, __timePicker)',
       ];
     }
 
@@ -295,6 +282,43 @@ export const DateTimePickerMixin = (superClass) =>
       this.__changeEventHandler = this.__changeEventHandler.bind(this);
       this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
       this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following structure and default values:
+     *
+     * ```
+     * {
+     *   // Accessible label to the date picker.
+     *   // The property works in conjunction with label and accessibleName defined on the field.
+     *   // If both properties are defined, then accessibleName takes precedence.
+     *   // Then, the dateLabel value is concatenated with it.
+     *   dateLabel: undefined;
+     *
+     *   // Accessible label to the time picker.
+     *   // The property works in conjunction with label and accessibleName defined on the field.
+     *   // If both properties are defined, then accessibleName takes precedence.
+     *   // Then, the dateLabel value is concatenated with it.
+     *   timeLabel: undefined;
+     * }
+     * ```
+     *
+     * Additionally, all i18n properties from
+     * [`<vaadin-date-picker>`](#/elements/vaadin-date-picker) and
+     * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker) are supported.
+     *
+     * @type {!DateTimePickerI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @private */
@@ -448,15 +472,15 @@ export const DateTimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __syncI18n(target, source, props = Object.keys(source.i18n)) {
-      const i18n = { ...target.i18n };
+    __syncI18n(target, i18n, props) {
+      const targetI18n = {};
       props.forEach((prop) => {
         // eslint-disable-next-line no-prototype-builtins
-        if (source.i18n && source.i18n.hasOwnProperty(prop)) {
-          i18n[prop] = source.i18n[prop];
+        if (i18n && i18n.hasOwnProperty(prop)) {
+          targetI18n[prop] = i18n[prop];
         }
       });
-      target.i18n = i18n;
+      target.i18n = targetI18n;
     }
 
     /** @private */
@@ -528,7 +552,6 @@ export const DateTimePickerMixin = (superClass) =>
         this.datePlaceholder = newDatePicker.placeholder;
         this.initialPosition = newDatePicker.initialPosition;
         this.showWeekNumbers = newDatePicker.showWeekNumbers;
-        this.__syncI18n(this, newDatePicker, datePickerI18nProps);
       }
 
       // Min and max are always synchronized from date time picker (host) to inner fields because time picker
@@ -557,7 +580,6 @@ export const DateTimePickerMixin = (superClass) =>
         // Synchronize properties from slotted time picker
         this.timePlaceholder = newTimePicker.placeholder;
         this.step = newTimePicker.step;
-        this.__syncI18n(this, newTimePicker, timePickerI18nProps);
       }
 
       // Min and max are always synchronized from parent to slotted because time picker min and max
@@ -589,26 +611,26 @@ export const DateTimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __i18nChanged(_i18n, datePicker, timePicker) {
+    __i18nChanged(effectiveI18n, datePicker, timePicker) {
       if (datePicker) {
-        this.__syncI18n(datePicker, this, datePickerI18nProps);
+        this.__syncI18n(datePicker, effectiveI18n, datePickerI18nProps);
       }
 
       if (timePicker) {
-        this.__syncI18n(timePicker, this, timePickerI18nProps);
+        this.__syncI18n(timePicker, effectiveI18n, timePickerI18nProps);
       }
     }
 
     /** @private */
-    __labelOrAccessibleNameChanged(label, accessibleName, i18n, datePicker, timePicker) {
+    __labelOrAccessibleNameChanged(label, accessibleName, effectiveI18n, datePicker, timePicker) {
       const name = accessibleName || label || '';
 
       if (datePicker) {
-        datePicker.accessibleName = `${name} ${i18n.dateLabel || ''}`.trim();
+        datePicker.accessibleName = `${name} ${effectiveI18n.dateLabel || ''}`.trim();
       }
 
       if (timePicker) {
-        timePicker.accessibleName = `${name} ${i18n.timeLabel || ''}`.trim();
+        timePicker.accessibleName = `${name} ${effectiveI18n.timeLabel || ''}`.trim();
       }
     }
 

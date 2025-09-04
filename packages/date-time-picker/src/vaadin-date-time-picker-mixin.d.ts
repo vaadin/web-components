@@ -6,6 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
@@ -19,7 +20,7 @@ export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {
    * If both properties are defined, then accessibleName takes precedence.
    * Then, the dateLabel value is concatenated with it.
    */
-  dateLabel: string | null | undefined;
+  dateLabel?: string;
 
   /**
    * Accessible label to the time picker.
@@ -27,7 +28,7 @@ export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {
    * If both properties are defined, then accessibleName takes precedence.
    * Then, the dateLabel value is concatenated with it.
    */
-  timeLabel: string | null | undefined;
+  timeLabel?: string;
 }
 
 /**
@@ -39,6 +40,7 @@ export declare function DateTimePickerMixin<T extends Constructor<HTMLElement>>(
   Constructor<DisabledMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<DateTimePickerI18n>> &
   Constructor<LabelMixinClass> &
   Constructor<ValidateMixinClass> &
   T;
@@ -142,13 +144,31 @@ export declare class DateTimePickerMixinClass {
   autofocus: boolean;
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * `i18n` object or just the properties you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
-   * The object is a combination of the i18n properties supported by
+   * The object has the following structure and default values:
+   *
+   * ```
+   * {
+   *   // Accessible label to the date picker.
+   *   // The property works in conjunction with label and accessibleName defined on the field.
+   *   // If both properties are defined, then accessibleName takes precedence.
+   *   // Then, the dateLabel value is concatenated with it.
+   *   dateLabel: undefined;
+   *
+   *   // Accessible label to the time picker.
+   *   // The property works in conjunction with label and accessibleName defined on the field.
+   *   // If both properties are defined, then accessibleName takes precedence.
+   *   // Then, the dateLabel value is concatenated with it.
+   *   timeLabel: undefined;
+   * }
+   * ```
+   *
+   * Additionally, all i18n properties from
    * [`<vaadin-date-picker>`](#/elements/vaadin-date-picker) and
-   * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
+   * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker) are supported.
    */
   i18n: DateTimePickerI18n;
 }
