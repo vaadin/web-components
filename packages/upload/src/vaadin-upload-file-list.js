@@ -32,7 +32,7 @@ class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LitE
   /** @protected */
   render() {
     return html`
-      <ul part="list">
+      <ul id="list" part="list">
         <slot></slot>
       </ul>
     `;

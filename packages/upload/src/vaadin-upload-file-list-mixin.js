@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, render } from 'lit';
+import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 
 /**
  * @polymerMixin
@@ -37,48 +37,71 @@ export const UploadFileListMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['__updateItems(items, i18n, disabled)'];
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.__virtualizer = new Virtualizer({
+        createElements: this.__createElements.bind(this),
+        updateElement: this.__updateElement.bind(this),
+        elementsContainer: this,
+        scrollTarget: this,
+        scrollContainer: this.$.list,
+        reorderElements: true,
+      });
     }
 
-    /** @private */
-    __updateItems(items, i18n) {
-      if (items && i18n) {
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items') || props.has('i18n') || props.has('disabled')) {
+        this.toggleAttribute('has-items', this.items && this.items.length);
         this.requestContentUpdate();
       }
     }
 
+    /** @private */
+    __createElements(count) {
+      return [...Array(count)].map(() => {
+        const item = document.createElement('li');
+        const file = document.createElement('vaadin-upload-file');
+        item.appendChild(file);
+        return item;
+      });
+    }
+
+    /** @private */
+    __updateElement(el, index) {
+      const file = el.firstElementChild;
+      const item = this.items[index];
+
+      file.disabled = this.disabled;
+      file.i18n = this.i18n;
+      file.file = item;
+      file.complete = item.complete;
+      file.errorMessage = item.error;
+      file.fileName = item.name;
+      file.held = item.held;
+      file.indeterminate = item.indeterminate;
+      file.progress = item.progress;
+      file.status = item.status;
+      file.uploading = item.uploading;
+    }
+
     /**
-     * Requests an update for the `vaadin-upload-file` elements.
-     *
-     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     * Updates the virtualizer's size and items.
      */
     requestContentUpdate() {
-      const { items, i18n, disabled } = this;
+      if (!this.__virtualizer) {
+        return;
+      }
 
-      render(
-        html`
-          ${items.map(
-            (file) => html`
-              <li>
-                <vaadin-upload-file
-                  .disabled="${disabled}"
-                  .file="${file}"
-                  .complete="${file.complete}"
-                  .errorMessage="${file.error}"
-                  .fileName="${file.name}"
-                  .held="${file.held}"
-                  .indeterminate="${file.indeterminate}"
-                  .progress="${file.progress}"
-                  .status="${file.status}"
-                  .uploading="${file.uploading}"
-                  .i18n="${i18n}"
-                ></vaadin-upload-file>
-              </li>
-            `,
-          )}
-        `,
-        this,
-      );
+      if (this.items) {
+        this.__virtualizer.size = this.items.length;
+      }
+
+      console.warn('update', this.items);
+      this.__virtualizer.update();
     }
   };

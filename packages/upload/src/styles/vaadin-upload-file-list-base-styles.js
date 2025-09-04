@@ -12,6 +12,11 @@ export const uploadFileListStyles = css`
     overflow: auto;
   }
 
+  :host([has-items]) {
+    min-height: 50px; /* TODO needs some min-height */
+    max-height: 85vh;
+  }
+
   :host([hidden]) {
     display: none !important;
   }
@@ -20,10 +25,16 @@ export const uploadFileListStyles = css`
     list-style-type: none;
     margin: 0;
     padding: 0;
+    position: relative;
+    width: 100%;
+  }
+
+  ::slotted(*) {
+    width: 100%;
   }
 
   ::slotted(:first-child) {
-    margin-top: var(--vaadin-upload-gap, var(--vaadin-gap-s));
+    padding-top: var(--vaadin-upload-gap, var(--vaadin-gap-s));
   }
 
   ::slotted(li:not(:last-of-type)) {
