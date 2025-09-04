@@ -229,6 +229,20 @@
         );
       };
       orgSelect.value = 'aura';
+
+      function clearLocalStorage() {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const key = localStorage.key(i);
+          if (/^aura/u.test(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+
+      document.all.resetAll.onclick = () => {
+        clearLocalStorage();
+        window.location.reload();
+      };
     </script>
   </head>
 
@@ -236,6 +250,7 @@
 
     <vaadin-popover for="theme-editor-btn" position="bottom-start" opened width="320px" style="--aura-base-size: 12; --aura-base-font-size: 13;" theme>
       <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch;">
+        <h3>Edit Theme</h3>
         <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
         <aura-scheme-control property="--aura-content-color-scheme" label="--aura-content-color-scheme"></aura-scheme-control>
         <aura-scheme-control property="--aura-notification-color-scheme"
@@ -250,8 +265,13 @@
         <aura-inset-control></aura-inset-control>
         <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
         <aura-number-control property="--aura-base-font-size" label="--aura-base-font-size" min="12"
-          max="18"></aura-number-control>
+        max="18"></aura-number-control>
         <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
+        <hr>
+        <vaadin-button theme="" id="resetAll">
+          Reset All
+          <vaadin-icon icon="lucide:rotate-ccw"></vaadin-icon>
+        </vaadin-button>
       </vaadin-vertical-layout>
     </vaadin-popover>
 

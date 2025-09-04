@@ -77,3 +77,10 @@ vaadin-scroller:not([overflow]) {
 #org-select::part(input-field) {
   box-shadow: none;
 }
+
+hr {
+  align-self: stretch;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--vaadin-border-color-subtle);
+}
