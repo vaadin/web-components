@@ -69,7 +69,7 @@ vaadin-app-layout > [slot='drawer'] {
     grid-row: 3;
 
     vaadin-button[theme~='tertiary'] {
-      width: 100%;
+      flex: 1;
       justify-content: start;
     }
   }
