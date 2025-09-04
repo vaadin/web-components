@@ -1,5 +1,5 @@
 html {
-  --vaadin-card-title-font-weight: var(--aura-font-weight-emphasis);
+  --vaadin-card-title-font-weight: var(--aura-font-weight-medium);
   --vaadin-card-padding: var(--vaadin-padding-l);
   --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
   --vaadin-card-border-color: var(--vaadin-border-color-subtle);
