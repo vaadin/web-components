@@ -2,6 +2,10 @@ html {
   --aura-app-layout-inset: 1.5vmin;
   --aura-app-layout-radius: var(--vaadin-radius-l);
   --_aura-mdl-border: 1px;
+  --vaadin-app-layout-navbar-padding-top: 0;
+  --vaadin-app-layout-navbar-padding-bottom: 0;
+  --vaadin-app-layout-navbar-padding-inline-start: 0;
+  --vaadin-app-layout-navbar-padding-inline-end: 0;
 }
 
 /* Aligned with App Layout overlay breakpoint */
@@ -17,19 +21,36 @@ vaadin-app-layout {
   padding-block: var(--aura-app-layout-inset);
   padding-inline-end: var(--aura-app-layout-inset);
   padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
+
+  > [slot]:is(header, footer) {
+    padding: var(--vaadin-padding-s);
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+  }
 }
 
 vaadin-app-layout[overlay] {
+  &::part(navbar),
+  &::part(drawer) {
+    --vaadin-app-layout-navbar-background: var(--aura-surface);
+    --vaadin-app-layout-drawer-background: var(--aura-surface);
+    --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+    -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+    backdrop-filter: var(--aura-overlay-backdrop-filter);
+  }
+}
+
+vaadin-app-layout:is([overlay], :not([drawer-opened])) {
   padding-inline-start: var(--aura-app-layout-inset);
 }
 
-vaadin-app-layout::part(navbar),
-vaadin-app-layout[overlay]::part(drawer) {
-  --vaadin-app-layout-navbar-background: var(--aura-surface);
-  --vaadin-app-layout-drawer-background: var(--aura-surface);
-  --aura-surface-opacity: 0.85;
-  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
-  backdrop-filter: var(--aura-overlay-backdrop-filter);
+vaadin-app-layout::part(navbar) {
+  justify-content: space-between;
+}
+
+vaadin-app-layout:not([overlay])::part(navbar) {
+  --vaadin-app-layout-navbar-background: transparent;
 }
 
 vaadin-app-layout::part(drawer) {
@@ -42,10 +63,6 @@ vaadin-app-layout > [slot='drawer'] {
 
   &:is(header, footer) {
     grid-row: 1;
-    padding: var(--vaadin-padding-s);
-    display: flex;
-    align-items: center;
-    gap: var(--vaadin-gap-s);
   }
 
   &:is(footer) {
@@ -58,7 +75,7 @@ vaadin-app-layout > [slot='drawer'] {
   }
 
   vaadin-side-nav-item::part(content) {
-    --aura-surface-level: 4;
+    --aura-surface-level: 5;
   }
 }
 
@@ -81,6 +98,32 @@ vaadin-app-layout > vaadin-master-detail-layout {
   &:is([drawer][has-detail]) {
     border-color: var(--vaadin-border-color);
   }
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']) {
+  padding-top: var(--_vaadin-app-layout-navbar-offset-size);
+
+  &::part(drawer) {
+    padding-top: 0;
+  }
+
+  &:not([drawer-opened]) > vaadin-master-detail-layout {
+    border-inline-start-width: 0;
+  }
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer'])[drawer-opened]:not([overlay])
+  > vaadin-master-detail-layout {
+  border-start-start-radius: var(--aura-app-layout-radius);
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']) > vaadin-master-detail-layout {
+  border-top-width: 1px;
+}
+
+vaadin-app-layout:has([slot='navbar']) > :is(:not([slot]), [slot='drawer']) vaadin-drawer-toggle,
+vaadin-app-layout:not([slot='navbar']) > [slot='drawer'] vaadin-drawer-toggle {
+  display: none;
 }
 
 /* ::view-transition-group(vaadin-mdl-backdrop),
