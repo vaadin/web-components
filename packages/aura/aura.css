@@ -68,7 +68,7 @@ vaadin-scroller:not([overflow]) {
 
 /* TODO built-in variant? */
 #org-select {
-  --vaadin-input-field-value-font-weight: var(--aura-font-weight-strong);
+  --vaadin-input-field-value-font-weight: var(--aura-font-weight-semibold);
   --vaadin-input-field-value-font-size: var(--aura-font-size-l);
   /* TODO optical adjustment */
   margin-inline-start: var(--vaadin-padding-xs);

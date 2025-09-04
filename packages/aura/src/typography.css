@@ -17,8 +17,8 @@ html {
   --aura-base-line-height: 1.4;
 
   --aura-font-weight: 400;
-  --aura-font-weight-emphasis: 500;
-  --aura-font-weight-strong: 600;
+  --aura-font-weight-medium: 500;
+  --aura-font-weight-semibold: 600;
 }
 
 html,
@@ -60,5 +60,5 @@ body,
 :is(h1, h2, h3, h4, h5, h6) {
   text-wrap: balance;
   margin: 0;
-  font-weight: var(--aura-font-weight-strong);
+  font-weight: var(--aura-font-weight-semibold);
 }

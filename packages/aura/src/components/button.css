@@ -23,7 +23,7 @@ vaadin-button:not([theme~='primary'], [theme~='tertiary']) {
 }
 
 vaadin-button[theme~='primary'] {
-  --vaadin-button-font-weight: var(--aura-font-weight-strong);
+  --vaadin-button-font-weight: var(--aura-font-weight-semibold);
   --vaadin-button-text-color: var(--aura-background);
 }
 

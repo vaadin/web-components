@@ -19,7 +19,7 @@
   margin: 0;
   padding-block: calc(var(--vaadin-padding-xs) + var(--vaadin-button-border-width, 1px));
   font-size: var(--aura-font-size-l);
-  font-weight: var(--aura-font-weight-strong);
+  font-weight: var(--aura-font-weight-semibold);
   color: var(--vaadin-color);
   flex: 1;
 }

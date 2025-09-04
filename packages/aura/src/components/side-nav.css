@@ -1,6 +1,6 @@
 html {
   --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
-  --vaadin-side-nav-item-font-weight: var(--aura-font-weight-emphasis);
+  --vaadin-side-nav-item-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-border-width: 1px;
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
   --side-nav-padding: var(--vaadin-padding-m);
