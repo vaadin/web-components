@@ -6,7 +6,6 @@
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
-import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { isElementHidden } from './focus-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
@@ -138,7 +137,7 @@ export const ListMixin = (superClass) =>
 
       const slot = this.shadowRoot.querySelector('slot:not([name])');
       this._observer = new SlotObserver(slot, () => {
-        this._setItems(this._filterItems(getFlattenedElements(this)));
+        this._setItems(this._filterItems([...this.children]));
       });
     }
 
