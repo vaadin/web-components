@@ -50,6 +50,27 @@ describe('i18n property', () => {
     expect(dateTimePicker.i18n).to.have.property('cancel', 'Peruuta');
     expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
   });
+
+  describe('slotted date and time pickers', () => {
+    beforeEach(() => {
+      dateTimePicker = fixtureSync(`
+        <vaadin-date-time-picker>
+          <vaadin-date-picker slot="date-picker"></vaadin-date-picker>
+          <vaadin-time-picker slot="time-picker"></vaadin-time-picker>
+        </vaadin-date-time-picker>
+      `);
+      datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
+      timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
+    });
+
+    it('should not override i18n of slotted date and time pickers', () => {
+      const i18n = { cancel: 'Peruuta', formatDate: () => 'formatted-date' };
+      dateTimePicker.i18n = i18n;
+
+      expect(datePicker.i18n.cancel).to.not.equal(i18n.cancel);
+      expect(datePicker.i18n.formatDate).to.not.equal(i18n.formatDate);
+    });
+  });
 });
 
 describe('accessibility', () => {

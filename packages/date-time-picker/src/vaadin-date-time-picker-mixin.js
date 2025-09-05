@@ -612,11 +612,12 @@ export const DateTimePickerMixin = (superClass) =>
 
     /** @private */
     __i18nChanged(effectiveI18n, datePicker, timePicker) {
-      if (datePicker) {
+      // Only propagate i18n to default pickers
+      if (datePicker && this.__isDefaultPicker(datePicker, 'date')) {
         this.__syncI18n(datePicker, effectiveI18n, datePickerI18nProps);
       }
 
-      if (timePicker) {
+      if (timePicker && this.__isDefaultPicker(timePicker, 'time')) {
         this.__syncI18n(timePicker, effectiveI18n, timePickerI18nProps);
       }
     }
