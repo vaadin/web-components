@@ -9,6 +9,7 @@
  * license.
  */
 import '../vendor/vaadin-quill.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -427,7 +428,7 @@ export const RichTextEditorMixin = (superClass) =>
 
       requestAnimationFrame(() => {
         this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-          this.$.linkUrl.focus();
+          this.$.linkUrl.focus({ focusVisible: isKeyboardActive() });
         });
       });
     }

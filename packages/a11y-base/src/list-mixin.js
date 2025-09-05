@@ -113,7 +113,12 @@ export const ListMixin = (superClass) =>
       return this.orientation !== 'horizontal';
     }
 
-    focus() {
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
       // In initialization (e.g vaadin-select) observer might not been run yet.
       if (this._observer) {
         this._observer.flush();
@@ -122,10 +127,10 @@ export const ListMixin = (superClass) =>
       const items = Array.isArray(this.items) ? this.items : [];
       const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0 && !isElementHidden(item));
       if (idx >= 0) {
-        this._focus(idx);
+        this._focus(idx, options);
       } else {
         // Call `KeyboardDirectionMixin` logic to focus first non-disabled item.
-        super.focus();
+        super.focus(options);
       }
     }
 
@@ -281,13 +286,13 @@ export const ListMixin = (superClass) =>
      * @param {number} idx
      * @protected
      */
-    _focus(idx) {
+    _focus(idx, options) {
       this.items.forEach((e, index) => {
         e.focused = index === idx;
       });
       this._setFocusable(idx);
       this._scrollToItem(idx);
-      super._focus(idx);
+      super._focus(idx, options);
     }
 
     /**

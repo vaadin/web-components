@@ -144,10 +144,14 @@ export const CustomFieldMixin = (superClass) =>
       });
     }
 
-    /** @protected */
-    focus() {
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
       if (this.inputs && this.inputs[0]) {
-        this.inputs[0].focus();
+        this.inputs[0].focus(options);
       }
     }
 

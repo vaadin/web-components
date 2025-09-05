@@ -1,3 +1,4 @@
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
@@ -31,12 +32,6 @@ describe('date-time-picker', () => {
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
-    });
-
-    it('focused', async () => {
-      element.label = 'Label';
-      element.focus();
-      await visualDiff(div, 'focused');
     });
 
     it('placeholder', async () => {
@@ -77,6 +72,35 @@ describe('date-time-picker', () => {
       element.helperText = 'Helper text';
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
+    });
+  });
+
+  describe('focus', () => {
+    beforeEach(() => {
+      element.label = 'Label';
+      element.autoOpenDisabled = true;
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      const picker = element.querySelector('[slot="date-picker"]');
+      await sendMouseToElement({ type: 'click', element: picker });
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      const picker = element.querySelector('[slot="date-picker"]');
+      await sendMouseToElement({ type: 'click', element: picker });
+      await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
 

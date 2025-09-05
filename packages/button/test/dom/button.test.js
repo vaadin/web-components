@@ -32,7 +32,7 @@ describe('vaadin-button', () => {
     });
 
     it('focused', async () => {
-      button.focus();
+      button.focus({ focusVisible: false });
       await expect(button).dom.to.equalSnapshot();
     });
 
