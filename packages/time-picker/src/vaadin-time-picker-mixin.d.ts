@@ -10,6 +10,7 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -22,8 +23,9 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
 import type { TimePickerTime } from './vaadin-time-picker-helper.js';
 
 export interface TimePickerI18n {
-  parseTime(time: string): TimePickerTime | undefined;
-  formatTime(time: TimePickerTime | undefined): string;
+  parseTime?(time: string): TimePickerTime | undefined;
+
+  formatTime?(time: TimePickerTime | undefined): string;
 }
 
 /**
@@ -38,6 +40,7 @@ export declare function TimePickerMixin<T extends Constructor<HTMLElement>>(
   Constructor<DisabledMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<TimePickerI18n>> &
   Constructor<InputConstraintsMixinClass> &
   Constructor<InputControlMixinClass> &
   Constructor<InputMixinClass> &
@@ -99,9 +102,9 @@ export declare class TimePickerMixinClass {
   step: number | null | undefined;
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides both the
+   * time parsing and formatting functions.
    *
    * The object has the following JSON structure:
    *
@@ -124,8 +127,8 @@ export declare class TimePickerMixinClass {
    * }
    * ```
    *
-   * Both `formatTime` and `parseTime` need to be implemented
-   * to ensure the component works properly.
+   * NOTE: `formatTime` and `parseTime` must be implemented in a
+   * compatible manner to ensure the component works properly.
    */
   i18n: TimePickerI18n;
 }
