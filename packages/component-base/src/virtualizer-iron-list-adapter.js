@@ -579,6 +579,18 @@ export class IronListAdapter {
         timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
         () => this.__fixInvalidItemPositioning(),
       );
+
+      if (!this.__overscrollDebouncer?.isActive()) {
+        this.scrollTarget.style.overscrollBehavior = 'none';
+      }
+
+      this.__overscrollDebouncer = Debouncer.debounce(
+        this.__overscrollDebouncer,
+        timeOut.after(this.timeouts.PREVENT_OVERSCROLL),
+        () => {
+          this.scrollTarget.style.overscrollBehavior = null;
+        },
+      );
     }
 
     if (this.reorderElements) {
@@ -596,18 +608,6 @@ export class IronListAdapter {
     if (this._scrollTop === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
       this.scrollToIndex(0);
     }
-
-    if (!this.__overscrollDebouncer?.isActive()) {
-      this.scrollTarget.style.overscrollBehavior = 'none';
-    }
-
-    this.__overscrollDebouncer = Debouncer.debounce(
-      this.__overscrollDebouncer,
-      timeOut.after(this.timeouts.PREVENT_OVERSCROLL),
-      () => {
-        this.scrollTarget.style.overscrollBehavior = null;
-      },
-    );
   }
 
   /** @override */
