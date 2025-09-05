@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/lit-renderer",
-  "version": "25.0.0-alpha17",
+  "version": "25.0.0-alpha18",
   "publishConfig": {
     "access": "public"
   },
@@ -33,8 +33,8 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha17",
-    "@vaadin/test-runner-commands": "25.0.0-alpha17",
+    "@vaadin/chai-plugins": "25.0.0-alpha18",
+    "@vaadin/test-runner-commands": "25.0.0-alpha18",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^21.0.0"
   }

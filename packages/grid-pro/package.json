@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/grid-pro",
-  "version": "25.0.0-alpha17",
+  "version": "25.0.0-alpha18",
   "publishConfig": {
     "access": "public"
   },
@@ -36,20 +36,20 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/checkbox": "25.0.0-alpha17",
-    "@vaadin/component-base": "25.0.0-alpha17",
-    "@vaadin/grid": "25.0.0-alpha17",
-    "@vaadin/lit-renderer": "25.0.0-alpha17",
-    "@vaadin/select": "25.0.0-alpha17",
-    "@vaadin/text-field": "25.0.0-alpha17",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha17",
+    "@vaadin/checkbox": "25.0.0-alpha18",
+    "@vaadin/component-base": "25.0.0-alpha18",
+    "@vaadin/grid": "25.0.0-alpha18",
+    "@vaadin/lit-renderer": "25.0.0-alpha18",
+    "@vaadin/select": "25.0.0-alpha18",
+    "@vaadin/text-field": "25.0.0-alpha18",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha18",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha17",
-    "@vaadin/test-runner-commands": "25.0.0-alpha17",
+    "@vaadin/chai-plugins": "25.0.0-alpha18",
+    "@vaadin/test-runner-commands": "25.0.0-alpha18",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha17",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha18",
     "sinon": "^21.0.0"
   },
   "cvdlName": "vaadin-grid-pro",
