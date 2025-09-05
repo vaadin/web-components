@@ -2,11 +2,12 @@ import '../../vaadin-date-time-picker.js';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { DateTimePickerMixinClass } from '../../src/vaadin-date-time-picker-mixin.js';
+import type { DateTimePickerI18n, DateTimePickerMixinClass } from '../../src/vaadin-date-time-picker-mixin.js';
 import type {
   DateTimePicker,
   DateTimePickerChangeEvent,
@@ -25,6 +26,7 @@ assertType<DisabledMixinClass>(picker);
 assertType<ElementMixinClass>(picker);
 assertType<FieldMixinClass>(picker);
 assertType<FocusMixinClass>(picker);
+assertType<I18nMixinClass<DateTimePickerI18n>>(picker);
 assertType<LabelMixinClass>(picker);
 assertType<ThemableMixinClass>(picker);
 assertType<ValidateMixinClass>(picker);
@@ -69,3 +71,9 @@ assertType<boolean | null | undefined>(picker.autoOpenDisabled);
 assertType<boolean | null | undefined>(picker.autofocus);
 assertType<() => boolean>(picker.validate);
 assertType<() => boolean>(picker.checkValidity);
+
+// I18n
+assertType<DateTimePickerI18n>({});
+assertType<DateTimePickerI18n>({ dateLabel: 'Date', timeLabel: 'Time' });
+assertType<DateTimePickerI18n>({ cancel: 'Cancel' });
+assertType<DateTimePickerI18n>({ formatDate: (_date) => 'formatted date' });

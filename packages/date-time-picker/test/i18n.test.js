@@ -1,57 +1,74 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-time-picker.js';
 
-['default', 'slotted'].forEach((set) => {
-  describe(`i18n property (${set})`, () => {
-    let dateTimePicker, datePicker;
+describe('i18n property', () => {
+  let dateTimePicker, datePicker, timePicker;
 
-    const CUSTOM_I18N = { cancel: 'Peruuta' };
-
-    beforeEach(async () => {
-      const i18nProp = JSON.stringify(CUSTOM_I18N);
-
-      if (set === 'default') {
-        dateTimePicker = fixtureSync(`<vaadin-date-time-picker i18n='${i18nProp}'></vaadin-date-time-picker>`);
-      } else {
-        dateTimePicker = fixtureSync(`
-          <vaadin-date-time-picker>
-            <vaadin-date-picker slot="date-picker" i18n='${i18nProp}'></vaadin-date-picker>
-            <vaadin-time-picker slot="time-picker"></vaadin-time-picker>
-          </vaadin-date-time-picker>
-        `);
-      }
-      await nextRender();
-      datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-    });
-
-    it('should have initial value for i18n', () => {
-      expect(dateTimePicker.i18n).to.have.property('cancel', CUSTOM_I18N.cancel);
-      expect(datePicker.i18n).to.have.property('cancel', CUSTOM_I18N.cancel);
-    });
-  });
-});
-
-describe('setting i18n on a slotted picker before connected to the DOM', () => {
-  let dateTimePicker, datePicker;
-
-  beforeEach(() => {
-    dateTimePicker = document.createElement('vaadin-date-time-picker');
+  beforeEach(async () => {
+    dateTimePicker = fixtureSync(`<vaadin-date-time-picker></vaadin-date-time-picker>`);
+    await nextRender();
+    datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
+    timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
   });
 
-  describe('date-picker', () => {
+  it('should have default i18n properties coming from date and time pickers', () => {
+    // From date picker
+    expect(dateTimePicker.i18n).to.have.property('formatDate').that.is.a('function');
+    expect(dateTimePicker.i18n).to.have.property('parseDate').that.is.a('function');
+    expect(dateTimePicker.i18n).to.have.property('cancel').that.is.a('string');
+    // From time picker
+    expect(dateTimePicker.i18n).to.have.property('formatTime').that.is.a('function');
+    expect(dateTimePicker.i18n).to.have.property('parseTime').that.is.a('function');
+  });
+
+  it('should propagate relevant properties to sub-components', () => {
+    dateTimePicker.i18n = { cancel: 'Peruuta' };
+
+    expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
+    expect(timePicker.i18n).to.not.have.property('cancel');
+
+    const parseTime = () => {};
+    dateTimePicker.i18n = { parseTime };
+
+    expect(timePicker.i18n).to.have.property('parseTime', parseTime);
+    expect(datePicker.i18n).to.not.have.property('parseTime');
+  });
+
+  it('should fall back to default values', () => {
+    dateTimePicker.i18n = {};
+
+    expect(datePicker.i18n.cancel).to.equal('Cancel');
+    expect(timePicker.i18n).to.have.property('formatTime').that.is.a('function');
+  });
+
+  it('should initialize property from JSON string', () => {
+    const i18nJson = JSON.stringify({ cancel: 'Peruuta' });
+    dateTimePicker = fixtureSync(`<vaadin-date-time-picker i18n='${i18nJson}'></vaadin-date-time-picker>`);
+    datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
+
+    expect(dateTimePicker.i18n).to.have.property('cancel', 'Peruuta');
+    expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
+  });
+
+  describe('slotted date and time pickers', () => {
     beforeEach(() => {
-      datePicker = document.createElement('vaadin-date-picker');
-      datePicker.slot = 'date-picker';
-      datePicker.i18n = { ...datePicker.i18n, cancel: 'Peruuta' };
-      dateTimePicker.appendChild(datePicker);
+      dateTimePicker = fixtureSync(`
+        <vaadin-date-time-picker>
+          <vaadin-date-picker slot="date-picker"></vaadin-date-picker>
+          <vaadin-time-picker slot="time-picker"></vaadin-time-picker>
+        </vaadin-date-time-picker>
+      `);
+      datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
+      timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
     });
 
-    it('should not have i18n overridden', async () => {
-      await aTimeout(0);
-      document.body.appendChild(dateTimePicker);
-      await nextRender();
-      expect(datePicker.i18n.cancel).to.equal('Peruuta');
+    it('should not override i18n of slotted date and time pickers', () => {
+      const i18n = { cancel: 'Peruuta', formatDate: () => 'formatted-date' };
+      dateTimePicker.i18n = i18n;
+
+      expect(datePicker.i18n.cancel).to.not.equal(i18n.cancel);
+      expect(datePicker.i18n.formatDate).to.not.equal(i18n.formatDate);
     });
   });
 });
