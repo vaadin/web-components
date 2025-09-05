@@ -114,7 +114,7 @@ export const FormItemMixin = (superClass) =>
     __onLabelClick() {
       const fieldNode = this.__fieldNode;
       if (fieldNode) {
-        fieldNode.focus();
+        fieldNode.focus({ focusVisible: false });
         fieldNode.click();
       }
     }

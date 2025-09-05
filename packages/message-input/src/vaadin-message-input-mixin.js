@@ -129,9 +129,9 @@ export const MessageInputMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
-    focus() {
+    focus(options) {
       if (this._textArea) {
-        this._textArea.focus();
+        this._textArea.focus(options);
       }
     }
 

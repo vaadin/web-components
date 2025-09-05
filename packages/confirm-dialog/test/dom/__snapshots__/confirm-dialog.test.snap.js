@@ -81,6 +81,7 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
     Cancel
   </vaadin-button>
   <vaadin-button
+    focus-ring=""
     focused=""
     role="button"
     slot="confirm-button"

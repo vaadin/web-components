@@ -486,10 +486,7 @@ export const AvatarGroupMixin = (superClass) =>
 
         this._openedWithFocusRing = overflow.hasAttribute('focus-ring');
       } else if (this.__oldOpened) {
-        overflow.focus();
-        if (this._openedWithFocusRing) {
-          overflow.setAttribute('focus-ring', '');
-        }
+        overflow.focus({ focusVisible: this._openedWithFocusRing });
       }
 
       overflow.setAttribute('aria-expanded', opened === true);

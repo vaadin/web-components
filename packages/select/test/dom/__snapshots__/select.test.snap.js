@@ -317,7 +317,6 @@ snapshots["vaadin-select host opened overlay"] =
   >
     <vaadin-select-item
       aria-selected="false"
-      focus-ring=""
       focused=""
       role="option"
       tabindex="0"
@@ -350,7 +349,6 @@ snapshots["vaadin-select host opened overlay class"] =
   >
     <vaadin-select-item
       aria-selected="false"
-      focus-ring=""
       focused=""
       role="option"
       tabindex="0"

@@ -9,6 +9,7 @@ import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -234,7 +235,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
   /** @private */
   _onOverlayOpen() {
     if (this._menuElement) {
-      this._menuElement.focus();
+      this._menuElement.focus({ focusVisible: isKeyboardActive() });
     }
   }
 

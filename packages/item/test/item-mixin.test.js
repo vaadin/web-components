@@ -25,7 +25,7 @@ describe('ItemMixin', () => {
   describe('properties', () => {
     beforeEach(async () => {
       item = fixtureSync(`
-        <${tag} value="foo">
+        <${tag} value="foo" tabindex="0">
           text-content
         </${tag}>
       `);
@@ -150,11 +150,6 @@ describe('ItemMixin', () => {
         expect(item.hasAttribute('focus-ring')).to.be.false;
       });
 
-      it('should not have focus-ring attribute when not focused with keyboard', () => {
-        item.click();
-        expect(item.hasAttribute('focus-ring')).to.be.false;
-      });
-
       it('should have focus-ring attribute when focused with keyboard', () => {
         tabKeyDown(item);
         focusin(item);
@@ -168,16 +163,19 @@ describe('ItemMixin', () => {
         expect(item.hasAttribute('focus-ring')).to.be.false;
       });
 
-      it('should set focus-ring on programmatic focus after keydown', () => {
-        tabKeyDown(item);
+      it('should not have focus-ring attribute when focused with mouse', () => {
+        mousedown(item);
+        focusin(item);
+        expect(item.hasAttribute('focus-ring')).to.be.false;
+      });
+
+      it('should set focus-ring when calling focus() by default', () => {
         item.focus();
         expect(item.hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should not set focus-ring on programmatic focus after mousedown', () => {
-        tabKeyDown(item);
-        mousedown(item);
-        item.focus();
+      it('should not set focus-ring when calling focus() with focusVisible: false', () => {
+        item.focus({ focusVisible: false });
         expect(item.hasAttribute('focus-ring')).to.be.false;
       });
     });

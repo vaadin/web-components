@@ -386,9 +386,14 @@ export const DateTimePickerMixin = (superClass) =>
       document.removeEventListener('click', this.__onGlobalClick, true);
     }
 
-    focus() {
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
       if (this.__datePicker) {
-        this.__datePicker.focus();
+        this.__datePicker.focus(options);
       }
     }
 

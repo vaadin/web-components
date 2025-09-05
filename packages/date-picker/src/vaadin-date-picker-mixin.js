@@ -492,6 +492,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */
