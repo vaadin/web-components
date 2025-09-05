@@ -57,7 +57,7 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
   _updatePosition() {
     super._updatePosition();
 
-    if (this.parentOverlay == null && this.positionTarget && this.position) {
+    if (this.parentOverlay == null && this.positionTarget && this.position && this.opened) {
       if (this.position === 'bottom' || this.position === 'top') {
         const targetRect = this.positionTarget.getBoundingClientRect();
         const overlayRect = this.$.overlay.getBoundingClientRect();
