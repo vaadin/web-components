@@ -65,7 +65,6 @@ export class IronListAdapter {
     attachObserver.observe(this.scrollTarget);
 
     this._scrollLineHeight = this._getScrollLineHeight();
-    this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
 
     this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
     this.elementsContainer.addEventListener('focusin', () => {
@@ -652,96 +651,6 @@ export class IronListAdapter {
       // Restore the original "_ratio" value.
       this._ratio = originalRatio;
     }
-  }
-
-  /** @private */
-  __onWheel(e) {
-    if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
-      return;
-    }
-
-    let deltaY = e.deltaY;
-    if (e.deltaMode === WheelEvent.DOM_DELTA_LINE) {
-      // Scrolling by "lines of text" instead of pixels
-      deltaY *= this._scrollLineHeight;
-    } else if (e.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
-      // Scrolling by "pages" instead of pixels
-      deltaY *= this._scrollPageHeight;
-    }
-
-    if (!this._deltaYAcc) {
-      this._deltaYAcc = 0;
-    }
-
-    if (this._wheelAnimationFrame) {
-      // Accumulate wheel delta while a frame is being processed
-      this._deltaYAcc += deltaY;
-      e.preventDefault();
-      return;
-    }
-
-    deltaY += this._deltaYAcc;
-    this._deltaYAcc = 0;
-
-    this._wheelAnimationFrame = true;
-    this.__debouncerWheelAnimationFrame = Debouncer.debounce(
-      this.__debouncerWheelAnimationFrame,
-      animationFrame,
-      () => {
-        this._wheelAnimationFrame = false;
-      },
-    );
-
-    const momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
-
-    if (this._canScroll(this.scrollTarget, e.deltaX, deltaY)) {
-      e.preventDefault();
-      this.scrollTarget.scrollTop += deltaY;
-      this.scrollTarget.scrollLeft += e.deltaX;
-
-      this._hasResidualMomentum = true;
-
-      this._ignoreNewWheel = true;
-      this._debouncerIgnoreNewWheel = Debouncer.debounce(
-        this._debouncerIgnoreNewWheel,
-        timeOut.after(this.timeouts.IGNORE_WHEEL),
-        () => {
-          this._ignoreNewWheel = false;
-        },
-      );
-    } else if ((this._hasResidualMomentum && momentum <= this._previousMomentum) || this._ignoreNewWheel) {
-      e.preventDefault();
-    } else if (momentum > this._previousMomentum) {
-      this._hasResidualMomentum = false;
-    }
-    this._previousMomentum = momentum;
-  }
-
-  /**
-   * Determines if the element has an ancestor that handles the scroll delta prior to this
-   *
-   * @private
-   */
-  _hasScrolledAncestor(el, deltaX, deltaY) {
-    if (el === this.scrollTarget || el === this.scrollTarget.getRootNode().host) {
-      return false;
-    } else if (
-      this._canScroll(el, deltaX, deltaY) &&
-      ['auto', 'scroll'].indexOf(getComputedStyle(el).overflow) !== -1
-    ) {
-      return true;
-    } else if (el !== this && el.parentElement) {
-      return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
-    }
-  }
-
-  _canScroll(el, deltaX, deltaY) {
-    return (
-      (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
-      (deltaY < 0 && el.scrollTop > 0) ||
-      (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
-      (deltaX < 0 && el.scrollLeft > 0)
-    );
   }
 
   /**
