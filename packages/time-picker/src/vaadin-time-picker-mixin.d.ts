@@ -108,7 +108,7 @@ export declare class TimePickerMixinClass {
    *
    * The object has the following JSON structure:
    *
-   * ```
+   * ```js
    * {
    *   // A function to format given `Object` as
    *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`

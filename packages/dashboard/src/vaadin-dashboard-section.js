@@ -96,7 +96,7 @@ class DashboardSection extends DashboardItemMixin(
        * `i18n` object with a custom one.
        *
        * The object has the following structure and default values:
-       * ```
+       * ```js
        * {
        *   selectSection: 'Select section for editing',
        *   remove: 'Remove',

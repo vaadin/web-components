@@ -192,7 +192,7 @@ class Dashboard extends DashboardLayoutMixin(
    * just the individual properties you want to change.
    *
    * The object has the following structure and default values:
-   * ```
+   * ```js
    * {
    *   selectSection: 'Select section for editing',
    *   selectWidget: 'Select widget for editing',

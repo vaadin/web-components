@@ -291,7 +291,7 @@ export const DateTimePickerMixin = (superClass) =>
      *
      * The object has the following structure and default values:
      *
-     * ```
+     * ```js
      * {
      *   // Accessible label to the date picker.
      *   // The property works in conjunction with label and accessibleName defined on the field.

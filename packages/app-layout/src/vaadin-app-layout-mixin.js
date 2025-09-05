@@ -105,7 +105,7 @@ export const AppLayoutMixin = (superclass) =>
      * just the individual properties you want to change.
      *
      * The object has the following structure and default values:
-     * ```
+     * ```js
      * {
      *   drawer: 'Drawer'
      * }

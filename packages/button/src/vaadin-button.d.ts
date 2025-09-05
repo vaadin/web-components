@@ -49,7 +49,7 @@ declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(HTMLElement)
    * which makes disabled buttons focusable and hoverable, while still
    * preventing them from being triggered:
    *
-   * ```
+   * ```js
    * // Set before any button is attached to the DOM.
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true
    * ```

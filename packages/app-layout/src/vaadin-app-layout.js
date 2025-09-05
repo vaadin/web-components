@@ -35,17 +35,17 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * For best results, the component should be added to the root level of your application (i.e., as a direct child of `<body>`).
  *
  * The page should include a viewport meta tag which contains `viewport-fit=cover`, like the following:
- * ```
+ * ```html
  * <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
  * ```
+ *
  * This causes the viewport to be scaled to fill the device display.
- * To ensure that important content is displayed, use the provided css variables.
- * ```
- * --safe-area-inset-top
- * --safe-area-inset-right
- * --safe-area-inset-bottom
- * --safe-area-inset-left
- * ```
+ * To ensure that important content is displayed, use the provided css variables:
+ *
+ * - `--safe-area-inset-top`
+ * - `--safe-area-inset-right`
+ * - `--safe-area-inset-bottom`
+ * - `--safe-area-inset-left`
  *
  * ### Styling
  *

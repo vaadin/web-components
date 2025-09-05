@@ -69,7 +69,7 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *
  * The `label-position` host attribute can be used to target the label on top state:
  *
- * ```
+ * ```css
  * :host([label-position="top"]) {
  *   padding-top: 0.5rem;
  * }

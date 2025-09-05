@@ -129,7 +129,7 @@ export const LoginMixin = (superClass) =>
      * and `header` sections, `header` can be added to override `title` and `description` properties
      * in `vaadin-login-overlay`):
      *
-     * ```
+     * ```js
      * {
      *   header: {
      *     title: 'App name',

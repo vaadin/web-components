@@ -96,7 +96,7 @@ export const AvatarMixin = (superClass) =>
      * just the individual properties you want to change.
      *
      * The object has the following JSON structure and default values:
-     * ```
+     * ```js
      * {
      *   // Translation of the anonymous user avatar tooltip.
      *   anonymous: 'anonymous'
