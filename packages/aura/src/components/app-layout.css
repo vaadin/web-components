@@ -1,0 +1,140 @@
+html {
+  --aura-app-layout-inset: 1.5vmin;
+  --aura-app-layout-radius: var(--vaadin-radius-l);
+  --_aura-mdl-border: 1px;
+  --vaadin-app-layout-navbar-padding-top: 0;
+  --vaadin-app-layout-navbar-padding-bottom: 0;
+  --vaadin-app-layout-navbar-padding-inline-start: 0;
+  --vaadin-app-layout-navbar-padding-inline-end: 0;
+}
+
+/* Aligned with App Layout overlay breakpoint */
+@media (width <= 800px), (height <= 600px) {
+  html {
+    --aura-app-layout-inset: 0px !important;
+    --_aura-mdl-border: 0px;
+  }
+}
+
+vaadin-app-layout {
+  --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline-end: var(--aura-app-layout-inset);
+  padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
+
+  > [slot]:is(header, footer) {
+    padding: var(--vaadin-padding-s);
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+  }
+}
+
+vaadin-app-layout[overlay] {
+  &::part(navbar),
+  &::part(drawer) {
+    --vaadin-app-layout-navbar-background: var(--aura-surface);
+    --vaadin-app-layout-drawer-background: var(--aura-surface);
+    --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+    -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+    backdrop-filter: var(--aura-overlay-backdrop-filter);
+  }
+}
+
+vaadin-app-layout:is([overlay], :not([drawer-opened])) {
+  padding-inline-start: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout::part(navbar) {
+  justify-content: space-between;
+}
+
+vaadin-app-layout:not([overlay])::part(navbar) {
+  --vaadin-app-layout-navbar-background: transparent;
+}
+
+vaadin-app-layout::part(drawer) {
+  padding: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout > [slot='drawer'] {
+  grid-column: 1;
+  grid-row: 2;
+
+  &:is(header, footer) {
+    grid-row: 1;
+  }
+
+  &:is(footer) {
+    grid-row: 3;
+
+    vaadin-button[theme~='tertiary'] {
+      flex: 1;
+      justify-content: start;
+    }
+  }
+
+  &:is(header, footer),
+  vaadin-side-nav {
+    padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
+  }
+
+  vaadin-side-nav-item::part(content) {
+    --aura-surface-level: 5;
+  }
+}
+
+vaadin-app-layout > vaadin-master-detail-layout {
+  border-radius: var(--_app-layout-radius);
+  border: var(--_aura-mdl-border) solid var(--vaadin-border-color-subtle);
+  border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+  border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+
+  & > vaadin-master-detail-layout,
+  &:not([drawer])::part(detail) {
+    border-start-end-radius: var(--_app-layout-radius);
+    border-end-end-radius: var(--_app-layout-radius);
+  }
+
+  &::part(backdrop) {
+    border-radius: calc(var(--_app-layout-radius) - var(--_aura-mdl-border));
+  }
+
+  &:is([drawer][has-detail]) {
+    border-color: var(--vaadin-border-color);
+  }
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']) {
+  padding-top: var(--_vaadin-app-layout-navbar-offset-size);
+
+  &::part(drawer) {
+    padding-top: 0;
+  }
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']):not([overlay]):not([drawer-opened])
+  > vaadin-master-detail-layout {
+  border-inline-start-width: min(var(--aura-app-layout-inset), 1px);
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer'])[drawer-opened]:not([overlay])
+  > vaadin-master-detail-layout {
+  border-start-start-radius: var(--aura-app-layout-radius);
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']) > vaadin-master-detail-layout {
+  border-top-width: 1px;
+}
+
+vaadin-app-layout:has([slot='navbar']) > :is(:not([slot]), [slot='drawer']) vaadin-drawer-toggle,
+vaadin-app-layout:not([slot='navbar']) > [slot='drawer'] vaadin-drawer-toggle {
+  display: none;
+}
+
+/* ::view-transition-group(vaadin-mdl-backdrop),
+::view-transition-group(vaadin-mdl-master),
+::view-transition-group(vaadin-mdl-detail) {
+  border-radius: var(--app-layout-radius);
+  overflow: hidden;
+  } */

@@ -1,0 +1,37 @@
+/*
+Copyright (c) 2015, Chris Simpson, with Reserved Font Name: "Metropolis".
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is included in the LICENSE.txt file, and is also available with a FAQ at: https://openfontlicense.org
+*/
+@font-face {
+  font-family: 'Metropolis';
+  src: url(./Metropolis-Regular.woff2) format('woff2');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url(./Metropolis-Medium.woff2) format('woff2');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url(./Metropolis-SemiBold.woff2) format('woff2');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url(./Metropolis-Bold.woff2) format('woff2');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
