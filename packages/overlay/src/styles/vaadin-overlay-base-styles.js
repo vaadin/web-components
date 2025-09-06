@@ -65,6 +65,20 @@ export const overlayStyles = css`
     overscroll-behavior: contain;
     pointer-events: auto;
     -webkit-tap-highlight-color: initial;
+
+    /* CSS reset for font styles */
+    color: initial;
+    font-family: initial;
+    font-size: initial;
+    font-style: initial;
+    font-weight: initial;
+    font-variant: initial;
+    line-height: initial;
+    letter-spacing: initial;
+    text-align: initial;
+    text-decoration: initial;
+    text-transform: initial;
+    white-space: initial;
   }
 
   [part='backdrop'] {
