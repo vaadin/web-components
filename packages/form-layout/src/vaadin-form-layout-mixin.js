@@ -36,7 +36,7 @@ export const FormLayoutMixin = (superClass) =>
          * enabled explicitly via the `autoResponsive` property or implicitly
          * if the following feature flag is set:
          *
-         * ```
+         * ```js
          * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true
          * ```
          *

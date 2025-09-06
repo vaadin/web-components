@@ -302,7 +302,7 @@ export const DatePickerMixin = (subclass) =>
      *
      * The object has the following JSON structure and default values:
      *
-     * ```
+     * ```js
      * {
      *   // An array with the full names of months starting
      *   // with January.

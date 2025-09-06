@@ -130,7 +130,7 @@ class DashboardWidget extends DashboardItemMixin(
        * `i18n` object with a custom one.
        *
        * The object has the following structure and default values:
-       * ```
+       * ```js
        * {
        *   selectWidget: 'Select widget for editing',
        *   remove: 'Remove',

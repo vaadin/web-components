@@ -185,7 +185,7 @@ export const NotificationMixin = (superClass) =>
      * An options object can be passed to configure the notification.
      * The options object has the following structure:
      *
-     * ```
+     * ```ts
      * {
      *   assertive?: boolean
      *   position?: string

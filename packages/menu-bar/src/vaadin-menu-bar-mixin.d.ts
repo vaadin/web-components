@@ -114,7 +114,7 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * which makes disabled buttons focusable and hoverable, while still
    * preventing them from being triggered:
    *
-   * ```
+   * ```js
    * // Set before any menu bar is attached to the DOM.
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
    * ```
@@ -127,7 +127,7 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
-   * ```
+   * ```js
    * {
    *   moreOptions: 'More options'
    * }

@@ -78,7 +78,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          * _i18n_ object or just the property you want to modify.
          *
          * The object has the following JSON structure and default values:
-         * ```
+         * ```js
          * {
          *   // Screen reader announcement on clear button click.
          *   cleared: 'Selection cleared',

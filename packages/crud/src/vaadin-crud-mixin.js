@@ -307,7 +307,7 @@ export const CrudMixin = (superClass) =>
      *
      * The object has the following JSON structure and default values:
      *
-     * ```
+     * ```js
      * {
      *   newItem: 'New item',
      *   editItem: 'Edit item',

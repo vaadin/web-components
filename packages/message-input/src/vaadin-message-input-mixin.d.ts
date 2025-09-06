@@ -27,7 +27,7 @@ export declare class MessageInputMixinClass {
    * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
-   * ```
+   * ```js
    * {
    *   // Used as the button label
    *   send: 'Send',

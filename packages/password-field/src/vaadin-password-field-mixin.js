@@ -44,7 +44,7 @@ export const PasswordFieldMixin = (superClass) =>
          * An object with translated strings used for localization.
          * It has the following structure and default values:
          *
-         * ```
+         * ```js
          * {
          *   // Translation of the reveal icon button accessible label
          *   reveal: 'Show password'

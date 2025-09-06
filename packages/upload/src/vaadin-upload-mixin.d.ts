@@ -101,7 +101,7 @@ export declare class UploadMixinClass {
   /**
    * Key-Value map to send to the server. If you set this property as an
    * attribute, use a valid JSON string, for example:
-   * ```
+   * ```html
    * <vaadin-upload headers='{"X-Foo": "Bar"}'></vaadin-upload>
    * ```
    */
@@ -201,7 +201,7 @@ export declare class UploadMixinClass {
    *
    * The object has the following JSON structure and default values:
    *
-   * ```
+   * ```js
    * {
    *   dropFiles: {
    *     one: 'Drop file here',

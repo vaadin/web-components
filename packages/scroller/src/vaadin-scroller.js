@@ -21,6 +21,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  *   <div>Content</div>
  * </vaadin-scroller>
  * ```
+ *
  * The following attributes are exposed for styling:
  *
  * Attribute    | Description

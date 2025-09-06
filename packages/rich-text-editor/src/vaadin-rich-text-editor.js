@@ -33,7 +33,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * ```
  *
  * Vaadin Rich Text Editor focuses on the structure, not the styling of content.
- * Therefore, the semantic HTML5 tags such as <h1>, <strong> and <ul> are used,
+ * Therefore, the semantic HTML5 tags such as `<h1>`, `<strong>` and `<ul>` are used,
  * and CSS usage is limited to most common cases, like horizontal text alignment.
  *
  * ### Styling
