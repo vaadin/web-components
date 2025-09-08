@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-/* Use a stronger selector so that imports added later do not override the property values */
-:where(:root, :host):not(div) {
+/* Use a stronger selector than `:where()` used by other Lumo CSS */
+:is(:root, :host) {
   --lumo-size-xl: 3rem;
   --lumo-size-l: 2.5rem;
   --lumo-size-m: 2rem;
