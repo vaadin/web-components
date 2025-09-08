@@ -21,7 +21,7 @@
     "start": "web-dev-server --node-resolve --open /dev",
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
-    "check-releases": "node ./scripts/check-releases.js && web-dev-server --node-resolve --open /scripts/check-releases.html",
+    "check-releases": "node ./scripts/check-releases.js && web-dev-server --node-resolve --open /scripts/check-releases.html --theme=lumo",
     "test": "web-test-runner",
     "test:aura": "yarn test --config web-test-runner-aura.config.js",
     "test:base": "yarn test --config web-test-runner-base.config.js",
