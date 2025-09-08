@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="../packages/aura/src/icons/lucide/lucide.css" />
     <link rel="stylesheet" href="../packages/aura/adaptive-typography.css" />
+    <link rel="stylesheet" href="./aura/aura-view.css" />
     <link rel="stylesheet" href="./aura/components-view.css" />
     <script type="module">
       window.Vaadin ||= {};
@@ -128,15 +129,15 @@
             });
           } else if (id === 'components') {
             views[id].querySelector('vaadin-avatar-group').items = [
-              { name: 'AA' },
-              { name: 'BB' },
-              { name: 'CC' },
-              { name: 'DD' },
-              { name: 'EE' },
-              { name: 'FF' },
-              { name: 'GG' },
-              { name: 'HH' },
-              { name: 'II' },
+              { name: 'AA', colorIndex: 0 },
+              { name: 'BB', colorIndex: 1 },
+              { name: 'CC', colorIndex: 2 },
+              { name: 'DD', colorIndex: 3 },
+              { name: 'EE', colorIndex: 4 },
+              { name: 'FF', colorIndex: 5 },
+              { name: 'GG', colorIndex: 6 },
+              { name: 'HH', colorIndex: 7 },
+              { name: 'II', colorIndex: 8 },
             ];
             views[id].querySelector('vaadin-grid').items = generateItems(20);
 
@@ -314,7 +315,7 @@
 
   <body>
 
-    <vaadin-popover for="theme-editor-btn" position="bottom-start" opened width="320px" style="--aura-base-size: 12; --aura-base-font-size: 13;" theme>
+    <vaadin-popover for="theme-editor-btn" position="bottom-start" width="320px" style="--aura-base-size: 12; --aura-base-font-size: 13;" theme>
       <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch;">
         <h3>Edit Theme</h3>
         <vaadin-checkbox label="Use Navbar" id="useNavbar"></vaadin-checkbox>
@@ -513,10 +514,11 @@
         </header>
         <vaadin-scroller theme="overflow-indicators">
           <div class="grid">
-            <div class="component" theme="surface">
+            <div class="component wide" theme="surface">
               <div class="flex flex-wrap gap-s">
-                <vaadin-button theme="primary" class="flex-auto">Save</vaadin-button>
-                <vaadin-button class="flex-auto">Cancel</vaadin-button>
+                <vaadin-button theme="primary">Save</vaadin-button>
+                <vaadin-button>Cancel</vaadin-button>
+                <vaadin-button theme="tertiary">Wat</vaadin-button>
               </div>
             </div>
 
@@ -635,6 +637,24 @@
                 <vaadin-tab>Tab 2</vaadin-tab>
                 <vaadin-tab>Tab 3</vaadin-tab>
               </vaadin-tabs>
+            </div>
+
+            <style>
+              .component .size {
+                background: currentColor;
+                height: 4px;
+                width: var(--size);
+              }
+            </style>
+
+            <div class="component" theme="surface">
+              <div class="flex flex-col gap-s">
+                <div class="size xs" style="--size: var(--vaadin-padding-xs)"></div>
+                <div class="size s" style="--size: var(--vaadin-padding-s);"></div>
+                <div class="size m" style="--size: var(--vaadin-padding-m);"></div>
+                <div class="size l" style="--size: var(--vaadin-padding-l);"></div>
+                <div class="size xl" style="--size: var(--vaadin-padding-xl);"></div>
+              </div>
             </div>
 
             <div class="component" theme="surface">
