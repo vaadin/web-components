@@ -34,6 +34,7 @@ vaadin-button:not([slot='button']):has([slot='suffix']:is(vaadin-icon, svg, i[cl
 
 :is(vaadin-button, vaadin-drawer-toggle)[theme~='primary'] {
   --vaadin-button-font-weight: var(--aura-font-weight-semibold);
+  --vaadin-button-text-color: light-dark(var(--vaadin-background-color), var(--aura-background-dark));
 }
 
 :is(vaadin-button, vaadin-drawer-toggle)[disabled][theme~='primary'] {
