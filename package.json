@@ -4,7 +4,7 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js",
+    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js",
     "api-docs:start": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs start",
     "api-docs:build": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs build",
     "debug": "yarn test --watch",
