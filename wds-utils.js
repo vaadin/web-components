@@ -22,7 +22,7 @@ export function appendStyles(html) {
 }
 
 export function isIndexPage(html) {
-  return html.includes('<ul id="listing">');
+  return html.includes('<!-- LISTING -->');
 }
 
 function isSubPage(dir, file) {
@@ -36,21 +36,45 @@ function isSubPage(dir, file) {
 
 export function generateListing(html, dir) {
   if (isIndexPage(html)) {
-    const listing = `
-      <ul id="listing">
-        ${fs
-          .readdirSync(dir || '.')
-          .filter((file) => file !== 'index.html' && file !== 'dist')
-          .filter((file) => file.endsWith('.html') || isSubPage(dir, file))
-          .map(
-            (file) => `<li>
-            <a href="${file}${file.endsWith('.html') ? '' : '/'}">${file}</a>
-          </li>`,
-          )
-          .join('')}
-      </ul>`;
+    const files = fs.readdirSync(dir || '.').filter((file) => file !== 'index.html' && file !== 'dist');
 
-    return html.replace(/<ul id="listing">.*<\/ul>/u, listing);
+    // Separate sub pages (folders with index.html) from HTML files
+    const subPages = files.filter((file) => isSubPage(dir, file));
+    const htmlFiles = files.filter((file) => file.endsWith('.html'));
+
+    let listing = '';
+
+    // Add sub pages section if there are any
+    if (subPages.length > 0) {
+      listing += `
+        <h2>Sub pages</h2>
+        <ul>
+          ${subPages
+            .map(
+              (file) => `<li>
+              <a href="${file}/">${file}/</a>
+            </li>`,
+            )
+            .join('')}
+        </ul>`;
+    }
+
+    // Add HTML files section if there are any
+    if (htmlFiles.length > 0) {
+      listing += `
+        <h2>Pages</h2>
+        <ul>
+          ${htmlFiles
+            .map(
+              (file) => `<li>
+              <a href="${file}">${file}</a>
+            </li>`,
+            )
+            .join('')}
+        </ul>`;
+    }
+
+    return html.replace(/<!-- LISTING -->/u, listing);
   }
 
   return html;
