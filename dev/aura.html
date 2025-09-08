@@ -344,7 +344,7 @@
     </vaadin-popover>
 
     <vaadin-app-layout primary-section="navbar">
-      <header slot="drawer">
+      <header slot="drawer" class="aura-view-header">
         <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
         <vaadin-select id="org-select" theme="subtle auto-size"></vaadin-select>
         <!-- TODO if this button isn't here, the height of the header too narrow -->
@@ -397,9 +397,9 @@
           </vaadin-side-nav-item>
         </vaadin-side-nav>
       </vaadin-scroller>
-      <footer slot="drawer">
+      <footer slot="drawer" class="aura-view-footer">
         <vaadin-button theme="tertiary">
-          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh;" slot="prefix"></vaadin-avatar>
+          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh;" slot="prefix" tabindex="-1"></vaadin-avatar>
           <span>John Doe</span>
         </vaadin-button>
         <vaadin-button theme="tertiary" id="theme-editor-btn">

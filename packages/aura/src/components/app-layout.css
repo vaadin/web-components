@@ -21,13 +21,6 @@ vaadin-app-layout {
   padding-block: var(--aura-app-layout-inset);
   padding-inline-end: var(--aura-app-layout-inset);
   padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
-
-  > [slot]:is(header, footer) {
-    padding: var(--vaadin-padding-s);
-    display: flex;
-    align-items: center;
-    gap: var(--vaadin-gap-xs);
-  }
 }
 
 vaadin-app-layout[overlay] {
@@ -54,34 +47,12 @@ vaadin-app-layout:not([overlay])::part(navbar) {
 }
 
 vaadin-app-layout::part(drawer) {
-  padding: var(--aura-app-layout-inset);
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline: calc(var(--aura-app-layout-inset) - var(--side-nav-padding));
 }
 
-vaadin-app-layout > [slot='drawer'] {
-  grid-column: 1;
-  grid-row: 2;
-
-  &:is(header, footer) {
-    grid-row: 1;
-  }
-
-  &:is(footer) {
-    grid-row: 3;
-
-    vaadin-button[theme~='tertiary'] {
-      flex: 1;
-      justify-content: start;
-    }
-  }
-
-  &:is(header, footer),
-  vaadin-side-nav {
-    padding-inline: calc(var(--side-nav-padding) - var(--aura-app-layout-inset));
-  }
-
-  vaadin-side-nav-item::part(content) {
-    --aura-surface-level: 5;
-  }
+vaadin-app-layout > [slot='drawer'] vaadin-side-nav-item::part(content) {
+  --aura-surface-level: 5;
 }
 
 vaadin-app-layout > vaadin-master-detail-layout {
