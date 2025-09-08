@@ -30,7 +30,7 @@
     "components/*.css",
     "mixins/*.d.ts",
     "mixins/*.js",
-    "presets/*.js",
+    "presets",
     "src",
     "utilities/*.js"
   ],
