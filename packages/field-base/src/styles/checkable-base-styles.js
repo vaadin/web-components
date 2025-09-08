@@ -65,7 +65,6 @@ export const checkable = (part, propName = part) => css`
     content: '\\2003';
     grid-column: 1;
     grid-row: 1;
-    z-index: -1;
     width: 0;
   }
 
