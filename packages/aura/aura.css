@@ -46,10 +46,6 @@ html:has(vaadin-app-layout) {
   }
 }
 
-vaadin-scroller[slot='drawer'] {
-  scrollbar-width: thin;
-}
-
 /* TODO move to base styles */
 vaadin-scroller:not([overflow]) {
   overflow: visible;

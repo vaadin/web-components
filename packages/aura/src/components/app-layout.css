@@ -51,6 +51,10 @@ vaadin-app-layout::part(drawer) {
   padding-inline: calc(var(--aura-app-layout-inset) - var(--side-nav-padding));
 }
 
+vaadin-scroller[slot='drawer'] {
+  scrollbar-width: thin;
+}
+
 vaadin-app-layout > [slot='drawer'] vaadin-side-nav-item::part(content) {
   --aura-surface-level: 5;
 }
