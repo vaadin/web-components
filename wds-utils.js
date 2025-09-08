@@ -21,21 +21,27 @@ export function appendStyles(html) {
   return html.replace(/<\/body>/u, `${preventFouc}\n</body>`);
 }
 
-export function generateListing(html, dir, path) {
-  if (html.includes('<ul id="listing">')) {
-    // Add <base> to make index.html work when opening
-    // http://localhost:8000/dev or http://localhost:8000/dev/charts without trailing slash
-    const match = /\/(?<section>dev|charts)$/u.exec(path);
-    if (match) {
-      html = html.replace('<head>', `<head>\n<base href="${match.groups.section}/">`);
-    }
+export function isIndexPage(html) {
+  return html.includes('<ul id="listing">');
+}
 
+function isSubPage(dir, file) {
+  const filePath = `${dir}/${file}`;
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    const indexPath = `${filePath}/index.html`;
+    return fs.existsSync(indexPath);
+  }
+  return false;
+}
+
+export function generateListing(html, dir) {
+  if (isIndexPage(html)) {
     const listing = `
       <ul id="listing">
         ${fs
           .readdirSync(dir || '.')
-          .filter((file) => file !== 'index.html')
-          .filter((file) => file.endsWith('.html') || file === 'charts')
+          .filter((file) => file !== 'index.html' && file !== 'dist')
+          .filter((file) => file.endsWith('.html') || isSubPage(dir, file))
           .map(
             (file) => `<li>
             <a href="${file}${file.endsWith('.html') ? '' : '/'}">${file}</a>
