@@ -29,6 +29,7 @@ html,
   --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale), 0.0625rem);
 
+  /* TODO sometimes in the Aura dev page in Safari, when switching  back to Components view, some of the side nav menu item texts disappear after the view transition. Removing these line heights "fixes" the issue. Another fix is to use system fonts. It sometimes also depends on the browser viewport size. */
   --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-base-line-height), 0.125rem);
   --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-base-line-height), 0.125rem);
   --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-base-line-height), 0.125rem);

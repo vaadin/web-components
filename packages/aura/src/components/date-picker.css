@@ -3,10 +3,6 @@ html {
   --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
   --vaadin-date-picker-date-width: calc(var(--aura-font-size-m) * 2);
   --vaadin-date-picker-year-scroller-width: calc(var(--aura-font-size-m) * 3);
-}
-
-/* TODO try to make accent color available on the root level */
-body {
   /* TODO add/use selection color */
   --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
   --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast);

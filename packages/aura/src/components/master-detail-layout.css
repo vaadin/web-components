@@ -24,7 +24,7 @@ vaadin-master-detail-layout:not([drawer])::part(detail) {
   border-end-end-radius: var(--_app-layout-radius);
 }
 
-/* TODO these end up affecting app MDLs, not just the one directly inside the App Layout */
+/* TODO these end up affecting all MDLs, not just the one directly inside the App Layout */
 ::view-transition-group(vaadin-mdl-backdrop),
 ::view-transition-group(vaadin-mdl-master),
 ::view-transition-group(vaadin-mdl-detail) {

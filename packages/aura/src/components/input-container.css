@@ -2,7 +2,6 @@ html,
 [theme] {
   --vaadin-input-field-background: var(--aura-surface);
   --vaadin-input-field-error-color: var(--aura-red);
-  /* TODO disabled background? */
 }
 
 ::part(input-field),
@@ -22,8 +21,6 @@ vaadin-message-input:not([readonly], [disabled]) {
   --aura-surface-opacity: 0.5;
   --aura-surface-level: 1;
 }
-
-/* TODO invalid field styles */
 
 /* TODO there should be single selector to target all field buttons */
 ::part(decrease-button),

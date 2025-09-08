@@ -36,7 +36,6 @@ html {
   --aura-background-dark: oklch(from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) calc(c * 0.05) h);
   --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
 
-  /* TODO Safari generates odd reddish shades near white input colors */
   --_bg-alt: oklch(
     from var(--aura-background) calc(l + c) min(c, c * 2 - l/20) calc(h + 180 * var(--_safari-17-deg, 1deg) * l * c * 4)
   );
