@@ -63,6 +63,9 @@ html {
   --aura-accent-text-dark: oklch(from var(--aura-accent-dark) max(0.8, l) c h);
   --aura-accent-text: light-dark(var(--aura-accent-text-light), var(--aura-accent-text-dark));
 
+  /* TODO probably broken for Safari 17 */
+  --vaadin-user-color: var(--aura-accent-color);
+
   --vaadin-background-container: color-mix(
     in srgb,
     var(--_color-base) calc(3% + min(3%, 1% * var(--aura-contrast))),
