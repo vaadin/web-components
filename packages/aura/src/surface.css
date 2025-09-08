@@ -1,6 +1,5 @@
 html {
   --aura-surface-level: 1;
-  --aura-surface-opacity: 0.5;
 }
 
 /* List all elements that are surfaces */
@@ -19,7 +18,7 @@ vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
 [theme~='surface'] {
-  --_opacity: var(--aura-surface-opacity);
+  --aura-surface-opacity: 0.5;
 
   --aura-surface-solid: light-dark(
     oklch(
@@ -30,14 +29,14 @@ vaadin-side-nav-item::part(content),
       from var(--aura-background-dark)
         min(
           1,
-          max(0.28 - var(--aura-surface-level) * 0.02, l) + var(--aura-surface-level) *
+          max(0.28 - var(--aura-surface-level) * 0.04, l) + var(--aura-surface-level) *
             (0.05 - 0.008 * var(--aura-contrast))
         )
         clamp(0, c * (1 + l), 0.2) h
     )
   );
 
-  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--_opacity)), transparent);
+  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--aura-surface-opacity)), transparent);
   --vaadin-background-color: var(--aura-surface-solid);
 }
 
