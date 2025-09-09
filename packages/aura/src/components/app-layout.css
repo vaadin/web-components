@@ -56,6 +56,7 @@ vaadin-app-layout:not([overlay])::part(navbar) {
   --vaadin-app-layout-navbar-background: transparent;
 }
 
+<<<<<<< HEAD
 vaadin-app-layout:not([overlay])::part(drawer) {
   padding-block: var(--aura-app-layout-inset);
   padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
@@ -72,6 +73,19 @@ vaadin-app-layout > vaadin-scroller:nth-child(1 of [slot='drawer']) {
 
 vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
   padding-bottom: var(--vaadin-padding-s);
+=======
+vaadin-app-layout::part(drawer) {
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline: calc(var(--aura-app-layout-inset) - var(--side-nav-padding));
+}
+
+vaadin-scroller[slot='drawer'] {
+  scrollbar-width: thin;
+}
+
+vaadin-app-layout > [slot='drawer'] vaadin-side-nav-item::part(content) {
+  --aura-surface-level: 5;
+>>>>>>> 94d06b282b (feat: Aura surface properties and app-layout theme)
 }
 
 vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
