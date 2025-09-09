@@ -21,30 +21,60 @@ export function appendStyles(html) {
   return html.replace(/<\/body>/u, `${preventFouc}\n</body>`);
 }
 
-export function generateListing(html, dir, path) {
-  if (html.includes('<ul id="listing">')) {
-    // Add <base> to make index.html work when opening
-    // http://localhost:8000/dev or http://localhost:8000/dev/charts without trailing slash
-    const match = /\/(?<section>dev|charts)$/u.exec(path);
-    if (match) {
-      html = html.replace('<head>', `<head>\n<base href="${match.groups.section}/">`);
+export function isIndexPage(html) {
+  return html.includes('<!-- LISTING -->');
+}
+
+function isSubPage(dir, file) {
+  const filePath = `${dir}/${file}`;
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    const indexPath = `${filePath}/index.html`;
+    return fs.existsSync(indexPath);
+  }
+  return false;
+}
+
+export function generateListing(html, dir) {
+  if (isIndexPage(html)) {
+    const files = fs.readdirSync(dir || '.').filter((file) => file !== 'index.html' && file !== 'dist');
+
+    // Separate sub pages (folders with index.html) from HTML files
+    const subPages = files.filter((file) => isSubPage(dir, file));
+    const htmlFiles = files.filter((file) => file.endsWith('.html'));
+
+    let listing = '';
+
+    // Add sub pages section if there are any
+    if (subPages.length > 0) {
+      listing += `
+        <h2>Sub pages</h2>
+        <ul>
+          ${subPages
+            .map(
+              (file) => `<li>
+              <a href="${file}/">${file}/</a>
+            </li>`,
+            )
+            .join('')}
+        </ul>`;
     }
 
-    const listing = `
-      <ul id="listing">
-        ${fs
-          .readdirSync(dir || '.')
-          .filter((file) => file !== 'index.html')
-          .filter((file) => file.endsWith('.html') || file === 'charts')
-          .map(
-            (file) => `<li>
-            <a href="${file}${file.endsWith('.html') ? '' : '/'}">${file}</a>
-          </li>`,
-          )
-          .join('')}
-      </ul>`;
+    // Add HTML files section if there are any
+    if (htmlFiles.length > 0) {
+      listing += `
+        <h2>Pages</h2>
+        <ul>
+          ${htmlFiles
+            .map(
+              (file) => `<li>
+              <a href="${file}">${file}</a>
+            </li>`,
+            )
+            .join('')}
+        </ul>`;
+    }
 
-    return html.replace(/<ul id="listing">.*<\/ul>/u, listing);
+    return html.replace(/<!-- LISTING -->/u, listing);
   }
 
   return html;

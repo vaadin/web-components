@@ -1,5 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
-import { appendStyles, generateListing } from './wds-utils.js';
+import { appendStyles, generateListing, isIndexPage } from './wds-utils.js';
 
 const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base';
 
@@ -76,13 +76,13 @@ export default {
           body = appendStyles(body);
 
           // Index page listing
-          const devPageMatch = /^\/dev(?:\/(?<section>charts))?(?:\/index\.html|\/)?$/u.exec(context.path);
+          if (isIndexPage(body)) {
+            const path = context.path.replace(/\/?(index.html)?$/u, '');
+            const dir = `.${path}`;
+            body = generateListing(body, dir);
 
-          if (devPageMatch) {
-            // If a group was captured, then it's in the /dev/charts path,
-            // otherwise it should list the pages under the /dev folder
-            const dir = devPageMatch.groups.section ? './dev/charts' : './dev';
-            body = generateListing(body, dir, context.path);
+            // Add <base> to make index pages work without trailing slash
+            body = body.replace('<head>', `<head>\n<base href="${path}/">`);
           }
 
           return { body };
