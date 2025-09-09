@@ -141,12 +141,9 @@ describe('form-layout', () => {
           <style>
             vaadin-form-layout {
               --vaadin-form-layout-column-spacing: 4em;
-            }
-
-            vaadin-form-item {
-              --vaadin-form-item-label-width: 6em;
-              --vaadin-form-item-label-spacing: 1em;
-              --vaadin-form-item-row-spacing: 1.25em;
+              --vaadin-form-layout-label-width: 6em;
+              --vaadin-form-layout-label-spacing: 1em;
+              --vaadin-form-layout-row-spacing: 1.25em;
             }
           </style>
           <vaadin-form-layout id="tests">

@@ -49,29 +49,6 @@ export const FormItemMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-
-      const computedStyle = getComputedStyle(this);
-      const spacing = computedStyle.getPropertyValue('--vaadin-form-item-row-spacing');
-      const labelWidth = computedStyle.getPropertyValue('--vaadin-form-item-label-width');
-      const labelSpacing = computedStyle.getPropertyValue('--vaadin-form-item-label-spacing');
-
-      if (spacing !== '' && parseInt(spacing) !== 0) {
-        issueWarning(
-          '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` on <vaadin-form-layout> instead.',
-        );
-      }
-
-      if (labelWidth !== '' && parseInt(labelWidth) !== 0) {
-        issueWarning(
-          '`--vaadin-form-item-label-width` is deprecated since 24.7. Use `--vaadin-form-layout-label-width` on <vaadin-form-layout> instead.',
-        );
-      }
-
-      if (labelSpacing !== '' && parseInt(labelSpacing) !== 0) {
-        issueWarning(
-          '`--vaadin-form-item-label-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-label-spacing` on <vaadin-form-layout> instead.',
-        );
-      }
     }
 
     /**

@@ -82,15 +82,6 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *
  * ### Custom CSS Properties Reference
  *
- * The following custom CSS properties are available on the `<vaadin-form-item>`
- * element:
- *
- * Custom CSS property | Description | Default
- * ---|---|---
- * `--vaadin-form-item-label-width` | (DEPRECATED: Use `--vaadin-form-layout-label-width` on `<vaadin-form-layout>` instead) Width of the label column when the labels are aside | `8em`
- * `--vaadin-form-item-label-spacing` | (DEPRECATED: Use `--vaadin-form-layout-label-spacing` on `<vaadin-form-layout>` instead) Spacing between the label column and the input column when the labels are aside | `1em`
- * `--vaadin-form-item-row-spacing` | (DEPRECATED: Use `--vaadin-form-layout-row-spacing` on `<vaadin-form-layout>` instead) Height of the spacing between the form item elements | `1em`
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class FormItem extends FormItemMixin(ThemableMixin(HTMLElement)) {}
