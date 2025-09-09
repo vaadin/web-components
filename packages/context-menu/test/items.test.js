@@ -242,6 +242,7 @@ describe('items', () => {
   it('should not have a checked item', async () => {
     rootMenu.items[0].children[0].checked = false;
     subMenu.close();
+    await nextRender();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
   });
@@ -349,8 +350,9 @@ describe('items', () => {
     expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('false');
   });
 
-  it('should open item on right arrow', () => {
+  it('should open item on right arrow', async () => {
     subMenu.close();
+    await nextRender();
     arrowRightKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
   });
@@ -359,25 +361,29 @@ describe('items', () => {
     document.documentElement.setAttribute('dir', 'rtl');
     await nextFrame();
     subMenu.close();
+    await nextRender();
     arrowLeftKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
     document.documentElement.setAttribute('dir', 'ltr');
   });
 
-  it('should open item on enter', () => {
+  it('should open item on enter', async () => {
     subMenu.close();
+    await nextRender();
     enterKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
   });
 
-  it('should open item on space', () => {
+  it('should open item on space', async () => {
     subMenu.close();
+    await nextRender();
     spaceKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
   });
 
   it('should not focus item if parent item is not focused', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;

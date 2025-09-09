@@ -372,17 +372,17 @@ export const ItemsMixin = (superClass) =>
       }
 
       const subMenu = this._subMenu;
+      const expandedItem = this._listBox.querySelector('[expanded]');
 
-      if (item) {
+      if (item && item !== expandedItem) {
         const { children } = item._item;
 
         // Check if the sub-menu was focused before closing it.
         const child = subMenu._overlayElement._contentRoot.firstElementChild;
         const isSubmenuFocused = child && child.focused;
 
-        // Mark previously expanded item as collapsed when opening submenu for a new item
-        const expandedItem = this._listBox.querySelector('[expanded]');
-        if (expandedItem && expandedItem !== item) {
+        // Mark previously expanded item as collapsed
+        if (expandedItem) {
           this.__updateExpanded(expandedItem, false);
         }
 
@@ -396,7 +396,7 @@ export const ItemsMixin = (superClass) =>
         }
 
         if (children && children.length) {
-          // Open the submenu if the new item has children
+          // Open or update the submenu if the new item has children
           this.__updateExpanded(item, true);
           this.__openSubMenu(subMenu, item);
         } else if (isSubmenuFocused) {
