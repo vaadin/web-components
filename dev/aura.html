@@ -375,6 +375,17 @@
         align-self: center;
         flex-direction: column;
       }
+
+      /* TODO re-evaluate MDL API, how to achieve this */
+      .dashboard-section::part(master) {
+        flex-grow: 0.1;
+        flex-basis: 15%;
+      }
+
+      .dashboard-section::part(detail) {
+        flex-grow: 2;
+        flex-basis: 100%;
+      }
     </style>
   </head>
 
@@ -472,7 +483,7 @@
         </vaadin-button>
       </footer>
 
-      <vaadin-master-detail-layout master-min-size="14em" detail-size="75%" detail-min-size="20em">
+      <vaadin-master-detail-layout master-min-size="14rem" detail-min-size="40rem" class="dashboard-section">
         <div class="aura-view">
           <header>
             <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
