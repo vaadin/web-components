@@ -19,6 +19,7 @@
   "main": "aura.css",
   "type": "module",
   "files": [
+    "src",
     "*.css"
   ],
   "keywords": [
