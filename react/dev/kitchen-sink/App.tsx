@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import '../../packages/react-components/css/lumo/Typography.css';
 import { AppLayout } from '../../packages/react-components/src/AppLayout.js';
 import { Avatar } from '../../packages/react-components/src/Avatar.js';
 import { Board } from '../../packages/react-components-pro/src/Board.js';
