@@ -1,6 +1,6 @@
 html {
   --aura-red: light-dark(
-    oklch(from var(--aura-accent-light) 0.6 c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20)),
+    oklch(from var(--aura-accent-light) 0.55 c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20)),
     oklch(from var(--aura-accent-dark) 0.7 c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20))
   );
   --aura-orange: light-dark(
@@ -12,30 +12,30 @@ html {
     oklch(from var(--aura-accent-dark) 0.85 min(c + 0.1, 0.4) clamp(100 - rem(h, 6), h, 105 - rem(h, 6)))
   );
   --aura-green: light-dark(
-    oklch(from var(--aura-accent-light) 0.6 min(c + 0.05, 0.4) clamp(130 - rem(h, 6), h, 160 - rem(h, 6))),
+    oklch(from var(--aura-accent-light) 0.5 min(c + 0.05, 0.4) clamp(130 - rem(h, 6), h, 160 - rem(h, 6))),
     oklch(from var(--aura-accent-dark) 0.7 min(c + 0.05, 0.4) clamp(130 - rem(h, 6), h, 160 - rem(h, 6)))
   );
   --aura-blue: light-dark(
-    oklch(from var(--aura-accent-light) 0.6 min(c + 0.05, 0.4) clamp(220 - rem(h, 6), h, 260 - rem(h, 6))),
+    oklch(from var(--aura-accent-light) 0.55 min(c + 0.05, 0.4) clamp(220 - rem(h, 6), h, 260 - rem(h, 6))),
     oklch(from var(--aura-accent-dark) 0.7 min(c + 0.05, 0.4) clamp(220 - rem(h, 6), h, 260 - rem(h, 6)))
   );
   --aura-purple: light-dark(
-    oklch(from var(--aura-accent-light) 0.6 min(c + 0.05, 0.4) clamp(280 - rem(h, 6), h, 350 - rem(h, 6))),
+    oklch(from var(--aura-accent-light) 0.55 min(c + 0.05, 0.4) clamp(280 - rem(h, 6), h, 350 - rem(h, 6))),
     oklch(from var(--aura-accent-dark) 0.7 min(c + 0.05, 0.4) clamp(280 - rem(h, 6), h, 350 - rem(h, 6)))
   );
 
   --aura-red-text: color-mix(in srgb, var(--aura-red) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-color));
   --aura-orange-text: color-mix(
     in srgb,
-    var(--aura-orange) calc(55% - 15% * var(--aura-contrast)),
+    var(--aura-orange) calc(60% - 15% * var(--aura-contrast)),
     var(--vaadin-color)
   );
   --aura-yellow-text: color-mix(
     in srgb,
-    var(--aura-yellow) calc(50% - 15% * var(--aura-contrast)),
+    var(--aura-yellow) calc(55% - 15% * var(--aura-contrast)),
     var(--vaadin-color)
   );
-  --aura-green-text: color-mix(in srgb, var(--aura-green) calc(65% - 15% * var(--aura-contrast)), var(--vaadin-color));
+  --aura-green-text: color-mix(in srgb, var(--aura-green) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-color));
   --aura-blue-text: color-mix(in srgb, var(--aura-blue) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-color));
   --aura-purple-text: color-mix(
     in srgb,
