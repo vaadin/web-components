@@ -1,0 +1,128 @@
+:where(html) {
+  --aura-app-layout-inset: 1.5vmin;
+  --aura-app-layout-radius: var(--vaadin-radius-l);
+  --_aura-mdl-border: 1px;
+  --vaadin-app-layout-navbar-padding-top: 0;
+  --vaadin-app-layout-navbar-padding-bottom: 0;
+  --vaadin-app-layout-navbar-padding-inline-start: 0;
+  --vaadin-app-layout-navbar-padding-inline-end: 0;
+}
+
+/* Aligned with App Layout overlay breakpoint */
+@media (width <= 800px), (height <= 600px) {
+  html {
+    --aura-app-layout-inset: 0px !important;
+    --_aura-mdl-border: 0px;
+  }
+}
+
+html:has(vaadin-app-layout) {
+  &,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+}
+
+vaadin-app-layout {
+  --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline-end: var(--aura-app-layout-inset);
+  padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
+}
+
+vaadin-app-layout[overlay] {
+  &::part(navbar),
+  &::part(drawer) {
+    --vaadin-app-layout-navbar-background: var(--aura-surface);
+    --vaadin-app-layout-drawer-background: var(--aura-surface);
+    --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+    -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+    backdrop-filter: var(--aura-overlay-backdrop-filter);
+  }
+}
+
+vaadin-app-layout:is([overlay], :not([drawer-opened])) {
+  padding-inline-start: var(--aura-app-layout-inset);
+}
+
+vaadin-app-layout::part(navbar) {
+  justify-content: space-between;
+}
+
+vaadin-app-layout:not([overlay])::part(navbar) {
+  --vaadin-app-layout-navbar-background: transparent;
+}
+
+vaadin-app-layout::part(drawer) {
+  padding-block: var(--aura-app-layout-inset);
+  padding-inline: calc(var(--aura-app-layout-inset) - var(--side-nav-padding));
+}
+
+vaadin-scroller[slot='drawer'] {
+  scrollbar-width: thin;
+}
+
+vaadin-app-layout > [slot='drawer'] vaadin-side-nav-item::part(content) {
+  --aura-surface-level: 5;
+}
+
+vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+  color-scheme: var(--aura-content-color-scheme);
+  color: var(--vaadin-color);
+  background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-app-background);
+  background-clip: padding-box;
+  background-origin: border-box;
+  min-height: 100%;
+  box-sizing: border-box;
+  border-radius: var(--_app-layout-radius);
+  border: var(--_aura-mdl-border) solid var(--vaadin-border-color-subtle);
+  border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+  border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+}
+
+vaadin-app-layout > vaadin-master-detail-layout {
+  & > vaadin-master-detail-layout,
+  &:not([drawer])::part(detail) {
+    border-start-end-radius: var(--_app-layout-radius);
+    border-end-end-radius: var(--_app-layout-radius);
+  }
+
+  &::part(backdrop) {
+    border-radius: calc(var(--_app-layout-radius) - var(--_aura-mdl-border));
+  }
+
+  &:is([drawer][has-detail]) {
+    border-color: var(--vaadin-border-color);
+  }
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']) {
+  padding-top: var(--_vaadin-app-layout-navbar-offset-size);
+
+  &::part(drawer) {
+    padding-top: 0;
+  }
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer']):not([overlay]):not([drawer-opened])
+  > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+  border-inline-start-width: min(var(--aura-app-layout-inset), 1px);
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer'])[drawer-opened]:not([overlay])
+  > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+  border-start-start-radius: var(--aura-app-layout-radius);
+}
+
+vaadin-app-layout:has([slot='navbar']):has([slot='drawer'])
+  > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+  border-top-width: 1px;
+}
+
+vaadin-app-layout:has([slot='navbar']) > :is(:not([slot]), [slot='drawer']) vaadin-drawer-toggle,
+vaadin-app-layout:not([slot='navbar']) > [slot='drawer'] vaadin-drawer-toggle {
+  display: none;
+}

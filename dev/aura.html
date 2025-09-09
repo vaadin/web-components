@@ -9,13 +9,21 @@
   <link rel="stylesheet" href="../packages/aura/aura.css" />
   <script type="module">
     import '@vaadin/app-layout';
+    import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
   </script>
 </head>
 <body>
 
   <vaadin-app-layout>
+    <div slot="navbar">
+      <vaadin-drawer-toggle></vaadin-drawer-toggle>
+    </div>
+    <div slot="drawer">
+      Navigation
+    </div>
     <main>
       <h1>Aura</h1>
+      Content
     </main>
   </vaadin-app-layout>
 
