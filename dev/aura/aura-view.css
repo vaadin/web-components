@@ -23,16 +23,18 @@
   font-weight: var(--aura-font-weight-semibold);
   color: var(--vaadin-color);
   flex: 1;
-}
 
-:is(vaadin-app-layout:not([overlay]), vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'])
-  :is(.aura-view > header, .aura-view-header)
-  :is(h1, h2, h3, h4, h5, h6) {
-  padding-inline: var(--vaadin-padding-s);
+  &:last-child {
+    padding-inline-end: var(--vaadin-padding-xs);
+  }
 }
 
 vaadin-app-layout:not([overlay]) :is(.aura-view > header, .aura-view-header) vaadin-drawer-toggle,
 vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'].aura-view > header mdl-back-button,
 vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'] .aura-view > header mdl-back-button {
   display: none;
+
+  & + :is(h1, h2, h3, h4, h5, h6) {
+    padding-inline-start: var(--vaadin-padding-xs);
+  }
 }
