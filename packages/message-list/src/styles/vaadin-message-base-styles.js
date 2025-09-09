@@ -10,8 +10,8 @@ export const messageStyles = css`
   :host {
     display: flex;
     flex-direction: row;
-    padding: var(--vaadin-message-padding, var(--vaadin-padding-s));
-    gap: var(--vaadin-message-gap, var(--vaadin-gap-s) var(--vaadin-gap-s));
+    padding: var(--vaadin-message-padding, var(--vaadin-padding-s) var(--vaadin-padding-m));
+    gap: var(--vaadin-message-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
   }
 
   :host([hidden]) {
@@ -46,7 +46,7 @@ export const messageStyles = css`
   }
 
   [part='time'] {
-    font-size: var(--vaadin-message-time-font-size, 0.75em);
+    font-size: var(--vaadin-message-time-font-size, max(11px, 0.75em));
     font-weight: var(--vaadin-message-time-font-weight, inherit);
     color: var(--vaadin-message-time-color, var(--vaadin-color-subtle));
   }

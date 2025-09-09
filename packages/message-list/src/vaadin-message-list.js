@@ -62,6 +62,7 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
       :host {
         display: block;
         overflow: auto;
+        padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
       }
 
       :host([hidden]) {
