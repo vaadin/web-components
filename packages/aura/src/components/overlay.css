@@ -35,7 +35,3 @@ html,
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
-
-vaadin-popover {
-  color-scheme: var(--aura-content-color-scheme);
-}
