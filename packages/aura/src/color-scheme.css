@@ -1,0 +1,26 @@
+html {
+  --aura-color-scheme: light;
+  --aura-content-color-scheme: var(--aura-color-scheme);
+  --aura-notification-color-scheme: var(--aura-color-scheme);
+
+  color-scheme: var(--aura-color-scheme);
+
+  /* TODO this file should only be concerned about setting the color-scheme property, not setting background or text colors */
+  color: var(--vaadin-color);
+  background: var(--aura-app-background);
+  background-size: 100vw 100vh;
+  background-attachment: fixed;
+}
+
+vaadin-app-layout > :not([slot]) {
+  color-scheme: var(--aura-content-color-scheme);
+  color: var(--vaadin-color);
+  background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-app-background);
+  background-clip: padding-box;
+  background-origin: border-box;
+}
+
+vaadin-notification-container {
+  color-scheme: var(--aura-notification-color-scheme);
+  color: var(--vaadin-color);
+}

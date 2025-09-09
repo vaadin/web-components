@@ -143,6 +143,10 @@ export const masterDetailLayoutStyles = css`
     forced-color-adjust: none;
   }
 
+  :host([containment='layout']) [part='backdrop'] {
+    border-radius: inherit;
+  }
+
   :host(:is([drawer], [stack])) [part='detail'] {
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
