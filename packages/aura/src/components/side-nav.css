@@ -1,5 +1,6 @@
 html {
   --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
+  --vaadin-side-nav-label-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-border-width: 1px;
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
@@ -12,11 +13,6 @@ vaadin-side-nav {
 
 vaadin-side-nav + vaadin-side-nav {
   margin-top: var(--vaadin-gap-l);
-}
-
-vaadin-side-nav::part(toggle-button),
-vaadin-side-nav-item::part(toggle-button) {
-  --vaadin-icon-size: 1em;
 }
 
 vaadin-side-nav-item::part(content) {
