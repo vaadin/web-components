@@ -7,6 +7,7 @@ import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -14,16 +15,26 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
+const DEFAULT_I18N = {
+  cleared: 'Selection cleared',
+  focused: 'focused. Press Backspace to remove',
+  selected: 'added to selection',
+  deselected: 'removed from selection',
+  total: '{count} items selected',
+};
+
 /**
  * @polymerMixin
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxItemsMixin
+ * @mixes I18nMixin
  * @mixes InputControlMixin
  * @mixes ResizeMixin
  */
 export const MultiSelectComboBoxMixin = (superClass) =>
-  class MultiSelectComboBoxMixinClass extends ComboBoxDataProviderMixin(
-    ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass))),
+  class MultiSelectComboBoxMixinClass extends I18nMixin(
+    DEFAULT_I18N,
+    ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
   ) {
     static get properties() {
       return {
@@ -70,43 +81,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         itemIdPath: {
           type: String,
           sync: true,
-        },
-
-        /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure and default values:
-         * ```js
-         * {
-         *   // Screen reader announcement on clear button click.
-         *   cleared: 'Selection cleared',
-         *   // Screen reader announcement when a chip is focused.
-         *   focused: ' focused. Press Backspace to remove',
-         *   // Screen reader announcement when item is selected.
-         *   selected: 'added to selection',
-         *   // Screen reader announcement when item is deselected.
-         *   deselected: 'removed from selection',
-         *   // Screen reader announcement of the selected items count.
-         *   // {count} is replaced with the actual count of items.
-         *   total: '{count} items selected',
-         * }
-         * ```
-         * @type {!MultiSelectComboBoxI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              cleared: 'Selection cleared',
-              focused: 'focused. Press Backspace to remove',
-              selected: 'added to selection',
-              deselected: 'removed from selection',
-              total: '{count} items selected',
-            };
-          },
         },
 
         /**
@@ -242,6 +216,37 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```js
+     * {
+     *   // Screen reader announcement on clear button click.
+     *   cleared: 'Selection cleared',
+     *   // Screen reader announcement when a chip is focused.
+     *   focused: ' focused. Press Backspace to remove',
+     *   // Screen reader announcement when item is selected.
+     *   selected: 'added to selection',
+     *   // Screen reader announcement when item is deselected.
+     *   deselected: 'removed from selection',
+     *   // Screen reader announcement of the selected items count.
+     *   // {count} is replaced with the actual count of items.
+     *   total: '{count} items selected',
+     * }
+     * ```
+     * @return {!MultiSelectComboBoxI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @protected */
@@ -384,7 +389,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     clear() {
       this.__updateSelection([]);
 
-      announce(this.i18n.cleared);
+      announce(this.__effectiveI18n.cleared);
     }
 
     /**
@@ -750,8 +755,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @private */
     __announceItem(itemLabel, isSelected, itemCount) {
       const state = isSelected ? 'selected' : 'deselected';
-      const total = this.i18n.total.replace('{count}', itemCount || 0);
-      announce(`${itemLabel} ${this.i18n[state]} ${total}`);
+      const total = this.__effectiveI18n.total.replace('{count}', itemCount || 0);
+      announce(`${itemLabel} ${this.__effectiveI18n[state]} ${total}`);
     }
 
     /** @private */
@@ -1218,7 +1223,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (focusedIndex > -1) {
           const item = chips[focusedIndex].item;
           const itemLabel = this._getItemLabel(item);
-          announce(`${itemLabel} ${this.i18n.focused}`);
+          announce(`${itemLabel} ${this.__effectiveI18n.focused}`);
         }
       }
     }
