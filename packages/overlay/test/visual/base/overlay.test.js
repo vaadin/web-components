@@ -39,7 +39,9 @@ describe('overlay', () => {
       textAlign: 'center',
       textDecoration: 'underline',
       textTransform: 'uppercase',
+      textIndent: '20px',
       whiteSpace: 'nowrap',
+      wordSpacing: '20px',
     });
     // Make overlay smaller to force text wrapping, also tests text-align on wrapped text
     element.$.overlay.style.width = '150px';

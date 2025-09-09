@@ -77,8 +77,10 @@
     letter-spacing: 0;
     text-align: initial;
     text-decoration: none;
+    text-indent: initial;
     text-transform: none;
     white-space: initial;
+    word-spacing: initial;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

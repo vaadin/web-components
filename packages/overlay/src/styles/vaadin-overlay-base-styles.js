@@ -68,17 +68,14 @@ export const overlayStyles = css`
 
     /* CSS reset for font styles */
     color: initial;
-    font-family: initial;
-    font-size: initial;
-    font-style: initial;
-    font-weight: initial;
-    font-variant: initial;
-    line-height: initial;
+    font: initial;
     letter-spacing: initial;
     text-align: initial;
     text-decoration: initial;
+    text-indent: initial;
     text-transform: initial;
     white-space: initial;
+    word-spacing: initial;
   }
 
   [part='backdrop'] {
