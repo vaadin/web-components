@@ -59,8 +59,16 @@ html {
     oklch(from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0)
   );
 
-  --aura-accent-text-light: oklch(from var(--aura-accent-light) min(0.4, l) c h);
-  --aura-accent-text-dark: oklch(from var(--aura-accent-dark) max(0.8, l) c h);
+  --aura-accent-text-light: color-mix(
+    in srgb,
+    var(--aura-accent-light) calc(60% - 15% * var(--aura-contrast)),
+    var(--vaadin-color)
+  );
+  --aura-accent-text-dark: color-mix(
+    in srgb,
+    var(--aura-accent-dark) calc(60% - 15% * var(--aura-contrast)),
+    var(--vaadin-color)
+  );
   --aura-accent-text: light-dark(var(--aura-accent-text-light), var(--aura-accent-text-dark));
 
   /* TODO probably broken for Safari 17 */
