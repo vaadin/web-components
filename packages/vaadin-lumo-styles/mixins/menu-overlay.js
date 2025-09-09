@@ -3,8 +3,11 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { overlay } from './overlay.js';
+
+issueWarning('Lumo .js mixins are deprecated and will be removed in V26');
 
 const menuOverlayCore = css`
   :host([opening]),
