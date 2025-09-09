@@ -387,6 +387,7 @@ describe('items', () => {
 
   it('should focus first item in submenu on overlay element arrow down', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     const item = getMenuItems(subMenu)[0];
@@ -397,6 +398,7 @@ describe('items', () => {
 
   it('should focus last item in submenu on overlay element arrow up', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     const items = getMenuItems(subMenu);
@@ -408,6 +410,7 @@ describe('items', () => {
 
   it('should focus first item after re-opening when using components', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
 
     const rootItem = getMenuItems(rootMenu)[3];
@@ -434,6 +437,7 @@ describe('items', () => {
 
   it('should focus first non-disabled item after re-opening when using components', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
 
     rootMenu.items[3].children[0].disabled = true;

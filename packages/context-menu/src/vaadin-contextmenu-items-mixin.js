@@ -138,10 +138,10 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(subMenu, itemElement) {
+      // Update sub-menu items and position target
       this.__updateSubMenuForItem(subMenu, itemElement);
 
       const parent = this._overlayElement;
-
       const subMenuOverlay = subMenu._overlayElement;
       // Store the reference parent overlay
       subMenuOverlay._setParentOverlay(parent);
@@ -170,6 +170,7 @@ export const ItemsMixin = (superClass) =>
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
       subMenu._positionTarget = itemElement;
+      subMenu._overlayElement.requestContentUpdate();
     }
 
     /**
@@ -379,16 +380,24 @@ export const ItemsMixin = (superClass) =>
         const child = subMenu._overlayElement._contentRoot.firstElementChild;
         const isSubmenuFocused = child && child.focused;
 
-        if (subMenu.items !== children) {
+        // Mark previously expanded item as collapsed when opening submenu for a new item
+        const expandedItem = this._listBox.querySelector('[expanded]');
+        if (expandedItem && expandedItem !== item) {
+          this.__updateExpanded(expandedItem, false);
+        }
+
+        // Close sub-menu if there are no children for the new item
+        if (!children || !children.length) {
           subMenu.close();
         }
+
         if (!this.opened) {
           return;
         }
 
         if (children && children.length) {
+          // Open the submenu if the new item has children
           this.__updateExpanded(item, true);
-
           this.__openSubMenu(subMenu, item);
         } else if (isSubmenuFocused) {
           // If the sub-menu item was focused, focus its parent item.
