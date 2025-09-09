@@ -25,4 +25,28 @@ describe('overlay', () => {
     element.opened = true;
     await visualDiff(div, 'with-backdrop');
   });
+
+  it('text-style-reset', async () => {
+    Object.assign(div.style, {
+      color: 'red',
+      fontFamily: "'Comic Sans MS', cursive",
+      fontSize: '20px',
+      fontStyle: 'italic',
+      fontWeight: 'bold',
+      fontVariant: 'small-caps',
+      lineHeight: '2',
+      letterSpacing: '2px',
+      textAlign: 'center',
+      textDecoration: 'underline',
+      textTransform: 'uppercase',
+      textIndent: '20px',
+      whiteSpace: 'nowrap',
+      wordSpacing: '20px',
+    });
+    // Make overlay smaller to force text wrapping, also tests text-align on wrapped text
+    element.$.overlay.style.width = '150px';
+    element.opened = true;
+
+    await visualDiff(div, 'text-style-reset');
+  });
 });
