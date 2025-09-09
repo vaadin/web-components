@@ -54,7 +54,7 @@
   --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-base-line-height), 0.125rem);
 }
 
-:where(body) {
+:where(body, :host) {
   font-family: var(--aura-font-family);
   font-optical-sizing: auto;
   font-style: normal;
@@ -69,7 +69,7 @@
   text-size-adjust: none;
 }
 
-:where(body, [theme]) {
+:where(body, :host, [theme]) {
   font-size: var(--aura-font-size-m);
   line-height: var(--aura-line-height-m);
 }
