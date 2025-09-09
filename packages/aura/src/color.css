@@ -1,0 +1,103 @@
+:where(html) {
+  --aura-contrast: 1;
+
+  --aura-accent-light: hsl(220, 80%, 47%);
+  --aura-accent-dark: hsl(220, 75%, 55%);
+
+  --_color-base: light-dark(
+    oklch(from var(--aura-background-light) 0.1 calc(c / 2 + c * (1 - c)) h),
+    oklch(from var(--aura-background-dark) 1 c h)
+  );
+  --vaadin-color: light-dark(
+    color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, #fff calc(90% + 5% * var(--aura-contrast)), transparent)
+  );
+  --vaadin-color-subtle: light-dark(
+    color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_color-base) calc(57% + 10% * var(--aura-contrast)), transparent)
+  );
+  --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(30% + 10% * var(--aura-contrast)), transparent);
+
+  --_border-color-base: light-dark(
+    oklch(from var(--aura-background-light) 0.1 c h),
+    oklch(from var(--aura-background-dark) 0.85 c h)
+  );
+  --vaadin-border-color: color-mix(
+    in srgb,
+    var(--_border-color-base) calc(14% + 6% * var(--aura-contrast)),
+    transparent
+  );
+  --vaadin-border-color-subtle: light-dark(
+    color-mix(in srgb, var(--_border-color-base) max(5%, 5% + 3% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 5% * var(--aura-contrast)), transparent)
+  );
+
+  --aura-background-light: oklch(from var(--aura-accent-light) min(1, l + (1 - l) * 0.9) calc(c * 0.05) h);
+  --aura-background-dark: oklch(from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) calc(c * 0.05) h);
+  --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
+
+  --_bg-alt: oklch(
+    from var(--aura-background) calc(l + c) min(c, c * 2 - l/20) calc(h + 180 * var(--_safari-17-deg, 1deg) * l * c * 4)
+  );
+  --_bg-accent: radial-gradient(
+    circle at 0% 0%,
+    light-dark(
+      oklch(from var(--aura-background-light) min(1, l + c * 3) min(c, c * 3 - l/20) h),
+      oklch(from var(--aura-background-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
+    ),
+    transparent 30%
+  );
+  --aura-app-background:
+    var(--_bg-accent), radial-gradient(circle at 25% 0% in xyz, var(--aura-background) 33%, var(--_bg-alt));
+
+  --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
+  --vaadin-focus-ring-color: var(--aura-accent-color);
+  accent-color: var(--aura-accent-color);
+  /* Workaround Safari 17 limitation and compute these separately for light and dark */
+  --aura-accent-contrast: light-dark(
+    oklch(from var(--aura-accent-light) clamp(0, (0.62 - l) * 1000, 1) 0 0),
+    oklch(from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0)
+  );
+
+  --aura-accent-text-light: color-mix(
+    in srgb,
+    var(--aura-accent-light) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-color)
+  );
+  --aura-accent-text-dark: color-mix(
+    in srgb,
+    var(--aura-accent-dark) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-color)
+  );
+  --aura-accent-text: light-dark(var(--aura-accent-text-light), var(--aura-accent-text-dark));
+
+  /* TODO probably broken for Safari 17 */
+  --vaadin-user-color: var(--aura-accent-color);
+
+  --vaadin-background-container: color-mix(
+    in srgb,
+    var(--_color-base) calc(3% + min(3%, 1% * var(--aura-contrast))),
+    transparent
+  );
+
+  --vaadin-background-container-strong: color-mix(
+    in srgb,
+    var(--_color-base) calc(7% + min(8%, 1.5% * var(--aura-contrast))),
+    transparent
+  );
+
+  color: var(--vaadin-color);
+  background: var(--aura-app-background);
+  background-size: 100vw 100vh;
+  background-attachment: fixed;
+}
+
+@supports (color: hsl(0 0 0)) {
+  :where(html) {
+    --_safari-17-deg: 1;
+  }
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  color: var(--vaadin-color);
+}

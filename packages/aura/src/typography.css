@@ -1,0 +1,101 @@
+@import './fonts/InstrumentSans/InstrumentSans.css';
+
+:where(html) {
+  --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
+  --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
+
+  --aura-font-family: var(--aura-font-family-instrument-sans);
+
+  --aura-base-font-size: 16;
+  --aura-font-size-scale: 1.125;
+  --aura-base-line-height: 1.4;
+
+  --aura-font-weight: 400;
+  --aura-font-weight-medium: 500;
+  --aura-font-weight-semibold: 600;
+}
+
+@media (pointer: fine) {
+  :where(html) {
+    --aura-base-font-size: 14;
+  }
+}
+
+@supports not (-webkit-touch-callout: none) {
+  @media (pointer: coarse) {
+    /* Android optimizations */
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (pointer: coarse) {
+    :where(html) {
+      /* iOS/iPadOS optimizations */
+
+      /* Support iOS dynamic text size */
+      font: -apple-system-body;
+      --aura-base-font-size: 14;
+    }
+  }
+}
+
+:where(html, [theme]) {
+  --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, 0.0625rem);
+  --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale), 0.0625rem);
+
+  /* TODO sometimes in the Aura dev page in Safari, when switching  back to Components view, some of the side nav menu item texts disappear after the view transition. Removing these line heights "fixes" the issue. Another fix is to use system fonts. It sometimes also depends on the browser viewport size. */
+  --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-l: round(var(--aura-font-size-l) * var(--aura-base-line-height), 0.125rem);
+  --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-base-line-height), 0.125rem);
+}
+
+:where(body) {
+  font-family: var(--aura-font-family);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: var(--aura-font-weight);
+
+  /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
+  -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);
+  -moz-osx-font-smoothing: var(--aura-font-smoothing, grayscale);
+
+  /* We assume apps are built with responsive layouting in mind */
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+:where(body, [theme]) {
+  font-size: var(--aura-font-size-m);
+  line-height: var(--aura-line-height-m);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+  margin: 0;
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+:where(h1) {
+  font-size: var(--aura-font-size-xl);
+  line-height: var(--aura-line-height-xl);
+}
+
+:where(h2, h3) {
+  font-size: var(--aura-font-size-l);
+  line-height: var(--aura-line-height-l);
+}
+
+:where(h4, h5) {
+  font-size: var(--aura-font-size-m);
+  line-height: var(--aura-line-height-m);
+}
+
+:where(h6) {
+  font-size: var(--aura-font-size-s);
+  line-height: var(--aura-line-height-s);
+}
