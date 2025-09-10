@@ -13,6 +13,7 @@ import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-
 import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -31,11 +32,11 @@ export type MultiSelectComboBoxRenderer<TItem> = (
 ) => void;
 
 export interface MultiSelectComboBoxI18n {
-  cleared: string;
-  focused: string;
-  selected: string;
-  deselected: string;
-  total: string;
+  cleared?: string;
+  focused?: string;
+  selected?: string;
+  deselected?: string;
+  total?: string;
 }
 
 export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
@@ -49,6 +50,7 @@ export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HT
   Constructor<DisabledMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<MultiSelectComboBoxI18n>> &
   Constructor<InputConstraintsMixinClass> &
   Constructor<InputControlMixinClass> &
   Constructor<InputMixinClass> &
@@ -97,9 +99,9 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   itemIdPath: string;
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
    * ```js

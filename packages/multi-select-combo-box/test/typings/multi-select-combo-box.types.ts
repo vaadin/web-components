@@ -12,6 +12,7 @@ import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -120,6 +121,7 @@ assertType<DelegateStateMixinClass>(narrowedComboBox);
 assertType<DisabledMixinClass>(narrowedComboBox);
 assertType<FieldMixinClass>(narrowedComboBox);
 assertType<FocusMixinClass>(narrowedComboBox);
+assertType<I18nMixinClass<MultiSelectComboBoxI18n>>(narrowedComboBox);
 assertType<InputConstraintsMixinClass>(narrowedComboBox);
 assertType<InputControlMixinClass>(narrowedComboBox);
 assertType<ClearButtonMixinClass>(narrowedComboBox);
@@ -150,3 +152,7 @@ assertType<() => void>(narrowedItem.requestContentUpdate);
 assertType<ComboBoxItemMixinClass<TestComboBoxItem, MultiSelectComboBox>>(narrowedItem);
 assertType<DirMixinClass>(narrowedItem);
 assertType<ThemableMixinClass>(narrowedItem);
+
+// I18n
+assertType<MultiSelectComboBoxI18n>({});
+assertType<MultiSelectComboBoxI18n>({ cleared: 'Cleared' });
