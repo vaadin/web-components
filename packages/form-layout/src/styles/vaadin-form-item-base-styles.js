@@ -16,7 +16,7 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-flow: var(--_form-item-labels-above, column) nowrap;
     justify-self: stretch;
-    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
+    margin: calc(0.5 * var(--vaadin-form-layout-row-spacing, 1em)) 0;
   }
 
   :host([label-position='top']) {
@@ -34,16 +34,13 @@ export const formItemStyles = css`
     font-size: var(--vaadin-form-item-label-font-size, inherit);
     font-weight: var(--vaadin-form-item-label-font-weight, 500);
     line-height: var(--vaadin-form-item-label-line-height, inherit);
-    width: var(
-      --_form-item-labels-aside,
-      var(--vaadin-form-item-label-width, var(--vaadin-form-layout-label-width, 8em))
-    );
+    width: var(--_form-item-labels-aside, var(--vaadin-form-layout-label-width, 8em));
     word-break: break-word;
   }
 
   #spacing {
     flex: 0 0 auto;
-    width: var(--vaadin-form-item-label-spacing, var(--vaadin-form-layout-label-spacing, 1em));
+    width: var(--vaadin-form-layout-label-spacing, 1em);
   }
 
   #content {
