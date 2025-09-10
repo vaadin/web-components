@@ -19,5 +19,3 @@ export const srcURL = pathToFileURL(`${srcDir}/`);
 export const generatedURL = pathToFileURL(`${generatedDir}/`);
 
 await Promise.all([mkdir(generatedDir, { recursive: true }), mkdir(typesDir, { recursive: true })]);
-
-export const stylePackages = ['@vaadin/vaadin-lumo-styles'];
