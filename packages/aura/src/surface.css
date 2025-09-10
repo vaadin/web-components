@@ -4,23 +4,16 @@
 
 /* List all elements that are surfaces */
 html,
-<<<<<<< HEAD
 [theme~='surface'],
 [theme~='surface-solid'],
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
 ::part(overlay) {
-=======
-[theme*='surface'],
-vaadin-app-layout::part(navbar),
-vaadin-app-layout::part(drawer) {
->>>>>>> 94d06b282b (feat: Aura surface properties and app-layout theme)
   --aura-surface-opacity: 0.5;
 
   --aura-surface-solid: light-dark(
     oklch(
       from var(--aura-background-light)
-<<<<<<< HEAD
         min(
           1,
           l + (0.98 - l) * 4 + var(--aura-surface-level) * (0.07 - 0.01 * var(--aura-contrast)) -
@@ -33,16 +26,6 @@ vaadin-app-layout::part(drawer) {
         calc(
           max(l + 0.03, 0.25) + var(--aura-surface-level) * (0.03 - 0.008 * var(--aura-contrast)) -
             var(--aura-surface-opacity) / 40
-=======
-        min(1, 1 + (0.9 - l) + var(--aura-surface-level) * (0.07 - 0.01 * var(--aura-contrast))) clamp(0, c - l, 0.2) h
-    ),
-    oklch(
-      from var(--aura-background-dark)
-        min(
-          1,
-          max(0.28 - var(--aura-surface-level) * 0.04, l) + var(--aura-surface-level) *
-            (0.05 - 0.008 * var(--aura-contrast))
->>>>>>> 94d06b282b (feat: Aura surface properties and app-layout theme)
         )
         clamp(0, c * (1 + l), 0.2) h
     )
@@ -57,9 +40,6 @@ vaadin-app-layout::part(drawer) {
 }
 
 [theme~='surface-solid'] {
-<<<<<<< HEAD
   --aura-surface-opacity: 1;
-=======
->>>>>>> 94d06b282b (feat: Aura surface properties and app-layout theme)
   background: var(--aura-surface-solid) padding-box;
 }
