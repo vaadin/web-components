@@ -6,7 +6,8 @@
 html,
 [theme*='surface'],
 vaadin-app-layout::part(navbar),
-vaadin-app-layout::part(drawer) {
+vaadin-app-layout::part(drawer),
+::part(overlay) {
   --aura-surface-opacity: 0.5;
 
   --aura-surface-solid: light-dark(
