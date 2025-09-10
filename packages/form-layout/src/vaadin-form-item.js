@@ -85,8 +85,6 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * ---|---
  * label | The label slot container
  *
- * ### Custom CSS Properties Reference
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
