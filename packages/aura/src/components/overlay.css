@@ -34,4 +34,9 @@ html,
   box-shadow: var(--aura-overlay-shadow);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-m);
+  font-weight: var(--aura-font-weight);
+  line-height: var(--aura-line-height-m);
+  color: var(--aura-color);
 }
