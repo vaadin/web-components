@@ -22,6 +22,12 @@ export declare class AccordionMixinClass {
   opened: number | null;
 
   /**
+   * Indicates whether all the accordion panels are closed.
+   * Setting this property to true closes all the accordion panels.
+   */
+  closed: boolean | null;
+
+  /**
    * The list of `<vaadin-accordion-panel>` child elements.
    * It is populated from the elements passed to the light DOM,
    * and updated dynamically when adding or removing panels.
