@@ -1,0 +1,38 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_month-picker-overlay-content {
+  :host {
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  [part='month-grid'] {
+    min-width: var(--vaadin-month-picker-month-width, calc(var(--lumo-size-xl) * 4));
+    gap: var(--lumo-space-xs);
+  }
+
+  [part~='month'] {
+    border-radius: var(--lumo-border-radius-m);
+    width: var(--vaadin-month-picker-month-width, var(--lumo-size-xl));
+    height: var(--vaadin-month-picker-month-height, var(--lumo-size-m));
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  [part~='month']:focus-visible {
+    box-shadow:
+      0 0 0 1px var(--lumo-base-color),
+      0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+  }
+
+  [part~='selected-month'] {
+    color: var(--lumo-primary-contrast-color);
+    background-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+  }
+}
