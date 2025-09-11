@@ -23,8 +23,8 @@ vaadin-app-layout::part(drawer),
     oklch(
       from var(--aura-background-dark)
         calc(
-          max(l, 0.001) + max(0, (1 / max(0.05, l)) / 100) + var(--aura-surface-level) *
-            (0.05 - 0.008 * var(--aura-contrast)) - var(--aura-surface-opacity) / 40 * var(--aura-surface-level)
+          max(l + 0.03, 0.25) + var(--aura-surface-level) * (0.03 - 0.008 * var(--aura-contrast)) -
+            var(--aura-surface-opacity) / 40
         )
         clamp(0, c * (1 + l), 0.2) h
     )
