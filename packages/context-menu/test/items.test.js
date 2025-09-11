@@ -251,6 +251,27 @@ describe('items', () => {
     expect(getMenuItems(subMenu)[1].disabled).to.be.true;
   });
 
+  it('should update the submenu when activating other parent item', () => {
+    activateItem(getMenuItems(rootMenu)[3]);
+
+    expect(subMenu.opened).to.be.true;
+
+    const items = getMenuItems(subMenu);
+    expect(items.length).to.equal(3);
+    expect(items[0].textContent).to.equal('foo-3-0');
+    expect(items[1].textContent).to.equal('foo-3-1');
+    expect(items[2].textContent).to.equal('foo-3-2');
+  });
+
+  it('should not change opened state of the submenu when activating other parent item', () => {
+    const openedChangeSpy = sinon.spy();
+    subMenu.addEventListener('opened-changed', openedChangeSpy);
+
+    activateItem(getMenuItems(rootMenu)[3]);
+
+    expect(openedChangeSpy.called).to.be.false;
+  });
+
   it('should close the submenu on activating non-parent item', () => {
     activateItem(getMenuItems(rootMenu)[1]);
     expect(subMenu.opened).to.be.false;
@@ -537,6 +558,23 @@ describe('items', () => {
     await nextRender();
     expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
     expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
+  });
+
+  it('should update expanded attributes when activating different parent items', async () => {
+    expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
+    expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
+
+    await activateItem(getMenuItems(rootMenu)[3]);
+    expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
+    expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
+    expect(getMenuItems(rootMenu)[3].hasAttribute('expanded')).to.be.true;
+    expect(getMenuItems(rootMenu)[3].getAttribute('aria-expanded')).to.equal('true');
+
+    await activateItem(getMenuItems(rootMenu)[0]);
+    expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
+    expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
+    expect(getMenuItems(rootMenu)[3].hasAttribute('expanded')).to.be.false;
+    expect(getMenuItems(rootMenu)[3].getAttribute('aria-expanded')).to.equal('false');
   });
 
   (isTouch ? describe.skip : describe)('scrolling', () => {
