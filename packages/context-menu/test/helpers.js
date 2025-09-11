@@ -19,8 +19,15 @@ export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') 
   }
   // Disable logic that delays opening submenu
   menu.__openListenerActive = true;
+
+  // Open the submenu
+  const wasOpened = menu._overlayElement.opened;
   activateItem(target, event);
-  await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
+
+  // Wait for the submenu to open, unless it was already opened for a different item
+  if (!wasOpened) {
+    await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
+  }
 }
 
 export function getMenuItems(menu) {

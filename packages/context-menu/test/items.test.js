@@ -242,12 +242,34 @@ describe('items', () => {
   it('should not have a checked item', async () => {
     rootMenu.items[0].children[0].checked = false;
     subMenu.close();
+    await nextRender();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
   });
 
   it('should have a disabled item', () => {
     expect(getMenuItems(subMenu)[1].disabled).to.be.true;
+  });
+
+  it('should update the submenu when activating other parent item', () => {
+    activateItem(getMenuItems(rootMenu)[3]);
+
+    expect(subMenu.opened).to.be.true;
+
+    const items = getMenuItems(subMenu);
+    expect(items.length).to.equal(3);
+    expect(items[0].textContent).to.equal('foo-3-0');
+    expect(items[1].textContent).to.equal('foo-3-1');
+    expect(items[2].textContent).to.equal('foo-3-2');
+  });
+
+  it('should not change opened state of the submenu when activating other parent item', () => {
+    const openedChangeSpy = sinon.spy();
+    subMenu.addEventListener('opened-changed', openedChangeSpy);
+
+    activateItem(getMenuItems(rootMenu)[3]);
+
+    expect(openedChangeSpy.called).to.be.false;
   });
 
   it('should close the submenu on activating non-parent item', () => {
@@ -349,8 +371,9 @@ describe('items', () => {
     expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('false');
   });
 
-  it('should open item on right arrow', () => {
+  it('should open item on right arrow', async () => {
     subMenu.close();
+    await nextRender();
     arrowRightKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
   });
@@ -359,25 +382,29 @@ describe('items', () => {
     document.documentElement.setAttribute('dir', 'rtl');
     await nextFrame();
     subMenu.close();
+    await nextRender();
     arrowLeftKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
     document.documentElement.setAttribute('dir', 'ltr');
   });
 
-  it('should open item on enter', () => {
+  it('should open item on enter', async () => {
     subMenu.close();
+    await nextRender();
     enterKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
   });
 
-  it('should open item on space', () => {
+  it('should open item on space', async () => {
     subMenu.close();
+    await nextRender();
     spaceKeyDown(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
   });
 
   it('should not focus item if parent item is not focused', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
@@ -387,6 +414,7 @@ describe('items', () => {
 
   it('should focus first item in submenu on overlay element arrow down', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     const item = getMenuItems(subMenu)[0];
@@ -397,6 +425,7 @@ describe('items', () => {
 
   it('should focus last item in submenu on overlay element arrow up', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     const items = getMenuItems(subMenu);
@@ -408,6 +437,7 @@ describe('items', () => {
 
   it('should focus first item after re-opening when using components', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
 
     const rootItem = getMenuItems(rootMenu)[3];
@@ -434,6 +464,7 @@ describe('items', () => {
 
   it('should focus first non-disabled item after re-opening when using components', async () => {
     subMenu.close();
+    await nextRender();
     rootOverlay.focus();
 
     rootMenu.items[3].children[0].disabled = true;
@@ -527,6 +558,23 @@ describe('items', () => {
     await nextRender();
     expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
     expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
+  });
+
+  it('should update expanded attributes when activating different parent items', async () => {
+    expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
+    expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
+
+    await activateItem(getMenuItems(rootMenu)[3]);
+    expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
+    expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
+    expect(getMenuItems(rootMenu)[3].hasAttribute('expanded')).to.be.true;
+    expect(getMenuItems(rootMenu)[3].getAttribute('aria-expanded')).to.equal('true');
+
+    await activateItem(getMenuItems(rootMenu)[0]);
+    expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
+    expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
+    expect(getMenuItems(rootMenu)[3].hasAttribute('expanded')).to.be.false;
+    expect(getMenuItems(rootMenu)[3].getAttribute('aria-expanded')).to.equal('false');
   });
 
   (isTouch ? describe.skip : describe)('scrolling', () => {
