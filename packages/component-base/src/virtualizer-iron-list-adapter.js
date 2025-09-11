@@ -547,8 +547,8 @@ export class IronListAdapter {
       return;
     }
 
-    this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
-    const delta = this.scrollTarget.scrollTop - this._scrollPosition;
+    this._adjustVirtualIndexOffset(this._scrollTop - this._scrollPosition);
+    const delta = this._scrollTop - this._scrollPosition;
 
     super._scrollHandler();
 
@@ -601,11 +601,9 @@ export class IronListAdapter {
       );
     }
 
-    this.__previousScrollTop = this._scrollTop;
-
     // If the first visible index is not 0 when scrolled to the top,
     // scroll to index 0 to fix the issue.
-    if (this._scrollTop === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
+    if (this._scrollPosition === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
       this.scrollToIndex(0);
     }
   }
