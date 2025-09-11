@@ -1,0 +1,35 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_month-picker {
+  [part~='toggle-button']::before {
+    content: var(--lumo-icons-calendar);
+  }
+
+  [part~='clear-button']::before {
+    content: var(--lumo-icons-cross);
+  }
+
+  :host([opened]) {
+    pointer-events: auto;
+  }
+
+  :host([dir='rtl']) [part='input-field'] {
+    direction: ltr;
+  }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
+    direction: rtl;
+    text-align: left;
+  }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input) {
+    --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+  }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input:placeholder-shown) {
+    --_lumo-text-field-overflow-mask-image: none;
+  }
+}
