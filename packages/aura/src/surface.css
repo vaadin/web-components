@@ -39,5 +39,6 @@ vaadin-app-layout::part(drawer),
 }
 
 [theme~='surface-solid'] {
+  --aura-surface-opacity: 1;
   background: var(--aura-surface-solid) padding-box;
 }
