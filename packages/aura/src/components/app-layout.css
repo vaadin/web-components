@@ -58,10 +58,11 @@ vaadin-app-layout:not([overlay])::part(navbar) {
 
 vaadin-app-layout::part(drawer) {
   padding-block: var(--aura-app-layout-inset);
-  padding-inline: calc(var(--aura-app-layout-inset) - var(--side-nav-padding));
+  padding-inline: max(0, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
 }
 
 vaadin-scroller[slot='drawer'] {
+  padding-inline: var(--vaadin-padding-s);
   scrollbar-width: thin;
 }
 
