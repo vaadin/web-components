@@ -1,0 +1,40 @@
+.aura-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.aura-view > :not(header, footer) {
+  flex: 1;
+}
+
+.aura-view > :is(header, footer),
+:is(.aura-view-header, .aura-view-footer) {
+  padding: var(--vaadin-padding-m);
+  display: flex;
+  align-items: center;
+  gap: var(--vaadin-gap-xs);
+}
+
+:is(.aura-view > header, .aura-view-header) :is(h1, h2, h3, h4, h5, h6, .aura-view-heading) {
+  margin: 0;
+  padding-block: calc(var(--vaadin-padding-xs) + var(--vaadin-button-border-width, 1px));
+  font-size: var(--aura-font-size-l);
+  font-weight: var(--aura-font-weight-semibold);
+  color: var(--vaadin-color);
+  flex: 1;
+
+  &:last-child {
+    padding-inline-end: var(--vaadin-padding-xs);
+  }
+}
+
+vaadin-app-layout[drawer-opened]:not([overlay]) :is(.aura-view > header, .aura-view-header) vaadin-drawer-toggle,
+vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'].aura-view > header mdl-back-button,
+vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'] .aura-view > header mdl-back-button {
+  display: none;
+
+  & + :is(h1, h2, h3, h4, h5, h6, .aura-view-heading) {
+    padding-inline-start: var(--vaadin-padding-xs);
+  }
+}
