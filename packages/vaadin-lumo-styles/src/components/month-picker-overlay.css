@@ -1,0 +1,24 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_month-picker-overlay {
+  [part='content'] {
+    padding: var(--lumo-space-s);
+  }
+
+  :host([top-aligned]) [part='overlay'] {
+    margin-top: var(--lumo-space-xs);
+  }
+
+  :host([bottom-aligned]) [part='overlay'] {
+    margin-bottom: var(--lumo-space-xs);
+  }
+
+  @media (forced-colors: active) {
+    [part='overlay'] {
+      outline: 3px solid;
+    }
+  }
+}
