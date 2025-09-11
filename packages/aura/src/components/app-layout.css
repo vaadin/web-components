@@ -56,18 +56,22 @@ vaadin-app-layout:not([overlay])::part(navbar) {
   --vaadin-app-layout-navbar-background: transparent;
 }
 
-vaadin-app-layout::part(drawer) {
+vaadin-app-layout:not([overlay])::part(drawer) {
   padding-block: var(--aura-app-layout-inset);
   padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
 }
 
-vaadin-scroller[slot='drawer'] {
-  padding-inline: var(--vaadin-padding-s);
+vaadin-app-layout > vaadin-scroller[slot='drawer'] {
+  padding-inline: var(--vaadin-padding-m);
   scrollbar-width: thin;
 }
 
-vaadin-app-layout > [slot='drawer'] vaadin-side-nav-item::part(content) {
-  --aura-surface-level: 5;
+vaadin-app-layout > vaadin-scroller:nth-child(1 of [slot='drawer']) {
+  padding-top: var(--vaadin-padding-s);
+}
+
+vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
+  padding-bottom: var(--vaadin-padding-s);
 }
 
 vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
