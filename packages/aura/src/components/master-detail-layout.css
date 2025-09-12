@@ -8,6 +8,13 @@ vaadin-master-detail-layout[drawer]::part(detail) {
   background: var(--aura-surface) padding-box;
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
+  box-shadow:
+    inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
+    -1px 0 0 0 var(--aura-overlay-outline-color),
+    var(--aura-shadow-m);
+}
+
+vaadin-master-detail-layout[containment='viewport'][drawer]::part(detail) {
   box-shadow: var(--aura-overlay-shadow);
 }
 
