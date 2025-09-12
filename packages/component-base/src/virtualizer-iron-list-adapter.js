@@ -14,15 +14,24 @@ const MAX_VIRTUAL_COUNT = 100000;
 const OFFSET_ADJUST_MIN_THRESHOLD = 1000;
 
 export class IronListAdapter {
-  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
+  constructor({
+    createElements,
+    updateElement,
+    scrollTarget,
+    scrollContainer,
+    reorderElements,
+    elementsContainer,
+    elementsMinHeightGuaranteed,
+  }) {
     this.isAttached = true;
     this._vidxOffset = 0;
     this.createElements = createElements;
     this.updateElement = updateElement;
     this.scrollTarget = scrollTarget;
     this.scrollContainer = scrollContainer;
-    this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
+    this.elementsContainer = elementsContainer || scrollContainer;
+    this.elementsMinHeightGuaranteed = elementsMinHeightGuaranteed ?? false;
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
@@ -270,33 +279,35 @@ export class IronListAdapter {
    * @param {!Array<!HTMLElement>} updatedElements
    */
   __afterElementsUpdated(updatedElements) {
-    updatedElements.forEach((el) => {
-      const elementHeight = el.offsetHeight;
-      if (elementHeight === 0) {
-        // If the elements have 0 height after update (for example due to lazy rendering),
-        // it results in iron-list requesting to create an unlimited count of elements.
-        // Assign a temporary placeholder sizing to elements that would otherwise end up having
-        // no height.
-        el.style.paddingTop = `${this.__placeholderHeight}px`;
-        el.style.opacity = '0';
-        el.__virtualizerPlaceholder = true;
+    if (!this.elementsMinHeightGuaranteed) {
+      updatedElements.forEach((el) => {
+        const elementHeight = el.offsetHeight;
+        if (elementHeight === 0) {
+          // If the elements have 0 height after update (for example due to lazy rendering),
+          // it results in iron-list requesting to create an unlimited count of elements.
+          // Assign a temporary placeholder sizing to elements that would otherwise end up having
+          // no height.
+          el.style.paddingTop = `${this.__placeholderHeight}px`;
+          el.style.opacity = '0';
+          el.__virtualizerPlaceholder = true;
 
-        // Manually schedule the resize handler to make sure the placeholder padding is
-        // cleared in case the resize observer never triggers.
-        this.__placeholderClearDebouncer = Debouncer.debounce(this.__placeholderClearDebouncer, animationFrame, () =>
-          this._resizeHandler(),
-        );
-      } else {
-        // Add element height to the queue
-        this.__elementHeightQueue.push(elementHeight);
-        this.__elementHeightQueue.shift();
+          // Manually schedule the resize handler to make sure the placeholder padding is
+          // cleared in case the resize observer never triggers.
+          this.__placeholderClearDebouncer = Debouncer.debounce(this.__placeholderClearDebouncer, animationFrame, () =>
+            this._resizeHandler(),
+          );
+        } else {
+          // Add element height to the queue
+          this.__elementHeightQueue.push(elementHeight);
+          this.__elementHeightQueue.shift();
 
-        // Calculate new placeholder height based on the average of the defined values in the
-        // element height queue
-        const filteredHeights = this.__elementHeightQueue.filter((h) => h !== undefined);
-        this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
-      }
-    });
+          // Calculate new placeholder height based on the average of the defined values in the
+          // element height queue
+          const filteredHeights = this.__elementHeightQueue.filter((h) => h !== undefined);
+          this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
+        }
+      });
+    }
 
     if (this.__pendingScrollToIndex !== undefined && !this.__hasPlaceholders()) {
       this.scrollToIndex(this.__pendingScrollToIndex);
