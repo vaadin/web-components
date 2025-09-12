@@ -1,7 +1,10 @@
-class AuraInsetControl extends HTMLElement {
+import { AuraControl } from './aura-abstract-control.js';
+
+class AuraInsetControl extends AuraControl {
   static get is() {
     return 'aura-inset-control';
   }
+
   static get storageKey() {
     return 'aura:app-layout-inset';
   }
@@ -12,20 +15,11 @@ class AuraInsetControl extends HTMLElement {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot;
     shadow.innerHTML = `
       <style>
-        :host {
-          display: block;
-        }
-
         .control {
-          display: grid; gap: .2rem;
-        }
-
-        label {
-          color: var(--vaadin-color);
-          font-weight: var(--aura-font-weight-medium);
+          gap: .2rem;
         }
 
         .row {
@@ -43,23 +37,6 @@ class AuraInsetControl extends HTMLElement {
           min-width: 4ch; justify-self: end;
           font-variant-numeric: tabular-nums;
           text-align: end;
-        }
-
-        #reset {
-          background: transparent;
-          border: 0;
-        }
-
-        #reset:not(:hover, :focus-visible) {
-          opacity: 0.6;
-        }
-
-        #reset::before {
-          content: "";
-          width: 1lh;
-          height: 1lh;
-          mask-image: var(--icon-rotate-ccw);
-          background: currentColor;
         }
       </style>
       <div class="control">

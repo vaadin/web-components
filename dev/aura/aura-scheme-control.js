@@ -1,7 +1,10 @@
-class AuraSchemeControl extends HTMLElement {
+import { AuraControl } from './aura-abstract-control.js';
+
+class AuraSchemeControl extends AuraControl {
   static get is() {
     return 'aura-scheme-control';
   }
+
   static get observedAttributes() {
     return ['property', 'label'];
   }
@@ -14,21 +17,11 @@ class AuraSchemeControl extends HTMLElement {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot;
     shadow.innerHTML = `
       <style>
-        :host {
-          display: block;
-        }
-
         .control {
-          display: grid;
           gap: .4rem;
-        }
-
-        label {
-          color: var(--vaadin-color);
-          font-weight: var(--aura-font-weight-medium);
         }
 
         .segmented {
@@ -80,23 +73,6 @@ class AuraSchemeControl extends HTMLElement {
           width: 1px;
           height: 1px;
           overflow: hidden;
-        }
-
-        #reset {
-          background: transparent;
-          border: 0;
-        }
-
-        #reset:not(:hover, :focus-visible) {
-          opacity: 0.6;
-        }
-
-        #reset::before {
-          content: "";
-          width: 1lh;
-          height: 1lh;
-          mask-image: var(--icon-rotate-ccw);
-          background: currentColor;
         }
       </style>
       <div class="control">

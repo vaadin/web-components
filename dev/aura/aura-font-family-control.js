@@ -1,4 +1,6 @@
-class AuraFontFamilyControl extends HTMLElement {
+import { AuraControl } from './aura-abstract-control.js';
+
+class AuraFontFamilyControl extends AuraControl {
   static get is() {
     return 'aura-font-family-control';
   }
@@ -19,21 +21,11 @@ class AuraFontFamilyControl extends HTMLElement {
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.shadowRoot;
     shadow.innerHTML = `
       <style>
-        :host {
-          display: block;
-        }
-
         .control {
-          display: grid;
           gap: .4rem;
-        }
-
-        label {
-          color: var(--vaadin-color);
-          font-weight: var(--aura-font-weight-medium);
         }
 
         .row {
@@ -46,23 +38,6 @@ class AuraFontFamilyControl extends HTMLElement {
         select {
           padding: .4rem .6rem;
           border-radius: 10px;
-        }
-
-        #reset {
-          background: transparent;
-          border: 0;
-        }
-
-        #reset:not(:hover, :focus-visible) {
-          opacity: 0.6;
-        }
-
-        #reset::before {
-          content: "";
-          width: 1lh;
-          height: 1lh;
-          mask-image: var(--icon-rotate-ccw);
-          background: currentColor;
         }
       </style>
       <div class="control">
