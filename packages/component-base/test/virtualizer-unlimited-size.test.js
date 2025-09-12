@@ -17,13 +17,7 @@ describe('unlimited size', () => {
     elementsContainer = scrollContainer;
 
     virtualizer = new Virtualizer({
-      createElements: (count) => {
-        return Array.from({ length: count }, () => {
-          const el = document.createElement('div');
-          el.style.height = '30px';
-          return el;
-        });
-      },
+      createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
       updateElement: (el, index) => {
         el.index = index;
         el.id = `item-${index}`;
@@ -33,11 +27,11 @@ describe('unlimited size', () => {
         el.style.display = 'flex';
         el.style.alignItems = 'center';
         el.style.background = index % 2 === 0 ? '#e7e7e7' : '#d0d0d0';
+        el.style.height = '30px';
         el.style.padding = '0 10px';
       },
       scrollTarget,
       scrollContainer,
-      __disableHeightPlaceholder: true,
     });
 
     virtualizer.size = 1000000;

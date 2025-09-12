@@ -234,7 +234,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
         scrollTarget: this,
         scrollContainer: this.$.selector,
         reorderElements: true,
-        __disableHeightPlaceholders: true,
+        __disableHeightPlaceholder: true,
       });
     }
 

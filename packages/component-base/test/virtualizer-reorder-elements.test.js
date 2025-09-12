@@ -46,13 +46,7 @@ describe('reorder elements', () => {
     elementsContainer = scrollContainer;
 
     virtualizer = new Virtualizer({
-      createElements: (count) => {
-        return Array.from({ length: count }).map(() => {
-          const el = document.createElement('div');
-          el.style.minHeight = '1lh';
-          return el;
-        });
-      },
+      createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
       updateElement: (el, index) => {
         el.index = index;
         el.id = `item-${index}`;
@@ -61,7 +55,6 @@ describe('reorder elements', () => {
       },
       scrollTarget,
       scrollContainer,
-      __disableHeightPlaceholder: true,
       ...config,
     });
 

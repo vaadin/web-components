@@ -16,20 +16,13 @@ describe('virtualizer - variable row height', () => {
     const scrollContainer = scrollTarget.firstElementChild;
 
     virtualizer = new Virtualizer({
-      createElements: (count) => {
-        return Array.from({ length: count }, () => {
-          const el = document.createElement('div');
-          el.style.minHeight = '30px';
-          return el;
-        });
-      },
+      createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
       updateElement: (el, index) => {
         el.style.height = `${30 + index}px`;
         el.textContent = `Item ${index}`;
       },
       scrollTarget,
       scrollContainer,
-      __disableHeightPlaceholder: true,
     });
 
     virtualizer.size = 100;
@@ -140,13 +133,11 @@ describe('virtualizer - variable row height - large variance', () => {
           el.classList.add('item');
           el.style.backgroundColor = 'red';
           el.style.width = '100%';
-          el.style.minHeight = '30px';
           return el;
         }),
       updateElement,
       scrollTarget,
       scrollContainer,
-      __disableHeightPlaceholder: true,
     });
 
     sinon.spy(virtualizer.__adapter, '__fixInvalidItemPositioning');
@@ -291,13 +282,7 @@ describe('virtualizer - variable row height - size changes', () => {
     const scrollContainer = scrollTarget.firstElementChild;
 
     virtualizer = new Virtualizer({
-      createElements: (count) => {
-        return Array.from(Array(count)).map(() => {
-          const el = document.createElement('div');
-          el.style.minHeight = '30px';
-          return el;
-        });
-      },
+      createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
       updateElement: (el, index) => {
         el.style.height = `${reverseItemHeights[virtualizer.size - index - 1]}px`;
         el.style.outline = '1px solid black';
@@ -308,7 +293,6 @@ describe('virtualizer - variable row height - size changes', () => {
       },
       scrollTarget,
       scrollContainer,
-      __disableHeightPlaceholder: true,
     });
 
     virtualizer.size = 2;
