@@ -143,7 +143,7 @@ describe('restore focus', () => {
           mousedown(document.body);
           overlay.opened = false;
           expect(spy).to.be.calledOnce;
-          expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+          expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: true });
         });
 
         it('should not prevent scroll when restoring focus on close after keydown', async () => {
@@ -154,7 +154,31 @@ describe('restore focus', () => {
           escKeyDown(document.body);
           overlay.opened = false;
           expect(spy).to.be.calledOnce;
-          expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
+          expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: false });
+        });
+      });
+
+      describe('focusVisible', () => {
+        it('should set focusVisible: false when restoring focus on close after mousedown', async () => {
+          focusable.focus();
+          overlay.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+          const spy = sinon.spy(focusable, 'focus');
+          mousedown(document.body);
+          overlay.opened = false;
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
+        });
+
+        it('should set focusVisible: true when restoring focus on close after keydown', async () => {
+          focusable.focus();
+          overlay.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+          const spy = sinon.spy(focusable, 'focus');
+          escKeyDown(document.body);
+          overlay.opened = false;
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: true });
         });
       });
     });
