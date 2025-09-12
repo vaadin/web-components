@@ -4,7 +4,8 @@
 
 /* List all elements that are surfaces */
 html,
-[theme*='surface'],
+[theme~='surface'],
+[theme~='surface-solid'],
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
 ::part(overlay) {
