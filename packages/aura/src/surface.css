@@ -1,0 +1,45 @@
+:where(html) {
+  --aura-surface-level: 1;
+}
+
+/* List all elements that are surfaces */
+html,
+[theme~='surface'],
+[theme~='surface-solid'],
+vaadin-app-layout::part(navbar),
+vaadin-app-layout::part(drawer),
+::part(overlay) {
+  --aura-surface-opacity: 0.5;
+
+  --aura-surface-solid: light-dark(
+    oklch(
+      from var(--aura-background-light)
+        min(
+          1,
+          l + (0.98 - l) * 4 + var(--aura-surface-level) * (0.07 - 0.01 * var(--aura-contrast)) -
+            var(--aura-surface-opacity) / 15
+        )
+        clamp(0, c - l / 10 * var(--aura-surface-level) + var(--aura-surface-opacity) / 40, c) h
+    ),
+    oklch(
+      from var(--aura-background-dark)
+        calc(
+          max(l + 0.03, 0.25) + var(--aura-surface-level) * (0.03 - 0.008 * var(--aura-contrast)) -
+            var(--aura-surface-opacity) / 40
+        )
+        clamp(0, c * (1 + l), 0.2) h
+    )
+  );
+
+  --aura-surface: color-mix(in oklab, var(--aura-surface-solid) calc(100% * var(--aura-surface-opacity)), transparent);
+  --vaadin-background-color: var(--aura-surface-solid);
+}
+
+[theme~='surface'] {
+  background: var(--aura-surface) padding-box;
+}
+
+[theme~='surface-solid'] {
+  --aura-surface-opacity: 1;
+  background: var(--aura-surface-solid) padding-box;
+}

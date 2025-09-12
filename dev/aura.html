@@ -9,13 +9,35 @@
   <link rel="stylesheet" href="../packages/aura/aura.css" />
   <script type="module">
     import '@vaadin/app-layout';
+    import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
+    import '@vaadin/vertical-layout';
   </script>
 </head>
 <body>
 
   <vaadin-app-layout>
-    <main>
-      <h1>Aura</h1>
+    <div slot="navbar">
+      <vaadin-drawer-toggle></vaadin-drawer-toggle>
+    </div>
+    <div slot="drawer">
+      Navigation
+    </div>
+    <main theme="surface">
+      <vaadin-vertical-layout theme="padding spacing">
+        <h1>Aura</h1>
+        <div theme="surface" style="padding: 2em; --aura-surface-level: 1;">
+          Level 1
+        </div>
+        <div theme="surface" style="padding: 2em; --aura-surface-level: 2;">
+          Level 2
+        </div>
+        <div theme="surface" style="padding: 2em; --aura-surface-level: 3;">
+          Level 3
+        </div>
+        <div theme="surface" style="padding: 2em; --aura-surface-level: 4;">
+          Level 4
+        </div>
+      </vaadin-vertical-layout>
     </main>
   </vaadin-app-layout>
 
