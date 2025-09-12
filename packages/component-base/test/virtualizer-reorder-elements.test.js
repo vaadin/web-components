@@ -61,7 +61,7 @@ describe('reorder elements', () => {
       },
       scrollTarget,
       scrollContainer,
-      elementsMinHeightGuaranteed: true,
+      __disableHeightPlaceholder: true,
       ...config,
     });
 

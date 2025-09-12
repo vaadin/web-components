@@ -231,10 +231,10 @@ export const ComboBoxScrollerMixin = (superClass) =>
         createElements: this.__createElements.bind(this),
         updateElement: this._updateElement.bind(this),
         elementsContainer: this,
-        elementsMinHeightGuaranteed: true,
         scrollTarget: this,
         scrollContainer: this.$.selector,
         reorderElements: true,
+        __disableHeightPlaceholders: true,
       });
     }
 

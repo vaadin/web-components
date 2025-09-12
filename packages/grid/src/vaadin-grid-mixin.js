@@ -256,7 +256,7 @@ export const GridMixin = (superClass) =>
         scrollContainer: this.$.items,
         scrollTarget: this.$.table,
         reorderElements: true,
-        elementsMinHeightGuaranteed: false,
+        __disableHeightPlaceholder: true,
       });
 
       new ResizeObserver(() =>

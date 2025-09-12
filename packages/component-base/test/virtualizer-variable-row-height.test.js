@@ -29,7 +29,7 @@ describe('virtualizer - variable row height', () => {
       },
       scrollTarget,
       scrollContainer,
-      elementsMinHeightGuaranteed: true,
+      __disableHeightPlaceholder: true,
     });
 
     virtualizer.size = 100;
@@ -146,7 +146,7 @@ describe('virtualizer - variable row height - large variance', () => {
       updateElement,
       scrollTarget,
       scrollContainer,
-      elementsMinHeightGuaranteed: true,
+      __disableHeightPlaceholder: true,
     });
 
     sinon.spy(virtualizer.__adapter, '__fixInvalidItemPositioning');
@@ -308,7 +308,7 @@ describe('virtualizer - variable row height - size changes', () => {
       },
       scrollTarget,
       scrollContainer,
-      elementsMinHeightGuaranteed: true,
+      __disableHeightPlaceholder: true,
     });
 
     virtualizer.size = 2;

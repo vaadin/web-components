@@ -21,7 +21,7 @@ export class IronListAdapter {
     scrollContainer,
     reorderElements,
     elementsContainer,
-    elementsMinHeightGuaranteed,
+    __disableHeightPlaceholder,
   }) {
     this.isAttached = true;
     this._vidxOffset = 0;
@@ -31,7 +31,12 @@ export class IronListAdapter {
     this.scrollContainer = scrollContainer;
     this.reorderElements = reorderElements;
     this.elementsContainer = elementsContainer || scrollContainer;
-    this.elementsMinHeightGuaranteed = elementsMinHeightGuaranteed ?? false;
+
+    // Internal option that disables the heavy height placeholder calculation
+    // (see __afterElementsUpdated) for components that always render virtual
+    // elements with a non-zero height. Not for public use.
+    this.__disableHeightPlaceholder = __disableHeightPlaceholder ?? false;
+
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
@@ -279,7 +284,7 @@ export class IronListAdapter {
    * @param {!Array<!HTMLElement>} updatedElements
    */
   __afterElementsUpdated(updatedElements) {
-    if (!this.elementsMinHeightGuaranteed) {
+    if (!this.__disableHeightPlaceholder) {
       updatedElements.forEach((el) => {
         const elementHeight = el.offsetHeight;
         if (elementHeight === 0) {

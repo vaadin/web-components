@@ -37,7 +37,7 @@ describe('unlimited size', () => {
       },
       scrollTarget,
       scrollContainer,
-      elementsMinHeightGuaranteed: true,
+      __disableHeightPlaceholder: true,
     });
 
     virtualizer.size = 1000000;

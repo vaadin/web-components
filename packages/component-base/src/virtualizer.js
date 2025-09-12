@@ -14,7 +14,6 @@ export class Virtualizer {
    * @property {HTMLElement} scrollContainer Reference to a wrapper for the item elements (or a slot) inside the scrollTarget
    * @property {HTMLElement | undefined} elementsContainer Reference to the container in which the item elements are placed, defaults to scrollContainer
    * @property {boolean | undefined} reorderElements Determines whether the physical item elements should be kept in order in the DOM
-   * @property {boolean | undefined} elementsMinHeightGuaranteed Determines whether the item elements are guaranteed to have a minimum height (e.g. via CSS)
    * @param {VirtualizerConfig} config Configuration for the virtualizer
    */
   constructor(config) {
