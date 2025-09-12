@@ -1,20 +1,17 @@
-html {
-  --_shadow-color: light-dark(
-    oklch(from var(--aura-background-light) calc(l - l * 0.8) calc(c / 10) h / 0.2),
-    oklch(from var(--aura-background-dark) calc(l - l * 0.8) calc(c / 10) h / 0.2)
-  );
-  --_outline-color: light-dark(
-    oklch(from var(--aura-background-light) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast))),
-    oklch(from var(--aura-background-dark) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast)))
-  );
-  --aura-overlay-shadow:
-    inset 0 0 0 1px hsla(0deg, 0%, 100%, max(3%, 2% + 4% * var(--aura-contrast))), 0 0 0 1px var(--_outline-color),
-    0 8px 16px -3px var(--_shadow-color);
+:where(html) {
   --vaadin-overlay-border-width: 0px;
   --vaadin-overlay-backdrop-background: light-dark(
     oklch(from var(--aura-background-light) calc(l * 0.1) c h / 0.15),
     hsla(0deg, 0%, 0%, 0.3)
   );
+  --aura-overlay-outline-color: light-dark(
+    oklch(from var(--aura-background-light) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast))),
+    oklch(from var(--aura-background-dark) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast)))
+  );
+  --aura-overlay-inner-outline-color: hsla(0deg, 0%, 100%, max(3%, 2% + 4% * var(--aura-contrast)));
+  --aura-overlay-shadow:
+    inset 0 0 0 1px var(--aura-overlay-inner-outline-color), 0 0 0 1px var(--aura-overlay-outline-color),
+    var(--aura-shadow-m);
   --aura-overlay-backdrop-filter: blur(12px) brightness(1.2) saturate(1.2);
   --aura-overlay-surface-opacity: 0.85;
 
@@ -23,13 +20,9 @@ html {
   }
 }
 
-html,
 ::part(overlay) {
   --vaadin-overlay-background: var(--aura-surface);
-}
-
-::part(overlay) {
-  --aura-surface-level: 3;
+  --aura-surface-level: 4;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   box-shadow: var(--aura-overlay-shadow);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
@@ -38,5 +31,5 @@ html,
   font-size: var(--aura-font-size-m);
   font-weight: var(--aura-font-weight);
   line-height: var(--aura-line-height-m);
-  color: var(--aura-color);
+  color: var(--vaadin-color);
 }
