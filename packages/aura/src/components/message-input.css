@@ -1,0 +1,3 @@
+vaadin-message-input vaadin-text-area::part(input-field) {
+  --vaadin-input-field-background: transparent;
+}
