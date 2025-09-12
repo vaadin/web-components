@@ -43,7 +43,7 @@ export default {
     }),
     terser(),
     copy([
-      { src: 'assets/*.svg', dest: 'assets' },
+      { src: 'assets/**/*.svg', dest: 'assets' },
       { src: 'charts/demo-data/*.json', dest: 'charts/demo-data' },
     ]),
   ],
