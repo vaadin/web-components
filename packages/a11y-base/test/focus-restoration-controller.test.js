@@ -60,43 +60,87 @@ describe('focus-restoration-controller', () => {
     expect(getDeepActiveElement()).to.equal(button2);
   });
 
-  it('should not prevent scroll when restoring focus synchronously by default', () => {
-    button1.focus();
-    const spy = sinon.spy(button2, 'focus');
-    controller.saveFocus(button2);
-    controller.restoreFocus();
-    expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
+  describe('preventScroll', () => {
+    it('should not prevent scroll when restoring focus synchronously by default', () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      controller.restoreFocus();
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: false });
+    });
+
+    it('should prevent scroll when restoring focus synchronously with preventScroll', () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      controller.restoreFocus({ preventScroll: true });
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: true });
+    });
+
+    it('should not prevent scroll when restoring focus asynchronously by default', async () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      outsideClick();
+      controller.restoreFocus();
+      await aTimeout(0);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: false });
+    });
+
+    it('should prevent scroll when restoring focus asynchronously with preventScroll', async () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      outsideClick();
+      controller.restoreFocus({ preventScroll: true });
+      await aTimeout(0);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: true });
+    });
   });
 
-  it('should prevent scroll when restoring focus synchronously with preventScroll', () => {
-    button1.focus();
-    const spy = sinon.spy(button2, 'focus');
-    controller.saveFocus(button2);
-    controller.restoreFocus({ preventScroll: true });
-    expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
-  });
+  describe('focusVisible', () => {
+    it('should not set focusVisible when restoring focus synchronously by default', () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      controller.restoreFocus();
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
+    });
 
-  it('should not prevent scroll when restoring focus asynchronously by default', async () => {
-    button1.focus();
-    const spy = sinon.spy(button2, 'focus');
-    controller.saveFocus(button2);
-    outsideClick();
-    controller.restoreFocus();
-    await aTimeout(0);
-    expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
-  });
+    it('should set focusVisible when restoring focus synchronously with preventScroll', () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      controller.restoreFocus({ focusVisible: true });
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: true });
+    });
 
-  it('should prevent scroll when restoring focus asynchronously with preventScroll', async () => {
-    button1.focus();
-    const spy = sinon.spy(button2, 'focus');
-    controller.saveFocus(button2);
-    outsideClick();
-    controller.restoreFocus({ preventScroll: true });
-    await aTimeout(0);
-    expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+    it('should not set focusVisible when restoring focus asynchronously by default', async () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      outsideClick();
+      controller.restoreFocus();
+      await aTimeout(0);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
+    });
+
+    it('should set focusVisible when restoring focus asynchronously with preventScroll', async () => {
+      button1.focus();
+      const spy = sinon.spy(button2, 'focus');
+      controller.saveFocus(button2);
+      outsideClick();
+      controller.restoreFocus({ focusVisible: true });
+      await aTimeout(0);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: true });
+    });
   });
 });
