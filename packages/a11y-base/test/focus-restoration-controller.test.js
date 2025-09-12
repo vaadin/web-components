@@ -112,7 +112,7 @@ describe('focus-restoration-controller', () => {
       expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
     });
 
-    it('should set focusVisible when restoring focus synchronously with preventScroll', () => {
+    it('should set focusVisible when restoring focus synchronously with focusVisible', () => {
       button1.focus();
       const spy = sinon.spy(button2, 'focus');
       controller.saveFocus(button2);
@@ -132,7 +132,7 @@ describe('focus-restoration-controller', () => {
       expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
     });
 
-    it('should set focusVisible when restoring focus asynchronously with preventScroll', async () => {
+    it('should set focusVisible when restoring focus asynchronously with focusVisible', async () => {
       button1.focus();
       const spy = sinon.spy(button2, 'focus');
       controller.saveFocus(button2);
