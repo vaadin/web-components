@@ -52,16 +52,16 @@ class AuraNumberControl extends HTMLElement {
           font-variant-numeric: tabular-nums;
         }
 
-        .reset {
+        #reset {
           background: transparent;
           border: 0;
         }
 
-        .reset:not(:hover, :focus-visible) {
+        #reset:not(:hover, :focus-visible) {
           opacity: 0.6;
         }
 
-        .reset::before {
+        #reset::before {
           content: "";
           width: 1lh;
           height: 1lh;
@@ -74,7 +74,7 @@ class AuraNumberControl extends HTMLElement {
         <div class="row">
           <input id="slider" type="range" />
           <output id="val" for="slider">0</output>
-          <vaadin-button class="reset" aria-label="reset"></vaadin-button>
+          <vaadin-button id="reset" aria-label="reset"></vaadin-button>
         </div>
       </div>
     `;
