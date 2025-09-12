@@ -21,43 +21,58 @@ class AuraFontFamilyControl extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
-          <style>
-            :host { display: block; }
-            .control {
-              display: grid;
-              gap: .4rem;
-            }
-            label {
-              color: var(--vaadin-color);
-                font-weight: var(--aura-font-weight-medium);
-            }
-            .row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-            select { padding: .4rem .6rem; border-radius: 10px; }
-            #reset {
-              background: transparent;
-              border: 0;
-            }
+      <style>
+        :host {
+          display: block;
+        }
 
-            #reset:not(:hover, :focus-visible) {
-              opacity: 0.6;
-            }
+        .control {
+          display: grid;
+          gap: .4rem;
+        }
 
-            #reset::before {
-              content: "";
-              width: 1lh;
-              height: 1lh;
-              mask-image: var(--icon-rotate-ccw);
-              background: currentColor;
-            }
-          </style>
-          <div class="control">
-            <label id="hdr">Font family</label>
-            <div class="row">
-              <select id="sel" aria-labelledby="hdr"></select>
-              <vaadin-button id="reset" type="button" aria-label="reset"></vaadin-button>
-            </div>
-          </div>
-        `;
+        label {
+          color: var(--vaadin-color);
+          font-weight: var(--aura-font-weight-medium);
+        }
+
+        .row {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+          flex-wrap: wrap;
+        }
+
+        select {
+          padding: .4rem .6rem;
+          border-radius: 10px;
+        }
+
+        #reset {
+          background: transparent;
+          border: 0;
+        }
+
+        #reset:not(:hover, :focus-visible) {
+          opacity: 0.6;
+        }
+
+        #reset::before {
+          content: "";
+          width: 1lh;
+          height: 1lh;
+          mask-image: var(--icon-rotate-ccw);
+          background: currentColor;
+        }
+      </style>
+      <div class="control">
+        <label id="hdr">Font family</label>
+        <div class="row">
+          <select id="sel" aria-labelledby="hdr"></select>
+          <vaadin-button id="reset" type="button" aria-label="reset"></vaadin-button>
+        </div>
+      </div>
+    `;
     this.#select = shadow.getElementById('sel');
     this.#labelEl = shadow.getElementById('hdr');
     this.#resetBtn = shadow.getElementById('reset');

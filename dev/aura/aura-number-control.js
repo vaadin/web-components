@@ -21,50 +21,63 @@ class AuraNumberControl extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
-            <style>
-              :host { display: block; }
-              .control {
-                display: grid;
-                gap: .2rem;
-              }
-              label {
-                color: var(--vaadin-color);
-                font-weight: var(--aura-font-weight-medium);
-              }
-              .row { display: flex; align-items: center; gap: .75rem; }
-              input[type="range"] { flex: 1; }
-              output {
-                min-width: 2ch;
-                text-align: right;
-                font-variant-numeric: tabular-nums;
-              }
+      <style>
+        :host {
+          display: block;
+        }
 
-              .reset {
-                background: transparent;
-                border: 0;
-              }
+        .control {
+          display: grid;
+          gap: .2rem;
+        }
 
-              .reset:not(:hover, :focus-visible) {
-                opacity: 0.6;
-              }
+        label {
+          color: var(--vaadin-color);
+          font-weight: var(--aura-font-weight-medium);
+        }
 
-              .reset::before {
-                content: "";
-                width: 1lh;
-                height: 1lh;
-                mask-image: var(--icon-rotate-ccw);
-                background: currentColor;
-              }
-            </style>
-            <div class="control" part="control">
-              <label id="lbl" for="slider">Numeric value</label>
-              <div class="row">
-                <input id="slider" type="range" />
-                <output id="val" for="slider">0</output>
-                <vaadin-button class="reset" aria-label="reset"></vaadin-button>
-              </div>
-            </div>
-          `;
+        .row {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+        }
+
+        input[type="range"] {
+          flex: 1;
+        }
+
+        output {
+          min-width: 2ch;
+          text-align: right;
+          font-variant-numeric: tabular-nums;
+        }
+
+        .reset {
+          background: transparent;
+          border: 0;
+        }
+
+        .reset:not(:hover, :focus-visible) {
+          opacity: 0.6;
+        }
+
+        .reset::before {
+          content: "";
+          width: 1lh;
+          height: 1lh;
+          mask-image: var(--icon-rotate-ccw);
+          background: currentColor;
+        }
+      </style>
+      <div class="control" part="control">
+        <label id="lbl" for="slider">Numeric value</label>
+        <div class="row">
+          <input id="slider" type="range" />
+          <output id="val" for="slider">0</output>
+          <vaadin-button class="reset" aria-label="reset"></vaadin-button>
+        </div>
+      </div>
+    `;
     this.#root = shadow;
     this.#input = shadow.getElementById('slider');
     this.#output = shadow.getElementById('val');

@@ -16,45 +16,64 @@ class AuraColorControl extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
-            <style>
-              :host { display: block; }
-              .control {
-                display: grid;
-                gap: .2rem;
-              }
-              label {
-                color: var(--vaadin-color);
-                font-weight: var(--aura-font-weight-medium);
-              }
-              .row { display: flex; align-items: center; gap: .75rem; }
-              input[type="color"] { width: 3rem; height: 2rem; border: none; background: transparent; }
-              output { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-              #reset {
-                background: transparent;
-                border: 0;
-              }
+      <style>
+        :host {
+          display: block;
+        }
 
-              #reset:not(:hover, :focus-visible) {
-                opacity: 0.6;
-              }
+        .control {
+          display: grid;
+          gap: .2rem;
+        }
 
-              #reset::before {
-                content: "";
-                width: 1lh;
-                height: 1lh;
-                mask-image: var(--icon-rotate-ccw);
-                background: currentColor;
-              }
-            </style>
-            <div class="control" part="control">
-              <label id="lbl" for="picker">Color</label>
-              <div class="row">
-                <input id="picker" type="color" />
-                <output id="val" for="picker">#000000</output>
-                <vaadin-button id="reset" aria-label="reset"></vaadin-button>
-              </div>
-              </div>
-          `;
+        label {
+          color: var(--vaadin-color);
+          font-weight: var(--aura-font-weight-medium);
+        }
+
+        .row {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+        }
+
+        input[type="color"] {
+          width: 3rem;
+          height: 2rem;
+          border: none;
+          background: transparent;
+        }
+
+        output {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        #reset {
+          background: transparent;
+          border: 0;
+        }
+
+        #reset:not(:hover, :focus-visible) {
+          opacity: 0.6;
+        }
+
+        #reset::before {
+          content: "";
+          width: 1lh;
+          height: 1lh;
+          mask-image: var(--icon-rotate-ccw);
+          background: currentColor;
+        }
+      </style>
+      <div class="control" part="control">
+        <label id="lbl" for="picker">Color</label>
+        <div class="row">
+          <input id="picker" type="color" />
+          <output id="val" for="picker">#000000</output>
+          <vaadin-button id="reset" aria-label="reset"></vaadin-button>
+        </div>
+      </div>
+    `;
     this.#input = shadow.getElementById('picker');
     this.#output = shadow.getElementById('val');
     this.#labelEl = shadow.getElementById('lbl');

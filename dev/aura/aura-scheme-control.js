@@ -16,77 +16,99 @@ class AuraSchemeControl extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
-            <style>
-              :host { display: block; }
-              .control {
-                display: grid;
-                gap: .4rem;
-              }
-              label {
-                color: var(--vaadin-color);
-                font-weight: var(--aura-font-weight-medium);
-              }
-              .segmented {
-                display: inline-grid;
-                grid-auto-flow: column;
-                gap: 0;
-                border: 1px solid var(--vaadin-border-color);
-                border-radius: var(--vaadin-radius-m);
-                background: var(--aura-surface) padding-box;
-                overflow: hidden;
-              }
-              .segmented input {
-                position: absolute;
-                opacity: 0;
-                pointer-events: none;
-              }
-              .segmented label {
-                padding: var(--vaadin-padding-xs) var(--vaadin-padding-m);
-                cursor: pointer;
-                user-select: none;
-                display: inline-block;
-                border-right: 1px solid var(--vaadin-border-color-subtle);
-              }
-              .segmented label:last-of-type { border-right: none; }
+      <style>
+        :host {
+          display: block;
+        }
 
-              /* Selected state */
-              .segmented input:checked + label {
-                background: var(--vaadin-background-container);
-                color: var(--vaadin-color);
-                background-clip: padding-box;
-                font-weight: 600;
-              }
+        .control {
+          display: grid;
+          gap: .4rem;
+        }
 
-              .row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-              .sr-only { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        label {
+          color: var(--vaadin-color);
+          font-weight: var(--aura-font-weight-medium);
+        }
 
-              #reset {
-                background: transparent;
-                border: 0;
-              }
+        .segmented {
+          display: inline-grid;
+          grid-auto-flow: column;
+          gap: 0;
+          border: 1px solid var(--vaadin-border-color);
+          border-radius: var(--vaadin-radius-m);
+          background: var(--aura-surface) padding-box;
+          overflow: hidden;
+        }
 
-              #reset:not(:hover, :focus-visible) {
-                opacity: 0.6;
-              }
+        .segmented input {
+          position: absolute;
+          opacity: 0;
+          pointer-events: none;
+        }
 
-              #reset::before {
-                content: "";
-                width: 1lh;
-                height: 1lh;
-                mask-image: var(--icon-rotate-ccw);
-                background: currentColor;
-              }
-            </style>
-            <div class="control">
-              <label class="header" id="hdr">Color scheme</label>
-              <div class="row">
-                <div class="segmented" role="radiogroup" aria-labelledby="hdr" id="group">
-                  <!-- Radios will be populated in connectedCallback -->
-                </div>
-                <vaadin-button id="reset" type="button" aria-label="reset"></vaadin-button>
-              </div>
-            </div>
-          `;
+        .segmented label {
+          padding: var(--vaadin-padding-xs) var(--vaadin-padding-m);
+          cursor: pointer;
+          user-select: none;
+          display: inline-block;
+          border-right: 1px solid var(--vaadin-border-color-subtle);
+        }
+
+        .segmented label:last-of-type {
+          border-right: none;
+        }
+
+        /* Selected state */
+        .segmented input:checked + label {
+          background: var(--vaadin-background-container);
+          color: var(--vaadin-color);
+          background-clip: padding-box;
+          font-weight: 600;
+        }
+
+        .row {
+          display: flex;
+          align-items: center;
+          gap: .75rem;
+          flex-wrap: wrap;
+        }
+
+        .sr-only {
+          position: absolute;
+          left: -9999px;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+        }
+
+        #reset {
+          background: transparent;
+          border: 0;
+        }
+
+        #reset:not(:hover, :focus-visible) {
+          opacity: 0.6;
+        }
+
+        #reset::before {
+          content: "";
+          width: 1lh;
+          height: 1lh;
+          mask-image: var(--icon-rotate-ccw);
+          background: currentColor;
+        }
+      </style>
+      <div class="control">
+        <label class="header" id="hdr">Color scheme</label>
+        <div class="row">
+          <div class="segmented" role="radiogroup" aria-labelledby="hdr" id="group">
+            <!-- Radios will be populated in connectedCallback -->
+          </div>
+          <vaadin-button id="reset" type="button" aria-label="reset"></vaadin-button>
+        </div>
+      </div>
+    `;
     this.#group = shadow.getElementById('group');
     this.#reset = shadow.getElementById('reset');
     this.#labelEl = shadow.getElementById('hdr');

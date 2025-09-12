@@ -14,48 +14,63 @@ class AuraInsetControl extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
-        <style>
-          :host { display: block; }
-          .control {
-            display: grid; gap: .2rem;
-          }
-          label {
-            color: var(--vaadin-color);
-            font-weight: var(--aura-font-weight-medium);
-          }
-          .row { display: grid; grid-template-columns: 1fr auto auto; gap: .75rem; align-items: center; }
-          input[type="range"] { width: 100%; }
-          output {
-            min-width: 4ch; justify-self: end;
-            font-variant-numeric: tabular-nums;
-            text-align: end;
-          }
-          #reset {
-            background: transparent;
-            border: 0;
-          }
+      <style>
+        :host {
+          display: block;
+        }
 
-          #reset:not(:hover, :focus-visible) {
-            opacity: 0.6;
-          }
+        .control {
+          display: grid; gap: .2rem;
+        }
 
-          #reset::before {
-            content: "";
-            width: 1lh;
-            height: 1lh;
-            mask-image: var(--icon-rotate-ccw);
-            background: currentColor;
-          }
-        </style>
-        <div class="control">
-          <label for="slider">--aura-app-layout-inset</label>
-          <div class="row">
-            <input id="slider" type="range" min="0" max="50" step="1" />
-            <output id="val">0px</output>
-            <vaadin-button id="reset" aria-label="reset"></vaadin-button>
-          </div>
+        label {
+          color: var(--vaadin-color);
+          font-weight: var(--aura-font-weight-medium);
+        }
+
+        .row {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          gap: .75rem;
+          align-items: center;
+        }
+
+        input[type="range"] {
+          width: 100%;
+        }
+
+        output {
+          min-width: 4ch; justify-self: end;
+          font-variant-numeric: tabular-nums;
+          text-align: end;
+        }
+
+        #reset {
+          background: transparent;
+          border: 0;
+        }
+
+        #reset:not(:hover, :focus-visible) {
+          opacity: 0.6;
+        }
+
+        #reset::before {
+          content: "";
+          width: 1lh;
+          height: 1lh;
+          mask-image: var(--icon-rotate-ccw);
+          background: currentColor;
+        }
+      </style>
+      <div class="control">
+        <label for="slider">--aura-app-layout-inset</label>
+        <div class="row">
+          <input id="slider" type="range" min="0" max="50" step="1" />
+          <output id="val">0px</output>
+          <vaadin-button id="reset" aria-label="reset"></vaadin-button>
         </div>
-      `;
+      </div>
+    `;
     this.#slider = shadow.getElementById('slider');
     this.#out = shadow.getElementById('val');
     this.#reset = shadow.getElementById('reset');
