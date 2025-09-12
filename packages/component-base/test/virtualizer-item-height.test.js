@@ -412,3 +412,33 @@ describe('virtualizer - item height - lazy rendering', () => {
     });
   });
 });
+
+describe('virtualizer - item height - placeholders are disabled', () => {
+  let virtualizer;
+  let scrollTarget;
+
+  beforeEach(() => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 200px;">
+        <div class="container"></div>
+      </div>
+    `);
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.id = `item-${index}`;
+      },
+      scrollTarget,
+      scrollContainer: scrollTarget.firstElementChild,
+      __disableHeightPlaceholder: true,
+    });
+
+    virtualizer.size = 1;
+  });
+
+  it('should not add placeholder padding to items with zero height', () => {
+    const item = document.querySelector('#item-0');
+    expect(item.offsetHeight).to.equal(0);
+  });
+});

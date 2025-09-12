@@ -234,6 +234,11 @@ export const ComboBoxScrollerMixin = (superClass) =>
         scrollTarget: this,
         scrollContainer: this.$.selector,
         reorderElements: true,
+        // Combo-box items have a CSS-defined minimum height, so the virtualizer's
+        // height placeholder logic can be disabled. This helps save reflows which
+        // might otherwise be triggered by this logic because it reads the row height
+        // right after updating the rows' content.
+        __disableHeightPlaceholder: true,
       });
     }
 
