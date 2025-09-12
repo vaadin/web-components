@@ -256,6 +256,10 @@ export const GridMixin = (superClass) =>
         scrollContainer: this.$.items,
         scrollTarget: this.$.table,
         reorderElements: true,
+        // Grid rows have a CSS-defined minimum height, so the virtualizer's height
+        // placeholder logic can be disabled. This helps save reflows which might
+        // otherwise be triggered by this logic because it reads the row height
+        // right after updating the rows' content.
         __disableHeightPlaceholder: true,
       });
 
