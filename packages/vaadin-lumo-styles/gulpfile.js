@@ -170,28 +170,6 @@ Iconset.register('lumo', 1000, template);\n`;
             }
           });
 
-          const outputJS = `
-import './version.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { addLumoGlobalStyles } from './global.js';
-
-const fontIcons = css\`
-${outputCSS
-  .trim()
-  .replace(':where(:root, :host)', 'html')
-  .replace(/\\/gu, '\\\\')
-  .replace(/^(?!$)/gmu, '  ')}
-\`;
-
-addLumoGlobalStyles('font-icons', fontIcons);
-`;
-
-          fs.writeFile('font-icons.js', [createCopyright(), outputJS.trimStart()].join('\n'), (err) => {
-            if (err) {
-              return console.error(err);
-            }
-          });
-
           const list = glyphs.map((g) => g.name);
           fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), (err) => {
             if (err) {

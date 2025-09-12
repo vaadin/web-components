@@ -31,8 +31,7 @@
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets",
-    "src",
-    "utilities/*.js"
+    "src"
   ],
   "keywords": [
     "vaadin",
