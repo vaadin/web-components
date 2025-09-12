@@ -1,0 +1,9 @@
+:where(html) {
+  --aura-color-scheme: light;
+  --aura-content-color-scheme: var(--aura-color-scheme);
+  --aura-notification-color-scheme: var(--aura-color-scheme);
+}
+
+html {
+  color-scheme: var(--aura-color-scheme);
+}
