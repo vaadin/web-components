@@ -170,7 +170,7 @@ describe('restore focus', () => {
           expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
         });
 
-        it('should not prevent scroll when restoring focus on close after keydown', async () => {
+        it('should set focusVisible: true when restoring focus on close after keydown', async () => {
           focusable.focus();
           overlay.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
