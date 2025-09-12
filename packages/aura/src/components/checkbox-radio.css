@@ -1,0 +1,68 @@
+:where(html) {
+  --vaadin-radio-button-dot-size: 6px;
+  --vaadin-checkbox-size: round(1lh - 2px, 2px);
+  --vaadin-radio-button-size: round(1lh - 2px, 2px);
+}
+
+vaadin-checkbox::part(checkbox),
+vaadin-radio-button::part(radio) {
+  --vaadin-checkbox-background: var(--aura-surface);
+  --vaadin-radio-button-background: var(--aura-surface);
+  transition: background-color 100ms;
+}
+
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox),
+vaadin-radio-button:not([readonly], [disabled])::part(radio) {
+  --aura-surface-level: 4;
+  box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.07);
+  --_shade: color-mix(in srgb, var(--vaadin-border-color-subtle) 50%, transparent);
+  background-image: linear-gradient(
+    light-dark(transparent, var(--_shade)),
+    transparent 33%,
+    transparent 66%,
+    light-dark(var(--_shade), transparent)
+  );
+}
+
+vaadin-checkbox:not([checked], [indeterminate])::part(checkbox),
+vaadin-radio-button:not([checked])::part(radio) {
+  background-clip: padding-box;
+}
+
+vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
+  /* TODO add/use selection color */
+  --vaadin-checkbox-background: var(--aura-accent-color);
+  --vaadin-checkbox-color: var(--aura-accent-contrast);
+}
+
+vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
+  /* TODO add/use selection color */
+  --vaadin-radio-button-background: var(--aura-accent-color);
+  --vaadin-radio-button-color: var(--aura-accent-contrast);
+}
+
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox)::before,
+vaadin-radio-button:not([readonly], [disabled])::part(radio)::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  transition:
+    opacity 100ms,
+    background-color 100ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-checkbox:hover:not([readonly], [disabled], :active)::part(checkbox)::before,
+  vaadin-radio-button:hover:not([readonly], [disabled], :active)::part(radio)::before {
+    opacity: 0.04;
+  }
+}
+
+vaadin-checkbox:active:not([readonly], [disabled])::part(checkbox)::before,
+vaadin-radio-button:active:not([readonly], [disabled])::part(radio)::before {
+  opacity: 0.1;
+  background: #000;
+}

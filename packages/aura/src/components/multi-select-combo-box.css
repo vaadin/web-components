@@ -1,0 +1,8 @@
+:where(html) {
+  --vaadin-chip-padding: 0.4em;
+  --vaadin-chip-background: var(--vaadin-background-container-strong);
+}
+
+vaadin-multi-select-combo-box-chip {
+  --vaadin-icon-size: 1.25em;
+}
