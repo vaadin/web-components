@@ -88,8 +88,9 @@ export const OverlayFocusMixin = (superClass) =>
       }
 
       if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
-        const preventScroll = !isKeyboardActive();
-        this.__focusRestorationController.restoreFocus({ preventScroll });
+        const focusVisible = isKeyboardActive();
+        const preventScroll = !focusVisible;
+        this.__focusRestorationController.restoreFocus({ preventScroll, focusVisible });
       }
     }
 
