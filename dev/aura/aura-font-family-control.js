@@ -4,6 +4,7 @@ class AuraFontFamilyControl extends AuraControl {
   static get is() {
     return 'aura-font-family-control';
   }
+
   static get observedAttributes() {
     return ['property', 'label'];
   }
