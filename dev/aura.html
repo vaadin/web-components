@@ -1,174 +1,181 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura</title>
+    <link rel="stylesheet" href="../packages/aura/aura.css" />
+    <link rel="stylesheet" href="./aura/aura-view.css" />
+    <script type="module">
+      import './aura/aura-color-control.js';
+      import './aura/aura-font-family-control.js';
+      import './aura/aura-inset-control.js';
+      import './aura/aura-number-control.js';
+      import './aura/aura-scheme-control.js';
+      import '@vaadin/app-layout';
+      import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
+      import '@vaadin/avatar';
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/icon';
+      import '@vaadin/popover';
+      import '@vaadin/side-nav';
+      import '@vaadin/vertical-layout';
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aura</title>
-  <link rel="stylesheet" href="../packages/aura/aura.css" />
-  <link rel="stylesheet" href="./aura/aura-view.css" />
-  <script type="module">
-    import './aura/aura-color-control.js';
-    import './aura/aura-font-family-control.js';
-    import './aura/aura-inset-control.js';
-    import './aura/aura-number-control.js';
-    import './aura/aura-scheme-control.js';
-    import '@vaadin/app-layout';
-    import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
-    import '@vaadin/avatar';
-    import '@vaadin/button';
-    import '@vaadin/checkbox';
-    import '@vaadin/icon';
-    import '@vaadin/popover';
-    import '@vaadin/side-nav';
-    import '@vaadin/vertical-layout';
-
-    function clearLocalStorage() {
-      for (let i = localStorage.length - 1; i >= 0; i--) {
-        const key = localStorage.key(i);
-        if (/^aura/u.test(key)) {
-          localStorage.removeItem(key);
+      function clearLocalStorage() {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const key = localStorage.key(i);
+          if (/^aura/u.test(key)) {
+            localStorage.removeItem(key);
+          }
         }
       }
-    }
 
-    document.querySelector('#resetAll').addEventListener('click', () => {
-      clearLocalStorage();
-      window.location.reload();
-    });
+      document.querySelector('#resetAll').addEventListener('click', () => {
+        clearLocalStorage();
+        window.location.reload();
+      });
 
-    document.querySelector('#useNavbar').addEventListener('change', (e) => {
-      if (e.target.checked) {
-        document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'navbar');
-        document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'navbar');
-      } else {
-        document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'drawer');
-        document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'drawer');
+      document.querySelector('#useNavbar').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'navbar');
+          document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'navbar');
+        } else {
+          document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'drawer');
+          document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'drawer');
+        }
+      });
+    </script>
+
+    <style>
+      html {
+        --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
       }
-    });
-  </script>
-
-  <style>
-    html {
-      --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
-    }
-  </style>
-</head>
-<body>
-
-  <vaadin-app-layout>
-    <header slot="drawer" class="aura-view-header">
-      <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
-      <div class="aura-view-heading">Aura</div>
-    </header>
-
-    <vaadin-scroller slot="drawer" theme="overflow-indicators">
-      <vaadin-side-nav collapsible>
-        <span slot="label">General</span>
-
-        <vaadin-side-nav-item path="">
-          <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
-          Dashboard
-        </vaadin-side-nav-item>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
-          Projects
-        </vaadin-side-nav-item>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="prefix"></vaadin-icon>
-          Documents
-        </vaadin-side-nav-item>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon src="./assets/lucide-icons/calendar.svg" slot="prefix"></vaadin-icon>
-          Calendar
-        </vaadin-side-nav-item>
-      </vaadin-side-nav>
-
-      <vaadin-side-nav collapsible>
-        <span slot="label">Organization</span>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon src="./assets/lucide-icons/chart-pie.svg" slot="prefix"></vaadin-icon>
-          Reporting
-        </vaadin-side-nav-item>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon src="./assets/lucide-icons/list-todo.svg" slot="prefix"></vaadin-icon>
-          Tasks
-        </vaadin-side-nav-item>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon src="./assets/lucide-icons/users.svg" slot="prefix"></vaadin-icon>
-          Users
-        </vaadin-side-nav-item>
-      </vaadin-side-nav>
-    </vaadin-scroller>
-
-    <footer slot="drawer" class="aura-view-footer">
-      <vaadin-button theme="tertiary">
-        <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh;" slot="prefix" tabindex="-1"></vaadin-avatar>
-        <span>John Smith</span>
-      </vaadin-button>
-      <vaadin-button theme="tertiary" id="theme-editor-btn">
-        <vaadin-icon src="./assets/lucide-icons/palette.svg"></vaadin-icon>
-      </vaadin-button>
-    </footer>
-
-    <main class="aura-view" theme="surface">
-      <header>
+    </style>
+  </head>
+  <body>
+    <vaadin-app-layout>
+      <header slot="drawer" class="aura-view-header">
         <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
-        <h1>View Title</h1>
+        <div class="aura-view-heading">Aura</div>
       </header>
-      <vaadin-vertical-layout theme="padding">
-        <div theme="surface" style="padding: 2em; --aura-surface-level: 1;">
-          Level 1
-        </div>
-        <div theme="surface" style="padding: 2em; --aura-surface-level: 2;">
-          Level 2
-        </div>
-        <div theme="surface" style="padding: 2em; --aura-surface-level: 3;">
-          Level 3
-        </div>
-        <div theme="surface" style="padding: 2em; --aura-surface-level: 4;">
-          Level 4
-        </div>
+
+      <vaadin-scroller slot="drawer" theme="overflow-indicators">
+        <vaadin-side-nav collapsible>
+          <span slot="label">General</span>
+
+          <vaadin-side-nav-item path="">
+            <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
+            Dashboard
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
+            Projects
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="prefix"></vaadin-icon>
+            Documents
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/calendar.svg" slot="prefix"></vaadin-icon>
+            Calendar
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+
+        <vaadin-side-nav collapsible>
+          <span slot="label">Organization</span>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/chart-pie.svg" slot="prefix"></vaadin-icon>
+            Reporting
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/list-todo.svg" slot="prefix"></vaadin-icon>
+            Tasks
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/users.svg" slot="prefix"></vaadin-icon>
+            Users
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      </vaadin-scroller>
+
+      <footer slot="drawer" class="aura-view-footer">
+        <vaadin-button theme="tertiary">
+          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh" slot="prefix" tabindex="-1"></vaadin-avatar>
+          <span>John Smith</span>
+        </vaadin-button>
+        <vaadin-button theme="tertiary" id="theme-editor-btn">
+          <vaadin-icon src="./assets/lucide-icons/palette.svg"></vaadin-icon>
+        </vaadin-button>
+      </footer>
+
+      <main class="aura-view" theme="surface">
+        <header>
+          <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
+          <h1>View Title</h1>
+        </header>
+        <vaadin-vertical-layout theme="padding">
+          <div theme="surface" style="padding: 2em; --aura-surface-level: 1"> Level 1 </div>
+          <div theme="surface" style="padding: 2em; --aura-surface-level: 2"> Level 2 </div>
+          <div theme="surface" style="padding: 2em; --aura-surface-level: 3"> Level 3 </div>
+          <div theme="surface" style="padding: 2em; --aura-surface-level: 4"> Level 4 </div>
+        </vaadin-vertical-layout>
+      </main>
+    </vaadin-app-layout>
+
+    <vaadin-popover
+      for="theme-editor-btn"
+      position="top-start"
+      width="320px"
+      style="--aura-base-size: 12; --aura-base-font-size: 13"
+      theme
+    >
+      <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch">
+        <h3>Edit Theme</h3>
+        <vaadin-checkbox label="Use Navbar" id="useNavbar"></vaadin-checkbox>
+        <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
+        <aura-scheme-control
+          property="--aura-content-color-scheme"
+          label="--aura-content-color-scheme"
+        ></aura-scheme-control>
+        <aura-scheme-control
+          property="--aura-notification-color-scheme"
+          label="--aura-notification-color-scheme"
+        ></aura-scheme-control>
+        <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
+        <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
+        <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
+        <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
+        <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
+        <aura-number-control
+          property="--aura-overlay-surface-opacity"
+          min="0.5"
+          max="1"
+          step="0.01"
+        ></aura-number-control>
+        <aura-inset-control></aura-inset-control>
+        <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
+        <aura-number-control property="--aura-base-size" min="12" max="20"></aura-number-control>
+        <aura-number-control
+          property="--aura-base-font-size"
+          label="--aura-base-font-size"
+          min="12"
+          max="18"
+        ></aura-number-control>
+        <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
+        <hr />
+        <vaadin-button theme="" id="resetAll">
+          Reset All
+          <vaadin-icon icon="lucide:rotate-ccw"></vaadin-icon>
+        </vaadin-button>
       </vaadin-vertical-layout>
-    </main>
-  </vaadin-app-layout>
-
-  <vaadin-popover for="theme-editor-btn" position="top-start" width="320px"
-    style="--aura-base-size: 12; --aura-base-font-size: 13;" theme>
-    <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch;">
-      <h3>Edit Theme</h3>
-      <vaadin-checkbox label="Use Navbar" id="useNavbar"></vaadin-checkbox>
-      <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
-      <aura-scheme-control property="--aura-content-color-scheme"
-        label="--aura-content-color-scheme"></aura-scheme-control>
-      <aura-scheme-control property="--aura-notification-color-scheme"
-        label="--aura-notification-color-scheme"></aura-scheme-control>
-      <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
-      <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
-      <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
-      <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
-      <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
-      <aura-number-control property="--aura-overlay-surface-opacity" min="0.5" max="1" step="0.01"></aura-number-control>
-      <aura-inset-control></aura-inset-control>
-      <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
-      <aura-number-control property="--aura-base-size" min="12" max="20"></aura-number-control>
-      <aura-number-control property="--aura-base-font-size" label="--aura-base-font-size" min="12"
-        max="18"></aura-number-control>
-      <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
-      <hr>
-      <vaadin-button theme="" id="resetAll">
-        Reset All
-        <vaadin-icon icon="lucide:rotate-ccw"></vaadin-icon>
-      </vaadin-button>
-    </vaadin-vertical-layout>
-  </vaadin-popover>
-
-</body>
+    </vaadin-popover>
+  </body>
 </html>
