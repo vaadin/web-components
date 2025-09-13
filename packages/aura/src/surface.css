@@ -8,6 +8,8 @@ html,
 [theme~='surface-solid'],
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
+vaadin-master-detail-layout::part(detail),
+vaadin-side-nav-item::part(content),
 ::part(overlay) {
   --aura-surface-opacity: 0.5;
 
