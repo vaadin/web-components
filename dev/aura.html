@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
     <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
+    <script type="module">
       import './aura/aura-color-control.js';
       import './aura/aura-font-family-control.js';
       import './aura/aura-inset-control.js';
@@ -19,6 +24,7 @@
       import '@vaadin/button';
       import '@vaadin/checkbox';
       import '@vaadin/icon';
+      import '@vaadin/master-detail-layout';
       import '@vaadin/popover';
       import '@vaadin/side-nav';
       import '@vaadin/vertical-layout';
@@ -147,8 +153,8 @@
                 </vaadin-side-nav-item>
                 <vaadin-side-nav-item slot="children">
                   <span>Subscription</span>
-                </vaadin-side-nav-item>
-              </vaadin-side-nav-item><vaadin-side-nav-item>
+                </vaadin-side-nav-item> </vaadin-side-nav-item
+              ><vaadin-side-nav-item>
                 <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="prefix"></vaadin-icon>
                 <span>Support</span>
               </vaadin-side-nav-item>
@@ -162,18 +168,10 @@
             <h1>Components</h1>
           </header>
           <vaadin-vertical-layout theme="padding">
-            <div theme="surface" style="padding: 2em; --aura-surface-level: 1;">
-              Level 1
-            </div>
-            <div theme="surface" style="padding: 2em; --aura-surface-level: 2;">
-              Level 2
-            </div>
-            <div theme="surface" style="padding: 2em; --aura-surface-level: 3;">
-              Level 3
-            </div>
-            <div theme="surface" style="padding: 2em; --aura-surface-level: 4;">
-              Level 4
-            </div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 1">Level 1</div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 2">Level 2</div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 3">Level 3</div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 4">Level 4</div>
           </vaadin-vertical-layout>
         </main>
       </vaadin-master-detail-layout>
