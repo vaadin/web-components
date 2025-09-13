@@ -1,4 +1,4 @@
-html {
+:where(:root, :host) {
   --vaadin-side-nav-label-line-height: var(--aura-line-height-xs);
   --vaadin-side-nav-label-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-font-weight: var(--aura-font-weight-medium);
