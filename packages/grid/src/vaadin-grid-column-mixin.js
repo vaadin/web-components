@@ -536,24 +536,8 @@ export const ColumnBaseMixin = (superClass) =>
         return;
       }
 
-      let textAlignFallback;
-      if (getComputedStyle(this._grid).direction === 'ltr') {
-        if (textAlign === 'start') {
-          textAlignFallback = 'left';
-        } else if (textAlign === 'end') {
-          textAlignFallback = 'right';
-        }
-      } else if (textAlign === 'start') {
-        textAlignFallback = 'right';
-      } else if (textAlign === 'end') {
-        textAlignFallback = 'left';
-      }
-
       this._allCells.forEach((cell) => {
         cell._content.style.textAlign = textAlign;
-        if (getComputedStyle(cell._content).textAlign !== textAlign) {
-          cell._content.style.textAlign = textAlignFallback;
-        }
       });
     }
 
