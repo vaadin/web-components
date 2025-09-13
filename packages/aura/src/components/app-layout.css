@@ -88,7 +88,7 @@ vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot
   border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
 }
 
-vaadin-app-layout > vaadin-master-detail-layout {
+vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
   & > vaadin-master-detail-layout,
   &:not([drawer])::part(detail) {
     border-start-end-radius: var(--_app-layout-radius);
@@ -100,7 +100,7 @@ vaadin-app-layout > vaadin-master-detail-layout {
   }
 
   &:is([drawer][has-detail]) {
-    border-color: var(--vaadin-border-color);
+    border-color: light-dark(var(--vaadin-border-color), var(--vaadin-border-color-subtle));
   }
 }
 
@@ -127,7 +127,9 @@ vaadin-app-layout:has([slot='navbar']):has([slot='drawer'])
   border-top-width: 1px;
 }
 
-vaadin-app-layout:has([slot='navbar']) > :is(:not([slot]), [slot='drawer']) vaadin-drawer-toggle,
-vaadin-app-layout:not([slot='navbar']) > [slot='drawer'] vaadin-drawer-toggle {
+vaadin-app-layout:has([slot='navbar'])
+  > :is(:not([slot]), [slot='drawer'])
+  vaadin-drawer-toggle:not([theme~='permanent']),
+vaadin-app-layout:not(:has([slot='navbar'])) > [slot='drawer'] vaadin-drawer-toggle:not([theme~='permanent']) {
   display: none;
 }
