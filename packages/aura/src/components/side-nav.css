@@ -28,29 +28,6 @@ vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
 }
 
-/* @media (prefers-reduced-motion: no-preference) {
-  vaadin-side-nav[collapsed]::part(children),
-  vaadin-side-nav-item::part(children) {
-    --vaadin-side-nav-hidden-display: flex;
-    transition: 200ms;
-    transition-property: display, height, opacity;
-    transition-behavior: allow-discrete;
-    interpolate-size: allow-keywords;
-    overflow: hidden;
-    height: 0;
-
-    @starting-style {
-      height: 0;
-      opacity: 0;
-    }
-  }
-
-  vaadin-side-nav:not([collapsed])::part(children),
-  vaadin-side-nav-item[expanded]::part(children) {
-    height: auto;
-  }
-} */
-
 /* Contrast variant */
 
 vaadin-side-nav[theme~='contrast'] vaadin-side-nav-item[current]::part(content) {
