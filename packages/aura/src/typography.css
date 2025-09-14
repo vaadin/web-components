@@ -69,7 +69,7 @@
   text-size-adjust: none;
 }
 
-:where(body, :host, [theme]) {
+:where(body, :host, [theme]:not(html)) {
   font-size: var(--aura-font-size-m);
   line-height: var(--aura-line-height-m);
 }
