@@ -57,7 +57,7 @@ class AuraNumberControl extends AuraControl {
     this.#root = shadow;
     this.#input = shadow.getElementById('slider');
     this.#output = shadow.getElementById('val');
-    this.#resetBtn = shadow.querySelector('vaadin-button.reset');
+    this.#resetBtn = shadow.getElementById('reset');
   }
 
   attributeChangedCallback(name, _old, val) {
