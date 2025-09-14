@@ -38,8 +38,3 @@ vaadin-master-detail-layout:not([drawer])::part(detail) {
   border-radius: var(--_app-layout-radius);
   overflow: hidden;
 }
-
-/* ::view-transition-group(vaadin-mdl-detail.viewport) {
-    border-radius: 0;
-    overflow: visible;
-  } */
