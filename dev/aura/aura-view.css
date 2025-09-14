@@ -38,7 +38,7 @@
   }
 }
 
-vaadin-app-layout[drawer-opened]
+:is(vaadin-app-layout[drawer-opened], vaadin-app-layout:has([slot='navbar'] vaadin-drawer-toggle))
   :is(.aura-view > header, .aura-view-header)
   vaadin-drawer-toggle:not([theme~='permanent']),
 vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'].aura-view > header mdl-back-button,
