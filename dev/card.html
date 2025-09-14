@@ -136,7 +136,7 @@
     </script>
 
     <style>
-      html:has([theme~='elevated']) {
+      html:has([theme~='elevated']):not(:has(link[href*='aura'])) {
         background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
       }
 

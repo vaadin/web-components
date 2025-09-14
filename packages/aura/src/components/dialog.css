@@ -1,0 +1,29 @@
+:where(:root, :host) {
+  --vaadin-dialog-title-font-size: var(--aura-font-size-l);
+  --vaadin-dialog-border-width: 0px;
+}
+
+vaadin-dialog,
+vaadin-confirm-dialog {
+  color-scheme: var(--aura-content-color-scheme);
+}
+
+vaadin-dialog::part(overlay),
+vaadin-confirm-dialog::part(overlay) {
+  --vaadin-dialog-background: var(--aura-surface);
+  --aura-surface-level: 4;
+
+  /* TODO probably should be in base styles */
+  /* Keeps dialogs on top of MDL view transitions */
+  view-transition-name: vaadin-dialog;
+}
+
+vaadin-confirm-dialog::part(message) {
+  color: var(--vaadin-color-subtle);
+}
+
+/* TODO probably should be in base styles */
+::view-transition-group(vaadin-dialog) {
+  border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
+  z-index: 1;
+}
