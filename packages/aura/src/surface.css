@@ -16,20 +16,7 @@ vaadin-menu-bar-button,
 vaadin-message-input,
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
-:is(
-  vaadin-combo-box,
-  vaadin-date-picker,
-  vaadin-email-field,
-  vaadin-integer-field,
-  vaadin-multi-select-combo-box,
-  vaadin-number-field,
-  vaadin-password-field,
-  vaadin-select,
-  vaadin-text-area,
-  vaadin-text-field,
-  vaadin-time-picker,
-
-)::part(input-field),
+::part(input-field),
 ::part(overlay) {
   --aura-surface-opacity: 0.5;
 
