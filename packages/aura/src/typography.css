@@ -1,6 +1,6 @@
 @import './fonts/InstrumentSans/InstrumentSans.css';
 
-:where(html) {
+:where(:root, :host) {
   --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
   --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
 
@@ -16,7 +16,7 @@
 }
 
 @media (pointer: fine) {
-  :where(html) {
+  :where(:root, :host) {
     --aura-base-font-size: 14;
   }
 }
@@ -29,7 +29,7 @@
 
 @supports (-webkit-touch-callout: none) {
   @media (pointer: coarse) {
-    :where(html) {
+    :where(:root, :host) {
       /* iOS/iPadOS optimizations */
 
       /* Support iOS dynamic text size */
@@ -39,7 +39,7 @@
   }
 }
 
-:where(html, [theme]) {
+:where(:root, :host, [theme]) {
   --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, 0.0625rem);

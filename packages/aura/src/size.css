@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --aura-base-size: 16;
   --_size-ref: 16;
   --aura-base-radius: 3;
@@ -7,7 +7,7 @@
   --vaadin-radius-l: round(var(--aura-base-radius) * 1.5px + 10px, 1px);
 }
 
-:where(html, [theme]) {
+:where(:root, :host, [theme]) {
   --vaadin-padding-xs: round(
     var(--aura-base-size) * 0.25 * pow(var(--aura-base-size) / var(--_size-ref), 0.5) * 1px,
     1px
@@ -38,7 +38,7 @@
 }
 
 @media (pointer: coarse) {
-  :where(html) {
+  :where(:root, :host) {
     --aura-base-size: 19;
   }
 }

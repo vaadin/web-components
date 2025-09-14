@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --aura-app-layout-inset: 1.5vmin;
   --aura-app-layout-radius: var(--vaadin-radius-l);
   --_aura-mdl-border: 1px;

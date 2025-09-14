@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --aura-surface-level: 1;
 }
 

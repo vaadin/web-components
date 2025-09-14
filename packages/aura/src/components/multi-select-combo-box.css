@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --vaadin-chip-padding: 0.4em;
   --vaadin-chip-background: var(--vaadin-background-container-strong);
 }

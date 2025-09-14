@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --vaadin-button-border-color: var(--vaadin-border-color);
   --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
