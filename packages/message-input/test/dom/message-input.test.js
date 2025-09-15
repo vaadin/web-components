@@ -20,4 +20,10 @@ describe('vaadin-message-input', () => {
     input.disabled = true;
     await expect(input).dom.to.equalSnapshot();
   });
+
+  it('theme', async () => {
+    input.setAttribute('theme', 'icon-only');
+    await nextUpdate(input);
+    await expect(input).dom.to.equalSnapshot();
+  });
 });

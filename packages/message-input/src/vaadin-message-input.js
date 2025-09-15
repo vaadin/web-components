@@ -3,8 +3,8 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/text-area/src/vaadin-text-area.js';
+import './vaadin-message-input-button.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -34,6 +34,14 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * ---------------|---------------------------------
  * `disabled`     | Set when the element is disabled
  * `has-tooltip`  | Set when the element has a slotted tooltip
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-message-input>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-message-input-button>` - has the same API as `<vaadin-button>`
+ * - `<vaadin-text-area>`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

@@ -10,7 +10,7 @@ describe('message-input', () => {
     messageInput = fixtureSync('<vaadin-message-input></vaadin-message-input>');
     await nextRender();
     textArea = messageInput.querySelector('vaadin-text-area');
-    button = messageInput.querySelector('vaadin-button');
+    button = messageInput.querySelector('vaadin-message-input-button');
   });
 
   describe('custom element definition', () => {
