@@ -1,13 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer - overscroll', () => {
   const PREVENT_OVERSCROLL_TIMEOUT = 500;
   let virtualizer;
   let scrollTarget;
-  let clock;
 
   beforeEach(() => {
     scrollTarget = fixtureSync(`
@@ -29,25 +27,18 @@ describe('virtualizer - overscroll', () => {
     });
 
     virtualizer.size = 100;
-
-    clock = sinon.useFakeTimers({
-      shouldClearNativeTimers: true,
-    });
-  });
-
-  afterEach(() => {
-    clock.restore();
   });
 
   it('should prevent outer scrolling right after reaching the end', async () => {
     scrollTarget.scrollTop = scrollTarget.scrollHeight;
-    await clock.tickAsync();
+    await oneEvent(scrollTarget, 'scroll');
     expect(scrollTarget.style.overscrollBehavior).to.equal('none');
   });
 
   it('should allow outer scrolling again after timeout', async () => {
     scrollTarget.scrollTop = scrollTarget.scrollHeight;
-    await clock.tickAsync(PREVENT_OVERSCROLL_TIMEOUT);
+    await oneEvent(scrollTarget, 'scroll');
+    await aTimeout(PREVENT_OVERSCROLL_TIMEOUT);
     expect(scrollTarget.style.overscrollBehavior).to.be.empty;
   });
 });
