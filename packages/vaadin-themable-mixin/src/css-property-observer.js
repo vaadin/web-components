@@ -11,16 +11,15 @@
  */
 export class CSSPropertyObserver {
   #root;
-  #name;
   #callback;
   #properties = new Set();
   #styleSheet;
   #isConnected = false;
 
-  constructor(root, name, callback) {
+  constructor(root, callback) {
     this.#root = root;
-    this.#name = name;
     this.#callback = callback;
+    this.#styleSheet = new CSSStyleSheet();
   }
 
   #handleTransitionEvent(event) {
@@ -33,16 +32,12 @@ export class CSSPropertyObserver {
   observe(property) {
     this.connect();
 
-    this.#properties.add(property);
-    this.#rootHost.style.setProperty(`--${this.#name}-props`, [...this.#properties].join(', '));
-  }
-
-  connect() {
-    if (this.#isConnected) {
+    if (this.#properties.has(property)) {
       return;
     }
 
-    this.#styleSheet = new CSSStyleSheet();
+    this.#properties.add(property);
+
     this.#styleSheet.replaceSync(`
       :is(:root, :host)::before {
         content: '' !important;
@@ -51,9 +46,16 @@ export class CSSPropertyObserver {
         left: -9999px !important;
         visibility: hidden !important;
         transition: 1ms allow-discrete step-end !important;
-        transition-property: var(--${this.#name}-props) !important;
+        transition-property: ${[...this.#properties].join(', ')} !important;
       }
     `);
+  }
+
+  connect() {
+    if (this.#isConnected) {
+      return;
+    }
+
     this.#root.adoptedStyleSheets.unshift(this.#styleSheet);
 
     this.#rootHost.addEventListener('transitionstart', (event) => this.#handleTransitionEvent(event));
@@ -69,7 +71,6 @@ export class CSSPropertyObserver {
 
     this.#rootHost.removeEventListener('transitionstart', this.#handleTransitionEvent);
     this.#rootHost.removeEventListener('transitionend', this.#handleTransitionEvent);
-    this.#rootHost.style.removeProperty(`--${this.#name}-props`);
 
     this.#isConnected = false;
   }

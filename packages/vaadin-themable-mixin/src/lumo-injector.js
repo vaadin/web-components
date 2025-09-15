@@ -82,7 +82,7 @@ export class LumoInjector {
 
   constructor(root = document) {
     this.#root = root;
-    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-lumo-injector', (propertyName) => {
+    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, (propertyName) => {
       const tagName = propertyName.slice(2).replace('-lumo-inject', '');
       this.#updateStyleSheet(tagName);
     });
