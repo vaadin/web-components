@@ -7,5 +7,5 @@
 }
 
 html {
-  --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
+  --_lumo-vaadin-email-field-inject-modules: lumo_base-field, lumo_email-field;
 }

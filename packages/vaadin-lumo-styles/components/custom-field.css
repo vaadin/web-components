@@ -10,8 +10,8 @@
 @import '../src/components/custom-field.css';
 
 :is(:root, :host)::before {
-  --vaadin-custom-field-lumo-inject: 1;
-  --vaadin-custom-field-lumo-inject-modules:
+  --_lumo-vaadin-custom-field-inject: 1;
+  --_lumo-vaadin-custom-field-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

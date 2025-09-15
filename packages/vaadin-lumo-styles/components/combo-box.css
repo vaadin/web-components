@@ -21,8 +21,8 @@
 @import './input-container.css';
 
 :is(:root, :host)::before {
-  --vaadin-combo-box-lumo-inject: 1;
-  --vaadin-combo-box-lumo-inject-modules:
+  --_lumo-vaadin-combo-box-inject: 1;
+  --_lumo-vaadin-combo-box-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -31,13 +31,13 @@
     lumo_mixins_field-base,
     lumo_components_combo-box;
 
-  --vaadin-combo-box-item-lumo-inject: 1;
-  --vaadin-combo-box-item-lumo-inject-modules:
+  --_lumo-vaadin-combo-box-item-inject: 1;
+  --_lumo-vaadin-combo-box-item-inject-modules:
     lumo_components_item,
     lumo_components_combo-box-item;
 
-  --vaadin-combo-box-overlay-lumo-inject: 1;
-  --vaadin-combo-box-overlay-lumo-inject-modules:
+  --_lumo-vaadin-combo-box-overlay-inject: 1;
+  --_lumo-vaadin-combo-box-overlay-inject-modules:
     lumo_mixins_loader,
     lumo_mixins_combo-box-loader,
     lumo_mixins_overlay,

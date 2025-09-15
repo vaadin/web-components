@@ -6,6 +6,6 @@
 @import '../src/components/button.css';
 
 :is(:root, :host)::before {
-  --vaadin-button-lumo-inject: 1;
-  --vaadin-button-lumo-inject-modules: lumo_components_button;
+  --_lumo-vaadin-button-inject: 1;
+  --_lumo-vaadin-button-inject-modules: lumo_components_button;
 }

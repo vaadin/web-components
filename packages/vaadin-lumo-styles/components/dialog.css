@@ -8,8 +8,8 @@
 @import '../src/components/dialog-overlay.css';
 
 :is(:root, :host)::before {
-  --vaadin-dialog-overlay-lumo-inject: 1;
-  --vaadin-dialog-overlay-lumo-inject-modules:
+  --_lumo-vaadin-dialog-overlay-inject: 1;
+  --_lumo-vaadin-dialog-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_mixins_resizable-overlay,
     lumo_components_dialog-overlay;

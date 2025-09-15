@@ -7,8 +7,8 @@
 @import '../src/components/details-summary.css';
 
 :is(:root, :host)::before {
-  --vaadin-accordion-heading-lumo-inject: 1;
-  --vaadin-accordion-heading-lumo-inject-modules:
+  --_lumo-vaadin-accordion-heading-inject: 1;
+  --_lumo-vaadin-accordion-heading-inject-modules:
     lumo_components_details-summary,
     lumo_components_accordion-heading;
 }

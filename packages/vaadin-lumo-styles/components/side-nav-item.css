@@ -7,8 +7,8 @@
 @import '../src/components/side-nav-item.css';
 
 :is(:root, :host)::before {
-  --vaadin-side-nav-item-lumo-inject: 1;
-  --vaadin-side-nav-item-lumo-inject-modules:
+  --_lumo-vaadin-side-nav-item-inject: 1;
+  --_lumo-vaadin-side-nav-item-inject-modules:
     lumo_mixins_field-button,
     lumo_components_side-nav-item;
 }

@@ -9,6 +9,6 @@
 @import './text-field.css';
 
 :is(:root, :host)::before {
-  --vaadin-login-form-wrapper-lumo-inject: 1;
-  --vaadin-login-form-wrapper-lumo-inject-modules: lumo_components_login-form-wrapper;
+  --_lumo-vaadin-login-form-wrapper-inject: 1;
+  --_lumo-vaadin-login-form-wrapper-inject-modules: lumo_components_login-form-wrapper;
 }

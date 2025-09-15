@@ -12,8 +12,8 @@
 @import './input-container.css';
 
 :is(:root, :host)::before {
-  --vaadin-text-field-lumo-inject: 1;
-  --vaadin-text-field-lumo-inject-modules:
+  --_lumo-vaadin-text-field-inject: 1;
+  --_lumo-vaadin-text-field-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

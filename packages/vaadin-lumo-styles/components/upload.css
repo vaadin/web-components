@@ -11,14 +11,14 @@
 @import './progress-bar.css';
 
 :is(:root, :host)::before {
-  --vaadin-upload-lumo-inject: 1;
-  --vaadin-upload-lumo-inject-modules: lumo_components_upload;
+  --_lumo-vaadin-upload-inject: 1;
+  --_lumo-vaadin-upload-inject-modules: lumo_components_upload;
 
-  --vaadin-upload-icon-lumo-inject: 1;
-  --vaadin-upload-icon-lumo-inject-modules: lumo_components_upload-icon;
+  --_lumo-vaadin-upload-icon-inject: 1;
+  --_lumo-vaadin-upload-icon-inject-modules: lumo_components_upload-icon;
 
-  --vaadin-upload-file-lumo-inject: 1;
-  --vaadin-upload-file-lumo-inject-modules:
+  --_lumo-vaadin-upload-file-inject: 1;
+  --_lumo-vaadin-upload-file-inject-modules:
     lumo_mixins_field-button,
     lumo_components_upload-file;
 }

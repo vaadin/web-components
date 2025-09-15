@@ -73,8 +73,8 @@ customElements.define(TestBaz.is, TestBaz);
 
 const TEST_FOO_STYLES = `
   html, :host {
-    --test-foo-lumo-inject: 1;
-    --test-foo-lumo-inject-modules: lumo_foo, lumo_non-existing-module;
+    --_lumo-test-foo-inject: 1;
+    --_lumo-test-foo-inject-modules: lumo_foo, lumo_non-existing-module;
   }
 
   @media lumo_foo {

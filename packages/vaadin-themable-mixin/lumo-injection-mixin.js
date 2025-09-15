@@ -58,7 +58,7 @@ export const LumoInjectionMixin = (superClass) =>
     }
 
     static get lumoInjectPropName() {
-      return `--${this.is}-lumo-inject`;
+      return `--_lumo-${this.is}-inject`;
     }
 
     static get lumoInjector() {

@@ -8,6 +8,6 @@
 @import './text-area.css';
 
 :is(:root, :host)::before {
-  --vaadin-message-input-lumo-inject: 1;
-  --vaadin-message-input-lumo-inject-modules: lumo_components_message-input;
+  --_lumo-vaadin-message-input-inject: 1;
+  --_lumo-vaadin-message-input-inject-modules: lumo_components_message-input;
 }

@@ -6,6 +6,6 @@
 @import '../src/components/icon.css';
 
 :is(:root, :host)::before {
-  --vaadin-icon-lumo-inject: 1;
-  --vaadin-icon-lumo-inject-modules: lumo_components_icon;
+  --_lumo-vaadin-icon-inject: 1;
+  --_lumo-vaadin-icon-inject-modules: lumo_components_icon;
 }
