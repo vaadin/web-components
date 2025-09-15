@@ -101,21 +101,19 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11yUpdateRowExpanded(row) {
+      const toggleCell = this.__a11yFindTreeToggleCell(row);
       if (this.__isRowExpandable(row)) {
         row.setAttribute('aria-expanded', 'false');
-        const toggleCell = this.__a11yFindTreeToggleCell(row);
         if (toggleCell) {
           toggleCell.setAttribute('aria-expanded', 'false');
         }
       } else if (this.__isRowCollapsible(row)) {
         row.setAttribute('aria-expanded', 'true');
-        const toggleCell = this.__a11yFindTreeToggleCell(row);
         if (toggleCell) {
           toggleCell.setAttribute('aria-expanded', 'true');
         }
       } else {
         row.removeAttribute('aria-expanded');
-        const toggleCell = this.__a11yFindTreeToggleCell(row);
         if (toggleCell) {
           toggleCell.removeAttribute('aria-expanded');
         }
