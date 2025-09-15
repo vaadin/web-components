@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
     <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
+    <script type="module">
       import './aura/aura-color-control.js';
       import './aura/aura-font-family-control.js';
       import './aura/aura-inset-control.js';
@@ -19,6 +24,7 @@
       import '@vaadin/button';
       import '@vaadin/checkbox';
       import '@vaadin/icon';
+      import '@vaadin/master-detail-layout';
       import '@vaadin/popover';
       import '@vaadin/side-nav';
       import '@vaadin/vertical-layout';
@@ -116,18 +122,59 @@
         </vaadin-button>
       </footer>
 
-      <main class="aura-view" theme="surface">
-        <header>
-          <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
-          <h1>View Title</h1>
-        </header>
-        <vaadin-vertical-layout theme="padding">
-          <div theme="surface" style="padding: 2em; --aura-surface-level: 1"> Level 1 </div>
-          <div theme="surface" style="padding: 2em; --aura-surface-level: 2"> Level 2 </div>
-          <div theme="surface" style="padding: 2em; --aura-surface-level: 3"> Level 3 </div>
-          <div theme="surface" style="padding: 2em; --aura-surface-level: 4"> Level 4 </div>
-        </vaadin-vertical-layout>
-      </main>
+      <vaadin-master-detail-layout master-min-size="14rem" detail-min-size="40rem" class="dashboard-section">
+        <div class="aura-view">
+          <header>
+            <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
+            <h1>Dashboard</h1>
+          </header>
+          <vaadin-scroller theme="overflow-indicators">
+            <vaadin-side-nav theme="contrast">
+              <vaadin-side-nav-item path="#components">
+                <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
+                <span>Components</span>
+              </vaadin-side-nav-item>
+              <vaadin-side-nav-item>
+                <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
+                <span>Grid View</span>
+              </vaadin-side-nav-item>
+              <vaadin-side-nav-item>
+                <vaadin-icon src="./assets/lucide-icons/chart-pie.svg" slot="prefix"></vaadin-icon>
+                <span>Reporting</span>
+              </vaadin-side-nav-item>
+              <vaadin-side-nav-item>
+                <vaadin-icon src="./assets/lucide-icons/cog.svg" slot="prefix"></vaadin-icon>
+                <span>Settings</span>
+                <vaadin-side-nav-item slot="children">
+                  <span>Account</span>
+                </vaadin-side-nav-item>
+                <vaadin-side-nav-item slot="children">
+                  <span>Preferences</span>
+                </vaadin-side-nav-item>
+                <vaadin-side-nav-item slot="children">
+                  <span>Subscription</span>
+                </vaadin-side-nav-item> </vaadin-side-nav-item
+              ><vaadin-side-nav-item>
+                <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="prefix"></vaadin-icon>
+                <span>Support</span>
+              </vaadin-side-nav-item>
+            </vaadin-side-nav>
+          </vaadin-scroller>
+        </div>
+
+        <main class="aura-view" slot="detail">
+          <header>
+            <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
+            <h1>Components</h1>
+          </header>
+          <vaadin-vertical-layout theme="padding">
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 1">Level 1</div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 2">Level 2</div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 3">Level 3</div>
+            <div theme="surface" style="padding: 2em; --aura-surface-level: 4">Level 4</div>
+          </vaadin-vertical-layout>
+        </main>
+      </vaadin-master-detail-layout>
     </vaadin-app-layout>
 
     <vaadin-popover

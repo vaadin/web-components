@@ -1,0 +1,40 @@
+vaadin-master-detail-layout::part(detail) {
+  --aura-surface-level: 2;
+  background: var(--aura-surface) padding-box;
+}
+
+vaadin-master-detail-layout[drawer]::part(detail) {
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  background: var(--aura-surface) padding-box;
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
+  box-shadow:
+    inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
+    -1px 0 0 0 var(--aura-overlay-outline-color),
+    var(--aura-shadow-m);
+}
+
+vaadin-master-detail-layout[containment='viewport'][drawer]::part(detail) {
+  box-shadow: var(--aura-overlay-shadow);
+}
+
+/* TODO could be a built-in variant */
+vaadin-master-detail-layout[theme~='inset-drawer'][drawer]::part(detail),
+vaadin-master-detail-layout[containment='viewport'][drawer]::part(detail) {
+  margin: calc(var(--aura-app-layout-inset) / 2);
+  border-radius: var(--_app-layout-radius);
+}
+
+vaadin-master-detail-layout > vaadin-master-detail-layout,
+vaadin-master-detail-layout:not([drawer])::part(detail) {
+  border-start-end-radius: var(--_app-layout-radius);
+  border-end-end-radius: var(--_app-layout-radius);
+}
+
+/* TODO these end up affecting all MDLs, not just the one directly inside the App Layout */
+::view-transition-group(vaadin-mdl-backdrop),
+::view-transition-group(vaadin-mdl-master),
+::view-transition-group(vaadin-mdl-detail) {
+  border-radius: var(--_app-layout-radius);
+  overflow: hidden;
+}
