@@ -22,29 +22,16 @@ vaadin-message-input:not([readonly], [disabled]) {
   --aura-surface-level: 1;
 }
 
-/* TODO there should be single selector to target all field buttons */
-::part(decrease-button),
-::part(increase-button),
-::part(toggle-button),
-::part(clear-button),
-::part(reveal-button) {
+::part(field-button) {
   transition: color 100ms;
 }
 
-:not([readonly], [disabled])::part(decrease-button):active,
-:not([readonly], [disabled])::part(increase-button):active,
-:not([readonly], [disabled])::part(toggle-button):active,
-:not([readonly], [disabled])::part(clear-button):active,
-:not([readonly], [disabled])::part(reveal-button):active {
+:not([readonly], [disabled])::part(field-button):active {
   color: var(--vaadin-color);
 }
 
 @media (any-hover: hover) {
-  :not([readonly], [disabled])::part(decrease-button):hover,
-  :not([readonly], [disabled])::part(increase-button):hover,
-  :not([readonly], [disabled])::part(toggle-button):hover,
-  :not([readonly], [disabled])::part(clear-button):hover,
-  :not([readonly], [disabled])::part(reveal-button):hover {
+  :not([readonly], [disabled])::part(field-button):hover {
     color: var(--vaadin-color);
   }
 }
