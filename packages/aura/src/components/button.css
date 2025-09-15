@@ -63,7 +63,7 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
   --vaadin-button-text-color: var(--vaadin-color-subtle);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button'], [readonly], [disabled])::before {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button'], [disabled])::before {
   content: '';
   position: absolute;
   inset: calc(var(--vaadin-button-border-width, 1px) * -1);
@@ -77,22 +77,17 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
 }
 
 @supports (color: hsl(0 0 0)) {
-  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not(
-      [slot='button'],
-      [readonly],
-      [disabled]
-    )::before {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button'], [disabled])::before {
     background-color: oklch(from currentColor calc(l + 0.4 - c) c h);
   }
 }
 
 @media (any-hover: hover) {
-  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):hover:not([readonly], [disabled], [active])::before {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):hover:not([disabled], [active])::before {
     opacity: 0.05;
   }
 
   :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary']:hover:not(
-      [readonly],
       [disabled],
       [active]
     )::before {
@@ -111,11 +106,7 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
   }
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[active]:not(
-    [slot='button'],
-    [readonly],
-    [disabled]
-  )::before {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[active]:not([slot='button'], [disabled])::before {
   transition-duration: 0s;
   opacity: 0.08;
   background: oklch(from currentColor min(c, 1 - l + c) calc(c * 0.9) h);
@@ -123,7 +114,6 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'][active]:not(
     [slot='button'],
-    [readonly],
     [disabled]
   )::before {
   opacity: 0.16;
