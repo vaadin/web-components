@@ -291,9 +291,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   /** @private */
   __onDetailKeydown(event) {
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && !event.defaultPrevented) {
       // Prevent firing on parent layout when using nested layouts
-      event.stopPropagation();
+      event.preventDefault();
       this.dispatchEvent(new CustomEvent('detail-escape-press'));
     }
   }
