@@ -6,6 +6,6 @@
 @import '../src/components/item.css';
 
 :is(:root, :host)::before {
-  --vaadin-item-lumo-inject: 1;
-  --vaadin-item-lumo-inject-modules: lumo_components_item;
+  --_lumo-vaadin-item-inject: 1;
+  --_lumo-vaadin-item-inject-modules: lumo_components_item;
 }

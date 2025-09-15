@@ -6,8 +6,8 @@
 @import '../src/components/avatar.css';
 
 :is(:root, :host)::before {
-  --vaadin-avatar-lumo-inject: 1;
-  --vaadin-avatar-lumo-inject-modules: lumo_components_avatar;
+  --_lumo-vaadin-avatar-inject: 1;
+  --_lumo-vaadin-avatar-inject-modules: lumo_components_avatar;
 }
 
 :where(:root, :host) {

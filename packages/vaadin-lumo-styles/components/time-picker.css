@@ -19,8 +19,8 @@
 @import './input-container.css';
 
 :is(:root, :host)::before {
-  --vaadin-time-picker-lumo-inject: 1;
-  --vaadin-time-picker-lumo-inject-modules:
+  --_lumo-vaadin-time-picker-inject: 1;
+  --_lumo-vaadin-time-picker-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -29,13 +29,13 @@
     lumo_mixins_field-base,
     lumo_components_time-picker;
 
-  --vaadin-time-picker-item-lumo-inject: 1;
-  --vaadin-time-picker-item-lumo-inject-modules:
+  --_lumo-vaadin-time-picker-item-inject: 1;
+  --_lumo-vaadin-time-picker-item-inject-modules:
     lumo_components_item,
     lumo_components_combo-box-item;
 
-  --vaadin-time-picker-overlay-lumo-inject: 1;
-  --vaadin-time-picker-overlay-lumo-inject-modules:
+  --_lumo-vaadin-time-picker-overlay-inject: 1;
+  --_lumo-vaadin-time-picker-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_combo-box-overlay,

@@ -6,6 +6,6 @@
 @import '../src/components/chart.css';
 
 :is(:root, :host)::before {
-  --vaadin-chart-lumo-inject: 1;
-  --vaadin-chart-lumo-inject-modules: lumo_components_chart;
+  --_lumo-vaadin-chart-inject: 1;
+  --_lumo-vaadin-chart-inject-modules: lumo_components_chart;
 }

@@ -6,6 +6,6 @@
 @import '../src/components/split-layout.css';
 
 :is(:root, :host)::before {
-  --vaadin-split-layout-lumo-inject: 1;
-  --vaadin-split-layout-lumo-inject-modules: lumo_components_split-layout;
+  --_lumo-vaadin-split-layout-inject: 1;
+  --_lumo-vaadin-split-layout-inject-modules: lumo_components_split-layout;
 }

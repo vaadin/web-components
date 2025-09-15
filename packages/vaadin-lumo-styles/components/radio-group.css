@@ -12,8 +12,8 @@
 @import './radio-button.css';
 
 :is(:root, :host)::before {
-  --vaadin-radio-group-lumo-inject: 1;
-  --vaadin-radio-group-lumo-inject-modules:
+  --_lumo-vaadin-radio-group-inject: 1;
+  --_lumo-vaadin-radio-group-inject-modules:
     lumo_mixins_group-field,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

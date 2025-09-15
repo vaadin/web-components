@@ -13,8 +13,8 @@
 @import './input-container.css';
 
 :is(:root, :host)::before {
-  --vaadin-number-field-lumo-inject: 1;
-  --vaadin-number-field-lumo-inject-modules:
+  --_lumo-vaadin-number-field-inject: 1;
+  --_lumo-vaadin-number-field-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

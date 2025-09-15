@@ -6,6 +6,6 @@
 @import '../src/components/grid.css';
 
 :is(:root, :host)::before {
-  --vaadin-grid-lumo-inject: 1;
-  --vaadin-grid-lumo-inject-modules: lumo_components_grid;
+  --_lumo-vaadin-grid-inject: 1;
+  --_lumo-vaadin-grid-inject-modules: lumo_components_grid;
 }

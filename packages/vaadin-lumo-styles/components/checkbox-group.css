@@ -12,8 +12,8 @@
 @import './checkbox.css';
 
 :is(:root, :host)::before {
-  --vaadin-checkbox-group-lumo-inject: 1;
-  --vaadin-checkbox-group-lumo-inject-modules:
+  --_lumo-vaadin-checkbox-group-inject: 1;
+  --_lumo-vaadin-checkbox-group-inject-modules:
     lumo_mixins_group-field,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

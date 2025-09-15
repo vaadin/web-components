@@ -34,26 +34,26 @@ import { parseStyleSheets } from './lumo-modules.js';
  * }
  *
  * html {
- *   --vaadin-text-field-lumo-inject: 1;
- *   --vaadin-text-field-lumo-inject-modules:
+ *   --_lumo-vaadin-text-field-inject: 1;
+ *   --_lumo-vaadin-text-field-inject-modules:
  *      lumo_base-field,
  *      lumo_text-field;
  *
- *   --vaadin-email-field-lumo-inject: 1;
- *   --vaadin-email-field-lumo-inject-modules:
+ *   --_lumo-vaadin-email-field-inject: 1;
+ *   --_lumo-vaadin-email-field-inject-modules:
  *      lumo_base-field,
  *      lumo_email-field;
  * }
  * ```
  *
- * The class observes the custom property `--{tagName}-lumo-inject`,
+ * The class observes the custom property `--_lumo-{tagName}-inject`,
  * which indicates whether styles are present for the given component
  * in the document style sheets. When the property is set to `1`, the
  * class recursively searches all document style sheets for CSS modules
- * listed in the `--{tagName}-lumo-inject-modules` property that apply to
+ * listed in the `--_lumo-{tagName}-inject-modules` property that apply to
  * the given component tag name. The found rules are then injected
  * into the component's Shadow DOM using the `adoptedStyleSheets` API,
- * in the order specified in the `--{tagName}-lumo-inject-modules` property.
+ * in the order specified in the `--_lumo-{tagName}-inject-modules` property.
  * The same module can be used in multiple components.
  *
  * The class also removes the injected styles when the property is set to `0`.
@@ -83,7 +83,7 @@ export class LumoInjector {
   constructor(root = document) {
     this.#root = root;
     this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, (propertyName) => {
-      const tagName = propertyName.slice(2).replace('-lumo-inject', '');
+      const tagName = propertyName.match(/^--_lumo-(.*)-inject$/u)?.[1];
       this.#updateStyleSheet(tagName);
     });
   }
@@ -98,7 +98,7 @@ export class LumoInjector {
    * Adds a component to the list of elements monitored for style injection.
    * If the styles have already been detected, they are injected into the
    * component's shadow DOM immediately. Otherwise, the class watches the
-   * custom property `--{tagName}-lumo-inject` to trigger injection when
+   * custom property `--_lumo-{tagName}-inject` to trigger injection when
    * the styles are added to the document or root element.
    *
    * @param {HTMLElement} component

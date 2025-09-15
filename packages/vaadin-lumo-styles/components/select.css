@@ -20,8 +20,8 @@
 @import './input-container.css';
 
 :is(:root, :host)::before {
-  --vaadin-select-lumo-inject: 1;
-  --vaadin-select-lumo-inject-modules:
+  --_lumo-vaadin-select-inject: 1;
+  --_lumo-vaadin-select-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -30,19 +30,19 @@
     lumo_mixins_field-base,
     lumo_components_select;
 
-  --vaadin-select-item-lumo-inject: 1;
-  --vaadin-select-item-lumo-inject-modules: lumo_components_item;
+  --_lumo-vaadin-select-item-inject: 1;
+  --_lumo-vaadin-select-item-inject-modules: lumo_components_item;
 
-  --vaadin-select-overlay-lumo-inject: 1;
-  --vaadin-select-overlay-lumo-inject-modules:
+  --_lumo-vaadin-select-overlay-inject: 1;
+  --_lumo-vaadin-select-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
     lumo_components_select-overlay;
 
-  --vaadin-select-list-box-lumo-inject: 1;
-  --vaadin-select-list-box-lumo-inject-modules: lumo_components_list-box;
+  --_lumo-vaadin-select-list-box-inject: 1;
+  --_lumo-vaadin-select-list-box-inject-modules: lumo_components_list-box;
 
-  --vaadin-select-value-button-lumo-inject: 1;
-  --vaadin-select-value-button-lumo-inject-modules: lumo_components_select-value-button;
+  --_lumo-vaadin-select-value-button-inject: 1;
+  --_lumo-vaadin-select-value-button-inject-modules: lumo_components_select-value-button;
 }

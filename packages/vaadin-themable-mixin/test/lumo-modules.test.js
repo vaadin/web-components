@@ -55,12 +55,12 @@ describe('Lumo modules', () => {
     fixtureSync(`
       <style>
         html {
-          --vaadin-text-field-lumo-inject-modules: lumo_base-field, lumo_text-field;
+          --_lumo-vaadin-text-field-inject-modules: lumo_base-field, lumo_text-field;
         }
       </style>
       <style>
         html {
-          --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
+          --_lumo-vaadin-email-field-inject-modules: lumo_base-field, lumo_email-field;
         }
       </style>
     `);
@@ -148,13 +148,13 @@ describe('Lumo modules', () => {
       const style0 = new CSSStyleSheet();
       style0.replaceSync(`
         html {
-          --vaadin-text-field-lumo-inject-modules: lumo_base-field, lumo_text-field;
+          --_lumo-vaadin-text-field-inject-modules: lumo_base-field, lumo_text-field;
         }
       `);
       const style1 = new CSSStyleSheet();
       style1.replaceSync(`
         html {
-          --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
+          --_lumo-vaadin-email-field-inject-modules: lumo_base-field, lumo_email-field;
         }
       `);
       document.adoptedStyleSheets = [style0, style1];
@@ -235,8 +235,8 @@ describe('Lumo modules', () => {
     it('should extract tag-to-modules mappings from shadowRoot', () => {
       const adoptedStyleSheet = new CSSStyleSheet();
       adoptedStyleSheet.replaceSync(`
-        :host  {
-          --vaadin-text-field-lumo-inject-modules: lumo_text-field;
+        :host {
+          --_lumo-vaadin-text-field-inject-modules: lumo_text-field;
         }
       `);
       root.shadowRoot.adoptedStyleSheets = [adoptedStyleSheet];
@@ -244,7 +244,7 @@ describe('Lumo modules', () => {
       root.shadowRoot.innerHTML = `
         <style>
           :host {
-            --vaadin-email-field-lumo-inject-modules: lumo_email-field;
+            --_lumo-vaadin-email-field-inject-modules: lumo_email-field;
           }
         </style>
       `;
