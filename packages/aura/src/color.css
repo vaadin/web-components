@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --aura-contrast: 1;
 
   --aura-accent-light: hsl(220, 80%, 47%);
@@ -93,7 +93,7 @@
 }
 
 @supports (color: hsl(0 0 0)) {
-  :where(html) {
+  :where(:root, :host) {
     --_safari-17-deg: 1;
   }
 }

@@ -1,0 +1,30 @@
+vaadin-select-item::part(content) {
+  display: flex;
+  align-items: center;
+  gap: inherit;
+}
+
+vaadin-select[theme~='subtle']::part(input-field) {
+  --vaadin-input-field-border-color: transparent;
+  --vaadin-input-field-background: transparent;
+}
+
+vaadin-select[theme~='subtle']::part(toggle-button) {
+  transition: opacity 200ms;
+  opacity: 0;
+  --vaadin-icon-size: 0.75lh;
+}
+
+vaadin-select[theme~='subtle'][focus-ring]::part(toggle-button) {
+  opacity: 1;
+}
+
+@media (any-hover: hover) {
+  vaadin-select[theme~='subtle']:hover::part(toggle-button) {
+    opacity: 1;
+  }
+}
+
+vaadin-select[theme~='auto-size'] {
+  --vaadin-field-default-width: auto;
+}

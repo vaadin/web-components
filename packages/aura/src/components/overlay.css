@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --vaadin-overlay-border-width: 0px;
   --vaadin-overlay-backdrop-background: light-dark(
     oklch(from var(--aura-background-light) calc(l * 0.1) c h / 0.15),

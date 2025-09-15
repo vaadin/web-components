@@ -1,0 +1,68 @@
+:where(:root, :host) {
+  --vaadin-date-picker-year-scroller-background: light-dark(var(--vaadin-background-container), transparent);
+  --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
+  /* TODO add/use selection color */
+  --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
+  --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast);
+}
+
+:where(:root, :host, [theme]) {
+  --vaadin-date-picker-date-width: calc(var(--aura-font-size-m) * 2.5);
+  --vaadin-date-picker-year-scroller-width: calc(var(--aura-font-size-m) * 3.5);
+}
+
+vaadin-date-picker-month-scroller,
+vaadin-date-picker-overlay-content::part(toolbar) {
+  background: var(--aura-surface);
+}
+
+vaadin-date-picker-year-scroller::before {
+  width: 12px;
+  height: 12px;
+  background: var(--aura-surface-solid) padding-box;
+}
+
+vaadin-date-picker-year::part(year-number) {
+  font-size: var(--aura-font-size-s);
+  font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-date-picker-year[current]::part(year-number) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-date-picker-year[selected] {
+  position: relative;
+}
+
+vaadin-date-picker-year[selected]::part(year-number) {
+  color: var(--aura-accent-text);
+}
+
+vaadin-date-picker-year[selected]::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  height: 100%;
+  background: var(--aura-accent-color);
+  border-radius: var(--vaadin-radius-s);
+  top: -0.5lh;
+  inset-inline: 3px;
+  opacity: 0.1;
+}
+
+vaadin-date-picker-year::part(year-separator) {
+  text-align: center;
+  translate: 0 -50%;
+  height: 8px;
+  line-height: 0;
+}
+
+vaadin-date-picker-year::part(year-separator)::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--vaadin-color-disabled);
+}

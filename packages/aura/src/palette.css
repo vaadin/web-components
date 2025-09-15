@@ -1,4 +1,4 @@
-:where(html) {
+:where(:root, :host) {
   --aura-red: light-dark(
     oklch(from var(--aura-accent-light) 0.55 c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20)),
     oklch(from var(--aura-accent-dark) 0.7 c calc(clamp(380 - rem(h, 6), h + 20, 420 - rem(h, 6)) + 20))

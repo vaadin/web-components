@@ -1,15 +1,21 @@
-:where(html) {
+:where(:root, :host) {
   --aura-surface-level: 1;
 }
 
 /* List all elements that are surfaces */
-html,
+:is(:root, :host),
 [theme~='surface'],
 [theme~='surface-solid'],
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
+vaadin-button,
+vaadin-checkbox::part(checkbox),
 vaadin-master-detail-layout::part(detail),
+vaadin-menu-bar-button,
+vaadin-message-input,
+vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
+::part(input-field),
 ::part(overlay) {
   --aura-surface-opacity: 0.5;
 
@@ -19,7 +25,7 @@ vaadin-side-nav-item::part(content),
         min(
           1,
           l + (0.98 - l) * 4 + var(--aura-surface-level) * (0.07 - 0.01 * var(--aura-contrast)) -
-            var(--aura-surface-opacity) / 15
+            var(--aura-surface-opacity) / 20
         )
         clamp(0, c - l / 10 * var(--aura-surface-level) + var(--aura-surface-opacity) / 40, c) h
     ),

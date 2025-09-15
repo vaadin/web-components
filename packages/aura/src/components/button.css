@@ -1,0 +1,116 @@
+:where(:root, :host) {
+  --vaadin-button-border-color: var(--vaadin-border-color);
+  --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
+}
+
+/* TODO Avoid styling message-input button with :not([slot=button]) */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([slot='button'])) {
+  transition: scale 180ms;
+  position: relative;
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([slot='button'], [theme~='tertiary'])) {
+  --aura-surface-level: 6;
+  --aura-surface-opacity: 0.3;
+  box-shadow: var(--vaadin-button-shadow);
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([theme~='primary'], [theme~='tertiary']) {
+  background: var(--vaadin-button-background, var(--aura-surface) padding-box);
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='primary'])) {
+  outline-offset: calc(var(--vaadin-button-border-width, 1px) * -1);
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where([theme~='primary']) {
+  outline-offset: 2px;
+}
+
+/*
+Increase padding, but only for buttons that don't have an icon in the default slot.
+Buttons that place an icon in the default slot are assumed to be icon-only buttons.
+*/
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button']):not(:has(:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
+  --vaadin-button-padding: round(var(--vaadin-padding-s) / 1.4, 1px)
+    max(var(--vaadin-padding-m), round(var(--vaadin-radius-m) / 1.5, 1px));
+}
+
+/* Decrease padding when an icon is placed in the prefix or suffix slot */
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button):not([slot='button']):has([slot='prefix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
+vaadin-drawer-toggle:empty {
+  padding-inline-start: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
+}
+
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button']):has([slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
+vaadin-drawer-toggle:empty,
+vaadin-menu-bar-button[aria-haspopup='true'] {
+  padding-inline-end: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'] {
+  --vaadin-button-font-weight: var(--aura-font-weight-semibold);
+  --vaadin-button-text-color: light-dark(var(--vaadin-background-color), var(--aura-background-dark));
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[disabled][theme~='primary'] {
+  --vaadin-button-text-color: var(--vaadin-color-subtle);
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button'], [disabled])::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--vaadin-button-border-width, 1px) * -1);
+  pointer-events: none;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  transition:
+    opacity 100ms,
+    background-color 100ms;
+}
+
+@supports (color: hsl(0 0 0)) {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([slot='button'], [disabled])::before {
+    background-color: oklch(from currentColor calc(l + 0.4 - c) c h);
+  }
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):hover:not([disabled], [active])::before {
+    opacity: 0.05;
+  }
+
+  /* prettier-ignore */
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary']:hover:not([disabled], [active])::before {
+    opacity: 0.12;
+  }
+}
+
+@media (min-resolution: 2x) {
+  /* prettier-ignore */
+  :is(vaadin-button, vaadin-menu-bar-button[first-visible][last-visible], vaadin-drawer-toggle)[active]:not([slot='button'], [disabled], [aria-disabled='true']) {
+    scale: 0.98;
+    transition-duration: 50ms;
+  }
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[active]:not([slot='button'], [disabled])::before {
+  transition-duration: 0s;
+  opacity: 0.08;
+  background: oklch(from currentColor min(c, 1 - l + c) calc(c * 0.9) h);
+}
+
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'][active]:not([slot='button'], [disabled])::before {
+  opacity: 0.16;
+}
+
+@container style(--_gap: 0) {
+  vaadin-menu-bar-button:not(:first-of-type) {
+    border-inline-start-color: transparent;
+  }
+}
