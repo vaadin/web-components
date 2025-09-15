@@ -60,7 +60,7 @@ describe('dropdown', () => {
     let toggleButton;
 
     beforeEach(() => {
-      toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
+      toggleButton = datePicker.shadowRoot.querySelector('[part~="toggle-button"]');
     });
 
     it('should open by tapping the calendar icon', async () => {

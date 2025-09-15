@@ -548,13 +548,13 @@ snapshots["vaadin-date-picker shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -608,13 +608,13 @@ snapshots["vaadin-date-picker shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -668,13 +668,13 @@ snapshots["vaadin-date-picker shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -728,13 +728,13 @@ snapshots["vaadin-date-picker shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -788,13 +788,13 @@ snapshots["vaadin-date-picker shadow theme"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>

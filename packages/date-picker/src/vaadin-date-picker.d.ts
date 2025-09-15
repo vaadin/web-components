@@ -84,6 +84,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and buttons
+ * `field-button`       | Set on both clear and toggle buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper

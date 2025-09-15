@@ -30,6 +30,7 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on clear, decrease and increase buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
@@ -115,7 +116,7 @@ class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMix
           theme="${ifDefined(this._theme)}"
         >
           <div
-            part="decrease-button"
+            part="field-button decrease-button"
             ?disabled="${!this._isButtonEnabled(-1, this.value, this.min, this.max, this.step)}"
             ?hidden="${!this.stepButtonsVisible}"
             @click="${this._onDecreaseButtonClick}"
@@ -126,9 +127,9 @@ class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMix
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
           <div
-            part="increase-button"
+            part="field-button increase-button"
             ?disabled="${!this._isButtonEnabled(1, this.value, this.min, this.max, this.step)}"
             ?hidden="${!this.stepButtonsVisible}"
             @click="${this._onIncreaseButtonClick}"

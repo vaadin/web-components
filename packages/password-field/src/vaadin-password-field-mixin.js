@@ -93,7 +93,7 @@ export const PasswordFieldMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._revealPart = this.shadowRoot.querySelector('[part="reveal-button"]');
+      this._revealPart = this.shadowRoot.querySelector('[part~="reveal-button"]');
 
       this._revealButtonController = new SlotController(this, 'reveal', 'vaadin-password-field-button', {
         initializer: (btn) => {

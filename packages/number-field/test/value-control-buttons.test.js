@@ -10,8 +10,8 @@ describe('value control buttons', () => {
     numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
     await nextRender();
     input = numberField.inputElement;
-    decreaseButton = numberField.shadowRoot.querySelector('[part=decrease-button]');
-    increaseButton = numberField.shadowRoot.querySelector('[part=increase-button]');
+    decreaseButton = numberField.shadowRoot.querySelector('[part~="decrease-button"]');
+    increaseButton = numberField.shadowRoot.querySelector('[part~="increase-button"]');
   });
 
   describe('basic', () => {
@@ -677,7 +677,7 @@ describe('multiple fields', () => {
       let button;
 
       beforeEach(() => {
-        button = fields[1].shadowRoot.querySelector(`[part=${type}-button]`);
+        button = fields[1].shadowRoot.querySelector(`[part~="${type}-button"]`);
       });
 
       it(`should blur the other field on ${type} button touchend`, () => {

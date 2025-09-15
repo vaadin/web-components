@@ -24,7 +24,7 @@ export const datePickerStyles = css`
     text-align: left;
   }
 
-  [part='toggle-button']::before {
+  [part~='toggle-button']::before {
     mask-image: var(--_vaadin-icon-calendar);
   }
 `;

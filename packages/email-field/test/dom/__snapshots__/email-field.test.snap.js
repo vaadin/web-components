@@ -113,7 +113,7 @@ snapshots["vaadin-email-field shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -162,7 +162,7 @@ snapshots["vaadin-email-field shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -211,7 +211,7 @@ snapshots["vaadin-email-field shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -260,7 +260,7 @@ snapshots["vaadin-email-field shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -309,7 +309,7 @@ snapshots["vaadin-email-field shadow theme"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>

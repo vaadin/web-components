@@ -55,6 +55,7 @@ export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFiel
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on both clear and reveal buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper

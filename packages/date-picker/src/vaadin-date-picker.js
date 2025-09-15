@@ -48,6 +48,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and buttons
+ * `field-button`       | Set on both clear and toggle buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
@@ -204,8 +205,8 @@ class DatePicker extends DatePickerMixin(
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" @click="${this._toggle}"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
+          <div part="field-button toggle-button" slot="suffix" aria-hidden="true" @click="${this._toggle}"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -272,7 +273,7 @@ class DatePicker extends DatePickerMixin(
 
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
 
-    const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
+    const toggleButton = this.shadowRoot.querySelector('[part="field-button toggle-button"]');
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
   }
 

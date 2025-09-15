@@ -270,7 +270,7 @@ describe('clear button', () => {
   beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
     await nextRender();
-    clearButton = datePicker.shadowRoot.querySelector('[part="clear-button"]');
+    clearButton = datePicker.shadowRoot.querySelector('[part~="clear-button"]');
   });
 
   it('should have clearButtonVisible property', () => {
@@ -385,7 +385,7 @@ describe('auto open disabled', () => {
     datePicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
     await nextRender();
     input = datePicker.inputElement;
-    toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
+    toggleButton = datePicker.shadowRoot.querySelector('[part~="toggle-button"]');
     datePicker.autoOpenDisabled = true;
   });
 

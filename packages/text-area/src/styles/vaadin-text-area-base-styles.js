@@ -18,7 +18,7 @@ export const textAreaStyles = css`
   }
 
   [part='input-field'] ::slotted(:not(textarea)),
-  [part='clear-button'] {
+  [part~='clear-button'] {
     align-self: flex-start;
     position: sticky;
     top: 0;

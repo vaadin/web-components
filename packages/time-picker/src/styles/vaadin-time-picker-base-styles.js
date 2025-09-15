@@ -11,7 +11,7 @@ export const timePickerStyles = css`
     pointer-events: auto;
   }
 
-  [part='toggle-button']::before {
+  [part~='toggle-button']::before {
     mask-image: var(--_vaadin-icon-clock);
   }
 

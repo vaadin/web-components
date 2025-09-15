@@ -25,11 +25,11 @@ export const button = css`
     width: var(--vaadin-icon-size, 1lh);
   }
 
-  :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part='clear-button'] {
+  :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part~='clear-button'] {
     display: none;
   }
 
-  [part='clear-button']::before {
+  [part~='clear-button']::before {
     mask-image: var(--_vaadin-icon-cross);
   }
 

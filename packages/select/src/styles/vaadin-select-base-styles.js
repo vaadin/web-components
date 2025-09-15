@@ -32,7 +32,7 @@ export const selectStyles = css`
     cursor: var(--vaadin-clickable-cursor);
   }
 
-  [part='toggle-button']::before {
+  [part~='toggle-button']::before {
     mask-image: var(--_vaadin-icon-chevron-down);
   }
 `;

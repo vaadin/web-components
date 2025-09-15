@@ -37,7 +37,7 @@ describe('select in grid', () => {
     grid.addEventListener('active-item-changed', spy);
 
     const select = getBodyCellContent(grid, 0, 0).firstElementChild;
-    const toggle = select.shadowRoot.querySelector('[part="toggle-button"]');
+    const toggle = select.shadowRoot.querySelector('[part~="toggle-button"]');
     toggle.click();
 
     expect(spy.called).to.be.false;

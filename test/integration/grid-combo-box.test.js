@@ -37,7 +37,7 @@ describe('combo-box in grid', () => {
     grid.addEventListener('active-item-changed', spy);
 
     const combo = getBodyCellContent(grid, 0, 0).firstElementChild;
-    const toggle = combo.shadowRoot.querySelector('[part="toggle-button"]');
+    const toggle = combo.shadowRoot.querySelector('[part~="toggle-button"]');
     toggle.click();
 
     expect(spy.called).to.be.false;

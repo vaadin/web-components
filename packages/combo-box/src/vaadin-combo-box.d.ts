@@ -181,6 +181,7 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and buttons
+ * `field-button`       | Set on both clear and toggle buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper

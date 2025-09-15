@@ -332,8 +332,8 @@ describe('value commit', () => {
     let increaseButton, decreaseButton;
 
     beforeEach(() => {
-      increaseButton = numberField.shadowRoot.querySelector('[part=increase-button]');
-      decreaseButton = numberField.shadowRoot.querySelector('[part=decrease-button]');
+      increaseButton = numberField.shadowRoot.querySelector('[part~="increase-button"]');
+      decreaseButton = numberField.shadowRoot.querySelector('[part~="decrease-button"]');
     });
 
     it('should commit on increase button click', async () => {
@@ -351,7 +351,7 @@ describe('value commit', () => {
 
   describe('value control button click committed', () => {
     beforeEach(async () => {
-      numberField.shadowRoot.querySelector('[part=increase-button]').click();
+      numberField.shadowRoot.querySelector('[part~="increase-button"]').click();
       await nextUpdate(numberField);
       valueChangedSpy.resetHistory();
       validateSpy.resetHistory();

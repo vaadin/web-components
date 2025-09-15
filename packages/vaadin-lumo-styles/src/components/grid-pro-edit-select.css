@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_grid-pro-edit-select {
-  :host([theme~='grid-pro-editor']) [part='toggle-button'] {
+  :host([theme~='grid-pro-editor']) [part~='toggle-button'] {
     margin-right: var(--lumo-space-xs);
   }
 
