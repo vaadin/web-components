@@ -9,6 +9,7 @@
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
 vaadin-button,
+vaadin-card,
 vaadin-checkbox::part(checkbox),
 vaadin-master-detail-layout::part(detail),
 vaadin-menu-bar-button,

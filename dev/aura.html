@@ -7,6 +7,7 @@
     <title>Aura</title>
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
+    <link rel="stylesheet" href="./aura/badge.css" />
     <script type="module">
       window.Vaadin ||= {};
       window.Vaadin.featureFlags ||= {};
@@ -21,10 +22,14 @@
       import '@vaadin/app-layout';
       import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
       import '@vaadin/avatar';
+      import '@vaadin/avatar-group';
+      import '@vaadin/card';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
       import '@vaadin/combo-box';
       import '@vaadin/date-time-picker';
+      import '@vaadin/grid';
+      import '@vaadin/grid/src/vaadin-grid-selection-column.js';
       import '@vaadin/icon';
       import '@vaadin/master-detail-layout';
       import '@vaadin/menu-bar';
@@ -40,6 +45,7 @@
       import '@vaadin/vertical-layout';
       import { html, render } from 'lit';
       import { Button } from '@vaadin/button';
+      import { Notification } from '@vaadin/notification';
 
       function clearLocalStorage() {
         for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -67,6 +73,16 @@
           document.querySelector('vaadin-app-layout > header[slot]').append(drawerToggle);
         }
       });
+
+      const generateItems = (count) => {
+        return Array.from({ length: count }, (_, i) => ({
+          name: `First Lastname ${i + 1}`,
+          email: `first.lastname${i + 1}@example.com`,
+          address: `${i + 1} Main Street`,
+          city: `City ${i + 1}`,
+          country: `Country ${i + 1}`,
+        }));
+      };
 
       function initComponentsView() {
         const view = document.querySelector('.components-view');
@@ -153,6 +169,39 @@
             userColorIndex: 2,
           },
         ];
+
+        // Notification
+        view.querySelector('#showNotificationBtn').addEventListener('click', () => {
+          const notification = Notification.show(
+            html`<vaadin-card theme="horizontal footer-end no-frame">
+              <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="media"></vaadin-icon>
+              <div slot="title">New Message from Olivia</div>
+              <div>The AI chat UI is evolving with the integration of components…</div>
+              <vaadin-button slot="footer">Show</vaadin-button>
+              <vaadin-button slot="footer">Dismiss</vaadin-button>
+            </vaadin-card>`,
+            { duration: 0, position: 'top-end' },
+          );
+          notification._overlayElement
+            .querySelectorAll('vaadin-button')
+            .forEach((button) => button.addEventListener('click', () => notification.close()));
+        });
+
+        // Avatar Group
+        view.querySelector('vaadin-avatar-group').items = [
+          { name: 'AA', colorIndex: 0 },
+          { name: 'BB', colorIndex: 1 },
+          { name: 'CC', colorIndex: 2 },
+          { name: 'DD', colorIndex: 3 },
+          { name: 'EE', colorIndex: 4 },
+          { name: 'FF', colorIndex: 5 },
+          { name: 'GG', colorIndex: 6 },
+          { name: 'HH', colorIndex: 7 },
+          { name: 'II', colorIndex: 8 },
+        ];
+
+        // Grid
+        view.querySelector('vaadin-grid').items = generateItems(20);
       }
 
       initComponentsView();
@@ -189,6 +238,34 @@
       .dashboard-section::part(detail) {
         flex-basis: 85%;
       }
+
+      /* TODO part of Aura? */
+      hr {
+        place-self: stretch;
+        margin: var(--vaadin-gap-m) 0;
+        border: 0;
+        background: var(--vaadin-border-color-subtle);
+        min-height: 1px;
+        max-height: 1px;
+      }
+
+      /* Considering these as built-in variants, but perhaps they should be another component like https://github.com/vaadin/web-components/issues/7958 */
+      vaadin-card[theme~='no-frame'] {
+        --vaadin-card-padding: 0px;
+        --vaadin-card-background: transparent;
+      }
+
+      vaadin-card[theme~='footer-end'] {
+        --_footer: 0;
+        grid-template-rows: repeat(var(--_content), auto) 1fr;
+      }
+
+      vaadin-card[theme~='footer-end']::part(footer) {
+        grid-column: -1;
+        grid-row: 1 / span calc(var(--_header) + var(--_content));
+        align-self: center;
+        flex-direction: column;
+      }
     </style>
   </head>
   <body>
@@ -205,6 +282,7 @@
           <vaadin-side-nav-item path="">
             <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
             Dashboard
+            <span theme="badge accent" slot="suffix" aria-label="(2 new items)">2</span>
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>
@@ -264,6 +342,7 @@
               <vaadin-side-nav-item path="#components">
                 <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
                 <span>Components</span>
+                <span theme="badge accent" slot="suffix" aria-label="(2 new items)">2</span>
               </vaadin-side-nav-item>
               <vaadin-side-nav-item>
                 <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
@@ -288,6 +367,7 @@
               ><vaadin-side-nav-item>
                 <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="prefix"></vaadin-icon>
                 <span>Support</span>
+                <span theme="badge green" slot="suffix">Online</span>
               </vaadin-side-nav-item>
             </vaadin-side-nav>
           </vaadin-scroller>
@@ -360,6 +440,13 @@
                 padding: 0;
               }
 
+              .components-view .badges {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: var(--vaadin-gap-s);
+              }
+
               .components-view .sizes {
                 display: flex;
                 flex-direction: column;
@@ -378,6 +465,94 @@
                   <vaadin-button theme="primary">Primary</vaadin-button>
                   <vaadin-button>Default</vaadin-button>
                   <vaadin-button theme="tertiary">Tertiary</vaadin-button>
+                </div>
+
+                <div class="component" theme="surface">
+                  <div class="flex justify-center">
+                    <vaadin-button id="showNotificationBtn">
+                      <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
+                      Show Notification
+                    </vaadin-button>
+                  </div>
+                </div>
+
+                <div class="component wide tall" theme="surface">
+
+                  <div class="badges">
+                    <span theme="badge">Default</span>
+                    <span theme="badge accent">Accent</span>
+                    <span theme="badge green">Green</span>
+                    <span theme="badge blue">Blue</span>
+                    <span theme="badge purple">Purple</span>
+                    <span theme="badge red">Red</span>
+                    <span theme="badge orange">Orange</span>
+                    <span theme="badge yellow">Yellow</span>
+                  </div>
+
+                  <div class="badges">
+                    <span theme="filled badge">Default</span>
+                    <span theme="filled badge accent">Accent</span>
+                    <span theme="filled badge green">Green</span>
+                    <span theme="filled badge blue">Blue</span>
+                    <span theme="filled badge purple">Purple</span>
+                    <span theme="filled badge red">Red</span>
+                    <span theme="filled badge orange">Orange</span>
+                    <span theme="filled badge yellow">Yellow</span>
+                  </div>
+
+                  <div class="badges">
+                    <span theme="badge">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge accent">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge green">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge blue">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge purple">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge red">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge orange">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge yellow">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                  </div>
+
+                  <div class="badges">
+                    <span theme="badge filled">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled accent">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled green">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled blue">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled purple">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled red">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled orange">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                    <span theme="badge filled yellow">
+                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
+                    </span>
+                  </div>
                 </div>
 
                 <div class="component" theme="surface">
@@ -432,6 +607,18 @@
 
                 <div class="component wide" theme="surface">
                   <vaadin-select label="Options"></vaadin-select>
+                </div>
+
+                <div class="component widest tall no-padding" theme="surface">
+                  <vaadin-grid theme="no-border">
+                    <vaadin-grid-selection-column></vaadin-grid-selection-column>
+                    <vaadin-grid-column path="name"></vaadin-grid-column>
+                    <vaadin-grid-column path="email"></vaadin-grid-column>
+                  </vaadin-grid>
+                </div>
+
+                <div class="component" theme="surface">
+                  <vaadin-avatar-group></vaadin-avatar-group>
                 </div>
 
                 <div class="component tall wide column" theme="surface">
@@ -501,7 +688,7 @@
         ></aura-number-control>
         <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
         <hr />
-        <vaadin-button theme="" id="resetAll">
+        <vaadin-button id="resetAll">
           Reset All
           <vaadin-icon icon="lucide:rotate-ccw"></vaadin-icon>
         </vaadin-button>
