@@ -42,6 +42,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `chips`                | The element that wraps slotted chips for selected items
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
+ * `field-button`         | Set on both clear and toggle buttons
  * `clear-button`         | The clear button
  * `error-message`        | The error message element
  * `helper-text`          | The helper text element wrapper
@@ -134,8 +135,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
             <slot name="chip"></slot>
           </div>
           <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div id="toggleButton" part="toggle-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="toggleButton" part="field-button toggle-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-multi-select-combo-box-container>
 
         <div part="helper-text">

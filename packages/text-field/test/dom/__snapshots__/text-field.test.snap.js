@@ -135,7 +135,7 @@ snapshots["vaadin-text-field shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -184,7 +184,7 @@ snapshots["vaadin-text-field shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -233,7 +233,7 @@ snapshots["vaadin-text-field shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -282,7 +282,7 @@ snapshots["vaadin-text-field shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
@@ -331,7 +331,7 @@ snapshots["vaadin-text-field shadow theme"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>

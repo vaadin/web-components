@@ -277,8 +277,8 @@ describe('value commit', () => {
     let increaseButton, decreaseButton;
 
     beforeEach(() => {
-      increaseButton = integerField.shadowRoot.querySelector('[part=increase-button]');
-      decreaseButton = integerField.shadowRoot.querySelector('[part=decrease-button]');
+      increaseButton = integerField.shadowRoot.querySelector('[part~="increase-button"]');
+      decreaseButton = integerField.shadowRoot.querySelector('[part~="decrease-button"]');
     });
 
     it('should commit on increase button click', () => {

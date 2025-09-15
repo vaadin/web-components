@@ -185,7 +185,7 @@ snapshots["vaadin-number-field shadow default"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -204,14 +204,14 @@ snapshots["vaadin-number-field shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -244,7 +244,7 @@ snapshots["vaadin-number-field shadow step-buttons-visible"] =
   <vaadin-input-container part="input-field">
     <div
       aria-hidden="true"
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -263,13 +263,13 @@ snapshots["vaadin-number-field shadow step-buttons-visible"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -306,7 +306,7 @@ snapshots["vaadin-number-field shadow disabled"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -325,14 +325,14 @@ snapshots["vaadin-number-field shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -369,7 +369,7 @@ snapshots["vaadin-number-field shadow readonly"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -388,14 +388,14 @@ snapshots["vaadin-number-field shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -432,7 +432,7 @@ snapshots["vaadin-number-field shadow invalid"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -451,14 +451,14 @@ snapshots["vaadin-number-field shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -495,7 +495,7 @@ snapshots["vaadin-number-field shadow theme"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -514,14 +514,14 @@ snapshots["vaadin-number-field shadow theme"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>

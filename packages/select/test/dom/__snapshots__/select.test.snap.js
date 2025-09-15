@@ -590,7 +590,7 @@ snapshots["vaadin-select shadow default"] =
     </slot>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -645,7 +645,7 @@ snapshots["vaadin-select shadow disabled"] =
     </slot>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -700,7 +700,7 @@ snapshots["vaadin-select shadow readonly"] =
     </slot>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -755,7 +755,7 @@ snapshots["vaadin-select shadow invalid"] =
     </slot>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -810,7 +810,7 @@ snapshots["vaadin-select shadow theme"] =
     </slot>
     <div
       aria-hidden="true"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>

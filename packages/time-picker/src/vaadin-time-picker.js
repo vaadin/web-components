@@ -46,6 +46,7 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and buttons
+ * `field-button`       | Set on both clear and toggle buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
@@ -134,8 +135,8 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div id="toggleButton" part="toggle-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="toggleButton" part="field-button toggle-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">

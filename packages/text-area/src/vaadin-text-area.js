@@ -51,6 +51,7 @@ import { TextAreaMixin } from './vaadin-text-area-mixin.js';
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on the clear button
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
@@ -117,7 +118,7 @@ export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMi
           <slot name="prefix" slot="prefix"></slot>
           <slot name="textarea"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">

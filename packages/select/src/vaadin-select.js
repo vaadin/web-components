@@ -92,6 +92,7 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and toggle button
+ * `field-button`       | Set on the toggle button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
  * `required-indicator` | The `required` state indicator element
@@ -167,7 +168,12 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" @mousedown="${this._onToggleMouseDown}"></div>
+          <div
+            part="field-button toggle-button"
+            slot="suffix"
+            aria-hidden="true"
+            @mousedown="${this._onToggleMouseDown}"
+          ></div>
         </vaadin-input-container>
 
         <div part="helper-text">

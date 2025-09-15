@@ -34,14 +34,14 @@ describe('integer-field', () => {
     it('should fire input event on input element when clicking decrease button', () => {
       const spy = sinon.spy();
       input.addEventListener('input', spy);
-      integerField.shadowRoot.querySelector('[part=decrease-button]').click();
+      integerField.shadowRoot.querySelector('[part~="decrease-button"]').click();
       expect(spy).to.be.calledOnce;
     });
 
     it('should fire input event on input element when clicking increase button', () => {
       const spy = sinon.spy();
       input.addEventListener('input', spy);
-      integerField.shadowRoot.querySelector('[part=increase-button]').click();
+      integerField.shadowRoot.querySelector('[part~="increase-button"]').click();
       expect(spy).to.be.calledOnce;
     });
 

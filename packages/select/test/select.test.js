@@ -324,13 +324,13 @@ describe('vaadin-select', () => {
       it('should prevent default for the toggle button mousedown', () => {
         const e = new CustomEvent('mousedown', { bubbles: true });
         const spy = sinon.spy(e, 'preventDefault');
-        select.shadowRoot.querySelector('[part=toggle-button]').dispatchEvent(e);
+        select.shadowRoot.querySelector('[part~="toggle-button"]').dispatchEvent(e);
         expect(spy.calledOnce).to.be.true;
       });
 
       it('should focus the value button when opening on toggle button mousedown', () => {
         const spy = sinon.spy(valueButton, 'focus');
-        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        mousedown(select.shadowRoot.querySelector('[part~="toggle-button"]'));
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -338,7 +338,7 @@ describe('vaadin-select', () => {
         const spy = sinon.spy(valueButton, 'focus');
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        mousedown(select.shadowRoot.querySelector('[part~="toggle-button"]'));
         expect(spy.calledOnce).to.be.false;
       });
 

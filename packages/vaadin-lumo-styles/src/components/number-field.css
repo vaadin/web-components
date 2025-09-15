@@ -20,8 +20,8 @@
     padding: 0;
   }
 
-  [part='decrease-button'],
-  [part='increase-button'] {
+  [part~='decrease-button'],
+  [part~='increase-button'] {
     cursor: pointer;
     width: 1.5em;
     height: 1.5em;
@@ -29,16 +29,16 @@
     user-select: none;
   }
 
-  [part='decrease-button']::before,
-  [part='increase-button']::before {
+  [part~='decrease-button']::before,
+  [part~='increase-button']::before {
     margin-top: 0.25em;
   }
 
-  [part='decrease-button']::before {
+  [part~='decrease-button']::before {
     content: var(--lumo-icons-minus);
   }
 
-  [part='increase-button']::before {
+  [part~='increase-button']::before {
     content: var(--lumo-icons-plus);
   }
 

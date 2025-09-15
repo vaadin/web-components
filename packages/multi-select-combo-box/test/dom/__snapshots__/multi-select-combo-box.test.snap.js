@@ -469,14 +469,14 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       id="toggleButton"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -537,14 +537,14 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       id="toggleButton"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -605,14 +605,14 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       id="toggleButton"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>
@@ -673,14 +673,14 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       id="toggleButton"
-      part="toggle-button"
+      part="field-button toggle-button"
       slot="suffix"
     >
     </div>

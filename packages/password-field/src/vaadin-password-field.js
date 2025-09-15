@@ -25,6 +25,7 @@ import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on both clear and reveal buttons
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
@@ -78,7 +79,7 @@ export class PasswordField extends PasswordFieldMixin(TextField) {
   _renderSuffix() {
     return html`
       ${super._renderSuffix()}
-      <div part="reveal-button" slot="suffix">
+      <div part="field-button reveal-button" slot="suffix">
         <slot name="reveal"></slot>
       </div>
     `;

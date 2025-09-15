@@ -54,6 +54,7 @@ export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCusto
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on the clear button
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper

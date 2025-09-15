@@ -11,11 +11,11 @@ export const numberFieldStyles = css`
     text-align: center;
   }
 
-  [part='decrease-button']::before {
+  [part~='decrease-button']::before {
     mask-image: var(--_vaadin-icon-minus);
   }
 
-  [part='increase-button']::before {
+  [part~='increase-button']::before {
     mask-image: var(--_vaadin-icon-plus);
   }
 

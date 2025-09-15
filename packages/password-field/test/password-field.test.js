@@ -186,7 +186,7 @@ describe('password-field', () => {
     let revealPart;
 
     beforeEach(async () => {
-      revealPart = passwordField.shadowRoot.querySelector('[part="reveal-button"]');
+      revealPart = passwordField.shadowRoot.querySelector('[part~="reveal-button"]');
       passwordField.revealButtonHidden = true;
       await nextUpdate(passwordField);
     });

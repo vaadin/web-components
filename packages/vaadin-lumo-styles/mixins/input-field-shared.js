@@ -155,7 +155,7 @@ const inputField = css`
     font-weight: 400;
   }
 
-  [part='clear-button']::before {
+  [part~='clear-button']::before {
     content: var(--lumo-icons-cross);
   }
 `;
