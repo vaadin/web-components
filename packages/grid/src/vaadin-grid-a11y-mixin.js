@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getBodyRowCells, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
+import { findTreeToggleCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -101,7 +101,7 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11yUpdateRowExpanded(row) {
-      const toggleCell = this.__a11yFindTreeToggleCell(row);
+      const toggleCell = findTreeToggleCell(row);
       if (this.__isRowExpandable(row)) {
         row.setAttribute('aria-expanded', 'false');
         if (toggleCell) {
@@ -118,20 +118,6 @@ export const A11yMixin = (superClass) =>
           toggleCell.removeAttribute('aria-expanded');
         }
       }
-    }
-
-    /**
-     * Finds the cell containing the tree toggle element
-     * @param {!HTMLElement} row
-     * @return {HTMLElement|null}
-     * @private
-     */
-    __a11yFindTreeToggleCell(row) {
-      const cellWithTreeToggle = getBodyRowCells(row).find((cell) => {
-        const toggle = cell._content.querySelector('vaadin-grid-tree-toggle');
-        return toggle && !toggle.leaf;
-      });
-      return cellWithTreeToggle === undefined ? null : cellWithTreeToggle;
     }
 
     /**
