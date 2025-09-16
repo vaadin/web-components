@@ -95,6 +95,26 @@ describe('events', () => {
 
         expect(spy).to.be.calledOnce;
       });
+
+      it('should call preventDefault on keydown event on pressing Escape', async () => {
+        const spy = sinon.spy();
+        layout.addEventListener('keydown', spy);
+
+        focusable.focus();
+        await sendKeys({ press: 'Escape' });
+
+        expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+      });
+
+      it('should not call stopPropagation on keydown event on pressing Escape', async () => {
+        const spy = sinon.spy();
+        document.addEventListener('keydown', spy, { once: true });
+
+        focusable.focus();
+        await sendKeys({ press: 'Escape' });
+
+        expect(spy.calledOnce).to.be.true;
+      });
     });
   });
 
