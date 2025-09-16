@@ -179,11 +179,7 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
  * @return {HTMLElement | null}
  */
 export function findTreeToggleCell(row) {
-  const cellWithTreeToggle = getBodyRowCells(row).find((cell) => {
-    const toggle = cell._content.querySelector('vaadin-grid-tree-toggle');
-    return toggle && !toggle.leaf;
-  });
-  return cellWithTreeToggle === undefined ? null : cellWithTreeToggle;
+  return getBodyRowCells(row).find((cell) => cell._content.querySelector('vaadin-grid-tree-toggle'));
 }
 
 /**
