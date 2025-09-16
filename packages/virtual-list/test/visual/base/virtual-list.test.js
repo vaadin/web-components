@@ -28,7 +28,7 @@ describe('virtual-list', () => {
   });
 
   it('theme-overflow-indicators-bottom', async () => {
-    element.setAttribute('theme', 'overflow-indicators');
+    element.setAttribute('theme', 'overflow-indicator-bottom');
     await visualDiff(div, 'theme-overflow-indicators-bottom');
   });
 
@@ -39,7 +39,7 @@ describe('virtual-list', () => {
   });
 
   it('theme-overflow-indicators-top', async () => {
-    element.setAttribute('theme', 'overflow-indicators');
+    element.setAttribute('theme', 'overflow-indicator-top');
     element.scrollTop = element.scrollHeight - element.clientHeight;
     await visualDiff(div, 'theme-overflow-indicators-top');
   });
