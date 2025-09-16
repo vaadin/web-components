@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
+import { findTreeToggleCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -101,12 +101,22 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11yUpdateRowExpanded(row) {
+      const toggleCell = findTreeToggleCell(row);
       if (this.__isRowExpandable(row)) {
         row.setAttribute('aria-expanded', 'false');
+        if (toggleCell) {
+          toggleCell.setAttribute('aria-expanded', 'false');
+        }
       } else if (this.__isRowCollapsible(row)) {
         row.setAttribute('aria-expanded', 'true');
+        if (toggleCell) {
+          toggleCell.setAttribute('aria-expanded', 'true');
+        }
       } else {
         row.removeAttribute('aria-expanded');
+        if (toggleCell) {
+          toggleCell.removeAttribute('aria-expanded');
+        }
       }
     }
 
