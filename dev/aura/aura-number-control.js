@@ -147,7 +147,7 @@ class AuraNumberControl extends AuraControl {
     const computed = this.#getComputedNumber();
     const initial = computed != null ? computed : this.#clamp(this.#snap((this.#min + this.#max) / 2));
     this.#initialComputed = computed ?? initial;
-    this.#setValue(initial, { persist: false });
+    this.#setValue(initial, { persist: null });
   }
 
   #getComputedNumber() {
