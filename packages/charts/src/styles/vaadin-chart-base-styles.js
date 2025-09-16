@@ -776,6 +776,10 @@ export const chartStyles = css`
     stroke-width: 0;
   }
 
+  :where([styled-mode]) .highcharts-organization-series .highcharts-null-point {
+    fill: transparent;
+  }
+
   :where([styled-mode]) .highcharts-polygon-series .highcharts-graph {
     fill: inherit;
     stroke-width: 0;
@@ -1106,7 +1110,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-null-point {
-    fill: var(--highcharts-neutral-color-3, transparent);
+    fill: var(--highcharts-neutral-color-3, var(--vaadin-charts-button-background, var(--vaadin-background-container)));
   }
 
   /* 3d charts */
