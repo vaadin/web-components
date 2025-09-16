@@ -1,7 +1,6 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../hide-scrollbar.js';
 import '../../../src/vaadin-scroller.js';
 
 describe('scroller', () => {
@@ -31,7 +30,7 @@ describe('scroller', () => {
   });
 
   it('theme-overflow-indicators-bottom', async () => {
-    element.setAttribute('theme', 'overflow-indicators');
+    element.setAttribute('theme', 'overflow-indicator-bottom');
     await visualDiff(div, 'theme-overflow-indicators-bottom');
   });
 
@@ -42,7 +41,7 @@ describe('scroller', () => {
   });
 
   it('theme-overflow-indicators-top', async () => {
-    element.setAttribute('theme', 'overflow-indicators');
+    element.setAttribute('theme', 'overflow-indicator-top');
     element.scrollTop = element.scrollHeight - element.clientHeight;
     await visualDiff(div, 'theme-overflow-indicators-top');
   });

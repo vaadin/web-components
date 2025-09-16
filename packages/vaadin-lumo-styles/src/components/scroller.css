@@ -14,8 +14,8 @@
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
-  :host([theme~='overflow-indicators'])::before,
-  :host([theme~='overflow-indicators'])::after {
+  :host([theme*='overflow-indicator'])::before,
+  :host([theme*='overflow-indicator'])::after {
     background: var(--lumo-contrast-10pct);
   }
 }

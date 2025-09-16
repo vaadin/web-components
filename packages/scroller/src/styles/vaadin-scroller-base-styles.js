@@ -33,8 +33,8 @@ export const scrollerStyles = css`
     overflow: hidden;
   }
 
-  :host([theme~='overflow-indicators'])::before,
-  :host([theme~='overflow-indicators'])::after {
+  :host([theme*='overflow-indicator'])::before,
+  :host([theme*='overflow-indicator'])::after {
     content: '';
     display: none;
     position: sticky;
@@ -45,13 +45,15 @@ export const scrollerStyles = css`
     background: var(--vaadin-scroller-border-color, var(--vaadin-border-color-subtle));
   }
 
-  :host([theme~='overflow-indicators'])::after {
+  :host([theme*='overflow-indicator'])::after {
     margin-bottom: 0;
     margin-top: -1px;
   }
 
+  :host([theme~='overflow-indicator-top'][overflow~='top'])::before,
   :host([theme~='overflow-indicators'][overflow~='top'])::before,
-  :host([theme~='overflow-indicators'][overflow~='bottom'])::after {
+  :host([theme~='overflow-indicators'][overflow~='bottom'])::after,
+  :host([theme~='overflow-indicator-bottom'][overflow~='bottom'])::after {
     display: block;
   }
 `;
