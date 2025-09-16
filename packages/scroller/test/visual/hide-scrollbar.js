@@ -4,7 +4,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-scroller',
   css`
-    :host([theme~='overflow-indicators'])::-webkit-scrollbar {
+    :host([theme*='overflow-indicator'])::-webkit-scrollbar {
       display: none;
     }
   `,
