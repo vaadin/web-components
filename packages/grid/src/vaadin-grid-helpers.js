@@ -174,6 +174,15 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
 }
 
 /**
+ * Finds the cell containing the tree toggle element
+ * @param {!HTMLElement} row
+ * @return {HTMLElement | null}
+ */
+export function findTreeToggleCell(row) {
+  return getBodyRowCells(row).find((cell) => cell._content.querySelector('vaadin-grid-tree-toggle'));
+}
+
+/**
  * A helper for observing flattened child column list of an element.
  */
 export class ColumnObserver {
