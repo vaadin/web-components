@@ -187,17 +187,17 @@ export const gridStyles = css`
       0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
-  :focus-visible,
+  :host([navigating]) :focus,
   [part~='row']::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='row']:is(:focus-visible, :focus-within) {
+  :host([navigating]) [part~='row']:is(:focus, :focus-within) {
     z-index: 3;
   }
 
-  [part~='cell']:not([part~='details-cell'], [part~='last-row-cell']):focus-visible {
+  :host([navigating]) [part~='cell']:not([part~='details-cell'], [part~='last-row-cell']):focus {
     padding-bottom: var(--_row-border-width);
     margin-bottom: calc(var(--_row-border-width) * -1);
     box-shadow: none;
@@ -215,7 +215,7 @@ export const gridStyles = css`
     visibility: hidden;
   }
 
-  [part~='row']:focus-visible::after {
+  :host([navigating]) [part~='row']:focus::after {
     visibility: visible;
   }
 
