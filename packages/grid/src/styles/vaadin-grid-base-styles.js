@@ -180,7 +180,7 @@ export const gridStyles = css`
       var(--_hover-background-image, none), var(--_selected-background-image, none), var(--_highlight-background-image),
       var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
     box-shadow:
-      0 var(--_row-border-width) 0 0 var(--vaadin-grid-border-color, var(--vaadin-border-color-subtle)),
+      0 var(--_row-border-width) 0 0 var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
       0 var(--_row-border-width) 0 0 var(--_hover-background-color, transparent),
       0 var(--_row-border-width) 0 0 var(--_selected-background-color, transparent),
       0 var(--_row-border-width) 0 0 var(--_highlight-background-color, transparent),
