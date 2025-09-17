@@ -56,7 +56,7 @@ export const MessageInputMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__buttonPropsChanged(_button, disabled, _theme, __effectiveI18n)',
+        '__buttonPropsChanged(_button, disabled, __effectiveI18n)',
         '__textAreaPropsChanged(_textArea, disabled, __effectiveI18n, value)',
       ];
     }
@@ -134,19 +134,10 @@ export const MessageInputMixin = (superClass) =>
     }
 
     /** @private */
-    __buttonPropsChanged(button, disabled, theme, effectiveI18n) {
+    __buttonPropsChanged(button, disabled, effectiveI18n) {
       if (button) {
         button.disabled = disabled;
         button.textContent = effectiveI18n.send;
-
-        // Only set theme attribute on the default button
-        if (button === this._buttonController.defaultNode) {
-          if (theme) {
-            button.setAttribute('theme', theme);
-          } else {
-            button.removeAttribute('theme');
-          }
-        }
       }
     }
 
