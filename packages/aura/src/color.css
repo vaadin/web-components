@@ -27,7 +27,7 @@
     var(--_border-color-base) calc(14% + 6% * var(--aura-contrast)),
     transparent
   );
-  --vaadin-border-color-subtle: light-dark(
+  --vaadin-border-color-secondary: light-dark(
     color-mix(in srgb, var(--_border-color-base) max(5%, 5% + 3% * var(--aura-contrast)), transparent),
     color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 5% * var(--aura-contrast)), transparent)
   );

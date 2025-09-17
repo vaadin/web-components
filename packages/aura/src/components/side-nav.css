@@ -25,7 +25,7 @@ vaadin-side-nav-item:not([disabled])::part(content):hover {
 
 vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-surface);
-  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-subtle);
+  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-secondary);
 }
 
 /* Contrast variant */

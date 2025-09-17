@@ -24,7 +24,7 @@ export const tooltipOverlayStyles = css`
     border: 0;
     box-shadow:
       0 0 0 var(--vaadin-tooltip-border-width, 1px)
-        var(--vaadin-tooltip-border-color, var(--vaadin-border-color-subtle)),
+        var(--vaadin-tooltip-border-color, var(--vaadin-border-color-secondary)),
       var(--vaadin-tooltip-box-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2));
   }
 

@@ -17,12 +17,12 @@ export const dashboardWidgetAndSectionStyles = css`
     --_widget-background: var(--vaadin-dashboard-widget-background, var(--vaadin-background-color));
     --_widget-border-radius: var(--vaadin-dashboard-widget-border-radius, var(--vaadin-radius-m));
     --_widget-border-width: var(--vaadin-dashboard-widget-border-width, 1px);
-    --_widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--vaadin-border-color-subtle));
+    --_widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--vaadin-border-color-secondary));
     --_widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
     --_widget-editable-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
     --_widget-selected-shadow: 0 3px 12px -1px rgba(0, 0, 0, 0.3);
     --_drop-target-background: var(--vaadin-dashboard-drop-target-background, var(--vaadin-background-container));
-    --_drop-target-border-color: var(--vaadin-dashboard-drop-target-border-color, var(--vaadin-border-color-subtle));
+    --_drop-target-border-color: var(--vaadin-dashboard-drop-target-border-color, var(--vaadin-border-color-secondary));
     --_focus-ring-color: var(--vaadin-focus-ring-color);
     --_focus-ring-width: var(--vaadin-focus-ring-width);
   }

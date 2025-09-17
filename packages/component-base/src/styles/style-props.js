@@ -23,7 +23,7 @@ addGlobalThemeStyles(
         );
 
         /* Border colors */
-        --vaadin-border-color-subtle: color-mix(in oklab, var(--vaadin-text-color) 24%, transparent);
+        --vaadin-border-color-secondary: color-mix(in oklab, var(--vaadin-text-color) 24%, transparent);
         --vaadin-border-color: color-mix(in oklab, var(--vaadin-text-color) 48%, transparent); /* Above 3:1 contrast */
 
         /* Text colors */

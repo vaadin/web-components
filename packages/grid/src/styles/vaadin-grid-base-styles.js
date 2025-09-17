@@ -25,7 +25,7 @@ export const gridStyles = css`
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     background: var(--vaadin-grid-background, var(--vaadin-background-color));
-    border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--vaadin-border-color-subtle));
+    border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     cursor: default;
     --_border-width: 0;
     --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
@@ -217,11 +217,12 @@ export const gridStyles = css`
 
   [part~='cell']:not([part~='last-column-cell'], [part~='details-cell']) {
     border-inline-end: var(--_column-border-width, 0) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part~='cell']:where(:not([part~='details-cell'], [part~='first-row-cell'])) {
-    border-top: var(--_row-border-width) solid var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-subtle));
+    border-top: var(--_row-border-width) solid
+      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part~='first-header-row-cell'] {
@@ -230,12 +231,12 @@ export const gridStyles = css`
 
   [part~='last-header-row-cell'] {
     border-bottom: var(--_row-border-width, 1px) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part~='first-footer-row-cell'] {
     border-top: var(--_row-border-width, 1px) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
   /* Variant: row stripes */

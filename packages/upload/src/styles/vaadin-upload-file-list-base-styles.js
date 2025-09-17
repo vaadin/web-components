@@ -30,7 +30,7 @@ export const uploadFileListStyles = css`
     border-bottom: var(
       --vaadin-upload-file-list-border,
       var(--vaadin-upload-file-list-border-width, 1px) solid
-        var(--vaadin-upload-file-list-border-color, var(--vaadin-border-color-subtle))
+        var(--vaadin-upload-file-list-border-color, var(--vaadin-border-color-secondary))
     );
   }
 `;

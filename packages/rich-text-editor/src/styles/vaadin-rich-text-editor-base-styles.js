@@ -357,7 +357,7 @@ export const content = css`
   /* quill core end */
 
   blockquote {
-    border-inline-start: 4px solid var(--vaadin-border-color-subtle);
+    border-inline-start: 4px solid var(--vaadin-border-color-secondary);
     margin: var(--vaadin-padding-container);
     padding-inline-start: var(--vaadin-padding-s);
   }

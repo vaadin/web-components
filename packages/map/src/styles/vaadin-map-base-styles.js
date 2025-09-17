@@ -37,7 +37,7 @@ export const mapStyles = css`
     content: '';
     position: absolute;
     inset: 0;
-    border: 1px solid var(--vaadin-map-border-color, var(--vaadin-border-color-subtle));
+    border: 1px solid var(--vaadin-map-border-color, var(--vaadin-border-color-secondary));
     border-radius: inherit;
     z-index: 1;
     pointer-events: none;

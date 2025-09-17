@@ -32,7 +32,7 @@ export const buttonStyles = css`
     background: var(--vaadin-button-background, var(--vaadin-background-container));
     background-origin: border-box;
     border: var(--vaadin-button-border-width, 1px) solid
-      var(--vaadin-button-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-button-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
   }

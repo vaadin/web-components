@@ -19,7 +19,7 @@ export const notificationCardStyles = css`
     padding: var(--vaadin-notification-padding, var(--vaadin-padding-s));
     background: var(--vaadin-notification-background, var(--vaadin-background-container));
     border: var(--vaadin-notification-border-width, 1px) solid
-      var(--vaadin-notification-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-notification-border-color, var(--vaadin-border-color-secondary));
     box-shadow: var(--vaadin-notification-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     border-radius: var(--vaadin-notification-border-radius, var(--vaadin-radius-l));
     cursor: default;

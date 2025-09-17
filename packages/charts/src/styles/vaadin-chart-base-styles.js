@@ -119,13 +119,13 @@ export const chartStyles = css`
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-text-color-secondary));
     --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
     --_point-border: var(--vaadin-charts-point-border, var(--_bg));
-    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-subtle));
+    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-secondary));
     --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
     --_axis-label: var(--vaadin-charts-axis-label, var(--_secondary-label));
-    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color-subtle));
+    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color-secondary));
     --_minor-grid-line: var(
       --vaadin-charts-minor-grid-line,
-      color-mix(in srgb, var(--vaadin-border-color-subtle) 60%, transparent)
+      color-mix(in srgb, var(--vaadin-border-color-secondary) 60%, transparent)
     );
     --_data-label: var(--vaadin-charts-data-label, var(--_label));
   }

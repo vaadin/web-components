@@ -57,7 +57,7 @@ export const overlayContentStyles = css`
   }
 
   :host([desktop]) ::slotted([slot='months']) {
-    border-bottom: 1px solid var(--vaadin-border-color-subtle);
+    border-bottom: 1px solid var(--vaadin-border-color-secondary);
   }
 
   ::slotted([slot='years']) {
@@ -66,7 +66,7 @@ export const overlayContentStyles = css`
     width: var(--vaadin-date-picker-year-scroller-width, 3rem);
     box-sizing: border-box;
     border-inline-start: 1px solid
-      var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color-secondary));
     overflow: visible;
     min-height: 0;
     clip-path: inset(0);
@@ -74,7 +74,7 @@ export const overlayContentStyles = css`
 
   ::slotted([slot='years'])::before {
     background: var(--vaadin-overlay-background, var(--vaadin-background-color));
-    border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color-subtle));
+    border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color-secondary));
     width: 16px;
     height: 16px;
     position: absolute;
@@ -103,6 +103,6 @@ export const overlayContentStyles = css`
 
   :host([fullscreen]) [part='toolbar'] {
     grid-area: header;
-    border-bottom: 1px solid var(--vaadin-border-color-subtle);
+    border-bottom: 1px solid var(--vaadin-border-color-secondary);
   }
 `;

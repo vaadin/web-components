@@ -45,7 +45,7 @@ class AuraSchemeControl extends AuraControl {
           cursor: pointer;
           user-select: none;
           display: inline-block;
-          border-right: 1px solid var(--vaadin-border-color-subtle);
+          border-right: 1px solid var(--vaadin-border-color-secondary);
         }
 
         .segmented label:last-of-type {

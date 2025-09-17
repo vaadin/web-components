@@ -61,7 +61,7 @@ export const monthCalendarStyles = css`
     flex: 1;
     background: var(
       --vaadin-date-picker-week-divider-color,
-      var(--vaadin-divider-color, var(--vaadin-border-color-subtle))
+      var(--vaadin-divider-color, var(--vaadin-border-color-secondary))
     );
   }
 

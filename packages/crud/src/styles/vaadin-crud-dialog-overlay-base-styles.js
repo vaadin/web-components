@@ -43,7 +43,7 @@ const crudDialogOverlay = css`
     justify-content: normal;
     background: var(--vaadin-crud-footer-background, transparent);
     border-top: var(--vaadin-crud-border-width, 1px) solid
-      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-secondary));
   }
 `;
 

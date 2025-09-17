@@ -26,7 +26,7 @@ export const progressBarStyles = css`
     background: var(--vaadin-progress-bar-background, var(--vaadin-background-container));
     border-radius: var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m));
     border: var(--vaadin-progress-bar-border-width, 1px) solid
-      var(--vaadin-progress-bar-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-progress-bar-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part='value'] {
