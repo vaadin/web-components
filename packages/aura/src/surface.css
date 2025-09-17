@@ -4,8 +4,8 @@
 
 /* List all elements that are surfaces */
 :is(:root, :host),
-[theme~='surface'],
-[theme~='surface-solid'],
+.aura-surface,
+.aura-surface-solid,
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
 vaadin-button,
@@ -44,11 +44,11 @@ vaadin-side-nav-item::part(content),
   --vaadin-background-color: var(--aura-surface-solid);
 }
 
-[theme~='surface'] {
+.aura-surface {
   background: var(--aura-surface) padding-box;
 }
 
-[theme~='surface-solid'] {
+.aura-surface-solid {
   --aura-surface-opacity: 1;
   background: var(--aura-surface-solid) padding-box;
 }
