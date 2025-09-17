@@ -28,10 +28,9 @@ export const gridStyles = css`
     border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     cursor: default;
     --_border-width: 0;
-    --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
-    --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
+    --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
+    --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
     --_cell-padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
-    --_selection-background-image: none;
     border-radius: var(--_border-radius);
     --_border-radius: 0;
   }
@@ -157,10 +156,7 @@ export const gridStyles = css`
 
   [part~='row'],
   [part~='cell'] {
-    --_hover-background-image: var(--vaadin-grid-cell-background-hover, none);
-    background:
-      var(--_hover-background-image), var(--_selection-background-image),
-      var(--vaadin-grid-cell-background, var(--vaadin-background-color));
+    background: var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
   [part~='cell']:not([part~='details-cell']) {
@@ -174,21 +170,45 @@ export const gridStyles = css`
     white-space: nowrap;
   }
 
+  [part~='body-cell']:not([part~='details-cell']) {
+    --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
+    --_highlight-background-image: linear-gradient(
+      var(--_highlight-background-color),
+      var(--_highlight-background-color)
+    );
+    background:
+      var(--_hover-background-image, none), var(--_selected-background-image, none), var(--_highlight-background-image),
+      var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+    box-shadow:
+      0 var(--_row-border-width) 0 0 var(--vaadin-grid-border-color, var(--vaadin-border-color-subtle)),
+      0 var(--_row-border-width) 0 0 var(--_hover-background-color, transparent),
+      0 var(--_row-border-width) 0 0 var(--_selected-background-color, transparent),
+      0 var(--_row-border-width) 0 0 var(--_highlight-background-color, transparent),
+      0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
   :focus-visible,
   [part~='row']::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='row']:focus-visible {
-    z-index: 1;
+  [part~='row']:is(:focus-visible, :focus-within) {
+    z-index: 3;
+  }
+
+  [part~='cell']:not([part~='details-cell'], [part~='last-row-cell']):focus-visible {
+    padding-bottom: var(--_row-border-width);
+    margin-bottom: calc(var(--_row-border-width) * -1);
+    box-shadow: none;
   }
 
   /* Used for focus outline and drag'n'drop target indication */
   [part~='row']::after {
     content: '';
     position: absolute;
-    inset: calc(var(--_row-border-width) * -1) 0;
+    inset: 0;
+    bottom: calc(var(--_row-border-width) * -1);
     z-index: 3;
     transform: translateX(var(--_grid-horizontal-scroll-position));
     pointer-events: none;
@@ -200,27 +220,16 @@ export const gridStyles = css`
   }
 
   /* Variant: wrap cell contents */
-
   :host([theme~='wrap-cell-content']) [part~='cell']:not([part~='details-cell']) {
     white-space: normal;
   }
 
-  /* Variant: row & column borders */
-
-  :host([theme~='no-row-borders']) {
-    --_row-border-width: 0;
-  }
-
-  :host([theme~='column-borders']) {
-    --_column-border-width: var(--vaadin-grid-cell-border-width, 1px);
-  }
-
   [part~='cell']:not([part~='last-column-cell'], [part~='details-cell']) {
-    border-inline-end: var(--_column-border-width, 0) solid
+    border-inline-end: var(--_column-border-width) solid
       var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
-  [part~='cell']:where(:not([part~='details-cell'], [part~='first-row-cell'])) {
+  [part~='cell']:where(:not([part~='first-row-cell'])) {
     border-top: var(--_row-border-width) solid
       var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
@@ -230,28 +239,25 @@ export const gridStyles = css`
   }
 
   [part~='last-header-row-cell'] {
-    border-bottom: var(--_row-border-width, 1px) solid
+    border-bottom: var(--_row-border-width) solid
       var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part~='first-footer-row-cell'] {
-    border-top: var(--_row-border-width, 1px) solid
+    border-top: var(--_row-border-width) solid
       var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
   /* Variant: row stripes */
-  :host([theme~='row-stripes']) [part~='odd-row'],
-  :host([theme~='row-stripes']) [part~='odd-row'] [part~='cell'] {
-    --vaadin-grid-cell-background: var(
-      --vaadin-grid-odd-row-cell-background,
-      linear-gradient(var(--vaadin-background-container), var(--vaadin-background-container))
-    );
+  [part~='odd-row'] {
+    --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--vaadin-background-color));
   }
 
-  [part~='details-cell'] {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+  :host([theme~='row-stripes']) [part~='odd-row'] {
+    --vaadin-grid-cell-background-color: var(
+      --vaadin-grid-row-odd-background-color,
+      var(--vaadin-background-container)
+    );
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -269,13 +275,45 @@ export const gridStyles = css`
     will-change: transform;
   }
 
+  [part~='details-cell'] {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: auto;
+  }
+
+  /* Raise highlighted rows above others */
+  [part~='body-row']:where([selected]) {
+    z-index: 1;
+  }
+
+  @container style(--vaadin-grid-row-odd-background-color) {
+    [part~='odd-row'] {
+      z-index: 1;
+    }
+  }
+
+  /* Row hover */
+  @media (any-hover: hover) {
+    @container style(--vaadin-grid-row-hover-background-color) {
+      [part~='body-row']:hover {
+        z-index: 2;
+      }
+    }
+
+    [part~='body-row']:hover [part~='cell']:not([part~='details-cell']) {
+      --_hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
+      --_hover-background-image: linear-gradient(var(--_hover-background-color), var(--_hover-background-color));
+    }
+  }
+
   /* Selected row */
-  [part~='row'][selected] [part~='body-cell']:not([part~='details-cell']) {
-    --_color: color-mix(in srgb, currentColor 8%, transparent);
-    --_selection-background-image: var(
-      --vaadin-grid-row-selected-background,
-      linear-gradient(var(--_color), var(--_color))
+  [part~='body-row'][selected] {
+    --_selected-background-color: var(
+      --vaadin-grid-row-selected-background-color,
+      color-mix(in srgb, currentColor 8%, transparent)
     );
+    --_selected-background-image: linear-gradient(var(--_selected-background-color), var(--_selected-background-color));
   }
 
   /* Empty state */
