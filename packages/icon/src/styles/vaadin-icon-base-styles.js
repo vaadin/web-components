@@ -22,7 +22,7 @@ export const iconStyles = css`
   :host::after,
   :host::before {
     line-height: 1;
-    font-size: 100cqh;
+    font-size: var(--vaadin-icon-visual-size, 100cqh);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;
@@ -34,10 +34,14 @@ export const iconStyles = css`
 
   svg {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: var(--vaadin-icon-visual-size, 100%);
+    height: var(--vaadin-icon-visual-size, 100%);
     /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
     overflow: visible;
+
+    @container style(--vaadin-icon-stroke-width) {
+      stroke-width: var(--vaadin-icon-stroke-width);
+    }
   }
 
   :host(:is([icon-class], [font-icon-content])) svg {
