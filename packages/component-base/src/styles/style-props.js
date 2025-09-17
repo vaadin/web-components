@@ -100,7 +100,7 @@ addGlobalThemeStyles(
         html {
           --vaadin-background-color: Canvas;
           --vaadin-border-color: CanvasText;
-          --vaadin-border-color-strong: CanvasText;
+          --vaadin-border-color-secondary: CanvasText;
           --vaadin-color-disabled: CanvasText;
           --vaadin-text-color-secondary: CanvasText;
           --vaadin-text-color: CanvasText;
