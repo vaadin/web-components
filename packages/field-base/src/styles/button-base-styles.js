@@ -34,7 +34,7 @@ export const button = css`
   }
 
   :host(:is([readonly], [disabled])) [part$='button'] {
-    color: var(--vaadin-color-disabled);
+    color: var(--vaadin-text-color-disabled);
     cursor: var(--vaadin-disabled-cursor);
   }
 

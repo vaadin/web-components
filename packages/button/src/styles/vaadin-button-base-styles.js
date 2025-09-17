@@ -72,7 +72,7 @@ export const buttonStyles = css`
 
   :host([disabled][theme~='primary']) {
     --vaadin-button-text-color: var(--vaadin-background-container-strong);
-    --vaadin-button-background: var(--vaadin-color-disabled);
+    --vaadin-button-background: var(--vaadin-text-color-disabled);
   }
 
   @media (forced-colors: active) {

@@ -117,7 +117,7 @@ export const chartStyles = css`
 
     --_label: var(--vaadin-charts-label, var(--vaadin-text-color));
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-text-color-secondary));
-    --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
+    --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-text-color-disabled));
     --_point-border: var(--vaadin-charts-point-border, var(--_bg));
     --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-secondary));
     --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
@@ -948,7 +948,10 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-button-disabled text {
-    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-disabled-label, var(--vaadin-color-disabled)));
+    fill: var(
+      --highcharts-neutral-color-80,
+      var(--vaadin-charts-button-disabled-label, var(--vaadin-text-color-disabled))
+    );
   }
 
   :where([styled-mode]) .highcharts-range-selector-buttons .highcharts-button {

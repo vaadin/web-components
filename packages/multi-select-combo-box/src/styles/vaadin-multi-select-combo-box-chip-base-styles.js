@@ -69,7 +69,7 @@ export const multiSelectComboBoxChipStyles = css`
   }
 
   :host([disabled]) [part='label'] {
-    --vaadin-chip-color: var(--vaadin-color-disabled);
+    --vaadin-chip-color: var(--vaadin-text-color-disabled);
   }
 
   :host([hidden]),

@@ -112,7 +112,7 @@ export const monthCalendarStyles = css`
 
   [disabled] {
     cursor: var(--vaadin-disabled-cursor);
-    color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-color-disabled));
+    color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-text-color-disabled));
     opacity: 0.7;
   }
 

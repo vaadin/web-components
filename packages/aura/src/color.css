@@ -16,7 +16,11 @@
     color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
     color-mix(in srgb, var(--_color-base) calc(57% + 10% * var(--aura-contrast)), transparent)
   );
-  --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(30% + 10% * var(--aura-contrast)), transparent);
+  --vaadin-text-color-disabled: color-mix(
+    in srgb,
+    var(--_color-base) calc(30% + 10% * var(--aura-contrast)),
+    transparent
+  );
 
   --_border-color-base: light-dark(
     oklch(from var(--aura-background-light) 0.1 c h),

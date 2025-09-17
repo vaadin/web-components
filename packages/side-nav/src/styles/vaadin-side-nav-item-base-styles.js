@@ -39,7 +39,7 @@ const sideNavItem = css`
   }
 
   :host([disabled]) [part='content'] {
-    --vaadin-side-nav-item-color: var(--vaadin-color-disabled);
+    --vaadin-side-nav-item-color: var(--vaadin-text-color-disabled);
   }
 
   [part='link'] {
