@@ -46,7 +46,7 @@ export const checkable = (part, propName = part) => css`
     font-size: var(--vaadin-${unsafeCSS(propName)}-label-font-size, var(--vaadin-input-field-label-font-size, inherit));
     line-height: var(--vaadin-${unsafeCSS(propName)}-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
     font-weight: var(--vaadin-${unsafeCSS(propName)}-font-weight, var(--vaadin-input-field-label-font-weight, 500));
-    color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-color)));
+    color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     word-break: break-word;
   }
 
@@ -87,14 +87,14 @@ export const checkable = (part, propName = part) => css`
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
-    color: var(--vaadin-${unsafeCSS(propName)}-color, var(--vaadin-input-field-text-color, var(--vaadin-color)));
+    color: var(--vaadin-${unsafeCSS(propName)}-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)));
     height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
   }
 
   :host(:is([checked], [indeterminate])) {
-    --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-color);
+    --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-text-color);
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
     --vaadin-${unsafeCSS(propName)}-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   }

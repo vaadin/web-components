@@ -23,7 +23,7 @@ export const uploadStyles = css`
 
   :host([dragover-valid]) {
     --vaadin-upload-background: var(--vaadin-background-container);
-    --vaadin-upload-border: 1px dashed var(--vaadin-color);
+    --vaadin-upload-border: 1px dashed var(--vaadin-text-color);
   }
 
   :host([hidden]) {
@@ -42,7 +42,7 @@ export const uploadStyles = css`
 
   [part='drop-label'] {
     align-items: center;
-    color: var(--vaadin-upload-drop-label-color, var(--vaadin-color));
+    color: var(--vaadin-upload-drop-label-color, var(--vaadin-text-color));
     display: flex;
     font-size: var(--vaadin-upload-drop-label-font-size, inherit);
     font-weight: var(--vaadin-upload-drop-label-font-weight, inherit);

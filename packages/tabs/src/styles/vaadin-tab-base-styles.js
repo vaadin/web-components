@@ -38,7 +38,7 @@ export const tabStyles = css`
 
   :host([selected]) {
     --vaadin-tab-background: var(--vaadin-background-container);
-    --vaadin-tab-color: var(--vaadin-color);
+    --vaadin-tab-color: var(--vaadin-text-color);
   }
 
   :host([disabled]) {

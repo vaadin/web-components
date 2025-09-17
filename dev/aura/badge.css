@@ -12,9 +12,13 @@
   padding: 0 0.5em;
   border-radius: var(--vaadin-radius-l);
   min-width: calc(1lh - 1em - 2px);
-  --color: var(--vaadin-color);
+  --color: var(--vaadin-text-color);
   --text-opacity: 70%;
-  color: color-mix(in xyz, var(--color) calc(var(--text-opacity) - 15% * var(--aura-contrast)), var(--vaadin-color));
+  color: color-mix(
+    in xyz,
+    var(--color) calc(var(--text-opacity) - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
   --vaadin-icon-size: 0.75lh;
 }
 

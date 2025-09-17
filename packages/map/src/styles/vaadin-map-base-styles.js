@@ -399,7 +399,7 @@ export const mapStyles = css`
   }
 
   .ol-control button:hover {
-    color: var(--vaadin-map-control-color-hover, var(--vaadin-color));
+    color: var(--vaadin-map-control-color-hover, var(--vaadin-text-color));
   }
 
   .ol-control button:focus-visible {

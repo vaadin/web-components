@@ -38,7 +38,7 @@ const loginOverlayWrapper = css`
   }
 
   ::slotted([slot='title']) {
-    color: var(--vaadin-login-overlay-title-color, var(--vaadin-color));
+    color: var(--vaadin-login-overlay-title-color, var(--vaadin-text-color));
     font-size: var(--vaadin-login-overlay-title-font-size, inherit);
     font-weight: var(--vaadin-login-overlay-title-font-weight, 600);
     line-height: var(--vaadin-login-overlay-title-line-height, inherit);

@@ -14,7 +14,7 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
     border: var(--${unsafeCSS(partName)}-border, none);
     border-radius: var(--${unsafeCSS(partName)}-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
-    color: var(--${unsafeCSS(partName)}-text-color, var(--vaadin-color));
+    color: var(--${unsafeCSS(partName)}-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
     display: flex;
     font-size: var(--${unsafeCSS(partName)}-font-size, inherit);

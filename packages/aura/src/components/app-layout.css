@@ -76,7 +76,7 @@ vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
 
 vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
   color-scheme: var(--aura-content-color-scheme);
-  color: var(--vaadin-color);
+  color: var(--vaadin-text-color);
   background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-app-background);
   background-clip: padding-box;
   background-origin: border-box;

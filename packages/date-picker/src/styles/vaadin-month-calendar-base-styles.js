@@ -13,7 +13,7 @@ export const monthCalendarStyles = css`
   }
 
   [part='month-header'] {
-    color: var(--vaadin-date-picker-month-header-color, var(--vaadin-color));
+    color: var(--vaadin-date-picker-month-header-color, var(--vaadin-text-color));
     font-size: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
     font-weight: var(--vaadin-date-picker-month-header-font-weight, 500);
     line-height: inherit;
@@ -98,7 +98,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='today'] {
-    color: var(--vaadin-date-picker-date-today-color, var(--vaadin-color));
+    color: var(--vaadin-date-picker-date-today-color, var(--vaadin-text-color));
   }
 
   [part~='selected'] {
@@ -106,7 +106,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='selected']::after {
-    background: var(--vaadin-date-picker-date-selected-background, var(--vaadin-color));
+    background: var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color));
     outline-offset: 1px;
   }
 

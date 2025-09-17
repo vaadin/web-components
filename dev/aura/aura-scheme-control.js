@@ -55,7 +55,7 @@ class AuraSchemeControl extends AuraControl {
         /* Selected state */
         .segmented input:checked + label {
           background: var(--vaadin-background-container);
-          color: var(--vaadin-color);
+          color: var(--vaadin-text-color);
           background-clip: padding-box;
           font-weight: 600;
         }

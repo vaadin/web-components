@@ -31,7 +31,7 @@ const sideNavItem = css`
 
   :host([current]) [part='content'] {
     --vaadin-side-nav-item-background: var(--vaadin-background-container);
-    --vaadin-side-nav-item-color: var(--vaadin-color);
+    --vaadin-side-nav-item-color: var(--vaadin-text-color);
   }
 
   :host([disabled]) {

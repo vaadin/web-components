@@ -15,21 +15,29 @@ addGlobalThemeStyles(
         --vaadin-background-color: light-dark(#fff, #222);
 
         /* Container colors */
-        --vaadin-background-container: color-mix(in oklab, var(--vaadin-color) 5%, var(--vaadin-background-color));
+        --vaadin-background-container: color-mix(in oklab, var(--vaadin-text-color) 5%, var(--vaadin-background-color));
         --vaadin-background-container-strong: color-mix(
           in oklab,
-          var(--vaadin-color) 10%,
+          var(--vaadin-text-color) 10%,
           var(--vaadin-background-color)
         );
 
         /* Border colors */
-        --vaadin-border-color-subtle: color-mix(in oklab, var(--vaadin-color) 24%, transparent);
-        --vaadin-border-color: color-mix(in oklab, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
+        --vaadin-border-color-subtle: color-mix(in oklab, var(--vaadin-text-color) 24%, transparent);
+        --vaadin-border-color: color-mix(in oklab, var(--vaadin-text-color) 48%, transparent); /* Above 3:1 contrast */
 
         /* Text colors */
-        --vaadin-color-disabled: color-mix(in oklab, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
-        --vaadin-color-subtle: color-mix(in oklab, var(--vaadin-color) 68%, transparent); /* Above 4.5:1 contrast */
-        --vaadin-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
+        --vaadin-color-disabled: color-mix(
+          in oklab,
+          var(--vaadin-text-color) 48%,
+          transparent
+        ); /* Above 3:1 contrast */
+        --vaadin-color-subtle: color-mix(
+          in oklab,
+          var(--vaadin-text-color) 68%,
+          transparent
+        ); /* Above 4.5:1 contrast */
+        --vaadin-text-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
         --vaadin-padding-xs: 6px;
@@ -53,7 +61,7 @@ addGlobalThemeStyles(
 
         /* Focus outline */
         --vaadin-focus-ring-width: 2px;
-        --vaadin-focus-ring-color: var(--vaadin-color);
+        --vaadin-focus-ring-color: var(--vaadin-text-color);
 
         /* Icons, used as mask-image */
         --_vaadin-icon-arrow-up: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" /></svg>');
@@ -95,7 +103,7 @@ addGlobalThemeStyles(
           --vaadin-border-color-strong: CanvasText;
           --vaadin-color-disabled: CanvasText;
           --vaadin-color-subtle: CanvasText;
-          --vaadin-color: CanvasText;
+          --vaadin-text-color: CanvasText;
           --vaadin-icon-color: CanvasText;
           --vaadin-focus-ring-color: Highlight;
         }

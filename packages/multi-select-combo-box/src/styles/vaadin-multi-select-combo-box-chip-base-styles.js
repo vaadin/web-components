@@ -15,7 +15,7 @@ export const multiSelectComboBoxChipStyles = css`
     box-sizing: border-box;
     gap: var(--vaadin-chip-gap, 0);
     background: var(--vaadin-chip-background, var(--vaadin-background-container));
-    color: var(--vaadin-chip-color, var(--vaadin-color));
+    color: var(--vaadin-chip-color, var(--vaadin-text-color));
     font-size: max(11px, var(--vaadin-chip-font-size, 0.875em));
     font-weight: var(--vaadin-chip-font-weight, 500);
     line-height: var(--vaadin-input-field-value-line-height, inherit);

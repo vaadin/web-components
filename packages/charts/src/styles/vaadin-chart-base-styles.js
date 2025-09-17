@@ -34,7 +34,7 @@ const tooltipStyles = (scope) => css`
 
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)} .highcharts-tooltip foreignObject span {
-    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-color)));
+    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-text-color)));
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-tracker {
@@ -115,7 +115,7 @@ export const chartStyles = css`
     --_color-positive: light-dark(#19b156, #1ccc62);
     --_color-negative: light-dark(#dc0611, #f7353f);
 
-    --_label: var(--vaadin-charts-label, var(--vaadin-color));
+    --_label: var(--vaadin-charts-label, var(--vaadin-text-color));
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-color-subtle));
     --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
     --_point-border: var(--vaadin-charts-point-border, var(--_bg));

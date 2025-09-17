@@ -13,7 +13,7 @@ export const messageInputButtonStyles = css`
     margin: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
     --vaadin-button-border-width: 0;
     --vaadin-button-background: transparent;
-    --vaadin-button-text-color: var(--vaadin-color);
+    --vaadin-button-text-color: var(--vaadin-text-color);
     --vaadin-button-padding: 0;
   }
 `;

@@ -131,7 +131,7 @@ export const crudStyles = css`
   }
 
   [part='header'] {
-    color: var(--vaadin-crud-header-color, var(--vaadin-color));
+    color: var(--vaadin-crud-header-color, var(--vaadin-text-color));
     font-size: var(--vaadin-crud-header-font-size, 1em);
     font-weight: var(--vaadin-crud-header-font-weight, 600);
     line-height: var(--vaadin-crud-header-line-height, inherit);

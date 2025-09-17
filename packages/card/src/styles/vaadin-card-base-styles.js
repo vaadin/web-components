@@ -133,7 +133,7 @@ export const cardStyles = css`
   }
 
   ::slotted([slot='title']) {
-    color: var(--vaadin-card-title-color, var(--vaadin-color)) !important;
+    color: var(--vaadin-card-title-color, var(--vaadin-text-color)) !important;
     font-size: var(--vaadin-card-title-font-size, inherit) !important;
     font-weight: var(--vaadin-card-title-font-weight, 500) !important;
     line-height: var(--vaadin-card-title-line-height, inherit) !important;

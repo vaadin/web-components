@@ -31,7 +31,7 @@ export const overlayContentStyles = css`
     display: inline-flex;
     align-items: center;
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-color);
+    color: var(--vaadin-text-color);
     font-size: var(--vaadin-button-font-size, inherit);
     font-weight: var(--vaadin-button-font-weight, 500);
     height: var(--vaadin-button-height, auto);
@@ -41,7 +41,7 @@ export const overlayContentStyles = css`
   }
 
   :host([years-visible]) [part='years-toggle-button'] {
-    background: var(--vaadin-color);
+    background: var(--vaadin-text-color);
     color: var(--vaadin-background-color);
   }
 

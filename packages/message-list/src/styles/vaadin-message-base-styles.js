@@ -42,7 +42,7 @@ export const messageStyles = css`
   [part='name'] {
     font-size: var(--vaadin-message-name-font-size, inherit);
     font-weight: var(--vaadin-message-name-font-weight, 500);
-    color: var(--vaadin-message-name-color, var(--vaadin-color));
+    color: var(--vaadin-message-name-color, var(--vaadin-text-color));
   }
 
   [part='time'] {
@@ -56,7 +56,7 @@ export const messageStyles = css`
     font-size: var(--vaadin-message-font-size, inherit);
     font-weight: var(--vaadin-message-font-weight, inherit);
     line-height: var(--vaadin-message-line-height, inherit);
-    color: var(--vaadin-message-color, var(--vaadin-color));
+    color: var(--vaadin-message-color, var(--vaadin-text-color));
   }
 
   ::slotted([slot='avatar']) {

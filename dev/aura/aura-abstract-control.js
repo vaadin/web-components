@@ -15,7 +15,7 @@ export class AuraControl extends HTMLElement {
       }
 
       label {
-        color: var(--vaadin-color);
+        color: var(--vaadin-text-color);
         font-weight: var(--aura-font-weight-medium);
       }
 

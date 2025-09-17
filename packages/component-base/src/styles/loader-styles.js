@@ -24,7 +24,7 @@ export const loaderStyles = css`
       spin var(--vaadin-spinner-animation-duration, 1s) linear infinite,
       fade-in 0.3s 0.3s both;
     border: var(--vaadin-spinner-width, 2px) solid;
-    --_spinner-color: var(--vaadin-spinner-color, var(--vaadin-color));
+    --_spinner-color: var(--vaadin-spinner-color, var(--vaadin-text-color));
     --_spinner-color2: color-mix(in srgb, var(--_spinner-color) 20%, transparent);
     border-color: var(--_spinner-color) var(--_spinner-color) var(--_spinner-color2) var(--_spinner-color2);
     border-radius: 50%;
