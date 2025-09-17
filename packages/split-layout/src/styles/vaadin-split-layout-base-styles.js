@@ -62,7 +62,7 @@ export const splitLayoutStyles = css`
   }
 
   [part='handle'] {
-    background: var(--vaadin-split-layout-handle-background, var(--vaadin-color-subtle));
+    background: var(--vaadin-split-layout-handle-background, var(--vaadin-text-color-secondary));
     border-radius: var(--vaadin-radius-m);
     flex: none;
     width: var(--_handle-size);

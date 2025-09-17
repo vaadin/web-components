@@ -9,7 +9,7 @@ import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 
 const menuItemStyles = css`
   :host::after {
-    background: var(--vaadin-color-subtle);
+    background: var(--vaadin-text-color-secondary);
     content: '';
     display: block;
     height: var(--vaadin-icon-size, 1lh);

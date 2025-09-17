@@ -38,7 +38,7 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
   }
 
   [part='toggle'] {
-    color: var(--vaadin-color-subtle);
+    color: var(--vaadin-text-color-secondary);
   }
 
   @media (prefers-reduced-motion: no-preference) {

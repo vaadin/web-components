@@ -48,7 +48,7 @@ export const messageStyles = css`
   [part='time'] {
     font-size: var(--vaadin-message-time-font-size, max(11px, 0.75em));
     font-weight: var(--vaadin-message-time-font-weight, inherit);
-    color: var(--vaadin-message-time-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-message-time-color, var(--vaadin-text-color-secondary));
   }
 
   [part='message'] {

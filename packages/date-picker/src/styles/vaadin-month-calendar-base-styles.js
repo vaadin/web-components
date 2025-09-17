@@ -33,7 +33,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='weekday'] {
-    color: var(--vaadin-date-picker-weekday-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-date-picker-weekday-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-date-picker-weekday-font-size, 0.75rem);
     font-weight: var(--vaadin-date-picker-weekday-font-weight, 500);
     margin-bottom: 0.375rem;
@@ -46,7 +46,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='week-number'] {
-    color: var(--vaadin-date-picker-week-number-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-date-picker-week-number-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-date-picker-week-number-font-size, 0.7rem);
     line-height: 1;
     width: 100%;

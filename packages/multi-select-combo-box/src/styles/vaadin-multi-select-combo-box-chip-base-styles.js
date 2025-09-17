@@ -50,7 +50,7 @@ export const multiSelectComboBoxChipStyles = css`
     display: block;
     margin-inline-start: auto;
     margin-block: calc(var(--vaadin-chip-border-width, 1px) * -1);
-    color: var(--vaadin-chip-remove-button-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-chip-remove-button-color, var(--vaadin-text-color-secondary));
     cursor: var(--vaadin-clickable-cursor);
     translate: 25%;
   }

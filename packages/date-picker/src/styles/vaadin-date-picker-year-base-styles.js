@@ -18,7 +18,7 @@ export const datePickerYearStyles = css`
     height: 50%;
     justify-content: center;
     transform: translateY(-50%);
-    color: var(--vaadin-color-subtle);
+    color: var(--vaadin-text-color-secondary);
   }
 
   :host([current]) [part='year-number'] {

@@ -141,7 +141,7 @@ export const cardStyles = css`
   }
 
   ::slotted([slot='subtitle']) {
-    color: var(--vaadin-card-subtitle-color, var(--vaadin-color-subtle)) !important;
+    color: var(--vaadin-card-subtitle-color, var(--vaadin-text-color-secondary)) !important;
     font-size: var(--vaadin-card-subtitle-font-size, inherit) !important;
     font-weight: var(--vaadin-card-subtitle-font-weight, 400) !important;
     line-height: var(--vaadin-card-subtitle-line-height, inherit) !important;

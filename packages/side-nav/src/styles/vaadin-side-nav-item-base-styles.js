@@ -20,7 +20,7 @@ const sideNavItem = css`
     font-size: var(--vaadin-side-nav-item-font-size, 1em);
     font-weight: var(--vaadin-side-nav-item-font-weight, 500);
     line-height: var(--vaadin-side-nav-item-line-height, inherit);
-    color: var(--vaadin-side-nav-item-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-side-nav-item-color, var(--vaadin-text-color-secondary));
     background: var(--vaadin-side-nav-item-background, transparent);
     background-origin: border-box;
     border: var(--vaadin-side-nav-item-border-width, 0) solid var(--vaadin-side-nav-item-border-color, transparent);

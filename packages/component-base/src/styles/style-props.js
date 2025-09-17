@@ -32,7 +32,7 @@ addGlobalThemeStyles(
           var(--vaadin-text-color) 48%,
           transparent
         ); /* Above 3:1 contrast */
-        --vaadin-color-subtle: color-mix(
+        --vaadin-text-color-secondary: color-mix(
           in oklab,
           var(--vaadin-text-color) 68%,
           transparent
@@ -102,7 +102,7 @@ addGlobalThemeStyles(
           --vaadin-border-color: CanvasText;
           --vaadin-border-color-strong: CanvasText;
           --vaadin-color-disabled: CanvasText;
-          --vaadin-color-subtle: CanvasText;
+          --vaadin-text-color-secondary: CanvasText;
           --vaadin-text-color: CanvasText;
           --vaadin-icon-color: CanvasText;
           --vaadin-focus-ring-color: Highlight;

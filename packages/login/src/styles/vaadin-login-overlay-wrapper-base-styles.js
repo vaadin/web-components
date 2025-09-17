@@ -45,7 +45,7 @@ const loginOverlayWrapper = css`
   }
 
   [part='description'] {
-    color: var(--vaadin-login-overlay-description-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-login-overlay-description-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-login-overlay-description-font-size, inherit);
     font-weight: var(--vaadin-login-overlay-description-font-weight, inherit);
     line-height: var(--vaadin-login-overlay-description-line-height, inherit);

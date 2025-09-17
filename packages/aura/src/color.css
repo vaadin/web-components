@@ -12,7 +12,7 @@
     color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
     color-mix(in srgb, #fff calc(90% + 5% * var(--aura-contrast)), transparent)
   );
-  --vaadin-color-subtle: light-dark(
+  --vaadin-text-color-secondary: light-dark(
     color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
     color-mix(in srgb, var(--_color-base) calc(57% + 10% * var(--aura-contrast)), transparent)
   );

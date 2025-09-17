@@ -62,7 +62,7 @@ export const uploadFileStyles = css`
   }
 
   [part='status'] {
-    color: var(--vaadin-upload-file-status-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-upload-file-status-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-upload-file-status-font-size, inherit);
     font-weight: var(--vaadin-upload-file-status-font-weight, inherit);
     line-height: var(--vaadin-upload-file-status-line-height, inherit);

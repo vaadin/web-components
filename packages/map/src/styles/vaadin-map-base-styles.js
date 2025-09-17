@@ -247,7 +247,7 @@ export const mapStyles = css`
     gap: 1em;
     list-style: none;
     margin: 0;
-    color: var(--vaadin-map-attribution-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-map-attribution-color, var(--vaadin-text-color-secondary));
     padding: var(--vaadin-padding-container);
     font-size: 0.8em;
   }

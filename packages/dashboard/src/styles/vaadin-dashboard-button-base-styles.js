@@ -17,7 +17,7 @@ const dashboardButton = css`
   }
 
   :host([theme~='tertiary']) {
-    color: var(--vaadin-dashboard-button-text-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-dashboard-button-text-color, var(--vaadin-text-color-secondary));
   }
 `;
 

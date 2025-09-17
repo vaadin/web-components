@@ -44,7 +44,7 @@ const tooltipStyles = (scope) => css`
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-header {
     font-size: 0.85em;
-    color: var(--highcharts-neutral-color-60, var(--vaadin-color-subtle));
+    color: var(--highcharts-neutral-color-60, var(--vaadin-text-color-secondary));
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip-box {
@@ -116,7 +116,7 @@ export const chartStyles = css`
     --_color-negative: light-dark(#dc0611, #f7353f);
 
     --_label: var(--vaadin-charts-label, var(--vaadin-text-color));
-    --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-color-subtle));
+    --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-text-color-secondary));
     --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
     --_point-border: var(--vaadin-charts-point-border, var(--_bg));
     --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-subtle));

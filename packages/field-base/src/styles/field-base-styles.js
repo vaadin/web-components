@@ -63,7 +63,7 @@ export const field = css`
     position: absolute;
     width: 1em;
     text-align: center;
-    color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-text-color-secondary));
   }
 
   [part='required-indicator']::after {
@@ -90,7 +90,7 @@ export const field = css`
     font-size: var(--vaadin-input-field-helper-font-size, inherit);
     line-height: var(--vaadin-input-field-helper-line-height, inherit);
     font-weight: var(--vaadin-input-field-helper-font-weight, 400);
-    color: var(--vaadin-input-field-helper-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-helper-color, var(--vaadin-text-color-secondary));
     order: var(--vaadin-input-field-helper-order);
   }
 
