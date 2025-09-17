@@ -30,7 +30,6 @@ export const gridStyles = css`
     --_border-width: 0;
     --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
-    --_cell-padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
     border-radius: var(--_border-radius);
     --_border-radius: 0;
   }
@@ -150,6 +149,7 @@ export const gridStyles = css`
   }
 
   [part~='cell'] {
+    --_cell-padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
     padding: 0;
     box-sizing: border-box;
   }
