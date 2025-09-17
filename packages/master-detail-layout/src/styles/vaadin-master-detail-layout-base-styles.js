@@ -150,12 +150,12 @@ export const masterDetailLayoutStyles = css`
 
   :host([orientation='horizontal']:not([drawer], [stack])) [part='detail'] {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
-      var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
   :host([orientation='vertical']:not([drawer], [stack])) [part='detail'] {
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
-      var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
   @media (forced-colors: active) {

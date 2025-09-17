@@ -26,7 +26,7 @@
   font-size: var(--aura-font-size-l);
   font-weight: var(--aura-font-weight-semibold);
   line-height: var(--aura-line-height-m);
-  color: var(--vaadin-color);
+  color: var(--vaadin-text-color);
   flex: 1;
 
   &:first-child {

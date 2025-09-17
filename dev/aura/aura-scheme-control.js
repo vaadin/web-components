@@ -45,7 +45,7 @@ class AuraSchemeControl extends AuraControl {
           cursor: pointer;
           user-select: none;
           display: inline-block;
-          border-right: 1px solid var(--vaadin-border-color-subtle);
+          border-right: 1px solid var(--vaadin-border-color-secondary);
         }
 
         .segmented label:last-of-type {
@@ -55,7 +55,7 @@ class AuraSchemeControl extends AuraControl {
         /* Selected state */
         .segmented input:checked + label {
           background: var(--vaadin-background-container);
-          color: var(--vaadin-color);
+          color: var(--vaadin-text-color);
           background-clip: padding-box;
           font-weight: 600;
         }

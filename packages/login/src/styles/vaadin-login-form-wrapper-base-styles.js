@@ -30,7 +30,7 @@ export const loginFormWrapperStyles = css`
   }
 
   ::slotted([slot='form-title']) {
-    color: var(--vaadin-login-form-title-color, var(--vaadin-color));
+    color: var(--vaadin-login-form-title-color, var(--vaadin-text-color));
     font-size: var(--vaadin-login-form-title-font-size, 1.25rem);
     font-weight: var(--vaadin-login-form-title-font-weight, 600);
     line-height: var(--vaadin-login-form-title-line-height, inherit);
@@ -41,7 +41,7 @@ export const loginFormWrapperStyles = css`
   }
 
   [part='error-message'] {
-    color: var(--vaadin-login-form-error-color, var(--vaadin-color));
+    color: var(--vaadin-login-form-error-color, var(--vaadin-text-color));
     font-size: var(--vaadin-login-form-error-font-size, inherit);
     font-weight: var(--vaadin-login-form-error-font-weight, 400);
     gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-s));

@@ -14,7 +14,7 @@ export const tabSheetStyles = [
       display: flex;
       flex-direction: column;
       border: var(--vaadin-tabsheet-border-width, 1px) solid
-        var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-subtle));
+        var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-secondary));
       border-radius: var(--vaadin-tabsheet-border-radius, var(--vaadin-radius-l));
       overflow: hidden;
     }
@@ -58,7 +58,7 @@ export const tabSheetStyles = [
     }
 
     [part='content'][overflow~='top'] {
-      border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-subtle));
+      border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-secondary));
     }
 
     :host([loading]) [part='content'] {

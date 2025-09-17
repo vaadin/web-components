@@ -33,7 +33,7 @@ vaadin-notification-card::part(overlay) {
 
 vaadin-notification-card vaadin-card {
   --vaadin-card-gap: var(--vaadin-gap-xs) var(--vaadin-gap-s);
-  color: var(--vaadin-color-subtle);
+  color: var(--vaadin-text-color-secondary);
 }
 
 vaadin-notification-card vaadin-button {

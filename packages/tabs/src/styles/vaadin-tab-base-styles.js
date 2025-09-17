@@ -18,7 +18,7 @@ export const tabStyles = css`
     font-size: var(--vaadin-tab-font-size, 1em);
     font-weight: var(--vaadin-tab-font-weight, 500);
     line-height: var(--vaadin-tab-line-height, inherit);
-    color: var(--vaadin-tab-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-tab-color, var(--vaadin-text-color-secondary));
     background: var(--vaadin-tab-background, transparent);
     border-radius: var(--vaadin-tab-border-radius, var(--vaadin-radius-m));
     -webkit-tap-highlight-color: transparent;
@@ -38,7 +38,7 @@ export const tabStyles = css`
 
   :host([selected]) {
     --vaadin-tab-background: var(--vaadin-background-container);
-    --vaadin-tab-color: var(--vaadin-color);
+    --vaadin-tab-color: var(--vaadin-text-color);
   }
 
   :host([disabled]) {

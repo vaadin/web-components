@@ -55,7 +55,7 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[disabled][theme~='primary'] {
-  --vaadin-button-text-color: var(--vaadin-color-subtle);
+  --vaadin-button-text-color: var(--vaadin-text-color-secondary);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([disabled])::before {

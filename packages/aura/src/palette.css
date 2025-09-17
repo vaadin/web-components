@@ -24,22 +24,30 @@
     oklch(from var(--aura-accent-dark) 0.7 min(c + 0.05, 0.4) clamp(280 - rem(h, 6), h, 350 - rem(h, 6)))
   );
 
-  --aura-red-text: color-mix(in srgb, var(--aura-red) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-color));
+  --aura-red-text: color-mix(in srgb, var(--aura-red) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-text-color));
   --aura-orange-text: color-mix(
     in srgb,
     var(--aura-orange) calc(60% - 15% * var(--aura-contrast)),
-    var(--vaadin-color)
+    var(--vaadin-text-color)
   );
   --aura-yellow-text: color-mix(
     in srgb,
     var(--aura-yellow) calc(55% - 15% * var(--aura-contrast)),
-    var(--vaadin-color)
+    var(--vaadin-text-color)
   );
-  --aura-green-text: color-mix(in srgb, var(--aura-green) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-color));
-  --aura-blue-text: color-mix(in srgb, var(--aura-blue) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-color));
+  --aura-green-text: color-mix(
+    in srgb,
+    var(--aura-green) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
+  --aura-blue-text: color-mix(
+    in srgb,
+    var(--aura-blue) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
   --aura-purple-text: color-mix(
     in srgb,
     var(--aura-purple) calc(70% - 15% * var(--aura-contrast)),
-    var(--vaadin-color)
+    var(--vaadin-text-color)
   );
 }

@@ -53,7 +53,7 @@ export const uploadFileStyles = css`
   }
 
   [part='name'] {
-    color: var(--vaadin-upload-file-name-color, var(--vaadin-color));
+    color: var(--vaadin-upload-file-name-color, var(--vaadin-text-color));
     font-size: var(--vaadin-upload-file-name-font-size, inherit);
     font-weight: var(--vaadin-upload-file-name-font-weight, inherit);
     line-height: var(--vaadin-upload-file-name-line-height, inherit);
@@ -62,14 +62,14 @@ export const uploadFileStyles = css`
   }
 
   [part='status'] {
-    color: var(--vaadin-upload-file-status-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-upload-file-status-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-upload-file-status-font-size, inherit);
     font-weight: var(--vaadin-upload-file-status-font-weight, inherit);
     line-height: var(--vaadin-upload-file-status-line-height, inherit);
   }
 
   [part='error'] {
-    color: var(--vaadin-upload-file-error-color, var(--vaadin-color));
+    color: var(--vaadin-upload-file-error-color, var(--vaadin-text-color));
     font-size: var(--vaadin-upload-file-error-font-size, inherit);
     font-weight: var(--vaadin-upload-file-error-font-weight, inherit);
     line-height: var(--vaadin-upload-file-error-line-height, inherit);
@@ -83,7 +83,7 @@ export const uploadFileStyles = css`
         var(--vaadin-upload-file-button-border-color, transparent)
     );
     border-radius: var(--vaadin-upload-file-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-upload-file-button-text-color, var(--vaadin-color));
+    color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
     font-family: var(--vaadin-upload-file-button-font-family, inherit);

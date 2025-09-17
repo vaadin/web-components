@@ -31,7 +31,8 @@ export const cardStyles = css`
 
   /* Could be an inset outline on the host as well, but let's reserve that for a potential focus outline */
   :host::before {
-    border: var(--vaadin-card-border-width, 0) solid var(--vaadin-card-border-color, var(--vaadin-border-color-subtle));
+    border: var(--vaadin-card-border-width, 0) solid
+      var(--vaadin-card-border-color, var(--vaadin-border-color-secondary));
     border-radius: inherit;
     content: '';
     inset: 0;
@@ -133,7 +134,7 @@ export const cardStyles = css`
   }
 
   ::slotted([slot='title']) {
-    color: var(--vaadin-card-title-color, var(--vaadin-color)) !important;
+    color: var(--vaadin-card-title-color, var(--vaadin-text-color)) !important;
     font-size: var(--vaadin-card-title-font-size, inherit) !important;
     font-weight: var(--vaadin-card-title-font-weight, 500) !important;
     line-height: var(--vaadin-card-title-line-height, inherit) !important;
@@ -141,7 +142,7 @@ export const cardStyles = css`
   }
 
   ::slotted([slot='subtitle']) {
-    color: var(--vaadin-card-subtitle-color, var(--vaadin-color-subtle)) !important;
+    color: var(--vaadin-card-subtitle-color, var(--vaadin-text-color-secondary)) !important;
     font-size: var(--vaadin-card-subtitle-font-size, inherit) !important;
     font-weight: var(--vaadin-card-subtitle-font-weight, 400) !important;
     line-height: var(--vaadin-card-subtitle-line-height, inherit) !important;

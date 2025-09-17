@@ -34,7 +34,7 @@ const tooltipStyles = (scope) => css`
 
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)} .highcharts-tooltip foreignObject span {
-    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-color)));
+    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-text-color)));
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-tracker {
@@ -44,7 +44,7 @@ const tooltipStyles = (scope) => css`
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-header {
     font-size: 0.85em;
-    color: var(--highcharts-neutral-color-60, var(--vaadin-color-subtle));
+    color: var(--highcharts-neutral-color-60, var(--vaadin-text-color-secondary));
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip-box {
@@ -115,17 +115,17 @@ export const chartStyles = css`
     --_color-positive: light-dark(#19b156, #1ccc62);
     --_color-negative: light-dark(#dc0611, #f7353f);
 
-    --_label: var(--vaadin-charts-label, var(--vaadin-color));
-    --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-color-subtle));
-    --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
+    --_label: var(--vaadin-charts-label, var(--vaadin-text-color));
+    --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-text-color-secondary));
+    --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-text-color-disabled));
     --_point-border: var(--vaadin-charts-point-border, var(--_bg));
-    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-subtle));
+    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-secondary));
     --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
     --_axis-label: var(--vaadin-charts-axis-label, var(--_secondary-label));
-    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color-subtle));
+    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color-secondary));
     --_minor-grid-line: var(
       --vaadin-charts-minor-grid-line,
-      color-mix(in srgb, var(--vaadin-border-color-subtle) 60%, transparent)
+      color-mix(in srgb, var(--vaadin-border-color-secondary) 60%, transparent)
     );
     --_data-label: var(--vaadin-charts-data-label, var(--_label));
   }
@@ -948,7 +948,10 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-button-disabled text {
-    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-disabled-label, var(--vaadin-color-disabled)));
+    fill: var(
+      --highcharts-neutral-color-80,
+      var(--vaadin-charts-button-disabled-label, var(--vaadin-text-color-disabled))
+    );
   }
 
   :where([styled-mode]) .highcharts-range-selector-buttons .highcharts-button {

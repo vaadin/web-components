@@ -13,7 +13,7 @@ export const monthCalendarStyles = css`
   }
 
   [part='month-header'] {
-    color: var(--vaadin-date-picker-month-header-color, var(--vaadin-color));
+    color: var(--vaadin-date-picker-month-header-color, var(--vaadin-text-color));
     font-size: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
     font-weight: var(--vaadin-date-picker-month-header-font-weight, 500);
     line-height: inherit;
@@ -33,7 +33,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='weekday'] {
-    color: var(--vaadin-date-picker-weekday-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-date-picker-weekday-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-date-picker-weekday-font-size, 0.75rem);
     font-weight: var(--vaadin-date-picker-weekday-font-weight, 500);
     margin-bottom: 0.375rem;
@@ -46,7 +46,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='week-number'] {
-    color: var(--vaadin-date-picker-week-number-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-date-picker-week-number-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-date-picker-week-number-font-size, 0.7rem);
     line-height: 1;
     width: 100%;
@@ -61,7 +61,7 @@ export const monthCalendarStyles = css`
     flex: 1;
     background: var(
       --vaadin-date-picker-week-divider-color,
-      var(--vaadin-divider-color, var(--vaadin-border-color-subtle))
+      var(--vaadin-divider-color, var(--vaadin-border-color-secondary))
     );
   }
 
@@ -98,7 +98,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='today'] {
-    color: var(--vaadin-date-picker-date-today-color, var(--vaadin-color));
+    color: var(--vaadin-date-picker-date-today-color, var(--vaadin-text-color));
   }
 
   [part~='selected'] {
@@ -106,13 +106,13 @@ export const monthCalendarStyles = css`
   }
 
   [part~='selected']::after {
-    background: var(--vaadin-date-picker-date-selected-background, var(--vaadin-color));
+    background: var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color));
     outline-offset: 1px;
   }
 
   [disabled] {
     cursor: var(--vaadin-disabled-cursor);
-    color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-color-disabled));
+    color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-text-color-disabled));
     opacity: 0.7;
   }
 

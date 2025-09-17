@@ -37,7 +37,7 @@ export const sharedStyles = css`
 
   [part='toggle-button'] {
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-s));
-    color: var(--vaadin-color-subtle);
+    color: var(--vaadin-text-color-secondary);
   }
 
   [part='toggle-button']::before {

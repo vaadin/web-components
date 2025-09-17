@@ -14,7 +14,7 @@ import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-ove
 
 const crudDialogOverlay = css`
   [part='header'] {
-    color: var(--vaadin-crud-dialog-header-color, var(--vaadin-color));
+    color: var(--vaadin-crud-dialog-header-color, var(--vaadin-text-color));
     font-size: var(--vaadin-crud-dialog-header-font-size, 1em);
     font-weight: var(--vaadin-crud-dialog-header-font-weight, 600);
     line-height: var(--vaadin-crud-dialog-header-line-height, inherit);
@@ -43,7 +43,7 @@ const crudDialogOverlay = css`
     justify-content: normal;
     background: var(--vaadin-crud-footer-background, transparent);
     border-top: var(--vaadin-crud-border-width, 1px) solid
-      var(--vaadin-crud-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-crud-border-color, var(--vaadin-border-color-secondary));
   }
 `;
 

@@ -15,7 +15,7 @@ export const multiSelectComboBoxChipStyles = css`
     box-sizing: border-box;
     gap: var(--vaadin-chip-gap, 0);
     background: var(--vaadin-chip-background, var(--vaadin-background-container));
-    color: var(--vaadin-chip-color, var(--vaadin-color));
+    color: var(--vaadin-chip-color, var(--vaadin-text-color));
     font-size: max(11px, var(--vaadin-chip-font-size, 0.875em));
     font-weight: var(--vaadin-chip-font-weight, 500);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
@@ -23,7 +23,7 @@ export const multiSelectComboBoxChipStyles = css`
     height: var(--vaadin-chip-height, calc(1lh / 0.875));
     border-radius: var(--vaadin-chip-border-radius, var(--vaadin-radius-m));
     border: var(--vaadin-chip-border-width, 1px) solid
-      var(--vaadin-chip-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-chip-border-color, var(--vaadin-border-color-secondary));
     cursor: default;
   }
 
@@ -50,7 +50,7 @@ export const multiSelectComboBoxChipStyles = css`
     display: block;
     margin-inline-start: auto;
     margin-block: calc(var(--vaadin-chip-border-width, 1px) * -1);
-    color: var(--vaadin-chip-remove-button-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-chip-remove-button-color, var(--vaadin-text-color-secondary));
     cursor: var(--vaadin-clickable-cursor);
     translate: 25%;
   }
@@ -69,7 +69,7 @@ export const multiSelectComboBoxChipStyles = css`
   }
 
   :host([disabled]) [part='label'] {
-    --vaadin-chip-color: var(--vaadin-color-disabled);
+    --vaadin-chip-color: var(--vaadin-text-color-disabled);
   }
 
   :host([hidden]),
@@ -88,7 +88,7 @@ export const multiSelectComboBoxChipStyles = css`
     content: '';
     position: absolute;
     inset: calc(var(--vaadin-chip-border-width, 1px) * -1);
-    border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color-subtle));
+    border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color-secondary));
     border-radius: inherit;
   }
 

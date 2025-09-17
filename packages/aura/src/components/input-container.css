@@ -27,11 +27,11 @@ vaadin-message-input:not([readonly], [disabled]) {
 }
 
 :not([readonly], [disabled])::part(field-button):active {
-  color: var(--vaadin-color);
+  color: var(--vaadin-text-color);
 }
 
 @media (any-hover: hover) {
   :not([readonly], [disabled])::part(field-button):hover {
-    color: var(--vaadin-color);
+    color: var(--vaadin-text-color);
   }
 }

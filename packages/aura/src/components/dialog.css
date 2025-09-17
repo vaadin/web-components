@@ -19,7 +19,7 @@ vaadin-confirm-dialog::part(overlay) {
 }
 
 vaadin-confirm-dialog::part(message) {
-  color: var(--vaadin-color-subtle);
+  color: var(--vaadin-text-color-secondary);
 }
 
 /* TODO probably should be in base styles */

@@ -85,7 +85,7 @@ export const content = css`
 
   .ql-editor {
     box-sizing: border-box;
-    color: var(--vaadin-rich-text-editor-editor-color, var(--vaadin-color));
+    color: var(--vaadin-rich-text-editor-editor-color, var(--vaadin-text-color));
     flex: 1;
     font-size: var(--vaadin-rich-text-editor-editor-font-size, inherit);
     height: 100%;
@@ -357,7 +357,7 @@ export const content = css`
   /* quill core end */
 
   blockquote {
-    border-inline-start: 4px solid var(--vaadin-border-color-subtle);
+    border-inline-start: 4px solid var(--vaadin-border-color-secondary);
     margin: var(--vaadin-padding-container);
     padding-inline-start: var(--vaadin-padding-s);
   }
@@ -398,7 +398,7 @@ const toolbar = css`
     border: var(--vaadin-rich-text-editor-toolbar-button-border-width, 1px) solid
       var(--vaadin-rich-text-editor-toolbar-button-border-color, transparent);
     border-radius: var(--vaadin-rich-text-editor-toolbar-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-color));
+    color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
     font-family: var(--vaadin-rich-text-editor-toolbar-button-font-family, inherit);

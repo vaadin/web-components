@@ -31,5 +31,5 @@
   font-size: var(--aura-font-size-m);
   font-weight: var(--aura-font-weight);
   line-height: var(--aura-line-height-m);
-  color: var(--vaadin-color);
+  color: var(--vaadin-text-color);
 }

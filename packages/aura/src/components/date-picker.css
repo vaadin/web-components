@@ -64,5 +64,5 @@ vaadin-date-picker-year::part(year-separator)::before {
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: var(--vaadin-color-disabled);
+  background: var(--vaadin-text-color-disabled);
 }

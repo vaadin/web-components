@@ -8,15 +8,19 @@
     oklch(from var(--aura-background-light) 0.1 calc(c / 2 + c * (1 - c)) h),
     oklch(from var(--aura-background-dark) 1 c h)
   );
-  --vaadin-color: light-dark(
+  --vaadin-text-color: light-dark(
     color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent),
     color-mix(in srgb, #fff calc(90% + 5% * var(--aura-contrast)), transparent)
   );
-  --vaadin-color-subtle: light-dark(
+  --vaadin-text-color-secondary: light-dark(
     color-mix(in srgb, var(--_color-base) calc(55% + 10% * var(--aura-contrast)), transparent),
     color-mix(in srgb, var(--_color-base) calc(57% + 10% * var(--aura-contrast)), transparent)
   );
-  --vaadin-color-disabled: color-mix(in srgb, var(--_color-base) calc(30% + 10% * var(--aura-contrast)), transparent);
+  --vaadin-text-color-disabled: color-mix(
+    in srgb,
+    var(--_color-base) calc(30% + 10% * var(--aura-contrast)),
+    transparent
+  );
 
   --_border-color-base: light-dark(
     oklch(from var(--aura-background-light) 0.1 c h),
@@ -27,7 +31,7 @@
     var(--_border-color-base) calc(14% + 6% * var(--aura-contrast)),
     transparent
   );
-  --vaadin-border-color-subtle: light-dark(
+  --vaadin-border-color-secondary: light-dark(
     color-mix(in srgb, var(--_border-color-base) max(5%, 5% + 3% * var(--aura-contrast)), transparent),
     color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 5% * var(--aura-contrast)), transparent)
   );
@@ -62,12 +66,12 @@
   --aura-accent-text-light: color-mix(
     in srgb,
     var(--aura-accent-light) calc(70% - 15% * var(--aura-contrast)),
-    var(--vaadin-color)
+    var(--vaadin-text-color)
   );
   --aura-accent-text-dark: color-mix(
     in srgb,
     var(--aura-accent-dark) calc(70% - 15% * var(--aura-contrast)),
-    var(--vaadin-color)
+    var(--vaadin-text-color)
   );
   --aura-accent-text: light-dark(var(--aura-accent-text-light), var(--aura-accent-text-dark));
 
@@ -86,7 +90,7 @@
     transparent
   );
 
-  color: var(--vaadin-color);
+  color: var(--vaadin-text-color);
   background: var(--aura-app-background);
   background-size: 100vw 100vh;
   background-attachment: fixed;
@@ -99,5 +103,5 @@
 }
 
 :where(h1, h2, h3, h4, h5, h6) {
-  color: var(--vaadin-color);
+  color: var(--vaadin-text-color);
 }

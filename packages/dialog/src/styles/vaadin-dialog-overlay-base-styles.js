@@ -32,7 +32,7 @@ export const dialogOverlayBase = css`
     background: var(--vaadin-dialog-background, var(--vaadin-background-color));
     background-origin: border-box;
     border: var(--vaadin-dialog-border-width, 1px) solid
-      var(--vaadin-dialog-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-dialog-border-color, var(--vaadin-border-color-secondary));
     box-shadow: var(--vaadin-dialog-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
     width: max-content;
@@ -92,7 +92,7 @@ export const dialogOverlayBase = css`
   }
 
   [part='title'] {
-    color: var(--vaadin-dialog-title-color, var(--vaadin-color));
+    color: var(--vaadin-dialog-title-color, var(--vaadin-text-color));
     font-weight: var(--vaadin-dialog-title-font-weight, 600);
     font-size: var(--vaadin-dialog-title-font-size, 1em);
     line-height: var(--vaadin-dialog-title-line-height, inherit);

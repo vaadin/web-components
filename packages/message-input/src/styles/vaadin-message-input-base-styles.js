@@ -28,7 +28,7 @@ export const messageInputStyles = css`
   }
 
   :host([disabled]) {
-    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-color-disabled));
+    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-text-color-disabled));
     --vaadin-input-field-background: var(
       --vaadin-input-field-disabled-background,
       var(--vaadin-background-container-strong)

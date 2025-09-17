@@ -24,7 +24,7 @@ export const inputContainerStyles = css`
     padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
     gap: var(--vaadin-input-field-gap, var(--vaadin-gap-s));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
-    color: var(--vaadin-input-field-value-color, var(--vaadin-color));
+    color: var(--vaadin-input-field-value-color, var(--vaadin-text-color));
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     font-weight: var(--vaadin-input-field-value-font-weight, 400);
@@ -84,7 +84,7 @@ export const inputContainerStyles = css`
   }
 
   ::slotted(:is(input, textarea):placeholder-shown) {
-    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-text-color-secondary));
   }
 
   :host(:focus-within) {
@@ -93,7 +93,7 @@ export const inputContainerStyles = css`
   }
 
   :host([invalid]) {
-    --vaadin-input-field-border-color: var(--vaadin-input-field-error-color, var(--vaadin-color));
+    --vaadin-input-field-border-color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
   }
 
   :host([readonly]) {
@@ -106,7 +106,7 @@ export const inputContainerStyles = css`
   }
 
   :host([disabled]) {
-    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-color-disabled));
+    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-text-color-disabled));
     --vaadin-input-field-background: var(
       --vaadin-input-field-disabled-background,
       var(--vaadin-background-container-strong)

@@ -28,11 +28,11 @@ export const buttonStyles = css`
     font-size: var(--vaadin-button-font-size, inherit);
     line-height: var(--vaadin-button-line-height, inherit);
     font-weight: var(--vaadin-button-font-weight, 500);
-    color: var(--vaadin-button-text-color, var(--vaadin-color));
+    color: var(--vaadin-button-text-color, var(--vaadin-text-color));
     background: var(--vaadin-button-background, var(--vaadin-background-container));
     background-origin: border-box;
     border: var(--vaadin-button-border-width, 1px) solid
-      var(--vaadin-button-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-button-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
   }
@@ -54,7 +54,7 @@ export const buttonStyles = css`
   }
 
   :host([theme~='primary']) {
-    --vaadin-button-background: var(--vaadin-color);
+    --vaadin-button-background: var(--vaadin-text-color);
     --vaadin-button-text-color: var(--vaadin-background-color);
     --vaadin-button-border-color: transparent;
   }
@@ -72,7 +72,7 @@ export const buttonStyles = css`
 
   :host([disabled][theme~='primary']) {
     --vaadin-button-text-color: var(--vaadin-background-container-strong);
-    --vaadin-button-background: var(--vaadin-color-disabled);
+    --vaadin-button-background: var(--vaadin-text-color-disabled);
   }
 
   @media (forced-colors: active) {

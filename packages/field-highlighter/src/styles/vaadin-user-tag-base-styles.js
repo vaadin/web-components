@@ -19,7 +19,7 @@ export const userTagStyles = css`
     font-weight: var(--vaadin-user-tag-font-weight, 500);
     line-height: var(--vaadin-user-tag-line-height, 1);
     border: var(--vaadin-user-tag-border-width, 0) solid
-      var(--vaadin-user-tag-border-color, var(--vaadin-border-color-subtle));
+      var(--vaadin-user-tag-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-user-tag-border-radius, var(--vaadin-radius-m));
     cursor: default;
   }
