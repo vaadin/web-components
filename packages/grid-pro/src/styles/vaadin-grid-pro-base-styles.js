@@ -29,6 +29,17 @@ const gridPro = css`
     outline: 0;
   }
 
+  :host([navigating]) [part~='editable-cell']:focus {
+    margin-block: calc(var(--_row-border-width) * -1);
+    padding-block: var(--_row-border-width);
+    margin-inline: calc(var(--_column-border-width) * -1);
+    padding-inline: var(--_column-border-width);
+  }
+
+  :host([navigating]) [part~='last-column-cell'] [part~='editable-cell'] {
+    margin-inline-end: 0;
+  }
+
   [part~='editable-cell']:hover,
   :host([navigating]) [part~='editable-cell']:focus {
     background: var(--vaadin-grid-pro-editable-cell-background-hover, var(--_highlight-bg));
@@ -49,7 +60,7 @@ const gridPro = css`
   /* Indicate read-only cells */
 
   :host([theme~='highlight-read-only-cells']) [part~='body-cell']:not(:has([part~='editable-cell'])) {
-    --vaadin-grid-cell-background-hover: repeating-linear-gradient(
+    --_highlight-background-image: repeating-linear-gradient(
       -45deg,
       transparent,
       transparent 30%,
