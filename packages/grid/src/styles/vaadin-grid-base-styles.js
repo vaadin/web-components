@@ -202,6 +202,13 @@ export const gridStyles = css`
     box-shadow: none;
   }
 
+  :host([navigating]) [part~='cell']:not([part~='details-cell'], [part~='first-column-cell']):focus {
+    padding-inline-start: var(--_column-border-width);
+    box-sizing: content-box;
+    margin-inline-start: calc(var(--_column-border-width) * -1);
+    border-inline-end: 0;
+  }
+
   /* Used for focus outline and drag'n'drop target indication */
   [part~='row']::after {
     content: '';
@@ -238,13 +245,35 @@ export const gridStyles = css`
   }
 
   [part~='last-header-row-cell'] {
-    border-bottom: var(--_row-border-width) solid
+    box-shadow: 0 var(--_row-border-width) 0 0
       var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
   }
 
+  #header:has([frozen], [frozen-to-end]) [part~='last-header-row-cell'] {
+    box-shadow:
+      0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary)),
+      0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
+  [part~='body-cell'][part~='first-row-cell'] {
+    padding-top: var(--_row-border-width);
+  }
+
   [part~='first-footer-row-cell'] {
-    border-top: var(--_row-border-width) solid
+    border-top: 0;
+    box-shadow: 0 calc(var(--_row-border-width) * -1) 0 0
       var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
+  }
+
+  [part~='body-cell'][part~='last-row-cell'] {
+    padding-bottom: var(--_row-border-width);
+  }
+
+  #footer:has([frozen], [frozen-to-end]) [part~='first-footer-row-cell'] {
+    box-shadow:
+      0 calc(var(--_row-border-width) * -1) 0 0
+        var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary)),
+      0 calc(var(--_row-border-width) * -1) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
   /* Variant: row stripes */
@@ -255,8 +284,9 @@ export const gridStyles = css`
   :host([theme~='row-stripes']) [part~='odd-row'] {
     --vaadin-grid-cell-background-color: var(
       --vaadin-grid-row-odd-background-color,
-      var(--vaadin-background-container)
+      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--vaadin-background-color))
     );
+    z-index: 1;
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -332,6 +362,7 @@ export const gridStyles = css`
   #emptystaterow {
     display: flex;
     flex: 1;
+    padding-top: var(--_row-border-width);
   }
 
   #emptystatecell {
