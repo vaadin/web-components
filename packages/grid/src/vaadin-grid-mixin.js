@@ -339,6 +339,12 @@ export const GridMixin = (superClass) =>
 
         // Make sure the body has a tabbable element
         this._resetKeyboardNavigation();
+
+        // Updating data can change the visibility of the scroll bar. Therefore, the scroll position
+        // has to be recalculated.
+        requestAnimationFrame(() => {
+          this.__updateHorizontalScrollPosition();
+        });
       }
     }
 
