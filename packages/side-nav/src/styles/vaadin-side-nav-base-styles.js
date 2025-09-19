@@ -57,4 +57,8 @@ export const sideNavSlotStyles = css`
   )::part(children) {
     --_level: var(--_level-2, 0);
   }
+
+  vaadin-side-nav:not(:has([slot='label']))::part(label) {
+    display: none;
+  }
 `;
