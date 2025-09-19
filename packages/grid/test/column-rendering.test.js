@@ -193,9 +193,12 @@ import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
     });
 
     it('should have a larger row height when details opened', () => {
-      // Disable cell padding for this test
+      // Disable cell padding and row border for this test
       fixtureSync(`
         <style>
+          vaadin-grid {
+            --vaadin-grid-row-border-width: 0px;
+          }
           vaadin-grid-cell-content {
             padding: 0;
           }
