@@ -224,6 +224,7 @@ describe('column auto-width', () => {
     // Assign more items to the grid. The last one with the long content, while in the DOM,
     // will end up outside the visible viewport and therefore should not affect the
     // calculated column auto-width
+    grid.style.height = '180px';
     grid.items = [...testItems, { a: 'a' }, { a: 'aaaaaaaaaaaaaaaaaaaaa' }];
 
     await recalculateWidths();

@@ -151,23 +151,65 @@ export const gridStyles = css`
   [part~='cell'] {
     padding: 0;
     box-sizing: border-box;
-  }
-
-  [part~='row'],
-  [part~='cell'] {
     background: var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+    border-block: var(--_row-border-width) solid var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
+    margin-top: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='cell']:not([part~='details-cell']) {
+  [part~='cell']:where(:not([part~='details-cell'])) {
     flex-shrink: 0;
     flex-grow: 1;
-    box-sizing: border-box;
     display: flex;
     width: 100%;
     position: relative;
     align-items: center;
     white-space: nowrap;
+    border-inline-start: var(--_column-border-width) solid
+      var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
   }
+
+  [part~='first-row-cell'] {
+    margin-top: 0;
+    border-top-color: transparent;
+  }
+
+  [part~='first-column-cell'] {
+    border-inline-start: 0;
+  }
+
+  [part~='first-header-row-cell'] {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  [part~='last-column-cell'] {
+    box-shadow:
+      var(--_column-border-width) 0 0 0 var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
+      var(--_column-border-width) 0 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
+  [part~='last-row-cell'],
+  [part~='last-header-row-cell'],
+  [part~='last-footer-row-cell'] {
+    border-bottom: 0;
+    box-shadow:
+      var(--_column-border-width) var(--_row-border-width) 0 0
+        var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
+      var(--_column-border-width) 0 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
+  [part~='first-footer-row-cell'] {
+    margin-top: 0;
+    border-top: 0;
+    box-shadow:
+      var(--_column-border-width) calc(var(--_row-border-width) * -1) 0 0
+        var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
+      var(--_column-border-width) 0 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
+  /* [part~='details-opened-row-cell'] {
+    border-bottom: 0;
+  } */
 
   [part~='body-cell']:not([part~='details-cell']) {
     --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
@@ -178,102 +220,68 @@ export const gridStyles = css`
     background:
       var(--_hover-background-image, none), var(--_selected-background-image, none), var(--_highlight-background-image),
       var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
-    box-shadow:
-      0 var(--_row-border-width) 0 0 var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
-      0 var(--_row-border-width) 0 0 var(--_hover-background-color, transparent),
-      0 var(--_row-border-width) 0 0 var(--_selected-background-color, transparent),
-      0 var(--_row-border-width) 0 0 var(--_highlight-background-color, transparent),
-      0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
-  :host([navigating]) :focus,
-  [part~='row']::after {
+  [part~='cell']:focus-visible {
+    outline: 0;
+  }
+
+  /* Keyboard navigation focus outline (row focus outline also used for drag'n'drop target indication) */
+  [part~='row']::after,
+  :host([navigating]) [part~='cell']::after {
+    position: absolute;
+    inset: calc(var(--_row-border-width) * -1) calc(var(--_column-border-width) * -1);
+    z-index: 1;
+    pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  :host([navigating]) [part~='row']:is(:focus, :focus-within) {
-    z-index: 3;
-  }
+  :host([navigating]) {
+    [part~='row']:is(:focus, :focus-within) {
+      z-index: 2;
+    }
 
-  :host([navigating]) [part~='cell']:not([part~='details-cell'], [part~='last-row-cell']):focus {
-    padding-bottom: var(--_row-border-width);
-    margin-bottom: calc(var(--_row-border-width) * -1);
-    box-shadow: none;
-  }
+    :is([part~='row'], [part~='cell']):is(:focus, :focus-within :focus-visible) {
+      outline: 0;
+    }
 
-  :host([navigating]) [part~='cell']:not([part~='details-cell'], [part~='first-column-cell']):focus {
-    padding-inline-start: var(--_column-border-width);
-    box-sizing: content-box;
-    margin-inline-start: calc(var(--_column-border-width) * -1);
-    border-inline-end: 0;
-  }
+    :is([part~='row'], [part~='cell']):focus::after,
+    [part~='cell']:has([part~='editable-cell']:focus)::after {
+      content: '';
+    }
 
-  /* Used for focus outline and drag'n'drop target indication */
-  [part~='row']::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    bottom: calc(var(--_row-border-width) * -1);
-    z-index: 3;
-    transform: translateX(var(--_grid-horizontal-scroll-position));
-    pointer-events: none;
-    visibility: hidden;
-  }
+    [part~='row']::after {
+      transform: translateX(var(--_grid-horizontal-scroll-position));
+      inset-inline: 0;
+      bottom: 0;
+    }
 
-  :host([navigating]) [part~='row']:focus::after {
-    visibility: visible;
+    [part~='first-column-cell']::after {
+      inset-inline-start: 0;
+    }
+
+    [part~='last-column-cell']::after {
+      inset-inline-end: 0;
+    }
+
+    :is(#header [part~='row']:first-child, [part~='first-header-row-cell'], [part~='first-row'])::after {
+      top: 0;
+    }
+
+    :is(
+      #footer [part~='row']:last-child,
+      [part~='last-footer-row-cell'],
+      [part~='last-row-cell'],
+      [part~='last-cell']
+    )::after {
+      bottom: 0;
+    }
   }
 
   /* Variant: wrap cell contents */
   :host([theme~='wrap-cell-content']) [part~='cell']:not([part~='details-cell']) {
     white-space: normal;
-  }
-
-  [part~='cell']:not([part~='last-column-cell'], [part~='details-cell']) {
-    border-inline-end: var(--_column-border-width) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  [part~='cell']:where(:not([part~='first-row-cell'])) {
-    border-top: var(--_row-border-width) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  [part~='first-header-row-cell'] {
-    border-top: 0;
-  }
-
-  [part~='last-header-row-cell'] {
-    box-shadow: 0 var(--_row-border-width) 0 0
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  #header:has([frozen], [frozen-to-end]) [part~='last-header-row-cell'] {
-    box-shadow:
-      0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary)),
-      0 var(--_row-border-width) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
-  }
-
-  [part~='body-cell'][part~='first-row-cell'] {
-    padding-top: var(--_row-border-width);
-  }
-
-  [part~='first-footer-row-cell'] {
-    border-top: 0;
-    box-shadow: 0 calc(var(--_row-border-width) * -1) 0 0
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  [part~='body-cell'][part~='last-row-cell'] {
-    padding-bottom: var(--_row-border-width);
-  }
-
-  #footer:has([frozen], [frozen-to-end]) [part~='first-footer-row-cell'] {
-    box-shadow:
-      0 calc(var(--_row-border-width) * -1) 0 0
-        var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary)),
-      0 calc(var(--_row-border-width) * -1) 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
   /* Variant: row stripes */
@@ -309,6 +317,7 @@ export const gridStyles = css`
     bottom: 0;
     width: 100%;
     z-index: auto;
+    border-top: 0;
   }
 
   /* Raise highlighted rows above others */
@@ -362,7 +371,6 @@ export const gridStyles = css`
   #emptystaterow {
     display: flex;
     flex: 1;
-    padding-top: var(--_row-border-width);
   }
 
   #emptystatecell {
@@ -498,13 +506,13 @@ export const gridStyles = css`
   }
 
   [part~='row'][dragover]::after {
-    visibility: visible;
+    content: '';
   }
 
   [part~='row'][dragover='above']::after {
     outline: 0;
     border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    top: calc(var(--vaadin-focus-ring-width) / -2);
+    top: calc(var(--vaadin-focus-ring-width) / -1);
   }
 
   [part~='row'][dragover='below']::after {
@@ -513,16 +521,16 @@ export const gridStyles = css`
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  :is([part~='row']:first-child, [part~='first-row'])::after {
+  /* :is([part~='row']:first-child, [part~='first-row'])::after {
     top: 0;
   }
 
   :is([part~='row']:last-child, [part~='last-row'])::after {
     bottom: 0;
-  }
+  } */
 
   [part~='row'][dragstart] [part~='cell'] {
-    border-top: 0 !important;
+    border: 0 !important;
   }
 
   [part~='row'][dragstart] [part~='cell'][last-column] {
