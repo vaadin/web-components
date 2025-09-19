@@ -38,6 +38,7 @@ const gridPro = css`
 
   :host([navigating]) [part~='last-column-cell'] [part~='editable-cell'] {
     margin-inline-end: 0;
+    padding-inline-end: 0;
   }
 
   [part~='editable-cell']:hover,
