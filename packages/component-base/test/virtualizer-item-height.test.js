@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { html, LitElement } from 'lit';
 import { Virtualizer } from '../src/virtualizer.js';
 
 async function contentUpdate() {
@@ -11,6 +12,7 @@ async function contentUpdate() {
 describe('virtualizer - item height', () => {
   let elementsContainer;
   let virtualizer;
+  let scrollContainer;
   const EVEN_ITEM_HEIGHT = 20;
   const ODD_ITEM_HEIGHT = 40;
 
@@ -20,7 +22,7 @@ describe('virtualizer - item height', () => {
         <div class="container"></div>
       </div>
     `);
-    const scrollContainer = scrollTarget.firstElementChild;
+    scrollContainer = scrollTarget.firstElementChild;
     elementsContainer = scrollContainer;
 
     virtualizer = new Virtualizer({
@@ -100,6 +102,75 @@ describe('virtualizer - item height', () => {
 
     // The padding should have been be cleared and the item should have its original height.
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
+  });
+
+  it('should handle lit element slot content updates affecting height', async () => {
+    const elementName = 'sample-lit-element';
+    class SampleLitElement extends LitElement {
+      render() {
+        return html` <div class="title">
+          <slot name="title"></slot>
+        </div>`;
+      }
+
+      get titleInSlot() {
+        const titleElement = this.querySelector('[slot="title"]');
+        return titleElement ? titleElement.textContent : '';
+      }
+
+      set titleInSlot(title) {
+        // Use a slotted title that will update the element height async
+        let titleElement = this.querySelector('[slot="title"]');
+        if (!titleElement) {
+          titleElement = document.createElement('div');
+          titleElement.setAttribute('slot', 'title');
+          this.appendChild(titleElement);
+        }
+        titleElement.textContent = title;
+      }
+    }
+
+    customElements.define(elementName, SampleLitElement);
+
+    const getExactY = (el) => parseFloat(el.style.transform.match(/translateY\(([^)]+)\)/u)?.[1] || '0');
+
+    virtualizer.updateElement = (el, index) => {
+      if (!el.firstElementChild) {
+        const sampleElement = document.createElement(elementName);
+        el.appendChild(sampleElement);
+      }
+      el.firstElementChild.titleInSlot = `Item ${index}`;
+    };
+
+    virtualizer.update();
+    await nextFrame();
+    await aTimeout(50);
+
+    // Scroll quickly
+    virtualizer.scrollToIndex(500);
+    virtualizer.scrollToIndex(1000);
+    await nextFrame();
+    await aTimeout(50);
+
+    const elements = Array.from(scrollContainer.children).slice(0, 10);
+    const firstElement = elements[0];
+
+    let expectedY = getExactY(firstElement) + firstElement.offsetHeight;
+    let positioningCorrect = true;
+
+    // Check that the elements are positioned correctly using translateY
+    elements.forEach((el, index) => {
+      if (index === 0) {
+        return;
+      }
+      const actualY = getExactY(el);
+      if (Math.abs(actualY - expectedY) > 2) {
+        positioningCorrect = false;
+      }
+      expectedY += el.offsetHeight;
+    });
+
+    expect(positioningCorrect).to.be.true;
   });
 });
 
@@ -371,6 +442,7 @@ describe('virtualizer - item height - lazy rendering', () => {
 
       it('should not change scroll position after item height change', async () => {
         renderPlaceholders = false;
+        virtualizer.update();
         virtualizer.scrollToIndex(1);
         await contentUpdate();
         const scrollTop = scrollTarget.scrollTop;

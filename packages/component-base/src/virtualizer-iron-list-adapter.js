@@ -314,6 +314,13 @@ export class IronListAdapter {
       });
     }
 
+    // Schedule one additional measurement cycle for async height updates
+    // https://github.com/vaadin/web-components/issues/9077
+    this.__asyncHeightUpdateDebouncer = Debouncer.debounce(this.__asyncHeightUpdateDebouncer, animationFrame, () => {
+      this._updateMetrics();
+      this._positionItems();
+    });
+
     if (this.__pendingScrollToIndex !== undefined && !this.__hasPlaceholders()) {
       this.scrollToIndex(this.__pendingScrollToIndex);
     }
