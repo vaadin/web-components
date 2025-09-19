@@ -217,6 +217,39 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(getComputedStyle(sizerCell).transform).to.equal('none');
     });
 
+    it('should update frozen-to-end positioning when scrollbar affects layout during data changes', async () => {
+      grid.style.width = '200px';
+      const originalClientWidth = grid.$.table.clientWidth;
+
+      // Simulate a wide scrollbar like with Windows
+      const scrollbarWidth = 17;
+      Object.defineProperty(grid.$.table, 'clientWidth', {
+        get: () => originalClientWidth - scrollbarWidth,
+        configurable: true,
+      });
+      flushGrid(grid);
+      await nextRender();
+
+      const getFrozenToEndHeaderCell = () => getRowCells(getRows(grid.$.header)[0])[2];
+      const positionWithScrollbar = getFrozenToEndHeaderCell().getBoundingClientRect().x;
+
+      // Set small number of items and simulate the scroll bar disappearing
+      Object.defineProperty(grid.$.table, 'clientWidth', {
+        get: () => originalClientWidth,
+        configurable: true,
+      });
+      grid.items = Array.from({ length: 2 }, (_, i) => ({
+        foo: `foo${i}`,
+        bar: `bar${i}`,
+        baz: `baz${i}`,
+      }));
+      flushGrid(grid);
+      await nextRender();
+
+      const positionAfterDataChange = getFrozenToEndHeaderCell().getBoundingClientRect().x;
+      expect(positionWithScrollbar).to.not.equal(positionAfterDataChange);
+    });
+
     ['header', 'body'].forEach((container) => {
       describe(container, () => {
         const defaultCellWidth = 100;
