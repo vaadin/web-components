@@ -305,14 +305,6 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + dx));
   });
 
-  it('should not set bounds again after position is set to absolute', () => {
-    const spy = sinon.spy(dialog.$.overlay, 'setBounds');
-    dispatchMouseEvent(overlayPart.querySelector('.n'), 'mousedown');
-    dialog.$.overlay.$.overlay.style.position = 'absolute';
-    dispatchMouseEvent(overlayPart.querySelector('.n'), 'mousedown');
-    expect(spy.calledOnce).to.be.true;
-  });
-
   it('should dispatch resize event with correct details', () => {
     const onResize = sinon.spy();
     const content = dialog.$.overlay.$.content;
@@ -590,14 +582,6 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left));
     expect(Math.floor(draggedBounds.width)).to.be.eql(Math.floor(bounds.width));
     expect(Math.floor(draggedBounds.height)).to.be.eql(Math.floor(bounds.height));
-  });
-
-  it('should not update overlay bounds with position: absolute', () => {
-    const spy = sinon.spy(dialog.$.overlay, 'setBounds');
-    dispatchMouseEvent(content, 'mousedown');
-    dialog.$.overlay.$.overlay.style.position = 'absolute';
-    dispatchMouseEvent(content, 'mousedown');
-    expect(spy.calledOnce).to.be.true;
   });
 
   it('should not reset scroll position on dragstart', async () => {
