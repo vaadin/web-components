@@ -6,152 +6,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dialog</title>
     <script type="module" src="./common.js"></script>
-
     <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/checkbox-group';
-      import '@vaadin/checkbox';
       import '@vaadin/dialog';
+      import '@vaadin/button';
       import '@vaadin/icon';
-      import '@vaadin/icons';
-      import '@vaadin/popover';
-    </script>
-
-    <style>
-      .content {
-        display: grid;
-        gap: 1rem;
-        justify-items: start;
-        max-width: 35em;
-      }
-
-      body > .content > div:first-child {
-        display: none;
-      }
-    </style>
-
-    <script type="module">
-      const defaultOptions = ['title', 'header', 'footer', 'modal', 'resizable', 'draggable'];
-      document.querySelector('vaadin-checkbox-group').value = defaultOptions;
-
-      const openDialog = (e) => {
-        const dialog = document.createElement('vaadin-dialog');
-
-        const scope = e.target.closest('div.content');
-        const hasTitle = scope.querySelector('[value="title"]').checked;
-        const hasHeader = scope.querySelector('[value="header"]').checked;
-        const hasFooter = scope.querySelector('[value="footer"]').checked;
-        const isModal = scope.querySelector('[value="modal"]').checked;
-        const hasWidth = scope.querySelector('[value="width"]').checked;
-        const hasHeight = scope.querySelector('[value="height"]').checked;
-        const isResizable = scope.querySelector('[value="resizable"]').checked;
-        const isDraggable = scope.querySelector('[value="draggable"]').checked;
-
-        dialog.renderer = (root) => {
-          if (root.firstChild) {
-            return;
-          }
-
-          root.innerHTML = `
-            <button>I have a popover</button>
-            <vaadin-popover>
-              <div>Popover content</div>
-            </vaadin-popover>
-          `;
-
-          const popover = root.querySelector('vaadin-popover');
-          popover.target = root.querySelector('button');
-
-          root.append(scope.cloneNode(true));
-          root.querySelector('vaadin-checkbox-group').value = defaultOptions;
-          root.querySelector('vaadin-button').addEventListener('click', openDialog);
-        };
-
-        if (hasTitle) {
-          dialog.headerTitle = 'Dialog Title';
-        }
-
-        if (hasHeader) {
-          dialog.headerRenderer = (root) => {
-            if (root.firstChild) {
-              return;
-            }
-            const closeBtn = document.createElement('vaadin-button');
-            closeBtn.innerHTML = '<vaadin-icon icon="vaadin:close" aria-label="close dialog"></vaadin-icon>';
-            closeBtn.addEventListener('click', () => {
-              dialog.opened = false;
-            });
-
-            const text = document.createElement('span');
-            text.textContent = 'Header content';
-
-            root.append(text, closeBtn);
-          };
-        }
-
-        if (hasFooter) {
-          dialog.footerRenderer = (root) => {
-            if (root.firstChild) {
-              return;
-            }
-            const button = document.createElement('vaadin-button');
-            button.textContent = 'Action';
-            button.setAttribute('theme', 'primary');
-
-            const button2 = document.createElement('vaadin-button');
-            button2.textContent = 'Action';
-
-            const text = document.createElement('span');
-            text.textContent = 'Footer content';
-
-            root.append(text, button2, button);
-          };
-        }
-
-        if (hasWidth) {
-          dialog.width = '300px';
-        }
-
-        if (hasHeight) {
-          dialog.height = '280px';
-        }
-
-        dialog.modeless = !isModal;
-        dialog.resizable = isResizable;
-        dialog.draggable = isDraggable;
-
-        document.body.append(dialog);
-        dialog.opened = true;
-
-        dialog.addEventListener('closed', (e) => {
-          dialog.parentNode.removeChild(dialog);
-        });
-      };
-
-      document.querySelector('vaadin-button').addEventListener('click', openDialog);
     </script>
   </head>
 
   <body>
-    <div class="content">
-      <div
-        >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga
-        reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur
-        recusandae laudantium.</div
-      >
+    <vaadin-dialog></vaadin-dialog>
 
-      <vaadin-checkbox-group label="Features" theme="horizontal">
-        <vaadin-checkbox value="title" label="Title"></vaadin-checkbox>
-        <vaadin-checkbox value="header" label="Header"></vaadin-checkbox>
-        <vaadin-checkbox value="footer" label="Footer"></vaadin-checkbox>
-        <vaadin-checkbox value="modal" label="Modal"></vaadin-checkbox>
-        <vaadin-checkbox value="width" label="Width (300px)"></vaadin-checkbox>
-        <vaadin-checkbox value="height" label="Height (280px)"></vaadin-checkbox>
-        <vaadin-checkbox value="resizable" label="Resizable"></vaadin-checkbox>
-        <vaadin-checkbox value="draggable" label="Draggable"></vaadin-checkbox>
-      </vaadin-checkbox-group>
+    <vaadin-button>Open dialog 1</vaadin-button>
 
-      <vaadin-button>Open Dialog</vaadin-button>
-    </div>
+    <script type="module">
+      const dialog1 = document.querySelector('vaadin-dialog');
+      dialog1.headerTitle = 'Title';
+      dialog1.draggable = true;
+      dialog1.resizable = true;
+
+      dialog1.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+
+        const container = document.createElement('div');
+        container.style.maxWidth = '40em';
+        container.style.minWidth = '20em';
+        root.appendChild(container);
+
+        // Second dialog
+        const dialog2 = document.createElement('vaadin-dialog');
+        dialog2.renderer = (root2) => {
+          if (root2.firstChild) {
+            return;
+          }
+
+          // Close second dialog
+          const btnClose2 = document.createElement('vaadin-button');
+          btnClose2.textContent = 'Close dialog 2';
+          btnClose2.addEventListener('click', () => {
+            dialog2.opened = false;
+          });
+
+          root2.appendChild(btnClose2);
+        };
+
+        container.appendChild(dialog2);
+
+        // Open second dialog
+        const btnOpen2 = document.createElement('vaadin-button');
+        btnOpen2.textContent = 'Open dialog 2';
+        btnOpen2.addEventListener('click', () => {
+          dialog2.opened = true;
+        });
+
+        const text = document.createElement('p');
+        text.textContent =
+          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.';
+        text.style.marginTop = '0';
+
+        container.append(text, btnOpen2);
+      };
+
+      dialog1.headerRenderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const button = document.createElement('vaadin-button');
+        button.innerHTML = '<vaadin-icon icon="lumo:cross" aria-label="close dialog"></vaadin-icon>';
+        button.setAttribute('theme', 'tertiary icon');
+        button.addEventListener('click', () => {
+          dialog1.opened = false;
+        });
+
+        const text = document.createElement('span');
+        text.textContent = 'Header content';
+
+        root.append(text, button);
+      };
+
+      dialog1.footerRenderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const button = document.createElement('vaadin-button');
+        button.textContent = 'Action';
+        button.theme = 'primary';
+
+        const button2 = document.createElement('vaadin-button');
+        button2.textContent = 'Action';
+
+        const text = document.createElement('span');
+        text.textContent = 'Footer content';
+
+        root.append(text, button2, button);
+      };
+
+      // Open first dialog
+      const btnOpen1 = document.querySelector('vaadin-button');
+      btnOpen1.addEventListener('click', () => {
+        dialog1.opened = true;
+      });
+    </script>
   </body>
 </html>

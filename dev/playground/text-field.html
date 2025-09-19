@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Field</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/text-field';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Plain</h2>
+      <vaadin-text-field value="Value"></vaadin-text-field>
+      <vaadin-text-field placeholder="Placeholder"></vaadin-text-field>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Bells & Whistles</h2>
+      <vaadin-text-field
+        label="Label"
+        helper-text="Description for this field."
+        value="Value"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">States</h2>
+      <vaadin-text-field
+        label="Read-only"
+        helper-text="Description for this field."
+        value="Value"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        readonly
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+
+      <vaadin-text-field
+        label="Disabled"
+        helper-text="Description for this field."
+        value="Value"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        disabled
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+
+      <vaadin-text-field
+        label="Invalid"
+        helper-text="Description for this field."
+        value=""
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        invalid
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Helper Above Field</h2>
+      <vaadin-text-field
+        theme="helper-above-field"
+        label="Label"
+        helper-text="Description for this field."
+        value="Value"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Content &amp; Layout Variations</h2>
+      <p>Resize the field to test how content flows.</p>
+      <vaadin-text-field
+        label="A very long label for this field"
+        helper-text="If the label wasn't enough to tell what you should input here, then this long description should be."
+        value="I’m not sure what I should write here"
+        placeholder="Perhaps this gives you an idea what to write?"
+        clear-button-visible
+        error-message="In case you didn't write anything in this required field, this error message is here to let you know that you really should write something in this field."
+        required
+        style="resize: horizontal; overflow: hidden; padding: 1px"
+      >
+        <vaadin-icon icon="vaadin:envelope-o" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+    </section>
+  </body>
+</html>

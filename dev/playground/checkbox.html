@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkbox</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/checkbox';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Label &amp; Description</h2>
+      <vaadin-checkbox label="Checked" checked></vaadin-checkbox>
+      <vaadin-checkbox label="Indeterminate" indeterminate></vaadin-checkbox>
+      <vaadin-checkbox label="Unchecked"></vaadin-checkbox>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">All Features</h2>
+      <vaadin-checkbox
+        label="Label"
+        helper-text="Description"
+        required
+        error-message="You have to check me."
+        invalid
+      ></vaadin-checkbox>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Complex Label</h2>
+      <vaadin-checkbox>
+        <label slot="label">
+          <vaadin-icon icon="vaadin:file"></vaadin-icon>
+          I accept <a href="http://vaadin.com">the terms and conditions</a>
+        </label>
+      </vaadin-checkbox>
+    </section>
+  </body>
+</html>

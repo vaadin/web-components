@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Date Picker</title>
     <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <vaadin-date-picker label="Start date">
+      <vaadin-tooltip slot="tooltip" text="Counted as first day"></vaadin-tooltip>
+    </vaadin-date-picker>
 
     <script type="module">
       import '@vaadin/date-picker';
-      import '@vaadin/icon';
-      import '@vaadin/icons';
-      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+      import '@vaadin/tooltip';
 
       const isDateDisabled = (date) => {
         // Exclude weekends and the 16th day of each month:
@@ -21,67 +24,10 @@
         checkDate.setDate(date.day);
         return checkDate.getDay() === 0 || checkDate.getDay() === 6 || checkDate.getDate() === 16;
       };
-      const picker = document.querySelector('vaadin-date-picker#weekNumbers');
-      picker.i18n = {
-        ...picker.i18n,
-        firstDayOfWeek: 1,
-      };
+
+      const picker = document.querySelector('vaadin-date-picker');
       picker.isDateDisabled = isDateDisabled;
-      picker.min = new Date(new Date().setDate(1)).toISOString().split('T')[0];
-      picker.value = new Date().toISOString().split('T')[0];
+      picker.min = '2023-11-01';
     </script>
-  </head>
-
-  <body>
-    <section class="section">
-      <h2 class="heading">Plain</h2>
-      <vaadin-date-picker value="Value"></vaadin-date-picker>
-      <vaadin-date-picker placeholder="Placeholder"></vaadin-date-picker>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">Bells & Whistles</h2>
-      <vaadin-date-picker
-        clear-button-visible
-        error-message="You need to select a date."
-        has-error-message
-        helper-text="Description for this field."
-        id="weekNumbers"
-        label="Label"
-        required
-        show-week-numbers
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-date-picker>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">States</h2>
-      <vaadin-date-picker
-        label="Read-only"
-        helper-text="Description for this field."
-        value="Value"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        has-error-message
-        required
-        readonly
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-date-picker>
-
-      <vaadin-date-picker
-        label="Disabled"
-        helper-text="Description for this field."
-        value="Value"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        has-error-message
-        required
-        disabled
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-date-picker>
-    </section>
   </body>
 </html>
