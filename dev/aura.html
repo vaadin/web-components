@@ -232,11 +232,13 @@
 
       /* TODO re-evaluate MDL API, how to achieve this */
       .dashboard-section::part(master) {
-        flex-basis: 15%;
+        flex-basis: 15em;
+        flex-grow: 0.1;
       }
 
       .dashboard-section::part(detail) {
-        flex-basis: 85%;
+        flex-basis: 85em;
+        flex-grow: 2;
       }
 
       /* TODO part of Aura? */
@@ -398,7 +400,7 @@
 
               .components-view .component {
                 display: flex;
-                height: 200px;
+                height: calc(200px - var(--vaadin-gap-s));
                 align-items: center;
                 justify-content: center;
                 border-radius: var(--vaadin-radius-m);
@@ -610,7 +612,7 @@
 
                 <div class="aura-surface component widest tall no-padding">
                   <vaadin-grid theme="no-border">
-                    <vaadin-grid-selection-column></vaadin-grid-selection-column>
+                    <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
                     <vaadin-grid-column path="name"></vaadin-grid-column>
                     <vaadin-grid-column path="email"></vaadin-grid-column>
                   </vaadin-grid>
@@ -688,8 +690,8 @@
         <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
         <hr />
         <vaadin-button id="resetAll">
+          <vaadin-icon src="./assets/lucide-icons/rotate-ccw.svg" slot="prefix"></vaadin-icon>
           Reset All
-          <vaadin-icon icon="lucide:rotate-ccw"></vaadin-icon>
         </vaadin-button>
       </vaadin-vertical-layout>
     </vaadin-popover>
