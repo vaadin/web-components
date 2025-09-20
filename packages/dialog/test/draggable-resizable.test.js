@@ -422,14 +422,27 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should only change "position", "top", and "left" values on drag', () => {
+  it('should only change "position", "top", and "left" values on drag', async () => {
     drag(content);
+    await nextRender();
     const overlay = dialog.$.overlay.$.overlay;
     const style = overlay.style;
     expect(style.length).to.be.eql(3);
     expect(style.position).to.be.ok;
     expect(style.top).to.be.ok;
     expect(style.left).to.be.ok;
+  });
+
+  it('should assign "top", and "left" properties on drag start', async () => {
+    const overlayBounds = dialog.$.overlay.getBounds();
+    expect(dialog.left).to.be.undefined;
+    expect(dialog.top).to.be.undefined;
+
+    dispatchMouseEvent(content, 'mousedown');
+    await nextRender();
+
+    expect(dialog.left).to.be.equal(overlayBounds.left);
+    expect(dialog.top).to.be.equal(overlayBounds.top);
   });
 
   it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', async () => {
@@ -514,7 +527,7 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left));
   });
 
-  it('should not drag dialog if mousedown on .resizer-container scrollbar', () => {
+  it('should not drag dialog if mousedown on .resizer-container scrollbar', async () => {
     const boundsSpy = sinon.spy(dialog.$.overlay, 'setBounds');
     content.style.width = `${content.clientWidth * 4}px`;
     const scrollbarHeight = container.offsetHeight - container.clientHeight;
@@ -523,6 +536,7 @@ describe('draggable', () => {
       x: containerBounds.left + containerBounds.width / 2,
       y: containerBounds.top + containerBounds.height - scrollbarHeight / 2,
     });
+    await nextRender();
     expect(boundsSpy.called).to.equal(!scrollbarHeight);
   });
 
@@ -593,6 +607,22 @@ describe('draggable', () => {
     const { detail } = onDragged.args[0][0];
     expect(detail.top).to.be.equal(dialog.top);
     expect(detail.left).to.be.equal(dialog.left);
+  });
+
+  it('should use correct coordinates in "dragged" event without moving the dialog during drag', async () => {
+    const overlayBounds = dialog.$.overlay.getBounds();
+    const onDragged = sinon.spy();
+    dialog.addEventListener('dragged', onDragged);
+
+    dispatchMouseEvent(content, 'mousedown');
+    await nextRender();
+    dispatchMouseEvent(content, 'mouseup');
+    await nextRender();
+
+    expect(onDragged.calledOnce).to.be.true;
+    const { detail } = onDragged.args[0][0];
+    expect(detail.top).to.be.equal(overlayBounds.top);
+    expect(detail.left).to.be.equal(overlayBounds.left);
   });
 
   it('should not set overlay max-width to none on drag', async () => {

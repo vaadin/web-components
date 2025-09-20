@@ -17,7 +17,6 @@
   padding: var(--vaadin-padding-m);
   display: flex;
   align-items: center;
-  gap: var(--vaadin-gap-xs);
 }
 
 :is(.aura-view > header, .aura-view-header) :is(h1, h2, h3, h4, h5, h6, .aura-view-heading) {
