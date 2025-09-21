@@ -171,6 +171,11 @@ export const gridStyles = css`
   [part~='first-row-cell'] {
     margin-top: 0;
     border-top-color: transparent;
+    margin-top: calc(var(--_row-border-width) * -1);
+  }
+
+  [part~='last-header-row-cell'] {
+    margin-bottom: var(--_row-border-width);
   }
 
   [part~='first-column-cell'] {
@@ -243,17 +248,21 @@ export const gridStyles = css`
   :host([navigating]) [part~='cell']::after {
     position: absolute;
     inset: calc(var(--_row-border-width) * -1) calc(var(--_column-border-width) * -1);
-    z-index: 1;
+    z-index: 3;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  :host([navigating]) {
-    [part~='row']:is(:focus, :focus-within) {
-      z-index: 2;
-    }
+  [part~='row']:focus-visible::after {
+    content: '';
+  }
 
+  [part~='row']:is(:focus, :focus-within) {
+    z-index: 3;
+  }
+
+  :host([navigating]) {
     :is([part~='row'], [part~='cell']):is(:focus, :focus-within :focus-visible) {
       outline: 0;
     }
