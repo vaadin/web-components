@@ -393,7 +393,6 @@ export const gridStyles = css`
     display: flex;
     flex: 1;
     overflow: auto;
-    padding-top: var(--_row-border-width);
   }
 
   #emptystatecell {
