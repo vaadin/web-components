@@ -198,6 +198,14 @@ export const gridStyles = css`
       var(--_column-border-width) 0 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
+  #header:has(:is([frozen], [frozen-to-end])) [part~='last-header-row-cell'] {
+    box-shadow:
+      var(--_column-border-width) var(--_row-border-width) 0 0
+        var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
+      var(--_column-border-width) var(--_row-border-width) 0 0
+        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
   [part~='first-footer-row-cell'] {
     margin-top: 0;
     border-top: 0;
@@ -207,9 +215,13 @@ export const gridStyles = css`
       var(--_column-border-width) 0 0 0 var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
-  /* [part~='details-opened-row-cell'] {
-    border-bottom: 0;
-  } */
+  #footer:has(:is([frozen], [frozen-to-end])) [part~='first-footer-row-cell'] {
+    box-shadow:
+      var(--_column-border-width) calc(var(--_row-border-width) * -1) 0 0
+        var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary)),
+      var(--_column-border-width) calc(var(--_row-border-width) * -1) 0 0
+        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
 
   [part~='body-cell']:not([part~='details-cell']) {
     --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
@@ -371,12 +383,13 @@ export const gridStyles = css`
   #emptystaterow {
     display: flex;
     flex: 1;
+    overflow: auto;
+    padding-top: var(--_row-border-width);
   }
 
   #emptystatecell {
     display: block;
     flex: 1;
-    overflow: auto;
     padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
   }
 
@@ -512,7 +525,7 @@ export const gridStyles = css`
   [part~='row'][dragover='above']::after {
     outline: 0;
     border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    top: calc(var(--vaadin-focus-ring-width) / -1);
+    top: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
   [part~='row'][dragover='below']::after {
@@ -521,13 +534,13 @@ export const gridStyles = css`
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  /* :is([part~='row']:first-child, [part~='first-row'])::after {
+  :is([part~='row']:first-child, [part~='first-row'])::after {
     top: 0;
   }
 
   :is([part~='row']:last-child, [part~='last-row'])::after {
     bottom: 0;
-  } */
+  }
 
   [part~='row'][dragstart] [part~='cell'] {
     border: 0 !important;

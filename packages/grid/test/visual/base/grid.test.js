@@ -32,7 +32,7 @@ describe('theme', () => {
   });
 
   it('column-border-width', async () => {
-    element.style.setProperty('--vaadin-grid-column-border-width', '0px');
+    element.style.setProperty('--vaadin-grid-column-border-width', '1px');
     await visualDiff(element, 'column-border-width');
   });
 
