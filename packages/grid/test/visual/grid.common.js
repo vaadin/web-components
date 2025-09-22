@@ -463,4 +463,107 @@ describe('grid', () => {
       await visualDiff(element, 'empty-state');
     });
   });
+
+  describe('grid header and footer slots', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 400px">
+          <div slot="header" style="padding: 10px; background: #f0f0f0; display: flex; align-items: center; gap: 10px;">
+            <strong>Grid Header</strong>
+            <button style="margin-left: auto;">Action</button>
+          </div>
+          
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          
+          <div slot="footer" style="padding: 8px; background: #fafafa; font-size: 12px; display: flex; justify-content: space-between;">
+            <span>Total: 10 items</span>
+            <span>Page 1 of 1</span>
+          </div>
+        </vaadin-grid>
+      `);
+      element.items = users.slice(0, 5);
+      flushGrid(element);
+      await nextRender();
+    });
+
+    it('header and footer slots', async () => {
+      await visualDiff(element, 'grid-header-footer-slots');
+    });
+  });
+
+  describe('grid header slot only', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 400px">
+          <div slot="header" style="padding: 12px; background: linear-gradient(to right, #4f46e5, #7c3aed); color: white;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <strong style="flex: 1;">User Management</strong>
+              <input type="search" placeholder="Search..." style="padding: 4px 8px; border-radius: 4px; border: none;">
+              <button style="padding: 4px 12px; background: white; color: #4f46e5; border: none; border-radius: 4px; font-weight: bold;">Add User</button>
+            </div>
+          </div>
+          
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email" header="Email"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.items = users.slice(0, 5);
+      flushGrid(element);
+      await nextRender();
+    });
+
+    it('header slot only', async () => {
+      await visualDiff(element, 'grid-header-slot-only');
+    });
+  });
+
+  describe('grid footer slot only', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 400px">
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="location.city" header="City"></vaadin-grid-column>
+          
+          <div slot="footer" style="padding: 10px; background: #f9fafb; border-top: 1px solid #e5e7eb;">
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #6b7280;">
+              <span>Showing 5 of 200 results</span>
+              <div style="display: flex; gap: 5px;">
+                <button style="padding: 2px 8px;">← Previous</button>
+                <button style="padding: 2px 8px;">Next →</button>
+              </div>
+            </div>
+          </div>
+        </vaadin-grid>
+      `);
+      element.items = users.slice(0, 5);
+      flushGrid(element);
+      await nextRender();
+    });
+
+    it('footer slot only', async () => {
+      await visualDiff(element, 'grid-footer-slot-only');
+    });
+  });
+
+  describe('grid empty header and footer slots', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 400px">
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email" header="Email"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.items = users.slice(0, 5);
+      flushGrid(element);
+      await nextRender();
+    });
+
+    it('empty slots', async () => {
+      await visualDiff(element, 'grid-empty-slots');
+    });
+  });
 });
