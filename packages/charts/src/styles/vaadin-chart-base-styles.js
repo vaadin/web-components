@@ -359,100 +359,110 @@ export const chartStyles = css`
   :where([styled-mode]) .highcharts-color-0 {
     fill: var(--_color-0);
     stroke: var(--_color-0);
-    color: var(--_color-0-label);
   }
 
   :where([styled-mode]) .highcharts-color-1 {
     fill: var(--_color-1);
     stroke: var(--_color-1);
-    color: var(--_color-1-label);
   }
 
   :where([styled-mode]) .highcharts-color-2 {
     fill: var(--_color-2);
     stroke: var(--_color-2);
-    color: var(--_color-2-label);
   }
 
   :where([styled-mode]) .highcharts-color-3 {
     fill: var(--_color-3);
     stroke: var(--_color-3);
-    color: var(--_color-2-label);
   }
 
   :where([styled-mode]) .highcharts-color-4 {
     fill: var(--_color-4);
     stroke: var(--_color-4);
-    color: var(--_color-4-label);
   }
 
   :where([styled-mode]) .highcharts-color-5 {
     fill: var(--_color-5);
     stroke: var(--_color-5);
-    color: var(--_color-5-label);
   }
 
   :where([styled-mode]) .highcharts-color-6 {
     fill: var(--_color-6);
     stroke: var(--_color-6);
-    color: var(--_color-6-label);
   }
 
   :where([styled-mode]) .highcharts-color-7 {
     fill: var(--_color-7);
-    stroke: var(--_color-7);
     color: var(--_color-7-label);
   }
 
   :where([styled-mode]) .highcharts-color-8 {
     fill: var(--_color-8);
     stroke: var(--_color-8);
-    color: var(--_color-8-label);
   }
 
   :where([styled-mode]) .highcharts-color-9 {
     fill: var(--_color-9);
     stroke: var(--_color-9);
-    color: var(--_color-9-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-0 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-0 {
     color: var(--_color-0-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-1 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-1 {
     color: var(--_color-1-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-2 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-2 {
     color: var(--_color-2-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-3 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-3 {
     color: var(--_color-3-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-4 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-4 {
     color: var(--_color-4-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-5 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-5 {
     color: var(--_color-5-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-6 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-6 {
     color: var(--_color-6-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-7 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-7 {
     color: var(--_color-7-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-8 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-8 {
     color: var(--_color-8-label);
   }
 
-  :where([styled-mode]) .highcharts-data-label-color-9 {
+  :where([styled-mode])
+    :where(.highcharts-treemap-series, .highcharts-organization-series, .highcharts-gantt-series)
+    .highcharts-data-label-color-9 {
     color: var(--_color-9-label);
   }
 
