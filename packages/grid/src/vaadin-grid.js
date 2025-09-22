@@ -256,6 +256,7 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
+ * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  *
  * @customElement
  * @extends HTMLElement
