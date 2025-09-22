@@ -38,6 +38,10 @@
       vaadin-grid.max-height {
         max-height: 350px;
       }
+
+      vaadin-grid[theme~="row-hover"] {
+        --vaadin-grid-row-hover-background-color: hsla(0deg, 0%, 0%, 0.03);
+      }
     </style>
   </head>
   <body>
@@ -72,12 +76,15 @@
       </div>
 
       <div class="control-group">
-        <vaadin-checkbox-group label="Theme Variants">
+        <vaadin-checkbox-group label="Built-In Variants">
           <vaadin-checkbox id="no-border" value="no-border" label="No Border"></vaadin-checkbox>
           <vaadin-checkbox id="no-row-borders" value="no-row-borders" label="No Row Border"></vaadin-checkbox>
           <vaadin-checkbox id="column-borders" value="column-borders" label="Column Borders"></vaadin-checkbox>
           <vaadin-checkbox id="row-stripes" value="row-stripes" label="Row Stripes"></vaadin-checkbox>
           <vaadin-checkbox id="wrap-cell-content" value="wrap-cell-content" label="Wrap Cell Content"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-checkbox-group label="Custom Variants">
+          <vaadin-checkbox id="row-hover" value="row-hover" label="Row Hover"></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
 
@@ -307,7 +314,14 @@
       });
 
       // Theme Controls
-      const themeControls = ['no-border', 'no-row-borders', 'column-borders', 'row-stripes', 'wrap-cell-content'];
+      const themeControls = [
+        'no-border',
+        'no-row-borders',
+        'column-borders',
+        'row-stripes',
+        'wrap-cell-content',
+        'row-hover',
+      ];
       themeControls.forEach((control) => {
         document.getElementById(control).addEventListener('checked-changed', (e) => {
           if (e.detail.value) {

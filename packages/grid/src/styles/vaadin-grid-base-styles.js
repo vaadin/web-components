@@ -30,8 +30,6 @@ export const gridStyles = css`
     --_border-width: 0;
     --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
-    --_cell-padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
-    --_selection-background-image: none;
     border-radius: var(--_border-radius);
     --_border-radius: 0;
   }
@@ -153,25 +151,33 @@ export const gridStyles = css`
   [part~='cell'] {
     padding: 0;
     box-sizing: border-box;
+    background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
   }
 
   [part~='row'],
   [part~='cell'] {
     --_hover-background-image: var(--vaadin-grid-cell-background-hover, none);
-    background:
-      var(--_hover-background-image), var(--_selection-background-image),
-      var(--vaadin-grid-cell-background, var(--vaadin-background-color));
   }
 
-  [part~='cell']:not([part~='details-cell']) {
+  [part~='cell']:where(:not([part~='details-cell'])) {
     flex-shrink: 0;
     flex-grow: 1;
-    box-sizing: border-box;
     display: flex;
     width: 100%;
     position: relative;
     align-items: center;
     white-space: nowrap;
+  }
+
+  [part~='body-cell']:where(:not([part~='details-cell'])) {
+    --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
+    --_highlight-background-image: linear-gradient(
+      var(--_highlight-background-color),
+      var(--_highlight-background-color)
+    );
+    background:
+      var(--_hover-background-image, none), var(--_selected-background-image, none), var(--_highlight-background-image),
+      var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
   }
 
   :focus-visible,
@@ -240,12 +246,23 @@ export const gridStyles = css`
   }
 
   /* Variant: row stripes */
-  :host([theme~='row-stripes']) [part~='odd-row'],
-  :host([theme~='row-stripes']) [part~='odd-row'] [part~='cell'] {
-    --vaadin-grid-cell-background: var(
-      --vaadin-grid-odd-row-cell-background,
-      linear-gradient(var(--vaadin-background-container), var(--vaadin-background-container))
+  [part~='odd-row'] {
+    --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--vaadin-background-color));
+  }
+
+  :host([theme~='row-stripes']) [part~='odd-row'] {
+    --vaadin-grid-cell-background-color: var(
+      --vaadin-grid-row-odd-background-color,
+      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--vaadin-background-color))
     );
+  }
+
+  /* Row hover */
+  @media (any-hover: hover) {
+    [part~='body-row']:hover [part~='cell']:where(:not([part~='details-cell'])) {
+      --_hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
+      --_hover-background-image: linear-gradient(var(--_hover-background-color), var(--_hover-background-color));
+    }
   }
 
   [part~='details-cell'] {
@@ -258,7 +275,7 @@ export const gridStyles = css`
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: var(--_cell-padding);
+    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
     flex: 1;
     min-width: 0;
   }
@@ -270,12 +287,12 @@ export const gridStyles = css`
   }
 
   /* Selected row */
-  [part~='row'][selected] [part~='body-cell']:not([part~='details-cell']) {
-    --_color: color-mix(in srgb, currentColor 8%, transparent);
-    --_selection-background-image: var(
-      --vaadin-grid-row-selected-background,
-      linear-gradient(var(--_color), var(--_color))
+  [part~='body-row'][selected] {
+    --_selected-background-color: var(
+      --vaadin-grid-row-selected-background-color,
+      color-mix(in srgb, currentColor 8%, transparent)
     );
+    --_selected-background-image: linear-gradient(var(--_selected-background-color), var(--_selected-background-color));
   }
 
   /* Empty state */
@@ -301,7 +318,7 @@ export const gridStyles = css`
     display: block;
     flex: 1;
     overflow: auto;
-    padding: var(--_cell-padding);
+    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
   }
 
   /* Reordering styles */
@@ -318,7 +335,7 @@ export const gridStyles = css`
     box-shadow:
       0 0 0 1px hsla(0deg, 0%, 0%, 0.2),
       0 8px 24px -2px hsla(0deg, 0%, 0%, 0.2);
-    padding: var(--_cell-padding) !important;
+    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container)) !important;
     border-radius: 3px;
 
     /* Prevent overflowing the grid in Firefox */
