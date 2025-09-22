@@ -39,16 +39,16 @@ snapshots["vaadin-grid host default"] =
 
 snapshots["vaadin-grid shadow default"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   style="touch-action: none;"
 >
-  <div
-    id="gridHeader"
-    part="header"
-  >
-    <slot name="header">
-    </slot>
-  </div>
   <table
     aria-colcount="2"
     aria-multiselectable="true"
@@ -255,15 +255,15 @@ snapshots["vaadin-grid shadow default"] =
       </tr>
     </tfoot>
   </table>
-  <div
-    id="gridFooter"
-    part="footer"
-  >
-    <slot name="footer">
-    </slot>
-  </div>
   <div part="reorder-ghost">
   </div>
+</div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
 </div>
 <slot name="tooltip">
 </slot>
@@ -277,16 +277,16 @@ snapshots["vaadin-grid shadow default"] =
 
 snapshots["vaadin-grid shadow selected"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   style="touch-action: none;"
 >
-  <div
-    id="gridHeader"
-    part="header"
-  >
-    <slot name="header">
-    </slot>
-  </div>
   <table
     aria-colcount="2"
     aria-multiselectable="true"
@@ -494,15 +494,15 @@ snapshots["vaadin-grid shadow selected"] =
       </tr>
     </tfoot>
   </table>
-  <div
-    id="gridFooter"
-    part="footer"
-  >
-    <slot name="footer">
-    </slot>
-  </div>
   <div part="reorder-ghost">
   </div>
+</div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
 </div>
 <slot name="tooltip">
 </slot>
@@ -516,16 +516,16 @@ snapshots["vaadin-grid shadow selected"] =
 
 snapshots["vaadin-grid shadow details opened"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   style="touch-action: none;"
 >
-  <div
-    id="gridHeader"
-    part="header"
-  >
-    <slot name="header">
-    </slot>
-  </div>
   <table
     aria-colcount="2"
     aria-multiselectable="true"
@@ -732,15 +732,15 @@ snapshots["vaadin-grid shadow details opened"] =
       </tr>
     </tfoot>
   </table>
-  <div
-    id="gridFooter"
-    part="footer"
-  >
-    <slot name="footer">
-    </slot>
-  </div>
   <div part="reorder-ghost">
   </div>
+</div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
 </div>
 <slot name="tooltip">
 </slot>
@@ -754,17 +754,17 @@ snapshots["vaadin-grid shadow details opened"] =
 
 snapshots["vaadin-grid shadow hidden column"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   scrolling=""
   style="touch-action: none;"
 >
-  <div
-    id="gridHeader"
-    part="header"
-  >
-    <slot name="header">
-    </slot>
-  </div>
   <table
     aria-colcount="2"
     aria-multiselectable="true"
@@ -919,15 +919,15 @@ snapshots["vaadin-grid shadow hidden column"] =
       </tr>
     </tfoot>
   </table>
-  <div
-    id="gridFooter"
-    part="footer"
-  >
-    <slot name="footer">
-    </slot>
-  </div>
   <div part="reorder-ghost">
   </div>
+</div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
 </div>
 <slot name="tooltip">
 </slot>
@@ -941,17 +941,17 @@ snapshots["vaadin-grid shadow hidden column"] =
 
 snapshots["vaadin-grid shadow hidden column selected"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   scrolling=""
   style="touch-action: none;"
 >
-  <div
-    id="gridHeader"
-    part="header"
-  >
-    <slot name="header">
-    </slot>
-  </div>
   <table
     aria-colcount="2"
     aria-multiselectable="true"
@@ -1107,15 +1107,15 @@ snapshots["vaadin-grid shadow hidden column selected"] =
       </tr>
     </tfoot>
   </table>
-  <div
-    id="gridFooter"
-    part="footer"
-  >
-    <slot name="footer">
-    </slot>
-  </div>
   <div part="reorder-ghost">
   </div>
+</div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
 </div>
 <slot name="tooltip">
 </slot>
