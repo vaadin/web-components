@@ -258,6 +258,11 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  *
+ * @slot header - Slot for custom content to be placed above the grid table, typically used for toolbars and controls
+ * @slot footer - Slot for custom content to be placed below the grid table, typically used for status information
+ * @slot empty-state - Slot for content to be displayed when there are no body rows to show
+ * @slot tooltip - Slot for tooltip overlay
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes GridMixin
@@ -273,6 +278,32 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   }
 
   /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+
+    // Handle header slot visibility
+    const headerSlot = this.shadowRoot.querySelector('slot[name="header"]');
+    const footerSlot = this.shadowRoot.querySelector('slot[name="footer"]');
+
+    const updateSlotVisibility = () => {
+      // Check header slot
+      const hasHeaderContent = headerSlot.assignedNodes().length > 0;
+      this.toggleAttribute('header-hidden', !hasHeaderContent);
+
+      // Check footer slot
+      const hasFooterContent = footerSlot.assignedNodes().length > 0;
+      this.toggleAttribute('footer-hidden', !hasFooterContent);
+    };
+
+    // Initial check
+    updateSlotVisibility();
+
+    // Listen for slot changes
+    headerSlot.addEventListener('slotchange', updateSlotVisibility);
+    footerSlot.addEventListener('slotchange', updateSlotVisibility);
+  }
+
+  /** @protected */
   render() {
     return html`
       <div
@@ -283,6 +314,10 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         ?column-reordering-allowed="${this.columnReorderingAllowed}"
         ?empty-state="${this.__emptyState}"
       >
+        <div part="header" id="gridHeader">
+          <slot name="header"></slot>
+        </div>
+
         <table
           id="table"
           role="treegrid"
@@ -302,6 +337,10 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           </tbody>
           <tfoot id="footer" role="rowgroup"></tfoot>
         </table>
+
+        <div part="footer" id="gridFooter">
+          <slot name="footer"></slot>
+        </div>
 
         <div part="reorder-ghost"></div>
       </div>
