@@ -72,10 +72,7 @@ export const DialogResizableMixin = (superClass) =>
         window.addEventListener('touchmove', this._resizeListeners.resize[direction]);
         window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
         window.addEventListener('touchend', this._resizeListeners.stop[direction]);
-        if (this.$.overlay.$.overlay.style.position !== 'absolute' || this.width || this.height) {
-          this.$.overlay.setBounds(this._originalBounds);
-        }
-
+        this.$.overlay.setBounds(this._originalBounds);
         this.$.overlay.setAttribute('has-bounds-set', '');
       }
     }
