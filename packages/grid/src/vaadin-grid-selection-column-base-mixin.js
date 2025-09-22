@@ -63,7 +63,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, the active gets automatically selected.
+         * When true, the active item gets automatically selected.
          * @attr {boolean} auto-select
          * @type {boolean}
          */
