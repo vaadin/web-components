@@ -715,6 +715,13 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
+      // When Tab (forward) would go to focusexit, let the natural Tab order work instead
+      // This allows tabbing to footer slot content that's outside the scroller
+      if (focusTarget === this.$.focusexit && !e.shiftKey) {
+        this.toggleAttribute('navigating', true);
+        return;
+      }
+
       // Prevent focus-trap logic from intercepting the event.
       e.stopPropagation();
 

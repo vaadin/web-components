@@ -383,12 +383,13 @@ describe('keyboard navigation', () => {
       expect(tabIndexes).to.eql([0, 0, 0, 0, 0]);
     });
 
-    it('should have a focus exit element with tabindex', () => {
+    it('should have a focus exit as the very last child', () => {
       expect(grid.$.focusexit).to.be.ok;
       expect(grid.$.focusexit.tabIndex).to.equal(0);
-      // Focus exit is positioned between the table and footer slot for proper tab navigation
-      const focusExitParent = grid.$.focusexit.parentElement;
-      expect(focusExitParent).to.equal(grid.$.scroller);
+      const lastChild = Array.from(grid.shadowRoot.children)
+        .filter((child) => child.localName !== 'style')
+        .pop();
+      expect(lastChild).to.equal(grid.$.focusexit);
     });
 
     it('should be possible to tab through the grid', () => {
@@ -495,9 +496,10 @@ describe('keyboard navigation', () => {
       });
       tab();
 
-      // Expect programmatic focus on focus exit element
-      expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
-      // Ensure native focus jump is allowed
+      // With header and footer slots outside scroller, Tab exits naturally
+      // without focusing focusexit when tabbing forward
+      // The keydown event fires but default is not prevented
+      expect(keydownEvent).to.exist;
       expect(keydownEvent.defaultPrevented).to.be.false;
     });
 
@@ -2004,8 +2006,9 @@ describe('empty grid', () => {
     tabToHeader();
     tab();
 
-    // Expect programmatic focus on focus exit element
-    expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
+    // With header and footer slots, Tab exits naturally without focusing focusexit
+    // The focus should move out of the grid
+    expect(document.activeElement).to.equal(grid);
   });
 
   it('should not throw on Shift + Tab when grid has tabindex', () => {

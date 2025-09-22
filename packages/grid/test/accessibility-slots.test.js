@@ -50,18 +50,24 @@ describe('accessibility - header and footer slots', () => {
 
     it('should position header before the table', () => {
       const header = grid.shadowRoot.querySelector('[part="header"]');
-      const table = grid.shadowRoot.querySelector('#table');
-      const headerIndex = Array.from(header.parentElement.children).indexOf(header);
-      const tableIndex = Array.from(table.parentElement.children).indexOf(table);
-      expect(headerIndex).to.be.below(tableIndex);
+      const scroller = grid.shadowRoot.querySelector('#scroller');
+      const shadowChildren = Array.from(grid.shadowRoot.children).filter(
+        (child) => child.localName !== 'style' && child.localName !== 'slot',
+      );
+      const headerIndex = shadowChildren.indexOf(header);
+      const scrollerIndex = shadowChildren.indexOf(scroller);
+      expect(headerIndex).to.be.below(scrollerIndex);
     });
 
     it('should position footer after the table', () => {
       const footer = grid.shadowRoot.querySelector('[part="footer"]');
-      const table = grid.shadowRoot.querySelector('#table');
-      const footerIndex = Array.from(footer.parentElement.children).indexOf(footer);
-      const tableIndex = Array.from(table.parentElement.children).indexOf(table);
-      expect(footerIndex).to.be.above(tableIndex);
+      const scroller = grid.shadowRoot.querySelector('#scroller');
+      const shadowChildren = Array.from(grid.shadowRoot.children).filter(
+        (child) => child.localName !== 'style' && child.localName !== 'slot',
+      );
+      const footerIndex = shadowChildren.indexOf(footer);
+      const scrollerIndex = shadowChildren.indexOf(scroller);
+      expect(footerIndex).to.be.above(scrollerIndex);
     });
   });
 
