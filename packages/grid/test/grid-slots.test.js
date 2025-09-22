@@ -52,10 +52,10 @@ describe('grid slots', () => {
       expect(headerRect.bottom).to.be.at.most(tableRect.top + 1);
     });
 
-    it('should hide empty header slot', () => {
+    it('should have zero height when header slot is empty', () => {
       const headerPart = grid.shadowRoot.querySelector('[part="header"]');
-      const computedStyle = window.getComputedStyle(headerPart);
-      expect(computedStyle.display).to.equal('none');
+      const rect = headerPart.getBoundingClientRect();
+      expect(rect.height).to.equal(0);
     });
 
     it('should show header slot with content', async () => {
@@ -127,10 +127,10 @@ describe('grid slots', () => {
       expect(footerRect.top).to.be.at.least(tableRect.bottom - 1);
     });
 
-    it('should hide empty footer slot', () => {
+    it('should have zero height when footer slot is empty', () => {
       const footerPart = grid.shadowRoot.querySelector('[part="footer"]');
-      const computedStyle = window.getComputedStyle(footerPart);
-      expect(computedStyle.display).to.equal('none');
+      const rect = footerPart.getBoundingClientRect();
+      expect(rect.height).to.equal(0);
     });
 
     it('should show footer slot with content', async () => {
