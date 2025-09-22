@@ -279,32 +279,6 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   }
 
   /** @protected */
-  firstUpdated() {
-    super.firstUpdated();
-
-    // Handle header slot visibility
-    const headerSlot = this.shadowRoot.querySelector('slot[name="header"]');
-    const footerSlot = this.shadowRoot.querySelector('slot[name="footer"]');
-
-    const updateSlotVisibility = () => {
-      // Check header slot
-      const hasHeaderContent = headerSlot.assignedNodes().length > 0;
-      this.toggleAttribute('header-hidden', !hasHeaderContent);
-
-      // Check footer slot
-      const hasFooterContent = footerSlot.assignedNodes().length > 0;
-      this.toggleAttribute('footer-hidden', !hasFooterContent);
-    };
-
-    // Initial check
-    updateSlotVisibility();
-
-    // Listen for slot changes
-    headerSlot.addEventListener('slotchange', updateSlotVisibility);
-    footerSlot.addEventListener('slotchange', updateSlotVisibility);
-  }
-
-  /** @protected */
   render() {
     return html`
       <div

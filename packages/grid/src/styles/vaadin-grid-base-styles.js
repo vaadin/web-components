@@ -80,11 +80,6 @@ export const gridStyles = css`
     box-sizing: border-box;
   }
 
-  :host([header-hidden]) [part='header'],
-  :host([footer-hidden]) [part='footer'] {
-    display: none;
-  }
-
   #items {
     flex-grow: 1;
     flex-shrink: 0;
