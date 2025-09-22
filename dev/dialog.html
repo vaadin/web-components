@@ -6,11 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dialog</title>
     <script type="module" src="./common.js"></script>
-    <script type="module">
-      import '@vaadin/dialog';
-      import '@vaadin/button';
-      import '@vaadin/icon';
-    </script>
   </head>
 
   <body>
@@ -19,6 +14,10 @@
     <vaadin-button>Open dialog 1</vaadin-button>
 
     <script type="module">
+      import '@vaadin/dialog';
+      import '@vaadin/button';
+      import '@vaadin/icon';
+
       const dialog1 = document.querySelector('vaadin-dialog');
       dialog1.headerTitle = 'Title';
       dialog1.draggable = true;
