@@ -27,6 +27,7 @@ export const gridSorterStyles = css`
   [part='indicators'] {
     position: relative;
     flex: none;
+    height: 1lh;
   }
 
   [part='order'] {
