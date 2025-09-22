@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-grid.js';
 import '../src/vaadin-grid-column.js';
@@ -65,25 +66,96 @@ describe('accessibility - header and footer slots', () => {
   });
 
   describe('keyboard navigation', () => {
-    it('should allow keyboard navigation to header slot content', () => {
+    it('should allow Tab navigation from header to grid', async () => {
       const addButton = grid.querySelector('#addBtn');
+      const searchInput = grid.querySelector('#searchInput');
+
+      // Focus the first button in header
       addButton.focus();
       expect(document.activeElement).to.equal(addButton);
+
+      // Tab to search input
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(searchInput);
+
+      // Tab to grid - should focus a header cell
+      await sendKeys({ press: 'Tab' });
+      const activeElement = grid.shadowRoot.activeElement;
+      expect(activeElement).to.exist;
+      expect(activeElement.getAttribute('role')).to.equal('columnheader');
     });
 
-    it('should allow keyboard navigation to footer slot content', () => {
+    it('should allow Tab navigation from grid to footer', async () => {
+      // Focus the search input in header first
+      const searchInput = grid.querySelector('#searchInput');
+      searchInput.focus();
+      expect(document.activeElement).to.equal(searchInput);
+
+      // Tab into grid
+      await sendKeys({ press: 'Tab' });
+
+      // Focus should be in the grid (on a cell in shadow DOM)
+      expect(document.activeElement).to.equal(grid);
+      expect(grid.shadowRoot.activeElement).to.exist;
+      expect(grid.shadowRoot.activeElement.getAttribute('role')).to.be.oneOf(['columnheader', 'gridcell']);
+
+      // Tab out of grid - Grid's internal Tab handling exits the grid
+      // Note: The grid may handle Tab internally and exit on the first Tab press
+      // or may require multiple Tab presses depending on its internal state
+      let attempts = 0;
+      const maxAttempts = 5;
+
+      while (document.activeElement !== grid.querySelector('#nextBtn') && attempts < maxAttempts) {
+        await sendKeys({ press: 'Tab' });
+        attempts += 1;
+      }
+
+      // After exiting grid, focus should be on the footer button
+      expect(document.activeElement.id).to.equal('nextBtn');
+    });
+
+    it('should allow Shift+Tab navigation from footer back to grid', async () => {
       const nextButton = grid.querySelector('#nextBtn');
+
+      // Focus footer button
       nextButton.focus();
       expect(document.activeElement).to.equal(nextButton);
-    });
 
-    it('should maintain grid table keyboard navigation', () => {
-      const table = grid.shadowRoot.querySelector('#table');
-      table.focus();
-      // When the table is focused, the actual focus goes to a cell
+      // Shift+Tab should go back to grid
+      await sendKeys({ press: 'Shift+Tab' });
+
+      // Should be in the grid now
       const activeElement = grid.shadowRoot.activeElement;
       expect(activeElement).to.exist;
       expect(activeElement.getAttribute('role')).to.be.oneOf(['columnheader', 'gridcell']);
+    });
+
+    it('should allow Shift+Tab navigation from grid to header', async () => {
+      // Focus grid first
+      const table = grid.shadowRoot.querySelector('#table');
+      table.focus();
+
+      // Shift+Tab should go to header content
+      await sendKeys({ press: 'Shift+Tab' });
+
+      // Should be in header (search input is last in header)
+      expect(document.activeElement.id).to.equal('searchInput');
+    });
+
+    it('should maintain grid table keyboard navigation', async () => {
+      const table = grid.shadowRoot.querySelector('#table');
+      table.focus();
+
+      // When the table is focused, the actual focus goes to a cell
+      const initialActiveElement = grid.shadowRoot.activeElement;
+      expect(initialActiveElement).to.exist;
+      expect(initialActiveElement.getAttribute('role')).to.be.oneOf(['columnheader', 'gridcell']);
+
+      // Arrow keys should work within grid
+      await sendKeys({ press: 'ArrowRight' });
+      const afterArrowRight = grid.shadowRoot.activeElement;
+      expect(afterArrowRight).to.exist;
+      expect(afterArrowRight).to.not.equal(initialActiveElement);
     });
   });
 
@@ -137,40 +209,84 @@ describe('accessibility - header and footer slots', () => {
   });
 
   describe('focus management', () => {
-    it('should not trap focus in header', () => {
+    it('should not trap focus in header', async () => {
       const addButton = grid.querySelector('#addBtn');
       const searchInput = grid.querySelector('#searchInput');
 
       addButton.focus();
       expect(document.activeElement).to.equal(addButton);
 
-      searchInput.focus();
+      // Tab within header
+      await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(searchInput);
+
+      // Tab out of header to grid
+      await sendKeys({ press: 'Tab' });
+      expect(grid.shadowRoot.activeElement).to.exist;
+      expect(grid.shadowRoot.activeElement.getAttribute('role')).to.equal('columnheader');
     });
 
-    it('should not trap focus in footer', () => {
+    it('should not trap focus in footer', async () => {
       const nextButton = grid.querySelector('#nextBtn');
       nextButton.focus();
       expect(document.activeElement).to.equal(nextButton);
+
+      // Shift+Tab should go back to grid
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(grid.shadowRoot.activeElement).to.exist;
     });
 
-    it('should maintain proper focus order', () => {
-      // Focus should flow naturally through header -> grid -> footer
-      const focusableElements = [
-        grid.querySelector('#addBtn'),
-        grid.querySelector('#searchInput'),
-        grid.shadowRoot.querySelector('#table'),
-        grid.querySelector('#nextBtn'),
-      ];
+    it('should maintain proper Tab focus order through entire grid', async () => {
+      const addButton = grid.querySelector('#addBtn');
 
-      // Verify all elements are focusable
-      focusableElements.forEach((el) => {
-        if (el === grid.shadowRoot.querySelector('#table')) {
-          expect(el.getAttribute('tabindex')).to.equal('0');
-        } else {
-          expect(el.tabIndex).to.be.at.least(0);
-        }
-      });
+      // Start from header
+      addButton.focus();
+      expect(document.activeElement).to.equal(addButton);
+
+      // Tab through header
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement.id).to.equal('searchInput');
+
+      // Tab into grid
+      await sendKeys({ press: 'Tab' });
+      expect(grid.shadowRoot.activeElement).to.exist;
+      expect(grid.shadowRoot.activeElement.getAttribute('role')).to.equal('columnheader');
+
+      // Tab out of grid - Grid handles Tab navigation and exits to footer
+      let attempts = 0;
+      const maxAttempts = 5;
+
+      while (document.activeElement !== grid.querySelector('#nextBtn') && attempts < maxAttempts) {
+        await sendKeys({ press: 'Tab' });
+        attempts += 1;
+      }
+
+      // Should reach footer
+      expect(document.activeElement.id).to.equal('nextBtn');
+    });
+
+    it('should support reverse Tab navigation', async () => {
+      const nextButton = grid.querySelector('#nextBtn');
+
+      // Start from footer
+      nextButton.focus();
+      expect(document.activeElement).to.equal(nextButton);
+
+      // Shift+Tab back through grid to header
+      let shiftTabCount = 0;
+      const maxShiftTabs = 15;
+
+      while (document.activeElement.id !== 'searchInput' && shiftTabCount < maxShiftTabs) {
+        await sendKeys({ press: 'Shift+Tab' });
+        shiftTabCount += 1;
+      }
+
+      // Should reach header search input
+      expect(document.activeElement.id).to.equal('searchInput');
+
+      // One more Shift+Tab to reach add button
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(document.activeElement.id).to.equal('addBtn');
     });
   });
 });

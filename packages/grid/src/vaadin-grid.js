@@ -313,6 +313,8 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           <tfoot id="footer" role="rowgroup"></tfoot>
         </table>
 
+        <div id="focusexit" tabindex="0"></div>
+
         <div part="footer" id="gridFooter">
           <slot name="footer"></slot>
         </div>
@@ -321,8 +323,6 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       </div>
 
       <slot name="tooltip"></slot>
-
-      <div id="focusexit" tabindex="0"></div>
     `;
   }
 }
