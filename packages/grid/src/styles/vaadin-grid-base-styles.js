@@ -15,6 +15,7 @@ export const gridStyles = css`
 
   :host {
     display: flex;
+    flex-direction: column;
     animation: 1ms vaadin-grid-appear;
     max-width: 100%;
     height: 400px;
@@ -67,6 +68,7 @@ export const gridStyles = css`
     width: 100%;
     min-width: 0;
     min-height: 0;
+    flex: 1 1 auto;
     align-self: stretch;
     overflow: hidden;
   }

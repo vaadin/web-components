@@ -281,6 +281,10 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   /** @protected */
   render() {
     return html`
+      <div part="header" id="gridHeader">
+        <slot name="header"></slot>
+      </div>
+
       <div
         id="scroller"
         ?safari="${this._safari}"
@@ -289,10 +293,6 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         ?column-reordering-allowed="${this.columnReorderingAllowed}"
         ?empty-state="${this.__emptyState}"
       >
-        <div part="header" id="gridHeader">
-          <slot name="header"></slot>
-        </div>
-
         <table
           id="table"
           role="treegrid"
@@ -313,16 +313,16 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           <tfoot id="footer" role="rowgroup"></tfoot>
         </table>
 
-        <div id="focusexit" tabindex="0"></div>
-
-        <div part="footer" id="gridFooter">
-          <slot name="footer"></slot>
-        </div>
-
         <div part="reorder-ghost"></div>
       </div>
 
+      <div part="footer" id="gridFooter">
+        <slot name="footer"></slot>
+      </div>
+
       <slot name="tooltip"></slot>
+
+      <div id="focusexit" tabindex="0"></div>
     `;
   }
 }

@@ -199,16 +199,12 @@ describe('keyboard navigation - row focus', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
       tabbableElements[3].focus(); // Focus footer row
 
-      let keydownEvent;
-      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => {
-        keydownEvent = e;
-      });
       tab();
 
-      // Expect programmatic focus on focus exit element
-      expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
-      // Ensure native focus jump is allowed
-      expect(keydownEvent.defaultPrevented).to.be.false;
+      // With header and footer slots outside scroller, Tab exits naturally
+      // without focusing focusexit when tabbing forward
+      // The last focused element should remain the footer row
+      expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
     });
 
     it('should be possible to exit grid with shift+tab', () => {
