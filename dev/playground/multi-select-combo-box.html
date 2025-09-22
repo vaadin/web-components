@@ -157,43 +157,7 @@
         const item = event.detail;
         comboBox.items.push(item);
         comboBox.selectedItems = [...comboBox.selectedItems, item];
-        console.log('custom-value-set', item);
       });
-
-      comboBox.addEventListener('change', () => {
-        console.log('change', comboBox.selectedItems);
-      });
-
-      /*
-      comboBox.items = [
-        { id: 1, name: 'Hydrogen' },
-        { id: 2, name: 'Helium' },
-        { id: 3, name: 'Lithium' },
-        { id: 4, name: 'Beryllium' },
-        { id: 5, name: 'Boron' },
-        { id: 6, name: 'Carbon' },
-        { id: 7, name: 'Nitrogen' },
-        { id: 8, name: 'Oxygen' },
-        { id: 9, name: 'Fluorine' }
-      ];
-
-      comboBox.selectedItems = [
-        { id: 3, name: 'Lithium' },
-        { id: 5, name: 'Boron' }
-      ];
-      */
-
-      /*
-      comboBox.renderer = (root, _, model) => {
-        let div = root.firstChild;
-        if (!div) {
-          div = document.createElement('em');
-          root.appendChild(div);
-        }
-
-        div.textContent = model.item;
-      }
-      */
     </script>
   </body>
 </html>
