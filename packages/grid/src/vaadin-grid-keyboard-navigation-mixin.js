@@ -715,10 +715,19 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      // When Tab (forward) would go to focusexit, let the natural Tab order work instead
-      // This allows tabbing to footer slot content that's outside the scroller
+      // When Tab (forward) would go to focusexit, skip the grid's Tab handling entirely
+      // to allow natural Tab order to work for footer content or overlay scenarios
       if (focusTarget === this.$.focusexit && !e.shiftKey) {
+        // Prevent focus-trap logic from intercepting the event.
+        e.stopPropagation();
         this.toggleAttribute('navigating', true);
+        // Remove focusexit from Tab order before the browser processes Tab
+        this.$.focusexit.tabIndex = -1;
+        // Restore it after the current event completes
+        setTimeout(() => {
+          this.$.focusexit.tabIndex = 0;
+        }, 0);
+        // Don't prevent default and don't focus anything - let browser handle Tab naturally
         return;
       }
 
