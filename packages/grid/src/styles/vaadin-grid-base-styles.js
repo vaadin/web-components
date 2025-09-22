@@ -253,11 +253,7 @@ export const gridStyles = css`
   :host([theme~='row-stripes']) [part~='odd-row'] {
     --vaadin-grid-cell-background-color: var(
       --vaadin-grid-row-odd-background-color,
-      color-mix(
-        in srgb,
-        var(--vaadin-text-color) 4%,
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color))
-      )
+      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--vaadin-background-color))
     );
   }
 
