@@ -16,7 +16,6 @@ const gridPro = css`
   [part~='body-cell'] {
     --_highlight-color: color-mix(in srgb, currentColor 5%, transparent);
     --_highlight-color2: color-mix(in srgb, currentColor 10%, transparent);
-    --_highlight-bg: linear-gradient(var(--_highlight-color), var(--_highlight-color));
   }
 
   [part~='editable-cell'] {
@@ -29,34 +28,40 @@ const gridPro = css`
     outline: 0;
   }
 
-  [part~='editable-cell']:hover,
-  :host([navigating]) [part~='editable-cell']:focus {
-    background: var(--vaadin-grid-pro-editable-cell-background-hover, var(--_highlight-bg));
+  /* On macOS the editable-cell part is a button inside the body cell. On other platforms the body cell is the editable-cell part. */
+
+  @media (any-hover: hover) {
+    [part~='body-cell']:is([part~='editable-cell'], :has([part~='editable-cell'])):hover {
+      --vaadin-grid-row-hover-background-color: var(--_highlight-color);
+    }
+  }
+
+  :host([navigating]) [part~='body-cell']:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus)) {
+    --vaadin-grid-row-highlight-background-color: var(--_highlight-color);
   }
 
   /* Indicate editable cells */
 
-  :host([theme~='highlight-editable-cells']) [part~='editable-cell'] {
-    background: var(--vaadin-grid-pro-editable-cell-background, var(--_highlight-bg));
-  }
-
-  :host([theme~='highlight-editable-cells']) [part~='editable-cell']:is(:hover, :focus-visible) {
-    background:
-      var(--vaadin-grid-pro-editable-cell-background-hover, var(--_highlight-bg)),
-      var(--vaadin-grid-pro-editable-cell-background, var(--_highlight-bg));
+  :host([theme~='highlight-editable-cells'])
+    [part~='body-cell']:is([part~='editable-cell'], :has([part~='editable-cell'])) {
+    --vaadin-grid-row-highlight-background-color: var(
+      --vaadin-grid-pro-editable-cell-background-color,
+      var(--_highlight-color)
+    );
   }
 
   /* Indicate read-only cells */
 
-  :host([theme~='highlight-read-only-cells']) [part~='body-cell']:not(:has([part~='editable-cell'])) {
-    --vaadin-grid-cell-background-hover: repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 30%,
-      var(--_highlight-color2) 30%,
-      var(--_highlight-color2) 50%
-    );
-    background-size: 6px 6px;
+  :host([theme~='highlight-read-only-cells'])
+    [part~='body-cell']:not([part~='editable-cell'], :has([part~='editable-cell'])) {
+    --_highlight-background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 30%,
+        var(--_highlight-color2) 30%,
+        var(--_highlight-color2) 50%
+      )
+      padding-box 0 0 / 6px 6px;
   }
 
   /* Loading editor cell styles are used by Flow GridPro */
