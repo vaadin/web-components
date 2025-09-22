@@ -281,6 +281,9 @@ export const GridMixin = (superClass) =>
       minHeightObserver.observe(this.$.header);
       minHeightObserver.observe(this.$.items);
       minHeightObserver.observe(this.$.footer);
+      // Also observe the header and footer slot containers
+      minHeightObserver.observe(this.$.gridHeader);
+      minHeightObserver.observe(this.$.gridFooter);
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
@@ -961,7 +964,12 @@ export const GridMixin = (superClass) =>
       const headerHeight = this.$.header.clientHeight;
       const footerHeight = this.$.footer.clientHeight;
       const scrollbarHeight = this.$.table.offsetHeight - this.$.table.clientHeight;
-      const minHeight = headerHeight + rowHeight + footerHeight + scrollbarHeight;
+
+      // Include header and footer slot container heights
+      const headerSlotHeight = this.$.gridHeader.clientHeight;
+      const footerSlotHeight = this.$.gridFooter.clientHeight;
+
+      const minHeight = headerHeight + rowHeight + footerHeight + scrollbarHeight + headerSlotHeight + footerSlotHeight;
 
       // The style is set to host instead of the scroller so that the value can be overridden by the user with "grid { min-height: 0 }"
       // Prefer setting style in adopted style sheet to avoid the need to add a confusing inline style on the host element
