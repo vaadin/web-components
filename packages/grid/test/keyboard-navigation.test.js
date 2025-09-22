@@ -383,13 +383,12 @@ describe('keyboard navigation', () => {
       expect(tabIndexes).to.eql([0, 0, 0, 0, 0]);
     });
 
-    it('should have a focus exit as the very last child', () => {
+    it('should have a focus exit element with tabindex', () => {
       expect(grid.$.focusexit).to.be.ok;
       expect(grid.$.focusexit.tabIndex).to.equal(0);
-      const lastChild = Array.from(grid.shadowRoot.children)
-        .filter((child) => child.localName !== 'style')
-        .pop();
-      expect(lastChild).to.equal(grid.$.focusexit);
+      // Focus exit is positioned between the table and footer slot for proper tab navigation
+      const focusExitParent = grid.$.focusexit.parentElement;
+      expect(focusExitParent).to.equal(grid.$.scroller);
     });
 
     it('should be possible to tab through the grid', () => {
