@@ -63,11 +63,26 @@ export const gridStyles = css`
     border-radius: calc(var(--_border-radius) - var(--_border-width));
     position: relative;
     display: flex;
+    flex-direction: column;
     width: 100%;
     min-width: 0;
     min-height: 0;
     align-self: stretch;
     overflow: hidden;
+  }
+
+  [part='header'],
+  [part='footer'] {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  :host([header-hidden]) [part='header'],
+  :host([footer-hidden]) [part='footer'] {
+    display: none;
   }
 
   #items {
@@ -85,6 +100,8 @@ export const gridStyles = css`
     display: flex;
     flex-direction: column;
     width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow: auto;
     position: relative;
     border-radius: inherit;
