@@ -28,6 +28,11 @@ const gridPro = css`
     outline: 0;
   }
 
+  /* Show cell focus outline */
+  [part~='cell']:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus))::after {
+    content: '';
+  }
+
   /* On macOS the editable-cell part is a button inside the body cell. On other platforms the body cell is the editable-cell part. */
 
   @media (any-hover: hover) {
