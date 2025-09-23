@@ -76,6 +76,7 @@ describe('avatar', () => {
   });
 
   it('focus-ring', async () => {
+    element.setAttribute('tabindex', '0');
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-ring');
   });
@@ -84,6 +85,7 @@ describe('avatar', () => {
     div.style.width = '90px';
     div.style.height = '75px';
     div.style.textAlign = 'center';
+    element.setAttribute('tabindex', '0');
     element.withTooltip = true;
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'tooltip');

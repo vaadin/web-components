@@ -124,10 +124,6 @@ export const AvatarMixin = (superClass) =>
         this.setAttribute('role', 'img');
       }
 
-      if (!this.hasAttribute('tabindex')) {
-        this.setAttribute('tabindex', '0');
-      }
-
       // Should set `anonymous` if name / abbr is not provided
       if (!this.name && !this.abbr) {
         this.__setTooltip();

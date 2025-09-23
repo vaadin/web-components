@@ -66,7 +66,6 @@ snapshots["vaadin-message avatar username"] =
     name="Joan Doe"
     role="img"
     slot="avatar"
-    tabindex="-1"
   >
   </vaadin-avatar>
 </vaadin-message>
@@ -81,7 +80,6 @@ snapshots["vaadin-message avatar abbr"] =
     aria-label="JD"
     role="img"
     slot="avatar"
-    tabindex="-1"
   >
   </vaadin-avatar>
 </vaadin-message>
@@ -95,7 +93,6 @@ snapshots["vaadin-message avatar img"] =
     img="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
     role="img"
     slot="avatar"
-    tabindex="-1"
   >
   </vaadin-avatar>
 </vaadin-message>
@@ -110,7 +107,6 @@ snapshots["vaadin-message avatar userColorIndex"] =
     role="img"
     slot="avatar"
     style="--vaadin-avatar-user-color: var(--vaadin-user-color-2);"
-    tabindex="-1"
   >
   </vaadin-avatar>
 </vaadin-message>
