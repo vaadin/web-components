@@ -6,76 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TabSheet</title>
     <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/checkbox-group';
-      import '@vaadin/icon';
-      import '@vaadin/icons/vaadin-iconset.js';
-      import '@vaadin/radio-group';
-      import '@vaadin/tabsheet';
-
-      // Generate content for the panels
-      const lorem = `Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
-        Vestibulum luctus odio ut quam. Maecenas congue convallis diam. Cras urna arcu, vestibulum vitae, blandit ut,
-        laoreet id, risus. Ut condimentum, arcu sit amet placerat blandit, augue nibh pretium nunc, in tempus sem dolor
-        non leo. Etiam fringilla mauris a odio. Nunc lorem diam, interdum eget, lacinia in, scelerisque sit amet, purus.
-        Nam ornare. Donec placerat dui ut orci. Phasellus quis lacus at nisl elementum cursus. Cras bibendum egestas
-        nulla. Phasellus pulvinar ullamcorper odio. Etiam ipsum. Proin tincidunt. Aliquam aliquet.`;
-
-      document.querySelectorAll('[tab]').forEach((panelContent, i, array) => {
-        const dotIndex = lorem.indexOf('.', (i * lorem.length) / array.length);
-        const content = lorem.substring(dotIndex + 1);
-        panelContent.textContent = content.repeat(5);
-      });
-
-      const tabsheet = document.querySelector('vaadin-tabsheet');
-
-      document.querySelector('#variant-group').addEventListener('value-changed', (e) => {
-        tabsheet.setAttribute('theme', e.detail.value.join(' '));
-      });
-
-      document.querySelector('#direction-group').addEventListener('value-changed', (e) => {
-        document.dir = e.detail.value;
-      });
-    </script>
   </head>
 
   <body>
-    <section class="section" dir="ltr">
-      <vaadin-checkbox-group label="Tabsheet theme variants" id="variant-group" theme="vertical" dir="ltr">
-        <vaadin-checkbox label="bordered (Lumo)" value="bordered" dir="ltr"></vaadin-checkbox>
-        <vaadin-checkbox label="no-border (base)" value="no-border" dir="ltr"></vaadin-checkbox>
-        <vaadin-checkbox label="no padding" value="no-padding" dir="ltr"></vaadin-checkbox>
-      </vaadin-checkbox-group>
-
-      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical" dir="ltr">
-        <vaadin-radio-button label="ltr" value="ltr" dir="ltr"></vaadin-radio-button>
-        <vaadin-radio-button label="rtl" value="rtl" dir="ltr"></vaadin-radio-button>
-      </vaadin-radio-group>
-    </section>
-
     <vaadin-tabsheet>
-      <vaadin-checkbox slot="prefix" label="All tabs"></vaadin-checkbox>
-      <vaadin-button slot="suffix" label="Suffix">
-        <vaadin-icon icon="vaadin:plus" slot="prefix"></vaadin-icon>
-        Add tab
-      </vaadin-button>
-
       <vaadin-tabs slot="tabs">
         <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
         <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
-        <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
-        <vaadin-tab id="tab-4">Tab 4</vaadin-tab>
-        <vaadin-tab id="tab-5">Tab 5</vaadin-tab>
-        <vaadin-tab id="tab-6">Loading tab</vaadin-tab>
       </vaadin-tabs>
 
-      <div tab="tab-1"></div>
-      <div tab="tab-2"></div>
-      <div tab="tab-3"></div>
-      <div tab="tab-4"></div>
-      <div tab="tab-5"></div>
+      <div tab="tab-1">Content 1</div>
+      <div tab="tab-2">Content 2</div>
     </vaadin-tabsheet>
+
+    <button id="add">Add</button>
+    <button id="remove">Remove</button>
+
+    <script type="module">
+      import '@vaadin/tabsheet';
+
+      const tabsheet = document.querySelector('vaadin-tabsheet');
+
+      document.querySelector('#add').addEventListener('click', () => {
+        // Add new tab and panel
+        const tab = document.createElement('vaadin-tab');
+        const idx = document.querySelectorAll('vaadin-tab').length + 1;
+        tab.id = `tab-${idx}`;
+        tab.textContent = `Tab ${idx}`;
+
+        const panel = document.createElement('div');
+        panel.setAttribute('tab', `tab-${idx}`);
+        panel.textContent = `Content ${idx}`;
+
+        tabsheet.querySelector('vaadin-tabs').append(tab);
+        tabsheet.append(panel);
+      });
+
+      document.querySelector('#remove').addEventListener('click', () => {
+        const idx = document.querySelectorAll('vaadin-tab').length;
+
+        // Remove tab and panel
+        const tab = document.getElementById(`tab-${idx}`);
+        const panel = document.querySelector(`[tab="tab-${idx}"]`);
+        tab.remove();
+        panel.remove();
+
+        // Select previous tab
+        if (tabsheet.selected === idx - 1) {
+          tabsheet.selected = tabsheet.selected - 1;
+        }
+      });
+    </script>
   </body>
 </html>
