@@ -193,7 +193,6 @@ export const gridStyles = css`
   }
 
   [part~='first-row-cell'] {
-    margin-top: 0;
     border-top-color: transparent;
     margin-top: calc(var(--_row-border-width) * -1);
   }
