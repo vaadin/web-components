@@ -31,12 +31,12 @@ describe('theme', () => {
     await nextRender();
   });
 
-  it('column-borders', async () => {
+  it('column-border-width', async () => {
     element.style.setProperty('--vaadin-grid-column-border-width', '1px');
     await visualDiff(element, 'column-border-width');
   });
 
-  it('no-row-borders', async () => {
+  it('row-border-width', async () => {
     element.style.setProperty('--vaadin-grid-row-border-width', '0px');
     await visualDiff(element, 'row-border-width');
   });
