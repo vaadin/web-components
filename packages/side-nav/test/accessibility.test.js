@@ -92,6 +92,7 @@ describe('accessibility', () => {
         <div>
           <input />
           <vaadin-side-nav collapsible>
+            <span slot="label">Label</span>
             <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
             <vaadin-side-nav-item path="/bar">Bar</vaadin-side-nav-item>
           </vaadin-side-nav>
