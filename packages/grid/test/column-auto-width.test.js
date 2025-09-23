@@ -70,7 +70,7 @@ describe('column auto-width', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 600px; height: 200px;" hidden>
+      <vaadin-grid style="width: 600px; height: 195px;" hidden>
         <vaadin-grid-column auto-width flex-grow="0" path="a"></vaadin-grid-column>
         <vaadin-grid-column auto-width flex-grow="0" path="b"></vaadin-grid-column>
         <vaadin-grid-column auto-width flex-grow="0" path="c"></vaadin-grid-column>
