@@ -27,7 +27,6 @@ snapshots["vaadin-message-list items"] =
       name="Jane Doe"
       role="img"
       slot="avatar"
-      tabindex="-1"
     >
     </vaadin-avatar>
   </vaadin-message>
@@ -43,7 +42,6 @@ snapshots["vaadin-message-list items"] =
       name="Lina Roy"
       role="img"
       slot="avatar"
-      tabindex="-1"
     >
     </vaadin-avatar>
   </vaadin-message>
@@ -69,7 +67,6 @@ snapshots["vaadin-message-list theme"] =
       name="Admin"
       role="img"
       slot="avatar"
-      tabindex="-1"
     >
     </vaadin-avatar>
   </vaadin-message>
@@ -95,7 +92,6 @@ snapshots["vaadin-message-list className"] =
       name="Admin"
       role="img"
       slot="avatar"
-      tabindex="-1"
     >
     </vaadin-avatar>
   </vaadin-message>

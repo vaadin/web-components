@@ -229,7 +229,6 @@ snapshots["vaadin-avatar-group opened default"] =
         aria-label="Mno Pqr (MP)"
         name="Mno Pqr"
         role="img"
-        tabindex="-1"
       >
       </vaadin-avatar>
       Mno Pqr
@@ -245,7 +244,6 @@ snapshots["vaadin-avatar-group opened default"] =
         aria-label="Stu Vwx (SV)"
         name="Stu Vwx"
         role="img"
-        tabindex="-1"
       >
       </vaadin-avatar>
       Stu Vwx

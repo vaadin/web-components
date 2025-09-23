@@ -119,6 +119,7 @@ describe('avatar', () => {
     div.style.height = '90px';
     div.style.textAlign = 'center';
     element.withTooltip = true;
+    element.setAttribute('tabindex', '0');
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'tooltip');
   });

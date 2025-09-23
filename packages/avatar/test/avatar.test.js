@@ -279,6 +279,7 @@ describe('vaadin-avatar', () => {
         container.appendChild(avatar);
 
         const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+        avatar.setAttribute('tabindex', '0');
         tabKeyDown(avatar);
         avatar.focus();
         expect(overlay.opened).to.be.true;
@@ -297,8 +298,8 @@ describe('vaadin-avatar', () => {
   });
 
   describe('focus', () => {
-    it('should set tabindex="0" on the avatar', () => {
-      expect(avatar.getAttribute('tabindex')).to.equal('0');
+    beforeEach(() => {
+      avatar.setAttribute('tabindex', '0');
     });
 
     it('should set focused attribute on avatar focusin', () => {

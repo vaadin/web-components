@@ -156,6 +156,7 @@ export const AvatarGroupMixin = (superClass) =>
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', {
         initializer: (overflow) => {
           overflow.setAttribute('role', 'button');
+          overflow.setAttribute('tabindex', '0');
           overflow.setAttribute('aria-haspopup', 'menu');
           overflow.setAttribute('aria-expanded', 'false');
           overflow.addEventListener('click', (e) => this._onOverflowClick(e));
@@ -259,7 +260,6 @@ export const AvatarGroupMixin = (superClass) =>
                   class="${ifDefined(item.className)}"
                   theme="${ifDefined(this._theme)}"
                   aria-hidden="true"
-                  tabindex="-1"
                 ></vaadin-avatar>
                 ${item.name || ''}
               </vaadin-avatar-group-menu-item>
@@ -334,6 +334,7 @@ export const AvatarGroupMixin = (superClass) =>
                 .i18n="${this.__effectiveI18n}"
                 theme="${ifDefined(this._theme)}"
                 class="${ifDefined(item.className)}"
+                tabindex="0"
                 with-tooltip
               ></vaadin-avatar>
             `,
