@@ -14,7 +14,7 @@ style.textContent = css`
   }
 
   vaadin-grid::part(cell) {
-    min-height: 36px;
+    min-height: 37px;
     padding: 0;
   }
 
