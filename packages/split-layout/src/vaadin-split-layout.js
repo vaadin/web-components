@@ -165,6 +165,12 @@ class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMix
     return splitLayoutStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`
