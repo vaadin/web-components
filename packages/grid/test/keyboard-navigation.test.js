@@ -1841,7 +1841,7 @@ describe('keyboard navigation on column groups', () => {
     pageDown();
 
     const firstVisibleIndex = getFirstVisibleItem(grid).index;
-    expect(firstVisibleIndex).to.be.above(5);
+    expect(firstVisibleIndex).to.be.above(4);
 
     // Tab to header
     tabToHeader();

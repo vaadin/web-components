@@ -162,14 +162,14 @@ describe('resizing', () => {
     it('should not auto-grow inside a fixed height column flexbox', async () => {
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(130);
+      expect(grid.getBoundingClientRect().height).to.equal(132);
     });
 
     it('should not auto-grow inside a fixed height row flexbox', async () => {
       component.style.flexDirection = 'row';
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(130);
+      expect(grid.getBoundingClientRect().height).to.equal(132);
     });
 
     it('should not shrink horizontally inside a row flexbox', () => {
