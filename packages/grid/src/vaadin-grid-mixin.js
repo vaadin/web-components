@@ -263,11 +263,14 @@ export const GridMixin = (superClass) =>
         __disableHeightPlaceholder: true,
       });
 
-      new ResizeObserver(() =>
+      new ResizeObserver(() => {
         setTimeout(() => {
           this.__updateColumnsBodyContentHidden();
-        }),
-      ).observe(this.$.table);
+        });
+        // Updating data can change the visibility of the scroll bar. Therefore,
+        // the scroll position has to be recalculated.
+        this.__updateHorizontalScrollPosition();
+      }).observe(this.$.table);
 
       const minHeightObserver = new ResizeObserver(() =>
         setTimeout(() => {
