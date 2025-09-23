@@ -283,7 +283,8 @@ export const gridStyles = css`
 
   /* Raise highlighted rows above others */
 
-  [part~='row']:is(:focus, :focus-within),
+  [part~='row']:focus,
+  [part~='row']:focus-within,
   [part~='body-row']:where([selected]) {
     z-index: 3;
   }
@@ -514,7 +515,8 @@ export const gridStyles = css`
     bottom: 0 !important;
   }
 
-  :host([navigating]) :is([part~='row'], [part~='cell']):focus {
+  :host([navigating]) [part~='row']:focus,
+  :host([navigating]) [part~='cell']:focus {
     outline: 0;
   }
 
@@ -524,8 +526,10 @@ export const gridStyles = css`
     bottom: 0;
   }
 
-  :is([part~='row'], [part~='cell']):focus-visible::after,
-  :host([navigating]) :is([part~='row'], [part~='cell']):focus::after {
+  [part~='row']:focus-visible::after,
+  [part~='cell']:focus-visible::after,
+  :host([navigating]) [part~='row']:focus::after,
+  :host([navigating]) [part~='cell']:focus::after {
     content: '';
   }
 
