@@ -38,6 +38,14 @@
       vaadin-grid-pro.max-height {
         max-height: 250px;
       }
+
+      vaadin-grid-pro[theme~="no-row-borders"] {
+        --vaadin-grid-row-border-width: 0px;
+      }
+
+      vaadin-grid-pro[theme~="column-borders"] {
+        --vaadin-grid-column-border-width: 1px;
+      }
     </style>
   </head>
   <body>
@@ -67,15 +75,17 @@
         <vaadin-select id="textAlign" label="Text Align"></vaadin-select>
       </div>
 
-      <div class="control-group">
-        <vaadin-checkbox-group label="Theme Variants">
+      <div class="control-group theme-variants">
+        <vaadin-checkbox-group label="Built-In Variants">
           <vaadin-checkbox value="no-border" label="No Border"></vaadin-checkbox>
-          <vaadin-checkbox value="no-row-borders" label="No Row Border"></vaadin-checkbox>
-          <vaadin-checkbox value="column-borders" label="Column Borders"></vaadin-checkbox>
           <vaadin-checkbox value="row-stripes" label="Row Stripes"></vaadin-checkbox>
           <vaadin-checkbox value="wrap-cell-content" label="Wrap Cell Content"></vaadin-checkbox>
           <vaadin-checkbox value="highlight-editable-cells" label="Highlight Editable Cells"></vaadin-checkbox>
           <vaadin-checkbox value="highlight-read-only-cells" label="Highlight Read-Only Cells"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-checkbox-group label="Custom Variants">
+          <vaadin-checkbox value="no-row-borders" label="No Row Border"></vaadin-checkbox>
+          <vaadin-checkbox value="column-borders" label="Column Borders"></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
 
@@ -257,7 +267,7 @@
       });
 
       // Theme Controls
-      document.querySelectorAll('[label="Theme Variants"] vaadin-checkbox').forEach((control) => {
+      document.querySelectorAll('.theme-variants vaadin-checkbox').forEach((control) => {
         control.addEventListener('checked-changed', (e) => {
           if (e.detail.value) {
             grid.setAttribute('theme', `${grid.getAttribute('theme') || ''} ${control.value}`.trim());

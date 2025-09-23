@@ -31,14 +31,14 @@ describe('theme', () => {
     await nextRender();
   });
 
-  it('column-borders', async () => {
-    element.setAttribute('theme', 'column-borders');
-    await visualDiff(element, 'theme-column-borders');
+  it('column-border-width', async () => {
+    element.style.setProperty('--vaadin-grid-column-border-width', '1px');
+    await visualDiff(element, 'column-border-width');
   });
 
-  it('no-row-borders', async () => {
-    element.setAttribute('theme', 'no-row-borders');
-    await visualDiff(element, 'theme-no-row-borders');
+  it('row-border-width', async () => {
+    element.style.setProperty('--vaadin-grid-row-border-width', '0px');
+    await visualDiff(element, 'row-border-width');
   });
 
   it('row-stripes', async () => {

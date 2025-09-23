@@ -42,6 +42,14 @@
       vaadin-grid[theme~="row-hover"] {
         --vaadin-grid-row-hover-background-color: hsla(0deg, 0%, 0%, 0.03);
       }
+
+      vaadin-grid[theme~="no-row-borders"] {
+        --vaadin-grid-row-border-width: 0px;
+      }
+
+      vaadin-grid[theme~="column-borders"] {
+        --vaadin-grid-column-border-width: 1px;
+      }
     </style>
   </head>
   <body>
@@ -78,12 +86,12 @@
       <div class="control-group">
         <vaadin-checkbox-group label="Built-In Variants">
           <vaadin-checkbox id="no-border" value="no-border" label="No Border"></vaadin-checkbox>
-          <vaadin-checkbox id="no-row-borders" value="no-row-borders" label="No Row Border"></vaadin-checkbox>
-          <vaadin-checkbox id="column-borders" value="column-borders" label="Column Borders"></vaadin-checkbox>
-          <vaadin-checkbox id="row-stripes" value="row-stripes" label="Row Stripes"></vaadin-checkbox>
           <vaadin-checkbox id="wrap-cell-content" value="wrap-cell-content" label="Wrap Cell Content"></vaadin-checkbox>
+          <vaadin-checkbox id="row-stripes" value="row-stripes" label="Row Stripes"></vaadin-checkbox>
         </vaadin-checkbox-group>
         <vaadin-checkbox-group label="Custom Variants">
+          <vaadin-checkbox id="no-row-borders" value="no-row-borders" label="No Row Border"></vaadin-checkbox>
+          <vaadin-checkbox id="column-borders" value="column-borders" label="Column Borders"></vaadin-checkbox>
           <vaadin-checkbox id="row-hover" value="row-hover" label="Row Hover"></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
