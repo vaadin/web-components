@@ -25,11 +25,12 @@ export const gridStyles = css`
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     background: var(--vaadin-grid-background, var(--vaadin-background-color));
-    border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
+    border: var(--_border-width) solid var(--_border-color);
     cursor: default;
+    --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     --_border-width: 0;
-    --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
-    --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
+    --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
+    --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
     border-radius: var(--_border-radius);
     --_border-radius: 0;
   }
@@ -152,11 +153,28 @@ export const gridStyles = css`
     padding: 0;
     box-sizing: border-box;
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
-  }
+    border-block: var(--_row-border-width) solid var(--_border-color);
+    margin-top: calc(var(--_row-border-width) * -1);
 
-  [part~='row'],
-  [part~='cell'] {
-    --_hover-background-image: var(--vaadin-grid-cell-background-hover, none);
+    /*
+    Box-shadows are used to create a "fake" border at the end of the cell/row, which is visible when a row/cell ends
+    before the edge of the grid viewport, as well as frozen columns and rows (header and footer).
+    If there are frozen columns, we'll make the "fake box-shadow border" on the header and footer opaque by rendering
+    both the border color and cell background color, so that a semi-transparent border color doesn't "stack" when
+    scrolling horizontally.
+    */
+    --_fake-border:
+      0 calc(var(--_top, 0) * var(--_row-border-width) * -1) 0 0 var(--_border-color),
+      0 calc(var(--_top-opaque, 0) * var(--_row-border-width) * -1) 0 0
+        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
+      0 calc(var(--_bottom, 0) * var(--_row-border-width)) 0 0 var(--_border-color),
+      0 calc(var(--_bottom-opaque, 0) * var(--_row-border-width)) 0 0
+        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
+      calc(var(--_start, 0) * var(--_column-border-width) * -1) 0 0 0 var(--_border-color),
+      calc(var(--_end, 0) * var(--_column-border-width)) 0 0 0 var(--_border-color),
+      calc(var(--_end-opaque, 0) * var(--_column-border-width)) 0 0 0
+        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+    box-shadow: var(--_fake-border);
   }
 
   [part~='cell']:where(:not([part~='details-cell'])) {
@@ -167,6 +185,72 @@ export const gridStyles = css`
     position: relative;
     align-items: center;
     white-space: nowrap;
+    border-inline-start: var(--_column-border-width) solid var(--_border-color);
+  }
+
+  [part~='first-column-cell'] {
+    border-inline-start: 0;
+  }
+
+  [part~='first-row-cell'] {
+    margin-top: 0;
+    border-top-color: transparent;
+    margin-top: calc(var(--_row-border-width) * -1);
+  }
+
+  [part~='first-header-row-cell'],
+  [part~='first-footer-row-cell'] {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  [part~='last-column-cell'] {
+    --_end: 1;
+  }
+
+  [part~='last-column-cell']:is([part~='header-cell'], [part~='footer-cell']) {
+    --_end-opaque: 1;
+  }
+
+  [part~='last-row-cell']:where(:not([part~='details-opened-row-cell'])),
+  [part~='last-footer-row-cell'] {
+    border-bottom: 0;
+    --_bottom: 1;
+  }
+
+  [part~='last-frozen-cell'] {
+    --_end: 1;
+  }
+
+  [part~='last-frozen-cell'] + [part~='cell'] {
+    border-inline-start-color: transparent;
+  }
+
+  [part~='first-frozen-to-end-cell'] {
+    border-inline-start: 0;
+    --_start: 1;
+  }
+
+  [part~='last-header-row-cell'] {
+    margin-bottom: var(--_row-border-width);
+    border-bottom: 0;
+    --_bottom: 1;
+  }
+
+  #header:has(:is([frozen], [frozen-to-end])) [part~='last-header-row-cell'] {
+    --_bottom-opaque: 1;
+  }
+
+  [part~='first-footer-row-cell'] {
+    --_top: 1;
+  }
+
+  #footer:has(:is([frozen], [frozen-to-end])) [part~='first-footer-row-cell'] {
+    --_top-opaque: 1;
+  }
+
+  table:has(#footer > tr:not([hidden])) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
+    border-bottom: var(--_row-border-width) solid transparent;
   }
 
   [part~='body-cell']:where(:not([part~='details-cell'])) {
@@ -184,10 +268,6 @@ export const gridStyles = css`
   [part~='row']::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
-  }
-
-  [part~='row']:focus-visible {
-    z-index: 1;
   }
 
   /* Used for focus outline and drag'n'drop target indication */
@@ -211,40 +291,6 @@ export const gridStyles = css`
     white-space: normal;
   }
 
-  /* Variant: row & column borders */
-
-  :host([theme~='no-row-borders']) {
-    --_row-border-width: 0;
-  }
-
-  :host([theme~='column-borders']) {
-    --_column-border-width: var(--vaadin-grid-cell-border-width, 1px);
-  }
-
-  [part~='cell']:not([part~='last-column-cell'], [part~='details-cell']) {
-    border-inline-end: var(--_column-border-width, 0) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  [part~='cell']:where(:not([part~='details-cell'], [part~='first-row-cell'])) {
-    border-top: var(--_row-border-width) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  [part~='first-header-row-cell'] {
-    border-top: 0;
-  }
-
-  [part~='last-header-row-cell'] {
-    border-bottom: var(--_row-border-width, 1px) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  [part~='first-footer-row-cell'] {
-    border-top: var(--_row-border-width, 1px) solid
-      var(--vaadin-grid-cell-border-color, var(--vaadin-border-color-secondary));
-  }
-
   /* Variant: row stripes */
   [part~='odd-row'] {
     --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--vaadin-background-color));
@@ -257,8 +303,27 @@ export const gridStyles = css`
     );
   }
 
+  /* Raise highlighted rows above others */
+
+  [part~='row']:focus-visible,
+  [part~='body-row']:where([selected]) {
+    z-index: 3;
+  }
+
+  @container style(--vaadin-grid-row-odd-background-color) {
+    [part~='odd-row'] {
+      z-index: 1;
+    }
+  }
+
   /* Row hover */
   @media (any-hover: hover) {
+    @container style(--vaadin-grid-row-hover-background-color) {
+      [part~='body-row']:hover {
+        z-index: 2;
+      }
+    }
+
     [part~='body-row']:hover [part~='cell']:where(:not([part~='details-cell'])) {
       --_hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
       --_hover-background-image: linear-gradient(var(--_hover-background-color), var(--_hover-background-color));
@@ -269,6 +334,12 @@ export const gridStyles = css`
     position: absolute;
     bottom: 0;
     width: 100%;
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  [part~='last-row-cell'] + [part~='details-cell'] {
+    border-bottom: 0;
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -422,13 +493,12 @@ export const gridStyles = css`
     inset-inline: 0 auto;
   }
 
-  [first-frozen-to-end] {
-    margin-inline-start: auto;
+  [frozen-to-end] [part~='resize-handle'] {
+    translate: calc(var(--_column-border-width) * -1);
   }
 
-  /* Hide resize handle if scrolled to end */
-  :host(:not([overflow~='end'])) [first-frozen-to-end] [part~='resize-handle'] {
-    display: none;
+  [first-frozen-to-end] {
+    margin-inline-start: auto;
   }
 
   #scroller:is([column-resizing], [range-selecting]) {
