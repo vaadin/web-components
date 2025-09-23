@@ -364,18 +364,18 @@ export const gridStyles = css`
     display: none;
   }
 
-  #emptystatebody,
-  #emptystaterow {
+  #emptystatebody {
     display: flex;
-    flex-direction: column;
     position: sticky;
+    inset: 0;
     flex: 1;
     overflow: hidden;
     margin-top: calc(var(--_row-border-width) * -1);
   }
 
   #emptystaterow {
-    margin-top: 0;
+    display: flex;
+    flex: 1;
   }
 
   #emptystatecell {
