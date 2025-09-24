@@ -119,7 +119,7 @@ snapshots["vaadin-grid shadow default"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 70px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -167,7 +167,7 @@ snapshots["vaadin-grid shadow default"] =
         odd=""
         part="row body-row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
-        style="position: absolute; transform: translateY(35px);"
+        style="position: absolute; transform: translateY(36px);"
         tabindex="-1"
       >
         <td
@@ -343,7 +343,7 @@ snapshots["vaadin-grid shadow selected"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 70px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -392,7 +392,7 @@ snapshots["vaadin-grid shadow selected"] =
         odd=""
         part="row body-row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
-        style="position: absolute; transform: translateY(35px);"
+        style="position: absolute; transform: translateY(36px);"
         tabindex="-1"
       >
         <td
@@ -568,7 +568,7 @@ snapshots["vaadin-grid shadow details opened"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 70px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -616,7 +616,7 @@ snapshots["vaadin-grid shadow details opened"] =
         odd=""
         part="row body-row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
-        style="position: absolute; transform: translateY(35px);"
+        style="position: absolute; transform: translateY(36px);"
         tabindex="-1"
       >
         <td
@@ -773,7 +773,7 @@ snapshots["vaadin-grid shadow hidden column"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 70px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -810,7 +810,7 @@ snapshots["vaadin-grid shadow hidden column"] =
         odd=""
         part="row body-row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
-        style="position: absolute; transform: translateY(35px);"
+        style="position: absolute; transform: translateY(36px);"
         tabindex="-1"
       >
         <td
@@ -946,7 +946,7 @@ snapshots["vaadin-grid shadow hidden column selected"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 70px;"
+      style="transform: translate(0px, 0px); height: 71px;"
     >
       <tr
         aria-rowindex="2"
@@ -984,7 +984,7 @@ snapshots["vaadin-grid shadow hidden column selected"] =
         odd=""
         part="row body-row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
-        style="position: absolute; transform: translateY(35px);"
+        style="position: absolute; transform: translateY(36px);"
         tabindex="-1"
       >
         <td
