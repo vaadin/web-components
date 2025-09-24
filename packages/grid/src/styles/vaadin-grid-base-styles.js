@@ -106,8 +106,8 @@ export const gridStyles = css`
 
   :host([overflow~='top']) #header,
   :host([overflow~='bottom']) #footer,
-  :host([navigating]) #header:focus-within,
-  :host([navigating]) #footer:focus-within,
+  :host([navigating]) #header:has(tr:last-child:focus-within),
+  :host([navigating]) #footer:has(tr:first-child:focus-within),
   [empty-state] #header {
     z-index: 2;
   }
