@@ -56,6 +56,14 @@ import { ensureSvgLiteral } from './vaadin-icon-svg.js';
  *
  * ### Styling
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property          | Description
+ * -----------------------------|-------------
+ * `--vaadin-icon-size`         | Size (width and height) of the icon
+ * `--vaadin-icon-stroke-width` | Stroke width of the SVG icon
+ * `--vaadin-icon-visual-size`  | Visual size of the icon
+ *
  * The following state attributes are available for styling:
  *
  * Attribute      | Description
