@@ -152,6 +152,10 @@ export class Cache {
       }
     }
 
+    if (this.items.length > size) {
+      this.items.length = size || 0;
+    }
+
     Object.keys(this.pendingRequests).forEach((page) => {
       const startIndex = parseInt(page) * this.pageSize;
       if (startIndex >= this.size || 0) {
