@@ -5,4 +5,4 @@
  */
 @import './props.css';
 @import './global.css';
-@import './components.css';
+@import './components/index.css';
