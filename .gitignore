@@ -33,6 +33,10 @@ web-types.lit.json
 # Generated auto-complete CSS file for Lumo theme
 packages/vaadin-lumo-styles/auto-complete.css
 
+# Generated theme dist files
+packages/vaadin-aura/dist
+packages/vaadin-lumo-styles/dist
+
 # Generated release check
 scripts/check-releases.html
 
