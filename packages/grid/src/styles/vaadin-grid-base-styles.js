@@ -656,4 +656,16 @@ export const gridStyles = css`
   #sizer [part~='cell']::before {
     content: '-';
   }
+
+  @media (forced-colors: active) {
+    :host([overflow~='top']) [part~='last-header-row-cell'] {
+      border-bottom: var(--_row-border-width) solid;
+      margin-bottom: calc(var(--_row-border-width) * -1);
+    }
+
+    :host([overflow~='bottom']) [part~='first-footer-row-cell'] {
+      border-top: var(--_row-border-width) solid;
+      margin-top: calc(var(--_row-border-width) * -1);
+    }
+  }
 `;
