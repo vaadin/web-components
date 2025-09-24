@@ -6,15 +6,6 @@ import '../../../src/vaadin-split-layout.js';
 describe('split-layout', () => {
   let element;
 
-  beforeEach(() => {
-    element = fixtureSync(`
-      <vaadin-split-layout style="width: 200px; height: 100px">
-        <div></div>
-        <div></div>
-      </vaadin-split-layout>
-    `);
-  });
-
   afterEach(async () => {
     await resetMouse();
   });
@@ -22,7 +13,12 @@ describe('split-layout', () => {
   ['horizontal', 'vertical'].forEach((orientation) => {
     describe(orientation, () => {
       beforeEach(() => {
-        element.orientation = orientation;
+        element = fixtureSync(`
+          <vaadin-split-layout orientation="${orientation}" style="width: 200px; height: 100px">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+        `);
       });
 
       it(orientation, async () => {
@@ -39,6 +35,26 @@ describe('split-layout', () => {
         await sendMouseToElement({ type: 'move', element: element.$.splitter });
         await visualDiff(element, `${orientation}-small-hover`);
       });
+    });
+  });
+
+  describe('nested', () => {
+    beforeEach(() => {
+      element = fixtureSync(`
+        <vaadin-split-layout orientation="vertical" style="height: 500px">
+          <vaadin-split-layout slot="primary" orientation="horizontal">
+            <span slot="primary">Foo</span>
+            <span slot="secondary">Bar</span>
+          </vaadin-split-layout>>
+          <div slot="secondary">
+            Baz
+          </div>
+        </vaadin-split-layout>
+      `);
+    });
+
+    it('horizontal', async () => {
+      await visualDiff(element, 'nested');
     });
   });
 });

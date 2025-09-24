@@ -68,7 +68,7 @@ export const splitLayoutStyles = css`
     width: var(--_handle-size);
     height: var(--_handle-target-size);
     max-height: 50%;
-    position: relative;
+    position: absolute;
   }
 
   :host([orientation='vertical']) [part='handle'] {
