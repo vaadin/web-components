@@ -53,7 +53,7 @@ type TextFieldProps = typeof textFieldProps;
 
 type PartialTextFieldElement = Omit<
   Partial<TextFieldElement>,
-  'draggable' | 'style' | 'translate' | 'children' | 'contentEditable'
+  'draggable' | 'style' | 'translate' | 'children' | 'contentEditable' | 'part'
 >;
 
 assertType<PartialTextFieldElement>(textFieldProps);

@@ -45,7 +45,7 @@ export function useRenderer<P extends {}, W extends WebComponentRenderer>(
   convert?: (props: Slice<Parameters<W>, 1>) => PropsWithChildren<P>,
   config?: RendererConfig<W>,
 ): UseRendererResult<W> {
-  const [map, update] = useReducer<typeof rendererReducer<W>>(rendererReducer, initialState);
+  const [map, update] = useReducer(rendererReducer, initialState);
   const renderer = useCallback(
     ((...args: Parameters<W>) => {
       if (config?.renderMode === 'microtask') {

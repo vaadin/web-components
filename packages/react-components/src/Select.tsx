@@ -31,7 +31,7 @@ function Select(props: SelectProps, ref: ForwardedRef<SelectElement>): ReactElem
 
   // Components with slot attribute should stay in light DOM.
   const slottedChildren = children.filter((child): child is ReactNode => {
-    return isValidElement(child) && child.props.slot;
+    return isValidElement(child) && (child.props as any).slot;
   });
 
   // Component without slot attribute should go to the overlay.
