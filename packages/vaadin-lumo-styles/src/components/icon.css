@@ -5,7 +5,7 @@
  */
 @media lumo_components_icon {
   :host {
-    width: var(--lumo-icon-size-m);
-    height: var(--lumo-icon-size-m);
+    width: var(--vaadin-icon-size, var(--lumo-icon-size-m));
+    height: var(--vaadin-icon-size, var(--lumo-icon-size-m));
   }
 }
