@@ -20,7 +20,7 @@
   "module": "all-imports.js",
   "type": "module",
   "scripts": {
-    "build": "postcss ./{lumo,utility}.css --dir dist",
+    "build": "postcss ./{lumo,utility}.css --dir dist && postcss ./presets/**.css --dir dist/presets",
     "icons": "gulp icons"
   },
   "files": [
