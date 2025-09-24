@@ -18,7 +18,7 @@
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky",
-    "release": "yarn dist:themes && yarn dist:web-types",
+    "release": "yarn release:themes && yarn release:web-types",
     "release:themes": "yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",
     "release:web-types": "yarn analyze && node scripts/buildWebtypes.js",
     "start": "web-dev-server --node-resolve --open /dev",
