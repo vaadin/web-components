@@ -70,7 +70,7 @@ snapshots["vaadin-upload-file shadow default"] =
   id="progress"
   part="progress"
   role="progressbar"
-  style="--vaadin-progress-value:0.6;"
+  style="--vaadin-progress-value: 0.6;"
   value="0.6"
 >
 </vaadin-progress-bar>
