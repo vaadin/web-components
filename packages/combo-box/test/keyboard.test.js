@@ -18,7 +18,7 @@ import '../src/vaadin-combo-box.js';
 import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
 
 describe('keyboard', () => {
-  let comboBox, input;
+  let comboBox, input, lastGlobalFocusable;
 
   function filter(value) {
     input.value = value;
@@ -43,7 +43,12 @@ describe('keyboard', () => {
   }
 
   beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    [comboBox, lastGlobalFocusable] = fixtureSync(
+      `<div>
+        <vaadin-combo-box></vaadin-combo-box>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).children;
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
   });
@@ -150,33 +155,18 @@ describe('keyboard', () => {
 
     it('should tab to the next focusable', async () => {
       await sendKeys({ press: 'Tab' });
-
-      expect(document.activeElement).to.equal(document.body);
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
 
     describe('focusable items content', () => {
-      let button;
-
-      beforeEach(() => {
-        button = document.createElement('button');
-        button.textContent = 'Button';
-      });
-
-      afterEach(() => {
-        button.remove();
-      });
-
       it('should tab to the next focusable when items have focusable content', async () => {
         comboBox.renderer = (root) => (root.innerHTML = '<input>');
-        document.body.appendChild(button);
 
-        // Workaround Firefox sendKeys bug
-        button.focus();
         input.focus();
         arrowDownKeyDown(input);
 
         await sendKeys({ press: 'Tab' });
-        expect(document.activeElement).to.equal(button);
+        expect(document.activeElement).to.equal(lastGlobalFocusable);
       });
     });
   });

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../vaadin-radio-group.js';
 
@@ -7,21 +7,22 @@ describe('keyboard navigation', () => {
   let group, buttons;
 
   beforeEach(async () => {
-    group = fixtureSync(`
-      <vaadin-radio-group>
-        <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
-        <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
-        <vaadin-radio-button label="Button 3" value="3"></vaadin-radio-button>
-      </vaadin-radio-group>
-    `);
+    group = fixtureSync(
+      `<div>
+        <vaadin-radio-group>
+          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 3" value="3"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).firstElementChild;
     await nextFrame();
     buttons = [...group.querySelectorAll('vaadin-radio-button')];
   });
 
   describe('Tab', () => {
-    // There is a bug in the Playwright Firefox build that causes all the radio buttons
-    // to be available for focus when no radio button has been selected yet.
-    (isFirefox ? it.skip : it)('should leave focusable only the first button by default', async () => {
+    it('should leave focusable only the first button by default', async () => {
       // Focus on the 1st radio button.
       await sendKeys({ press: 'Tab' });
       expect(buttons[0].hasAttribute('focused')).to.be.true;
