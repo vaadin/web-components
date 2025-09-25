@@ -42,6 +42,7 @@ describe('slot-styles-mixin', () => {
   beforeEach(() => {
     wrapper = fixtureSync('<div></div');
     wrapper.attachShadow({ mode: 'open' });
+    wrapper.shadowRoot.innerHTML = '<slot></slot>';
     element = document.createElement('slot-styles-mixin-element');
     wrapper.shadowRoot.appendChild(element);
     button = element.querySelector('button');
