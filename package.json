@@ -4,7 +4,7 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js && ./scripts/buildThemeTypings.sh",
+    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
     "build:ts": "tsc --build tsconfig.build.json",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
@@ -17,6 +17,9 @@
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky",
+    "release": "yarn release:themes && yarn release:web-types",
+    "release:themes": "node scripts/generateLumoAutoCompleteCss.js && ./scripts/buildThemeTypings.sh",
+    "release:web-types": "yarn analyze && node scripts/buildWebtypes.js",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",
     "start:base": "web-dev-server --node-resolve --open /dev --base",
