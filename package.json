@@ -3,7 +3,7 @@
   "private": true,
   "author": "Vaadin Ltd",
   "scripts": {
-    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js",
+    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
     "debug": "web-test-runner --watch",
     "debug:it": "web-test-runner --watch --config web-test-runner-it.config.js",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
@@ -15,6 +15,9 @@
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky install",
+    "release": "yarn release:themes && yarn release:web-types",
+    "release:themes": "node scripts/generateLumoAutoCompleteCss.js",
+    "release:web-types": "yarn analyze && node scripts/buildWebtypes.js",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",
     "test": "web-test-runner",
