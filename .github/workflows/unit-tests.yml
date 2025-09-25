@@ -40,7 +40,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install-deps firefox
+        run: npx playwright install firefox --with-deps
 
       - name: Test
         run: yarn test:firefox
@@ -62,7 +62,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install-deps webkit
+        run: npx playwright install webkit --with-deps
 
       - name: Test
         run: yarn test:webkit
