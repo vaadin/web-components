@@ -108,7 +108,7 @@ snapshots["vaadin-message userColorIndex"] =
   has-color-index=""
   part="avatar"
   role="button"
-  style="--vaadin-avatar-user-color:var(--vaadin-user-color-2);"
+  style="--vaadin-avatar-user-color: var(--vaadin-user-color-2);"
   tabindex="-1"
   title="anonymous"
 >
