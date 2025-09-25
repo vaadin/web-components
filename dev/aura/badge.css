@@ -8,14 +8,14 @@
   height: calc(1lh - 2px);
   border: 1px solid var(--_bg);
   --_bg: color-mix(in srgb, var(--color) 12%, transparent);
-  background: var(--aura-surface-solid);
+  background: var(--_bg);
   padding: 0 0.5em;
   border-radius: var(--vaadin-radius-l);
   min-width: calc(1lh - 1em - 2px);
   --color: var(--vaadin-text-color);
   --text-opacity: 70%;
   color: color-mix(
-    in xyz,
+    in srgb,
     var(--color) calc(var(--text-opacity) - 15% * var(--aura-contrast)),
     var(--vaadin-text-color)
   );
@@ -24,47 +24,34 @@
 
 [theme~='badge'][theme~='accent'] {
   --color: var(--aura-accent-color);
-  color: var(--aura-accent-text);
-  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='blue'] {
   --color: var(--aura-blue);
-  color: var(--aura-blue-text);
-  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='red'] {
   --color: var(--aura-red);
-  color: var(--aura-red-text);
-  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='green'] {
   --color: var(--aura-green);
-  color: var(--aura-green-text);
-  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='yellow'] {
   --color: var(--aura-yellow);
-  color: var(--aura-yellow-text);
-  background: var(--_bg);
+  --text-opacity: 60%;
 }
 
 [theme~='badge'][theme~='orange'] {
   --color: var(--aura-orange);
-  color: var(--aura-orange-text);
-  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='purple'] {
   --color: var(--aura-purple);
-  color: var(--aura-purple-text);
-  background: var(--_bg);
 }
 
 [theme~='badge'][theme~='filled'] {
-  background: var(--color);
-  color: oklch(from var(--color) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1));
+  --_bg: color-mix(in srgb, var(--vaadin-text-color) 5%, var(--color));
+  color: oklch(from var(--_bg) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1));
 }
