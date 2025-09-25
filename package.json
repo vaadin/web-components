@@ -4,7 +4,7 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",
+    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
     "api-docs:start": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs start",
     "api-docs:build": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs build",
     "debug": "yarn test --watch",
@@ -18,6 +18,9 @@
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky",
+    "release": "yarn release:themes && yarn release:web-types",
+    "release:themes": "yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",
+    "release:web-types": "yarn analyze && node scripts/buildWebtypes.js",
     "start": "web-dev-server --node-resolve --open /dev",
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
