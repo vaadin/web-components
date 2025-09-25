@@ -201,7 +201,16 @@
         ];
 
         // Grid
-        view.querySelector('vaadin-grid').items = generateItems(20);
+        const grid = view.querySelector('vaadin-grid');
+        grid.items = generateItems(20);
+        grid.selectedItems = [grid.items[0]];
+        const badgeColors = ['accent', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'];
+        grid.querySelector('vaadin-grid-column[header="Status"]').renderer = (root, col, model) => {
+          root.innerHTML = `<span theme="badge ${badgeColors[model.index % badgeColors.length]}">Status</span>`;
+        };
+        grid.querySelector('vaadin-grid-column.avatar').renderer = (root, col, model) => {
+          root.innerHTML = `<vaadin-avatar name="${model.item.name}"></vaadin-avatar>`;
+        };
       }
 
       initComponentsView();
@@ -613,8 +622,10 @@
                 <div class="aura-surface component widest tall no-padding">
                   <vaadin-grid theme="no-border">
                     <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+                    <vaadin-grid-column class="avatar" auto-width flex-grow="0"></vaadin-grid-column>
                     <vaadin-grid-column path="name"></vaadin-grid-column>
                     <vaadin-grid-column path="email"></vaadin-grid-column>
+                    <vaadin-grid-column header="Status"></vaadin-grid-column>
                   </vaadin-grid>
                 </div>
 
