@@ -13,6 +13,7 @@
     "lint:js": "eslint --ext .js,.ts *.js scripts packages",
     "lint:types": "tsc",
     "prepare": "husky install",
+    "release": "yarn analyze",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev/index.html",
     "test": "web-test-runner",
