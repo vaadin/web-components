@@ -142,8 +142,6 @@ describe('items', () => {
   });
 
   describe('itemClassNameGenerator', () => {
-    let comboBox;
-
     beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       await nextRender();

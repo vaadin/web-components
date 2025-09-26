@@ -81,8 +81,6 @@ describe('items', () => {
   });
 
   describe('itemClassNameGenerator', () => {
-    let comboBox;
-
     const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
     beforeEach(async () => {
