@@ -87,4 +87,14 @@ export declare class TooltipMixinClass {
    * String used as a tooltip content.
    */
   text: string | null | undefined;
+
+  /**
+   * When `true`, the tooltip content is rendered as Markdown.
+   * `false`, which means the content is rendered as plain text.
+   *
+   * **Note:** Using Markdown is discouraged if accessibility of the tooltip
+   * content is essential, as semantics of the rendered markdown content
+   * (headers, lists, ...) will not be conveyed to assistive technologies.
+   */
+  markdown: boolean;
 }
