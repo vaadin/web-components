@@ -84,4 +84,22 @@ describe('tooltip', () => {
     fire(target, 'mouseenter');
     await visualDiff(div, 'custom-offset');
   });
+
+  it('markdown', async () => {
+    // Increase container height to fit larger tooltip content
+    div.style.height = '500px';
+
+    element.markdown = true;
+    element.text = `
+## Tooltip Title
+
+**Important:** This tooltip contains:
+
+- **Bold** and *italic* text
+- A [link](https://vaadin.com)
+- Code: \`console.log('Hello')\``;
+    await nextUpdate(element);
+    fire(target, 'mouseenter');
+    await visualDiff(div, 'markdown');
+  });
 });

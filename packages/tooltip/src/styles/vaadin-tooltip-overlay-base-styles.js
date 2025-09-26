@@ -28,7 +28,7 @@ export const tooltipOverlayStyles = css`
       var(--vaadin-tooltip-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2));
   }
 
-  [part='content'] {
+  :host(:not([markdown])) [part='content'] {
     white-space: pre-wrap;
   }
 

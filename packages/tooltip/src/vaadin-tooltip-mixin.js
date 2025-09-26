@@ -7,6 +7,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { renderMarkdownToElement } from '@vaadin/markdown/src/markdown-helpers.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
 
@@ -329,6 +330,20 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
+         * When `true`, the tooltip content is rendered as Markdown.
+         * `false`, which means the content is rendered as plain text.
+         *
+         * **Note:** Using Markdown is discouraged if accessibility of the tooltip
+         * content is essential, as semantics of the rendered markdown content
+         * (headers, lists, ...) will not be conveyed to assistive technologies.
+         */
+        markdown: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Element used to link with the `aria-describedby`
          * attribute. When not set, defaults to `target`.
          * @protected
@@ -447,7 +462,7 @@ export const TooltipMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('text') || props.has('generator') || props.has('context')) {
+      if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
         this.__updateContent();
         this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       }
@@ -682,7 +697,14 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __updateContent() {
-      this.__contentNode.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+      const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+
+      if (this.markdown && content) {
+        renderMarkdownToElement(this.__contentNode, content);
+      } else {
+        this.__contentNode.textContent = content || '';
+      }
+
       this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
 
