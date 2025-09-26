@@ -53,6 +53,6 @@
     "@vaadin/text-area": "^22.1.0",
     "@vaadin/text-field": "^22.1.0",
     "@vaadin/time-picker": "^22.1.0",
-    "sinon": "^9.2.1"
+    "sinon": "^13.0.2"
   }
 }
