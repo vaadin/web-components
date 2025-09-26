@@ -89,6 +89,9 @@ describe('tooltip', () => {
     // Increase container height to fit larger tooltip content
     div.style.height = '500px';
 
+    // Preload markdown helpers to avoid dynamic import delays
+    await element.__importMarkdownHelpers();
+
     element.markdown = true;
     element.text = `
 ## Tooltip Title
