@@ -61,4 +61,26 @@ describe('tooltip', () => {
     await nextRender();
     await visualDiff(div, 'white-space-pre');
   });
+
+  it('markdown', async () => {
+    // Increase container height to fit larger tooltip content
+    div.style.height = '500px';
+
+    // Preload markdown helpers to avoid dynamic import delays
+    await element.__importMarkdownHelpers();
+
+    element.contentType = 'markdown';
+    element.text = `
+## Tooltip Title
+
+**Important:** This tooltip contains:
+
+- **Bold** and *italic* text
+- A [link](https://vaadin.com)
+- Code: \`console.log('Hello')\``;
+    await nextUpdate(element);
+    mouseenter(target);
+    await nextRender();
+    await visualDiff(div, 'markdown');
+  });
 });

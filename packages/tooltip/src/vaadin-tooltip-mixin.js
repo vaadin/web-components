@@ -329,6 +329,24 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
+         * The content type for rendering the tooltip content.
+         *
+         * - `text` (default): Renders the content as plain text
+         * - `markdown`: Renders the content as Markdown
+         *
+         * **Note:** Using Markdown is discouraged if accessibility of the tooltip
+         * content is essential, as semantics of the rendered markdown content
+         * (headers, lists, ...) will not be conveyed to assistive technologies.
+         *
+         * @attr {string} content-type
+         */
+        contentType: {
+          type: String,
+          value: 'text',
+          reflectToAttribute: true,
+        },
+
+        /**
          * Element used to link with the `aria-describedby`
          * attribute. When not set, defaults to `target`.
          * @protected
@@ -447,9 +465,8 @@ export const TooltipMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('text') || props.has('generator') || props.has('context')) {
+      if (props.has('text') || props.has('generator') || props.has('context') || props.has('contentType')) {
         this.__updateContent();
-        this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       }
     }
 
@@ -668,7 +685,22 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __updateContent() {
-      this.__contentNode.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+      const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+
+      if (this.contentType === 'markdown' && content) {
+        this.__importMarkdownHelpers().then((helpers) => {
+          helpers.renderMarkdownToElement(this.__contentNode, content);
+          this.__updateContentFinished();
+        });
+      } else {
+        this.__contentNode.textContent = content || '';
+        this.__updateContentFinished();
+      }
+    }
+
+    /** @private */
+    __updateContentFinished() {
+      this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
 
@@ -692,6 +724,14 @@ export const TooltipMixin = (superClass) =>
           addValueToAttribute(target, 'aria-describedby', this._uniqueId);
         });
       }
+    }
+
+    /** @private **/
+    __importMarkdownHelpers() {
+      if (!this.__markdownHelpers) {
+        this.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
+      }
+      return this.__markdownHelpers;
     }
 
     /**
