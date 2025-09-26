@@ -62,7 +62,7 @@
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-vaadin": "^0.2.10",
-    "typescript": "^4.4.4"
+    "typescript": "^4.9.5"
   },
   "resolutions": {
     "playwright": "1.53.0",
