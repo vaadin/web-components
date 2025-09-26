@@ -30,13 +30,13 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  *
  * ### Markdown Support
  *
- * The tooltip supports rendering Markdown content when the `markdown` property is set to `true`:
+ * The tooltip supports rendering Markdown content when the `contentType` property is set to `markdown`:
  *
  * ```html
  * <button id="info">Info</button>
  * <vaadin-tooltip
  *   text="**Important:** Click to view *detailed* information"
- *   markdown
+ *   content-type="markdown"
  *   for="info">
  * </vaadin-tooltip>
  * ```
@@ -54,6 +54,7 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  *
  * Attribute        | Description
  * -----------------|----------------------------------------
+ * `content-type`   | Reflects the `contentType` property value.
  * `position`       | Reflects the `position` property value.
  *
  * ### Custom CSS Properties

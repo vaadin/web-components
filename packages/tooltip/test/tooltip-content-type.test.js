@@ -3,7 +3,7 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-tooltip.js';
 
-describe('vaadin-tooltip markdown', () => {
+describe('vaadin-tooltip content-type', () => {
   let tooltip, overlay, contentNode;
 
   beforeEach(async () => {
@@ -16,17 +16,19 @@ describe('vaadin-tooltip markdown', () => {
     await tooltip.__importMarkdownHelpers();
   });
 
-  it('should have markdown property with default value false', () => {
-    expect(tooltip.markdown).to.be.false;
+  it('should have contentType property with default value text', () => {
+    expect(tooltip.contentType).to.equal('text');
   });
 
-  it('should reflect markdown property to attribute', async () => {
-    tooltip.markdown = true;
+  it('should reflect contentType property to attribute', async () => {
+    expect(tooltip.getAttribute('content-type')).to.equal('text');
+
+    tooltip.contentType = 'markdown';
     await nextUpdate(tooltip);
-    expect(tooltip.hasAttribute('markdown')).to.be.true;
+    expect(tooltip.getAttribute('content-type')).to.equal('markdown');
   });
 
-  describe('markdown disabled', () => {
+  describe('contentType text', () => {
     it('should not parse markdown syntax', async () => {
       tooltip.text = '**Bold text** and *italic text*';
       await nextUpdate(tooltip);
@@ -34,9 +36,9 @@ describe('vaadin-tooltip markdown', () => {
     });
   });
 
-  describe('markdown enabled', () => {
+  describe('contentType markdown', () => {
     beforeEach(async () => {
-      tooltip.markdown = true;
+      tooltip.contentType = 'markdown';
       await nextUpdate(tooltip);
     });
 
@@ -69,45 +71,63 @@ describe('vaadin-tooltip markdown', () => {
       await nextUpdate(tooltip);
       expect(contentNode.innerHTML).to.equal('');
     });
-  });
 
-  describe('switching between modes', () => {
-    it('should switch from plain text to markdown', async () => {
-      tooltip.text = '**Bold text**';
+    it('should sanitize markdown', async () => {
+      tooltip.text = '<script>alert("xss")</script>\n\n**Safe content**';
       await nextUpdate(tooltip);
-      expect(contentNode.innerHTML).to.equal('**Bold text**');
 
-      tooltip.markdown = true;
-      await nextUpdate(tooltip);
-      expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Bold text</strong></p>');
+      expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Safe content</strong></p>');
     });
 
-    it('should switch from markdown to plain text', async () => {
-      tooltip.markdown = true;
-      tooltip.text = '**Bold text**';
+    it('should hide overlay when markdown content is empty', async () => {
+      tooltip.text = '';
       await nextUpdate(tooltip);
-      expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Bold text</strong></p>');
 
-      tooltip.markdown = false;
-      await nextUpdate(tooltip);
-      expect(contentNode.innerHTML).to.equal('**Bold text**');
+      expect(overlay.hasAttribute('hidden')).to.be.true;
     });
-  });
 
-  describe('content-changed event', () => {
+    it('should show overlay when markdown content is not empty', async () => {
+      tooltip.text = '**Content**';
+      await nextUpdate(tooltip);
+
+      expect(overlay.hasAttribute('hidden')).to.be.false;
+    });
+
     it('should fire content-changed event when markdown content is set', async () => {
       const spy = sinon.spy();
       tooltip.addEventListener('content-changed', spy);
 
-      tooltip.markdown = true;
       tooltip.text = '**Bold text**';
       await nextUpdate(tooltip);
 
       expect(spy.callCount).to.equal(1);
       expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Bold text\n' });
     });
+  });
 
-    it('should fire content-changed event when switching modes', async () => {
+  describe('switching between content types', () => {
+    it('should switch from text to markdown', async () => {
+      tooltip.text = '**Bold text**';
+      await nextUpdate(tooltip);
+      expect(contentNode.innerHTML).to.equal('**Bold text**');
+
+      tooltip.contentType = 'markdown';
+      await nextUpdate(tooltip);
+      expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Bold text</strong></p>');
+    });
+
+    it('should switch from markdown to text', async () => {
+      tooltip.contentType = 'markdown';
+      tooltip.text = '**Bold text**';
+      await nextUpdate(tooltip);
+      expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Bold text</strong></p>');
+
+      tooltip.contentType = 'text';
+      await nextUpdate(tooltip);
+      expect(contentNode.innerHTML).to.equal('**Bold text**');
+    });
+
+    it('should fire content-changed event when switching content types', async () => {
       const spy = sinon.spy();
       tooltip.addEventListener('content-changed', spy);
 
@@ -117,39 +137,11 @@ describe('vaadin-tooltip markdown', () => {
       expect(spy.callCount).to.equal(1);
       expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '**Bold text**' });
 
-      tooltip.markdown = true;
+      tooltip.contentType = 'markdown';
       await nextUpdate(tooltip);
 
       expect(spy.callCount).to.equal(2);
       expect(spy.secondCall.args[0].detail).to.deep.equal({ content: 'Bold text\n' });
-    });
-  });
-
-  describe('HTML sanitization', () => {
-    it('should sanitize markdown', async () => {
-      tooltip.markdown = true;
-      tooltip.text = '<script>alert("xss")</script>\n\n**Safe content**';
-      await nextUpdate(tooltip);
-
-      expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Safe content</strong></p>');
-    });
-  });
-
-  describe('overlay visibility', () => {
-    it('should hide overlay when markdown content is empty', async () => {
-      tooltip.markdown = true;
-      tooltip.text = '';
-      await nextUpdate(tooltip);
-
-      expect(overlay.hasAttribute('hidden')).to.be.true;
-    });
-
-    it('should show overlay when markdown content is not empty', async () => {
-      tooltip.markdown = true;
-      tooltip.text = '**Content**';
-      await nextUpdate(tooltip);
-
-      expect(overlay.hasAttribute('hidden')).to.be.false;
     });
   });
 });

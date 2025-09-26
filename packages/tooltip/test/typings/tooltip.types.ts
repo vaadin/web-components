@@ -19,7 +19,7 @@ assertType<string | null | undefined>(tooltip.text);
 assertType<Record<string, unknown>>(tooltip.context);
 assertType<(context: Record<string, unknown>) => string>(tooltip.generator);
 assertType<boolean>(tooltip.manual);
-assertType<boolean>(tooltip.markdown);
+assertType<'text' | 'markdown'>(tooltip.contentType);
 assertType<boolean>(tooltip.opened);
 assertType<number>(tooltip.focusDelay);
 assertType<number>(tooltip.hideDelay);
