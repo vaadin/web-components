@@ -30,6 +30,13 @@ export declare class ComboBoxItemsMixinClass<TItem> {
   filter: string;
 
   /**
+   * A function that is used to generate the label for dropdown
+   * items based on the item. Receives one argument:
+   * - `item` The item to generate the label for.
+   */
+  itemLabelGenerator: ((item: TItem) => string) | undefined;
+
+  /**
    * Path for label of the item. If `items` is an array of objects, the
    * `itemLabelPath` is used to fetch the displayed string label for each
    * item.

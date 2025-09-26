@@ -78,6 +78,15 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
+         * A function that is used to generate the label for dropdown
+         * items based on the item. Receives one argument:
+         * - `item` The item to generate the label for.
+         */
+        itemLabelGenerator: {
+          type: Object,
+        },
+
+        /**
          * Path for label of the item. If `items` is an array of objects, the
          * `itemLabelPath` is used to fetch the displayed string label for each
          * item.
@@ -122,6 +131,10 @@ export const ComboBoxItemsMixin = (superClass) =>
       if (props.has('filter')) {
         this._filterChanged(this.filter);
       }
+
+      if (props.has('itemLabelGenerator')) {
+        this.requestContentUpdate();
+      }
     }
 
     /**
@@ -161,6 +174,10 @@ export const ComboBoxItemsMixin = (superClass) =>
      * @override
      */
     _getItemLabel(item) {
+      if (typeof this.itemLabelGenerator === 'function' && item) {
+        return this.itemLabelGenerator(item) || '';
+      }
+
       let label = item && this.itemLabelPath ? get(this.itemLabelPath, item) : undefined;
       if (label === undefined || label === null) {
         label = item ? item.toString() : '';

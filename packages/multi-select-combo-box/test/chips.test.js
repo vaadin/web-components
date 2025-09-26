@@ -2,11 +2,10 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
+import { getChips } from './helpers.js';
 
 describe('chips', () => {
   let comboBox, inputElement;
-
-  const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
   const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 

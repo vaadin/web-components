@@ -142,8 +142,6 @@ describe('items', () => {
   });
 
   describe('itemClassNameGenerator', () => {
-    let comboBox;
-
     beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       await nextRender();
@@ -192,6 +190,78 @@ describe('items', () => {
       expect(items[0].className).to.equal('');
       expect(items[1].className).to.equal('');
       expect(items[2].className).to.equal('');
+    });
+  });
+
+  describe('itemLabelGenerator', () => {
+    beforeEach(async () => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = [
+        { id: 1, name: 'John', surname: 'Doe', age: 30 },
+        { id: 2, name: 'Jane', surname: 'Smith', age: 25 },
+        { id: 3, name: 'Bob', surname: 'Johnson', age: 35 },
+      ];
+      comboBox.itemLabelGenerator = (item) => `${item.name} ${item.surname}`;
+      await nextRender();
+    });
+
+    it('should generate items text content using itemLabelGenerator', async () => {
+      comboBox.open();
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      expect(items[0].textContent).to.equal('John Doe');
+      expect(items[1].textContent).to.equal('Jane Smith');
+      expect(items[2].textContent).to.equal('Bob Johnson');
+    });
+
+    it('should set generated label as input value when item is selected', async () => {
+      comboBox.itemValuePath = 'id';
+      comboBox.value = 2;
+      await nextRender();
+      expect(comboBox.inputElement.value).to.equal('Jane Smith');
+    });
+
+    it('should filter items using generated label', () => {
+      setInputValue(comboBox, 'john');
+
+      expect(comboBox.filteredItems.length).to.equal(2);
+      expect(comboBox.filteredItems[0]).to.deep.equal(comboBox.items[0]);
+      expect(comboBox.filteredItems[1]).to.deep.equal(comboBox.items[2]);
+    });
+
+    it('should use itemLabelGenerator over itemLabelPath', async () => {
+      comboBox.itemLabelPath = 'surname';
+      comboBox.itemLabelGenerator = (item) => item.name;
+      comboBox.open();
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      expect(items[0].textContent).to.equal('John');
+      expect(items[1].textContent).to.equal('Jane');
+    });
+
+    it('should accept empty string returned from itemLabelGenerator', async () => {
+      comboBox.itemLabelGenerator = (item) => (item.id === 2 ? '' : `${item.name} ${item.surname}`);
+      comboBox.open();
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      expect(items[0].textContent).to.equal('John Doe');
+      expect(items[1].textContent).to.equal('');
+      expect(items[2].textContent).to.equal('Bob Johnson');
+    });
+
+    it('should update dropdown when itemLabelGenerator changes', async () => {
+      comboBox.open();
+      await nextRender();
+
+      expect(getFirstItem(comboBox).textContent).to.equal('John Doe');
+
+      comboBox.itemLabelGenerator = (item) => `${item.name} (${item.age})`;
+      await nextRender();
+
+      expect(getFirstItem(comboBox).textContent).to.equal('John (30)');
     });
   });
 });
