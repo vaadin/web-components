@@ -11,6 +11,9 @@ describe('vaadin-tooltip markdown', () => {
     await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
     contentNode = tooltip.querySelector('[slot="overlay"]');
+
+    // Preload markdown helpers to avoid dynamic import delays
+    await tooltip.__importMarkdownHelpers();
   });
 
   it('should have markdown property with default value false', () => {

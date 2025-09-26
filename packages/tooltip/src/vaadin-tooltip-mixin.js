@@ -7,7 +7,6 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { renderMarkdownToElement } from '@vaadin/markdown/src/markdown-helpers.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
 
@@ -464,7 +463,6 @@ export const TooltipMixin = (superClass) =>
 
       if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
         this.__updateContent();
-        this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       }
     }
 
@@ -700,11 +698,19 @@ export const TooltipMixin = (superClass) =>
       const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
 
       if (this.markdown && content) {
-        renderMarkdownToElement(this.__contentNode, content);
+        this.__importMarkdownHelpers().then((helpers) => {
+          helpers.renderMarkdownToElement(this.__contentNode, content);
+          this.__updateContentFinished();
+        });
       } else {
         this.__contentNode.textContent = content || '';
+        this.__updateContentFinished();
       }
+    }
 
+    /** @private */
+    __updateContentFinished() {
+      this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
 
@@ -728,6 +734,14 @@ export const TooltipMixin = (superClass) =>
           addValueToAttribute(target, 'aria-describedby', this._uniqueId);
         });
       }
+    }
+
+    /** @private **/
+    __importMarkdownHelpers() {
+      if (!this.__markdownHelpers) {
+        this.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
+      }
+      return this.__markdownHelpers;
     }
 
     /**
