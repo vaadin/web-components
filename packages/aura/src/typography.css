@@ -34,7 +34,6 @@
 
       /* Support iOS dynamic text size */
       font: -apple-system-body;
-      --aura-base-font-size: 14;
     }
   }
 }
