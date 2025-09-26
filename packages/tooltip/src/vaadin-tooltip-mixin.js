@@ -329,16 +329,20 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
-         * When `true`, the tooltip content is rendered as Markdown.
-         * `false`, which means the content is rendered as plain text.
+         * The content type for rendering the tooltip content.
+         *
+         * - `text` (default): Renders the content as plain text
+         * - `markdown`: Renders the content as Markdown
          *
          * **Note:** Using Markdown is discouraged if accessibility of the tooltip
          * content is essential, as semantics of the rendered markdown content
          * (headers, lists, ...) will not be conveyed to assistive technologies.
+         *
+         * @attr {string} content-type
          */
-        markdown: {
-          type: Boolean,
-          value: false,
+        contentType: {
+          type: String,
+          value: 'text',
           reflectToAttribute: true,
         },
 
@@ -461,7 +465,7 @@ export const TooltipMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
+      if (props.has('text') || props.has('generator') || props.has('context') || props.has('contentType')) {
         this.__updateContent();
       }
     }
@@ -697,7 +701,7 @@ export const TooltipMixin = (superClass) =>
     __updateContent() {
       const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
 
-      if (this.markdown && content) {
+      if (this.contentType === 'markdown' && content) {
         this.__importMarkdownHelpers().then((helpers) => {
           helpers.renderMarkdownToElement(this.__contentNode, content);
           this.__updateContentFinished();

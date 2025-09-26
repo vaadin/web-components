@@ -22,13 +22,13 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * ### Markdown Support
  *
- * The tooltip supports rendering Markdown content when the `markdown` property is set to `true`:
+ * The tooltip supports rendering Markdown content when the `contentType` property is set to `markdown`:
  *
  * ```html
  * <button id="info">Info</button>
  * <vaadin-tooltip
  *   text="**Important:** Click to view *detailed* information"
- *   markdown
+ *   content-type="markdown"
  *   for="info">
  * </vaadin-tooltip>
  * ```
@@ -46,6 +46,7 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * Attribute        | Description
  * -----------------|----------------------------------------
+ * `content-type`   | Reflects the `contentType` property value.
  * `position`       | Reflects the `position` property value.
  *
  * ### Custom CSS Properties
@@ -103,7 +104,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         modeless
-        ?markdown="${this.markdown}"
+        content-type="${this.contentType}"
         exportparts="overlay, content"
         ><slot name="overlay"></slot
       ></vaadin-tooltip-overlay>
