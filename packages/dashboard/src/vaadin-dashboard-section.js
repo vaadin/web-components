@@ -126,11 +126,6 @@ class DashboardSection extends DashboardItemMixin(
         value: '',
       },
 
-      /* @private */
-      __rootHeadingLevel: {
-        type: Number,
-      },
-
       /** @private */
       __childCount: {
         type: Number,
@@ -149,7 +144,7 @@ class DashboardSection extends DashboardItemMixin(
 
         <header part="header">
           ${this.__renderDragHandle()}
-          <div id="title" role="heading" aria-level=${this.__rootHeadingLevel || 2} part="title"
+          <div id="title" role="heading" aria-level=${this._rootHeadingLevel || 2} part="title"
             >${this.sectionTitle}</div
           >
           ${this.__renderRemoveButton()}
