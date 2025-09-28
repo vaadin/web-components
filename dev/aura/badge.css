@@ -8,7 +8,7 @@
   height: calc(1lh - 2px);
   border: 1px solid var(--_bg);
   --_bg: color-mix(in srgb, var(--color) 12%, transparent);
-  background: var(--_bg) padding-box;
+  background: var(--_bg);
   padding: 0 0.5em;
   border-radius: var(--vaadin-radius-l);
   min-width: calc(1lh - 1em - 2px);
