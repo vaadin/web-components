@@ -18,6 +18,8 @@ import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-styles.js'
 /**
  * `<vaadin-breadcrumb-item>` is a Web Component for displaying a single item in a breadcrumb trail.
  *
+ * ⚠️ **This component is experimental** and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.breadcrumbComponent = true`.
+ *
  * ```html
  * <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
  * ```
@@ -53,6 +55,10 @@ class BreadcrumbItem extends DisabledMixin(
 ) {
   static get is() {
     return 'vaadin-breadcrumb-item';
+  }
+
+  static get experimental() {
+    return true;
   }
 
   static get styles() {

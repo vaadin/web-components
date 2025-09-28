@@ -15,6 +15,8 @@ import { breadcrumbStyles } from './styles/vaadin-breadcrumb-styles.js';
 /**
  * `<vaadin-breadcrumb>` is a Web Component for displaying hierarchical navigation.
  *
+ * ⚠️ **This component is experimental** and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.breadcrumbComponent = true`.
+ *
  * ```html
  * <vaadin-breadcrumb>
  *   <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
@@ -41,6 +43,10 @@ import { breadcrumbStyles } from './styles/vaadin-breadcrumb-styles.js';
 class Breadcrumb extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-breadcrumb';
+  }
+
+  static get experimental() {
+    return true;
   }
 
   static get styles() {

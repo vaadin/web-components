@@ -1,5 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+
+// Enable experimental breadcrumb component
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
+
 import '../vaadin-breadcrumb.js';
 import '../vaadin-breadcrumb-item.js';
 
