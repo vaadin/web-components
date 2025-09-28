@@ -2,6 +2,12 @@ import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-co
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
+
+// Enable experimental breadcrumb component
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
+
 import '../../../vaadin-breadcrumb.js';
 import '../../../vaadin-breadcrumb-item.js';
 
