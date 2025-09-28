@@ -7,8 +7,8 @@
   <script type="module" src="./common.js"></script>
   <script type="module">
     // Enable experimental breadcrumb component
-    window.Vaadin ||= {};
-    window.Vaadin.featureFlags ||= {};
+    window.Vaadin ??= {};
+    window.Vaadin.featureFlags ??= {};
     window.Vaadin.featureFlags.breadcrumbComponent = true;
     
     import '@vaadin/breadcrumb/vaadin-breadcrumb.js';
