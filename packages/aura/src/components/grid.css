@@ -1,25 +1,25 @@
 :where(:root, :host) {
-  /* TODO should likely be just a color prop, not a background-image */
-  --vaadin-grid-row-selected-background: linear-gradient(
-    var(--vaadin-background-container),
-    var(--vaadin-background-container)
-  );
+  --vaadin-grid-row-selected-background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  --vaadin-grid-background: linear-gradient(var(--aura-surface), var(--aura-surface)) var(--aura-background) padding-box;
 }
 
 vaadin-grid[theme~='no-border']::part(first-column-cell) {
-  /* TODO can't use --vaadin-grid-cell-padding, it only works on the host */
-  /* quite difficult to override the cell padding when it’s on the slotted vaadin-grid-cell-content element */
-  --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s) var(--vaadin-padding-xs) var(--vaadin-padding-l);
+  --vaadin-grid-cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s) var(--vaadin-padding-xs)
+    var(--vaadin-padding-l);
 }
 
 vaadin-grid[theme~='no-border']::part(last-column-cell) {
-  --_cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs) var(--vaadin-padding-s);
+  --vaadin-grid-cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs)
+    var(--vaadin-padding-s);
+}
+
+vaadin-grid::part(empty-state) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
 vaadin-grid::part(active-nav-item) {
-  /* TODO should likely be just a color prop, not a background-image */
-  /* TODO need a custom prop in grid base styles that can be used to just highlight a row, which works together with row stripes, selection color, etc. */
-  --vaadin-grid-cell-background: linear-gradient(var(--vaadin-background-container), var(--vaadin-background-container))
-    var(--vaadin-background-color);
+  --vaadin-grid-row-highlight-background-color: var(--vaadin-background-container);
 }
