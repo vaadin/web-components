@@ -27,7 +27,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Breadcrumb extends ElementMixin(ThemableMixin(HTMLElement)) {}
+declare class Breadcrumb extends ElementMixin(ThemableMixin(HTMLElement)) {
+  /**
+   * The aria-label attribute for the breadcrumb navigation
+   */
+  ariaLabel: string;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

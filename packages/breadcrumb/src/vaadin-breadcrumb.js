@@ -50,6 +50,16 @@ class Breadcrumb extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMi
   static get properties() {
     return {
       /**
+       * The aria-label attribute for the breadcrumb navigation
+       */
+      ariaLabel: {
+        type: String,
+        value: 'Breadcrumb',
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
        * The list of breadcrumb items
        * @type {!Array<!BreadcrumbItem>}
        * @private
@@ -81,8 +91,6 @@ class Breadcrumb extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMi
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'navigation');
     }
-
-    this.setAttribute('aria-label', 'Breadcrumb');
   }
 
   /** @private */
