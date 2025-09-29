@@ -45,7 +45,7 @@ vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current]::part(content) {
 }
 
 /* Badges and other content that uses the palette inside a filled nav item */
-vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current] > :not([slot='children']) {
+vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']) {
   --vaadin-text-color: var(--vaadin-side-nav-item-color);
   --vaadin-text-color-secondary: var(--vaadin-side-nav-item-color);
   --aura-accent-color: var(--vaadin-side-nav-item-color);
