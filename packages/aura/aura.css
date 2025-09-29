@@ -6,6 +6,7 @@
 @import './src/surface.css';
 @import './src/typography.css';
 
+@import './src/components/accordion-details.css';
 @import './src/components/app-layout.css';
 @import './src/components/avatar.css';
 @import './src/components/button.css';
