@@ -127,7 +127,7 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
   --aura-accent-dark: var(--aura-text-dark);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='danger'] {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):is([theme~='danger'], [theme~='error']) {
   --aura-accent-light: var(--aura-red);
   --aura-accent-dark: var(--aura-red);
 }
