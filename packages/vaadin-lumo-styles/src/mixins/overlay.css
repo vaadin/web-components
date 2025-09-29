@@ -79,6 +79,7 @@
     text-decoration: none;
     text-indent: initial;
     text-transform: none;
+    user-select: text;
     white-space: initial;
     word-spacing: initial;
     -webkit-text-size-adjust: 100%;

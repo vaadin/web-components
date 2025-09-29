@@ -74,6 +74,7 @@ export const overlayStyles = css`
     text-decoration: initial;
     text-indent: initial;
     text-transform: initial;
+    user-select: text;
     white-space: initial;
     word-spacing: initial;
   }
