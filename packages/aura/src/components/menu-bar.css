@@ -1,0 +1,5 @@
+@container not style(--vaadin-menu-bar-gap) {
+  vaadin-menu-bar-button:not(:first-of-type) {
+    border-inline-start-color: transparent;
+  }
+}
