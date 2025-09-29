@@ -82,7 +82,8 @@
 
 :where(:root, :host),
 vaadin-button,
-vaadin-context-menu-item vaadin-drawer-toggle,
+vaadin-context-menu-item,
+vaadin-drawer-toggle,
 vaadin-menu-bar-button,
 vaadin-menu-bar-item,
 vaadin-checkbox::part(checkbox),
