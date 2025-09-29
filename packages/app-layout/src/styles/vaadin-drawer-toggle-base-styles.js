@@ -11,7 +11,7 @@ export const drawerToggle = css`
     background: currentColor;
     display: block;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-menu);
+    mask: var(--_vaadin-icon-menu) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

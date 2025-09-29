@@ -55,7 +55,7 @@ export const loginFormWrapperStyles = css`
     display: inline-block;
     flex: none;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-warn);
+    mask: var(--_vaadin-icon-warn) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

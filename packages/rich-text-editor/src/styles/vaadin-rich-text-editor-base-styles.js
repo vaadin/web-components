@@ -416,6 +416,9 @@ const toolbar = css`
     display: block;
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
+    mask-size: var(--vaadin-icon-visual-size, 100%);
+    mask-repeat: no-repeat;
+    mask-position: 50%;
   }
 
   [part~='toolbar-button']:focus {

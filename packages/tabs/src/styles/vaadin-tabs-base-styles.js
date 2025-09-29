@@ -74,7 +74,7 @@ export const tabsStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask-image: var(--_vaadin-icon-chevron-down);
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     rotate: 90deg;
   }
 

@@ -32,7 +32,7 @@ export const menuBarButtonStyles = css`
     background: currentColor;
     content: '';
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-chevron-down);
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

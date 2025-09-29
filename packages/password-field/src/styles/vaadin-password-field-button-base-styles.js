@@ -22,7 +22,7 @@ const passwordFieldBase = css`
     content: '';
     display: block;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-eye);
+    mask: var(--_vaadin-icon-eye) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

@@ -44,7 +44,7 @@ export const sharedStyles = css`
     content: '';
     display: block;
     background: currentColor;
-    mask-image: var(--_vaadin-icon-chevron-down);
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     rotate: -90deg;

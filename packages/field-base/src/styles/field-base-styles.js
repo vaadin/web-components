@@ -109,7 +109,7 @@ export const field = css`
     flex: none;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-warn);
+    mask: var(--_vaadin-icon-warn) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     background: currentColor;
   }
 
