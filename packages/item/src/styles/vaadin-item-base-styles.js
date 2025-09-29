@@ -43,7 +43,7 @@ export const itemStyles = css`
     display: block;
     background: currentColor;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-checkmark);
+    mask: var(--_vaadin-icon-checkmark) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

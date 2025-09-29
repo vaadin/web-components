@@ -85,7 +85,7 @@ export const dashboardWidgetAndSectionStyles = css`
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask-image: var(--icon);
+    mask: var(--icon) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   #focus-button-wrapper,

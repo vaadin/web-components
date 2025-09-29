@@ -38,6 +38,12 @@ export const uploadFileStyles = css`
     width: var(--vaadin-icon-size, 1lh);
   }
 
+  :is([part$='icon'], [part$='button'])::before {
+    mask-size: var(--vaadin-icon-visual-size, 100%);
+    mask-position: 50%;
+    mask-repeat: no-repeat;
+  }
+
   [part='done-icon']::before {
     background: var(--vaadin-upload-file-done-color, currentColor);
     mask-image: var(--_vaadin-icon-checkmark);

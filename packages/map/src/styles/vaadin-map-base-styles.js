@@ -265,7 +265,7 @@ export const mapStyles = css`
   }
 
   .ol-compass:empty::before {
-    mask-image: var(--_vaadin-icon-arrow-up);
+    mask: var(--_vaadin-icon-arrow-up) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-full-screen {
@@ -273,11 +273,11 @@ export const mapStyles = css`
   }
 
   .ol-full-screen button:empty::before {
-    mask-image: var(--_vaadin-icon-fullscreen);
+    mask: var(--_vaadin-icon-fullscreen) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-full-screen .ol-full-screen-true:empty::before {
-    mask-image: var(--_vaadin-icon-cross);
+    mask: var(--_vaadin-icon-cross) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-overviewmap {
@@ -333,7 +333,8 @@ export const mapStyles = css`
   }
 
   .ol-overviewmap button span:empty::before {
-    mask-image: var(--vaadin-map-icon-overview-map-collapse, var(--_vaadin-icon-chevron-down));
+    mask: var(--vaadin-map-icon-overview-map-collapse, var(--_vaadin-icon-chevron-down)) 50% /
+      var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-overviewmap.ol-collapsed button {
@@ -355,11 +356,12 @@ export const mapStyles = css`
   }
 
   .ol-zoom-in:empty::before {
-    mask-image: var(--vaadin-map-icon-zoom-in, var(--_vaadin-icon-plus));
+    mask: var(--vaadin-map-icon-zoom-in, var(--_vaadin-icon-plus)) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-zoom-out:empty::before {
-    mask-image: var(--vaadin-map-icon-zoom-out, var(--_vaadin-icon-minus));
+    mask: var(--vaadin-map-icon-zoom-out, var(--_vaadin-icon-minus)) 50% / var(--vaadin-icon-visual-size, 100%)
+      no-repeat;
   }
 
   .ol-zoom button.ol-zoom-in {

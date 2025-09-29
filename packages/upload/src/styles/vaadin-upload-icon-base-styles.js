@@ -17,7 +17,7 @@ export const uploadIconStyles = css`
     display: inline-block;
     flex: none;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-upload);
+    mask: var(--_vaadin-icon-upload) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

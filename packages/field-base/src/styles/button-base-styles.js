@@ -23,6 +23,9 @@ export const button = css`
     display: block;
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
+    mask-size: var(--vaadin-icon-visual-size, 100%);
+    mask-position: 50%;
+    mask-repeat: no-repeat;
   }
 
   :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part~='clear-button'] {
