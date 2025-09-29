@@ -553,8 +553,14 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __onMouseDown() {
+    __onMouseDown(event) {
       if (this.manual) {
+        return;
+      }
+
+      // Do not close on bubbling mousedown events when
+      // the tooltip is slotted into the target element
+      if (event.composedPath().includes(this)) {
         return;
       }
 

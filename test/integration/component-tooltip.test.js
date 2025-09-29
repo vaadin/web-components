@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import { AccordionPanel } from '@vaadin/accordion/src/vaadin-accordion-panel.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
@@ -151,6 +151,15 @@ before(() => {
         mouseenter(tooltip.target);
         expect(tooltipOverlay.opened).to.be.false;
       }
+    });
+
+    it('should not close slotted tooltip on overlay mousedown', () => {
+      mouseenter(tooltip.target);
+
+      expect(tooltipOverlay.opened).to.be.true;
+      const content = tooltip.querySelector('[slot="overlay"]');
+      mousedown(content);
+      expect(tooltipOverlay.opened).to.be.true;
     });
 
     it('should set has-tooltip attribute on the element', () => {
