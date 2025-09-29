@@ -50,10 +50,4 @@ export const uploadStyles = css`
     gap: var(--vaadin-upload-drop-label-gap, var(--vaadin-gap-s));
     line-height: var(--vaadin-upload-drop-label-line-height, inherit);
   }
-
-  :host([nodrop]) {
-    --vaadin-upload-border: none;
-    --vaadin-upload-border-radius: 0;
-    --vaadin-upload-padding: 0;
-  }
 `;
