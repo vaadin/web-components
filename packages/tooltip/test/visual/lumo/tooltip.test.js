@@ -96,7 +96,7 @@ describe('tooltip', () => {
     element.text = `
 ## Tooltip Title
 
-**Important:** This tooltip contains:
+This tooltip contains:
 
 - **Bold** and *italic* text
 - A [link](https://vaadin.com)
