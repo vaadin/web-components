@@ -36,8 +36,10 @@
     color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 5% * var(--aura-contrast)), transparent)
   );
 
-  --aura-background-light: oklch(from var(--aura-accent-light) min(1, l + (1 - l) * 0.9) calc(c * 0.05) h);
-  --aura-background-dark: oklch(from var(--aura-accent-dark) max(0, l/2 - (1 - l) * 0.2) calc(c * 0.05) h);
+  /* Using static values (vs relative colors) for these backgrounds improves first paint rendering performance quite much (~200ms) */
+  --aura-background-light: oklch(95% 0.005 260);
+  --aura-background-dark: oklch(20% 0.01 260);
+
   --aura-background: light-dark(var(--aura-background-light), var(--aura-background-dark));
 
   --_bg-alt: oklch(
@@ -46,13 +48,14 @@
   --_bg-accent: radial-gradient(
     circle at 0% 0%,
     light-dark(
-      oklch(from var(--aura-background-light) min(1, l + c * 3) min(c, c * 3 - l/20) h),
+      oklch(from var(--aura-background-light) min(1, l + c * 3) min(c, c * 3) h),
       oklch(from var(--aura-background-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
     ),
     transparent 30%
   );
   --aura-app-background:
-    var(--_bg-accent), radial-gradient(circle at 25% 0% in xyz, var(--aura-background) 33%, var(--_bg-alt));
+    var(--_bg-accent),
+    radial-gradient(circle at 25% 0% in xyz, var(--aura-background) 33%, var(--_bg-alt)) var(--aura-background);
 
   --aura-accent-color: light-dark(var(--aura-accent-light), var(--aura-accent-dark));
   --vaadin-focus-ring-color: var(--aura-accent-color);
