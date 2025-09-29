@@ -5,6 +5,7 @@
   --vaadin-radius-s: min(0.25lh, round(var(--aura-base-radius) * 1px + 2px, 1px));
   --vaadin-radius-m: round(var(--aura-base-radius) * 2px + 3px, 1px);
   --vaadin-radius-l: round(var(--aura-base-radius) * 1.5px + 10px, 1px);
+  --vaadin-icon-stroke-width: 1.75;
 }
 
 :where(:root, :host, [theme]) {
