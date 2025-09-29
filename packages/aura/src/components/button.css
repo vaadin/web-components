@@ -1,11 +1,19 @@
 :where(:root, :host) {
-  --vaadin-button-border-color: var(--vaadin-border-color);
   --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle) {
   transition: scale 180ms;
   position: relative;
+  --_accent: light-dark(
+    oklch(from var(--aura-accent-light) calc(l + 0.2) c h / min(0.3, c / 2)),
+    oklch(from var(--aura-accent-dark) calc(l - 0.2) c h / min(0.3, c / 2))
+  );
+  --_accent-border: light-dark(
+    oklch(from var(--aura-accent-light) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast))),
+    oklch(from var(--aura-accent-dark) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast)))
+  );
+  --_background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='tertiary'])) {
@@ -15,15 +23,13 @@
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([theme~='primary'], [theme~='tertiary']) {
-  background: var(--vaadin-button-background, var(--aura-surface) padding-box);
+  background: var(--vaadin-button-background, var(--_background));
+  --vaadin-button-border-color: var(--_accent-border);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='primary'])) {
   outline-offset: calc(var(--vaadin-button-border-width, 1px) * -1);
-}
-
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where([theme~='primary']) {
-  outline-offset: 2px;
+  --vaadin-button-text-color: var(--aura-accent-text);
 }
 
 /*
@@ -49,13 +55,15 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
   padding-inline-end: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'] {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where([theme~='primary']) {
+  outline-offset: 2px;
   --vaadin-button-font-weight: var(--aura-font-weight-semibold);
-  --vaadin-button-text-color: light-dark(var(--vaadin-background-color), var(--aura-background-dark));
+  --vaadin-button-text-color: var(--aura-accent-contrast);
+  --vaadin-button-background: var(--aura-accent-color);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[disabled][theme~='primary'] {
-  --vaadin-button-text-color: var(--vaadin-text-color-secondary);
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[disabled][theme~='primary']::part(label) {
+  color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([disabled])::before {
@@ -73,13 +81,13 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
 
 @supports (color: hsl(0 0 0)) {
   :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([disabled])::before {
-    background-color: oklch(from currentColor calc(l + 0.4 - c) c h);
+    background-color: oklch(from currentColor calc(l + 0.4 - c) c h / calc(1 - l / 2));
   }
 }
 
 @media (any-hover: hover) {
   :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):hover:not([disabled], [active])::before {
-    opacity: 0.05;
+    opacity: 0.03;
   }
 
   /* prettier-ignore */
@@ -110,4 +118,21 @@ vaadin-menu-bar-button[aria-haspopup='true'] {
   vaadin-menu-bar-button:not(:first-of-type) {
     border-inline-start-color: transparent;
   }
+}
+
+/* Color variants */
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='accent'])) {
+  --aura-accent-light: var(--aura-text-light);
+  --aura-accent-dark: var(--aura-text-dark);
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):is([theme~='danger'], [theme~='error']) {
+  --aura-accent-light: var(--aura-red);
+  --aura-accent-dark: var(--aura-red);
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='success'] {
+  --aura-accent-light: var(--aura-green);
+  --aura-accent-dark: var(--aura-green);
 }
