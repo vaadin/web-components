@@ -335,7 +335,7 @@ export const TooltipMixin = (superClass) =>
          * - `markdown`: Renders the content as Markdown
          *
          * **Note:** Using Markdown is discouraged if accessibility of the tooltip
-         * content is essential, as semantics of the rendered markdown content
+         * content is essential, as semantics of the rendered HTML content
          * (headers, lists, ...) will not be conveyed to assistive technologies.
          *
          * @attr {string} content-type
