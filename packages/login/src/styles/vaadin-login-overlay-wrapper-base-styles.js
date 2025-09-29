@@ -16,10 +16,7 @@ const loginOverlayWrapper = css`
     border: var(--vaadin-login-overlay-border-width, var(--vaadin-overlay-border-width, 1px)) solid
       var(--vaadin-login-overlay-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color-secondary)));
     border-radius: var(--vaadin-login-overlay-border-radius, var(--vaadin-radius-l));
-    box-shadow: var(
-      --vaadin-login-overlay-box-shadow,
-      var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3))
-    );
+    box-shadow: var(--vaadin-login-overlay-shadow, var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3)));
   }
 
   [part='card'] {

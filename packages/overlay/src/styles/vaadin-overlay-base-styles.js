@@ -58,7 +58,7 @@ export const overlayStyles = css`
     border: var(--vaadin-overlay-border-width, 1px) solid
       var(--vaadin-overlay-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-overlay-border-radius, var(--vaadin-radius-m));
-    box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+    box-shadow: var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     box-sizing: border-box;
     max-width: 100%;
     overflow: auto;
