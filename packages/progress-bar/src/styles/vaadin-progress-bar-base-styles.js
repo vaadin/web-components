@@ -97,4 +97,14 @@ export const progressBarStyles = css`
       animation: indeterminate-reduced 2s linear infinite alternate;
     }
   }
+
+  @media (forced-colors: active) {
+    [part='bar'] {
+      border-width: max(1px, var(--vaadin-progress-bar-border-width));
+    }
+
+    [part='value'] {
+      background: CanvasText !important;
+    }
+  }
 `;
