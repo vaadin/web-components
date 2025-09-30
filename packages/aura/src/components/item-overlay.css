@@ -21,6 +21,10 @@
     --vaadin-icon-visual-size: 75%;
   }
 
+  &::part(content) {
+    display: flex;
+  }
+
   @media (any-hover: hover) {
     &:not([disabled], [aria-disabled='true']):hover {
       background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
