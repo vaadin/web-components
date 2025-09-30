@@ -12,7 +12,7 @@
   --aura-overlay-shadow:
     inset 0 0 0 1px var(--aura-overlay-inner-outline-color), 0 0 0 1px var(--aura-overlay-outline-color),
     var(--aura-shadow-m);
-  --aura-overlay-backdrop-filter: blur(12px) brightness(1.2) saturate(1.2);
+  --aura-overlay-backdrop-filter: blur(20px) brightness(1.1) saturate(1.2);
   --aura-overlay-surface-opacity: 0.85;
 
   @media (prefers-reduced-transparency: reduce) {
