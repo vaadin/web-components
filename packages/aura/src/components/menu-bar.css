@@ -5,7 +5,8 @@
 }
 
 @media (any-hover: hover) {
-  vaadin-menu-bar-button vaadin-menu-bar-item:not([disabled]):hover {
+  /* Increase specificity to reset hover styles */
+  vaadin-menu-bar-button vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
     background: transparent;
   }
 }
