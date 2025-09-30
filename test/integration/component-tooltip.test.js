@@ -173,6 +173,17 @@ before(() => {
       expect(spy.called).to.be.false;
     });
 
+    it('should not fire target mousedown listeners on overlay mousedown', () => {
+      const spy = sinon.spy();
+      tooltip.target.addEventListener('mousedown', spy);
+
+      mouseenter(tooltip.target);
+      const content = tooltip.querySelector('[slot="overlay"]');
+      mousedown(content);
+
+      expect(spy.called).to.be.false;
+    });
+
     it('should set has-tooltip attribute on the element', () => {
       expect(element.hasAttribute('has-tooltip')).to.be.true;
     });

@@ -86,6 +86,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
         @click="${this.__onOverlayClick}"
+        @mousedown="${this.__onOverlayMouseDown}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         modeless
