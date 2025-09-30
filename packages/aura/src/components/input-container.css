@@ -1,6 +1,6 @@
 :where(:root, :host, [theme]) {
   --vaadin-input-field-background: var(--aura-surface);
-  --vaadin-input-field-error-color: var(--aura-red);
+  --vaadin-input-field-error-color: var(--aura-red-text);
 }
 
 ::part(input-field),
