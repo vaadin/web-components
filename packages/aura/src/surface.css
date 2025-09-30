@@ -18,6 +18,8 @@ vaadin-menu-bar-button,
 vaadin-message-input,
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
+vaadin-upload,
+vaadin-upload-file,
 ::part(input-field),
 ::part(overlay) {
   --aura-surface-opacity: 0.5;
