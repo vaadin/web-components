@@ -21,7 +21,10 @@ vaadin-side-nav-item::part(content),
 vaadin-upload,
 vaadin-upload-file,
 ::part(input-field),
-::part(overlay) {
+::part(overlay),
+vaadin-confirm-dialog::part(overlay),
+vaadin-dialog::part(overlay),
+vaadin-login-overlay::part(overlay) {
   --aura-surface-opacity: 0.5;
 
   --aura-surface-solid: light-dark(
