@@ -54,22 +54,25 @@ describe('button', () => {
   });
 
   describe('icon', () => {
-    const PREFIX_ICON = '<vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>';
-    const SUFFIX_ICON = '<vaadin-icon icon="vaadin:reply" slot="suffix"></vaadin-icon>';
+    const getIcon = (slot) => `
+      <vaadin-icon
+        icon="vaadin:reply"
+         ${slot ? `slot="${slot}"` : ''}
+      ></vaadin-icon>
+    `;
 
     it('before text', async () => {
-      element.insertAdjacentHTML('afterbegin', PREFIX_ICON);
+      element.insertAdjacentHTML('afterbegin', getIcon('prefix'));
       await visualDiff(div, 'icon-before-text');
     });
 
     it('after text', async () => {
-      element.insertAdjacentHTML('beforeend', SUFFIX_ICON);
+      element.insertAdjacentHTML('beforeend', getIcon('suffix'));
       await visualDiff(div, 'icon-after-text');
     });
 
     it('without text', async () => {
-      element.textContent = '';
-      element.insertAdjacentHTML('afterbegin', PREFIX_ICON);
+      element.innerHTML = getIcon('');
       await visualDiff(div, 'icon-without-text');
     });
   });

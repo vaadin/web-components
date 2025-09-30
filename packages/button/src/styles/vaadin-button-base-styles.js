@@ -43,9 +43,12 @@ export const buttonStyles = css`
 
   .vaadin-button-container,
   [part='prefix'],
-  [part='suffix'],
-  [part='label'] {
+  [part='suffix'] {
     display: contents;
+  }
+
+  [part='label'] {
+    display: inline-flex;
   }
 
   :host(:is([focus-ring], :focus-visible)) {
