@@ -210,6 +210,8 @@ export type GridDefaultItem = any;
  * `resize-handle`            | Handle for resizing the columns
  * `empty-state`              | The container for the content to be displayed when there are no body rows to show
  * `reorder-ghost`            | Ghost element of the header cell being dragged
+ * `header`                   | Grid header toolbar container for custom content above the grid table
+ * `footer`                   | Grid footer toolbar container for custom content below the grid table
  *
  * The following state attributes are available for styling:
  *

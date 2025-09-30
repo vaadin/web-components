@@ -39,6 +39,13 @@ snapshots["vaadin-grid host default"] =
 
 snapshots["vaadin-grid shadow default"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   style="touch-action: none;"
 >
@@ -251,6 +258,13 @@ snapshots["vaadin-grid shadow default"] =
   <div part="reorder-ghost">
   </div>
 </div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
+</div>
 <slot name="tooltip">
 </slot>
 <div
@@ -263,6 +277,13 @@ snapshots["vaadin-grid shadow default"] =
 
 snapshots["vaadin-grid shadow selected"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   style="touch-action: none;"
 >
@@ -476,6 +497,13 @@ snapshots["vaadin-grid shadow selected"] =
   <div part="reorder-ghost">
   </div>
 </div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
+</div>
 <slot name="tooltip">
 </slot>
 <div
@@ -488,6 +516,13 @@ snapshots["vaadin-grid shadow selected"] =
 
 snapshots["vaadin-grid shadow details opened"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   style="touch-action: none;"
 >
@@ -700,6 +735,13 @@ snapshots["vaadin-grid shadow details opened"] =
   <div part="reorder-ghost">
   </div>
 </div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
+</div>
 <slot name="tooltip">
 </slot>
 <div
@@ -712,6 +754,13 @@ snapshots["vaadin-grid shadow details opened"] =
 
 snapshots["vaadin-grid shadow hidden column"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   scrolling=""
   style="touch-action: none;"
@@ -873,6 +922,13 @@ snapshots["vaadin-grid shadow hidden column"] =
   <div part="reorder-ghost">
   </div>
 </div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
+</div>
 <slot name="tooltip">
 </slot>
 <div
@@ -885,6 +941,13 @@ snapshots["vaadin-grid shadow hidden column"] =
 
 snapshots["vaadin-grid shadow hidden column selected"] = 
 `<div
+  id="gridHeader"
+  part="header"
+>
+  <slot name="header">
+  </slot>
+</div>
+<div
   id="scroller"
   scrolling=""
   style="touch-action: none;"
@@ -1046,6 +1109,13 @@ snapshots["vaadin-grid shadow hidden column selected"] =
   </table>
   <div part="reorder-ghost">
   </div>
+</div>
+<div
+  id="gridFooter"
+  part="footer"
+>
+  <slot name="footer">
+  </slot>
 </div>
 <slot name="tooltip">
 </slot>

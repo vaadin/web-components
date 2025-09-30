@@ -6,15 +6,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grid</title>
     <script type="module" src="./common.js"></script>
+    <style>
+      body {
+        font-family: var(--lumo-font-family);
+        padding: 20px;
+      }
+      
+      h2 {
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: var(--lumo-header-text-color);
+      }
+      
+      vaadin-grid {
+        margin-bottom: 40px;
+        height: 400px;
+      }
+      
+      /* Header and footer slot styles */
+      [part="header"] {
+        background: var(--lumo-contrast-5pct);
+        border-bottom: 1px solid var(--lumo-contrast-10pct);
+        padding: var(--lumo-space-s) var(--lumo-space-m);
+        gap: var(--lumo-space-m);
+      }
+      
+      [part="footer"] {
+        background: var(--lumo-contrast-5pct);
+        border-top: 1px solid var(--lumo-contrast-10pct);
+        padding: var(--lumo-space-xs) var(--lumo-space-m);
+        font-size: var(--lumo-font-size-s);
+        color: var(--lumo-secondary-text-color);
+        gap: var(--lumo-space-s);
+      }
+      
+      .flex-grow {
+        flex: 1;
+      }
+    </style>
   </head>
   <body>
+    <h1>Grid Examples</h1>
     <script type="module">
       import '@vaadin/grid/all-imports';
       import '@vaadin/tooltip';
+      import '@vaadin/button';
+      import '@vaadin/text-field';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+    </script>
 
-      const grid = document.querySelector('vaadin-grid');
+    <h2>Grid with Header and Footer Slots (Flex Layout)</h2>
+    <vaadin-grid id="header-footer-grid">
+      <!-- Multiple elements directly in header slot using flex layout -->
+      <vaadin-icon slot="header" icon="vaadin:grid-h" style="color: var(--lumo-primary-color);"></vaadin-icon>
+      <strong slot="header">User Management</strong>
+      <span slot="header" class="flex-grow"></span>
+      <vaadin-text-field slot="header" placeholder="Search users..." clear-button-visible style="width: 250px;">
+        <vaadin-icon slot="prefix" icon="vaadin:search"></vaadin-icon>
+      </vaadin-text-field>
+      <vaadin-button slot="header" theme="primary">
+        <vaadin-icon icon="vaadin:plus" slot="prefix"></vaadin-icon>
+        Add User
+      </vaadin-button>
+      
+      <vaadin-grid-selection-column></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" header="Name"></vaadin-grid-column>
+      <vaadin-grid-column path="email" header="Email"></vaadin-grid-column>
+      <vaadin-grid-column path="role" header="Role"></vaadin-grid-column>
+      <vaadin-grid-column path="status" header="Status"></vaadin-grid-column>
+      
+      <!-- Multiple elements in footer -->
+      <span slot="footer">Total: <strong id="user-count">0</strong> users</span>
+      <span slot="footer" class="flex-grow"></span>
+      <span slot="footer">Selected: <strong id="selected-count">0</strong></span>
+      <span slot="footer" style="margin-left: var(--lumo-space-xl);">Last updated: <span id="update-time">Never</span></span>
+    </vaadin-grid>
 
-      grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+    <h2>Grid with Toolbar Actions</h2>
+    <vaadin-grid id="toolbar-grid">
+      <!-- Header with title and actions -->
+      <h3 slot="header" style="margin: 0;">Products</h3>
+      <div slot="header" style="margin-left: auto; display: flex; gap: var(--lumo-space-s);">
+        <vaadin-button theme="tertiary">
+          <vaadin-icon icon="vaadin:download" slot="prefix"></vaadin-icon>
+          Export
+        </vaadin-button>
+        <vaadin-button theme="tertiary">
+          <vaadin-icon icon="vaadin:upload" slot="prefix"></vaadin-icon>
+          Import
+        </vaadin-button>
+        <vaadin-button theme="error tertiary">
+          <vaadin-icon icon="vaadin:trash" slot="prefix"></vaadin-icon>
+          Delete
+        </vaadin-button>
+      </div>
+      
+      <vaadin-grid-selection-column></vaadin-grid-selection-column>
+      <vaadin-grid-filter-column path="product" header="Product"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="category" header="Category"></vaadin-grid-filter-column>
+      <vaadin-grid-column path="price" header="Price"></vaadin-grid-column>
+      <vaadin-grid-column path="stock" header="Stock"></vaadin-grid-column>
+      
+      <!-- Footer with status indicator -->
+      <span slot="footer" style="display: flex; align-items: center; gap: var(--lumo-space-xs);">
+        <span style="width: 8px; height: 8px; background: var(--lumo-success-color); border-radius: 50%;"></span>
+        All systems operational
+      </span>
+      <span slot="footer" style="margin-left: auto;">
+        Showing <strong id="product-count">0</strong> of <strong id="product-total">0</strong> products
+      </span>
+    </vaadin-grid>
+
+    <h2>Original Tree Grid Example</h2>
+    <vaadin-grid id="tree-grid" item-id-path="name">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+
+      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
+    </vaadin-grid>
+
+    <script type="module">
+      // Sample data for header-footer grid
+      const users = [
+        { name: 'John Smith', email: 'john.smith@example.com', role: 'Administrator', status: 'Active' },
+        { name: 'Jane Doe', email: 'jane.doe@example.com', role: 'Editor', status: 'Active' },
+        { name: 'Bob Johnson', email: 'bob.j@example.com', role: 'Viewer', status: 'Inactive' },
+        { name: 'Alice Williams', email: 'alice.w@example.com', role: 'Editor', status: 'Active' },
+        { name: 'Charlie Brown', email: 'charlie.b@example.com', role: 'Viewer', status: 'Active' },
+        { name: 'Diana Prince', email: 'diana.p@example.com', role: 'Administrator', status: 'Active' },
+        { name: 'Edward Norton', email: 'edward.n@example.com', role: 'Editor', status: 'Active' },
+        { name: 'Fiona Green', email: 'fiona.g@example.com', role: 'Viewer', status: 'Inactive' },
+      ];
+
+      const headerFooterGrid = document.querySelector('#header-footer-grid');
+      headerFooterGrid.items = users;
+      document.querySelector('#user-count').textContent = users.length;
+      document.querySelector('#update-time').textContent = new Date().toLocaleTimeString();
+      
+      // Update selected count
+      headerFooterGrid.addEventListener('selected-items-changed', (e) => {
+        document.querySelector('#selected-count').textContent = e.detail.value.length;
+      });
+      
+      // Handle search
+      const searchField = headerFooterGrid.querySelector('vaadin-text-field[slot="header"]');
+      searchField.addEventListener('value-changed', (e) => {
+        const searchTerm = e.detail.value.toLowerCase();
+        if (searchTerm) {
+          headerFooterGrid.items = users.filter(
+            (user) =>
+              user.name.toLowerCase().includes(searchTerm) ||
+              user.email.toLowerCase().includes(searchTerm) ||
+              user.role.toLowerCase().includes(searchTerm),
+          );
+        } else {
+          headerFooterGrid.items = users;
+        }
+        document.querySelector('#user-count').textContent = headerFooterGrid.items.length;
+      });
+
+      // Sample data for toolbar grid
+      const products = [
+        { product: 'Laptop Pro', category: 'Electronics', price: '$1,299', stock: 45 },
+        { product: 'Wireless Mouse', category: 'Accessories', price: '$29', stock: 120 },
+        { product: 'USB-C Cable', category: 'Accessories', price: '$19', stock: 200 },
+        { product: 'Monitor 27"', category: 'Electronics', price: '$399', stock: 30 },
+        { product: 'Keyboard Mechanical', category: 'Accessories', price: '$79', stock: 85 },
+        { product: 'Webcam HD', category: 'Electronics', price: '$99', stock: 60 },
+        { product: 'Desk Lamp LED', category: 'Office', price: '$49', stock: 95 },
+        { product: 'Office Chair', category: 'Furniture', price: '$299', stock: 25 },
+        { product: 'Standing Desk', category: 'Furniture', price: '$599', stock: 15 },
+        { product: 'Headphones', category: 'Electronics', price: '$149', stock: 70 },
+      ];
+
+      const toolbarGrid = document.querySelector('#toolbar-grid');
+      toolbarGrid.items = products;
+      document.querySelector('#product-count').textContent = products.length;
+      document.querySelector('#product-total').textContent = products.length;
+
+      // Original tree grid setup
+      const treeGrid = document.querySelector('#tree-grid');
+      treeGrid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
         // Let's have 100 root-level items and 5 items on every child level
         const levelSize = parentItem ? 5 : 100;
 
@@ -30,20 +206,10 @@
         cb(pageItems, levelSize);
       };
 
-      const tooltip = document.querySelector('[slot="tooltip"]');
+      const tooltip = treeGrid.querySelector('[slot="tooltip"]');
       tooltip.generator = ({ column, item }) => {
         return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
       };
     </script>
-
-    <vaadin-grid item-id-path="name">
-      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
-      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
-    </vaadin-grid>
   </body>
 </html>

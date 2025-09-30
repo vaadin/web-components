@@ -259,6 +259,11 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  *
+ * @slot header - Slot for custom content to be placed above the grid table, typically used for toolbars and controls
+ * @slot footer - Slot for custom content to be placed below the grid table, typically used for status information
+ * @slot empty-state - Slot for content to be displayed when there are no body rows to show
+ * @slot tooltip - Slot for tooltip overlay
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes GridMixin
@@ -276,6 +281,10 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   /** @protected */
   render() {
     return html`
+      <div part="header" id="gridHeader">
+        <slot name="header"></slot>
+      </div>
+
       <div
         id="scroller"
         ?safari="${this._safari}"
@@ -305,6 +314,10 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         </table>
 
         <div part="reorder-ghost"></div>
+      </div>
+
+      <div part="footer" id="gridFooter">
+        <slot name="footer"></slot>
       </div>
 
       <slot name="tooltip"></slot>

@@ -101,6 +101,72 @@ describe('min-height', () => {
     });
   });
 
+  describe('with header slot', () => {
+    beforeEach(async () => {
+      const headerDiv = document.createElement('div');
+      headerDiv.setAttribute('slot', 'header');
+      headerDiv.style.height = '50px';
+      headerDiv.textContent = 'Header Slot Content';
+      grid.appendChild(headerDiv);
+      flushGrid(grid);
+      await nextResize(grid);
+    });
+
+    it('should include header slot height in min-height', () => {
+      const height = grid.getBoundingClientRect().height;
+      const headerSlotHeight = grid.shadowRoot.querySelector('#gridHeader').getBoundingClientRect().height;
+      expect(headerSlotHeight).to.be.above(0);
+      expect(height).to.be.at.least(rowHeight + headerSlotHeight);
+    });
+  });
+
+  describe('with footer slot', () => {
+    beforeEach(async () => {
+      const footerDiv = document.createElement('div');
+      footerDiv.setAttribute('slot', 'footer');
+      footerDiv.style.height = '40px';
+      footerDiv.textContent = 'Footer Slot Content';
+      grid.appendChild(footerDiv);
+      flushGrid(grid);
+      await nextResize(grid);
+    });
+
+    it('should include footer slot height in min-height', () => {
+      const height = grid.getBoundingClientRect().height;
+      const footerSlotHeight = grid.shadowRoot.querySelector('#gridFooter').getBoundingClientRect().height;
+      expect(footerSlotHeight).to.be.above(0);
+      expect(height).to.be.at.least(rowHeight + footerSlotHeight);
+    });
+  });
+
+  describe('with header and footer slots', () => {
+    beforeEach(async () => {
+      const headerDiv = document.createElement('div');
+      headerDiv.setAttribute('slot', 'header');
+      headerDiv.style.height = '50px';
+      headerDiv.textContent = 'Header Slot Content';
+      grid.appendChild(headerDiv);
+
+      const footerDiv = document.createElement('div');
+      footerDiv.setAttribute('slot', 'footer');
+      footerDiv.style.height = '40px';
+      footerDiv.textContent = 'Footer Slot Content';
+      grid.appendChild(footerDiv);
+
+      flushGrid(grid);
+      await nextResize(grid);
+    });
+
+    it('should include both header and footer slot heights in min-height', () => {
+      const height = grid.getBoundingClientRect().height;
+      const headerSlotHeight = grid.shadowRoot.querySelector('#gridHeader').getBoundingClientRect().height;
+      const footerSlotHeight = grid.shadowRoot.querySelector('#gridFooter').getBoundingClientRect().height;
+      expect(headerSlotHeight).to.be.above(0);
+      expect(footerSlotHeight).to.be.above(0);
+      expect(height).to.be.at.least(rowHeight + headerSlotHeight + footerSlotHeight);
+    });
+  });
+
   describe('override', () => {
     beforeEach(() => {
       fixtureSync(`
