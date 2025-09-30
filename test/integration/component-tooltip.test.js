@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import { AccordionPanel } from '@vaadin/accordion/src/vaadin-accordion-panel.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
@@ -160,6 +161,27 @@ before(() => {
       const content = tooltip.querySelector('[slot="overlay"]');
       mousedown(content);
       expect(tooltipOverlay.opened).to.be.true;
+    });
+
+    it('should not fire target click listeners on overlay click', () => {
+      const spy = sinon.spy();
+      tooltip.target.addEventListener('click', spy);
+
+      mouseenter(tooltip.target);
+      tooltipOverlay.click();
+
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not fire target mousedown listeners on overlay mousedown', () => {
+      const spy = sinon.spy();
+      tooltip.target.addEventListener('mousedown', spy);
+
+      mouseenter(tooltip.target);
+      const content = tooltip.querySelector('[slot="overlay"]');
+      mousedown(content);
+
+      expect(spy.called).to.be.false;
     });
 
     it('should set has-tooltip attribute on the element', () => {
