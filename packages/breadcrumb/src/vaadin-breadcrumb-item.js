@@ -58,7 +58,7 @@ class BreadcrumbItem extends DisabledMixin(
   }
 
   static get experimental() {
-    return true;
+    return 'breadcrumbComponent';
   }
 
   static get styles() {
