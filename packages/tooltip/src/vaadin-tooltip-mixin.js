@@ -617,6 +617,13 @@ export const TooltipMixin = (superClass) =>
       }
     }
 
+    /** @protected */
+    __onOverlayClick(event) {
+      // Prevent click listeners from being called when
+      // the tooltip is slotted into the target element
+      event.stopPropagation();
+    }
+
     /** @private */
     __handleMouseLeave() {
       if (this.manual) {
