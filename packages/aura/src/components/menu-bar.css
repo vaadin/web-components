@@ -3,3 +3,9 @@
     border-inline-start-color: transparent;
   }
 }
+
+@media (any-hover: hover) {
+  vaadin-menu-bar-button vaadin-menu-bar-item:not([disabled]):hover {
+    background: transparent;
+  }
+}
