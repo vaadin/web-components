@@ -1,6 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
+
+// Enable experimental breadcrumb component
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
+
 import '../../src/vaadin-breadcrumb.js';
 import '../../src/vaadin-breadcrumb-item.js';
 
