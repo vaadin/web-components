@@ -1,0 +1,17 @@
+@container not style(--vaadin-menu-bar-gap) {
+  vaadin-menu-bar:not([has-single-button]) vaadin-menu-bar-button:not([first-visible]) {
+    border-inline-start-color: transparent;
+  }
+}
+
+@media (any-hover: hover) {
+  /* Increase specificity to reset hover styles */
+  vaadin-menu-bar-button vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
+    background: transparent;
+  }
+}
+
+vaadin-menu-bar-button[slot='overflow'] {
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+}

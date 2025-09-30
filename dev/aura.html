@@ -89,7 +89,8 @@
         const view = document.querySelector('.components-view');
 
         // Menu Bar
-        view.querySelector('vaadin-menu-bar').items = [
+        const menuBar = view.querySelector('vaadin-menu-bar');
+        menuBar.items = [
           {
             text: 'Actions',
             children: [
@@ -114,6 +115,15 @@
             ],
           },
         ];
+        view.querySelector('#filled-menu-bar').addEventListener('change', (e) => {
+          if (e.target.checked) {
+            menuBar.setAttribute('theme', 'filled');
+            menuBar.items[0].children[9].theme = 'danger filled';
+          } else {
+            menuBar.removeAttribute('theme');
+            menuBar.items[0].children[9].theme = 'danger';
+          }
+        });
 
         // Select
         view.querySelector('vaadin-select').renderer = (root) => {
@@ -579,8 +589,11 @@
                   </vaadin-radio-group>
                 </div>
 
-                <div class="aura-surface component">
+                <div class="aura-surface component column">
                   <vaadin-menu-bar></vaadin-menu-bar>
+                  <vaadin-checkbox id="filled-menu-bar" label="Filled">
+                    <vaadin-tooltip slot="tooltip" text="Apply the filled variant on the menu items"></vaadin-tooltip>
+                  </vaadin-checkbox>
                 </div>
 
                 <div class="aura-surface component wide">
