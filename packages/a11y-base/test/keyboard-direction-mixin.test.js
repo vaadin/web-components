@@ -245,6 +245,18 @@ const runTests = (defineHelper, baseMixin) => {
       tabKeyDown(items[5]);
       expect(element.focused).to.not.equal(items[0]);
     });
+
+    it('should not prevent default on Tab keydown with only one item present', () => {
+      element.innerHTML = '<div tabindex="0">Foo</div>';
+      items = element.children;
+      items[0].focus();
+
+      const spy = sinon.spy();
+      element.addEventListener('keydown', spy);
+      tabKeyDown(items[0]);
+
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
+    });
   });
 };
 

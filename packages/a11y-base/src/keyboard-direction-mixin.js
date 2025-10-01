@@ -104,11 +104,12 @@ export const KeyboardDirectionMixin = (superclass) =>
       if (
         this._tabNavigation &&
         key === 'Tab' &&
-        ((idx > currentIdx && event.shiftKey) || (idx < currentIdx && !event.shiftKey))
+        ((idx > currentIdx && event.shiftKey) || (idx < currentIdx && !event.shiftKey) || idx === currentIdx)
       ) {
         // Prevent "roving tabindex" logic and let the normal Tab behavior if
         // - currently on the first focusable item and Shift + Tab is pressed,
-        // - currently on the last focusable item and Tab is pressed.
+        // - currently on the last focusable item and Tab is pressed,
+        // - currently on the only focusable item and Tab is pressed
         return;
       }
 
