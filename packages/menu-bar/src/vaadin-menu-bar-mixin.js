@@ -873,11 +873,10 @@ export const MenuBarMixin = (superClass) =>
         // Hide tooltip on mouseover to disabled button
         this._hideTooltip();
       } else if (button !== this._expandedButton) {
-        const isOpened = this._subMenu.opened;
         // Switch sub-menu when moving cursor over another button
         // with children, regardless of whether openOnHover is set.
         // If the button has no children, keep the sub-menu opened.
-        if (button.item.children && (this.openOnHover || isOpened)) {
+        if (button.item.children && (this.openOnHover || this._subMenu.opened)) {
           this.__openSubMenu(button, false);
         }
 
