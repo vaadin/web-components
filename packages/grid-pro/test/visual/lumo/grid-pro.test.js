@@ -1,7 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-pro.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-pro-edit-column.css';
 import '../../not-animated-styles.js';

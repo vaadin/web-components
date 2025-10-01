@@ -1,7 +1,7 @@
 import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/field-highlighter.css';
 import '@vaadin/vaadin-lumo-styles/components/checkbox.css';
 import '@vaadin/vaadin-lumo-styles/components/checkbox-group.css';

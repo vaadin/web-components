@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../props.css';
+import '../../src/props/index.css';
 import '../../global.css';
 
 describe('sizing', () => {

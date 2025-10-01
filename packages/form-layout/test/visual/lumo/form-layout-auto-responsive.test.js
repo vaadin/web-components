@@ -1,7 +1,7 @@
 import { nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/form-layout.css';
 import '@vaadin/vaadin-lumo-styles/components/form-item.css';
 import '../../../vaadin-form-layout.js';
