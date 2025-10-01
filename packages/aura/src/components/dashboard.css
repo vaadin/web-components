@@ -15,6 +15,34 @@ vaadin-dashboard-widget {
     border-radius: var(--vaadin-dashboard-widget-border-radius);
   }
 
+  &::part(content) {
+    transition: 200ms;
+    transition-property: filter, opacity;
+  }
+
+  &:is([resize-mode], [move-mode])::part(content) {
+    opacity: 0.75;
+    filter: blur(10px);
+    clip-path: inset(0);
+    transition-duration: 50ms;
+  }
+}
+
+vaadin-dashboard-section {
+  vaadin-dashboard-widget {
+    transition: 200ms;
+    transition-property: filter, opacity;
+  }
+
+  &[move-mode] vaadin-dashboard-widget {
+    opacity: 0.75;
+    filter: blur(10px);
+    clip-path: inset(0);
+    transition-duration: 50ms;
+  }
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section) {
   &::part(move-forward-button),
   &::part(move-backward-button),
   &::part(resize-shrink-height-button),
@@ -64,22 +92,10 @@ vaadin-dashboard-widget {
   &[editable] {
     --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
   }
-
-  &::part(content) {
-    transition: 200ms;
-    transition-property: filter, opacity;
-  }
-
-  &:is([resize-mode], [move-mode])::part(content) {
-    opacity: 0.75;
-    filter: blur(10px);
-    clip-path: inset(0);
-    transition-duration: 50ms;
-  }
 }
 
 @media (any-hover: hover) {
-  vaadin-dashboard-widget {
+  :is(vaadin-dashboard-widget, vaadin-dashboard-section) {
     &::part(move-button):hover,
     &::part(remove-button):hover,
     &::part(resize-button):hover,
