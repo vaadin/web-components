@@ -5,14 +5,14 @@
  */
 @media lumo_components_upload-file {
   :host {
-    padding: var(--lumo-space-s) 0;
-    gap: 0 var(--lumo-space-xs);
+    padding: var(--vaadin-upload-file-padding, var(--lumo-space-s) 0);
+    gap: var(--vaadin-upload-file-gap, 0 var(--lumo-space-xs));
+    border-radius: var(--vaadin-upload-file-border-radius, var(--lumo-border-radius-s));
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   :host(:focus-visible) {
-    border-radius: var(--lumo-border-radius-s);
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
     outline-offset: calc(var(--_focus-ring-width) * -1);
   }
