@@ -21,10 +21,11 @@ vaadin-dashboard-widget {
   &::part(resize-grow-height-button),
   &::part(resize-shrink-width-button),
   &::part(resize-grow-width-button) {
-    background: var(--aura-surface-solid) padding-box;
+    background: var(--aura-surface) padding-box;
     color: var(--vaadin-text-color-secondary);
     border: 1px solid var(--vaadin-border-color);
     transition: 120ms color;
+    outline-offset: -1px;
   }
 
   &::part(resize-shrink-height-button),
@@ -50,6 +51,7 @@ vaadin-dashboard-widget {
     background: var(--aura-accent-color);
     color: var(--aura-accent-contrast);
     box-shadow: 0 0 0 3px var(--aura-surface);
+    outline-offset: 2px;
   }
 
   &::part(move-button),
@@ -61,6 +63,18 @@ vaadin-dashboard-widget {
 
   &[editable] {
     --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
+  }
+
+  &::part(content) {
+    transition: 200ms;
+    transition-property: filter, opacity;
+  }
+
+  &:is([resize-mode], [move-mode])::part(content) {
+    opacity: 0.75;
+    filter: blur(10px);
+    clip-path: inset(0);
+    transition-duration: 50ms;
   }
 }
 
