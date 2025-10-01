@@ -525,12 +525,12 @@ describe('open on hover', () => {
     expect(subMenu.listenOn).to.equal(buttons[0]);
   });
 
-  it('should close open sub-menu on mouseover on button without nested items', async () => {
+  it('should not close open sub-menu on mouseover on button without nested items', async () => {
     fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
     fire(buttons[1], openOnHoverEvent);
     await nextRender(subMenu);
-    expect(subMenu.opened).to.be.false;
+    expect(subMenu.opened).to.be.true;
   });
 
   it('should switch opened sub-menu on hover also when open-on-hover is false', async () => {
