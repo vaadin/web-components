@@ -455,4 +455,45 @@ describe('keyboard navigation', () => {
       });
     });
   });
+
+  describe('single button', () => {
+    beforeEach(async () => {
+      menu.items = [{ text: 'Item 1', children: [{ text: 'Item 1 1' }] }];
+      await nextUpdate(menu);
+      buttons = menu._buttons;
+      firstGlobalFocusable.focus();
+    });
+
+    it('should be focusable on Shift + Tab after closing and moving focus by default', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'Escape' });
+
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(document.activeElement).to.equal(buttons[0]);
+    });
+
+    it('should be focusable on Shift + Tab after closing and moving focus with Tab navigation', async () => {
+      menu.tabNavigation = true;
+
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'Escape' });
+
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(document.activeElement).to.equal(buttons[0]);
+    });
+  });
 });
