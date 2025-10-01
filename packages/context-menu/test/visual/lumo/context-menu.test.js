@@ -1,5 +1,6 @@
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/global.css';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/item.css';
 import '@vaadin/vaadin-lumo-styles/components/list-box.css';
@@ -177,6 +178,33 @@ describe('context-menu', () => {
           });
         });
       });
+    });
+  });
+
+  describe('dark', () => {
+    before(() => {
+      document.documentElement.setAttribute('theme', 'dark');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('theme');
+    });
+
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-context-menu>
+          <div style="padding: 10px">Target</div>
+        </vaadin-context-menu>
+      `);
+      element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+      await nextUpdate(element);
+    });
+
+    it('dark', async () => {
+      element.openOn = 'click';
+      element.firstElementChild.click();
+      await nextRender();
+      await visualDiff(document.body, 'dark');
     });
   });
 });
