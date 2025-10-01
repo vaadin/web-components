@@ -1,6 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/grid.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-selection-column.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-sort-column.css';

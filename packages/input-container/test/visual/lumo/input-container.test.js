@@ -1,7 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
-import '@vaadin/vaadin-lumo-styles/global.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
+import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/components/input-container.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../common.js';

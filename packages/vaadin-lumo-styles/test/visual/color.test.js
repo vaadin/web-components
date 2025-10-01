@@ -1,7 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../props.css';
-import '../../global.css';
+import '../../src/props/index.css';
+import '../../src/global/index.css';
 
 describe('color', () => {
   let wrapper;

@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/item.css';
 import '@vaadin/vaadin-lumo-styles/components/list-box.css';
 import '@vaadin/item';
