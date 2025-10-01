@@ -761,7 +761,8 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
+        const selector = this.tabNavigation ? '[focused]' : '[tabindex="0"]';
+        const target = this.querySelector(`vaadin-menu-bar-button${selector}`);
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
