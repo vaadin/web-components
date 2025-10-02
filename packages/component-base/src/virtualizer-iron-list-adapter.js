@@ -51,7 +51,11 @@ export class IronListAdapter {
       FIX_INVALID_ITEM_POSITIONING: 100,
     };
 
-    this.__resizeObserver = new ResizeObserver(() => this._resizeHandler());
+    // Use requestAnimationFrame to avoid performance issues with Safari
+    this.__resizeObserver = new ResizeObserver(() => {
+      const ironListAdapter = this;
+      requestAnimationFrame(() => ironListAdapter._resizeHandler());
+    });
 
     if (getComputedStyle(this.scrollTarget).overflow === 'visible') {
       this.scrollTarget.style.overflow = 'auto';
