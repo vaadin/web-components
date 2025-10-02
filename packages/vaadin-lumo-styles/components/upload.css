@@ -25,7 +25,7 @@
 
 :where(:root, :host) {
   --vaadin-upload-gap: 0;
-  --vaadin-upload-file-list-border-color: var(
+  --vaadin-upload-file-list-divider-color: var(
     --lumo-contrast-10pct
   );
 }
