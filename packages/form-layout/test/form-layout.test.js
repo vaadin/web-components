@@ -77,15 +77,13 @@ describe('form layout', () => {
     });
 
     it('should apply default --vaadin-form-layout-row-spacing', () => {
-      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-row-spacing')).to.equal('calc(8px * 2)');
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-row-spacing')).to.equal('16px');
       expect(getComputedStyle(item).marginTop).to.equal('8px');
       expect(getComputedStyle(item).marginBottom).to.equal('8px');
     });
 
     it('should apply default --vaadin-form-layout-column-spacing', () => {
-      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-column-spacing')).to.equal(
-        'calc(8px * 2)',
-      );
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-column-spacing')).to.equal('16px');
       expect(getComputedStyle(item).marginLeft).to.equal('8px');
       expect(getComputedStyle(item).marginRight).to.equal('8px');
     });
