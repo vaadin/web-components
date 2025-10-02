@@ -9,7 +9,6 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
-import { Tooltip } from './vaadin-tooltip.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -698,7 +697,7 @@ export const TooltipMixin = (superClass) =>
       const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
 
       if (this.markdown && content) {
-        const helpers = await Tooltip.__importMarkdownHelpers();
+        const helpers = await this.constructor.__importMarkdownHelpers();
         helpers.renderMarkdownToElement(this.__contentNode, content);
       } else {
         this.__contentNode.textContent = content || '';
@@ -732,10 +731,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private **/
     static __importMarkdownHelpers() {
-      if (!Tooltip.__markdownHelpers) {
-        Tooltip.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
+      if (!this.constructor.__markdownHelpers) {
+        this.constructor.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
       }
-      return Tooltip.__markdownHelpers;
+      return this.constructor.__markdownHelpers;
     }
 
     /**
