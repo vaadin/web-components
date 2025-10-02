@@ -431,6 +431,7 @@ export const gridStyles = css`
     z-index: 1;
     -webkit-backdrop-filter: var(--_reorder-curtain-filter);
     backdrop-filter: var(--_reorder-curtain-filter);
+    outline: 0;
   }
 
   :host([reordering]) [part~='cell'][reorder-status='allowed'] {
@@ -555,6 +556,11 @@ export const gridStyles = css`
     transform: translateX(var(--_grid-horizontal-scroll-position));
     inset-inline: 0;
     bottom: 0;
+  }
+
+  [part~='row']:focus-visible,
+  [part~='cell']:focus-visible {
+    outline: 0;
   }
 
   [part~='row']:focus-visible::after,
