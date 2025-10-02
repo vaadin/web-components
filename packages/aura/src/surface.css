@@ -24,7 +24,8 @@ vaadin-upload-file,
 ::part(overlay),
 vaadin-confirm-dialog::part(overlay),
 vaadin-dialog::part(overlay),
-vaadin-login-overlay::part(overlay) {
+vaadin-login-overlay::part(overlay),
+vaadin-crud-dialog::part(overlay) {
   --aura-surface-opacity: 0.5;
 
   --aura-surface-solid: light-dark(

@@ -3,17 +3,7 @@
   --vaadin-grid-background: linear-gradient(var(--aura-surface), var(--aura-surface)) var(--aura-background) padding-box;
 }
 
-vaadin-grid[theme~='no-border']::part(first-column-cell) {
-  --vaadin-grid-cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s) var(--vaadin-padding-xs)
-    var(--vaadin-padding-l);
-}
-
-vaadin-grid[theme~='no-border']::part(last-column-cell) {
-  --vaadin-grid-cell-padding: var(--vaadin-padding-xs) var(--vaadin-padding-l) var(--vaadin-padding-xs)
-    var(--vaadin-padding-s);
-}
-
-vaadin-grid::part(empty-state) {
+:is(vaadin-grid, vaadin-crud-grid)::part(empty-state) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,4 +12,16 @@ vaadin-grid::part(empty-state) {
 /* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
 vaadin-grid::part(active-nav-item) {
   --vaadin-grid-row-highlight-background-color: var(--vaadin-background-container);
+}
+
+vaadin-grid-sorter::part(indicators) {
+  transition: color 120ms;
+}
+
+:is(vaadin-grid, vaadin-crud)[theme~='column-borders'] {
+  --vaadin-grid-column-border-width: 1px;
+}
+
+:is(vaadin-grid, vaadin-crud)[theme~='no-row-borders'] {
+  --vaadin-grid-row-border-width: 0px;
 }
