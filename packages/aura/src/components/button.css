@@ -22,10 +22,8 @@
   box-shadow: var(--vaadin-button-shadow);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(
-  [theme~='primary'],
-  [theme~='tertiary']
-) {
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([theme~='primary'], [theme~='tertiary']) {
   background: var(--vaadin-button-background, var(--_background));
   --vaadin-button-border-color: var(--_accent-border);
 }
@@ -67,9 +65,8 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[disabled][theme~='primary']::part(
-    label
-  ) {
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[disabled][theme~='primary']::part(label) {
   color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
@@ -93,10 +90,8 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
 }
 
 @media (any-hover: hover) {
-  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):hover:not(
-      [disabled],
-      [active]
-    )::before {
+  /* prettier-ignore */
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):hover:not([disabled], [active])::before {
     opacity: 0.03;
   }
 
@@ -124,9 +119,8 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   background: oklch(from currentColor min(c, 1 - l + c) calc(c * 0.9) h);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary'][active]:not(
-    [disabled]
-  )::before {
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary'][active]:not([disabled])::before {
   opacity: 0.16;
 }
 
@@ -143,10 +137,8 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --aura-accent-dark: var(--aura-text-dark);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):is(
-  [theme~='danger'],
-  [theme~='error']
-) {
+/* prettier-ignore */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):is([theme~='danger'], [theme~='error']) {
   --aura-accent-light: var(--aura-red);
   --aura-accent-dark: var(--aura-red);
 }
