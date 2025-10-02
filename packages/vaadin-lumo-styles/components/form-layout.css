@@ -3,9 +3,11 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/components/form-layout.css';
-
-:is(:root, :host)::before {
-  --_lumo-vaadin-form-layout-inject: 1;
-  --_lumo-vaadin-form-layout-inject-modules: lumo_components_form-layout;
+:where(:root, :host) {
+  --vaadin-form-layout-label-spacing: 1em;
+  --vaadin-form-layout-label-width: 8em;
+  --vaadin-form-layout-column-spacing: var(
+    --lumo-space-l
+  );
+  --vaadin-form-layout-row-spacing: 0;
 }
