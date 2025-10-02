@@ -11,7 +11,7 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
     align-items: center;
     background: var(--${unsafeCSS(partName)}-background, transparent);
     background-origin: border-box;
-    border: var(--${unsafeCSS(partName)}-border-width, 0px) solid
+    border: var(--${unsafeCSS(partName)}-border-width, 0) solid
       var(--${unsafeCSS(partName)}-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--${unsafeCSS(partName)}-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
