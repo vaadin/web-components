@@ -731,10 +731,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private **/
     static __importMarkdownHelpers() {
-      if (!this.constructor.__markdownHelpers) {
-        this.constructor.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
+      if (!this.__markdownHelpers) {
+        this.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
       }
-      return this.constructor.__markdownHelpers;
+      return this.__markdownHelpers;
     }
 
     /**
