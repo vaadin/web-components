@@ -69,7 +69,7 @@ describe('tooltip', () => {
     // Preload markdown helpers to avoid dynamic import delays
     await element.__importMarkdownHelpers();
 
-    element.contentType = 'markdown';
+    element.markdown = true;
     element.text = `
 ## Tooltip Title
 

@@ -417,7 +417,6 @@ snapshots["vaadin-rich-text-editor host"] =
     </button>
   </vaadin-rich-text-editor-popup>
   <vaadin-tooltip
-    content-type="text"
     modeless=""
     slot="tooltip"
   >

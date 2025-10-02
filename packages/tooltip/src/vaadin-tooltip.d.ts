@@ -30,7 +30,7 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  *
  * ### Markdown Support
  *
- * The tooltip supports rendering Markdown content when the `contentType` property is set to `markdown`:
+ * The tooltip supports rendering Markdown content by setting the `markdown` property:
  *
  * ```html
  * <button id="info">Info</button>
@@ -54,7 +54,7 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  *
  * Attribute        | Description
  * -----------------|----------------------------------------
- * `content-type`   | Reflects the `contentType` property value.
+ * `markdown`       | Reflects the `markdown` property value.
  * `position`       | Reflects the `position` property value.
  *
  * ### Custom CSS Properties

@@ -17,7 +17,6 @@ snapshots["vaadin-avatar-group default"] =
     tabindex="0"
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -51,7 +50,6 @@ snapshots["vaadin-avatar-group items"] =
     with-tooltip=""
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -75,7 +73,6 @@ snapshots["vaadin-avatar-group items"] =
     with-tooltip=""
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -101,7 +98,6 @@ snapshots["vaadin-avatar-group items"] =
     tabindex="0"
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -141,7 +137,6 @@ snapshots["vaadin-avatar-group theme"] =
     with-tooltip=""
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -166,7 +161,6 @@ snapshots["vaadin-avatar-group theme"] =
     with-tooltip=""
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -193,7 +187,6 @@ snapshots["vaadin-avatar-group theme"] =
     theme="small"
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -267,7 +260,6 @@ snapshots["vaadin-avatar-group opened default"] =
     with-tooltip=""
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -291,7 +283,6 @@ snapshots["vaadin-avatar-group opened default"] =
     with-tooltip=""
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >
@@ -316,7 +307,6 @@ snapshots["vaadin-avatar-group opened default"] =
     tabindex="0"
   >
     <vaadin-tooltip
-      content-type="text"
       modeless=""
       slot="tooltip"
     >

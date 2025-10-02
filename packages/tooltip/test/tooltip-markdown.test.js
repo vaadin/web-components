@@ -16,29 +16,29 @@ describe('vaadin-tooltip content-type', () => {
     await tooltip.__importMarkdownHelpers();
   });
 
-  it('should have contentType property with default value text', () => {
-    expect(tooltip.contentType).to.equal('text');
+  it('should have markdown property with default value false', () => {
+    expect(tooltip.markdown).to.equal(false);
   });
 
-  it('should reflect contentType property to attribute', async () => {
-    expect(tooltip.getAttribute('content-type')).to.equal('text');
+  it('should reflect markdown property to attribute', async () => {
+    expect(tooltip.hasAttribute('markdown')).to.be.false;
 
-    tooltip.contentType = 'markdown';
+    tooltip.markdown = true;
     await nextUpdate(tooltip);
-    expect(tooltip.getAttribute('content-type')).to.equal('markdown');
+    expect(tooltip.hasAttribute('markdown')).to.be.true;
   });
 
-  describe('contentType text', () => {
-    it('should not parse markdown syntax', async () => {
+  describe('markdown disabled', () => {
+    it('should not parse markdown syntax by default', async () => {
       tooltip.text = '**Bold text** and *italic text*';
       await nextUpdate(tooltip);
       expect(contentNode.innerHTML).to.equal('**Bold text** and *italic text*');
     });
   });
 
-  describe('contentType markdown', () => {
+  describe('markdown enabled', () => {
     beforeEach(async () => {
-      tooltip.contentType = 'markdown';
+      tooltip.markdown = true;
       await nextUpdate(tooltip);
     });
 
@@ -105,24 +105,24 @@ describe('vaadin-tooltip content-type', () => {
     });
   });
 
-  describe('switching between content types', () => {
+  describe('switching between text and markdown', () => {
     it('should switch from text to markdown', async () => {
       tooltip.text = '**Bold text**';
       await nextUpdate(tooltip);
       expect(contentNode.innerHTML).to.equal('**Bold text**');
 
-      tooltip.contentType = 'markdown';
+      tooltip.markdown = true;
       await nextUpdate(tooltip);
       expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Bold text</strong></p>');
     });
 
     it('should switch from markdown to text', async () => {
-      tooltip.contentType = 'markdown';
+      tooltip.markdown = true;
       tooltip.text = '**Bold text**';
       await nextUpdate(tooltip);
       expect(contentNode.innerHTML.trim()).to.equal('<p><strong>Bold text</strong></p>');
 
-      tooltip.contentType = 'text';
+      tooltip.markdown = false;
       await nextUpdate(tooltip);
       expect(contentNode.innerHTML).to.equal('**Bold text**');
     });
@@ -137,7 +137,7 @@ describe('vaadin-tooltip content-type', () => {
       expect(spy.callCount).to.equal(1);
       expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '**Bold text**' });
 
-      tooltip.contentType = 'markdown';
+      tooltip.markdown = true;
       await nextUpdate(tooltip);
 
       expect(spy.callCount).to.equal(2);

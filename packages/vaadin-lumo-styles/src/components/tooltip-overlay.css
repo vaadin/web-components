@@ -17,9 +17,12 @@
     line-height: var(--lumo-line-height-s);
   }
 
-  :host(:not([content-type='markdown'])) [part='content'] {
-    white-space: pre-wrap;
+  [part='content'] {
     padding: var(--lumo-space-xs) var(--lumo-space-s);
+  }
+
+  :host(:not([markdown])) [part='content'] {
+    white-space: pre-wrap;
   }
 
   :host([position^='top'][top-aligned]) [part='overlay'],
