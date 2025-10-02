@@ -16,7 +16,6 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-flow: var(--_form-item-labels-above, column) nowrap;
     justify-self: stretch;
-    margin: calc(0.5 * var(--_row-spacing, 1em)) 0;
   }
 
   :host([label-position='top']) {
