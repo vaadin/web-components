@@ -329,6 +329,19 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
+         * When enabled, the tooltip text is rendered as Markdown.
+         *
+         * **Note:** Using Markdown is discouraged if accessibility of the tooltip
+         * content is essential, as semantics of the rendered HTML content
+         * (headers, lists, ...) will not be conveyed to assistive technologies.
+         */
+        markdown: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Element used to link with the `aria-describedby`
          * attribute. When not set, defaults to `target`.
          * @protected
@@ -447,9 +460,8 @@ export const TooltipMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('text') || props.has('generator') || props.has('context')) {
+      if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
         this.__updateContent();
-        this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       }
     }
 
@@ -681,8 +693,17 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __updateContent() {
-      this.__contentNode.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+    async __updateContent() {
+      const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+
+      if (this.markdown && content) {
+        const helpers = await this.constructor.__importMarkdownHelpers();
+        helpers.renderMarkdownToElement(this.__contentNode, content);
+      } else {
+        this.__contentNode.textContent = content || '';
+      }
+
+      this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
 
@@ -706,6 +727,14 @@ export const TooltipMixin = (superClass) =>
           addValueToAttribute(target, 'aria-describedby', this._uniqueId);
         });
       }
+    }
+
+    /** @private **/
+    static __importMarkdownHelpers() {
+      if (!this.__markdownHelpers) {
+        this.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
+      }
+      return this.__markdownHelpers;
     }
 
     /**

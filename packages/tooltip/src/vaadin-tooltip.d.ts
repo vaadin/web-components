@@ -28,6 +28,19 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  * <vaadin-tooltip text="Click to save changes" for="confirm"></vaadin-tooltip>
  * ```
  *
+ * ### Markdown Support
+ *
+ * The tooltip supports rendering Markdown content by setting the `markdown` property:
+ *
+ * ```html
+ * <button id="info">Info</button>
+ * <vaadin-tooltip
+ *   text="**Important:** Click to view *detailed* information"
+ *   markdown
+ *   for="info">
+ * </vaadin-tooltip>
+ * ```
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
@@ -41,6 +54,7 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  *
  * Attribute        | Description
  * -----------------|----------------------------------------
+ * `markdown`       | Reflects the `markdown` property value.
  * `position`       | Reflects the `position` property value.
  *
  * ### Custom CSS Properties

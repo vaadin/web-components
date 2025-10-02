@@ -36,6 +36,7 @@
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@vaadin/a11y-base": "25.0.0-alpha20",
     "@vaadin/component-base": "25.0.0-alpha20",
+    "@vaadin/markdown": "25.0.0-alpha20",
     "@vaadin/overlay": "25.0.0-alpha20",
     "@vaadin/popover": "25.0.0-alpha20",
     "@vaadin/vaadin-themable-mixin": "25.0.0-alpha20",
