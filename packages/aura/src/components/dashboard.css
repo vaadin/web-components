@@ -87,6 +87,7 @@ vaadin-dashboard-section {
   &::part(resize-button) {
     color: var(--vaadin-text-color-disabled);
     transition: 120ms color;
+    outline-offset: -2px;
   }
 
   &[editable] {
