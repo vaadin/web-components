@@ -5,14 +5,29 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+addGlobalThemeStyles(
+  'vaadin-form-layout-base',
+  css`
+    @layer vaadin.base {
+      :where(html) {
+        --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
+        --vaadin-form-layout-label-width: 8em;
+        --vaadin-form-layout-column-spacing: var(--vaadin-gap-l);
+        --vaadin-form-layout-row-spacing: var(--vaadin-gap-l);
+      }
+    }
+  `,
+);
 
 export const formLayoutStyles = css`
   :host {
     /* Default values */
-    --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
-    --vaadin-form-layout-label-width: 8em;
-    --vaadin-form-layout-column-spacing: calc(var(--vaadin-gap-s) * 2);
-    --vaadin-form-layout-row-spacing: calc(var(--vaadin-gap-s) * 2);
+    --_label-spacing: var(--vaadin-form-layout-label-spacing);
+    --_label-width: var(--vaadin-form-layout-label-width);
+    --_column-spacing: var(--vaadin-form-layout-column-spacing);
+    --_row-spacing: var(--vaadin-form-layout-row-spacing);
 
     align-self: stretch;
     display: block;
@@ -35,7 +50,7 @@ export const formLayoutStyles = css`
     flex-shrink: 0;
 
     /* Margins make spacing between the columns */
-    margin-inline: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+    margin-inline: calc(0.5 * var(--_column-spacing));
   }
 
   #layout ::slotted(br) {
@@ -46,13 +61,11 @@ export const formLayoutStyles = css`
     /* Column width */
     --_column-width: var(--vaadin-field-default-width, 12em);
     --_column-width-labels-above: var(--_column-width);
-    --_column-width-labels-aside: calc(
-      var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
-    );
+    --_column-width-labels-aside: calc(var(--_column-width) + var(--_label-width) + var(--_label-spacing));
 
     /* Column gap */
-    --_min-total-gap: calc((var(--_min-columns) - 1) * var(--vaadin-form-layout-column-spacing));
-    --_max-total-gap: calc((var(--_max-columns) - 1) * var(--vaadin-form-layout-column-spacing));
+    --_min-total-gap: calc((var(--_min-columns) - 1) * var(--_column-spacing));
+    --_max-total-gap: calc((var(--_max-columns) - 1) * var(--_column-spacing));
 
     /* Minimum form layout width */
     --_min-width-labels-above: calc(var(--_min-columns) * var(--_column-width-labels-above) + var(--_min-total-gap));
@@ -78,7 +91,7 @@ export const formLayoutStyles = css`
     --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
-    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
+    gap: var(--_row-spacing) var(--_column-spacing);
 
     /*
       Auto-columns can be created when an item's colspan exceeds the rendered column count.
