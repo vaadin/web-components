@@ -19,7 +19,7 @@ export const crudStyles = css`
     --vaadin-crud-editor-max-width: 40%;
     border: var(--vaadin-crud-border-width, 1px) solid
       var(--vaadin-crud-border-color, var(--vaadin-border-color-secondary));
-    border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-l));
+    border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-m));
     height: 400px;
     width: 100%;
     background: var(--vaadin-crud-background, var(--vaadin-background-color));
@@ -131,11 +131,11 @@ export const crudStyles = css`
   }
 
   [part='header'] {
-    color: var(--vaadin-crud-header-color, var(--vaadin-text-color));
-    font-size: var(--vaadin-crud-header-font-size, 1em);
-    font-weight: var(--vaadin-crud-header-font-weight, 600);
-    line-height: var(--vaadin-crud-header-line-height, inherit);
-    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding-m));
+    color: var(--vaadin-crud-header-color, var(--vaadin-dialog-title-color, var(--vaadin-text-color)));
+    font-size: var(--vaadin-crud-header-font-size, var(--vaadin-dialog-title-font-size, 1em));
+    font-weight: var(--vaadin-crud-header-font-weight, var(--vaadin-dialog-title-font-weight, 600));
+    line-height: var(--vaadin-crud-header-line-height, var(--vaadin-dialog-title-line-height, inherit));
+    padding: var(--vaadin-crud-header-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
   }
 
   ::slotted([slot='header']) {
@@ -146,7 +146,8 @@ export const crudStyles = css`
   }
 
   ::slotted([slot='form']) {
-    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding-m));
+    padding: var(--vaadin-crud-form-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
+    padding-top: 0;
   }
 
   [part='footer'] {
@@ -156,10 +157,15 @@ export const crudStyles = css`
     display: flex;
     flex: none;
     gap: var(--vaadin-crud-footer-gap, var(--vaadin-gap-s));
-    padding: var(--vaadin-crud-footer-padding, var(--vaadin-padding-m));
+    padding: var(--vaadin-crud-footer-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
   }
 
   ::slotted([slot='delete-button']) {
     margin-inline-start: auto;
+  }
+
+  :host([theme~='no-border']) {
+    border: 0;
+    border-radius: 0;
   }
 `;

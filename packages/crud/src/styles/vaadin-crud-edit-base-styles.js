@@ -16,7 +16,7 @@ export const crudEditStyles = css`
     background: currentColor;
     display: block;
     height: var(--vaadin-icon-size, 1lh);
-    mask: var(--_vaadin-icon-edit) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+    mask: var(--_vaadin-icon-pen) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 
