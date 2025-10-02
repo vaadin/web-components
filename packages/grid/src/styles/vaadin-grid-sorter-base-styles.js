@@ -28,6 +28,7 @@ export const gridSorterStyles = css`
     position: relative;
     flex: none;
     height: 1lh;
+    color: var(--vaadin-text-color-disabled);
   }
 
   [part='order'] {
@@ -35,6 +36,7 @@ export const gridSorterStyles = css`
     vertical-align: super;
     font-size: 0.75em;
     line-height: 1;
+    color: var(--vaadin-text-color-secondary);
   }
 
   [part='indicators']::before {
@@ -54,6 +56,16 @@ export const gridSorterStyles = css`
 
   :host([direction='desc']) [part='indicators']::before {
     padding-block: 6px 0;
+  }
+
+  :host([direction]) [part='indicators'] {
+    color: var(--vaadin-text-color-secondary);
+  }
+
+  @media (any-hover: hover) {
+    :host(:hover) [part='indicators'] {
+      color: var(--vaadin-text-color);
+    }
   }
 
   @media (forced-colors: active) {
