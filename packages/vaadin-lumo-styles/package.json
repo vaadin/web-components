@@ -28,6 +28,7 @@
     "*.d.ts",
     "*.js",
     "!gulpfile.js",
+    "!postcss.config.js",
     "components/*.css",
     "dist",
     "mixins/*.d.ts",
