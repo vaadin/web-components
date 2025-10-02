@@ -28,7 +28,7 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * <button id="info">Info</button>
  * <vaadin-tooltip
  *   text="**Important:** Click to view *detailed* information"
- *   content-type="markdown"
+ *   markdown
  *   for="info">
  * </vaadin-tooltip>
  * ```

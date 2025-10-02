@@ -3,7 +3,7 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Tooltip } from '../src/vaadin-tooltip.js';
 
-describe('vaadin-tooltip content-type', () => {
+describe('markdown', () => {
   let tooltip, overlay, contentNode;
 
   before(async () => {

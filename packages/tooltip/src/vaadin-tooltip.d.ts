@@ -36,7 +36,7 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  * <button id="info">Info</button>
  * <vaadin-tooltip
  *   text="**Important:** Click to view *detailed* information"
- *   content-type="markdown"
+ *   markdown
  *   for="info">
  * </vaadin-tooltip>
  * ```
