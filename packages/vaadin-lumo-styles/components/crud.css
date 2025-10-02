@@ -9,10 +9,10 @@
 @import '../src/components/crud-edit.css';
 @import '../src/components/crud.css';
 @import '../src/components/dialog-overlay.css';
-@import '../src/components/form-layout.css';
 @import '../src/components/grid.css';
 @import './button.css';
 @import './confirm-dialog.css';
+@import './form-layout.css';
 @import './grid-filter.css';
 @import './grid-sorter.css';
 @import './text-field.css';
