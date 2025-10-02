@@ -2,8 +2,8 @@
   --vaadin-upload-background: var(--aura-surface) padding-box;
   --vaadin-upload-border: 1px solid var(--vaadin-border-color-secondary);
   --vaadin-upload-padding: var(--vaadin-padding-s);
-  --vaadin-upload-file-list-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-upload-file-list-border-width: 1px;
+  --vaadin-upload-file-list-divider-color: var(--vaadin-border-color-secondary);
+  --vaadin-upload-file-list-divider-width: 1px;
   --vaadin-upload-file-error-color: var(--vaadin-text-color-secondary);
   --vaadin-upload-file-warning-color: var(--aura-red);
   --vaadin-upload-file-done-color: var(--aura-green);
@@ -124,7 +124,7 @@ vaadin-upload[theme~='no-border'] {
   --vaadin-upload-padding: 0;
   --vaadin-upload-background: transparent;
   --vaadin-upload-border: none;
-  --vaadin-upload-file-list-border-width: 0;
+  --vaadin-upload-file-list-divider-width: 0;
   --_divider-offset-start: 0px;
   --_divider-offset-end: 0px;
   outline-offset: 2px;

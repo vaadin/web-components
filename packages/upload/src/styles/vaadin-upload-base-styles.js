@@ -9,11 +9,8 @@ import { css } from 'lit';
 export const uploadStyles = css`
   :host {
     background: var(--vaadin-upload-background, transparent);
-    border: var(
-      --vaadin-upload-border,
-      var(--vaadin-upload-border-width, 1px) solid
-        var(--vaadin-upload-border-color, var(--vaadin-border-color-secondary))
-    );
+    border: var(--vaadin-upload-border-width, 1px) solid
+      var(--vaadin-upload-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-upload-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
     display: flex;

@@ -27,10 +27,7 @@ export const uploadFileListStyles = css`
   }
 
   ::slotted(li:not(:last-of-type)) {
-    border-bottom: var(
-      --vaadin-upload-file-list-border,
-      var(--vaadin-upload-file-list-border-width, 1px) solid
-        var(--vaadin-upload-file-list-border-color, var(--vaadin-border-color-secondary))
-    );
+    border-bottom: var(--vaadin-upload-file-list-divider-width, 1px) solid
+      var(--vaadin-upload-file-list-divider-color, var(--vaadin-border-color-secondary));
   }
 `;

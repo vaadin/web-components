@@ -84,11 +84,8 @@ export const uploadFileStyles = css`
 
   button {
     background: var(--vaadin-upload-file-button-background, transparent);
-    border: var(
-      --vaadin-upload-file-button-border,
-      var(--vaadin-upload-file-button-border-width, 1px) solid
-        var(--vaadin-upload-file-button-border-color, transparent)
-    );
+    border: var(--vaadin-upload-file-button-border-width, 1px) solid
+      var(--vaadin-upload-file-button-border-color, transparent);
     border-radius: var(--vaadin-upload-file-button-border-radius, var(--vaadin-radius-m));
     color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
