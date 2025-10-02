@@ -48,7 +48,7 @@ export const gridStyles = css`
   /* Variant: No outer border */
   :host(:not([theme~='no-border'])) {
     --_border-width: var(--vaadin-grid-border-width, 1px);
-    --_border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-l));
+    --_border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-m));
   }
 
   :host([all-rows-visible]) {
