@@ -4,7 +4,8 @@
 }
 
 vaadin-dialog,
-vaadin-confirm-dialog {
+vaadin-confirm-dialog,
+vaadin-crud::part(overlay) {
   color-scheme: var(--aura-content-color-scheme);
 }
 

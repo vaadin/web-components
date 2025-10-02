@@ -83,6 +83,7 @@
 :where(:root, :host),
 vaadin-button,
 vaadin-context-menu-item,
+vaadin-crud-edit,
 vaadin-drawer-toggle,
 vaadin-menu-bar-button,
 vaadin-menu-bar-item,

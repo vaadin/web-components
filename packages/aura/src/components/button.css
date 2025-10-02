@@ -2,7 +2,7 @@
   --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
   transition: scale 180ms;
   position: relative;
   --_accent: light-dark(
@@ -16,18 +16,21 @@
   --_background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='tertiary'])) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='tertiary'])) {
   --aura-surface-level: 6;
   --aura-surface-opacity: 0.3;
   box-shadow: var(--vaadin-button-shadow);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([theme~='primary'], [theme~='tertiary']) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(
+  [theme~='primary'],
+  [theme~='tertiary']
+) {
   background: var(--vaadin-button-background, var(--_background));
   --vaadin-button-border-color: var(--_accent-border);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='primary'])) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='primary'])) {
   outline-offset: calc(var(--vaadin-button-border-width, 1px) * -1);
   --vaadin-button-text-color: var(--aura-accent-text);
 }
@@ -37,7 +40,7 @@ Increase padding, but only for buttons that don't have an icon in the default sl
 Buttons that place an icon in the default slot are assumed to be icon-only buttons.
 */
 /* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not(:has(:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(:has(:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
   --vaadin-button-padding: round(var(--vaadin-padding-s) / 1.4, 1px)
     max(var(--vaadin-padding-m), round(var(--vaadin-radius-m) / 1.5, 1px));
 }
@@ -49,24 +52,28 @@ vaadin-drawer-toggle:empty {
 }
 
 /* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):has([slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):has([slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
 vaadin-drawer-toggle:empty,
 vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   padding-inline-end: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where([theme~='primary']) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where([theme~='primary']) {
   outline-offset: 2px;
   --vaadin-button-font-weight: var(--aura-font-weight-semibold);
   --vaadin-button-text-color: var(--aura-accent-contrast);
   --vaadin-button-background: var(--aura-accent-color);
+  --vaadin-button-border-color: var(--vaadin-border-color-secondary);
+  --vaadin-button-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[disabled][theme~='primary']::part(label) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[disabled][theme~='primary']::part(
+    label
+  ) {
   color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([disabled])::before {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([disabled])::before {
   content: '';
   position: absolute;
   inset: calc(var(--vaadin-button-border-width, 1px) * -1);
@@ -80,18 +87,21 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
 }
 
 @supports (color: hsl(0 0 0)) {
-  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):not([disabled])::before {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([disabled])::before {
     background-color: oklch(from currentColor calc(l + 0.4 - c) c h / calc(1 - l / 2));
   }
 }
 
 @media (any-hover: hover) {
-  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):hover:not([disabled], [active])::before {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):hover:not(
+      [disabled],
+      [active]
+    )::before {
     opacity: 0.03;
   }
 
   /* prettier-ignore */
-  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary']:hover:not([disabled], [active])::before {
+  :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary']:hover:not([disabled], [active])::before {
     opacity: 0.12;
   }
 }
@@ -104,13 +114,19 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   }
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[active]:not([disabled])::before {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[active]:not([disabled]) {
+  box-shadow: none;
+}
+
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[active]:not([disabled])::before {
   transition-duration: 0s;
   opacity: 0.08;
   background: oklch(from currentColor min(c, 1 - l + c) calc(c * 0.9) h);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'][active]:not([disabled])::before {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary'][active]:not(
+    [disabled]
+  )::before {
   opacity: 0.16;
 }
 
@@ -122,17 +138,15 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
 
 /* Color variants */
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):where(:not([theme~='accent'])) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='accent'])) {
   --aura-accent-light: var(--aura-text-light);
   --aura-accent-dark: var(--aura-text-dark);
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle):is([theme~='danger'], [theme~='error']) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):is(
+  [theme~='danger'],
+  [theme~='error']
+) {
   --aura-accent-light: var(--aura-red);
   --aura-accent-dark: var(--aura-red);
-}
-
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='success'] {
-  --aura-accent-light: var(--aura-green);
-  --aura-accent-dark: var(--aura-green);
 }
