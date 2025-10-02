@@ -9,10 +9,12 @@ import { Tooltip } from '../../../vaadin-tooltip.js';
 describe('tooltip', () => {
   let div, target, element;
 
-  before(() => {
+  before(async () => {
     Tooltip.setDefaultFocusDelay(0);
     Tooltip.setDefaultHoverDelay(0);
     Tooltip.setDefaultHideDelay(0);
+    // Preload markdown helpers to avoid dynamic import delays
+    await Tooltip.__importMarkdownHelpers();
   });
 
   beforeEach(() => {
@@ -88,9 +90,6 @@ describe('tooltip', () => {
   it('markdown', async () => {
     // Increase container height to fit larger tooltip content
     div.style.height = '500px';
-
-    // Preload markdown helpers to avoid dynamic import delays
-    await element.__importMarkdownHelpers();
 
     element.markdown = true;
     element.text = `

@@ -9,6 +9,7 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
+import { Tooltip } from './vaadin-tooltip.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -693,22 +694,16 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __updateContent() {
+    async __updateContent() {
       const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
 
       if (this.markdown && content) {
-        this.__importMarkdownHelpers().then((helpers) => {
-          helpers.renderMarkdownToElement(this.__contentNode, content);
-          this.__updateContentFinished();
-        });
+        const helpers = await Tooltip.__importMarkdownHelpers();
+        helpers.renderMarkdownToElement(this.__contentNode, content);
       } else {
         this.__contentNode.textContent = content || '';
-        this.__updateContentFinished();
       }
-    }
 
-    /** @private */
-    __updateContentFinished() {
       this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
       this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
@@ -736,11 +731,11 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private **/
-    __importMarkdownHelpers() {
-      if (!this.__markdownHelpers) {
-        this.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
+    static __importMarkdownHelpers() {
+      if (!Tooltip.__markdownHelpers) {
+        Tooltip.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
       }
-      return this.__markdownHelpers;
+      return Tooltip.__markdownHelpers;
     }
 
     /**

@@ -1,19 +1,21 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-tooltip.js';
+import { Tooltip } from '../src/vaadin-tooltip.js';
 
 describe('vaadin-tooltip content-type', () => {
   let tooltip, overlay, contentNode;
+
+  before(async () => {
+    // Preload markdown helpers to avoid dynamic import delays
+    await Tooltip.__importMarkdownHelpers();
+  });
 
   beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
     await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
     contentNode = tooltip.querySelector('[slot="overlay"]');
-
-    // Preload markdown helpers to avoid dynamic import delays
-    await tooltip.__importMarkdownHelpers();
   });
 
   it('should have markdown property with default value false', () => {
