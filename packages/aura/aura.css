@@ -27,6 +27,7 @@
 @import './src/components/notification.css';
 @import './src/components/overlay.css';
 @import './src/components/progress-bar.css';
+@import './src/components/rich-text-editor.css';
 @import './src/components/select.css';
 @import './src/components/side-nav.css';
 @import './src/components/upload.css';

@@ -39,6 +39,7 @@
       import '@vaadin/popover';
       import '@vaadin/progress-bar';
       import '@vaadin/radio-group';
+      import '@vaadin/rich-text-editor';
       import '@vaadin/select';
       import '@vaadin/scroller';
       import '@vaadin/side-nav';
@@ -611,6 +612,10 @@
                   </div>
                 </div>
 
+                <div class="aura-surface component wide">
+                  <vaadin-rich-text-editor placeholder="Write something…"></vaadin-rich-text-editor>
+                </div>
+
                 <div class="aura-surface component">
                   <vaadin-checkbox-group label="Options">
                     <vaadin-checkbox label="Option 1" value="1" checked></vaadin-checkbox>
@@ -634,7 +639,7 @@
                   </div>
                 </div>
 
-                <div class="aura-surface component wide">
+                <div class="aura-surface component">
                   <vaadin-select label="Options"></vaadin-select>
                 </div>
 
@@ -667,7 +672,7 @@
                   <vaadin-progress-bar value="0.5"></vaadin-progress-bar>
                 </div>
 
-                <div class="aura-surface component wide">
+                <div class="aura-surface component">
                   <vaadin-multi-select-combo-box
                     class="Countries"
                     class="w-full"

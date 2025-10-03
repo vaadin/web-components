@@ -20,12 +20,6 @@ const base = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-  }
-
-  :host(:focus-within) {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: -1px;
   }
 
   :host([hidden]) {
@@ -47,6 +41,12 @@ const base = css`
     flex-direction: column;
     max-height: inherit;
     min-height: inherit;
+    border-radius: inherit;
+  }
+
+  .vaadin-rich-text-editor-container:has([part='content']:focus-within),
+  .vaadin-rich-text-editor-container:has([part='toolbar']:active) {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 `;
 
@@ -421,7 +421,7 @@ const toolbar = css`
     mask-position: 50%;
   }
 
-  [part~='toolbar-button']:focus {
+  [part~='toolbar-button']:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
     z-index: 1;
