@@ -38,10 +38,16 @@ export const formLayoutStyles = css`
     display: none !important;
   }
 
+  :host(:not([auto-responsive])) {
+    contain: layout;
+  }
+
   :host(:not([auto-responsive])) #layout {
     align-items: baseline; /* default \`stretch\` is not appropriate */
     display: flex;
     flex-wrap: wrap; /* the items should wrap */
+    /* Compensate for row spacing */
+    margin-block: calc(-0.5 * var(--_row-spacing));
   }
 
   :host(:not([auto-responsive])) #layout ::slotted(*) {
@@ -49,8 +55,9 @@ export const formLayoutStyles = css`
     flex-grow: 0;
     flex-shrink: 0;
 
-    /* Margins make spacing between the columns */
+    /* Margins make spacing between the columns and rows */
     margin-inline: calc(0.5 * var(--_column-spacing));
+    margin-block: calc(0.5 * var(--_row-spacing));
   }
 
   #layout ::slotted(br) {
