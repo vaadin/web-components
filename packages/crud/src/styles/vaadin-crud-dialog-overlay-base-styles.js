@@ -14,11 +14,11 @@ import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-ove
 
 const crudDialogOverlay = css`
   [part='header'] {
-    color: var(--vaadin-crud-dialog-header-color, var(--vaadin-text-color));
-    font-size: var(--vaadin-crud-dialog-header-font-size, 1em);
-    font-weight: var(--vaadin-crud-dialog-header-font-weight, 600);
-    line-height: var(--vaadin-crud-dialog-header-line-height, inherit);
-    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding-l));
+    color: var(--vaadin-dialog-title-color, var(--vaadin-text-color));
+    font-size: var(--vaadin-dialog-title-font-size, 1em);
+    font-weight: var(--vaadin-dialog-title-font-weight, 600);
+    line-height: var(--vaadin-dialog-title-line-height, inherit);
+    padding: var(--vaadin-crud-header-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
   }
 
   ::slotted([slot='header']) {

@@ -39,12 +39,12 @@ class CrudEditColumn extends GridColumn {
   static get properties() {
     return {
       /**
-       * Width of the cells for this column.
+       * Automatically sets the width of the column based on the column contents when this is set to `true`.
        * @private
        */
-      width: {
-        type: String,
-        value: '4rem',
+      autoWidth: {
+        type: Boolean,
+        value: true,
       },
 
       /**
