@@ -92,7 +92,7 @@ export const crudStyles = css`
     display: flex;
     flex-shrink: 0;
     justify-content: flex-end;
-    padding: var(--vaadin-crud-toolbar-padding, var(--vaadin-padding-m));
+    padding: var(--vaadin-crud-toolbar-padding, var(--vaadin-dialog-padding, var(--vaadin-padding-l)));
   }
 
   :host([no-toolbar]) [part='toolbar'] {
