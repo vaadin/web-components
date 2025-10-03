@@ -19,7 +19,7 @@ export const crudStyles = css`
     --vaadin-crud-editor-max-width: 40%;
     border: var(--vaadin-crud-border-width, 1px) solid
       var(--vaadin-crud-border-color, var(--vaadin-border-color-secondary));
-    border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-l));
+    border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-m));
     height: 400px;
     width: 100%;
     background: var(--vaadin-crud-background, var(--vaadin-background-color));
