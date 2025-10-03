@@ -37,7 +37,7 @@ export const dialogOverlayBase = css`
     border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
     width: max-content;
     min-width: min(var(--vaadin-dialog-min-width, 4em), 100%);
-    max-width: var(--vaadin-dialog-max-width, 100%);
+    max-width: min(var(--vaadin-dialog-max-width, 100%), 100%);
     max-height: 100%;
   }
 
