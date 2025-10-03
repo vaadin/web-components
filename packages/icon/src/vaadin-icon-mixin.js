@@ -5,6 +5,7 @@
  */
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
 import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
 
 const srcCache = new Map();
@@ -14,9 +15,10 @@ const Iconset = customElements.get('vaadin-iconset');
 /**
  * @polymerMixin
  * @mixes SlotStylesMixin
+ * @mixes IconFontSizeMixin
  */
 export const IconMixin = (superClass) =>
-  class extends SlotStylesMixin(superClass) {
+  class extends IconFontSizeMixin(SlotStylesMixin(superClass)) {
     static get properties() {
       return {
         /**
