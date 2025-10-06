@@ -64,6 +64,7 @@ export const content = css`
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    cursor: text;
   }
 
   /*
