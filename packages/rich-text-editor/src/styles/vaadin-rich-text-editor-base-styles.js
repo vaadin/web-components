@@ -45,7 +45,7 @@ const base = css`
   }
 
   .vaadin-rich-text-editor-container:has([part='content']:focus-within),
-  .vaadin-rich-text-editor-container:has([part='toolbar']:active) {
+  .vaadin-rich-text-editor-container:has([part~='toolbar-button']:active) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 `;
