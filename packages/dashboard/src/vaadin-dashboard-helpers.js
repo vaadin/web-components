@@ -144,9 +144,5 @@ export function findAncestorInstance(node, baseClass) {
  * @returns {HTMLElement | null}
  */
 export function getParentLayout(node) {
-  return __findFilteredAncestorInstance(node, (el) => {
-    return (
-      el.constructor && (el.constructor.is === 'vaadin-dashboard' || el.constructor.is === 'vaadin-dashboard-layout')
-    );
-  });
+  return __findFilteredAncestorInstance(node, (el) => el.__hasVaadinDashboardLayoutMixin);
 }
