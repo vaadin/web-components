@@ -354,7 +354,7 @@ describe('vaadin-dialog', () => {
       dialog.height = 400;
       await nextRender();
       expect(getComputedStyle(overlay.$.overlay).position).to.equal('relative');
-      expect(getComputedStyle(overlay.$.overlay).maxWidth).to.equal('100%');
+      expect(getComputedStyle(overlay.$.overlay).maxWidth).to.be.oneOf(['100%', 'min(100%, 100%)']);
     });
 
     it('should reset overlay width when set to null', async () => {

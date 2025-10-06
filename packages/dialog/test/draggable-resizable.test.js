@@ -628,7 +628,7 @@ describe('draggable', () => {
   it('should not set overlay max-width to none on drag', async () => {
     drag(container);
     await nextRender();
-    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
+    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.be.oneOf(['100%', 'min(100%, 100%)']);
   });
 });
 
