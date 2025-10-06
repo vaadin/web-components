@@ -292,13 +292,13 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     fallBackIt('should have the custom property (iconClass)', async () => {
-      icon = fixtureSync('<vaadin-icon icon-class="foo"></vaadin-icon>');
+      icon = fixtureSync('<vaadin-icon icon-class="foo" style="--vaadin-icon-size: 24px"></vaadin-icon>');
       await nextFrame();
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
     });
 
     fallBackIt('should have the custom property (char)', async () => {
-      icon = fixtureSync('<vaadin-icon char="foo"></vaadin-icon>');
+      icon = fixtureSync('<vaadin-icon char="foo" style="--vaadin-icon-size: 24px"></vaadin-icon>');
       await nextFrame();
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
     });
@@ -310,7 +310,7 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     fallBackIt('should set the custom property', async () => {
-      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon = fixtureSync('<vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>');
       await nextFrame();
       icon.iconClass = 'foo';
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
@@ -333,6 +333,18 @@ describe('vaadin-icon - icon fonts', () => {
       await nextFrame(icon);
       await nextFrame(icon);
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
+    });
+
+    fallBackIt('should have the same height as the host with shadow root', async () => {
+      const parent = fixtureSync('<div></div>');
+      parent.attachShadow({ mode: 'open' });
+      parent.shadowRoot.innerHTML = '<slot></slot>';
+
+      parent.append(icon);
+      await nextResize(icon);
+
+      const fontIconStyle = getComputedStyle(icon, ':before');
+      expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
     });
   });
 });
