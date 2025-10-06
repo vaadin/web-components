@@ -21,6 +21,16 @@ export const DashboardLayoutMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * Used for mixin detection because `instanceof` does not work with mixins.
+         *
+         * @private
+         * @type {boolean}
+         */
+        __hasVaadinDashboardLayoutMixin: {
+          value: true,
+        },
+
+        /**
          * Whether the dashboard layout is dense.
          *
          * @attr {boolean} dense-layout
