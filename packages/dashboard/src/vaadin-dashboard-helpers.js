@@ -102,7 +102,6 @@ export function fireRemove(element) {
   element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true }));
 }
 
-/** @private */
 function __findFilteredAncestorInstance(node, elementFilter) {
   while (node) {
     if (elementFilter(node)) {
