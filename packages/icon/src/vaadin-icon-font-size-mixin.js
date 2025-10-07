@@ -32,22 +32,11 @@ export const IconFontSizeMixin = (superclass) =>
   !usesFontIconSizingFallback
     ? superclass
     : class extends ResizeMixin(superclass) {
-        static get observers() {
-          return ['__iconFontSizeMixinfontChanged(iconClass, char, ligature)'];
-        }
-
-        /** @protected */
-        ready() {
-          super.ready();
-
-          // Update once initially to avoid a fouc
-          this.__updateFontIconSize();
-        }
-
-        /** @private */
-        __iconFontSizeMixinfontChanged(_iconClass, _char, _ligature) {
-          // Update when iconClass, char or ligature changes
-          this.__updateFontIconSize();
+        updated(props) {
+          super.updated(props);
+          if (props.has('char') || props.has('iconClass') || props.has('ligature')) {
+            this.__updateFontIconSize();
+          }
         }
 
         /**
