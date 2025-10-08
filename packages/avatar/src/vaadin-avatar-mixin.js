@@ -133,20 +133,11 @@ export const AvatarMixin = (superClass) =>
     /** @private */
     __colorIndexChanged(index) {
       if (index != null) {
-        const prop = `--vaadin-user-color-${index}`;
-
-        // Check if custom CSS property is defined
-        const isValid = Boolean(getComputedStyle(document.documentElement).getPropertyValue(prop));
-
-        if (isValid) {
-          this.setAttribute('has-color-index', '');
-          this.style.setProperty('--vaadin-avatar-user-color', `var(${prop})`);
-        } else {
-          this.removeAttribute('has-color-index');
-          console.warn(`The CSS property --vaadin-user-color-${index} is not defined`);
-        }
+        this.setAttribute('has-color-index', '');
+        this.style.setProperty('--vaadin-avatar-user-color', `var(--vaadin-user-color-${index})`);
       } else {
         this.removeAttribute('has-color-index');
+        this.style.removeProperty('--vaadin-avatar-user-color');
       }
     }
 

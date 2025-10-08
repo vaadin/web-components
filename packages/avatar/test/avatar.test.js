@@ -352,28 +352,6 @@ describe('vaadin-avatar', () => {
         expect(avatar.hasAttribute('has-color-index')).to.be.false;
       });
     });
-
-    describe('incorrect index', () => {
-      beforeEach(() => {
-        sinon.stub(console, 'warn');
-      });
-
-      afterEach(() => {
-        console.warn.restore();
-      });
-
-      it('should not set attribute for invalid index', async () => {
-        avatar.colorIndex = 99;
-        await nextUpdate(avatar);
-        expect(avatar.hasAttribute('has-color-index')).to.be.false;
-      });
-
-      it('should warn about invalid css property used', async () => {
-        avatar.colorIndex = 99;
-        await nextUpdate(avatar);
-        expect(console.warn.called).to.be.true;
-      });
-    });
   });
 
   describe('a11y', () => {
