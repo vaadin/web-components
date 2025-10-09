@@ -43,6 +43,7 @@
       import '@vaadin/select';
       import '@vaadin/scroller';
       import '@vaadin/side-nav';
+      import '@vaadin/tabs';
       import '@vaadin/text-field';
       import '@vaadin/vertical-layout';
       import { html, render } from 'lit';
@@ -595,6 +596,14 @@
                   <vaadin-checkbox id="filled-menu-bar" label="Filled">
                     <vaadin-tooltip slot="tooltip" text="Apply the filled variant on the menu items"></vaadin-tooltip>
                   </vaadin-checkbox>
+                </div>
+
+                <div class="aura-surface component wide">
+                  <vaadin-tabs>
+                    <vaadin-tab>Details<span theme="badge accent">2</span></vaadin-tab>
+                    <vaadin-tab>Preferences</vaadin-tab>
+                    <vaadin-tab>Settings</vaadin-tab>
+                  </vaadin-tabs>
                 </div>
 
                 <div class="aura-surface component wide">

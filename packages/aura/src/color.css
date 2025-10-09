@@ -89,7 +89,8 @@ vaadin-menu-bar-button,
 vaadin-menu-bar-item,
 vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
-vaadin-side-nav-item::part(content) {
+vaadin-side-nav-item::part(content),
+vaadin-tab {
   --aura-accent-contrast-light: oklch(
     from var(--aura-accent-light) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
   );
