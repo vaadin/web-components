@@ -23,6 +23,7 @@ import type { ColumnReorderingMixinClass } from '../../src/vaadin-grid-column-re
 import type { DataProviderMixinClass } from '../../src/vaadin-grid-data-provider-mixin';
 import type { DragAndDropMixinClass } from '../../src/vaadin-grid-drag-and-drop-mixin';
 import type { EventContextMixinClass } from '../../src/vaadin-grid-event-context-mixin';
+import type { ResizeMixinClass } from '../../src/vaadin-grid-resize-mixin';
 import type { RowDetailsMixinClass } from '../../src/vaadin-grid-row-details-mixin';
 import type { ScrollMixinClass } from '../../src/vaadin-grid-scroll-mixin';
 import type { GridSelectionColumnBaseMixinClass } from '../../src/vaadin-grid-selection-column-base-mixin';
@@ -85,6 +86,7 @@ assertType<ColumnReorderingMixinClass>(narrowedGrid);
 assertType<EventContextMixinClass<TestGridItem>>(narrowedGrid);
 assertType<StylingMixinClass<TestGridItem>>(narrowedGrid);
 assertType<DragAndDropMixinClass<TestGridItem>>(narrowedGrid);
+assertType<ResizeMixinClass>(narrowedGrid);
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
   assertType<GridActiveItemChangedEvent<TestGridItem>>(event);
