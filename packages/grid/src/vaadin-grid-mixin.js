@@ -31,6 +31,7 @@ import {
   updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
+import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
 import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
@@ -57,6 +58,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * @mixes EventContextMixin
  * @mixes StylingMixin
  * @mixes DragAndDropMixin
+ * @mixes ResizeMixin
  */
 export const GridMixin = (superClass) =>
   class extends ColumnAutoWidthMixin(
@@ -73,7 +75,7 @@ export const GridMixin = (superClass) =>
                         FilterMixin(
                           ColumnReorderingMixin(
                             ColumnResizingMixin(
-                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(superClass)))),
+                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(ResizeMixin(superClass))))),
                             ),
                           ),
                         ),
@@ -263,25 +265,6 @@ export const GridMixin = (superClass) =>
         __disableHeightPlaceholder: true,
       });
 
-      new ResizeObserver(() => {
-        setTimeout(() => {
-          this.__updateColumnsBodyContentHidden();
-        });
-        // Updating data can change the visibility of the scroll bar. Therefore,
-        // the scroll position has to be recalculated.
-        this.__updateHorizontalScrollPosition();
-      }).observe(this.$.table);
-
-      const minHeightObserver = new ResizeObserver(() =>
-        setTimeout(() => {
-          this.__updateMinHeight();
-        }),
-      );
-
-      minHeightObserver.observe(this.$.header);
-      minHeightObserver.observe(this.$.items);
-      minHeightObserver.observe(this.$.footer);
-
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
       this._tooltipController.setManual(true);
@@ -290,6 +273,23 @@ export const GridMixin = (superClass) =>
         this.$.emptystatecell._content = currentNodes[0];
         this.__hasEmptyStateContent = !!this.$.emptystatecell._content;
       });
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('__headerRect') || props.has('__footerRect') || props.has('__itemsRect')) {
+        setTimeout(() => this.__updateMinHeight());
+      }
+
+      if (props.has('__tableRect')) {
+        setTimeout(() => this.__updateColumnsBodyContentHidden());
+
+        // Updating data can change the visibility of the scroll bar. Therefore,
+        // the scroll position has to be recalculated.
+        this.__updateHorizontalScrollPosition();
+      }
     }
 
     /** @private */
