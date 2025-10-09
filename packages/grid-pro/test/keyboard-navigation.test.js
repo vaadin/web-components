@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-grid-pro.js';
 import '../src/vaadin-grid-pro-edit-column.js';
@@ -30,8 +30,7 @@ describe('keyboard navigation', () => {
     };
 
     grid.items = createItems();
-    // Wait for vaadin-grid-appear animation to finish
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
     flushGrid(grid);
   });
 
