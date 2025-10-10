@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
@@ -31,14 +31,14 @@ describe('hidden grid', () => {
 
     it('should have content on appear', async () => {
       grid.removeAttribute('hidden');
-      await oneEvent(grid, 'animationend');
+      await nextResize(grid);
       await nextFrame();
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('0');
     });
 
     it('should make it possible to Tab to header', async () => {
       grid.removeAttribute('hidden');
-      await oneEvent(grid, 'animationend');
+      await nextResize(grid);
       await nextFrame();
 
       await sendKeys({ press: 'Tab' });

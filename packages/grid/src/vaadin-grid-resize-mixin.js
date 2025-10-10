@@ -14,6 +14,12 @@ export const ResizeMixin = (superClass) =>
     static get properties() {
       return {
         /** @private */
+        __hostVisible: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
         __tableRect: Object,
 
         /** @private */
@@ -32,6 +38,11 @@ export const ResizeMixin = (superClass) =>
       super.ready();
 
       const resizeObserver = new ResizeObserver((entries) => {
+        const hostEntry = entries.findLast(({ target }) => target === this);
+        if (hostEntry) {
+          this.__hostVisible = this.checkVisibility();
+        }
+
         const tableEntry = entries.findLast(({ target }) => target === this.$.table);
         if (tableEntry) {
           this.__tableRect = tableEntry.contentRect;
@@ -53,6 +64,7 @@ export const ResizeMixin = (superClass) =>
         }
       });
 
+      resizeObserver.observe(this);
       resizeObserver.observe(this.$.table);
       resizeObserver.observe(this.$.header);
       resizeObserver.observe(this.$.items);

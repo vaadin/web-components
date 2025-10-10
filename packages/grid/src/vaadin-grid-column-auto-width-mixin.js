@@ -30,14 +30,12 @@ export const ColumnAutoWidthMixin = (superClass) =>
       ];
     }
 
-    constructor() {
-      super();
-      this.addEventListener('animationend', this.__onAnimationEndAutoWidth);
-    }
+    /** @protected */
+    updated(props) {
+      super.updated(props);
 
-    /** @private */
-    __onAnimationEndAutoWidth(e) {
-      if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
+      // If the grid was hidden and is now visible
+      if (props.has('__hostVisible') && !props.get('__hostVisible')) {
         this.__tryToRecalculateColumnWidthsIfPending();
       }
     }

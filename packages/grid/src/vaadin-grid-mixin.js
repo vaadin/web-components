@@ -170,11 +170,6 @@ export const GridMixin = (superClass) =>
       };
     }
 
-    constructor() {
-      super();
-      this.addEventListener('animationend', this._onAnimationEnd);
-    }
-
     /** @private */
     get _firstVisibleIndex() {
       const firstVisibleItem = this.__getFirstVisibleItem();
@@ -278,6 +273,14 @@ export const GridMixin = (superClass) =>
     /** @protected */
     updated(props) {
       super.updated(props);
+
+      // If the grid was hidden and is now visible
+      if (props.has('__hostVisible') && !props.get('__hostVisible')) {
+        // Ensure header and footer have tabbable elements
+        this._resetKeyboardNavigation();
+
+        requestAnimationFrame(() => this.__scrollToPendingIndexes());
+      }
 
       if (props.has('__headerRect') || props.has('__footerRect') || props.has('__itemsRect')) {
         setTimeout(() => this.__updateMinHeight());
@@ -822,21 +825,6 @@ export const GridMixin = (superClass) =>
     _resizeHandler() {
       this._updateDetailsCellHeights();
       this.__updateHorizontalScrollPosition();
-    }
-
-    /** @private */
-    _onAnimationEnd(e) {
-      // ShadyCSS applies scoping suffixes to animation names
-      if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
-        e.stopPropagation();
-
-        // Ensure header and footer have tabbable elements
-        this._resetKeyboardNavigation();
-
-        requestAnimationFrame(() => {
-          this.__scrollToPendingIndexes();
-        });
-      }
     }
 
     /**
