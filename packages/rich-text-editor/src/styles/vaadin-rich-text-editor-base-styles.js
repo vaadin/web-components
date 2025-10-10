@@ -86,14 +86,14 @@ export const content = css`
 
   .ql-editor {
     box-sizing: border-box;
-    color: var(--vaadin-rich-text-editor-editor-color, var(--vaadin-text-color));
+    color: var(--vaadin-rich-text-editor-content-color, var(--vaadin-text-color));
     flex: 1;
-    font-size: var(--vaadin-rich-text-editor-editor-font-size, inherit);
+    font-size: var(--vaadin-rich-text-editor-content-font-size, inherit);
     height: 100%;
-    line-height: var(--vaadin-rich-text-editor-editor-line-height, inherit);
+    line-height: var(--vaadin-rich-text-editor-content-line-height, inherit);
     outline: none;
     overflow-y: auto;
-    padding: var(--vaadin-rich-text-editor-editor-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-rich-text-editor-content-padding, var(--vaadin-padding-container));
     tab-size: calc(var(--_item-indent) * 2);
     text-align: left;
     white-space: pre-wrap;
