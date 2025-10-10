@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import type { IconFontSizeMixinClass } from './vaadin-icon-font-size-mixin.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
@@ -12,7 +13,7 @@ import type { IconSvgLiteral } from './vaadin-icon-svg.js';
  */
 export declare function IconMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<IconMixinClass> & Constructor<SlotStylesMixinClass> & T;
+): Constructor<IconFontSizeMixinClass> & Constructor<IconMixinClass> & Constructor<SlotStylesMixinClass> & T;
 
 export declare class IconMixinClass {
   /**
