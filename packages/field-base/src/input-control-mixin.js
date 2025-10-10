@@ -122,7 +122,7 @@ export const InputControlMixin = (superclass) =>
           ${tag}:has(> input[slot='input']:autofill)::part(input-field) {
             --vaadin-input-field-background: var(--vaadin-input-field-autofill-background, lightyellow) !important;
             --vaadin-input-field-value-color: var(--vaadin-input-field-autofill-color, black) !important;
-            --vaadin-input-field-button-color: var(--vaadin-input-field-autofill-color, black) !important;
+            --vaadin-input-field-button-text-color: var(--vaadin-input-field-autofill-color, black) !important;
           }
         `,
       ];

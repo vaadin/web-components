@@ -17,7 +17,7 @@ export const tooltipOverlayStyles = css`
     padding: var(--vaadin-tooltip-padding, var(--vaadin-padding-container));
     border-radius: var(--vaadin-tooltip-border-radius, var(--vaadin-radius-m));
     background: var(--vaadin-tooltip-background, var(--vaadin-background-color));
-    color: var(--vaadin-tooltip-color, inherit);
+    color: var(--vaadin-tooltip-text-color, inherit);
     font-size: var(--vaadin-tooltip-font-size, 0.9em);
     font-weight: var(--vaadin-tooltip-font-weight, inherit);
     line-height: var(--vaadin-tooltip-line-height, inherit);

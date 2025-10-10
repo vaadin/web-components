@@ -20,7 +20,7 @@ const sideNavItem = css`
     font-size: var(--vaadin-side-nav-item-font-size, 1em);
     font-weight: var(--vaadin-side-nav-item-font-weight, 500);
     line-height: var(--vaadin-side-nav-item-line-height, inherit);
-    color: var(--vaadin-side-nav-item-color, var(--vaadin-text-color-secondary));
+    color: var(--vaadin-side-nav-item-text-color, var(--vaadin-text-color-secondary));
     background: var(--vaadin-side-nav-item-background, transparent);
     background-origin: border-box;
     border: var(--vaadin-side-nav-item-border-width, 0) solid var(--vaadin-side-nav-item-border-color, transparent);
@@ -31,7 +31,7 @@ const sideNavItem = css`
 
   :host([current]) [part='content'] {
     --vaadin-side-nav-item-background: var(--vaadin-background-container);
-    --vaadin-side-nav-item-color: var(--vaadin-text-color);
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
   }
 
   :host([disabled]) {
@@ -39,7 +39,7 @@ const sideNavItem = css`
   }
 
   :host([disabled]) [part='content'] {
-    --vaadin-side-nav-item-color: var(--vaadin-text-color-disabled);
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color-disabled);
   }
 
   [part='link'] {
@@ -112,7 +112,7 @@ const sideNavItem = css`
     }
 
     :host([disabled]) [part='content'] {
-      --vaadin-side-nav-item-color: GrayText !important;
+      --vaadin-side-nav-item-text-color: GrayText !important;
     }
 
     :host([disabled]) [part='toggle-button']::before {

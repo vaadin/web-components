@@ -247,7 +247,7 @@ export const mapStyles = css`
     gap: 1em;
     list-style: none;
     margin: 0;
-    color: var(--vaadin-map-attribution-color, var(--vaadin-text-color-secondary));
+    color: var(--vaadin-map-attribution-text-color, var(--vaadin-text-color-secondary));
     padding: var(--vaadin-padding-container);
     font-size: 0.8em;
   }
@@ -378,7 +378,7 @@ export const mapStyles = css`
   .ol-attribution:not(.ol-uncollapsible) ul {
     transition: 0.15s opacity;
     background: var(--vaadin-map-control-background, var(--vaadin-background-color));
-    color: var(--vaadin-map-control-color, var(--vaadin-subtle));
+    color: var(--vaadin-map-control-text-color, var(--vaadin-text-color-secondary));
     opacity: 0.65;
     display: flex;
     align-items: center;
@@ -401,7 +401,7 @@ export const mapStyles = css`
   }
 
   .ol-control button:hover {
-    color: var(--vaadin-map-control-color-hover, var(--vaadin-text-color));
+    color: var(--vaadin-map-control-text-color-hover, var(--vaadin-text-color));
   }
 
   .ol-control button:focus-visible {

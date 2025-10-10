@@ -11,7 +11,7 @@ const passwordFieldBase = css`
   :host {
     --vaadin-button-background: transparent;
     --vaadin-button-padding: 0;
-    color: var(--vaadin-input-field-button-color, inherit);
+    color: var(--vaadin-input-field-button-text-color, inherit);
     display: block;
     border: none;
     cursor: var(--vaadin-clickable-cursor);
