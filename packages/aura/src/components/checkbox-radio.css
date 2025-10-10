@@ -1,5 +1,5 @@
 :where(:root, :host) {
-  --vaadin-radio-button-dot-size: 6px;
+  --vaadin-radio-button-marker-size: 6px;
   --vaadin-checkbox-size: round(1lh - 2px, 2px);
   --vaadin-radio-button-size: round(1lh - 2px, 2px);
 }
@@ -31,13 +31,13 @@ vaadin-radio-button:not([checked])::part(radio) {
 
 vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
   --vaadin-checkbox-background: var(--aura-accent-color);
-  --vaadin-checkbox-color: var(--aura-accent-contrast);
+  --vaadin-checkbox-marker-color: var(--aura-accent-contrast);
   --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
 }
 
 vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
   --vaadin-radio-button-background: var(--aura-accent-color);
-  --vaadin-radio-button-color: var(--aura-accent-contrast);
+  --vaadin-radio-button-marker-color: var(--aura-accent-contrast);
   --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
 }
 

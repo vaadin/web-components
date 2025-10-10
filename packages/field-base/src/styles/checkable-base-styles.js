@@ -87,7 +87,7 @@ export const checkable = (part, propName = part) => css`
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
-    color: var(--vaadin-${unsafeCSS(propName)}-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)));
+    color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)));
     height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
@@ -96,13 +96,13 @@ export const checkable = (part, propName = part) => css`
   :host(:is([checked], [indeterminate])) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-text-color);
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --vaadin-${unsafeCSS(propName)}-marker-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   }
 
   :host([disabled]) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-color: var(--vaadin-text-color-disabled);
+    --vaadin-${unsafeCSS(propName)}-marker-color: var(--vaadin-text-color-disabled);
   }
 
   /* Focus ring */

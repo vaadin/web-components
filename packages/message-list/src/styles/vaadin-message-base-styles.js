@@ -56,7 +56,7 @@ export const messageStyles = css`
     font-size: var(--vaadin-message-font-size, inherit);
     font-weight: var(--vaadin-message-font-weight, inherit);
     line-height: var(--vaadin-message-line-height, inherit);
-    color: var(--vaadin-message-color, var(--vaadin-text-color));
+    color: var(--vaadin-message-text-color, var(--vaadin-text-color));
   }
 
   ::slotted([slot='avatar']) {

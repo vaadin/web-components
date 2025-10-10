@@ -15,7 +15,7 @@ export const multiSelectComboBoxChipStyles = css`
     box-sizing: border-box;
     gap: var(--vaadin-chip-gap, 0);
     background: var(--vaadin-chip-background, var(--vaadin-background-container));
-    color: var(--vaadin-chip-color, var(--vaadin-text-color));
+    color: var(--vaadin-chip-text-color, var(--vaadin-text-color));
     font-size: max(11px, var(--vaadin-chip-font-size, 0.875em));
     font-weight: var(--vaadin-chip-font-weight, 500);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
@@ -50,7 +50,7 @@ export const multiSelectComboBoxChipStyles = css`
     display: block;
     margin-inline-start: auto;
     margin-block: calc(var(--vaadin-chip-border-width, 1px) * -1);
-    color: var(--vaadin-chip-remove-button-color, var(--vaadin-text-color-secondary));
+    color: var(--vaadin-chip-remove-button-text-color, var(--vaadin-text-color-secondary));
     cursor: var(--vaadin-clickable-cursor);
     translate: 25%;
   }
@@ -69,7 +69,7 @@ export const multiSelectComboBoxChipStyles = css`
   }
 
   :host([disabled]) [part='label'] {
-    --vaadin-chip-color: var(--vaadin-text-color-disabled);
+    --vaadin-chip-text-color: var(--vaadin-text-color-disabled);
   }
 
   :host([hidden]),

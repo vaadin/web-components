@@ -66,7 +66,7 @@
     pointer-events: none;
     width: 0;
     height: 0;
-    border: var(--vaadin-radio-button-dot-size, 3px) solid
+    border: var(--vaadin-radio-button-marker-size, 3px) solid
       var(--vaadin-radio-button-dot-color, var(--lumo-primary-contrast-color));
     border-radius: 50%;
     position: absolute;
