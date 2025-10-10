@@ -59,6 +59,13 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-drawer`   | Set when the element has a drawer.
+ * `has-navbar`   | Set when the element has a navbar.
+ *
  * ### Component's slots
  *
  * The following slots are available to be set
@@ -121,11 +128,11 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   render() {
     return html`
       <div part="navbar" id="navbarTop">
-        <slot name="navbar" @slotchange="${this._updateTouchOptimizedMode}"></slot>
+        <slot name="navbar" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
       <div part="backdrop" @click="${this._onBackdropClick}" @touchend="${this._onBackdropTouchend}"></div>
       <div part="drawer" id="drawer">
-        <slot name="drawer" id="drawerSlot" @slotchange="${this._updateDrawerSize}"></slot>
+        <slot name="drawer" id="drawerSlot" @slotchange="${this.__onDrawerSlotChange}"></slot>
       </div>
       <div content>
         <slot></slot>
@@ -134,7 +141,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         <slot name="navbar-bottom"></slot>
       </div>
       <div hidden>
-        <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this._updateTouchOptimizedMode}"></slot>
+        <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
     `;
   }
