@@ -7,31 +7,55 @@ import '../../vaadin-drawer-toggle.js';
 describe('vaadin-app-layout', () => {
   let layout;
 
-  async function fixtureLayout() {
-    layout = fixtureSync(`
-      <vaadin-app-layout>
-        <vaadin-drawer-toggle id="toggle" slot="navbar">
-          Drawer Toggle
-        </vaadin-drawer-toggle>
-        <section slot="drawer">
-          Drawer Content
-        </section>
-        <main>Page Content</main>
-      </vaadin-app-layout>
-    `);
-    await nextRender();
-  }
-
-  describe('desktop layout', () => {
-    before(async () => {
-      await setViewport({ width: 1000, height: 1000 });
+  describe('host', () => {
+    beforeEach(() => {
+      layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
     });
 
+    it('default', async () => {
+      await expect(layout).dom.to.equalSnapshot();
+    });
+
+    it('with drawer', async () => {
+      const drawer = document.createElement('div');
+      drawer.setAttribute('slot', 'drawer');
+      drawer.textContent = 'Drawer Content';
+      layout.appendChild(drawer);
+      await nextRender();
+      await expect(layout).dom.to.equalSnapshot();
+    });
+
+    it('with navbar', async () => {
+      const navbar = document.createElement('div');
+      navbar.setAttribute('slot', 'navbar');
+      navbar.textContent = 'Navbar Content';
+      layout.appendChild(navbar);
+      await nextRender();
+      await expect(layout).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('shadow', () => {
     beforeEach(async () => {
-      await fixtureLayout();
+      layout = fixtureSync(`
+        <vaadin-app-layout>
+          <vaadin-drawer-toggle id="toggle" slot="navbar">
+            Drawer Toggle
+          </vaadin-drawer-toggle>
+          <section slot="drawer">
+            Drawer Content
+          </section>
+          <main>Page Content</main>
+        </vaadin-app-layout>
+      `);
+      await nextRender();
     });
 
-    describe('shadow', () => {
+    describe('desktop layout', () => {
+      before(async () => {
+        await setViewport({ width: 1000, height: 1000 });
+      });
+
       it('default', async () => {
         await expect(layout).shadowDom.to.equalSnapshot();
       });
@@ -41,18 +65,12 @@ describe('vaadin-app-layout', () => {
         await expect(layout).shadowDom.to.equalSnapshot();
       });
     });
-  });
 
-  describe('mobile layout', () => {
-    before(async () => {
-      await setViewport({ width: 500, height: 500 });
-    });
+    describe('mobile layout', () => {
+      before(async () => {
+        await setViewport({ width: 500, height: 500 });
+      });
 
-    beforeEach(async () => {
-      await fixtureLayout();
-    });
-
-    describe('shadow', () => {
       it('default', async () => {
         await expect(layout).shadowDom.to.equalSnapshot();
       });

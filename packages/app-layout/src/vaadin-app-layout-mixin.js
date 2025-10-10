@@ -208,6 +208,18 @@ export const AppLayoutMixin = (superclass) =>
       window.removeEventListener('keydown', this.__onDrawerKeyDown);
     }
 
+    /** @private */
+    __onNavbarSlotChange() {
+      this._updateTouchOptimizedMode();
+      this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
+    }
+
+    /** @private */
+    __onDrawerSlotChange() {
+      this._updateDrawerSize();
+      this.toggleAttribute('has-drawer', !!this.querySelector('[slot="drawer"]'));
+    }
+
     /**
      * A callback for the `primarySection` property observer.
      *
