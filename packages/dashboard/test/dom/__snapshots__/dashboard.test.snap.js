@@ -2,7 +2,10 @@
 export const snapshots = {};
 
 snapshots["vaadin-dashboard host"] = 
-`<vaadin-dashboard style="">
+`<vaadin-dashboard
+  root-heading-level="2"
+  style=""
+>
   <vaadin-dashboard-widget-wrapper
     slot="slot-0"
     style=""

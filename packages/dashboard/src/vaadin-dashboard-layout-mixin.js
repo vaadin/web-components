@@ -21,6 +21,16 @@ export const DashboardLayoutMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * Used for mixin detection because `instanceof` does not work with mixins.
+         *
+         * @private
+         * @type {boolean}
+         */
+        __hasVaadinDashboardLayoutMixin: {
+          value: true,
+        },
+
+        /**
          * Whether the dashboard layout is dense.
          *
          * @attr {boolean} dense-layout
@@ -30,6 +40,22 @@ export const DashboardLayoutMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+        },
+
+        /**
+         * Root heading level for sections and widgets. Defaults to 2.
+         *
+         * If changed to e.g. 1:
+         * - sections will have the attribute `aria-level` with value 1
+         * - non-nested widgets will have the attribute `aria-level` with value 1
+         * - nested widgets will have the attribute `aria-level` with value 2
+         */
+        rootHeadingLevel: {
+          type: Number,
+          value: 2,
+          sync: true,
+          reflectToAttribute: true,
+          observer: '__rootHeadingLevelChanged',
         },
       };
     }
@@ -62,5 +88,12 @@ export const DashboardLayoutMixin = (superClass) =>
       const columnCount = getComputedStyle(this.$.grid).gridTemplateColumns.split(' ').length;
       // ...and set it as the new value
       this.$.grid.style.setProperty('--_col-count', columnCount);
+    }
+
+    /** @private */
+    __rootHeadingLevelChanged(rootHeadingLevel) {
+      this.dispatchEvent(
+        new CustomEvent('dashboard-root-heading-level-changed', { detail: { value: rootHeadingLevel } }),
+      );
     }
   };
