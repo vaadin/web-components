@@ -42,6 +42,7 @@ const base = css`
     max-height: inherit;
     min-height: inherit;
     border-radius: inherit;
+    contain: paint;
   }
 
   .vaadin-rich-text-editor-container:has([part='content']:focus-within),
