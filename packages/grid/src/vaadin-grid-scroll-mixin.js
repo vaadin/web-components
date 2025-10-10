@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementHidden } from '@vaadin/a11y-base';
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
@@ -162,19 +161,6 @@ export const ScrollMixin = (superClass) =>
      */
     _onResize() {
       this.__updateHorizontalScrollPosition();
-
-      // For Firefox, manually restore last scroll position when grid becomes
-      // visible again. This solves an issue where switching visibility of two
-      // grids causes Firefox trying to synchronize the scroll positions between
-      // the two grid's table elements.
-      // See https://github.com/vaadin/web-components/issues/5796
-      if (this._firefox) {
-        const isVisible = !isElementHidden(this);
-        if (isVisible && this.__previousVisible === false) {
-          this._scrollTop = this.__memorizedScrollTop || 0;
-        }
-        this.__previousVisible = isVisible;
-      }
     }
 
     /**
@@ -247,14 +233,6 @@ export const ScrollMixin = (superClass) =>
           }
         },
       );
-
-      // Memorize last scroll position in Firefox
-      if (this._firefox) {
-        const isVisible = !isElementHidden(this);
-        if (isVisible && this.__previousVisible !== false) {
-          this.__memorizedScrollTop = this._scrollTop;
-        }
-      }
     }
 
     /** @private */
