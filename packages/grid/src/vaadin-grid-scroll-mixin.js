@@ -7,7 +7,6 @@ import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const timeouts = {
   SCROLLING: 500,
@@ -18,7 +17,7 @@ const timeouts = {
  * @polymerMixin
  */
 export const ScrollMixin = (superClass) =>
-  class ScrollMixin extends ResizeMixin(superClass) {
+  class ScrollMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -153,14 +152,6 @@ export const ScrollMixin = (superClass) =>
 
       this.__overflowController = new OverflowController(this, this.$.table);
       this.addController(this.__overflowController);
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _onResize() {
-      this.__updateHorizontalScrollPosition();
     }
 
     /**
