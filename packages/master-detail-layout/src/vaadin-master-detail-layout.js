@@ -192,11 +192,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         background-color: rgba(0, 0, 0, 0.2);
       }
 
-      [part='detail'] {
-        background: #fff;
-      }
-
       :host(:is([drawer], [stack])) [part='detail'] {
+        background-color: #fff;
         box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
       }
 
