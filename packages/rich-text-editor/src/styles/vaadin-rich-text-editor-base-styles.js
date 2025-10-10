@@ -52,9 +52,9 @@ const base = css`
 
 export const content = css`
   :host {
-    --_item-indent: var(--vaadin-padding-l);
-    --_marker-indent: calc(var(--vaadin-padding-s) / 2);
-    --_list-indent: calc(var(--_item-indent) + var(--_marker-indent));
+    --_item-indent: var(--vaadin-padding-s);
+    --_marker-indent: var(--vaadin-gap-s);
+    --_list-indent: var(--_item-indent);
   }
 
   [part='content'] {
@@ -371,6 +371,14 @@ export const content = css`
 
   img {
     max-width: 100%;
+  }
+
+  .ql-editor > :is(p, ol, ul, blockquote, .ql-code-block-container):first-child {
+    margin-top: 0;
+  }
+
+  .ql-editor > :is(p, ol, ul, blockquote, .ql-code-block-container):last-child {
+    margin-bottom: 0;
   }
 
   /* RTL specific styles */
