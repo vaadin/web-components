@@ -8,7 +8,8 @@
 @import './password-field.css';
 @import './text-field.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-login-form-wrapper-inject: 1;
   --_lumo-vaadin-login-form-wrapper-inject-modules: lumo_components_login-form-wrapper;
 }

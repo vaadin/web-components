@@ -7,7 +7,8 @@
 @import './message-input-button.css';
 @import './text-area.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-message-input-inject: 1;
   --_lumo-vaadin-message-input-inject-modules: lumo_components_message-input;
 }

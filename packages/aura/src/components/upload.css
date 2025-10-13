@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-upload-background: var(--aura-surface) padding-box;
   --vaadin-upload-border: 1px solid var(--vaadin-border-color-secondary);
   --vaadin-upload-padding: var(--vaadin-padding-s);

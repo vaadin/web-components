@@ -11,7 +11,8 @@
   font-style: normal;
 }
 
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --lumo-icons-align-center: '\ea01';
   --lumo-icons-align-left: '\ea02';
   --lumo-icons-align-right: '\ea03';

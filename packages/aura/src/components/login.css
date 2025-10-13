@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-login-form-error-color: var(--aura-red-text);
   --vaadin-login-form-padding: var(--vaadin-padding-xl);
   --vaadin-login-overlay-brand-padding: var(--vaadin-padding-xl);

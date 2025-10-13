@@ -39,7 +39,7 @@ export class CSSPropertyObserver {
     this.#properties.add(property);
 
     this.#styleSheet.replaceSync(`
-      :is(:root, :host)::before {
+      :root::before, :host::before {
         content: '' !important;
         position: absolute !important;
         top: -9999px !important;

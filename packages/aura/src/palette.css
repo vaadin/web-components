@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --aura-red: oklch(0.6 0.22 25);
   --aura-orange: oklch(0.61 0.4 93);
   --aura-yellow: oklch(0.9 0.36 105);

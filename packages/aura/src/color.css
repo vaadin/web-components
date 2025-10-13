@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --aura-contrast: 1;
 
   --aura-accent-light: hsl(220, 80%, 47%);
@@ -80,7 +81,8 @@
   background-attachment: fixed;
 }
 
-:where(:root, :host),
+:where(:root),
+:where(:host),
 vaadin-button,
 vaadin-context-menu-item,
 vaadin-crud-edit,
@@ -115,7 +117,8 @@ vaadin-tab {
 }
 
 @supports (color: hsl(0 0 0)) {
-  :where(:root, :host) {
+  :where(:root),
+  :where(:host) {
     --_safari-17-deg: 1;
   }
 }

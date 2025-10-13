@@ -5,7 +5,8 @@
  */
 @import '../src/components/grid-tree-toggle.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-grid-tree-toggle-inject: 1;
   --_lumo-vaadin-grid-tree-toggle-inject-modules: lumo_components_grid-tree-toggle;
 }

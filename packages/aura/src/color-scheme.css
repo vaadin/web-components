@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --aura-color-scheme: light;
   --aura-content-color-scheme: var(--aura-color-scheme);
   --aura-notification-color-scheme: var(--aura-color-scheme);

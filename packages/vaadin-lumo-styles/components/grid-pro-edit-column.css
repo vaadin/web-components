@@ -18,7 +18,8 @@
 @import './select.css';
 @import './text-field.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-grid-pro-edit-text-field-inject: 1;
   --_lumo-vaadin-grid-pro-edit-text-field-inject-modules:
     lumo_mixins_field-label,

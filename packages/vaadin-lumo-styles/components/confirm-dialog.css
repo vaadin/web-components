@@ -8,7 +8,8 @@
 @import '../src/components/dialog-overlay.css';
 @import './button.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-confirm-dialog-overlay-inject: 1;
   --_lumo-vaadin-confirm-dialog-overlay-inject-modules:
     lumo_mixins_overlay,

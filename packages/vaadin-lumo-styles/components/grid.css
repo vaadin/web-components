@@ -5,7 +5,8 @@
  */
 @import '../src/components/grid.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-grid-inject: 1;
   --_lumo-vaadin-grid-inject-modules: lumo_components_grid;
 }

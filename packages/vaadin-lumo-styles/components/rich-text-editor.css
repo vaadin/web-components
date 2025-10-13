@@ -13,7 +13,8 @@
 @import './text-field.css';
 @import './tooltip.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-rich-text-editor-inject: 1;
   --_lumo-vaadin-rich-text-editor-inject-modules:
     lumo_global_typography,

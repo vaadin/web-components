@@ -11,7 +11,8 @@
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-avatar-group-inject: 1;
   --_lumo-vaadin-avatar-group-inject-modules: lumo_components_avatar-group;
 

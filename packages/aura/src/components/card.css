@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-card-title-font-weight: var(--aura-font-weight-medium);
   --vaadin-card-padding: var(--vaadin-padding-l);
   --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
