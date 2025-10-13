@@ -37,7 +37,9 @@
   }
 }
 
-vaadin-app-layout:is([drawer-opened], [has-navbar]) vaadin-drawer-toggle:not([theme~='permanent']),
+vaadin-app-layout:is([drawer-opened], :has(> [slot='navbar'] vaadin-drawer-toggle))
+  :is(.aura-view > header, .aura-view-header)
+  vaadin-drawer-toggle:not([theme~='permanent']),
 vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'].aura-view > header mdl-back-button,
 vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'] .aura-view > header mdl-back-button {
   display: none;
