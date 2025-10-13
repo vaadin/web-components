@@ -3,7 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-form-layout-label-spacing: 1em;
   --vaadin-form-layout-label-width: 8em;
   --vaadin-form-layout-column-spacing: var(

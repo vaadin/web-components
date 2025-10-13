@@ -1,6 +1,7 @@
 @import './fonts/InstrumentSans/InstrumentSans.css';
 
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --aura-font-family-system: system-ui, ui-sans-serif, sans-serif;
   --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
 
@@ -16,7 +17,8 @@
 }
 
 @media (pointer: fine) {
-  :where(:root, :host) {
+  :where(:root),
+  :where(:host) {
     --aura-base-font-size: 14;
   }
 }
@@ -29,7 +31,8 @@
 
 @supports (-webkit-touch-callout: none) {
   @media (pointer: coarse) {
-    :where(:root, :host) {
+    :where(:root),
+    :where(:host) {
       /* iOS/iPadOS optimizations */
 
       /* Support iOS dynamic text size */
@@ -38,7 +41,9 @@
   }
 }
 
-:where(:root, :host, [theme]) {
+:where(:root),
+:where(:host),
+:where([theme]) {
   --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale), 0.0625rem);
   --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, 0.0625rem);
@@ -53,7 +58,8 @@
   --aura-line-height-xl: round(var(--aura-font-size-xl) * var(--aura-base-line-height), 0.125rem);
 }
 
-:where(body, :host) {
+:where(body),
+:where(:host) {
   font-family: var(--aura-font-family);
   font-optical-sizing: auto;
   font-style: normal;
@@ -68,7 +74,9 @@
   text-size-adjust: none;
 }
 
-:where(body, :host, [theme]:not(html)) {
+:where(body),
+:where(:host),
+:where([theme]:not(html)) {
   font-size: var(--aura-font-size-m);
   line-height: var(--aura-line-height-m);
 }

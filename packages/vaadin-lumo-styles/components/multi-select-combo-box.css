@@ -23,7 +23,8 @@
 @import '../src/components/multi-select-combo-box-overlay.css';
 @import '../src/components/multi-select-combo-box.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-multi-select-combo-box-container-inject: 1;
   --_lumo-vaadin-multi-select-combo-box-container-inject-modules:
     lumo_components_input-container,

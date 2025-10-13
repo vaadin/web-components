@@ -7,7 +7,8 @@
 @import '../src/mixins/resizable-overlay.css';
 @import '../src/components/dialog-overlay.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-dialog-overlay-inject: 1;
   --_lumo-vaadin-dialog-overlay-inject-modules:
     lumo_mixins_overlay,

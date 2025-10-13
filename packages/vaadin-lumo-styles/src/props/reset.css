@@ -5,7 +5,8 @@
  */
 
 /* Reset properties that are set by the base theme */
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-focus-ring-color: inherit;
   --vaadin-focus-ring-width: inherit;
 }

@@ -12,7 +12,8 @@
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-context-menu-overlay-inject: 1;
   --_lumo-vaadin-context-menu-overlay-inject-modules:
     lumo_mixins_overlay,

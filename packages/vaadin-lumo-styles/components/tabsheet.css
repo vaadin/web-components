@@ -8,7 +8,8 @@
 @import './scroller.css';
 @import './tabs.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-tabsheet-inject: 1;
   --_lumo-vaadin-tabsheet-inject-modules:
     lumo_mixins_loader,

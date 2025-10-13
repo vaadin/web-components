@@ -10,7 +10,8 @@
 @import '../src/components/dashboard-widget.css';
 @import '../src/components/dashboard.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-dashboard-inject: 1;
   --_lumo-vaadin-dashboard-inject-modules:
     lumo_components_dashboard-layout,

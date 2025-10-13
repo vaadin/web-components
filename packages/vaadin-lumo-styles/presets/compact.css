@@ -5,7 +5,8 @@
  */
 
 /* Use a stronger selector than `:where()` used by other Lumo CSS */
-:is(:root, :host) {
+:root,
+:host {
   --lumo-size-xl: 3rem;
   --lumo-size-l: 2.5rem;
   --lumo-size-m: 2rem;

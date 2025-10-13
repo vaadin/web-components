@@ -3,7 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   /* Base (background) */
   --lumo-base-color: #fff;
 
@@ -92,7 +93,8 @@
 
 /* forced-colors mode adjustments */
 @media (forced-colors: active) {
-  :where(:root, :host) {
+  :where(:root),
+  :where(:host) {
     --lumo-disabled-text-color: GrayText;
   }
 }

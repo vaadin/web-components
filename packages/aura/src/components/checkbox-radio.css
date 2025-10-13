@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-radio-button-dot-size: 6px;
   --vaadin-checkbox-size: round(1lh - 2px, 2px);
   --vaadin-radio-button-size: round(1lh - 2px, 2px);

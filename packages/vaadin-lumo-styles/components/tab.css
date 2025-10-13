@@ -5,7 +5,8 @@
  */
 @import '../src/components/tab.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-tab-inject: 1;
   --_lumo-vaadin-tab-inject-modules: lumo_components_tab;
 }
