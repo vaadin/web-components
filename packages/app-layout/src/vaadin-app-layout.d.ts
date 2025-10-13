@@ -81,8 +81,8 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  *
  * Attribute      | Description
  * ---------------|-------------
- * `has-drawer`   | Set when the element has a drawer.
- * `has-navbar`   | Set when the element has a navbar.
+ * `has-drawer`   | Set when the element has light DOM content in the drawer slot.
+ * `has-navbar`   | Set when the element has light DOM content in the navbar slot.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
