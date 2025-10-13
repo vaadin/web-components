@@ -139,7 +139,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       <div content>
         <slot></slot>
       </div>
-      <div part="navbar navbar-bottom" id="navbarBottom" hidden>
+      <div part="navbar navbar-bottom" id="navbarBottom" bottom hidden>
         <slot name="navbar-bottom"></slot>
       </div>
       <div hidden>
