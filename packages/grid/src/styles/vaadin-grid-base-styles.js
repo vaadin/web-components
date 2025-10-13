@@ -127,7 +127,7 @@ export const gridStyles = css`
   [part~='reorder-ghost'] {
     font-size: var(--vaadin-grid-header-font-size, 1em);
     font-weight: var(--vaadin-grid-header-font-weight, 500);
-    color: var(--vaadin-grid-header-text-color, var(--vaadin-text-color));
+    color: var(--vaadin-grid-header-color, var(--vaadin-text-color));
   }
 
   [part~='row'] {
@@ -337,6 +337,7 @@ export const gridStyles = css`
     text-overflow: ellipsis;
     padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
     flex: 1;
+    min-height: 1lh;
     min-width: 0;
   }
 
