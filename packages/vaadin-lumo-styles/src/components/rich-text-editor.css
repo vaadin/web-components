@@ -335,7 +335,7 @@
 
   .ql-editor {
     color: inherit;
-    padding: 0 var(--lumo-space-m);
+    padding: var(--lumo-space-s) var(--lumo-space-m);
   }
 
   .ql-code-block-container {
