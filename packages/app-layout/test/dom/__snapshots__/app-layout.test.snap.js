@@ -43,7 +43,7 @@ snapshots["vaadin-app-layout host with navbar"] =
 snapshots["vaadin-app-layout shadow desktop layout default"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -65,10 +65,9 @@ snapshots["vaadin-app-layout shadow desktop layout default"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -86,7 +85,7 @@ snapshots["vaadin-app-layout shadow desktop layout default"] =
 snapshots["vaadin-app-layout shadow desktop layout drawer closed"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -108,10 +107,9 @@ snapshots["vaadin-app-layout shadow desktop layout drawer closed"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -129,7 +127,7 @@ snapshots["vaadin-app-layout shadow desktop layout drawer closed"] =
 snapshots["vaadin-app-layout shadow mobile layout default"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -154,10 +152,9 @@ snapshots["vaadin-app-layout shadow mobile layout default"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -175,7 +172,7 @@ snapshots["vaadin-app-layout shadow mobile layout default"] =
 snapshots["vaadin-app-layout shadow mobile layout drawer opened"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -200,10 +197,9 @@ snapshots["vaadin-app-layout shadow mobile layout drawer opened"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>

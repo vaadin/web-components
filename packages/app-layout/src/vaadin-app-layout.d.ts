@@ -69,13 +69,15 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  *
  * ### Styling
  *
- * The following Shadow DOM parts of the `<vaadin-app-layout>` are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name     | Description
- * --------------|---------------------------------------------------------|
- * `backdrop`    | Backdrop covering the layout when drawer is open as an overlay
- * `navbar`      | Container for the navigation bar
- * `drawer`      | Container for the drawer area
+ * Part name        | Description
+ * -----------------|---------------------------------------------------------|
+ * `backdrop`       | Backdrop covering the layout when drawer is open as an overlay
+ * `navbar`         | Container for the navigation bar
+ * `navbar-top`     | Container for the top navigation bar
+ * `navbar-bottom`  | Container for the bottom navigation bar
+ * `drawer`         | Container for the drawer area
  *
  * The following state attributes are available for styling:
  *
