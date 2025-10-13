@@ -7,15 +7,8 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const gridStyles = css`
-  @keyframes vaadin-grid-appear {
-    to {
-      opacity: 1;
-    }
-  }
-
   :host {
     display: flex;
-    animation: 1ms vaadin-grid-appear;
     max-width: 100%;
     height: 400px;
     min-height: var(--_grid-min-height, 0);

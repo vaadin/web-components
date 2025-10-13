@@ -8,7 +8,8 @@
 @import '../src/components/user-tag.css';
 @import '../src/components/user-tags-overlay.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-user-tags-overlay-inject: 1;
   --_lumo-vaadin-user-tags-overlay-inject-modules:
     lumo_mixins_overlay,

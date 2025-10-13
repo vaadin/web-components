@@ -9,7 +9,8 @@
 @import '../src/mixins/field-required.css';
 @import '../src/components/custom-field.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-custom-field-inject: 1;
   --_lumo-vaadin-custom-field-inject-modules:
     lumo_mixins_field-label,

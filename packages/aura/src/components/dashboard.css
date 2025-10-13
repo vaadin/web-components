@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-dashboard-widget-title-font-weight: var(--aura-font-weight-medium);
   --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
   --vaadin-dashboard-header-gap: var(--vaadin-gap-xs);

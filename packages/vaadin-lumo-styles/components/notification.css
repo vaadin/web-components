@@ -6,7 +6,8 @@
 @import '../src/components/notification-card.css';
 @import '../src/components/notification-container.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-notification-container-inject: 1;
   --_lumo-vaadin-notification-container-inject-modules: lumo_components_notification-container;
 

@@ -77,6 +77,13 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  * `navbar`      | Container for the navigation bar
  * `drawer`      | Container for the drawer area
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-drawer`   | Set when the element has light DOM content in the drawer slot.
+ * `has-navbar`   | Set when the element has light DOM content in the navbar slot.
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Component's slots

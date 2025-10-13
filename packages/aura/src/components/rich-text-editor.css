@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-rich-text-editor-toolbar-background: transparent;
   --vaadin-rich-text-editor-toolbar-padding: var(--vaadin-padding-xs);
   --vaadin-rich-text-editor-toolbar-gap: var(--vaadin-gap-xs) var(--vaadin-gap-m);

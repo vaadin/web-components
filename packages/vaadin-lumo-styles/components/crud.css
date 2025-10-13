@@ -17,7 +17,8 @@
 @import './grid-sorter.css';
 @import './text-field.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-crud-inject: 1;
   --_lumo-vaadin-crud-inject-modules: lumo_components_crud;
 

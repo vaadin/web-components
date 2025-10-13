@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-grid-row-selected-background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
   --vaadin-grid-background: linear-gradient(var(--aura-surface), var(--aura-surface)) var(--aura-background) padding-box;
 }

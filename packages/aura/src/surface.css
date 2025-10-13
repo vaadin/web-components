@@ -1,9 +1,11 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --aura-surface-level: 1;
 }
 
 /* List all elements that are surfaces */
-:is(:root, :host),
+:root,
+:host,
 .aura-surface,
 .aura-surface-solid,
 vaadin-accordion-panel[theme~='filled'],

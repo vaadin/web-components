@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -38,9 +38,9 @@ describe('resizing', () => {
       root.textContent = 'footer';
     };
     grid.dataProvider = infiniteDataProvider;
-    await nextFrame();
+    await nextResize(grid);
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
     flushGrid(grid);
   });
 

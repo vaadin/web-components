@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
@@ -54,14 +54,14 @@ describe('rows', () => {
   async function init(fixtureFactory) {
     grid = fixtureFactory();
 
-    await nextFrame();
+    await nextResize(grid);
 
     grid.dataProvider = infiniteDataProvider;
     grid.hidden = false;
     flushGrid(grid);
     header = grid.$.header;
 
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
     flushGrid(grid);
 
     rows = getRows(grid.$.items);

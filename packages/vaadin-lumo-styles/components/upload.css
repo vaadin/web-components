@@ -10,7 +10,8 @@
 @import './button.css';
 @import './progress-bar.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-upload-inject: 1;
   --_lumo-vaadin-upload-inject-modules: lumo_components_upload;
 
@@ -23,7 +24,8 @@
     lumo_components_upload-file;
 }
 
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-upload-gap: 0;
   --vaadin-upload-file-list-divider-color: var(
     --lumo-contrast-10pct

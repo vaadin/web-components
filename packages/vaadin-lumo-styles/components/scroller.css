@@ -5,7 +5,8 @@
  */
 @import '../src/components/scroller.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-scroller-inject: 1;
   --_lumo-vaadin-scroller-inject-modules: lumo_components_scroller;
 }

@@ -1,4 +1,6 @@
-:where(:root, :host, [theme]) {
+:where(:root),
+:where(:host),
+:where([theme]) {
   --vaadin-input-field-background: var(--aura-surface);
   --vaadin-input-field-error-color: var(--aura-red-text);
 }

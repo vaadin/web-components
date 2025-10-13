@@ -12,7 +12,8 @@
 @import '../src/components/number-field.css';
 @import './input-container.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-number-field-inject: 1;
   --_lumo-vaadin-number-field-inject-modules:
     lumo_mixins_field-label,

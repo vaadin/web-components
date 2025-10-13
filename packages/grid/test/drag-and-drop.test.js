@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
@@ -114,9 +114,9 @@ describe('drag and drop', () => {
         <vaadin-grid-column path="last" header="Last name"></vaadin-grid-column>
       </vaadin-grid>
     `);
-    await nextFrame();
+    await nextResize(grid);
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
     await aTimeout(1);
 
     dragData = {};

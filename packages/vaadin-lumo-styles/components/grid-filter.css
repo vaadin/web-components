@@ -6,7 +6,8 @@
 @import '../src/components/grid-filter.css';
 @import './text-field.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-grid-filter-inject: 1;
   --_lumo-vaadin-grid-filter-inject-modules: lumo_components_grid-filter;
 }

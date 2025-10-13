@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-tab-font-weight: var(--aura-font-weight-medium);
   --vaadin-tabs-gap: 2px;
 }

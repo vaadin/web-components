@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-avatar-border-color: var(--vaadin-border-color-secondary);
   --vaadin-avatar-background: var(--vaadin-background-container);
   --vaadin-avatar-font-weight: var(--aura-font-weight-medium);

@@ -1,4 +1,5 @@
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
 }
 

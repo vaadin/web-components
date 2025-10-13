@@ -18,7 +18,8 @@
 @import '../src/components/time-picker.css';
 @import './input-container.css';
 
-:is(:root, :host)::before {
+:root::before,
+:host::before {
   --_lumo-vaadin-time-picker-inject: 1;
   --_lumo-vaadin-time-picker-inject-modules:
     lumo_mixins_field-label,
