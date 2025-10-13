@@ -79,7 +79,7 @@ vaadin-tab {
 }
 
 vaadin-tab:not([disabled], [selected]):hover {
-  --vaadin-tab-color: var(--vaadin-text-color);
+  --vaadin-tab-text-color: var(--vaadin-text-color);
 }
 
 vaadin-tab[selected] {
@@ -92,7 +92,7 @@ vaadin-tab[selected] {
     oklch(from var(--aura-accent-dark) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast)))
   );
   --vaadin-tab-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
-  --vaadin-tab-color: var(--aura-accent-text);
+  --vaadin-tab-text-color: var(--aura-accent-text);
   border-color: var(--_accent-border);
   box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
 }
@@ -101,26 +101,26 @@ vaadin-tab[selected] {
 
 vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
   --vaadin-tab-background: var(--aura-accent-color) border-box;
-  --vaadin-tab-color: var(--aura-accent-contrast);
+  --vaadin-tab-text-color: var(--aura-accent-contrast);
   outline-offset: 1px;
 }
 
 /* Badges and other content that uses the palette inside a filled nav item */
 vaadin-tabs[theme~='filled'] vaadin-tab[selected] > :not([slot='tooltip']) {
-  --vaadin-text-color: var(--vaadin-tab-color);
-  --vaadin-text-color-secondary: var(--vaadin-tab-color);
-  --aura-accent-color: var(--vaadin-tab-color);
-  --aura-accent-text: var(--vaadin-tab-color);
-  --aura-red: var(--vaadin-tab-color);
-  --aura-red-text: var(--vaadin-tab-color);
-  --aura-orange: var(--vaadin-tab-color);
-  --aura-orange-text: var(--vaadin-tab-color);
-  --aura-yellow: var(--vaadin-tab-color);
-  --aura-yellow-text: var(--vaadin-tab-color);
-  --aura-green: var(--vaadin-tab-color);
-  --aura-green-text: var(--vaadin-tab-color);
-  --aura-blue: var(--vaadin-tab-color);
-  --aura-blue-text: var(--vaadin-tab-color);
-  --aura-purple: var(--vaadin-tab-color);
-  --aura-purple-text: var(--vaadin-tab-color);
+  --vaadin-text-color: var(--vaadin-tab-text-color);
+  --vaadin-text-color-secondary: var(--vaadin-tab-text-color);
+  --aura-accent-color: var(--vaadin-tab-text-color);
+  --aura-accent-text: var(--vaadin-tab-text-color);
+  --aura-red: var(--vaadin-tab-text-color);
+  --aura-red-text: var(--vaadin-tab-text-color);
+  --aura-orange: var(--vaadin-tab-text-color);
+  --aura-orange-text: var(--vaadin-tab-text-color);
+  --aura-yellow: var(--vaadin-tab-text-color);
+  --aura-yellow-text: var(--vaadin-tab-text-color);
+  --aura-green: var(--vaadin-tab-text-color);
+  --aura-green-text: var(--vaadin-tab-text-color);
+  --aura-blue: var(--vaadin-tab-text-color);
+  --aura-blue-text: var(--vaadin-tab-text-color);
+  --aura-purple: var(--vaadin-tab-text-color);
+  --aura-purple-text: var(--vaadin-tab-text-color);
 }

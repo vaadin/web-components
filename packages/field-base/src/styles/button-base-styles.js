@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const button = css`
   [part$='button'] {
-    color: var(--vaadin-input-field-button-color, var(--vaadin-text-color-secondary));
+    color: var(--vaadin-input-field-button-text-color, var(--vaadin-text-color-secondary));
     cursor: var(--vaadin-clickable-cursor);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
