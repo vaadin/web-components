@@ -49,13 +49,15 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  *
  * ### Styling
  *
- * The following Shadow DOM parts of the `<vaadin-app-layout>` are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name     | Description
- * --------------|---------------------------------------------------------|
- * `backdrop`    | Backdrop covering the layout when drawer is open as an overlay
- * `navbar`      | Container for the navigation bar
- * `drawer`      | Container for the drawer area
+ * Part name        | Description
+ * -----------------|---------------------------------------------------------|
+ * `backdrop`       | Backdrop covering the layout when drawer is open as an overlay
+ * `navbar`         | Container for the navigation bar
+ * `navbar-top`     | Container for the top navigation bar
+ * `navbar-bottom`  | Container for the bottom navigation bar
+ * `drawer`         | Container for the drawer area
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -127,7 +129,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @protected */
   render() {
     return html`
-      <div part="navbar" id="navbarTop">
+      <div part="navbar navbar-top" id="navbarTop">
         <slot name="navbar" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
       <div part="backdrop" @click="${this._onBackdropClick}" @touchend="${this._onBackdropTouchend}"></div>
@@ -137,7 +139,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       <div content>
         <slot></slot>
       </div>
-      <div part="navbar" id="navbarBottom" bottom hidden>
+      <div part="navbar navbar-bottom" id="navbarBottom" bottom hidden>
         <slot name="navbar-bottom"></slot>
       </div>
       <div hidden>

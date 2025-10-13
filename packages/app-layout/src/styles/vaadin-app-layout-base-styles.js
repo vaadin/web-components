@@ -55,7 +55,7 @@ export const appLayoutStyles = css`
     }
   }
 
-  [part='navbar'] {
+  [part~='navbar'] {
     position: fixed;
     display: flex;
     align-items: center;
@@ -78,7 +78,7 @@ export const appLayoutStyles = css`
     background: var(--vaadin-app-layout-navbar-background, var(--vaadin-background-container));
   }
 
-  :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
+  :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part~='navbar'] {
     inset-inline-start: var(--vaadin-app-layout-drawer-offset-left, 0);
   }
 
@@ -86,7 +86,7 @@ export const appLayoutStyles = css`
     top: 0;
   }
 
-  [part='navbar'][bottom] {
+  [part~='navbar-bottom'] {
     top: auto;
     bottom: 0;
     padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s));
