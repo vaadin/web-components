@@ -7,6 +7,13 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const group = css`
+  [part='label'],
+  [part='helper-text'],
+  [part='error-message'] {
+    width: auto;
+    min-width: auto;
+  }
+
   [part='group-field'] {
     display: flex;
     flex-direction: column;
@@ -15,5 +22,6 @@ export const group = css`
 
   :host([theme~='horizontal']) [part='group-field'] {
     flex-flow: row wrap;
+    align-items: center;
   }
 `;

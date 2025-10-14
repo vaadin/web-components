@@ -19,8 +19,11 @@ export const field = css`
     display: inline-grid;
     grid-template-columns: 100%;
     grid-template-rows:
-      var(--_helper-below-field, var(--_has-label, auto) 0 1fr var(--_has-helper, auto) var(--_has-error, auto))
-      var(--_helper-above-field, var(--_has-label, auto) var(--_has-helper, auto) 0 1fr var(--_has-error, auto));
+      var(--_helper-below-field, var(--_has-label, auto 0) 1fr var(--_has-helper, auto) var(--_has-error, auto))
+      var(
+        --_helper-above-field,
+        var(--_has-label, auto) var(--_has-helper, auto) var(--_has-label, 0) 1fr var(--_has-error, auto)
+      );
     gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     outline: none;
     cursor: default;
@@ -56,23 +59,34 @@ export const field = css`
   :host::before {
     content: '\\2003' / '';
     grid-column: 1;
-    grid-row: var(--_helper-below-field, var(--_no-label, 1 / 2) var(--_has-label, 1 / 3))
-      var(--_helper-above-field, 1 / 3);
-    align-self: end;
+    grid-row: var(--_helper-below-field, var(--_no-label, 1) var(--_has-label, 1 / 3))
+      var(
+        --_helper-above-field,
+        var(--_no-label, var(--_no-helper, 1) var(--_has-helper, 1 / 3))
+          var(--_has-label, var(--_no-helper, 1 / 3) var(--_has-helper, 1 / 4))
+      );
+    align-self: var(--_helper-below-field, var(--_no-label, start) var(--_has-label, end))
+      var(
+        --_helper-above-field,
+        var(--_no-label, var(--_no-helper, start) var(--_has-helper, end))
+          var(--_has-label, var(--_no-helper, end) var(--_has-helper, end))
+      );
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
-    --_label-gap: var(--_helper-below-field, 0px)
-      var(--_helper-above-field, var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs)));
-    margin-bottom: calc(
+    margin-bottom: var(--_no-label, 0)
       var(
-          --vaadin-field-baseline-input-height,
-          (1lh + var(--vaadin-padding-xs) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
-        ) *
-        -1 - var(--_label-gap)
-    );
+        --_has-label,
+        calc(
+          var(
+              --vaadin-field-baseline-input-height,
+              (1lh + var(--vaadin-padding-xs) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
+            ) *
+            -1
+        )
+      );
   }
 
   [class$='container'] {
@@ -136,10 +150,10 @@ export const field = css`
   [part='input-field'],
   [part='group-field'],
   [part='input-fields'] {
-    grid-row: var(--_helper-below-field, var(--_no-label, 1 / 3) var(--_has-label, 2 / 4))
+    grid-row: var(--_helper-below-field, var(--_no-label, 1) var(--_has-label, 2 / 4))
       var(
         --_helper-above-field,
-        var(--_no-label, var(--_no-helper, 1 / 3) var(--_has-helper, 2 / 4))
+        var(--_no-label, var(--_no-helper, 1) var(--_has-helper, 2 / 4))
           var(--_has-label, var(--_no-helper, 2 / 4) var(--_has-helper, 3 / 5))
       );
   }
