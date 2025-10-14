@@ -16,6 +16,9 @@
       import '@vaadin/select';
       import '@vaadin/custom-field';
       import '@vaadin/number-field';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/button';
 
       const select = document.querySelector('vaadin-select');
       select.items = [
@@ -32,8 +35,14 @@
 
   <body>
     <span>Inline text</span>
+    <vaadin-button>
+      <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      <span>Button</span>
+    </vaadin-button>
     <vaadin-checkbox></vaadin-checkbox>
-    <vaadin-text-field required error-message="Write something"></vaadin-text-field>
+    <vaadin-text-field required error-message="Write something">
+      <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+    </vaadin-text-field>
     <vaadin-checkbox label="Checkbox" helper-text="Description text" required error-message="Check this"></vaadin-checkbox>
     <vaadin-text-field label="Label that should wrap on multiple lines" required error-message="Write something"></vaadin-text-field>
     <vaadin-text-field label="Label" helper-text="Description that wraps on multiple lines" required error-message="Write something"></vaadin-text-field>
