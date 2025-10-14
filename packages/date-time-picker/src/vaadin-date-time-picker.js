@@ -117,7 +117,7 @@ class DateTimePicker extends DateTimePickerMixin(
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="slots">
+        <div part="input-fields">
           <slot name="date-picker" id="dateSlot"></slot>
           <slot name="time-picker" id="timeSlot"></slot>
         </div>
