@@ -22,7 +22,7 @@ export const IconFontSizeMixin = (superclass) =>
           return css`
             :host::after,
             :host::before {
-              font-size: var(--_vaadin-font-icon-size);
+              font-size: var(--vaadin-icon-visual-size, var(--_vaadin-font-icon-size));
             }
           `;
         }
