@@ -84,7 +84,8 @@ class Icon extends IconMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   }
 
   static get styles() {
-    return iconStyles;
+    // Apply `super.styles` only if the fallback is used
+    return [super.styles, iconStyles].filter(Boolean);
   }
 
   static get lumoInjector() {

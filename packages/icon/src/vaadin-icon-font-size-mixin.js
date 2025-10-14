@@ -3,25 +3,11 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { css } from 'lit';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { needsFontIconSizingFallback } from './vaadin-icon-helpers.js';
 
 const usesFontIconSizingFallback = needsFontIconSizingFallback();
-
-if (usesFontIconSizingFallback) {
-  registerStyles(
-    'vaadin-icon',
-    css`
-      :host::after,
-      :host::before {
-        font-size: var(--_vaadin-font-icon-size);
-      }
-    `,
-    'vaadin-icon-font-size-mixin-styles',
-  );
-}
-
 /**
  * Mixin which enables the font icon sizing fallback for browsers that do not support CSS Container Queries.
  * The mixin does nothing if the browser supports CSS Container Query units for pseudo elements.
@@ -32,8 +18,19 @@ export const IconFontSizeMixin = (superclass) =>
   !usesFontIconSizingFallback
     ? superclass
     : class extends ResizeMixin(superclass) {
+        static get styles() {
+          return css`
+            :host::after,
+            :host::before {
+              font-size: var(--_vaadin-font-icon-size);
+            }
+          `;
+        }
+
+        /** @protected */
         updated(props) {
           super.updated(props);
+
           if (props.has('char') || props.has('iconClass') || props.has('ligature')) {
             this.__updateFontIconSize();
           }
