@@ -796,7 +796,7 @@ export const ChartMixin = (superClass) =>
         // environments where the chart is lazily attached (e.g Grid).
         if (this.configuration) {
           const { height } = this.$.wrapper.style;
-          this.$.wrapper.style.height = null;
+          this.$.wrapper.style.height = '';
           this.configuration.setSize(null, null, false);
           this.$.wrapper.style.height = height;
           return;
