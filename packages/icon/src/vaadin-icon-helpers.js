@@ -28,11 +28,21 @@ export function supportsCQUnitsForPseudoElements() {
   const testElement = document.createElement('div');
   testElement.classList.add('vaadin-icon-test-element');
 
-  document.body.append(testStyle, testElement);
-  const { height } = getComputedStyle(testElement, '::before');
+  const shadowParent = document.createElement('div');
+  shadowParent.attachShadow({ mode: 'open' });
+  shadowParent.shadowRoot.innerHTML = '<slot></slot>';
+  shadowParent.append(testElement.cloneNode());
+
+  document.body.append(testStyle, testElement, shadowParent);
+
+  const needsFallback = [...document.querySelectorAll('.vaadin-icon-test-element')].find(
+    (el) => getComputedStyle(el, '::before').height !== '2px',
+  );
+
   testStyle.remove();
   testElement.remove();
-  return height === '2px';
+  shadowParent.remove();
+  return !needsFallback;
 }
 
 /**
