@@ -336,6 +336,7 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     fallBackIt('should have the same height as the host with shadow root', async () => {
+      icon = fixtureSync('<vaadin-icon char="foo" style="--vaadin-icon-size: 24px"></vaadin-icon>');
       const parent = fixtureSync('<div></div>');
       parent.attachShadow({ mode: 'open' });
       parent.shadowRoot.innerHTML = '<slot></slot>';
