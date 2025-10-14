@@ -259,6 +259,24 @@ describe('reattach', () => {
     expect(chart.configuration.inverted).to.be.undefined;
   });
 
+  it('should restore default height when moving from different container with defined height', async () => {
+    await oneEvent(chart, 'chart-load');
+
+    const initialHeight = getComputedStyle(chart).height;
+
+    inner.style.height = '700px';
+    inner.appendChild(chart);
+    await nextFrame();
+
+    expect(getComputedStyle(chart).height).to.be.equal(inner.style.height);
+
+    // Move back to first parent
+    wrapper.appendChild(chart);
+    await nextFrame();
+
+    expect(getComputedStyle(chart).height).to.be.equal(initialHeight);
+  });
+
   describe('series', () => {
     let series;
 
