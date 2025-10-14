@@ -14,22 +14,15 @@ describe('nested popover', () => {
   });
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
+    popover = fixtureSync(`
+      <vaadin-popover>
+        <button id="nested-target">Nested target</button>
+        <vaadin-popover for="nested-target">Nested</vaadin-popover>
+      </vaadin-popover>
+    `);
     target = fixtureSync('<button>Target</button>');
     popover.target = target;
-    popover.renderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-      root.innerHTML = `
-        <button id="nested-target">Nested target</button>
-        <vaadin-popover for="nested-target"></vaadin-popover>
-      `;
-      [nestedTarget, nestedPopover] = root.children;
-      nestedPopover.renderer = (root2) => {
-        root2.textContent = 'Nested';
-      };
-    };
+    [nestedTarget, nestedPopover] = popover.children;
     await nextRender();
   });
 
@@ -170,100 +163,110 @@ describe('nested popover', () => {
 });
 
 describe('not nested popover', () => {
-  let popover, popoverContent, target, secondPopover, secondPopoverContent, secondTarget;
+  let popover1, content1, target1, popover2, content2, target2;
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
-    target = fixtureSync('<button>Target</button>');
-    popover.target = target;
-    popover.renderer = (root) => {
-      root.innerHTML = '<button>Popover content</button>';
-      popoverContent = root.firstElementChild;
-    };
+    [popover1, popover2] = fixtureSync(`
+      <div>
+        <vaadin-popover>
+          <button>Content 1</button>
+        </vaadin-popover>
+        <vaadin-popover>
+          <button>Content 2</button>
+        </vaadin-popover>
+      </div>
+    `).children;
 
-    secondPopover = fixtureSync('<vaadin-popover></vaadin-popover>');
-    secondTarget = fixtureSync('<button>Second Target</button>');
-    secondPopover.target = secondTarget;
-    secondPopover.trigger = [];
-    secondPopover.renderer = (root) => {
-      root.innerHTML = '<button>Second Popover content</button>';
-      secondPopoverContent = root.firstElementChild;
-    };
+    [target1, target2] = fixtureSync(`
+      <div>
+        <button>Target 1</button>
+        <button>Target 2</button>
+      </div>
+    `).children;
+
+    popover1.target = target1;
+    popover2.target = target2;
+
+    content1 = popover1.firstElementChild;
+    content2 = popover2.firstElementChild;
+
+    popover2.trigger = [];
+
     await nextRender();
   });
 
   describe('focus', () => {
     beforeEach(() => {
-      popover.trigger = ['focus'];
+      popover1.trigger = ['focus'];
     });
 
     it('should close the popover when focus moves from target to non-nested popover', async () => {
-      target.focus();
+      target1.focus();
       await nextRender();
 
       // open second popover
-      secondPopover.opened = true;
+      popover2.opened = true;
       await nextRender();
 
-      secondPopoverContent.focus();
+      content2.focus();
 
-      expect(popover.opened).to.be.false;
+      expect(popover1.opened).to.be.false;
     });
 
     it('should close when focus moves from the overlay to non-nested popover', async () => {
-      target.focus();
+      target1.focus();
       await nextRender();
 
-      popoverContent.focus();
+      content1.focus();
       await nextRender();
-      expect(popover.opened).to.be.true;
+      expect(popover1.opened).to.be.true;
 
       // open second popover
-      secondPopover.opened = true;
+      popover2.opened = true;
       await nextRender();
 
-      secondPopoverContent.focus();
+      content2.focus();
       await nextRender();
 
-      expect(popover.opened).to.be.false;
+      expect(popover1.opened).to.be.false;
     });
   });
 
   describe('hover', () => {
     beforeEach(() => {
-      popover.trigger = ['hover'];
+      popover1.trigger = ['hover'];
     });
 
     it('should close the popover when mouse leaves target to non-nested popover', async () => {
-      mouseenter(target);
+      mouseenter(target1);
       await nextRender();
 
       // open second popover
-      secondPopover.opened = true;
+      popover2.opened = true;
       await nextRender();
 
-      mouseleave(target, secondPopoverContent);
-      await nextUpdate(popover);
+      mouseleave(target1, content2);
+      await nextUpdate(popover1);
 
-      expect(popover.opened).to.be.false;
+      expect(popover1.opened).to.be.false;
     });
 
     it('should close when mouse leaves the overlay to non-nested popover', async () => {
-      mouseenter(target);
+      mouseenter(target1);
       await nextRender();
 
-      mouseenter(popoverContent);
+      mouseenter(content1);
       await nextRender();
-      expect(popover.opened).to.be.true;
+      expect(popover1.opened).to.be.true;
 
       // open second popover
-      secondPopover.opened = true;
+      popover2.opened = true;
       await nextRender();
 
-      mouseleave(popoverContent, secondPopoverContent);
-      await nextUpdate(popover);
+      mouseleave(content1, content2);
+      await nextUpdate(popover1);
 
-      expect(popover.opened).to.be.false;
+      expect(popover1.opened).to.be.false;
     });
   });
 });
