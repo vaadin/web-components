@@ -55,7 +55,7 @@ export const field = css`
 
   /* Baseline alignment guide */
   :host::before {
-    content: '\\2003';
+    content: '\\2003' / '';
     grid-column: 1;
     grid-row: var(--_helper-below-field, var(--_no-label, 1 / 2) var(--_has-label, 1 / 3))
       var(--_helper-above-field, 1 / 3);
