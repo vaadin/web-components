@@ -192,6 +192,43 @@ describe('not nested popover', () => {
     await nextRender();
   });
 
+  describe('focus', () => {
+    beforeEach(() => {
+      popover.trigger = ['focus'];
+    });
+
+    it('should close the popover when focus moves from target to non-nested popover', async () => {
+      target.focus();
+      await nextRender();
+
+      // open second popover
+      secondPopover.opened = true;
+      await nextRender();
+
+      secondPopoverContent.focus();
+
+      expect(popover.opened).to.be.false;
+    });
+
+    it('should close when focus moves from the overlay to non-nested popover', async () => {
+      target.focus();
+      await nextRender();
+
+      popoverContent.focus();
+      await nextRender();
+      expect(popover.opened).to.be.true;
+
+      // open second popover
+      secondPopover.opened = true;
+      await nextRender();
+
+      secondPopoverContent.focus();
+      await nextRender();
+
+      expect(popover.opened).to.be.false;
+    });
+  });
+
   describe('hover', () => {
     beforeEach(() => {
       popover.trigger = ['hover'];
