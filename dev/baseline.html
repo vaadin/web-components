@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Field Baseline Alignment</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/text-field';
+      import '@vaadin/text-area';
+      import '@vaadin/checkbox';
+      import '@vaadin/radio-group';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/select';
+      import '@vaadin/custom-field';
+      import '@vaadin/number-field';
+
+      const select = document.querySelector('vaadin-select');
+      select.items = [
+        { label: 'Show all', value: 'all' },
+        { component: 'hr' },
+        { label: 'XS (out of stock)', value: 'xs', disabled: true },
+        { label: 'S', value: 's' },
+        { label: 'M', value: 'm' },
+        { label: 'L', value: 'l' },
+        { label: 'XL', value: 'xl' },
+      ];
+    </script>
+  </head>
+
+  <body>
+    <span>Inline text</span>
+    <vaadin-checkbox></vaadin-checkbox>
+    <vaadin-text-field required error-message="Write something"></vaadin-text-field>
+    <vaadin-checkbox label="Checkbox" helper-text="Description text" required error-message="Check this"></vaadin-checkbox>
+    <vaadin-text-field label="Label that should wrap on multiple lines" required error-message="Write something"></vaadin-text-field>
+    <vaadin-text-field label="Label" helper-text="Description that wraps on multiple lines" required error-message="Write something"></vaadin-text-field>
+    <vaadin-text-area required error-message="Write something"></vaadin-text-area>
+    <vaadin-text-area label="Label" helper-text="Description that wraps on multiple lines" theme="helper-above-field" required error-message="Write something"></vaadin-text-area>
+    <vaadin-select label="Label" required error-message="Select an item"></vaadin-select>
+    <vaadin-checkbox-group label="Checkbox Group" helper-text="Description text">
+      <vaadin-checkbox label="Option"></vaadin-checkbox>
+      <vaadin-checkbox label="Option"></vaadin-checkbox>
+      <vaadin-checkbox label="Option"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+    <vaadin-radio-group label="Radio Group" helper-text="Description text" theme="helper-above-field">
+      <vaadin-radio-button label="Option"></vaadin-radio-button>
+      <vaadin-radio-button label="Option"></vaadin-radio-button>
+      <vaadin-radio-button label="Option"></vaadin-radio-button>
+    </vaadin-radio-group>
+    <vaadin-custom-field label="Label" required error-message="This field is required"
+      helper-text="Description text">
+      <vaadin-text-field allowed-char-pattern="[0-9]" pattern="[0-9]*" maxlength="4" style="width: 5rem"
+        required></vaadin-text-field>
+      <vaadin-number-field required></vaadin-number-field>
+    </vaadin-custom-field>
+  </body>
+</html>

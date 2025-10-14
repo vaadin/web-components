@@ -10,7 +10,6 @@ import { css, unsafeCSS } from 'lit';
 export const checkable = (part, propName = part) => css`
   :host {
     align-items: center;
-    display: inline-grid;
     gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     /*
@@ -29,10 +28,6 @@ export const checkable = (part, propName = part) => css`
 
   :host(:not([has-label])) {
     column-gap: 0;
-  }
-
-  .vaadin-${unsafeCSS(propName)}-container {
-    display: contents;
   }
 
   [part='${unsafeCSS(part)}'],
@@ -58,17 +53,20 @@ export const checkable = (part, propName = part) => css`
     grid-column: 1;
   }
 
+  [part='label'],
   [part='helper-text'],
   [part='error-message'] {
     grid-column: 2;
+    width: auto;
+    min-width: auto;
   }
 
   /* Baseline vertical alignment */
   :host::before {
-    content: '\\2003';
-    grid-column: 1;
     grid-row: 1;
-    width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
   }
 
   /* visually hidden */

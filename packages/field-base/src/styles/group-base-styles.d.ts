@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const group: (name?: string) => CSSResult;
+export const group: CSSResult;
