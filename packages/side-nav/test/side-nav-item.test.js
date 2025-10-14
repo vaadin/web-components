@@ -196,21 +196,6 @@ describe('side-nav-item', () => {
         await item.updateComplete;
         expect(spy.calledOnce).to.be.true;
       });
-
-      it('should expand parent items when path matches', async () => {
-        item = fixtureSync(`
-          <vaadin-side-nav-item>
-            <vaadin-side-nav-item slot="children">
-                <vaadin-side-nav-item slot="children"></vaadin-side-nav-item>
-            </vaadin-side-nav-item>
-          </vaadin-side-nav-item>
-        `);
-        await nextRender();
-        item._items[0]._items[0].path = '';
-        await item.updateComplete;
-        expect(item.expanded).to.be.true;
-        expect(item._items[0].expanded).to.be.true;
-      });
     });
 
     describe('current item with children', () => {

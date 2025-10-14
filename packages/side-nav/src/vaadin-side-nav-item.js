@@ -341,6 +341,11 @@ class SideNavItem extends SideNavChildrenMixin(
 
   /** @private */
   __expandParentItems() {
+    const sideNav = this.closest('vaadin-side-nav');
+    if (sideNav && sideNav.noAutoExpand) {
+      return;
+    }
+
     const parentItem = this.__getParentItem();
     if (parentItem) {
       parentItem.__expandParentItems();

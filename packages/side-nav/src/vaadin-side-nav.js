@@ -150,6 +150,19 @@ class SideNav extends SideNavChildrenMixin(
       location: {
         observer: '__locationChanged',
       },
+
+      /**
+       * Whether to expand parent items of the nested matching item after initial
+       * rendering or navigation. By default, all the parent items are expanded.
+       * Set to true to disable this behavior.
+       *
+       * @attr {boolean} no-auto-expand
+       */
+      noAutoExpand: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false,
+      },
     };
   }
 
