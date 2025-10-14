@@ -16,7 +16,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { isLastOverlay as isLastOverlayBase } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import {
+  hasOnlyNestedOverlays,
+  isLastOverlay as isLastOverlayBase,
+} from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -852,13 +855,16 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
-    // Do not close the popover on target focusout if the overlay is not the last one.
-    // This happens e.g. when opening the nested popover that uses non-modal overlay.
-    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
+    // Do not close if the pointer moves to the overlay
+    if (this.contains(event.relatedTarget)) {
       return;
     }
-
-    if (this.contains(event.relatedTarget)) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
+    if (
+      this._overlayElement.opened &&
+      !isLastOverlay(this._overlayElement) &&
+      hasOnlyNestedOverlays(this._overlayElement)
+    ) {
       return;
     }
 
@@ -924,14 +930,12 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
-    // This happens when opening the nested component that uses "modal" overlay
-    // setting `pointer-events: none` on the body (combo-box, date-picker etc).
-    if (!isLastOverlay(this._overlayElement)) {
+    // Do not close if the pointer moves to the target
+    if (event.relatedTarget === this.target) {
       return;
     }
-
-    if (event.relatedTarget === this.target) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
+    if (!isLastOverlay(this._overlayElement) && hasOnlyNestedOverlays(this._overlayElement)) {
       return;
     }
 

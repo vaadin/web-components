@@ -17,7 +17,7 @@ const getAttachedInstances = () => [...attachedInstances].filter((el) => !el.has
  * Returns true if all the instances on top of the overlay are nested overlays.
  * @private
  */
-const hasOnlyNestedOverlays = (overlay) => {
+export const hasOnlyNestedOverlays = (overlay) => {
   const instances = getAttachedInstances();
   const next = instances[instances.indexOf(overlay) + 1];
   if (!next) {
