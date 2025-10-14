@@ -260,13 +260,14 @@ describe('reattach', () => {
   });
 
   it('should restore default height when moving from different container with defined height', async () => {
+    chart.style.height = '100%';
     await oneEvent(chart, 'chart-load');
 
     const initialHeight = getComputedStyle(chart).height;
 
     inner.style.height = '700px';
     inner.appendChild(chart);
-    await nextFrame();
+    await oneEvent(chart, 'chart-redraw');
 
     expect(getComputedStyle(chart).height).to.be.equal(inner.style.height);
 
