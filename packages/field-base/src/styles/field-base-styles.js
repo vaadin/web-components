@@ -25,7 +25,6 @@ export const field = css`
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
-    contain: layout;
   }
 
   :host([has-label]) {
