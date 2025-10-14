@@ -127,6 +127,15 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
    */
   location: any;
 
+  /**
+   * Whether to expand all the parent items when the item is the current one
+   * after initial rendering or navigation. By default, all the parent items
+   * are being expanded recursively. Set to true to disable this behavior.
+   *
+   * @attr {boolean} no-auto-expand
+   */
+  noAutoExpand: boolean;
+
   addEventListener<K extends keyof SideNavEventMap>(
     type: K,
     listener: (this: SideNav, ev: SideNavEventMap[K]) => void,

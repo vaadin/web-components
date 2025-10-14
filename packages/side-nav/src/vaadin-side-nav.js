@@ -150,6 +150,19 @@ class SideNav extends SideNavChildrenMixin(
       location: {
         observer: '__locationChanged',
       },
+
+      /**
+       * Whether to expand all the parent items when the item is the current one
+       * after initial rendering or navigation. By default, all the parent items
+       * are being expanded recursively. Set to true to disable this behavior.
+       *
+       * @attr {boolean} no-auto-expand
+       */
+      noAutoExpand: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false,
+      },
     };
   }
 

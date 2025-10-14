@@ -6,21 +6,11 @@ import '../src/vaadin-side-nav.js';
 describe('side-nav', () => {
   let sideNav;
 
-  beforeEach(async () => {
-    sideNav = fixtureSync(`
-      <vaadin-side-nav collapsible>
-        <span slot="label">Main menu</span>
-        <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
-        <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
-      </vaadin-side-nav>
-    `);
-    await nextRender();
-  });
-
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
+      sideNav = fixtureSync('<vaadin-side-nav></vaadin-side-nav>');
       tagName = sideNav.tagName.toLowerCase();
     });
 
@@ -36,7 +26,15 @@ describe('side-nav', () => {
   describe('collapsing', () => {
     let label;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      sideNav = fixtureSync(`
+        <vaadin-side-nav collapsible>
+          <span slot="label">Main menu</span>
+          <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
+          <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
+        </vaadin-side-nav>
+      `);
+      await nextRender();
       label = sideNav.shadowRoot.querySelector('[part="label"]');
     });
 
@@ -70,6 +68,39 @@ describe('side-nav', () => {
       label.click();
       await sideNav.updateComplete;
       expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('expanding items', () => {
+    let items;
+
+    beforeEach(async () => {
+      sideNav = fixtureSync(`
+        <vaadin-side-nav collapsible>
+          <vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">
+              <vaadin-side-nav-item slot="children"></vaadin-side-nav-item>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      `);
+      items = sideNav.querySelectorAll('vaadin-side-nav-item');
+      await nextRender();
+    });
+
+    it('should expand parent items when path matches by default', async () => {
+      items[2].path = '';
+      await items[2].updateComplete;
+      expect(items[0].expanded).to.be.true;
+      expect(items[1].expanded).to.be.true;
+    });
+
+    it('should not expand parent items when path matches if noAutoExpand is set to true', async () => {
+      sideNav.noAutoExpand = true;
+      items[2].path = '';
+      await items[2].updateComplete;
+      expect(items[0].expanded).to.be.false;
+      expect(items[1].expanded).to.be.false;
     });
   });
 });

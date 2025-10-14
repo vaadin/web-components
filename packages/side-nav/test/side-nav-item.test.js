@@ -198,47 +198,6 @@ describe('side-nav-item', () => {
       });
     });
 
-    describe('nested item', () => {
-      let root, items;
-
-      beforeEach(async () => {
-        root = fixtureSync(`
-          <div>
-            <vaadin-side-nav-item>
-              <vaadin-side-nav-item slot="children">
-                <vaadin-side-nav-item slot="children"></vaadin-side-nav-item>
-              </vaadin-side-nav-item>
-            </vaadin-side-nav-item>
-          </div>
-        `);
-        items = root.querySelectorAll('vaadin-side-nav-item');
-        await nextRender();
-      });
-
-      it('should expand parent items when path matches by default', async () => {
-        items[2].path = '';
-        await items[2].updateComplete;
-        expect(items[0].expanded).to.be.true;
-        expect(items[1].expanded).to.be.true;
-      });
-
-      it('should not expand parent items when path matches if noAutoExpand is set on leaf item', async () => {
-        items[2].noAutoExpand = true;
-        items[2].path = '';
-        await items[2].updateComplete;
-        expect(items[0].expanded).to.be.false;
-        expect(items[1].expanded).to.be.false;
-      });
-
-      it('should not expand parent items when path matches if noAutoExpand is set on parent item', async () => {
-        items[1].noAutoExpand = true;
-        items[2].path = '';
-        await items[2].updateComplete;
-        expect(items[0].expanded).to.be.false;
-        expect(items[1].expanded).to.be.false;
-      });
-    });
-
     describe('current item with children', () => {
       beforeEach(async () => {
         item = fixtureSync(`

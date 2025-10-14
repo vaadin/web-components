@@ -177,18 +177,6 @@ class SideNavItem extends SideNavChildrenMixin(
         value: false,
       },
 
-      /**
-       * Whether to expand all the parent items when the item is the current one
-       * after initial rendering or navigation. By default, all the parent items
-       * are being expanded recursively. Set to true to disable this behavior.
-       *
-       * @attr {boolean} no-auto-expand
-       */
-      noAutoExpand: {
-        type: Boolean,
-        value: false,
-      },
-
       /** @private */
       __tooltipText: {
         type: String,
@@ -353,7 +341,8 @@ class SideNavItem extends SideNavChildrenMixin(
 
   /** @private */
   __expandParentItems() {
-    if (this.noAutoExpand) {
+    const sideNav = this.closest('vaadin-side-nav');
+    if (sideNav && sideNav.noAutoExpand) {
       return;
     }
 
