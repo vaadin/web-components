@@ -159,7 +159,7 @@ export const gridStyles = css`
     box-sizing: border-box;
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
     border-block: var(--_row-border-width) solid var(--_border-color);
-    margin-top: calc(var(--_row-border-width) * -1);
+    /* margin-top: calc(var(--_row-border-width) * -1); */
 
     /*
     Box-shadows are used to create a "fake" border at the end of the cell/row, which is visible when a row/cell ends
@@ -368,7 +368,7 @@ export const gridStyles = css`
     inset: 0;
     flex: 1;
     overflow: hidden;
-    margin-top: calc(var(--_row-border-width) * -1);
+    /* margin-top: calc(var(--_row-border-width) * -1); */
   }
 
   #emptystaterow {
