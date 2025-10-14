@@ -152,9 +152,9 @@ class SideNav extends SideNavChildrenMixin(
       },
 
       /**
-       * Whether to expand all the parent items when the item is the current one
-       * after initial rendering or navigation. By default, all the parent items
-       * are being expanded recursively. Set to true to disable this behavior.
+       * Whether to expand parent items of the nested matching item after initial
+       * rendering or navigation. By default, all the parent items are expanded.
+       * Set to true to disable this behavior.
        *
        * @attr {boolean} no-auto-expand
        */
