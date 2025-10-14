@@ -8,6 +8,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { needsFontIconSizingFallback } from './vaadin-icon-helpers.js';
 
 const usesFontIconSizingFallback = needsFontIconSizingFallback();
+
 /**
  * Mixin which enables the font icon sizing fallback for browsers that do not support CSS Container Queries.
  * The mixin does nothing if the browser supports CSS Container Query units for pseudo elements.
