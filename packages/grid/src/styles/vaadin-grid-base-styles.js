@@ -22,7 +22,7 @@ export const gridStyles = css`
     cursor: default;
     --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     --_border-width: 0;
-    --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
+    --_row-border-width: var(--vaadin-grid-row-border-width, 5px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
     border-radius: var(--_border-radius);
     --_border-radius: 0;
@@ -52,7 +52,7 @@ export const gridStyles = css`
   }
 
   #scroller {
-    contain: layout;
+    /* contain: layout; */
     border-radius: calc(var(--_border-radius) - var(--_border-width));
     position: relative;
     display: flex;
@@ -97,13 +97,13 @@ export const gridStyles = css`
     width: 100%;
   }
 
-  :host([overflow~='top']) #header,
+  /* :host([overflow~='top']) #header,
   :host([overflow~='bottom']) #footer,
   :host([navigating]) #header:has(tr:last-child:focus-within),
   :host([navigating]) #footer:has(tr:first-child:focus-within),
   [empty-state] #header {
     z-index: 2;
-  }
+  } */
 
   :host([dir='rtl']) #items,
   :host([dir='rtl']) #header,
@@ -130,12 +130,65 @@ export const gridStyles = css`
     color: var(--vaadin-grid-header-text-color, var(--vaadin-text-color));
   }
 
+  #header,
+  #footer {
+    z-index: 2;
+  }
+
   [part~='row'] {
-    display: flex;
-    width: 100%;
+    display: inline-flex;
+    min-width: 100%;
     box-sizing: border-box;
     margin: 0;
     position: relative;
+    background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
+    border-block: var(--_row-border-width) solid var(--_border-color);
+  }
+
+  #header [part~='row'] {
+    border-block-start-style: none;
+
+    &:last-child {
+      background: transparent;
+    }
+  }
+
+  #footer [part~='row'] {
+    border-block-end-style: none;
+
+    &:first-child {
+      border-block-start-style: none;
+
+      &::before {
+        content: '';
+        display: none;
+        height: var(--_row-border-width);
+        background: var(--_border-color);
+        position: absolute;
+        inset-inline: 0;
+        inset-block-start: calc(-1 * var(--_row-border-width));
+      }
+    }
+  }
+
+  #items [part~='row'] {
+    border-block-start-style: none;
+  }
+
+  :host([overflow~='top']) [part~='last-row'] {
+    border-block-end-style: none;
+  }
+
+  :host([overflow~='bottom']),
+  :host([overflow~='top']) {
+    #table:has(#footer > tr:not([hidden])) [part~='last-row'] {
+      border-block-end-style: solid;
+      border-block-end-color: transparent;
+    }
+
+    #footer [part~='row']::before {
+      display: block;
+    }
   }
 
   [part~='row']:not(:focus-within) {
@@ -155,31 +208,8 @@ export const gridStyles = css`
   }
 
   [part~='cell'] {
-    padding: 0;
     box-sizing: border-box;
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
-    border-block: var(--_row-border-width) solid var(--_border-color);
-    margin-top: calc(var(--_row-border-width) * -1);
-
-    /*
-    Box-shadows are used to create a "fake" border at the end of the cell/row, which is visible when a row/cell ends
-    before the edge of the grid viewport, as well as frozen columns and rows (header and footer).
-    If there are frozen columns, we'll make the "fake box-shadow border" on the header and footer opaque by rendering
-    both the border color and cell background color, so that a semi-transparent border color doesn't "stack" when
-    scrolling horizontally.
-    */
-    --_fake-border:
-      0 calc(var(--_top, 0) * var(--_row-border-width) * -1) 0 0 var(--_border-color),
-      0 calc(var(--_top-opaque, 0) * var(--_row-border-width) * -1) 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
-      0 calc(var(--_bottom, 0) * var(--_row-border-width)) 0 0 var(--_border-color),
-      0 calc(var(--_bottom-opaque, 0) * var(--_row-border-width)) 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
-      calc(var(--_start, 0) * var(--_column-border-width) * -1) 0 0 0 var(--_border-color),
-      calc(var(--_end, 0) * var(--_column-border-width)) 0 0 0 var(--_border-color),
-      calc(var(--_end-opaque, 0) * var(--_column-border-width)) 0 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
-    box-shadow: var(--_fake-border);
   }
 
   [part~='cell']:where(:not([part~='details-cell'])) {
@@ -197,18 +227,18 @@ export const gridStyles = css`
     border-inline-start: 0;
   }
 
-  [part~='first-header-row-cell'],
+  /* [part~='first-header-row-cell'],
   [part~='first-footer-row-cell'],
   [part~='first-row-cell'] {
     margin-top: 0;
     border-top: 0;
-  }
+  } */
 
-  table:has(#header > tr:not([hidden])) [part~='first-row-cell'] {
+  /* table:has(#header > tr:not([hidden])) [part~='first-row-cell'] {
     border-top: var(--_row-border-width) solid var(--_border-color);
-  }
+  } */
 
-  [part~='last-column-cell'] {
+  /* [part~='last-column-cell'] {
     --_end: 1;
   }
 
@@ -260,7 +290,7 @@ export const gridStyles = css`
   table:has(#footer > tr:not([hidden])) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
     border-bottom: var(--_row-border-width) solid var(--_border-color);
     --_bottom: 0;
-  }
+  } */
 
   [part~='body-cell']:where(:not([part~='details-cell'])) {
     --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
@@ -327,9 +357,9 @@ export const gridStyles = css`
     border-top: 0;
   }
 
-  [part~='last-row-cell'] + [part~='details-cell'] {
+  /* [part~='last-row-cell'] + [part~='details-cell'] {
     border-bottom: 0;
-  }
+  } */
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: block;
@@ -508,22 +538,23 @@ export const gridStyles = css`
   /* Focus outline element, also used for d'n'd indication */
   :is([part~='row'], [part~='cell'])::after {
     position: absolute;
-    inset: calc(var(--_row-border-width) * -1) calc(var(--_column-border-width) * -1);
+    inset-block: calc(-1 * var(--_row-border-width));
+    inset-inline: 0;
     z-index: 3;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='first-column-cell']::after {
+  /* [part~='first-column-cell']::after {
     inset-inline-start: 0;
   }
 
   [part~='last-column-cell']::after {
     inset-inline-end: 0;
-  }
+  } */
 
-  #header [part~='row']:first-child::after,
+  /* #header [part~='row']:first-child::after,
   [part~='first-header-row-cell']::after,
   [part*='first-row']::after {
     top: 0;
@@ -531,19 +562,19 @@ export const gridStyles = css`
 
   table:has(#header > tr:not([hidden])) [part~='first-row-cell']::after {
     top: calc(var(--_row-border-width) * -1);
-  }
+  } */
 
-  #footer [part~='row']:last-child::after,
+  /* #footer [part~='row']:last-child::after,
   [part~='last-footer-row-cell']::after,
   [part~='last-row']::after,
   [part~='last-row-cell']::after {
     bottom: 0;
-  }
+  } */
 
-  #header [part~='row']:last-child::after,
+  /* #header [part~='row']:last-child::after,
   table:has(#footer > tr:not([hidden])) [part*='last-row']::after {
     bottom: calc(var(--_row-border-width) * -1);
-  }
+  } */
 
   :host([navigating]) [part~='row']:focus,
   :host([navigating]) [part~='cell']:focus {
@@ -552,8 +583,6 @@ export const gridStyles = css`
 
   [part~='row']::after {
     transform: translateX(var(--_grid-horizontal-scroll-position));
-    inset-inline: 0;
-    bottom: 0;
   }
 
   [part~='row']:focus-visible,
@@ -602,9 +631,8 @@ export const gridStyles = css`
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  [part~='row'][dragstart] [part~='cell'] {
+  [part~='row'][dragstart] {
     border-block-color: transparent !important;
-    box-shadow: none;
   }
 
   [part~='row'][dragstart] [part~='cell'][last-column] {
@@ -639,6 +667,7 @@ export const gridStyles = css`
   #sizer {
     display: flex;
     visibility: hidden;
+    border: none !important;
   }
 
   #sizer [part~='details-cell'],
