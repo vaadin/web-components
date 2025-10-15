@@ -54,7 +54,7 @@
           width: 200vw;
           height: 1px;
           background: rgba(255, 0, 0, 0.612);
-          top: calc(1lh - 0.3em);
+          top: calc(1em + 1px);
         }
       }
     }
@@ -266,12 +266,10 @@
     <vaadin-checkbox-group label="Label" theme="horizontal">
       <vaadin-checkbox value="a" label="A"></vaadin-checkbox>
       <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
-      <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
     </vaadin-checkbox-group>
-    <vaadin-radio-group label="Label" helper-text="Description text" invalid error-message="Something is wrong">
+    <vaadin-radio-group label="Label" invalid error-message="Something is wrong">
       <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
       <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
-      <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
     </vaadin-radio-group>
     <vaadin-custom-field label="Label that is long but doesn't wrap" helper-text="Description text" invalid
       error-message="Something is wrong" theme="helper-above-field">
