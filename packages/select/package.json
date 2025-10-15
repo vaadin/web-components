@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/select",
-  "version": "25.0.0-alpha21",
+  "version": "25.0.0-beta1",
   "publishConfig": {
     "access": "public"
   },
@@ -36,23 +36,23 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/a11y-base": "25.0.0-alpha21",
-    "@vaadin/button": "25.0.0-alpha21",
-    "@vaadin/component-base": "25.0.0-alpha21",
-    "@vaadin/field-base": "25.0.0-alpha21",
-    "@vaadin/input-container": "25.0.0-alpha21",
-    "@vaadin/item": "25.0.0-alpha21",
-    "@vaadin/list-box": "25.0.0-alpha21",
-    "@vaadin/lit-renderer": "25.0.0-alpha21",
-    "@vaadin/overlay": "25.0.0-alpha21",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha21",
+    "@vaadin/a11y-base": "25.0.0-beta1",
+    "@vaadin/button": "25.0.0-beta1",
+    "@vaadin/component-base": "25.0.0-beta1",
+    "@vaadin/field-base": "25.0.0-beta1",
+    "@vaadin/input-container": "25.0.0-beta1",
+    "@vaadin/item": "25.0.0-beta1",
+    "@vaadin/list-box": "25.0.0-beta1",
+    "@vaadin/lit-renderer": "25.0.0-beta1",
+    "@vaadin/overlay": "25.0.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-beta1",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha21",
-    "@vaadin/test-runner-commands": "25.0.0-alpha21",
+    "@vaadin/chai-plugins": "25.0.0-beta1",
+    "@vaadin/test-runner-commands": "25.0.0-beta1",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha21",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-beta1",
     "sinon": "^21.0.0"
   },
   "web-types": [

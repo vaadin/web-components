@@ -1,5 +1,5 @@
 {
   "packages": ["test/*", "packages/*", "api-docs", "dev"],
   "npmClient": "yarn",
-  "version": "25.0.0-alpha21"
+  "version": "25.0.0-beta1"
 }
