@@ -334,5 +334,18 @@ describe('vaadin-icon - icon fonts', () => {
       await nextFrame(icon);
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
     });
+
+    fallBackIt('should have the same height as the host with shadow root', async () => {
+      icon = fixtureSync('<vaadin-icon char="foo" style="--vaadin-icon-size: 24px"></vaadin-icon>');
+      const parent = fixtureSync('<div></div>');
+      parent.attachShadow({ mode: 'open' });
+      parent.shadowRoot.innerHTML = '<slot></slot>';
+
+      parent.append(icon);
+      await nextResize(icon);
+
+      const fontIconStyle = getComputedStyle(icon, ':before');
+      expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
+    });
   });
 });
