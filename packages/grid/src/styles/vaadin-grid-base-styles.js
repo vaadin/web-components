@@ -22,7 +22,7 @@ export const gridStyles = css`
     cursor: default;
     --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     --_border-width: 0;
-    --_row-border-width: var(--vaadin-grid-row-border-width, 5px);
+    --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
     border-radius: var(--_border-radius);
     --_border-radius: 0;
@@ -96,6 +96,7 @@ export const gridStyles = css`
     left: 0;
     width: 100%;
     z-index: 2;
+    will-change: transform;
   }
 
   :host([dir='rtl']) #items,
@@ -133,6 +134,12 @@ export const gridStyles = css`
     border-block: var(--_row-border-width) solid var(--_border-color);
   }
 
+  #header:not(:empty):not(:has(tr:not([hidden]))) {
+    margin-block-start: calc(var(--_row-border-width) * -1);
+    padding-block-start: var(--_row-border-width);
+    pointer-events: none;
+  }
+
   #header [part~='row'] {
     border-block-start-style: none;
 
@@ -155,6 +162,7 @@ export const gridStyles = css`
     &:first-child {
       border-block-start-style: none;
 
+      /* Footer top border */
       &::before {
         content: '';
         display: none;
@@ -185,11 +193,6 @@ export const gridStyles = css`
 
   /* Grid without header */
   #table:not(:has(#header > tr:not([hidden]))) {
-    #header {
-      margin-block-start: calc(var(--_row-border-width) * -1);
-      padding-block-start: var(--_row-border-width);
-    }
-
     [part~='first-row'],
     [part~='first-row'] [part~='cell'] {
       /* Focus outline */
@@ -199,8 +202,7 @@ export const gridStyles = css`
     }
   }
 
-  /* Grid without footer and is at the end */
-  :host([overflow~='top']):not(:has(#footer > tr:not([hidden]))) {
+  :host([overflow~='top']) #table:not(:has(#footer > tr:not([hidden]))) {
     [part~='last-row'] {
       border-block-end-style: none;
     }
@@ -221,6 +223,7 @@ export const gridStyles = css`
       }
     }
 
+    /* Footer top border */
     #footer [part~='row']::before {
       display: block;
     }
@@ -228,15 +231,16 @@ export const gridStyles = css`
 
   #scroller[empty-state] {
     #table:has(#header > tr:not([hidden])) {
-      & #emptystatebody {
+      #emptystatebody {
         margin-top: calc(var(--_row-border-width) * -1);
       }
 
-      & #emptystatecell {
+      #emptystatecell {
         border-block: var(--_row-border-width) solid transparent;
       }
     }
 
+    /* Footer top border */
     #footer [part~='row']::before {
       display: block;
     }
@@ -267,77 +271,21 @@ export const gridStyles = css`
     position: relative;
     align-items: center;
     white-space: nowrap;
-    border-inline-start: var(--_column-border-width) solid var(--_border-color);
+    border-inline: var(--_column-border-width) var(--_border-color);
+    border-inline-start-style: solid;
   }
 
   [part~='first-column-cell'] {
-    border-inline-start: 0;
-  }
-
-  /* [part~='first-header-row-cell'],
-  [part~='first-footer-row-cell'],
-  [part~='first-row-cell'] {
-    margin-top: 0;
-    border-top: 0;
-  } */
-
-  /* table:has(#header > tr:not([hidden])) [part~='first-row-cell'] {
-    border-top: var(--_row-border-width) solid var(--_border-color);
-  } */
-
-  /* [part~='last-column-cell'] {
-    --_end: 1;
-  }
-
-  [part~='last-column-cell']:is([part~='header-cell'], [part~='footer-cell']) {
-    --_end-opaque: 1;
-  }
-
-  [part~='last-row-cell']:where(:not([part~='details-opened-row-cell'])),
-  [part~='last-footer-row-cell'] {
-    border-bottom: 0;
-    --_bottom: 1;
+    border-inline-start-style: none;
   }
 
   [part~='last-frozen-cell'] {
-    --_end: 1;
-  }
+    border-inline-end-style: solid;
 
-  [part~='last-frozen-cell'] + [part~='cell'] {
-    border-inline-start-color: transparent;
+    & + [part~='cell'] {
+      border-inline-start-style: none;
+    }
   }
-
-  [part~='first-frozen-to-end-cell'] {
-    border-inline-start: 0;
-    --_start: 1;
-  }
-
-  [part~='last-header-row-cell'] {
-    border-bottom: 0;
-  }
-
-  :host([overflow~='top']) [part~='last-header-row-cell'],
-  [empty-state] [part~='last-header-row-cell'] {
-    --_bottom: 1;
-  }
-
-  #header:has(:is([frozen], [frozen-to-end])) [part~='last-header-row-cell'] {
-    --_bottom-opaque: 1;
-  }
-
-  :host([overflow~='bottom']) [part~='first-footer-row-cell'],
-  [empty-state] [part~='first-footer-row-cell'] {
-    --_top: 1;
-  }
-
-  #footer:has(:is([frozen], [frozen-to-end])) [part~='first-footer-row-cell'] {
-    --_top-opaque: 1;
-  }
-
-  table:has(#footer > tr:not([hidden])) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
-    border-bottom: var(--_row-border-width) solid var(--_border-color);
-    --_bottom: 0;
-  } */
 
   [part~='body-cell']:where(:not([part~='details-cell'])) {
     --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
@@ -590,40 +538,6 @@ export const gridStyles = css`
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
-
-  /* [part~='first-column-cell']::after {
-    inset-inline-start: 0;
-  }
-
-  [part~='last-column-cell']::after {
-    inset-inline-end: 0;
-  } */
-
-  /* #header [part~='row'] {
-
-  } */
-
-  /* #header [part~='row']:first-child::after,
-  [part~='first-header-row-cell']::after,
-  [part*='first-row']::after {
-    top: 0;
-  }
-
-  table:has(#header > tr:not([hidden])) [part~='first-row-cell']::after {
-    top: calc(var(--_row-border-width) * -1);
-  } */
-
-  /* #footer [part~='row']:last-child::after,
-  [part~='last-footer-row-cell']::after,
-  [part~='last-row']::after,
-  [part~='last-row-cell']::after {
-    bottom: 0;
-  } */
-
-  /* #header [part~='row']:last-child::after,
-  table:has(#footer > tr:not([hidden])) [part*='last-row']::after {
-    bottom: calc(var(--_row-border-width) * -1);
-  } */
 
   :host([navigating]) [part~='row']:focus,
   :host([navigating]) [part~='cell']:focus {
