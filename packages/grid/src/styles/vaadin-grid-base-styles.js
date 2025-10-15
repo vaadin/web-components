@@ -134,38 +134,47 @@ export const gridStyles = css`
     border-block: var(--_row-border-width) solid var(--_border-color);
   }
 
-  #header:not(:empty):not(:has(tr:not([hidden]))) {
-    margin-block-start: calc(var(--_row-border-width) * -1);
-    padding-block-start: var(--_row-border-width);
-    pointer-events: none;
-  }
-
-  #header [part~='row'] {
-    border-block-start-style: none;
-
-    &:first-child,
-    &:first-child [part~='cell'] {
-      /* Focus outline */
-      &::after {
-        inset-block-start: 0;
-      }
+  #header {
+    [part~='row'] {
+      border-block-start-style: none;
     }
 
-    &:last-child {
+    /* Focus outline */
+    [part~='row']:first-child::after,
+    [part~='row']:first-child [part~='cell']::after {
+      inset-block-start: 0;
+    }
+
+    [part~='row']:last-child {
       background: transparent;
     }
   }
 
-  #footer [part~='row'] {
-    border-block-end-style: none;
-
-    &:first-child {
+  #items {
+    [part~='row'] {
       border-block-start-style: none;
+    }
 
-      /* Footer top border */
-      &::before {
+    [part~='row']:empty {
+      height: 100%;
+    }
+  }
+
+  #footer {
+    [part~='row'] {
+      border-block-end-style: none;
+    }
+
+    [part~='row']:first-child {
+      border-block-start-style: none;
+    }
+
+    /* Footer top border */
+    #scroller[empty-state] &,
+    :host([overflow~='top']) &,
+    :host([overflow~='bottom']) & {
+      [part~='row']::before {
         content: '';
-        display: none;
         height: var(--_row-border-width);
         background: var(--_border-color);
         position: absolute;
@@ -174,75 +183,61 @@ export const gridStyles = css`
       }
     }
 
-    &:last-child,
-    &:last-child [part~='cell'] {
-      /* Focus outline */
-      &::after {
-        inset-block-end: 0;
-      }
+    /* Focus outline */
+    [part~='row']:last-child::after,
+    [part~='row']:last-child [part~='cell']::after {
+      inset-block-end: 0;
     }
   }
 
-  #items [part~='row'] {
-    border-block-start-style: none;
+  /* Grid with header */
+  #table:has(#header > tr:not([hidden])) {
+    #emptystatebody {
+      margin-top: calc(var(--_row-border-width) * -1);
+    }
 
-    &:empty {
-      height: 100%;
+    #emptystatecell {
+      border-block: var(--_row-border-width) solid transparent;
     }
   }
 
   /* Grid without header */
   #table:not(:has(#header > tr:not([hidden]))) {
-    [part~='first-row'],
-    [part~='first-row'] [part~='cell'] {
-      /* Focus outline */
-      &::after {
-        inset-block-start: 0;
-      }
+    /* #header:not(:empty) {
+      margin-block-start: calc(var(--_row-border-width) * -1);
+      padding-block-start: var(--_row-border-width);
+      pointer-events: none;
+    } */
+
+    /* Focus outline */
+    [part~='first-row']::after,
+    [part~='first-row'] [part~='cell']::after {
+      inset-block-start: 0;
     }
   }
 
-  :host([overflow~='top']) #table:not(:has(#footer > tr:not([hidden]))) {
-    [part~='last-row'] {
-      border-block-end-style: none;
-    }
-
-    [part~='last-row'],
-    [part~='last-row'] [part~='cell'] {
-      /* Focus outline */
-      &::after {
-        inset-block-end: 0;
-      }
-    }
-  }
-
-  :host(:is([overflow~='top'], [overflow~='bottom'])) {
-    #table:has(#footer > tr:not([hidden])) {
+  /* Grid with footer */
+  #table:has(#footer > tr:not([hidden])) {
+    :host([overflow~='top']) &,
+    :host([overflow~='bottom']) & {
       [part~='last-row'] {
         border-block-end-color: transparent;
       }
     }
-
-    /* Footer top border */
-    #footer [part~='row']::before {
-      display: block;
-    }
   }
 
-  #scroller[empty-state] {
-    #table:has(#header > tr:not([hidden])) {
-      #emptystatebody {
-        margin-top: calc(var(--_row-border-width) * -1);
+  /* Grid without footer */
+  #table:not(:has(#footer > tr:not([hidden]))) {
+    :host([overflow~='top']) & {
+      [part~='last-row'] {
+        border-block-end-style: none;
       }
 
-      #emptystatecell {
-        border-block: var(--_row-border-width) solid transparent;
+      /* Focus outline */
+      [part~='last-row']::after,
+      [part~='last-row'] [part~='cell']::after {
+        inset-block-end: 0;
       }
-    }
-
-    /* Footer top border */
-    #footer [part~='row']::before {
-      display: block;
     }
   }
 
@@ -531,12 +526,18 @@ export const gridStyles = css`
   /* Focus outline element, also used for d'n'd indication */
   :is([part~='row'], [part~='cell'])::after {
     position: absolute;
-    inset-block: calc(-1 * var(--_row-border-width));
-    inset-inline: 0;
+    inset: calc(-1 * var(--_row-border-width));
     z-index: 3;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  [part~='first-column-cell']::after {
+    inset-inline-start: 0;
+  }
+  [part~='last-column-cell']::after {
+    inset-inline-end: 0;
   }
 
   :host([navigating]) [part~='row']:focus,
