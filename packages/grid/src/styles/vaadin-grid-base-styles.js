@@ -95,15 +95,8 @@ export const gridStyles = css`
     position: sticky;
     left: 0;
     width: 100%;
-  }
-
-  /* :host([overflow~='top']) #header,
-  :host([overflow~='bottom']) #footer,
-  :host([navigating]) #header:has(tr:last-child:focus-within),
-  :host([navigating]) #footer:has(tr:first-child:focus-within),
-  [empty-state] #header {
     z-index: 2;
-  } */
+  }
 
   :host([dir='rtl']) #items,
   :host([dir='rtl']) #header,
@@ -130,11 +123,6 @@ export const gridStyles = css`
     color: var(--vaadin-grid-header-text-color, var(--vaadin-text-color));
   }
 
-  #header,
-  #footer {
-    z-index: 2;
-  }
-
   [part~='row'] {
     display: inline-flex;
     min-width: 100%;
@@ -147,6 +135,14 @@ export const gridStyles = css`
 
   #header [part~='row'] {
     border-block-start-style: none;
+
+    &:first-child,
+    &:first-child [part~='cell'] {
+      /* Focus outline */
+      &::after {
+        inset-block-start: 0;
+      }
+    }
 
     &:last-child {
       background: transparent;
@@ -165,25 +161,80 @@ export const gridStyles = css`
         height: var(--_row-border-width);
         background: var(--_border-color);
         position: absolute;
-        inset-inline: 0;
         inset-block-start: calc(-1 * var(--_row-border-width));
+        inset-inline: 0;
+      }
+    }
+
+    &:last-child,
+    &:last-child [part~='cell'] {
+      /* Focus outline */
+      &::after {
+        inset-block-end: 0;
       }
     }
   }
 
   #items [part~='row'] {
     border-block-start-style: none;
+
+    &:empty {
+      height: 100%;
+    }
   }
 
-  :host([overflow~='top']) [part~='last-row'] {
-    border-block-end-style: none;
+  /* Grid without header */
+  #table:not(:has(#header > tr:not([hidden]))) {
+    #header {
+      margin-block-start: calc(var(--_row-border-width) * -1);
+      padding-block-start: var(--_row-border-width);
+    }
+
+    [part~='first-row'],
+    [part~='first-row'] [part~='cell'] {
+      /* Focus outline */
+      &::after {
+        inset-block-start: 0;
+      }
+    }
   }
 
-  :host([overflow~='bottom']),
-  :host([overflow~='top']) {
-    #table:has(#footer > tr:not([hidden])) [part~='last-row'] {
-      border-block-end-style: solid;
-      border-block-end-color: transparent;
+  /* Grid without footer and is at the end */
+  :host([overflow~='top']):not(:has(#footer > tr:not([hidden]))) {
+    [part~='last-row'] {
+      border-block-end-style: none;
+    }
+
+    [part~='last-row'],
+    [part~='last-row'] [part~='cell'] {
+      /* Focus outline */
+      &::after {
+        inset-block-end: 0;
+      }
+    }
+  }
+
+  :host(:is([overflow~='top'], [overflow~='bottom'])) {
+    #table:has(#footer > tr:not([hidden])) {
+      [part~='last-row'] {
+        border-block-end-color: transparent;
+      }
+    }
+
+    #footer [part~='row']::before {
+      display: block;
+    }
+  }
+
+  #scroller[empty-state] {
+    #table:has(#header > tr:not([hidden])) {
+      & #emptystatebody {
+        margin-top: calc(var(--_row-border-width) * -1);
+      }
+
+      & #emptystatecell {
+        border-block: var(--_row-border-width) solid transparent;
+      }
     }
 
     #footer [part~='row']::before {
@@ -201,10 +252,6 @@ export const gridStyles = css`
 
   [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
     transform: translateX(var(--_grid-lazy-columns-start));
-  }
-
-  #items [part~='row']:empty {
-    height: 100%;
   }
 
   [part~='cell'] {
@@ -398,7 +445,6 @@ export const gridStyles = css`
     inset: 0;
     flex: 1;
     overflow: hidden;
-    margin-top: calc(var(--_row-border-width) * -1);
   }
 
   #emptystaterow {
@@ -411,7 +457,6 @@ export const gridStyles = css`
     flex: 1;
     overflow: auto;
     padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
-    border-top: var(--_row-border-width) solid transparent;
     outline: none;
   }
 
@@ -554,6 +599,10 @@ export const gridStyles = css`
     inset-inline-end: 0;
   } */
 
+  /* #header [part~='row'] {
+
+  } */
+
   /* #header [part~='row']:first-child::after,
   [part~='first-header-row-cell']::after,
   [part*='first-row']::after {
@@ -632,7 +681,7 @@ export const gridStyles = css`
   }
 
   [part~='row'][dragstart] {
-    border-block-color: transparent !important;
+    border-block: var(--_row-border-width) solid transparent !important;
   }
 
   [part~='row'][dragstart] [part~='cell'][last-column] {
