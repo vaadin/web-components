@@ -22,7 +22,7 @@ export const gridStyles = css`
     cursor: default;
     --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     --_border-width: 0;
-    --_row-border-width: var(--vaadin-grid-row-border-width, 5px);
+    --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
     border-radius: var(--_border-radius);
     --_border-radius: 0;
