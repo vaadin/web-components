@@ -177,7 +177,7 @@ export const gridStyles = css`
     #scroller[empty-state] &,
     :host([overflow~='top']) &,
     :host([overflow~='bottom']) & {
-      [part~='row']::before {
+      [part~='row']:first-child::before {
         content: '';
         height: var(--_row-border-width);
         background: var(--_border-color);
@@ -207,11 +207,10 @@ export const gridStyles = css`
 
   /* Grid without header */
   #table:not(:has(#header > tr:not([hidden]))) {
-    /* #header:not(:empty) {
-      margin-block-start: calc(var(--_row-border-width) * -1);
-      padding-block-start: var(--_row-border-width);
+    :host([overflow~='top']) & #header {
+      min-height: var(--_row-border-width);
       pointer-events: none;
-    } */
+    }
 
     /* Focus outline */
     [part~='first-row']::after,
@@ -573,19 +572,18 @@ export const gridStyles = css`
 
     &[dragover]::after {
       content: '';
-      outline: 0;
-      border-width: var(--vaadin-focus-ring-width);
-      border-color: var(--vaadin-focus-ring-color);
     }
 
     &[dragover='above']::after {
       top: calc(var(--vaadin-focus-ring-width) / -2);
-      border-top-style: solid;
+      border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      outline: 0;
     }
 
     &[dragover='below']::after {
       bottom: calc(var(--vaadin-focus-ring-width) / -2 + var(--_row-border-width) * -1);
-      border-bottom-style: solid;
+      border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      outline: 0;
     }
   }
 
