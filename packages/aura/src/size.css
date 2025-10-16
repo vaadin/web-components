@@ -44,6 +44,6 @@
 @media (pointer: coarse) {
   :where(:root),
   :where(:host) {
-    --aura-base-size: 19;
+    --aura-base-size: 18;
   }
 }
