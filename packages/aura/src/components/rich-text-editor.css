@@ -23,6 +23,7 @@ vaadin-rich-text-editor {
 
 vaadin-rich-text-editor::part(toolbar) {
   contain: paint;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
 }
 
 vaadin-rich-text-editor::part(toolbar-group) {
