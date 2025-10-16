@@ -524,7 +524,7 @@ export const gridStyles = css`
   /* Focus outline element, also used for d'n'd indication */
   :is([part~='row'], [part~='cell'])::after {
     position: absolute;
-    inset: calc(-1 * var(--_row-border-width)) calc(-1 * var(--_column-border-width));
+    inset: calc(var(--_row-border-width) * -1) calc(var(--_column-border-width) * -1);
     z-index: 3;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
