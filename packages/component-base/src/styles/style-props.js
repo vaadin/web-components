@@ -27,17 +27,12 @@ addGlobalThemeStyles(
         --vaadin-border-color: color-mix(in oklab, var(--vaadin-text-color) 48%, transparent); /* Above 3:1 contrast */
 
         /* Text colors */
-        --vaadin-text-color-disabled: color-mix(
-          in oklab,
-          var(--vaadin-text-color) 48%,
-          transparent
-        ); /* Above 3:1 contrast */
-        --vaadin-text-color-secondary: color-mix(
-          in oklab,
-          var(--vaadin-text-color) 68%,
-          transparent
-        ); /* Above 4.5:1 contrast */
-        --vaadin-text-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
+        /* Above 3:1 contrast */
+        --vaadin-text-color-disabled: color-mix(in oklab, var(--vaadin-text-color) 48%, transparent);
+        /* Above 4.5:1 contrast */
+        --vaadin-text-color-secondary: color-mix(in oklab, var(--vaadin-text-color) 68%, transparent);
+        /* Above 7:1 contrast */
+        --vaadin-text-color: light-dark(#1f1f1f, white);
 
         /* Padding */
         --vaadin-padding-xs: 6px;
