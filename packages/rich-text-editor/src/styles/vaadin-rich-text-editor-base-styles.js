@@ -89,7 +89,7 @@ export const content = css`
     box-sizing: border-box;
     color: var(--vaadin-rich-text-editor-content-color, var(--vaadin-text-color));
     flex: 1;
-    font-size: var(--vaadin-rich-text-editor-content-font-size, inherit);
+    font-size: var(--vaadin-rich-text-editor-content-font-size, var(--vaadin-input-field-value-font-size, inherit));
     height: 100%;
     line-height: var(--vaadin-rich-text-editor-content-line-height, inherit);
     outline: none;
