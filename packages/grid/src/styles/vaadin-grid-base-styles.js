@@ -134,6 +134,10 @@ export const gridStyles = css`
     border-block: var(--_row-border-width) solid var(--_border-color);
   }
 
+  [part~='details-cell'] {
+    border-block-start: var(--_row-border-width) solid var(--_border-color);
+  }
+
   #header {
     [part~='row'] {
       border-block-start-style: none;
@@ -254,6 +258,7 @@ export const gridStyles = css`
   }
 
   [part~='cell'] {
+    padding: 0;
     box-sizing: border-box;
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
   }
@@ -343,13 +348,7 @@ export const gridStyles = css`
     position: absolute;
     bottom: 0;
     width: 100%;
-    margin-top: 0;
-    border-top: 0;
   }
-
-  /* [part~='last-row-cell'] + [part~='details-cell'] {
-    border-bottom: 0;
-  } */
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: block;
@@ -592,7 +591,7 @@ export const gridStyles = css`
 
   [part~='row']:not([part*='last-row'])[dragover='below']::after,
   table:has(#footer > tr:not([hidden])) [part*='last-row'][dragover='below']::after {
-    bottom: calc(var(--vaadin-focus-ring-width) / -2);
+    bottom: calc((var(--vaadin-focus-ring-width) / -2) - var(--_row-border-width));
   }
 
   [part~='row'][dragstart] {
