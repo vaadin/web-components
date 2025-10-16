@@ -68,7 +68,9 @@ export const avatarStyles = css`
 
   :host([has-color-index]) {
     background-color: var(--vaadin-avatar-user-color);
-    color: oklch(from var(--vaadin-avatar-user-color) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    color: oklch(
+      from var(--vaadin-avatar-user-color) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    );
   }
 
   :host([has-color-index])::before {
