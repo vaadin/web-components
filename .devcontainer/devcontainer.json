@@ -1,0 +1,15 @@
+{
+	"name": "Vaadin web-components Dev Container",
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+	"forwardPorts": [8000],
+  "mounts": [
+    // Mount node_modules from volume instead of from file system, which should improve FS performance on MacOS
+    "source=web-components-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+  ],
+  "postCreateCommand": "sudo chown node node_modules && yarn install",
+  "customizations" : {
+    "jetbrains" : {
+      "backend" : "WebStorm"
+    }
+  },
+}
