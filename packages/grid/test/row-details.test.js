@@ -119,7 +119,7 @@ describe('row details', () => {
       const bounds = cells[1].getBoundingClientRect();
       expect(bounds.top).to.be.closeTo(cells[0].getBoundingClientRect().bottom, 1);
       expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
-      expect(bounds.right).to.equal(grid.$.items.getBoundingClientRect().right);
+      expect(bounds.right).to.equal(cells[0].getBoundingClientRect().right);
       expect(bounds.bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
       expect(bounds.height).to.be.above(10);
     };
