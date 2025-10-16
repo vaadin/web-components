@@ -130,7 +130,7 @@ export const gridStyles = css`
     box-sizing: border-box;
     margin: 0;
     position: relative;
-    background: var(--vaadin-grid-background, var(--vaadin-background-color));
+    background: var(--vaadin-cell-background, var(--vaadin-background-color));
     border-block: var(--_row-border-width) solid var(--_border-color);
   }
 
@@ -150,7 +150,22 @@ export const gridStyles = css`
     }
 
     [part~='row']:last-child {
+      border-block-end-style: none;
       background: transparent;
+    }
+
+    /* Header bottom border */
+    [part~='row']:last-child::before {
+      content: '';
+      height: var(--_row-border-width);
+      background: var(--_border-color);
+      position: absolute;
+      inset-block-end: calc(-1 * var(--_row-border-width));
+      inset-inline: 0;
+    }
+
+    :host([overflow~='top']) & {
+      padding-block-end: var(--_row-border-width);
     }
   }
 
@@ -203,15 +218,15 @@ export const gridStyles = css`
     #emptystatecell {
       border-block: var(--_row-border-width) solid transparent;
     }
+
+    [part~='first-row'] {
+      border-block-start-color: transparent;
+      border-block-start-style: solid;
+    }
   }
 
   /* Grid without header */
   #table:not(:has(#header > tr:not([hidden]))) {
-    :host([overflow~='top']) & #header {
-      min-height: var(--_row-border-width);
-      pointer-events: none;
-    }
-
     /* Focus outline */
     [part~='first-row']::after,
     [part~='first-row'] [part~='cell']::after {
@@ -589,12 +604,12 @@ export const gridStyles = css`
 
   /* Grid with header */
   #table:has(#header > tr:not([hidden])) [part~='first-row'][dragover='above']::after {
-    top: calc(var(--_row-border-width) * -1);
+    top: 0;
   }
 
   /* Grid with footer */
   #table:has(#footer > tr:not([hidden])) [part~='last-row'][dragover='below']::after {
-    bottom: calc(var(--_row-border-width) * -1);
+    bottom: 0;
   }
 
   [part~='row'][dragstart] {
