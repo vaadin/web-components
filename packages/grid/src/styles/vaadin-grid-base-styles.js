@@ -130,7 +130,7 @@ export const gridStyles = css`
     box-sizing: border-box;
     margin: 0;
     position: relative;
-    background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
+    background: var(--vaadin-grid-background, var(--vaadin-background-color));
     border-block: var(--_row-border-width) solid var(--_border-color);
   }
 
