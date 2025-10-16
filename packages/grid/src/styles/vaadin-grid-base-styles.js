@@ -566,32 +566,37 @@ export const gridStyles = css`
     outline-offset: calc(var(--_border-width) * -1);
   }
 
-  [part~='row'][dragover] {
-    z-index: 100 !important;
+  [part~='row'] {
+    &[dragover] {
+      z-index: 100 !important;
+    }
+
+    &[dragover]::after {
+      content: '';
+      outline: 0;
+      border-width: var(--vaadin-focus-ring-width);
+      border-color: var(--vaadin-focus-ring-color);
+    }
+
+    &[dragover='above']::after {
+      top: calc(var(--vaadin-focus-ring-width) / -2);
+      border-top-style: solid;
+    }
+
+    &[dragover='below']::after {
+      bottom: calc(var(--vaadin-focus-ring-width) / -2 + var(--_row-border-width) * -1);
+      border-bottom-style: solid;
+    }
   }
 
-  [part~='row'][dragover]::after {
-    content: '';
+  /* Grid with header */
+  #table:has(#header > tr:not([hidden])) [part~='first-row'][dragover='above']::after {
+    top: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='row'][dragover='above']::after {
-    outline: 0;
-    border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-  }
-
-  [part~='row']:not([part*='first-row'])[dragover='above']::after,
-  table:has(#header > tr:not([hidden])) [part*='first-row'][dragover='above']::after {
-    top: calc(var(--vaadin-focus-ring-width) / -2);
-  }
-
-  [part~='row'][dragover='below']::after {
-    outline: 0;
-    border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-  }
-
-  [part~='row']:not([part*='last-row'])[dragover='below']::after,
-  table:has(#footer > tr:not([hidden])) [part*='last-row'][dragover='below']::after {
-    bottom: calc((var(--vaadin-focus-ring-width) / -2) - var(--_row-border-width));
+  /* Grid with footer */
+  #table:has(#footer > tr:not([hidden])) [part~='last-row'][dragover='below']::after {
+    bottom: calc(var(--_row-border-width) * -1);
   }
 
   [part~='row'][dragstart] {
