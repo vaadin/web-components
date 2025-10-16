@@ -11,3 +11,7 @@ vaadin-crud-edit {
 vaadin-crud::part(editor) {
   background: var(--aura-surface);
 }
+
+vaadin-crud vaadin-confirm-dialog {
+  color-scheme: inherit;
+}
