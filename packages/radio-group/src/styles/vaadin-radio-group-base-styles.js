@@ -9,7 +9,7 @@ import { group } from '@vaadin/field-base/src/styles/group-base-styles.js';
 
 export const radioGroupStyles = [
   field,
-  group('radio'),
+  group,
   css`
     :host([readonly]) ::slotted(vaadin-radio-button) {
       --vaadin-radio-button-background: transparent;
