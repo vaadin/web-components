@@ -257,6 +257,8 @@ export const DragAndDropMixin = (superClass) =>
           // The dragover didn't occur on a body row but the grid has items
           if (row) {
             // The dragover occurred over a header/footer row
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'none';
             return;
           } else if (this.dropMode === DropMode.BETWEEN || this.dropMode === DropMode.ON_TOP_OR_BETWEEN) {
             // The drop mode allows setting the last row as the drag over item
@@ -303,6 +305,12 @@ export const DragAndDropMixin = (superClass) =>
           }
         } else {
           this._clearDragStyles();
+        }
+      } else if (this.__draggedItems && this.__draggedItems.length > 0) {
+        const row = e.composedPath().find((node) => node.localName === 'tr');
+        if (row && (row.parentNode === this.$.header || row.parentNode === this.$.footer)) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'none';
         }
       }
     }
