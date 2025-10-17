@@ -11,6 +11,7 @@ style.textContent = css`
     max-width: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --vaadin-grid-row-border-width: 0px;
   }
 
   vaadin-grid::part(cell) {
