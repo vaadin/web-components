@@ -54,7 +54,7 @@ export const gridTreeToggleStyles = css`
 
   @media (prefers-reduced-motion: no-preference) {
     [part='toggle']::before {
-      transition: rotate 120ms;
+      transition: var(--_non-focused-row-none, rotate 120ms);
     }
   }
 

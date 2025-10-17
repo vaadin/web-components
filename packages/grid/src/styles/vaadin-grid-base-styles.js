@@ -138,6 +138,10 @@ export const gridStyles = css`
     position: relative;
   }
 
+  [part~='row']:not(:focus-within) {
+    --_non-focused-row-none: none;
+  }
+
   [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
     visibility: hidden;
   }
