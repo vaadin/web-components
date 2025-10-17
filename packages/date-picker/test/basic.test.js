@@ -362,6 +362,30 @@ describe('clear button', () => {
     click(clearButton);
     expect(datePicker.opened).to.be.not.ok;
   });
+
+  it('should not prevent default on clear button mousedown if input is not focused', () => {
+    datePicker.value = '2001-01-01';
+    const event = new CustomEvent('mousedown', { cancelable: true });
+    clearButton.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.false;
+  });
+
+  it('should prevent default on clear button mousedown if input is focused', () => {
+    datePicker.value = '2001-01-01';
+    datePicker.inputElement.focus();
+    const event = new CustomEvent('mousedown', { cancelable: true });
+    clearButton.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.true;
+  });
+
+  it('should prevent default on clear button mousedown when opened', async () => {
+    datePicker.value = '2001-01-01';
+    await open(datePicker);
+    datePicker.inputElement.blur();
+    const event = new CustomEvent('mousedown', { cancelable: true });
+    clearButton.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.true;
+  });
 });
 
 describe('initial value attribute', () => {
