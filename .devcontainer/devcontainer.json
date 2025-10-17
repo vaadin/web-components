@@ -1,0 +1,25 @@
+{
+  "name": "Vaadin Web Components Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [
+    8000
+  ],
+  "mounts": [
+    // Mount node_modules from volume instead of from file system. Should
+    // improve FS performance on macOS and Windows and avoids installing Linux
+    // specific binaries on host system.
+    "source=web-components-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+  ],
+  "postCreateCommand": "sudo chown node node_modules && yarn install && yarn playwright install chromium firefox webkit --with-deps",
+  // Allow node user in the container to access the Git repository, which is
+  // otherwise owned by the host system user.
+  "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+  "customizations": {
+    "jetbrains": {
+      "backend": "WebStorm"
+    }
+  },
+}
