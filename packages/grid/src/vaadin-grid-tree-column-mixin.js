@@ -49,7 +49,11 @@ export const GridTreeColumnMixin = (superClass) =>
       toggle.__rendererExpanded = expanded;
       toggle.expanded = expanded;
       toggle.leaf = !hasChildren;
-      toggle.textContent = this.__getToggleContent(this.path, item);
+      const content = this.__getToggleContent(this.path, item);
+      if (toggle.textContent !== content) {
+        // Only update textContent if it has changed to avoid toggle animation issues on Safari
+        toggle.textContent = content;
+      }
       toggle.level = level;
     }
 
