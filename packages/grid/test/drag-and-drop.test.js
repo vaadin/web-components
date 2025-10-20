@@ -353,6 +353,7 @@ describe('drag and drop', () => {
       it('should auto generate data transfer text data', () => {
         grid.selectedItems = grid.items;
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
@@ -366,6 +367,7 @@ describe('drag and drop', () => {
         await aTimeout(0);
         flushGrid(grid);
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
@@ -377,6 +379,7 @@ describe('drag and drop', () => {
         const columns = grid.querySelectorAll('vaadin-grid-column');
         grid._swapColumnOrders(columns[0], columns[1]);
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
@@ -390,6 +393,7 @@ describe('drag and drop', () => {
           e.detail.setDragData('text/plain', e.detail.draggedItems.map((item) => item.last).join(','));
         });
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const dragData = event.detail.dragData.find((d) => d.type === 'text/plain');
@@ -785,11 +789,13 @@ describe('drag and drop', () => {
       it('should stop the native event', () => {
         const spy = sinon.spy();
         listenOnce(grid, 'drop', spy);
+        fireDragOver();
         fireDrop();
         expect(spy.called).to.be.false;
       });
 
       it('should cancel the native event', () => {
+        fireDragOver();
         const event = fireDrop();
         expect(event.defaultPrevented).to.be.true;
       });
@@ -835,11 +841,13 @@ describe('drag and drop', () => {
       });
 
       it('should dispatch a grid specific event', () => {
+        fireDragOver();
         fireDrop();
         expect(dropSpy.calledOnce).to.be.true;
       });
 
       it('should bubble and be cancelable', () => {
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         expect(event.bubbles).to.be.true;
@@ -874,6 +882,7 @@ describe('drag and drop', () => {
       });
 
       it('should have the original event', () => {
+        fireDragOver();
         const originalEvent = fireDrop();
         const event = dropSpy.getCall(0).args[0];
         expect(event.originalEvent).to.equal(originalEvent);
@@ -1038,6 +1047,7 @@ describe('drag and drop', () => {
     it('should emit a grid-drop event for non drop disabled row', () => {
       const spy = sinon.spy();
       listenOnce(grid, 'grid-drop', spy);
+      fireDragOver(grid.$.items.children[1]);
       fireDrop(grid.$.items.children[1]);
       expect(spy.called).to.be.true;
     });
