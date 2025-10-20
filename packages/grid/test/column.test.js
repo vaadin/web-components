@@ -78,7 +78,7 @@ describe('column', () => {
         column.width = '20%';
 
         const width = getContainerCell(grid.$.header, 0, 0).style.width;
-        expect(width).to.be.oneOf(['calc(20% + 100px)', 'calc(100px + 20%)']);
+        expect(width).to.be.oneOf(['calc(20cqw + 100px)', 'calc(100px + 20cqw)']);
       });
 
       it('should be bound to row cells', () => {

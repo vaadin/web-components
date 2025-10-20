@@ -97,6 +97,13 @@ export const gridStyles = css`
     width: 100%;
   }
 
+  #header,
+  #footer,
+  #items,
+  #sizer {
+    container: grid-section / inline-size;
+  }
+
   :host([overflow~='top']) #header,
   :host([overflow~='bottom']) #footer,
   :host([navigating]) #header:has(tr:last-child:focus-within),

@@ -398,7 +398,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this._allCells.forEach((cell) => {
-        cell.style.width = width;
+        cell.style.width = width.replace('%', 'cqw');
       });
     }
 

@@ -118,6 +118,13 @@
     overflow: visible;
   }
 
+  #header,
+  #footer,
+  #items,
+  #sizer {
+    container: grid-section / inline-size;
+  }
+
   [part~='row'] {
     display: flex;
     width: 100%;

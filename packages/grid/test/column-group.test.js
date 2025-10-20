@@ -24,13 +24,13 @@ describe('column group', () => {
   });
 
   it('should sum child column widths', () => {
-    expect(group.width).to.eql('calc(20% + 200px)');
+    expect(group.width).to.eql('calc(20cqw + 200px)');
   });
 
   it('should strip nested `calc` keywords', () => {
     columns[0].width = 'calc(50% + 10px)';
 
-    expect(group.width).to.eql('calc((50% + 10px) + 200px)');
+    expect(group.width).to.eql('calc((50cqw + 10px) + 200px)');
   });
 
   it('should react to child column flex-grow changes', () => {
@@ -42,7 +42,7 @@ describe('column group', () => {
   it('should react to child column width changes', () => {
     columns[0].width = '10%';
 
-    expect(group.width).to.eql('calc(10% + 200px)');
+    expect(group.width).to.eql('calc(10cqw + 200px)');
   });
 
   it('should get frozen when child column freezes', () => {
