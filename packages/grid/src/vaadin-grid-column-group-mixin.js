@@ -196,7 +196,7 @@ export const GridColumnGroupMixin = (superClass) =>
       if (this._visibleChildColumns.length > 0) {
         const width = this._visibleChildColumns
           .reduce((prev, curr) => {
-            prev += ` + ${(curr.width || '0px').replace('calc', '').replace('%', 'cqw')}`;
+            prev += ` + ${(curr.width || '0px').replace('calc', '').replace(/%/g, 'cqw')}`;
             return prev;
           }, '')
           .substring(3);
