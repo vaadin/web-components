@@ -108,10 +108,6 @@ describe('drag and drop', () => {
     return event;
   };
 
-  const isDropAllowed = (e) => {
-    return e.dataTransfer.dropEffect !== 'none' && e.defaultPrevented;
-  };
-
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid hidden>
@@ -508,7 +504,7 @@ describe('drag and drop', () => {
         const e = fireDragOver(grid.$.header.children[0]);
         expect(grid.hasAttribute('dragover')).to.be.false;
         expect(row.hasAttribute('dragover')).to.be.false;
-        expect(isDropAllowed(e)).to.be.false;
+        expect(e.defaultPrevented).to.be.false;
       });
 
       it('should allow drop over header when there are no items', () => {
@@ -516,7 +512,7 @@ describe('drag and drop', () => {
         grid.items = [];
         const e = fireDragOver(grid.$.header.children[0]);
         expect(grid.hasAttribute('dragover')).to.be.true;
-        expect(isDropAllowed(e)).to.be.true;
+        expect(e.defaultPrevented).to.be.true;
       });
 
       it('should set dragover attribute to grid on on-grid dropmode', () => {
@@ -650,52 +646,6 @@ describe('drag and drop', () => {
         cells.forEach((cell) => {
           expect(cell.getAttribute('part')).to.not.contain('dragover-above-row-cell');
           expect(cell.getAttribute('part')).to.contain('dragover-below-row-cell');
-        });
-      });
-
-      describe('header and footer input', () => {
-        beforeEach(() => {
-          const inputRenderer = (root) => {
-            if (root.firstChild) {
-              return;
-            }
-            const input = document.createElement('input');
-            root.appendChild(input);
-          };
-          const column = grid.querySelector('vaadin-grid-column');
-          column.headerRenderer = inputRenderer;
-          column.footerRenderer = inputRenderer;
-          flushGrid(grid);
-        });
-
-        const isDropAllowedOnInput = (e) => e.dataTransfer.dropEffect !== 'none';
-
-        it('should not allow drop over header input on grid with drop mode', () => {
-          grid.dropMode = 'between';
-          fireDragStart();
-          const e = fireDragOver(grid.$.header.children[0]);
-          expect(isDropAllowedOnInput(e)).to.be.false;
-        });
-
-        it('should not allow drop over header input on grid without drop mode', () => {
-          grid.dropMode = null;
-          fireDragStart();
-          const e = fireDragOver(grid.$.header.children[0]);
-          expect(isDropAllowedOnInput(e)).to.be.false;
-        });
-
-        it('should not allow drop over footer input on grid with drop mode', () => {
-          grid.dropMode = 'between';
-          fireDragStart();
-          const e = fireDragOver(grid.$.footer.children[0]);
-          expect(isDropAllowedOnInput(e)).to.be.false;
-        });
-
-        it('should not allow drop over footer input on grid without drop mode', () => {
-          grid.dropMode = null;
-          fireDragStart();
-          const e = fireDragOver(grid.$.footer.children[0]);
-          expect(isDropAllowedOnInput(e)).to.be.false;
         });
       });
     });
@@ -886,6 +836,40 @@ describe('drag and drop', () => {
         const originalEvent = fireDrop();
         const event = dropSpy.getCall(0).args[0];
         expect(event.originalEvent).to.equal(originalEvent);
+      });
+
+      it('should not dispatch grid-drop event on dropping row on input in header', () => {
+        const column = grid.querySelector('vaadin-grid-column');
+        column.headerRenderer = (root) => {
+          if (root.firstChild) {
+            return;
+          }
+          const input = document.createElement('input');
+          root.appendChild(input);
+        };
+        flushGrid(grid);
+        grid.dropMode = 'between';
+        fireDragStart();
+        fireDragOver(grid.$.header.children[0]);
+        fireDrop(grid.$.header.children[0]);
+        expect(dropSpy.called).to.be.false;
+      });
+
+      it('should not dispatch grid-drop event on dropping row on input in footer', () => {
+        const column = grid.querySelector('vaadin-grid-column');
+        column.footerRenderer = (root) => {
+          if (root.firstChild) {
+            return;
+          }
+          const input = document.createElement('input');
+          root.appendChild(input);
+        };
+        flushGrid(grid);
+        grid.dropMode = 'between';
+        fireDragStart();
+        fireDragOver(grid.$.footer.children[0]);
+        fireDrop(grid.$.footer.children[0]);
+        expect(dropSpy.called).to.be.false;
       });
     });
   });
