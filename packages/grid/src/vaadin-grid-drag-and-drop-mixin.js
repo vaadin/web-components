@@ -413,7 +413,7 @@ export const DragAndDropMixin = (superClass) =>
 
     /** @private */
     _onDrop(e) {
-      if (this.dropMode) {
+      if (this.dropMode && this._dropLocation) {
         e.stopPropagation();
         e.preventDefault();
 
