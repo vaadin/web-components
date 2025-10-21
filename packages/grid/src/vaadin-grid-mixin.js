@@ -657,6 +657,14 @@ export const GridMixin = (superClass) =>
         row.hidden = !visibleRowCells.length;
       }
 
+      if (row.parentElement === this.$.header) {
+        this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
+      }
+
+      if (row.parentElement === this.$.footer) {
+        this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
+      }
+
       // Make sure the section has a tabbable element
       this._resetKeyboardNavigation();
       this._a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
