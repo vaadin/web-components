@@ -182,6 +182,7 @@ export const gridStyles = css`
 
   [part~='cell'] {
     grid-row-start: 1;
+    grid-column-end: span var(--_colspan, 1);
     padding: 0;
     box-sizing: border-box;
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
@@ -241,31 +242,6 @@ export const gridStyles = css`
   [part~='body-cell']:not([part~='last-row-cell']),
   [part~='body-cell']:not([part~='last-row-cell']) + [part~='details-cell'] {
     /* padding-bottom: var(--_row-border-width); */
-  }
-
-  /* Grid with header */
-  #table:has(#header > tr:not([hidden])) {
-    [part~='first-row-cell'] {
-      /* padding-top: var(--_row-border-width); */
-    }
-  }
-
-  /* Grid with footer */
-  #table:has(#footer > tr:not([hidden])) {
-    [part~='last-row-cell'] {
-      /* padding-bottom: var(--_row-border-width); */
-    }
-  }
-
-  /* Grid with header */
-  #table:has(#header > tr:not([hidden])) {
-    #emptystatebody {
-      /* margin-top: calc(var(--_row-border-width) * -1); */
-    }
-
-    #emptystatecell {
-      /* border-block: var(--_row-border-width) solid transparent; */
-    }
   }
 
   [part~='body-cell'] {
@@ -542,11 +518,11 @@ export const gridStyles = css`
     inset-block-start: 0;
   }
 
-  #table:has(#header > tr:not([hidden])) {
+  /* #table:has(#header > tr:not([hidden])) {
     [part~='first-row']::after {
       inset-block-start: 0;
     }
-  }
+  } */
 
   :host([navigating]) [part~='row']:focus,
   :host([navigating]) [part~='cell']:focus {
@@ -598,14 +574,14 @@ export const gridStyles = css`
   }
 
   /* Grid with header */
-  #table:has(#header > tr:not([hidden])) [part~='first-row'][dragover='above']::after {
+  /* #table:has(#header > tr:not([hidden])) [part~='first-row'][dragover='above']::after {
     top: 0;
-  }
+  } */
 
   /* Grid with footer */
-  #table:has(#footer > tr:not([hidden])) [part~='last-row'][dragover='below']::after {
+  /* #table:has(#footer > tr:not([hidden])) [part~='last-row'][dragover='below']::after {
     bottom: 0;
-  }
+  } */
 
   [part~='row'][dragstart] {
     border-block: var(--_row-border-width) solid transparent !important;
