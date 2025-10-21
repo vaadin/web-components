@@ -88,7 +88,6 @@ describe('drag and drop', () => {
       cancelable: true,
       composed: true,
     });
-    event.dataTransfer = { dropEffect: 'move' };
     if (row) {
       const rect = row.getBoundingClientRect();
       if (location === 'on-top') {
