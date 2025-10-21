@@ -374,14 +374,18 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _flexGrowChanged(flexGrow) {
+    _flexGrowChanged(_flexGrow) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('flexGrow');
       }
 
-      this._allCells.forEach((cell) => {
-        cell.style.flexGrow = flexGrow;
-      });
+      if (this._grid && this._grid.__updateCSSGridTemplateColumns) {
+        this._grid.__updateCSSGridTemplateColumns();
+      }
+
+      // this._allCells.forEach((cell) => {
+      //   cell.style.flexGrow = flexGrow;
+      // });
     }
 
     /** @private */
@@ -389,17 +393,25 @@ export const ColumnBaseMixin = (superClass) =>
       this._allCells.forEach((cell) => {
         cell.style.order = order;
       });
+
+      if (this._grid && this._grid._cellOrderChanged) {
+        this._grid._cellOrderChanged();
+      }
     }
 
     /** @private */
-    _widthChanged(width) {
+    _widthChanged(_width) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('width');
       }
 
-      this._allCells.forEach((cell) => {
-        cell.style.width = width;
-      });
+      // this._allCells.forEach((cell) => {
+      //   cell.style.width = width;
+      // });
+
+      if (this._grid && this._grid.__updateCSSGridTemplateColumns) {
+        this._grid.__updateCSSGridTemplateColumns();
+      }
     }
 
     /** @private */
@@ -419,9 +431,9 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _frozenToEndChanged(frozenToEnd) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('frozenToEnd', frozenToEnd);
-      }
+      // if (this.parentElement && this.parentElement._columnPropChanged) {
+      //   this.parentElement._columnPropChanged('frozenToEnd', frozenToEnd);
+      // }
 
       this._allCells.forEach((cell) => {
         // Skip sizer cells to keep correct scrollWidth.
