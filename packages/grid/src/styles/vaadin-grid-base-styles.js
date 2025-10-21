@@ -121,19 +121,35 @@ export const gridStyles = css`
   [part~='reorder-ghost'] {
     font-size: var(--vaadin-grid-header-font-size, 1em);
     font-weight: var(--vaadin-grid-header-font-weight, 500);
-    color: var(--vaadin-grid-text-header-color, var(--vaadin-text-color));
+    color: var(--vaadin-grid-header-text-color, var(--vaadin-text-color));
   }
 
   [part~='row'] {
-    display: flex;
+    --_row-background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
+    display: grid;
+    grid-template-columns: var(--_template-columns);
+    grid-template-rows: min-content 4px;
     width: 100%;
     box-sizing: border-box;
     margin: 0;
     position: relative;
-  }
 
-  [part~='row']:empty {
-    height: 100%;
+    &::before {
+      content: '';
+      display: none;
+      position: absolute;
+      box-sizing: border-box;
+      grid-row: 1 / -1;
+      grid-column: 1 / -1;
+      inset: calc(var(--_row-border-width) * -1) 0 0 0;
+      background-image: var(--_selected-background-image);
+      background-color: var(--_row-background-color);
+      border-block: var(--_row-border-width) solid var(--_border-color);
+    }
+
+    &:empty {
+      height: 100%;
+    }
   }
 
   [part~='row']:not(:focus-within) {
@@ -144,16 +160,31 @@ export const gridStyles = css`
     visibility: hidden;
   }
 
-  [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
-    transform: translateX(var(--_grid-lazy-columns-start));
+  [part~='body-row'] {
+    &::before {
+      display: block;
+    }
+
+    &:focus,
+    &:focus-within {
+      z-index: 4;
+
+      &:not([part~='selected-row'])::before {
+        border-color: transparent;
+        background-clip: padding-box;
+      }
+    }
+
+    &[selected] {
+      z-index: 3;
+    }
   }
 
   [part~='cell'] {
-    --vaadin-grid-cell-background-color: yellow;
+    grid-row-start: 1;
     padding: 0;
     box-sizing: border-box;
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
-    border-block: var(--_row-border-width) var(--_border-color);
   }
 
   [part~='body-cell'],
@@ -166,7 +197,12 @@ export const gridStyles = css`
     position: relative;
     align-items: center;
     white-space: nowrap;
+    z-index: 1;
     border-inline: var(--_column-border-width) var(--_border-color);
+
+    &:focus {
+      z-index: 4;
+    }
   }
 
   /* Column borders */
@@ -184,31 +220,40 @@ export const gridStyles = css`
 
   /* Row borders */
   #header {
-    padding-bottom: var(--_row-border-width);
-    margin-bottom: calc(var(--_row-border-width) * -1);
+    /* padding-bottom: var(--_row-border-width);
+    margin-bottom: calc(var(--_row-border-width) * -1); */
   }
 
-  [part~='header-cell']:not([part~='last-header-row-cell']),
-  [part~='footer-cell']:not([part~='last-footer-row-cell']) {
-    border-bottom-style: solid;
+  #header [part~='row'],
+  #footer [part~='row'] {
+    &::before {
+      display: block;
+    }
+  }
+
+  [part~='first-row-cell'] {
+    margin-top: 0;
+  }
+  [part~='last-header-row-cell'] {
+    border-bottom: 0;
   }
 
   [part~='body-cell']:not([part~='last-row-cell']),
   [part~='body-cell']:not([part~='last-row-cell']) + [part~='details-cell'] {
-    border-bottom-style: solid;
+    /* padding-bottom: var(--_row-border-width); */
   }
 
   /* Grid with header */
   #table:has(#header > tr:not([hidden])) {
     [part~='first-row-cell'] {
-      border-block-start-style: solid;
+      /* padding-top: var(--_row-border-width); */
     }
   }
 
   /* Grid with footer */
   #table:has(#footer > tr:not([hidden])) {
     [part~='last-row-cell'] {
-      border-block-end-style: solid;
+      /* padding-bottom: var(--_row-border-width); */
     }
   }
 
@@ -219,7 +264,7 @@ export const gridStyles = css`
     }
 
     #emptystatecell {
-      border-block: var(--_row-border-width) solid transparent;
+      /* border-block: var(--_row-border-width) solid transparent; */
     }
   }
 
@@ -233,7 +278,11 @@ export const gridStyles = css`
       var(--_hover-background-image, none) padding-box,
       var(--_selected-background-image, none) border-box,
       var(--_highlight-background-image) padding-box,
-      var(--vaadin-grid-cell-background-color) border-box;
+      var(--vaadin-grid-cell-background-color, var(--_row-background-color)) border-box;
+  }
+
+  [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+    transform: translateX(var(--_grid-lazy-columns-start));
   }
 
   /* Variant: wrap cell contents */
@@ -244,30 +293,17 @@ export const gridStyles = css`
 
   /* Variant: row stripes */
   [part~='odd-row'] {
-    --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--vaadin-background-color));
+    --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--_row-background-color));
   }
 
   :host([theme~='row-stripes']) [part~='odd-row'] {
     --vaadin-grid-cell-background-color: var(
       --vaadin-grid-row-odd-background-color,
-      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--vaadin-background-color))
+      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--_row-background-color))
     );
   }
 
   /* Raise highlighted rows above others */
-
-  [part~='selected-row'] {
-    z-index: 3;
-  }
-
-  [part~='row']:focus,
-  [part~='row']:focus-within {
-    z-index: 4;
-
-    [part~='cell']:not([part~='selected-row-cell']) {
-      border-top-color: transparent;
-    }
-  }
 
   /* @container style(--vaadin-grid-row-odd-background-color) {
     [part~='odd-row'] {
@@ -321,11 +357,11 @@ export const gridStyles = css`
   }
 
   [part~='selected-row-cell'] {
-    border-top-style: solid;
+    /* border-top-style: solid; */
   }
 
   [part~='selected-row-cell']:not([part~='first-row-cell']) {
-    margin-top: calc(var(--_row-border-width) * -1);
+    /* margin-top: calc(var(--_row-border-width) * -1); */
   }
 
   /* Empty state */
@@ -605,9 +641,9 @@ export const gridStyles = css`
 
   /* Sizer styles */
   #sizer {
-    display: flex;
     visibility: hidden;
     border: none !important;
+    grid-template-rows: none !important;
   }
 
   #sizer [part~='details-cell'],
