@@ -6,7 +6,6 @@ import {
   escKeyDown,
   fire,
   fixtureSync,
-  focusin,
   focusout,
   mousedown,
   nextRender,
@@ -144,7 +143,7 @@ describe('menu-bar with tooltip', () => {
 
     it('should show tooltip on menu button keyboard focus', () => {
       tabKeyDown(document.body);
-      focusin(buttons[0]);
+      buttons[0].focus();
       expect(tooltip.opened).to.be.true;
     });
 
@@ -159,27 +158,27 @@ describe('menu-bar with tooltip', () => {
 
     it('should set tooltip target on menu button keyboard focus', () => {
       tabKeyDown(document.body);
-      focusin(buttons[0]);
+      buttons[0].focus();
       expect(tooltip.target).to.be.equal(buttons[0]);
     });
 
     it('should set tooltip context on menu button keyboard focus', () => {
       tabKeyDown(document.body);
-      focusin(buttons[0]);
+      buttons[0].focus();
       expect(tooltip.context).to.be.instanceOf(Object);
       expect(tooltip.context.item.text).to.equal('Edit');
     });
 
     it('should hide tooltip on menu-bar focusout', () => {
       tabKeyDown(document.body);
-      focusin(buttons[0]);
+      buttons[0].focus();
       focusout(menuBar);
       expect(tooltip.opened).to.be.false;
     });
 
     it('should hide tooltip on menuBar menu button content Esc', () => {
       tabKeyDown(document.body);
-      focusin(buttons[0]);
+      buttons[0].focus();
       escKeyDown(buttons[0]);
       expect(tooltip.opened).to.be.false;
     });
@@ -250,7 +249,7 @@ describe('menu-bar with tooltip', () => {
         arrowRight(buttons[0]);
         arrowRight(buttons[1]);
         tabKeyDown(document.body);
-        focusin(buttons[buttons.length - 1]);
+        menuBar._overflow.focus();
         expect(tooltip.opened).to.be.false;
       });
     });
@@ -327,7 +326,7 @@ describe('menu-bar with tooltip', () => {
         tooltip.focusDelay = 100;
 
         tabKeyDown(document.body);
-        focusin(buttons[0]);
+        buttons[0].focus();
         expect(tooltip.opened).to.be.false;
 
         clock.tick(100);
@@ -338,7 +337,7 @@ describe('menu-bar with tooltip', () => {
         tooltip.hideDelay = 100;
 
         tabKeyDown(document.body);
-        focusin(buttons[0]);
+        buttons[0].focus();
         clock.tick(DEFAULT_DELAY);
 
         escKeyDown(buttons[0]);

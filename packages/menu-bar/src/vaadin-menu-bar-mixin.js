@@ -268,6 +268,7 @@ export const MenuBarMixin = (superClass) =>
     set _hasOverflow(hasOverflow) {
       if (this._overflow) {
         this._overflow.toggleAttribute('hidden', !hasOverflow);
+        this._overflow.setAttribute('tabindex', hasOverflow ? '0' : '-1');
       }
     }
 
@@ -761,8 +762,7 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        const selector = this.tabNavigation ? '[focused]' : '[tabindex="0"]';
-        const target = this.querySelector(`vaadin-menu-bar-button${selector}`);
+        const target = this._buttons.find((btn) => isElementFocused(btn));
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
