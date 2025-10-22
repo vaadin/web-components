@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/charts';
+    </script>
+  </head>
+
+  <body>
+    <div style="display: flex">
+      <div>
+        <div style="height: 100%; min-height: 500px">
+          <vaadin-chart
+            type="bar"
+            title="Historic World Population by Region"
+            categories='["Africa", "America", "Asia", "Europe", "Oceania"]'
+          >
+            <vaadin-chart-series title="Year 1800" values="[107, 31, 635, 203, 2]"></vaadin-chart-series>
+            <vaadin-chart-series title="Year 1900" values="[133, 156, 947, 408, 6]"></vaadin-chart-series>
+            <vaadin-chart-series title="Year 2000" values="[814, 841, 3714, 727, 31]"></vaadin-chart-series>
+            <vaadin-chart-series title="Year 2016" values="[1216, 1001, 4436, 738, 40]"></vaadin-chart-series>
+          </vaadin-chart>
+        </div>
+        <div style="height: 5px"></div>
+      </div>
+    </div>
+  </body>
+</html>
