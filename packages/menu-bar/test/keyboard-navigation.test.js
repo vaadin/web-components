@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 
 describe('keyboard navigation', () => {
