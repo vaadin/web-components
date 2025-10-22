@@ -64,18 +64,28 @@
         window.location.reload();
       });
 
-      document.querySelector('#useNavbar').addEventListener('change', (e) => {
+      const useNavbarToggle = document.querySelector('#useNavbar');
+      useNavbarToggle.addEventListener('change', (e) => {
+        useNavbar(e.target.checked);
+      });
+
+      function useNavbar(useNavbar) {
+        useNavbarToggle.checked = useNavbar;
         const drawerToggle = document.querySelector('vaadin-app-layout > header[slot] vaadin-drawer-toggle');
-        if (e.target.checked) {
+        if (useNavbar) {
+          localStorage.setItem('aura-navbar', useNavbar);
           document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'navbar');
           document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'navbar');
           document.querySelector('vaadin-app-layout > header[slot]').prepend(drawerToggle);
         } else {
+          localStorage.removeItem('aura-navbar');
           document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'drawer');
           document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'drawer');
           document.querySelector('vaadin-app-layout > header[slot]').append(drawerToggle);
         }
-      });
+      }
+
+      useNavbar(localStorage.getItem('aura-navbar') !== null);
 
       const generateItems = (count) => {
         return Array.from({ length: count }, (_, i) => ({
