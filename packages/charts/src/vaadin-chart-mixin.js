@@ -830,10 +830,11 @@ export const ChartMixin = (superClass) =>
       const { chartHeight, chartWidth } = this.configuration;
 
       this.$.wrapper.style.minHeight = '';
-      this.$.wrapper.style.minWidth = '';
-
-      if (this.$.wrapper.offsetHeight === 0 || this.$.wrapper.offsetWidth === 0) {
+      if (this.$.wrapper.offsetHeight === 0) {
         this.$.wrapper.style.minHeight = `${chartHeight}px`;
+      }
+      this.$.wrapper.style.minWidth = '';
+      if (this.$.wrapper.offsetWidth === 0) {
         this.$.wrapper.style.minWidth = `${chartWidth}px`;
       }
 
