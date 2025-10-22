@@ -585,6 +585,24 @@ export const GridMixin = (superClass) =>
       this._updateFirstAndLastColumnForRow(row);
     }
 
+    /** @private */
+    __updateCSSGridTemplateColumns() {
+      if (!this._columnTree) {
+        return;
+      }
+
+      const templateColumns = this._columnTree[this._columnTree.length - 1]
+        .map((column) => {
+          if (column.flexGrow > 0) {
+            return `minmax(${column.width}, ${column.flexGrow}fr)`;
+          }
+          return column.width;
+        })
+        .join(' ');
+
+      this.$.table.style.setProperty('--_template-columns', templateColumns);
+    }
+
     /**
      * @param {HTMLTableRowElement} row
      * @protected
@@ -637,6 +655,14 @@ export const GridMixin = (superClass) =>
 
       if (row.hidden !== !visibleRowCells.length) {
         row.hidden = !visibleRowCells.length;
+      }
+
+      if (row.parentElement === this.$.header) {
+        this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
+      }
+
+      if (row.parentElement === this.$.footer) {
+        this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
       }
 
       // Make sure the section has a tabbable element
@@ -746,6 +772,7 @@ export const GridMixin = (superClass) =>
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
+      this.__updateCSSGridTemplateColumns();
       this._resizeHandler();
       this._frozenCellsChanged();
       this._updateFirstAndLastColumn();
