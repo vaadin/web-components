@@ -795,10 +795,6 @@ export const ChartMixin = (superClass) =>
         // Detect if the chart had already been initialized. This might happen in
         // environments where the chart is lazily attached (e.g Grid).
         if (this.configuration) {
-          const { height } = this.$.wrapper.style;
-          this.$.wrapper.style.height = '';
-          this.configuration.setSize(null, null, false);
-          this.$.wrapper.style.height = height;
           return;
         }
 
