@@ -132,10 +132,16 @@ export const gridStyles = css`
 
     display: grid;
     grid-template-columns: var(--_template-columns);
+    grid-template-rows: min-content;
     width: 100%;
     box-sizing: border-box;
     margin: 0;
     position: relative;
+  }
+
+  [part~='details-opened-row'] {
+    grid-template-rows: min-content var(--_details-cell-height, 0px);
+    row-gap: var(--_row-border-width);
   }
 
   [part~='row']:not(:focus-within) {
@@ -149,13 +155,18 @@ export const gridStyles = css`
   [part~='row']:where(:not(#sizer)) {
     &::before {
       content: '';
-      inset: 0;
+      inset: calc(var(--_row-border-width) * -1) 0;
       position: absolute;
+      grid-row: 1 / 1;
       grid-column: 1 / -1;
       background-color: var(--_row-background-color);
       background-image: var(--_selected-background-image, none);
       border-block: var(--_row-border-width) solid var(--_border-color);
     }
+  }
+
+  [part~='details-cell'] {
+    /* border-bottom: var(--_row-border-width) solid var(--_border-color); */
   }
 
   [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
@@ -172,11 +183,11 @@ export const gridStyles = css`
       z-index: 4;
 
       &:not([part~='selected-row']):not([part~='first-row'])::before {
-        inset-block-start: var(--_row-border-width);
+        inset-block-start: 0;
       }
 
-      &:not([part~='selected-row']):not([part~='last-row'])::before {
-        inset-block-end: var(--_row-border-width);
+      &:not([part~='selected-row']):not([part~='last-row']):not([part~='details-opened-row'])::before {
+        inset-block-end: 0;
       }
     }
 
@@ -211,10 +222,6 @@ export const gridStyles = css`
     );
     --_selected-background-image: linear-gradient(var(--_selected-background-color), var(--_selected-background-color));
     z-index: 3;
-
-    &::before {
-      /* inset-block-start: calc(var(--_row-border-width) * -1); */
-    }
   }
 
   /* Cells */
@@ -222,6 +229,7 @@ export const gridStyles = css`
   [part~='cell'] {
     padding: 0;
     box-sizing: border-box;
+    grid-row-start: 1;
     grid-column-end: span var(--_colspan, 1);
     background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
   }
@@ -245,7 +253,7 @@ export const gridStyles = css`
   }
 
   /* Column borders */
-  [part~='cell']:not([part~='first-column-cell']) {
+  [part~='cell']:where(:not([part~='details-cell']):not([part~='first-column-cell'])) {
     border-left-style: solid;
   }
 
@@ -265,7 +273,7 @@ export const gridStyles = css`
     );
   }
 
-  [part~='body-cell'] {
+  [part~='body-cell']:where(:not([part~='details-cell'])) {
     background:
       var(--_hover-background-image, none) border-box,
       var(--_selected-background-image, none) border-box,
@@ -303,8 +311,8 @@ export const gridStyles = css`
 
   [part~='details-cell'] {
     position: absolute;
-    bottom: 0;
-    width: 100%;
+    inset-inline: 0;
+    grid-row-start: 2;
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
