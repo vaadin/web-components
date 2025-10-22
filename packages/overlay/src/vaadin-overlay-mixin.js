@@ -552,7 +552,7 @@ export const OverlayMixin = (superClass) =>
      * @private
      */
     _keydownListener(event) {
-      if (!this._last) {
+      if (!this._last || event.defaultPrevented) {
         return;
       }
 
@@ -562,10 +562,6 @@ export const OverlayMixin = (superClass) =>
       }
 
       if (event.key === 'Escape') {
-        if (event.defaultPrevented) {
-          return;
-        }
-
         const evt = new CustomEvent('vaadin-overlay-escape-press', {
           cancelable: true,
           detail: { sourceEvent: event },
