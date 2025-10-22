@@ -60,6 +60,14 @@ describe('interactions', () => {
 
       expect(overlay.opened).to.be.true;
     });
+
+    it('should not close on Esc if the keydown event was prevented', () => {
+      overlay.addEventListener('keydown', (e) => e.preventDefault());
+
+      escKeyDown(overlay);
+
+      expect(overlay.opened).to.be.true;
+    });
   });
 
   describe('click', () => {

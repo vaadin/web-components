@@ -568,7 +568,7 @@ export const OverlayMixin = (superClass) =>
         });
         this.dispatchEvent(evt);
 
-        if (this.opened && !evt.defaultPrevented) {
+        if (this.opened && !evt.defaultPrevented && !event.defaultPrevented) {
           this.close(event);
         }
       }
