@@ -8,7 +8,7 @@ import { Directive, directive } from 'lit/directive.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -500,12 +500,6 @@ export const MenuBarMixin = (superClass) =>
 
         const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
         this.__updateOverflow(items);
-
-        // Ensure there is at least one button with tabindex set to 0
-        // so that menu-bar is not skipped when navigating with Tab
-        if (remaining.length && !remaining.some((btn) => btn.getAttribute('tabindex') === '0')) {
-          this._setTabindex(remaining[remaining.length - 1], true);
-        }
       }
     }
 
@@ -536,13 +530,23 @@ export const MenuBarMixin = (superClass) =>
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
 
+      // Collect visible buttons to detect if tabindex should be updated
+      const visibleButtons = buttons.filter((btn) => btn.style.visibility !== 'hidden');
+
+      if (!visibleButtons.length) {
+        // If all buttons except overflow are hidden, set tabindex on it
+        this._overflow.setAttribute('tabindex', '0');
+      } else if (!visibleButtons.some((btn) => btn.getAttribute('tabindex') === '0')) {
+        // Ensure there is at least one button with tabindex set to 0
+        // so that menu-bar is not skipped when navigating with Tab
+        this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
+      }
+
       // Apply first/last visible attributes to the visible buttons
-      buttons
-        .filter((btn) => btn.style.visibility !== 'hidden')
-        .forEach((btn, index, visibleButtons) => {
-          btn.toggleAttribute('first-visible', index === 0);
-          btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
-        });
+      visibleButtons.forEach((btn, index, visibleButtons) => {
+        btn.toggleAttribute('first-visible', index === 0);
+        btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
+      });
     }
 
     /** @private */
@@ -761,8 +765,7 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        const selector = this.tabNavigation ? '[focused]' : '[tabindex="0"]';
-        const target = this.querySelector(`vaadin-menu-bar-button${selector}`);
+        const target = this.__getFocusTarget();
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
@@ -774,6 +777,24 @@ export const MenuBarMixin = (superClass) =>
       } else {
         this._hideTooltip();
       }
+    }
+
+    /** @private */
+    __getFocusTarget() {
+      // First, check if focus is moving to a visible button
+      let target = this._buttons.find((btn) => isElementFocused(btn));
+
+      if (!target) {
+        const selector = this.tabNavigation ? '[focused]' : '[tabindex="0"]';
+        // Next, check if there is a button that could be focused but is hidden
+        target = this.querySelector(`vaadin-menu-bar-button${selector}`);
+
+        if (isElementHidden(target)) {
+          target = this._buttons[this._getFocusableIndex()];
+        }
+      }
+
+      return target;
     }
 
     /**
