@@ -232,7 +232,7 @@
           root.innerHTML = `<span theme="badge ${badgeColors[model.index % badgeColors.length]}">Status</span>`;
         };
         grid.querySelector('vaadin-grid-column.avatar').renderer = (root, col, model) => {
-          root.innerHTML = `<vaadin-avatar name="${model.item.name}"></vaadin-avatar>`;
+          root.innerHTML = `<vaadin-avatar name="${model.item.name}" color-index="${model.index % 9}"></vaadin-avatar>`;
         };
       }
 
