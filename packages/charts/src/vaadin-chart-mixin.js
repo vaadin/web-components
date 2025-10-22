@@ -830,11 +830,12 @@ export const ChartMixin = (superClass) =>
       const { chartHeight, chartWidth } = this.configuration;
 
       this.$.wrapper.style.minHeight = '';
-      if (this.$.wrapper.offsetHeight === 0) {
+      // Use 1px as the threshold to align with Highcharts
+      if (this.$.wrapper.offsetHeight < 2) {
         this.$.wrapper.style.minHeight = `${chartHeight}px`;
       }
       this.$.wrapper.style.minWidth = '';
-      if (this.$.wrapper.offsetWidth === 0) {
+      if (this.$.wrapper.offsetWidth < 2) {
         this.$.wrapper.style.minWidth = `${chartWidth}px`;
       }
 
@@ -848,7 +849,6 @@ export const ChartMixin = (superClass) =>
       if (!this.configuration) {
         return;
       }
-
       this.configuration.reflow();
     }
 
