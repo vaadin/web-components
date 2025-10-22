@@ -44,13 +44,21 @@ export const KeyboardDirectionMixin = (superclass) =>
      * @override
      */
     focus(options) {
-      const items = this._getItems();
-      if (Array.isArray(items)) {
-        const idx = this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item));
-        if (idx >= 0) {
-          this._focus(idx, options);
-        }
+      const idx = this._getFocusableIndex();
+      if (idx >= 0) {
+        this._focus(idx, options);
       }
+    }
+
+    /**
+     * Get the index of a first focusable item, if any.
+     *
+     * @return {Element[]}
+     * @protected
+     */
+    _getFocusableIndex() {
+      const items = this._getItems();
+      return Array.isArray(items) ? this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item)) : -1;
     }
 
     /**

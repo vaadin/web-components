@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, focusin, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-menu-bar.js';
 
 describe('custom element definition', () => {
@@ -71,7 +71,7 @@ describe('root menu layout', () => {
   });
 
   it('should set tabindex to -1 to all the buttons except first one', () => {
-    focusin(menu);
+    menu.focus();
     expect(buttons[0].getAttribute('tabindex')).to.equal('0');
     buttons.slice(1).forEach((btn) => {
       expect(btn.getAttribute('tabindex')).to.equal('-1');
