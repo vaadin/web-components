@@ -562,13 +562,17 @@ export const OverlayMixin = (superClass) =>
       }
 
       if (event.key === 'Escape') {
+        if (event.defaultPrevented) {
+          return;
+        }
+
         const evt = new CustomEvent('vaadin-overlay-escape-press', {
           cancelable: true,
           detail: { sourceEvent: event },
         });
         this.dispatchEvent(evt);
 
-        if (this.opened && !evt.defaultPrevented && !event.defaultPrevented) {
+        if (this.opened && !evt.defaultPrevented) {
           this.close(event);
         }
       }

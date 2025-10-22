@@ -68,6 +68,16 @@ describe('interactions', () => {
 
       expect(overlay.opened).to.be.true;
     });
+
+    it('should not fire the vaadin-overlay-escape-press event if keydown was prevented', () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-escape-press', spy);
+      overlay.addEventListener('keydown', (e) => e.preventDefault());
+
+      enterKeyDown(overlay);
+
+      expect(spy.called).to.be.false;
+    });
   });
 
   describe('click', () => {
