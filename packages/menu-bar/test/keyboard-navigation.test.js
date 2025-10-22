@@ -148,7 +148,7 @@ describe('keyboard navigation', () => {
 
         it('should move focus back to the overflow button on Shift + Tab after Tab', async () => {
           // Hide all buttons except overflow
-          menu.style.maxWidth = '100px';
+          menu.style.width = '100px';
           await nextResize(menu);
 
           firstGlobalFocusable.focus();
@@ -164,7 +164,7 @@ describe('keyboard navigation', () => {
 
         it('should move focus back to the overflow button on Tab after Shift + Tab', async () => {
           // Show 1 button + overflow
-          menu.style.maxWidth = '120px';
+          menu.style.width = '120px';
           await nextResize(menu);
 
           lastGlobalFocusable.focus();
@@ -187,11 +187,31 @@ describe('keyboard navigation', () => {
           expect(document.activeElement).to.equal(firstGlobalFocusable);
 
           // Hide all buttons except overflow
-          menu.style.maxWidth = '100px';
+          menu.style.width = '100px';
           await nextResize(menu);
 
           await sendKeys({ press: 'Tab' });
           expect(document.activeElement).to.equal(menu._overflow);
+        });
+
+        it('should not skip buttons on Tab after overflow becomes hidden', async () => {
+          // Hide all buttons except overflow
+          menu.style.width = '100px';
+          await nextResize(menu);
+
+          firstGlobalFocusable.focus();
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+          // Show all buttons and hide overflow
+          menu.style.width = '100%';
+          await nextResize(menu);
+
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(buttons[1]);
         });
       });
     });

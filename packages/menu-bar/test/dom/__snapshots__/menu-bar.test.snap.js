@@ -56,7 +56,7 @@ snapshots["menu-bar basic"] =
     hidden=""
     role="menuitem"
     slot="overflow"
-    tabindex="-1"
+    tabindex="0"
   >
     <div aria-hidden="true">
       ···
@@ -156,7 +156,7 @@ snapshots["menu-bar opened"] =
     hidden=""
     role="menuitem"
     slot="overflow"
-    tabindex="-1"
+    tabindex="0"
   >
     <div aria-hidden="true">
       ···
