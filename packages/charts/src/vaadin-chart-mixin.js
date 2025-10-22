@@ -829,6 +829,14 @@ export const ChartMixin = (superClass) =>
       const { height, width } = contentRect;
       const { chartHeight, chartWidth } = this.configuration;
 
+      this.$.wrapper.style.minHeight = '';
+      this.$.wrapper.style.minWidth = '';
+
+      if (this.$.wrapper.offsetHeight === 0 || this.$.wrapper.offsetWidth === 0) {
+        this.$.wrapper.style.minHeight = `${chartHeight}px`;
+        this.$.wrapper.style.minWidth = `${chartWidth}px`;
+      }
+
       if (height !== chartHeight || width !== chartWidth) {
         this.__reflow();
       }
@@ -839,6 +847,7 @@ export const ChartMixin = (superClass) =>
       if (!this.configuration) {
         return;
       }
+
       this.configuration.reflow();
     }
 
