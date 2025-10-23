@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chart Parent Sizing Test</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/charts';
+    </script>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+
+      .test-case {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 2px solid #ccc;
+        background: #f5f5f5;
+      }
+
+      .test-case h2 {
+        margin-top: 0;
+        font-size: 16px;
+      }
+
+      .parent-container {
+        border: 2px dashed #333;
+        background: #fff;
+        padding: 10px;
+      }
+
+      .info {
+        margin-top: 10px;
+        padding: 10px;
+        background: #e3f2fd;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Chart Parent Sizing Test Cases</h1>
+    <p>Testing whether charts with absolute positioning affect parent container sizing</p>
+
+    <div class="test-case">
+      <h2>Test 1: Chart in auto-sized container (should the container expand to fit chart?)</h2>
+      <div class="parent-container" id="parent1">
+        <vaadin-chart
+          id="chart1"
+          title="Chart in Auto-Sized Container"
+          categories='["Jan", "Feb", "Mar", "Apr"]'
+        >
+          <vaadin-chart-series values="[29.9, 71.5, 106.4, 129.2]"></vaadin-chart-series>
+        </vaadin-chart>
+      </div>
+      <div class="info" id="info1"></div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 2: Chart with siblings (does chart contribute to parent height?)</h2>
+      <div class="parent-container" id="parent2">
+        <div style="padding: 10px; background: #ffeb3b">Sibling above chart</div>
+        <vaadin-chart
+          id="chart2"
+          title="Chart with Siblings"
+          categories='["Q1", "Q2", "Q3", "Q4"]'
+        >
+          <vaadin-chart-series values="[50, 80, 60, 90]"></vaadin-chart-series>
+        </vaadin-chart>
+        <div style="padding: 10px; background: #ffeb3b">Sibling below chart</div>
+      </div>
+      <div class="info" id="info2"></div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 3: Multiple charts stacked vertically (do they stack properly?)</h2>
+      <div class="parent-container" id="parent3">
+        <vaadin-chart
+          id="chart3a"
+          title="First Chart"
+          categories='["A", "B", "C"]'
+          style="height: 200px"
+        >
+          <vaadin-chart-series values="[1, 2, 3]"></vaadin-chart-series>
+        </vaadin-chart>
+        <vaadin-chart
+          id="chart3b"
+          title="Second Chart"
+          categories='["A", "B", "C"]'
+          style="height: 200px"
+        >
+          <vaadin-chart-series values="[3, 2, 1]"></vaadin-chart-series>
+        </vaadin-chart>
+      </div>
+      <div class="info" id="info3"></div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 4: Chart in flex container (flex item contribution)</h2>
+      <div class="parent-container" id="parent4" style="display: flex; gap: 10px">
+        <div style="flex: 1; background: #ffeb3b; padding: 10px">Flex item 1</div>
+        <vaadin-chart
+          id="chart4"
+          title="Chart in Flex"
+          categories='["A", "B"]'
+          style="flex: 1"
+        >
+          <vaadin-chart-series values="[10, 20]"></vaadin-chart-series>
+        </vaadin-chart>
+        <div style="flex: 1; background: #ffeb3b; padding: 10px">Flex item 3</div>
+      </div>
+      <div class="info" id="info4"></div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 5: Chart in grid layout (grid item contribution)</h2>
+      <div class="parent-container" id="parent5" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+        <div style="background: #ffeb3b; padding: 10px">Grid item 1</div>
+        <vaadin-chart
+          id="chart5"
+          title="Chart in Grid"
+          categories='["X", "Y"]'
+        >
+          <vaadin-chart-series values="[5, 15]"></vaadin-chart-series>
+        </vaadin-chart>
+      </div>
+      <div class="info" id="info5"></div>
+    </div>
+
+    <script>
+      // Update info panels with measurements
+      function updateInfo(testNumber) {
+        const parent = document.getElementById(`parent${testNumber}`);
+        const chart = document.getElementById(`chart${testNumber}`) ||
+                      document.getElementById(`chart${testNumber}a`);
+        const info = document.getElementById(`info${testNumber}`);
+
+        const update = () => {
+          info.innerHTML = `
+            <strong>Parent size:</strong> ${parent.offsetWidth}px × ${parent.offsetHeight}px<br>
+            <strong>Chart size:</strong> ${chart.offsetWidth}px × ${chart.offsetHeight}px<br>
+            <strong>Chart config size:</strong> ${chart.configuration?.chartWidth || 'N/A'}px × ${chart.configuration?.chartHeight || 'N/A'}px
+          `;
+        };
+
+        chart.addEventListener('chart-load', update);
+        // Update periodically to catch any changes
+        setInterval(update, 1000);
+      }
+
+      for (let i = 1; i <= 5; i++) {
+        updateInfo(i);
+      }
+    </script>
+  </body>
+</html>

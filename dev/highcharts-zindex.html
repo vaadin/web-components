@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chart Z-Index Test</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/charts';
+    </script>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+
+      .test-case {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 2px solid #ccc;
+        background: #f5f5f5;
+      }
+
+      .test-case h2 {
+        margin-top: 0;
+        font-size: 16px;
+      }
+
+      .container {
+        position: relative;
+        border: 2px dashed #333;
+        background: #fff;
+        min-height: 400px;
+      }
+
+      .overlay {
+        position: absolute;
+        background: rgba(255, 152, 0, 0.8);
+        color: white;
+        padding: 20px;
+        font-weight: bold;
+        border: 2px solid #ff9800;
+      }
+
+      .info {
+        margin-top: 10px;
+        padding: 10px;
+        background: #e3f2fd;
+        font-size: 14px;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        z-index: 1000;
+      }
+
+      .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        z-index: 1001;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .tooltip {
+        position: absolute;
+        background: #333;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 100;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Chart Z-Index Test Cases</h1>
+    <p>Testing z-index behavior with absolute positioned chart elements</p>
+
+    <div class="test-case">
+      <h2>Test 1: Chart with overlapping absolutely positioned sibling (top-left)</h2>
+      <div class="info">
+        Expected: Orange overlay should appear ABOVE the chart (overlay has z-index: auto, chart uses absolute positioning internally)
+      </div>
+      <div class="container">
+        <vaadin-chart
+          title="Chart with Overlay"
+          categories='["Jan", "Feb", "Mar", "Apr"]'
+          style="width: 100%; height: 350px"
+        >
+          <vaadin-chart-series values="[29.9, 71.5, 106.4, 129.2]"></vaadin-chart-series>
+        </vaadin-chart>
+        <div class="overlay" style="top: 50px; left: 50px; width: 200px">
+          Overlay (no z-index)<br>
+          Should be visible above chart
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 2: Chart with z-indexed overlay (bottom-right)</h2>
+      <div class="info">
+        Expected: Blue overlay with z-index: 10 should appear above chart
+      </div>
+      <div class="container">
+        <vaadin-chart
+          title="Chart with Z-Indexed Overlay"
+          categories='["Q1", "Q2", "Q3", "Q4"]'
+          style="width: 100%; height: 350px"
+        >
+          <vaadin-chart-series values="[50, 80, 60, 90]"></vaadin-chart-series>
+        </vaadin-chart>
+        <div class="overlay" style="bottom: 50px; right: 50px; width: 200px; background: rgba(33, 150, 243, 0.8); border-color: #2196f3; z-index: 10">
+          Overlay (z-index: 10)<br>
+          Should be visible above chart
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 3: Chart behind overlay (negative chart z-index)</h2>
+      <div class="info">
+        Expected: Chart with negative z-index should appear BELOW the overlay
+      </div>
+      <div class="container">
+        <vaadin-chart
+          title="Chart Behind Overlay"
+          categories='["A", "B", "C", "D"]'
+          style="width: 100%; height: 350px; z-index: -1"
+        >
+          <vaadin-chart-series values="[100, 120, 90, 140]"></vaadin-chart-series>
+        </vaadin-chart>
+        <div class="overlay" style="top: 100px; left: 100px; width: 250px; height: 150px; background: rgba(76, 175, 80, 0.9); border-color: #4caf50">
+          Overlay (z-index: auto)<br>
+          Chart has z-index: -1<br>
+          Overlay should be visible
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 4: Chart with CSS tooltip on hover</h2>
+      <div class="info">
+        Expected: Hover tooltips should appear above chart. Try hovering near the chart edges.
+      </div>
+      <div class="container" id="tooltip-container" onmousemove="showTooltip(event)" onmouseleave="hideTooltip()">
+        <vaadin-chart
+          title="Chart with Tooltip"
+          categories='["Mon", "Tue", "Wed", "Thu"]'
+          style="width: 100%; height: 350px"
+        >
+          <vaadin-chart-series values="[45, 65, 55, 75]"></vaadin-chart-series>
+        </vaadin-chart>
+        <div class="tooltip" id="custom-tooltip" style="display: none">
+          Custom Tooltip (z-index: 100)
+        </div>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 5: Chart with modal dialog</h2>
+      <div class="info">
+        Expected: Modal should appear above chart when opened
+        <button onclick="openModal()" style="margin-left: 10px; padding: 8px 16px">Open Modal</button>
+      </div>
+      <div class="container">
+        <vaadin-chart
+          title="Chart with Modal"
+          categories='["Product A", "Product B", "Product C"]'
+          style="width: 100%; height: 350px"
+        >
+          <vaadin-chart-series values="[120, 95, 140]"></vaadin-chart-series>
+        </vaadin-chart>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="modal-backdrop" onclick="closeModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <h2>Modal Dialog</h2>
+        <p>This modal has z-index: 1001</p>
+        <p>It should appear above the chart without issues.</p>
+        <button onclick="closeModal()" style="padding: 8px 16px">Close Modal</button>
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h2>Test 6: Stacking context test - multiple charts with overlays</h2>
+      <div class="info">
+        Expected: Each chart should respect the stacking order of its overlays
+      </div>
+      <div style="display: flex; gap: 20px">
+        <div class="container" style="flex: 1; min-height: 300px">
+          <vaadin-chart
+            title="Chart 1"
+            categories='["X", "Y"]'
+            style="width: 100%; height: 250px"
+          >
+            <vaadin-chart-series values="[10, 20]"></vaadin-chart-series>
+          </vaadin-chart>
+          <div class="overlay" style="top: 80px; left: 20px; width: 120px; font-size: 12px">
+            Overlay 1
+          </div>
+        </div>
+        <div class="container" style="flex: 1; min-height: 300px">
+          <vaadin-chart
+            title="Chart 2"
+            categories='["X", "Y"]'
+            style="width: 100%; height: 250px"
+          >
+            <vaadin-chart-series values="[30, 15]"></vaadin-chart-series>
+          </vaadin-chart>
+          <div class="overlay" style="top: 80px; left: 20px; width: 120px; font-size: 12px; background: rgba(156, 39, 176, 0.8); border-color: #9c27b0">
+            Overlay 2
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showTooltip(event) {
+        const tooltip = document.getElementById('custom-tooltip');
+        const container = document.getElementById('tooltip-container');
+        const rect = container.getBoundingClientRect();
+
+        tooltip.style.display = 'block';
+        tooltip.style.left = (event.clientX - rect.left + 10) + 'px';
+        tooltip.style.top = (event.clientY - rect.top + 10) + 'px';
+        tooltip.textContent = `Position: ${event.clientX}, ${event.clientY}`;
+      }
+
+      function hideTooltip() {
+        document.getElementById('custom-tooltip').style.display = 'none';
+      }
+
+      function openModal() {
+        document.getElementById('modal-backdrop').style.display = 'block';
+      }
+
+      function closeModal() {
+        document.getElementById('modal-backdrop').style.display = 'none';
+      }
+    </script>
+  </body>
+</html>
