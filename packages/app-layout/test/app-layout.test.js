@@ -4,6 +4,7 @@ import {
   esc,
   fixtureSync,
   makeSoloTouchEvent,
+  mousedown,
   nextFrame,
   nextRender,
   nextResize,
@@ -457,6 +458,21 @@ describe('vaadin-app-layout', () => {
           layout.drawerOpened = true;
           await nextFrame();
           expect(spy.called).to.be.false;
+        });
+
+        it('should focus the drawer toggle with focusVisible: false on closing with mouse', async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          mousedown(document.body);
+          layout.drawerOpened = false;
+          await nextFrame();
+          expect(spy.firstCall.args[0]).to.eql({ focusVisible: false });
+        });
+
+        it('should focus the drawer toggle with focusVisible: true on closing with keyboard', async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          esc(drawer);
+          await nextFrame();
+          expect(spy.firstCall.args[0]).to.eql({ focusVisible: true });
         });
 
         it('should remove drawer tabindex when it resizes from the overlay mode', async () => {
