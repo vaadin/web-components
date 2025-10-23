@@ -37,11 +37,20 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
-     * Override method from OverlayFocusMixin to use slotted div as the content root.
+     * Override method from OverlayFocusMixin to use slotted div as content root.
      * @protected
      * @override
      */
     get _contentRoot() {
+      return this._rendererRoot;
+    }
+
+    /**
+     * Override method from OverlayMixin to use slotted div as the renderer root.
+     * @protected
+     * @override
+     */
+    get _rendererRoot() {
       if (!this.__savedRoot) {
         const root = document.createElement('div');
         root.setAttribute('slot', 'overlay');

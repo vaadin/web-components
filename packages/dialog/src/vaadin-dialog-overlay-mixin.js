@@ -53,6 +53,22 @@ export const DialogOverlayMixin = (superClass) =>
       return this.owner;
     }
 
+    /**
+     * Override method from OverlayMixin to use slotted div as a renderer root.
+     * @protected
+     * @override
+     */
+    get _rendererRoot() {
+      if (!this.__savedRoot) {
+        const root = document.createElement('div');
+        root.style.display = 'contents';
+        this.owner.appendChild(root);
+        this.__savedRoot = root;
+      }
+
+      return this.__savedRoot;
+    }
+
     /** @protected */
     ready() {
       super.ready();

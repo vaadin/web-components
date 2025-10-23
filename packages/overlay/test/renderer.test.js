@@ -158,7 +158,7 @@ describe('renderer', () => {
     customElements.define(
       'custom-root-overlay',
       class extends Overlay {
-        get _contentRoot() {
+        get _rendererRoot() {
           return this.__customRoot;
         }
 
@@ -174,7 +174,7 @@ describe('renderer', () => {
     beforeEach(async () => {
       overlay = fixtureSync('<custom-root-overlay></custom-root-overlay>');
       await nextRender();
-      root = overlay._contentRoot;
+      root = overlay._rendererRoot;
       content = document.createElement('p');
       content.textContent = 'renderer-content';
     });

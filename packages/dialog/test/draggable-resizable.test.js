@@ -235,7 +235,8 @@ describe('resizable', () => {
   });
 
   it('should support scrollable full size content', () => {
-    const container = dialog.firstElementChild;
+    const root = dialog.firstElementChild;
+    const container = root.firstElementChild;
     container.style.height = '100%';
     container.style.width = '100%';
     container.style.overflow = 'auto';
@@ -247,8 +248,9 @@ describe('resizable', () => {
 
   it('should scroll if the content overflows', async () => {
     // Fill the content with a lot of text so that it overflows the viewport
-    dialog.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
-    await nextResize(dialog.firstElementChild);
+    const root = dialog.firstElementChild;
+    root.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
+    await nextResize(root.firstElementChild);
     await nextRender();
 
     const content = dialog.$.overlay.$.content;
@@ -260,9 +262,10 @@ describe('resizable', () => {
     resize(overlayPart.querySelector('.s'), 0, 10);
 
     // Set the dialog content to have 100% height
-    dialog.firstElementChild.style.height = '100%';
+    const root = dialog.firstElementChild;
+    root.firstElementChild.style.height = '100%';
 
-    const contentBounds = dialog.firstElementChild.getBoundingClientRect();
+    const contentBounds = root.firstElementChild.getBoundingClientRect();
     const overlayBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(contentBounds.height)).to.equal(Math.floor(overlayBounds.height));
   });
@@ -579,7 +582,8 @@ describe('draggable', () => {
     dialog.height = '100px';
     await nextRender();
 
-    const contentElement = dialog.firstElementChild;
+    const root = dialog.firstElementChild;
+    const contentElement = root.firstElementChild;
     contentElement.style.minHeight = '200px';
     await nextResize(contentElement);
     await nextRender();

@@ -193,6 +193,10 @@ describe('custom content root', () => {
       get _contentRoot() {
         return this.owner;
       }
+
+      get _rendererRoot() {
+        return this.owner;
+      }
     },
   );
 
