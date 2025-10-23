@@ -9,8 +9,8 @@
  * license.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { defaults as defaultControls } from 'ol/control';
-import { defaults as defaultInteractions } from 'ol/interaction';
+import { defaults as defaultControls } from 'ol/control.js';
+import { defaults as defaultInteractions } from 'ol/interaction.js';
 import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
