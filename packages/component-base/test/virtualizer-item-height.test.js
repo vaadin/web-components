@@ -479,3 +479,59 @@ describe('virtualizer - item height - placeholders are disabled', () => {
     expect(item.offsetHeight).to.equal(0);
   });
 });
+
+describe('virtualizer - item height - self-resizing items', () => {
+  // Create a custom element that resizes itself on slotchange
+  // (simulating vaadin-card's behavior, see https://github.com/vaadin/web-components/issues/9077)
+  customElements.define(
+    'resize-item',
+    class extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' }).innerHTML = `<slot></slot>`;
+        this.shadowRoot.addEventListener('slotchange', () => {
+          this.style.display = 'block';
+          this.style.height = '100px';
+        });
+      }
+    },
+  );
+
+  let virtualizer;
+  let scrollTarget;
+
+  beforeEach(() => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 300px;">
+        <div class="container"></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.innerHTML = `<resize-item id="item-${index}">Item ${index}</resize-item>`;
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 100;
+  });
+
+  it('should not overlap items after scrolling', async () => {
+    await contentUpdate();
+    // Scroll manually to the end
+    scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    await contentUpdate();
+
+    // Ensure that the first two visible items do not overlap
+    const firstVisibleItem = scrollTarget.querySelector(`#item-${virtualizer.firstVisibleIndex}`);
+    const secondVisibleItem = scrollTarget.querySelector(`#item-${virtualizer.firstVisibleIndex + 1}`);
+
+    expect(firstVisibleItem.getBoundingClientRect().bottom).to.be.at.most(
+      secondVisibleItem.getBoundingClientRect().top,
+    );
+  });
+});
