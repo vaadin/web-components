@@ -1,23 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/grid';
 import '@vaadin/dialog';
 
 describe('grid in dialog', () => {
-  let dialog, grid;
-
-  function enter() {
-    keyDownOn(grid.shadowRoot.activeElement, 13, [], 'Enter');
-  }
-
-  function esc() {
-    keyDownOn(document.activeElement, 27, [], 'Escape');
-  }
-
-  function focus() {
-    grid._itemsFocusable.focus();
-  }
+  let dialog;
 
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
@@ -34,8 +23,7 @@ describe('grid in dialog', () => {
       };
     };
     dialog.opened = true;
-    await nextFrame();
-    grid = dialog.querySelector('vaadin-grid');
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
   });
 
   afterEach(async () => {
@@ -44,19 +32,19 @@ describe('grid in dialog', () => {
   });
 
   describe('interaction', () => {
-    it('should not close on Esc if focus is on interetive element', () => {
-      focus();
-      enter();
-      esc();
-      expect(dialog.opened).to.be.ok;
+    it('should not close on Esc if focus is on interactive element', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Escape' });
+      expect(dialog.opened).to.be.true;
     });
 
-    it('should close on Esc if focus is back to grid cell', () => {
-      focus();
-      enter();
-      esc();
-      esc();
-      expect(dialog.opened).to.be.not.ok;
+    it('should close on Esc if focus is back to grid cell', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Escape' });
+      expect(dialog.opened).to.be.false;
     });
   });
 });
