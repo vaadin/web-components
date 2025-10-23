@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, isDesktopSafari, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
@@ -151,13 +151,14 @@ describe('validation', () => {
       expect(field.invalid).to.be.false;
     });
 
-    it('should be invalid when trying to commit an invalid number', async () => {
+    // Safari 26 installed since Playwright 1.56 disallows typing two minus signs
+    (isDesktopSafari ? it.skip : it)('should be invalid when trying to commit an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(field.invalid).to.be.true;
     });
 
-    it('should be valid after removing an invalid number', async () => {
+    (isDesktopSafari ? it.skip : it)('should be valid after removing an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
       input.focus();
