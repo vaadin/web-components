@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/grid';
-import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/dialog';
 
 describe('grid in dialog', () => {
   let dialog, grid;
@@ -42,6 +42,7 @@ describe('grid in dialog', () => {
     dialog.opened = false;
     await nextFrame();
   });
+
   describe('interaction', () => {
     it('should not close on Esc if focus is on interetive element', () => {
       focus();
