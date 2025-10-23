@@ -1,10 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/virtual-list';
 import '@vaadin/card';
 
 describe('virtual-list with card items', () => {
   let virtualList;
+
+  async function contentUpdate() {
+    // Wait for the content to update (and resize observer to fire)
+    await aTimeout(200);
+  }
 
   beforeEach(async () => {
     virtualList = fixtureSync(`
@@ -23,13 +28,13 @@ describe('virtual-list with card items', () => {
     };
 
     virtualList.items = Array.from({ length: 100 }, (_, i) => ({ index: i }));
-    await nextFrame();
+    await contentUpdate();
   });
 
   it('should not overlap items after scrolling', async () => {
     virtualList.scrollTop = virtualList.scrollHeight;
 
-    await aTimeout(200); // Wait for the scroll to settle
+    await contentUpdate();
 
     // Ensure that the first two visible items do not overlap
     const firstVisibleItem = virtualList.querySelector(`#card-${virtualList.firstVisibleIndex}`);
