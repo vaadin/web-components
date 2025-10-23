@@ -239,7 +239,7 @@ export class IronListAdapter {
       this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
 
       if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
-        // Physical size changed, resize observer may not catch it....
+        // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
         physicalSizesChanged = true;
       }
 
@@ -257,7 +257,7 @@ export class IronListAdapter {
     }
 
     if (physicalSizesChanged) {
-      // Debounce the resize handler to avoid creating too many items initially
+      // There were changes in physical sizes, schedule a resize handler call
       this.__physicalSizesChangedDebouncer = Debouncer.debounce(this.__physicalSizesChangedDebouncer, microTask, () => {
         this._resizeHandler();
       });
@@ -647,6 +647,7 @@ export class IronListAdapter {
     super._resizeHandler();
 
     if (this.__physicalSizesChangedDebouncer && this.__physicalSizesChangedDebouncer.isActive()) {
+      // Cancel any pending debounced calls to avoid unnecessary extra work
       this.__physicalSizesChangedDebouncer.cancel();
     }
 
