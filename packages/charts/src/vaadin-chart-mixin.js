@@ -827,11 +827,11 @@ export const ChartMixin = (superClass) =>
 
       this.$.wrapper.style.minHeight = '';
       // Use 1px as the threshold to align with Highcharts
-      if (this.$.wrapper.offsetHeight < 2) {
+      if (this.$.wrapper.offsetHeight <= 1) {
         this.$.wrapper.style.minHeight = `${chartHeight}px`;
       }
       this.$.wrapper.style.minWidth = '';
-      if (this.$.wrapper.offsetWidth < 2) {
+      if (this.$.wrapper.offsetWidth <= 1) {
         this.$.wrapper.style.minWidth = `${chartWidth}px`;
       }
 
