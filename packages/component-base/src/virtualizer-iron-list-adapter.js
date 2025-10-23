@@ -180,6 +180,9 @@ export class IronListAdapter {
     this._resizeHandler();
     flush();
     this._scrollHandler();
+    if (this.__physicalSizesChangedDebouncer) {
+      this.__physicalSizesChangedDebouncer.flush();
+    }
     if (this.__fixInvalidItemPositioningDebouncer) {
       this.__fixInvalidItemPositioningDebouncer.flush();
     }
@@ -254,8 +257,12 @@ export class IronListAdapter {
     }
 
     if (physicalSizesChanged) {
-      // TODO: This fixes the issue but....due to the same timing problems, there are way too many row elements in the DOM
-      this._resizeHandler();
+      // Debounce the resize handler to avoid creating too many items initially
+      this.__physicalSizesChangedDebouncer = Debouncer.debounce(
+        this.__physicalSizesChangedDebouncer,
+        animationFrame,
+        () => this._resizeHandler(),
+      );
     }
   }
 
