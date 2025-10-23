@@ -468,7 +468,7 @@ export const OverlayMixin = (superClass) =>
      * @private
      */
     _keydownListener(event) {
-      if (!this._last) {
+      if (!this._last || event.defaultPrevented) {
         return;
       }
 

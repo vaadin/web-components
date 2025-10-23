@@ -1095,10 +1095,8 @@ export const DatePickerMixin = (subclass) =>
         // The input element cannot be readonly as it would conflict with
         // the required attribute. Both are not allowed on an input element.
         // Therefore we prevent default on most keydown events.
-        const allowedKeys = [
-          9, // Tab
-        ];
-        if (allowedKeys.indexOf(e.keyCode) === -1) {
+        const allowedKeys = ['Tab', 'Escape'];
+        if (allowedKeys.indexOf(e.key) === -1) {
           e.preventDefault();
         }
       }
