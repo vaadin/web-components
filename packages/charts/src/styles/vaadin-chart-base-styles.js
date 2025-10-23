@@ -1399,12 +1399,4 @@ export const chartStyles = css`
   :host([dir='rtl']) :where([styled-mode]) .highcharts-menu {
     box-shadow: -3px 3px 10px #888;
   }
-
-  #wrapper {
-    position: relative;
-  }
-
-  #chart {
-    position: absolute;
-  }
 `;
