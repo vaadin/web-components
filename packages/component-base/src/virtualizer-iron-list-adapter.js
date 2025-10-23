@@ -228,10 +228,18 @@ export class IronListAdapter {
     const prevAvgCount = this._physicalAverageCount;
     const prevPhysicalAvg = this._physicalAverage;
 
+    let physicalSizesChanged = false;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
+      const elementOldPhysicalSize = this._physicalSizes[pidx] || 0;
       this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+
+      if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
+        // Physical size changed, resize observer may not catch it....
+        physicalSizesChanged = true;
+      }
+
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
@@ -243,6 +251,11 @@ export class IronListAdapter {
       this._physicalAverage = Math.round(
         (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
+    }
+
+    if (physicalSizesChanged) {
+      // TODO: This fixes the issue but....due to the same timing problems, there are way too many row elements in the DOM
+      this._resizeHandler();
     }
   }
 
