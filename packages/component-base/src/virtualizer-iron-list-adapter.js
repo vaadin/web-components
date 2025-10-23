@@ -258,11 +258,9 @@ export class IronListAdapter {
 
     if (physicalSizesChanged) {
       // Debounce the resize handler to avoid creating too many items initially
-      this.__physicalSizesChangedDebouncer = Debouncer.debounce(
-        this.__physicalSizesChangedDebouncer,
-        animationFrame,
-        () => this._resizeHandler(),
-      );
+      this.__physicalSizesChangedDebouncer = Debouncer.debounce(this.__physicalSizesChangedDebouncer, microTask, () => {
+        this._resizeHandler();
+      });
     }
   }
 
@@ -647,6 +645,10 @@ export class IronListAdapter {
   /** @override */
   _resizeHandler() {
     super._resizeHandler();
+
+    if (this.__physicalSizesChangedDebouncer && this.__physicalSizesChangedDebouncer.isActive()) {
+      this.__physicalSizesChangedDebouncer.cancel();
+    }
 
     // Fixes an issue where the new items are not created on scroll target resize when the scroll position is around the end.
     // See https://github.com/vaadin/flow-components/issues/7307
