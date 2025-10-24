@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -410,6 +410,43 @@ describe('virtualizer - item height - lazy rendering', () => {
       const lastVisibleItem = document.querySelector(`[data-index="${virtualizer.lastVisibleIndex}"]`);
       expect(bottomMostItem).to.equal(lastVisibleItem);
     });
+  });
+});
+
+describe('virtualizer - item padding', () => {
+  let virtualizer;
+  let scrollTarget;
+  let item0, item1;
+
+  beforeEach(async () => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 200px;">
+        <div class="container"></div>
+      </div>
+    `);
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.style.paddingBottom = '20px';
+        el.style.boxSizing = 'border-box';
+        el.id = `item-${index}`;
+      },
+      scrollTarget,
+      scrollContainer: scrollTarget.firstElementChild,
+    });
+    virtualizer.size = 2;
+    await nextResize(scrollTarget);
+    await nextFrame();
+  });
+
+  it('should adjust item positions after an item padding box changes', async () => {
+    item0 = document.querySelector('#item-0');
+    item1 = document.querySelector('#item-1');
+    item0.style.paddingBottom = '50px';
+    await nextResize(scrollTarget);
+    await nextFrame();
+    expect(item1.getBoundingClientRect().top).to.equal(item0.getBoundingClientRect().bottom);
   });
 });
 
