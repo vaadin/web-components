@@ -157,7 +157,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       expect(dialog.textContent).to.include(HEADER_CONTENT);
-      expect(dialog.querySelector('div[slot=header-content]')).to.exist;
+      expect(dialog.querySelector('[slot=header-content]')).to.exist;
     });
 
     it('should remove header element if headerRenderer is removed', async () => {
@@ -169,7 +169,7 @@ describe('header/footer feature', () => {
       await nextUpdate(dialog);
 
       expect(dialog.textContent).to.not.include(HEADER_CONTENT);
-      expect(dialog.querySelector('div[slot=header-content]')).to.not.exist;
+      expect(dialog.querySelector('[slot=header-content]')).to.not.exist;
     });
 
     it('should render new content if another headerRenderer is set', async () => {
@@ -243,7 +243,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       expect(dialog.textContent).to.include(FOOTER_CONTENT);
-      expect(dialog.querySelector('div[slot=footer]')).to.exist;
+      expect(dialog.querySelector('[slot=footer]')).to.exist;
     });
 
     it('should remove footer element if footerRenderer is removed', async () => {
@@ -255,7 +255,7 @@ describe('header/footer feature', () => {
       await nextUpdate(dialog);
 
       expect(dialog.textContent).to.not.include(FOOTER_CONTENT);
-      expect(dialog.querySelector('div[slot=footer]')).to.not.exist;
+      expect(dialog.querySelector('[slot=footer]')).to.not.exist;
     });
 
     it('should render new content if another footerRenderer is set', async () => {

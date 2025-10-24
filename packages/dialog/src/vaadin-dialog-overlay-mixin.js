@@ -60,7 +60,7 @@ export const DialogOverlayMixin = (superClass) =>
      */
     get _rendererRoot() {
       if (!this.__savedRoot) {
-        const root = document.createElement('div');
+        const root = document.createElement('vaadin-dialog-content');
         root.style.display = 'contents';
         this.owner.appendChild(root);
         this.__savedRoot = root;
@@ -94,7 +94,7 @@ export const DialogOverlayMixin = (superClass) =>
 
     /** @private */
     __createContainer(slot) {
-      const container = document.createElement('div');
+      const container = document.createElement('vaadin-dialog-content');
       container.setAttribute('slot', slot);
       return container;
     }
