@@ -19,9 +19,12 @@ vaadin-message-input:not([readonly], [disabled]) {
   box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.04);
 }
 
+[readonly]::part(input-field) {
+  --aura-surface-opacity: 0;
+}
+
 [disabled]::part(input-field) {
-  --aura-surface-opacity: 0.5;
-  --aura-surface-level: 1;
+  --vaadin-input-field-background: var(--vaadin-background-container);
 }
 
 ::part(field-button) {
