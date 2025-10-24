@@ -255,6 +255,21 @@
           }
         },
       );
+
+      // Fake navigation: prevent navigation, update 'current' item manually
+      document.querySelectorAll('vaadin-side-nav').forEach((nav) => {
+        nav.addEventListener('click', (e) => {
+          const item = e.target.closest('vaadin-side-nav-item');
+          if (item) {
+            e.preventDefault();
+            item
+              .closest('vaadin-side-nav')
+              .parentNode.querySelectorAll('vaadin-side-nav-item')
+              .forEach((item) => item.removeAttribute('current'));
+            item.setAttribute('current', '');
+          }
+        });
+      });
     </script>
 
     <style>
