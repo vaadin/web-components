@@ -9,7 +9,9 @@ snapshots["vaadin-dialog host"] =
   tabindex="0"
   with-backdrop=""
 >
-  content
+  <div>
+    content
+  </div>
 </vaadin-dialog>
 `;
 /* end snapshot vaadin-dialog host */

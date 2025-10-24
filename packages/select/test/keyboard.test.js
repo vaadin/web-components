@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-select.js';
@@ -91,9 +91,10 @@ describe('keyboard', () => {
 
       const focusedSpy = sinon.spy(valueButton, 'focus');
 
-      outsideClick();
+      await sendMouseToElement({ type: 'click', element: document.body });
       await nextUpdate(select);
       await aTimeout(0);
+      await resetMouse();
 
       expect(focusedSpy.calledOnce).to.be.true;
     });

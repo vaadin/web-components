@@ -75,6 +75,14 @@ class PopoverOverlay extends PopoverOverlayMixin(
   }
 
   /**
+   * @override
+   * @protected
+   */
+  get _rendererRoot() {
+    return this.owner;
+  }
+
+  /**
    * Override method from OverlayFocusMixin to use owner as focus trap root
    * @protected
    * @override

@@ -102,6 +102,15 @@ export const OverlayMixin = (superClass) =>
       return ['_rendererOrDataChanged(renderer, owner, model, opened)'];
     }
 
+    /**
+     * Override to specify another element used as a renderer root,
+     * e.g. slotted into the overlay, rather than overlay itself.
+     * @protected
+     */
+    get _rendererRoot() {
+      return this;
+    }
+
     constructor() {
       super();
 
@@ -175,7 +184,7 @@ export const OverlayMixin = (superClass) =>
      */
     requestContentUpdate() {
       if (this.renderer) {
-        this.renderer.call(this.owner, this._contentRoot, this.owner, this.model);
+        this.renderer.call(this.owner, this._rendererRoot, this.owner, this.model);
       }
     }
 
@@ -295,11 +304,11 @@ export const OverlayMixin = (superClass) =>
       this._oldOpened = opened;
 
       if (rendererChanged && hasOldRenderer) {
-        this._contentRoot.innerHTML = '';
+        this._rendererRoot.innerHTML = '';
         // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
         // When clearing the rendered content, this part needs to be manually disposed of.
         // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-        delete this._contentRoot._$litPart$;
+        delete this._rendererRoot._$litPart$;
       }
 
       if (opened && renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
