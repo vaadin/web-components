@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
@@ -403,13 +403,29 @@ describe('row details', () => {
       expect(bodyRow.style.paddingBottom).to.equal('');
     });
 
-    it('should update the row height when details cell height changes', async () => {
+    it('should update the row height when details cell content box changes', async () => {
       grid.detailsOpenedItems = [...grid.items];
       await nextFrame();
       const detailsRowHeight = bodyRow.offsetHeight;
       updateDetailsCellHeight();
       await nextFrame();
       expect(bodyRow.offsetHeight).to.equal(detailsRowHeight + 50);
+    });
+
+    it('should update the row height when details cell border box changes', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      await nextResize(grid);
+      await nextFrame();
+      const detailsRowHeight = bodyRow.offsetHeight;
+      fixtureSync(`
+        <style>
+          vaadin-grid::part(details-cell) {
+            border-top: 100px solid black;
+          }
+        </style>
+      `);
+      await nextResize(grid);
+      expect(bodyRow.offsetHeight).to.equal(detailsRowHeight + 100);
     });
   });
 });
