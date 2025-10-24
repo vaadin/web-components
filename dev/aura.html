@@ -277,7 +277,9 @@
         --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
       }
 
-      html, body, vaadin-app-layout {
+      html,
+      body,
+      vaadin-app-layout {
         margin: 0;
         height: 100%;
       }
@@ -338,8 +340,16 @@
   <body>
     <vaadin-app-layout>
       <header slot="drawer" class="aura-view-header">
-        <vaadin-avatar theme="vaadin square" has-color-index
-          style="--vaadin-avatar-size: 1.25lh; --vaadin-avatar-user-color: var(--aura-accent-color); color: var(--aura-accent-contrast); margin-inline: var(--vaadin-padding-s);"></vaadin-avatar>
+        <vaadin-avatar
+          theme="vaadin square"
+          has-color-index
+          style="
+            --vaadin-avatar-size: 1.25lh;
+            --vaadin-avatar-user-color: var(--aura-accent-color);
+            color: var(--aura-accent-contrast);
+            margin-inline: var(--vaadin-padding-s);
+          "
+        ></vaadin-avatar>
         <div class="aura-view-heading">Aura</div>
         <vaadin-drawer-toggle theme="tertiary permanent"></vaadin-drawer-toggle>
       </header>
@@ -399,27 +409,49 @@
           <vaadin-icon src="./assets/lucide-icons/palette.svg"></vaadin-icon>
           <vaadin-tooltip slot="tooltip" text="Edit Theme"></vaadin-tooltip>
         </vaadin-button>
-        <vaadin-popover for="theme-editor-btn" position="top-start" width="320px"
-          style="--aura-base-size: 12; --aura-base-font-size: 13" theme>
-          <vaadin-vertical-layout class="editor" theme="padding" style="gap: var(--vaadin-gap-xl); align-items: stretch">
+        <vaadin-popover
+          for="theme-editor-btn"
+          position="top-start"
+          width="320px"
+          style="--aura-base-size: 12; --aura-base-font-size: 13"
+          theme
+        >
+          <vaadin-vertical-layout
+            class="editor"
+            theme="padding"
+            style="gap: var(--vaadin-gap-xl); align-items: stretch"
+          >
             <h3>Edit Theme</h3>
             <vaadin-checkbox label="Use Navbar" id="useNavbar"></vaadin-checkbox>
             <aura-scheme-control property="--aura-color-scheme" label="--aura-color-scheme"></aura-scheme-control>
-            <aura-scheme-control property="--aura-content-color-scheme"
-              label="--aura-content-color-scheme"></aura-scheme-control>
-            <aura-scheme-control property="--aura-notification-color-scheme"
-              label="--aura-notification-color-scheme"></aura-scheme-control>
+            <aura-scheme-control
+              property="--aura-content-color-scheme"
+              label="--aura-content-color-scheme"
+            ></aura-scheme-control>
+            <aura-scheme-control
+              property="--aura-notification-color-scheme"
+              label="--aura-notification-color-scheme"
+            ></aura-scheme-control>
             <aura-color-control property="--aura-accent-light" label="--aura-accent-light"></aura-color-control>
             <aura-color-control property="--aura-background-light" label="--aura-background-light"></aura-color-control>
             <aura-color-control property="--aura-accent-dark" label="--aura-accent-dark"></aura-color-control>
             <aura-color-control property="--aura-background-dark" label="--aura-background-dark"></aura-color-control>
             <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
-            <aura-number-control property="--aura-overlay-surface-opacity" min="0.5" max="1" step="0.01"></aura-number-control>
+            <aura-number-control
+              property="--aura-overlay-surface-opacity"
+              min="0.5"
+              max="1"
+              step="0.01"
+            ></aura-number-control>
             <aura-inset-control></aura-inset-control>
             <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
             <aura-number-control property="--aura-base-size" min="12" max="20"></aura-number-control>
-            <aura-number-control property="--aura-base-font-size" label="--aura-base-font-size" min="12"
-              max="18"></aura-number-control>
+            <aura-number-control
+              property="--aura-base-font-size"
+              label="--aura-base-font-size"
+              min="12"
+              max="18"
+            ></aura-number-control>
             <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
             <hr />
             <vaadin-button id="resetAll">
