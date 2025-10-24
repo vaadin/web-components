@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-dialog host"] = 
+snapshots["vaadin-dialog host default"] = 
 `<vaadin-dialog
   aria-modal="true"
   opened=""
@@ -9,14 +9,75 @@ snapshots["vaadin-dialog host"] =
   tabindex="0"
   with-backdrop=""
 >
-  <div>
+  <vaadin-dialog-content>
     content
-  </div>
+  </vaadin-dialog-content>
 </vaadin-dialog>
 `;
-/* end snapshot vaadin-dialog host */
+/* end snapshot vaadin-dialog host default */
 
-snapshots["vaadin-dialog shadow"] = 
+snapshots["vaadin-dialog host headerTitle"] = 
+`<vaadin-dialog
+  aria-label="Title"
+  aria-modal="true"
+  has-title=""
+  opened=""
+  role="dialog"
+  tabindex="0"
+  with-backdrop=""
+>
+  <vaadin-dialog-content>
+    content
+  </vaadin-dialog-content>
+  <h2
+    class="draggable"
+    slot="title"
+  >
+    Title
+  </h2>
+</vaadin-dialog>
+`;
+/* end snapshot vaadin-dialog host headerTitle */
+
+snapshots["vaadin-dialog host headerRenderer"] = 
+`<vaadin-dialog
+  aria-modal="true"
+  has-header=""
+  opened=""
+  role="dialog"
+  tabindex="0"
+  with-backdrop=""
+>
+  <vaadin-dialog-content>
+    content
+  </vaadin-dialog-content>
+  <vaadin-dialog-content slot="header-content">
+    Header
+  </vaadin-dialog-content>
+</vaadin-dialog>
+`;
+/* end snapshot vaadin-dialog host headerRenderer */
+
+snapshots["vaadin-dialog host footerRenderer"] = 
+`<vaadin-dialog
+  aria-modal="true"
+  has-footer=""
+  opened=""
+  role="dialog"
+  tabindex="0"
+  with-backdrop=""
+>
+  <vaadin-dialog-content>
+    content
+  </vaadin-dialog-content>
+  <vaadin-dialog-content slot="footer">
+    Footer
+  </vaadin-dialog-content>
+</vaadin-dialog>
+`;
+/* end snapshot vaadin-dialog host footerRenderer */
+
+snapshots["vaadin-dialog shadow default"] = 
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -45,9 +106,9 @@ snapshots["vaadin-dialog shadow"] =
   </slot>
 </vaadin-dialog-overlay>
 `;
-/* end snapshot vaadin-dialog shadow */
+/* end snapshot vaadin-dialog shadow default */
 
-snapshots["vaadin-dialog modeless"] = 
+snapshots["vaadin-dialog shadow modeless"] = 
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -76,9 +137,9 @@ snapshots["vaadin-dialog modeless"] =
   </slot>
 </vaadin-dialog-overlay>
 `;
-/* end snapshot vaadin-dialog modeless */
+/* end snapshot vaadin-dialog shadow modeless */
 
-snapshots["vaadin-dialog theme"] = 
+snapshots["vaadin-dialog shadow theme"] = 
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -108,9 +169,9 @@ snapshots["vaadin-dialog theme"] =
   </slot>
 </vaadin-dialog-overlay>
 `;
-/* end snapshot vaadin-dialog theme */
+/* end snapshot vaadin-dialog shadow theme */
 
-snapshots["vaadin-dialog overlay"] = 
+snapshots["vaadin-dialog shadow overlay"] = 
 `<div
   id="backdrop"
   part="backdrop"
@@ -164,5 +225,5 @@ snapshots["vaadin-dialog overlay"] =
   </section>
 </div>
 `;
-/* end snapshot vaadin-dialog overlay */
+/* end snapshot vaadin-dialog shadow overlay */
 
