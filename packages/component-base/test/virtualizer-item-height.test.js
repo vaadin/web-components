@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -523,8 +523,10 @@ describe('virtualizer - item height - self-resizing items', () => {
   it('should not overlap items after scrolling', async () => {
     await contentUpdate();
     // Scroll manually to the end
-    scrollTarget.scrollTop = scrollTarget.scrollHeight;
-    await contentUpdate();
+    while (Math.ceil(scrollTarget.scrollTop) < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
+      scrollTarget.scrollTop += 100;
+      await oneEvent(scrollTarget, 'scroll');
+    }
 
     // Ensure that the first two visible items do not overlap
     const firstVisibleItem = scrollTarget.querySelector(`#item-${virtualizer.firstVisibleIndex}`);

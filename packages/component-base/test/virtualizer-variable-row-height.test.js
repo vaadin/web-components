@@ -64,7 +64,6 @@ describe('virtualizer - variable row height - large variance', () => {
     // Scroll to last item
     virtualizer.scrollToIndex(virtualizer.size - 1);
     await nextFrame();
-    virtualizer.scrollToIndex(virtualizer.size - 1);
     await nextFrame();
     // Manually scroll to end
     scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
