@@ -51,7 +51,14 @@ export function enforceThemePlugin(theme) {
 
       if (theme === 'aura' && context.response.is('html')) {
         // For dev pages: add Aura Stylesheet
-        body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
+        body = body.replace(
+          '</title>',
+          `
+          </title>
+          <link rel="preload" href="/packages/aura/src/fonts/InstrumentSans/InstrumentSans.woff2" as="font" type="font/woff2" crossorigin>
+          <link rel="stylesheet" href="/packages/aura/aura.css" />
+          `,
+        );
       }
 
       return body;
