@@ -308,7 +308,7 @@ export class InfiniteScroller extends HTMLElement {
 
   /** @private */
   _createPool() {
-    const container = this.getBoundingClientRect();
+    const viewportHeight = this.innerHeight;
     this._buffers.forEach((buffer) => {
       for (let i = 0; i < this.bufferSize; i++) {
         const itemWrapper = document.createElement('div');
@@ -326,7 +326,7 @@ export class InfiniteScroller extends HTMLElement {
         this.appendChild(itemWrapper);
 
         // Only stamp the visible instances first
-        if (this._isVisible(itemWrapper, container)) {
+        if (this.itemHeight * i <= viewportHeight) {
           this._ensureStampedInstance(itemWrapper);
         }
       }
