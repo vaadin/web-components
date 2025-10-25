@@ -7,19 +7,18 @@
 
   --aura-font-family: var(--aura-font-family-instrument-sans);
 
-  --aura-base-font-size: 16;
-  --aura-font-size-scale: 1.125;
+  --aura-base-font-size: 14;
   --aura-base-line-height: 1.4;
 
-  --aura-font-weight: 400;
+  --aura-font-weight-regular: 400;
   --aura-font-weight-medium: 500;
   --aura-font-weight-semibold: 600;
 }
 
-@media (pointer: fine) {
+@media (pointer: coarse) {
   :where(:root),
   :where(:host) {
-    --aura-base-font-size: 14;
+    --vaadin-input-field-value-font-size: max(16px, var(--aura-font-size-m));
   }
 }
 
@@ -44,13 +43,12 @@
 :where(:root),
 :where(:host),
 :where([theme]) {
-  --aura-font-size-xs: round(var(--aura-font-size-s) / var(--aura-font-size-scale), 0.0625rem);
-  --aura-font-size-s: round(var(--aura-font-size-m) / var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-xs: clamp(0.625rem, round(var(--aura-font-size-m) * 0.75, 0.0625rem), 0.8125rem);
+  --aura-font-size-s: round((var(--aura-font-size-m) + var(--aura-font-size-xs)) / 2, 0.0625rem);
   --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, 0.0625rem);
-  --aura-font-size-l: round(var(--aura-font-size-m) * var(--aura-font-size-scale), 0.0625rem);
-  --aura-font-size-xl: round(var(--aura-font-size-l) * var(--aura-font-size-scale), 0.0625rem);
+  --aura-font-size-l: round(var(--aura-font-size-m) * 1.125, 0.0625rem);
+  --aura-font-size-xl: round(var(--aura-font-size-l) * 1.125, 0.0625rem);
 
-  /* TODO sometimes in the Aura dev page in Safari, when switching  back to Components view, some of the side nav menu item texts disappear after the view transition. Removing these line heights "fixes" the issue. Another fix is to use system fonts. It sometimes also depends on the browser viewport size. */
   --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-base-line-height), 0.125rem);
   --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-base-line-height), 0.125rem);
   --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-base-line-height), 0.125rem);
@@ -63,7 +61,7 @@
   font-family: var(--aura-font-family);
   font-optical-sizing: auto;
   font-style: normal;
-  font-weight: var(--aura-font-weight);
+  font-weight: var(--aura-font-weight-regular);
 
   /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
   -webkit-font-smoothing: var(--aura-font-smoothing, antialiased);

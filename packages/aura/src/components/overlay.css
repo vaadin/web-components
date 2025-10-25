@@ -30,7 +30,7 @@
   backdrop-filter: var(--aura-overlay-backdrop-filter);
   font-family: var(--aura-font-family);
   font-size: var(--aura-font-size-m);
-  font-weight: var(--aura-font-weight);
+  font-weight: var(--aura-font-weight-regular);
   line-height: var(--aura-line-height-m);
   color: var(--vaadin-text-color);
 }
