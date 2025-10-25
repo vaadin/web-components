@@ -582,7 +582,7 @@ snapshots["vaadin-date-time-picker shadow default"] =
     >
     </span>
   </div>
-  <div class="slots">
+  <div part="input-fields">
     <slot
       id="dateSlot"
       name="date-picker"

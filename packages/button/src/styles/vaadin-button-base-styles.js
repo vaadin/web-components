@@ -19,7 +19,6 @@ export const buttonStyles = css`
     user-select: none;
     cursor: var(--vaadin-clickable-cursor);
     box-sizing: border-box;
-    vertical-align: middle;
     flex-shrink: 0;
     height: var(--vaadin-button-height, auto);
     margin: var(--vaadin-button-margin, 0);
