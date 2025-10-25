@@ -231,7 +231,14 @@ export class IronListAdapter {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
+      const elementOldPhysicalSize = this._physicalSizes[pidx];
       this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+
+      if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
+        // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
+        this.__schedulePhysicalSizesChangedDebouncer();
+      }
+
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
@@ -244,6 +251,27 @@ export class IronListAdapter {
         (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
     }
+  }
+
+  __schedulePhysicalSizesChangedDebouncer() {
+    this.__physicalSizesChangedDebouncer = Debouncer.debounce(
+      this.__physicalSizesChangedDebouncer,
+      animationFrame,
+      () => {
+        if (this.__hasSizeChanges()) {
+          this._updateMetrics();
+          this._positionItems();
+          this._updateScrollerSize();
+        }
+      },
+    );
+  }
+
+  __hasSizeChanges() {
+    return this._physicalItems?.some((item, pidx) => {
+      const currentSize = Math.ceil(this.__getBorderBoxHeight(item));
+      return currentSize !== this._physicalSizes[pidx];
+    });
   }
 
   __getBorderBoxHeight(el) {
