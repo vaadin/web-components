@@ -288,9 +288,9 @@
         transition: none !important;
       }
 
-      [theme~="small"] {
+      [theme~='small'] {
         --aura-base-size: 12;
-        --aura-base-font-size: 13
+        --aura-base-font-size: 13;
       }
 
       vaadin-avatar[theme~='vaadin']::part(icon) {
@@ -348,10 +348,7 @@
         <vaadin-avatar
           theme="vaadin square"
           color-index="0"
-          style="
-            --vaadin-avatar-size: 1.25lh;
-            margin-inline: var(--vaadin-padding-s);
-          "
+          style="--vaadin-avatar-size: 1.25lh; margin-inline: var(--vaadin-padding-s)"
         ></vaadin-avatar>
         <div class="aura-view-heading">Aura</div>
         <vaadin-drawer-toggle theme="tertiary permanent"></vaadin-drawer-toggle>
@@ -412,12 +409,7 @@
           <vaadin-icon src="./assets/lucide-icons/palette.svg"></vaadin-icon>
           <vaadin-tooltip slot="tooltip" text="Edit Theme"></vaadin-tooltip>
         </vaadin-button>
-        <vaadin-popover
-          for="theme-editor-btn"
-          position="top-start"
-          width="320px"
-          theme="small"
-        >
+        <vaadin-popover for="theme-editor-btn" position="top-start" width="320px" theme="small">
           <vaadin-vertical-layout
             class="editor"
             theme="padding"
