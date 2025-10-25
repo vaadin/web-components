@@ -180,9 +180,6 @@ export class IronListAdapter {
     this._resizeHandler();
     flush();
     this._scrollHandler();
-    if (this.__physicalSizesChangedDebouncer) {
-      this.__physicalSizesChangedDebouncer.flush();
-    }
     if (this.__fixInvalidItemPositioningDebouncer) {
       this.__fixInvalidItemPositioningDebouncer.flush();
     }
@@ -231,16 +228,15 @@ export class IronListAdapter {
     const prevAvgCount = this._physicalAverageCount;
     const prevPhysicalAvg = this._physicalAverage;
 
-    let physicalSizesChanged = false;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
-      const elementOldPhysicalSize = this._physicalSizes[pidx] || 0;
+      const elementOldPhysicalSize = this._physicalSizes[pidx];
       this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
 
       if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
         // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
-        physicalSizesChanged = true;
+        this.__schedulePhysicalSizesChangedDebouncer();
       }
 
       newPhysicalSize += this._physicalSizes[pidx];
@@ -255,13 +251,27 @@ export class IronListAdapter {
         (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
     }
+  }
 
-    if (physicalSizesChanged) {
-      // There were changes in physical sizes, schedule a resize handler call
-      this.__physicalSizesChangedDebouncer = Debouncer.debounce(this.__physicalSizesChangedDebouncer, microTask, () => {
-        this._resizeHandler();
-      });
-    }
+  __schedulePhysicalSizesChangedDebouncer() {
+    this.__physicalSizesChangedDebouncer = Debouncer.debounce(
+      this.__physicalSizesChangedDebouncer,
+      animationFrame,
+      () => {
+        if (this.__hasSizeChanges()) {
+          this._updateMetrics();
+          this._positionItems();
+          this._updateScrollerSize();
+        }
+      },
+    );
+  }
+
+  __hasSizeChanges() {
+    return this._physicalItems?.some((item, pidx) => {
+      const currentSize = Math.ceil(this.__getBorderBoxHeight(item));
+      return currentSize !== this._physicalSizes[pidx];
+    });
   }
 
   __getBorderBoxHeight(el) {
@@ -645,11 +655,6 @@ export class IronListAdapter {
   /** @override */
   _resizeHandler() {
     super._resizeHandler();
-
-    if (this.__physicalSizesChangedDebouncer && this.__physicalSizesChangedDebouncer.isActive()) {
-      // Cancel any pending debounced calls to avoid unnecessary extra work
-      this.__physicalSizesChangedDebouncer.cancel();
-    }
 
     // Fixes an issue where the new items are not created on scroll target resize when the scroll position is around the end.
     // See https://github.com/vaadin/flow-components/issues/7307
