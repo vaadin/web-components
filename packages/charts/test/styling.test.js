@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import './theme-styles.js';
 import '../src/vaadin-chart.js';
 
@@ -14,6 +14,7 @@ describe('vaadin-chart styling', () => {
         </vaadin-chart>
       `);
       await oneEvent(chart, 'chart-load');
+      await nextResize(chart);
       chartContainer = chart.$.chart;
     });
 

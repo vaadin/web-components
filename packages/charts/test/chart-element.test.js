@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
@@ -344,6 +344,47 @@ describe('vaadin-chart', () => {
       expect(rect.width).to.be.equal(300);
       expect(chart.configuration.chartWidth).to.be.equal(300);
     });
+
+    it('should use intrinsic width when container provides no width', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.greaterThan(0);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should resize from intrinsic width to explicit width', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      chart.style.width = '100px';
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.equal(100);
+      expect(chart.configuration.chartWidth).to.be.equal(chart.offsetWidth);
+    });
+
+    it('should collapse to zero width when container width is zero', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px; width: 0px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.equal(0);
+    });
   });
 
   describe('height', () => {
@@ -366,6 +407,66 @@ describe('vaadin-chart', () => {
       const rect = chart.$.chart.getBoundingClientRect();
       expect(rect.height).to.be.equal(300);
       expect(chart.configuration.chartHeight).to.be.equal(300);
+    });
+
+    it('should not cause container height expansion in flex layout', async () => {
+      const chartMinHeight = 300;
+      const siblingHeight = 5;
+
+      // See https://github.com/vaadin/web-components/issues/10316
+      chart = fixtureSync(`
+        <div style="display: flex">
+          <div>
+              <vaadin-chart style="height: 100%; min-height: ${chartMinHeight}px;"></vaadin-chart>
+              <div style="height: ${siblingHeight}px"></div>
+          </div>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(chartMinHeight + siblingHeight);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should use intrinsic height when container provides no height', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.greaterThan(0);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should resize from intrinsic height to explicit height', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      chart.style.height = '100px';
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.equal(100);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should collapse to zero height when container height is zero', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px; height: 0px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.equal(0);
     });
   });
 

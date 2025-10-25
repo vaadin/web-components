@@ -178,8 +178,8 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   /** @protected */
   render() {
     return html`
-      <div id="wrapper" style="height: 100%; width: 100%;">
-        <div id="chart" style="height: 100%; width: 100%;"></div>
+      <div id="wrapper" style="height: 100%; width: 100%; position: relative;">
+        <div id="chart" style="height: 100%; width: 100%; position: absolute;"></div>
       </div>
       <slot id="slot"></slot>
     `;
