@@ -9,23 +9,22 @@
  *
  * @private
  */
-export class CSSPropertyObserver {
+export class CSSPropertyObserver extends EventTarget {
   #root;
-  #callback;
   #properties = new Set();
   #styleSheet;
   #isConnected = false;
 
-  constructor(root, callback) {
+  constructor(root) {
+    super();
     this.#root = root;
-    this.#callback = callback;
     this.#styleSheet = new CSSStyleSheet();
   }
 
   #handleTransitionEvent(event) {
     const { propertyName } = event;
     if (this.#properties.has(propertyName)) {
-      this.#callback(propertyName);
+      this.dispatchEvent(new CustomEvent('property-changed', { detail: { propertyName } }));
     }
   }
 
@@ -77,5 +76,15 @@ export class CSSPropertyObserver {
 
   get #rootHost() {
     return this.#root.documentElement ?? this.#root.host;
+  }
+
+  /**
+   * Gets or creates the CSSPropertyObserver for the given root.
+   * @param {DocumentOrShadowRoot} root
+   * @returns {CSSPropertyObserver}
+   */
+  static for(root) {
+    root.__cssPropertyObserver ||= new CSSPropertyObserver(root);
+    return root.__cssPropertyObserver;
   }
 }

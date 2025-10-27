@@ -82,14 +82,13 @@ export class LumoInjector {
 
   constructor(root = document) {
     this.#root = root;
-    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, (propertyName) => {
-      const tagName = propertyName.match(/^--_lumo-(.*)-inject$/u)?.[1];
-      this.#updateStyleSheet(tagName);
-    });
+    this.handlePropertyChange = this.handlePropertyChange.bind(this);
+    this.#cssPropertyObserver = CSSPropertyObserver.for(root);
+    this.#cssPropertyObserver.addEventListener('property-changed', this.handlePropertyChange);
   }
 
   disconnect() {
-    this.#cssPropertyObserver.disconnect();
+    this.#cssPropertyObserver.removeEventListener('property-changed', this.handlePropertyChange);
     this.#styleSheetsByTag.clear();
     this.#componentsByTag.values().forEach((components) => components.forEach(removeLumoStyleSheet));
   }
@@ -132,6 +131,14 @@ export class LumoInjector {
     this.#componentsByTag.get(tagName)?.delete(component);
 
     removeLumoStyleSheet(component);
+  }
+
+  handlePropertyChange(event) {
+    const { propertyName } = event.detail;
+    const tagName = propertyName.match(/^--_lumo-(.*)-inject$/u)?.[1];
+    if (tagName) {
+      this.#updateStyleSheet(tagName);
+    }
   }
 
   #initStyleSheet(tagName) {
