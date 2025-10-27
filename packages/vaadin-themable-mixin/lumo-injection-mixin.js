@@ -16,7 +16,7 @@ const registeredProperties = new Set();
  * @param {HTMLElement} element
  * @return {DocumentOrShadowRoot}
  */
-function findRoot(element) {
+export function findRoot(element) {
   const root = element.getRootNode();
 
   if (root.host && root.host.constructor.version) {
