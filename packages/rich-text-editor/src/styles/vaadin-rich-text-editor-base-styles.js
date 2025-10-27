@@ -9,13 +9,17 @@
  * license.
  */
 import { css } from 'lit';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { icons } from './vaadin-rich-text-editor-base-icons.js';
 
 const base = css`
   :host {
     box-sizing: border-box;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
+    outline: none;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :host([hidden]) {
@@ -29,6 +33,14 @@ const base = css`
 
   input[type='file'] {
     display: none;
+  }
+
+  .vaadin-field-container {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    gap: var(--vaadin-input-field-label-spacing, var(--vaadin-gap-xs));
+    min-height: 0;
   }
 
   .vaadin-rich-text-editor-container {
@@ -592,4 +604,4 @@ const states = css`
   }
 `;
 
-export const richTextEditorStyles = [icons, base, content, toolbar, states];
+export const richTextEditorStyles = [icons, field, base, content, toolbar, states];

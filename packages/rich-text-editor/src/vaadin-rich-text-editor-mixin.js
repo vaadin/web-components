@@ -13,6 +13,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 
 const Quill = window.Quill;
 
@@ -97,8 +98,17 @@ const DEFAULT_I18N = {
 /**
  * @polymerMixin
  */
-export const RichTextEditorMixin = (superClass) =>
-  class RichTextEditorMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
+export const RichTextEditorMixin = (superClass) => {
+  class RichTextEditorMixinClass extends FieldMixin(I18nMixin(DEFAULT_I18N, superClass)) {
+    constructor() {
+      super();
+      this.ariaTarget = this;
+      this._errorController.addEventListener('slot-content-changed', (event) => {
+        const { hasContent, node } = event.detail;
+        this.__updateDescriptions(hasContent, node, 'error');
+      });
+    }
+
     static get properties() {
       return {
         /**
@@ -243,7 +253,11 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
+      return [
+        '_valueChanged(value, _editor)',
+        '_disabledChanged(disabled, readonly, _editor)',
+        '__constraintsChanged(required)',
+      ];
     }
 
     /**
@@ -324,6 +338,19 @@ export const RichTextEditorMixin = (superClass) =>
       this._editor.emitter.connect();
     }
 
+    /**
+     * @return {boolean}
+     * @override
+     */
+    checkValidity() {
+      return !this.required || this.__hasValue();
+    }
+
+    /** @private */
+    __hasValue() {
+      return this.value !== '' && this.value !== '[{"insert":"\\n"}]';
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -346,10 +373,25 @@ export const RichTextEditorMixin = (superClass) =>
 
       this.__setDirection(this.__dir);
 
-      const editorContent = editor.querySelector('.ql-editor');
+      const editorContent = this.__getEditorContent();
 
       editorContent.setAttribute('role', 'textbox');
       editorContent.setAttribute('aria-multiline', 'true');
+
+      if (this.hasAttribute('has-label')) {
+        const labelNode = this._labelNode;
+        this.__updateLabels(true, labelNode);
+      }
+
+      if (this.hasAttribute('has-helper')) {
+        const helperNode = this._helperNode;
+        this.__updateDescriptions(true, helperNode, 'helper');
+      }
+
+      if (this.hasAttribute('has-error-message')) {
+        const errorNode = this._errorNode;
+        this.__updateDescriptions(true, errorNode, 'error');
+      }
 
       this._editor.on('text-change', () => {
         const timeout = 200;
@@ -919,6 +961,65 @@ export const RichTextEditorMixin = (superClass) =>
       }
     }
 
+    /**
+     * @private
+     * @override
+     */
+    __labelChanged(hasLabel, labelNode) {
+      super.__labelChanged(hasLabel, labelNode);
+      this.__updateLabels(hasLabel, labelNode);
+    }
+
+    /**
+     * @private
+     * @override
+     */
+    __helperChanged(hasHelper, helperNode) {
+      super.__helperChanged(hasHelper, helperNode);
+      this.__updateDescriptions(hasHelper, helperNode, 'helper');
+    }
+
+    /** @private */
+    __updateLabels(hasLabel, labelNode) {
+      if (!this._toolbar || !this.__getEditorContent()) {
+        return;
+      }
+      const labelId = hasLabel && labelNode ? labelNode.id : null;
+      if (labelId) {
+        this._toolbar.setAttribute('aria-labelledby', labelId);
+        this.__getEditorContent().setAttribute('aria-labelledby', labelId);
+      } else {
+        this._toolbar.removeAttribute('aria-labelledby');
+        this.__getEditorContent().removeAttribute('aria-labelledby');
+      }
+    }
+
+    /** @private */
+    __updateDescriptions(hasContent, node, type) {
+      if (!this._toolbar || !this.__getEditorContent()) {
+        return;
+      }
+      [this._toolbar, this.__getEditorContent()].forEach((element) => {
+        const currentDescribedBy = element.getAttribute('aria-describedby');
+        const ids = currentDescribedBy ? currentDescribedBy.split(' ') : [];
+        const filteredIds = ids.filter((id) => !id.includes(`${type === 'helper' ? 'helper' : 'error-message'}-`));
+        const nodeId = hasContent && node ? node.id : null;
+        if (nodeId) {
+          filteredIds.push(nodeId);
+        }
+        if (filteredIds.length > 0) {
+          element.setAttribute('aria-describedby', filteredIds.join(' '));
+        } else {
+          element.removeAttribute('aria-describedby');
+        }
+      });
+    }
+
+    /** @private */
+    __getEditorContent() {
+      return this.shadowRoot.querySelector('.ql-editor');
+    }
+
     /** @private */
     _disabledChanged(disabled, readonly, editor) {
       if (disabled === undefined || readonly === undefined || editor === undefined) {
@@ -940,6 +1041,28 @@ export const RichTextEditorMixin = (superClass) =>
       }
 
       this.__oldDisabled = disabled;
+    }
+
+    /** @private */
+    __constraintsChanged(...constraints) {
+      const hasConstraints = this.__hasValidConstraints(constraints);
+      const isLastConstraintRemoved = this.__previousHasConstraints && !hasConstraints;
+      if ((this.__hasValue() || this.invalid) && hasConstraints) {
+        this._requestValidation();
+      } else if (isLastConstraintRemoved && !this.manualValidation) {
+        this._setInvalid(false);
+      }
+      this.__previousHasConstraints = hasConstraints;
+    }
+
+    /** @private */
+    __hasValidConstraints(constraints) {
+      return constraints.some((c) => this.__isValidConstraint(c));
+    }
+
+    /** @private */
+    __isValidConstraint(constraint) {
+      return Boolean(constraint) || constraint === 0;
     }
 
     /** @private */
@@ -991,5 +1114,12 @@ export const RichTextEditorMixin = (superClass) =>
         // Value changed from outside
         this.__lastCommittedChange = this.value;
       }
+
+      if (this.invalid) {
+        this._requestValidation();
+      }
     }
-  };
+  }
+
+  return RichTextEditorMixinClass;
+};
