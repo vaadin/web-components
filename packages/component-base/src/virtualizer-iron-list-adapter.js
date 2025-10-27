@@ -237,7 +237,8 @@ export class IronListAdapter {
       if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
         // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
         // See https://github.com/vaadin/web-components/issues/9077
-        this.__schedulePhysicalSizesChangedDebouncer();
+        this.__resizeObserver.unobserve(this._physicalItems[pidx]);
+        this.__resizeObserver.observe(this._physicalItems[pidx], { box: 'border-box' });
       }
 
       newPhysicalSize += this._physicalSizes[pidx];
@@ -252,42 +253,6 @@ export class IronListAdapter {
         (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
     }
-  }
-
-  /**
-   * Schedules an additional check to catch rapid size changes that
-   * might be missed by the resize observer.
-   *
-   * @private
-   */
-  __schedulePhysicalSizesChangedDebouncer() {
-    // Note that this debouncer shouldn't be flushed in the flush() method,
-    // since that would make it useless.
-    this.__physicalSizesChangedDebouncer = Debouncer.debounce(
-      this.__physicalSizesChangedDebouncer,
-      animationFrame,
-      () => {
-        if (this.__hasSizeChanges()) {
-          this._updateMetrics();
-          this._positionItems();
-          this._updateScrollerSize();
-        }
-      },
-    );
-  }
-
-  /**
-   * Checks if there are any size changes in the physical items that
-   * are not yet reflected in the _physicalSizes array.
-   *
-   * @returns {boolean} true if there are size changes
-   * @private
-   */
-  __hasSizeChanges() {
-    return this._physicalItems?.some((item, pidx) => {
-      const currentSize = Math.ceil(this.__getBorderBoxHeight(item));
-      return currentSize !== this._physicalSizes[pidx];
-    });
   }
 
   __getBorderBoxHeight(el) {
