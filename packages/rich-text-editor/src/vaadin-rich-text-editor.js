@@ -125,257 +125,275 @@ class RichTextEditor extends RichTextEditorMixin(
   /** @protected */
   render() {
     return html`
-      <div class="vaadin-rich-text-editor-container">
-        <!-- Create toolbar container -->
-        <div part="toolbar" role="toolbar">
-          <span part="toolbar-group toolbar-group-history">
-            <!-- Undo and Redo -->
-            <button
-              id="btn-undo"
-              type="button"
-              part="toolbar-button toolbar-button-undo"
-              aria-label="${this.__effectiveI18n.undo}"
-              @click="${this._undo}"
-            ></button>
-
-            <button
-              id="btn-redo"
-              type="button"
-              part="toolbar-button toolbar-button-redo"
-              aria-label="${this.__effectiveI18n.redo}"
-              @click="${this._redo}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-emphasis">
-            <!-- Bold -->
-            <button
-              id="btn-bold"
-              class="ql-bold"
-              part="toolbar-button toolbar-button-bold"
-              aria-label="${this.__effectiveI18n.bold}"
-            ></button>
-
-            <!-- Italic -->
-            <button
-              id="btn-italic"
-              class="ql-italic"
-              part="toolbar-button toolbar-button-italic"
-              aria-label="${this.__effectiveI18n.italic}"
-            ></button>
-
-            <!-- Underline -->
-            <button
-              id="btn-underline"
-              class="ql-underline"
-              part="toolbar-button toolbar-button-underline"
-              aria-label="${this.__effectiveI18n.underline}"
-            ></button>
-
-            <!-- Strike -->
-            <button
-              id="btn-strike"
-              class="ql-strike"
-              part="toolbar-button toolbar-button-strike"
-              aria-label="${this.__effectiveI18n.strike}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-style">
-            <!-- Color -->
-            <button
-              id="btn-color"
-              type="button"
-              part="toolbar-button toolbar-button-color"
-              aria-label="${this.__effectiveI18n.color}"
-              @click="${this.__onColorClick}"
-            ></button>
-            <!-- Background -->
-            <button
-              id="btn-background"
-              type="button"
-              part="toolbar-button toolbar-button-background"
-              aria-label="${this.__effectiveI18n.background}"
-              @click="${this.__onBackgroundClick}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-heading">
-            <!-- Header buttons -->
-            <button
-              id="btn-h1"
-              type="button"
-              class="ql-header"
-              value="1"
-              part="toolbar-button toolbar-button-h1"
-              aria-label="${this.__effectiveI18n.h1}"
-            ></button>
-            <button
-              id="btn-h2"
-              type="button"
-              class="ql-header"
-              value="2"
-              part="toolbar-button toolbar-button-h2"
-              aria-label="${this.__effectiveI18n.h2}"
-            ></button>
-            <button
-              id="btn-h3"
-              type="button"
-              class="ql-header"
-              value="3"
-              part="toolbar-button toolbar-button-h3"
-              aria-label="${this.__effectiveI18n.h3}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-glyph-transformation">
-            <!-- Subscript and superscript -->
-            <button
-              id="btn-subscript"
-              class="ql-script"
-              value="sub"
-              part="toolbar-button toolbar-button-subscript"
-              aria-label="${this.__effectiveI18n.subscript}"
-            ></button>
-            <button
-              id="btn-superscript"
-              class="ql-script"
-              value="super"
-              part="toolbar-button toolbar-button-superscript"
-              aria-label="${this.__effectiveI18n.superscript}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-list">
-            <!-- List buttons -->
-            <button
-              id="btn-ol"
-              type="button"
-              class="ql-list"
-              value="ordered"
-              part="toolbar-button toolbar-button-list-ordered"
-              aria-label="${this.__effectiveI18n.listOrdered}"
-            ></button>
-            <button
-              id="btn-ul"
-              type="button"
-              class="ql-list"
-              value="bullet"
-              part="toolbar-button toolbar-button-list-bullet"
-              aria-label="${this.__effectiveI18n.listBullet}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-indent">
-            <!-- Decrease -->
-            <button
-              id="btn-outdent"
-              type="button"
-              class="ql-indent"
-              value="-1"
-              part="toolbar-button toolbar-button-outdent"
-              aria-label="${this.__effectiveI18n.outdent}"
-            ></button>
-            <!-- Increase -->
-            <button
-              id="btn-indent"
-              type="button"
-              class="ql-indent"
-              value="+1"
-              part="toolbar-button toolbar-button-indent"
-              aria-label="${this.__effectiveI18n.indent}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-alignment">
-            <!-- Align buttons -->
-            <button
-              id="btn-left"
-              type="button"
-              class="ql-align"
-              value=""
-              part="toolbar-button toolbar-button-align-left"
-              aria-label="${this.__effectiveI18n.alignLeft}"
-            ></button>
-            <button
-              id="btn-center"
-              type="button"
-              class="ql-align"
-              value="center"
-              part="toolbar-button toolbar-button-align-center"
-              aria-label="${this.__effectiveI18n.alignCenter}"
-            ></button>
-            <button
-              id="btn-right"
-              type="button"
-              class="ql-align"
-              value="right"
-              part="toolbar-button toolbar-button-align-right"
-              aria-label="${this.__effectiveI18n.alignRight}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-rich-text">
-            <!-- Image -->
-            <button
-              id="btn-image"
-              type="button"
-              part="toolbar-button toolbar-button-image"
-              aria-label="${this.__effectiveI18n.image}"
-              @touchend="${this._onImageTouchEnd}"
-              @click="${this._onImageClick}"
-            ></button>
-            <!-- Link -->
-            <button
-              id="btn-link"
-              type="button"
-              part="toolbar-button toolbar-button-link"
-              aria-label="${this.__effectiveI18n.link}"
-              @click="${this._onLinkClick}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-block">
-            <!-- Blockquote -->
-            <button
-              id="btn-blockquote"
-              type="button"
-              class="ql-blockquote"
-              part="toolbar-button toolbar-button-blockquote"
-              aria-label="${this.__effectiveI18n.blockquote}"
-            ></button>
-            <!-- Code block -->
-            <button
-              id="btn-code"
-              type="button"
-              class="ql-code-block"
-              part="toolbar-button toolbar-button-code-block"
-              aria-label="${this.__effectiveI18n.codeBlock}"
-            ></button>
-          </span>
-
-          <span part="toolbar-group toolbar-group-format">
-            <!-- Clean -->
-            <button
-              id="btn-clean"
-              type="button"
-              class="ql-clean"
-              part="toolbar-button toolbar-button-clean"
-              aria-label="${this.__effectiveI18n.clean}"
-            ></button>
-          </span>
-
-          <input
-            id="fileInput"
-            type="file"
-            accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
-            @change="${this._uploadImage}"
-          />
+      <div class="vaadin-field-container">
+        <!-- Label slot -->
+        <div part="label">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div part="content"></div>
+        <div class="vaadin-rich-text-editor-container">
+          <!-- Create toolbar container -->
+          <div part="toolbar" role="toolbar">
+            <span part="toolbar-group toolbar-group-history">
+              <!-- Undo and Redo -->
+              <button
+                id="btn-undo"
+                type="button"
+                part="toolbar-button toolbar-button-undo"
+                aria-label="${this.__effectiveI18n.undo}"
+                @click="${this._undo}"
+              ></button>
 
-        <div class="announcer" aria-live="polite"></div>
+              <button
+                id="btn-redo"
+                type="button"
+                part="toolbar-button toolbar-button-redo"
+                aria-label="${this.__effectiveI18n.redo}"
+                @click="${this._redo}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-emphasis">
+              <!-- Bold -->
+              <button
+                id="btn-bold"
+                class="ql-bold"
+                part="toolbar-button toolbar-button-bold"
+                aria-label="${this.__effectiveI18n.bold}"
+              ></button>
+
+              <!-- Italic -->
+              <button
+                id="btn-italic"
+                class="ql-italic"
+                part="toolbar-button toolbar-button-italic"
+                aria-label="${this.__effectiveI18n.italic}"
+              ></button>
+
+              <!-- Underline -->
+              <button
+                id="btn-underline"
+                class="ql-underline"
+                part="toolbar-button toolbar-button-underline"
+                aria-label="${this.__effectiveI18n.underline}"
+              ></button>
+
+              <!-- Strike -->
+              <button
+                id="btn-strike"
+                class="ql-strike"
+                part="toolbar-button toolbar-button-strike"
+                aria-label="${this.__effectiveI18n.strike}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-style">
+              <!-- Color -->
+              <button
+                id="btn-color"
+                type="button"
+                part="toolbar-button toolbar-button-color"
+                aria-label="${this.__effectiveI18n.color}"
+                @click="${this.__onColorClick}"
+              ></button>
+              <!-- Background -->
+              <button
+                id="btn-background"
+                type="button"
+                part="toolbar-button toolbar-button-background"
+                aria-label="${this.__effectiveI18n.background}"
+                @click="${this.__onBackgroundClick}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-heading">
+              <!-- Header buttons -->
+              <button
+                id="btn-h1"
+                type="button"
+                class="ql-header"
+                value="1"
+                part="toolbar-button toolbar-button-h1"
+                aria-label="${this.__effectiveI18n.h1}"
+              ></button>
+              <button
+                id="btn-h2"
+                type="button"
+                class="ql-header"
+                value="2"
+                part="toolbar-button toolbar-button-h2"
+                aria-label="${this.__effectiveI18n.h2}"
+              ></button>
+              <button
+                id="btn-h3"
+                type="button"
+                class="ql-header"
+                value="3"
+                part="toolbar-button toolbar-button-h3"
+                aria-label="${this.__effectiveI18n.h3}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-glyph-transformation">
+              <!-- Subscript and superscript -->
+              <button
+                id="btn-subscript"
+                class="ql-script"
+                value="sub"
+                part="toolbar-button toolbar-button-subscript"
+                aria-label="${this.__effectiveI18n.subscript}"
+              ></button>
+              <button
+                id="btn-superscript"
+                class="ql-script"
+                value="super"
+                part="toolbar-button toolbar-button-superscript"
+                aria-label="${this.__effectiveI18n.superscript}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-list">
+              <!-- List buttons -->
+              <button
+                id="btn-ol"
+                type="button"
+                class="ql-list"
+                value="ordered"
+                part="toolbar-button toolbar-button-list-ordered"
+                aria-label="${this.__effectiveI18n.listOrdered}"
+              ></button>
+              <button
+                id="btn-ul"
+                type="button"
+                class="ql-list"
+                value="bullet"
+                part="toolbar-button toolbar-button-list-bullet"
+                aria-label="${this.__effectiveI18n.listBullet}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-indent">
+              <!-- Decrease -->
+              <button
+                id="btn-outdent"
+                type="button"
+                class="ql-indent"
+                value="-1"
+                part="toolbar-button toolbar-button-outdent"
+                aria-label="${this.__effectiveI18n.outdent}"
+              ></button>
+              <!-- Increase -->
+              <button
+                id="btn-indent"
+                type="button"
+                class="ql-indent"
+                value="+1"
+                part="toolbar-button toolbar-button-indent"
+                aria-label="${this.__effectiveI18n.indent}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-alignment">
+              <!-- Align buttons -->
+              <button
+                id="btn-left"
+                type="button"
+                class="ql-align"
+                value=""
+                part="toolbar-button toolbar-button-align-left"
+                aria-label="${this.__effectiveI18n.alignLeft}"
+              ></button>
+              <button
+                id="btn-center"
+                type="button"
+                class="ql-align"
+                value="center"
+                part="toolbar-button toolbar-button-align-center"
+                aria-label="${this.__effectiveI18n.alignCenter}"
+              ></button>
+              <button
+                id="btn-right"
+                type="button"
+                class="ql-align"
+                value="right"
+                part="toolbar-button toolbar-button-align-right"
+                aria-label="${this.__effectiveI18n.alignRight}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-rich-text">
+              <!-- Image -->
+              <button
+                id="btn-image"
+                type="button"
+                part="toolbar-button toolbar-button-image"
+                aria-label="${this.__effectiveI18n.image}"
+                @touchend="${this._onImageTouchEnd}"
+                @click="${this._onImageClick}"
+              ></button>
+              <!-- Link -->
+              <button
+                id="btn-link"
+                type="button"
+                part="toolbar-button toolbar-button-link"
+                aria-label="${this.__effectiveI18n.link}"
+                @click="${this._onLinkClick}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-block">
+              <!-- Blockquote -->
+              <button
+                id="btn-blockquote"
+                type="button"
+                class="ql-blockquote"
+                part="toolbar-button toolbar-button-blockquote"
+                aria-label="${this.__effectiveI18n.blockquote}"
+              ></button>
+              <!-- Code block -->
+              <button
+                id="btn-code"
+                type="button"
+                class="ql-code-block"
+                part="toolbar-button toolbar-button-code-block"
+                aria-label="${this.__effectiveI18n.codeBlock}"
+              ></button>
+            </span>
+
+            <span part="toolbar-group toolbar-group-format">
+              <!-- Clean -->
+              <button
+                id="btn-clean"
+                type="button"
+                class="ql-clean"
+                part="toolbar-button toolbar-button-clean"
+                aria-label="${this.__effectiveI18n.clean}"
+              ></button>
+            </span>
+
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
+              @change="${this._uploadImage}"
+            />
+          </div>
+
+          <div part="content"></div>
+
+          <div class="announcer" aria-live="polite"></div>
+        </div>
+
+        <!-- Helper text slot -->
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <!-- Error message slot -->
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
 
       <slot name="tooltip"></slot>

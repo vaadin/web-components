@@ -9,17 +9,17 @@
  * license.
  */
 import { css } from 'lit';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { icons } from './vaadin-rich-text-editor-base-icons.js';
 
 const base = css`
   :host {
-    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
-    border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
-    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
+    outline: none;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :host([hidden]) {
@@ -35,13 +35,24 @@ const base = css`
     display: none;
   }
 
+  .vaadin-field-container {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    gap: var(--vaadin-input-field-label-spacing, var(--vaadin-gap-xs));
+    min-height: 0;
+  }
+
   .vaadin-rich-text-editor-container {
     display: flex;
     flex: auto;
     flex-direction: column;
-    max-height: inherit;
-    min-height: inherit;
-    border-radius: inherit;
+    min-height: var(--vaadin-rich-text-editor-min-height, 12em);
+    max-height: var(--vaadin-rich-text-editor-max-height);
+    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
+    border: var(--vaadin-input-field-border-width, 1px) solid
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
+    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     contain: paint;
   }
 
@@ -592,4 +603,4 @@ const states = css`
   }
 `;
 
-export const richTextEditorStyles = [icons, base, content, toolbar, states];
+export const richTextEditorStyles = [icons, field, base, content, toolbar, states];
