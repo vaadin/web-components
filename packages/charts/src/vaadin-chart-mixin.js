@@ -795,10 +795,6 @@ export const ChartMixin = (superClass) =>
         // Detect if the chart had already been initialized. This might happen in
         // environments where the chart is lazily attached (e.g Grid).
         if (this.configuration) {
-          const { height } = this.$.wrapper.style;
-          this.$.wrapper.style.height = '';
-          this.configuration.setSize(null, null, false);
-          this.$.wrapper.style.height = height;
           return;
         }
 
@@ -828,6 +824,16 @@ export const ChartMixin = (superClass) =>
 
       const { height, width } = contentRect;
       const { chartHeight, chartWidth } = this.configuration;
+
+      this.$.wrapper.style.minHeight = '';
+      // Use 1px as the threshold to align with Highcharts
+      if (this.$.wrapper.offsetHeight <= 1) {
+        this.$.wrapper.style.minHeight = `${chartHeight}px`;
+      }
+      this.$.wrapper.style.minWidth = '';
+      if (this.$.wrapper.offsetWidth <= 1) {
+        this.$.wrapper.style.minWidth = `${chartWidth}px`;
+      }
 
       if (height !== chartHeight || width !== chartWidth) {
         this.__reflow();
