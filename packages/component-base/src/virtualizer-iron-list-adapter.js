@@ -236,6 +236,7 @@ export class IronListAdapter {
 
       if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
         // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
+        // See https://github.com/vaadin/web-components/issues/9077
         this.__schedulePhysicalSizesChangedDebouncer();
       }
 
@@ -253,7 +254,15 @@ export class IronListAdapter {
     }
   }
 
+  /**
+   * Schedules an additional check to catch rapid size changes that
+   * might be missed by the resize observer.
+   *
+   * @private
+   */
   __schedulePhysicalSizesChangedDebouncer() {
+    // Note that this debouncer shouldn't be flushed in the flush() method,
+    // since that would make it useless.
     this.__physicalSizesChangedDebouncer = Debouncer.debounce(
       this.__physicalSizesChangedDebouncer,
       animationFrame,
@@ -267,6 +276,13 @@ export class IronListAdapter {
     );
   }
 
+  /**
+   * Checks if there are any size changes in the physical items that
+   * are not yet reflected in the _physicalSizes array.
+   *
+   * @returns {boolean} true if there are size changes
+   * @private
+   */
   __hasSizeChanges() {
     return this._physicalItems?.some((item, pidx) => {
       const currentSize = Math.ceil(this.__getBorderBoxHeight(item));
