@@ -225,7 +225,7 @@ export class IronListAdapter {
         // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
         // See https://github.com/vaadin/web-components/issues/9077
         this.__resizeObserver.unobserve(this._physicalItems[pidx]);
-        this.__resizeObserver.observe(this._physicalItems[pidx], { box: 'border-box' });
+        this.__resizeObserver.observe(this._physicalItems[pidx]);
       }
 
       newPhysicalSize += this._physicalSizes[pidx];
