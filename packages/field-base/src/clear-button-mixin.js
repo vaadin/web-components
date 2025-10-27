@@ -72,7 +72,7 @@ export const ClearButtonMixin = (superclass) =>
      * @protected
      */
     _onClearButtonMouseDown(event) {
-      if (this._shouldKeepFocusOnClearMousedown(event)) {
+      if (this._shouldKeepFocusOnClearMousedown()) {
         event.preventDefault();
       }
 

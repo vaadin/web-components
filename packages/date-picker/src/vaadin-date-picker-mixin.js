@@ -621,17 +621,16 @@ export const DatePickerMixin = (subclass) =>
      * to not blur on clear button mousedown when opened
      * so that focus remains in the input field.
      *
-     * @param {Event} event
      * @return {boolean}
      * @protected
      * @override
      */
-    _shouldKeepFocusOnClearMousedown(event) {
+    _shouldKeepFocusOnClearMousedown() {
       if (this.opened) {
         return true;
       }
 
-      return super._shouldKeepFocusOnClearMousedown(event);
+      return super._shouldKeepFocusOnClearMousedown();
     }
 
     /**
