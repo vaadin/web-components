@@ -126,6 +126,12 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
     `;
   }
 
+  /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+    this._onSlotChange();
+  }
+
   /** @private */
   _onSlotChange() {
     this.toggleAttribute('_m', this.querySelector(':scope > [slot="media"]'));

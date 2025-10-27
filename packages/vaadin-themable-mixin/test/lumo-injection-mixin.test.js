@@ -120,6 +120,8 @@ describe('Lumo injection', () => {
     afterEach(() => {
       document.__lumoInjector?.disconnect();
       document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
     });
 
     describe('styles added after element is connected', () => {
@@ -245,6 +247,8 @@ describe('Lumo injection', () => {
     afterEach(() => {
       host.__lumoInjector?.disconnect();
       host.__lumoInjector = undefined;
+      host.__cssPropertyObserver?.disconnect();
+      host.__cssPropertyObserver = undefined;
     });
 
     describe('styles added after element is connected', () => {
@@ -426,6 +430,8 @@ describe('Lumo injection', () => {
     afterEach(() => {
       host.__lumoInjector?.disconnect();
       host.__lumoInjector = undefined;
+      host.__cssPropertyObserver?.disconnect();
+      host.__cssPropertyObserver = undefined;
     });
 
     it('should inject matching styles added to parent shadow host', async () => {
@@ -465,6 +471,8 @@ describe('Lumo injection', () => {
     afterEach(() => {
       document.__lumoInjector?.disconnect();
       document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
     });
 
     it('should inject matching styles for the extending component', async () => {
@@ -505,6 +513,8 @@ describe('Lumo injection', () => {
       style.remove();
       document.__lumoInjector?.disconnect();
       document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
     });
 
     it('should not remove styles from injected stylesheets when calling registerStyles()', () => {

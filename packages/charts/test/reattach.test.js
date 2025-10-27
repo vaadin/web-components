@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
@@ -262,18 +262,19 @@ describe('reattach', () => {
 
   it('should restore default height when moving from different container with defined height', async () => {
     await oneEvent(chart, 'chart-load');
+    await nextResize(chart);
 
     const initialHeight = getComputedStyle(chart).height;
 
     inner.style.height = '700px';
     inner.appendChild(chart);
-    await nextFrame();
+    await nextResize(chart);
 
     expect(getComputedStyle(chart).height).to.be.equal(inner.style.height);
 
     // Move back to first parent
     wrapper.appendChild(chart);
-    await nextFrame();
+    await nextResize(chart);
 
     expect(getComputedStyle(chart).height).to.be.equal(initialHeight);
   });

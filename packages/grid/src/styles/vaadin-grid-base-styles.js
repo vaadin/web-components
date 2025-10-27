@@ -337,6 +337,7 @@ export const gridStyles = css`
     text-overflow: ellipsis;
     padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
     flex: 1;
+    min-height: 1lh;
     min-width: 0;
   }
 
