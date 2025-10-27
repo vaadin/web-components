@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -477,5 +477,63 @@ describe('virtualizer - item height - placeholders are disabled', () => {
   it('should not add placeholder padding to items with zero height', () => {
     const item = document.querySelector('#item-0');
     expect(item.offsetHeight).to.equal(0);
+  });
+});
+
+describe('virtualizer - item height - self-resizing items', () => {
+  // Create a custom element that resizes itself on slotchange
+  // (simulating vaadin-card's behavior, see https://github.com/vaadin/web-components/issues/9077)
+  customElements.define(
+    'resize-item',
+    class extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' }).innerHTML = `<slot></slot>`;
+        this.shadowRoot.addEventListener('slotchange', () => {
+          this.style.display = 'block';
+          this.style.height = '100px';
+        });
+      }
+    },
+  );
+
+  let virtualizer;
+  let scrollTarget;
+
+  beforeEach(() => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 300px;">
+        <div class="container"></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.innerHTML = `<resize-item id="item-${index}">Item ${index}</resize-item>`;
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 100;
+  });
+
+  it('should not overlap items after scrolling', async () => {
+    await contentUpdate();
+    // Scroll manually to the end
+    while (Math.ceil(scrollTarget.scrollTop) < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
+      scrollTarget.scrollTop += 100;
+      await oneEvent(scrollTarget, 'scroll');
+    }
+
+    // Ensure that the first two visible items do not overlap
+    const firstVisibleItem = scrollTarget.querySelector(`#item-${virtualizer.firstVisibleIndex}`);
+    const secondVisibleItem = scrollTarget.querySelector(`#item-${virtualizer.firstVisibleIndex + 1}`);
+
+    expect(firstVisibleItem.getBoundingClientRect().bottom).to.be.at.most(
+      secondVisibleItem.getBoundingClientRect().top,
+    );
   });
 });
