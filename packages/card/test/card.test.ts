@@ -99,4 +99,20 @@ describe('vaadin-card', () => {
       expect(getCustomTitleElement()).to.exist;
     });
   });
+
+  describe('sizing', () => {
+    it('should size synchronously', async () => {
+      const template = `
+        <vaadin-card>
+          <div slot="title">New Message from Olivia</div>
+        </vaadin-card>`;
+
+      card = fixtureSync(template);
+      await nextRender();
+      const height = card.offsetHeight;
+
+      card = fixtureSync(template);
+      expect(card.offsetHeight).to.equal(height);
+    });
+  });
 });
