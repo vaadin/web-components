@@ -218,7 +218,16 @@ export class IronListAdapter {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
+      const elementOldPhysicalSize = this._physicalSizes[pidx];
       this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+
+      if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
+        // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
+        // See https://github.com/vaadin/web-components/issues/9077
+        this.__resizeObserver.unobserve(this._physicalItems[pidx]);
+        this.__resizeObserver.observe(this._physicalItems[pidx]);
+      }
+
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
