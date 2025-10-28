@@ -584,6 +584,20 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.height)).to.be.eql(Math.floor(bounds.height));
   });
 
+  it('should not shrink dialog when dragged to the right edge', async () => {
+    dialog.renderer = (root) => {
+      root.innerHTML = `<div style="padding: 20px;">Lorem ipsum dolor sit amet</div>`;
+    };
+    await nextRender();
+    const initialWidth = container.offsetWidth;
+    const bounds = container.getBoundingClientRect();
+    const targetX = window.innerWidth - 100;
+    dx = targetX - Math.floor(bounds.left + bounds.width / 2);
+    drag(container);
+    await nextRender();
+    expect(container.offsetWidth).to.equal(initialWidth);
+  });
+
   it('should not reset scroll position on dragstart', async () => {
     dialog.modeless = true;
     button.style.marginBottom = '200px';
