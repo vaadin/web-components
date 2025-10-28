@@ -636,6 +636,23 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
+     * Override method inherited from `ClearButtonMixin`
+     * to not blur on clear button mousedown when opened
+     * so that focus remains in the input field.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldKeepFocusOnClearMousedown() {
+      if (this.opened) {
+        return true;
+      }
+
+      return super._shouldKeepFocusOnClearMousedown();
+    }
+
+    /**
      * Override method inherited from `FocusMixin`
      * to prevent removing the `focused` attribute:
      * - when moving focus to the overlay content,
