@@ -58,7 +58,7 @@ describe('theme-detection-mixin', () => {
       it('should detect no theme', () => {
         contentElement.append(testElement);
 
-        expect(testElement.hasAttribute('vaadin-theme')).to.be.false;
+        expect(testElement.hasAttribute('data-application-theme')).to.be.false;
       });
 
       it('should detect Aura theme', () => {
@@ -66,7 +66,7 @@ describe('theme-detection-mixin', () => {
 
         contentElement.append(testElement);
 
-        expect(testElement.getAttribute('vaadin-theme')).to.equal('aura');
+        expect(testElement.getAttribute('data-application-theme')).to.equal('aura');
       });
 
       it('should detect Lumo theme', () => {
@@ -74,7 +74,7 @@ describe('theme-detection-mixin', () => {
 
         contentElement.append(testElement);
 
-        expect(testElement.getAttribute('vaadin-theme')).to.equal('lumo');
+        expect(testElement.getAttribute('data-application-theme')).to.equal('lumo');
       });
     });
 
@@ -85,19 +85,19 @@ describe('theme-detection-mixin', () => {
       });
 
       it('should detect theme changes', async () => {
-        expect(testElement.hasAttribute('vaadin-theme')).to.be.false;
+        expect(testElement.hasAttribute('data-application-theme')).to.be.false;
 
         applyTheme('--vaadin-aura-theme');
         await oneEvent(hostElement, 'transitionend');
-        expect(testElement.getAttribute('vaadin-theme')).to.equal('aura');
+        expect(testElement.getAttribute('data-application-theme')).to.equal('aura');
 
         applyTheme('--vaadin-lumo-theme');
         await oneEvent(hostElement, 'transitionend');
-        expect(testElement.getAttribute('vaadin-theme')).to.equal('lumo');
+        expect(testElement.getAttribute('data-application-theme')).to.equal('lumo');
 
         applyTheme();
         await oneEvent(hostElement, 'transitionend');
-        expect(testElement.hasAttribute('vaadin-theme')).to.be.false;
+        expect(testElement.hasAttribute('data-application-theme')).to.be.false;
       });
     });
   }

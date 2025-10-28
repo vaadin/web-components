@@ -43,11 +43,11 @@ export const ThemeDetectionMixin = (superClass) =>
 
       const themes = this.__themeDetector.themes;
       if (themes.aura) {
-        this.setAttribute('vaadin-theme', 'aura');
+        this.dataset.applicationTheme = 'aura';
       } else if (themes.lumo) {
-        this.setAttribute('vaadin-theme', 'lumo');
+        this.dataset.applicationTheme = 'lumo';
       } else {
-        this.removeAttribute('vaadin-theme');
+        delete this.dataset.applicationTheme;
       }
     }
   };
