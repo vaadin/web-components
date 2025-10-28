@@ -115,6 +115,13 @@ describe('interactions', () => {
         expect(overlay.opened).to.be.false;
       });
 
+      it('should not close on outside click when modeless', () => {
+        overlay.modeless = true;
+        click(parent);
+
+        expect(overlay.opened).to.be.true;
+      });
+
       it('should close on backdrop click', () => {
         overlay.withBackdrop = true;
 
@@ -167,6 +174,30 @@ describe('interactions', () => {
         click(backdrop);
 
         expect(overlay.opened).to.be.true;
+      });
+
+      it('should not fire the event on outside click when modeless set to true', () => {
+        overlay.modeless = true;
+
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-outside-click', spy);
+
+        click(parent);
+
+        expect(spy).to.be.not.called;
+      });
+
+      it('should not fire the event on outside click when modeless set back to false', () => {
+        overlay.modeless = true;
+
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-outside-click', spy);
+
+        overlay.modeless = false;
+
+        click(parent);
+
+        expect(spy.calledOnce).to.be.true;
       });
     });
 
