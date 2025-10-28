@@ -40,7 +40,7 @@ describe('theme-detection-mixin', () => {
 
   afterEach(() => {
     testElement.remove();
-    styleRoot.__themeDetector?.destroy();
+    styleRoot.__themeDetector?.disconnect();
     styleRoot.__themeDetector = undefined;
     styleRoot.__cssPropertyObserver?.disconnect();
     styleRoot.__cssPropertyObserver = undefined;

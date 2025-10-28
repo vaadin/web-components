@@ -29,39 +29,50 @@ CSS.registerProperty({
  * @private
  */
 export class ThemeDetector extends EventTarget {
+  /** @type {DocumentOrShadowRoot} */
+  #root;
+  /** @type {CSSPropertyObserver} */
+  #observer;
+  /** @type {{ aura: boolean; lumo: boolean }} */
+  #themes = { aura: false, lumo: false };
+  /** @type {(event: CustomEvent) => void} */
+  #boundHandleThemeChange = this.#handleThemeChange.bind(this);
+
   constructor(root) {
     super();
-    this.root = root;
-    this.detectTheme();
+    this.#root = root;
+    this.#detectTheme();
 
-    this.handleThemeChange = this.handleThemeChange.bind(this);
-
-    this.observer = CSSPropertyObserver.for(this.root);
-    this.observer.observe('--vaadin-aura-theme');
-    this.observer.observe('--vaadin-lumo-theme');
-    this.observer.addEventListener('property-changed', this.handleThemeChange);
+    this.#observer = CSSPropertyObserver.for(this.#root);
+    this.#observer.observe('--vaadin-aura-theme');
+    this.#observer.observe('--vaadin-lumo-theme');
+    this.#observer.addEventListener('property-changed', this.#boundHandleThemeChange);
   }
 
-  handleThemeChange(event) {
+  get themes() {
+    return { ...this.#themes };
+  }
+
+  #handleThemeChange(event) {
     const { propertyName } = event.detail;
     if (!['--vaadin-aura-theme', '--vaadin-lumo-theme'].includes(propertyName)) {
       return;
     }
 
-    this.detectTheme();
+    this.#detectTheme();
     this.dispatchEvent(new CustomEvent('theme-changed'));
   }
 
-  detectTheme() {
-    const rootElement = this.root.documentElement ?? this.root.host;
+  #detectTheme() {
+    const rootElement = this.#root.documentElement ?? this.#root.host;
     const style = getComputedStyle(rootElement);
-    this.themes = {
+    this.#themes = {
       aura: style.getPropertyValue('--vaadin-aura-theme').trim() === '1',
       lumo: style.getPropertyValue('--vaadin-lumo-theme').trim() === '1',
     };
   }
 
-  destroy() {
-    this.observer.removeEventListener('property-changed', this.handleThemeChange);
+  disconnect() {
+    this.#observer.removeEventListener('property-changed', this.#boundHandleThemeChange);
   }
 }
