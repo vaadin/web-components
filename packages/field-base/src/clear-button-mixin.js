@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputMixin } from './input-mixin.js';
@@ -71,7 +72,10 @@ export const ClearButtonMixin = (superclass) =>
      * @protected
      */
     _onClearButtonMouseDown(event) {
-      event.preventDefault();
+      if (this._shouldKeepFocusOnClearMousedown()) {
+        event.preventDefault();
+      }
+
       if (!isTouch) {
         this.inputElement.focus();
       }
@@ -108,5 +112,18 @@ export const ClearButtonMixin = (superclass) =>
       // while the input event is composed.
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    /**
+     * Whether to keep focus inside the field on clear button
+     * mousedown. By default, if the field has focus, it gets
+     * preserved using `preventDefault()` on mousedown event
+     * in order to avoid blur and change events.
+     *
+     * @protected
+     * @return {boolean}
+     */
+    _shouldKeepFocusOnClearMousedown() {
+      return isElementFocused(this.inputElement);
     }
   };

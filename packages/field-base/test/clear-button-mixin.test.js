@@ -69,7 +69,14 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should prevent default on clear button mousedown', () => {
+    it('should not prevent default on clear button mousedown if input is not focused', () => {
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.false;
+    });
+
+    it('should prevent default on clear button mousedown if input is focused', () => {
+      input.focus();
       const event = new CustomEvent('mousedown', { cancelable: true });
       clearButton.dispatchEvent(event);
       expect(event.defaultPrevented).to.be.true;
