@@ -305,6 +305,19 @@ export const RichTextEditorMixin = (superClass) => {
       super.disconnectedCallback();
 
       this._editor.emitter.disconnect();
+
+      if (this.__labelTextObserver) {
+        this.__labelTextObserver.disconnect();
+        this.__labelTextObserver = null;
+      }
+      if (this.__helperTextObserver) {
+        this.__helperTextObserver.disconnect();
+        this.__helperTextObserver = null;
+      }
+      if (this.__errorTextObserver) {
+        this.__errorTextObserver.disconnect();
+        this.__errorTextObserver = null;
+      }
     }
 
     /** @private */
@@ -382,6 +395,8 @@ export const RichTextEditorMixin = (superClass) => {
         const labelNode = this._labelNode;
         this.__updateLabels(true, labelNode);
       }
+
+      this.__updateRequired(this.required);
 
       if (this.hasAttribute('has-helper')) {
         const helperNode = this._helperNode;
@@ -980,17 +995,61 @@ export const RichTextEditorMixin = (superClass) => {
     }
 
     /** @private */
+    __constraintsChanged(...constraints) {
+      const hasConstraints = this.__hasValidConstraints(constraints);
+      const isLastConstraintRemoved = this.__previousHasConstraints && !hasConstraints;
+      if ((this.__hasValue() || this.invalid) && hasConstraints) {
+        this._requestValidation();
+      } else if (isLastConstraintRemoved && !this.manualValidation) {
+        this._setInvalid(false);
+      }
+      this.__previousHasConstraints = hasConstraints;
+    }
+
+    /**
+     * @param {boolean} required
+     * @protected
+     * @override
+     */
+    _requiredChanged(required) {
+      super._requiredChanged(required);
+      this.__updateRequired(required);
+    }
+
+    /** @private */
     __updateLabels(hasLabel, labelNode) {
       if (!this._toolbar || !this.__getEditorContent()) {
         return;
       }
-      const labelId = hasLabel && labelNode ? labelNode.id : null;
-      if (labelId) {
-        this._toolbar.setAttribute('aria-labelledby', labelId);
-        this.__getEditorContent().setAttribute('aria-labelledby', labelId);
+      if (this.__labelTextObserver) {
+        this.__labelTextObserver.disconnect();
+        this.__labelTextObserver = null;
+      }
+      if (hasLabel && labelNode) {
+        this.__updateLabelText(labelNode);
+        this.__labelTextObserver = new MutationObserver(() => {
+          this.__updateLabelText(labelNode);
+        });
+        this.__labelTextObserver.observe(labelNode, {
+          childList: true,
+          characterData: true,
+          subtree: true,
+        });
       } else {
-        this._toolbar.removeAttribute('aria-labelledby');
-        this.__getEditorContent().removeAttribute('aria-labelledby');
+        this._toolbar.removeAttribute('aria-label');
+        this.__getEditorContent().removeAttribute('aria-label');
+      }
+    }
+
+    /** @private */
+    __updateLabelText(labelNode) {
+      const labelText = labelNode.textContent.trim();
+      if (labelText) {
+        this._toolbar.setAttribute('aria-label', labelText);
+        this.__getEditorContent().setAttribute('aria-label', labelText);
+      } else {
+        this._toolbar.removeAttribute('aria-label');
+        this.__getEditorContent().removeAttribute('aria-label');
       }
     }
 
@@ -999,20 +1058,81 @@ export const RichTextEditorMixin = (superClass) => {
       if (!this._toolbar || !this.__getEditorContent()) {
         return;
       }
-      [this._toolbar, this.__getEditorContent()].forEach((element) => {
-        const currentDescribedBy = element.getAttribute('aria-describedby');
-        const ids = currentDescribedBy ? currentDescribedBy.split(' ') : [];
-        const filteredIds = ids.filter((id) => !id.includes(`${type === 'helper' ? 'helper' : 'error-message'}-`));
-        const nodeId = hasContent && node ? node.id : null;
-        if (nodeId) {
-          filteredIds.push(nodeId);
-        }
-        if (filteredIds.length > 0) {
-          element.setAttribute('aria-describedby', filteredIds.join(' '));
+      const descId = type === 'helper' ? 'rte-shadow-helper-desc' : 'rte-shadow-error-desc';
+      const observerKey = type === 'helper' ? '__helperTextObserver' : '__errorTextObserver';
+      if (hasContent && node) {
+        this.__addDescription(node, descId, observerKey);
+      } else {
+        this.__removeDescription(descId, observerKey);
+      }
+    }
+
+    /** @private */
+    __removeDescription(descId, observerKey) {
+      const descElement = this.shadowRoot.querySelector(`#${descId}`);
+      if (descElement) {
+        descElement.remove();
+      }
+      const editorContent = this.__getEditorContent();
+      const currentDescribedBy = editorContent.getAttribute('aria-describedby');
+      if (currentDescribedBy) {
+        const ids = currentDescribedBy.split(' ').filter((id) => id !== descId);
+        if (ids.length > 0) {
+          editorContent.setAttribute('aria-describedby', ids.join(' '));
         } else {
-          element.removeAttribute('aria-describedby');
+          editorContent.removeAttribute('aria-describedby');
+        }
+      }
+      if (this[observerKey]) {
+        this[observerKey].disconnect();
+        this[observerKey] = null;
+      }
+    }
+
+    /** @private */
+    __addDescription(node, descId, observerKey) {
+      let descElement = this.shadowRoot.querySelector(`#${descId}`);
+      if (!descElement) {
+        descElement = document.createElement('div');
+        descElement.id = descId;
+        descElement.hidden = true;
+        this.shadowRoot.appendChild(descElement);
+      }
+      descElement.textContent = node.textContent.trim();
+      if (this[observerKey]) {
+        this[observerKey].disconnect();
+      }
+      this[observerKey] = new MutationObserver(() => {
+        const updatedText = node.textContent.trim();
+        if (descElement && descElement.textContent !== updatedText) {
+          descElement.textContent = updatedText;
         }
       });
+      this[observerKey].observe(node, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+      const editorContent = this.__getEditorContent();
+      const currentDescribedBy = editorContent.getAttribute('aria-describedby');
+      const ids = currentDescribedBy ? currentDescribedBy.split(' ') : [];
+      if (!ids.includes(descId)) {
+        ids.push(descId);
+      }
+      editorContent.setAttribute('aria-describedby', ids.join(' '));
+    }
+
+    /** @private */
+    __updateRequired(required) {
+      const editorContent = this.__getEditorContent();
+      if (!editorContent) {
+        return;
+      }
+      if (required) {
+        editorContent.setAttribute('aria-required', 'true');
+      } else {
+        editorContent.removeAttribute('aria-required');
+      }
     }
 
     /** @private */
@@ -1041,18 +1161,6 @@ export const RichTextEditorMixin = (superClass) => {
       }
 
       this.__oldDisabled = disabled;
-    }
-
-    /** @private */
-    __constraintsChanged(...constraints) {
-      const hasConstraints = this.__hasValidConstraints(constraints);
-      const isLastConstraintRemoved = this.__previousHasConstraints && !hasConstraints;
-      if ((this.__hasValue() || this.invalid) && hasConstraints) {
-        this._requestValidation();
-      } else if (isLastConstraintRemoved && !this.manualValidation) {
-        this._setInvalid(false);
-      }
-      this.__previousHasConstraints = hasConstraints;
     }
 
     /** @private */
