@@ -6,3 +6,8 @@
 @import './src/props/index.css';
 @import './src/global/index.css';
 @import './components/index.css';
+
+:where(:root),
+:where(:host) {
+  --vaadin-lumo-theme: 1;
+}
