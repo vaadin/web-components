@@ -203,8 +203,25 @@ export const OverlayMixin = (superClass) =>
       }
     }
 
+    /**
+     * Whether to add global listeners for closing on outside click.
+     * By default, listeners are not added for a modeless overlay.
+     *
+     * @return {boolean}
+     * @protected
+     */
+    _shouldAddGlobalListeners() {
+      return !this.modeless;
+    }
+
     /** @private */
     _addGlobalListeners() {
+      if (this.__hasGlobalListeners) {
+        return;
+      }
+
+      this.__hasGlobalListeners = true;
+
       document.addEventListener('mousedown', this._boundMouseDownListener);
       document.addEventListener('mouseup', this._boundMouseUpListener);
       // Firefox leaks click to document on contextmenu even if prevented
@@ -214,6 +231,12 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _removeGlobalListeners() {
+      if (!this.__hasGlobalListeners) {
+        return;
+      }
+
+      this.__hasGlobalListeners = false;
+
       document.removeEventListener('mousedown', this._boundMouseDownListener);
       document.removeEventListener('mouseup', this._boundMouseUpListener);
       document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
@@ -247,13 +270,20 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _modelessChanged(modeless) {
+      if (this.opened) {
+        // Add / remove listeners if modeless is changed while opened
+        if (this._shouldAddGlobalListeners()) {
+          this._addGlobalListeners();
+        } else {
+          this._removeGlobalListeners();
+        }
+      }
+
       if (!modeless) {
         if (this.opened) {
-          this._addGlobalListeners();
           this._enterModalState();
         }
       } else {
-        this._removeGlobalListeners();
         this._exitModalState();
       }
     }
@@ -275,7 +305,7 @@ export const OverlayMixin = (superClass) =>
 
         document.addEventListener('keydown', this._boundKeydownListener);
 
-        if (!this.modeless) {
+        if (this._shouldAddGlobalListeners()) {
           this._addGlobalListeners();
         }
       } else if (wasOpened) {
@@ -290,7 +320,7 @@ export const OverlayMixin = (superClass) =>
 
         document.removeEventListener('keydown', this._boundKeydownListener);
 
-        if (!this.modeless) {
+        if (this._shouldAddGlobalListeners()) {
           this._removeGlobalListeners();
         }
       }
@@ -473,7 +503,7 @@ export const OverlayMixin = (superClass) =>
       }
 
       // Only close modeless overlay on Esc press when it contains focus
-      if (this.modeless && !event.composedPath().includes(this.$.overlay)) {
+      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this.$.overlay)) {
         return;
       }
 
