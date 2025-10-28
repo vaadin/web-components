@@ -3,9 +3,9 @@ import { ThemeDetector } from './src/theme-detector.js';
 
 /**
  * Mixin for detecting which Vaadin theme is applied to the application.
- * Automatically adds a `vaadin-theme` attribute to the host element
- * with the name of the detected theme (`lumo` or `aura`), which can be
- * used in component styles to apply theme-specific styling.
+ * Automatically adds a `data-application-theme` attribute to the host
+ * element with the name of the detected theme (`lumo` or `aura`), which
+ * can be used in component styles to apply theme-specific styling.
  *
  * @polymerMixin
  */
