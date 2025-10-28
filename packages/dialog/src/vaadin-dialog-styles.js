@@ -91,6 +91,7 @@ export const resizableOverlay = css`
     overflow: visible;
     max-height: 100%;
     display: flex;
+    width: max-content;
   }
 
   [part='content'] {
