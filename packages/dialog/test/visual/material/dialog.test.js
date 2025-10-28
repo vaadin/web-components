@@ -60,7 +60,8 @@ describe('dialog', () => {
   });
 
   it('long title and header renderer', async () => {
-    element.$.overlay.style.maxWidth = '20rem';
+    // Override default Material max-width: 560px
+    element.$.overlay.$.overlay.style.maxWidth = '20rem';
     element.headerTitle = 'Long title that wraps in multiple lines';
     element.headerRenderer = createRenderer('Header');
     await nextUpdate(element);
@@ -68,7 +69,8 @@ describe('dialog', () => {
   });
 
   it('long single word title and header renderer', async () => {
-    element.$.overlay.style.maxWidth = '20rem';
+    // Override default Material max-width: 560px
+    element.$.overlay.$.overlay.style.maxWidth = '20rem';
     element.headerTitle = 'InternationalizationConfigurationHelper';
     element.headerRenderer = createRenderer('Header');
     await nextUpdate(element);
