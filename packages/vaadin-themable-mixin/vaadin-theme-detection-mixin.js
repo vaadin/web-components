@@ -6,15 +6,18 @@ import { ThemeDetector } from './src/theme-detector.js';
  * Automatically adds a `vaadin-theme` attribute to the host element
  * with the name of the detected theme (`lumo` or `aura`), which can be
  * used in component styles to apply theme-specific styling.
+ *
+ * @polymerMixin
  */
 export const ThemeDetectionMixin = (superClass) =>
-  class VaadinThemeDetectionMixin extends superClass {
+  class ThemeDetectionMixinClass extends superClass {
     constructor() {
       super();
 
       this.__applyDetectedTheme = this.__applyDetectedTheme.bind(this);
     }
 
+    /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
@@ -27,6 +30,7 @@ export const ThemeDetectionMixin = (superClass) =>
       }
     }
 
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
@@ -36,6 +40,7 @@ export const ThemeDetectionMixin = (superClass) =>
       }
     }
 
+    /** @private */
     __applyDetectedTheme() {
       if (!this.__themeDetector) {
         return;
