@@ -35,9 +35,7 @@ class PopoverOverlay extends PopoverOverlayMixin(
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

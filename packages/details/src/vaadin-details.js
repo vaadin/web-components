@@ -79,9 +79,7 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

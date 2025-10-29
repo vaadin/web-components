@@ -7,6 +7,10 @@ import { CSSPropertyObserver } from './css-property-observer.js';
 import { injectLumoStyleSheet, removeLumoStyleSheet } from './css-utils.js';
 import { parseStyleSheets } from './lumo-modules.js';
 
+export function getLumoInjectorPropName(lumoInjector) {
+  return `--_lumo-${lumoInjector.is}-inject`;
+}
+
 /**
  * Implements auto-injection of CSS styles from document style sheets
  * into the Shadow DOM of corresponding Vaadin components.
@@ -103,7 +107,8 @@ export class LumoInjector {
    * @param {HTMLElement} component
    */
   componentConnected(component) {
-    const { is: tagName, lumoInjectPropName } = component.constructor;
+    const { lumoInjector } = component.constructor;
+    const { is: tagName } = lumoInjector;
 
     this.#componentsByTag.set(tagName, this.#componentsByTag.get(tagName) ?? new Set());
     this.#componentsByTag.get(tagName).add(component);
@@ -117,7 +122,9 @@ export class LumoInjector {
     }
 
     this.#initStyleSheet(tagName);
-    this.#cssPropertyObserver.observe(lumoInjectPropName);
+
+    const propName = getLumoInjectorPropName(lumoInjector);
+    this.#cssPropertyObserver.observe(propName);
   }
 
   /**
@@ -127,7 +134,7 @@ export class LumoInjector {
    * @param {HTMLElement} component
    */
   componentDisconnected(component) {
-    const { is: tagName } = component.constructor;
+    const { is: tagName } = component.constructor.lumoInjector;
     this.#componentsByTag.get(tagName)?.delete(component);
 
     removeLumoStyleSheet(component);

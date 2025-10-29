@@ -89,9 +89,7 @@ class Icon extends IconMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

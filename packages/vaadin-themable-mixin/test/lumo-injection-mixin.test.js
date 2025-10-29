@@ -27,9 +27,7 @@ class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   render() {
@@ -70,6 +68,26 @@ class TestBaz extends TestFoo {
 }
 
 customElements.define(TestBaz.is, TestBaz);
+
+class TestCustomLumoInjectorTagName extends TestFoo {
+  static get is() {
+    return 'test-custom-lumo-injector-tag-name';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, is: 'test-foo' };
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  render() {
+    return html`<div part="content">Baz Content</div>`;
+  }
+}
+
+customElements.define(TestCustomLumoInjectorTagName.is, TestCustomLumoInjectorTagName);
 
 const TEST_FOO_STYLES = `
   html, :host {
@@ -478,6 +496,35 @@ describe('Lumo injection', () => {
     it('should inject matching styles for the extending component', async () => {
       const style = document.createElement('style');
       style.textContent = TEST_FOO_STYLES.replaceAll('foo', 'baz');
+      document.head.appendChild(style);
+
+      await contentTransition();
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
+    });
+  });
+
+  describe('custom tag name', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-custom-lumo-injector-tag-name></test-custom-lumo-injector-tag-name>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should inject matching styles for the extending component', async () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
       document.head.appendChild(style);
 
       await contentTransition();

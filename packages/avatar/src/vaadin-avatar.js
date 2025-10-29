@@ -58,9 +58,7 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

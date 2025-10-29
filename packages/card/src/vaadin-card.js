@@ -62,9 +62,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {

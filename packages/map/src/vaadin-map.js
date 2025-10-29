@@ -71,9 +71,7 @@ class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjection
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */
