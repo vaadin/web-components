@@ -157,9 +157,9 @@ snapshots["vaadin-password-field shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow default */
 
@@ -213,9 +213,9 @@ snapshots["vaadin-password-field shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow disabled */
 
@@ -269,9 +269,9 @@ snapshots["vaadin-password-field shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow readonly */
 
@@ -325,9 +325,9 @@ snapshots["vaadin-password-field shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow invalid */
 
@@ -381,9 +381,9 @@ snapshots["vaadin-password-field shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow theme */
 
