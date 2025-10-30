@@ -489,6 +489,8 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-multi-select-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -499,8 +501,6 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow default */
 
@@ -557,6 +557,8 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-multi-select-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -567,8 +569,6 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow disabled */
 
@@ -625,6 +625,8 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-multi-select-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -635,8 +637,6 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow readonly */
 
@@ -693,6 +693,8 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-multi-select-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -703,8 +705,6 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow invalid */
 

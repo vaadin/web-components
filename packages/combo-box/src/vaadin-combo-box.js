@@ -229,6 +229,8 @@ class ComboBox extends ComboBoxDataProviderMixin(
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-combo-box-overlay
@@ -244,8 +246,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
       >
         <slot name="overlay"></slot>
       </vaadin-combo-box-overlay>
-
-      <slot name="tooltip"></slot>
     `;
   }
 

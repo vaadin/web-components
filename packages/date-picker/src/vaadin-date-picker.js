@@ -216,6 +216,8 @@ class DatePicker extends DatePickerMixin(
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-date-picker-overlay
@@ -237,8 +239,6 @@ class DatePicker extends DatePickerMixin(
       >
         <slot name="overlay"></slot>
       </vaadin-date-picker-overlay>
-
-      <slot name="tooltip"></slot>
     `;
   }
 
