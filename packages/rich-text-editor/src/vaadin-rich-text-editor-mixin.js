@@ -1185,12 +1185,19 @@ export const RichTextEditorMixin = (superClass) => {
       }
 
       if (value == null || value === '[{"insert":"\\n"}]') {
+        this.__clearingValue = true;
         this.value = '';
         return;
       }
 
       if (value === '') {
         this._clear();
+        if (this.__clearingValue) {
+          if (this.invalid || this.__previousHasConstraints) {
+            this._requestValidation();
+          }
+          this.__clearingValue = false;
+        }
         return;
       }
 
@@ -1223,7 +1230,7 @@ export const RichTextEditorMixin = (superClass) => {
         this.__lastCommittedChange = this.value;
       }
 
-      if (this.invalid) {
+      if (this.invalid || this.__previousHasConstraints) {
         this._requestValidation();
       }
     }
