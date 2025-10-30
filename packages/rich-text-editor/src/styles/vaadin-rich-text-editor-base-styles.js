@@ -15,11 +15,8 @@ import { icons } from './vaadin-rich-text-editor-base-icons.js';
 const base = css`
   :host {
     box-sizing: border-box;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
-    outline: none;
-    cursor: default;
-    -webkit-tap-highlight-color: transparent;
   }
 
   :host([hidden]) {
