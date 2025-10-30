@@ -93,8 +93,9 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
         <span part="suffix" aria-hidden="true">
           <slot name="suffix"></slot>
         </span>
+
+        <slot name="tooltip"></slot>
       </div>
-      <slot name="tooltip"></slot>
     `;
   }
 
