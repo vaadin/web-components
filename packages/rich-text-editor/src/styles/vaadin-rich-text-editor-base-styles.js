@@ -15,11 +15,8 @@ import { icons } from './vaadin-rich-text-editor-base-icons.js';
 const base = css`
   :host {
     box-sizing: border-box;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
-    outline: none;
-    cursor: default;
-    -webkit-tap-highlight-color: transparent;
   }
 
   :host([hidden]) {
@@ -47,8 +44,8 @@ const base = css`
     display: flex;
     flex: auto;
     flex-direction: column;
-    min-height: var(--vaadin-rich-text-editor-min-height, 12em);
-    max-height: var(--vaadin-rich-text-editor-max-height);
+    max-height: inherit;
+    min-height: inherit;
     background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
     border: var(--vaadin-input-field-border-width, 1px) solid
       var(--vaadin-input-field-border-color, var(--vaadin-border-color));
