@@ -34,9 +34,7 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

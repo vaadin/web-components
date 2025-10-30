@@ -119,9 +119,7 @@ class RichTextEditor extends RichTextEditorMixin(
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

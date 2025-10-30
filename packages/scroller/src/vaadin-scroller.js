@@ -46,9 +46,7 @@ class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

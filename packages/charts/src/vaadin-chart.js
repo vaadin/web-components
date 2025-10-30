@@ -170,9 +170,7 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */
