@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icons",
-  "version": "25.0.0-beta2",
+  "version": "25.0.0-beta3",
   "publishConfig": {
     "access": "public"
   },
@@ -34,10 +34,10 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/icon": "25.0.0-beta2"
+    "@vaadin/icon": "25.0.0-beta3"
   },
   "devDependencies": {
-    "@vaadin/vaadin-lumo-styles": "25.0.0-beta2",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-beta3",
     "cheerio": "^1.0.0",
     "gulp": "^5.0.1",
     "gulp-cli": "^3.1.0",
