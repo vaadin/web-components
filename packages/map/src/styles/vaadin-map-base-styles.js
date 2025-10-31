@@ -151,9 +151,18 @@ export const mapStyles = css`
   }
 
   .ol-scale-bar-inner {
+    display: flex;
     border: 1px solid rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
     overflow: hidden;
+  }
+
+  .ol-scale-singlebar-even {
+    background: #000;
+  }
+
+  .ol-scale-singlebar-odd {
+    background: #fff;
   }
 
   .ol-scale-step-marker {
