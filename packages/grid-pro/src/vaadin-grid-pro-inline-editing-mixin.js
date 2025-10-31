@@ -549,7 +549,7 @@ export const InlineEditingMixin = (superClass) =>
     _updateItem(row, item) {
       if (this.__edited) {
         const { cell, model } = this.__edited;
-        if (cell.parentNode === row && model.item !== item) {
+        if (cell.parentNode === row && this.getItemId(model.item) !== this.getItemId(item)) {
           this._stopEdit();
         }
       }
