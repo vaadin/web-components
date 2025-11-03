@@ -119,8 +119,9 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polymer
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
-      <slot name="tooltip"></slot>
     `;
   }
 

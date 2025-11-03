@@ -171,8 +171,9 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolymerEleme
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
-      <slot name="tooltip"></slot>
     `;
   }
 }

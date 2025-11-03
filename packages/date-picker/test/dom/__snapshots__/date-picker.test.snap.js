@@ -830,14 +830,14 @@ snapshots["vaadin-date-picker shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-date-picker shadow default */
 
@@ -885,14 +885,14 @@ snapshots["vaadin-date-picker shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-date-picker shadow disabled */
 
@@ -940,14 +940,14 @@ snapshots["vaadin-date-picker shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-date-picker shadow readonly */
 
@@ -995,14 +995,14 @@ snapshots["vaadin-date-picker shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-date-picker shadow invalid */
 
@@ -1050,6 +1050,8 @@ snapshots["vaadin-date-picker shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
@@ -1057,8 +1059,6 @@ snapshots["vaadin-date-picker shadow theme"] =
   theme="align-right"
 >
 </vaadin-date-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-date-picker shadow theme */
 

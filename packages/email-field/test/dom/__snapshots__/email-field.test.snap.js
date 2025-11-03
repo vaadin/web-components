@@ -125,9 +125,9 @@ snapshots["vaadin-email-field shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-email-field shadow default */
 
@@ -174,9 +174,9 @@ snapshots["vaadin-email-field shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-email-field shadow disabled */
 
@@ -223,9 +223,9 @@ snapshots["vaadin-email-field shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-email-field shadow readonly */
 
@@ -272,9 +272,9 @@ snapshots["vaadin-email-field shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-email-field shadow invalid */
 
@@ -321,9 +321,9 @@ snapshots["vaadin-email-field shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-email-field shadow theme */
 

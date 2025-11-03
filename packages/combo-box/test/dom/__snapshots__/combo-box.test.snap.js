@@ -527,6 +527,8 @@ snapshots["vaadin-combo-box shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   id="overlay"
@@ -538,8 +540,6 @@ snapshots["vaadin-combo-box shadow default"] =
   >
   </vaadin-combo-box-scroller>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow default */
 
@@ -588,6 +588,8 @@ snapshots["vaadin-combo-box shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   id="overlay"
@@ -599,8 +601,6 @@ snapshots["vaadin-combo-box shadow disabled"] =
   >
   </vaadin-combo-box-scroller>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow disabled */
 
@@ -649,6 +649,8 @@ snapshots["vaadin-combo-box shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   id="overlay"
@@ -660,8 +662,6 @@ snapshots["vaadin-combo-box shadow readonly"] =
   >
   </vaadin-combo-box-scroller>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow readonly */
 
@@ -710,6 +710,8 @@ snapshots["vaadin-combo-box shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   id="overlay"
@@ -721,8 +723,6 @@ snapshots["vaadin-combo-box shadow invalid"] =
   >
   </vaadin-combo-box-scroller>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow invalid */
 
@@ -771,6 +771,8 @@ snapshots["vaadin-combo-box shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   id="overlay"
@@ -783,8 +785,6 @@ snapshots["vaadin-combo-box shadow theme"] =
   >
   </vaadin-combo-box-scroller>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow theme */
 

@@ -121,9 +121,9 @@ export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolymerEl
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
-      </div>
 
-      <slot name="tooltip"></slot>
+        <slot name="tooltip"></slot>
+      </div>
     `;
   }
 
