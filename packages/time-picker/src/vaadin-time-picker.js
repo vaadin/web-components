@@ -146,6 +146,8 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-time-picker-overlay
@@ -160,8 +162,6 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
       >
         <slot name="overlay"></slot>
       </vaadin-time-picker-overlay>
-
-      <slot name="tooltip"></slot>
     `;
   }
 }
