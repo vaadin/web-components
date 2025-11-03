@@ -25,7 +25,9 @@ describe('Dialog', () => {
     );
     expect(footer).to.have.text('Footer');
 
-    const body = childNodes.find((node) => node.nodeType === Node.TEXT_NODE);
+    const body = childNodes.find(
+      (node) => node.nodeType === Node.ELEMENT_NODE && !(node as Element).hasAttribute('slot'),
+    );
     expect(body).to.have.text('FooBar');
   }
 
