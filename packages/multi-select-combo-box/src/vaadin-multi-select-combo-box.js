@@ -175,9 +175,9 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(ThemableMixin(Element
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
-      </div>
 
-      <slot name="tooltip"></slot>
+        <slot name="tooltip"></slot>
+      </div>
     `;
   }
 }
