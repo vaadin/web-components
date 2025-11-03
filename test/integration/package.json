@@ -13,6 +13,7 @@
     "@vaadin/checkbox": "25.0.0-beta3",
     "@vaadin/checkbox-group": "25.0.0-beta3",
     "@vaadin/combo-box": "25.0.0-beta3",
+    "@vaadin/component-testing-api": "25.0.0-beta3",
     "@vaadin/confirm-dialog": "25.0.0-beta3",
     "@vaadin/context-menu": "25.0.0-beta3",
     "@vaadin/custom-field": "25.0.0-beta3",

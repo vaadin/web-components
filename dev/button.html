@@ -10,13 +10,29 @@
     <script type="module">
       import '@vaadin/button';
       import '@vaadin/tooltip';
+      // import '@vaadin/component-testing-api';
+
+      document.querySelectorAll('vaadin-button').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          // Alternative way of loading component testing API
+          // intended to be used e.g. in the browser console
+          await btn.constructor.loadTestingAPI();
+          document.querySelector('#output').textContent = btn.getTooltipText();
+        });
+      });
     </script>
   </head>
 
   <body>
     <vaadin-button>
-      Edit
-      <vaadin-tooltip slot="tooltip" text="Click to edit"></vaadin-tooltip>
+      Foo
+      <vaadin-tooltip slot="tooltip" text="Foo tooltip"></vaadin-tooltip>
     </vaadin-button>
+    <vaadin-button>
+      Bar
+      <vaadin-tooltip slot="tooltip" text="Bar tooltip"></vaadin-tooltip>
+    </vaadin-button>
+
+    <div id="output" style="margin: 1rem 0"></div>
   </body>
 </html>

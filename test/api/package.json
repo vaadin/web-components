@@ -1,0 +1,14 @@
+{
+  "name": "@vaadin/component-testing-api",
+  "version": "25.0.0-beta3",
+  "description": "Vaadin web components testing API",
+  "license": "Apache-2.0",
+  "author": "Vaadin Ltd",
+  "main": "index.js",
+  "module": "index.js",
+  "type": "module",
+  "files": [
+    "index.js",
+    "src"
+  ]
+}

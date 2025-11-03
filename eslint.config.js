@@ -107,7 +107,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
+    files: ['packages/**/*', 'test/integration/**', 'test/api/**', 'dev/**/*', 'api-docs/js/**'],
     languageOptions: {
       globals: {
         ...globals.browser,

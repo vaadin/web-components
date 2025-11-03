@@ -31,6 +31,8 @@ let statsJob;
 
 const registered = new Set();
 
+let testingAPILoaded = false;
+
 /**
  * @polymerMixin
  * @mixes DirMixin
@@ -55,6 +57,13 @@ export const ElementMixin = (superClass) =>
           });
           enqueueDebouncer(statsJob);
         }
+      }
+    }
+
+    static async loadTestingAPI() {
+      if (!testingAPILoaded) {
+        testingAPILoaded = true;
+        await import('@vaadin/component-testing-api');
       }
     }
 
