@@ -674,6 +674,8 @@ snapshots["vaadin-time-picker shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
@@ -685,8 +687,6 @@ snapshots["vaadin-time-picker shadow default"] =
   <slot name="overlay">
   </slot>
 </vaadin-time-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow default */
 
@@ -735,6 +735,8 @@ snapshots["vaadin-time-picker shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
@@ -746,8 +748,6 @@ snapshots["vaadin-time-picker shadow disabled"] =
   <slot name="overlay">
   </slot>
 </vaadin-time-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow disabled */
 
@@ -796,6 +796,8 @@ snapshots["vaadin-time-picker shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
@@ -807,8 +809,6 @@ snapshots["vaadin-time-picker shadow readonly"] =
   <slot name="overlay">
   </slot>
 </vaadin-time-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow readonly */
 
@@ -857,6 +857,8 @@ snapshots["vaadin-time-picker shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
@@ -868,8 +870,6 @@ snapshots["vaadin-time-picker shadow invalid"] =
   <slot name="overlay">
   </slot>
 </vaadin-time-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow invalid */
 
@@ -918,6 +918,8 @@ snapshots["vaadin-time-picker shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
@@ -930,8 +932,6 @@ snapshots["vaadin-time-picker shadow theme"] =
   <slot name="overlay">
   </slot>
 </vaadin-time-picker-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow theme */
 

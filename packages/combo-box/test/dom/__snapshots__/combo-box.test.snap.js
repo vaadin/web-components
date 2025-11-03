@@ -540,6 +540,8 @@ snapshots["vaadin-combo-box shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -550,8 +552,6 @@ snapshots["vaadin-combo-box shadow default"] =
   <slot name="overlay">
   </slot>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow default */
 
@@ -600,6 +600,8 @@ snapshots["vaadin-combo-box shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -610,8 +612,6 @@ snapshots["vaadin-combo-box shadow disabled"] =
   <slot name="overlay">
   </slot>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow disabled */
 
@@ -660,6 +660,8 @@ snapshots["vaadin-combo-box shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -670,8 +672,6 @@ snapshots["vaadin-combo-box shadow readonly"] =
   <slot name="overlay">
   </slot>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow readonly */
 
@@ -720,6 +720,8 @@ snapshots["vaadin-combo-box shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -730,8 +732,6 @@ snapshots["vaadin-combo-box shadow invalid"] =
   <slot name="overlay">
   </slot>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow invalid */
 
@@ -780,6 +780,8 @@ snapshots["vaadin-combo-box shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <vaadin-combo-box-overlay
   exportparts="overlay, content, loader"
@@ -791,8 +793,6 @@ snapshots["vaadin-combo-box shadow theme"] =
   <slot name="overlay">
   </slot>
 </vaadin-combo-box-overlay>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-combo-box shadow theme */
 

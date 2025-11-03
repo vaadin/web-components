@@ -146,6 +146,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-multi-select-combo-box-overlay
@@ -161,8 +163,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       >
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
-
-      <slot name="tooltip"></slot>
     `;
   }
 }
