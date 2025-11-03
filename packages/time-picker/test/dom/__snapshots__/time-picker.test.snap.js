@@ -962,9 +962,9 @@ snapshots["vaadin-time-picker shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow default */
 
@@ -1021,9 +1021,9 @@ snapshots["vaadin-time-picker shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow disabled */
 
@@ -1079,9 +1079,9 @@ snapshots["vaadin-time-picker shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow readonly */
 
@@ -1136,9 +1136,9 @@ snapshots["vaadin-time-picker shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow invalid */
 
@@ -1194,9 +1194,9 @@ snapshots["vaadin-time-picker shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-time-picker shadow theme */
 
