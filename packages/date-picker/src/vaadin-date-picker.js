@@ -183,6 +183,8 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-date-picker-overlay
@@ -196,8 +198,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
       ></vaadin-date-picker-overlay>
-
-      <slot name="tooltip"></slot>
     `;
   }
 

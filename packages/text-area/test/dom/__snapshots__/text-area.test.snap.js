@@ -126,9 +126,9 @@ snapshots["vaadin-text-area shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-text-area shadow default */
 
@@ -175,9 +175,9 @@ snapshots["vaadin-text-area shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-text-area shadow disabled */
 
@@ -224,9 +224,9 @@ snapshots["vaadin-text-area shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-text-area shadow readonly */
 
@@ -273,9 +273,9 @@ snapshots["vaadin-text-area shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-text-area shadow invalid */
 
@@ -322,9 +322,9 @@ snapshots["vaadin-text-area shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-text-area shadow theme */
 
