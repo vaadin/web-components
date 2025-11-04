@@ -33,7 +33,7 @@ export const A11yMixin = (superClass) =>
     }
 
     /** @private */
-    _a11yGetFooterRowCount(_columnTree) {
+    __a11yGetFooterRowCount(_columnTree) {
       return _columnTree.filter((level) => level.some((col) => col.footerRenderer)).length;
     }
 
