@@ -20,10 +20,11 @@ export const checkable = (part, propName = part) => css`
     */
     grid-template-rows: minmax(auto, max-content);
     -webkit-tap-highlight-color: transparent;
+    --_cursor: var(--vaadin-clickable-cursor);
   }
 
   :host([disabled]) {
-    cursor: var(--vaadin-disabled-cursor);
+    --_cursor: var(--vaadin-disabled-cursor);
   }
 
   :host(:not([has-label])) {
@@ -48,6 +49,8 @@ export const checkable = (part, propName = part) => css`
     font-weight: var(--vaadin-${unsafeCSS(propName)}-font-weight, var(--vaadin-input-field-label-font-weight, 500));
     color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     word-break: break-word;
+    cursor: var(--_cursor);
+    /* TODO clicking the label part doesn't toggle the checked state, even though it triggers the active state */
   }
 
   [part='${unsafeCSS(part)}'],
@@ -76,6 +79,7 @@ export const checkable = (part, propName = part) => css`
     appearance: none;
     width: 100%;
     height: 100%;
+    cursor: var(--_cursor);
   }
 
   /* Control container (checkbox, radio button) */
@@ -91,6 +95,7 @@ export const checkable = (part, propName = part) => css`
     height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
+    cursor: var(--_cursor);
   }
 
   :host(:is([checked], [indeterminate])) {
