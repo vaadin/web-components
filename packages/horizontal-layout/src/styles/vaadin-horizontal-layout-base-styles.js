@@ -22,7 +22,7 @@ export const baseStyles = css`
   }
 
   :host([theme~='padding']) {
-    padding: var(--vaadin-horizontal-layout-margin, var(--vaadin-padding-m));
+    padding: var(--vaadin-horizontal-layout-padding, var(--vaadin-padding-m));
   }
 
   :host([theme~='spacing']) {

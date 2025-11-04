@@ -24,7 +24,7 @@ export const baseStyles = css`
   }
 
   :host([theme~='padding']) {
-    padding: var(--vaadin-vertical-layout-margin, var(--vaadin-padding-m));
+    padding: var(--vaadin-vertical-layout-padding, var(--vaadin-padding-m));
   }
 
   :host([theme~='spacing']) {
