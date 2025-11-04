@@ -204,7 +204,7 @@ export const gridStyles = css`
     border-top: 0;
   }
 
-  table:has(#header > tr:not([hidden])) [part~='first-row-cell'] {
+  table[has-header] [part~='first-row-cell'] {
     border-top: var(--_row-border-width) solid var(--_border-color);
   }
 
@@ -257,7 +257,7 @@ export const gridStyles = css`
     --_top-opaque: 1;
   }
 
-  table:has(#footer > tr:not([hidden])) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
+  table[has-footer] [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
     border-bottom: var(--_row-border-width) solid var(--_border-color);
     --_bottom: 0;
   }
@@ -529,7 +529,7 @@ export const gridStyles = css`
     top: 0;
   }
 
-  table:has(#header > tr:not([hidden])) [part~='first-row-cell']::after {
+  table[has-header] [part~='first-row-cell']::after {
     top: calc(var(--_row-border-width) * -1);
   }
 
@@ -541,7 +541,7 @@ export const gridStyles = css`
   }
 
   #header [part~='row']:last-child::after,
-  table:has(#footer > tr:not([hidden])) [part*='last-row']::after {
+  table[has-footer] [part*='last-row']::after {
     bottom: calc(var(--_row-border-width) * -1);
   }
 
@@ -588,7 +588,7 @@ export const gridStyles = css`
   }
 
   [part~='row']:not([part*='first-row'])[dragover='above']::after,
-  table:has(#header > tr:not([hidden])) [part*='first-row'][dragover='above']::after {
+  table[has-header] [part*='first-row'][dragover='above']::after {
     top: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
@@ -598,7 +598,7 @@ export const gridStyles = css`
   }
 
   [part~='row']:not([part*='last-row'])[dragover='below']::after,
-  table:has(#footer > tr:not([hidden])) [part*='last-row'][dragover='below']::after {
+  table[has-footer] [part*='last-row'][dragover='below']::after {
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
