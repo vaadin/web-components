@@ -27,10 +27,9 @@ export const richTextEditorPopupOverlay = css`
       var(--vaadin-rich-text-editor-overlay-color-option-border-color, transparent);
     border-radius: var(--vaadin-rich-text-editor-overlay-color-option-border-radius, 9999px);
     cursor: var(--vaadin-clickable-cursor);
-    font-size: var(--vaadin-rich-text-editor-overlay-color-option-font-size, inherit);
+    font: inherit;
     height: var(--vaadin-rich-text-editor-overlay-color-option-height, 1lh);
-    line-height: var(--vaadin-rich-text-editor-overlay-color-option-line-height, inherit);
-    padding: var(--vaadin-rich-text-editor-overlay-color-option-padding, 0);
+    padding: 0;
     width: var(--vaadin-rich-text-editor-overlay-color-option-width, 1lh);
   }
 

@@ -411,11 +411,7 @@ const toolbar = css`
     color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
-    font-family: var(--vaadin-rich-text-editor-toolbar-button-font-family, inherit);
-    font-size: var(--vaadin-rich-text-editor-toolbar-button-font-size, inherit);
-    font-weight: var(--vaadin-rich-text-editor-toolbar-button-font-weight, 500);
-    height: var(--vaadin-rich-text-editor-toolbar-button-height, auto);
-    line-height: var(--vaadin-rich-text-editor-toolbar-button-line-height, inherit);
+    font: inherit;
     padding: var(--vaadin-rich-text-editor-toolbar-button-padding, var(--vaadin-padding-container));
     position: relative;
   }
