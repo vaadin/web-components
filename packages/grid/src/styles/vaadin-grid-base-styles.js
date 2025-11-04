@@ -94,13 +94,6 @@ export const gridStyles = css`
     position: sticky;
     left: 0;
     width: 100%;
-  }
-
-  :host([overflow~='top']) #header,
-  :host([overflow~='bottom']) #footer,
-  :host([navigating]) #header:has(tr:last-child:focus-within),
-  :host([navigating]) #footer:has(tr:first-child:focus-within),
-  [empty-state] #header {
     z-index: 2;
   }
 
@@ -156,29 +149,6 @@ export const gridStyles = css`
   [part~='cell'] {
     padding: 0;
     box-sizing: border-box;
-    background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
-    border-block: var(--_row-border-width) solid var(--_border-color);
-    margin-top: calc(var(--_row-border-width) * -1);
-
-    /*
-    Box-shadows are used to create a "fake" border at the end of the cell/row, which is visible when a row/cell ends
-    before the edge of the grid viewport, as well as frozen columns and rows (header and footer).
-    If there are frozen columns, we'll make the "fake box-shadow border" on the header and footer opaque by rendering
-    both the border color and cell background color, so that a semi-transparent border color doesn't "stack" when
-    scrolling horizontally.
-    */
-    --_fake-border:
-      0 calc(var(--_top, 0) * var(--_row-border-width) * -1) 0 0 var(--_border-color),
-      0 calc(var(--_top-opaque, 0) * var(--_row-border-width) * -1) 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
-      0 calc(var(--_bottom, 0) * var(--_row-border-width)) 0 0 var(--_border-color),
-      0 calc(var(--_bottom-opaque, 0) * var(--_row-border-width)) 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
-      calc(var(--_start, 0) * var(--_column-border-width) * -1) 0 0 0 var(--_border-color),
-      calc(var(--_end, 0) * var(--_column-border-width)) 0 0 0 var(--_border-color),
-      calc(var(--_end-opaque, 0) * var(--_column-border-width)) 0 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
-    box-shadow: var(--_fake-border);
   }
 
   [part~='cell']:where(:not([part~='details-cell'])) {
@@ -189,87 +159,124 @@ export const gridStyles = css`
     position: relative;
     align-items: center;
     white-space: nowrap;
-    border-inline-start: var(--_column-border-width) solid var(--_border-color);
   }
 
-  [part~='first-column-cell'] {
-    border-inline-start: 0;
+  /* Row and cell borders */
+
+  [part~='last-header-row']::before,
+  [part~='first-footer-row']::before {
+    position: absolute;
+    inset-inline: 0;
+    border-block: var(--_row-border-width) var(--_border-color);
+    transform: translateX(var(--_grid-horizontal-scroll-position));
   }
 
-  [part~='first-header-row-cell'],
-  [part~='first-footer-row-cell'],
-  [part~='first-row-cell'] {
-    margin-top: 0;
-    border-top: 0;
+  :host([overflow~='top']) [part~='last-header-row']::before {
+    content: '';
+    inset-block-end: calc(var(--_row-border-width) * -1);
+    border-block-end-style: solid;
   }
 
-  table[has-header] [part~='first-row-cell'] {
-    border-top: var(--_row-border-width) solid var(--_border-color);
+  :host([overflow~='bottom']) [part~='first-footer-row']::before,
+  :host(:not([overflow~='top'])) #scroller:not([empty-state]) [part~='first-footer-row']::before {
+    content: '';
+    inset-block-start: calc(var(--_row-border-width) * -1);
+    border-block-start-style: solid;
   }
 
-  [part~='last-column-cell'] {
-    --_end: 1;
+  [part~='body-row'] {
+    scroll-margin-block-end: var(--_row-border-width);
   }
 
-  [part~='last-column-cell']:is([part~='header-cell'], [part~='footer-cell']) {
-    --_end-opaque: 1;
+  /* stylelint-disable-next-line no-duplicate-selectors */
+  [part~='cell'] {
+    border-block: var(--_row-border-width) var(--_border-color);
+    border-inline: var(--_column-border-width) var(--_border-color);
   }
 
-  [part~='last-row-cell']:where(:not([part~='details-opened-row-cell'])),
-  [part~='last-footer-row-cell'] {
-    border-bottom: 0;
-    --_bottom: 1;
+  [part~='header-cell']:not([part~='first-header-row-cell']),
+  [part~='footer-cell']:not([part~='first-footer-row-cell']),
+  [part~='body-cell']:not([part~='first-row-cell']),
+  #table[has-header] [part~='first-row-cell'] {
+    border-block-start-style: solid;
   }
 
-  [part~='last-frozen-cell'] {
-    --_end: 1;
+  [part~='details-opened-row-cell'],
+  #table[has-footer] [part~='last-row-cell'],
+  #table[has-footer] [part~='last-row'] [part~='details-cell'],
+  :host(:not([overflow~='bottom']):not([overflow~='top'])) [part~='last-row-cell'],
+  :host(:not([overflow~='bottom']):not([overflow~='top'])) [part~='last-row'] [part~='details-cell'] {
+    border-block-end-style: solid;
   }
 
-  [part~='last-frozen-cell'] + [part~='cell'] {
-    border-inline-start-color: transparent;
+  [part~='header-cell']:not([part~='first-column-cell']),
+  [part~='footer-cell']:not([part~='first-column-cell']),
+  [part~='body-cell']:not([part~='first-column-cell']) {
+    border-inline-start-style: solid;
   }
 
-  [part~='first-frozen-to-end-cell'] {
-    border-inline-start: 0;
-    --_start: 1;
+  [part~='last-frozen-cell']:not([part~='last-column-cell']) {
+    border-inline-end-style: solid;
+
+    & + [part~='cell'] {
+      border-inline-start-style: none;
+    }
   }
 
-  [part~='last-header-row-cell'] {
-    border-bottom: 0;
+  /* Row and cell background */
+
+  /* stylelint-disable-next-line no-duplicate-selectors */
+  [part~='row'] {
+    background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
   }
 
-  :host([overflow~='top']) [part~='last-header-row-cell'],
-  [empty-state] [part~='last-header-row-cell'] {
-    --_bottom: 1;
-  }
-
-  #header:has(:is([frozen], [frozen-to-end])) [part~='last-header-row-cell'] {
-    --_bottom-opaque: 1;
-  }
-
-  :host([overflow~='bottom']) [part~='first-footer-row-cell'],
-  [empty-state] [part~='first-footer-row-cell'] {
-    --_top: 1;
-  }
-
-  #footer:has(:is([frozen], [frozen-to-end])) [part~='first-footer-row-cell'] {
-    --_top-opaque: 1;
-  }
-
-  table[has-footer] [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
-    border-bottom: var(--_row-border-width) solid var(--_border-color);
-    --_bottom: 0;
-  }
-
-  [part~='body-cell']:where(:not([part~='details-cell'])) {
-    --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
-    --_highlight-background-image: linear-gradient(
-      var(--_highlight-background-color),
-      var(--_highlight-background-color)
+  /* stylelint-disable-next-line no-duplicate-selectors */
+  [part~='cell'] {
+    background-color: inherit;
+    background-repeat: no-repeat;
+    background-origin: padding-box;
+    background-image: linear-gradient(
+      var(--vaadin-grid-cell-background-color, transparent),
+      var(--vaadin-grid-cell-background-color, transparent)
     );
-    background:
-      var(--_hover-background-image, none), var(--_selected-background-image, none), var(--_highlight-background-image),
-      var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+  }
+
+  [part~='body-cell'] {
+    background-image:
+      linear-gradient(var(--_row-hover-background-color, transparent), var(--_row-hover-background-color, transparent)),
+      linear-gradient(
+        var(--_row-selected-background-color, transparent),
+        var(--_row-selected-background-color, transparent)
+      ),
+      linear-gradient(
+        var(--vaadin-grid-row-highlight-background-color, transparent),
+        var(--vaadin-grid-row-highlight-background-color, transparent)
+      ),
+      linear-gradient(var(--_row-odd-background-color, transparent), var(--_row-odd-background-color, transparent)),
+      linear-gradient(
+        var(--vaadin-grid-cell-background-color, transparent),
+        var(--vaadin-grid-cell-background-color, transparent)
+      );
+  }
+
+  [part~='body-row'][selected] {
+    --_row-selected-background-color: var(
+      --vaadin-grid-row-selected-background-color,
+      color-mix(in srgb, currentColor 8%, transparent)
+    );
+  }
+
+  @media (any-hover: hover) {
+    [part~='body-row']:hover {
+      --_row-hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
+    }
+  }
+
+  :host([theme~='row-stripes']) [part~='odd-row'] {
+    --_row-odd-background-color: var(
+      --vaadin-grid-row-odd-background-color,
+      color-mix(in srgb, var(--vaadin-text-color) 4%, transparent)
+    );
   }
 
   /* Variant: wrap cell contents */
@@ -278,43 +285,13 @@ export const gridStyles = css`
     white-space: normal;
   }
 
-  /* Variant: row stripes */
-  [part~='odd-row'] {
-    --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--vaadin-background-color));
-  }
-
-  :host([theme~='row-stripes']) [part~='odd-row'] {
-    --vaadin-grid-cell-background-color: var(
-      --vaadin-grid-row-odd-background-color,
-      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--vaadin-background-color))
-    );
-  }
-
   /* Raise highlighted rows above others */
-
-  [part~='row']:focus,
-  [part~='row']:focus-within,
-  [part~='body-row']:where([selected]) {
-    z-index: 3;
-  }
-
-  @container style(--vaadin-grid-row-odd-background-color) {
-    [part~='odd-row'] {
-      z-index: 1;
-    }
-  }
-
-  /* Row hover */
-  @media (any-hover: hover) {
-    @container style(--vaadin-grid-row-hover-background-color) {
-      [part~='body-row']:hover {
-        z-index: 2;
-      }
-    }
-
-    [part~='body-row']:hover [part~='cell']:where(:not([part~='details-cell'])) {
-      --_hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
-      --_hover-background-image: linear-gradient(var(--_hover-background-color), var(--_hover-background-color));
+  [part~='row'],
+  [part~='frozen-cell'],
+  [part~='frozen-to-end-cell'] {
+    &:focus,
+    &:focus-within {
+      z-index: 3;
     }
   }
 
@@ -322,12 +299,6 @@ export const gridStyles = css`
     position: absolute;
     bottom: 0;
     width: 100%;
-    margin-top: 0;
-    border-top: 0;
-  }
-
-  [part~='last-row-cell'] + [part~='details-cell'] {
-    border-bottom: 0;
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -346,15 +317,6 @@ export const gridStyles = css`
     will-change: transform;
   }
 
-  /* Selected row */
-  [part~='body-row'][selected] {
-    --_selected-background-color: var(
-      --vaadin-grid-row-selected-background-color,
-      color-mix(in srgb, currentColor 8%, transparent)
-    );
-    --_selected-background-image: linear-gradient(var(--_selected-background-color), var(--_selected-background-color));
-  }
-
   /* Empty state */
   #scroller:not([empty-state]) #emptystatebody,
   #scroller[empty-state] #items {
@@ -367,7 +329,6 @@ export const gridStyles = css`
     inset: 0;
     flex: 1;
     overflow: hidden;
-    margin-top: calc(var(--_row-border-width) * -1);
   }
 
   #emptystaterow {
@@ -380,8 +341,16 @@ export const gridStyles = css`
     flex: 1;
     overflow: auto;
     padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
-    border-top: var(--_row-border-width) solid transparent;
     outline: none;
+    border-block: var(--_row-border-width) var(--_border-color);
+  }
+
+  #table[has-header] #emptystatecell {
+    border-block-start-style: solid;
+  }
+
+  #table[has-footer] #emptystatecell {
+    border-block-end-style: solid;
   }
 
   #emptystatecell:focus-visible {
@@ -507,11 +476,19 @@ export const gridStyles = css`
   /* Focus outline element, also used for d'n'd indication */
   :is([part~='row'], [part~='cell'])::after {
     position: absolute;
-    inset: calc(var(--_row-border-width) * -1) calc(var(--_column-border-width) * -1);
     z-index: 3;
+    inset: 0;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  [part~='cell']::after {
+    inset-block: calc(var(--_row-border-width) * -1);
+  }
+
+  [part~='cell']:where(:not([part~='details-cell']))::after {
+    inset-inline: calc(var(--_column-border-width) * -1);
   }
 
   [part~='first-column-cell']::after {
@@ -522,37 +499,36 @@ export const gridStyles = css`
     inset-inline-end: 0;
   }
 
-  #header [part~='row']:first-child::after,
+  [part~='row']::after {
+    inset: 0 0 calc(var(--_row-border-width) * -1);
+    transform: translateX(var(--_grid-horizontal-scroll-position));
+  }
+
   [part~='first-header-row-cell']::after,
-  [part*='first-row']::after {
-    top: 0;
+  #table:not([has-header]) [part~='first-row-cell']::after {
+    inset-block-start: 0;
   }
 
-  table[has-header] [part~='first-row-cell']::after {
-    top: calc(var(--_row-border-width) * -1);
+  [part~='first-footer-row']::after {
+    inset-block-start: calc(var(--_row-border-width) * -1);
   }
 
-  #footer [part~='row']:last-child::after,
-  [part~='last-footer-row-cell']::after,
   [part~='last-row']::after,
-  [part~='last-row-cell']::after {
-    bottom: 0;
+  [part~='last-footer-row']::after,
+  [part~='last-footer-row-cell']::after {
+    inset-block-end: 0;
   }
 
-  #header [part~='row']:last-child::after,
-  table[has-footer] [part*='last-row']::after {
-    bottom: calc(var(--_row-border-width) * -1);
+  [part~='last-row'] [part~='details-cell']::after,
+  [part~='last-row']:not([part~='details-opened-row']) [part~='last-row-cell']::after {
+    :host([overflow~='top']) #table:not([has-footer]) & {
+      inset-block-end: 0;
+    }
   }
 
   :host([navigating]) [part~='row']:focus,
   :host([navigating]) [part~='cell']:focus {
     outline: 0;
-  }
-
-  [part~='row']::after {
-    transform: translateX(var(--_grid-horizontal-scroll-position));
-    inset-inline: 0;
-    bottom: 0;
   }
 
   [part~='row']:focus-visible,
@@ -586,8 +562,7 @@ export const gridStyles = css`
     border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  [part~='row']:not([part*='first-row'])[dragover='above']::after,
-  table[has-header] [part*='first-row'][dragover='above']::after {
+  [part~='row']:not([part~='first-row'])[dragover='above']::after {
     top: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
@@ -596,14 +571,13 @@ export const gridStyles = css`
     border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  [part~='row']:not([part*='last-row'])[dragover='below']::after,
-  table[has-footer] [part*='last-row'][dragover='below']::after {
+  [part~='row']:not([part~='last-row'])[dragover='below']::after {
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
   [part~='row'][dragstart] [part~='cell'] {
-    border-block-color: transparent !important;
-    box-shadow: none;
+    border-block: none !important;
+    padding-block: var(--_row-border-width) !important;
   }
 
   [part~='row'][dragstart] [part~='cell'][last-column] {
@@ -658,17 +632,5 @@ export const gridStyles = css`
 
   #sizer [part~='cell']::before {
     content: '-';
-  }
-
-  @media (forced-colors: active) {
-    :host([overflow~='top']) [part~='last-header-row-cell'] {
-      border-bottom: var(--_row-border-width) solid;
-      margin-bottom: calc(var(--_row-border-width) * -1);
-    }
-
-    :host([overflow~='bottom']) [part~='first-footer-row-cell'] {
-      border-top: var(--_row-border-width) solid;
-      margin-top: calc(var(--_row-border-width) * -1);
-    }
   }
 `;

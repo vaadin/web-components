@@ -13,16 +13,6 @@ describe('a11y', () => {
     await setViewport({ width: 1024, height: 768 });
   });
 
-  beforeEach(() => {
-    fixtureSync(`
-      <style>
-        :root {
-          --vaadin-grid-row-border-width: 0px;
-        }
-      </style>
-    `);
-  });
-
   function focusRestorationTests(testId, createFixture) {
     describe(`focus restoration - ${testId}`, () => {
       let grid, form, dialog, newButton, saveButton, cancelButton, editButtons;

@@ -91,6 +91,7 @@ snapshots["vaadin-grid basic shadow default"] =
         aria-rowindex="1"
         part="row header-row first-header-row last-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -120,7 +121,7 @@ snapshots["vaadin-grid basic shadow default"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -222,6 +223,7 @@ snapshots["vaadin-grid basic shadow default"] =
         hidden=""
         part="row footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -316,6 +318,7 @@ snapshots["vaadin-grid basic shadow selected"] =
         aria-rowindex="1"
         part="row header-row first-header-row last-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -345,7 +348,7 @@ snapshots["vaadin-grid basic shadow selected"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -448,6 +451,7 @@ snapshots["vaadin-grid basic shadow selected"] =
         hidden=""
         part="row footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -542,6 +546,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
         aria-rowindex="1"
         part="row header-row first-header-row last-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -571,7 +576,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -673,6 +678,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
         hidden=""
         part="row footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -758,6 +764,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
         aria-rowindex="1"
         part="row header-row first-header-row last-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -777,7 +784,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -857,6 +864,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
         hidden=""
         part="row footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -932,6 +940,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
         aria-rowindex="1"
         part="row header-row first-header-row last-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -951,7 +960,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -1032,6 +1041,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
         hidden=""
         part="row footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -1118,6 +1128,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
         aria-rowindex="1"
         part="row header-row first-header-row last-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -1147,7 +1158,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -1248,6 +1259,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
         aria-rowindex="4"
         part="row footer-row first-footer-row last-footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -1365,6 +1377,7 @@ snapshots["vaadin-grid column groups default"] =
         aria-rowindex="2"
         part="row header-row last-header-row first-header-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
@@ -1394,7 +1407,7 @@ snapshots["vaadin-grid column groups default"] =
     <tbody
       id="items"
       role="rowgroup"
-      style="transform: translate(0px, 0px); height: 71px;"
+      style="transform: translate(0px, 0px); height: 72px;"
     >
       <tr
         aria-rowindex="2"
@@ -1495,6 +1508,7 @@ snapshots["vaadin-grid column groups default"] =
         aria-rowindex="4"
         part="row footer-row first-footer-row last-footer-row"
         role="row"
+        style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
@@ -1588,6 +1602,7 @@ snapshots["vaadin-grid column groups with header"] =
     aria-rowindex="2"
     part="row header-row last-header-row"
     role="row"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="-1"
   >
     <th
@@ -1627,6 +1642,7 @@ snapshots["vaadin-grid column groups with footer"] =
     aria-rowindex="4"
     part="row footer-row first-footer-row"
     role="row"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="-1"
   >
     <td
