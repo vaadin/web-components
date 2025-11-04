@@ -51,5 +51,13 @@ describe('vaadin-grid', () => {
       await nextFrame();
       await expect(grid).shadowDom.to.equalSnapshot();
     });
+
+    it('with footer', async () => {
+      grid.querySelector('vaadin-grid-column').footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
   });
 });
