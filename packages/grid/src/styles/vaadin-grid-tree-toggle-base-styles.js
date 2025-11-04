@@ -66,6 +66,7 @@ export const gridTreeToggleStyles = css`
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex: 1;
   }
 
   @media (forced-colors: active) {
