@@ -43,8 +43,8 @@ export const A11yMixin = (superClass) =>
         return;
       }
 
-      const headerRowsCount = this._a11yGetHeaderRowCount(_columnTree);
-      const footerRowsCount = this._a11yGetFooterRowCount(_columnTree);
+      const headerRowsCount = this.__a11yGetHeaderRowCount(_columnTree);
+      const footerRowsCount = this.__a11yGetFooterRowCount(_columnTree);
       const bodyRowsCount = emptyState ? 1 : size;
       const rowsCount = bodyRowsCount + headerRowsCount + footerRowsCount;
 
