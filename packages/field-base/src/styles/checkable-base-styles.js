@@ -20,6 +20,7 @@ export const checkable = (part, propName = part) => css`
     */
     grid-template-rows: minmax(auto, max-content);
     -webkit-tap-highlight-color: transparent;
+    cursor: var(--vaadin-clickable-cursor);
   }
 
   :host([disabled]) {
