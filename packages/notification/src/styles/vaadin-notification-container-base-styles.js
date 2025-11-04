@@ -13,7 +13,7 @@ export const notificationContainerStyles = css`
     /* Space between notifications and the viewport */
     --_padding: var(--vaadin-notification-viewport-inset, var(--vaadin-padding-s));
     /* Space between notifications */
-    --_gap: var(--vaadin-notification-gap, var(--vaadin-gap-s));
+    --_gap: var(--vaadin-notification-container-gap, var(--vaadin-gap-s));
     display: grid;
     /* top-stretch, top and bottom regions, bottom-stretch */
     grid-template-rows: auto 1fr auto;
