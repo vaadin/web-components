@@ -649,7 +649,7 @@ export const GridMixin = (superClass) =>
 
       // Make sure the section has a tabbable element
       this._resetKeyboardNavigation();
-      this._a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
+      this.__a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
     }
 
     /** @private */
