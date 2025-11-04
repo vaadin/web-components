@@ -60,9 +60,9 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
-      </div>
 
-      <slot name="tooltip"></slot>
+        <slot name="tooltip"></slot>
+      </div>
     `;
   }
 
