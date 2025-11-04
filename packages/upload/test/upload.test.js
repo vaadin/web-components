@@ -582,6 +582,17 @@ describe('upload', () => {
       upload._uploadFile(pdfFile);
     });
 
+    it('should set X-Filename header in raw format', (done) => {
+      const testFile = createFile(1000, 'application/pdf');
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const filename = e.detail.xhr.getRequestHeader('X-Filename');
+        expect(filename).to.equal(testFile.name);
+        done();
+      });
+      upload._uploadFile(testFile);
+    });
+
     it('should set Content-Type to application/octet-stream when file has no type in raw format', (done) => {
       const unknownFile = createFile(1000, '');
       upload.uploadFormat = 'raw';
@@ -599,6 +610,16 @@ describe('upload', () => {
       upload.addEventListener('upload-request', (e) => {
         const contentType = e.detail.xhr.getRequestHeader('Content-Type');
         expect(contentType).to.be.undefined;
+        done();
+      });
+      upload._uploadFile(file);
+    });
+
+    it('should not set X-Filename header in multipart format', (done) => {
+      upload.uploadFormat = 'multipart';
+      upload.addEventListener('upload-request', (e) => {
+        const filename = e.detail.xhr.getRequestHeader('X-Filename');
+        expect(filename).to.be.undefined;
         done();
       });
       upload._uploadFile(file);
