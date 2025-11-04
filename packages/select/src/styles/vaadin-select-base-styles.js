@@ -35,4 +35,8 @@ export const selectStyles = css`
   [part~='toggle-button']::before {
     mask-image: var(--_vaadin-icon-chevron-down);
   }
+
+  :host([readonly]) [part~='toggle-button'] {
+    display: none;
+  }
 `;

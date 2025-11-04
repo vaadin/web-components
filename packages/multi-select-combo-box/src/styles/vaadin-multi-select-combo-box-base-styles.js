@@ -43,6 +43,11 @@ export const multiSelectComboBoxStyles = [
       padding: 0;
     }
 
+    :host([readonly]:not([disabled])) [part~='toggle-button'] {
+      display: block;
+      color: var(--vaadin-input-field-button-text-color, var(--vaadin-text-color-secondary));
+    }
+
     :host([readonly]:not([disabled])) [part$='button'] {
       cursor: var(--vaadin-clickable-cursor);
     }
