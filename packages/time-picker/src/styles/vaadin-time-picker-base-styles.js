@@ -15,6 +15,10 @@ export const timePickerStyles = css`
     mask-image: var(--_vaadin-icon-clock);
   }
 
+  :host([readonly]) [part~='toggle-button'] {
+    display: none;
+  }
+
   /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
   :host([dir='rtl']) [part='input-field'] {
     direction: ltr;

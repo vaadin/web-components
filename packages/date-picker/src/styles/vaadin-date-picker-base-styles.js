@@ -27,4 +27,8 @@ export const datePickerStyles = css`
   [part~='toggle-button']::before {
     mask-image: var(--_vaadin-icon-calendar);
   }
+
+  :host([readonly]) [part~='toggle-button'] {
+    display: none;
+  }
 `;
