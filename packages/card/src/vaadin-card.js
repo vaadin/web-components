@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { cardStyles } from './styles/vaadin-card-core-styles.js';
+import { cardStyles } from './styles/vaadin-card-base-styles.js';
 
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.
@@ -52,7 +52,7 @@ import { cardStyles } from './styles/vaadin-card-core-styles.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Card extends ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-card';
   }
@@ -62,9 +62,7 @@ class Card extends ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(Li
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -124,6 +122,12 @@ class Card extends ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(Li
         <slot name="footer"></slot>
       </div>
     `;
+  }
+
+  /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+    this._onSlotChange();
   }
 
   /** @private */

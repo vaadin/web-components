@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { timePickerScrollerStyles } from './styles/vaadin-time-picker-scroller-core-styles.js';
+import { timePickerScrollerStyles } from './styles/vaadin-time-picker-scroller-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.

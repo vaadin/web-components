@@ -10,7 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-core-styles.js';
+import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
@@ -22,7 +22,7 @@ import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-core-st
  * @mixes ThemableMixin
  * @protected
  */
-class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group-menu';
   }

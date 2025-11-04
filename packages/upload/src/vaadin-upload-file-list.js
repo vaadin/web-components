@@ -7,9 +7,8 @@ import './vaadin-upload-file.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { uploadFileListStyles } from './styles/vaadin-upload-file-list-core-styles.js';
+import { uploadFileListStyles } from './styles/vaadin-upload-file-list-base-styles.js';
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 
 /**
@@ -21,7 +20,7 @@ import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
  * @mixes UploadFileListMixin
  * @private
  */
-class UploadFileList extends UploadFileListMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-upload-file-list';
   }

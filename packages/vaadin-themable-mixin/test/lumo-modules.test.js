@@ -55,12 +55,12 @@ describe('Lumo modules', () => {
     fixtureSync(`
       <style>
         html {
-          --vaadin-text-field-lumo-inject-modules: lumo_base-field, lumo_text-field;
+          --_lumo-vaadin-text-field-inject-modules: lumo_base-field, lumo_text-field;
         }
       </style>
       <style>
         html {
-          --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
+          --_lumo-vaadin-email-field-inject-modules: lumo_base-field, lumo_email-field;
         }
       </style>
     `);
@@ -103,8 +103,13 @@ describe('Lumo modules', () => {
   });
 
   describe('adoptedStyleSheets', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+    });
+
     afterEach(() => {
       document.adoptedStyleSheets = [];
+      console.warn.restore();
     });
 
     it('should extract modules from adoptedStyleSheets', () => {
@@ -143,13 +148,13 @@ describe('Lumo modules', () => {
       const style0 = new CSSStyleSheet();
       style0.replaceSync(`
         html {
-          --vaadin-text-field-lumo-inject-modules: lumo_base-field, lumo_text-field;
+          --_lumo-vaadin-text-field-inject-modules: lumo_base-field, lumo_text-field;
         }
       `);
       const style1 = new CSSStyleSheet();
       style1.replaceSync(`
         html {
-          --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
+          --_lumo-vaadin-email-field-inject-modules: lumo_base-field, lumo_email-field;
         }
       `);
       document.adoptedStyleSheets = [style0, style1];
@@ -170,6 +175,25 @@ describe('Lumo modules', () => {
       document.adoptedStyleSheets = [style];
 
       expect(() => parseStyleSheets([...document.adoptedStyleSheets])).to.not.throw();
+      expect(console.warn).to.be.calledWithMatch(
+        '[LumoInjector] Browser denied to access property "cssRules" for some CSS stylesheets, so they were skipped.',
+      );
+    });
+
+    it('should not throw when rule media text is not accessible', () => {
+      const style = new CSSStyleSheet();
+      style.replaceSync('@media lumo_text-field {}');
+
+      sinon.stub(style.cssRules[0].media, 'mediaText').get(() => {
+        throw new DOMException('Permission denied to access property "mediaText"');
+      });
+
+      document.adoptedStyleSheets = [style];
+
+      expect(() => parseStyleSheets([...document.adoptedStyleSheets])).to.not.throw();
+      expect(console.warn).to.be.calledWithMatch(
+        '[LumoInjector] Browser denied to access property "mediaText" for some CSS rules, so they were skipped.',
+      );
     });
   });
 
@@ -211,8 +235,8 @@ describe('Lumo modules', () => {
     it('should extract tag-to-modules mappings from shadowRoot', () => {
       const adoptedStyleSheet = new CSSStyleSheet();
       adoptedStyleSheet.replaceSync(`
-        :host  {
-          --vaadin-text-field-lumo-inject-modules: lumo_text-field;
+        :host {
+          --_lumo-vaadin-text-field-inject-modules: lumo_text-field;
         }
       `);
       root.shadowRoot.adoptedStyleSheets = [adoptedStyleSheet];
@@ -220,7 +244,7 @@ describe('Lumo modules', () => {
       root.shadowRoot.innerHTML = `
         <style>
           :host {
-            --vaadin-email-field-lumo-inject-modules: lumo_email-field;
+            --_lumo-vaadin-email-field-inject-modules: lumo_email-field;
           }
         </style>
       `;

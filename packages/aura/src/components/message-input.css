@@ -1,0 +1,30 @@
+vaadin-message-input vaadin-text-area::part(input-field) {
+  --vaadin-input-field-background: transparent;
+}
+
+vaadin-message-input[theme~='icon-button'] vaadin-message-input-button {
+  width: var(--vaadin-icon-size, 1lh);
+  height: var(--vaadin-icon-size, 1lh);
+  color: transparent;
+  position: relative;
+  contain: strict;
+}
+
+vaadin-message-input[theme~='icon-button'] vaadin-message-input-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  mask-image: var(--_vaadin-icon-paper-airplane);
+  background: var(--vaadin-button-text-color);
+}
+
+vaadin-message-input[theme~='icon-button'][dir='rtl'] vaadin-message-input-button::before {
+  scale: -1;
+}
+
+@media (forced-colors: active) {
+  vaadin-message-input[theme~='icon-button'] vaadin-message-input-button {
+    forced-color-adjust: none;
+    --vaadin-button-text-color: CanvasText;
+  }
+}

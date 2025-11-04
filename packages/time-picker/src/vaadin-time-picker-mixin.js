@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ComboBoxBaseMixin } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -24,11 +25,15 @@ const MAX_ALLOWED_TIME = '23:59:59.999';
  *
  * @polymerMixin
  * @mixes ComboBoxBaseMixin
+ * @mixes I18nMixin
  * @mixes InputControlMixin
  * @mixes PatternMixin
  */
 export const TimePickerMixin = (superClass) =>
-  class TimePickerMixinClass extends PatternMixin(ComboBoxBaseMixin(InputControlMixin(superClass))) {
+  class TimePickerMixinClass extends I18nMixin(
+    timePickerI18nDefaults,
+    PatternMixin(ComboBoxBaseMixin(InputControlMixin(superClass))),
+  ) {
     static get properties() {
       return {
         /**
@@ -98,43 +103,6 @@ export const TimePickerMixin = (superClass) =>
           sync: true,
         },
 
-        /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure:
-         *
-         * ```
-         * {
-         *   // A function to format given `Object` as
-         *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-         *   formatTime: (time) => {
-         *     // returns a string representation of the given
-         *     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
-         *   },
-         *
-         *   // A function to parse the given text to an `Object` in the format
-         *   // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
-         *   // Must properly parse (at least) text
-         *   // formatted by `formatTime`.
-         *   parseTime: text => {
-         *     // Parses a string in object/string that can be formatted by`formatTime`.
-         *   }
-         * }
-         * ```
-         *
-         * Both `formatTime` and `parseTime` need to be implemented
-         * to ensure the component works properly.
-         *
-         * @type {!TimePickerI18n}
-         */
-        i18n: {
-          type: Object,
-          sync: true,
-          value: () => ({ ...timePickerI18nDefaults }),
-        },
-
         /** @private */
         _comboBoxValue: {
           type: String,
@@ -154,7 +122,7 @@ export const TimePickerMixin = (superClass) =>
         '_openedOrItemsChanged(opened, _dropdownItems)',
         '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
-        '__updateDropdownItems(i18n, min, max, step)',
+        '__updateDropdownItems(__effectiveI18n, min, max, step)',
       ];
     }
 
@@ -181,13 +149,52 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides both the
+     * time parsing and formatting functions.
+     *
+     * The object has the following JSON structure:
+     *
+     * ```js
+     * {
+     *   // A function to format given `Object` as
+     *   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+     *   formatTime: (time) => {
+     *     // returns a string representation of the given
+     *     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
+     *   },
+     *
+     *   // A function to parse the given text to an `Object` in the format
+     *   // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+     *   // Must properly parse (at least) text
+     *   // formatted by `formatTime`.
+     *   parseTime: text => {
+     *     // Parses a string in object/string that can be formatted by`formatTime`.
+     *   }
+     * }
+     * ```
+     *
+     * NOTE: `formatTime` and `parseTime` must be implemented in a
+     * compatible manner to ensure the component works properly.
+     *
+     * @return {!TimePickerI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
+    }
+
+    /**
      * The input element's value when it cannot be parsed as a time, and an empty string otherwise.
      *
      * @private
      * @return {string}
      */
     get __unparsableValue() {
-      if (this._inputElementValue && !this.i18n.parseTime(this._inputElementValue)) {
+      if (this._inputElementValue && !this.__effectiveI18n.parseTime(this._inputElementValue)) {
         return this._inputElementValue;
       }
 
@@ -245,8 +252,8 @@ export const TimePickerMixin = (superClass) =>
     checkValidity() {
       return !!(
         this.inputElement.checkValidity() &&
-        (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
-        (!this._comboBoxValue || this.i18n.parseTime(this._comboBoxValue))
+        (!this.value || this._timeAllowed(this.__effectiveI18n.parseTime(this.value))) &&
+        (!this._comboBoxValue || this.__effectiveI18n.parseTime(this._comboBoxValue))
       );
     }
 
@@ -411,7 +418,7 @@ export const TimePickerMixin = (superClass) =>
       // observer where the value can be parsed again, so we set
       // this flag to ensure it does not alter the value.
       this.__useMemo = true;
-      this._comboBoxValue = this.i18n.formatTime(objWithStep);
+      this._comboBoxValue = this.__effectiveI18n.formatTime(objWithStep);
       this.__useMemo = false;
 
       this.__commitValueChange();
@@ -508,7 +515,7 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __updateDropdownItems(i18n, min, max, step) {
+    __updateDropdownItems(effectiveI18n, min, max, step) {
       const minTimeObj = validateTime(parseISOTime(min || MIN_ALLOWED_TIME), step);
       const minSec = this.__getSec(minTimeObj);
 
@@ -524,7 +531,7 @@ export const TimePickerMixin = (superClass) =>
       }
 
       if (this.value) {
-        this._comboBoxValue = i18n.formatTime(i18n.parseTime(this.value));
+        this._comboBoxValue = effectiveI18n.formatTime(effectiveI18n.parseTime(this.value));
       }
     }
 
@@ -560,7 +567,7 @@ export const TimePickerMixin = (superClass) =>
       while (time + step >= minSec && time + step <= maxSec) {
         const timeObj = validateTime(this.__addStep(time * 1000, step), step);
         time += step;
-        const formatted = this.i18n.formatTime(timeObj);
+        const formatted = this.__effectiveI18n.formatTime(timeObj);
         generatedList.push({ label: formatted, value: formatted });
       }
 
@@ -606,8 +613,8 @@ export const TimePickerMixin = (superClass) =>
         return;
       }
 
-      const parsedObj = this.__useMemo ? this.__memoValue : this.i18n.parseTime(value);
-      const newValue = this.i18n.formatTime(parsedObj) || '';
+      const parsedObj = this.__useMemo ? this.__memoValue : this.__effectiveI18n.parseTime(value);
+      const newValue = this.__effectiveI18n.formatTime(parsedObj) || '';
 
       if (parsedObj) {
         if (value !== newValue) {
@@ -644,7 +651,7 @@ export const TimePickerMixin = (superClass) =>
 
     /** @private */
     __updateInputValue(obj) {
-      const timeString = this.i18n.formatTime(validateTime(obj, this.step)) || '';
+      const timeString = this.__effectiveI18n.formatTime(validateTime(obj, this.step)) || '';
       this._inputElementValue = timeString;
       this._comboBoxValue = timeString;
     }
@@ -657,8 +664,8 @@ export const TimePickerMixin = (superClass) =>
      * @protected
      */
     _timeAllowed(time) {
-      const parsedMin = this.i18n.parseTime(this.min || MIN_ALLOWED_TIME);
-      const parsedMax = this.i18n.parseTime(this.max || MAX_ALLOWED_TIME);
+      const parsedMin = this.__effectiveI18n.parseTime(this.min || MIN_ALLOWED_TIME);
+      const parsedMax = this.__effectiveI18n.parseTime(this.max || MAX_ALLOWED_TIME);
 
       return (
         (!this.__getMsec(parsedMin) || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&

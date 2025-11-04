@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaadin charts | bullet</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import './theme-switcher.js';
+    </script>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
+
+    <vaadin-chart
+      type="bullet"
+      theme="steps"
+      title="2017 YTD"
+      style="height: 115px"
+      categories='["<span class=\"hc-cat-title\">Revenue</span><br/>U.S. $ (1,000s)"]'
+      additional-options='{
+        "chart": {
+          "inverted": true,
+          "marginLeft": 135,
+          "marginTop": 40
+        },
+        "yAxis": {
+          "title": {
+            "text": ""
+          },
+          "plotBands": [
+            {
+              "from": 0,
+              "to": 150,
+              "className": "band-0"
+            },
+            {
+              "from": 150,
+              "to": 225,
+              "className": "band-1"
+            },
+            {
+              "from": 225,
+              "to": 9000000000,
+              "className": "band-2"
+            }
+          ]
+        },
+        "tooltip": {
+          "pointFormat": "<b>{point.y}</b> (with target at {point.target})"
+        }
+      }'
+      no-legend
+    >
+      <vaadin-chart-series
+        values='[{ "y": 275, "target": 250 }]'
+        additional-options='{
+          "pointPadding": 0.25,
+          "targetOptions": {
+            "width": "200%"
+          }
+        }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+
+    <vaadin-chart
+      type="bullet"
+      theme="steps"
+      style="height: 85px"
+      categories='["<span class=\"hc-cat-title\">Profit</span><br/>%"]'
+      additional-options='{
+        "chart": {
+          "inverted": true,
+          "marginLeft": 135
+        },
+        "yAxis": {
+          "title": {
+            "text": ""
+          },
+          "plotBands": [
+            {
+              "from": 0,
+              "to": 20,
+              "className": "band-0"
+            },
+            {
+              "from": 20,
+              "to": 25,
+              "className": "band-1"
+            },
+            {
+              "from": 25,
+              "to": 100,
+              "className": "band-2"
+            }
+          ],
+          "labels": {
+            "format": "{value}%"
+          }
+        },
+        "tooltip": {
+          "pointFormat": "<b>{point.y}</b> (with target at {point.target})"
+        }
+      }'
+      no-legend
+    >
+      <vaadin-chart-series
+        values='[{ "y": 22, "target": 27 }]'
+        additional-options='{
+          "pointPadding": 0.25,
+          "targetOptions": {
+            "width": "200%"
+          }
+        }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+
+    <vaadin-chart
+      type="bullet"
+      theme="steps"
+      style="height: 85px"
+      categories='["<span class=\"hc-cat-title\">New Customers</span><br/>Count"]'
+      additional-options='{
+        "chart": {
+          "inverted": true,
+          "marginLeft": 135
+        },
+        "yAxis": {
+          "title": {
+            "text": ""
+          },
+          "plotBands": [
+            {
+              "from": 0,
+              "to": 1400,
+              "className": "band-0"
+            },
+            {
+              "from": 1400,
+              "to": 2000,
+              "className": "band-1"
+            },
+            {
+              "from": 2000,
+              "to": 9e9,
+              "className": "band-2"
+            }
+          ]
+        },
+        "tooltip": {
+          "pointFormat": "<b>{point.y}</b> (with target at {point.target})"
+        }
+      }'
+      no-legend
+    >
+      <vaadin-chart-series
+        values='[{ "y": 1650, "target": 2100 }]'
+        additional-options='{
+          "pointPadding": 0.25,
+          "targetOptions": {
+            "width": "200%"
+          }
+        }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  </body>
+</html>

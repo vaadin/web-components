@@ -2,7 +2,7 @@ import { nextFrame } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/text-field';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/form-layout.css';
 import '@vaadin/vaadin-lumo-styles/components/form-item.css';
 import '@vaadin/vaadin-lumo-styles/components/text-field.css';
@@ -141,12 +141,9 @@ describe('form-layout', () => {
           <style>
             vaadin-form-layout {
               --vaadin-form-layout-column-spacing: 4em;
-            }
-
-            vaadin-form-item {
-              --vaadin-form-item-label-width: 6em;
-              --vaadin-form-item-label-spacing: 1em;
-              --vaadin-form-item-row-spacing: 1.25em;
+              --vaadin-form-layout-label-width: 6em;
+              --vaadin-form-layout-label-spacing: 1em;
+              --vaadin-form-layout-row-spacing: 1.25em;
             }
           </style>
           <vaadin-form-layout id="tests">

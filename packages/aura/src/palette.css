@@ -1,0 +1,36 @@
+:where(:root),
+:where(:host) {
+  --aura-red: oklch(0.6 0.22 25);
+  --aura-orange: oklch(0.61 0.4 93);
+  --aura-yellow: oklch(0.9 0.36 105);
+  --aura-green: oklch(0.6 0.28 160);
+  --aura-blue: oklch(0.6 0.3 240);
+  --aura-purple: oklch(0.6 0.3 280);
+
+  --aura-red-text: color-mix(in srgb, var(--aura-red) calc(70% - 15% * var(--aura-contrast)), var(--vaadin-text-color));
+  --aura-orange-text: color-mix(
+    in srgb,
+    var(--aura-orange) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
+  --aura-yellow-text: color-mix(
+    in srgb,
+    var(--aura-yellow) calc(65% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
+  --aura-green-text: color-mix(
+    in srgb,
+    var(--aura-green) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
+  --aura-blue-text: color-mix(
+    in srgb,
+    var(--aura-blue) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
+  --aura-purple-text: color-mix(
+    in srgb,
+    var(--aura-purple) calc(70% - 15% * var(--aura-contrast)),
+    var(--vaadin-text-color)
+  );
+}

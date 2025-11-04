@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const itemStyles = css`
@@ -13,7 +13,7 @@ export const itemStyles = css`
     box-sizing: border-box;
     cursor: var(--vaadin-clickable-cursor);
     display: flex;
-    gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-s));
     height: var(--vaadin-item-height, auto);
     padding: var(--vaadin-item-padding, var(--vaadin-padding-container));
   }
@@ -26,6 +26,7 @@ export const itemStyles = css`
   :host([disabled]) {
     cursor: var(--vaadin-disabled-cursor);
     opacity: 0.5;
+    pointer-events: none;
   }
 
   :host([hidden]) {
@@ -43,7 +44,7 @@ export const itemStyles = css`
     display: block;
     background: currentColor;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-checkmark);
+    mask: var(--_vaadin-icon-checkmark) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 
@@ -53,5 +54,11 @@ export const itemStyles = css`
 
   [part='content'] {
     flex: 1;
+  }
+
+  @media (forced-colors: active) {
+    [part='checkmark']::before {
+      background: CanvasText;
+    }
   }
 `;

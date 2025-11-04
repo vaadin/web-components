@@ -69,19 +69,6 @@
     height: auto;
   }
 
-  @media (min-height: 320px) {
-    :host(:is([has-title], [has-header], [has-footer])) .resizer-container {
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
-      flex: 1;
-      overflow: auto;
-    }
-  }
-
   /*
   NOTE(platosha): Make some min-width to prevent collapsing of the content
   taking the parent width, e. g., <vaadin-grid> and such.
@@ -89,6 +76,16 @@
   [part='content'] {
     min-width: 12em; /* matches the default <vaadin-text-field> width */
     padding: var(--lumo-space-l);
+    flex: 1;
+    min-height: 0;
+  }
+
+  :host([overflow]) [part='content'] {
+    overflow: auto;
+  }
+
+  :host([overflow~='top']) [part='header'] {
+    box-shadow: 0 1px 0 0 var(--lumo-contrast-10pct);
   }
 
   :host([has-bounds-set]) [part='overlay'] {
@@ -124,12 +121,6 @@
   /* No padding */
   :host([theme~='no-padding']) [part='content'] {
     padding: 0 !important;
-  }
-
-  @media (min-height: 320px) {
-    :host([overflow~='top']) [part='header'] {
-      box-shadow: 0 1px 0 0 var(--lumo-contrast-10pct);
-    }
   }
 
   /* Animations */

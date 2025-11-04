@@ -244,21 +244,6 @@ function getTimePicker(dateTimePicker) {
       expect(datePicker.autoOpenDisabled).to.be.true;
       expect(timePicker.autoOpenDisabled).to.be.true;
     });
-
-    it('should have default i18n properties coming from date and time pickers', () => {
-      // From date picker
-      expect(dateTimePicker.i18n).to.have.property('formatDate').that.is.a('function');
-      expect(dateTimePicker.i18n).to.have.property('parseDate').that.is.a('function');
-      expect(dateTimePicker.i18n).to.have.property('cancel').that.is.a('string');
-      // From time picker
-      expect(dateTimePicker.i18n).to.have.property('formatTime').that.is.a('function');
-      expect(dateTimePicker.i18n).to.have.property('parseTime').that.is.a('function');
-    });
-
-    it('should propagate i18n properties to the date picker', () => {
-      dateTimePicker.i18n = { ...dateTimePicker.i18n, cancel: 'Peruuta' };
-      expect(datePicker.i18n.cancel).to.equal('Peruuta');
-    });
   });
 
   describe(`Initial property values (${set})`, () => {

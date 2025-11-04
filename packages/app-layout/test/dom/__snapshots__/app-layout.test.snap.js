@@ -1,10 +1,49 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-app-layout desktop layout shadow default"] = 
+snapshots["vaadin-app-layout host default"] = 
+`<vaadin-app-layout
+  no-anim=""
+  overlay=""
+  primary-section="navbar"
+  style="--_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-drawer-width: 0;"
+>
+</vaadin-app-layout>
+`;
+/* end snapshot vaadin-app-layout host default */
+
+snapshots["vaadin-app-layout host with drawer"] = 
+`<vaadin-app-layout
+  has-drawer=""
+  overlay=""
+  primary-section="navbar"
+  style="--_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px; --_vaadin-app-layout-drawer-offset-size: 320px;"
+>
+  <div slot="drawer">
+    Drawer Content
+  </div>
+</vaadin-app-layout>
+`;
+/* end snapshot vaadin-app-layout host with drawer */
+
+snapshots["vaadin-app-layout host with navbar"] = 
+`<vaadin-app-layout
+  has-navbar=""
+  overlay=""
+  primary-section="navbar"
+  style="--_vaadin-app-layout-navbar-offset-size: 34px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-drawer-width: 0;"
+>
+  <div slot="navbar">
+    Navbar Content
+  </div>
+</vaadin-app-layout>
+`;
+/* end snapshot vaadin-app-layout host with navbar */
+
+snapshots["vaadin-app-layout shadow desktop layout default"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -26,10 +65,9 @@ snapshots["vaadin-app-layout desktop layout shadow default"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -42,12 +80,12 @@ snapshots["vaadin-app-layout desktop layout shadow default"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout desktop layout shadow default */
+/* end snapshot vaadin-app-layout shadow desktop layout default */
 
-snapshots["vaadin-app-layout desktop layout shadow drawer closed"] = 
+snapshots["vaadin-app-layout shadow desktop layout drawer closed"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -69,10 +107,9 @@ snapshots["vaadin-app-layout desktop layout shadow drawer closed"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -85,12 +122,12 @@ snapshots["vaadin-app-layout desktop layout shadow drawer closed"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout desktop layout shadow drawer closed */
+/* end snapshot vaadin-app-layout shadow desktop layout drawer closed */
 
-snapshots["vaadin-app-layout mobile layout shadow default"] = 
+snapshots["vaadin-app-layout shadow mobile layout default"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -115,10 +152,9 @@ snapshots["vaadin-app-layout mobile layout shadow default"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -131,12 +167,12 @@ snapshots["vaadin-app-layout mobile layout shadow default"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout mobile layout shadow default */
+/* end snapshot vaadin-app-layout shadow mobile layout default */
 
-snapshots["vaadin-app-layout mobile layout shadow drawer opened"] = 
+snapshots["vaadin-app-layout shadow mobile layout drawer opened"] = 
 `<div
   id="navbarTop"
-  part="navbar"
+  part="navbar navbar-top"
 >
   <slot name="navbar">
   </slot>
@@ -161,10 +197,9 @@ snapshots["vaadin-app-layout mobile layout shadow drawer opened"] =
   </slot>
 </div>
 <div
-  bottom=""
   hidden=""
   id="navbarBottom"
-  part="navbar"
+  part="navbar navbar-bottom"
 >
   <slot name="navbar-bottom">
   </slot>
@@ -177,5 +212,5 @@ snapshots["vaadin-app-layout mobile layout shadow drawer opened"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout mobile layout shadow drawer opened */
+/* end snapshot vaadin-app-layout shadow mobile layout drawer opened */
 

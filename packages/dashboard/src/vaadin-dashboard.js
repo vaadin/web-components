@@ -17,7 +17,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dashboardStyles } from './styles/vaadin-dashboard-core-styles.js';
+import { dashboardStyles } from './styles/vaadin-dashboard-base-styles.js';
 import {
   getElementItem,
   getItemsArrayOfItem,
@@ -106,7 +106,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
-  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-dashboard';
@@ -118,6 +118,10 @@ class Dashboard extends DashboardLayoutMixin(
 
   static get styles() {
     return dashboardStyles;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -186,7 +190,7 @@ class Dashboard extends DashboardLayoutMixin(
    * just the individual properties you want to change.
    *
    * The object has the following structure and default values:
-   * ```
+   * ```js
    * {
    *   selectSection: 'Select section for editing',
    *   selectWidget: 'Select widget for editing',

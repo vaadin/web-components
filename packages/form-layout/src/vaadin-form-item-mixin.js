@@ -5,10 +5,7 @@
  */
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-
-let spacingDeprecationNotified = false;
-let labelWidthDeprecationNotified = false;
-let labelSpacingDeprecationNotified = false;
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
 /**
  * @polymerMixin
@@ -52,32 +49,6 @@ export const FormItemMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-
-      const computedStyle = getComputedStyle(this);
-      const spacing = computedStyle.getPropertyValue('--vaadin-form-item-row-spacing');
-      const labelWidth = computedStyle.getPropertyValue('--vaadin-form-item-label-width');
-      const labelSpacing = computedStyle.getPropertyValue('--vaadin-form-item-label-spacing');
-
-      if (!spacingDeprecationNotified && spacing !== '' && parseInt(spacing) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` on <vaadin-form-layout> instead.',
-        );
-        spacingDeprecationNotified = true;
-      }
-
-      if (!labelWidthDeprecationNotified && labelWidth !== '' && parseInt(labelWidth) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-label-width` is deprecated since 24.7. Use `--vaadin-form-layout-label-width` on <vaadin-form-layout> instead.',
-        );
-        labelWidthDeprecationNotified = true;
-      }
-
-      if (!labelSpacingDeprecationNotified && labelSpacing !== '' && parseInt(labelSpacing) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-label-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-label-spacing` on <vaadin-form-layout> instead.',
-        );
-        labelSpacingDeprecationNotified = true;
-      }
     }
 
     /**
@@ -120,7 +91,7 @@ export const FormItemMixin = (superClass) =>
     __onLabelClick() {
       const fieldNode = this.__fieldNode;
       if (fieldNode) {
-        fieldNode.focus();
+        fieldNode.focus({ focusVisible: false });
         fieldNode.click();
       }
     }
@@ -185,7 +156,7 @@ export const FormItemMixin = (superClass) =>
 
       const fieldNodes = this.$.contentSlot.assignedElements();
       if (fieldNodes.length > 1) {
-        console.warn(
+        issueWarning(
           `WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.
 Please wrap fields with a <vaadin-custom-field> instead.`,
         );

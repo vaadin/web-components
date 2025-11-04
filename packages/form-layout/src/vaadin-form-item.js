@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { formItemStyles } from './styles/vaadin-form-item-core-styles.js';
+import { formItemStyles } from './styles/vaadin-form-item-base-styles.js';
 import { FormItemMixin } from './vaadin-form-item-mixin.js';
 
 /**
@@ -69,7 +69,7 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *
  * The `label-position` host attribute can be used to target the label on top state:
  *
- * ```
+ * ```css
  * :host([label-position="top"]) {
  *   padding-top: 0.5rem;
  * }
@@ -85,17 +85,6 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * ---|---
  * label | The label slot container
  *
- * ### Custom CSS Properties Reference
- *
- * The following custom CSS properties are available on the `<vaadin-form-item>`
- * element:
- *
- * Custom CSS property | Description | Default
- * ---|---|---
- * `--vaadin-form-item-label-width` | (DEPRECATED: Use `--vaadin-form-layout-label-width` on `<vaadin-form-layout>` instead) Width of the label column when the labels are aside | `8em`
- * `--vaadin-form-item-label-spacing` | (DEPRECATED: Use `--vaadin-form-layout-label-spacing` on `<vaadin-form-layout>` instead) Spacing between the label column and the input column when the labels are aside | `1em`
- * `--vaadin-form-item-row-spacing` | (DEPRECATED: Use `--vaadin-form-layout-row-spacing` on `<vaadin-form-layout>` instead) Height of the spacing between the form item elements | `1em`
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
@@ -103,7 +92,7 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * @mixes FormItemMixin
  * @mixes ThemableMixin
  */
-class FormItem extends FormItemMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class FormItem extends FormItemMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-form-item';
   }
@@ -113,9 +102,7 @@ class FormItem extends FormItemMixin(ThemableMixin(LumoInjectionMixin(PolylitMix
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

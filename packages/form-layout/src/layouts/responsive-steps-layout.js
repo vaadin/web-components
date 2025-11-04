@@ -125,7 +125,7 @@ export class ResponsiveStepsLayout extends AbstractLayout {
     */
 
     const style = getComputedStyle(host);
-    const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
+    const columnSpacing = style.getPropertyValue('--_column-spacing');
 
     const direction = style.direction;
     const marginStartProp = `margin-${direction === 'ltr' ? 'left' : 'right'}`;

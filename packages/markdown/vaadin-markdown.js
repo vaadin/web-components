@@ -1,3 +1,3 @@
-import './theme/lumo/vaadin-markdown.js';
+import './src/vaadin-markdown.js';
 
 export * from './src/vaadin-markdown.js';

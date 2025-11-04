@@ -6,9 +6,10 @@
 @import '../src/mixins/overlay.css';
 @import '../src/components/tooltip-overlay.css';
 
-:is(:root, :host)::before {
-  --vaadin-tooltip-overlay-lumo-inject: 1;
-  --vaadin-tooltip-overlay-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-tooltip-overlay-inject: 1;
+  --_lumo-vaadin-tooltip-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_components_tooltip-overlay;
 }

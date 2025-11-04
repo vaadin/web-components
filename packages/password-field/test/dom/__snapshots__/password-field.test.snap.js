@@ -137,12 +137,12 @@ snapshots["vaadin-password-field shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
-      part="reveal-button"
+      part="field-button reveal-button"
       slot="suffix"
     >
       <slot name="reveal">
@@ -157,9 +157,9 @@ snapshots["vaadin-password-field shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow default */
 
@@ -193,12 +193,12 @@ snapshots["vaadin-password-field shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
-      part="reveal-button"
+      part="field-button reveal-button"
       slot="suffix"
     >
       <slot name="reveal">
@@ -213,9 +213,9 @@ snapshots["vaadin-password-field shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow disabled */
 
@@ -249,12 +249,12 @@ snapshots["vaadin-password-field shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
-      part="reveal-button"
+      part="field-button reveal-button"
       slot="suffix"
     >
       <slot name="reveal">
@@ -269,9 +269,9 @@ snapshots["vaadin-password-field shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow readonly */
 
@@ -305,12 +305,12 @@ snapshots["vaadin-password-field shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
-      part="reveal-button"
+      part="field-button reveal-button"
       slot="suffix"
     >
       <slot name="reveal">
@@ -325,9 +325,9 @@ snapshots["vaadin-password-field shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow invalid */
 
@@ -361,12 +361,12 @@ snapshots["vaadin-password-field shadow theme"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
-      part="reveal-button"
+      part="field-button reveal-button"
       slot="suffix"
     >
       <slot name="reveal">
@@ -381,9 +381,9 @@ snapshots["vaadin-password-field shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-password-field shadow theme */
 

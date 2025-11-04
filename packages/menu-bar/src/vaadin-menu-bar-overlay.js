@@ -11,7 +11,7 @@ import { MenuOverlayMixin } from '@vaadin/context-menu/src/vaadin-menu-overlay-m
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-core-styles.js';
+import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
@@ -25,7 +25,7 @@ import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-core-styl
  * @protected
  */
 export class MenuBarOverlay extends MenuOverlayMixin(
-  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-menu-bar-overlay';
@@ -42,6 +42,7 @@ export class MenuBarOverlay extends MenuOverlayMixin(
       <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content">
           <slot></slot>
+          <slot name="submenu"></slot>
         </div>
       </div>
     `;

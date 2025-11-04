@@ -18,6 +18,7 @@
  *
  * @param {Cache} cache
  * @param {number} flatIndex
+ * @param {number} level
  */
 export function getFlatIndexContext(cache, flatIndex, level = 0) {
   let levelIndex = flatIndex;
@@ -53,7 +54,6 @@ export function getFlatIndexContext(cache, flatIndex, level = 0) {
  *
  * If the item isn't found, the method returns undefined.
  *
- * @param {Cache} cache
  * @param {{ getItemId: (item: unknown) => unknown}} context
  * @param {Cache} cache
  * @param {unknown} targetItem

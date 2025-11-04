@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { menuBarStyles } from './styles/vaadin-menu-bar-core-styles.js';
+import { menuBarStyles } from './styles/vaadin-menu-bar-base-styles.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 /**
@@ -57,7 +57,7 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
  * - `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
- * - `<vaadin-menu-bar-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-menu-bar-submenu>` - has the same API as [`<vaadin-context-menu>`](#/elements/vaadin-context-menu).
  *
  * The `<vaadin-menu-bar-item>` sub-menu elements have the following additional state attributes
  * on top of the built-in `<vaadin-item>` state attributes:
@@ -65,9 +65,6 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * Attribute  | Description
  * ---------- |-------------
  * `expanded` | Expanded parent item.
- *
- * Note: the `theme` attribute value set on `<vaadin-menu-bar>` is
- * propagated to the internal components listed above.
  *
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
@@ -77,7 +74,7 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * @mixes MenuBarMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-menu-bar';
   }
@@ -93,7 +90,8 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
-      <vaadin-menu-bar-submenu is-root .overlayClass="${this.overlayClass}"></vaadin-menu-bar-submenu>
+
+      <slot name="submenu"></slot>
 
       <slot name="tooltip"></slot>
     `;

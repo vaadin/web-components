@@ -1,7 +1,7 @@
 import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/field-highlighter.css';
 import '@vaadin/vaadin-lumo-styles/components/checkbox.css';
 import '@vaadin/vaadin-lumo-styles/components/checkbox-group.css';
@@ -219,21 +219,15 @@ describe('field-highlighter', () => {
       await visualDiff(div, 'text-field');
     });
 
-    it('focused', async () => {
+    it('focus-ring', async () => {
       await sendKeys({ press: 'Tab' });
       await nextFrame();
-      await visualDiff(div, 'text-field-focused');
+      await visualDiff(div, 'text-field-focus-ring');
     });
 
-    it('pointer focus-ring disabled', async () => {
+    it('pointer focus', async () => {
       await sendMouseToElement({ type: 'click', element });
-      await visualDiff(div, 'text-field-pointer-focus-ring-disabled');
-    });
-
-    it('pointer focus-ring enabled', async () => {
-      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
-      await sendMouseToElement({ type: 'click', element });
-      await visualDiff(div, 'text-field-pointer-focus-ring-enabled');
+      await visualDiff(div, 'text-field-pointer-focus');
     });
   });
 });

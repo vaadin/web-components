@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/tabs/src/vaadin-tabs.js';
 import '../src/vaadin-tabsheet.js';
 
 describe('tabsheet', () => {
@@ -19,9 +18,9 @@ describe('tabsheet', () => {
           <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
         </vaadin-tabs>
 
-        <div tab="tab-1">Panel 1</div>
-        <div tab="tab-2">Panel 2</div>
-        <div tab="tab-3">Panel 3</div>
+        <p tab="tab-1">Panel 1</p>
+        <p tab="tab-2">Panel 2</p>
+        <p tab="tab-3">Panel 3</p>
       </vaadin-tabsheet>
     `);
     tabs = tabsheet.querySelector('vaadin-tabs');
@@ -162,6 +161,15 @@ describe('tabsheet', () => {
       expect(getPanels()[2].hidden).to.be.true;
     });
 
+    it('should override display style when panel is hidden', async () => {
+      tabsheet.selected = 1;
+      await nextFrame();
+      const panel2 = getPanels()[2];
+      panel2.style.display = 'contents';
+      const display = getComputedStyle(panel2).display;
+      expect(display).to.equal('none');
+    });
+
     it('should bind dynamically added tab and panel', async () => {
       // Create a new tab and panel
       const tab = document.createElement('vaadin-tab');
@@ -283,8 +291,8 @@ describe('tabsheet', () => {
       await nextFrame();
 
       // Add two panels
-      tabsheet.appendChild(fixtureSync(`<div tab="new-tab-1">New Panel 1</div>`));
-      tabsheet.appendChild(fixtureSync(`<div tab="new-tab-2">New Panel 2</div>`));
+      tabsheet.appendChild(fixtureSync(`<p tab="new-tab-1">New Panel 1</p>`));
+      tabsheet.appendChild(fixtureSync(`<p tab="new-tab-2">New Panel 2</p>`));
 
       await nextFrame();
       expect(tabsheet.offsetHeight).to.be.below(height);

@@ -66,14 +66,15 @@ export const AccordionMixin = (superClass) =>
     }
 
     /**
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */
-    focus() {
+    focus(options) {
       if (this._observer) {
         this._observer.flush();
       }
-      super.focus();
+      super.focus(options);
     }
 
     /** @protected */

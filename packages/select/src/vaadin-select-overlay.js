@@ -6,10 +6,10 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { selectOverlayStyles } from './styles/vaadin-select-overlay-core-styles.js';
+import { selectOverlayStyles } from './styles/vaadin-select-overlay-base-styles.js';
 import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
 /**
@@ -21,7 +21,7 @@ import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
  * @mixes ThemableMixin
  * @private
  */
-export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -34,7 +34,7 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(LumoInjectio
   render() {
     return html`
       <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <div part="content" id="content">
           <slot></slot>
         </div>

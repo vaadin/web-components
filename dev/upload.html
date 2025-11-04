@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Upload</title>
-    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
@@ -55,9 +54,9 @@
 
   <body>
     <vaadin-upload target="/api/fileupload"></vaadin-upload>
-
-    <br />
-
+    <hr style="margin-block: 24px" />
+    <vaadin-upload nodrop target="/api/fileupload"></vaadin-upload>
+    <hr style="margin-block: 24px" />
     <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
       <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
       <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>

@@ -12,11 +12,11 @@ import { css, html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { richTextEditorPopupOverlayStyles } from './styles/vaadin-rich-text-editor-popup-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
@@ -32,8 +32,15 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
 
   static get styles() {
     return css`
-      :host {
-        display: none;
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: contents !important;
+      }
+
+      :host,
+      :host([hidden]) {
+        display: none !important;
       }
     `;
   }
@@ -46,15 +53,12 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
 
       opened: {
         type: Boolean,
+        reflectToAttribute: true,
         notify: true,
       },
 
       colors: {
         type: Array,
-      },
-
-      renderer: {
-        type: Object,
       },
     };
   }
@@ -67,16 +71,20 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
   render() {
     return html`
       <vaadin-rich-text-editor-popup-overlay
-        .renderer="${this.renderer}"
+        id="overlay"
+        .owner="${this}"
         .opened="${this.opened}"
         .positionTarget="${this.target}"
         no-vertical-overlap
         horizontal-align="start"
         vertical-align="top"
         focus-trap
+        exportparts="overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
-      ></vaadin-rich-text-editor-popup-overlay>
+      >
+        <slot></slot>
+      </vaadin-rich-text-editor-popup-overlay>
     `;
   }
 
@@ -98,19 +106,17 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
 
   /** @private */
   __colorsChanged(colors) {
-    this.renderer = (root) => {
-      render(
-        html`
-          ${colors.map(
-            (color) => html`
-              <button data-color="${color}" style="background: ${color}" @click="${this._onColorClick}"></button>
-            `,
-          )}
-        `,
-        root,
-        { host: this },
-      );
-    };
+    render(
+      html`
+        ${colors.map(
+          (color) => html`
+            <button data-color="${color}" style="background: ${color}" @click="${this._onColorClick}"></button>
+          `,
+        )}
+      `,
+      this,
+      { host: this },
+    );
   }
 
   /** @private */
@@ -137,24 +143,43 @@ export { RichTextEditorPopup };
  * @private
  */
 class RichTextEditorPopupOverlay extends PositionMixin(
-  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-rich-text-editor-popup-overlay';
   }
 
   static get styles() {
-    return overlayStyles;
+    return richTextEditorPopupOverlayStyles;
   }
 
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
-        <div part="content" id="content"><slot></slot></div>
+        <div part="content" id="content">
+          <slot></slot>
+        </div>
       </div>
     `;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as content root
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * @protected
+   * @override
+   */
+  get _focusTrapRoot() {
+    return this.owner;
   }
 }
 

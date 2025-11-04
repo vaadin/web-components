@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabSheetStyles } from './styles/vaadin-tabsheet-core-styles.js';
+import { tabSheetStyles } from './styles/vaadin-tabsheet-base-styles.js';
 import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
 
 /**
@@ -62,7 +62,7 @@ import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tabsheet';
   }

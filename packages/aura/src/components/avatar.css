@@ -1,0 +1,16 @@
+:where(:root),
+:where(:host) {
+  --vaadin-avatar-border-color: var(--vaadin-border-color-secondary);
+  --vaadin-avatar-background: var(--vaadin-background-container);
+  --vaadin-avatar-font-weight: var(--aura-font-weight-medium);
+  --vaadin-avatar-font-size: var(--aura-font-size-m);
+}
+
+vaadin-avatar:not([img]) {
+  --_shade: color-mix(in srgb, var(--vaadin-border-color) 20%, transparent);
+  background-image: linear-gradient(
+    light-dark(transparent, var(--_shade)),
+    transparent 50%,
+    light-dark(var(--_shade), transparent)
+  );
+}

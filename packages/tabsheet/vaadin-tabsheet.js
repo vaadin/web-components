@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-tabsheet.js';
+import './src/vaadin-tabsheet.js';
 export * from './src/vaadin-tabsheet.js';

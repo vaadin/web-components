@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { buttonStyles } from './styles/vaadin-button-core-styles.js';
+import { buttonStyles } from './styles/vaadin-button-base-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
 
 /**
@@ -30,14 +30,15 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * `prefix`  | A slot for content before the label (e.g. an icon).
  * `suffix`  | A slot for content after the label (e.g. an icon).
  *
- * The following attributes are available for styling:
+ * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `active`     | Set when the button is pressed down, either with mouse, touch or the keyboard.
- * `disabled`   | Set when the button is disabled.
- * `focus-ring` | Set when the button is focused using the keyboard.
- * `focused`    | Set when the button is focused.
+ * Attribute      | Description
+ * ---------------|-------------
+ * `active`       | Set when the button is pressed down, either with mouse, touch or the keyboard
+ * `disabled`     | Set when the button is disabled
+ * `focus-ring`   | Set when the button is focused using the keyboard
+ * `focused`      | Set when the button is focused
+ * `has-tooltip`  | Set when the button has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -47,7 +48,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ButtonMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-button';
   }
@@ -70,7 +71,7 @@ class Button extends ButtonMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(P
        * which makes disabled buttons focusable and hoverable, while still
        * preventing them from being triggered:
        *
-       * ```
+       * ```js
        * // Set before any button is attached to the DOM.
        * window.Vaadin.featureFlags.accessibleDisabledButtons = true
        * ```
@@ -98,8 +99,9 @@ class Button extends ButtonMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(P
         <span part="suffix" aria-hidden="true">
           <slot name="suffix"></slot>
         </span>
+
+        <slot name="tooltip"></slot>
       </div>
-      <slot name="tooltip"></slot>
     `;
   }
 

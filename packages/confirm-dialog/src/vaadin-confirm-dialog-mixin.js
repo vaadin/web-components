@@ -5,20 +5,21 @@
  */
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes DialogSizeMixin
  */
 export const ConfirmDialogMixin = (superClass) =>
-  class ConfirmDialogMixinClass extends superClass {
+  class ConfirmDialogMixinClass extends DialogSizeMixin(superClass) {
     static get properties() {
       return {
         /**
-         * Sets the `aria-describedby` attribute of the overlay element.
+         * Sets the `aria-describedby` attribute of the dialog.
          *
-         * By default, all elements inside the message area are linked
-         * through the `aria-describedby` attribute. However, there are
+         * By default, the text contents of all elements inside the message area
+         * are combined into the `aria-description` attribute. However, there are
          * cases where this can confuse screen reader users (e.g. the dialog
          * may present a password confirmation form). For these cases,
          * it's better to associate only the elements that will help describe
@@ -29,11 +30,12 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * True if the overlay is currently displayed.
+         * True if the dialog is visible and available for interaction.
          * @type {boolean}
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           sync: true,
@@ -155,32 +157,6 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * A space-delimited list of CSS class names
-         * to set on the underlying overlay element.
-         *
-         * @attr {string} overlay-class
-         */
-        overlayClass: {
-          type: String,
-        },
-
-        /**
-         * Set the height of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        height: {
-          type: String,
-        },
-
-        /**
-         * Set the width of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        width: {
-          type: String,
-        },
-
-        /**
          * A reference to the "Cancel" button which will be teleported to the overlay.
          * @private
          */
@@ -214,15 +190,6 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * A reference to the overlay element.
-         * @private
-         */
-        _overlayElement: {
-          type: Object,
-          sync: true,
-        },
-
-        /**
          * A reference to the "Reject" button which will be teleported to the overlay.
          * @private
          */
@@ -239,7 +206,7 @@ export const ConfirmDialogMixin = (superClass) =>
         '__updateHeaderNode(_headerNode, header)',
         '__updateMessageNodes(_messageNodes, message)',
         '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
-        '__accessibleDescriptionRefChanged(_overlayElement, _messageNodes, accessibleDescriptionRef)',
+        '__accessibleDescriptionRefChanged(_messageNodes, accessibleDescriptionRef)',
       ];
     }
 
@@ -251,13 +218,36 @@ export const ConfirmDialogMixin = (superClass) =>
       this.__reject = this.__reject.bind(this);
     }
 
-    get __slottedNodes() {
-      return [this._headerNode, ...this._messageNodes, this._cancelButton, this._confirmButton, this._rejectButton];
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      // Restore opened state if overlay was opened when disconnecting
+      if (this.__restoreOpened) {
+        this.opened = true;
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      // Automatically close the overlay when dialog is removed from DOM
+      // Using a timeout to avoid toggling opened state, and dispatching change
+      // events, when just moving the dialog in the DOM
+      setTimeout(() => {
+        if (!this.isConnected) {
+          this.__restoreOpened = this.opened;
+          this.opened = false;
+        }
+      });
     }
 
     /** @protected */
     ready() {
       super.ready();
+
+      this.role = 'alertdialog';
+      this.setAttribute('aria-modal', 'true');
+      this.setAttribute('tabindex', '0');
 
       this._headerController = new SlotController(this, 'header', 'h3', {
         initializer: (node) => {
@@ -271,13 +261,7 @@ export const ConfirmDialogMixin = (superClass) =>
         multiple: true,
         observe: false,
         initializer: (node) => {
-          const wrapper = document.createElement('div');
-          wrapper.style.display = 'contents';
-          const wrapperId = `confirm-dialog-message-${generateUniqueId()}`;
-          wrapper.id = wrapperId;
-          this.appendChild(wrapper);
-          wrapper.appendChild(node);
-          this._messageNodes = [...this._messageNodes, wrapper];
+          this._messageNodes = [...this._messageNodes, node];
         },
       });
       this.addController(this._messageController);
@@ -304,59 +288,47 @@ export const ConfirmDialogMixin = (superClass) =>
       });
       this.addController(this._confirmController);
 
-      this._overlayElement = this.$.dialog.$.overlay;
-
-      this._initOverlay(this._overlayElement);
+      this._overlayElement = this.$.overlay;
     }
 
     /** @protected */
-    _initOverlay(overlay) {
-      overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
-      overlay.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
-      overlay.addEventListener('vaadin-overlay-closed', () => this.__onDialogClosed());
-      overlay.setAttribute('role', 'alertdialog');
-    }
+    updated(props) {
+      super.updated(props);
 
-    /** @private */
-    __onDialogOpened() {
-      const overlay = this._overlayElement;
-
-      // Teleport slotted nodes to the overlay element.
-      this.__slottedNodes.forEach((node) => {
-        overlay.appendChild(node);
-      });
-
-      const confirmButton = overlay.querySelector('[slot="confirm-button"]');
-      if (confirmButton) {
-        confirmButton.focus();
+      if (props.has('header')) {
+        this.ariaLabel = this.header || 'confirmation';
       }
     }
 
-    /** @private */
+    /** @protected */
+    __onDialogOpened() {
+      if (this._confirmButton) {
+        this._confirmButton.focus();
+      }
+    }
+
+    /** @protected */
     __onDialogClosed() {
-      // Move nodes from the overlay back to the host.
-      this.__slottedNodes.forEach((node) => {
-        this.appendChild(node);
-      });
       this.dispatchEvent(new CustomEvent('closed'));
     }
 
     /** @private */
-    __accessibleDescriptionRefChanged(overlay, messageNodes, accessibleDescriptionRef) {
-      if (!overlay || !messageNodes) {
+    __accessibleDescriptionRefChanged(messageNodes, accessibleDescriptionRef) {
+      if (!messageNodes) {
         return;
       }
 
-      if (accessibleDescriptionRef !== undefined) {
-        setAriaIDReference(overlay, 'aria-describedby', {
+      if (accessibleDescriptionRef) {
+        this.removeAttribute('aria-description');
+        setAriaIDReference(this, 'aria-describedby', {
           newId: accessibleDescriptionRef,
           oldId: this.__oldAccessibleDescriptionRef,
           fromUser: true,
         });
       } else {
-        messageNodes.forEach((node) => {
-          setAriaIDReference(overlay, 'aria-describedby', { newId: node.id });
-        });
+        this.removeAttribute('aria-describedby');
+        const ariaDescription = messageNodes.map((node) => node.textContent.trim()).join(' ');
+        this.setAttribute('aria-description', ariaDescription);
       }
 
       this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
@@ -405,11 +377,9 @@ export const ConfirmDialogMixin = (superClass) =>
     /** @private */
     __updateMessageNodes(nodes, message) {
       if (nodes && nodes.length > 0) {
-        const defaultWrapperNode = nodes.find(
-          (node) => this._messageController.defaultNode && node === this._messageController.defaultNode.parentElement,
-        );
-        if (defaultWrapperNode) {
-          defaultWrapperNode.firstChild.textContent = message;
+        const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
+        if (defaultNode) {
+          defaultNode.textContent = message;
         }
       }
     }
@@ -425,11 +395,18 @@ export const ConfirmDialogMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _escPressed(event) {
-      if (!event.defaultPrevented) {
+    /** @protected */
+    _onOverlayEscapePress(event) {
+      if (this.noCloseOnEsc) {
+        event.preventDefault();
+      } else {
         this.__cancel();
       }
+    }
+
+    /** @protected */
+    _onOverlayOutsideClick(event) {
+      event.preventDefault();
     }
 
     /** @private */
@@ -448,11 +425,6 @@ export const ConfirmDialogMixin = (superClass) =>
     __reject() {
       this.dispatchEvent(new CustomEvent('reject'));
       this.opened = false;
-    }
-
-    /** @private */
-    _getAriaLabel(header) {
-      return header || 'confirmation';
     }
 
     /**

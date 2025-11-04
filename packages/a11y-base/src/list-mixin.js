@@ -6,7 +6,6 @@
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
-import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { isElementHidden } from './focus-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
@@ -56,15 +55,9 @@ export const ListMixin = (superClass) =>
         },
 
         /**
-         * The list of items from which a selection can be made.
+         * A read-only list of items from which a selection can be made.
          * It is populated from the elements passed to the light DOM,
          * and updated dynamically when adding or removing items.
-         *
-         * The item elements must implement `Vaadin.ItemMixin`.
-         *
-         * Note: unlike `<vaadin-combo-box>`, this property is read-only,
-         * so if you want to provide items by iterating array of data,
-         * you have to use `dom-repeat` and place it to the light DOM.
          * @type {!Array<!Element> | undefined}
          */
         items: {
@@ -114,7 +107,12 @@ export const ListMixin = (superClass) =>
       return this.orientation !== 'horizontal';
     }
 
-    focus() {
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
       // In initialization (e.g vaadin-select) observer might not been run yet.
       if (this._observer) {
         this._observer.flush();
@@ -123,10 +121,10 @@ export const ListMixin = (superClass) =>
       const items = Array.isArray(this.items) ? this.items : [];
       const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0 && !isElementHidden(item));
       if (idx >= 0) {
-        this._focus(idx);
+        this._focus(idx, options);
       } else {
         // Call `KeyboardDirectionMixin` logic to focus first non-disabled item.
-        super.focus();
+        super.focus(options);
       }
     }
 
@@ -138,7 +136,7 @@ export const ListMixin = (superClass) =>
 
       const slot = this.shadowRoot.querySelector('slot:not([name])');
       this._observer = new SlotObserver(slot, () => {
-        this._setItems(this._filterItems(getFlattenedElements(this)));
+        this._setItems(this._filterItems([...this.children]));
       });
     }
 
@@ -282,13 +280,13 @@ export const ListMixin = (superClass) =>
      * @param {number} idx
      * @protected
      */
-    _focus(idx) {
+    _focus(idx, options) {
       this.items.forEach((e, index) => {
         e.focused = index === idx;
       });
       this._setFocusable(idx);
       this._scrollToItem(idx);
-      super._focus(idx);
+      super._focus(idx, options);
     }
 
     /**

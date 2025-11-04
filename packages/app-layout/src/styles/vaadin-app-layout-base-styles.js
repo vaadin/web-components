@@ -3,7 +3,7 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const appLayoutStyles = css`
@@ -55,30 +55,30 @@ export const appLayoutStyles = css`
     }
   }
 
-  [part='navbar'] {
+  [part~='navbar'] {
     position: fixed;
     display: flex;
     align-items: center;
     top: 0;
     inset-inline: 0;
     transition: inset-inline-start var(--vaadin-app-layout-transition-duration);
-    padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding)), var(--safe-area-inset-top));
-    padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding));
+    padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s)), var(--safe-area-inset-top));
+    padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding-s));
     padding-inline-start: max(
-      var(--vaadin-app-layout-navbar-padding-inline-start, var(--vaadin-padding)),
+      var(--vaadin-app-layout-navbar-padding-inline-start, var(--vaadin-padding-s)),
       var(--safe-area-inset-left)
     );
     /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
     padding-inline-end: max(
-      var(--vaadin-app-layout-navbar-padding-inline-end, var(--vaadin-padding)),
+      var(--vaadin-app-layout-navbar-padding-inline-end, var(--vaadin-padding-s)),
       var(--safe-area-inset-right)
     );
     z-index: 1;
-    gap: var(--vaadin-app-layout-navbar-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-app-layout-navbar-gap, var(--vaadin-gap-s));
     background: var(--vaadin-app-layout-navbar-background, var(--vaadin-background-container));
   }
 
-  :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
+  :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part~='navbar'] {
     inset-inline-start: var(--vaadin-app-layout-drawer-offset-left, 0);
   }
 
@@ -86,12 +86,12 @@ export const appLayoutStyles = css`
     top: 0;
   }
 
-  [part='navbar'][bottom] {
+  [part~='navbar-bottom'] {
     top: auto;
     bottom: 0;
-    padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding));
+    padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s));
     padding-bottom: max(
-      var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding)),
+      var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding-s)),
       var(--safe-area-inset-bottom)
     );
   }
@@ -116,7 +116,7 @@ export const appLayoutStyles = css`
     visibility: hidden;
     display: flex;
     flex-direction: column;
-    background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
+    background: var(--vaadin-app-layout-drawer-background, transparent);
   }
 
   :host([drawer-opened]) [part='drawer'] {
@@ -127,7 +127,8 @@ export const appLayoutStyles = css`
   }
 
   [part='backdrop'] {
-    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.5));
+    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
+    forced-color-adjust: none;
   }
 
   :host(:not([drawer-opened])) [part='backdrop'] {
@@ -145,7 +146,8 @@ export const appLayoutStyles = css`
   :host([overlay]) [part='drawer'] {
     top: 0;
     bottom: 0;
-    box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+    box-shadow: var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+    background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
   }
 
   :host([overlay]) [part='drawer'],

@@ -8,7 +8,7 @@ import { ComboBoxItemMixin } from '@vaadin/combo-box/src/vaadin-combo-box-item-m
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-core-styles.js';
+import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -40,7 +40,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @private
  */
 export class MultiSelectComboBoxItem extends ComboBoxItemMixin(
-  LumoInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box-item';

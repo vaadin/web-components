@@ -79,35 +79,3 @@ jobs:
           path: |
             packages/*/test/visual/lumo/screenshots/*/failed/*.png
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
-  lumo-ported:
-    name: Lumo (CSS files)
-    runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Visual tests
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: yarn test:lumo --ported
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: lumo-css-screenshots
-          path: |
-            packages/*/test/visual/lumo/screenshots/*/failed/*.png
-            packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png

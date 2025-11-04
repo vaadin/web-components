@@ -11,21 +11,22 @@
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 
-:is(:root, :host)::before {
-  --vaadin-avatar-group-lumo-inject: 1;
-  --vaadin-avatar-group-lumo-inject-modules: lumo_components_avatar-group;
+:root::before,
+:host::before {
+  --_lumo-vaadin-avatar-group-inject: 1;
+  --_lumo-vaadin-avatar-group-inject-modules: lumo_components_avatar-group;
 
-  --vaadin-avatar-group-overlay-lumo-inject: 1;
-  --vaadin-avatar-group-overlay-lumo-inject-modules:
+  --_lumo-vaadin-avatar-group-overlay-inject: 1;
+  --_lumo-vaadin-avatar-group-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_components_avatar-group-overlay;
 
-  --vaadin-avatar-group-menu-lumo-inject: 1;
-  --vaadin-avatar-group-menu-lumo-inject-modules: lumo_components_list-box;
+  --_lumo-vaadin-avatar-group-menu-inject: 1;
+  --_lumo-vaadin-avatar-group-menu-inject-modules: lumo_components_list-box;
 
-  --vaadin-avatar-group-menu-item-lumo-inject: 1;
-  --vaadin-avatar-group-menu-item-lumo-inject-modules:
+  --_lumo-vaadin-avatar-group-menu-item-inject: 1;
+  --_lumo-vaadin-avatar-group-menu-item-inject-modules:
     lumo_components_item,
     lumo_components_avatar-group-menu-item;
 }

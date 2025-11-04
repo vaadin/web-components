@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-menu-bar.js';
 
@@ -138,6 +138,82 @@ describe('keyboard navigation', () => {
           expect(buttons[3].hasAttribute('focused')).to.be.true;
         });
       });
+
+      describe('overflow', () => {
+        beforeEach(async () => {
+          menu.items = [{ text: 'Item Foo' }, { text: 'Item Bar' }];
+          await nextRender();
+          buttons = menu._buttons;
+        });
+
+        it('should move focus back to the overflow button on Shift + Tab after Tab', async () => {
+          // Hide all buttons except overflow
+          menu.style.width = '100px';
+          await nextResize(menu);
+
+          firstGlobalFocusable.focus();
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+        });
+
+        it('should move focus back to the overflow button on Tab after Shift + Tab', async () => {
+          // Show 1 button + overflow
+          menu.style.width = '120px';
+          await nextResize(menu);
+
+          lastGlobalFocusable.focus();
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(firstGlobalFocusable);
+
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+        });
+
+        it('should move focus back to the overflow button on Tab after button is hidden', async () => {
+          lastGlobalFocusable.focus();
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(buttons[1]);
+
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(firstGlobalFocusable);
+
+          // Hide all buttons except overflow
+          menu.style.width = '100px';
+          await nextResize(menu);
+
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+        });
+
+        it('should not skip buttons on Tab after overflow becomes hidden', async () => {
+          // Hide all buttons except overflow
+          menu.style.width = '100px';
+          await nextResize(menu);
+
+          firstGlobalFocusable.focus();
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(menu._overflow);
+
+          await sendKeys({ press: 'Tab' });
+          expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+          // Show all buttons and hide overflow
+          menu.style.width = '100%';
+          await nextResize(menu);
+
+          await sendKeys({ press: 'Shift+Tab' });
+          expect(document.activeElement).to.equal(buttons[1]);
+        });
+      });
     });
 
     describe('tab navigation mode', () => {
@@ -193,7 +269,7 @@ describe('keyboard navigation', () => {
   });
 
   describe('submenu items', () => {
-    let subMenu, overlay;
+    let subMenu;
 
     beforeEach(async () => {
       menu.items = [
@@ -211,7 +287,6 @@ describe('keyboard navigation', () => {
       await nextUpdate(menu);
       buttons = menu._buttons;
       subMenu = menu._subMenu;
-      overlay = subMenu._overlayElement;
     });
 
     describe('default mode', () => {
@@ -221,7 +296,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to previous button with submenu
         await sendKeys({ press: 'ArrowLeft' });
@@ -237,7 +312,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to previous button without submenu
         await sendKeys({ press: 'ArrowLeft' });
@@ -253,7 +328,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to next button with submenu
         await sendKeys({ press: 'ArrowRight' });
@@ -269,7 +344,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Move to next button without submenu
         await sendKeys({ press: 'ArrowRight' });
@@ -285,7 +360,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         await sendKeys({ press: 'ArrowLeft' });
         await nextRender();
@@ -303,7 +378,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         await sendKeys({ press: 'ArrowRight' });
         await nextRender();
@@ -327,7 +402,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab to next button with submenu
         await sendKeys({ press: 'Tab' });
@@ -343,7 +418,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Shift Tab to previous button with submenu
         await sendKeys({ press: 'Shift+Tab' });
@@ -359,7 +434,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab to next button without submenu
         await sendKeys({ press: 'Tab' });
@@ -375,7 +450,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab to next button without submenu
         await sendKeys({ press: 'Shift+Tab' });
@@ -391,7 +466,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab outside the menu bar
         await sendKeys({ press: 'Tab' });
@@ -407,7 +482,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Shift + Tab outside the menu bar
         await sendKeys({ press: 'Shift+Tab' });
@@ -425,7 +500,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab outside the menu bar (since next button is disabled)
         await sendKeys({ press: 'Tab' });
@@ -444,7 +519,7 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
         expect(subMenu.opened).to.be.true;
-        expect(document.activeElement).to.equal(overlay.querySelector('vaadin-menu-bar-item'));
+        expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
         // Tab outside the menu bar (since previous buttons are disabled)
         await sendKeys({ press: 'Shift+Tab' });
@@ -453,6 +528,47 @@ describe('keyboard navigation', () => {
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(firstGlobalFocusable);
       });
+    });
+  });
+
+  describe('single button', () => {
+    beforeEach(async () => {
+      menu.items = [{ text: 'Item 1', children: [{ text: 'Item 1 1' }] }];
+      await nextUpdate(menu);
+      buttons = menu._buttons;
+      firstGlobalFocusable.focus();
+    });
+
+    it('should be focusable on Shift + Tab after closing and moving focus by default', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'Escape' });
+
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(document.activeElement).to.equal(buttons[0]);
+    });
+
+    it('should be focusable on Shift + Tab after closing and moving focus with Tab navigation', async () => {
+      menu.tabNavigation = true;
+
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'Escape' });
+
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+      await sendKeys({ press: 'Shift+Tab' });
+      expect(document.activeElement).to.equal(buttons[0]);
     });
   });
 });

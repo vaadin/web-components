@@ -54,6 +54,12 @@ describe('vaadin-select', () => {
       await expect(select).dom.to.equalSnapshot();
     });
 
+    it('phone', async () => {
+      select._phone = true;
+      await nextUpdate(select);
+      await expect(select).dom.to.equalSnapshot();
+    });
+
     it('error', async () => {
       select.errorMessage = 'Error';
       select.invalid = true;
@@ -81,12 +87,6 @@ describe('vaadin-select', () => {
       });
 
       it('overlay', async () => {
-        await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-      });
-
-      it('overlay class', async () => {
-        select.overlayClass = 'custom select-overlay';
-        await nextUpdate(select);
         await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });

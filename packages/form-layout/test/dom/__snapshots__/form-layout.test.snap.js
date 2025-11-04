@@ -312,11 +312,11 @@ snapshots["vaadin-form-layout responsive-steps host default"] =
 `<vaadin-form-layout>
   <input
     placeholder="First name"
-    style="width: calc(50% - 1em); margin-left: 0px;"
+    style="width: calc(50% - 8px); margin-left: 0px;"
   >
   <input
     placeholder="Last name"
-    style="width: calc(50% - 1em); margin-right: 0px;"
+    style="width: calc(50% - 8px); margin-right: 0px;"
   >
 </vaadin-form-layout>
 `;

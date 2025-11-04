@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaadin charts | column range</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import './theme-switcher.js';
+    </script>
+    <script defer>
+      fetch('./demo-data/temperature-date-min-max.json')
+        .then((response) => response.json())
+        .then((data) => {
+          const series = document.querySelector('vaadin-chart-series');
+          series.values = data;
+        });
+      const series = document.querySelector('vaadin-chart-series');
+    </script>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
+
+    <vaadin-chart
+      type="columnrange"
+      title="Temperature variation by day"
+      timeline
+      additional-options='{
+        "rangeSelector": {
+          "selected": 2
+        },
+        "tooltip": {
+          "valueSuffix": "°C"
+        }
+      }'
+    >
+      <vaadin-chart-series title="Temperatures"></vaadin-chart-series>
+    </vaadin-chart>
+  </body>
+</html>

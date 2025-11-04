@@ -1,30 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, esc, fixtureSync, nextRender, nextUpdate, oneEvent, tap } from '@vaadin/testing-helpers';
+import { aTimeout, enter, esc, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-login-overlay.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { fillUsernameAndPassword } from './helpers.js';
 
 describe('login overlay', () => {
-  let overlay;
-
-  beforeEach(async () => {
-    overlay = fixtureSync('<vaadin-login-overlay></vaadin-login-overlay>');
-    await nextRender();
-  });
-
-  afterEach(() => {
-    overlay.opened = false;
-  });
-
-  it('should render form wrapper when opened', async () => {
-    overlay.opened = true;
-    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.be.ok;
-  });
-});
-
-describe('opened overlay', () => {
-  let overlay, submitStub;
+  let login, overlay, submitStub;
 
   before(() => {
     submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
@@ -35,59 +17,51 @@ describe('opened overlay', () => {
   });
 
   beforeEach(async () => {
-    overlay = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
+    login = fixtureSync('<vaadin-login-overlay theme="some-theme"></vaadin-login-overlay>');
+    login.opened = true;
     await nextRender();
-    await nextUpdate(overlay.$.vaadinLoginForm);
+    overlay = login.$.overlay;
   });
 
   afterEach(() => {
-    overlay.opened = false;
     submitStub.resetHistory();
   });
 
-  it('should set opened using attribute', () => {
-    expect(overlay.opened).to.be.true;
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
-  });
+  it('should reflect opened property to attribute', () => {
+    expect(overlay.hasAttribute('opened')).to.be.true;
 
-  it('should remove form wrapper when closed', async () => {
     overlay.opened = false;
-    await nextUpdate(overlay);
-    expect(document.querySelector('vaadin-login-form-wrapper')).not.to.exist;
+    expect(overlay.hasAttribute('opened')).to.be.false;
   });
 
-  it('should not remove form wrapper when moved within DOM', async () => {
-    const newParent = document.createElement('div');
-    document.body.appendChild(newParent);
-    newParent.appendChild(overlay);
-    await nextRender();
-
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
+  it('should set opened on the host overlay wrapper', () => {
+    expect(overlay.opened).to.be.true;
   });
 
-  it('should propagate theme to a wrapper', () => {
-    const wrapper = document.querySelector('vaadin-login-overlay-wrapper');
-    expect(wrapper.getAttribute('theme')).to.be.equal('some-theme');
+  it('should propagate theme attribute to the overlay wrapper', () => {
+    expect(overlay.getAttribute('theme')).to.be.equal('some-theme');
   });
 
   it('should not close on ESC key', () => {
     esc(document.body);
 
+    expect(login.opened).to.be.true;
     expect(overlay.opened).to.be.true;
   });
 
-  it('should not close on click outside', () => {
-    tap(overlay.$.vaadinLoginOverlayWrapper.$.backdrop);
+  it('should not close on backdrop click', () => {
+    overlay.$.backdrop.click();
 
+    expect(login.opened).to.be.true;
     expect(overlay.opened).to.be.true;
   });
 
   it('should be able to listen to `login` event', () => {
     const loginSpy = sinon.spy();
 
-    overlay.addEventListener('login', loginSpy);
+    login.addEventListener('login', loginSpy);
 
-    const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
+    const { vaadinLoginUsername } = fillUsernameAndPassword(login);
 
     enter(vaadinLoginUsername);
     expect(loginSpy.called).to.be.true;
@@ -97,260 +71,256 @@ describe('opened overlay', () => {
   });
 
   it('should be able to prevent default to `login` event', async () => {
-    overlay.action = 'login';
-    await nextUpdate(overlay);
-    overlay.addEventListener('login', (e) => e.preventDefault());
+    login.action = 'login';
+    await nextUpdate(login);
+    login.addEventListener('login', (e) => e.preventDefault());
 
-    const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
+    const { vaadinLoginUsername } = fillUsernameAndPassword(login);
 
     enter(vaadinLoginUsername);
     expect(submitStub.called).to.be.false;
   });
 
   it('should focus the username field', () => {
-    const usernameElement = overlay.$.vaadinLoginForm.$.vaadinLoginUsername;
+    const usernameElement = login._userNameField;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
 
-  it('should update disabled property when form disabled changes', async () => {
-    const form = overlay.$.vaadinLoginForm;
+  it('should dispatch closed event when the overlay is closed', async () => {
+    const closedSpy = sinon.spy();
+    login.addEventListener('closed', closedSpy);
+    login.opened = false;
+    await nextRender();
+    expect(closedSpy.calledOnce).to.be.true;
+  });
+});
 
-    form.disabled = true;
-    await nextUpdate(form);
-    expect(overlay.disabled).to.be.true;
+describe('display', () => {
+  let login;
 
-    form.disabled = false;
-    await nextUpdate(form);
-    expect(overlay.disabled).to.be.false;
+  beforeEach(async () => {
+    login = fixtureSync('<vaadin-login-overlay></vaadin-login-overlay>');
+    await nextRender();
+  });
+
+  it('should use display: none when not opened', () => {
+    expect(getComputedStyle(login).display).to.equal('none');
+  });
+
+  ['opened', 'opening', 'closing'].forEach((state) => {
+    it(`should use display: block when ${state} attribute is set`, () => {
+      login.setAttribute(state, '');
+      expect(getComputedStyle(login).display).to.equal('block');
+    });
   });
 });
 
 describe('no autofocus', () => {
-  let overlay;
+  let login, overlay;
 
-  beforeEach(() => {
-    overlay = fixtureSync('<vaadin-login-overlay no-autofocus></vaadin-login-overlay>');
+  beforeEach(async () => {
+    login = fixtureSync('<vaadin-login-overlay no-autofocus></vaadin-login-overlay>');
+    await nextRender();
+    overlay = login.$.overlay;
   });
 
   it('should not focus the username field', async () => {
-    overlay.opened = true;
-    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
-    // Overlay traps focus and focuses the wrapper by default
-    expect(document.activeElement).to.equal(overlay.$.vaadinLoginOverlayWrapper);
+    login.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+    // Overlay traps focus and focuses the host by default
+    expect(getDeepActiveElement()).to.equal(login);
   });
 });
 
 describe('title and description', () => {
-  let overlay, headerElement, descriptionElement;
+  let login, overlay, titleElement, descriptionElement;
 
   beforeEach(async () => {
-    overlay = fixtureSync(`
-      <vaadin-login-overlay title="New title" description="New description" opened></vaadin-login-overlay>
+    login = fixtureSync(`
+      <vaadin-login-overlay title="New title" description="New description"></vaadin-login-overlay>
     `);
     await nextRender();
-    headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="title"]');
-    descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="description"]');
-  });
-
-  afterEach(() => {
-    overlay.opened = false;
+    overlay = login.$.overlay;
+    titleElement = login.querySelector('[slot="title"]');
+    descriptionElement = overlay.shadowRoot.querySelector('[part="description"]');
   });
 
   it('should display title and description set via attributes or properties', () => {
-    expect(overlay.title).to.be.equal('New title');
-    expect(overlay.description).to.be.equal('New description');
+    expect(login.title).to.be.equal('New title');
+    expect(login.description).to.be.equal('New description');
 
-    expect(headerElement.textContent).to.be.equal(overlay.title);
-    expect(descriptionElement.textContent).to.be.equal(overlay.description);
+    expect(titleElement.textContent).to.be.equal(login.title);
+    expect(descriptionElement.textContent).to.be.equal(login.description);
   });
 
   it('should update title and description when property updated', async () => {
-    overlay.title = 'The newest title';
-    overlay.description = 'The newest description';
-    await nextUpdate(overlay);
+    login.title = 'The newest title';
+    login.description = 'The newest description';
+    await nextUpdate(login);
 
-    expect(headerElement.textContent).to.be.equal(overlay.title);
-    expect(descriptionElement.textContent).to.be.equal(overlay.description);
+    expect(titleElement.textContent).to.be.equal(login.title);
+    expect(descriptionElement.textContent).to.be.equal(login.description);
   });
 
   it('should update title and description when i18n.header updated', async () => {
     const i18n = { header: { title: 'The newest title', description: 'The newest description' } };
-    overlay.i18n = i18n;
-    await nextUpdate(overlay);
-    await nextUpdate(overlay.$.vaadinLoginOverlayWrapper);
+    login.i18n = i18n;
+    await nextUpdate(login);
 
-    expect(headerElement.textContent).to.be.equal('The newest title');
+    expect(titleElement.textContent).to.be.equal('The newest title');
     expect(descriptionElement.textContent).to.be.equal('The newest description');
 
-    expect(overlay.title).to.be.equal(overlay.i18n.header.title);
-    expect(overlay.description).to.be.equal(overlay.i18n.header.description);
-  });
-
-  it('should update aria-label when title property changes', async () => {
-    overlay.title = 'New title';
-    await nextUpdate(overlay);
-    expect(overlay.$.vaadinLoginOverlayWrapper.getAttribute('aria-label')).to.equal('New title');
+    expect(login.title).to.be.equal(login.i18n.header.title);
+    expect(login.description).to.be.equal(login.i18n.header.description);
   });
 });
 
 describe('heading level', () => {
-  let overlay, form;
+  let login, formTitle;
 
   beforeEach(async () => {
-    overlay = fixtureSync(`<vaadin-login-overlay opened></vaadin-login-overlay>`);
+    login = fixtureSync(`<vaadin-login-overlay></vaadin-login-overlay>`);
     await nextRender();
-    form = overlay.$.vaadinLoginForm;
+    formTitle = login.shadowRoot.querySelector('[part="form-title"]');
   });
 
-  afterEach(() => {
-    overlay.opened = false;
-  });
+  it('should update form title heading level based on the overlay', async () => {
+    expect(login.headingLevel).to.equal(1);
+    expect(formTitle.getAttribute('aria-level')).to.equal('2');
 
-  it('should set login form title heading level based on the overlay', async () => {
-    expect(overlay.headingLevel).to.equal(1);
-    expect(form.headingLevel).to.equal(2);
-
-    overlay.headingLevel = 2;
-    await nextUpdate(overlay);
-    expect(form.headingLevel).to.equal(3);
+    login.headingLevel = 2;
+    await nextUpdate(login);
+    expect(formTitle.getAttribute('aria-level')).to.equal('3');
   });
 });
 
 describe('title slot', () => {
-  let overlay, overlayWrapper;
+  let login, title;
 
-  beforeEach(async () => {
-    overlay = fixtureSync(`
-      <vaadin-login-overlay description="New description" opened>
-        <div slot="title">Teleported title</div>
-      </vaadin-login-overlay>
-    `);
-    await nextRender();
-    overlayWrapper = overlay.$.vaadinLoginOverlayWrapper;
+  const ID_REGEX = /^title-vaadin-login-overlay-\d+$/u;
+
+  describe('default', () => {
+    beforeEach(async () => {
+      login = fixtureSync('<vaadin-login-overlay></vaadin-login-overlay>');
+      await nextRender();
+      title = login.querySelector('[slot=title]');
+    });
+
+    it('should render generated title and link it using aria-labelledby', () => {
+      expect(title.id).to.match(ID_REGEX);
+      expect(login.getAttribute('aria-labelledby')).to.equal(title.id);
+    });
+
+    it('should set role="heading" on the generated title element', () => {
+      expect(title.getAttribute('role')).to.equal('heading');
+    });
+
+    it('should update aria-level on the generated title when headingLevel changes', async () => {
+      expect(title.getAttribute('aria-level')).to.equal('1');
+
+      login.headingLevel = '2';
+      await nextUpdate(login);
+
+      expect(title.getAttribute('aria-level')).to.equal('2');
+    });
   });
 
-  afterEach(() => {
-    overlay.opened = false;
-  });
+  describe('custom', () => {
+    beforeEach(async () => {
+      login = fixtureSync(`
+        <vaadin-login-overlay>
+          <h1 id="custom-title" slot="title">Custom title</h1>
+        </vaadin-login-overlay>
+      `);
+      await nextRender();
+      title = login.querySelector('[slot=title]');
+    });
 
-  it('should teleport title', async () => {
-    let titleElements = overlayWrapper.querySelectorAll('[slot=title]');
-    expect(titleElements.length).to.be.equal(1);
-    expect(titleElements[0].textContent).to.be.equal('Teleported title');
+    it('should not override custom id set on the slotted title', () => {
+      expect(title.id).to.equal('custom-title');
+      expect(login.getAttribute('aria-labelledby')).to.equal('custom-title');
+    });
 
-    overlay.opened = false;
-    await nextRender();
-    titleElements = overlayWrapper.querySelectorAll('[slot=title]');
-    expect(titleElements.length).to.be.equal(0);
+    it('should not set role="heading" on the custom title element', () => {
+      expect(title.hasAttribute('role')).to.be.false;
+    });
 
-    overlay.opened = true;
-    await nextRender();
-    titleElements = overlayWrapper.querySelectorAll('[slot=title]');
-    expect(titleElements.length).to.be.equal(1);
-    expect(titleElements[0].textContent).to.be.equal('Teleported title');
-  });
+    it('should not set aria-level on the custom title element', () => {
+      expect(title.hasAttribute('aria-level')).to.be.false;
+    });
 
-  it('should link slotted title using aria-labelledby', () => {
-    const title = overlayWrapper.querySelector('[slot=title]');
-    expect(title.id).to.be.ok;
-    expect(overlayWrapper.hasAttribute('aria-label')).to.be.false;
-    expect(overlayWrapper.getAttribute('aria-labelledby')).to.equal(title.id);
-  });
+    it('should restore generated title element when custom title is removed', async () => {
+      title.remove();
+      await nextRender();
 
-  it('should reset aria-labelledby when slotted title is removed', async () => {
-    overlay.opened = false;
-    await nextRender();
-
-    overlay.querySelector('[slot=title]').remove();
-
-    overlay.opened = true;
-    await nextRender();
-    expect(overlayWrapper.hasAttribute('aria-labelledby')).to.be.false;
-    expect(overlayWrapper.getAttribute('aria-label')).to.equal(overlay.title);
-  });
-
-  it('should not override custom id set on the slotted title', async () => {
-    overlay.opened = false;
-    await nextRender();
-
-    overlay.querySelector('[slot=title]').remove();
-
-    // Attach new slotted title with a custom ID
-    const title = document.createElement('h1');
-    title.id = 'custom-title';
-    title.setAttribute('slot', 'title');
-    overlay.appendChild(title);
-
-    overlay.opened = true;
-    await nextRender();
-
-    expect(overlayWrapper.getAttribute('aria-labelledby')).to.equal('custom-title');
-    expect(title.id).to.equal('custom-title');
+      title = login.querySelector('[slot=title]');
+      expect(title.id).to.match(ID_REGEX);
+      expect(login.getAttribute('aria-labelledby')).to.equal(title.id);
+    });
   });
 });
 
-describe('custom-form-area slot', () => {
-  let overlay, inputs, form;
+describe('detach and re-attach', () => {
+  let login;
 
   beforeEach(async () => {
-    overlay = fixtureSync(`
-      <vaadin-login-overlay>
-        <input id="one" slot="custom-form-area" />
-        <input id="two" slot="custom-form-area" />
-      </vaadin-login-overlay>
-    `);
+    login = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
     await nextRender();
-    form = overlay.$.vaadinLoginForm;
-    inputs = overlay.querySelectorAll('input');
   });
 
-  it('should teleport custom field components to the login form', async () => {
-    overlay.opened = true;
-    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
+  it('should close the overlay when removed from DOM', async () => {
+    login.remove();
+    await aTimeout(0);
 
-    const wrapper = form.querySelector('vaadin-login-form-wrapper');
-    expect(inputs[0].parentElement).to.equal(wrapper);
-    expect(inputs[1].parentElement).to.equal(wrapper);
+    expect(login.opened).to.be.false;
+  });
 
-    const button = wrapper.querySelector('vaadin-button');
-    expect(inputs[0].nextElementSibling).to.equal(inputs[1]);
-    expect(inputs[1].nextElementSibling).to.equal(button);
-
-    overlay.opened = false;
+  it('should restore opened state when added to the DOM', async () => {
+    const parent = login.parentNode;
+    login.remove();
     await nextRender();
+    expect(login.opened).to.be.false;
 
-    expect(inputs[0].parentElement).to.equal(overlay);
-    expect(inputs[1].parentElement).to.equal(overlay);
+    parent.appendChild(login);
+    await nextRender();
+    expect(login.opened).to.be.true;
+  });
+
+  it('should not close the overlay when moved within the DOM', async () => {
+    const newParent = document.createElement('div');
+    document.body.appendChild(newParent);
+    newParent.appendChild(login);
+    await aTimeout(0);
+
+    expect(login.opened).to.be.true;
   });
 });
 
-describe('footer slot', () => {
-  let overlay, divs, form;
+describe('exportparts', () => {
+  let login, overlay, form;
 
   beforeEach(async () => {
-    overlay = fixtureSync(`
-      <vaadin-login-overlay>
-        <div id="foo" slot="footer">Foo</div>
-        <div id="bar" slot="footer">Bar</div>
-      </vaadin-login-overlay>
-    `);
+    login = fixtureSync('<vaadin-login-overlay></vaadin-login-overlay>');
     await nextRender();
-    form = overlay.$.vaadinLoginForm;
-    divs = overlay.querySelectorAll('[slot="footer"]');
+    overlay = login.$.overlay;
+    form = login.$.form;
   });
 
-  it('should teleport custom field components to the login form', async () => {
-    overlay.opened = true;
-    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
+  it('should export all overlay wrapper parts for styling', () => {
+    const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+    const exportParts = overlay.getAttribute('exportparts').split(', ');
 
-    const wrapper = form.querySelector('vaadin-login-form-wrapper');
-    expect(divs[0].parentElement).to.equal(wrapper);
-    expect(divs[1].parentElement).to.equal(wrapper);
+    parts.forEach((part) => {
+      expect(exportParts).to.include(part);
+    });
+  });
 
-    overlay.opened = false;
-    await nextRender();
+  it('should export all form wrapper parts for styling', () => {
+    const parts = [...form.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+    const exportParts = form.getAttribute('exportparts').split(', ');
 
-    expect(divs[0].parentElement).to.equal(overlay);
-    expect(divs[1].parentElement).to.equal(overlay);
+    parts.forEach((part) => {
+      expect(exportParts).to.include(part);
+    });
   });
 });

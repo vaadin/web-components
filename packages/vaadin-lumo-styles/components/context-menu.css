@@ -12,21 +12,22 @@
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 
-:is(:root, :host)::before {
-  --vaadin-context-menu-overlay-lumo-inject: 1;
-  --vaadin-context-menu-overlay-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-context-menu-overlay-inject: 1;
+  --_lumo-vaadin-context-menu-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
     lumo_components_context-menu-overlay;
 
-  --vaadin-context-menu-list-box-lumo-inject: 1;
-  --vaadin-context-menu-list-box-lumo-inject-modules:
+  --_lumo-vaadin-context-menu-list-box-inject: 1;
+  --_lumo-vaadin-context-menu-list-box-inject-modules:
     lumo_components_list-box,
     lumo_components_context-menu-list-box;
 
-  --vaadin-context-menu-item-lumo-inject: 1;
-  --vaadin-context-menu-item-lumo-inject-modules:
+  --_lumo-vaadin-context-menu-item-inject: 1;
+  --_lumo-vaadin-context-menu-item-inject-modules:
     lumo_components_item,
     lumo_components_context-menu-item;
 }

@@ -19,15 +19,19 @@ import {
   setSpacing,
 } from './helpers.js';
 
-const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
+// Corresponds to --_default-padding: var(--vaadin-padding-l); (16px)
+const defaultPadding = 16;
+
+// Corresponds to --_default-gap: var(--vaadin-gap-s); (8px)
+const defaultSpacing = 8;
+
+const defaultMinimumColumnWidth = (() => {
   const div = document.createElement('div');
   document.body.appendChild(div);
   div.style.width = '1rem';
   const minColWidth = div.offsetWidth * 25;
-  div.style.width = '1rem'; // var(--lumo-space-m)
-  const spacing = div.offsetWidth;
   div.remove();
-  return [spacing, minColWidth];
+  return minColWidth;
 })();
 
 describe('dashboard layout', () => {
@@ -317,7 +321,7 @@ describe('dashboard layout', () => {
       // Clear the gap used in the tests
       setSpacing(dashboard, undefined);
       // Increase the width of the dashboard to fit two items, paddings and a gap
-      dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
+      dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultPadding * 2}px + ${defaultSpacing}px)`;
       await nextResize(dashboard);
 
       const { right: item0Right } = childElements[0].getBoundingClientRect();
@@ -361,7 +365,7 @@ describe('dashboard layout', () => {
       const { left: itemLeft } = childElements[0].getBoundingClientRect();
       const { left: dashboardLeft } = dashboard.getBoundingClientRect();
       // Expect the dashboard to have default padding of 1rem
-      expect(itemLeft - dashboardLeft).to.eql(defaultSpacing);
+      expect(itemLeft - dashboardLeft).to.eql(defaultPadding);
     });
 
     it('should have custom gap between items horizontally', async () => {
@@ -547,7 +551,7 @@ describe('dashboard layout', () => {
         // Clear the spacing used in the tests
         setSpacing(dashboard, undefined);
         // Increase the width of the dashboard to fit two items, paddings and a gap
-        dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
+        dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultPadding * 3}px + ${defaultSpacing}px)`;
         await nextResize(dashboard);
 
         const { right: item2Right } = childElements[2].getBoundingClientRect();

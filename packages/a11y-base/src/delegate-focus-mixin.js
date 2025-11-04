@@ -73,18 +73,24 @@ export const DelegateFocusMixin = dedupeMixin(
         if (this.autofocus && !this.disabled) {
           requestAnimationFrame(() => {
             this.focus();
-            this.setAttribute('focus-ring', '');
           });
         }
       }
 
       /**
+       * @param {FocusOptions=} options
        * @protected
        * @override
        */
-      focus() {
+      focus(options) {
         if (this.focusElement && !this.disabled) {
           this.focusElement.focus();
+
+          // Set focus-ring attribute on programmatic focus by default
+          // unless explicitly disabled by `{ focusVisible: false }`.
+          if (!(options && options.focusVisible === false)) {
+            this.setAttribute('focus-ring', '');
+          }
         }
       }
 

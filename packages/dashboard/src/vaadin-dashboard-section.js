@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dashboardSectionStyles } from './styles/vaadin-dashboard-section-core-styles.js';
+import { dashboardSectionStyles } from './styles/vaadin-dashboard-section-base-styles.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 
@@ -71,7 +71,7 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  * @mixes DashboardItemMixin
  */
 class DashboardSection extends DashboardItemMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-dashboard-section';
@@ -79,6 +79,10 @@ class DashboardSection extends DashboardItemMixin(
 
   static get styles() {
     return dashboardSectionStyles;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -90,7 +94,7 @@ class DashboardSection extends DashboardItemMixin(
        * `i18n` object with a custom one.
        *
        * The object has the following structure and default values:
-       * ```
+       * ```js
        * {
        *   selectSection: 'Select section for editing',
        *   remove: 'Remove',

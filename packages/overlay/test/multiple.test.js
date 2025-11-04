@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { click, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
-import { setNestedOverlay } from '../src/vaadin-overlay-stack-mixin.js';
 import { createOverlay } from './helpers.js';
 
 describe('multiple overlays', () => {
@@ -229,16 +228,6 @@ describe('multiple overlays', () => {
       expect(overlay.scrollTop).to.equal(100);
     });
 
-    it('should grow the z-index by 1', () => {
-      modeless1.opened = true;
-      modeless2.opened = true;
-      modeless1.bringToFront();
-
-      const zIndex1 = parseFloat(getComputedStyle(modeless1).zIndex);
-      const zIndex2 = parseFloat(getComputedStyle(modeless2).zIndex);
-      expect(zIndex1).to.equal(zIndex2 + 1);
-    });
-
     it('should bring the newly opened overlay to front', () => {
       modeless1.opened = true;
       modeless2.opened = true;
@@ -251,18 +240,35 @@ describe('multiple overlays', () => {
       expect(frontmost).to.equal(modeless2);
     });
 
-    it('should reset z-indexes', () => {
-      modeless1.opened = true;
+    it('should not call showPopover on bringToFront if only nested overlay is open', () => {
+      modeless2.opened = true;
       modeless2.opened = true;
 
-      const zIndex1 = parseFloat(getComputedStyle(modeless1).zIndex);
-      expect(parseFloat(modeless2.style.zIndex)).to.equal(zIndex1 + 1);
+      // Mimic nested overlays case
+      modeless1.appendChild(modeless2);
 
-      modeless1.opened = false;
-      modeless2.opened = false;
+      const showSpy1 = sinon.spy(modeless1, 'showPopover');
+      const showSpy2 = sinon.spy(modeless2, 'showPopover');
 
+      modeless1.bringToFront();
+
+      expect(showSpy1).to.be.not.called;
+      expect(showSpy2).to.be.not.called;
+
+      expect(modeless2._last).to.be.true;
+    });
+
+    it('should not call showPopover on bringToFront for the last open overlay', () => {
       modeless2.opened = true;
-      expect(modeless2.style.zIndex).to.be.empty;
+      modeless2.opened = true;
+
+      const showSpy2 = sinon.spy(modeless2, 'showPopover');
+
+      modeless2.bringToFront();
+
+      expect(showSpy2).to.be.not.called;
+
+      expect(modeless2._last).to.be.true;
     });
 
     it('should not fire the vaadin-overlay-escape-press if the overlay does not contain focus', () => {
@@ -316,57 +322,6 @@ describe('multiple overlays', () => {
 
       escKeyDown(input);
       expect(spy.called).to.be.false;
-    });
-  });
-
-  describe('setNestedOverlay', () => {
-    let overlays;
-
-    beforeEach(() => {
-      overlays = Array.from(
-        fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay modeless></vaadin-overlay>
-          <vaadin-overlay modeless></vaadin-overlay>
-          <vaadin-overlay modeless></vaadin-overlay>
-        </div>
-      `).children,
-      );
-      overlays.forEach((el, idx) => {
-        el.renderer = (root) => {
-          if (!root.firstChild) {
-            const btn = document.createElement('button');
-            btn.textContent = `Overlay ${idx}`;
-            root.appendChild(btn);
-          }
-        };
-      });
-    });
-
-    it('should bring nested overlays to front recursively', () => {
-      setNestedOverlay(overlays[0], overlays[1]);
-      setNestedOverlay(overlays[1], overlays[2]);
-
-      const bringToFrontSpy1 = sinon.spy(overlays[1], 'bringToFront');
-      const bringToFrontSpy2 = sinon.spy(overlays[2], 'bringToFront');
-
-      overlays[0].bringToFront();
-
-      expect(bringToFrontSpy1).to.be.calledOnce;
-      expect(bringToFrontSpy2).to.be.calledOnce;
-      expect(bringToFrontSpy2).to.be.calledAfter(bringToFrontSpy1);
-    });
-
-    it('should not bring nested overlay to front when resetting', () => {
-      setNestedOverlay(overlays[0], overlays[1]);
-
-      setNestedOverlay(overlays[0], null);
-
-      const bringToFrontSpy = sinon.spy(overlays[1], 'bringToFront');
-
-      overlays[0].bringToFront();
-
-      expect(bringToFrontSpy).to.be.not.called;
     });
   });
 });

@@ -1,7 +1,7 @@
 import { fire, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/global.css';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/global/index.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/tooltip.css';
 import '../../not-animated-styles.js';
 import { Tooltip } from '../../../vaadin-tooltip.js';
@@ -9,10 +9,12 @@ import { Tooltip } from '../../../vaadin-tooltip.js';
 describe('tooltip', () => {
   let div, target, element;
 
-  before(() => {
+  before(async () => {
     Tooltip.setDefaultFocusDelay(0);
     Tooltip.setDefaultHoverDelay(0);
     Tooltip.setDefaultHideDelay(0);
+    // Preload markdown helpers to avoid dynamic import delays
+    await Tooltip.__importMarkdownHelpers();
   });
 
   beforeEach(() => {
@@ -76,5 +78,30 @@ describe('tooltip', () => {
     await nextUpdate(element);
     fire(target, 'mouseenter');
     await visualDiff(div, 'white-space-pre');
+  });
+
+  it('custom offset', async () => {
+    element.style.setProperty('--vaadin-tooltip-offset-top', '15px');
+    await nextUpdate(element);
+    fire(target, 'mouseenter');
+    await visualDiff(div, 'custom-offset');
+  });
+
+  it('markdown', async () => {
+    // Increase container height to fit larger tooltip content
+    div.style.height = '500px';
+
+    element.markdown = true;
+    element.text = `
+## Tooltip Title
+
+This tooltip contains:
+
+- **Bold** and *italic* text
+- A [link](https://vaadin.com)
+- Code: \`console.log('Hello')\``;
+    await nextUpdate(element);
+    fire(target, 'mouseenter');
+    await visualDiff(div, 'markdown');
   });
 });

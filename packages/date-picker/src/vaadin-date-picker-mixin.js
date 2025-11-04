@@ -10,7 +10,6 @@ import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import {
@@ -85,13 +84,12 @@ export const datePickerI18nDefaults = Object.freeze({
  * @mixes I18nMixin
  * @mixes InputConstraintsMixin
  * @mixes KeyboardMixin
- * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
   class DatePickerMixinClass extends I18nMixin(
     datePickerI18nDefaults,
-    OverlayClassMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))),
+    DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))),
   ) {
     static get properties() {
       return {
@@ -295,7 +293,6 @@ export const DatePickerMixin = (subclass) =>
 
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
-      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
     }
 
     /**
@@ -305,7 +302,7 @@ export const DatePickerMixin = (subclass) =>
      *
      * The object has the following JSON structure and default values:
      *
-     * ```
+     * ```js
      * {
      *   // An array with the full names of months starting
      *   // with January.
@@ -453,13 +450,17 @@ export const DatePickerMixin = (subclass) =>
 
       this.addController(new VirtualKeyboardController(this));
 
-      const overlay = this.$.overlay;
-      this._overlayElement = overlay;
+      this._overlayElement = this.$.overlay;
+    }
 
-      overlay.renderer = this._boundOverlayRenderer;
+    /** @protected */
+    updated(props) {
+      super.updated(props);
 
-      this.addEventListener('mousedown', () => this.__bringToFront());
-      this.addEventListener('touchstart', () => this.__bringToFront());
+      if (props.has('showWeekNumbers') || props.has('__effectiveI18n')) {
+        // Currently only supported for locales that start the week on Monday.
+        this.toggleAttribute('week-numbers', this.showWeekNumbers && this.__effectiveI18n.firstDayOfWeek === 1);
+      }
     }
 
     /** @protected */
@@ -470,6 +471,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */
@@ -498,14 +500,15 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _overlayRenderer(root) {
-      if (root.firstChild) {
+    __ensureContent() {
+      if (this._overlayContent) {
         return;
       }
 
       // Create and store document content element
       const content = document.createElement('vaadin-date-picker-overlay-content');
-      root.appendChild(content);
+      content.setAttribute('slot', 'overlay');
+      this.appendChild(content);
 
       this._overlayContent = content;
 
@@ -614,6 +617,23 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
+     * Override method inherited from `ClearButtonMixin`
+     * to not blur on clear button mousedown when opened
+     * so that focus remains in the input field.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldKeepFocusOnClearMousedown() {
+      if (this.opened) {
+        return true;
+      }
+
+      return super._shouldKeepFocusOnClearMousedown();
+    }
+
+    /**
      * Override method inherited from `FocusMixin`
      * to prevent removing the `focused` attribute:
      * - when moving focus to the overlay content,
@@ -713,13 +733,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    __bringToFront() {
-      requestAnimationFrame(() => {
-        this.$.overlay.bringToFront();
-      });
-    }
-
-    /** @private */
     // eslint-disable-next-line @typescript-eslint/max-params
     _isNoInput(inputElement, fullscreen, ios, effectiveI18n, opened, autoOpenDisabled) {
       // On fullscreen mode, text input is disabled if auto-open isn't disabled or
@@ -752,6 +765,10 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _openedChanged(opened) {
+      if (opened) {
+        this.__ensureContent();
+      }
+
       if (this.inputElement) {
         this.inputElement.setAttribute('aria-expanded', opened);
       }
@@ -912,7 +929,7 @@ export const DatePickerMixin = (subclass) =>
         this._overlayContent.focusDateElement();
       }
 
-      const focusables = this._noInput ? content : [input, content];
+      const focusables = this._noInput ? content : this;
       this.__showOthers = hideOthers(focusables);
     }
 
@@ -1031,6 +1048,11 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     _onClick(event) {
+      // Ignore click events bubbling from the overlay
+      if (event.composedPath().includes(this._overlayElement)) {
+        return;
+      }
+
       // Clear button click is handled in separate listener
       // but bubbles to the host, so we need to ignore it.
       if (!this._isClearButton(event)) {
@@ -1072,10 +1094,8 @@ export const DatePickerMixin = (subclass) =>
         // The input element cannot be readonly as it would conflict with
         // the required attribute. Both are not allowed on an input element.
         // Therefore we prevent default on most keydown events.
-        const allowedKeys = [
-          9, // Tab
-        ];
-        if (allowedKeys.indexOf(e.keyCode) === -1) {
+        const allowedKeys = ['Tab', 'Escape'];
+        if (allowedKeys.indexOf(e.key) === -1) {
           e.preventDefault();
         }
       }
@@ -1115,11 +1135,16 @@ export const DatePickerMixin = (subclass) =>
     /**
      * Override an event listener from `KeyboardMixin`.
      *
-     * @param {!KeyboardEvent} _event
+     * @param {!KeyboardEvent} event
      * @protected
      * @override
      */
-    _onEnter(_event) {
+    _onEnter(event) {
+      // Ignore Enter keydown event bubbling from the overlay
+      if (event.composedPath().includes(this._overlayContent)) {
+        return;
+      }
+
       if (this.opened) {
         // Closing will implicitly select parsed or focused date
         this.close();

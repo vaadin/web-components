@@ -24,6 +24,15 @@ describe('dropdown', () => {
     expect(overlay.owner).to.equal(datePicker);
   });
 
+  it('should export all overlay parts for styling', () => {
+    const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+    const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+    parts.forEach((part) => {
+      expect(exportParts).to.include(part);
+    });
+  });
+
   it('should update position of the overlay after changing opened property', async () => {
     const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
     datePicker.opened = true;
@@ -31,17 +40,27 @@ describe('dropdown', () => {
     expect(inputField.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
-  it('should detach overlay on datePicker detach', async () => {
+  it('should close overlay when date-picker is disconnected', async () => {
     await open(datePicker);
     datePicker.parentElement.removeChild(datePicker);
-    expect(overlay.parentElement).to.not.be.ok;
+    expect(overlay.opened).to.be.false;
+  });
+
+  it('should close overlay on backdrop element click', async () => {
+    await open(datePicker);
+
+    datePicker.setAttribute('fullscreen', '');
+    overlay.shadowRoot.querySelector('[part="backdrop"]').click();
+
+    expect(datePicker.opened).to.be.false;
+    expect(overlay.opened).to.be.false;
   });
 
   describe('toggle button', () => {
     let toggleButton;
 
     beforeEach(() => {
-      toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
+      toggleButton = datePicker.shadowRoot.querySelector('[part~="toggle-button"]');
     });
 
     it('should open by tapping the calendar icon', async () => {

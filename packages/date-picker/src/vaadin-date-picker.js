@@ -18,7 +18,7 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { datePickerStyles } from './styles/vaadin-date-picker-core-styles.js';
+import { datePickerStyles } from './styles/vaadin-date-picker-base-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 
 /**
@@ -42,33 +42,49 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * -------------------------------|----------------------------|---------
  * `--vaadin-field-default-width` | Default width of the field | `12em`
  *
- * `<vaadin-date-picker>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
  *
- * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and buttons
+ * `field-button`       | Set on both clear and toggle buttons
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `toggle-button`      | The toggle button
+ * `backdrop`           | Backdrop of the overlay
+ * `overlay`            | The overlay container
+ * `content`            | The overlay content
  *
- * Part name             | Description
- * ----------------------|--------------------
- * `toggle-button`       | Toggle button
+ * The following state attributes are available for styling:
  *
- * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
- *
- * Attribute  | Description                                      | Part name
- * -----------|--------------------------------------------------|-----------
- * `opened`   | Set when the date selector overlay is opened     | :host
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
+ * `invalid`            | Set when the element is invalid
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ * `opened`             | Set when the overlay is opened
+ * `week-numbers`       | Set when week numbers are shown in the calendar
  *
  * ### Internal components
  *
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-date-picker-month-scroller>`
  * - `<vaadin-date-picker-year-scroller>`
  * - `<vaadin-date-picker-year>`
  * - `<vaadin-month-calendar>`
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
  * In order to style the overlay content, use `<vaadin-date-picker-overlay-content>` shadow DOM parts:
  *
@@ -109,9 +125,6 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * `year-number`         | Year number
  * `year-separator`      | Year separator
  *
- * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
- * propagated to the internal components listed above.
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Change events
@@ -145,7 +158,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @mixes DatePickerMixin
  */
 class DatePicker extends DatePickerMixin(
-  InputControlMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))),
+  InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-date-picker';
@@ -192,8 +205,8 @@ class DatePicker extends DatePickerMixin(
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" @click="${this._toggle}"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
+          <div part="field-button toggle-button" slot="suffix" aria-hidden="true" @click="${this._toggle}"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -203,13 +216,14 @@ class DatePicker extends DatePickerMixin(
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-date-picker-overlay
         id="overlay"
         .owner="${this}"
         ?fullscreen="${this._fullscreen}"
-        ?week-numbers="${this.showWeekNumbers}"
         theme="${ifDefined(this._theme)}"
         .opened="${this.opened}"
         @opened-changed="${this._onOpenedChanged}"
@@ -219,11 +233,12 @@ class DatePicker extends DatePickerMixin(
         @vaadin-overlay-closing="${this._onOverlayClosed}"
         restore-focus-on-close
         no-vertical-overlap
+        exportparts="backdrop, overlay, content"
         .restoreFocusNode="${this.inputElement}"
         .positionTarget="${this._positionTarget}"
-      ></vaadin-date-picker-overlay>
-
-      <slot name="tooltip"></slot>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-date-picker-overlay>
     `;
   }
 
@@ -258,7 +273,7 @@ class DatePicker extends DatePickerMixin(
 
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
 
-    const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
+    const toggleButton = this.shadowRoot.querySelector('[part="field-button toggle-button"]');
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
   }
 
@@ -270,7 +285,8 @@ class DatePicker extends DatePickerMixin(
   /** @private */
   _onVaadinOverlayClose(e) {
     // Prevent closing the overlay on label element click
-    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
+    const event = e.detail.sourceEvent;
+    if (event && event.composedPath().includes(this) && !event.composedPath().includes(this._overlayElement)) {
       e.preventDefault();
     }
   }

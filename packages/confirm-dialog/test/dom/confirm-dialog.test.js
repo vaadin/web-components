@@ -18,24 +18,26 @@ describe('vaadin-confirm-dialog', () => {
       </vaadin-confirm-dialog>
     `);
     await nextRender();
-    overlay = dialog.$.dialog._overlayElement;
+    overlay = dialog.$.overlay;
     dialog.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
   });
 
-  it('overlay', async () => {
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  it('host', async () => {
+    await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('overlay theme', async () => {
+  it('shadow', async () => {
+    await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
+  it('theme', async () => {
     dialog.setAttribute('theme', 'custom');
     await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
-  it('overlay class', async () => {
-    dialog.overlayClass = 'confirm-dialog-overlay custom';
-    await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  it('overlay', async () => {
+    await expect(overlay).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

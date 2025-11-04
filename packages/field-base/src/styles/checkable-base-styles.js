@@ -3,14 +3,15 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css, unsafeCSS } from 'lit';
 
+// postcss-lit-disable-next-line
 export const checkable = (part, propName = part) => css`
   :host {
     align-items: center;
     display: inline-grid;
-    gap: var(--vaadin-${unsafeCSS(propName)}-gap, 0.25lh var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     /*
       Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox
@@ -19,10 +20,11 @@ export const checkable = (part, propName = part) => css`
     */
     grid-template-rows: minmax(auto, max-content);
     -webkit-tap-highlight-color: transparent;
+    --_cursor: var(--vaadin-clickable-cursor);
   }
 
   :host([disabled]) {
-    cursor: var(--vaadin-disabled-cursor);
+    --_cursor: var(--vaadin-disabled-cursor);
   }
 
   :host(:not([has-label])) {
@@ -45,8 +47,10 @@ export const checkable = (part, propName = part) => css`
     font-size: var(--vaadin-${unsafeCSS(propName)}-label-font-size, var(--vaadin-input-field-label-font-size, inherit));
     line-height: var(--vaadin-${unsafeCSS(propName)}-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
     font-weight: var(--vaadin-${unsafeCSS(propName)}-font-weight, var(--vaadin-input-field-label-font-weight, 500));
-    color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-color)));
+    color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     word-break: break-word;
+    cursor: var(--_cursor);
+    /* TODO clicking the label part doesn't toggle the checked state, even though it triggers the active state */
   }
 
   [part='${unsafeCSS(part)}'],
@@ -64,7 +68,6 @@ export const checkable = (part, propName = part) => css`
     content: '\\2003';
     grid-column: 1;
     grid-row: 1;
-    z-index: -1;
     width: 0;
   }
 
@@ -76,33 +79,35 @@ export const checkable = (part, propName = part) => css`
     appearance: none;
     width: 100%;
     height: 100%;
+    cursor: var(--_cursor);
   }
 
   /* Control container (checkbox, radio button) */
   [part='${unsafeCSS(part)}'] {
     background: var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color));
-    border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong)));
+    border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--vaadin-border-color)));
     border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--vaadin-radius-s));
-    border-style: solid;
+    border-style: var(--_border-style, solid);
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
-    color: var(--vaadin-${unsafeCSS(propName)}-color, var(--vaadin-input-field-text-color, var(--vaadin-color)));
+    color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)));
     height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
+    cursor: var(--_cursor);
   }
 
   :host(:is([checked], [indeterminate])) {
-    --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-color);
+    --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-text-color);
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-color: var(--vaadin-background-color);
+    --vaadin-${unsafeCSS(propName)}-marker-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   }
 
   :host([disabled]) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-color: var(--vaadin-color-disabled);
+    --vaadin-${unsafeCSS(propName)}-marker-color: var(--vaadin-text-color-disabled);
   }
 
   /* Focus ring */
@@ -135,19 +140,27 @@ export const checkable = (part, propName = part) => css`
 
   @media (forced-colors: active) {
     :host(:is([checked], [indeterminate])) {
-      --vaadin-${unsafeCSS(propName)}-border-color: CanvasText;
+      --vaadin-${unsafeCSS(propName)}-border-color: CanvasText !important;
+    }
+
+    :host(:is([checked], [indeterminate])) [part='${unsafeCSS(part)}'] {
+      background: SelectedItem !important;
+    }
+
+    :host(:is([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
+      background: SelectedItemText !important;
     }
 
     :host([readonly]) [part='${unsafeCSS(part)}']::after {
-      background: CanvasText;
+      background: CanvasText !important;
     }
 
     :host([disabled]) {
-      --vaadin-${unsafeCSS(propName)}-border-color: GrayText;
+      --vaadin-${unsafeCSS(propName)}-border-color: GrayText !important;
     }
 
     :host([disabled]) [part='${unsafeCSS(part)}']::after {
-      background: GrayText;
+      background: GrayText !important;
     }
   }
 `;

@@ -1,7 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/tabsheet.css';
 import '@vaadin/tabs/test/visual/not-animated-styles.js';
 import '../../../vaadin-tabsheet.js';
@@ -56,18 +56,27 @@ describe('tabsheet', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      describe(`${dir}`, () => {
-        it('default', async () => {
-          await visualDiff(div, `${dir}-default`);
+      it('default', async () => {
+        await visualDiff(div, `${dir}-default`);
+      });
+
+      it('bordered', async () => {
+        element.setAttribute('theme', 'bordered');
+        await visualDiff(div, `${dir}-bordered`);
+      });
+
+      describe('no-padding', () => {
+        before(() => {
+          const contentStyles = new CSSStyleSheet();
+          contentStyles.insertRule('vaadin-tabsheet::part(content) { padding: 20px; }');
+          document.adoptedStyleSheets = [contentStyles];
         });
 
-        it('bordered', async () => {
-          element.setAttribute('theme', 'bordered');
-          await visualDiff(div, `${dir}-bordered`);
+        after(() => {
+          document.adoptedStyleSheets = [];
         });
 
-        // prettier-ignore
-        it('no-padding', async () => { // NOSONAR
+        it('no-padding', async () => {
           element.setAttribute('theme', 'no-padding');
           await visualDiff(div, `${dir}-no-padding`);
         });

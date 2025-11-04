@@ -3,7 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   /* Border radius */
   --lumo-border-radius-s: 0.25em; /* Checkbox, badge, date-picker year indicator, etc */
   --lumo-border-radius-m: var(--lumo-border-radius, 0.25em); /* Button, text field, menu overlay, etc */

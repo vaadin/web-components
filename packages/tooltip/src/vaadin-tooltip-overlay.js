@@ -7,11 +7,11 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { PopoverOverlayMixin } from '@vaadin/popover/src/vaadin-popover-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-core-styles.js';
+import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-tooltip>`. Not intended to be used separately.
@@ -24,7 +24,7 @@ import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-core-style
  * @private
  */
 class TooltipOverlay extends PopoverOverlayMixin(
-  DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-tooltip-overlay';
@@ -34,29 +34,13 @@ class TooltipOverlay extends PopoverOverlayMixin(
     return [overlayStyles, tooltipOverlayStyles];
   }
 
-  /**
-   * Tag name prefix used by custom properties.
-   * @protected
-   * @return {string}
-   */
-  get _tagNamePrefix() {
-    return 'vaadin-tooltip';
-  }
-
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
-  }
-
-  requestContentUpdate() {
-    super.requestContentUpdate();
-
-    this.toggleAttribute('hidden', this.textContent.trim() === '');
   }
 }
 

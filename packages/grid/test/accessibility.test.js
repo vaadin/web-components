@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -219,6 +220,103 @@ describe('accessibility', () => {
       grid.collapseItem({ name: '0' });
       expect(grid.$.items.children[1].getAttribute('aria-level')).to.be.null;
     });
+
+    describe('toggle cell', () => {
+      function setupTreeGrid(additionalColumns = []) {
+        grid = fixtureSync(`
+        <vaadin-grid item-id-path="name">
+          ${additionalColumns.join('')}
+          <vaadin-grid-tree-column path="name" width="200px" header="Name" flex-shrink="0"></vaadin-grid-tree-column>
+          <vaadin-grid-column path="value" header="Value"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+        grid.dataProvider = ({ parentItem }, callback) => {
+          const itemsOnEachLevel = 5;
+          const items = [...Array(itemsOnEachLevel)].map((_, i) => {
+            return {
+              name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
+              value: `value-${i}`,
+              children: i % 2 === 0,
+              id: `${parentItem ? `${parentItem.id}-` : ''}${i}`,
+            };
+          });
+          callback(items, itemsOnEachLevel);
+        };
+        flushGrid(grid);
+        return grid;
+      }
+
+      function getToggleCell(row) {
+        for (const cell of row.querySelectorAll('td')) {
+          if (cell._content && cell._content.querySelector('vaadin-grid-tree-toggle')) {
+            return cell;
+          }
+        }
+        return null;
+      }
+
+      function getExpandableRows() {
+        return Array.from(grid.$.items.children).filter((row) => row.getAttribute('aria-expanded') !== null);
+      }
+
+      describe('aria-expanded', () => {
+        beforeEach(() => {
+          setupTreeGrid();
+        });
+
+        it('should reflect aria-expanded state of rows', () => {
+          Array.from(grid.$.items.children).forEach((row) => {
+            const toggleCell = getToggleCell(row);
+            expect(toggleCell).to.exist;
+            expect(toggleCell.getAttribute('aria-expanded')).to.equal(row.getAttribute('aria-expanded'));
+          });
+        });
+
+        it('should update cell aria-expanded when row expanded state changes', () => {
+          const row = getExpandableRows()[0];
+          const toggleCell = getToggleCell(row);
+          const itemName = row._item.name;
+
+          expect(row.getAttribute('aria-expanded')).to.equal('false');
+          expect(toggleCell.getAttribute('aria-expanded')).to.equal('false');
+
+          grid.expandItem({ name: itemName });
+          expect(row.getAttribute('aria-expanded')).to.equal('true');
+          expect(toggleCell.getAttribute('aria-expanded')).to.equal('true');
+
+          grid.collapseItem({ name: itemName });
+          expect(row.getAttribute('aria-expanded')).to.equal('false');
+          expect(toggleCell.getAttribute('aria-expanded')).to.equal('false');
+        });
+
+        it('should handle expansion via keyboard interaction', async () => {
+          const toggleCell = getToggleCell(getExpandableRows()[0]);
+          toggleCell.focus();
+          await sendKeys({ press: 'Space' });
+          expect(toggleCell.getAttribute('aria-expanded')).to.equal('true');
+          await sendKeys({ press: 'Space' });
+          expect(toggleCell.getAttribute('aria-expanded')).to.equal('false');
+        });
+      });
+
+      describe('with selection column', () => {
+        beforeEach(() => {
+          setupTreeGrid(['<vaadin-grid-selection-column></vaadin-grid-selection-column>']);
+        });
+
+        it('should update correct cell when selection column is present', () => {
+          const expandableRows = getExpandableRows();
+          expect(expandableRows.length).to.be.above(0);
+          expandableRows.forEach((row) => {
+            const toggleCell = getToggleCell(row);
+            expect(toggleCell).to.exist;
+            expect(toggleCell).to.not.equal(row.querySelector('td'));
+            expect(toggleCell._content.querySelector('vaadin-grid-tree-toggle')).to.exist;
+            expect(toggleCell.getAttribute('aria-expanded')).to.equal(row.getAttribute('aria-expanded'));
+          });
+        });
+      });
+    });
   });
 
   describe('details', () => {
@@ -239,6 +337,19 @@ describe('accessibility', () => {
         grid.appendChild(column);
         await nextFrame();
         expect(grid.$.table.getAttribute('aria-colcount')).to.equal('4');
+      });
+
+      it('should update aria-colcount when grid is empty with empty-state and no header/footer rendered', async () => {
+        const emptyStateText = document.createElement('span');
+        emptyStateText.setAttribute('slot', 'empty-state');
+        grid.appendChild(emptyStateText);
+        grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+          col.headerRenderer = null;
+          col.footerRenderer = null;
+        });
+        grid.items = [];
+        await nextFrame();
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('1');
       });
     });
 
@@ -313,6 +424,26 @@ describe('accessibility', () => {
 
       // 10 item rows + header row + footer row = 12 in total
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
+    });
+
+    it('should count the footer rows correctly as part of the aria-rowcount', async () => {
+      // Remove the header renderers
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.headerRenderer = null;
+      });
+
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
+    });
+
+    it('should count the header rows correctly as part of the aria-rowcount', async () => {
+      // Remove the footer renderers
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.footerRenderer = null;
+      });
+
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
     });
   });
 

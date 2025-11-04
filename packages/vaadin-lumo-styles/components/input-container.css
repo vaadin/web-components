@@ -5,7 +5,8 @@
  */
 @import '../src/components/input-container.css';
 
-:is(:root, :host)::before {
-  --vaadin-input-container-lumo-inject: 1;
-  --vaadin-input-container-lumo-inject-modules: lumo_components_input-container;
+:root::before,
+:host::before {
+  --_lumo-vaadin-input-container-inject: 1;
+  --_lumo-vaadin-input-container-inject-modules: lumo_components_input-container;
 }

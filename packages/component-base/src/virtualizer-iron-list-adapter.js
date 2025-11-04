@@ -14,15 +14,29 @@ const MAX_VIRTUAL_COUNT = 100000;
 const OFFSET_ADJUST_MIN_THRESHOLD = 1000;
 
 export class IronListAdapter {
-  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
+  constructor({
+    createElements,
+    updateElement,
+    scrollTarget,
+    scrollContainer,
+    reorderElements,
+    elementsContainer,
+    __disableHeightPlaceholder,
+  }) {
     this.isAttached = true;
     this._vidxOffset = 0;
     this.createElements = createElements;
     this.updateElement = updateElement;
     this.scrollTarget = scrollTarget;
     this.scrollContainer = scrollContainer;
-    this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
+    this.elementsContainer = elementsContainer || scrollContainer;
+
+    // Internal option that disables the heavy height placeholder calculation
+    // (see __afterElementsUpdated) for components that always render virtual
+    // elements with a non-zero height. Not for public use.
+    this.__disableHeightPlaceholder = __disableHeightPlaceholder ?? false;
+
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
@@ -33,7 +47,7 @@ export class IronListAdapter {
 
     this.timeouts = {
       SCROLL_REORDER: 500,
-      IGNORE_WHEEL: 500,
+      PREVENT_OVERSCROLL: 500,
       FIX_INVALID_ITEM_POSITIONING: 100,
     };
 
@@ -65,7 +79,6 @@ export class IronListAdapter {
     attachObserver.observe(this.scrollTarget);
 
     this._scrollLineHeight = this._getScrollLineHeight();
-    this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
 
     this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
     this.elementsContainer.addEventListener('focusin', () => {
@@ -218,7 +231,16 @@ export class IronListAdapter {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
+      const elementOldPhysicalSize = this._physicalSizes[pidx];
       this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+
+      if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
+        // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
+        // See https://github.com/vaadin/web-components/issues/9077
+        this.__resizeObserver.unobserve(this._physicalItems[pidx]);
+        this.__resizeObserver.observe(this._physicalItems[pidx], { box: 'border-box' });
+      }
+
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
@@ -271,33 +293,35 @@ export class IronListAdapter {
    * @param {!Array<!HTMLElement>} updatedElements
    */
   __afterElementsUpdated(updatedElements) {
-    updatedElements.forEach((el) => {
-      const elementHeight = el.offsetHeight;
-      if (elementHeight === 0) {
-        // If the elements have 0 height after update (for example due to lazy rendering),
-        // it results in iron-list requesting to create an unlimited count of elements.
-        // Assign a temporary placeholder sizing to elements that would otherwise end up having
-        // no height.
-        el.style.paddingTop = `${this.__placeholderHeight}px`;
-        el.style.opacity = '0';
-        el.__virtualizerPlaceholder = true;
+    if (!this.__disableHeightPlaceholder) {
+      updatedElements.forEach((el) => {
+        const elementHeight = el.offsetHeight;
+        if (elementHeight === 0) {
+          // If the elements have 0 height after update (for example due to lazy rendering),
+          // it results in iron-list requesting to create an unlimited count of elements.
+          // Assign a temporary placeholder sizing to elements that would otherwise end up having
+          // no height.
+          el.style.paddingTop = `${this.__placeholderHeight}px`;
+          el.style.opacity = '0';
+          el.__virtualizerPlaceholder = true;
 
-        // Manually schedule the resize handler to make sure the placeholder padding is
-        // cleared in case the resize observer never triggers.
-        this.__placeholderClearDebouncer = Debouncer.debounce(this.__placeholderClearDebouncer, animationFrame, () =>
-          this._resizeHandler(),
-        );
-      } else {
-        // Add element height to the queue
-        this.__elementHeightQueue.push(elementHeight);
-        this.__elementHeightQueue.shift();
+          // Manually schedule the resize handler to make sure the placeholder padding is
+          // cleared in case the resize observer never triggers.
+          this.__placeholderClearDebouncer = Debouncer.debounce(this.__placeholderClearDebouncer, animationFrame, () =>
+            this._resizeHandler(),
+          );
+        } else {
+          // Add element height to the queue
+          this.__elementHeightQueue.push(elementHeight);
+          this.__elementHeightQueue.shift();
 
-        // Calculate new placeholder height based on the average of the defined values in the
-        // element height queue
-        const filteredHeights = this.__elementHeightQueue.filter((h) => h !== undefined);
-        this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
-      }
-    });
+          // Calculate new placeholder height based on the average of the defined values in the
+          // element height queue
+          const filteredHeights = this.__elementHeightQueue.filter((h) => h !== undefined);
+          this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
+        }
+      });
+    }
 
     if (this.__pendingScrollToIndex !== undefined && !this.__hasPlaceholders()) {
       this.scrollToIndex(this.__pendingScrollToIndex);
@@ -432,7 +456,7 @@ export class IronListAdapter {
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
       fragment.appendChild(el);
-      this.__resizeObserver.observe(el);
+      this.__resizeObserver.observe(el, { box: 'border-box' });
     });
     this.elementsContainer.appendChild(fragment);
     return physicalItems;
@@ -548,8 +572,8 @@ export class IronListAdapter {
       return;
     }
 
-    this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
-    const delta = this.scrollTarget.scrollTop - this._scrollPosition;
+    this._adjustVirtualIndexOffset(this._scrollTop - this._scrollPosition);
+    const delta = this._scrollTop - this._scrollPosition;
 
     super._scrollHandler();
 
@@ -580,6 +604,18 @@ export class IronListAdapter {
         timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
         () => this.__fixInvalidItemPositioning(),
       );
+
+      if (!this.__overscrollDebouncer?.isActive()) {
+        this.scrollTarget.style.overscrollBehavior = 'none';
+      }
+
+      this.__overscrollDebouncer = Debouncer.debounce(
+        this.__overscrollDebouncer,
+        timeOut.after(this.timeouts.PREVENT_OVERSCROLL),
+        () => {
+          this.scrollTarget.style.overscrollBehavior = null;
+        },
+      );
     }
 
     if (this.reorderElements) {
@@ -590,11 +626,9 @@ export class IronListAdapter {
       );
     }
 
-    this.__previousScrollTop = this._scrollTop;
-
     // If the first visible index is not 0 when scrolled to the top,
     // scroll to index 0 to fix the issue.
-    if (this._scrollTop === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
+    if (this._scrollPosition === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
       this.scrollToIndex(0);
     }
   }
@@ -652,96 +686,6 @@ export class IronListAdapter {
       // Restore the original "_ratio" value.
       this._ratio = originalRatio;
     }
-  }
-
-  /** @private */
-  __onWheel(e) {
-    if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
-      return;
-    }
-
-    let deltaY = e.deltaY;
-    if (e.deltaMode === WheelEvent.DOM_DELTA_LINE) {
-      // Scrolling by "lines of text" instead of pixels
-      deltaY *= this._scrollLineHeight;
-    } else if (e.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
-      // Scrolling by "pages" instead of pixels
-      deltaY *= this._scrollPageHeight;
-    }
-
-    if (!this._deltaYAcc) {
-      this._deltaYAcc = 0;
-    }
-
-    if (this._wheelAnimationFrame) {
-      // Accumulate wheel delta while a frame is being processed
-      this._deltaYAcc += deltaY;
-      e.preventDefault();
-      return;
-    }
-
-    deltaY += this._deltaYAcc;
-    this._deltaYAcc = 0;
-
-    this._wheelAnimationFrame = true;
-    this.__debouncerWheelAnimationFrame = Debouncer.debounce(
-      this.__debouncerWheelAnimationFrame,
-      animationFrame,
-      () => {
-        this._wheelAnimationFrame = false;
-      },
-    );
-
-    const momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
-
-    if (this._canScroll(this.scrollTarget, e.deltaX, deltaY)) {
-      e.preventDefault();
-      this.scrollTarget.scrollTop += deltaY;
-      this.scrollTarget.scrollLeft += e.deltaX;
-
-      this._hasResidualMomentum = true;
-
-      this._ignoreNewWheel = true;
-      this._debouncerIgnoreNewWheel = Debouncer.debounce(
-        this._debouncerIgnoreNewWheel,
-        timeOut.after(this.timeouts.IGNORE_WHEEL),
-        () => {
-          this._ignoreNewWheel = false;
-        },
-      );
-    } else if ((this._hasResidualMomentum && momentum <= this._previousMomentum) || this._ignoreNewWheel) {
-      e.preventDefault();
-    } else if (momentum > this._previousMomentum) {
-      this._hasResidualMomentum = false;
-    }
-    this._previousMomentum = momentum;
-  }
-
-  /**
-   * Determines if the element has an ancestor that handles the scroll delta prior to this
-   *
-   * @private
-   */
-  _hasScrolledAncestor(el, deltaX, deltaY) {
-    if (el === this.scrollTarget || el === this.scrollTarget.getRootNode().host) {
-      return false;
-    } else if (
-      this._canScroll(el, deltaX, deltaY) &&
-      ['auto', 'scroll'].indexOf(getComputedStyle(el).overflow) !== -1
-    ) {
-      return true;
-    } else if (el !== this && el.parentElement) {
-      return this._hasScrolledAncestor(el.parentElement, deltaX, deltaY);
-    }
-  }
-
-  _canScroll(el, deltaX, deltaY) {
-    return (
-      (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
-      (deltaY < 0 && el.scrollTop > 0) ||
-      (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
-      (deltaX < 0 && el.scrollLeft > 0)
-    );
   }
 
   /**

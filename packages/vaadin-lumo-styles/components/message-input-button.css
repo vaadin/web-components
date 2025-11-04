@@ -1,0 +1,12 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './button.css';
+
+:root::before,
+:host::before {
+  --_lumo-vaadin-message-input-button-inject: 1;
+  --_lumo-vaadin-message-input-button-inject-modules: lumo_components_button;
+}

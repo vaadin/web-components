@@ -3,7 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
+import '@vaadin/component-base/src/styles/user-colors.js';
 import { css } from 'lit';
 
 export const avatarStyles = css`
@@ -12,11 +13,11 @@ export const avatarStyles = css`
     flex: none;
     border-radius: 50%;
     cursor: default;
-    color: var(--vaadin-avatar-color, var(--vaadin-color-subtle));
-    line-height: 0;
+    color: var(--vaadin-avatar-text-color, var(--vaadin-text-color-secondary));
     overflow: hidden;
-    height: var(--vaadin-avatar-size, 32px);
-    width: var(--vaadin-avatar-size, 32px);
+    --_size: var(--vaadin-avatar-size, calc(1lh + var(--vaadin-padding-xs) * 2));
+    height: var(--_size);
+    width: var(--_size);
     border: var(--vaadin-focus-ring-width) solid transparent;
     margin: calc(var(--vaadin-focus-ring-width) * -1);
     background: var(--vaadin-avatar-background, var(--vaadin-background-container-strong));
@@ -26,6 +27,17 @@ export const avatarStyles = css`
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     position: relative;
+    font-weight: var(--vaadin-avatar-font-weight, 400);
+    font-size: var(--vaadin-avatar-font-size, inherit);
+  }
+
+  /* Overlay border on top of image and icon as well */
+  :host::before {
+    position: absolute;
+    content: '';
+    inset: 0;
+    border-radius: inherit;
+    border: var(--vaadin-avatar-border-width, 1px) solid var(--vaadin-avatar-border-color, transparent);
   }
 
   :host([role='button']) {
@@ -56,19 +68,28 @@ export const avatarStyles = css`
 
   :host([has-color-index]) {
     background-color: var(--vaadin-avatar-user-color);
-    color: oklch(from var(--vaadin-avatar-user-color) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    color: oklch(
+      from var(--vaadin-avatar-user-color) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    );
   }
 
   :host([has-color-index])::before {
-    position: absolute;
-    content: '';
-    inset: 0;
-    border-radius: inherit;
-    border: 2px solid var(--vaadin-avatar-user-color);
+    --vaadin-avatar-border-width: 2px;
+    --vaadin-avatar-border-color: var(--vaadin-avatar-user-color);
   }
 
   :host([focus-ring]) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc((var(--vaadin-focus-ring-width)) * -1);
+  }
+
+  @media (forced-colors: active) {
+    :host {
+      border-color: Canvas !important;
+    }
+
+    [part='icon'] {
+      background: CanvasText !important;
+    }
   }
 `;

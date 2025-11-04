@@ -10,6 +10,7 @@ import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { MenuBarButton } from './vaadin-menu-bar-button.js';
 
 export type MenuBarItem<TItemData extends object = object> = {
   /**
@@ -113,7 +114,7 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * which makes disabled buttons focusable and hoverable, while still
    * preventing them from being triggered:
    *
-   * ```
+   * ```js
    * // Set before any menu bar is attached to the DOM.
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
    * ```
@@ -126,21 +127,13 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
-   * ```
+   * ```js
    * {
    *   moreOptions: 'More options'
    * }
    * ```
    */
   i18n: MenuBarI18n;
-
-  /**
-   * A space-delimited list of CSS class names
-   * to set on each sub-menu overlay element.
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
 
   /**
    * If true, the submenu will open on hover (mouseover) instead of click.
@@ -167,11 +160,11 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    */
   close(): void;
 
-  protected readonly _buttons: HTMLElement[];
+  protected readonly _buttons: MenuBarButton[];
 
   protected readonly _container: HTMLElement;
 
-  protected readonly _overflow: HTMLElement;
+  protected readonly _overflow: MenuBarButton;
 
   protected _hasOverflow: boolean;
 }

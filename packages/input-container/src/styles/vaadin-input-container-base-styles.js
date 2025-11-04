@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const inputContainerStyles = css`
@@ -18,13 +18,13 @@ export const inputContainerStyles = css`
       var(--vaadin-input-field-bottom-end-radius, var(--_radius))
       var(--vaadin-input-field-bottom-start-radius, var(--_radius));
     border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
     box-sizing: border-box;
     cursor: text;
     padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
-    gap: var(--vaadin-input-field-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-input-field-gap, var(--vaadin-gap-s));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
-    color: var(--vaadin-input-field-value-color, var(--vaadin-color));
+    color: var(--vaadin-input-field-value-color, var(--vaadin-text-color));
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     font-weight: var(--vaadin-input-field-value-font-weight, 400);
@@ -84,7 +84,7 @@ export const inputContainerStyles = css`
   }
 
   ::slotted(:is(input, textarea):placeholder-shown) {
-    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-text-color-secondary));
   }
 
   :host(:focus-within) {
@@ -93,7 +93,7 @@ export const inputContainerStyles = css`
   }
 
   :host([invalid]) {
-    --vaadin-input-field-border-color: var(--vaadin-input-field-error-color, var(--vaadin-color));
+    --vaadin-input-field-border-color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
   }
 
   :host([readonly]) {
@@ -106,7 +106,7 @@ export const inputContainerStyles = css`
   }
 
   :host([disabled]) {
-    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-color-disabled));
+    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-text-color-disabled));
     --vaadin-input-field-background: var(
       --vaadin-input-field-disabled-background,
       var(--vaadin-background-container-strong)

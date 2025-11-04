@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { checkboxStyles } from './styles/vaadin-checkbox-core-styles.js';
+import { checkboxStyles } from './styles/vaadin-checkbox-base-styles.js';
 import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
 
 /**
@@ -47,6 +47,7 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  * `has-label`          | Set when the checkbox has a label.
  * `has-helper`         | Set when the checkbox has helper text.
  * `has-error-message`  | Set when the checkbox has an error message.
+ * `has-tooltip`        | Set when the checkbox has a slotted tooltip.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -60,7 +61,7 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-checkbox';
   }

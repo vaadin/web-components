@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
 /**
  * @polymerMixin
@@ -43,13 +44,40 @@ export const DialogOverlayMixin = (superClass) =>
       ];
     }
 
+    /**
+     * Override method from OverlayFocusMixin to use owner as content root
+     * @protected
+     * @override
+     */
+    get _contentRoot() {
+      return this.owner;
+    }
+
+    /**
+     * Override method from OverlayMixin to use slotted div as a renderer root.
+     * @protected
+     * @override
+     */
+    get _rendererRoot() {
+      if (!this.__savedRoot) {
+        const root = document.createElement('vaadin-dialog-content');
+        root.style.display = 'contents';
+        this.owner.appendChild(root);
+        this.__savedRoot = root;
+      }
+
+      return this.__savedRoot;
+    }
+
     /** @protected */
     ready() {
       super.ready();
 
       // Update overflow attribute on resize
       this.__resizeObserver = new ResizeObserver(() => {
-        this.__updateOverflow();
+        requestAnimationFrame(() => {
+          this.__updateOverflow();
+        });
       });
       this.__resizeObserver.observe(this.$.resizerContainer);
 
@@ -57,11 +85,16 @@ export const DialogOverlayMixin = (superClass) =>
       this.$.content.addEventListener('scroll', () => {
         this.__updateOverflow();
       });
+
+      // Update overflow attribute on content change
+      this.shadowRoot.addEventListener('slotchange', () => {
+        this.__updateOverflow();
+      });
     }
 
     /** @private */
     __createContainer(slot) {
-      const container = document.createElement('div');
+      const container = document.createElement('vaadin-dialog-content');
       container.setAttribute('slot', slot);
       return container;
     }
@@ -81,8 +114,9 @@ export const DialogOverlayMixin = (superClass) =>
         // Reset existing container in case if a new renderer is set.
         this.__clearContainer(container);
       } else {
-        // Create the container, but wait to append it until requestContentUpdate is called.
+        // Create the container and append it to the dialog element.
         container = this.__createContainer(slot);
+        this.owner.appendChild(container);
       }
       return container;
     }
@@ -99,8 +133,8 @@ export const DialogOverlayMixin = (superClass) =>
       this._oldOpenedFooterHeader = opened;
 
       // Set attributes here to update styles before detecting content overflow
-      this.toggleAttribute('has-header', !!headerRenderer);
-      this.toggleAttribute('has-footer', !!footerRenderer);
+      setOverlayStateAttribute(this, 'has-header', !!headerRenderer);
+      setOverlayStateAttribute(this, 'has-footer', !!footerRenderer);
 
       if (headerRendererChanged) {
         if (headerRenderer) {
@@ -134,7 +168,7 @@ export const DialogOverlayMixin = (superClass) =>
 
     /** @private */
     _headerTitleChanged(headerTitle, opened) {
-      this.toggleAttribute('has-title', !!headerTitle);
+      setOverlayStateAttribute(this, 'has-title', !!headerTitle);
 
       if (opened && (headerTitle || this._oldHeaderTitle)) {
         this.requestContentUpdate();
@@ -150,7 +184,7 @@ export const DialogOverlayMixin = (superClass) =>
           this.headerTitleElement.setAttribute('slot', 'title');
           this.headerTitleElement.classList.add('draggable');
         }
-        this.appendChild(this.headerTitleElement);
+        this.owner.appendChild(this.headerTitleElement);
         this.headerTitleElement.textContent = this.headerTitle;
       } else if (this.headerTitleElement) {
         this.headerTitleElement.remove();
@@ -164,28 +198,12 @@ export const DialogOverlayMixin = (superClass) =>
     requestContentUpdate() {
       super.requestContentUpdate();
 
-      if (this.headerContainer) {
-        // If a new renderer has been set, make sure to reattach the container
-        if (!this.headerContainer.parentElement) {
-          this.appendChild(this.headerContainer);
-        }
-
-        if (this.headerRenderer) {
-          // Only call header renderer after the container has been initialized
-          this.headerRenderer.call(this.owner, this.headerContainer, this.owner);
-        }
+      if (this.headerContainer && this.headerRenderer) {
+        this.headerRenderer.call(this.owner, this.headerContainer, this.owner);
       }
 
-      if (this.footerContainer) {
-        // If a new renderer has been set, make sure to reattach the container
-        if (!this.footerContainer.parentElement) {
-          this.appendChild(this.footerContainer);
-        }
-
-        if (this.footerRenderer) {
-          // Only call header renderer after the container has been initialized
-          this.footerRenderer.call(this.owner, this.footerContainer, this.owner);
-        }
+      if (this.footerContainer && this.footerRenderer) {
+        this.footerRenderer.call(this.owner, this.footerContainer, this.owner);
       }
 
       this._headerTitleRenderer();
@@ -211,25 +229,21 @@ export const DialogOverlayMixin = (superClass) =>
     __updateOverflow() {
       let overflow = '';
 
-      // Only set "overflow" attribute if the dialog has a header, title or footer.
-      // Check for state attributes as extending components might not use renderers.
-      if (this.hasAttribute('has-header') || this.hasAttribute('has-footer') || this.headerTitle) {
-        const content = this.$.content;
+      const content = this.$.content;
 
-        if (content.scrollTop > 0) {
-          overflow += ' top';
-        }
+      if (content.scrollTop > 0) {
+        overflow += ' top';
+      }
 
-        if (content.scrollTop < content.scrollHeight - content.clientHeight) {
-          overflow += ' bottom';
-        }
+      if (content.scrollTop < content.scrollHeight - content.clientHeight) {
+        overflow += ' bottom';
       }
 
       const value = overflow.trim();
       if (value.length > 0 && this.getAttribute('overflow') !== value) {
-        this.setAttribute('overflow', value);
+        setOverlayStateAttribute(this, 'overflow', value);
       } else if (value.length === 0 && this.hasAttribute('overflow')) {
-        this.removeAttribute('overflow');
+        setOverlayStateAttribute(this, 'overflow', null);
       }
     }
   };

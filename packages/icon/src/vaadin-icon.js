@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { iconStyles } from './styles/vaadin-icon-core-styles.js';
+import { iconStyles } from './styles/vaadin-icon-base-styles.js';
 import { IconMixin } from './vaadin-icon-mixin.js';
 import { ensureSvgLiteral } from './vaadin-icon-svg.js';
 
@@ -54,25 +54,42 @@ import { ensureSvgLiteral } from './vaadin-icon-svg.js';
  * }
  * ```
  *
+ * ### Styling
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property          | Description
+ * -----------------------------|-------------
+ * `--vaadin-icon-size`         | Size (width and height) of the icon
+ * `--vaadin-icon-stroke-width` | Stroke width of the SVG icon
+ * `--vaadin-icon-visual-size`  | Visual size of the icon
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-tooltip`  | Set when the icon has a slotted tooltip
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes IconMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Icon extends IconMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Icon extends IconMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-icon';
   }
 
   static get styles() {
-    return iconStyles;
+    // Apply `super.styles` only if the fallback is used
+    return [iconStyles, super.styles].filter(Boolean);
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

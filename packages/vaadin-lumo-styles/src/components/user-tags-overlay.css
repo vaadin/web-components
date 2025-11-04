@@ -15,19 +15,16 @@
     will-change: opacity, transform;
   }
 
-  ::slotted([part='tags']) {
+  [part='content'] {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding: 0;
   }
 
   :host([dir='rtl']) [part='overlay'] {
     left: auto;
     right: -4px;
-  }
-
-  [part='content'] {
-    padding: 0;
   }
 
   :host([opening]),

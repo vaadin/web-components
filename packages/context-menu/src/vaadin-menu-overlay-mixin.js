@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { OverlayFocusMixin } from '@vaadin/overlay/src/vaadin-overlay-focus-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
@@ -37,6 +36,32 @@ export const MenuOverlayMixin = (superClass) =>
       return ['_themeChanged(_theme)'];
     }
 
+    /**
+     * Override method from OverlayFocusMixin to use slotted div as content root.
+     * @protected
+     * @override
+     */
+    get _contentRoot() {
+      return this._rendererRoot;
+    }
+
+    /**
+     * Override method from OverlayMixin to use slotted div as the renderer root.
+     * @protected
+     * @override
+     */
+    get _rendererRoot() {
+      if (!this.__savedRoot) {
+        const root = document.createElement('div');
+        root.setAttribute('slot', 'overlay');
+        root.style.display = 'contents';
+        this.owner.appendChild(root);
+        this.__savedRoot = root;
+      }
+
+      return this.__savedRoot;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -45,7 +70,7 @@ export const MenuOverlayMixin = (superClass) =>
 
       this.addEventListener('keydown', (e) => {
         if (!e.defaultPrevented && e.composedPath()[0] === this.$.overlay && [38, 40].indexOf(e.keyCode) > -1) {
-          const child = this.getFirstChild();
+          const child = this._contentRoot.firstElementChild;
           if (child && Array.isArray(child.items) && child.items.length) {
             e.preventDefault();
             if (e.keyCode === 38) {
@@ -56,15 +81,6 @@ export const MenuOverlayMixin = (superClass) =>
           }
         }
       });
-    }
-
-    /**
-     * Returns the first element in the overlay content.
-     *
-     * @returns {HTMLElement}
-     */
-    getFirstChild() {
-      return this.querySelector(':not(style):not(slot)');
     }
 
     /** @private */
@@ -106,7 +122,7 @@ export const MenuOverlayMixin = (superClass) =>
     _updatePosition() {
       super._updatePosition();
 
-      if (this.positionTarget && this.parentOverlay) {
+      if (this.positionTarget && this.parentOverlay && this.opened) {
         // This overlay is positioned by a parent menu item,
         // adjust the position by the overlay content paddings
         const content = this.$.content;
@@ -149,9 +165,9 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from `OverlayFocusMixin` to return
-     * true if the overlay contains the given node, including
-     * those within descendant menu overlays.
+     * Override method inherited from `OverlayFocusMixin` to check if the
+     * node is contained within the overlay's owner element (the menu),
+     * where all content (overlay content, sub-menus, etc.) is slotted.
      *
      * @protected
      * @override
@@ -159,18 +175,6 @@ export const MenuOverlayMixin = (superClass) =>
      * @return {boolean}
      */
     _deepContains(node) {
-      // Find the closest menu overlay for the given node.
-      let overlay = getClosestElement(this.localName, node);
-      while (overlay) {
-        if (overlay === this) {
-          // The node is inside a descendant menu overlay.
-          return true;
-        }
-
-        // Traverse the overlay hierarchy to check parent overlays.
-        overlay = overlay.parentOverlay;
-      }
-
-      return false;
+      return this.owner.contains(node);
     }
   };

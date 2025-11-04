@@ -6,9 +6,10 @@
 @import '../src/mixins/checkable-field.css';
 @import '../src/components/radio-button.css';
 
-:is(:root, :host)::before {
-  --vaadin-radio-button-lumo-inject: 1;
-  --vaadin-radio-button-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-radio-button-inject: 1;
+  --_lumo-vaadin-radio-button-inject-modules:
     lumo_mixins_checkable-field,
     lumo_components_radio-button;
 }

@@ -20,24 +20,45 @@ describe('theme', () => {
         <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
         <vaadin-grid-column path="email"></vaadin-grid-column>
       </vaadin-grid>
+      <style>
+        vaadin-grid::part(highlight-row) {
+          --vaadin-grid-row-highlight-background-color: #ede;
+        }
+      </style>
     `);
     element.items = users;
     flushGrid(element);
     await nextRender();
   });
 
-  it('column-borders', async () => {
-    element.setAttribute('theme', 'column-borders');
-    await visualDiff(element, 'theme-column-borders');
+  it('column-border-width', async () => {
+    element.style.setProperty('--vaadin-grid-column-border-width', '1px');
+    await visualDiff(element, 'column-border-width');
   });
 
-  it('no-row-borders', async () => {
-    element.setAttribute('theme', 'no-row-borders');
-    await visualDiff(element, 'theme-no-row-borders');
+  it('row-border-width', async () => {
+    element.style.setProperty('--vaadin-grid-row-border-width', '0px');
+    await visualDiff(element, 'row-border-width');
   });
 
   it('row-stripes', async () => {
     element.setAttribute('theme', 'row-stripes');
     await visualDiff(element, 'theme-row-stripes');
+  });
+
+  it('selected-row-color', async () => {
+    element.selectedItems = [element.items[0]];
+    element.style.setProperty('--vaadin-grid-row-selected-background-color', '#dee');
+    await visualDiff(element, 'selected-row-color');
+  });
+
+  it('highlight-row-color', async () => {
+    element.cellPartNameGenerator = (_, model) => {
+      if (model.item === users[1]) {
+        return 'highlight-row';
+      }
+    };
+    await nextRender();
+    await visualDiff(element, 'highlight-row-color');
   });
 });

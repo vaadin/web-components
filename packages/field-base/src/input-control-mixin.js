@@ -115,14 +115,14 @@ export const InputControlMixin = (superclass) =>
 
           /* Override built-in autofill styles */
           ${tag} > input[slot='input']:autofill {
-            -webkit-text-fill-color: var(--vaadin-input-field-autofill-color, black);
-            background-clip: text;
+            -webkit-text-fill-color: var(--vaadin-input-field-autofill-color, black) !important;
+            background-clip: text !important;
           }
 
-          ${tag}:has(> input[slot='input']:autofill) {
-            --vaadin-input-field-background: var(--vaadin-input-field-autofill-background, lightyellow);
-            --vaadin-input-field-value-color: var(--vaadin-input-field-autofill-color, black);
-            --vaadin-input-field-button-color: var(--vaadin-input-field-autofill-color, black);
+          ${tag}:has(> input[slot='input']:autofill)::part(input-field) {
+            --vaadin-input-field-background: var(--vaadin-input-field-autofill-background, lightyellow) !important;
+            --vaadin-input-field-value-color: var(--vaadin-input-field-autofill-color, black) !important;
+            --vaadin-input-field-button-text-color: var(--vaadin-input-field-autofill-color, black) !important;
           }
         `,
       ];

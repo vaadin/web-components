@@ -7,9 +7,6 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { CSSResult, CSSResultGroup } from 'lit';
 import type { ThemePropertyMixinClass } from './vaadin-theme-property-mixin.js';
 
-/**
- * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
- */
 export declare function ThemableMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ThemableMixinClass> & Constructor<ThemePropertyMixinClass> & T;
@@ -29,18 +26,6 @@ export declare interface ThemableMixinClass extends ThemePropertyMixinClass {}
  */
 declare function registerStyles(themeFor: string | null, styles: CSSResultGroup, options?: object | null): void;
 
-type Theme = {
-  themeFor: string;
-  styles: CSSResult[];
-  moduleId?: string;
-  include?: string[] | string;
-};
-
-/**
- * For internal purposes only.
- */
-declare const __themeRegistry: Theme[];
-
 export { css, unsafeCSS } from 'lit';
 
-export { registerStyles, __themeRegistry };
+export { registerStyles };

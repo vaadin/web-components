@@ -8,13 +8,13 @@ import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogRendererMixin } from './vaadin-dialog-renderer-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
+import { DialogSizeMixin } from './vaadin-dialog-size-mixin.js';
 
 export { DialogOverlay } from './vaadin-dialog-overlay.js';
 
@@ -47,16 +47,13 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  *
  * ### Styling
  *
- * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
- * themable component as the actual visible dialog overlay.
- *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
- * for `<vaadin-dialog-overlay>` parts.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `header`         | Element wrapping title and header content
  * `header-content` | Element wrapping the header content slot
  * `title`          | Element wrapping the title slot
@@ -70,9 +67,6 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * `has-header`     | Set when the element has header renderer
  * `has-footer`     | Set when the element has footer renderer
  * `overflow`       | Set to `top`, `bottom`, none or both
- *
- * Note: the `theme` attribute value set on `<vaadin-dialog>` is
- * propagated to the internal `<vaadin-dialog-overlay>` component.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -89,11 +83,13 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @mixes DialogDraggableMixin
  * @mixes DialogRendererMixin
  * @mixes DialogResizableMixin
- * @mixes OverlayClassMixin
+ * @mixes DialogSizeMixin
  */
-class Dialog extends DialogDraggableMixin(
-  DialogResizableMixin(
-    DialogRendererMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))))),
+class Dialog extends DialogSizeMixin(
+  DialogDraggableMixin(
+    DialogResizableMixin(
+      DialogRendererMixin(DialogBaseMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement))))),
+    ),
   ),
 ) {
   static get is() {
@@ -102,24 +98,23 @@ class Dialog extends DialogDraggableMixin(
 
   static get styles() {
     return css`
-      :host {
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: block !important;
+        position: absolute;
+        outline: none;
+      }
+
+      :host,
+      :host([hidden]) {
         display: none !important;
       }
-    `;
-  }
 
-  static get properties() {
-    return {
-      /**
-       * Set the `aria-label` attribute for assistive technologies like
-       * screen readers. An empty string value for this property (the
-       * default) means that the `aria-label` attribute is not present.
-       */
-      ariaLabel: {
-        type: String,
-        value: '',
-      },
-    };
+      :host(:focus-visible) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      }
+    `;
   }
 
   /** @protected */
@@ -127,7 +122,6 @@ class Dialog extends DialogDraggableMixin(
     return html`
       <vaadin-dialog-overlay
         id="overlay"
-        role="${this.overlayRole}"
         .owner="${this}"
         .opened="${this.opened}"
         .headerTitle="${this.headerTitle}"
@@ -138,14 +132,28 @@ class Dialog extends DialogDraggableMixin(
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"
         theme="${ifDefined(this._theme)}"
-        aria-label="${ifDefined(this.ariaLabel || this.headerTitle)}"
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"
         restore-focus-on-close
         focus-trap
-      ></vaadin-dialog-overlay>
+        exportparts="backdrop, overlay, header, title, header-content, content, footer"
+      >
+        <slot name="title" slot="title"></slot>
+        <slot name="header-content" slot="header-content"></slot>
+        <slot name="footer" slot="footer"></slot>
+        <slot></slot>
+      </vaadin-dialog-overlay>
     `;
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('headerTitle')) {
+      this.ariaLabel = this.headerTitle;
+    }
   }
 }
 

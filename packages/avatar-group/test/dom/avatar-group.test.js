@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-avatar-group.js';
 
 describe('vaadin-avatar-group', () => {
@@ -35,11 +35,11 @@ describe('vaadin-avatar-group', () => {
     };
 
     beforeEach(async () => {
-      group.maxItemsVisible = 3;
       group.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
-      await nextRender();
+      group.maxItemsVisible = 3;
+      await nextResize(group);
       group._overflow.click();
-      await nextRender();
+      await oneEvent(group.$.overlay, 'vaadin-overlay-open');
     });
 
     it('default', async () => {
@@ -47,12 +47,6 @@ describe('vaadin-avatar-group', () => {
     });
 
     it('overlay', async () => {
-      await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
-
-    it('overlay class', async () => {
-      group.overlayClass = 'avatar-group-overlay custom';
-      await nextUpdate(group);
       await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });

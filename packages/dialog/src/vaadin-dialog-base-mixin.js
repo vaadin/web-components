@@ -12,11 +12,12 @@ export const DialogBaseMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * True if the overlay is currently displayed.
+         * True if the dialog is visible and available for interaction.
          * @type {boolean}
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           sync: true,
@@ -52,59 +53,41 @@ export const DialogBaseMixin = (superClass) =>
         },
 
         /**
-         * Set the distance of the overlay from the top of its container.
+         * Set the distance of the dialog from the top of the viewport.
          * If a unitless number is provided, pixels are assumed.
          *
-         * Note that the overlay top edge may not be the same as the viewport
-         * top edge (e.g. the Lumo theme defines some spacing to prevent the
-         * overlay from stretching all the way to the top of the viewport).
+         * Note that the dialog uses an internal container that has some
+         * additional spacing, which can be overridden by the theme.
          */
         top: {
           type: String,
         },
 
         /**
-         * Set the distance of the overlay from the left of its container.
+         * Set the distance of the dialog from the left of the viewport.
          * If a unitless number is provided, pixels are assumed.
          *
-         * Note that the overlay left edge may not be the same as the viewport
-         * left edge (e.g. the Lumo theme defines some spacing to prevent the
-         * overlay from stretching all the way to the left of the viewport).
+         * Note that the dialog uses an internal container that has some
+         * additional spacing, which can be overridden by the theme.
          */
         left: {
           type: String,
         },
 
         /**
-         * Set the width of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        width: {
-          type: String,
-        },
-
-        /**
-         * Set the height of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        height: {
-          type: String,
-        },
-
-        /**
-         * The `role` attribute value to be set on the overlay. Defaults to "dialog".
+         * The `role` attribute value to be set on the dialog. Defaults to "dialog".
          *
          * @attr {string} overlay-role
+         * @deprecated Use standard `role` attribute on the dialog instead
          */
         overlayRole: {
           type: String,
-          value: 'dialog',
         },
       };
     }
 
     static get observers() {
-      return ['__positionChanged(top, left)', '__sizeChanged(width, height)'];
+      return ['__positionChanged(top, left)'];
     }
 
     /** @protected */
@@ -118,6 +101,29 @@ export const DialogBaseMixin = (superClass) =>
       overlay.addEventListener('vaadin-overlay-closed', this.__handleOverlayClosed.bind(this));
 
       this._overlayElement = overlay;
+
+      if (!this.hasAttribute('role')) {
+        this.role = 'dialog';
+      }
+
+      this.setAttribute('tabindex', '0');
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('overlayRole')) {
+        this.role = this.overlayRole || 'dialog';
+      }
+
+      if (props.has('modeless')) {
+        if (!this.modeless) {
+          this.setAttribute('aria-modal', 'true');
+        } else {
+          this.removeAttribute('aria-modal');
+        }
+      }
     }
 
     /** @private */

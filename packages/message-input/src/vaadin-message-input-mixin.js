@@ -67,7 +67,7 @@ export const MessageInputMixin = (superClass) =>
      * just the individual properties you want to change.
      *
      * The object has the following JSON structure and default values:
-     * ```
+     * ```js
      * {
      *   // Used as the button label
      *   send: 'Send',
@@ -90,7 +90,7 @@ export const MessageInputMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._buttonController = new SlotController(this, 'button', 'vaadin-button', {
+      this._buttonController = new SlotController(this, 'button', 'vaadin-message-input-button', {
         initializer: (btn) => {
           btn.addEventListener('click', () => {
             this.__submit();
@@ -127,9 +127,9 @@ export const MessageInputMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
-    focus() {
+    focus(options) {
       if (this._textArea) {
-        this._textArea.focus();
+        this._textArea.focus(options);
       }
     }
 

@@ -6,7 +6,7 @@
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { AutoResponsiveLayout } from './layouts/auto-responsive-layout.js';
 import { ResponsiveStepsLayout } from './layouts/responsive-steps-layout.js';
-import { formLayoutSlotStyles } from './styles/vaadin-form-layout-core-styles.js';
+import { formLayoutSlotStyles } from './styles/vaadin-form-layout-base-styles.js';
 
 /**
  * @polymerMixin
@@ -36,7 +36,7 @@ export const FormLayoutMixin = (superClass) =>
          * enabled explicitly via the `autoResponsive` property or implicitly
          * if the following feature flag is set:
          *
-         * ```
+         * ```js
          * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true
          * ```
          *
@@ -273,7 +273,7 @@ export const FormLayoutMixin = (superClass) =>
       this.__currentLayout.disconnect();
     }
 
-    /** @override */
+    /** @protected */
     get slotStyles() {
       return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
     }

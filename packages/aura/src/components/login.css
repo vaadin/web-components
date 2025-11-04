@@ -1,0 +1,43 @@
+:where(:root),
+:where(:host) {
+  --vaadin-login-form-error-color: var(--aura-red-text);
+  --vaadin-login-form-padding: var(--vaadin-padding-xl);
+  --vaadin-login-overlay-brand-padding: var(--vaadin-padding-xl);
+  --vaadin-login-overlay-brand-background: transparent;
+  --vaadin-login-overlay-title-font-size: 1.5em;
+  --vaadin-login-overlay-title-line-height: 1.2;
+  --vaadin-login-overlay-title-font-weight: var(--aura-font-weight-semibold);
+  --vaadin-login-overlay-title-color: var(--vaadin-text-color);
+  --vaadin-login-overlay-description-color: var(--vaadin-text-color-secondary);
+}
+
+vaadin-login-form::part(error-message) {
+  border-radius: var(--vaadin-radius-m);
+  padding: var(--vaadin-padding-m);
+  background: color-mix(in srgb, var(--aura-red) 10%, transparent);
+}
+
+vaadin-login-form::part(error-message-title) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-login-overlay {
+  --vaadin-overlay-backdrop-background: var(--aura-app-background);
+
+  &::part(overlay) {
+    --aura-surface-level: 2;
+  }
+
+  &::part(brand) {
+    text-align: center;
+    padding-bottom: 0;
+  }
+
+  &::part(form-title) {
+    display: none;
+  }
+
+  [slot='title'] {
+    letter-spacing: -0.03em;
+  }
+}

@@ -2,13 +2,17 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
+import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import type {
   ComboBoxItemMixinClass,
   ComboBoxItemRenderer,
 } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
+import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -89,6 +93,7 @@ assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
 assertType<(item: TestComboBoxItem) => string>(narrowedComboBox.itemClassNameGenerator);
+assertType<((item: TestComboBoxItem) => string) | undefined>(narrowedComboBox.itemLabelGenerator);
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
@@ -104,17 +109,20 @@ assertType<string | null | undefined>(narrowedComboBox.helperText);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
-assertType<string>(narrowedComboBox.overlayClass);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 
 // Mixins
+assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
+assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<ComboBoxItemsMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
 assertType<DelegateStateMixinClass>(narrowedComboBox);
 assertType<DisabledMixinClass>(narrowedComboBox);
 assertType<FieldMixinClass>(narrowedComboBox);
 assertType<FocusMixinClass>(narrowedComboBox);
+assertType<I18nMixinClass<MultiSelectComboBoxI18n>>(narrowedComboBox);
 assertType<InputConstraintsMixinClass>(narrowedComboBox);
 assertType<InputControlMixinClass>(narrowedComboBox);
 assertType<ClearButtonMixinClass>(narrowedComboBox);
@@ -145,3 +153,7 @@ assertType<() => void>(narrowedItem.requestContentUpdate);
 assertType<ComboBoxItemMixinClass<TestComboBoxItem, MultiSelectComboBox>>(narrowedItem);
 assertType<DirMixinClass>(narrowedItem);
 assertType<ThemableMixinClass>(narrowedItem);
+
+// I18n
+assertType<MultiSelectComboBoxI18n>({});
+assertType<MultiSelectComboBoxI18n>({ cleared: 'Cleared' });

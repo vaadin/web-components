@@ -6,7 +6,8 @@
 @import '../src/components/message.css';
 @import './avatar.css';
 
-:is(:root, :host)::before {
-  --vaadin-message-lumo-inject: 1;
-  --vaadin-message-lumo-inject-modules: lumo_components_message;
+:root::before,
+:host::before {
+  --_lumo-vaadin-message-inject: 1;
+  --_lumo-vaadin-message-inject-modules: lumo_components_message;
 }

@@ -1,7 +1,7 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/text-area.css';
 import '../common.js';
 import '../../../vaadin-text-area.js';
@@ -72,7 +72,7 @@ describe('text-area', () => {
   it('scrolled', async () => {
     element.style.height = '70px';
     element.value = 'a\nb\nc\nd\ne';
-    element.focus();
+    element.focus({ focusVisible: false });
     await visualDiff(div, 'scrolled');
   });
 
@@ -90,7 +90,7 @@ describe('text-area', () => {
     element.clearButtonVisible = true;
     element.style.height = '70px';
     element.value = 'a\nb\nc\nd\ne';
-    element.focus();
+    element.focus({ focusVisible: false });
     await visualDiff(div, 'scrolled-with-prefix-suffix-clear-button');
   });
 

@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dashboardWidgetStyles } from './styles/vaadin-dashboard-widget-core-styles.js';
+import { dashboardWidgetStyles } from './styles/vaadin-dashboard-widget-base-styles.js';
 import { findAncestorInstance, SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
@@ -105,7 +105,7 @@ import { DashboardSection } from './vaadin-dashboard-section.js';
  * @mixes DashboardItemMixin
  */
 class DashboardWidget extends DashboardItemMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-dashboard-widget';
@@ -113,6 +113,10 @@ class DashboardWidget extends DashboardItemMixin(
 
   static get styles() {
     return dashboardWidgetStyles;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -124,7 +128,7 @@ class DashboardWidget extends DashboardItemMixin(
        * `i18n` object with a custom one.
        *
        * The object has the following structure and default values:
-       * ```
+       * ```js
        * {
        *   selectWidget: 'Select widget for editing',
        *   remove: 'Remove',

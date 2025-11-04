@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -70,7 +70,7 @@ describe('column auto-width', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 600px; height: 200px;" hidden>
+      <vaadin-grid style="width: 600px; height: 195px;" hidden>
         <vaadin-grid-column auto-width flex-grow="0" path="a"></vaadin-grid-column>
         <vaadin-grid-column auto-width flex-grow="0" path="b"></vaadin-grid-column>
         <vaadin-grid-column auto-width flex-grow="0" path="c"></vaadin-grid-column>
@@ -79,10 +79,8 @@ describe('column auto-width', () => {
     `);
     spy = sinon.spy(grid, '_recalculateColumnWidths');
     columns = grid.querySelectorAll('vaadin-grid-column');
-    // Show the grid and wait for animationend event ("vaadin-grid-appear")
-    // to ensure the grid is in a consistent state before starting each test
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
   });
 
   it('should have correct column widths when items are set', async () => {
@@ -188,9 +186,9 @@ describe('column auto-width', () => {
       </vaadin-grid>
     `);
 
-    await nextFrame();
+    await nextResize(grid);
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
     expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [107]);
   });
 
@@ -352,6 +350,26 @@ describe('column auto-width', () => {
     const frozenToEndHeaderCell = getHeaderCell(grid, 0, columns.length - 1);
     expect(parseFloat(firstColumn.width)).not.to.be.lessThan(getCellIntrinsicWidth(frozenHeaderCell));
     expect(parseFloat(lastColumn.width)).not.to.be.lessThan(getCellIntrinsicWidth(frozenToEndHeaderCell));
+  });
+
+  it('should recalculate column widths on initial item load without data provider change', async () => {
+    let items = [];
+    grid.dataProvider = (_, cb) => cb(items, items.length);
+    await nextFrame();
+
+    // Should recalculate once on initial load of items
+    spy.resetHistory();
+    items = [testItems[0], testItems[1]];
+    grid.size = items.length;
+    await nextFrame();
+    expect(spy.callCount).to.equal(1);
+
+    // Should not recalculate on further update of items
+    spy.resetHistory();
+    items = [...items, testItems[2]];
+    grid.size = items.length;
+    await nextFrame();
+    expect(spy.called).to.be.false;
   });
 
   describe('focusButtonMode column', () => {

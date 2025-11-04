@@ -287,6 +287,8 @@ describe('form-layout auto responsive', () => {
 
     it('should update layout after adding a field to a row', async () => {
       const newField = document.createElement('input');
+      // There is a Safari bug that leads to incorrect calculation for baseline alignment of empty inputs
+      newField.placeholder = 'Middle name';
       rows[0].appendChild(newField);
       await nextFrame();
       assertFormLayoutGrid(layout, { columns: 3, rows: 2 });

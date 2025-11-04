@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { DialogSizeMixinClass } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
 /*
  * Fired when the `opened` property changes.
@@ -31,14 +32,14 @@ export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEve
 
 export declare function ConfirmDialogMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ConfirmDialogMixinClass> & T;
+): Constructor<ConfirmDialogMixinClass> & Constructor<DialogSizeMixinClass> & T;
 
 export declare class ConfirmDialogMixinClass {
   /**
-   * Sets the `aria-describedby` attribute of the overlay element.
+   * Sets the `aria-describedby` attribute of the dialog.
    *
-   * By default, all elements inside the message area are linked
-   * through the `aria-describedby` attribute. However, there are
+   * By default, the text contents of all elements inside the message area
+   * are combined into the `aria-description` attribute. However, there are
    * cases where this can confuse screen reader users (e.g. the dialog
    * may present a password confirmation form). For these cases,
    * it's better to associate only the elements that will help describe
@@ -48,7 +49,7 @@ export declare class ConfirmDialogMixinClass {
   accessibleDescriptionRef: string | null | undefined;
 
   /**
-   * True if the overlay is currently displayed.
+   * True if the dialog is visible and available for interaction.
    */
   opened: boolean;
 
@@ -121,24 +122,4 @@ export declare class ConfirmDialogMixinClass {
    * @attr {string} cancel-theme
    */
   cancelTheme: string;
-
-  /**
-   * A space-delimited list of CSS class names
-   * to set on the underlying overlay element.
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
-
-  /**
-   * Set the width of the overlay.
-   * If a unitless number is provided, pixels are assumed.
-   */
-  width: string | null;
-
-  /**
-   * Set the height of the overlay.
-   * If a unitless number is provided, pixels are assumed.
-   */
-  height: string | null;
 }

@@ -38,15 +38,27 @@ export const KeyboardDirectionMixin = (superclass) =>
       return false;
     }
 
-    /** @protected */
-    focus() {
-      const items = this._getItems();
-      if (Array.isArray(items)) {
-        const idx = this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item));
-        if (idx >= 0) {
-          this._focus(idx);
-        }
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
+      const idx = this._getFocusableIndex();
+      if (idx >= 0) {
+        this._focus(idx, options);
       }
+    }
+
+    /**
+     * Get the index of a first focusable item, if any.
+     *
+     * @return {Element[]}
+     * @protected
+     */
+    _getFocusableIndex() {
+      const items = this._getItems();
+      return Array.isArray(items) ? this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item)) : -1;
     }
 
     /**
@@ -104,17 +116,18 @@ export const KeyboardDirectionMixin = (superclass) =>
       if (
         this._tabNavigation &&
         key === 'Tab' &&
-        ((idx > currentIdx && event.shiftKey) || (idx < currentIdx && !event.shiftKey))
+        ((idx > currentIdx && event.shiftKey) || (idx < currentIdx && !event.shiftKey) || idx === currentIdx)
       ) {
         // Prevent "roving tabindex" logic and let the normal Tab behavior if
         // - currently on the first focusable item and Shift + Tab is pressed,
-        // - currently on the last focusable item and Tab is pressed.
+        // - currently on the last focusable item and Tab is pressed,
+        // - currently on the only focusable item and Tab is pressed
         return;
       }
 
       if (idx >= 0) {
         event.preventDefault();
-        this._focus(idx, true);
+        this._focus(idx, { focusVisible: true }, true);
       }
     }
 
@@ -150,30 +163,27 @@ export const KeyboardDirectionMixin = (superclass) =>
      * Focus the item at given index. Override this method to add custom logic.
      *
      * @param {number} index
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      */
-    _focus(index, navigating = false) {
+    _focus(index, options, navigating = false) {
       const items = this._getItems();
 
-      this._focusItem(items[index], navigating);
+      this._focusItem(items[index], options, navigating);
     }
 
     /**
      * Focus the given item. Override this method to add custom logic.
      *
      * @param {Element} item
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      */
-    _focusItem(item) {
+    _focusItem(item, options) {
       if (item) {
-        item.focus();
-
-        // Generally, the items are expected to implement `FocusMixin`
-        // that would set this attribute based on the `keydown` event.
-        // We set it manually to handle programmatic focus() calls.
-        item.setAttribute('focus-ring', '');
+        item.focus(options);
       }
     }
 

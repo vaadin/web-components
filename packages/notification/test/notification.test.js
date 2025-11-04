@@ -4,28 +4,30 @@ import sinon from 'sinon';
 import '../src/vaadin-notification.js';
 
 describe('vaadin-notification', () => {
-  let notification;
+  let notification, container, showPopoverSpy, hidePopoverSpy;
 
   beforeEach(async () => {
     notification = fixtureSync(`
       <vaadin-notification duration="20"></vaadin-notification>
     `);
+    container = notification._container;
+    showPopoverSpy = sinon.spy(container, 'showPopover');
+    hidePopoverSpy = sinon.spy(container, 'hidePopover');
+
     await nextFrame();
 
     notification.renderer = (root) => {
       root.innerHTML = `Your work has been <strong>saved</strong>`;
     };
 
-    // Force sync card attaching and removal instead of waiting for the animation
-    sinon.stub(notification, '_animatedAppendNotificationCard').callsFake(() => notification._appendNotificationCard());
-    sinon.stub(notification, '_animatedRemoveNotificationCard').callsFake(() => notification._removeNotificationCard());
-
     notification.open();
   });
 
   afterEach(() => {
-    // Close to stop all pending timers.
-    notification.close();
+    // Close all notifications to stop all pending timers.
+    document.querySelectorAll('vaadin-notification').forEach((n) => {
+      n.close();
+    });
     // Delete singleton reference, so as it's created in next test
     delete notification.constructor._container;
   });
@@ -98,32 +100,40 @@ describe('vaadin-notification', () => {
       expect(isVisible(document.body.querySelector('vaadin-notification-container'))).to.be.true;
     });
 
-    it('should cancel vaadin-overlay-close events when the source event occurred within the container', (done) => {
-      listenOnce(document, 'click', (clickEvent) => {
-        const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
-          cancelable: true,
-          detail: { sourceEvent: clickEvent },
-        });
-        document.dispatchEvent(overlayCloseEvent);
-
-        expect(overlayCloseEvent.defaultPrevented).to.be.true;
-        done();
-      });
-      notification._card.click();
+    it('should open as native popover', () => {
+      expect(container.popover).to.equal('manual');
+      expect(container.opened).to.be.true;
+      expect(showPopoverSpy.calledOnce).to.be.true;
     });
 
-    it('should not cancel vaadin-overlay-close events when the source event occurred outside of the container', (done) => {
-      listenOnce(document, 'click', (clickEvent) => {
-        const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
-          cancelable: true,
-          detail: { sourceEvent: clickEvent },
-        });
-        document.dispatchEvent(overlayCloseEvent);
+    it('should close native popover when notifications close', () => {
+      notification.close();
 
-        expect(overlayCloseEvent.defaultPrevented).to.be.false;
-        done();
-      });
-      document.body.click();
+      expect(container.opened).to.be.false;
+      expect(hidePopoverSpy.calledOnce).to.be.true;
+    });
+
+    it('should reopen native popover when notifications open', () => {
+      notification.close();
+      notification._removeNotificationCard();
+      notification.open();
+
+      expect(container.opened).to.be.true;
+      expect(showPopoverSpy.calledTwice).to.be.true;
+    });
+
+    it('should bring native popover to top of overlay stack when another notification opens', () => {
+      showPopoverSpy.resetHistory();
+
+      const anotherNotification = fixtureSync(`
+      <vaadin-notification duration="20"></vaadin-notification>
+    `);
+      anotherNotification.open();
+
+      // Bringing to front involves hiding and showing the popover again
+      expect(hidePopoverSpy.calledOnce).to.be.true;
+      expect(showPopoverSpy.calledOnce).to.be.true;
+      expect(hidePopoverSpy.calledBefore(showPopoverSpy)).to.be.true;
     });
 
     (isIOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
@@ -162,13 +172,6 @@ describe('vaadin-notification', () => {
         window.dispatchEvent(new CustomEvent('resize'));
         expect(container._detectIosNavbar.called).to.be.true;
         container._detectIosNavbar.restore();
-      });
-
-      it('should bring to front on notification open ', () => {
-        notification.opened = false;
-        const spy = sinon.spy(container, 'bringToFront');
-        notification.opened = true;
-        expect(spy).to.be.calledOnce;
       });
     });
   });

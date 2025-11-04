@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-core-styles.js';
+import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
@@ -22,7 +22,7 @@ import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-core-st
  * @mixes ThemableMixin
  * @protected
  */
-class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-context-menu-item';
   }

@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dialogOverlayStyles } from './styles/vaadin-dialog-overlay-core-styles.js';
+import { dialogOverlayStyles } from './styles/vaadin-dialog-overlay-base-styles.js';
 import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
 
 /**
@@ -23,7 +23,7 @@ import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
  * @private
  */
 export class DialogOverlay extends DialogOverlayMixin(
-  DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-dialog-overlay';
@@ -33,11 +33,20 @@ export class DialogOverlay extends DialogOverlayMixin(
     return dialogOverlayStyles;
   }
 
+  /**
+   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * @protected
+   * @override
+   */
+  get _focusTrapRoot() {
+    return this.owner;
+  }
+
   /** @protected */
   render() {
     return html`
       <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <section id="resizerContainer" class="resizer-container">
           <header part="header">
             <div part="title"><slot name="title"></slot></div>

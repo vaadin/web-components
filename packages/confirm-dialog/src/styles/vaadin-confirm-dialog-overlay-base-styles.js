@@ -20,7 +20,7 @@ const confirmDialogOverlay = css`
   }
 
   [part='header'] {
-    color: var(--vaadin-dialog-title-color, var(--vaadin-color));
+    color: var(--vaadin-dialog-title-color, var(--vaadin-text-color));
     font-weight: var(--vaadin-dialog-title-font-weight, 600);
     font-size: var(--vaadin-dialog-title-font-size, 1em);
     line-height: var(--vaadin-dialog-title-line-height, inherit);
@@ -33,11 +33,6 @@ const confirmDialogOverlay = css`
 
   [part='content'] {
     flex: 1;
-  }
-
-  /* TODO remove this wrapper element */
-  #resizerContainer {
-    display: contents;
   }
 `;
 

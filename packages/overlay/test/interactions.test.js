@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
+  aTimeout,
   click,
   enterKeyDown,
   escKeyDown,
@@ -59,6 +60,24 @@ describe('interactions', () => {
 
       expect(overlay.opened).to.be.true;
     });
+
+    it('should not close on Esc if the keydown event was prevented', () => {
+      overlay.addEventListener('keydown', (e) => e.preventDefault());
+
+      escKeyDown(overlay);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not fire the vaadin-overlay-escape-press event if keydown was prevented', () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-escape-press', spy);
+      overlay.addEventListener('keydown', (e) => e.preventDefault());
+
+      enterKeyDown(overlay);
+
+      expect(spy.called).to.be.false;
+    });
   });
 
   describe('click', () => {
@@ -95,6 +114,13 @@ describe('interactions', () => {
         click(parent);
 
         expect(overlay.opened).to.be.false;
+      });
+
+      it('should not close on outside click when modeless', () => {
+        overlay.modeless = true;
+        click(parent);
+
+        expect(overlay.opened).to.be.true;
       });
 
       it('should close on backdrop click', () => {
@@ -150,19 +176,79 @@ describe('interactions', () => {
 
         expect(overlay.opened).to.be.true;
       });
+
+      it('should not fire the event on outside click when modeless set to true', () => {
+        overlay.modeless = true;
+
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-outside-click', spy);
+
+        click(parent);
+
+        expect(spy).to.be.not.called;
+      });
+
+      it('should not fire the event on outside click when modeless set back to false', () => {
+        overlay.modeless = true;
+
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-outside-click', spy);
+
+        overlay.modeless = false;
+
+        click(parent);
+
+        expect(spy.calledOnce).to.be.true;
+      });
     });
 
     describe('vaadin-overlay-close event', () => {
-      it('should prevent closing the overlay if the event was prevented', (done) => {
-        overlay.addEventListener('vaadin-overlay-close', (e) => {
-          e.preventDefault();
+      const preventDefaultListener = (e) => {
+        e.preventDefault();
+      };
 
-          setTimeout(() => {
-            expect(overlay.opened).to.be.true;
-            done();
-          }, 1);
-        });
+      it('should not propagate through shadow roots', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-close', spy);
+
         click(parent);
+
+        expect(spy.firstCall.args[0].composed).to.be.false;
+      });
+
+      it('should prevent closing the overlay if the event was prevented', async () => {
+        overlay.addEventListener('vaadin-overlay-close', preventDefaultListener);
+        click(parent);
+        await aTimeout(1);
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should provide reference to the overlay in the event detail', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-close', spy);
+        click(parent);
+        const event = spy.firstCall.args[0];
+        expect(event.detail.overlay).to.equal(overlay);
+      });
+
+      describe('global', () => {
+        it('should prevent closing the overlay if the global event was prevented', async () => {
+          document.addEventListener('vaadin-overlay-close', preventDefaultListener, { once: true });
+
+          click(parent);
+          await aTimeout(1);
+
+          expect(overlay.opened).to.be.true;
+        });
+
+        it('should provide reference to the overlay in the global event detail', () => {
+          const globalSpy = sinon.spy();
+          document.addEventListener('vaadin-overlay-close', globalSpy, { once: true });
+          click(parent);
+          const event = globalSpy.firstCall.args[0];
+          expect(event.detail.overlay).to.equal(overlay);
+        });
       });
     });
 

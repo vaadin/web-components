@@ -5,39 +5,16 @@
  */
 @media lumo_components_upload-file {
   :host {
-    display: block;
-    padding: var(--lumo-space-s) 0;
-    outline: none;
+    padding: var(--vaadin-upload-file-padding, var(--lumo-space-s) 0);
+    gap: var(--vaadin-upload-file-gap, 0 var(--lumo-space-xs));
+    border-radius: var(--vaadin-upload-file-border-radius, var(--lumo-border-radius-s));
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
-  [hidden] {
-    display: none;
-  }
-
-  [part='row'] {
-    list-style-type: none;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-  }
-
-  button {
-    background: transparent;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-  }
-
-  :host([complete]) ::slotted([slot='progress']),
-  :host([error]) ::slotted([slot='progress']) {
-    display: none !important;
-  }
-
-  :host([focus-ring]) [part='row'] {
-    border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  :host(:focus-visible) {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1);
   }
 
   [part='status'],
@@ -46,57 +23,48 @@
     font-size: var(--lumo-font-size-s);
   }
 
-  [part='info'] {
-    display: flex;
-    align-items: baseline;
-    flex: auto;
-  }
-
-  [part='meta'] {
-    width: 0.001px;
-    flex: 1 1 auto;
-  }
-
   [part='name'] {
+    color: var(--lumo-body-text-color);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   [part='commands'] {
-    display: flex;
-    align-items: baseline;
-    flex: none;
+    align-self: start;
   }
 
   [part$='icon'] {
-    margin-right: var(--lumo-space-xs);
     font-size: var(--lumo-icon-size-m);
     font-family: 'lumo-icons';
     line-height: 1;
-  }
-
-  /* When both icons are hidden, let us keep space for one */
-  [part='done-icon'][hidden] + [part='warning-icon'][hidden] {
-    display: block !important;
-    visibility: hidden;
+    align-self: start;
   }
 
   [part$='button'] {
-    flex: none;
-    margin-left: var(--lumo-space-xs);
+    border: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+    border-radius: var(--lumo-border-radius-s);
     cursor: var(--lumo-clickable-cursor);
   }
 
   [part$='button']:focus {
-    outline: none;
-    border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1);
+  }
+
+  /* Vertically align icons / buttons with the first line of text */
+  [part$='icon'],
+  [part$='button'] {
+    margin-top: calc((1em * var(--lumo-line-height-m) - var(--lumo-icon-size-m)) / 2);
   }
 
   [part$='icon']::before,
   [part$='button']::before {
-    vertical-align: -0.25em;
+    background: transparent;
+    mask-image: none;
+    width: auto;
+    height: auto;
   }
 
   [part='done-icon']::before {
@@ -126,8 +94,6 @@
   }
 
   ::slotted([slot='progress']) {
-    width: auto;
-    margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
-    margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+    margin-inline-end: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
   }
 }

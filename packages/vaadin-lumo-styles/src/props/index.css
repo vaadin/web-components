@@ -1,0 +1,12 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './reset.css';
+@import './icons.css';
+@import './color.css';
+@import './sizing.css';
+@import './spacing.css';
+@import './style.css';
+@import './typography.css';

@@ -3,16 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '../color.js';
-import '../font-icons.js';
-import '../sizing.js';
-import '../spacing.js';
-import '../style.js';
-import '../typography.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { fieldButton } from './field-button.js';
 import { helper } from './helper.js';
 import { requiredField } from './required-field.js';
+
+issueWarning('Lumo .js mixins are deprecated and will be removed in V26');
 
 const inputField = css`
   :host {
@@ -158,7 +155,7 @@ const inputField = css`
     font-weight: 400;
   }
 
-  [part='clear-button']::before {
+  [part~='clear-button']::before {
     content: var(--lumo-icons-cross);
   }
 `;

@@ -22,31 +22,53 @@ describe('vaadin-dialog', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
   });
 
-  it('overlay', async () => {
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  describe('host', () => {
+    it('default', async () => {
+      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('headerTitle', async () => {
+      dialog.headerTitle = 'Title';
+      await nextUpdate(dialog);
+      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('headerRenderer', async () => {
+      dialog.headerRenderer = (root) => {
+        root.textContent = 'Header';
+      };
+      await nextUpdate(dialog);
+      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('footerRenderer', async () => {
+      dialog.footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+      await nextUpdate(dialog);
+      await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
   });
 
-  it('overlay modeless', async () => {
-    dialog.modeless = true;
-    await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-  });
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
 
-  it('overlay theme', async () => {
-    dialog.setAttribute('theme', 'custom');
-    await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-  });
+    it('modeless', async () => {
+      dialog.modeless = true;
+      await nextUpdate(dialog);
+      await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
 
-  it('overlay class', async () => {
-    dialog.overlayClass = 'custom dialog-overlay';
-    await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-  });
+    it('theme', async () => {
+      dialog.setAttribute('theme', 'custom');
+      await nextUpdate(dialog);
+      await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
 
-  it('overlay role', async () => {
-    dialog.overlayRole = 'alertdialog';
-    await nextUpdate(dialog);
-    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    it('overlay', async () => {
+      await expect(overlay).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
   });
 });

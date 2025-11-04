@@ -28,6 +28,14 @@ describe('vaadin-overlay', () => {
       expect(spy).to.be.calledOnce;
     });
 
+    it('should provide reference to the overlay in the event detail', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+      const event = spy.firstCall.args[0];
+      expect(event.detail.overlay).to.equal(overlay);
+    });
+
     it('should not fire when immediately setting opened property back to false', async () => {
       overlay.opened = true;
       overlay.opened = false;
@@ -35,32 +43,102 @@ describe('vaadin-overlay', () => {
       await aTimeout(0);
       expect(spy).to.not.be.called;
     });
+
+    it('should not fire when immediately disconnected after setting opened to true', async () => {
+      overlay.opened = true;
+      overlay.remove();
+
+      await nextFrame();
+      await aTimeout(0);
+
+      expect(spy).to.not.be.called;
+    });
+
+    it('should not propagate through shadow roots', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+
+      expect(spy.firstCall.args[0].composed).to.be.false;
+    });
+
+    describe('global', () => {
+      let globalSpy;
+
+      beforeEach(() => {
+        globalSpy = sinon.spy();
+        document.addEventListener('vaadin-overlay-open', globalSpy);
+      });
+
+      afterEach(() => {
+        document.removeEventListener('vaadin-overlay-open', globalSpy);
+      });
+
+      it('should fire a global event on the document body when opened', async () => {
+        overlay.opened = true;
+        await nextFrame();
+        await aTimeout(0);
+        expect(globalSpy).to.be.called;
+        expect(globalSpy.firstCall.args);
+      });
+
+      it('should provide reference to the overlay in the global event detail', async () => {
+        overlay.opened = true;
+        await nextFrame();
+        await aTimeout(0);
+        const event = globalSpy.firstCall.args[0];
+        expect(event.detail.overlay).to.equal(overlay);
+      });
+    });
   });
 
-  describe('moving overlay', () => {
-    let parent, overlay;
+  describe('popover', () => {
+    let overlay;
 
-    beforeEach(async () => {
-      parent = document.createElement('div');
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
+    beforeEach(() => {
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
       overlay.renderer = (root) => {
         root.textContent = 'overlay content';
       };
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
     afterEach(() => {
       overlay.opened = false;
     });
 
-    it('should move under document body when open', () => {
-      expect(overlay.parentElement).to.eql(document.body);
+    it('should call showPopover when opened property is set to true', async () => {
+      const showSpy = sinon.spy(overlay, 'showPopover');
+
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      expect(showSpy).to.be.calledOnce;
     });
 
-    it('should move back to original place after closing', () => {
+    it('should call hidePopover opened property is set to false', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const hideSpy = sinon.spy(overlay, 'hidePopover');
+
       overlay.opened = false;
-      expect(overlay.parentElement).to.eql(parent);
+
+      expect(hideSpy).to.be.calledOnce;
+    });
+
+    it('should not call showPopover when opened is set to true while disconnected', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const showSpy = sinon.spy(overlay, 'showPopover');
+
+      overlay.opened = false;
+
+      overlay.remove();
+      overlay.opened = true;
+
+      expect(overlay.opened).to.be.false;
+      expect(showSpy).to.be.not.called;
     });
   });
 
@@ -97,11 +175,34 @@ describe('vaadin-overlay', () => {
     });
   });
 
+  describe('modeless', () => {
+    let overlay, owner;
+
+    beforeEach(() => {
+      overlay = createOverlay('overlay content');
+      owner = document.createElement('div');
+      overlay.owner = owner;
+    });
+
+    it('should reflect modeless to owner', () => {
+      overlay.modeless = true;
+      expect(owner.hasAttribute('modeless')).to.be.true;
+
+      overlay.modeless = false;
+      expect(owner.hasAttribute('modeless')).to.be.false;
+
+      overlay.modeless = undefined;
+      expect(owner.hasAttribute('modeless')).to.be.false;
+    });
+  });
+
   describe('backdrop', () => {
-    let overlay, backdrop;
+    let overlay, backdrop, owner;
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
+      owner = document.createElement('div');
+      overlay.owner = owner;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       backdrop = overlay.$.backdrop;
@@ -127,6 +228,17 @@ describe('vaadin-overlay', () => {
     it('should reflect withBackdrop property to attribute', () => {
       overlay.withBackdrop = true;
       expect(overlay.hasAttribute('with-backdrop')).to.be.true;
+    });
+
+    it('should reflect withBackdrop to owner', () => {
+      overlay.withBackdrop = true;
+      expect(owner.hasAttribute('with-backdrop')).to.be.true;
+
+      overlay.withBackdrop = false;
+      expect(owner.hasAttribute('with-backdrop')).to.be.false;
+
+      overlay.withBackdrop = undefined;
+      expect(owner.hasAttribute('with-backdrop')).to.be.false;
     });
   });
 

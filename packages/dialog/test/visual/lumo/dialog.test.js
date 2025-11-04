@@ -1,6 +1,6 @@
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/dialog.css';
 import '../../not-animated-styles.js';
 import '../../../vaadin-dialog.js';
@@ -80,7 +80,7 @@ describe('dialog', () => {
   it('should not contain padding with no-padding theme', async () => {
     element.setAttribute('theme', 'no-padding');
     const contentStyles = new CSSStyleSheet();
-    contentStyles.insertRule('vaadin-dialog-overlay::part(content) { padding: 20px; }');
+    contentStyles.insertRule('vaadin-dialog::part(content) { padding: 20px; }');
     document.adoptedStyleSheets = [contentStyles];
     await nextUpdate(element);
     await visualDiff(div, 'content-no-padding-theme');

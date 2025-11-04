@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { fire, fixtureSync, focusout, mousedown, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fire, fixtureSync, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-password-field.js';
 
@@ -171,10 +171,12 @@ describe('password-field', () => {
     });
 
     describe('mousedown', () => {
-      it('should not set focus-ring attribute when focusing on mousedown', () => {
-        // Reset FocusMixin flag
-        mousedown(passwordField);
-        passwordField.focus();
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should not set focus-ring attribute when focusing on mousedown', async () => {
+        await sendMouseToElement({ type: 'click', element: passwordField });
         expect(passwordField.hasAttribute('focus-ring')).to.be.false;
       });
     });
@@ -184,7 +186,7 @@ describe('password-field', () => {
     let revealPart;
 
     beforeEach(async () => {
-      revealPart = passwordField.shadowRoot.querySelector('[part="reveal-button"]');
+      revealPart = passwordField.shadowRoot.querySelector('[part~="reveal-button"]');
       passwordField.revealButtonHidden = true;
       await nextUpdate(passwordField);
     });

@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -37,16 +36,13 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  *
  * ### Styling
  *
- * `<vaadin-popover>` uses `<vaadin-popover-overlay>` internal
- * themable component as the actual visible overlay.
- *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-popover-overlay>` parts.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `arrow`          | Optional arrow pointing to the target when using `theme="arrow"`
  *
  * The following state attributes are available for styling:
@@ -54,9 +50,6 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * Attribute        | Description
  * -----------------|----------------------------------------
  * `position`       | Reflects the `position` property value.
- *
- * Note: the `theme` attribute value set on `<vaadin-popover>` is
- * propagated to the internal `<vaadin-popover-overlay>` component.
  *
  * ### Custom CSS Properties
  *
@@ -74,9 +67,7 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the popover is closed.
  */
-declare class Popover extends PopoverPositionMixin(
-  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
-) {
+declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))) {
   /**
    * Sets the default focus delay to be used by all popover instances,
    * except for those that have focus delay configured using property.
@@ -96,16 +87,18 @@ declare class Popover extends PopoverPositionMixin(
   static setDefaultHoverDelay(hoverDelay: number): void;
 
   /**
-   * String used to label the overlay to screen reader users.
+   * String used to label the popover to screen reader users.
    *
    * @attr {string} accessible-name
+   * @deprecated Use `aria-label` attribute on the popover instead
    */
   accessibleName: string | null | undefined;
 
   /**
-   * Id of the element used as label of the overlay to screen reader users.
+   * Id of the element used as label of the popover to screen reader users.
    *
    * @attr {string} accessible-name-ref
+   * @deprecated Use `aria-labelledby` attribute on the popover instead
    */
   accessibleNameRef: string | null | undefined;
 
@@ -116,13 +109,13 @@ declare class Popover extends PopoverPositionMixin(
   autofocus: boolean;
 
   /**
-   * Set the height of the overlay.
+   * Set the height of the popover.
    * If a unitless number is provided, pixels are assumed.
    */
   height: string | null;
 
   /**
-   * Set the width of the overlay.
+   * Set the width of the popover.
    * If a unitless number is provided, pixels are assumed.
    */
   width: string | null;
@@ -159,60 +152,60 @@ declare class Popover extends PopoverPositionMixin(
   hoverDelay: number;
 
   /**
-   * True if the popover overlay is opened, false otherwise.
+   * True if the popover is visible and available for interaction.
    */
   opened: boolean;
 
   /**
-   * The `role` attribute value to be set on the overlay.
+   * The `role` attribute value to be set on the popover.
    *
    * @attr {string} overlay-role
+   * @deprecated Use standard `role` attribute on the popover instead
    */
   overlayRole: string;
 
   /**
-   * Custom function for rendering the content of the overlay.
+   * Custom function for rendering the content of the popover.
    * Receives two arguments:
    *
    * - `root` The root container DOM element. Append your content to it.
-   * - `popover` The reference to the `vaadin-popover` element (overlay host).
+   * - `popover` The reference to the `vaadin-popover` element.
+   *
+   * @deprecated Add content elements as children of the popover using default slot
    */
   renderer: PopoverRenderer | null | undefined;
 
   /**
    * When true, the popover prevents interacting with background elements
    * by setting `pointer-events` style on the document body to `none`.
-   * This also enables trapping focus inside the overlay.
+   * This also enables trapping focus inside the popover.
    */
   modal: boolean;
 
   /**
-   * Set to true to disable closing popover overlay on outside click.
+   * Set to true to disable closing popover on outside click.
    *
    * @attr {boolean} no-close-on-outside-click
    */
   noCloseOnOutsideClick: boolean;
 
   /**
-   * Set to true to disable closing popover overlay on Escape press.
-   * When the popover is modal, pressing Escape anywhere in the
-   * document closes the overlay. Otherwise, only Escape press
-   * from the popover itself or its target closes the overlay.
+   * Set to true to disable closing popover on Escape press.
    *
    * @attr {boolean} no-close-on-esc
    */
   noCloseOnEsc: boolean;
 
   /**
-   * Popover trigger mode, used to configure how the overlay is opened or closed.
+   * Popover trigger mode, used to configure how the popover is opened or closed.
    * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
    *
    * Supported values:
    * - `click` (default) - opens and closes on target click.
    * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
-   * to the popover overlay content keeps the overlay opened.
+   * to the popover content keeps the popover opened.
    * - `focus` - opens on target focus, closes on target blur. Moving focus to the
-   * popover overlay content keeps the overlay opened.
+   * popover content keeps the popover opened.
    *
    * In addition to the behavior specified by `trigger`, the popover can be closed by:
    * - pressing Escape key (unless `noCloseOnEsc` property is true)
@@ -225,7 +218,7 @@ declare class Popover extends PopoverPositionMixin(
   trigger: PopoverTrigger[] | null | undefined;
 
   /**
-   * When true, the overlay has a backdrop (modality curtain) on top of the
+   * When true, the popover has a backdrop (modality curtain) on top of the
    * underlying page content, covering the whole viewport.
    *
    * @attr {boolean} with-backdrop
@@ -237,6 +230,8 @@ declare class Popover extends PopoverPositionMixin(
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   *
+   * @deprecated Add content elements as children of the popover using default slot
    */
   requestContentUpdate(): void;
 

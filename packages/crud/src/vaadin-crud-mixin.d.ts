@@ -232,7 +232,7 @@ export declare class CrudMixinClass<Item> {
    *
    * The object has the following JSON structure and default values:
    *
-   * ```
+   * ```js
    * {
    *   newItem: 'New item',
    *   editItem: 'Edit item',

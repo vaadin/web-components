@@ -177,11 +177,6 @@ describe('KeyboardDirectionMixin', () => {
         expect(element.focused).to.be.equal(items[4]);
       });
 
-      it('should set focus-ring on the focused element on keydown', () => {
-        arrowDownKeyDown(items[0]);
-        expect(items[1].hasAttribute('focus-ring')).to.be.true;
-      });
-
       it('should not move focus on keydown with Ctrl key modifier', () => {
         const spy = sinon.spy(items[1], 'focus');
         arrowDownKeyDown(items[0], ['ctrl']);
@@ -242,6 +237,18 @@ describe('KeyboardDirectionMixin', () => {
       items[5].focus();
       tabKeyDown(items[5]);
       expect(element.focused).to.not.equal(items[0]);
+    });
+
+    it('should not prevent default on Tab keydown with only one item present', () => {
+      element.innerHTML = '<div tabindex="0">Foo</div>';
+      items = element.children;
+      items[0].focus();
+
+      const spy = sinon.spy();
+      element.addEventListener('keydown', spy);
+      tabKeyDown(items[0]);
+
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
     });
   });
 });

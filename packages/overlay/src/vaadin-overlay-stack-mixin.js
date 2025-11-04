@@ -4,21 +4,32 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/** @type {Set<HTMLElement>} */
+const attachedInstances = new Set();
+
 /**
  * Returns all attached overlays in visual stacking order.
  * @private
  */
-const getAttachedInstances = () =>
-  Array.from(document.body.children)
-    .filter((el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'))
-    .sort((a, b) => a.__zIndex - b.__zIndex || 0);
+const getAttachedInstances = () => [...attachedInstances].filter((el) => !el.hasAttribute('closing'));
 
 /**
- * Returns all attached overlay instances excluding notification container,
- * which only needs to be in the stack for zIndex but not pointer-events.
+ * Returns true if all the instances on top of the overlay are nested overlays.
  * @private
  */
-const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.overlay);
+export const hasOnlyNestedOverlays = (overlay) => {
+  const instances = getAttachedInstances();
+  const next = instances[instances.indexOf(overlay) + 1];
+  if (!next) {
+    return true;
+  }
+
+  if (!overlay._deepContains(next)) {
+    return false;
+  }
+
+  return hasOnlyNestedOverlays(next);
+};
 
 /**
  * Returns true if the overlay is the last one in the opened overlays stack.
@@ -28,25 +39,8 @@ const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.ove
  * @protected
  */
 export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
-  const filteredOverlays = getOverlayInstances().filter(filter);
+  const filteredOverlays = getAttachedInstances().filter(filter);
   return overlay === filteredOverlays.pop();
-};
-
-const overlayMap = new WeakMap();
-
-/**
- * Stores the reference to the nested overlay for given parent,
- * or removes it when the nested overlay is null.
- * @param {HTMLElement} parent
- * @param {HTMLElement} nested
- * @protected
- */
-export const setNestedOverlay = (parent, nested) => {
-  if (nested != null) {
-    overlayMap.set(parent, nested);
-  } else {
-    overlayMap.delete(parent);
-  }
 };
 
 /**
@@ -54,12 +48,6 @@ export const setNestedOverlay = (parent, nested) => {
  */
 export const OverlayStackMixin = (superClass) =>
   class OverlayStackMixin extends superClass {
-    constructor() {
-      super();
-
-      this._hasOverlayStackMixin = true;
-    }
-
     /**
      * Returns true if this is the last one in the opened overlays stack.
      *
@@ -71,24 +59,35 @@ export const OverlayStackMixin = (superClass) =>
     }
 
     /**
+     * Returns true if this is overlay is attached.
+     *
+     * @return {boolean}
+     * @protected
+     */
+    get _isAttached() {
+      return attachedInstances.has(this);
+    }
+
+    /**
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
-      let zIndex = '';
-      const frontmost = getAttachedInstances()
-        .filter((o) => o !== this)
-        .pop();
-      if (frontmost) {
-        const frontmostZIndex = frontmost.__zIndex;
-        zIndex = frontmostZIndex + 1;
+      // If the overlay is the last one, or if all other overlays shown above
+      // are nested overlays (e.g. date-picker inside a dialog), do not call
+      // `showPopover()` unnecessarily to avoid scroll position being reset.
+      if (isLastOverlay(this) || hasOnlyNestedOverlays(this)) {
+        return;
       }
-      this.style.zIndex = zIndex;
-      this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
 
-      // If there is a nested overlay, call `bringToFront()` for it as well.
-      if (overlayMap.has(this)) {
-        overlayMap.get(this).bringToFront();
+      // Update stacking order of native popover-based overlays
+      if (this.matches(':popover-open')) {
+        this.hidePopover();
+        this.showPopover();
       }
+
+      // Update order of attached instances
+      this._removeAttachedInstance();
+      this._appendAttachedInstance();
     }
 
     /** @protected */
@@ -101,7 +100,7 @@ export const OverlayStackMixin = (superClass) =>
       }
 
       // Disable pointer events in other attached overlays
-      getOverlayInstances().forEach((el) => {
+      getAttachedInstances().forEach((el) => {
         if (el !== this) {
           el.$.overlay.style.pointerEvents = 'none';
         }
@@ -117,7 +116,7 @@ export const OverlayStackMixin = (superClass) =>
       }
 
       // Restore pointer events in the previous overlay(s)
-      const instances = getOverlayInstances();
+      const instances = getAttachedInstances();
 
       let el;
       // Use instances.pop() to ensure the reverse order
@@ -131,6 +130,18 @@ export const OverlayStackMixin = (superClass) =>
           // Stop after the last modal
           break;
         }
+      }
+    }
+
+    /** @protected */
+    _appendAttachedInstance() {
+      attachedInstances.add(this);
+    }
+
+    /** @protected */
+    _removeAttachedInstance() {
+      if (this._isAttached) {
+        attachedInstances.delete(this);
       }
     }
   };

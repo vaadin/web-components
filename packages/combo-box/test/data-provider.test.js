@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './data-provider-styles.js';
 import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
@@ -64,7 +63,11 @@ describe('data provider', () => {
   });
 
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    comboBox = fixtureSync(`
+      <vaadin-combo-box
+        style="--vaadin-combo-box-overlay-max-height: 400px"
+      ></vaadin-combo-box>
+    `);
     await nextRender();
     spyDataProvider = sinon.spy(dataProvider);
     spyAsyncDataProvider = sinon.spy(asyncDataProvider);

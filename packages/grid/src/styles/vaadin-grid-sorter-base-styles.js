@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const gridSorterStyles = css`
@@ -12,7 +12,7 @@ export const gridSorterStyles = css`
     align-items: center;
     cursor: pointer;
     max-width: 100%;
-    gap: var(--vaadin-gap-container-inline);
+    gap: var(--vaadin-gap-s);
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -27,6 +27,8 @@ export const gridSorterStyles = css`
   [part='indicators'] {
     position: relative;
     flex: none;
+    height: 1lh;
+    color: var(--vaadin-text-color-disabled);
   }
 
   [part='order'] {
@@ -34,6 +36,7 @@ export const gridSorterStyles = css`
     vertical-align: super;
     font-size: 0.75em;
     line-height: 1;
+    color: var(--vaadin-text-color-secondary);
   }
 
   [part='indicators']::before {
@@ -53,6 +56,16 @@ export const gridSorterStyles = css`
 
   :host([direction='desc']) [part='indicators']::before {
     padding-block: 6px 0;
+  }
+
+  :host([direction]) [part='indicators'] {
+    color: var(--vaadin-text-color-secondary);
+  }
+
+  @media (any-hover: hover) {
+    :host(:hover) [part='indicators'] {
+      color: var(--vaadin-text-color);
+    }
   }
 
   @media (forced-colors: active) {

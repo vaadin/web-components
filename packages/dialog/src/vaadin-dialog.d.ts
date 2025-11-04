@@ -4,12 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogRendererMixin } from './vaadin-dialog-renderer-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
+import { DialogSizeMixin } from './vaadin-dialog-size-mixin.js';
 
 export { DialogOverlay, DialogOverlayBounds } from './vaadin-dialog-overlay.js';
 
@@ -90,16 +90,13 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  *
  * ### Styling
  *
- * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
- * themable component as the actual visible dialog overlay.
- *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
- * for `<vaadin-dialog-overlay>` parts.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `header`         | Element wrapping title and header content
  * `header-content` | Element wrapping the header content slot
  * `title`          | Element wrapping the title slot
@@ -114,9 +111,6 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * `has-footer`     | Set when the element has footer renderer
  * `overflow`       | Set to `top`, `bottom`, none or both
  *
- * Note: the `theme` attribute value set on `<vaadin-dialog>` is
- * propagated to the internal `<vaadin-dialog-overlay>` component.
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
@@ -124,18 +118,11 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
  */
-declare class Dialog extends DialogDraggableMixin(
-  DialogResizableMixin(
-    DialogRendererMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))))),
+declare class Dialog extends DialogSizeMixin(
+  DialogDraggableMixin(
+    DialogResizableMixin(DialogRendererMixin(DialogBaseMixin(ThemePropertyMixin(ElementMixin(HTMLElement))))),
   ),
 ) {
-  /**
-   * Set the `aria-label` attribute for assistive technologies like
-   * screen readers. An empty string value for this property (the
-   * default) means that the `aria-label` attribute is not present.
-   */
-  ariaLabel: string;
-
   addEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,

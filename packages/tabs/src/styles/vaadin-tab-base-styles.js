@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const tabStyles = css`
@@ -12,13 +12,13 @@ export const tabStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--vaadin-tab-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-tab-gap, var(--vaadin-gap-s));
     padding: var(--vaadin-tab-padding, var(--vaadin-padding-container));
     cursor: var(--vaadin-clickable-cursor);
     font-size: var(--vaadin-tab-font-size, 1em);
     font-weight: var(--vaadin-tab-font-weight, 500);
     line-height: var(--vaadin-tab-line-height, inherit);
-    color: var(--vaadin-tab-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-tab-text-color, var(--vaadin-text-color-secondary));
     background: var(--vaadin-tab-background, transparent);
     border-radius: var(--vaadin-tab-border-radius, var(--vaadin-radius-m));
     -webkit-tap-highlight-color: transparent;
@@ -38,7 +38,7 @@ export const tabStyles = css`
 
   :host([selected]) {
     --vaadin-tab-background: var(--vaadin-background-container);
-    --vaadin-tab-color: var(--vaadin-color);
+    --vaadin-tab-text-color: var(--vaadin-text-color);
   }
 
   :host([disabled]) {

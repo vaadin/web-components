@@ -3,15 +3,15 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/text-area/src/vaadin-text-area.js';
+import './vaadin-message-input-button.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { messageInputStyles } from './styles/vaadin-message-input-core-styles.js';
+import { messageInputStyles } from './styles/vaadin-message-input-base-styles.js';
 import { MessageInputMixin } from './vaadin-message-input-mixin.js';
 
 /**
@@ -26,6 +26,25 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * ### Styling
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|---------------------------------
+ * `disabled`     | Set when the element is disabled
+ * `has-tooltip`  | Set when the element has a slotted tooltip
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-message-input>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-message-input-button>` - has the same API as `<vaadin-button>`
+ * - `<vaadin-text-area>`
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes MessageInputMixin
@@ -33,7 +52,7 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * @mixes ElementMixin
  */
 class MessageInput extends MessageInputMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-message-input';

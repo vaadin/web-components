@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { customFieldStyles } from './styles/vaadin-custom-field-core-styles.js';
+import { customFieldStyles } from './styles/vaadin-custom-field-base-styles.js';
 import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
 
 /**
@@ -36,14 +36,15 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|------------
- * `invalid`           | Set when the element is invalid           | :host
- * `focused`           | Set when the element is focused           | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
+ * Attribute           | Description
+ * --------------------|--------------------------------
+ * `invalid`           | Set when the element is invalid
+ * `focused`           | Set when the element is focused
+ * `has-label`         | Set when the element has a label
+ * `has-value`         | Set when the element has a value
+ * `has-helper`        | Set when the element has helper text
+ * `has-error-message` | Set when the element has an error message
+ * `has-tooltip`       | Set when the element has a slotted tooltip
  *
  * You may also manually set `disabled` or `readonly` attribute on this component to make the label
  * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.
@@ -61,7 +62,7 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-custom-field';
   }

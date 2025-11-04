@@ -3,11 +3,10 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementHidden } from '@vaadin/a11y-base';
-import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/async.js';
+import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 
 const timeouts = {
   SCROLLING: 500,
@@ -18,7 +17,7 @@ const timeouts = {
  * @polymerMixin
  */
 export const ScrollMixin = (superClass) =>
-  class ScrollMixin extends ResizeMixin(superClass) {
+  class ScrollMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -150,28 +149,9 @@ export const ScrollMixin = (superClass) =>
       });
 
       this.$.table.addEventListener('scroll', () => this._afterScroll());
-    }
 
-    /**
-     * @protected
-     * @override
-     */
-    _onResize() {
-      this._updateOverflow();
-      this.__updateHorizontalScrollPosition();
-
-      // For Firefox, manually restore last scroll position when grid becomes
-      // visible again. This solves an issue where switching visibility of two
-      // grids causes Firefox trying to synchronize the scroll positions between
-      // the two grid's table elements.
-      // See https://github.com/vaadin/web-components/issues/5796
-      if (this._firefox) {
-        const isVisible = !isElementHidden(this);
-        if (isVisible && this.__previousVisible === false) {
-          this._scrollTop = this.__memorizedScrollTop || 0;
-        }
-        this.__previousVisible = isVisible;
-      }
+      this.__overflowController = new OverflowController(this, this.$.table);
+      this.addController(this.__overflowController);
     }
 
     /**
@@ -232,8 +212,6 @@ export const ScrollMixin = (superClass) =>
         this._hideTooltip(true);
       }
 
-      this._updateOverflow();
-
       this._debounceColumnContentVisibility = Debouncer.debounce(
         this._debounceColumnContentVisibility,
         timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
@@ -246,14 +224,6 @@ export const ScrollMixin = (superClass) =>
           }
         },
       );
-
-      // Memorize last scroll position in Firefox
-      if (this._firefox) {
-        const isVisible = !isElementHidden(this);
-        if (isVisible && this.__previousVisible !== false) {
-          this.__memorizedScrollTop = this._scrollTop;
-        }
-      }
     }
 
     /** @private */
@@ -358,58 +328,6 @@ export const ScrollMixin = (superClass) =>
       }
 
       this.__updateColumnsBodyContentHidden();
-    }
-
-    /** @private */
-    _updateOverflow() {
-      this._debounceOverflow = Debouncer.debounce(this._debounceOverflow, animationFrame, () => {
-        this.__doUpdateOverflow();
-      });
-    }
-
-    /** @private */
-    __doUpdateOverflow() {
-      // Set overflow styling attributes
-      let overflow = '';
-      const table = this.$.table;
-      if (table.scrollTop < table.scrollHeight - table.clientHeight) {
-        overflow += ' bottom';
-      }
-
-      if (table.scrollTop > 0) {
-        overflow += ' top';
-      }
-
-      const scrollLeft = getNormalizedScrollLeft(table, this.getAttribute('dir'));
-      if (scrollLeft > 0) {
-        overflow += ' start';
-      }
-
-      if (scrollLeft < table.scrollWidth - table.clientWidth) {
-        overflow += ' end';
-      }
-
-      if (this.__isRTL) {
-        overflow = overflow.replace(/start|end/giu, (matched) => {
-          return matched === 'start' ? 'end' : 'start';
-        });
-      }
-
-      // TODO: Remove "right" and "left" values in the next major.
-      if (table.scrollLeft < table.scrollWidth - table.clientWidth) {
-        overflow += ' right';
-      }
-
-      if (table.scrollLeft > 0) {
-        overflow += ' left';
-      }
-
-      const value = overflow.trim();
-      if (value.length > 0 && this.getAttribute('overflow') !== value) {
-        this.setAttribute('overflow', value);
-      } else if (value.length === 0 && this.hasAttribute('overflow')) {
-        this.removeAttribute('overflow');
-      }
     }
 
     /** @protected */

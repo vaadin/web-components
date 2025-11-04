@@ -1,0 +1,13 @@
+diff --git a/node_modules/@web/rollup-plugin-html/dist/output/emitAssets.js b/node_modules/@web/rollup-plugin-html/dist/output/emitAssets.js
+index 7fdc0bf..ec95119 100644
+--- a/node_modules/@web/rollup-plugin-html/dist/output/emitAssets.js
++++ b/node_modules/@web/rollup-plugin-html/dist/output/emitAssets.js
+@@ -73,7 +73,7 @@ async function emitAssets(inputs, options) {
+                     let updatedCssSource = false;
+                     const { code } = await (0, lightningcss_1.transform)({
+                         filename: basename,
+-                        code: asset.content,
++                        code: source,
+                         minify: false,
+                         visitor: {
+                             Url: url => {

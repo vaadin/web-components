@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, esc, fixtureSync, listenOnce, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { aTimeout, click, fixtureSync, listenOnce, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -31,21 +32,43 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    it('should enforce display: none to hide the host element', () => {
-      dialog.style.display = 'block';
+    it('should use display: none when not opened', () => {
+      expect(getComputedStyle(dialog).display).to.equal('none');
+    });
+
+    ['opened', 'opening', 'closing'].forEach((state) => {
+      it(`should use display: block when ${state} attribute is set`, () => {
+        dialog.setAttribute(state, '');
+        expect(getComputedStyle(dialog).display).to.equal('block');
+      });
+    });
+
+    it('should use display: none when hidden while opened', async () => {
+      dialog.opened = true;
+      await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+      dialog.hidden = true;
+      await nextRender();
       expect(getComputedStyle(dialog).display).to.equal('none');
     });
   });
 
   describe('opened', () => {
-    let dialog, backdrop, overlay;
+    let dialog, focusable, backdrop, overlay;
 
     beforeEach(async () => {
-      dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
+      [dialog, focusable] = fixtureSync(`
+        <div>
+          <vaadin-dialog opened></vaadin-dialog>
+          <input />
+        </div>
+      `).children;
       await nextRender();
 
       dialog.renderer = (root) => {
-        root.innerHTML = '<div>Simple dialog</div>';
+        root.innerHTML = `
+          <div>Simple dialog</div>
+          <input />
+        `;
       };
       await nextUpdate(dialog);
 
@@ -58,46 +81,37 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    describe('aria-label', () => {
-      beforeEach(async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
-      });
-
-      it('should set `aria-label` attribute on the overlay when ariaLabel is set', () => {
-        expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to undefined', async () => {
-        dialog.ariaLabel = undefined;
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to null', async () => {
-        dialog.ariaLabel = null;
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to empty string', async () => {
-        dialog.ariaLabel = '';
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-    });
-
     describe('no-close-on-esc', () => {
       it('should close itself on ESC press by default', async () => {
-        esc(document.body);
+        await sendKeys({ press: 'Escape' });
         await nextUpdate(dialog);
         expect(dialog.opened).to.be.false;
       });
 
       it('should not close itself on ESC press when no-close-on-esc is true', async () => {
         dialog.noCloseOnEsc = true;
-        await nextUpdate(dialog);
-        esc(document.body);
+        await sendKeys({ press: 'Escape' });
+        expect(dialog.opened).to.be.true;
+      });
+
+      it('should close on Escape press when modeless and dialog itself is focused', async () => {
+        dialog.modeless = true;
+        dialog.focus();
+        await sendKeys({ press: 'Escape' });
+        expect(dialog.opened).to.be.false;
+      });
+
+      it('should close on Escape press when modeless and content element is focused', async () => {
+        dialog.modeless = true;
+        dialog.querySelector('input').focus();
+        await sendKeys({ press: 'Escape' });
+        expect(dialog.opened).to.be.false;
+      });
+
+      it('should not close on Escape press when modeless and not focused', async () => {
+        dialog.modeless = true;
+        focusable.focus();
+        await sendKeys({ press: 'Escape' });
         expect(dialog.opened).to.be.true;
       });
     });
@@ -223,10 +237,8 @@ describe('vaadin-dialog', () => {
     it('should have min-width when not explicitly sized', async () => {
       dialog.opened = true;
       await nextRender();
-      const contentMinWidth = parseFloat(getComputedStyle(dialog.$.overlay.$.content).minWidth);
-      // TODO change to this with new base styles
-      // const contentMinWidth = parseFloat(getComputedStyle(dialog.$.overlay.$.overlay).minWidth);
-      expect(contentMinWidth).to.be.gt(0);
+      const contentMinWidth = getComputedStyle(dialog.$.overlay.$.overlay).minWidth;
+      expect(contentMinWidth).to.be.equal('min(64px, 100%)');
     });
   });
 
@@ -253,13 +265,13 @@ describe('vaadin-dialog', () => {
 
     it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
-      await nextRender();
-      expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(getDeepActiveElement()).to.equal(dialog);
     });
 
     it('should restore focus on dialog close', async () => {
       dialog.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       dialog.opened = false;
       await nextRender();
       expect(getDeepActiveElement()).to.equal(button);
@@ -342,7 +354,7 @@ describe('vaadin-dialog', () => {
       dialog.height = 400;
       await nextRender();
       expect(getComputedStyle(overlay.$.overlay).position).to.equal('relative');
-      expect(getComputedStyle(overlay.$.overlay).maxWidth).to.equal('100%');
+      expect(getComputedStyle(overlay.$.overlay).maxWidth).to.be.oneOf(['100%', 'min(100%, 100%)']);
     });
 
     it('should reset overlay width when set to null', async () => {
@@ -373,6 +385,61 @@ describe('vaadin-dialog', () => {
       await nextRender();
 
       expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+    });
+  });
+
+  describe('role', () => {
+    let dialog;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+    });
+
+    it('should have role="dialog" by default', () => {
+      expect(dialog.getAttribute('role')).to.equal('dialog');
+    });
+
+    it('should allow setting role as attribute', async () => {
+      dialog = fixtureSync('<vaadin-dialog role="alertdialog"></vaadin-dialog>');
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should set role through overlayRole', async () => {
+      dialog.overlayRole = 'alertdialog';
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should restore default role when removing overlayRole', async () => {
+      dialog.overlayRole = 'alertdialog';
+      await nextRender();
+      dialog.overlayRole = undefined;
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('dialog');
+    });
+  });
+
+  describe('exportparts', () => {
+    let dialog, overlay;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+      overlay = dialog.$.overlay;
+    });
+
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
     });
   });
 });

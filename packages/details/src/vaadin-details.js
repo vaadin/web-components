@@ -33,14 +33,15 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * -----------------|----------------
  * `content`        | The wrapper for the collapsible details content.
  *
- * The following attributes are exposed for styling:
+ * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------| -----------
- * `opened`     | Set when the collapsible content is expanded and visible.
- * `disabled`   | Set when the element is disabled.
- * `focus-ring` | Set when the element is focused using the keyboard.
- * `focused`    | Set when the element is focused.
+ * Attribute      | Description
+ * ---------------|------------
+ * `opened`       | Set when the collapsible content is expanded and visible
+ * `disabled`     | Set when the element is disabled
+ * `focus-ring`   | Set when the element is focused using the keyboard
+ * `focused`      | Set when the element is focused
+ * `has-tooltip`  | Set when the element has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -52,7 +53,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details';
   }
@@ -78,9 +79,7 @@ class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableM
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

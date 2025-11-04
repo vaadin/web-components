@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { avatarStyles } from './styles/vaadin-avatar-core-styles.js';
+import { avatarStyles } from './styles/vaadin-avatar-base-styles.js';
 import { AvatarMixin } from './vaadin-avatar-mixin.js';
 
 /**
@@ -38,6 +38,7 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
  * `focus-ring`      | Set when the avatar is focused using the keyboard.
  * `focused`         | Set when the avatar is focused.
  * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
+ * `has-tooltip`     | Set when the element has a slotted tooltip.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -47,7 +48,7 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar';
   }
@@ -57,9 +58,7 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(P
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

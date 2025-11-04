@@ -5,7 +5,6 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
@@ -43,11 +42,6 @@ export function resetGlobalTooltipState() {
 class TooltipStateController {
   constructor(host) {
     this.host = host;
-  }
-
-  /** @private */
-  get openedProp() {
-    return this.host.manual ? 'opened' : '_autoOpened';
   }
 
   /** @private */
@@ -115,12 +109,12 @@ class TooltipStateController {
 
   /** @private */
   _isOpened() {
-    return this.host[this.openedProp];
+    return this.host.opened;
   }
 
   /** @private */
   _setOpened(opened) {
-    this.host[this.openedProp] = opened;
+    this.host.opened = opened;
   }
 
   /** @private */
@@ -224,12 +218,11 @@ class TooltipStateController {
  * A mixin providing common tooltip functionality.
  *
  * @polymerMixin
- * @mixes OverlayClassMixin
  * @mixes PopoverPositionMixin
  * @mixes PopoverTargetMixin
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(OverlayClassMixin(superClass))) {
+  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -302,12 +295,15 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
-         * When true, the tooltip is opened programmatically.
-         * Only works if `manual` is set to `true`.
+         * When true, the tooltip is opened.
+         * In manual mode, this can be set programmatically.
+         * In automatic mode, this is set automatically by internal logic.
          */
         opened: {
           type: Boolean,
           value: false,
+          reflectToAttribute: true,
+          observer: '__openedChanged',
           sync: true,
         },
 
@@ -330,18 +326,19 @@ export const TooltipMixin = (superClass) =>
          */
         text: {
           type: String,
-          observer: '__textChanged',
         },
 
         /**
-         * Set to true when the overlay is opened using auto-added
-         * event listeners: mouseenter and focusin (keyboard only).
-         * @protected
+         * When enabled, the tooltip text is rendered as Markdown.
+         *
+         * **Note:** Using Markdown is discouraged if accessibility of the tooltip
+         * content is essential, as semantics of the rendered HTML content
+         * (headers, lists, ...) will not be conveyed to assistive technologies.
          */
-        _autoOpened: {
+        markdown: {
           type: Boolean,
-          observer: '__autoOpenedChanged',
-          sync: true,
+          value: false,
+          reflectToAttribute: true,
         },
 
         /**
@@ -366,24 +363,7 @@ export const TooltipMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
-
-        /** @private */
-        _srLabel: {
-          type: Object,
-        },
-
-        /** @private */
-        _overlayContent: {
-          type: String,
-        },
       };
-    }
-
-    static get observers() {
-      return [
-        '__generatorChanged(_overlayElement, generator, context)',
-        '__updateSrLabelText(_srLabel, _overlayContent)',
-      ];
     }
 
     /**
@@ -420,7 +400,6 @@ export const TooltipMixin = (superClass) =>
       super();
 
       this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
-      this._renderer = this.__tooltipRenderer.bind(this);
 
       this.__onFocusin = this.__onFocusin.bind(this);
       this.__onFocusout = this.__onFocusout.bind(this);
@@ -453,7 +432,7 @@ export const TooltipMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      if (this._autoOpened) {
+      if (this.opened && !this.manual) {
         this._stateController.close(true);
       }
       this._isConnected = false;
@@ -467,23 +446,27 @@ export const TooltipMixin = (superClass) =>
 
       this._overlayElement = this.$.overlay;
 
-      this._srLabelController = new SlotController(this, 'sr-label', 'div', {
+      this.__contentController = new SlotController(this, 'overlay', 'div', {
         initializer: (element) => {
           element.id = this._uniqueId;
           element.setAttribute('role', 'tooltip');
-          this._srLabel = element;
+          this.__contentNode = element;
         },
       });
-      this.addController(this._srLabelController);
+      this.addController(this.__contentController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
+        this.__updateContent();
+      }
     }
 
     /** @private */
-    __computeOpened(manual, opened, autoOpened, connected) {
-      return connected && (manual ? opened : autoOpened);
-    }
-
-    /** @private */
-    __autoOpenedChanged(opened, oldOpened) {
+    __openedChanged(opened, oldOpened) {
       if (opened) {
         document.addEventListener('keydown', this.__onKeyDown, true);
       } else if (oldOpened) {
@@ -546,7 +529,7 @@ export const TooltipMixin = (superClass) =>
 
       this.__focusInside = true;
 
-      if (!this.__isTargetHidden && (!this.__hoverInside || !this._autoOpened)) {
+      if (!this.__isTargetHidden && (!this.__hoverInside || !this.opened)) {
         this._stateController.open({ focus: true });
       }
     }
@@ -571,6 +554,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onKeyDown(event) {
+      if (this.manual) {
+        return;
+      }
+
       if (event.key === 'Escape') {
         event.stopPropagation();
         this._stateController.close(true);
@@ -603,7 +590,7 @@ export const TooltipMixin = (superClass) =>
 
       this.__hoverInside = true;
 
-      if (!this.__isTargetHidden && (!this.__focusInside || !this._autoOpened)) {
+      if (!this.__isTargetHidden && (!this.__focusInside || !this.opened)) {
         this._stateController.open({ hover: true });
       }
     }
@@ -636,6 +623,20 @@ export const TooltipMixin = (superClass) =>
       }
     }
 
+    /** @protected */
+    __onOverlayMouseDown(event) {
+      // Prevent mousedown listeners from being called when
+      // the tooltip is slotted into the target element
+      event.stopPropagation();
+    }
+
+    /** @protected */
+    __onOverlayClick(event) {
+      // Prevent click listeners from being called when
+      // the tooltip is slotted into the target element
+      event.stopPropagation();
+    }
+
     /** @private */
     __handleMouseLeave() {
       if (this.manual) {
@@ -663,6 +664,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onTargetVisibilityChange(isVisible) {
+      if (this.manual) {
+        return;
+      }
+
       const oldHidden = this.__isTargetHidden;
       this.__isTargetHidden = !isVisible;
 
@@ -673,7 +678,7 @@ export const TooltipMixin = (superClass) =>
       }
 
       // Close the overlay when the target is no longer fully visible.
-      if (!isVisible && this._autoOpened) {
+      if (!isVisible && this.opened) {
         this._stateController.close(true);
       }
     }
@@ -688,25 +693,25 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __textChanged(text, oldText) {
-      if (this._overlayElement && (text || oldText)) {
-        this._overlayElement.requestContentUpdate();
+    async __updateContent() {
+      const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+
+      if (this.markdown && content) {
+        const helpers = await this.constructor.__importMarkdownHelpers();
+        helpers.renderMarkdownToElement(this.__contentNode, content);
+      } else {
+        this.__contentNode.textContent = content || '';
       }
-    }
 
-    /** @private */
-    __tooltipRenderer(root) {
-      root.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
-
-      // Update the sr-only label text content
-      this._overlayContent = root.textContent;
+      this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
+      this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
     }
 
     /** @private */
     __computeAriaTarget(ariaTarget, target) {
       const isElementNode = (el) => el && el.nodeType === Node.ELEMENT_NODE;
       const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
-      return isAriaTargetSet ? ariaTarget : target;
+      return ariaTarget === null || isAriaTargetSet ? ariaTarget : target;
     }
 
     /** @private */
@@ -724,22 +729,17 @@ export const TooltipMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __generatorChanged(overlayElement, generator, context) {
-      if (overlayElement) {
-        if (generator !== this.__oldTextGenerator || context !== this.__oldContext) {
-          overlayElement.requestContentUpdate();
-        }
-
-        this.__oldTextGenerator = generator;
-        this.__oldContext = context;
+    /** @private **/
+    static __importMarkdownHelpers() {
+      if (!this.__markdownHelpers) {
+        this.__markdownHelpers = import('@vaadin/markdown/src/markdown-helpers.js');
       }
+      return this.__markdownHelpers;
     }
 
-    /** @private */
-    __updateSrLabelText(srLabel, textContent) {
-      if (srLabel) {
-        srLabel.textContent = textContent;
-      }
-    }
+    /**
+     * Fired when the tooltip text content is changed.
+     *
+     * @event content-changed
+     */
   };

@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card</title>
-    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
@@ -137,7 +136,7 @@
     </script>
 
     <style>
-      html:has([theme~='elevated']) {
+      html:has([theme~='elevated']):not(:has(link[href*='aura'])) {
         background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
       }
 
@@ -146,7 +145,7 @@
       }
 
       :where(body) {
-        margin: var(--lumo-space-l);
+        margin: 2rem;
       }
 
       .playground:not(.resize-width),
@@ -344,8 +343,11 @@
       <vaadin-checkbox-group class="theme-variant" theme="horizontal" label="Theme Variant">
         <vaadin-checkbox label="Outlined" value="outlined"></vaadin-checkbox>
         <vaadin-checkbox label="Elevated" value="elevated">
-          <vaadin-tooltip slot="tooltip" text="Also sets the background color of the page to make the elevated style more apparent"></vaadin-tooltip>
-          <label slot="label">Elevated <vaadin-icon icon="lumo:error" style="scale: -1;"></vaadin-icon></label>
+          <vaadin-tooltip
+            slot="tooltip"
+            text="Also sets the background color of the page to make the elevated style more apparent"
+          ></vaadin-tooltip>
+          <label slot="label">Elevated <vaadin-icon icon="lumo:error" style="scale: -1"></vaadin-icon></label>
         </vaadin-checkbox>
         <vaadin-checkbox label="Dark" value="dark"></vaadin-checkbox>
         <vaadin-checkbox label="Horizontal" value="horizontal"></vaadin-checkbox>

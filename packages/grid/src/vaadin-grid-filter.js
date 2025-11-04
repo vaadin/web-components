@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { gridFilterStyles } from './styles/vaadin-grid-filter-core-styles.js';
+import { gridFilterStyles } from './styles/vaadin-grid-filter-base-styles.js';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
@@ -41,7 +41,7 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  * @extends HTMLElement
  * @mixes GridFilterElementMixin
  */
-class GridFilter extends GridFilterElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-grid-filter';
   }

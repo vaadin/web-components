@@ -1,7 +1,7 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/multi-select-combo-box.css';
 import '../common.js';
 import '../../not-animated-styles.js';
@@ -167,21 +167,21 @@ describe('multi-select-combo-box', () => {
     });
 
     it('opened', async () => {
-      element.$.comboBox.click();
+      element.inputElement.click();
       await visualDiff(div, 'opened');
     });
 
     it('opened selected', async () => {
       element.style.width = '250px';
       element.selectedItems = ['Apple', 'Banana'];
-      element.$.comboBox.click();
+      element.inputElement.click();
       await visualDiff(div, 'opened-selected');
     });
 
     it('opened readonly', async () => {
       element.selectedItems = ['Apple', 'Banana'];
       element.readonly = true;
-      element.$.comboBox.click();
+      element.inputElement.click();
       await visualDiff(div, 'opened-readonly');
     });
   });

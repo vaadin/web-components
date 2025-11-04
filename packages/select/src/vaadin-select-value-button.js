@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { valueButton } from './styles/vaadin-select-value-button-core-styles.js';
+import { valueButton } from './styles/vaadin-select-value-button-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
@@ -20,7 +20,7 @@ import { valueButton } from './styles/vaadin-select-value-button-core-styles.js'
  * @mixes ThemableMixin
  * @protected
  */
-class SelectValueButton extends ButtonMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class SelectValueButton extends ButtonMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-select-value-button';
   }

@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const selectStyles = css`
@@ -13,6 +13,10 @@ export const selectStyles = css`
 
   ::slotted([slot='value']) {
     flex: 1;
+  }
+
+  ::slotted(div[slot='overlay']) {
+    display: contents;
   }
 
   :host(:not([focus-ring])) [part='input-field'] {
@@ -28,7 +32,7 @@ export const selectStyles = css`
     cursor: var(--vaadin-clickable-cursor);
   }
 
-  [part='toggle-button']::before {
+  [part~='toggle-button']::before {
     mask-image: var(--_vaadin-icon-chevron-down);
   }
 `;

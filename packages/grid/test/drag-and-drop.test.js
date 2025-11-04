@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
@@ -114,9 +114,9 @@ describe('drag and drop', () => {
         <vaadin-grid-column path="last" header="Last name"></vaadin-grid-column>
       </vaadin-grid>
     `);
-    await nextFrame();
+    await nextResize(grid);
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
+    await nextResize(grid);
     await aTimeout(1);
 
     dragData = {};
@@ -348,6 +348,7 @@ describe('drag and drop', () => {
       it('should auto generate data transfer text data', () => {
         grid.selectedItems = grid.items;
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
@@ -361,6 +362,7 @@ describe('drag and drop', () => {
         await aTimeout(0);
         flushGrid(grid);
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
@@ -372,6 +374,7 @@ describe('drag and drop', () => {
         const columns = grid.querySelectorAll('vaadin-grid-column');
         grid._swapColumnOrders(columns[0], columns[1]);
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
@@ -385,6 +388,7 @@ describe('drag and drop', () => {
           e.detail.setDragData('text/plain', e.detail.draggedItems.map((item) => item.last).join(','));
         });
         fireDragStart();
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const dragData = event.detail.dragData.find((d) => d.type === 'text/plain');
@@ -734,11 +738,13 @@ describe('drag and drop', () => {
       it('should stop the native event', () => {
         const spy = sinon.spy();
         listenOnce(grid, 'drop', spy);
+        fireDragOver();
         fireDrop();
         expect(spy.called).to.be.false;
       });
 
       it('should cancel the native event', () => {
+        fireDragOver();
         const event = fireDrop();
         expect(event.defaultPrevented).to.be.true;
       });
@@ -784,11 +790,13 @@ describe('drag and drop', () => {
       });
 
       it('should dispatch a grid specific event', () => {
+        fireDragOver();
         fireDrop();
         expect(dropSpy.calledOnce).to.be.true;
       });
 
       it('should bubble and be cancelable', () => {
+        fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         expect(event.bubbles).to.be.true;
@@ -823,9 +831,44 @@ describe('drag and drop', () => {
       });
 
       it('should have the original event', () => {
+        fireDragOver();
         const originalEvent = fireDrop();
         const event = dropSpy.getCall(0).args[0];
         expect(event.originalEvent).to.equal(originalEvent);
+      });
+
+      it('should not dispatch grid-drop event on dropping row on input in header', () => {
+        const column = grid.querySelector('vaadin-grid-column');
+        column.headerRenderer = (root) => {
+          if (root.firstChild) {
+            return;
+          }
+          const input = document.createElement('input');
+          root.appendChild(input);
+        };
+        flushGrid(grid);
+        grid.dropMode = 'between';
+        fireDragStart();
+        fireDragOver(grid.$.header.children[0]);
+        fireDrop(grid.$.header.children[0]);
+        expect(dropSpy.called).to.be.false;
+      });
+
+      it('should not dispatch grid-drop event on dropping row on input in footer', () => {
+        const column = grid.querySelector('vaadin-grid-column');
+        column.footerRenderer = (root) => {
+          if (root.firstChild) {
+            return;
+          }
+          const input = document.createElement('input');
+          root.appendChild(input);
+        };
+        flushGrid(grid);
+        grid.dropMode = 'between';
+        fireDragStart();
+        fireDragOver(grid.$.footer.children[0]);
+        fireDrop(grid.$.footer.children[0]);
+        expect(dropSpy.called).to.be.false;
       });
     });
   });
@@ -987,6 +1030,7 @@ describe('drag and drop', () => {
     it('should emit a grid-drop event for non drop disabled row', () => {
       const spy = sinon.spy();
       listenOnce(grid, 'grid-drop', spy);
+      fireDragOver(grid.$.items.children[1]);
       fireDrop(grid.$.items.children[1]);
       expect(spy.called).to.be.true;
     });

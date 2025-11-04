@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const button = css`
   [part$='button'] {
-    color: var(--vaadin-input-field-button-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-button-text-color, var(--vaadin-text-color-secondary));
     cursor: var(--vaadin-clickable-cursor);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -23,18 +23,21 @@ export const button = css`
     display: block;
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
+    mask-size: var(--vaadin-icon-visual-size, 100%);
+    mask-position: 50%;
+    mask-repeat: no-repeat;
   }
 
-  :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part='clear-button'] {
+  :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part~='clear-button'] {
     display: none;
   }
 
-  [part='clear-button']::before {
+  [part~='clear-button']::before {
     mask-image: var(--_vaadin-icon-cross);
   }
 
   :host(:is([readonly], [disabled])) [part$='button'] {
-    color: var(--vaadin-color-disabled);
+    color: var(--vaadin-text-color-disabled);
     cursor: var(--vaadin-disabled-cursor);
   }
 

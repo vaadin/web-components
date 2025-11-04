@@ -50,11 +50,6 @@ describe('tabsheet', () => {
     await visualDiff(div, 'no-border');
   });
 
-  it('no-padding', async () => {
-    element.setAttribute('theme', 'no-padding');
-    await visualDiff(div, 'no-padding');
-  });
-
   it('overflow-top', async () => {
     element.style.setProperty('height', '100px');
     element.shadowRoot.querySelector('[part="content"]').scrollBy(0, 40);
@@ -78,6 +73,24 @@ describe('tabsheet', () => {
     await visualDiff(div, 'loading');
   });
 
+  describe('no-padding', () => {
+    before(() => {
+      const contentStyles = new CSSStyleSheet();
+      contentStyles.insertRule('vaadin-tabsheet::part(content) { padding: 20px; }');
+      document.adoptedStyleSheets = [contentStyles];
+    });
+
+    after(() => {
+      document.adoptedStyleSheets = [];
+    });
+
+    it('no-padding', async () => {
+      element.setAttribute('theme', 'no-padding');
+      await nextRender();
+      await visualDiff(div, 'no-padding');
+    });
+  });
+
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
@@ -88,10 +101,8 @@ describe('tabsheet', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      describe(`${dir}`, () => {
-        it('default', async () => {
-          await visualDiff(div, `${dir}-default`);
-        });
+      it('default', async () => {
+        await visualDiff(div, `${dir}-default`);
       });
     });
   });

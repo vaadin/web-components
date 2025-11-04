@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 
@@ -29,16 +29,15 @@ export const dialogOverlayBase = css`
   }
 
   [part='overlay'] {
-    background: var(--vaadin-dialog-background, var(--vaadin-background-color));
+    background: var(--vaadin-dialog-background, var(--vaadin-overlay-background, var(--vaadin-background-color)));
     background-origin: border-box;
-    border: 0;
-    box-shadow:
-      0 0 0 var(--vaadin-dialog-border-width, 1px) var(--vaadin-dialog-border-color, rgba(0, 0, 0, 0.1)),
-      var(--vaadin-dialog-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
+    border: var(--vaadin-dialog-border-width, var(--vaadin-overlay-border-width, 1px)) solid
+      var(--vaadin-dialog-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color-secondary)));
+    box-shadow: var(--vaadin-dialog-shadow, var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3)));
     border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
     width: max-content;
     min-width: min(var(--vaadin-dialog-min-width, 4em), 100%);
-    max-width: var(--vaadin-dialog-max-width, 100%);
+    max-width: min(var(--vaadin-dialog-max-width, 100%), 100%);
     max-height: 100%;
   }
 
@@ -51,7 +50,7 @@ export const dialogOverlayBase = css`
     flex: none;
     pointer-events: none;
     z-index: 1;
-    gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-s));
   }
 
   ::slotted(*) {
@@ -61,7 +60,11 @@ export const dialogOverlayBase = css`
   [part='header'],
   [part='content'],
   [part='footer'] {
-    padding: var(--vaadin-dialog-padding, var(--vaadin-padding));
+    padding: var(--vaadin-dialog-padding, var(--vaadin-padding-l));
+  }
+
+  :host([theme~='no-padding']) [part='content'] {
+    padding: 0 !important;
   }
 
   :host(:is([has-header], [has-title])) [part='content'] {
@@ -89,7 +92,7 @@ export const dialogOverlayBase = css`
   }
 
   [part='title'] {
-    color: var(--vaadin-dialog-title-color, var(--vaadin-color));
+    color: var(--vaadin-dialog-title-color, var(--vaadin-text-color));
     font-weight: var(--vaadin-dialog-title-font-weight, 600);
     font-size: var(--vaadin-dialog-title-font-size, 1em);
     line-height: var(--vaadin-dialog-title-line-height, inherit);

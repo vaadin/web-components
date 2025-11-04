@@ -6,10 +6,7 @@
 
 @media lumo_components_tooltip-overlay {
   :host {
-    --vaadin-tooltip-offset-top: var(--lumo-space-xs);
-    --vaadin-tooltip-offset-bottom: var(--lumo-space-xs);
-    --vaadin-tooltip-offset-start: var(--lumo-space-xs);
-    --vaadin-tooltip-offset-end: var(--lumo-space-xs);
+    --_vaadin-tooltip-default-offset: var(--lumo-space-xs);
   }
 
   [part='overlay'] {
@@ -21,28 +18,31 @@
   }
 
   [part='content'] {
-    white-space: pre-wrap;
     padding: var(--lumo-space-xs) var(--lumo-space-s);
+  }
+
+  :host(:not([markdown])) [part='content'] {
+    white-space: pre-wrap;
   }
 
   :host([position^='top'][top-aligned]) [part='overlay'],
   :host([position^='bottom'][top-aligned]) [part='overlay'] {
-    margin-top: var(--vaadin-tooltip-offset-top, 0);
+    margin-top: var(--vaadin-tooltip-offset-top, var(--_vaadin-tooltip-default-offset));
   }
 
   :host([position^='top'][bottom-aligned]) [part='overlay'],
   :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-    margin-bottom: var(--vaadin-tooltip-offset-bottom, 0);
+    margin-bottom: var(--vaadin-tooltip-offset-bottom, var(--_vaadin-tooltip-default-offset));
   }
 
   :host([position^='start'][start-aligned]) [part='overlay'],
   :host([position^='end'][start-aligned]) [part='overlay'] {
-    margin-inline-start: var(--vaadin-tooltip-offset-start, 0);
+    margin-inline-start: var(--vaadin-tooltip-offset-start, var(--_vaadin-tooltip-default-offset));
   }
 
   :host([position^='start'][end-aligned]) [part='overlay'],
   :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
+    margin-inline-end: var(--vaadin-tooltip-offset-end, var(--_vaadin-tooltip-default-offset));
   }
 
   @media (forced-colors: active) {

@@ -3,7 +3,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-chart',
   css`
-    :host([theme='custom']) .highcharts-column-series rect.highcharts-point {
+    :host([theme='custom']) .highcharts-column-series .highcharts-point {
       stroke: rgb(255, 0, 0);
     }
   `,

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
-import { observeMove } from './vaadin-overlay-utils.js';
+import { observeMove, setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 const PROP_NAMES_VERTICAL = {
   start: 'top',
@@ -116,13 +116,6 @@ export const PositionMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return [
-        '__positionSettingsChanged(horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap, requiredVerticalSpace)',
-        '__overlayOpenedChanged(opened, positionTarget)',
-      ];
-    }
-
     constructor() {
       super();
 
@@ -143,6 +136,36 @@ export const PositionMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__removeUpdatePositionEventListeners();
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('positionTarget')) {
+        const oldTarget = props.get('positionTarget');
+
+        // 1. When position target is removed, always reset position settings
+        // 2. When position target is set, reset if overlay was opened before
+        if ((!this.positionTarget && oldTarget) || (this.positionTarget && !oldTarget && !!this.__margins)) {
+          this.__resetPosition();
+        }
+      }
+
+      if (props.has('opened') || props.has('positionTarget')) {
+        this.__updatePositionSettings(this.opened, this.positionTarget);
+      }
+
+      const positionProps = [
+        'horizontalAlign',
+        'verticalAlign',
+        'noHorizontalOverlap',
+        'noVerticalOverlap',
+        'requiredVerticalSpace',
+      ];
+      if (positionProps.some((prop) => props.has(prop))) {
+        this._updatePosition();
+      }
     }
 
     /** @private */
@@ -181,7 +204,7 @@ export const PositionMixin = (superClass) =>
     }
 
     /** @private */
-    __overlayOpenedChanged(opened, positionTarget) {
+    __updatePositionSettings(opened, positionTarget) {
       this.__removeUpdatePositionEventListeners();
 
       if (positionTarget) {
@@ -210,18 +233,33 @@ export const PositionMixin = (superClass) =>
       }
     }
 
-    __positionSettingsChanged() {
-      this._updatePosition();
-    }
-
     /** @private */
     __onScroll(e) {
       // If the scroll event occurred inside the overlay, ignore it.
-      if (e.target instanceof Node && this.contains(e.target)) {
+      if (e.target instanceof Node && this._deepContains(e.target)) {
         return;
       }
 
       this._updatePosition();
+    }
+
+    /** @private */
+    __resetPosition() {
+      this.__margins = null;
+
+      Object.assign(this.style, {
+        justifyContent: '',
+        alignItems: '',
+        top: '',
+        bottom: '',
+        left: '',
+        right: '',
+      });
+
+      setOverlayStateAttribute(this, 'bottom-aligned', false);
+      setOverlayStateAttribute(this, 'top-aligned', false);
+      setOverlayStateAttribute(this, 'end-aligned', false);
+      setOverlayStateAttribute(this, 'start-aligned', false);
     }
 
     _updatePosition() {
@@ -271,11 +309,11 @@ export const PositionMixin = (superClass) =>
       // Apply the positioning properties to the overlay
       Object.assign(this.style, verticalProps, horizontalProps);
 
-      this.toggleAttribute('bottom-aligned', !shouldAlignStartVertically);
-      this.toggleAttribute('top-aligned', shouldAlignStartVertically);
+      setOverlayStateAttribute(this, 'bottom-aligned', !shouldAlignStartVertically);
+      setOverlayStateAttribute(this, 'top-aligned', shouldAlignStartVertically);
 
-      this.toggleAttribute('end-aligned', !flexStart);
-      this.toggleAttribute('start-aligned', flexStart);
+      setOverlayStateAttribute(this, 'end-aligned', !flexStart);
+      setOverlayStateAttribute(this, 'start-aligned', flexStart);
     }
 
     __shouldAlignStartHorizontally(targetRect, rtl) {

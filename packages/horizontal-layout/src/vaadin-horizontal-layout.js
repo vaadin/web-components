@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { horizontalLayoutStyles } from './styles/vaadin-horizontal-layout-core-styles.js';
+import { horizontalLayoutStyles } from './styles/vaadin-horizontal-layout-base-styles.js';
 import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
 
 /**
@@ -26,12 +26,12 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  *
  * `<vaadin-horizontal-layout>` supports the following theme variations:
  *
- * Theme variation | Description
- * ---|---
- * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
- * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
- * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
- * `theme="wrap"` | Items wrap to the next row when they exceed the layout width
+ * Theme variation    | Description
+ * -------------------|---------------
+ * `theme="margin"`   | Applies the default amount of CSS margin for the host element
+ * `theme="padding"`  | Applies the default amount of CSS padding for the host element
+ * `theme="spacing"`  | Applies the default amount of CSS margin between items
+ * `theme="wrap"`     | Items wrap to the next row when they exceed the layout width
  *
  * ### Component's slots
  *
@@ -43,6 +43,18 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * `middle`           | Slot for the content placed in the middle
  * `end`              | Slot for the content placed at the end
  *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                  | Description
+ * -------------------------------------|-------------
+ * `--vaadin-horizontal-layout-margin`  | The default CSS margin applied when using `theme="margin"`
+ * `--vaadin-horizontal-layout-padding` | The default CSS padding applied when using `theme="padding"`
+ * `--vaadin-horizontal-layout-gap`     | The default CSS gap applied when using `theme="spacing"`
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
@@ -50,7 +62,7 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * @mixes HorizontalLayoutMixin
  */
 class HorizontalLayout extends HorizontalLayoutMixin(
-  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-horizontal-layout';
@@ -61,9 +73,7 @@ class HorizontalLayout extends HorizontalLayoutMixin(
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

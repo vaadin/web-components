@@ -5,7 +5,9 @@
  */
 import './vaadin-multi-select-combo-box-chip.js';
 import './vaadin-multi-select-combo-box-container.js';
-import './vaadin-multi-select-combo-box-internal.js';
+import './vaadin-multi-select-combo-box-item.js';
+import './vaadin-multi-select-combo-box-overlay.js';
+import './vaadin-multi-select-combo-box-scroller.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -14,7 +16,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-core-styles.js';
+import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-base-styles.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
 /**
@@ -40,11 +42,15 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `chips`                | The element that wraps slotted chips for selected items
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
+ * `field-button`         | Set on both clear and toggle buttons
  * `clear-button`         | The clear button
  * `error-message`        | The error message element
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `overlay`              | The overlay container
+ * `content`              | The overlay content
+ * `loader`               | The loading indicator shown while loading items
  *
  * The following state attributes are available for styling:
  *
@@ -55,6 +61,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `has-label`            | Set when the element has a label
  * `has-helper`           | Set when the element has helper text or slot
  * `has-error-message`    | Set when the element has an error message
+ * `has-tooltip`          | Set when the element has a slotted tooltip
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
  * `focus-ring`           | Set when the element is keyboard focused
@@ -76,12 +83,8 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * In addition to `<vaadin-multi-select-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-multi-select-combo-box-overlay>` - has the same API as `<vaadin-overlay>`.
+ * - `<vaadin-multi-select-combo-box-chip>`
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
- * - `<vaadin-multi-select-combo-box-container>` - has the same API as `<vaadin-input-container>`.
- *
- * Note: the `theme` attribute value set on `<vaadin-multi-select-combo-box>` is
- * propagated to these components.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -100,7 +103,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * @mixes MultiSelectComboBoxMixin
  */
 class MultiSelectComboBox extends MultiSelectComboBoxMixin(
-  LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
@@ -119,65 +122,22 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
-        <vaadin-multi-select-combo-box-internal
-          id="comboBox"
-          .owner="${this}"
-          .filteredItems="${this.filteredItems}"
-          .items="${this.items}"
-          .itemIdPath="${this.itemIdPath}"
-          .itemLabelPath="${this.itemLabelPath}"
-          .itemValuePath="${this.itemValuePath}"
-          .disabled="${this.disabled}"
+        <vaadin-multi-select-combo-box-container
+          part="input-field"
+          .autoExpandVertically="${this.autoExpandVertically}"
           .readonly="${this.readonly}"
-          .autoOpenDisabled="${this.autoOpenDisabled}"
-          .allowCustomValue="${this.allowCustomValue}"
-          .overlayClass="${this.overlayClass}"
-          .dataProvider="${this.dataProvider}"
-          .filter="${this.filter}"
-          .lastFilter="${this._lastFilter}"
-          .loading="${this.loading}"
-          .size="${this.size}"
-          .selectedItems="${this.selectedItems}"
-          .selectedItemsOnTop="${this.selectedItemsOnTop}"
-          .itemClassNameGenerator="${this.itemClassNameGenerator}"
-          .topGroup="${this._topGroup}"
-          .opened="${this.opened}"
-          .renderer="${this.renderer}"
-          .keepFilter="${this.keepFilter}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
           theme="${ifDefined(this._theme)}"
-          @combo-box-item-selected="${this._onComboBoxItemSelected}"
-          @change="${this._onComboBoxChange}"
-          @custom-value-set="${this._onCustomValueSet}"
-          @filtered-items-changed="${this._onFilteredItemsChanged}"
-          @filter-changed="${this._onComboBoxFilterChanged}"
-          @last-filter-changed="${this._onComboBoxLastFilterChanged}"
-          @loading-changed="${this._onComboBoxLoadingChanged}"
-          @opened-changed="${this._onComboBoxOpenedChanged}"
-          @size-changed="${this._onComboBoxSizeChanged}"
         >
-          <vaadin-multi-select-combo-box-container
-            part="input-field"
-            .autoExpandVertically="${this.autoExpandVertically}"
-            .readonly="${this.readonly}"
-            .disabled="${this.disabled}"
-            .invalid="${this.invalid}"
-            theme="${ifDefined(this._theme)}"
-          >
-            <slot name="overflow" slot="prefix"></slot>
-            <div id="chips" part="chips" slot="prefix">
-              <slot name="chip"></slot>
-            </div>
-            <slot name="input"></slot>
-            <div
-              id="clearButton"
-              part="clear-button"
-              slot="suffix"
-              @touchend="${this._onClearButtonTouchend}"
-              aria-hidden="true"
-            ></div>
-            <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix" aria-hidden="true"></div>
-          </vaadin-multi-select-combo-box-container>
-        </vaadin-multi-select-combo-box-internal>
+          <slot name="overflow" slot="prefix"></slot>
+          <div id="chips" part="chips" slot="prefix">
+            <slot name="chip"></slot>
+          </div>
+          <slot name="input"></slot>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="toggleButton" part="field-button toggle-button" slot="suffix" aria-hidden="true"></div>
+        </vaadin-multi-select-combo-box-container>
 
         <div part="helper-text">
           <slot name="helper"></slot>
@@ -186,35 +146,24 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
-      <slot name="tooltip"></slot>
+      <vaadin-multi-select-combo-box-overlay
+        id="overlay"
+        exportparts="overlay, content, loader"
+        .owner="${this}"
+        .dir="${this.dir}"
+        .opened="${this._overlayOpened}"
+        ?loading="${this.loading}"
+        theme="${ifDefined(this._theme)}"
+        .positionTarget="${this._inputField}"
+        no-vertical-overlap
+      >
+        <slot name="overlay"></slot>
+      </vaadin-multi-select-combo-box-overlay>
     `;
-  }
-
-  /** @private */
-  _onComboBoxFilterChanged(event) {
-    this.filter = event.detail.value;
-  }
-
-  /** @private */
-  _onComboBoxLoadingChanged(event) {
-    this.loading = event.detail.value;
-  }
-
-  /** @private */
-  _onComboBoxLastFilterChanged(event) {
-    this._lastFilter = event.detail.value;
-  }
-
-  /** @private */
-  _onComboBoxOpenedChanged(event) {
-    this.opened = event.detail.value;
-  }
-
-  /** @private */
-  _onComboBoxSizeChanged(event) {
-    this.size = event.detail.value;
   }
 }
 

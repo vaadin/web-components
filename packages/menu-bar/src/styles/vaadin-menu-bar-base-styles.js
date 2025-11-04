@@ -17,17 +17,15 @@ export const menuBarStyles = css`
   [part='container'] {
     display: flex;
     flex-wrap: nowrap;
-    margin: calc((var(--vaadin-focus-ring-width) + 1px) * -1);
+    margin: calc((var(--vaadin-focus-ring-width) + 2px) * -1);
     overflow: hidden;
-    padding: calc(var(--vaadin-focus-ring-width) + 1px);
+    padding: calc(var(--vaadin-focus-ring-width) + 2px);
     position: relative;
     width: 100%;
-    /* stylelint-disable length-zero-no-unit */
     --_gap: var(--vaadin-menu-bar-gap, 0px);
     --_bw: var(--vaadin-button-border-width, 1px);
     gap: var(--_gap);
     --_rad-button: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
-    --_rad: min(var(--_gap) * 1000, var(--_rad-button));
   }
 
   ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
@@ -35,16 +33,18 @@ export const menuBarStyles = css`
   }
 
   ::slotted(vaadin-menu-bar-button) {
-    border-radius: var(--_rad);
+    border-radius: 0;
   }
 
   ::slotted([first-visible]),
-  :host([has-single-button]) ::slotted([slot='overflow']) {
+  :host([has-single-button]) ::slotted([slot='overflow']),
+  ::slotted(vaadin-menu-bar-button[theme~='tertiary']) {
     border-start-start-radius: var(--_rad-button);
     border-end-start-radius: var(--_rad-button);
   }
 
-  ::slotted(:is([last-visible], [slot='overflow'])) {
+  ::slotted(:is([last-visible], [slot='overflow'])),
+  ::slotted(vaadin-menu-bar-button[theme~='tertiary']) {
     border-start-end-radius: var(--_rad-button);
     border-end-end-radius: var(--_rad-button);
   }

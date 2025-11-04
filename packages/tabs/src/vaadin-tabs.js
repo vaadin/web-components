@@ -10,7 +10,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabsStyles } from './styles/vaadin-tabs-core-styles.js';
+import { tabsStyles } from './styles/vaadin-tabs-base-styles.js';
 import { TabsMixin } from './vaadin-tabs-mixin.js';
 
 /**
@@ -37,10 +37,10 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
- * `overflow` | It's set to `start`, `end`, none or both. | :host
+ * Attribute      | Description
+ * ---------------|--------------------------------------
+ * `orientation`  | Tabs disposition, valid values are `horizontal` and `vertical`
+ * `overflow`     | It's set to `start`, `end`, none or both.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -53,7 +53,7 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
  * @mixes TabsMixin
  * @mixes ThemableMixin
  */
-class Tabs extends TabsMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tabs';
   }

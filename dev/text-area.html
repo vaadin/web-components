@@ -5,110 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Text Area</title>
-    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/icon';
-      import '@vaadin/icons';
       import '@vaadin/text-area';
-      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
     </script>
   </head>
 
   <body>
-    <section class="section">
-      <h2 class="heading">Plain</h2>
-      <vaadin-text-area value="Value"></vaadin-text-area>
-      <vaadin-text-area placeholder="Placeholder"></vaadin-text-area>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">Min &amp; Max Rows</h2>
-      <vaadin-text-area value="Value" min-rows="1" clear-button-visible>
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-
-      <vaadin-text-area
-        value="I’m not sure what I should write here, but I know it should be something long because this is a multi-line text area."
-        max-rows="3"
-        clear-button-visible
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">Bells & Whistles</h2>
-      <vaadin-text-area
-        label="Label"
-        helper-text="Description for this field."
-        value="Value"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">States</h2>
-      <vaadin-text-area
-        label="Read-only"
-        helper-text="Description for this field."
-        value="Value"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-        readonly
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-
-      <vaadin-text-area
-        label="Disabled"
-        helper-text="Description for this field."
-        value="Value"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-        disabled
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">Helper Above Field</h2>
-      <vaadin-text-area
-        theme="helper-above-field"
-        label="Label"
-        helper-text="Description for this field."
-        value="Value"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">Content &amp; Layout Variations</h2>
-      <p>Resize the field to test how content flows.</p>
-      <vaadin-text-area
-        label="A very long label for this field"
-        helper-text="If the label wasn't enough to tell what you should input here, then this long description should be."
-        value="I’m not sure what I should write here, but I know it should be something long because this is a multi-line text area."
-        placeholder="Perhaps this gives you an idea what to write?"
-        clear-button-visible
-        error-message="In case you didn't write anything in this required field, this error message is here to let you know that you really should write something in this field."
-        required
-        style="resize: both; overflow: hidden; padding: 1px; width: 50%"
-      >
-        <vaadin-icon icon="vaadin:envelope-o" slot="prefix"></vaadin-icon>
-      </vaadin-text-area>
-    </section>
+    <vaadin-text-area label="Feedback" required clear-button-visible></vaadin-text-area>
   </body>
 </html>

@@ -55,27 +55,36 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  * For best results, the component should be added to the root level of your application (i.e., as a direct child of `<body>`).
  *
  * The page should include a viewport meta tag which contains `viewport-fit=cover`, like the following:
- * ```
+ * ```html
  * <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
  * ```
+ *
  * This causes the viewport to be scaled to fill the device display.
- * To ensure that important content is displayed, use the provided css variables.
- * ```
- * --safe-area-inset-top
- * --safe-area-inset-right
- * --safe-area-inset-bottom
- * --safe-area-inset-left
- * ```
+ * To ensure that important content is displayed, use the provided css variables:
+ *
+ * - `--safe-area-inset-top`
+ * - `--safe-area-inset-right`
+ * - `--safe-area-inset-bottom`
+ * - `--safe-area-inset-left`
  *
  * ### Styling
  *
- * The following Shadow DOM parts of the `<vaadin-app-layout>` are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name     | Description
- * --------------|---------------------------------------------------------|
- * `backdrop`    | Backdrop covering the layout when drawer is open as an overlay
- * `navbar`      | Container for the navigation bar
- * `drawer`      | Container for the drawer area
+ * Part name        | Description
+ * -----------------|---------------------------------------------------------|
+ * `backdrop`       | Backdrop covering the layout when drawer is open as an overlay
+ * `navbar`         | Container for the navigation bar
+ * `navbar-top`     | Container for the top navigation bar
+ * `navbar-bottom`  | Container for the bottom navigation bar
+ * `drawer`         | Container for the drawer area
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-drawer`   | Set when the element has light DOM content in the drawer slot.
+ * `has-navbar`   | Set when the element has light DOM content in the navbar slot.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

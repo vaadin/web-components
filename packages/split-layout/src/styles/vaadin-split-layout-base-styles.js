@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const splitLayoutStyles = css`
@@ -62,13 +62,13 @@ export const splitLayoutStyles = css`
   }
 
   [part='handle'] {
-    background: var(--vaadin-split-layout-handle-background, var(--vaadin-color-subtle));
+    background: var(--vaadin-split-layout-handle-background, var(--vaadin-text-color-secondary));
     border-radius: var(--vaadin-radius-m);
     flex: none;
     width: var(--_handle-size);
     height: var(--_handle-target-size);
     max-height: 50%;
-    position: relative;
+    position: absolute;
   }
 
   :host([orientation='vertical']) [part='handle'] {

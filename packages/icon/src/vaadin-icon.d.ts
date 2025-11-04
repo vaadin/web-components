@@ -45,6 +45,24 @@ import { IconMixin } from './vaadin-icon-mixin.js';
  *   `;
  * }
  * ```
+ *
+ * ### Styling
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property          | Description
+ * -----------------------------|-------------
+ * `--vaadin-icon-size`         | Size (width and height) of the icon
+ * `--vaadin-icon-stroke-width` | Stroke width of the SVG icon
+ * `--vaadin-icon-visual-size`  | Visual size of the icon
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-tooltip`  | Set when the icon has a slotted tooltip
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class Icon extends ThemableMixin(ElementMixin(IconMixin(HTMLElement))) {}
 

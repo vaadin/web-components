@@ -10,7 +10,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { checkboxGroupStyles } from './styles/vaadin-checkbox-group-core-styles.js';
+import { checkboxGroupStyles } from './styles/vaadin-checkbox-group-base-styles.js';
 import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
 
 /**
@@ -39,16 +39,17 @@ import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|------------
- * `disabled`          | Set when the element is disabled          | :host
- * `readonly`          | Set when the element is readonly          | :host
- * `invalid`           | Set when the element is invalid           | :host
- * `focused`           | Set when the element is focused           | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
+ * Attribute           | Description
+ * --------------------|---------------------------------
+ * `disabled`          | Set when the element is disabled
+ * `readonly`          | Set when the element is readonly
+ * `invalid`           | Set when the element is invalid
+ * `focused`           | Set when the element is focused
+ * `has-label`         | Set when the element has a label
+ * `has-value`         | Set when the element has a value
+ * `has-helper`        | Set when the element has helper text
+ * `has-error-message` | Set when the element has an error message
+ * `has-tooltip`       | Set when the element has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -63,7 +64,7 @@ import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
  * @mixes CheckboxGroupMixin
  */
 class CheckboxGroup extends CheckboxGroupMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-checkbox-group';

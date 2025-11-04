@@ -711,6 +711,13 @@ describe('reordering with draggable contents', () => {
     expect(grid.hasAttribute('reordering')).to.be.false;
   });
 
+  it('should start reordering inside draggable parent', () => {
+    const parent = fixtureSync('<div draggable="true"></div>');
+    parent.appendChild(grid);
+    dragStart(visualColumnCellContents[0][1]);
+    expect(grid.hasAttribute('reordering')).to.be.true;
+  });
+
   it('should not start reordering inside draggable footer cell content', () => {
     dragStart(visualColumnCellContents[0][2].children[0]);
     expect(grid.hasAttribute('reordering')).to.be.false;

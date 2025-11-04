@@ -14,7 +14,6 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import './select-test-styles.test.js';
 import '../src/vaadin-select.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
@@ -81,7 +80,7 @@ describe('vaadin-select', () => {
       await nextUpdate(select);
       const listBox = select._menuElement;
       expect(listBox.isConnected).to.be.true;
-      expect(listBox.parentNode).to.equal(select._overlayElement);
+      expect(listBox.parentNode).to.equal(select._overlayElement._rendererRoot);
     });
 
     it('should have position set to relative', () => {
@@ -325,13 +324,13 @@ describe('vaadin-select', () => {
       it('should prevent default for the toggle button mousedown', () => {
         const e = new CustomEvent('mousedown', { bubbles: true });
         const spy = sinon.spy(e, 'preventDefault');
-        select.shadowRoot.querySelector('[part=toggle-button]').dispatchEvent(e);
+        select.shadowRoot.querySelector('[part~="toggle-button"]').dispatchEvent(e);
         expect(spy.calledOnce).to.be.true;
       });
 
       it('should focus the value button when opening on toggle button mousedown', () => {
         const spy = sinon.spy(valueButton, 'focus');
-        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        mousedown(select.shadowRoot.querySelector('[part~="toggle-button"]'));
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -339,7 +338,7 @@ describe('vaadin-select', () => {
         const spy = sinon.spy(valueButton, 'focus');
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        mousedown(select.shadowRoot.querySelector('[part~="toggle-button"]'));
         expect(spy.calledOnce).to.be.false;
       });
 
@@ -650,13 +649,6 @@ describe('vaadin-select', () => {
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(400);
-      });
-
-      it('should not set overlay part width based on the custom CSS property when phone', async () => {
-        select._phone = true;
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(overlay.$.overlay.getBoundingClientRect().width).to.not.equal(400);
       });
 
       it('should store the select width in the custom CSS property on overlay opening', async () => {

@@ -1,6 +1,7 @@
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/global/index.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/item.css';
 import '@vaadin/vaadin-lumo-styles/components/list-box.css';
 import '@vaadin/vaadin-lumo-styles/components/context-menu.css';
@@ -134,6 +135,76 @@ describe('context-menu', () => {
           await visualDiff(document.body, `${dir}-items`);
         });
       });
+
+      describe('position', () => {
+        let wrapper;
+
+        beforeEach(async () => {
+          wrapper = fixtureSync(`
+            <div style="display: flex; width: 600px; height: 600px; justify-content: center; align-items: center">
+              <vaadin-context-menu>
+                <div id="target" style="width: 200px; height: 200px; outline: 1px solid red;">
+                  Target
+                </div>
+              </vaadin-context-menu>
+            </div>
+          `);
+          element = wrapper.firstElementChild;
+          element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+          element.listenOn = element.querySelector('#target');
+          await nextUpdate(element);
+        });
+
+        [
+          'top-start',
+          'top',
+          'top-end',
+          'bottom-start',
+          'bottom',
+          'bottom-end',
+          'start-top',
+          'start',
+          'start-bottom',
+          'end-top',
+          'end',
+          'end-bottom',
+        ].forEach((position) => {
+          it(position, async () => {
+            element.position = position;
+            await nextUpdate(element);
+            contextmenu(element);
+            await nextRender();
+            await visualDiff(wrapper, `${dir}-${position}`);
+          });
+        });
+      });
+    });
+  });
+
+  describe('dark', () => {
+    before(() => {
+      document.documentElement.setAttribute('theme', 'dark');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('theme');
+    });
+
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-context-menu>
+          <div style="padding: 10px">Target</div>
+        </vaadin-context-menu>
+      `);
+      element.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+      await nextUpdate(element);
+    });
+
+    it('dark', async () => {
+      element.openOn = 'click';
+      element.firstElementChild.click();
+      await nextRender();
+      await visualDiff(document.body, 'dark');
     });
   });
 });

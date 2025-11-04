@@ -215,25 +215,9 @@ const PolylitMixinImplementation = (superclass) => {
       };
     }
 
-    constructor() {
-      super();
-      this.__hasPolylitMixin = true;
-    }
-
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-
-      // Components like `vaadin-overlay` are teleported to the body element when opened.
-      // If their opened state is set as an attribute, the teleportation happens immediately
-      // after they are connected to the DOM. This means they will be outside the scope of
-      // querySelectorAll in the parent component's `firstUpdated()`. To ensure their reference
-      // is still registered in the $ map, we propagate the reference here.
-      const parentHost = this.getRootNode().host;
-      if (parentHost && parentHost.__hasPolylitMixin && this.id) {
-        parentHost.$ ||= {};
-        parentHost.$[this.id] = this;
-      }
 
       const { polylitConfig } = this.constructor;
       if (!this.hasUpdated && !polylitConfig.asyncFirstRender) {
@@ -249,10 +233,8 @@ const PolylitMixinImplementation = (superclass) => {
         this.$ = {};
       }
 
-      [...Object.values(this.$), this.renderRoot].forEach((node) => {
-        node.querySelectorAll('[id]').forEach((node) => {
-          this.$[node.id] = node;
-        });
+      this.renderRoot.querySelectorAll('[id]').forEach((node) => {
+        this.$[node.id] = node;
       });
     }
 

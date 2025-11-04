@@ -4,10 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/components/message-input.css';
-@import './button.css';
+@import './message-input-button.css';
 @import './text-area.css';
 
-:is(:root, :host)::before {
-  --vaadin-message-input-lumo-inject: 1;
-  --vaadin-message-input-lumo-inject-modules: lumo_components_message-input;
+:root::before,
+:host::before {
+  --_lumo-vaadin-message-input-inject: 1;
+  --_lumo-vaadin-message-input-inject-modules: lumo_components_message-input;
 }

@@ -20,7 +20,7 @@ import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { comboBoxStyles } from './styles/vaadin-combo-box-core-styles.js';
+import { comboBoxStyles } from './styles/vaadin-combo-box-base-styles.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 
@@ -107,33 +107,45 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * `--vaadin-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
  *
- * `<vaadin-combo-box>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
  *
- * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and buttons
+ * `field-button`       | Set on both clear and toggle buttons
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `toggle-button`      | The toggle button
+ * `overlay`            | The overlay container
+ * `content`            | The overlay content
+ * `loader`             | The loading indicator shown while loading items
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * The following state attributes are available for styling:
  *
- * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
- *
- * Attribute | Description | Part name
- * ----------|-------------|------------
- * `opened`  | Set when the combo box dropdown is open | :host
- * `loading` | Set when new items are expected | :host
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
+ * `invalid`            | Set when the element is invalid
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ * `opened`             | Set when the overlay is opened
+ * `loading`            | Set when loading items from the data provider
  *
  * ### Internal components
  *
  * In addition to `<vaadin-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
- *
- * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
- * propagated to the internal components listed above.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -157,7 +169,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  */
 class ComboBox extends ComboBoxDataProviderMixin(
   ComboBoxMixin(
-    PatternMixin(InputControlMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
+    PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
   ),
 ) {
   static get is() {
@@ -206,8 +218,8 @@ class ComboBox extends ComboBoxDataProviderMixin(
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div id="toggleButton" part="toggle-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="toggleButton" part="field-button toggle-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -217,19 +229,23 @@ class ComboBox extends ComboBoxDataProviderMixin(
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
+
+        <slot name="tooltip"></slot>
       </div>
 
       <vaadin-combo-box-overlay
         id="overlay"
+        exportparts="overlay, content, loader"
         .owner="${this}"
+        .dir="${this.dir}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._positionTarget}"
         no-vertical-overlap
-      ></vaadin-combo-box-overlay>
-
-      <slot name="tooltip"></slot>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-combo-box-overlay>
     `;
   }
 
@@ -257,6 +273,15 @@ class ComboBox extends ComboBoxDataProviderMixin(
     this._toggleElement = this.$.toggleButton;
   }
 
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('dataProvider') || props.has('value')) {
+      this._warnDataProviderValue(this.dataProvider, this.value);
+    }
+  }
+
   /**
    * Override the method from `InputControlMixin`
    * to stop event propagation to prevent `ComboBoxMixin`
@@ -281,6 +306,22 @@ class ComboBox extends ComboBoxDataProviderMixin(
     // Open dropdown only when clicking on the label or input field
     if (path.includes(this._labelNode) || path.includes(this._positionTarget)) {
       super._onHostClick(event);
+    }
+  }
+
+  /** @private */
+  _warnDataProviderValue(dataProvider, value) {
+    if (dataProvider && value !== '' && (this.selectedItem === undefined || this.selectedItem === null)) {
+      const valueIndex = this.__getItemIndexByValue(this.filteredItems, value);
+      if (valueIndex < 0 || !this._getItemLabel(this.filteredItems[valueIndex])) {
+        console.warn(
+          'Warning: unable to determine the label for the provided `value`. ' +
+            'Nothing to display in the text field. This usually happens when ' +
+            'setting an initial `value` before any items are returned from ' +
+            'the `dataProvider` callback. Consider setting `selectedItem` ' +
+            'instead of `value`',
+        );
+      }
     }
   }
 }

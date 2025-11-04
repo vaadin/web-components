@@ -6,10 +6,12 @@ import { mouseenter } from '../../helpers.js';
 describe('tooltip', () => {
   let div, target, element;
 
-  before(() => {
+  before(async () => {
     Tooltip.setDefaultFocusDelay(0);
     Tooltip.setDefaultHoverDelay(0);
     Tooltip.setDefaultHideDelay(0);
+    // Preload markdown helpers to avoid dynamic import delays
+    await Tooltip.__importMarkdownHelpers();
   });
 
   beforeEach(() => {
@@ -60,5 +62,24 @@ describe('tooltip', () => {
     mouseenter(target);
     await nextRender();
     await visualDiff(div, 'white-space-pre');
+  });
+
+  it('markdown', async () => {
+    // Increase container height to fit larger tooltip content
+    div.style.height = '500px';
+
+    element.markdown = true;
+    element.text = `
+## Tooltip Title
+
+This tooltip contains:
+
+- **Bold** and *italic* text
+- A [link](https://vaadin.com)
+- Code: \`console.log('Hello')\``;
+    await nextUpdate(element);
+    mouseenter(target);
+    await nextRender();
+    await visualDiff(div, 'markdown');
   });
 });

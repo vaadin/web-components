@@ -8,6 +8,9 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ComboBoxDefaultItem } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
+import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
@@ -101,11 +104,15 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `chips`                | The element that wraps slotted chips for selected items
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
+ * `field-button`         | Set on both clear and toggle buttons
  * `clear-button`         | The clear button
  * `error-message`        | The error message element
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `overlay`              | The overlay container
+ * `content`              | The overlay content
+ * `loader`               | The loading indicator shown while loading items
  *
  * The following state attributes are available for styling:
  *
@@ -116,6 +123,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `has-label`            | Set when the element has a label
  * `has-helper`           | Set when the element has helper text or slot
  * `has-error-message`    | Set when the element has an error message
+ * `has-tooltip`          | Set when the element has a slotted tooltip
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
  * `focus-ring`           | Set when the element is keyboard focused
@@ -137,12 +145,8 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * In addition to `<vaadin-multi-select-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-multi-select-combo-box-overlay>` - has the same API as `<vaadin-overlay>`.
+ * - `<vaadin-multi-select-combo-box-chip>`
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
- * - `<vaadin-multi-select-combo-box-container>` - has the same API as `<vaadin-input-container>`.
- *
- * Note: the `theme` attribute value set on `<vaadin-multi-select-combo-box>` is
- * propagated to these components.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -169,7 +173,10 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
 }
 
 interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
-  extends ValidateMixinClass,
+  extends ComboBoxBaseMixinClass,
+    ComboBoxDataProviderMixinClass<TItem>,
+    ComboBoxItemsMixinClass<TItem>,
+    ValidateMixinClass,
     SlotStylesMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,

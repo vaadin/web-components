@@ -4,12 +4,25 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
 import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
 
 export { ContextMenuItem };
+
+export type ContextMenuPosition =
+  | 'bottom-end'
+  | 'bottom-start'
+  | 'bottom'
+  | 'end-bottom'
+  | 'end-top'
+  | 'end'
+  | 'start-bottom'
+  | 'start-top'
+  | 'start'
+  | 'top-end'
+  | 'top-start'
+  | 'top';
 
 export interface ContextMenuRendererContext {
   target: HTMLElement;
@@ -34,6 +47,11 @@ export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = Context
   value: TItem;
 }>;
 
+/**
+ * Fired when the context menu is closed.
+ */
+export type ContextMenuClosedEvent = CustomEvent;
+
 export interface ContextMenuCustomEventMap<TItem extends ContextMenuItem = ContextMenuItem> {
   'opened-changed': ContextMenuOpenedChangedEvent;
 
@@ -42,6 +60,8 @@ export interface ContextMenuCustomEventMap<TItem extends ContextMenuItem = Conte
   'close-all-menus': Event;
 
   'items-outside-click': Event;
+
+  closed: ContextMenuClosedEvent;
 }
 
 export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenuItem>
@@ -208,18 +228,30 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  *
  * ### Styling
  *
- * `<vaadin-context-menu>` uses `<vaadin-context-menu-overlay>` internal
- * themable component as the actual visible context menu overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay)
- * documentation for `<vaadin-context-menu-overlay>` stylable parts.
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                   | Description
+ * --------------------------------------|-------------
+ * `--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target
+ * `--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target
+ * `--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target
+ * `--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
  *
- * When using `items` API, in addition `<vaadin-context-menu-overlay>`, the following
- * internal components are themable:
+ * When using `items` API the following internal components are themable:
  *
  * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
@@ -231,13 +263,19 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * ---------- |-------------
  * `expanded` | Expanded parent item.
  *
- * Note: the `theme` attribute value set on `<vaadin-context-menu>` is
- * propagated to the internal components listed above.
- *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
+ * @fires {CustomEvent} closed - Fired when the context menu is closed.
  */
 declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> extends HTMLElement {
+  /**
+   * Position of the overlay with respect to the target.
+   * Supported values: null, `top-start`, `top`, `top-end`,
+   * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+   * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+   */
+  position: ContextMenuPosition | null | undefined;
+
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,
@@ -253,7 +291,6 @@ declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> exten
 
 interface ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>
   extends ContextMenuMixinClass<TItem>,
-    OverlayClassMixinClass,
     ElementMixinClass,
     ThemePropertyMixinClass {}
 

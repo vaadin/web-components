@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { numberFieldStyles } from './styles/vaadin-number-field-core-styles.js';
+import { numberFieldStyles } from './styles/vaadin-number-field-base-styles.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
 
 /**
@@ -24,15 +24,35 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  *
  * ### Styling
  *
- * `<vaadin-number-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
  *
- * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on clear, decrease and increase buttons
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `increase-button`    | Increase ("plus") button
+ * `decrease-button`    | Decrease ("minus") button
  *
- * Part name         | Description
- * ------------------|-------------------------
- * `increase-button` | Increase ("plus") button
- * `decrease-button` | Decrease ("minus") button
+ * The following state attributes are available for styling:
+ *
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
+ * `invalid`            | Set when the element is invalid
+ * `input-prevented`    | Temporarily set when invalid input is prevented
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
  *
  * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
  *
@@ -70,7 +90,7 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class NumberField extends NumberFieldMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-number-field';
   }
@@ -96,7 +116,7 @@ class NumberField extends NumberFieldMixin(LumoInjectionMixin(ThemableMixin(Elem
           theme="${ifDefined(this._theme)}"
         >
           <div
-            part="decrease-button"
+            part="field-button decrease-button"
             ?disabled="${!this._isButtonEnabled(-1, this.value, this.min, this.max, this.step)}"
             ?hidden="${!this.stepButtonsVisible}"
             @click="${this._onDecreaseButtonClick}"
@@ -107,9 +127,9 @@ class NumberField extends NumberFieldMixin(LumoInjectionMixin(ThemableMixin(Elem
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
           <div
-            part="increase-button"
+            part="field-button increase-button"
             ?disabled="${!this._isButtonEnabled(1, this.value, this.min, this.max, this.step)}"
             ?hidden="${!this.stepButtonsVisible}"
             @click="${this._onIncreaseButtonClick}"
@@ -126,9 +146,9 @@ class NumberField extends NumberFieldMixin(LumoInjectionMixin(ThemableMixin(Elem
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
-      </div>
 
-      <slot name="tooltip"></slot>
+        <slot name="tooltip"></slot>
+      </div>
     `;
   }
 }

@@ -8,12 +8,13 @@
 @import './scroller.css';
 @import './tabs.css';
 
-:is(:root, :host)::before {
-  --vaadin-tabsheet-lumo-inject: 1;
-  --vaadin-tabsheet-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-tabsheet-inject: 1;
+  --_lumo-vaadin-tabsheet-inject-modules:
     lumo_mixins_loader,
     lumo_components_tabsheet;
 
-  --vaadin-tabsheet-scroller-lumo-inject: 1;
-  --vaadin-tabsheet-scroller-lumo-inject-modules: lumo_components_scroller;
+  --_lumo-vaadin-tabsheet-scroller-inject: 1;
+  --_lumo-vaadin-tabsheet-scroller-inject-modules: lumo_components_scroller;
 }

@@ -35,6 +35,8 @@ export { AvatarGroupI18n, AvatarGroupItem, AvatarI18n };
  * Part name   | Description
  * ----------- | ---------------
  * `container` | The container element
+ * `overlay`   | The overflow avatar menu overlay
+ * `content`   | The overflow avatar menu overlay content
  *
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.
@@ -46,7 +48,6 @@ export { AvatarGroupI18n, AvatarGroupItem, AvatarI18n };
  * In addition to `<vaadin-avatar-group>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  */

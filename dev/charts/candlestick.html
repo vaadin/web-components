@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaadin charts | candle stick</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import './theme-switcher.js';
+    </script>
+    <script defer>
+      fetch('./demo-data/aapl-date-ohlc.json')
+        .then((response) => response.json())
+        .then((data) => {
+          const series = document.querySelector('vaadin-chart-series');
+          series.values = data;
+        });
+    </script>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
+
+    <vaadin-chart
+      title="AAPL Stock Price"
+      tooltip
+      timeline
+      additional-options='{
+        "rangeSelector": {
+          "selected": 4
+        }
+      }'
+    >
+      <vaadin-chart-series
+        type="candlestick"
+        title="AAPL Stock Price"
+        additional-options='{
+          "dataGrouping": {
+            "units": [
+              ["week", [1]],
+              ["month", [1, 2, 3, 4, 6]]
+            ]
+          }
+        }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  </body>
+</html>

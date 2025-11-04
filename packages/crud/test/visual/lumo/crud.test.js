@@ -1,6 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/crud.css';
 import '../../not-animated-styles.js';
 import '../../../vaadin-crud.js';
@@ -23,7 +23,6 @@ describe('crud', () => {
   it('edit-button-focus', async () => {
     const button = element.querySelector('vaadin-crud-edit');
     button.focus();
-    button.setAttribute('focus-ring', '');
     await visualDiff(div, 'edit-button-focus');
   });
 

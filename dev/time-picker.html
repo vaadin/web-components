@@ -5,63 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Time Picker</title>
-    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
-
     <script type="module">
-      import '@vaadin/icon';
-      import '@vaadin/icons';
       import '@vaadin/time-picker';
-      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
     </script>
   </head>
-
   <body>
-    <section class="section">
-      <h2 class="heading">Plain</h2>
-      <vaadin-time-picker value="12:00"></vaadin-time-picker>
-      <vaadin-time-picker placeholder="Placeholder"></vaadin-time-picker>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">Bells & Whistles</h2>
-      <vaadin-time-picker
-        label="Label"
-        helper-text="Description for this field."
-        value="12:00"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-time-picker>
-    </section>
-
-    <section class="section">
-      <h2 class="heading">States</h2>
-      <vaadin-time-picker
-        label="Read-only"
-        helper-text="Description for this field."
-        value="12:00"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-        readonly
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-time-picker>
-
-      <vaadin-time-picker
-        label="Disabled"
-        helper-text="Description for this field."
-        value="12:00"
-        clear-button-visible
-        error-message="You need to write something in this field."
-        required
-        disabled
-      >
-        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-      </vaadin-time-picker>
-    </section>
+    <vaadin-time-picker value="15:00" clear-button-visible></vaadin-time-picker>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '../grid-test-styles.js';
 import '../../vaadin-grid.js';
 import { users } from '../visual/users.js';
 
@@ -47,6 +48,14 @@ describe('vaadin-grid', () => {
     it('hidden column selected', async () => {
       grid.selectedItems = [grid.items[0]];
       grid.querySelector('vaadin-grid-column').hidden = true;
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+
+    it('with footer', async () => {
+      grid.querySelector('vaadin-grid-column').footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
       await nextFrame();
       await expect(grid).shadowDom.to.equalSnapshot();
     });

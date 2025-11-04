@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const field = css`
@@ -35,9 +35,10 @@ export const field = css`
     font-size: var(--vaadin-input-field-label-font-size, inherit);
     line-height: var(--vaadin-input-field-label-line-height, inherit);
     font-weight: var(--vaadin-input-field-label-font-weight, 500);
-    color: var(--vaadin-input-field-label-color, var(--vaadin-color));
+    color: var(--vaadin-input-field-label-color, var(--vaadin-text-color));
     order: var(--vaadin-input-field-helper-order);
     word-break: break-word;
+    position: relative;
   }
 
   ::slotted(label) {
@@ -62,7 +63,7 @@ export const field = css`
     position: absolute;
     width: 1em;
     text-align: center;
-    color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-text-color-secondary));
   }
 
   [part='required-indicator']::after {
@@ -89,7 +90,7 @@ export const field = css`
     font-size: var(--vaadin-input-field-helper-font-size, inherit);
     line-height: var(--vaadin-input-field-helper-line-height, inherit);
     font-weight: var(--vaadin-input-field-helper-font-weight, 400);
-    color: var(--vaadin-input-field-helper-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-input-field-helper-color, var(--vaadin-text-color-secondary));
     order: var(--vaadin-input-field-helper-order);
   }
 
@@ -97,9 +98,9 @@ export const field = css`
     font-size: var(--vaadin-input-field-error-font-size, inherit);
     line-height: var(--vaadin-input-field-error-line-height, inherit);
     font-weight: var(--vaadin-input-field-error-font-weight, 400);
-    color: var(--vaadin-input-field-error-color, var(--vaadin-color));
+    color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
     display: flex;
-    gap: var(--vaadin-gap-container-inline);
+    gap: var(--vaadin-gap-s);
   }
 
   [part='error-message']::before {
@@ -108,7 +109,7 @@ export const field = css`
     flex: none;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-warn);
+    mask: var(--_vaadin-icon-warn) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     background: currentColor;
   }
 

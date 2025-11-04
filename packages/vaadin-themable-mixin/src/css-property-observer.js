@@ -9,32 +9,45 @@
  *
  * @private
  */
-export class CSSPropertyObserver {
+export class CSSPropertyObserver extends EventTarget {
   #root;
-  #name;
-  #callback;
   #properties = new Set();
   #styleSheet;
   #isConnected = false;
 
-  constructor(root, name, callback) {
+  constructor(root) {
+    super();
     this.#root = root;
-    this.#name = name;
-    this.#callback = callback;
+    this.#styleSheet = new CSSStyleSheet();
   }
 
   #handleTransitionEvent(event) {
     const { propertyName } = event;
     if (this.#properties.has(propertyName)) {
-      this.#callback(propertyName);
+      this.dispatchEvent(new CustomEvent('property-changed', { detail: { propertyName } }));
     }
   }
 
   observe(property) {
     this.connect();
 
+    if (this.#properties.has(property)) {
+      return;
+    }
+
     this.#properties.add(property);
-    this.#rootHost.style.setProperty(`--${this.#name}-props`, [...this.#properties].join(', '));
+
+    this.#styleSheet.replaceSync(`
+      :root::before, :host::before {
+        content: '' !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        visibility: hidden !important;
+        transition: 1ms allow-discrete step-end !important;
+        transition-property: ${[...this.#properties].join(', ')} !important;
+      }
+    `);
   }
 
   connect() {
@@ -42,18 +55,6 @@ export class CSSPropertyObserver {
       return;
     }
 
-    this.#styleSheet = new CSSStyleSheet();
-    this.#styleSheet.replaceSync(`
-      :is(:root, :host)::before {
-        content: '' !important;
-        position: absolute !important;
-        top: -9999px !important;
-        left: -9999px !important;
-        visibility: hidden !important;
-        transition: 1ms allow-discrete step-end !important;
-        transition-property: var(--${this.#name}-props) !important;
-      }
-    `);
     this.#root.adoptedStyleSheets.unshift(this.#styleSheet);
 
     this.#rootHost.addEventListener('transitionstart', (event) => this.#handleTransitionEvent(event));
@@ -69,12 +70,21 @@ export class CSSPropertyObserver {
 
     this.#rootHost.removeEventListener('transitionstart', this.#handleTransitionEvent);
     this.#rootHost.removeEventListener('transitionend', this.#handleTransitionEvent);
-    this.#rootHost.style.removeProperty(`--${this.#name}-props`);
 
     this.#isConnected = false;
   }
 
   get #rootHost() {
     return this.#root.documentElement ?? this.#root.host;
+  }
+
+  /**
+   * Gets or creates the CSSPropertyObserver for the given root.
+   * @param {DocumentOrShadowRoot} root
+   * @returns {CSSPropertyObserver}
+   */
+  static for(root) {
+    root.__cssPropertyObserver ||= new CSSPropertyObserver(root);
+    return root.__cssPropertyObserver;
   }
 }

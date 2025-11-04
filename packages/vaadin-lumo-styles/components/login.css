@@ -7,9 +7,10 @@
 @import '../src/components/login-overlay-wrapper.css';
 @import './login-form.css';
 
-:is(:root, :host)::before {
-  --vaadin-login-overlay-wrapper-lumo-inject: 1;
-  --vaadin-login-overlay-wrapper-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-login-overlay-wrapper-inject: 1;
+  --_lumo-vaadin-login-overlay-wrapper-inject-modules:
     lumo_mixins_overlay,
     lumo_components_login-overlay-wrapper;
 }

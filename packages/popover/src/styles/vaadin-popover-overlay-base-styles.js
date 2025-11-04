@@ -36,9 +36,10 @@ const popoverOverlay = css`
     overflow: visible;
     max-height: 100%;
     border: var(--_border-width) solid
-      var(--vaadin-popover-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color)));
+      var(--vaadin-popover-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color-secondary)));
     background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--vaadin-background-color)));
-    box-shadow: var(--vaadin-popover-box-shadow, var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3)));
+    box-shadow: var(--vaadin-popover-shadow, var(--vaadin-overlay-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3)));
+    border-radius: var(--vaadin-popover-border-radius, var(--vaadin-overlay-border-radius, var(--vaadin-radius-m)));
   }
 
   [part='content'] {
@@ -46,11 +47,11 @@ const popoverOverlay = css`
     overscroll-behavior: contain;
     box-sizing: border-box;
     max-height: 100%;
-    padding: var(--vaadin-popover-padding, var(--vaadin-padding));
+    padding: var(--vaadin-popover-padding, var(--vaadin-padding-s));
   }
 
   :host([theme~='no-padding']) [part='content'] {
-    padding: 0;
+    padding: 0 !important;
   }
 
   /* Increase the area of the popover so the pointer can go from the target directly to it. */
@@ -85,7 +86,7 @@ const popoverOverlay = css`
   }
 
   :host([theme~='arrow']) {
-    --_default-offset: calc(4px + var(--_arrow-size) / 2);
+    --_default-offset: var(--_arrow-size);
   }
 
   :host([theme~='arrow']) [part='arrow'] {

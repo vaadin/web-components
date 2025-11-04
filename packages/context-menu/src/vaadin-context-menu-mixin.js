@@ -31,6 +31,8 @@ export const ContextMenuMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
+          observer: '_openedChanged',
           value: false,
           notify: true,
           readOnly: true,
@@ -123,21 +125,14 @@ export const ContextMenuMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_openedChanged(opened)',
         '_targetOrOpenOnChanged(listenOn, openOn)',
         '_rendererChanged(renderer, items)',
         '_fullscreenChanged(_fullscreen)',
-        '_overlayContextChanged(_overlayElement, _context)',
-        '_overlayModelessChanged(_overlayElement, _modeless)',
-        '_overlayPhoneChanged(_overlayElement, _phone)',
-        '_overlayThemeChanged(_overlayElement, _theme)',
       ];
     }
 
     constructor() {
       super();
-
-      this._createOverlay();
 
       this._boundOpen = this.open.bind(this);
       this._boundClose = this.close.bind(this);
@@ -170,8 +165,10 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    firstUpdated() {
+      super.firstUpdated();
+
+      this._overlayElement = this.$.overlay;
 
       this.addController(
         new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
@@ -180,29 +177,17 @@ export const ContextMenuMixin = (superClass) =>
       );
     }
 
-    /** @private */
-    _createOverlay() {
-      // Create an overlay in the constructor to use in observers before `ready()`
-      const overlay = document.createElement(`${this._tagNamePrefix}-overlay`);
-      overlay.owner = this;
-
-      overlay.addEventListener('opened-changed', (e) => {
-        this._onOverlayOpened(e);
-      });
-
-      overlay.addEventListener('vaadin-overlay-open', (e) => {
-        this._onVaadinOverlayOpen(e);
-      });
-
-      this._overlayElement = overlay;
-    }
-
     /**
      * Runs before overlay is fully rendered
      * @private
      */
-    _onOverlayOpened(e) {
-      const opened = e.detail.value;
+    _onOverlayOpened(event) {
+      // Ignore events from submenus
+      if (event.target !== this._overlayElement) {
+        return;
+      }
+
+      const opened = event.detail.value;
       this._setOpened(opened);
       if (opened) {
         this.__alignOverlayPosition();
@@ -213,43 +198,23 @@ export const ContextMenuMixin = (superClass) =>
      * Runs after overlay is fully rendered
      * @private
      */
-    _onVaadinOverlayOpen() {
+    _onVaadinOverlayOpen(event) {
+      // Ignore events from submenus
+      if (event.target !== this._overlayElement) {
+        return;
+      }
+
       this.__alignOverlayPosition();
       this._overlayElement.style.visibility = '';
       this.__forwardFocus();
     }
 
-    /** @private */
-    _overlayContextChanged(overlay, context) {
-      if (overlay) {
-        overlay.model = context;
-      }
-    }
-
-    /** @private */
-    _overlayModelessChanged(overlay, modeless) {
-      if (overlay) {
-        overlay.modeless = modeless;
-      }
-    }
-
-    /** @private */
-    _overlayPhoneChanged(overlay, phone) {
-      if (overlay) {
-        overlay.toggleAttribute('phone', phone);
-        overlay.withBackdrop = phone;
-      }
-    }
-
-    /** @private */
-    _overlayThemeChanged(overlay, theme) {
-      if (overlay) {
-        if (theme) {
-          overlay.setAttribute('theme', theme);
-        } else {
-          overlay.removeAttribute('theme');
-        }
-      }
+    /**
+     * Runs after overlay's closing animation is finished
+     * @private
+     */
+    _onVaadinOverlayClosed() {
+      this.dispatchEvent(new CustomEvent('closed'));
     }
 
     /** @private */
@@ -318,17 +283,14 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _openedChanged(opened) {
+    _openedChanged(opened, oldOpened) {
       if (opened) {
         document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
-      } else {
+      } else if (oldOpened) {
         document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
       }
 
       this.__setListenOnUserSelect(opened);
-
-      // Has to be set after instance has been created
-      this._overlayElement.opened = opened;
     }
 
     /**
@@ -362,11 +324,7 @@ export const ContextMenuMixin = (superClass) =>
         if (this.closeOn === 'click') {
           this.closeOn = '';
         }
-
-        renderer = this.__itemsRenderer;
       }
-
-      this._overlayElement.renderer = renderer;
     }
 
     /**
@@ -384,6 +342,9 @@ export const ContextMenuMixin = (superClass) =>
         return Array.prototype.filter.call(targets, (el) => {
           return e.composedPath().indexOf(el) > -1;
         })[0];
+      } else if (this.listenOn && this.listenOn !== this && this.position) {
+        // If listenOn has been set on a different element than the context menu root, then use listenOn as the target.
+        return this.listenOn;
       }
       return e.target;
     }
@@ -393,6 +354,11 @@ export const ContextMenuMixin = (superClass) =>
      * @param {!Event | undefined} e used as the context for the menu. Overlay coordinates are taken from this event.
      */
     open(e) {
+      // Ignore events from the overlay
+      if (this._overlayElement && e.composedPath().includes(this._overlayElement)) {
+        return;
+      }
+
       if (e && !this.opened) {
         this._context = {
           detail: e.detail,
@@ -472,17 +438,13 @@ export const ContextMenuMixin = (superClass) =>
     /** @private */
     __focusItem(item) {
       if (item) {
-        item.focus();
-
-        if (isKeyboardActive()) {
-          item.setAttribute('focus-ring', '');
-        }
+        item.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
     /** @private */
     __onScroll() {
-      if (!this.opened) {
+      if (!this.opened || this.position) {
         return;
       }
 
@@ -671,7 +633,11 @@ export const ContextMenuMixin = (superClass) =>
           // Dispatch another contextmenu at the same coordinates after the overlay is closed
           this._overlayElement.addEventListener(
             'vaadin-overlay-closed',
-            () => this.__contextMenuAt(e.clientX, e.clientY),
+            (closeEvent) => {
+              if (closeEvent.target === this._overlayElement) {
+                this.__contextMenuAt(e.clientX, e.clientY);
+              }
+            },
             {
               once: true,
             },
@@ -682,4 +648,10 @@ export const ContextMenuMixin = (superClass) =>
         this.close();
       }
     }
+
+    /**
+     * Fired when the context menu is closed.
+     *
+     * @event closed
+     */
   };

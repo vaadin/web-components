@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-virtual-list.js';
+import './src/vaadin-virtual-list.js';
 export * from './src/vaadin-virtual-list.js';

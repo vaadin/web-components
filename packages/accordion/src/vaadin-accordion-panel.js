@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { accordionPanel } from './styles/vaadin-accordion-panel-core-styles.js';
+import { accordionPanel } from './styles/vaadin-accordion-panel-base-styles.js';
 import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
 
 /**
@@ -23,14 +23,15 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  * -----------------|----------------
  * `content`        | The wrapper for the collapsible panel content.
  *
- * The following attributes are exposed for styling:
+ * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------| -----------
- * `opened`     | Set when the collapsible content is expanded and visible.
- * `disabled`   | Set when the element is disabled.
- * `focus-ring` | Set when the element is focused using the keyboard.
- * `focused`    | Set when the element is focused.
+ * Attribute      | Description
+ * ---------------|------------
+ * `opened`       | Set when the collapsible content is expanded and visible
+ * `disabled`     | Set when the element is disabled
+ * `focus-ring`   | Set when the element is focused using the keyboard
+ * `focused`      | Set when the element is focused
+ * `has-tooltip`  | Set when the element has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -41,7 +42,7 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  * @mixes AccordionPanelMixin
  * @mixes ThemableMixin
  */
-class AccordionPanel extends AccordionPanelMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-accordion-panel';
   }

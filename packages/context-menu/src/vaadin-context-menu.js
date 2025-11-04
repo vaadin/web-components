@@ -8,9 +8,9 @@ import './vaadin-context-menu-item.js';
 import './vaadin-context-menu-list-box.js';
 import './vaadin-context-menu-overlay.js';
 import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
@@ -175,18 +175,30 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * ### Styling
  *
- * `<vaadin-context-menu>` uses `<vaadin-context-menu-overlay>` internal
- * themable component as the actual visible context menu overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay)
- * documentation for `<vaadin-context-menu-overlay>` stylable parts.
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                   | Description
+ * --------------------------------------|-------------
+ * `--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target
+ * `--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target
+ * `--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target
+ * `--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
  *
- * When using `items` API, in addition `<vaadin-context-menu-overlay>`, the following
- * internal components are themable:
+ * When using `items` API the following internal components are themable:
  *
  * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
@@ -198,22 +210,17 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * ---------- |-------------
  * `expanded` | Expanded parent item.
  *
- * Note: the `theme` attribute value set on `<vaadin-context-menu>` is
- * propagated to the internal components listed above.
- *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
+ * @fires {CustomEvent} closed - Fired when the context menu is closed.
  *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ContextMenuMixin
- * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  */
-class ContextMenu extends ContextMenuMixin(
-  OverlayClassMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
-) {
+class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-context-menu';
   }
@@ -230,19 +237,87 @@ class ContextMenu extends ContextMenuMixin(
     `;
   }
 
-  /** @protected */
-  render() {
-    return html`<slot id="slot"></slot>`;
+  static get properties() {
+    return {
+      /**
+       * Position of the overlay with respect to the target.
+       * Supported values: null, `top-start`, `top`, `top-end`,
+       * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+       * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+       */
+      position: {
+        type: String,
+      },
+    };
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  createRenderRoot() {
-    const root = super.createRenderRoot();
-    root.appendChild(this._overlayElement);
-    return root;
+  /** @protected */
+  render() {
+    const { _context: context, position } = this;
+
+    return html`
+      <slot id="slot"></slot>
+      <vaadin-context-menu-overlay
+        id="overlay"
+        .owner="${this}"
+        .opened="${this.opened}"
+        .model="${context}"
+        .modeless="${this._modeless}"
+        .renderer="${this.items ? this.__itemsRenderer : this.renderer}"
+        .position="${position}"
+        .positionTarget="${position ? context && context.target : this._positionTarget}"
+        .horizontalAlign="${this.__computeHorizontalAlign(position)}"
+        .verticalAlign="${this.__computeVerticalAlign(position)}"
+        ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(position)}"
+        ?no-vertical-overlap="${this.__computeNoVerticalOverlap(position)}"
+        .withBackdrop="${this._phone}"
+        ?phone="${this._phone}"
+        theme="${ifDefined(this._theme)}"
+        exportparts="backdrop, overlay, content"
+        @opened-changed="${this._onOverlayOpened}"
+        @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
+        @vaadin-overlay-closed="${this._onVaadinOverlayClosed}"
+      >
+        <slot name="overlay"></slot>
+        <slot name="submenu" slot="submenu"></slot>
+      </vaadin-context-menu-overlay>
+    `;
+  }
+
+  /** @private */
+  __computeHorizontalAlign(position) {
+    if (!position) {
+      return 'start';
+    }
+
+    return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
+  }
+
+  /** @private */
+  __computeNoHorizontalOverlap(position) {
+    if (!position) {
+      return !!this._positionTarget;
+    }
+
+    return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
+  }
+
+  /** @private */
+  __computeNoVerticalOverlap(position) {
+    if (!position) {
+      return false;
+    }
+
+    return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
+  }
+
+  /** @private */
+  __computeVerticalAlign(position) {
+    if (!position) {
+      return 'top';
+    }
+
+    return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
   }
 
   /**

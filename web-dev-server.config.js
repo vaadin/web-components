@@ -1,9 +1,7 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
-import fs from 'node:fs';
-import path from 'node:path';
+import { appendStyles, generateListing, isIndexPage } from './wds-utils.js';
 
-const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'lumo';
-const hasPortedParam = process.argv.includes('--ported');
+const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base';
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 export function cssImportPlugin() {
@@ -43,59 +41,23 @@ export function enforceThemePlugin(theme) {
     transform(context) {
       let { body } = context;
 
-      if (theme === 'legacy-lumo' && context.response.is('html', 'js')) {
-        // For dev pages: replace link to CSS stylesheet with JS autoload script
+      if (theme === 'lumo' && context.response.is('html')) {
+        // For dev pages: add Lumo stylesheet
         body = body.replace(
-          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
-          '<script type="module" src="/packages/vaadin-lumo-styles/test/autoload.js"></script>',
+          '</title>',
+          '</title><link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
         );
-
-        // For visual tests: replace import of CSS file with JS autoload script
-        body = body.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
-        body = body.replace('../../global.css', '../autoload.js');
       }
 
-      if (['base', 'legacy-lumo'].includes(theme) && context.response.is('html', 'js')) {
-        // Remove all not transformed CSS imports
-        body = body.replaceAll(/^.+(vaadin-lumo-styles|\.\.)\/.+\.css.+$/gmu, '');
+      if (theme === 'aura' && context.response.is('html')) {
+        // For dev pages: add Aura Stylesheet
+        body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
       }
 
       return body;
     },
-    transformImport({ source, context }) {
-      if (theme === 'base' || theme === 'ported-lumo') {
-        source = source.replace('/theme/lumo/', '/src/');
-
-        const baseStylesResolvedPath = path.resolve(
-          path.dirname(context.url),
-          source.replace('-core-styles', '-base-styles'),
-        );
-        if (fs.existsSync(`.${baseStylesResolvedPath}`)) {
-          source = source.replace('-core-styles', '-base-styles');
-        }
-      }
-
-      return source;
-    },
   };
 }
-
-const preventFouc = `
-  <style>
-    body:not(.resolved) {
-      opacity: 0;
-    }
-
-    body {
-      transition: opacity 0.2s;
-    }
-  </style>
-
-  <script type="module">
-    // It's important to use type module for the script so the timing is correct
-    document.body.classList.add('resolved');
-  </script>
-`;
 
 export default {
   plugins: [
@@ -106,21 +68,16 @@ export default {
           let body = context.body;
 
           // Fouc prevention
-          body = body.replace(/<\/body>/u, `${preventFouc}\n</body>`);
+          body = appendStyles(body);
 
           // Index page listing
-          if (['/dev/index.html', '/dev', '/dev/'].includes(context.path)) {
-            const listing = `
-              <ul id="listing">
-                ${fs
-                  .readdirSync('./dev')
-                  .filter((file) => file !== 'index.html')
-                  .filter((file) => file.endsWith('.html'))
-                  .map((file) => `<li><a href="/dev/${file}">${file}</a></li>`)
-                  .join('')}
-              </ul>`;
+          if (isIndexPage(body)) {
+            const path = context.path.replace(/\/?(index.html)?$/u, '');
+            const dir = `.${path}`;
+            body = generateListing(body, dir);
 
-            body = body.replace(/<ul id="listing">.*<\/ul>/u, listing);
+            // Add <base> to make index pages work without trailing slash
+            body = body.replace('<head>', `<head>\n<base href="${path}/">`);
           }
 
           return { body };
@@ -129,14 +86,10 @@ export default {
     },
     esbuildPlugin({ ts: true }),
 
-    // yarn start --theme=base
-    theme === 'base' && enforceThemePlugin('base'),
+    // Used by all themes
+    enforceThemePlugin(theme),
 
-    // yarn start --theme=lumo (uses legacy lumo styles defined in js files)
-    theme === 'lumo' && !hasPortedParam && enforceThemePlugin('legacy-lumo'),
-
-    // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
-    theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
-    theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+    // Lumo / Aura CSS
+    ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
   ].filter(Boolean),
 };

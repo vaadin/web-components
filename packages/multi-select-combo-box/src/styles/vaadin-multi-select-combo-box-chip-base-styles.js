@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const multiSelectComboBoxChipStyles = css`
@@ -13,16 +13,17 @@ export const multiSelectComboBoxChipStyles = css`
     justify-content: center;
     white-space: nowrap;
     box-sizing: border-box;
-    gap: var(--vaadin-chip-gap, var(--vaadin-chip-padding, 0.3em));
+    gap: var(--vaadin-chip-gap, 0);
     background: var(--vaadin-chip-background, var(--vaadin-background-container));
-    color: var(--vaadin-chip-color, var(--vaadin-color));
-    font-size: var(--vaadin-chip-font-size, 0.875em);
+    color: var(--vaadin-chip-text-color, var(--vaadin-text-color));
+    font-size: max(11px, var(--vaadin-chip-font-size, 0.875em));
     font-weight: var(--vaadin-chip-font-weight, 500);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: 0 var(--vaadin-chip-padding, 0.3em);
     height: var(--vaadin-chip-height, calc(1lh / 0.875));
     border-radius: var(--vaadin-chip-border-radius, var(--vaadin-radius-m));
-    border: var(--vaadin-chip-border-width, 1px) solid var(--vaadin-chip-border-color, var(--vaadin-border-color));
+    border: var(--vaadin-chip-border-width, 1px) solid
+      var(--vaadin-chip-border-color, var(--vaadin-border-color-secondary));
     cursor: default;
   }
 
@@ -41,14 +42,17 @@ export const multiSelectComboBoxChipStyles = css`
   [part='label'] {
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-block: calc(var(--vaadin-chip-border-width, 1px) * -1);
   }
 
   [part='remove-button'] {
     flex: none;
     display: block;
-    margin-inline: auto calc(var(--vaadin-chip-padding, 0.3em) * -1);
-    color: var(--vaadin-chip-remove-button-color, var(--vaadin-color-subtle));
+    margin-inline-start: auto;
+    margin-block: calc(var(--vaadin-chip-border-width, 1px) * -1);
+    color: var(--vaadin-chip-remove-button-text-color, var(--vaadin-text-color-secondary));
     cursor: var(--vaadin-clickable-cursor);
+    translate: 25%;
   }
 
   [part='remove-button']::before {
@@ -65,7 +69,7 @@ export const multiSelectComboBoxChipStyles = css`
   }
 
   :host([disabled]) [part='label'] {
-    --vaadin-chip-color: var(--vaadin-color-disabled);
+    --vaadin-chip-text-color: var(--vaadin-text-color-disabled);
   }
 
   :host([hidden]),
@@ -84,7 +88,7 @@ export const multiSelectComboBoxChipStyles = css`
     content: '';
     position: absolute;
     inset: calc(var(--vaadin-chip-border-width, 1px) * -1);
-    border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color));
+    border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color-secondary));
     border-radius: inherit;
   }
 
@@ -108,5 +112,15 @@ export const multiSelectComboBoxChipStyles = css`
   :host([count='1'])::before,
   :host([count='1'])::after {
     display: none;
+  }
+
+  @media (forced-colors: active) {
+    :host {
+      border: 1px solid !important;
+    }
+
+    [part='remove-button']::before {
+      background: CanvasText;
+    }
   }
 `;

@@ -9,7 +9,9 @@
  * license.
  */
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
+import { gridProStyles } from './styles/vaadin-grid-pro-base-styles.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
 /**
@@ -49,13 +51,41 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  * @extends Grid
  * @mixes InlineEditingMixin
  */
-class GridPro extends InlineEditingMixin(Grid) {
+class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
   static get is() {
     return 'vaadin-grid-pro';
   }
 
   static get cvdlName() {
     return 'vaadin-grid-pro';
+  }
+
+  static get styles() {
+    return gridProStyles;
+  }
+
+  get slotStyles() {
+    const tag = this.localName;
+
+    return [
+      `
+      ${tag} [theme="grid-pro-editor"] {
+        --vaadin-input-field-border-radius: 0px;
+        --vaadin-input-field-border-width: 0px;
+        width: 100%;
+      }
+
+      ${tag} [theme="grid-pro-editor"]::part(input-field) {
+        height: 100%;
+        outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+      }
+
+      vaadin-grid-cell-content:has([theme="grid-pro-editor"]) {
+        padding: 0;
+        overflow: visible;
+      }
+    `,
+    ];
   }
 }
 

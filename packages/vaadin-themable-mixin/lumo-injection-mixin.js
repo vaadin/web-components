@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { LumoInjector } from './src/lumo-injector.js';
+import { getLumoInjectorPropName, LumoInjector } from './src/lumo-injector.js';
 
 /**
  * @type {Set<string>}
@@ -16,7 +16,7 @@ const registeredProperties = new Set();
  * @param {HTMLElement} element
  * @return {DocumentOrShadowRoot}
  */
-function findRoot(element) {
+export function findRoot(element) {
   const root = element.getRootNode();
 
   if (root.host && root.host.constructor.version) {
@@ -36,7 +36,7 @@ export const LumoInjectionMixin = (superClass) =>
     static finalize() {
       super.finalize();
 
-      const propName = this.lumoInjectPropName;
+      const propName = getLumoInjectorPropName(this.lumoInjector);
 
       // Prevent registering same property twice when a class extends
       // another class using this mixin, since `finalize()` is called
@@ -57,12 +57,9 @@ export const LumoInjectionMixin = (superClass) =>
       }
     }
 
-    static get lumoInjectPropName() {
-      return `--${this.is}-lumo-inject`;
-    }
-
     static get lumoInjector() {
       return {
+        is: this.is,
         includeBaseStyles: false,
       };
     }

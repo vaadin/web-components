@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vertical-layout",
-  "version": "25.0.0-alpha7",
+  "version": "25.0.0-beta3",
   "publishConfig": {
     "access": "public"
   },
@@ -21,7 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "web-types.json",
@@ -34,15 +33,15 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-alpha7",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha7",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha7",
+    "@vaadin/component-base": "25.0.0-beta3",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-beta3",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha7",
-    "@vaadin/test-runner-commands": "25.0.0-alpha7",
-    "@vaadin/testing-helpers": "^2.0.0"
+    "@vaadin/chai-plugins": "25.0.0-beta3",
+    "@vaadin/test-runner-commands": "25.0.0-beta3",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-beta3"
   },
   "web-types": [
     "web-types.json",

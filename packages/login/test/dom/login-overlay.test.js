@@ -29,35 +29,33 @@ describe('vaadin-login-overlay', () => {
     resetUniqueId();
     overlay = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
     await nextFrame();
-    wrapper = document.querySelector('vaadin-login-overlay-wrapper');
+    wrapper = overlay.$.overlay;
   });
 
   describe('host', () => {
     it('default', async () => {
-      await expect(wrapper).dom.to.equalSnapshot();
+      await expect(overlay).dom.to.equalSnapshot();
     });
 
     it('i18n', async () => {
       overlay.i18n = I18N_FINNISH;
       await nextUpdate(overlay);
-      await expect(wrapper).dom.to.equalSnapshot();
+      await expect(overlay).dom.to.equalSnapshot();
     });
 
     it('i18n-partial', async () => {
       overlay.i18n = { form: { forgotPassword: 'Custom forgot password' } };
       await nextUpdate(overlay);
-      await expect(wrapper).dom.to.equalSnapshot();
-    });
-
-    it('overlay class', async () => {
-      overlay.overlayClass = 'custom login-overlay';
-      await nextUpdate(overlay);
-      await expect(wrapper).dom.to.equalSnapshot();
+      await expect(overlay).dom.to.equalSnapshot();
     });
   });
 
   describe('shadow', () => {
     it('default', async () => {
+      await expect(overlay).shadowDom.to.equalSnapshot();
+    });
+
+    it('wrapper', async () => {
       await expect(wrapper).shadowDom.to.equalSnapshot();
     });
 

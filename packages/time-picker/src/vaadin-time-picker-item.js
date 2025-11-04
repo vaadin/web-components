@@ -8,7 +8,7 @@ import { ComboBoxItemMixin } from '@vaadin/combo-box/src/vaadin-combo-box-item-m
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-core-styles.js';
+import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -40,7 +40,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @private
  */
 export class TimePickerItem extends ComboBoxItemMixin(
-  LumoInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-time-picker-item';
@@ -58,17 +58,6 @@ export class TimePickerItem extends ComboBoxItemMixin(
         <slot></slot>
       </div>
     `;
-  }
-
-  /**
-   * Override method from `ComboBoxItemMixin` to enforce
-   * `dir` attribute to be set to `ltr` on the item.
-   * @protected
-   * @override
-   */
-  _getHostDir() {
-    // See https://github.com/vaadin/vaadin-time-picker/issues/145
-    return 'ltr';
   }
 }
 

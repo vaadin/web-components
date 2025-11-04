@@ -5,7 +5,8 @@
  */
 @import '../src/components/list-box.css';
 
-:is(:root, :host)::before {
-  --vaadin-list-box-lumo-inject: 1;
-  --vaadin-list-box-lumo-inject-modules: lumo_components_list-box;
+:root::before,
+:host::before {
+  --_lumo-vaadin-list-box-inject: 1;
+  --_lumo-vaadin-list-box-inject-modules: lumo_components_list-box;
 }

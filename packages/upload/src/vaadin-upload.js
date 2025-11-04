@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { uploadStyles } from './styles/vaadin-upload-core-styles.js';
+import { uploadStyles } from './styles/vaadin-upload-base-styles.js';
 import { UploadMixin } from './vaadin-upload-mixin.js';
 
 /**
@@ -37,13 +37,13 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description | Part name
- * ---|---|---
- * `disabled` | Set when the element is disabled | `:host`
- * `nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`
- * `dragover` | A file is being dragged over the element | `:host`
- * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
- * `max-files-reached` | The maximum number of files that the user is allowed to add to the upload has been reached | `:host`
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `nodrop`             | Set when drag and drop is disabled (e.g., on touch devices)
+ * `dragover`           | Set when the file is being dragged over the element
+ * `dragover-valid`     | Set when the dragged file is valid with `maxFiles` and `accept` criteria
+ * `max-files-reached`  | Set when maximum number of files that the user is allowed to add has been reached
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -66,7 +66,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * @mixes ElementMixin
  * @mixes UploadMixin
  */
-class Upload extends UploadMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-upload';
   }

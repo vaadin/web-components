@@ -20,7 +20,7 @@ async function renderOpenedDialog(container, { header, content, footer }) {
 }
 
 describe('lit renderer directives', () => {
-  let container, dialog, overlay;
+  let container, dialog;
 
   beforeEach(() => {
     container = fixtureSync('<div></div>');
@@ -30,7 +30,6 @@ describe('lit renderer directives', () => {
     describe('basic', () => {
       beforeEach(async () => {
         dialog = await renderOpenedDialog(container, { content: 'Content' });
-        overlay = dialog.$.overlay;
       });
 
       it('should set `renderer` property when the directive is attached', () => {
@@ -43,12 +42,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the dialog content with the renderer', () => {
-        expect(overlay.textContent).to.equal('Content');
+        expect(dialog.textContent).to.equal('Content');
       });
 
       it('should re-render the dialog content when a renderer dependency changes', async () => {
         await renderOpenedDialog(container, { content: 'New Content' });
-        expect(overlay.textContent).to.equal('New Content');
+        expect(dialog.textContent).to.equal('New Content');
       });
     });
 
@@ -75,8 +74,7 @@ describe('lit renderer directives', () => {
 
       beforeEach(async () => {
         dialog = await renderOpenedDialog(container, { header: 'Header' });
-        overlay = dialog.$.overlay;
-        header = overlay.querySelector('[slot=header-content]');
+        header = dialog.querySelector('[slot=header-content]');
       });
 
       it('should set `headerRenderer` property when the directive is attached', () => {
@@ -121,8 +119,7 @@ describe('lit renderer directives', () => {
 
       beforeEach(async () => {
         dialog = await renderOpenedDialog(container, { footer: 'Footer' });
-        overlay = dialog.$.overlay;
-        footer = overlay.querySelector('[slot=footer]');
+        footer = dialog.querySelector('[slot=footer]');
       });
 
       it('should set `footerRenderer` property when the directive is attached', () => {

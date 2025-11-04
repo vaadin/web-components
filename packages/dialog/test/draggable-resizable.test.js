@@ -1,27 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './draggable-resizable-styles.js';
 import '../src/vaadin-dialog.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-const style = document.createElement('style');
-style.textContent = css`
-  /* Disable safe area */
-  vaadin-dialog-overlay {
-    inset: 0;
-  }
-
-  /* Disable optical centering */
-  vaadin-dialog-overlay::after {
-    flex-grow: 1;
-  }
-
-  /* Disable content padding */
-  vaadin-dialog-overlay::part(content) {
-    padding: 0;
-  }
-`;
-document.head.append(style);
 
 customElements.define(
   'internally-draggable',
@@ -108,7 +89,7 @@ describe('helper methods', () => {
   });
 
   it('should move dialog to top when content is clicked', () => {
-    const div = overlay.querySelector('div');
+    const div = dialog1.querySelector('div');
     expect(dialog2.$.overlay._last).to.be.true;
     dispatchMouseEvent(div, 'mousedown');
     expect(dialog1.$.overlay._last).to.be.true;
@@ -254,37 +235,36 @@ describe('resizable', () => {
   });
 
   it('should support scrollable full size content', () => {
-    const container = dialog.$.overlay.firstElementChild;
-    container.style.height = '100%';
-    container.style.width = '100%';
-    container.style.overflow = 'auto';
-    container.textContent = new Array(10000).fill('foo').join(' ');
+    const contentElement = dialog.$.overlay._rendererRoot.firstElementChild;
+    contentElement.style.height = '100%';
+    contentElement.style.width = '100%';
+    contentElement.style.overflow = 'auto';
+    contentElement.textContent = new Array(10000).fill('foo').join(' ');
 
     const resizeContainer = dialog.$.overlay.$.resizerContainer;
-    expect(container.offsetHeight).to.equal(resizeContainer.offsetHeight);
+    expect(contentElement.offsetHeight).to.equal(resizeContainer.offsetHeight);
   });
 
-  it('should scroll if the content overflows', () => {
+  it('should scroll if the content overflows', async () => {
     // Fill the content with a lot of text so that it overflows the viewport
-    dialog.$.overlay.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
+    const contentElement = dialog.$.overlay._rendererRoot.firstElementChild;
+    contentElement.textContent = new Array(10000).fill('foo').join(' ');
+    await nextResize(contentElement);
+    await nextRender();
 
-    const resizeContainer = dialog.$.overlay.$.resizerContainer;
-    resizeContainer.scrollTop = 1;
-    expect(resizeContainer.scrollTop).to.equal(1);
-
-    // TODO change to this with base styles
-    // const content = dialog.$.overlay.$.content;
-    // content.scrollTop = 1;
-    // expect(content.scrollTop).to.equal(1);
+    const content = dialog.$.overlay.$.content;
+    content.scrollTop = 1;
+    expect(content.scrollTop).to.equal(1);
   });
 
   it('should expand content with relative height', () => {
     resize(overlayPart.querySelector('.s'), 0, 10);
 
     // Set the dialog content to have 100% height
-    dialog.$.overlay.firstElementChild.style.height = '100%';
+    const contentElement = dialog.$.overlay._rendererRoot.firstElementChild;
+    contentElement.style.height = '100%';
 
-    const contentBounds = dialog.$.overlay.firstElementChild.getBoundingClientRect();
+    const contentBounds = contentElement.getBoundingClientRect();
     const overlayBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(contentBounds.height)).to.equal(Math.floor(overlayBounds.height));
   });
@@ -320,7 +300,6 @@ describe('resizable', () => {
   });
 
   it('should be able to resize dialog to be wider than window', async () => {
-    dialog.$.overlay.$.content.style.padding = '20px';
     dx = 20;
     dialog.$.overlay.setBounds({ left: -dx });
     dx = Math.floor(window.innerWidth - bounds.width + 5);
@@ -416,7 +395,7 @@ describe('draggable', () => {
 
     container = dialog.$.overlay.$.resizerContainer;
     content = dialog.$.overlay.$.content;
-    button = dialog.$.overlay.querySelector('button');
+    button = dialog.querySelector('button');
     bounds = container.getBoundingClientRect();
     dx = 100;
   });
@@ -438,15 +417,16 @@ describe('draggable', () => {
   });
 
   it('should drag and move dialog if mousedown on element with [class="draggable"]', async () => {
-    drag(dialog.$.overlay.querySelector('.draggable'));
+    drag(dialog.querySelector('.draggable'));
     await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should only change "position", "top", and "left" values on drag', () => {
+  it('should only change "position", "top", and "left" values on drag', async () => {
     drag(content);
+    await nextRender();
     const overlay = dialog.$.overlay.$.overlay;
     const style = overlay.style;
     expect(style.length).to.be.eql(3);
@@ -455,8 +435,20 @@ describe('draggable', () => {
     expect(style.left).to.be.ok;
   });
 
+  it('should assign "top", and "left" properties on drag start', async () => {
+    const overlayBounds = dialog.$.overlay.getBounds();
+    expect(dialog.left).to.be.undefined;
+    expect(dialog.top).to.be.undefined;
+
+    dispatchMouseEvent(content, 'mousedown');
+    await nextRender();
+
+    expect(dialog.left).to.be.equal(overlayBounds.left);
+    expect(dialog.top).to.be.equal(overlayBounds.top);
+  });
+
   it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', async () => {
-    drag(dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
+    drag(dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
     await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
@@ -464,7 +456,7 @@ describe('draggable', () => {
   });
 
   it('should not drag by a draggable-leaf-only if it is not the drag event target', () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     drag(child);
@@ -474,7 +466,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a draggable-leaf-only if it is directly the dragged element', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     drag(draggable);
     await nextRender();
@@ -484,7 +476,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a draggable-leaf-only child if it is marked as draggable', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     child.classList.add('draggable');
@@ -496,7 +488,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a draggable-leaf-only child if it is marked as draggable-leaf-only', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     child.classList.add('draggable-leaf-only');
@@ -508,7 +500,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a child of a draggable node ', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     const child = draggable.firstElementChild;
     drag(child);
     await nextRender();
@@ -537,7 +529,7 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left));
   });
 
-  it('should not drag dialog if mousedown on .resizer-container scrollbar', () => {
+  it('should not drag dialog if mousedown on .resizer-container scrollbar', async () => {
     const boundsSpy = sinon.spy(dialog.$.overlay, 'setBounds');
     content.style.width = `${content.clientWidth * 4}px`;
     const scrollbarHeight = container.offsetHeight - container.clientHeight;
@@ -546,6 +538,7 @@ describe('draggable', () => {
       x: containerBounds.left + containerBounds.width / 2,
       y: containerBounds.top + containerBounds.height - scrollbarHeight / 2,
     });
+    await nextRender();
     expect(boundsSpy.called).to.equal(!scrollbarHeight);
   });
 
@@ -585,14 +578,17 @@ describe('draggable', () => {
 
   it('should not reset scroll position on dragstart', async () => {
     dialog.modeless = true;
-    button.style.marginBottom = '200px';
-    dialog.$.overlay.setBounds({ height: '100px' });
-    await nextUpdate(dialog);
-    // TODO use dialog.$.overlay.$.content.scrollTop with base styles
-    container.scrollTop = 100;
-    expect(container.scrollTop).to.equal(100);
+    dialog.height = '100px';
+    await nextRender();
+
+    const contentElement = dialog.$.overlay._rendererRoot.firstElementChild;
+    contentElement.style.minHeight = '200px';
+    await nextResize(contentElement);
+    await nextRender();
+
+    dialog.$.overlay.$.content.scrollTop = 100;
     drag(container);
-    expect(container.scrollTop).to.equal(100);
+    expect(dialog.$.overlay.$.content.scrollTop).to.equal(100);
   });
 
   it('should update "top" and "left" properties on drag', async () => {
@@ -615,10 +611,26 @@ describe('draggable', () => {
     expect(detail.left).to.be.equal(dialog.left);
   });
 
+  it('should use correct coordinates in "dragged" event without moving the dialog during drag', async () => {
+    const overlayBounds = dialog.$.overlay.getBounds();
+    const onDragged = sinon.spy();
+    dialog.addEventListener('dragged', onDragged);
+
+    dispatchMouseEvent(content, 'mousedown');
+    await nextRender();
+    dispatchMouseEvent(content, 'mouseup');
+    await nextRender();
+
+    expect(onDragged.calledOnce).to.be.true;
+    const { detail } = onDragged.args[0][0];
+    expect(detail.top).to.be.equal(overlayBounds.top);
+    expect(detail.left).to.be.equal(overlayBounds.left);
+  });
+
   it('should not set overlay max-width to none on drag', async () => {
     drag(container);
     await nextRender();
-    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
+    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.be.oneOf(['100%', 'min(100%, 100%)']);
   });
 });
 
@@ -675,9 +687,9 @@ describe('touch', () => {
     dispatchTouchEvent(target, 'touchend', toXY);
   }
 
-  function getFrontmostOverlayFromScreenCenter() {
+  function getFrontmostDialogFromScreenCenter() {
     let elementFromPoint = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-    while (elementFromPoint && elementFromPoint.localName !== 'vaadin-dialog-overlay') {
+    while (elementFromPoint && elementFromPoint.localName !== 'vaadin-dialog') {
       elementFromPoint = elementFromPoint.host || elementFromPoint.parentNode;
     }
     return elementFromPoint;
@@ -731,7 +743,7 @@ describe('touch', () => {
 
   it('should bring to front on touch start', () => {
     dispatchTouchEvent(resizableContainer, 'touchstart');
-    expect(getFrontmostOverlayFromScreenCenter()).to.equal(resizableOverlay);
+    expect(getFrontmostDialogFromScreenCenter()).to.equal(resizable);
   });
 
   it('should not move dialog if there more than two fingers used', () => {
@@ -824,7 +836,7 @@ describe('bring to front', () => {
     modelessDialog.opened = true;
     await nextRender();
 
-    const expectedTextContent = modelessDialog.$.overlay.innerText.trim();
+    const expectedTextContent = modelessDialog.innerText.trim();
 
     const windowCenterHeight = window.innerHeight / 2;
     const windowCenterWidth = window.innerWidth / 2;
@@ -861,7 +873,7 @@ describe('overflowing content', () => {
     div.style.maxWidth = '300px';
     div.style.overflow = 'auto';
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.appendChild(div);
+    dialog.appendChild(div);
     // Emulate removing "pointer-events: none"
     overlayPart.setAttribute('style', '');
     expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
@@ -870,17 +882,13 @@ describe('overflowing content', () => {
   it('should not reset scroll position on resize', async () => {
     const div = document.createElement('div');
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.appendChild(div);
+    dialog.appendChild(div);
     dialog.$.overlay.setBounds({ height: 200 });
     await nextFrame();
     overlay.$.content.style.padding = '20px';
-    container.scrollTop = 100;
-    // TODO change to this with new base styles
-    // overlay.$.content.scrollTop = 100;
+    overlay.$.content.scrollTop = 100;
     resize(overlayPart.querySelector('.s'), 0, -50);
     await nextFrame();
-    expect(container.scrollTop).to.equal(100);
-    // TODO change to this with new base styles
-    // expect(overlay.$.content.scrollTop).to.equal(100);
+    expect(overlay.$.content.scrollTop).to.equal(100);
   });
 });

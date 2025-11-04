@@ -13,14 +13,14 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { crudStyles } from './styles/vaadin-crud-core-styles.js';
+import { crudStyles } from './styles/vaadin-crud-base-styles.js';
 import { CrudMixin } from './vaadin-crud-mixin.js';
 
 /**
@@ -140,11 +140,26 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
+ * The following shadow DOM parts are available for styling when the editor is rendered next to, or below, the grid:
  *
  * Part name | Description
  * ----------------|----------------
- * `toolbar` | Toolbar container at the bottom. By default it contains the the `new` button
+ * `toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button
+ * `editor`   | The editor container
+ * `scroller` | The wrapper for the header and the form
+ * `header`   | The header of the editor
+ * `footer`   | The footer of the editor
+ *
+ * The following shadow DOM parts are available for styling when the editor renders as a dialog:
+ *
+ * Part name | Description
+ * ----------------|----------------
+ * `toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button
+ * `overlay`  | The dialog overlay
+ * `backdrop` | The dialog backdrop
+ * `header`   | The header of the dialog
+ * `footer`   | The footer of the dialog
+ * `content`  | The wrapper for the form
  *
  * The following custom properties are available:
  *
@@ -171,7 +186,15 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  * @mixes ThemableMixin
  * @mixes CrudMixin
  */
-class Crud extends CrudMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-crud';
+  }
+
+  static get cvdlName() {
+    return 'vaadin-crud';
+  }
+
   static get styles() {
     return crudStyles;
   }
@@ -189,71 +212,104 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(Polyl
           </div>
         </div>
 
-        <div
-          part="editor"
-          id="editor"
-          role="group"
-          aria-labelledby="header"
-          ?hidden="${this.__computeEditorHidden(this.editorOpened, this._fullscreen, this.editorPosition)}"
-        >
-          <div part="scroller" id="scroller">
-            <div part="header" id="header">
-              <slot name="header"></slot>
-            </div>
-            <slot name="form"></slot>
-          </div>
+        ${!this._dialogMode
+          ? html`
+              <div
+                part="editor"
+                id="editor"
+                role="group"
+                aria-labelledby="header"
+                tabindex="0"
+                ?hidden="${!this.editorOpened}"
+              >
+                <div part="scroller" id="scroller">
+                  <div part="header" id="header">
+                    <slot name="header"></slot>
+                  </div>
+                  <slot name="form"></slot>
+                </div>
 
-          <div part="footer" role="toolbar">
-            <slot name="save-button"></slot>
-            <slot name="cancel-button"></slot>
-            <slot name="delete-button"></slot>
-          </div>
-        </div>
+                <div part="footer" role="toolbar">
+                  <slot name="save-button"></slot>
+                  <slot name="cancel-button"></slot>
+                  <slot name="delete-button"></slot>
+                </div>
+              </div>
+            `
+          : nothing}
       </div>
 
-      <vaadin-crud-dialog
-        id="dialog"
-        .opened="${this.__computeDialogOpened(this.editorOpened, this._fullscreen, this.editorPosition)}"
-        .fullscreen="${this._fullscreen}"
-        .ariaLabel="${this.__dialogAriaLabel}"
-        .noCloseOnOutsideClick="${this.__isDirty}"
-        .noCloseOnEsc="${this.__isDirty}"
-        theme="${ifDefined(this._theme)}"
-        @opened-changed="${this.__onDialogOpened}"
-      ></vaadin-crud-dialog>
+      ${this._dialogMode
+        ? html`
+            <vaadin-crud-dialog
+              id="dialog"
+              aria-label="${ifDefined(this.__dialogAriaLabel)}"
+              theme="${ifDefined(this._theme)}"
+              exportparts="backdrop, overlay, header, content, footer"
+              .crudElement="${this}"
+              .opened="${this.editorOpened}"
+              .fullscreen="${this._fullscreen}"
+              .noCloseOnOutsideClick="${this.__isDirty}"
+              .noCloseOnEsc="${this.__isDirty}"
+              @cancel="${this.__cancel}"
+            >
+              <slot name="header" slot="header"></slot>
+              <slot name="form" slot="form"></slot>
+              <slot name="save-button" slot="save-button"></slot>
+              <slot name="cancel-button" slot="cancel-button"></slot>
+              <slot name="delete-button" slot="delete-button"></slot>
+            </vaadin-crud-dialog>
+          `
+        : nothing}
 
-      <vaadin-confirm-dialog
-        theme="${ifDefined(this._theme)}"
-        id="confirmCancel"
-        @confirm="${this.__confirmCancel}"
-        cancel-button-visible
-        .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
-        .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
-        .header="${this.__effectiveI18n.confirm.cancel.title}"
-        .message="${this.__effectiveI18n.confirm.cancel.content}"
-        confirm-theme="primary"
-      ></vaadin-confirm-dialog>
+      <slot name="confirm-cancel"></slot>
 
-      <vaadin-confirm-dialog
-        theme="${ifDefined(this._theme)}"
-        id="confirmDelete"
-        @confirm="${this.__confirmDelete}"
-        cancel-button-visible
-        .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
-        .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
-        .header="${this.__effectiveI18n.confirm.delete.title}"
-        .message="${this.__effectiveI18n.confirm.delete.content}"
-        confirm-theme="primary error"
-      ></vaadin-confirm-dialog>
+      <slot name="confirm-delete"></slot>
     `;
   }
 
-  static get is() {
-    return 'vaadin-crud';
+  /**
+   * Override update to render slotted overlays into light DOM after rendering shadow DOM.
+   * @param changedProperties
+   * @protected
+   */
+  update(changedProperties) {
+    super.update(changedProperties);
+
+    this.__renderSlottedOverlays();
   }
 
-  static get cvdlName() {
-    return 'vaadin-crud';
+  /** @private */
+  __renderSlottedOverlays() {
+    render(
+      html`
+        <vaadin-confirm-dialog
+          theme="${ifDefined(this._theme)}"
+          slot="confirm-cancel"
+          @confirm="${this.__confirmCancel}"
+          cancel-button-visible
+          .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
+          .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
+          .header="${this.__effectiveI18n.confirm.cancel.title}"
+          .message="${this.__effectiveI18n.confirm.cancel.content}"
+          confirm-theme="primary"
+        ></vaadin-confirm-dialog>
+
+        <vaadin-confirm-dialog
+          theme="${ifDefined(this._theme)}"
+          slot="confirm-delete"
+          @confirm="${this.__confirmDelete}"
+          cancel-button-visible
+          .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
+          .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
+          .header="${this.__effectiveI18n.confirm.delete.title}"
+          .message="${this.__effectiveI18n.confirm.delete.content}"
+          confirm-theme="primary error"
+        ></vaadin-confirm-dialog>
+      `,
+      this,
+      { host: this },
+    );
   }
 }
 

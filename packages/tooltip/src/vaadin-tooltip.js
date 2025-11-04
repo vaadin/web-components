@@ -20,22 +20,34 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * <vaadin-tooltip text="Click to save changes" for="confirm"></vaadin-tooltip>
  * ```
  *
+ * ### Markdown Support
+ *
+ * The tooltip supports rendering Markdown content by setting the `markdown` property:
+ *
+ * ```html
+ * <button id="info">Info</button>
+ * <vaadin-tooltip
+ *   text="**Important:** Click to view *detailed* information"
+ *   markdown
+ *   for="info">
+ * </vaadin-tooltip>
+ * ```
+ *
  * ### Styling
  *
- * `<vaadin-tooltip>` uses `<vaadin-tooltip-overlay>` internal
- * themable component as the actual visible overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-tooltip-overlay>` parts.
+ * Part name   | Description
+ * ----------- | ---------------
+ * `overlay`   | The overlay element
+ * `content`   | The overlay content element
  *
  * The following state attributes are available for styling:
  *
  * Attribute        | Description
  * -----------------|----------------------------------------
+ * `markdown`       | Reflects the `markdown` property value.
  * `position`       | Reflects the `position` property value.
- *
- * Note: the `theme` attribute value set on `<vaadin-tooltip>` is
- * propagated to the internal `<vaadin-tooltip-overlay>` component.
  *
  * ### Custom CSS Properties
  *
@@ -49,6 +61,8 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} content-changed - Fired when the tooltip text content is changed.
  *
  * @customElement
  * @extends HTMLElement
@@ -64,7 +78,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
   static get styles() {
     return css`
       :host {
-        display: none;
+        display: contents;
       }
     `;
   }
@@ -76,22 +90,24 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
     return html`
       <vaadin-tooltip-overlay
         id="overlay"
-        .renderer="${this._renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
-        .opened="${this._isConnected && (this.manual ? this.opened : this._autoOpened)}"
+        .opened="${this._isConnected && this.opened}"
         .positionTarget="${this.target}"
         .position="${effectivePosition}"
         ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(effectivePosition)}"
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
+        @click="${this.__onOverlayClick}"
+        @mousedown="${this.__onOverlayMouseDown}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         modeless
+        ?markdown="${this.markdown}"
+        exportparts="overlay, content"
+        ><slot name="overlay"></slot
       ></vaadin-tooltip-overlay>
-
-      <slot name="sr-label"></slot>
     `;
   }
 }

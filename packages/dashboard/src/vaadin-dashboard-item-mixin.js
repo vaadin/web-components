@@ -305,11 +305,16 @@ export const DashboardItemMixin = (superClass) =>
       }
     }
 
-    focus() {
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
       if (this.hasAttribute('editable')) {
-        this.$['focus-button'].focus();
+        this.$['focus-button'].focus(options);
       } else {
-        super.focus();
+        super.focus(options);
       }
     }
 

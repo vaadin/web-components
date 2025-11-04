@@ -11,7 +11,7 @@ export declare function DialogBaseMixin<T extends Constructor<HTMLElement>>(
 
 export declare class DialogBaseMixinClass {
   /**
-   * True if the overlay is currently displayed.
+   * True if the dialog is visible and available for interaction.
    */
   opened: boolean;
 
@@ -33,41 +33,28 @@ export declare class DialogBaseMixinClass {
   modeless: boolean;
 
   /**
-   * The `role` attribute value to be set on the overlay. Defaults to "dialog".
+   * The `role` attribute value to be set on the dialog. Defaults to "dialog".
    *
    * @attr {string} overlay-role
+   * @deprecated Use standard `role` attribute on the dialog instead
    */
   overlayRole: string;
 
   /**
-   * Set the distance of the overlay from the top of its container.
+   * Set the distance of the dialog from the top of the viewport.
    * If a unitless number is provided, pixels are assumed.
    *
-   * Note that the overlay top edge may not be the same as the viewport
-   * top edge (e.g. the Lumo theme defines some spacing to prevent the
-   * overlay from stretching all the way to the top of the viewport).
+   * Note that the dialog uses an internal container that has some
+   * additional spacing, which can be overridden by the theme.
    */
   top: string;
 
   /**
-   * Set the distance of the overlay from the left of its container.
+   * Set the distance of the dialog from the left of the viewport.
    * If a unitless number is provided, pixels are assumed.
    *
-   * Note that the overlay left edge may not be the same as the viewport
-   * left edge (e.g. the Lumo theme defines some spacing to prevent the
-   * overlay from stretching all the way to the left of the viewport).
+   * Note that the dialog uses an internal container that has some
+   * additional spacing, which can be overridden by the theme.
    */
   left: string;
-
-  /**
-   * Set the width of the overlay.
-   * If a unitless number is provided, pixels are assumed.
-   */
-  width: string | null;
-
-  /**
-   * Set the height of the overlay.
-   * If a unitless number is provided, pixels are assumed.
-   */
-  height: string | null;
 }

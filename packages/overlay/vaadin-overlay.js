@@ -1,2 +1,2 @@
-import './theme/lumo/vaadin-overlay.js';
+import './src/vaadin-overlay.js';
 export * from './src/vaadin-overlay.js';

@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const overlayContentStyles = css`
@@ -29,9 +29,9 @@ export const overlayContentStyles = css`
 
   [part='years-toggle-button'] {
     display: inline-flex;
-    border: var(--vaadin-button-border, var(--vaadin-button-border-width, 1px) solid transparent);
+    align-items: center;
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-button-text-color, var(--_vaadin-button-text-color));
+    color: var(--vaadin-text-color);
     font-size: var(--vaadin-button-font-size, inherit);
     font-weight: var(--vaadin-button-font-weight, 500);
     height: var(--vaadin-button-height, auto);
@@ -41,7 +41,7 @@ export const overlayContentStyles = css`
   }
 
   :host([years-visible]) [part='years-toggle-button'] {
-    background: var(--vaadin-color);
+    background: var(--vaadin-text-color);
     color: var(--vaadin-background-color);
   }
 
@@ -57,7 +57,7 @@ export const overlayContentStyles = css`
   }
 
   :host([desktop]) ::slotted([slot='months']) {
-    border-bottom: 1px solid var(--vaadin-border-color);
+    border-bottom: 1px solid var(--vaadin-border-color-secondary);
   }
 
   ::slotted([slot='years']) {
@@ -65,7 +65,8 @@ export const overlayContentStyles = css`
     background: var(--vaadin-date-picker-year-scroller-background, var(--vaadin-background-container));
     width: var(--vaadin-date-picker-year-scroller-width, 3rem);
     box-sizing: border-box;
-    border-inline-start: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color));
+    border-inline-start: 1px solid
+      var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color-secondary));
     overflow: visible;
     min-height: 0;
     clip-path: inset(0);
@@ -73,7 +74,7 @@ export const overlayContentStyles = css`
 
   ::slotted([slot='years'])::before {
     background: var(--vaadin-overlay-background, var(--vaadin-background-color));
-    border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color));
+    border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color-secondary));
     width: 16px;
     height: 16px;
     position: absolute;
@@ -97,11 +98,11 @@ export const overlayContentStyles = css`
     display: flex;
     grid-area: toolbar;
     justify-content: space-between;
-    padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding));
+    padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding-s));
   }
 
   :host([fullscreen]) [part='toolbar'] {
     grid-area: header;
-    border-bottom: 1px solid var(--vaadin-border-color);
+    border-bottom: 1px solid var(--vaadin-border-color-secondary);
   }
 `;

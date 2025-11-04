@@ -27,6 +27,13 @@ describe('progress bar', () => {
 
     beforeEach(async () => {
       progress = fixtureSync('<vaadin-progress-bar></vaadin-progress-bar>');
+      fixtureSync(`
+        <style>
+          vaadin-progress-bar::part(value) {
+            transition: none;
+          }
+        </style>
+      `);
       await nextRender();
       value = progress.shadowRoot.querySelector('[part="value"]');
     });

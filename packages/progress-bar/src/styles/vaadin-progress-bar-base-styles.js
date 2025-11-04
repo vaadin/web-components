@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const progressBarStyles = css`
@@ -22,18 +22,18 @@ export const progressBarStyles = css`
     box-sizing: border-box;
     height: 100%;
     --_padding: var(--vaadin-progress-bar-padding, 0px);
-    padding: var(--_padding); /* stylelint-disable-line length-zero-no-unit */
+    padding: var(--_padding);
     background: var(--vaadin-progress-bar-background, var(--vaadin-background-container));
     border-radius: var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m));
     border: var(--vaadin-progress-bar-border-width, 1px) solid
-      var(--vaadin-progress-bar-border-color, var(--vaadin-border-color));
+      var(--vaadin-progress-bar-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part='value'] {
     box-sizing: border-box;
     height: 100%;
     width: calc(var(--vaadin-progress-value) * 100%);
-    background: var(--vaadin-progress-bar-value-background, var(--vaadin-border-color-strong));
+    background: var(--vaadin-progress-bar-value-background, var(--vaadin-border-color));
     border-radius: calc(
       var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m)) - var(
           --vaadin-progress-bar-border-width,
@@ -95,6 +95,16 @@ export const progressBarStyles = css`
     :host([indeterminate]) [part='value'] {
       width: 25%;
       animation: indeterminate-reduced 2s linear infinite alternate;
+    }
+  }
+
+  @media (forced-colors: active) {
+    [part='bar'] {
+      border-width: max(1px, var(--vaadin-progress-bar-border-width));
+    }
+
+    [part='value'] {
+      background: CanvasText !important;
     }
   }
 `;

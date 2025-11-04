@@ -1,0 +1,77 @@
+:where(:root),
+:where(:host) {
+  --vaadin-item-overlay-padding: var(--vaadin-gap-xs);
+  --vaadin-item-border-radius: calc(var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
+  --vaadin-item-checkmark-color: var(--aura-accent-text);
+}
+
+:is(
+  vaadin-avatar-group-menu-item,
+  vaadin-combo-box-item,
+  vaadin-context-menu-item,
+  vaadin-time-picker-item,
+  vaadin-item,
+  vaadin-menu-bar-item,
+  vaadin-multi-select-combo-box-item,
+  vaadin-select-item[role]
+) {
+  font-weight: var(--aura-font-weight-medium);
+  --vaadin-item-checkmark-color: var(--aura-accent-text);
+
+  &::part(checkmark) {
+    --vaadin-icon-visual-size: 75%;
+  }
+
+  &::part(content) {
+    display: flex;
+  }
+
+  @media (any-hover: hover) {
+    &:not([disabled], [aria-disabled='true']):hover {
+      background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+
+      &[theme~='filled'] {
+        background: var(--aura-accent-color);
+        color: var(--aura-accent-contrast);
+        --vaadin-text-color: var(--aura-accent-contrast);
+        --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast) 70%, transparent);
+        --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast) 50%, transparent);
+        --vaadin-item-checkmark-color: var(--aura-accent-contrast);
+
+        > * {
+          --aura-red: var(--aura-accent-contrast);
+          --aura-red-text: var(--aura-accent-contrast);
+          --aura-orange: var(--aura-accent-contrast);
+          --aura-orange-text: var(--aura-accent-contrast);
+          --aura-yellow: var(--aura-accent-contrast);
+          --aura-yellow-text: var(--aura-accent-contrast);
+          --aura-green: var(--aura-accent-contrast);
+          --aura-green-text: var(--aura-accent-contrast);
+          --aura-blue: var(--aura-accent-contrast);
+          --aura-blue-text: var(--aura-accent-contrast);
+          --aura-purple: var(--aura-accent-contrast);
+          --aura-purple-text: var(--aura-accent-contrast);
+        }
+      }
+    }
+  }
+
+  &[aria-expanded='true']:not(:hover) {
+    background: var(--vaadin-background-container-strong);
+  }
+
+  &[theme~='danger'] {
+    --aura-accent-light: var(--aura-red);
+    --aura-accent-dark: var(--aura-red);
+    color: var(--aura-red-text);
+  }
+}
+
+/* TODO is there a better selector? */
+[role='menu'] [role='separator'] {
+  margin-block: var(--vaadin-gap-xs);
+  margin-inline-start: calc(
+    var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--vaadin-gap-s)) + var(--vaadin-gap-xs) * 2
+  );
+  border-color: var(--vaadin-border-color);
+}

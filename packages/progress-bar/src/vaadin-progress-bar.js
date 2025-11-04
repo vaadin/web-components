@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { progressBarStyles } from './styles/vaadin-progress-bar-core-styles.js';
+import { progressBarStyles } from './styles/vaadin-progress-bar-base-styles.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
 
 /**
@@ -39,9 +39,9 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute       | Description | Part name
- * ----------------|-------------|------------
- * `indeterminate` | Set to an indeterminate progress bar | :host
+ * Attribute       | Description
+ * ----------------|-------------------------------------
+ * `indeterminate` | Set to an indeterminate progress bar
  *
  * @customElement
  * @extends HTMLElement
@@ -49,7 +49,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-progress-bar';
   }

@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { appLayoutStyles } from './styles/vaadin-app-layout-core-styles.js';
+import { appLayoutStyles } from './styles/vaadin-app-layout-base-styles.js';
 import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
 
 /**
@@ -35,29 +35,38 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * For best results, the component should be added to the root level of your application (i.e., as a direct child of `<body>`).
  *
  * The page should include a viewport meta tag which contains `viewport-fit=cover`, like the following:
- * ```
+ * ```html
  * <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
  * ```
+ *
  * This causes the viewport to be scaled to fill the device display.
- * To ensure that important content is displayed, use the provided css variables.
- * ```
- * --safe-area-inset-top
- * --safe-area-inset-right
- * --safe-area-inset-bottom
- * --safe-area-inset-left
- * ```
+ * To ensure that important content is displayed, use the provided css variables:
+ *
+ * - `--safe-area-inset-top`
+ * - `--safe-area-inset-right`
+ * - `--safe-area-inset-bottom`
+ * - `--safe-area-inset-left`
  *
  * ### Styling
  *
- * The following Shadow DOM parts of the `<vaadin-app-layout>` are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
- * Part name     | Description
- * --------------|---------------------------------------------------------|
- * `backdrop`    | Backdrop covering the layout when drawer is open as an overlay
- * `navbar`      | Container for the navigation bar
- * `drawer`      | Container for the drawer area
+ * Part name        | Description
+ * -----------------|---------------------------------------------------------|
+ * `backdrop`       | Backdrop covering the layout when drawer is open as an overlay
+ * `navbar`         | Container for the navigation bar
+ * `navbar-top`     | Container for the top navigation bar
+ * `navbar-bottom`  | Container for the bottom navigation bar
+ * `drawer`         | Container for the drawer area
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-drawer`   | Set when the element has light DOM content in the drawer slot.
+ * `has-navbar`   | Set when the element has light DOM content in the navbar slot.
  *
  * ### Component's slots
  *
@@ -108,7 +117,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-app-layout';
   }
@@ -120,21 +129,21 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(LumoInjectionM
   /** @protected */
   render() {
     return html`
-      <div part="navbar" id="navbarTop">
-        <slot name="navbar" @slotchange="${this._updateTouchOptimizedMode}"></slot>
+      <div part="navbar navbar-top" id="navbarTop">
+        <slot name="navbar" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
       <div part="backdrop" @click="${this._onBackdropClick}" @touchend="${this._onBackdropTouchend}"></div>
       <div part="drawer" id="drawer">
-        <slot name="drawer" id="drawerSlot" @slotchange="${this._updateDrawerSize}"></slot>
+        <slot name="drawer" id="drawerSlot" @slotchange="${this.__onDrawerSlotChange}"></slot>
       </div>
       <div content>
         <slot></slot>
       </div>
-      <div part="navbar" id="navbarBottom" bottom hidden>
+      <div part="navbar navbar-bottom" id="navbarBottom" hidden>
         <slot name="navbar-bottom"></slot>
       </div>
       <div hidden>
-        <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this._updateTouchOptimizedMode}"></slot>
+        <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
     `;
   }

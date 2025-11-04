@@ -43,6 +43,7 @@ sideNav.onNavigate = (event) => {
 };
 
 assertType<any>(sideNav.location);
+assertType<boolean>(sideNav.noAutoExpand);
 
 const sideNavItem: SideNavItem = document.createElement('vaadin-side-nav-item');
 

@@ -20,7 +20,7 @@ class XFoo extends HTMLElement {
 customElements.define('x-foo', XFoo);
 
 describe('context', () => {
-  let menu, foo, fooContent, target, another;
+  let menu, overlayContent, foo, fooContent, target, another;
 
   beforeEach(async () => {
     menu = fixtureSync(`
@@ -40,6 +40,7 @@ describe('context', () => {
       `;
     };
     await nextRender();
+    overlayContent = menu._overlayElement._contentRoot;
     foo = document.querySelector('x-foo');
     fooContent = foo.shadowRoot.querySelector('#content');
     target = document.querySelector('#target');
@@ -51,7 +52,7 @@ describe('context', () => {
     await nextRender();
 
     expect(menu._context.target).to.eql(target);
-    expect(menu._overlayElement.textContent).to.contain(target.textContent);
+    expect(overlayContent.textContent).to.contain(target.textContent);
 
     menu.close();
 
@@ -59,7 +60,7 @@ describe('context', () => {
     await nextRender();
 
     expect(menu._context.target).to.eql(another);
-    expect(menu._overlayElement.textContent).to.contain(another.textContent);
+    expect(overlayContent.textContent).to.contain(another.textContent);
   });
 
   it('should use details as context details', () => {
@@ -84,6 +85,15 @@ describe('context', () => {
 
   it('should use selector outside shadow root to change context', () => {
     menu.selector = '#target';
+    fire(foo, 'contextmenu');
+
+    expect(menu._context.target).to.eql(target);
+  });
+
+  it('should use listenOn element as target if no selector set and position is set', () => {
+    menu.selector = null;
+    menu.position = 'top-end';
+    menu.listenOn = target;
     fire(foo, 'contextmenu');
 
     expect(menu._context.target).to.eql(target);

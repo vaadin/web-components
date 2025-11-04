@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import './theme-styles.js';
 import '../src/vaadin-chart.js';
 
@@ -14,6 +14,7 @@ describe('vaadin-chart styling', () => {
         </vaadin-chart>
       `);
       await oneEvent(chart, 'chart-load');
+      await nextResize(chart);
       chartContainer = chart.$.chart;
     });
 
@@ -50,9 +51,9 @@ describe('vaadin-chart styling', () => {
         type: 'column',
         data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
       });
-      const rects = chart.$.chart.querySelectorAll('.highcharts-series > rect');
-      expect(rects).to.have.lengthOf(12);
-      expect(getComputedStyle(rects[0]).stroke).to.equal('rgb(255, 0, 0)');
+      const point = chart.$.chart.querySelectorAll('.highcharts-series > .highcharts-point');
+      expect(point).to.have.lengthOf(12);
+      expect(getComputedStyle(point[0]).stroke).to.equal('rgb(255, 0, 0)');
     });
   });
 
@@ -76,16 +77,9 @@ describe('vaadin-chart styling', () => {
         data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
       });
 
-      // As there's no --vaadin-charts-color-1 this should pick default styling
-      configuration.addSeries({
-        type: 'column',
-        data: [19.9, 61.5, 96.4, 119.2, 134.0, 166.0, 125.6, 138.5, 206.4, 184.1, 85.6, 44.4],
-      });
-
       const rects = chart.$.chart.querySelectorAll('.highcharts-legend-item > rect');
-      expect(rects).to.have.lengthOf(2);
+      expect(rects).to.have.lengthOf(1);
       expect(getComputedStyle(rects[0]).fill).to.equal('rgb(0, 255, 0)');
-      expect(getComputedStyle(rects[1]).fill).to.equal('rgb(22, 118, 243)');
     });
   });
 });

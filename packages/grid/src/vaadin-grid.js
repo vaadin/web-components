@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { gridStyles } from './styles/vaadin-grid-core-styles.js';
+import { gridStyles } from './styles/vaadin-grid-base-styles.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
 
 /**
@@ -94,6 +94,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * `expanded` | Boolean | True if the item's tree sublevel is expanded.
  * `selected` | Boolean | True if the item is selected.
  * `detailsOpened` | Boolean | True if the item's row details are open.
+ * `hasChildren` | Boolean | True if the item has children
  *
  * The following helper elements can be used for further customization:
  * - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)
@@ -256,13 +257,14 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
+ * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  *
  * @customElement
  * @extends HTMLElement
  * @mixes GridMixin
  * @mixes ThemableMixin
  */
-class Grid extends GridMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-grid';
   }

@@ -6,6 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
+import { setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 /**
  * @polymerMixin
@@ -91,6 +92,7 @@ export const OverlayMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          observer: '_withBackdropChanged',
           sync: true,
         },
       };
@@ -98,6 +100,15 @@ export const OverlayMixin = (superClass) =>
 
     static get observers() {
       return ['_rendererOrDataChanged(renderer, owner, model, opened)'];
+    }
+
+    /**
+     * Override to specify another element used as a renderer root,
+     * e.g. slotted into the overlay, rather than overlay itself.
+     * @protected
+     */
+    get _rendererRoot() {
+      return this;
     }
 
     constructor() {
@@ -115,15 +126,20 @@ export const OverlayMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    firstUpdated() {
+      super.firstUpdated();
+
+      // Set popover in firstUpdated before opened observers are called
+      this.popover = 'manual';
 
       // Need to add dummy click listeners to this and the backdrop or else
       // the document click event listener (_outsideClickListener) may never
       // get invoked on iOS Safari (reproducible in <vaadin-dialog>
       // and <vaadin-context-menu>).
       this.addEventListener('click', () => {});
-      this.$.backdrop.addEventListener('click', () => {});
+      if (this.$.backdrop) {
+        this.$.backdrop.addEventListener('click', () => {});
+      }
 
       this.addEventListener('mouseup', () => {
         // In Chrome, focus moves to body on overlay content mousedown
@@ -149,6 +165,11 @@ export const OverlayMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
+      if (this.__scheduledOpen) {
+        cancelAnimationFrame(this.__scheduledOpen);
+        this.__scheduledOpen = null;
+      }
+
       /* c8 ignore next 3 */
       if (this._boundIosResizeListener) {
         window.removeEventListener('resize', this._boundIosResizeListener);
@@ -163,7 +184,7 @@ export const OverlayMixin = (superClass) =>
      */
     requestContentUpdate() {
       if (this.renderer) {
-        this.renderer.call(this.owner, this, this.owner, this.model);
+        this.renderer.call(this.owner, this._rendererRoot, this.owner, this.model);
       }
     }
 
@@ -171,13 +192,17 @@ export const OverlayMixin = (superClass) =>
      * @param {Event=} sourceEvent
      */
     close(sourceEvent) {
-      const evt = new CustomEvent('vaadin-overlay-close', {
+      // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots could have
+      // side effects when nesting overlays
+      const event = new CustomEvent('vaadin-overlay-close', {
         bubbles: true,
         cancelable: true,
-        detail: { sourceEvent },
+        detail: { overlay: this, sourceEvent },
       });
-      this.dispatchEvent(evt);
-      if (!evt.defaultPrevented) {
+      this.dispatchEvent(event);
+      // To allow listening for the event globally, also dispatch it on the document body
+      document.body.dispatchEvent(event);
+      if (!event.defaultPrevented) {
         this.opened = false;
       }
     }
@@ -226,8 +251,25 @@ export const OverlayMixin = (superClass) =>
       }
     }
 
+    /**
+     * Whether to add global listeners for closing on outside click.
+     * By default, listeners are not added for a modeless overlay.
+     *
+     * @return {boolean}
+     * @protected
+     */
+    _shouldAddGlobalListeners() {
+      return !this.modeless;
+    }
+
     /** @private */
     _addGlobalListeners() {
+      if (this.__hasGlobalListeners) {
+        return;
+      }
+
+      this.__hasGlobalListeners = true;
+
       document.addEventListener('mousedown', this._boundMouseDownListener);
       document.addEventListener('mouseup', this._boundMouseUpListener);
       // Firefox leaks click to document on contextmenu even if prevented
@@ -237,6 +279,12 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _removeGlobalListeners() {
+      if (!this.__hasGlobalListeners) {
+        return;
+      }
+
+      this.__hasGlobalListeners = false;
+
       document.removeEventListener('mousedown', this._boundMouseDownListener);
       document.removeEventListener('mouseup', this._boundMouseUpListener);
       document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
@@ -256,11 +304,11 @@ export const OverlayMixin = (superClass) =>
       this._oldOpened = opened;
 
       if (rendererChanged && hasOldRenderer) {
-        this.innerHTML = '';
+        this._rendererRoot.innerHTML = '';
         // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
         // When clearing the rendered content, this part needs to be manually disposed of.
         // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-        delete this._$litPart$;
+        delete this._rendererRoot._$litPart$;
       }
 
       if (opened && renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
@@ -270,20 +318,39 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _modelessChanged(modeless) {
+      if (this.opened) {
+        // Add / remove listeners if modeless is changed while opened
+        if (this._shouldAddGlobalListeners()) {
+          this._addGlobalListeners();
+        } else {
+          this._removeGlobalListeners();
+        }
+      }
+
       if (!modeless) {
         if (this.opened) {
-          this._addGlobalListeners();
           this._enterModalState();
         }
       } else {
-        this._removeGlobalListeners();
         this._exitModalState();
       }
+      setOverlayStateAttribute(this, 'modeless', modeless);
+    }
+
+    /** @private */
+    _withBackdropChanged(withBackdrop) {
+      setOverlayStateAttribute(this, 'with-backdrop', withBackdrop);
     }
 
     /** @private */
     _openedChanged(opened, wasOpened) {
       if (opened) {
+        // Prevent possible errors on setting `opened` to `true` while disconnected
+        if (!this.isConnected) {
+          this.opened = false;
+          return;
+        }
+
         this._saveFocus();
 
         this._animatedOpening();
@@ -292,13 +359,18 @@ export const OverlayMixin = (superClass) =>
           setTimeout(() => {
             this._trapFocus();
 
-            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true }));
+            // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots
+            // could have side effects when nesting overlays
+            const event = new CustomEvent('vaadin-overlay-open', { detail: { overlay: this }, bubbles: true });
+            this.dispatchEvent(event);
+            // To allow listening for the event globally, also dispatch it on the document body
+            document.body.dispatchEvent(event);
           });
         });
 
         document.addEventListener('keydown', this._boundKeydownListener);
 
-        if (!this.modeless) {
+        if (this._shouldAddGlobalListeners()) {
           this._addGlobalListeners();
         }
       } else if (wasOpened) {
@@ -313,7 +385,7 @@ export const OverlayMixin = (superClass) =>
 
         document.removeEventListener('keydown', this._boundKeydownListener);
 
-        if (!this.modeless) {
+        if (this._shouldAddGlobalListeners()) {
           this._removeGlobalListeners();
         }
       }
@@ -369,14 +441,16 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _animatedOpening() {
-      if (this.parentNode === document.body && this.hasAttribute('closing')) {
+      if (this._isAttached && this.hasAttribute('closing')) {
         this._flushAnimation('closing');
       }
       this._attachOverlay();
+      this._appendAttachedInstance();
+      this.bringToFront();
       if (!this.modeless) {
         this._enterModalState();
       }
-      this.setAttribute('opening', '');
+      setOverlayStateAttribute(this, 'opening', true);
 
       if (this._shouldAnimate()) {
         this._enqueueAnimation('opening', () => {
@@ -389,22 +463,20 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _attachOverlay() {
-      this._placeholder = document.createComment('vaadin-overlay-placeholder');
-      this.parentNode.insertBefore(this._placeholder, this);
-      document.body.appendChild(this);
-      this.bringToFront();
+      this.showPopover();
     }
 
     /** @private */
     _finishOpening() {
-      this.removeAttribute('opening');
+      setOverlayStateAttribute(this, 'opening', false);
     }
 
     /** @private */
     _finishClosing() {
       this._detachOverlay();
+      this._removeAttachedInstance();
       this.$.overlay.style.removeProperty('pointer-events');
-      this.removeAttribute('closing');
+      setOverlayStateAttribute(this, 'closing', false);
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
     }
 
@@ -413,9 +485,9 @@ export const OverlayMixin = (superClass) =>
       if (this.hasAttribute('opening')) {
         this._flushAnimation('opening');
       }
-      if (this._placeholder) {
+      if (this._isAttached) {
         this._exitModalState();
-        this.setAttribute('closing', '');
+        setOverlayStateAttribute(this, 'closing', true);
         this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
         if (this._shouldAnimate()) {
@@ -430,8 +502,7 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _detachOverlay() {
-      this._placeholder.parentNode.insertBefore(this, this._placeholder);
-      this._placeholder.parentNode.removeChild(this._placeholder);
+      this.hidePopover();
     }
 
     /** @private */
@@ -475,7 +546,6 @@ export const OverlayMixin = (superClass) =>
       }
 
       const evt = new CustomEvent('vaadin-overlay-outside-click', {
-        bubbles: true,
         cancelable: true,
         detail: { sourceEvent: event },
       });
@@ -491,18 +561,17 @@ export const OverlayMixin = (superClass) =>
      * @private
      */
     _keydownListener(event) {
-      if (!this._last) {
+      if (!this._last || event.defaultPrevented) {
         return;
       }
 
       // Only close modeless overlay on Esc press when it contains focus
-      if (this.modeless && !event.composedPath().includes(this.$.overlay)) {
+      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusTrapRoot)) {
         return;
       }
 
       if (event.key === 'Escape') {
         const evt = new CustomEvent('vaadin-overlay-escape-press', {
-          bubbles: true,
           cancelable: true,
           detail: { sourceEvent: event },
         });

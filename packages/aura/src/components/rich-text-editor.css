@@ -1,0 +1,73 @@
+:where(:root),
+:where(:host) {
+  --vaadin-rich-text-editor-toolbar-background: transparent;
+  --vaadin-rich-text-editor-toolbar-padding: var(--vaadin-padding-xs);
+  --vaadin-rich-text-editor-toolbar-gap: var(--vaadin-gap-xs) var(--vaadin-gap-m);
+  --vaadin-rich-text-editor-toolbar-button-background: transparent;
+  --vaadin-rich-text-editor-toolbar-button-border-radius: calc(var(--vaadin-radius-m) - 2px);
+  --vaadin-rich-text-editor-toolbar-button-padding: var(--vaadin-padding-xs);
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color-secondary);
+}
+
+vaadin-rich-text-editor {
+  --vaadin-icon-visual-size: 90%;
+  --vaadin-rich-text-editor-background: var(--aura-surface) padding-box;
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.7 !important;
+  box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.04);
+
+  &:not(:focus-within) {
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color-disabled);
+  }
+}
+
+vaadin-rich-text-editor::part(toolbar) {
+  contain: paint;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
+}
+
+vaadin-rich-text-editor::part(toolbar-group) {
+  gap: 1px;
+  align-items: center;
+}
+
+vaadin-rich-text-editor::part(toolbar-group)::before {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 1lh;
+  background: var(--vaadin-border-color-secondary);
+  translate: calc(var(--vaadin-gap-m) / -2);
+}
+
+vaadin-rich-text-editor::part(toolbar-button) {
+  transition:
+    color 80ms,
+    background-color 80ms,
+    scale 180ms;
+  outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  border: 1px solid transparent;
+  position: relative;
+}
+
+vaadin-rich-text-editor::part(toolbar-button-pressed) {
+  --vaadin-rich-text-editor-toolbar-button-background: transparent;
+}
+
+vaadin-rich-text-editor:focus-within::part(toolbar-button-pressed) {
+  --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container-strong) padding-box;
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
+  border-color: var(--vaadin-text-color-disabled);
+}
+
+vaadin-rich-text-editor::part(toolbar-button):active {
+  scale: 0.95;
+  transition-duration: 80ms, 80ms, 50ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-rich-text-editor::part(toolbar-button):hover {
+    --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container);
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
+  }
+}

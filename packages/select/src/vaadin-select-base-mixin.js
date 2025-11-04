@@ -8,7 +8,6 @@ import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.j
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -21,12 +20,9 @@ import { ButtonController } from './button-controller.js';
  * @mixes DelegateStateMixin
  * @mixes FieldMixin
  * @mixes KeyboardMixin
- * @mixes OverlayClassMixin
  */
 export const SelectBaseMixin = (superClass) =>
-  class SelectBaseMixin extends OverlayClassMixin(
-    DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(superClass)))),
-  ) {
+  class SelectBaseMixin extends DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(superClass)))) {
     static get properties() {
       return {
         /**
@@ -72,8 +68,7 @@ export const SelectBaseMixin = (superClass) =>
          * Custom function for rendering the content of the `<vaadin-select>`.
          * Receives two arguments:
          *
-         * - `root` The `<vaadin-select-overlay>` internal container
-         *   DOM element. Append your content to it.
+         * - `root` The internal container DOM element. Append your content to it.
          * - `select` The reference to the `<vaadin-select>` element.
          * @type {!SelectRenderer | undefined}
          */
@@ -204,6 +199,15 @@ export const SelectBaseMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('_phone')) {
+        this.toggleAttribute('phone', this._phone);
+      }
+    }
+
     /**
      * Requests an update for the content of the select.
      * While performing the update, it invokes the renderer passed in the `renderer` property.
@@ -216,10 +220,6 @@ export const SelectBaseMixin = (superClass) =>
       }
 
       this._overlayElement.requestContentUpdate();
-
-      if (this._menuElement && this._menuElement.items) {
-        this._updateSelectedItem(this.value, this._menuElement.items);
-      }
     }
 
     /**
@@ -279,6 +279,12 @@ export const SelectBaseMixin = (superClass) =>
 
         // Store the menu element reference
         this.__lastMenuElement = menuElement;
+      }
+
+      // When the renderer was re-assigned so that menu element is preserved
+      // but its items have changed, make sure selected property is updated.
+      if (this._menuElement && this._menuElement.items) {
+        this._updateSelectedItem(this.value, this._menuElement.items);
       }
     }
 
@@ -361,8 +367,16 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      */
     _onKeyDownInside(e) {
-      if (/^(Tab)$/u.test(e.key)) {
+      if (e.key === 'Tab') {
+        // Temporarily set tabindex to prevent moving focus
+        // to the value button element on item Shift + Tab
+        this.focusElement.setAttribute('tabindex', '-1');
+        this._overlayElement.restoreFocusOnClose = false;
         this.opened = false;
+        setTimeout(() => {
+          this.focusElement.setAttribute('tabindex', '0');
+          this._overlayElement.restoreFocusOnClose = true;
+        });
       }
     }
 
@@ -585,8 +599,8 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      * @override
      */
-    _shouldRemoveFocus() {
-      return !this.opened;
+    _shouldRemoveFocus(event) {
+      return !this.contains(event.relatedTarget);
     }
 
     /**

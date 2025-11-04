@@ -23,14 +23,15 @@
 @import '../src/components/multi-select-combo-box-overlay.css';
 @import '../src/components/multi-select-combo-box.css';
 
-:is(:root, :host)::before {
-  --vaadin-multi-select-combo-box-container-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-container-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-multi-select-combo-box-container-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-container-inject-modules:
     lumo_components_input-container,
     lumo_components_multi-select-combo-box-container;
 
-  --vaadin-multi-select-combo-box-overlay-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-overlay-lumo-inject-modules:
+  --_lumo-vaadin-multi-select-combo-box-overlay-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-overlay-inject-modules:
     lumo_mixins_loader,
     lumo_mixins_combo-box-loader,
     lumo_mixins_overlay,
@@ -38,19 +39,19 @@
     lumo_mixins_combo-box-overlay,
     lumo_components_multi-select-combo-box-overlay;
 
-  --vaadin-multi-select-combo-box-chip-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-chip-lumo-inject-modules:
+  --_lumo-vaadin-multi-select-combo-box-chip-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-chip-inject-modules:
     lumo_mixins_field-button,
     lumo_components_multi-select-combo-box-chip;
 
-  --vaadin-multi-select-combo-box-item-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-item-lumo-inject-modules:
+  --_lumo-vaadin-multi-select-combo-box-item-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-item-inject-modules:
     lumo_components_item,
     lumo_components_combo-box-item,
     lumo_components_multi-select-combo-box-item;
 
-  --vaadin-multi-select-combo-box-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-lumo-inject-modules:
+  --_lumo-vaadin-multi-select-combo-box-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

@@ -95,7 +95,8 @@ export const DialogDraggableMixin = (superClass) =>
           window.addEventListener('touchmove', this._drag);
           if (this.$.overlay.$.overlay.style.position !== 'absolute') {
             const { top, left } = this._originalBounds;
-            this.$.overlay.setBounds({ top, left });
+            this.top = top;
+            this.left = left;
           }
         }
       }

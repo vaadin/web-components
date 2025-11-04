@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { mapStyles } from './styles/vaadin-map-core-styles.js';
+import { mapStyles } from './styles/vaadin-map-base-styles.js';
 import { MapMixin } from './vaadin-map-mixin.js';
 
 /**
@@ -57,7 +57,7 @@ import { MapMixin } from './vaadin-map-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Map extends MapMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-map';
   }
@@ -71,9 +71,7 @@ class Map extends MapMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(Polylit
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

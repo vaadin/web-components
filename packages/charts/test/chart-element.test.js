@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './chart-not-animated-styles.js';
 import '../src/vaadin-chart.js';
 
 describe('vaadin-chart', () => {
@@ -76,6 +77,60 @@ describe('vaadin-chart', () => {
 
     it('should create gantt chart with gantt type', () => {
       expect(chart.configuration.options.isGantt).to.be.ok;
+    });
+  });
+
+  describe('organization', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
+      chart.updateConfiguration(
+        {
+          chart: {
+            styledMode: true,
+            inverted: true,
+            type: 'organization',
+          },
+          title: {
+            text: 'Acme organization chart',
+          },
+          series: [
+            {
+              keys: ['from', 'to'],
+              nodes: [
+                {
+                  id: 'Acme',
+                },
+                {
+                  id: 'Head Office',
+                },
+                {
+                  id: 'Labs',
+                },
+              ],
+              name: 'Highsoft',
+              data: [
+                ['Acme', 'Head Office'],
+                ['Acme', 'Labs'],
+              ],
+            },
+          ],
+        },
+        true,
+      );
+      await oneEvent(chart, 'chart-end-resize');
+    });
+
+    it('should have labels aligned with points', () => {
+      const renderElement = chart.$.chart;
+      const point = renderElement.querySelector('path.highcharts-node.highcharts-point.highcharts-color-0');
+      const label = renderElement.querySelector('div.highcharts-data-label.highcharts-data-label-color-0');
+
+      const { left: pointLeft, width: pointWidth } = point.getBoundingClientRect();
+      const { left: labelLeft, width: labelWidth } = label.getBoundingClientRect();
+
+      expect(pointLeft + pointWidth / 2).to.be.equal(labelLeft + labelWidth / 2);
     });
   });
 
@@ -276,18 +331,59 @@ describe('vaadin-chart', () => {
       await oneEvent(chart, 'chart-load');
     });
 
-    it('should propagate height to the chart container', () => {
+    it('should propagate width to the chart container', () => {
       const rect = chart.$.chart.getBoundingClientRect();
       expect(rect.width).to.be.equal(400);
       expect(chart.configuration.chartWidth).to.be.equal(400);
     });
 
-    it('should update container height on chart resize', async () => {
+    it('should update container width on chart resize', async () => {
       chart.style.width = '300px';
-      await oneEvent(chart, 'chart-redraw');
+      await oneEvent(chart, 'chart-end-resize');
       const rect = chart.$.chart.getBoundingClientRect();
       expect(rect.width).to.be.equal(300);
       expect(chart.configuration.chartWidth).to.be.equal(300);
+    });
+
+    it('should use intrinsic width when container provides no width', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.greaterThan(0);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should resize from intrinsic width to explicit width', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      chart.style.width = '100px';
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.equal(100);
+      expect(chart.configuration.chartWidth).to.be.equal(chart.offsetWidth);
+    });
+
+    it('should collapse to zero width when container width is zero', async () => {
+      chart = fixtureSync(`
+        <div style="display: inline-flex; height: 300px; width: 0px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(300);
+      expect(chart.offsetWidth).to.be.equal(0);
     });
   });
 
@@ -307,10 +403,70 @@ describe('vaadin-chart', () => {
 
     it('should update container height on chart resize', async () => {
       chart.style.height = '300px';
-      await oneEvent(chart, 'chart-redraw');
+      await oneEvent(chart, 'chart-end-resize');
       const rect = chart.$.chart.getBoundingClientRect();
       expect(rect.height).to.be.equal(300);
       expect(chart.configuration.chartHeight).to.be.equal(300);
+    });
+
+    it('should not cause container height expansion in flex layout', async () => {
+      const chartMinHeight = 300;
+      const siblingHeight = 5;
+
+      // See https://github.com/vaadin/web-components/issues/10316
+      chart = fixtureSync(`
+        <div style="display: flex">
+          <div>
+              <vaadin-chart style="height: 100%; min-height: ${chartMinHeight}px;"></vaadin-chart>
+              <div style="height: ${siblingHeight}px"></div>
+          </div>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetHeight).to.be.equal(chartMinHeight + siblingHeight);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should use intrinsic height when container provides no height', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.greaterThan(0);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should resize from intrinsic height to explicit height', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      chart.style.height = '100px';
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.equal(100);
+      expect(chart.configuration.chartHeight).to.be.equal(chart.offsetHeight);
+    });
+
+    it('should collapse to zero height when container height is zero', async () => {
+      chart = fixtureSync(`
+        <div style="display: flex; width: 300px; height: 0px">
+          <vaadin-chart></vaadin-chart>
+        </div>`).querySelector('vaadin-chart');
+
+      await nextResize(chart);
+
+      expect(chart.offsetWidth).to.be.equal(300);
+      expect(chart.offsetHeight).to.be.equal(0);
     });
   });
 
@@ -338,7 +494,8 @@ describe('vaadin-chart', () => {
       expect(charts[1].configuration.chartWidth).to.be.equal(500);
 
       layout.style.width = '500px';
-      await nextResize(charts[0]);
+      await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(100);
 
       expect(layout.getBoundingClientRect().width).to.be.equal(500);
       expect(charts[0].configuration.chartWidth).to.be.equal(250);
@@ -351,7 +508,8 @@ describe('vaadin-chart', () => {
       expect(charts[1].configuration.chartHeight).to.be.equal(300);
 
       layout.style.height = '200px';
-      await nextResize(charts[0]);
+      await oneEvent(charts[0], 'chart-end-resize');
+      await aTimeout(200);
 
       expect(layout.getBoundingClientRect().height).to.be.equal(200);
       expect(charts[0].configuration.chartHeight).to.be.equal(200);

@@ -28,13 +28,13 @@ describe('vaadin-tooltip', () => {
     Tooltip.setDefaultHideDelay(0);
   });
 
-  let tooltip, overlay, srLabel;
+  let tooltip, overlay, contentNode;
 
   beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
     await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
-    srLabel = tooltip.querySelector('[slot="sr-label"]');
+    contentNode = tooltip.querySelector('[slot="overlay"]');
   });
 
   describe('custom element definition', () => {
@@ -58,6 +58,15 @@ describe('vaadin-tooltip', () => {
       expect(overlay.owner).to.be.equal(tooltip);
     });
 
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+
     it('should not have tabindex on the overlay part', () => {
       expect(overlay.$.overlay.hasAttribute('tabindex')).to.be.false;
     });
@@ -70,25 +79,19 @@ describe('vaadin-tooltip', () => {
   });
 
   describe('text', () => {
-    it('should use text property as overlay text content', async () => {
+    it('should use text property as content node text content', async () => {
       tooltip.text = 'Foo';
       await nextUpdate(tooltip);
-      expect(overlay.textContent.trim()).to.equal('Foo');
+      expect(contentNode.textContent.trim()).to.equal('Foo');
     });
 
-    it('should use text property as screen reader label content', async () => {
-      tooltip.text = 'Foo';
-      await nextUpdate(tooltip);
-      expect(srLabel.textContent.trim()).to.equal('Foo');
-    });
-
-    it('should clear overlay content when text is set to null', async () => {
+    it('should clear content node text content when text is set to null', async () => {
       tooltip.text = 'Foo';
       await nextUpdate(tooltip);
 
       tooltip.text = null;
       await nextUpdate(tooltip);
-      expect(overlay.textContent.trim()).to.equal('');
+      expect(contentNode.textContent.trim()).to.equal('');
     });
 
     it('should set hidden on the overlay when text is cleared', async () => {
@@ -100,19 +103,30 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
     });
+
+    it('should fire content-changed event when text changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '' });
+    });
   });
 
   describe('generator', () => {
-    it('should use generator property to generate text content', async () => {
+    it('should use generator property to generate content node text content', async () => {
       tooltip.generator = () => 'Foo';
       await nextUpdate(tooltip);
-      expect(overlay.textContent.trim()).to.equal('Foo');
-    });
-
-    it('should set screen reader label content using generator', async () => {
-      tooltip.generator = () => 'Foo';
-      await nextUpdate(tooltip);
-      expect(srLabel.textContent.trim()).to.equal('Foo');
+      expect(contentNode.textContent.trim()).to.equal('Foo');
     });
 
     it('should override text property when generator is set', async () => {
@@ -121,14 +135,14 @@ describe('vaadin-tooltip', () => {
 
       tooltip.generator = () => 'Bar';
       await nextUpdate(tooltip);
-      expect(overlay.textContent.trim()).to.equal('Bar');
+      expect(contentNode.textContent.trim()).to.equal('Bar');
     });
 
     it('should use context property in generator when provided', async () => {
       tooltip.context = { text: 'Foo' };
       tooltip.generator = (context) => context.text;
       await nextUpdate(tooltip);
-      expect(overlay.textContent.trim()).to.equal('Foo');
+      expect(contentNode.textContent.trim()).to.equal('Foo');
     });
 
     it('should update text content when context property changes', async () => {
@@ -138,7 +152,7 @@ describe('vaadin-tooltip', () => {
 
       tooltip.context = { text: 'Bar' };
       await nextUpdate(tooltip);
-      expect(overlay.textContent.trim()).to.equal('Bar');
+      expect(contentNode.textContent.trim()).to.equal('Bar');
     });
 
     it('should set hidden on the overlay when generator clears text', async () => {
@@ -149,6 +163,41 @@ describe('vaadin-tooltip', () => {
       tooltip.generator = () => '';
       await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should fire content-changed event when generator changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.generator = () => 'Foo';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.generator = () => '';
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: '' });
+    });
+
+    it('should fire content-changed event when context changes', async () => {
+      const spy = sinon.spy();
+      tooltip.addEventListener('content-changed', spy);
+
+      tooltip.context = { text: 'Foo' };
+      tooltip.generator = (context) => context.text;
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Foo' });
+
+      spy.resetHistory();
+
+      tooltip.context = { text: 'Bar' };
+      await nextUpdate(tooltip);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.deep.equal({ content: 'Bar' });
     });
   });
 
@@ -174,7 +223,7 @@ describe('vaadin-tooltip', () => {
     it('should set aria-describedby on the target element', async () => {
       tooltip.target = target;
       await nextUpdate(tooltip);
-      expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
 
     it('should retain existing aria-describedby attribute', async () => {
@@ -183,7 +232,7 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
 
       expect(target.getAttribute('aria-describedby')).to.contain('foo');
-      expect(target.getAttribute('aria-describedby')).to.contain(srLabel.id);
+      expect(target.getAttribute('aria-describedby')).to.contain(contentNode.id);
     });
 
     it('should restore aria-describedby when clearing target', async () => {
@@ -218,10 +267,22 @@ describe('vaadin-tooltip', () => {
       tooltip.ariaTarget = ariaTarget;
       await nextUpdate(tooltip);
 
-      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(srLabel.id);
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
 
-    it('should remove aria-describedby when the ariaTarget is cleared', async () => {
+    it('should remove aria-describedby and set it on the target when ariaTarget is set to undefined', async () => {
+      tooltip.target = target;
+      tooltip.ariaTarget = ariaTarget;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaTarget = undefined;
+      await nextUpdate(tooltip);
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+    });
+
+    it('should remove aria-describedby and not set it on the target when ariaTarget is set to null', async () => {
       tooltip.target = target;
       tooltip.ariaTarget = ariaTarget;
       await nextUpdate(tooltip);
@@ -230,7 +291,7 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
-      expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
     });
 
     it('should set aria-describedby when providing multiple elements', async () => {
@@ -241,8 +302,8 @@ describe('vaadin-tooltip', () => {
       tooltip.ariaTarget = [ariaTarget, ariaTarget2];
       await nextUpdate(tooltip);
 
-      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(srLabel.id);
-      expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(srLabel.id);
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(contentNode.id);
+      expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
 
     it('should clear aria-describedby when providing empty array', async () => {
@@ -258,7 +319,7 @@ describe('vaadin-tooltip', () => {
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
       expect(ariaTarget2.hasAttribute('aria-describedby')).to.be.false;
-      expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
   });
 
@@ -285,13 +346,14 @@ describe('vaadin-tooltip', () => {
 
       it('should still target correct element after sorting the items differently', async () => {
         const container = fixtureSync('<div></div>');
+
         function renderTooltips(items) {
           render(
             html`
               ${items.map(
                 (item) => html`
                   <vaadin-tooltip for="${item}"></vaadin-tooltip>
-                  <div id=${item}></div>
+                  <div id="${item}"></div>
                 `,
               )}
             `,
@@ -584,6 +646,18 @@ describe('vaadin-tooltip', () => {
 
       expect(overlay.opened).to.be.false;
     });
+
+    it('should reflect opened attribute', async () => {
+      mouseenter(target);
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.true;
+      expect(overlay.opened).to.be.true;
+
+      mouseleave(target);
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.false;
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('inside a scrollable container', () => {
@@ -867,6 +941,16 @@ describe('vaadin-tooltip', () => {
       await nextRender();
 
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should reflect opened attribute', async () => {
+      tooltip.opened = true;
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.true;
+
+      tooltip.opened = false;
+      await nextUpdate(tooltip);
+      expect(tooltip.hasAttribute('opened')).to.be.false;
     });
   });
 

@@ -92,7 +92,7 @@ export const ComboBoxItemMixin = (superClass) =>
 
     /** @protected */
     _getHostDir() {
-      return this._owner && this._owner.getAttribute('dir');
+      return this._owner && this._owner.$.overlay.getAttribute('dir');
     }
 
     /**

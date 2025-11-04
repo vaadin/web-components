@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, mousedown, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { Overlay } from '../src/vaadin-overlay.js';
 
 customElements.define(
   'overlay-field-wrapper',
@@ -143,7 +143,7 @@ describe('restore focus', () => {
           mousedown(document.body);
           overlay.opened = false;
           expect(spy).to.be.calledOnce;
-          expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+          expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: true });
         });
 
         it('should not prevent scroll when restoring focus on close after keydown', async () => {
@@ -154,9 +154,110 @@ describe('restore focus', () => {
           escKeyDown(document.body);
           overlay.opened = false;
           expect(spy).to.be.calledOnce;
-          expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
+          expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: false });
+        });
+      });
+
+      describe('focusVisible', () => {
+        it('should set focusVisible: false when restoring focus on close after mousedown', async () => {
+          focusable.focus();
+          overlay.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+          const spy = sinon.spy(focusable, 'focus');
+          mousedown(document.body);
+          overlay.opened = false;
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: false });
+        });
+
+        it('should set focusVisible: true when restoring focus on close after keydown', async () => {
+          focusable.focus();
+          overlay.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+          const spy = sinon.spy(focusable, 'focus');
+          escKeyDown(document.body);
+          overlay.opened = false;
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: true });
         });
       });
     });
+  });
+});
+
+// Emulate dialog DOM structure, where the content root is slotted into the overlay
+describe('custom content root', () => {
+  customElements.define(
+    'custom-overlay',
+    class extends Overlay {
+      get _contentRoot() {
+        return this.owner;
+      }
+
+      get _rendererRoot() {
+        return this.owner;
+      }
+    },
+  );
+
+  customElements.define(
+    'custom-overlay-wrapper',
+    class extends HTMLElement {
+      constructor() {
+        super();
+
+        this.attachShadow({ mode: 'open' });
+
+        const overlay = document.createElement('custom-overlay');
+
+        const owner = document.createElement('div');
+        overlay.owner = owner;
+
+        // Forward the slotted content from wrapper to overlay
+        const slot = document.createElement('slot');
+        overlay.appendChild(slot);
+
+        overlay.focusTrap = true;
+        overlay.renderer = (root) => {
+          if (!root.firstChild) {
+            root.appendChild(document.createElement('input'));
+          }
+        };
+
+        this.shadowRoot.append(overlay);
+        this.append(owner);
+      }
+    },
+  );
+
+  let wrapper, overlay, contentRoot, focusInput;
+
+  beforeEach(async () => {
+    focusInput = document.createElement('input');
+    document.body.appendChild(focusInput);
+
+    wrapper = fixtureSync('<custom-overlay-wrapper></custom-overlay-wrapper>');
+    await nextRender();
+    overlay = wrapper.shadowRoot.querySelector('custom-overlay');
+    contentRoot = wrapper.querySelector('div');
+
+    overlay.restoreFocusOnClose = true;
+  });
+
+  afterEach(() => {
+    document.body.removeChild(focusInput);
+  });
+
+  it('should restore focus from the element in content root on close', async () => {
+    focusInput.focus();
+
+    overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    const input = contentRoot.querySelector('input');
+    input.focus();
+
+    overlay.opened = false;
+    expect(getDeepActiveElement()).to.equal(focusInput);
   });
 });

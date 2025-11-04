@@ -115,7 +115,7 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
   targets.forEach(keep);
 
   /**
-   * @param {?Node} el
+   * @param {?Node} parent
    */
   const deep = (parent) => {
     if (!parent || elementsToStop.has(parent)) {

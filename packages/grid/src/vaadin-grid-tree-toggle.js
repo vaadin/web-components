@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { gridTreeToggleStyles } from './styles/vaadin-grid-tree-toggle-core-styles.js';
+import { gridTreeToggleStyles } from './styles/vaadin-grid-tree-toggle-base-styles.js';
 import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 
 /**
@@ -46,10 +46,10 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * ---|---|---
- * `expanded` | When present, the toggle is expanded | :host
- * `leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
+ * Attribute  | Description
+ * -----------|-------------------------------------
+ * `expanded` | When present, the toggle is expanded
+ * `leaf`     | When present, the toggle is not expandable, i. e., the current item is a leaf
  *
  * The following custom CSS properties are available on
  * the `<vaadin-grid-tree-toggle>` element:
@@ -67,7 +67,7 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
  * @mixes GridTreeToggleMixin
  */
 class GridTreeToggle extends GridTreeToggleMixin(
-  ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-grid-tree-toggle';

@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './overlay-position-styles.js';
 import '../src/vaadin-combo-box.js';
 import { makeItems, setInputValue } from './helpers.js';
 

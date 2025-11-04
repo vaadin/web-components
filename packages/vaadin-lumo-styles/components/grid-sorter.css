@@ -13,7 +13,8 @@
   font-style: normal;
 }
 
-:is(:root, :host)::before {
-  --vaadin-grid-sorter-lumo-inject: 1;
-  --vaadin-grid-sorter-lumo-inject-modules: lumo_components_grid-sorter;
+:root::before,
+:host::before {
+  --_lumo-vaadin-grid-sorter-inject: 1;
+  --_lumo-vaadin-grid-sorter-inject-modules: lumo_components_grid-sorter;
 }

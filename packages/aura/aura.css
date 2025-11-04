@@ -1,0 +1,43 @@
+@import './src/color.css';
+@import './src/color-scheme.css';
+@import './src/palette.css';
+@import './src/shadow.css';
+@import './src/size.css';
+@import './src/surface.css';
+@import './src/typography.css';
+
+@import './src/components/accordion-details.css';
+@import './src/components/app-layout.css';
+@import './src/components/avatar.css';
+@import './src/components/button.css';
+@import './src/components/card.css';
+@import './src/components/checkbox-radio.css';
+@import './src/components/confirm-dialog.css';
+@import './src/components/crud.css';
+@import './src/components/date-picker.css';
+@import './src/components/dashboard.css';
+@import './src/components/dialog.css';
+@import './src/components/grid.css';
+@import './src/components/input-container.css';
+@import './src/components/item-overlay.css';
+@import './src/components/login.css';
+@import './src/components/master-detail-layout.css';
+@import './src/components/menu-bar.css';
+@import './src/components/message-input.css';
+@import './src/components/multi-select-combo-box.css';
+@import './src/components/notification.css';
+@import './src/components/overlay.css';
+@import './src/components/progress-bar.css';
+@import './src/components/rich-text-editor.css';
+@import './src/components/select.css';
+@import './src/components/side-nav.css';
+@import './src/components/tabs.css';
+@import './src/components/upload.css';
+
+:where(:root),
+:where(:host) {
+  cursor: default;
+  /* TODO: slightly smaller chevron than the one in base styles - consider if we should do this in base styles */
+  --_vaadin-icon-chevron-down: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  --vaadin-aura-theme: 1;
+}

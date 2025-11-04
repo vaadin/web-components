@@ -7,11 +7,11 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { comboBoxOverlayStyles } from './styles/vaadin-combo-box-overlay-core-styles.js';
+import { comboBoxOverlayStyles } from './styles/vaadin-combo-box-overlay-base-styles.js';
 import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
 
 /**
@@ -26,7 +26,7 @@ import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
  * @private
  */
 export class ComboBoxOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-combo-box-overlay';
@@ -39,7 +39,6 @@ export class ComboBoxOverlay extends ComboBoxOverlayMixin(
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
         <div part="loader"></div>
         <div part="content" id="content"><slot></slot></div>

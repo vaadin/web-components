@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { PopoverPositionMixinClass } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import type { PopoverTargetMixinClass } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
 
@@ -15,11 +14,7 @@ export type { PopoverPosition as TooltipPosition } from '@vaadin/popover/src/vaa
  */
 export declare function TooltipMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<OverlayClassMixinClass> &
-  Constructor<PopoverPositionMixinClass> &
-  Constructor<PopoverTargetMixinClass> &
-  Constructor<TooltipMixinClass> &
-  T;
+): Constructor<PopoverPositionMixinClass> & Constructor<PopoverTargetMixinClass> & Constructor<TooltipMixinClass> & T;
 
 export declare class TooltipMixinClass {
   /**
@@ -27,7 +22,7 @@ export declare class TooltipMixinClass {
    * attribute. Supports array of multiple elements.
    * When not set, defaults to `target`.
    */
-  ariaTarget: HTMLElement | HTMLElement[] | undefined;
+  ariaTarget: HTMLElement | HTMLElement[] | null | undefined;
 
   /**
    * Object with properties passed to `generator` and
@@ -73,8 +68,9 @@ export declare class TooltipMixinClass {
   manual: boolean;
 
   /**
-   * When true, the tooltip is opened programmatically.
-   * Only works if `manual` is set to `true`.
+   * When true, the tooltip is opened.
+   * In manual mode, this can be set programmatically.
+   * In automatic mode, this is set automatically by internal logic.
    */
   opened: boolean;
 
@@ -91,4 +87,13 @@ export declare class TooltipMixinClass {
    * String used as a tooltip content.
    */
   text: string | null | undefined;
+
+  /**
+   * When enabled, the tooltip text is rendered as Markdown.
+   *
+   * **Note:** Using Markdown is discouraged if accessibility of the tooltip
+   * content is essential, as semantics of the rendered HTML content
+   * (headers, lists, ...) will not be conveyed to assistive technologies.
+   */
+  markdown: boolean;
 }

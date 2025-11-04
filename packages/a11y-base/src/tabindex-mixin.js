@@ -95,12 +95,13 @@ export const TabindexMixin = (superclass) =>
      * `tabindex` to -1 does not prevent the element from being
      * programmatically focusable.
      *
+     * @param {FocusOptions=} options
      * @protected
      * @override
      */
-    focus() {
+    focus(options) {
       if (!this.disabled || this.__shouldAllowFocusWhenDisabled()) {
-        super.focus();
+        super.focus(options);
       }
     }
 

@@ -7,10 +7,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { datePickerOverlayStyles } from './styles/vaadin-date-picker-overlay-core-styles.js';
+import { datePickerOverlayStyles } from './styles/vaadin-date-picker-overlay-base-styles.js';
 import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
 
 /**
@@ -24,7 +24,7 @@ import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
  * @private
  */
 class DatePickerOverlay extends DatePickerOverlayMixin(
-  DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-picker-overlay';
@@ -44,6 +44,17 @@ class DatePickerOverlay extends DatePickerOverlayMixin(
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Override method from `OverlayFocusMixin` to specify content root
+   * used to detect whether focus should be restored on overlay close.
+   *
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner._overlayContent;
   }
 }
 

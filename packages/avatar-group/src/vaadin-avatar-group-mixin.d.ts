@@ -6,7 +6,6 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 export interface AvatarGroupI18n extends AvatarI18n {
@@ -33,7 +32,6 @@ export declare function AvatarGroupMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<AvatarGroupMixinClass> &
   Constructor<I18nMixinClass<AvatarGroupI18n>> &
-  Constructor<OverlayClassMixinClass> &
   Constructor<ResizeMixinClass> &
   T;
 
@@ -79,7 +77,7 @@ export declare class AvatarGroupMixinClass {
    * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
-   * ```
+   * ```js
    * {
    *   // Translation of the anonymous user avatar tooltip.
    *   anonymous: 'anonymous',

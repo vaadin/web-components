@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -248,42 +248,42 @@ describe('basic features', () => {
     return column.renderer.getCalls().filter((call) => call.args[2].index === 0).length;
   }
 
-  it('should have rendered the first cell once', () => {
+  it('should render the first cell once during initialization', () => {
     expect(getFirstCellRenderCount()).to.equal(1);
   });
 
-  it('should re-render the cell when last row enters the viewport on resize', () => {
+  it('should re-render the first cell when last row enters the viewport on resize', () => {
     column.renderer.resetHistory();
     grid.size = 1;
-    expect(getFirstCellRenderCount()).to.equal(1);
+    expect(getFirstCellRenderCount()).to.equal(1); // once on size change
   });
 
-  it('should re-render the cell when last row leaves the viewport on resize', () => {
+  it('should re-render the first cell when last row leaves the viewport on resize', () => {
     grid.size = 1;
     column.renderer.resetHistory();
     grid.size = 1000;
-    expect(getFirstCellRenderCount()).to.equal(1);
+    expect(getFirstCellRenderCount()).to.equal(2); // once on size change and once when data provider responds
   });
 
-  it('should not re-render the cell when last row change happens outside the viewport', () => {
+  it('should not re-render the first cell when last row change happens outside the viewport', () => {
     column.renderer.resetHistory();
     grid.size = 100;
     grid.size = 200;
     expect(getFirstCellRenderCount()).to.equal(0);
   });
 
-  it('should not re-render the cell when last row change happens on other visible rows', () => {
+  it('should re-render the first cell when last row change happens inside the viewport', () => {
     column.renderer.resetHistory();
     grid.size = 2;
     grid.size = 3;
-    expect(getFirstCellRenderCount()).to.equal(0);
+    expect(getFirstCellRenderCount()).to.equal(1); // once when data provider responds
   });
 
-  it('should have rendered the first cell once on resize from 0', () => {
+  it('should re-render the first cell on resize from 0', () => {
     column.renderer.resetHistory();
     grid.size = 0;
     grid.size = 1;
-    expect(getFirstCellRenderCount()).to.equal(1);
+    expect(getFirstCellRenderCount()).to.equal(2); // once on size change and once when data provider responds
   });
 
   it('should render all items with varying row heights when all rows visible', async () => {
@@ -358,14 +358,12 @@ describe('flex child', () => {
     it('should have a visible header after row reorder', async () => {
       column.header = 'header';
       grid.scrollToIndex(300);
-      await aTimeout(0);
+      await oneEvent(grid.$.table, 'scroll');
       flushGrid(grid);
       const { left, top } = grid.getBoundingClientRect();
 
-      oneEvent(grid.$.table, 'scroll');
-      flushGrid(grid);
-
-      const cell = grid._cellFromPoint(left + 1, top + 1);
+      // Use 10px to account for border-radius in Firefox
+      const cell = grid._cellFromPoint(left + 10, top + 10);
       expect(grid.$.header.contains(cell)).to.be.true;
     });
 

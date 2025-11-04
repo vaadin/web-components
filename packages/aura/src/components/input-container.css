@@ -1,0 +1,42 @@
+:where(:root),
+:where(:host),
+:where([theme]) {
+  --vaadin-input-field-background: var(--aura-surface);
+  --vaadin-input-field-error-color: var(--aura-red-text);
+}
+
+::part(input-field),
+vaadin-message-input,
+vaadin-input-container {
+  --vaadin-input-field-background: var(--aura-surface);
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.7;
+  background-clip: padding-box;
+}
+
+:not([readonly], [disabled])::part(input-field),
+vaadin-message-input:not([readonly], [disabled]) {
+  box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.04);
+}
+
+[readonly]::part(input-field) {
+  --aura-surface-opacity: 0;
+}
+
+[disabled]::part(input-field) {
+  --vaadin-input-field-background: var(--vaadin-background-container);
+}
+
+::part(field-button) {
+  transition: color 100ms;
+}
+
+:not([readonly], [disabled])::part(field-button):active {
+  color: var(--vaadin-text-color);
+}
+
+@media (any-hover: hover) {
+  :not([readonly], [disabled])::part(field-button):hover {
+    color: var(--vaadin-text-color);
+  }
+}

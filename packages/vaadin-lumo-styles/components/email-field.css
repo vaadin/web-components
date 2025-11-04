@@ -12,9 +12,10 @@
 @import '../src/components/email-field.css';
 @import './input-container.css';
 
-:is(:root, :host)::before {
-  --vaadin-email-field-lumo-inject: 1;
-  --vaadin-email-field-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-email-field-inject: 1;
+  --_lumo-vaadin-email-field-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

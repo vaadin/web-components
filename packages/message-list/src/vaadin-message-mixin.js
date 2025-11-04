@@ -95,7 +95,6 @@ export const MessageMixin = (superClass) =>
 
       this._avatarController = new SlotController(this, 'avatar', 'vaadin-avatar', {
         initializer: (avatar) => {
-          avatar.setAttribute('tabindex', '-1');
           avatar.setAttribute('aria-hidden', 'true');
           this._avatar = avatar;
         },

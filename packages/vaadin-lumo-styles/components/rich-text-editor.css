@@ -13,14 +13,15 @@
 @import './text-field.css';
 @import './tooltip.css';
 
-:is(:root, :host)::before {
-  --vaadin-rich-text-editor-lumo-inject: 1;
-  --vaadin-rich-text-editor-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-rich-text-editor-inject: 1;
+  --_lumo-vaadin-rich-text-editor-inject-modules:
     lumo_global_typography,
     lumo_components_rich-text-editor;
 
-  --vaadin-rich-text-editor-popup-overlay-lumo-inject: 1;
-  --vaadin-rich-text-editor-popup-overlay-lumo-inject-modules:
+  --_lumo-vaadin-rich-text-editor-popup-overlay-inject: 1;
+  --_lumo-vaadin-rich-text-editor-popup-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_components_rich-text-editor-popup-overlay;
 }

@@ -37,7 +37,7 @@ export const GridTreeColumnMixin = (superClass) =>
      *
      * @private
      */
-    __defaultRenderer(root, _column, { item, expanded, level }) {
+    __defaultRenderer(root, _column, { item, expanded, level, hasChildren }) {
       let toggle = root.firstElementChild;
       if (!toggle) {
         toggle = document.createElement('vaadin-grid-tree-toggle');
@@ -48,8 +48,12 @@ export const GridTreeColumnMixin = (superClass) =>
       toggle.__item = item;
       toggle.__rendererExpanded = expanded;
       toggle.expanded = expanded;
-      toggle.leaf = this.__isLeafItem(item, this._grid.itemHasChildrenPath);
-      toggle.textContent = this.__getToggleContent(this.path, item);
+      toggle.leaf = !hasChildren;
+      const content = this.__getToggleContent(this.path, item);
+      if (toggle.textContent !== content) {
+        // Only update textContent if it has changed to avoid toggle animation issues on Safari
+        toggle.textContent = content;
+      }
       toggle.level = level;
     }
 
@@ -81,11 +85,6 @@ export const GridTreeColumnMixin = (superClass) =>
       } else {
         this._grid.collapseItem(e.target.__item);
       }
-    }
-
-    /** @private */
-    __isLeafItem(item, itemHasChildrenPath) {
-      return !item || !item[itemHasChildrenPath];
     }
 
     /** @private */

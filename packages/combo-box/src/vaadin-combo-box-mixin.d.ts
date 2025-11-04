@@ -7,7 +7,6 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ComboBox } from './vaadin-combo-box.js';
@@ -26,7 +25,6 @@ export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
-  Constructor<OverlayClassMixinClass> &
   Constructor<ValidateMixinClass> &
   T;
 
@@ -43,12 +41,6 @@ export declare class ComboBoxMixinClass<TItem> {
    *   - `model.item` The item.
    */
   renderer: ComboBoxRenderer<TItem> | null | undefined;
-
-  /**
-   * A full set of items to filter the visible options from.
-   * The items can be of either `String` or `Object` type.
-   */
-  items: TItem[] | undefined;
 
   /**
    * A function used to generate CSS class names for dropdown
@@ -68,13 +60,6 @@ export declare class ComboBoxMixinClass<TItem> {
   allowCustomValue: boolean;
 
   /**
-   * A subset of items, filtered based on the user input. Filtered items
-   * can be assigned directly to omit the internal filtering functionality.
-   * The items can be of either `String` or `Object` type.
-   */
-  filteredItems: TItem[] | undefined;
-
-  /**
    * The `String` value for the selected item of the combo box.
    *
    * When there is no item selected, the value is an empty string.
@@ -90,36 +75,9 @@ export declare class ComboBoxMixinClass<TItem> {
   loading: boolean;
 
   /**
-   * Filtering string the user has typed into the input field.
-   */
-  filter: string;
-
-  /**
    * The selected item from the `items` array.
    */
   selectedItem: TItem | null | undefined;
-
-  /**
-   * Path for label of the item. If `items` is an array of objects, the
-   * `itemLabelPath` is used to fetch the displayed string label for each
-   * item.
-   *
-   * The item label is also used for matching items when processing user
-   * input, i.e., for filtering and selecting items.
-   * @attr {string} item-label-path
-   */
-  itemLabelPath: string;
-
-  /**
-   * Path for the value of the item. If `items` is an array of objects, the
-   * `itemValuePath:` is used to fetch the string value for the selected
-   * item.
-   *
-   * The item value is used in the `value` property of the combo box,
-   * to provide the form value.
-   * @attr {string} item-value-path
-   */
-  itemValuePath: string;
 
   /**
    * Path for the id of the item. If `items` is an array of objects,

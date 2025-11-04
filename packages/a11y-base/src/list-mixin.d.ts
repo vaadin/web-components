@@ -36,15 +36,9 @@ export declare class ListMixinClass {
   orientation: 'horizontal' | 'vertical';
 
   /**
-   * The list of items from which a selection can be made.
+   * A read-only list of items from which a selection can be made.
    * It is populated from the elements passed to the light DOM,
    * and updated dynamically when adding or removing items.
-   *
-   * The item elements must implement `Vaadin.ItemMixin`.
-   *
-   * Note: unlike `<vaadin-combo-box>`, this property is read-only,
-   * so if you want to provide items by iterating array of data,
-   * you have to use `dom-repeat` and place it to the light DOM.
    */
   readonly items: Element[] | undefined;
 

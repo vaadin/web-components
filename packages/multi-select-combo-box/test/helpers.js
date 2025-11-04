@@ -1,3 +1,5 @@
+import { fire } from '@vaadin/testing-helpers';
+
 export const getDataProvider = (allItems) => (params, callback) => {
   const offset = params.page * params.pageSize;
   const filteredItems = allItems.filter((item) => item.indexOf(params.filter) > -1);
@@ -20,8 +22,7 @@ export const getAsyncDataProvider = (allItems) => {
  * Returns all the items of the combo box dropdown.
  */
 export const getAllItems = (comboBox) => {
-  const internal = comboBox.$.comboBox;
-  return Array.from(internal._scroller.querySelectorAll('vaadin-multi-select-combo-box-item'))
+  return Array.from(comboBox._scroller.querySelectorAll('vaadin-multi-select-combo-box-item'))
     .filter((item) => !item.hidden)
     .sort((a, b) => a.index - b.index);
 };
@@ -30,6 +31,21 @@ export const getAllItems = (comboBox) => {
  * Returns first item of the combo box dropdown.
  */
 export const getFirstItem = (comboBox) => {
-  const internal = comboBox.$.comboBox;
-  return internal._scroller.querySelector('vaadin-multi-select-combo-box-item');
+  return comboBox._scroller.querySelector('vaadin-multi-select-combo-box-item');
 };
+
+/**
+ * Emulates the user filling in something in the combo-box input.
+ *
+ * @param {Element} comboBox
+ * @param {string} value
+ */
+export function setInputValue(comboBox, value) {
+  comboBox.inputElement.value = value;
+  fire(comboBox.inputElement, 'input');
+}
+
+/**
+ * Returns all the chips of the combo-box.
+ */
+export const getChips = (comboBox) => comboBox.querySelectorAll('vaadin-multi-select-combo-box-chip');

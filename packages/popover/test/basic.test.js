@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { esc, fixtureSync, nextRender, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-popover.js';
@@ -29,13 +30,25 @@ describe('popover', () => {
   });
 
   describe('host element', () => {
-    it('should set display: none on the host element by default', () => {
+    it('should use display: none when not opened', () => {
       expect(getComputedStyle(popover).display).to.equal('none');
     });
 
-    it('should enforce display: none to hide the host element', () => {
-      popover.style.display = 'block';
-      expect(getComputedStyle(popover).display).to.equal('none');
+    ['opened', 'opening', 'closing'].forEach((state) => {
+      it(`should use display: block when ${state} attribute is set`, () => {
+        popover.setAttribute(state, '');
+        expect(getComputedStyle(popover).display).to.equal('block');
+      });
+    });
+
+    it('should reflect opened property to attribute', async () => {
+      popover.opened = true;
+      await nextUpdate(popover);
+      expect(popover.hasAttribute('opened')).to.be.true;
+
+      popover.opened = false;
+      await nextUpdate(popover);
+      expect(popover.hasAttribute('opened')).to.be.false;
     });
   });
 
@@ -89,6 +102,79 @@ describe('popover', () => {
       popover.target = target;
       await nextUpdate(popover);
       expect(overlay.restoreFocusNode).to.eql(target);
+    });
+
+    it('should restore focus when target is set on already opened popover', async () => {
+      // Focus target before opening
+      target.focus();
+
+      // Open popover
+      popover.renderer = (root) => {
+        if (!root.firstChild) {
+          const input = document.createElement('input');
+          root.appendChild(input);
+        }
+      };
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // Set target
+      popover.target = target;
+      await nextUpdate(popover);
+
+      popover.querySelector('input').focus();
+
+      // Close popover
+      popover.opened = false;
+      await nextRender();
+
+      expect(document.activeElement).to.equal(target);
+    });
+
+    it('should not restore focus when target is cleared on already opened popover', async () => {
+      // Focus target before opening
+      target.focus();
+
+      // Open popover
+      popover.renderer = (root) => {
+        if (!root.firstChild) {
+          const input = document.createElement('input');
+          root.appendChild(input);
+        }
+      };
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // Set target
+      popover.target = target;
+      await nextUpdate(popover);
+
+      popover.querySelector('input').focus();
+
+      // Clear target
+      popover.target = null;
+      await nextUpdate(popover);
+
+      // Close popover
+      popover.opened = false;
+      await nextRender();
+
+      expect(document.activeElement).to.not.equal(target);
+    });
+
+    it('should not throw when target is removed', async () => {
+      popover.modal = true;
+
+      // Clear target
+      popover.target = null;
+      await nextUpdate(popover);
+
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // No error should be thrown
+      popover.opened = false;
+      await oneEvent(popover, 'closed');
     });
   });
 
@@ -173,6 +259,10 @@ describe('popover', () => {
       await nextUpdate(popover);
     });
 
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should open overlay on target click by default', async () => {
       target.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -183,7 +273,10 @@ describe('popover', () => {
       target.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      target.click();
+      // Use browser command here to test for possible side effects between the outside click listener and the
+      // target opened toggle behavior. Using browser commands for opening the popover doesn't work consistently as
+      // the opened event might fire before the click promise resolves.
+      await sendMouseToElement({ type: 'click', element: target });
       await nextRender();
       expect(overlay.opened).to.be.false;
     });
@@ -222,6 +315,31 @@ describe('popover', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should not close on outside click if overlay close event is prevented', async () => {
+      target.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+
+      outsideClick();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on outside click if overlay close event is prevented when modal', async () => {
+      popover.modal = true;
+      await nextUpdate(popover);
+
+      target.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+
+      outsideClick();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should close overlay when popover is detached', async () => {
       target.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -240,14 +358,6 @@ describe('popover', () => {
       parent.appendChild(popover);
       await nextRender();
       expect(overlay.opened).to.be.true;
-    });
-
-    it('should remove document click listener when popover is detached', async () => {
-      const spy = sinon.spy(document.documentElement, 'removeEventListener');
-      popover.remove();
-      await nextRender();
-      expect(spy).to.be.called;
-      expect(spy.firstCall.args[0]).to.equal('click');
     });
 
     describe('Escape press', () => {
@@ -285,6 +395,25 @@ describe('popover', () => {
         popover.modal = true;
         popover.noCloseOnEsc = true;
         await nextUpdate(popover);
+
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close on global Escape press if overlay close event was prevented', async () => {
+        document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close on global Escape press if overlay close event was prevented when modal', async () => {
+        popover.modal = true;
+        await nextUpdate(popover);
+
+        document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
 
         esc(document.body);
         await nextRender();
@@ -358,7 +487,7 @@ describe('popover', () => {
         await nextUpdate(popover);
 
         target.click();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should set pointer-events on backdrop to none when non modal', () => {
@@ -443,45 +572,79 @@ describe('popover', () => {
   });
 
   describe('dimensions', () => {
-    beforeEach(async () => {
-      popover.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
+    describe('default', () => {
+      beforeEach(async () => {
+        popover.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should update width after opening the popover', async () => {
+        popover.width = '300px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal('300px');
+      });
+
+      it('should update height after opening the popover', async () => {
+        popover.height = '500px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+      });
+
+      it('should reset style after setting width to null', async () => {
+        const originalWidth = getComputedStyle(overlay.$.overlay).width;
+
+        popover.width = '500px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal('500px');
+
+        popover.width = null;
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal(originalWidth);
+      });
+
+      it('should reset style after setting height to null', async () => {
+        const originalHeight = getComputedStyle(overlay.$.overlay).height;
+
+        popover.height = '500px';
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+
+        popover.height = null;
+        await nextRender();
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+      });
     });
 
-    it('should update width after opening the popover', async () => {
-      popover.width = '300px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.equal('300px');
-    });
+    describe('set before attach', () => {
+      beforeEach(() => {
+        popover = document.createElement('vaadin-popover');
+      });
 
-    it('should update height after opening the popover', async () => {
-      popover.height = '500px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
-    });
+      afterEach(() => {
+        popover.remove();
+      });
 
-    it('should reset style after setting width to null', async () => {
-      const originalWidth = getComputedStyle(overlay.$.overlay).width;
+      it('should apply overlay width when set before attach', async () => {
+        popover.width = '300px';
+        document.body.appendChild(popover);
+        await nextRender();
 
-      popover.width = '500px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.equal('500px');
+        popover.opened = true;
+        await oneEvent(popover.$.overlay, 'vaadin-overlay-open');
 
-      popover.width = null;
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.equal(originalWidth);
-    });
+        expect(getComputedStyle(popover.$.overlay.$.overlay).width).to.equal('300px');
+      });
 
-    it('should reset style after setting height to null', async () => {
-      const originalHeight = getComputedStyle(overlay.$.overlay).height;
+      it('should apply overlay height when set before attach', async () => {
+        popover.height = '300px';
+        document.body.appendChild(popover);
+        await nextRender();
 
-      popover.height = '500px';
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+        popover.opened = true;
+        await oneEvent(popover.$.overlay, 'vaadin-overlay-open');
 
-      popover.height = null;
-      await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+        expect(getComputedStyle(popover.$.overlay.$.overlay).height).to.equal('300px');
+      });
     });
   });
 
@@ -532,6 +695,17 @@ describe('popover', () => {
       popover.opened = false;
       await nextRender();
       await closedPromise;
+    });
+  });
+
+  describe('exportparts', () => {
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
     });
   });
 });

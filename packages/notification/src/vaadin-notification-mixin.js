@@ -7,17 +7,15 @@ import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { OverlayStackMixin } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
  * A mixin providing common notification container functionality.
  *
  * @polymerMixin
- * @mixes OverlayStackMixin
  */
 export const NotificationContainerMixin = (superClass) =>
-  class extends OverlayStackMixin(superClass) {
+  class extends superClass {
     static get properties() {
       return {
         /**
@@ -42,10 +40,28 @@ export const NotificationContainerMixin = (superClass) =>
       }
     }
 
+    /** @protected */
+    firstUpdated(props) {
+      super.firstUpdated(props);
+
+      this.popover = 'manual';
+    }
+
+    /**
+     * Move the notification container to the top of the stack.
+     */
+    bringToFront() {
+      if (this.matches(':popover-open')) {
+        this.hidePopover();
+        this.showPopover();
+      }
+    }
+
     /** @private */
     _openedChanged(opened) {
       if (opened) {
         document.body.appendChild(this);
+        this.showPopover();
         document.addEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
         if (this._boundIosResizeListener) {
           this._detectIosNavbar();
@@ -53,6 +69,7 @@ export const NotificationContainerMixin = (superClass) =>
         }
       } else {
         document.body.removeChild(this);
+        this.hidePopover();
         document.removeEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
         if (this._boundIosResizeListener) {
           window.removeEventListener('resize', this._boundIosResizeListener);
@@ -168,7 +185,7 @@ export const NotificationMixin = (superClass) =>
      * An options object can be passed to configure the notification.
      * The options object has the following structure:
      *
-     * ```
+     * ```ts
      * {
      *   assertive?: boolean
      *   position?: string
@@ -358,7 +375,11 @@ export const NotificationMixin = (superClass) =>
         return;
       }
 
-      this._container.bringToFront();
+      // Only call bringToFront if the container already has a child / was already opened.
+      // Otherwise, just setting `opened` on the container will make it the topmost overlay.
+      if (this._container.firstElementChild) {
+        this._container.bringToFront();
+      }
 
       this._card.slot = this.position;
       if (this._container.firstElementChild && /top/u.test(this.position)) {

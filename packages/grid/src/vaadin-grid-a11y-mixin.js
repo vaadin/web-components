@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
+import { findTreeToggleCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -22,7 +22,7 @@ export const A11yMixin = (superClass) =>
       };
     }
     static get observers() {
-      return ['__a11yUpdateGridSize(size, _columnTree)'];
+      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)'];
     }
 
     /** @private */
@@ -33,22 +33,29 @@ export const A11yMixin = (superClass) =>
     }
 
     /** @private */
-    __a11yGetFooterRowCount(_columnTree) {
-      return _columnTree.filter((level) => level.some((col) => col.headerRenderer)).length;
+    _a11yGetFooterRowCount(_columnTree) {
+      return _columnTree.filter((level) => level.some((col) => col.footerRenderer)).length;
     }
 
     /** @private */
-    __a11yUpdateGridSize(size, _columnTree) {
+    __a11yUpdateGridSize(size, _columnTree, emptyState) {
       if (size === undefined || _columnTree === undefined) {
         return;
       }
 
+      const headerRowsCount = this._a11yGetHeaderRowCount(_columnTree);
+      const footerRowsCount = this._a11yGetFooterRowCount(_columnTree);
+      const bodyRowsCount = emptyState ? 1 : size;
+      const rowsCount = bodyRowsCount + headerRowsCount + footerRowsCount;
+
+      this.$.table.setAttribute('aria-rowcount', rowsCount);
+
       const bodyColumns = _columnTree[_columnTree.length - 1];
-      this.$.table.setAttribute(
-        'aria-rowcount',
-        size + this.__a11yGetHeaderRowCount(_columnTree) + this.__a11yGetFooterRowCount(_columnTree),
-      );
-      this.$.table.setAttribute('aria-colcount', (bodyColumns && bodyColumns.length) || 0);
+
+      // If no header and footer rows while the empty state is active, count as one column
+      // Otherwise, use the number of body columns, if present
+      const columnsCount = emptyState ? 1 : (rowsCount && bodyColumns && bodyColumns.length) || 0;
+      this.$.table.setAttribute('aria-colcount', columnsCount);
 
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
@@ -95,12 +102,22 @@ export const A11yMixin = (superClass) =>
      * @private
      */
     __a11yUpdateRowExpanded(row) {
+      const toggleCell = findTreeToggleCell(row);
       if (this.__isRowExpandable(row)) {
         row.setAttribute('aria-expanded', 'false');
+        if (toggleCell) {
+          toggleCell.setAttribute('aria-expanded', 'false');
+        }
       } else if (this.__isRowCollapsible(row)) {
         row.setAttribute('aria-expanded', 'true');
+        if (toggleCell) {
+          toggleCell.setAttribute('aria-expanded', 'true');
+        }
       } else {
         row.removeAttribute('aria-expanded');
+        if (toggleCell) {
+          toggleCell.removeAttribute('aria-expanded');
+        }
       }
     }
 
@@ -132,7 +149,7 @@ export const A11yMixin = (superClass) =>
     }
 
     /**
-     * @param {!HTMLElement} row
+     * @param {!HTMLElement} cell
      * @param {number} colspan
      * @private
      */

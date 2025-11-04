@@ -1,0 +1,126 @@
+:where(:root),
+:where(:host) {
+  --vaadin-tab-font-weight: var(--aura-font-weight-medium);
+  --vaadin-tabs-gap: 2px;
+}
+
+vaadin-tabs {
+  background: var(--vaadin-background-container);
+  border-radius: calc(var(--vaadin-radius-m) + 3px);
+  padding: 3px;
+  contain: paint;
+}
+
+vaadin-tabs:not([theme~='accent']) {
+  --aura-accent-light: var(--aura-text-light);
+  --aura-accent-dark: var(--aura-text-dark);
+}
+
+vaadin-tabs::part(tabs) {
+  padding: 3px;
+  margin: -3px;
+  --_mask-fade-start: 0.5lh;
+  --_mask-fade-size: 2lh;
+  mask-image: linear-gradient(
+    var(--_mask-dir, to right),
+    var(--_mask-start, black) var(--_mask-fade-start),
+    black var(--_mask-fade-size),
+    black calc(100% - var(--_mask-fade-size)),
+    var(--_mask-end, black) calc(100% - var(--_mask-fade-start))
+  );
+}
+
+vaadin-tabs[dir='rtl']::part(tabs) {
+  --_mask-dir: to left;
+}
+
+vaadin-tabs[orientation='vertical']::part(tabs) {
+  --_mask-dir: to bottom;
+  --_mask-fade-start: 0px;
+  --_mask-fade-size: 0.5lh;
+}
+
+vaadin-tabs[overflow~='start'] {
+  --_mask-start: transparent;
+}
+
+vaadin-tabs[overflow~='end'] {
+  --_mask-end: transparent;
+}
+
+vaadin-tabs::part(back-button),
+vaadin-tabs::part(forward-button) {
+  background: var(--aura-surface-solid) padding-box;
+  border: 1px solid var(--vaadin-border-color);
+  border-radius: var(--vaadin-radius-m);
+  padding: var(--vaadin-padding-xs);
+  height: auto;
+  align-self: center;
+  box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
+  transition: opacity 120ms;
+}
+
+vaadin-tabs::part(back-button) {
+  inset-inline-start: 5px;
+}
+
+vaadin-tabs::part(forward-button) {
+  inset-inline-end: 5px;
+}
+
+vaadin-tab {
+  transition:
+    color 120ms,
+    border-color 120ms,
+    background-color 120ms;
+  --aura-surface-level: 8;
+  --aura-surface-opacity: 0.7;
+  border: 1px solid transparent;
+}
+
+vaadin-tab:not([disabled], [selected]):hover {
+  --vaadin-tab-text-color: var(--vaadin-text-color);
+}
+
+vaadin-tab[selected] {
+  --_accent: light-dark(
+    oklch(from var(--aura-accent-light) calc(l + 0.2) c h / min(0.3, c / 2)),
+    oklch(from var(--aura-accent-dark) calc(l - 0.2) c h / min(0.3, c / 2))
+  );
+  --_accent-border: light-dark(
+    oklch(from var(--aura-accent-light) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast))),
+    oklch(from var(--aura-accent-dark) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast)))
+  );
+  --vaadin-tab-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
+  --vaadin-tab-text-color: var(--aura-accent-text);
+  border-color: var(--_accent-border);
+  box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
+}
+
+/* Filled variant */
+
+vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
+  --vaadin-tab-background: var(--aura-accent-color) border-box;
+  --vaadin-tab-text-color: var(--aura-accent-contrast);
+  outline-offset: 1px;
+}
+
+/* Badges and other content that uses the palette inside a filled nav item */
+vaadin-tabs[theme~='filled'] vaadin-tab[selected] > :not([slot='tooltip']) {
+  --vaadin-text-color: var(--vaadin-tab-text-color);
+  --vaadin-text-color-secondary: var(--vaadin-tab-text-color);
+  --aura-accent-color: var(--vaadin-tab-text-color);
+  --aura-accent-text: var(--vaadin-tab-text-color);
+  --aura-red: var(--vaadin-tab-text-color);
+  --aura-red-text: var(--vaadin-tab-text-color);
+  --aura-orange: var(--vaadin-tab-text-color);
+  --aura-orange-text: var(--vaadin-tab-text-color);
+  --aura-yellow: var(--vaadin-tab-text-color);
+  --aura-yellow-text: var(--vaadin-tab-text-color);
+  --aura-green: var(--vaadin-tab-text-color);
+  --aura-green-text: var(--vaadin-tab-text-color);
+  --aura-blue: var(--vaadin-tab-text-color);
+  --aura-blue-text: var(--vaadin-tab-text-color);
+  --aura-purple: var(--vaadin-tab-text-color);
+  --aura-purple-text: var(--vaadin-tab-text-color);
+}

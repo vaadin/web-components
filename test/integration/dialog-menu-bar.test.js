@@ -9,17 +9,10 @@ import '@vaadin/vertical-layout/src/vaadin-vertical-layout.js';
 // this test covers was caused by the Lumo dialog opening animation.
 
 describe('menu-bar in dialog', () => {
-  let dialog, overlay, menuBar;
+  let dialog, menuBar;
 
   beforeEach(async () => {
-    fixtureSync(`
-      <style>
-        vaadin-dialog-overlay::part(content) {
-          padding: 0;
-        }
-      </style>
-    `);
-    dialog = fixtureSync(`<vaadin-dialog width="700px"></vaadin-dialog>`);
+    dialog = fixtureSync(`<vaadin-dialog width="650px" theme="no-padding"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
@@ -43,9 +36,8 @@ describe('menu-bar in dialog', () => {
     };
     await nextRender();
     dialog.opened = true;
-    overlay = dialog.$.overlay;
-    await oneEvent(overlay, 'vaadin-overlay-open');
-    menuBar = overlay.querySelector('vaadin-menu-bar');
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+    menuBar = dialog.querySelector('vaadin-menu-bar');
     await nextResize(menuBar);
   });
 

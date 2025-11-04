@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { fieldOutlineStyles } from './styles/vaadin-field-outline-core-styles.js';
+import { fieldOutlineStyles } from './styles/vaadin-field-outline-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
@@ -19,7 +19,7 @@ import { fieldOutlineStyles } from './styles/vaadin-field-outline-core-styles.js
  * @mixes ThemableMixin
  * @private
  */
-export class FieldOutline extends ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+export class FieldOutline extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-field-outline';
   }

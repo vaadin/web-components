@@ -3,7 +3,7 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const drawerToggle = css`
@@ -11,7 +11,7 @@ export const drawerToggle = css`
     background: currentColor;
     display: block;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-menu);
+    mask: var(--_vaadin-icon-menu) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

@@ -12,14 +12,13 @@ import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-core-styles.js';
+import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-base-styles.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
@@ -31,7 +30,7 @@ import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-cor
  * @mixes ThemableMixin
  * @private
  */
-class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
   }
@@ -40,13 +39,25 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectio
     return crudDialogOverlayStyles;
   }
 
+  /**
+   * Override method from OverlayFocusMixin to use dialog as focus trap root
+   * @protected
+   * @override
+   */
+  get _focusTrapRoot() {
+    // Do not use `owner` since that points to `vaadin-crud`
+    return this.getRootNode().host;
+  }
+
   /** @protected */
   render() {
     return html`
       <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <section id="resizerContainer" class="resizer-container">
-          <header part="header"><slot name="header"></slot></header>
+          <header part="header">
+            <slot name="header"></slot>
+          </header>
           <div part="content" id="content">
             <slot name="form"></slot>
           </div>
@@ -79,27 +90,39 @@ defineCustomElement(CrudDialogOverlay);
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  * @private
  */
-class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
+class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-crud-dialog';
   }
 
   static get styles() {
     return css`
-      :host {
-        display: none;
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: block !important;
+        position: absolute;
+      }
+
+      :host,
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:focus-visible) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       }
     `;
   }
 
   static get properties() {
     return {
-      ariaLabel: {
-        type: String,
-      },
-
       fullscreen: {
         type: Boolean,
+      },
+
+      crudElement: {
+        type: Object,
       },
     };
   }
@@ -109,19 +132,32 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
+        .owner="${this.crudElement}"
         .opened="${this.opened}"
-        aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"
+        @vaadin-overlay-outside-click="${this.__cancel}"
+        @vaadin-overlay-escape-press="${this.__cancel}"
         theme="${ifDefined(this._theme)}"
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?fullscreen="${this.fullscreen}"
-        role="dialog"
         focus-trap
-      ></vaadin-crud-dialog-overlay>
+        exportparts="backdrop, overlay, header, content, footer"
+      >
+        <slot name="header" slot="header"></slot>
+        <slot name="form" slot="form"></slot>
+        <slot name="save-button" slot="save-button"></slot>
+        <slot name="cancel-button" slot="cancel-button"></slot>
+        <slot name="delete-button" slot="delete-button"></slot>
+      </vaadin-crud-dialog-overlay>
     `;
+  }
+
+  /** @private **/
+  __cancel() {
+    this.dispatchEvent(new CustomEvent('cancel'));
   }
 }
 

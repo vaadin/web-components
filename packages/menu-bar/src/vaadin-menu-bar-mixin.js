@@ -8,7 +8,7 @@ import { Directive, directive } from 'lit/directive.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -76,10 +76,10 @@ export const MenuBarMixin = (superClass) =>
          * @property {string} text - Text to be set as the menu button component's textContent.
          * @property {string} tooltip - Text to be set as the menu button's tooltip.
          * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
-         * @property {union: string | object} component - The component to represent the button content.
+         * @property {string | HTMLElement} component - The component to represent the button content.
          * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
          * @property {boolean} disabled - If true, the button is disabled and cannot be activated.
-         * @property {union: string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
+         * @property {string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
          * @property {SubMenuItem[]} children - Array of submenu items.
          */
 
@@ -87,7 +87,7 @@ export const MenuBarMixin = (superClass) =>
          * @typedef SubMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent.
-         * @property {union: string | object} component - The component to represent the item.
+         * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected.
          * @property {boolean} checked - If true, the item shows a checkmark next to it.
@@ -136,12 +136,7 @@ export const MenuBarMixin = (superClass) =>
          * which makes disabled buttons focusable and hoverable, while still
          * preventing them from being triggered:
          *
-         * ```
-         * // Set before any menu bar is attached to the DOM.
-         * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-         * ```
-         *
-         * ```
+         * ```js
          * // Set before any menu bar is attached to the DOM.
          * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
          * ```
@@ -152,16 +147,6 @@ export const MenuBarMixin = (superClass) =>
           type: Array,
           sync: true,
           value: () => [],
-        },
-
-        /**
-         * A space-delimited list of CSS class names
-         * to set on each sub-menu overlay element.
-         *
-         * @attr {string} overlay-class
-         */
-        overlayClass: {
-          type: String,
         },
 
         /**
@@ -200,7 +185,7 @@ export const MenuBarMixin = (superClass) =>
      * just the individual properties you want to change.
      *
      * The object has the following JSON structure and default values:
-     * ```
+     * ```js
      * {
      *   moreOptions: 'More options'
      * }
@@ -275,11 +260,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    get _subMenu() {
-      return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
-    }
-
-    /** @private */
     get _hasOverflow() {
       return this._overflow && !this._overflow.hasAttribute('hidden');
     }
@@ -297,6 +277,20 @@ export const MenuBarMixin = (superClass) =>
 
       this.setAttribute('role', 'menubar');
 
+      this._subMenuController = new SlotController(this, 'submenu', 'vaadin-menu-bar-submenu', {
+        initializer: (menu) => {
+          menu.setAttribute('is-root', '');
+
+          menu.addEventListener('item-selected', this.__onItemSelected.bind(this));
+          menu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
+
+          const overlay = menu._overlayElement;
+          overlay._contentRoot.addEventListener('keydown', this.__boundOnContextMenuKeydown);
+
+          this._subMenu = menu;
+        },
+      });
+
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-menu-bar-button', {
         initializer: (btn) => {
           btn.setAttribute('hidden', '');
@@ -313,16 +307,12 @@ export const MenuBarMixin = (superClass) =>
           this._overflow = btn;
         },
       });
+
+      this.addController(this._subMenuController);
       this.addController(this._overflowController);
 
       this.addEventListener('mousedown', () => this._hideTooltip(true));
       this.addEventListener('mouseleave', () => this._hideTooltip());
-
-      this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
-      this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
-
-      const overlay = this._subMenu._overlayElement;
-      overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
 
       this._container = this.shadowRoot.querySelector('[part="container"]');
     }
@@ -419,7 +409,7 @@ export const MenuBarMixin = (superClass) =>
     __updateSubMenu() {
       const subMenu = this._subMenu;
       if (subMenu && subMenu.opened) {
-        const button = subMenu._overlayElement.positionTarget;
+        const button = subMenu._positionTarget;
 
         // Close sub-menu if the corresponding button is no longer in the DOM,
         // or if the item on it has been changed to no longer have children.
@@ -510,12 +500,6 @@ export const MenuBarMixin = (superClass) =>
 
         const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
         this.__updateOverflow(items);
-
-        // Ensure there is at least one button with tabindex set to 0
-        // so that menu-bar is not skipped when navigating with Tab
-        if (remaining.length && !remaining.some((btn) => btn.getAttribute('tabindex') === '0')) {
-          this._setTabindex(remaining[remaining.length - 1], true);
-        }
       }
     }
 
@@ -546,13 +530,23 @@ export const MenuBarMixin = (superClass) =>
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
 
+      // Collect visible buttons to detect if tabindex should be updated
+      const visibleButtons = buttons.filter((btn) => btn.style.visibility !== 'hidden');
+
+      if (!visibleButtons.length) {
+        // If all buttons except overflow are hidden, set tabindex on it
+        this._overflow.setAttribute('tabindex', '0');
+      } else if (!visibleButtons.some((btn) => btn.getAttribute('tabindex') === '0')) {
+        // Ensure there is at least one button with tabindex set to 0
+        // so that menu-bar is not skipped when navigating with Tab
+        this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
+      }
+
       // Apply first/last visible attributes to the visible buttons
-      buttons
-        .filter((btn) => btn.style.visibility !== 'hidden')
-        .forEach((btn, index, visibleButtons) => {
-          btn.toggleAttribute('first-visible', index === 0);
-          btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
-        });
+      visibleButtons.forEach((btn, index, visibleButtons) => {
+        btn.toggleAttribute('first-visible', index === 0);
+        btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
+      });
     }
 
     /** @private */
@@ -669,6 +663,7 @@ export const MenuBarMixin = (superClass) =>
     _hideTooltip(immediate) {
       const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
+        this._tooltipController.setContext({ item: null });
         tooltip._stateController.close(immediate);
       }
     }
@@ -702,17 +697,18 @@ export const MenuBarMixin = (superClass) =>
      * and open another one for the newly focused button.
      *
      * @param {Element} item
+     * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected
      * @override
      */
-    _focusItem(item, navigating) {
+    _focusItem(item, options, navigating) {
       const wasExpanded = navigating && this.focused === this._expandedButton;
       if (wasExpanded) {
         this._close();
       }
 
-      super._focusItem(item, navigating);
+      super._focusItem(item, options, navigating);
 
       this._buttons.forEach((btn) => {
         this._setTabindex(btn, btn === item);
@@ -735,13 +731,41 @@ export const MenuBarMixin = (superClass) =>
     /**
      * Override method inherited from `FocusMixin`
      *
+     * @override
+     * @protected
+     */
+    _shouldSetFocus(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return false;
+      }
+      return super._shouldSetFocus(event);
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     *
+     * @override
+     * @protected
+     */
+    _shouldRemoveFocus(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return false;
+      }
+      return super._shouldRemoveFocus(event);
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     *
      * @param {boolean} focused
      * @override
      * @protected
      */
     _setFocused(focused) {
       if (focused) {
-        const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
+        const target = this.__getFocusTarget();
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
@@ -753,6 +777,24 @@ export const MenuBarMixin = (superClass) =>
       } else {
         this._hideTooltip();
       }
+    }
+
+    /** @private */
+    __getFocusTarget() {
+      // First, check if focus is moving to a visible button
+      let target = this._buttons.find((btn) => isElementFocused(btn));
+
+      if (!target) {
+        const selector = this.tabNavigation ? '[focused]' : '[tabindex="0"]';
+        // Next, check if there is a button that could be focused but is hidden
+        target = this.querySelector(`vaadin-menu-bar-button${selector}`);
+
+        if (isElementHidden(target)) {
+          target = this._buttons[this._getFocusableIndex()];
+        }
+      }
+
+      return target;
     }
 
     /**
@@ -814,6 +856,16 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _onKeyDown(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return;
+      }
+
+      this._handleKeyDown(event);
+    }
+
+    /** @private */
+    _handleKeyDown(event) {
       switch (event.key) {
         case 'ArrowDown':
           this._onArrowDown(event);
@@ -828,20 +880,25 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * @param {!MouseEvent} e
+     * @param {!MouseEvent} event
      * @protected
      */
-    _onMouseOver(e) {
-      const button = this._getButtonFromEvent(e);
+    _onMouseOver(event) {
+      // Ignore events from the submenu
+      if (event.composedPath().includes(this._subMenu)) {
+        return;
+      }
+
+      const button = this._getButtonFromEvent(event);
       if (!button) {
         // Hide tooltip on mouseover to disabled button
         this._hideTooltip();
       } else if (button !== this._expandedButton) {
-        const isOpened = this._subMenu.opened;
-        if (button.item.children && (this.openOnHover || isOpened)) {
+        // Switch sub-menu when moving cursor over another button
+        // with children, regardless of whether openOnHover is set.
+        // If the button has no children, keep the sub-menu opened.
+        if (button.item.children && (this.openOnHover || this._subMenu.opened)) {
           this.__openSubMenu(button, false);
-        } else if (isOpened) {
-          this._close();
         }
 
         if (button === this._overflow || (this.openOnHover && button.item.children)) {
@@ -864,11 +921,11 @@ export const MenuBarMixin = (superClass) =>
         if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
-          this._onKeyDown(e);
+          this._handleKeyDown(e);
         }
 
         if (e.key === 'Tab' && this.tabNavigation) {
-          this._onKeyDown(e);
+          this._handleKeyDown(e);
         }
       }
     }
@@ -910,6 +967,7 @@ export const MenuBarMixin = (superClass) =>
 
       subMenu.items = items;
       subMenu.listenOn = button;
+      subMenu._positionTarget = button;
       const overlay = subMenu._overlayElement;
       overlay.noVerticalOverlap = true;
 
@@ -919,7 +977,6 @@ export const MenuBarMixin = (superClass) =>
       this._setExpanded(button, true);
 
       this.style.pointerEvents = 'auto';
-      overlay.positionTarget = button;
 
       button.dispatchEvent(
         new CustomEvent('opensubmenu', {
@@ -937,7 +994,8 @@ export const MenuBarMixin = (superClass) =>
           }
 
           if (options.keepFocus) {
-            this._focusItem(this._expandedButton, false);
+            const focusOptions = { focusVisible: isKeyboardActive() };
+            this._focusItem(this._expandedButton, focusOptions, false);
           }
 
           // Do not focus item when open not from keyboard
@@ -951,13 +1009,13 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _focusFirstItem() {
-      const list = this._subMenu._overlayElement.firstElementChild;
+      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
       list.focus();
     }
 
     /** @private */
     _focusLastItem() {
-      const list = this._subMenu._overlayElement.firstElementChild;
+      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
       const item = list.items[list.items.length - 1];
       if (item) {
         item.focus();
@@ -981,7 +1039,8 @@ export const MenuBarMixin = (superClass) =>
       if (button && button.hasAttribute('expanded')) {
         this._setExpanded(button, false);
         if (restoreFocus) {
-          this._focusItem(button, false);
+          const focusOptions = { focusVisible: isKeyboardActive() };
+          this._focusItem(button, focusOptions, false);
         }
         this._expandedButton = null;
       }

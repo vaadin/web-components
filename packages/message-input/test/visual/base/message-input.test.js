@@ -47,11 +47,6 @@ describe('message-input', () => {
           await sendKeys({ press: 'Tab' });
           await visualDiff(div, `${dir}-button-focused`);
         });
-
-        it('icon-button variant', async () => {
-          element.setAttribute('theme', 'icon-button');
-          await visualDiff(div, `${dir}-icon-button`);
-        });
       });
     });
   });

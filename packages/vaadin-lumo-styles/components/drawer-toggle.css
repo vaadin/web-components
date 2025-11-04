@@ -6,9 +6,10 @@
 @import '../src/components/button.css';
 @import '../src/components/drawer-toggle.css';
 
-:is(:root, :host)::before {
-  --vaadin-drawer-toggle-lumo-inject: 1;
-  --vaadin-drawer-toggle-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-drawer-toggle-inject: 1;
+  --_lumo-vaadin-drawer-toggle-inject-modules:
     lumo_components_button,
     lumo_components_drawer-toggle;
 }

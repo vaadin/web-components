@@ -5,7 +5,8 @@
  */
 @import '../src/components/progress-bar.css';
 
-:is(:root, :host)::before {
-  --vaadin-progress-bar-lumo-inject: 1;
-  --vaadin-progress-bar-lumo-inject-modules: lumo_components_progress-bar;
+:root::before,
+:host::before {
+  --_lumo-vaadin-progress-bar-inject: 1;
+  --_lumo-vaadin-progress-bar-inject-modules: lumo_components_progress-bar;
 }

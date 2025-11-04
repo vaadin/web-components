@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const tabsStyles = css`
@@ -28,7 +28,7 @@ export const tabsStyles = css`
     overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-tabs-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-tabs-gap, var(--vaadin-gap-s));
   }
 
   :host([orientation='horizontal']) [part='tabs'] {
@@ -74,7 +74,7 @@ export const tabsStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask-image: var(--_vaadin-icon-chevron-down);
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     rotate: 90deg;
   }
 

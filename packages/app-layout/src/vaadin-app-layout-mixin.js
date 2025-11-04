@@ -5,6 +5,7 @@
  */
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -105,7 +106,7 @@ export const AppLayoutMixin = (superclass) =>
      * just the individual properties you want to change.
      *
      * The object has the following structure and default values:
-     * ```
+     * ```js
      * {
      *   drawer: 'Drawer'
      * }
@@ -206,6 +207,18 @@ export const AppLayoutMixin = (superclass) =>
       this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
       window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
       window.removeEventListener('keydown', this.__onDrawerKeyDown);
+    }
+
+    /** @private */
+    __onNavbarSlotChange() {
+      this._updateTouchOptimizedMode();
+      this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
+    }
+
+    /** @private */
+    __onDrawerSlotChange() {
+      this._updateDrawerSize();
+      this.toggleAttribute('has-drawer', !!this.querySelector('[slot="drawer"]'));
     }
 
     /**
@@ -431,8 +444,7 @@ export const AppLayoutMixin = (superclass) =>
       // Move focus to the drawer toggle when closing the drawer.
       const toggle = this.querySelector('vaadin-drawer-toggle');
       if (toggle) {
-        toggle.focus();
-        toggle.setAttribute('focus-ring', 'focus');
+        toggle.focus({ focusVisible: isKeyboardActive() });
       }
     }
 

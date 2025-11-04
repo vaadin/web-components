@@ -7,7 +7,6 @@ import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
@@ -29,10 +28,9 @@ const DEFAULT_I18N = {
  * @polymerMixin
  * @mixes I18nMixin
  * @mixes ResizeMixin
- * @mixes OverlayClassMixin
  */
 export const AvatarGroupMixin = (superClass) =>
-  class AvatarGroupMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(OverlayClassMixin(superClass))) {
+  class AvatarGroupMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -64,7 +62,6 @@ export const AvatarGroupMixin = (superClass) =>
          */
         items: {
           type: Array,
-          observer: '__itemsChanged',
           sync: true,
         },
 
@@ -80,13 +77,6 @@ export const AvatarGroupMixin = (superClass) =>
         },
 
         /** @private */
-        _avatars: {
-          type: Array,
-          value: () => [],
-          sync: true,
-        },
-
-        /** @private */
         __itemsInView: {
           type: Number,
           value: null,
@@ -94,22 +84,13 @@ export const AvatarGroupMixin = (superClass) =>
         },
 
         /** @private */
-        _overflow: {
-          type: Object,
-          sync: true,
-        },
-
-        /** @private */
         _overflowItems: {
           type: Array,
-          observer: '__overflowItemsChanged',
-          computed: '__computeOverflowItems(items, __itemsInView, maxItemsVisible)',
         },
 
         /** @private */
-        _overflowTooltip: {
-          type: Object,
-          sync: true,
+        _overflowLimit: {
+          type: Number,
         },
 
         /** @private */
@@ -120,24 +101,13 @@ export const AvatarGroupMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return [
-        '__i18nItemsChanged(__effectiveI18n, items)',
-        '__openedChanged(_opened, _overflow)',
-        '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-        '__updateAvatars(items, __itemsInView, maxItemsVisible, _overflow, __effectiveI18n)',
-        '__updateOverflowAvatar(_overflow, items, __itemsInView, maxItemsVisible)',
-        '__updateOverflowTooltip(_overflowTooltip, items, __itemsInView, maxItemsVisible)',
-      ];
-    }
-
     /**
      * The object used to localize this component. To change the default
      * localization, replace this with an object that provides all properties, or
      * just the individual properties you want to change.
      *
      * The object has the following JSON structure and default values:
-     * ```
+     * ```js
      * {
      *   // Translation of the anonymous user avatar tooltip.
      *   anonymous: 'anonymous',
@@ -167,19 +137,26 @@ export const AvatarGroupMixin = (superClass) =>
       super.i18n = value;
     }
 
-    constructor() {
-      super();
-
-      this.__overlayRenderer = this.__overlayRenderer.bind(this);
+    /** @protected */
+    get _avatars() {
+      return [...this.children].filter((node) => node.localName === 'vaadin-avatar');
     }
 
     /** @protected */
     ready() {
       super.ready();
 
+      this._menuController = new SlotController(this, 'overlay', 'vaadin-avatar-group-menu', {
+        initializer: (menu) => {
+          menu.addEventListener('keydown', this._onListKeyDown.bind(this));
+          this._menuElement = menu;
+        },
+      });
+
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', {
         initializer: (overflow) => {
           overflow.setAttribute('role', 'button');
+          overflow.setAttribute('tabindex', '0');
           overflow.setAttribute('aria-haspopup', 'menu');
           overflow.setAttribute('aria-expanded', 'false');
           overflow.addEventListener('click', (e) => this._onOverflowClick(e));
@@ -193,6 +170,8 @@ export const AvatarGroupMixin = (superClass) =>
           this._overflowTooltip = tooltip;
         },
       });
+
+      this.addController(this._menuController);
       this.addController(this._overflowController);
 
       this._overlayElement = this.$.overlay;
@@ -205,6 +184,58 @@ export const AvatarGroupMixin = (superClass) =>
       this._opened = false;
     }
 
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      if (props.has('items') || props.has('__itemsInView') || props.has('maxItemsVisible')) {
+        // Calculate overflow limit only once to reuse it in updated() observers
+        const count = Array.isArray(this.items) ? this.items.length : 0;
+        const limit = this.__getLimit(count, this.__itemsInView, this.maxItemsVisible);
+        this._overflowLimit = limit;
+        this._overflowItems = limit ? this.items.slice(limit) : [];
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items')) {
+        this.__itemsChanged(this.items, props.get('items'));
+      }
+
+      if (props.has('items') || props.has('_overflowLimit') || props.has('__effectiveI18n') || props.has('_theme')) {
+        const limit = this._overflowLimit;
+        this.__renderAvatars(limit ? this.items.slice(0, limit) : this.items || []);
+      }
+
+      if (props.has('items') || props.has('_overflowLimit')) {
+        this.__updateOverflowTooltip(this.items, this._overflowLimit);
+        this.__updateOverflowAvatar(this.items, this._overflowLimit, this.__itemsInView);
+      }
+
+      if (props.has('__effectiveI18n') || props.has('items')) {
+        this.__i18nItemsChanged(this.__effectiveI18n, this.items);
+      }
+
+      if (props.has('_opened')) {
+        this.__openedChanged(this._opened, props.get('_opened'));
+      }
+
+      if (props.has('_theme')) {
+        if (this._theme) {
+          this._overflow.setAttribute('theme', this._theme);
+        } else {
+          this._overflow.removeAttribute('theme');
+        }
+      }
+
+      if (props.has('_overflowItems') || props.has('__effectiveI18n') || props.has('_theme')) {
+        this.__renderMenu();
+      }
+    }
+
     /** @private */
     __getMessage(user, action) {
       return action.replace('{user}', user.name || user.abbr || this.__effectiveI18n.anonymous);
@@ -212,34 +243,30 @@ export const AvatarGroupMixin = (superClass) =>
 
     /**
      * Renders items when they are provided by the `items` property and clears the content otherwise.
-     * @param {!HTMLElement} root
      * @private
      */
-    __overlayRenderer(root) {
+    __renderMenu() {
       render(
         html`
-          <vaadin-avatar-group-menu @keydown="${this._onListKeyDown}">
-            ${(this._overflowItems || []).map(
-              (item) => html`
-                <vaadin-avatar-group-menu-item>
-                  <vaadin-avatar
-                    .name="${item.name}"
-                    .abbr="${item.abbr}"
-                    .img="${item.img}"
-                    .colorIndex="${item.colorIndex}"
-                    .i18n="${this.__effectiveI18n}"
-                    class="${ifDefined(item.className)}"
-                    theme="${ifDefined(this._theme)}"
-                    aria-hidden="true"
-                    tabindex="-1"
-                  ></vaadin-avatar>
-                  ${item.name || ''}
-                </vaadin-avatar-group-menu-item>
-              `,
-            )}
-          </vaadin-avatar-group-menu>
+          ${(this._overflowItems || []).map(
+            (item) => html`
+              <vaadin-avatar-group-menu-item>
+                <vaadin-avatar
+                  .name="${item.name}"
+                  .abbr="${item.abbr}"
+                  .img="${item.img}"
+                  .colorIndex="${item.colorIndex}"
+                  .i18n="${this.__effectiveI18n}"
+                  class="${ifDefined(item.className)}"
+                  theme="${ifDefined(this._theme)}"
+                  aria-hidden="true"
+                ></vaadin-avatar>
+                ${item.name || ''}
+              </vaadin-avatar-group-menu-item>
+            `,
+          )}
         `,
-        root,
+        this._menuElement,
         { host: this },
       );
     }
@@ -305,7 +332,9 @@ export const AvatarGroupMixin = (superClass) =>
                 .img="${item.img}"
                 .colorIndex="${item.colorIndex}"
                 .i18n="${this.__effectiveI18n}"
+                theme="${ifDefined(this._theme)}"
                 class="${ifDefined(item.className)}"
+                tabindex="0"
                 with-tooltip
               ></vaadin-avatar>
             `,
@@ -317,32 +346,13 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAvatars(items, itemsInView, maxItemsVisible, overflow) {
-      if (!overflow || !Array.isArray(items)) {
-        return;
-      }
-
-      const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
-
-      this.__renderAvatars(limit ? items.slice(0, limit) : items);
-
-      this._avatars = [...this.querySelectorAll('vaadin-avatar')];
-    }
-
-    /** @private */
-    __computeOverflowItems(items, itemsInView, maxItemsVisible) {
-      const count = Array.isArray(items) ? items.length : 0;
-      const limit = this.__getLimit(count, itemsInView, maxItemsVisible);
-      return limit ? items.slice(limit) : [];
-    }
-
-    /** @private */
-    __updateOverflowAvatar(overflow, items, itemsInView, maxItemsVisible) {
+    __updateOverflowAvatar(items, limit, itemsInView) {
+      const overflow = this._overflow;
       if (overflow) {
         const count = Array.isArray(items) ? items.length : 0;
-        const maxReached = maxItemsVisible != null && count > this.__getMax(maxItemsVisible);
+        const maxReached = this.maxItemsVisible != null && count > this.__getMax(this.maxItemsVisible);
 
-        overflow.abbr = `+${count - this.__getLimit(count, itemsInView, maxItemsVisible)}`;
+        overflow.abbr = `+${count - limit}`;
         const hasOverflow = maxReached || (itemsInView && itemsInView < count);
         overflow.toggleAttribute('hidden', !hasOverflow);
         this.toggleAttribute('has-overflow', hasOverflow);
@@ -350,25 +360,11 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAvatarsTheme(overflow, avatars, theme) {
-      if (overflow) {
-        [overflow, ...avatars].forEach((avatar) => {
-          if (theme) {
-            avatar.setAttribute('theme', theme);
-          } else {
-            avatar.removeAttribute('theme');
-          }
-        });
-      }
-    }
-
-    /** @private */
-    __updateOverflowTooltip(tooltip, items, itemsInView, maxItemsVisible) {
-      if (!tooltip || !Array.isArray(items)) {
+    __updateOverflowTooltip(items, limit) {
+      if (!Array.isArray(items)) {
         return;
       }
 
-      const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
       if (limit == null) {
         return;
       }
@@ -381,7 +377,7 @@ export const AvatarGroupMixin = (superClass) =>
         }
       }
 
-      tooltip.text = result.join('\n');
+      this._overflowTooltip.text = result.join('\n');
     }
 
     /** @private */
@@ -450,46 +446,18 @@ export const AvatarGroupMixin = (superClass) =>
         if (effectiveI18n.activeUsers[field]) {
           this.setAttribute('aria-label', effectiveI18n.activeUsers[field].replace('{count}', count || 0));
         }
-
-        this._avatars.forEach((avatar) => {
-          avatar.i18n = effectiveI18n;
-        });
       }
     }
 
     /** @private */
-    __openedChanged(opened, overflow) {
-      if (!overflow) {
-        return;
-      }
-
+    __openedChanged(opened, oldOpened) {
       if (opened) {
-        if (!this._menuElement) {
-          this._menuElement = this.$.overlay.querySelector('vaadin-avatar-group-menu');
-        }
-
-        this._openedWithFocusRing = overflow.hasAttribute('focus-ring');
-      } else if (this.__oldOpened) {
-        overflow.focus();
-        if (this._openedWithFocusRing) {
-          overflow.setAttribute('focus-ring', '');
-        }
+        this._openedWithFocusRing = this._overflow.hasAttribute('focus-ring');
+      } else if (oldOpened) {
+        this._overflow.focus({ focusVisible: this._openedWithFocusRing });
       }
 
-      overflow.setAttribute('aria-expanded', opened === true);
-      this.__oldOpened = opened;
-    }
-
-    /** @private */
-    __overflowItemsChanged(items, oldItems) {
-      // Prevent renderer from being called unnecessarily on initialization
-      if (items && items.length === 0 && (!oldItems || oldItems.length === 0)) {
-        return;
-      }
-
-      if (items || oldItems) {
-        this.$.overlay.requestContentUpdate();
-      }
+      this._overflow.setAttribute('aria-expanded', opened === true);
     }
 
     /** @private */

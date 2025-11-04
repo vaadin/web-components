@@ -31,6 +31,7 @@ import {
   updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
+import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
 import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
@@ -57,6 +58,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * @mixes EventContextMixin
  * @mixes StylingMixin
  * @mixes DragAndDropMixin
+ * @mixes ResizeMixin
  */
 export const GridMixin = (superClass) =>
   class extends ColumnAutoWidthMixin(
@@ -73,7 +75,7 @@ export const GridMixin = (superClass) =>
                         FilterMixin(
                           ColumnReorderingMixin(
                             ColumnResizingMixin(
-                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(superClass)))),
+                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(ResizeMixin(superClass))))),
                             ),
                           ),
                         ),
@@ -168,11 +170,6 @@ export const GridMixin = (superClass) =>
       };
     }
 
-    constructor() {
-      super();
-      this.addEventListener('animationend', this._onAnimationEnd);
-    }
-
     /** @private */
     get _firstVisibleIndex() {
       const firstVisibleItem = this.__getFirstVisibleItem();
@@ -256,23 +253,12 @@ export const GridMixin = (superClass) =>
         scrollContainer: this.$.items,
         scrollTarget: this.$.table,
         reorderElements: true,
+        // Grid rows have a CSS-defined minimum height, so the virtualizer's height
+        // placeholder logic can be disabled. This helps save reflows which might
+        // otherwise be triggered by this logic because it reads the row height
+        // right after updating the rows' content.
+        __disableHeightPlaceholder: true,
       });
-
-      new ResizeObserver(() =>
-        setTimeout(() => {
-          this.__updateColumnsBodyContentHidden();
-        }),
-      ).observe(this.$.table);
-
-      const minHeightObserver = new ResizeObserver(() =>
-        setTimeout(() => {
-          this.__updateMinHeight();
-        }),
-      );
-
-      minHeightObserver.observe(this.$.header);
-      minHeightObserver.observe(this.$.items);
-      minHeightObserver.observe(this.$.footer);
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
@@ -282,6 +268,31 @@ export const GridMixin = (superClass) =>
         this.$.emptystatecell._content = currentNodes[0];
         this.__hasEmptyStateContent = !!this.$.emptystatecell._content;
       });
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // If the grid was hidden and is now visible
+      if (props.has('__hostVisible') && !props.get('__hostVisible')) {
+        // Ensure header and footer have tabbable elements
+        this._resetKeyboardNavigation();
+
+        requestAnimationFrame(() => this.__scrollToPendingIndexes());
+      }
+
+      if (props.has('__headerRect') || props.has('__footerRect') || props.has('__itemsRect')) {
+        setTimeout(() => this.__updateMinHeight());
+      }
+
+      if (props.has('__tableRect')) {
+        setTimeout(() => this.__updateColumnsBodyContentHidden());
+
+        // Updating data can change the visibility of the scroll bar. Therefore,
+        // the scroll position has to be recalculated.
+        this.__updateHorizontalScrollPosition();
+      }
     }
 
     /** @private */
@@ -628,8 +639,17 @@ export const GridMixin = (superClass) =>
         row.hidden = !visibleRowCells.length;
       }
 
+      if (row.parentElement === this.$.header) {
+        this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
+      }
+
+      if (row.parentElement === this.$.footer) {
+        this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
+      }
+
       // Make sure the section has a tabbable element
       this._resetKeyboardNavigation();
+      this._a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
     }
 
     /** @private */
@@ -815,21 +835,6 @@ export const GridMixin = (superClass) =>
       this.__updateHorizontalScrollPosition();
     }
 
-    /** @private */
-    _onAnimationEnd(e) {
-      // ShadyCSS applies scoping suffixes to animation names
-      if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
-        e.stopPropagation();
-
-        // Ensure header and footer have tabbable elements
-        this._resetKeyboardNavigation();
-
-        requestAnimationFrame(() => {
-          this.__scrollToPendingIndexes();
-        });
-      }
-    }
-
     /**
      * @param {!HTMLTableRowElement} row
      * @return {!GridItemModel}
@@ -839,9 +844,10 @@ export const GridMixin = (superClass) =>
       return {
         index: row.index,
         item: row._item,
-        level: this._getIndexLevel(row.index),
+        level: this.__getRowLevel(row),
         expanded: this._isExpanded(row._item),
         selected: this._isSelected(row._item),
+        hasChildren: this._hasChildren(row._item),
         detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item),
       };
     }

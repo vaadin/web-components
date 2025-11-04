@@ -5,11 +5,11 @@
  */
 @media lumo_components_vertical-layout {
   :host([theme~='margin']) {
-    margin: var(--lumo-space-m);
+    margin: var(--vaadin-vertical-layout-margin, var(--lumo-space-m));
   }
 
   :host([theme~='padding']) {
-    padding: var(--lumo-space-m);
+    padding: var(--vaadin-vertical-layout-padding, var(--lumo-space-m));
   }
 
   :host([theme~='spacing-xs']) {
@@ -21,7 +21,7 @@
   }
 
   :host([theme~='spacing']) {
-    gap: var(--lumo-space-m);
+    gap: var(--vaadin-vertical-layout-gap, var(--lumo-space-m));
   }
 
   :host([theme~='spacing-l']) {
@@ -30,9 +30,5 @@
 
   :host([theme~='spacing-xl']) {
     gap: var(--lumo-space-xl);
-  }
-
-  :host([theme~='wrap']) {
-    flex-wrap: wrap;
   }
 }

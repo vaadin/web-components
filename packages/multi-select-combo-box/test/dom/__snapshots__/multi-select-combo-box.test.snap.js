@@ -3,6 +3,14 @@ export const snapshots = {};
 
 snapshots["vaadin-multi-select-combo-box host default"] = 
 `<vaadin-multi-select-combo-box>
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -39,6 +47,14 @@ snapshots["vaadin-multi-select-combo-box host default"] =
 
 snapshots["vaadin-multi-select-combo-box host label"] = 
 `<vaadin-multi-select-combo-box has-label="">
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -77,6 +93,14 @@ snapshots["vaadin-multi-select-combo-box host label"] =
 
 snapshots["vaadin-multi-select-combo-box host helper"] = 
 `<vaadin-multi-select-combo-box has-helper="">
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -123,6 +147,14 @@ snapshots["vaadin-multi-select-combo-box host error"] =
   has-error-message=""
   invalid=""
 >
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -162,6 +194,14 @@ snapshots["vaadin-multi-select-combo-box host error"] =
 
 snapshots["vaadin-multi-select-combo-box host required"] = 
 `<vaadin-multi-select-combo-box required="">
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -202,6 +242,14 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
   aria-disabled="true"
   disabled=""
 >
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -241,6 +289,14 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
 
 snapshots["vaadin-multi-select-combo-box host readonly"] = 
 `<vaadin-multi-select-combo-box readonly="">
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -279,6 +335,14 @@ snapshots["vaadin-multi-select-combo-box host readonly"] =
 
 snapshots["vaadin-multi-select-combo-box host placeholder"] = 
 `<vaadin-multi-select-combo-box placeholder="Placeholder">
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -319,6 +383,14 @@ snapshots["vaadin-multi-select-combo-box host opened default"] =
   focused=""
   opened=""
 >
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -356,34 +428,16 @@ snapshots["vaadin-multi-select-combo-box host opened default"] =
 
 snapshots["vaadin-multi-select-combo-box host opened overlay"] = 
 `<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
 >
-  <vaadin-multi-select-combo-box-scroller
-    aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-multi-select-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened overlay */
-
-snapshots["vaadin-multi-select-combo-box host opened overlay class"] = 
-`<vaadin-multi-select-combo-box-overlay
-  class="custom multi-select-combo-box-overlay"
-  id="overlay"
-  no-vertical-overlap=""
->
-  <vaadin-multi-select-combo-box-scroller
-    aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-multi-select-combo-box-scroller>
-</vaadin-multi-select-combo-box-overlay>
-`;
-/* end snapshot vaadin-multi-select-combo-box host opened overlay class */
 
 snapshots["vaadin-multi-select-combo-box shadow default"] = 
 `<div class="vaadin-multi-select-combo-box-container">
@@ -396,40 +450,37 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
     >
     </span>
   </div>
-  <vaadin-multi-select-combo-box-internal id="comboBox">
-    <vaadin-multi-select-combo-box-container part="input-field">
-      <slot
-        name="overflow"
-        slot="prefix"
-      >
+  <vaadin-multi-select-combo-box-container part="input-field">
+    <slot
+      name="overflow"
+      slot="prefix"
+    >
+    </slot>
+    <div
+      id="chips"
+      part="chips"
+      slot="prefix"
+    >
+      <slot name="chip">
       </slot>
-      <div
-        id="chips"
-        part="chips"
-        slot="prefix"
-      >
-        <slot name="chip">
-        </slot>
-      </div>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-multi-select-combo-box-container>
-  </vaadin-multi-select-combo-box-internal>
+    </div>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="field-button clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="field-button toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-multi-select-combo-box-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -438,9 +489,18 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
+<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
+  id="overlay"
+  no-vertical-overlap=""
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+</vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow default */
 
@@ -455,47 +515,40 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
     >
     </span>
   </div>
-  <vaadin-multi-select-combo-box-internal
-    aria-disabled="true"
+  <vaadin-multi-select-combo-box-container
     disabled=""
-    id="comboBox"
+    part="input-field"
   >
-    <vaadin-multi-select-combo-box-container
-      disabled=""
-      part="input-field"
+    <slot
+      name="overflow"
+      slot="prefix"
     >
-      <slot
-        name="overflow"
-        slot="prefix"
-      >
+    </slot>
+    <div
+      id="chips"
+      part="chips"
+      slot="prefix"
+    >
+      <slot name="chip">
       </slot>
-      <div
-        id="chips"
-        part="chips"
-        slot="prefix"
-      >
-        <slot name="chip">
-        </slot>
-      </div>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-multi-select-combo-box-container>
-  </vaadin-multi-select-combo-box-internal>
+    </div>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="field-button clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="field-button toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-multi-select-combo-box-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -504,9 +557,18 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
+<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
+  id="overlay"
+  no-vertical-overlap=""
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+</vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow disabled */
 
@@ -521,46 +583,40 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
     >
     </span>
   </div>
-  <vaadin-multi-select-combo-box-internal
-    id="comboBox"
+  <vaadin-multi-select-combo-box-container
+    part="input-field"
     readonly=""
   >
-    <vaadin-multi-select-combo-box-container
-      part="input-field"
-      readonly=""
+    <slot
+      name="overflow"
+      slot="prefix"
     >
-      <slot
-        name="overflow"
-        slot="prefix"
-      >
+    </slot>
+    <div
+      id="chips"
+      part="chips"
+      slot="prefix"
+    >
+      <slot name="chip">
       </slot>
-      <div
-        id="chips"
-        part="chips"
-        slot="prefix"
-      >
-        <slot name="chip">
-        </slot>
-      </div>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-multi-select-combo-box-container>
-  </vaadin-multi-select-combo-box-internal>
+    </div>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="field-button clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="field-button toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-multi-select-combo-box-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -569,9 +625,18 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
+<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
+  id="overlay"
+  no-vertical-overlap=""
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+</vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow readonly */
 
@@ -586,43 +651,40 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
     >
     </span>
   </div>
-  <vaadin-multi-select-combo-box-internal id="comboBox">
-    <vaadin-multi-select-combo-box-container
-      invalid=""
-      part="input-field"
+  <vaadin-multi-select-combo-box-container
+    invalid=""
+    part="input-field"
+  >
+    <slot
+      name="overflow"
+      slot="prefix"
     >
-      <slot
-        name="overflow"
-        slot="prefix"
-      >
+    </slot>
+    <div
+      id="chips"
+      part="chips"
+      slot="prefix"
+    >
+      <slot name="chip">
       </slot>
-      <div
-        id="chips"
-        part="chips"
-        slot="prefix"
-      >
-        <slot name="chip">
-        </slot>
-      </div>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-multi-select-combo-box-container>
-  </vaadin-multi-select-combo-box-internal>
+    </div>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="field-button clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="field-button toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-multi-select-combo-box-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -631,9 +693,18 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
+<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
+  id="overlay"
+  no-vertical-overlap=""
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+</vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow invalid */
 

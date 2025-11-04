@@ -4,7 +4,7 @@ import './not-animated-styles.js';
 import '../src/vaadin-popover.js';
 
 describe('position', () => {
-  let popover, target, overlay;
+  let popover, target, overlay, defaultOffset;
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
@@ -15,59 +15,61 @@ describe('position', () => {
     popover.target = target;
     await nextRender();
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+    // The default offset is 0px in core styles and 4px in base styles + 0.1px for rounding
+    defaultOffset = 0.1 + parseInt(getComputedStyle(overlay).getPropertyValue('--_default-offset'));
   });
 
   // Overlay above the target (position="top-*")
   function assertPlacedAbove(overlayRect, targetRect) {
-    expect(overlayRect.bottom).to.be.closeTo(targetRect.top, 1);
+    expect(overlayRect.bottom).to.be.closeTo(targetRect.top, defaultOffset);
   }
 
   // Overlay below the target (position="bottom-*")
   function assertPlacedBelow(overlayRect, targetRect) {
-    expect(overlayRect.top).to.be.closeTo(targetRect.bottom, 1);
+    expect(overlayRect.top).to.be.closeTo(targetRect.bottom, defaultOffset);
   }
 
   // Overlay before the target (position="start-*")
   function assertPlacedBefore(overlayRect, targetRect, dir) {
     const x1 = dir === 'rtl' ? 'left' : 'right';
     const x2 = dir === 'rtl' ? 'right' : 'left';
-    expect(overlayRect[x1]).to.be.closeTo(targetRect[x2], 1);
+    expect(overlayRect[x1]).to.be.closeTo(targetRect[x2], defaultOffset);
   }
 
   // Overlay after the target (position="end-*")
   function assertPlacedAfter(overlayRect, targetRect, dir) {
     const x1 = dir === 'rtl' ? 'right' : 'left';
     const x2 = dir === 'rtl' ? 'left' : 'right';
-    expect(overlayRect[x1]).to.be.closeTo(targetRect[x2], 1);
+    expect(overlayRect[x1]).to.be.closeTo(targetRect[x2], defaultOffset);
   }
 
   function assertStartAligned(overlayRect, targetRect, dir) {
     const x = dir === 'rtl' ? 'right' : 'left';
-    expect(overlayRect[x]).to.be.closeTo(targetRect[x], 1);
+    expect(overlayRect[x]).to.be.closeTo(targetRect[x], defaultOffset);
   }
 
   function assertEndAligned(overlayRect, targetRect, dir) {
     const x = dir === 'rtl' ? 'left' : 'right';
-    expect(overlayRect[x]).to.be.closeTo(targetRect[x], 1);
+    expect(overlayRect[x]).to.be.closeTo(targetRect[x], defaultOffset);
   }
 
   function assertTopAligned(overlayRect, targetRect) {
-    expect(overlayRect.top).to.be.closeTo(targetRect.top, 1);
+    expect(overlayRect.top).to.be.closeTo(targetRect.top, defaultOffset);
   }
 
   function assertBottomAligned(overlayRect, targetRect) {
-    expect(overlayRect.bottom).to.be.closeTo(targetRect.bottom, 1);
+    expect(overlayRect.bottom).to.be.closeTo(targetRect.bottom, defaultOffset);
   }
 
   function assertCenteredHorizontally(overlayRect, targetRect, dir) {
     const coord = dir === 'rtl' ? 'right' : 'left';
     const offset = targetRect.width / 2 - overlayRect.width / 2;
-    expect(overlayRect[coord]).to.be.closeTo(targetRect[coord] + (dir === 'rtl' ? offset * -1 : offset), 1);
+    expect(overlayRect[coord]).to.be.closeTo(targetRect[coord] + (dir === 'rtl' ? offset * -1 : offset), defaultOffset);
   }
 
   function assertCenteredVertically(overlayRect, targetRect) {
     const offset = targetRect.height / 2 - overlayRect.height / 2;
-    expect(overlayRect.top).to.be.closeTo(targetRect.top + offset, 1);
+    expect(overlayRect.top).to.be.closeTo(targetRect.top + offset, defaultOffset);
   }
 
   describe('default', () => {

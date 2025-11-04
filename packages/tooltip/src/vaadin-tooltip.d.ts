@@ -10,6 +10,17 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
 export { TooltipPosition } from './vaadin-tooltip-mixin.js';
 
 /**
+ * Fired when the tooltip text content is changed.
+ */
+export type TooltipContentChangedEvent = CustomEvent<{ content: string }>;
+
+export interface TooltipCustomEventMap {
+  'content-changed': TooltipContentChangedEvent;
+}
+
+export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEventMap {}
+
+/**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  *
  * ```html
@@ -17,22 +28,34 @@ export { TooltipPosition } from './vaadin-tooltip-mixin.js';
  * <vaadin-tooltip text="Click to save changes" for="confirm"></vaadin-tooltip>
  * ```
  *
+ * ### Markdown Support
+ *
+ * The tooltip supports rendering Markdown content by setting the `markdown` property:
+ *
+ * ```html
+ * <button id="info">Info</button>
+ * <vaadin-tooltip
+ *   text="**Important:** Click to view *detailed* information"
+ *   markdown
+ *   for="info">
+ * </vaadin-tooltip>
+ * ```
+ *
  * ### Styling
  *
- * `<vaadin-tooltip>` uses `<vaadin-tooltip-overlay>` internal
- * themable component as the actual visible overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-tooltip-overlay>` parts.
+ * Part name   | Description
+ * ----------- | ---------------
+ * `overlay`   | The overlay element
+ * `content`   | The overlay content element
  *
  * The following state attributes are available for styling:
  *
  * Attribute        | Description
  * -----------------|----------------------------------------
+ * `markdown`       | Reflects the `markdown` property value.
  * `position`       | Reflects the `position` property value.
- *
- * Note: the `theme` attribute value set on `<vaadin-tooltip>` is
- * propagated to the internal `<vaadin-tooltip-overlay>` component.
  *
  * ### Custom CSS Properties
  *
@@ -46,6 +69,8 @@ export { TooltipPosition } from './vaadin-tooltip-mixin.js';
  * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} content-changed - Fired when the tooltip text content is changed.
  */
 declare class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(HTMLElement))) {
   /**
@@ -65,6 +90,18 @@ declare class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(HTMLE
    * except for those that have hover delay configured using property.
    */
   static setDefaultHoverDelay(hoverDelay: number): void;
+
+  addEventListener<K extends keyof TooltipEventMap>(
+    type: K,
+    listener: (this: Tooltip, ev: TooltipEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof TooltipEventMap>(
+    type: K,
+    listener: (this: Tooltip, ev: TooltipEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {

@@ -13,7 +13,7 @@ import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { sideNavSlotStyles, sideNavStyles } from './styles/vaadin-side-nav-core-styles.js';
+import { sideNavSlotStyles, sideNavStyles } from './styles/vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 /**
@@ -74,7 +74,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * @mixes SideNavChildrenMixin
  */
 class SideNav extends SideNavChildrenMixin(
-  SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))))),
+  SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-side-nav';
@@ -149,6 +149,19 @@ class SideNav extends SideNavChildrenMixin(
        */
       location: {
         observer: '__locationChanged',
+      },
+
+      /**
+       * Whether to expand parent items of the nested matching item after initial
+       * rendering or navigation. By default, all the parent items are expanded.
+       * Set to true to disable this behavior.
+       *
+       * @attr {boolean} no-auto-expand
+       */
+      noAutoExpand: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false,
       },
     };
   }

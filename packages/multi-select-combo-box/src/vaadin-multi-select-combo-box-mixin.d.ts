@@ -8,8 +8,12 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ComboBoxDataProvider, ComboBoxItemModel } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import type { ComboBoxItemModel } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
+import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -28,21 +32,25 @@ export type MultiSelectComboBoxRenderer<TItem> = (
 ) => void;
 
 export interface MultiSelectComboBoxI18n {
-  cleared: string;
-  focused: string;
-  selected: string;
-  deselected: string;
-  total: string;
+  cleared?: string;
+  focused?: string;
+  selected?: string;
+  deselected?: string;
+  total?: string;
 }
 
 export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ClearButtonMixinClass> &
+  Constructor<ComboBoxBaseMixinClass> &
+  Constructor<ComboBoxDataProviderMixinClass<TItem>> &
+  Constructor<ComboBoxItemsMixinClass<TItem>> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<MultiSelectComboBoxI18n>> &
   Constructor<InputConstraintsMixinClass> &
   Constructor<InputControlMixinClass> &
   Constructor<InputMixinClass> &
@@ -77,44 +85,6 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   allowCustomValue: boolean;
 
   /**
-   * Set true to prevent the overlay from opening automatically.
-   * @attr {boolean} auto-open-disabled
-   */
-  autoOpenDisabled: boolean;
-
-  /**
-   * Function that provides items lazily. Receives two arguments:
-   *
-   * - `params` - Object with the following properties:
-   *   - `params.page` Requested page index
-   *   - `params.pageSize` Current page size
-   *   - `params.filter` Currently applied filter
-   *
-   * - `callback(items, size)` - Callback function with arguments:
-   *   - `items` Current page of items
-   *   - `size` Total number of items.
-   */
-  dataProvider: ComboBoxDataProvider<TItem> | null | undefined;
-
-  /**
-   * A subset of items, filtered based on the user input. Filtered items
-   * can be assigned directly to omit the internal filtering functionality.
-   * The items can be of either `String` or `Object` type.
-   */
-  filteredItems: TItem[] | undefined;
-
-  /**
-   * Filtering string the user has typed into the input field.
-   */
-  filter: string;
-
-  /**
-   * A full set of items to filter the visible options from.
-   * The items can be of either `String` or `Object` type.
-   */
-  items: TItem[] | undefined;
-
-  /**
    * A function used to generate CSS class names for dropdown
    * items and selected chips based on the item. The return
    * value should be the generated class name as a string, or
@@ -123,31 +93,18 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   itemClassNameGenerator: (item: TItem) => string;
 
   /**
-   * The item property used for a visual representation of the item.
-   * @attr {string} item-label-path
-   */
-  itemLabelPath: string;
-
-  /**
    * Path for the id of the item, used to detect whether the item is selected.
    * @attr {string} item-id-path
    */
   itemIdPath: string;
 
   /**
-   * Path for the value of the item. If `items` is an array of objects,
-   * this property is used as a string value for the selected item.
-   * @attr {string} item-value-path
-   */
-  itemValuePath: string;
-
-  /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
-   * ```
+   * ```js
    * {
    *   // Screen reader announcement on clear button click.
    *   cleared: 'Selection cleared',
@@ -175,24 +132,6 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * True when loading items from the data provider, false otherwise.
    */
   loading: boolean;
-
-  /**
-   * A space-delimited list of CSS class names to set on the overlay element.
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
-
-  /**
-   * True if the dropdown is open, false otherwise.
-   */
-  opened: boolean;
-
-  /**
-   * Number of items fetched at a time from the data provider.
-   * @attr {number} page-size
-   */
-  pageSize: number;
 
   /**
    * A hint to the user of what can be entered in the control.
@@ -225,16 +164,6 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * @attr {boolean} selected-items-on-top
    */
   selectedItemsOnTop: boolean;
-
-  /**
-   * Total number of items.
-   */
-  size: number | undefined;
-
-  /**
-   * Clears the cached pages and reloads data from data provider when needed.
-   */
-  clearCache(): void;
 
   /**
    * Clears the selected items.

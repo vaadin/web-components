@@ -28,7 +28,7 @@ export declare class GridSelectionColumnBaseMixinClass<TItem> {
   selectAll: boolean;
 
   /**
-   * When true, the active gets automatically selected.
+   * When true, the active item gets automatically selected.
    * @attr {boolean} auto-select
    */
   autoSelect: boolean;

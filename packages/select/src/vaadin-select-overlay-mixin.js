@@ -27,6 +27,31 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /**
+     * Override method from OverlayFocusMixin to use slotted div as content root.
+     * @protected
+     * @override
+     */
+    get _contentRoot() {
+      return this._rendererRoot;
+    }
+
+    /**
+     * Override method from OverlayMixin to use slotted div as a renderer root.
+     * @protected
+     * @override
+     */
+    get _rendererRoot() {
+      if (!this.__savedRoot) {
+        const root = document.createElement('div');
+        root.setAttribute('slot', 'overlay');
+        this.owner.appendChild(root);
+        this.__savedRoot = root;
+      }
+
+      return this.__savedRoot;
+    }
+
+    /**
      * Override method inherited from `Overlay` to always close on outside click,
      * in order to avoid problem when using inside of the modeless dialog.
      *
@@ -51,22 +76,13 @@ export const SelectOverlayMixin = (superClass) =>
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this.children).find((el) => el.localName !== 'style');
+      return Array.from(this._rendererRoot.children).find((el) => el.localName !== 'style');
     }
 
     /** @private */
     _updateOverlayWidth(opened, positionTarget) {
       if (opened && positionTarget) {
         this.style.setProperty('--_vaadin-select-overlay-default-width', `${positionTarget.offsetWidth}px`);
-
-        const widthProperty = '--vaadin-select-overlay-width';
-        const customWidth = getComputedStyle(this.owner).getPropertyValue(widthProperty);
-
-        if (customWidth === '') {
-          this.style.removeProperty(widthProperty);
-        } else {
-          this.style.setProperty(widthProperty, customWidth);
-        }
       }
     }
 

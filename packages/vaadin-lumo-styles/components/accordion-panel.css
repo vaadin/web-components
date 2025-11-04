@@ -7,9 +7,10 @@
 @import '../src/components/details.css';
 @import './accordion-heading.css';
 
-:is(:root, :host)::before {
-  --vaadin-accordion-panel-lumo-inject: 1;
-  --vaadin-accordion-panel-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-accordion-panel-inject: 1;
+  --_lumo-vaadin-accordion-panel-inject-modules:
     lumo_components_details,
     lumo_components_accordion-panel;
 }

@@ -3,14 +3,18 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const loginFormWrapperStyles = css`
   :host {
     background: var(--vaadin-login-form-background, transparent);
     border-radius: var(--vaadin-login-form-border-radius, 0);
-    display: block;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-l));
+    padding: var(--vaadin-login-form-padding, var(--vaadin-padding-l));
     max-width: 100%;
     width: var(--vaadin-login-form-width, 360px);
   }
@@ -19,23 +23,14 @@ export const loginFormWrapperStyles = css`
     display: none !important;
   }
 
-  [part='form'] {
-    box-sizing: border-box;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
-    padding: var(--vaadin-login-form-padding, var(--vaadin-padding));
-  }
-
-  [part='form'] ::slotted(form) {
+  ::slotted(form) {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-m));
   }
 
-  [part='form-title'] {
-    color: var(--vaadin-login-form-title-color, var(--vaadin-color));
+  ::slotted([slot='form-title']) {
+    color: var(--vaadin-login-form-title-color, var(--vaadin-text-color));
     font-size: var(--vaadin-login-form-title-font-size, 1.25rem);
     font-weight: var(--vaadin-login-form-title-font-weight, 600);
     line-height: var(--vaadin-login-form-title-line-height, inherit);
@@ -46,10 +41,10 @@ export const loginFormWrapperStyles = css`
   }
 
   [part='error-message'] {
-    color: var(--vaadin-login-form-error-color, var(--vaadin-color));
+    color: var(--vaadin-login-form-error-color, var(--vaadin-text-color));
     font-size: var(--vaadin-login-form-error-font-size, inherit);
     font-weight: var(--vaadin-login-form-error-font-weight, 400);
-    gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     line-height: var(--vaadin-login-form-error-line-height, inherit);
   }
@@ -60,7 +55,7 @@ export const loginFormWrapperStyles = css`
     display: inline-block;
     flex: none;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-warn);
+    mask: var(--_vaadin-icon-warn) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
   }
 

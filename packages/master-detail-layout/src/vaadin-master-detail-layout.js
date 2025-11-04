@@ -10,10 +10,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-core-styles.js';
-import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-core-styles.js';
+import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
+import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-base-styles.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -52,21 +51,13 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  * @mixes ResizeMixin
  * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(
-  ResizeMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
-) {
+class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
 
   static get styles() {
     return masterDetailLayoutStyles;
-  }
-
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
   }
 
   static get properties() {
@@ -300,9 +291,9 @@ class MasterDetailLayout extends SlotStylesMixin(
 
   /** @private */
   __onDetailKeydown(event) {
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && !event.defaultPrevented) {
       // Prevent firing on parent layout when using nested layouts
-      event.stopPropagation();
+      event.preventDefault();
       this.dispatchEvent(new CustomEvent('detail-escape-press'));
     }
   }
@@ -532,8 +523,10 @@ class MasterDetailLayout extends SlotStylesMixin(
    * @protected
    */
   async _finishTransition() {
-    // Detect new layout mode after DOM has been updated
-    this.__detectLayoutMode();
+    // Detect new layout mode after DOM has been updated.
+    // The detection is wrapped in queueMicroTask in order to allow custom Lit elements to render before measurement.
+    // https://github.com/vaadin/web-components/issues/8969
+    queueMicrotask(() => this.__detectLayoutMode());
 
     if (!this.__transition) {
       return Promise.resolve();

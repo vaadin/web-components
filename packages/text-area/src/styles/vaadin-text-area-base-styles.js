@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const textAreaStyles = css`
@@ -18,7 +18,7 @@ export const textAreaStyles = css`
   }
 
   [part='input-field'] ::slotted(:not(textarea)),
-  [part='clear-button'] {
+  [part~='clear-button'] {
     align-self: flex-start;
     position: sticky;
     top: 0;

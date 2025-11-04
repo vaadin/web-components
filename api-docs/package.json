@@ -1,0 +1,22 @@
+{
+  "name": "api-docs",
+  "version": "25.0.0-beta3",
+  "private": true,
+  "description": "Documentation site for Vaadin web components API",
+  "license": "Apache-2.0",
+  "author": "Vaadin Ltd",
+  "type": "module",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "generate": "tsx generate.ts"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "node-html-parser": "^7.0.1",
+    "tsx": "^4.20.3"
+  }
+}

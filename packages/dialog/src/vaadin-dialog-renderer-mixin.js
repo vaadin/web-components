@@ -30,7 +30,7 @@ export const DialogRendererMixin = (superClass) =>
          * and the elements created by the renderer will be placed next to
          * each other, with the title coming first.
          *
-         * When `headerTitle` is set, the attribute `has-title` is added to the overlay element.
+         * When `headerTitle` is set, the attribute `has-title` is set on the dialog.
          * @attr {string} header-title
          */
         headerTitle: String,
@@ -46,7 +46,7 @@ export const DialogRendererMixin = (superClass) =>
          * and the elements created by the renderer will be placed next to
          * each other, with the title coming first.
          *
-         * When `headerRenderer` is set, the attribute `has-header` is added to the overlay element.
+         * When `headerRenderer` is set, the attribute `has-header` is set on the dialog.
          * @type {DialogRenderer | undefined}
          */
         headerRenderer: {
@@ -60,7 +60,7 @@ export const DialogRendererMixin = (superClass) =>
          * - `root` The root container DOM element. Append your content to it.
          * - `dialog` The reference to the `<vaadin-dialog>` element.
          *
-         * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
+         * When `footerRenderer` is set, the attribute `has-footer` is set on the dialog.
          * @type {DialogRenderer | undefined}
          */
         footerRenderer: {

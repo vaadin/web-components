@@ -4,6 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -11,13 +15,27 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
+const DEFAULT_I18N = {
+  cleared: 'Selection cleared',
+  focused: 'focused. Press Backspace to remove',
+  selected: 'added to selection',
+  deselected: 'removed from selection',
+  total: '{count} items selected',
+};
+
 /**
  * @polymerMixin
+ * @mixes ComboBoxDataProviderMixin
+ * @mixes ComboBoxItemsMixin
+ * @mixes I18nMixin
  * @mixes InputControlMixin
  * @mixes ResizeMixin
  */
 export const MultiSelectComboBoxMixin = (superClass) =>
-  class MultiSelectComboBoxMixinClass extends InputControlMixin(ResizeMixin(superClass)) {
+  class MultiSelectComboBoxMixinClass extends I18nMixin(
+    DEFAULT_I18N,
+    ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+  ) {
     static get properties() {
       return {
         /**
@@ -29,7 +47,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_autoExpandHorizontallyChanged',
           sync: true,
         },
 
@@ -43,37 +60,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_autoExpandVerticallyChanged',
-          sync: true,
-        },
-
-        /**
-         * Set true to prevent the overlay from opening automatically.
-         * @attr {boolean} auto-open-disabled
-         */
-        autoOpenDisabled: {
-          type: Boolean,
-          sync: true,
-        },
-
-        /**
-         * Set to true to display the clear icon which clears the input.
-         * @attr {boolean} clear-button-visible
-         */
-        clearButtonVisible: {
-          type: Boolean,
-          reflectToAttribute: true,
-          observer: '_clearButtonVisibleChanged',
-          value: false,
-          sync: true,
-        },
-
-        /**
-         * A full set of items to filter the visible options from.
-         * The items can be of either `String` or `Object` type.
-         */
-        items: {
-          type: Array,
           sync: true,
         },
 
@@ -85,28 +71,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         itemClassNameGenerator: {
           type: Object,
-          observer: '__itemClassNameGeneratorChanged',
-          sync: true,
-        },
-
-        /**
-         * The item property used for a visual representation of the item.
-         * @attr {string} item-label-path
-         */
-        itemLabelPath: {
-          type: String,
-          value: 'label',
-          sync: true,
-        },
-
-        /**
-         * Path for the value of the item. If `items` is an array of objects,
-         * this property is used as a string value for the selected item.
-         * @attr {string} item-value-path
-         */
-        itemValuePath: {
-          type: String,
-          value: 'value',
           sync: true,
         },
 
@@ -117,43 +81,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         itemIdPath: {
           type: String,
           sync: true,
-        },
-
-        /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure and default values:
-         * ```
-         * {
-         *   // Screen reader announcement on clear button click.
-         *   cleared: 'Selection cleared',
-         *   // Screen reader announcement when a chip is focused.
-         *   focused: ' focused. Press Backspace to remove',
-         *   // Screen reader announcement when item is selected.
-         *   selected: 'added to selection',
-         *   // Screen reader announcement when item is deselected.
-         *   deselected: 'removed from selection',
-         *   // Screen reader announcement of the selected items count.
-         *   // {count} is replaced with the actual count of items.
-         *   total: '{count} items selected',
-         * }
-         * ```
-         * @type {!MultiSelectComboBoxI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              cleared: 'Selection cleared',
-              focused: 'focused. Press Backspace to remove',
-              selected: 'added to selection',
-              deselected: 'removed from selection',
-              total: '{count} items selected',
-            };
-          },
         },
 
         /**
@@ -175,22 +102,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /**
-         * A space-delimited list of CSS class names to set on the overlay element.
-         *
-         * @attr {string} overlay-class
-         */
-        overlayClass: {
-          type: String,
-          sync: true,
-        },
-
-        /**
          * When present, it specifies that the field is read-only.
          */
         readonly: {
           type: Boolean,
           value: false,
-          observer: '_readonlyChanged',
           reflectToAttribute: true,
           sync: true,
         },
@@ -203,53 +119,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Array,
           value: () => [],
           notify: true,
-          sync: true,
-        },
-
-        /**
-         * True if the dropdown is open, false otherwise.
-         */
-        opened: {
-          type: Boolean,
-          notify: true,
-          value: false,
-          reflectToAttribute: true,
-          sync: true,
-        },
-
-        /**
-         * Total number of items.
-         */
-        size: {
-          type: Number,
-          sync: true,
-        },
-
-        /**
-         * Number of items fetched at a time from the data provider.
-         * @attr {number} page-size
-         */
-        pageSize: {
-          type: Number,
-          value: 50,
-          observer: '_pageSizeChanged',
-          sync: true,
-        },
-
-        /**
-         * Function that provides items lazily. Receives two arguments:
-         *
-         * - `params` - Object with the following properties:
-         *   - `params.page` Requested page index
-         *   - `params.pageSize` Current page size
-         *   - `params.filter` Currently applied filter
-         *
-         * - `callback(items, size)` - Callback function with arguments:
-         *   - `items` Current page of items
-         *   - `size` Total number of items.
-         */
-        dataProvider: {
-          type: Object,
           sync: true,
         },
 
@@ -291,26 +160,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /**
-         * Filtering string the user has typed into the input field.
-         */
-        filter: {
-          type: String,
-          value: '',
-          notify: true,
-          sync: true,
-        },
-
-        /**
-         * A subset of items, filtered based on the user input. Filtered items
-         * can be assigned directly to omit the internal filtering functionality.
-         * The items can be of either `String` or `Object` type.
-         */
-        filteredItems: {
-          type: Array,
-          sync: true,
-        },
-
-        /**
          * Set to true to group selected items at the top of the overlay.
          * @attr {boolean} selected-items-on-top
          */
@@ -348,6 +197,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         /** @private */
         _topGroup: {
           type: Array,
+          observer: '_topGroupChanged',
+          sync: true,
+        },
+
+        /** @private */
+        _inputField: {
+          type: Object,
         },
       };
     }
@@ -355,9 +211,42 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     static get observers() {
       return [
         '_selectedItemsChanged(selectedItems)',
+        '__openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
+        '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```js
+     * {
+     *   // Screen reader announcement on clear button click.
+     *   cleared: 'Selection cleared',
+     *   // Screen reader announcement when a chip is focused.
+     *   focused: ' focused. Press Backspace to remove',
+     *   // Screen reader announcement when item is selected.
+     *   selected: 'added to selection',
+     *   // Screen reader announcement when item is deselected.
+     *   deselected: 'removed from selection',
+     *   // Screen reader announcement of the selected items count.
+     *   // {count} is replaced with the actual count of items.
+     *   total: '{count} items selected',
+     * }
+     * ```
+     * @return {!MultiSelectComboBoxI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @protected */
@@ -399,6 +288,15 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return this.selectedItems && this.selectedItems.length > 0;
     }
 
+    /**
+     * Tag name prefix used by scroller and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-multi-select-combo-box';
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -419,6 +317,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       this._tooltipController.setAriaTarget(this.inputElement);
       this._tooltipController.setShouldShow((target) => !target.opened);
 
+      this._toggleElement = this.$.toggleButton;
       this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
 
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-multi-select-combo-box-chip', {
@@ -428,8 +327,41 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
+    }
 
-      this.__updateChips();
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer'].forEach((prop) => {
+        if (props.has(prop)) {
+          this._scroller[prop] = this[prop];
+        }
+      });
+
+      if (props.has('selectedItems') && this.opened) {
+        this.$.overlay._updateOverlayWidth();
+      }
+
+      const chipProps = [
+        'autoExpandHorizontally',
+        'autoExpandVertically',
+        'disabled',
+        'readonly',
+        'clearButtonVisible',
+        'itemClassNameGenerator',
+      ];
+      if (chipProps.some((prop) => props.has(prop))) {
+        this.__updateChips();
+      }
+
+      if (props.has('readonly')) {
+        this._setDropdownItems(this.filteredItems);
+
+        if (this.dataProvider) {
+          this.clearCache();
+        }
+      }
     }
 
     /**
@@ -441,21 +373,36 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Opens the dropdown list.
+     * @override
+     */
+    open() {
+      // Allow opening dropdown when readonly.
+      if (!this.disabled && !(this.readonly && this.selectedItems.length === 0)) {
+        this.opened = true;
+      }
+    }
+
+    /**
      * Clears the selected items.
      */
     clear() {
       this.__updateSelection([]);
 
-      announce(this.i18n.cleared);
+      announce(this.__effectiveI18n.cleared);
     }
 
     /**
      * Clears the cached pages and reloads data from data provider when needed.
+     * @override
      */
     clearCache() {
-      if (this.$ && this.$.comboBox) {
-        this.$.comboBox.clearCache();
+      // Do not clear the data provider cache when read-only.
+      if (this.readonly) {
+        return;
       }
+
+      super.clearCache();
     }
 
     /**
@@ -465,34 +412,130 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (this.$ && this.$.comboBox) {
-        this.$.comboBox.requestContentUpdate();
+      if (!this._scroller) {
+        return;
+      }
+
+      this._scroller.requestContentUpdate();
+
+      this._getItemElements().forEach((item) => {
+        item.requestContentUpdate();
+      });
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to implement clearing logic.
+     * @protected
+     * @override
+     */
+    _onClearAction() {
+      this.clear();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin`
+     * to commit value on overlay closing.
+     * @protected
+     * @override
+     */
+    _onClosed() {
+      // Do not commit selected item again on outside click
+      this._ignoreCommitValue = true;
+
+      if (!this.loading || this.allowCustomValue) {
+        this._commitValue();
+      }
+    }
+
+    /** @private */
+    __updateScroller(opened, items, focusedIndex, theme) {
+      if (opened) {
+        this._scroller.style.maxHeight =
+          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
+      }
+
+      this._scroller.setProperties({
+        items: opened ? items : [],
+        opened,
+        focusedIndex,
+        theme,
+      });
+    }
+
+    /** @private */
+    __openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
+      // Close the overlay if there are no items to display.
+      // See https://github.com/vaadin/vaadin-combo-box/pull/964
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+    }
+
+    /**
+     * @protected
+     */
+    _closeOrCommit() {
+      if (!this.opened) {
+        this._commitValue();
+      } else {
+        this.close();
       }
     }
 
     /**
-     * Override method inherited from `DisabledMixin` to forward disabled to chips.
      * @protected
      * @override
      */
-    _disabledChanged(disabled, oldDisabled) {
-      super._disabledChanged(disabled, oldDisabled);
+    _commitValue() {
+      // Store filter value for checking if user input is matching
+      // an item which is already selected, to not un-select it.
+      this._lastFilter = this.filter;
 
-      if (disabled || oldDisabled) {
-        this.__updateChips();
+      // Do not commit focused item on not blur / outside click
+      if (this._ignoreCommitValue) {
+        this._inputElementValue = '';
+        this._focusedIndex = -1;
+        this._ignoreCommitValue = false;
+      } else {
+        this.__commitUserInput();
+      }
+
+      // Clear filter unless keepFilter is set
+      if (!this.keepFilter || !this.opened) {
+        this.filter = '';
       }
     }
 
-    /**
-     * Override method inherited from `InputMixin` to forward the input to combo-box.
-     * @protected
-     * @override
-     */
-    _inputElementChanged(input) {
-      super._inputElementChanged(input);
+    /** @private */
+    __commitUserInput() {
+      if (this._focusedIndex > -1) {
+        const focusedItem = this._dropdownItems[this._focusedIndex];
+        this.__selectItem(focusedItem);
+      } else if (this._inputElementValue) {
+        // Detect if input value doesn't match an existing item
+        const items = [...this._dropdownItems];
+        const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
 
-      if (input) {
-        this.$.comboBox._setInputElement(input);
+        if (this.allowCustomValue && !itemMatchingInputValue) {
+          const customValue = this._inputElementValue;
+
+          // Store reference to the last custom value for checking it on focusout.
+          this._lastCustomValue = customValue;
+
+          this.__clearInternalValue(true);
+
+          this.dispatchEvent(
+            new CustomEvent('custom-value-set', {
+              detail: customValue,
+              composed: true,
+              bubbles: true,
+            }),
+          );
+        } else if (!this.allowCustomValue && !this.opened && itemMatchingInputValue) {
+          // An item matching by label was found, select it.
+          this.__selectItem(itemMatchingInputValue);
+        } else {
+          // Clear input value on Escape press while closed.
+          this._inputElementValue = '';
+        }
       }
     }
 
@@ -502,6 +545,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @protected
      */
     _setFocused(focused) {
+      if (!focused) {
+        this._ignoreCommitValue = true;
+      }
+
       super._setFocused(focused);
 
       // Do not validate when focusout is caused by document
@@ -509,6 +556,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (!focused && document.hasFocus()) {
         this._focusedChipIndex = -1;
         this._requestValidation();
+      }
+
+      if (!focused && this.readonly && !this._closeOnBlurIsPrevented) {
+        this.close();
       }
     }
 
@@ -539,73 +590,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       }
 
       super._delegateAttribute(name, value);
-    }
-
-    /** @private */
-    _autoExpandHorizontallyChanged(autoExpand, oldAutoExpand) {
-      if (autoExpand || oldAutoExpand) {
-        this.__updateChips();
-      }
-    }
-
-    /** @private */
-    _autoExpandVerticallyChanged(autoExpand, oldAutoExpand) {
-      if (autoExpand || oldAutoExpand) {
-        this.__updateChips();
-      }
-    }
-
-    /**
-     * Setting clear button visible reduces total space available
-     * for rendering chips, and making it hidden increases it.
-     * @private
-     */
-    _clearButtonVisibleChanged(visible, oldVisible) {
-      if (visible || oldVisible) {
-        this.__updateChips();
-      }
-    }
-
-    /**
-     * Implement two-way binding for the `filteredItems` property
-     * that can be set on the internal combo-box element.
-     *
-     * @param {CustomEvent} event
-     * @private
-     */
-    _onFilteredItemsChanged(event) {
-      const { value } = event.detail;
-      if (Array.isArray(value) || value == null) {
-        this.filteredItems = value;
-      }
-    }
-
-    /** @private */
-    _readonlyChanged(readonly, oldReadonly) {
-      if (readonly || oldReadonly) {
-        this.__updateChips();
-      }
-
-      if (this.dataProvider) {
-        this.clearCache();
-      }
-    }
-
-    /** @private */
-    __itemClassNameGeneratorChanged(generator, oldGenerator) {
-      if (generator || oldGenerator) {
-        this.__updateChips();
-      }
-    }
-
-    /** @private */
-    _pageSizeChanged(pageSize, oldPageSize) {
-      if (Math.floor(pageSize) !== pageSize || pageSize <= 0) {
-        this.pageSize = oldPageSize;
-        console.error('"pageSize" value must be an integer > 0');
-      }
-
-      this.$.comboBox.pageSize = this.pageSize;
     }
 
     /** @private */
@@ -643,15 +627,90 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       // Update selected for dropdown items
       this.requestContentUpdate();
-
-      if (this.opened) {
-        this.$.comboBox._updateOverlayWidth();
-      }
     }
 
     /** @private */
-    _getItemLabel(item) {
-      return this.$.comboBox._getItemLabel(item);
+    _topGroupChanged(topGroup) {
+      if (topGroup) {
+        this._setDropdownItems(this.filteredItems);
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle valid value.
+     * @protected
+     * @override
+     */
+    _hasValidInputValue() {
+      const hasInvalidOption = this._focusedIndex < 0 && this._inputElementValue !== '';
+      return this.allowCustomValue || !hasInvalidOption;
+    }
+
+    /**
+     * Override method inherited from the combo-box
+     * to not request data provider when read-only.
+     *
+     * @protected
+     * @override
+     */
+    _shouldFetchData() {
+      if (this.readonly) {
+        return false;
+      }
+
+      return super._shouldFetchData();
+    }
+
+    /**
+     * Override combo-box method to group selected
+     * items at the top of the overlay.
+     *
+     * @protected
+     * @override
+     */
+    _setDropdownItems(items) {
+      if (this.readonly) {
+        this.__setDropdownItems(this.selectedItems);
+        return;
+      }
+
+      if (this.filter || !this.selectedItemsOnTop) {
+        this.__setDropdownItems(items);
+        return;
+      }
+
+      if (items && items.length && this._topGroup && this._topGroup.length) {
+        // Filter out items included to the top group.
+        const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
+
+        this.__setDropdownItems(this._topGroup.concat(filteredItems));
+        return;
+      }
+
+      this.__setDropdownItems(items);
+    }
+
+    /** @private */
+    __setDropdownItems(newItems) {
+      const oldItems = this._dropdownItems;
+      this._dropdownItems = newItems;
+
+      // Store the currently focused item if any. The focused index preserves
+      // in the case when more filtered items are loading but it is reset
+      // when the user types in a filter query.
+      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
+
+      // Try to first set focus on the item that had been focused before `newItems` were updated
+      // if it is still present in the `newItems` array. Otherwise, set the focused index
+      // depending on the selected item or the filter query.
+      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
+      if (focusedItemIndex > -1) {
+        this._focusedIndex = focusedItemIndex;
+      } else {
+        // When the user filled in something that is different from the current value = filtering is enabled,
+        // set the focused index to the item that matches the filter query.
+        this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
+      }
     }
 
     /** @private */
@@ -682,13 +741,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     __clearInternalValue(force = false) {
       if (!this.keepFilter || force) {
-        // Clear both combo box value and filter.
+        // Clear both input value and filter.
         this.filter = '';
-        this.$.comboBox.clear();
+        this._inputElementValue = '';
       } else {
-        // Only clear combo box value. This effectively resets _lastCommittedValue
-        // which allows toggling the same item multiple times via keyboard.
-        this.$.comboBox.clear();
         // Restore input to the filter value. Needed when items are
         // navigated with keyboard, which overrides the input value
         // with the item label.
@@ -699,8 +755,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @private */
     __announceItem(itemLabel, isSelected, itemCount) {
       const state = isSelected ? 'selected' : 'deselected';
-      const total = this.i18n.total.replace('{count}', itemCount || 0);
-      announce(`${itemLabel} ${this.i18n[state]} ${total}`);
+      const total = this.__effectiveI18n.total.replace('{count}', itemCount || 0);
+      announce(`${itemLabel} ${this.__effectiveI18n[state]} ${total}`);
     }
 
     /** @private */
@@ -925,26 +981,20 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _onClearButtonTouchend(event) {
-      // Cancel the following click and focus events
-      event.preventDefault();
-      // Prevent default combo box behavior which can otherwise unnecessarily
-      // clear the input and filter
-      event.stopPropagation();
-
-      this.clear();
-    }
-
     /**
-     * Override method inherited from `InputControlMixin` and clear items.
+     * Override method from `ComboBoxBaseMixin` to deselect
+     * dropdown item by requesting content update on clear.
+     * @param {Event} event
      * @protected
-     * @override
      */
     _onClearButtonClick(event) {
       event.stopPropagation();
 
-      this.clear();
+      super._onClearButtonClick(event);
+
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
     }
 
     /**
@@ -969,9 +1019,85 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onEscape(event) {
-      if (this.clearButtonVisible && this.selectedItems && this.selectedItems.length) {
+      if (this.readonly) {
+        event.stopPropagation();
+        if (this.opened) {
+          this.close();
+        }
+        return;
+      }
+
+      if (this.clearButtonVisible && !this.opened && this.selectedItems && this.selectedItems.length) {
         event.stopPropagation();
         this.selectedItems = [];
+      }
+
+      super._onEscape(event);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle Escape pres.
+     * @protected
+     * @override
+     */
+    _onEscapeCancel() {
+      this._closeOrCommit();
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin` to keep
+     * overlay open when item is selected or unselected.
+     * @param {!Event} event
+     * @protected
+     * @override
+     */
+    _onEnter(event) {
+      if (this.opened) {
+        // Do not submit the surrounding form.
+        event.preventDefault();
+        // Do not trigger global listeners.
+        event.stopPropagation();
+
+        if (this.readonly) {
+          this.close();
+        } else if (this._hasValidInputValue()) {
+          // Keep selected item focused after committing on Enter.
+          const focusedItem = this._dropdownItems[this._focusedIndex];
+          this._commitValue();
+          this._focusedIndex = this._dropdownItems.indexOf(focusedItem);
+        }
+
+        return;
+      }
+
+      super._onEnter(event);
+    }
+
+    /**
+     * Override method inherited from the combo-box
+     * to not update focused item when readonly.
+     * @protected
+     * @override
+     */
+    _onArrowDown() {
+      if (!this.readonly) {
+        super._onArrowDown();
+      } else if (!this.opened) {
+        this.open();
+      }
+    }
+
+    /**
+     * Override method inherited from the combo-box
+     * to not update focused item when readonly.
+     * @protected
+     * @override
+     */
+    _onArrowUp() {
+      if (!this.readonly) {
+        super._onArrowUp();
+      } else if (!this.opened) {
+        this.open();
       }
     }
 
@@ -1097,41 +1223,34 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (focusedIndex > -1) {
           const item = chips[focusedIndex].item;
           const itemLabel = this._getItemLabel(item);
-          announce(`${itemLabel} ${this.i18n.focused}`);
+          announce(`${itemLabel} ${this.__effectiveI18n.focused}`);
         }
       }
     }
 
-    /** @private */
-    _onComboBoxChange() {
-      const item = this.$.comboBox.selectedItem;
-      if (item) {
-        this.__selectItem(item);
-      }
-    }
-
-    /** @private */
-    _onComboBoxItemSelected(event) {
-      this.__selectItem(event.detail.item);
-    }
-
-    /** @private */
-    _onCustomValueSet(event) {
-      // Do not set combo-box value
-      event.preventDefault();
-
-      // Stop the original event
+    /**
+     * @param {CustomEvent} event
+     * @protected
+     * @override
+     */
+    _overlaySelectedItemChanged(event) {
       event.stopPropagation();
 
-      this.__clearInternalValue(true);
+      // Do not un-select on click when readonly
+      if (this.readonly) {
+        return;
+      }
 
-      this.dispatchEvent(
-        new CustomEvent('custom-value-set', {
-          detail: event.detail,
-          composed: true,
-          bubbles: true,
-        }),
-      );
+      if (event.detail.item instanceof ComboBoxPlaceholder) {
+        return;
+      }
+
+      if (this.opened) {
+        // Store filter value for checking if user input is matching
+        // an item which is already selected, to not un-select it.
+        this._lastFilter = this._inputElementValue;
+        this.__selectItem(event.detail.item);
+      }
     }
 
     /** @private */

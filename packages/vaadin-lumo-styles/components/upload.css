@@ -4,25 +4,30 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/mixins/field-button.css';
-@import '../src/components/upload-file-list.css';
 @import '../src/components/upload-file.css';
 @import '../src/components/upload-icon.css';
 @import '../src/components/upload.css';
 @import './button.css';
 @import './progress-bar.css';
 
-:is(:root, :host)::before {
-  --vaadin-upload-lumo-inject: 1;
-  --vaadin-upload-lumo-inject-modules: lumo_components_upload;
+:root::before,
+:host::before {
+  --_lumo-vaadin-upload-inject: 1;
+  --_lumo-vaadin-upload-inject-modules: lumo_components_upload;
 
-  --vaadin-upload-icon-lumo-inject: 1;
-  --vaadin-upload-icon-lumo-inject-modules: lumo_components_upload-icon;
+  --_lumo-vaadin-upload-icon-inject: 1;
+  --_lumo-vaadin-upload-icon-inject-modules: lumo_components_upload-icon;
 
-  --vaadin-upload-file-lumo-inject: 1;
-  --vaadin-upload-file-lumo-inject-modules:
+  --_lumo-vaadin-upload-file-inject: 1;
+  --_lumo-vaadin-upload-file-inject-modules:
     lumo_mixins_field-button,
     lumo_components_upload-file;
+}
 
-  --vaadin-upload-file-list-lumo-inject: 1;
-  --vaadin-upload-file-list-lumo-inject-modules: lumo_components_upload-file-list;
+:where(:root),
+:where(:host) {
+  --vaadin-upload-gap: 0;
+  --vaadin-upload-file-list-divider-color: var(
+    --lumo-contrast-10pct
+  );
 }

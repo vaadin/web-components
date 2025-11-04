@@ -5,12 +5,14 @@
  */
 @import '../src/components/card.css';
 
-:is(:root, :host)::before {
-  --vaadin-card-lumo-inject: 1;
-  --vaadin-card-lumo-inject-modules: lumo_components_card;
+:root::before,
+:host::before {
+  --_lumo-vaadin-card-inject: 1;
+  --_lumo-vaadin-card-inject-modules: lumo_components_card;
 }
 
-:where(:root, :host) {
+:where(:root),
+:where(:host) {
   --vaadin-card-background: var(
     --lumo-contrast-5pct
   );

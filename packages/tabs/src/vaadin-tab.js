@@ -11,7 +11,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabStyles } from './styles/vaadin-tab-core-styles.js';
+import { tabStyles } from './styles/vaadin-tab-base-styles.js';
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
@@ -22,14 +22,15 @@ import { tabStyles } from './styles/vaadin-tab-core-styles.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled` | Set to a disabled tab | :host
- * `focused` | Set when the element is focused | :host
- * `focus-ring` | Set when the element is keyboard focused | :host
- * `selected` | Set when the tab is selected | :host
- * `active` | Set when mousedown or enter/spacebar pressed | :host
- * `orientation` | Set to `horizontal` or `vertical` depending on the direction of items  | :host
+ * Attribute      | Description
+ * ---------------|---------------------------------
+ * `disabled`     | Set when the element is disabled
+ * `focused`      | Set when the element is focused
+ * `focus-ring`   | Set when the element is keyboard focused
+ * `selected`     | Set when the tab is selected
+ * `active`       | Set when mousedown or enter/spacebar pressed
+ * `orientation`  | Set to `horizontal` or `vertical` depending on the direction of items
+ * `has-tooltip`  | Set when the tab has a slotted tooltip
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -39,7 +40,7 @@ import { tabStyles } from './styles/vaadin-tab-core-styles.js';
  * @mixes ItemMixin
  * @mixes ThemableMixin
  */
-class Tab extends ItemMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Tab extends ItemMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tab';
   }

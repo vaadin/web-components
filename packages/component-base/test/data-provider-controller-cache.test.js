@@ -231,6 +231,14 @@ describe('DataProviderController - Cache', () => {
       expect(cache.pendingRequests[8]).to.be.not.undefined;
       expect(cache.pendingRequests[9]).to.be.undefined;
     });
+
+    it('should remove exceeding items when decreasing size', () => {
+      cache.setPage(0, ['Item 0', 'Item 1']);
+      cache.setPage(1, ['Item 2', 'Item 3']);
+      cache.size = 1;
+      expect(cache.items).to.have.lengthOf(1);
+      expect(cache.items[0]).to.equal('Item 0');
+    });
   });
 
   describe('size with placeholder', () => {

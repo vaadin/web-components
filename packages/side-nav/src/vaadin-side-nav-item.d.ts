@@ -72,6 +72,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * `disabled`     | Set when the element is disabled.
  * `expanded`     | Set when the element is expanded.
  * `has-children` | Set when the element has child items.
+ * `has-tooltip`  | Set when the element has a slotted tooltip.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

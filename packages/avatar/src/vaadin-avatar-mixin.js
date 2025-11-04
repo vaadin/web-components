@@ -96,7 +96,7 @@ export const AvatarMixin = (superClass) =>
      * just the individual properties you want to change.
      *
      * The object has the following JSON structure and default values:
-     * ```
+     * ```js
      * {
      *   // Translation of the anonymous user avatar tooltip.
      *   anonymous: 'anonymous'
@@ -124,10 +124,6 @@ export const AvatarMixin = (superClass) =>
         this.setAttribute('role', 'img');
       }
 
-      if (!this.hasAttribute('tabindex')) {
-        this.setAttribute('tabindex', '0');
-      }
-
       // Should set `anonymous` if name / abbr is not provided
       if (!this.name && !this.abbr) {
         this.__setTooltip();
@@ -137,20 +133,11 @@ export const AvatarMixin = (superClass) =>
     /** @private */
     __colorIndexChanged(index) {
       if (index != null) {
-        const prop = `--vaadin-user-color-${index}`;
-
-        // Check if custom CSS property is defined
-        const isValid = Boolean(getComputedStyle(document.documentElement).getPropertyValue(prop));
-
-        if (isValid) {
-          this.setAttribute('has-color-index', '');
-          this.style.setProperty('--vaadin-avatar-user-color', `var(${prop})`);
-        } else {
-          this.removeAttribute('has-color-index');
-          console.warn(`The CSS property --vaadin-user-color-${index} is not defined`);
-        }
+        this.setAttribute('has-color-index', '');
+        this.style.setProperty('--vaadin-avatar-user-color', `var(--vaadin-user-color-${index})`);
       } else {
         this.removeAttribute('has-color-index');
+        this.style.removeProperty('--vaadin-avatar-user-color');
       }
     }
 
@@ -198,6 +185,8 @@ export const AvatarMixin = (superClass) =>
 
     /** @private */
     __withTooltipChanged(withTooltip, oldWithTooltip) {
+      this.toggleAttribute('has-tooltip', withTooltip);
+
       if (withTooltip) {
         // Create and attach tooltip
         const tooltipNode = document.createElement('vaadin-tooltip');

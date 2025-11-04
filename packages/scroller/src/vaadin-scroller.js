@@ -10,7 +10,7 @@ import { OverflowController } from '@vaadin/component-base/src/overflow-controll
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { scrollerStyles } from './styles/vaadin-scroller-core-styles.js';
+import { scrollerStyles } from './styles/vaadin-scroller-base-styles.js';
 import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
 /**
@@ -21,6 +21,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  *   <div>Content</div>
  * </vaadin-scroller>
  * ```
+ *
  * The following attributes are exposed for styling:
  *
  * Attribute    | Description
@@ -35,7 +36,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * @mixes ElementMixin
  * @mixes ScrollerMixin
  */
-class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-scroller';
   }
@@ -45,9 +46,7 @@ class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMix
   }
 
   static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

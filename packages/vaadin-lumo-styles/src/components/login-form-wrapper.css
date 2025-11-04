@@ -5,8 +5,11 @@
  */
 @media lumo_components_login-form-wrapper {
   :host {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: var(--lumo-space-l);
     overflow: hidden;
-    display: inline-block;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
@@ -22,20 +25,12 @@
     display: none !important;
   }
 
-  [part='form'] {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    padding: var(--lumo-space-l);
-  }
-
   ::slotted(form) {
     display: flex;
     flex-direction: column;
   }
 
-  [part='form-title'] {
+  ::slotted([slot='form-title']) {
     margin: 0;
     margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
     color: var(--lumo-header-text-color);
@@ -114,21 +109,5 @@
     font-size: var(--lumo-font-size-xs);
     line-height: var(--lumo-line-height-s);
     color: var(--lumo-secondary-text-color);
-  }
-
-  :host([theme~='with-overlay']) {
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    max-width: 100%;
-  }
-
-  /* Landscape small screen */
-  @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
-    :host([theme~='with-overlay']) [part='form'] {
-      height: 100%;
-      flex: 1;
-      padding: 2px;
-    }
   }
 }

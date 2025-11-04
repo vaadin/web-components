@@ -1,0 +1,53 @@
+/**
+ * @license
+ * Copyright (c) 2021 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import '@vaadin/component-base/src/styles/style-props.js';
+import { css } from 'lit';
+
+export const virtualListStyles = css`
+  :host {
+    display: block;
+    height: 400px;
+    overflow: auto;
+    flex: auto;
+    align-self: stretch;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host(:not([grid])) #items > ::slotted(*) {
+    width: 100%;
+  }
+
+  #items {
+    position: relative;
+  }
+
+  :host([theme*='overflow-indicator'])::before,
+  :host([theme*='overflow-indicator'])::after {
+    content: '';
+    display: none;
+    position: sticky;
+    inset: 0;
+    z-index: 9999;
+    height: 1px;
+    margin-bottom: -1px;
+    background: var(--vaadin-virtual-list-border-color, var(--vaadin-border-color-secondary));
+  }
+
+  :host([theme*='overflow-indicator'])::after {
+    margin-bottom: 0;
+    margin-top: -1px;
+  }
+
+  :host([theme~='overflow-indicator-top'][overflow~='top'])::before,
+  :host([theme~='overflow-indicators'][overflow~='top'])::before,
+  :host([theme~='overflow-indicators'][overflow~='bottom'])::after,
+  :host([theme~='overflow-indicator-bottom'][overflow~='bottom'])::after {
+    display: block;
+  }
+`;

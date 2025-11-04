@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const buttonStyles = css`
@@ -12,7 +12,7 @@ export const buttonStyles = css`
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: var(--vaadin-button-gap, 0 var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-button-gap, 0 var(--vaadin-gap-s));
     white-space: nowrap;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
@@ -28,13 +28,11 @@ export const buttonStyles = css`
     font-size: var(--vaadin-button-font-size, inherit);
     line-height: var(--vaadin-button-line-height, inherit);
     font-weight: var(--vaadin-button-font-weight, 500);
-    color: var(--vaadin-button-text-color, var(--vaadin-color));
+    color: var(--vaadin-button-text-color, var(--vaadin-text-color));
     background: var(--vaadin-button-background, var(--vaadin-background-container));
     background-origin: border-box;
-    border: var(
-      --vaadin-button-border,
-      var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--vaadin-border-color))
-    );
+    border: var(--vaadin-button-border-width, 1px) solid
+      var(--vaadin-button-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
   }
@@ -45,9 +43,12 @@ export const buttonStyles = css`
 
   .vaadin-button-container,
   [part='prefix'],
-  [part='suffix'],
-  [part='label'] {
+  [part='suffix'] {
     display: contents;
+  }
+
+  [part='label'] {
+    display: inline-flex;
   }
 
   :host(:is([focus-ring], :focus-visible)) {
@@ -56,15 +57,14 @@ export const buttonStyles = css`
   }
 
   :host([theme~='primary']) {
-    --vaadin-button-background: var(--vaadin-color);
+    --vaadin-button-background: var(--vaadin-text-color);
     --vaadin-button-text-color: var(--vaadin-background-color);
     --vaadin-button-border-color: transparent;
   }
 
   :host([theme~='tertiary']) {
-    --vaadin-button-text-color: var(--_vaadin-button-text-color);
-    --vaadin-button-background: transparent;
-    --vaadin-button-border-color: transparent;
+    background: transparent;
+    border-color: transparent;
   }
 
   :host([disabled]) {
@@ -75,7 +75,7 @@ export const buttonStyles = css`
 
   :host([disabled][theme~='primary']) {
     --vaadin-button-text-color: var(--vaadin-background-container-strong);
-    --vaadin-button-background: var(--vaadin-color-disabled);
+    --vaadin-button-background: var(--vaadin-text-color-disabled);
   }
 
   @media (forced-colors: active) {

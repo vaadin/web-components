@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
@@ -9,8 +9,13 @@ import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 describe('vaadin-chart exporting', () => {
   let chart, chartContainer, fireEventSpy;
 
+  function clickExportingButton() {
+    const exportingButton = chartContainer.querySelector('.highcharts-exporting-group > .highcharts-no-tooltip');
+    click(exportingButton);
+  }
+
   before(() => {
-    // Prevent form submit
+    // Prevent downloading on anchor click
     sinon.stub(HttpUtilities, 'post');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
@@ -49,11 +54,11 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
+    clickExportingButton();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
-    pngExportButton.onclick();
+    click(pngExportButton);
 
     expect(fireEventSpy.firstCall.args[1]).to.be.equal('beforeExport');
     await nextRender();
@@ -77,7 +82,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(document.body, { childList: true });
 
     // Reveal exporting menu items
-    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
+    clickExportingButton();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
@@ -108,7 +113,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(targetNode, config);
 
     // Reveal exporting menu items
-    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
+    clickExportingButton();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
@@ -140,7 +145,7 @@ describe('vaadin-chart exporting', () => {
     observer.observe(targetNode, config);
 
     // Reveal exporting menu items
-    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
+    clickExportingButton();
 
     // Simulate a PNG export
     const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];

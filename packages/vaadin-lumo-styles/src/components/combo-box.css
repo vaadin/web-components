@@ -8,7 +8,7 @@
     pointer-events: auto;
   }
 
-  [part='toggle-button']::before {
+  [part~='toggle-button']::before {
     content: var(--lumo-icons-dropdown);
   }
 }

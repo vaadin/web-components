@@ -26,8 +26,7 @@ export type SelectChangeEvent = Event & {
  * Function for rendering the content of the `<vaadin-select>`.
  * Receives two arguments:
  *
- * - `root` The `<vaadin-select-overlay>` internal container
- *   DOM element. Append your content to it.
+ * - `root` The internal container DOM element. Append your content to it.
  * - `select` The reference to the `<vaadin-select>` element.
  */
 export type SelectRenderer = (root: HTMLElement, select: Select) => void;
@@ -126,42 +125,50 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  *
  * The following custom properties are available for styling:
  *
- * Custom property                    | Description                  | Target element          | Default
- * -----------------------------------|------------------------------|-------------------------|--------
- * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
- * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
+ * Custom property                  | Description                 | Default
+ * ---------------------------------|-----------------------------|--------
+ * `--vaadin-field-default-width`   | Default width of the field  | `12em`
+ * `--vaadin-select-overlay-width`  | Width of the overlay        |
  *
- * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
  *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and toggle button
+ * `field-button`       | Set on the toggle button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `toggle-button`      | The toggle button
+ * `backdrop`           | Backdrop of the overlay
+ * `overlay`            | The overlay container
+ * `content`            | The overlay content
  *
- * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ * The following state attributes are available for styling:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
- *
- * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
- *
- * Attribute | Description                 | Part name
- * ----------|-----------------------------|-----------
- * `opened`  | Set when the select is open | :host
- *
- * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
- * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
- * - the `input-prevented` state attribute is not supported by `<vaadin-select>`.
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `invalid`            | Set when the element is invalid
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ * `opened`             | Set when the overlay is opened
+ * `phone`              | Set when the overlay is shown in phone mode
  *
  * ### Internal components
  *
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-select-value-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the button.
- *
- * Note: the `theme` attribute value set on `<vaadin-select>` is
- * propagated to the internal components listed above.
+ * - `<vaadin-select-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-select-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

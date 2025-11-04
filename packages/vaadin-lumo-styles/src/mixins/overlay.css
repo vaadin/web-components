@@ -18,6 +18,14 @@
     align-items: center;
     justify-content: center;
 
+    /* Override native [popover] user agent styles */
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    overflow: visible;
+
     /* Allow centering when max-width/max-height applies. */
     margin: auto;
 
@@ -30,7 +38,7 @@
     /* CSS API for host */
     --vaadin-overlay-viewport-bottom: 0;
 
-    inset: var(--lumo-space-m) var(--lumo-space-m) var(--lumo-space-m) var(--lumo-space-m);
+    inset: var(--vaadin-overlay-viewport-inset, var(--lumo-space-m));
     /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
     /* stylelint-disable-next-line */
     outline: 0px solid transparent;
@@ -57,13 +65,23 @@
     box-shadow:
       0 0 0 1px var(--lumo-shade-5pct),
       var(--lumo-box-shadow-m);
+
+    /* CSS reset for font styles */
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
+    font-style: normal;
     font-weight: 400;
+    font-variant: normal;
     line-height: var(--lumo-line-height-m);
     letter-spacing: 0;
+    text-align: initial;
+    text-decoration: none;
+    text-indent: initial;
     text-transform: none;
+    user-select: text;
+    white-space: initial;
+    word-spacing: initial;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { LitElement } from 'lit';
-import { html, unsafeStatic } from 'lit/static-html.js';
+import { html, LitElement } from 'lit';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 
 describe('PolylitMixin', () => {
@@ -1224,32 +1223,10 @@ describe('PolylitMixin', () => {
     let element;
 
     describe('basic', () => {
-      const teleportedTag = defineCE(
-        class extends PolylitMixin(LitElement) {
-          connectedCallback() {
-            super.connectedCallback();
-
-            if (this.parentNode !== document.body) {
-              document.body.appendChild(this);
-            }
-          }
-
-          render() {
-            return html`<slot></slot>`;
-          }
-        },
-      );
-
       const tag = defineCE(
         class extends PolylitMixin(LitElement) {
           render() {
-            return html`
-              <div id="title">Title</div>
-
-              <${unsafeStatic(teleportedTag)} id="teleported">
-                <div id="teleportedContent">Teleported content</div>
-              </${unsafeStatic(teleportedTag)}>
-            `;
+            return html`<div id="title">Title</div>`;
           }
         },
       );
@@ -1259,23 +1236,9 @@ describe('PolylitMixin', () => {
         await element.updateComplete;
       });
 
-      afterEach(() => {
-        document.querySelector('#teleported').remove();
-      });
-
       it('should register elements with id', () => {
         expect(element.$.title).to.be.instanceOf(HTMLDivElement);
         expect(element.$.title.textContent.trim()).to.equal('Title');
-      });
-
-      it('should register teleported elements with id', () => {
-        expect(element.$.teleported).to.be.instanceOf(HTMLElement);
-        expect(element.$.teleported.textContent.trim()).to.equal('Teleported content');
-      });
-
-      it('should register children with id whose parent was teleported', () => {
-        expect(element.$.teleportedContent).to.be.instanceOf(HTMLElement);
-        expect(element.$.teleportedContent.textContent.trim()).to.equal('Teleported content');
       });
     });
 

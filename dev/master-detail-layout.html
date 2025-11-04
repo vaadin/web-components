@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Master Detail Layout</title>
+    <title>Master-Detail Layout</title>
     <script type="module" src="./common.js"></script>
   </head>
 
@@ -159,7 +159,7 @@
 
         render() {
           return html`
-            <vaadin-master-detail-layout>
+            <vaadin-master-detail-layout @backdrop-click=${this.closeDetail}>
               <div class="master">
                 <header>
                   <vaadin-button

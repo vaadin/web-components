@@ -12,16 +12,12 @@
         "custom-rules/no-shorthand-with-unresolved-longhand": true,
         "custom-rules/license-header": true
       }
-    },
-    {
-      "files": ["packages/vaadin-lumo-styles/components/*.css"],
-      "rules": {
-        "custom-property-empty-line-before": null
-      }
     }
   ],
   "rules": {
     "color-function-notation": "legacy",
+    "custom-property-empty-line-before": ["never", { "ignore": ["after-custom-property"] }],
+    "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
     "no-duplicate-selectors": true
   }
 }

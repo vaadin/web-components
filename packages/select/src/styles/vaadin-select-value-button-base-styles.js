@@ -24,6 +24,10 @@ export const valueButton = css`
     display: contents;
   }
 
+  :host([placeholder]) {
+    color: var(--vaadin-input-field-placeholder-color, var(--vaadin-text-color-secondary));
+  }
+
   :host([disabled]) {
     pointer-events: none;
   }

@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { avatarGroupStyles } from './styles/vaadin-avatar-group-core-styles.js';
+import { avatarGroupStyles } from './styles/vaadin-avatar-group-base-styles.js';
 import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
 
 /**
@@ -42,6 +42,8 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * Part name   | Description
  * ----------- | ---------------
  * `container` | The container element
+ * `overlay`   | The overflow avatar menu overlay
+ * `content`   | The overflow avatar menu overlay content
  *
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.
@@ -53,7 +55,6 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * In addition to `<vaadin-avatar-group>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
@@ -63,7 +64,7 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * @mixes AvatarGroupMixin
  * @mixes ThemableMixin
  */
-class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group';
   }
@@ -81,14 +82,17 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(LumoInject
       </div>
       <vaadin-avatar-group-overlay
         id="overlay"
+        .owner="${this}"
         .opened="${this._opened}"
         .positionTarget="${this._overflow}"
-        .renderer="${this.__overlayRenderer}"
         no-vertical-overlap
+        exportparts="overlay, content"
         @vaadin-overlay-close="${this._onVaadinOverlayClose}"
         @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
         @opened-changed="${this._onOpenedChanged}"
-      ></vaadin-avatar-group-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-avatar-group-overlay>
     `;
   }
 

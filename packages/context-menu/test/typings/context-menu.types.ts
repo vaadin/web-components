@@ -7,9 +7,11 @@ import type { ContextMenuItem } from '../../src/vaadin-context-menu-item.js';
 import type { ContextMenuListBox } from '../../src/vaadin-context-menu-list-box.js';
 import type {
   ContextMenu,
+  ContextMenuClosedEvent,
   ContextMenuItem as MenuItem,
   ContextMenuItemSelectedEvent,
   ContextMenuOpenedChangedEvent,
+  ContextMenuPosition,
   ContextMenuRenderer,
   ContextMenuRendererContext,
 } from '../../vaadin-context-menu.js';
@@ -23,7 +25,7 @@ assertType<boolean>(menu.opened);
 assertType<string>(menu.openOn);
 assertType<string>(menu.closeOn);
 assertType<HTMLElement>(menu.listenOn);
-assertType<string>(menu.overlayClass);
+assertType<ContextMenuPosition | null | undefined>(menu.position);
 
 // Events
 menu.addEventListener('opened-changed', (event) => {
@@ -34,6 +36,10 @@ menu.addEventListener('opened-changed', (event) => {
 menu.addEventListener('item-selected', (event) => {
   assertType<ContextMenuItemSelectedEvent>(event);
   assertType<MenuItem>(event.detail.value);
+});
+
+menu.addEventListener('closed', (event) => {
+  assertType<ContextMenuClosedEvent>(event);
 });
 
 const renderer: ContextMenuRenderer = (root, contextMenu, context) => {

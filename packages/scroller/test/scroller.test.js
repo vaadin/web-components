@@ -12,8 +12,13 @@ describe('vaadin-scroller', () => {
   });
 
   describe('focus', () => {
-    it('should not add focus-ring to the host on programmatic focus', () => {
+    it('should add focus-ring to the host on programmatic focus', () => {
       scroller.focus();
+      expect(scroller.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not add focus-ring to the host on focus() with focusVisible: false', () => {
+      scroller.focus({ focusVisible: false });
       expect(scroller.hasAttribute('focus-ring')).to.be.false;
     });
 

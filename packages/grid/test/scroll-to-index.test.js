@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import './grid-test-styles.js';
 import '../all-imports.js';
 import {
@@ -51,7 +51,7 @@ describe('scroll to index', () => {
             expect(getLastVisibleItem(grid).index).to.equal(index);
 
             const table = grid.$.table;
-            expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
+            expect(Math.ceil(table.scrollTop)).to.equal(table.scrollHeight - table.offsetHeight);
           } else {
             expect(getFirstVisibleItem(grid).index).to.equal(index);
           }
@@ -81,7 +81,7 @@ describe('scroll to index', () => {
         const index = grid.size / 2;
         grid.scrollToIndex(index);
         flushGrid(grid);
-        grid.scrollTop += 1; // Scroll a little to validate the test
+        grid.$.table.scrollTop += 5; // Scroll a little to validate the test
         let row = Array.from(grid.$.items.children).find((r) => r.index === index);
         const rowTop = row.getBoundingClientRect().top;
 
@@ -149,18 +149,15 @@ describe('scroll to index', () => {
       grid.scrollToIndex(49, 100);
     });
 
-    it('should scroll to index after attaching', (done) => {
+    it('should scroll to index after attaching', async () => {
       const parent = grid.parentElement;
       parent.removeChild(grid);
       grid.scrollToIndex(100);
-      grid.addEventListener('animationend', () => {
-        requestAnimationFrame(() => {
-          expect(getFirstVisibleItem(grid).index).to.be.above(75);
-          expect(grid.$.table.scrollTop).to.be.above(0);
-          done();
-        });
-      });
       parent.appendChild(grid);
+      await nextResize(grid);
+      await nextFrame();
+      expect(getFirstVisibleItem(grid).index).to.be.above(75);
+      expect(grid.$.table.scrollTop).to.be.above(0);
     });
 
     it('should scroll to index after unhiding', async () => {
@@ -325,7 +322,7 @@ describe('scroll to index', () => {
         flushGrid(grid);
         flushPendingRequests();
 
-        await oneEvent(grid, 'animationend');
+        await nextResize(grid);
         await nextFrame();
       });
 
@@ -570,7 +567,7 @@ describe('scroll to index', () => {
       `);
       grid.items = Array.from({ length: 100 }, (_, index) => `Item ${index}`);
       grid.scrollToIndex(50);
-      await oneEvent(grid, 'animationend');
+      await nextResize(grid);
       await nextFrame();
     });
 
@@ -590,7 +587,7 @@ describe('scroll to index', () => {
       grid.items = Array.from({ length: 100 }, (_, index) => `Item ${index}`);
       grid.scrollToIndex(50);
       container.appendChild(grid);
-      await oneEvent(grid, 'animationend');
+      await nextResize(grid);
       await nextFrame();
     });
 

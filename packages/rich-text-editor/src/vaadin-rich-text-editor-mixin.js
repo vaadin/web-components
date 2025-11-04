@@ -9,40 +9,33 @@
  * license.
  */
 import '../vendor/vaadin-quill.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 const Quill = window.Quill;
 
-// Workaround for text disappearing when accepting spellcheck suggestion
-// See https://github.com/quilljs/quill/issues/2096#issuecomment-399576957
-const Inline = Quill.import('blots/inline');
+// There are some issues e.g. `spellcheck="false"` not preserved
+// See https://github.com/slab/quill/issues/4289
+// Fix to add `spellcheck="false"` on the `<pre>` tag removed by Quill
+const QuillCodeBlockContainer = Quill.import('formats/code-block-container');
 
-class CustomColor extends Inline {
-  constructor(domNode, value) {
-    super(domNode, value);
-
-    // Map <font> properties
-    domNode.style.color = domNode.color;
-
-    const span = this.replaceWith(new Inline(Inline.create()));
-
-    span.children.forEach((child) => {
-      if (child.attributes) child.attributes.copy(span);
-      if (child.unwrap) child.unwrap();
-    });
-
-    this.remove();
-
-    return span; // eslint-disable-line no-constructor-return
+class CodeBlockContainer extends QuillCodeBlockContainer {
+  html(index, length) {
+    const markup = super.html(index, length);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = markup;
+    const preTag = tempDiv.querySelector('pre');
+    if (preTag) {
+      preTag.setAttribute('spellcheck', 'false');
+      return preTag.outerHTML;
+    }
+    return markup; // fallback
   }
 }
 
-CustomColor.blotName = 'customColor';
-CustomColor.tagName = 'FONT';
-
-Quill.register(CustomColor, true);
+Quill.register('formats/code-block-container', CodeBlockContainer, true);
 
 const HANDLERS = [
   'bold',
@@ -69,8 +62,6 @@ const STATE = {
   CLICKED: 2,
 };
 
-const TAB_KEY = 9;
-
 const DEFAULT_I18N = {
   undo: 'undo',
   redo: 'redo',
@@ -87,6 +78,8 @@ const DEFAULT_I18N = {
   superscript: 'superscript',
   listOrdered: 'list ordered',
   listBullet: 'list bullet',
+  outdent: 'outdent',
+  indent: 'indent',
   alignLeft: 'align left',
   alignCenter: 'align center',
   alignRight: 'align right',
@@ -176,7 +169,7 @@ export const RichTextEditorMixin = (superClass) =>
               '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff',
               '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff',
               '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2',
-              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'
+              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466',
             ];
           },
         },
@@ -374,23 +367,21 @@ export const RichTextEditorMixin = (superClass) =>
         }
       });
 
-      const TAB_KEY = 9;
-
       editorContent.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           if (!this.__tabBindings) {
-            this.__tabBindings = this._editor.keyboard.bindings[TAB_KEY];
-            this._editor.keyboard.bindings[TAB_KEY] = null;
+            this.__tabBindings = this._editor.keyboard.bindings.Tab;
+            this._editor.keyboard.bindings.Tab = null;
           }
         } else if (this.__tabBindings) {
-          this._editor.keyboard.bindings[TAB_KEY] = this.__tabBindings;
+          this._editor.keyboard.bindings.Tab = this.__tabBindings;
           this.__tabBindings = null;
         }
       });
 
       editorContent.addEventListener('blur', () => {
         if (this.__tabBindings) {
-          this._editor.keyboard.bindings[TAB_KEY] = this.__tabBindings;
+          this._editor.keyboard.bindings.Tab = this.__tabBindings;
           this.__tabBindings = null;
         }
       });
@@ -416,13 +407,35 @@ export const RichTextEditorMixin = (superClass) =>
       // Flush pending htmlValue only once the editor is fully initialized
       this.__flushPendingHtmlValue();
 
-      this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
-      this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
+      this.querySelector('[slot="color-popup"]').target = this.shadowRoot.querySelector('#btn-color');
+      this.querySelector('[slot="background-popup"]').target = this.shadowRoot.querySelector('#btn-background');
 
-      requestAnimationFrame(() => {
-        this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-          this.$.linkUrl.focus();
-        });
+      // Set up tooltip to show when hovering or focusing toolbar buttons
+      this._tooltip = document.createElement('vaadin-tooltip');
+      this._tooltip.slot = 'tooltip';
+      // Set ariaTarget to null, as toolbar buttons already have aria-label,
+      // and also cannot be linked with the tooltip being in the light DOM
+      this._tooltip.ariaTarget = null;
+      this.append(this._tooltip);
+
+      const buttons = this.shadowRoot.querySelectorAll('[part~="toolbar-button"]');
+      buttons.forEach((button) => {
+        button.addEventListener('mouseenter', this.__showTooltip.bind(this));
+        button.addEventListener('focusin', this.__showTooltip.bind(this));
+      });
+    }
+
+    /** @private */
+    __showTooltip({ type, target }) {
+      // Only show tooltip when focused with keyboard
+      if (type === 'focusin' && !isKeyboardActive()) {
+        return;
+      }
+      this._tooltip.target = target;
+      this._tooltip.text = target.ariaLabel;
+      this._tooltip._stateController.open({
+        focus: type === 'focusin',
+        hover: type === 'mouseenter',
       });
     }
 
@@ -477,7 +490,7 @@ export const RichTextEditorMixin = (superClass) =>
           buttons[index].focus();
         }
         // Esc and Tab focuses the content
-        if (e.keyCode === 27 || (e.keyCode === TAB_KEY && !e.shiftKey)) {
+        if (e.keyCode === 27 || (e.key === 'Tab' && !e.shiftKey)) {
           e.preventDefault();
           this._editor.focus();
         }
@@ -520,7 +533,6 @@ export const RichTextEditorMixin = (superClass) =>
         toolbar.controls.forEach((pair) => {
           const input = pair[1];
           const isActive = input.classList.contains('ql-active');
-          input.toggleAttribute('on', isActive);
           input.part.toggle('toolbar-button-pressed', isActive);
         });
       };
@@ -533,19 +545,13 @@ export const RichTextEditorMixin = (superClass) =>
         this._toolbar.querySelector('button:not([tabindex])').focus();
       };
 
-      const keyboard = this._editor.getModule('keyboard');
-      const bindings = keyboard.bindings[TAB_KEY];
+      const keyboard = this._editor.keyboard;
 
-      // Exclude Quill shift-tab bindings, except for code block,
-      // as some of those are breaking when on a newline in the list
-      // https://github.com/vaadin/vaadin-rich-text-editor/issues/67
-      const originalBindings = bindings.filter((b) => !b.shiftKey || (b.format && b.format['code-block']));
-      const moveFocusBinding = { key: TAB_KEY, shiftKey: true, handler: focusToolbar };
-
-      keyboard.bindings[TAB_KEY] = [...originalBindings, moveFocusBinding];
+      // Shift + Tab focuses a toolbar button unless we are in list / code block
+      keyboard.addBinding({ key: 'Tab', shiftKey: true, handler: focusToolbar });
 
       // Alt-f10 focuses a toolbar button
-      keyboard.addBinding({ key: 121, altKey: true, handler: focusToolbar });
+      keyboard.addBinding({ key: 'F10', altKey: true, handler: focusToolbar });
     }
 
     /** @private */
@@ -584,6 +590,7 @@ export const RichTextEditorMixin = (superClass) =>
     _applyLink(link) {
       if (link) {
         this._markToolbarClicked();
+        this._editor.focus();
         this._editor.format('link', link, SOURCE.USER);
         this._editor.getModule('toolbar').update(this._editor.selection.savedRange);
       }
@@ -652,12 +659,14 @@ export const RichTextEditorMixin = (superClass) =>
       if (e.keyCode === 13) {
         e.preventDefault();
         e.stopPropagation();
-        this.$.confirmLink.click();
+        this._onLinkEditConfirm();
+        this._closeLinkDialog();
       }
     }
 
     /** @private */
     __onColorClick() {
+      this._tooltip.opened = false;
       this._colorEditing = true;
     }
 
@@ -666,6 +675,7 @@ export const RichTextEditorMixin = (superClass) =>
       const color = event.detail.color;
       this._colorValue = color === '#000000' ? null : color;
       this._markToolbarClicked();
+      this._editor.focus();
       this._editor.format('color', this._colorValue, SOURCE.USER);
       this._toolbar.style.setProperty('--_color-value', this._colorValue);
       this._colorEditing = false;
@@ -673,6 +683,7 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __onBackgroundClick() {
+      this._tooltip.opened = false;
       this._backgroundEditing = true;
     }
 
@@ -681,6 +692,7 @@ export const RichTextEditorMixin = (superClass) =>
       const color = event.detail.color;
       this._backgroundValue = color === '#ffffff' ? null : color;
       this._markToolbarClicked();
+      this._editor.focus();
       this._editor.format('background', this._backgroundValue, SOURCE.USER);
       this._toolbar.style.setProperty('--_background-value', this._backgroundValue);
       this._backgroundEditing = false;
@@ -688,30 +700,66 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __updateHtmlValue() {
-      const editor = this.shadowRoot.querySelector('.ql-editor');
-      let content = editor.innerHTML;
-
-      // Remove Quill classes, e.g. ql-syntax, except for align
+      // We have to use this instead of `innerHTML` to get correct tags like `<pre>` etc.
+      let content = this._editor.getSemanticHTML();
+      // Remove Quill classes, e.g. ql-syntax, except for align and indent
       content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
         const classes = group1.split(' ').filter((className) => {
-          return !className.startsWith('ql-') || className.startsWith('ql-align');
+          return !className.startsWith('ql-') || className.startsWith('ql-align') || className.startsWith('ql-indent');
         });
         return `class="${classes.join(' ')}"`;
       });
-      // Remove meta spans, e.g. cursor which are empty after Quill classes removed
-      content = content.replace(/<span[^>]*><\/span>/gu, '');
-
-      // Replace Quill align classes with inline styles
-      [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
-        content = content.replace(
-          new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'gu'),
-          ` style="text-align: ${align}"`,
-        );
-      });
-
-      content = content.replace(/ class=""/gu, '');
-
+      // Process align and indent classes
+      content = this.__processQuillClasses(content);
       this._setHtmlValue(content);
+    }
+
+    /** @private */
+    __processQuillClasses(content) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = content;
+      // Process only elements with align or indent classes
+      const elementsToProcess = tempDiv.querySelectorAll('[class*="ql-align"], [class*="ql-indent"]');
+      elementsToProcess.forEach((element) => {
+        this.__processAlignClasses(element);
+        this.__processIndentClasses(element);
+        element.removeAttribute('class');
+      });
+      return tempDiv.innerHTML;
+    }
+
+    /** @private */
+    __processAlignClasses(element) {
+      let styleText = element.getAttribute('style') || '';
+      const alignments = [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'];
+      alignments.forEach((align) => {
+        if (element.classList.contains(`ql-align-${align}`)) {
+          const newStyle = `text-align: ${align}`;
+          styleText = styleText ? `${styleText}; ${newStyle}` : newStyle;
+          element.setAttribute('style', styleText);
+          element.classList.remove(`ql-align-${align}`);
+        }
+      });
+    }
+
+    /** @private */
+    __processIndentClasses(element) {
+      const indentClass = Array.from(element.classList).find((className) => className.startsWith('ql-indent-'));
+      if (indentClass) {
+        const level = parseInt(indentClass.replace('ql-indent-', '').trim(), 10);
+        const tabs = '\t'.repeat(level);
+        // Add tabs to content
+        const firstChild = element.firstChild;
+        if (firstChild && firstChild.nodeType === Node.TEXT_NODE) {
+          firstChild.textContent = tabs + firstChild.textContent;
+        } else if (element.childNodes.length > 0) {
+          const tabNode = document.createTextNode(tabs);
+          element.insertBefore(tabNode, element.firstChild);
+        } else {
+          element.textContent = tabs;
+        }
+        element.classList.remove(indentClass);
+      }
     }
 
     /**
@@ -758,7 +806,7 @@ export const RichTextEditorMixin = (superClass) =>
         htmlValue = htmlValue.replaceAll(/>[^<]*</gu, (match) => match.replaceAll(character, replacement)); // NOSONAR
       });
 
-      const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
+      const deltaFromHtml = this._editor.clipboard.convert({ html: htmlValue });
 
       // Restore whitespace characters after the conversion
       Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
@@ -799,10 +847,7 @@ export const RichTextEditorMixin = (superClass) =>
         timeOut.after(timeout),
         () => {
           const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
-            .map((button) => {
-              const tooltip = this.shadowRoot.querySelector(`[for="${button.id}"]`);
-              return tooltip.text;
-            })
+            .map((button) => button.getAttribute('aria-label'))
             .join(', ');
           announcer.textContent = formatting;
         },

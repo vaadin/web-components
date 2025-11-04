@@ -14,10 +14,12 @@ import {
 } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { isLastOverlay as isLastOverlayBase } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import {
+  hasOnlyNestedOverlays,
+  isLastOverlay as isLastOverlayBase,
+} from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -169,16 +171,13 @@ const isLastOverlay = (overlay) => {
  *
  * ### Styling
  *
- * `<vaadin-popover>` uses `<vaadin-popover-overlay>` internal
- * themable component as the actual visible overlay.
- *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-popover-overlay>` parts.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `arrow`          | Optional arrow pointing to the target when using `theme="arrow"`
  *
  * The following state attributes are available for styling:
@@ -186,9 +185,6 @@ const isLastOverlay = (overlay) => {
  * Attribute        | Description
  * -----------------|----------------------------------------
  * `position`       | Reflects the `position` property value.
- *
- * Note: the `theme` attribute value set on `<vaadin-popover>` is
- * propagated to the internal `<vaadin-popover-overlay>` component.
  *
  * ### Custom CSS Properties
  *
@@ -209,13 +205,12 @@ const isLastOverlay = (overlay) => {
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes OverlayClassMixin
  * @mixes PopoverPositionMixin
  * @mixes PopoverTargetMixin
  * @mixes ThemePropertyMixin
  */
 class Popover extends PopoverPositionMixin(
-  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement))))),
+  PopoverTargetMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-popover';
@@ -223,8 +218,21 @@ class Popover extends PopoverPositionMixin(
 
   static get styles() {
     return css`
-      :host {
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: block !important;
+        position: absolute;
+        outline: none;
+      }
+
+      :host,
+      :host([hidden]) {
         display: none !important;
+      }
+
+      :host(:focus-visible) ::part(overlay) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       }
     `;
   }
@@ -232,18 +240,20 @@ class Popover extends PopoverPositionMixin(
   static get properties() {
     return {
       /**
-       * String used to label the overlay to screen reader users.
+       * String used to label the popover to screen reader users.
        *
        * @attr {string} accessible-name
+       * @deprecated Use `aria-label` attribute on the popover instead
        */
       accessibleName: {
         type: String,
       },
 
       /**
-       * Id of the element used as label of the overlay to screen reader users.
+       * Id of the element used as label of the popover to screen reader users.
        *
        * @attr {string} accessible-name-ref
+       * @deprecated Use `aria-labelledby` attribute on the popover instead
        */
       accessibleNameRef: {
         type: String,
@@ -258,7 +268,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set the height of the overlay.
+       * Set the height of the popover.
        * If a unitless number is provided, pixels are assumed.
        */
       height: {
@@ -266,7 +276,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set the width of the overlay.
+       * Set the width of the popover.
        * If a unitless number is provided, pixels are assumed.
        */
       width: {
@@ -311,31 +321,43 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * True if the popover overlay is opened, false otherwise.
+       * True if the popover is visible and available for interaction.
        */
       opened: {
         type: Boolean,
         value: false,
         notify: true,
+        reflectToAttribute: true,
         observer: '__openedChanged',
       },
 
       /**
-       * The `role` attribute value to be set on the overlay.
-       *
-       * @attr {string} overlay-role
+       * The `role` attribute value to be set on the popover.
+       * When not specified, defaults to 'dialog'.
        */
-      overlayRole: {
+      role: {
         type: String,
-        value: 'dialog',
+        reflectToAttribute: true,
       },
 
       /**
-       * Custom function for rendering the content of the overlay.
+       * The `role` attribute value to be set on the popover.
+       *
+       * @attr {string} overlay-role
+       * @deprecated Use standard `role` attribute on the popover instead
+       */
+      overlayRole: {
+        type: String,
+      },
+
+      /**
+       * Custom function for rendering the content of the popover.
        * Receives two arguments:
        *
        * - `root` The root container DOM element. Append your content to it.
-       * - `popover` The reference to the `vaadin-popover` element (overlay host).
+       * - `popover` The reference to the `vaadin-popover` element.
+       *
+       * @deprecated Use the content in the `vaadin-popover` via default slot
        */
       renderer: {
         type: Object,
@@ -344,7 +366,7 @@ class Popover extends PopoverPositionMixin(
       /**
        * When true, the popover prevents interacting with background elements
        * by setting `pointer-events` style on the document body to `none`.
-       * This also enables trapping focus inside the overlay.
+       * This also enables trapping focus inside the popover.
        */
       modal: {
         type: Boolean,
@@ -352,7 +374,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set to true to disable closing popover overlay on outside click.
+       * Set to true to disable closing popover on outside click.
        *
        * @attr {boolean} no-close-on-outside-click
        */
@@ -362,10 +384,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Set to true to disable closing popover overlay on Escape press.
-       * When the popover is modal, pressing Escape anywhere in the
-       * document closes the overlay. Otherwise, only Escape press
-       * from the popover itself or its target closes the overlay.
+       * Set to true to disable closing popover on Escape press.
        *
        * @attr {boolean} no-close-on-esc
        */
@@ -375,15 +394,15 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Popover trigger mode, used to configure how the overlay is opened or closed.
+       * Popover trigger mode, used to configure how the popover is opened or closed.
        * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
        *
        * Supported values:
        * - `click` (default) - opens and closes on target click.
        * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
-       * to the popover overlay content keeps the overlay opened.
+       * to the popover content keeps the popover opened.
        * - `focus` - opens on target focus, closes on target blur. Moving focus to the
-       * popover overlay content keeps the overlay opened.
+       * popover content keeps the popover opened.
        *
        * In addition to the behavior specified by `trigger`, the popover can be closed by:
        * - pressing Escape key (unless `noCloseOnEsc` property is true)
@@ -399,7 +418,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * When true, the overlay has a backdrop (modality curtain) on top of the
+       * When true, the popover has a backdrop (modality curtain) on top of the
        * underlying page content, covering the whole viewport.
        *
        * @attr {boolean} with-backdrop
@@ -415,16 +434,11 @@ class Popover extends PopoverPositionMixin(
         value: false,
         sync: true,
       },
-
-      /** @private */
-      __overlayId: {
-        type: String,
-      },
     };
   }
 
   static get observers() {
-    return ['__sizeChanged(width, height, _overlayElement)', '__updateAriaAttributes(opened, overlayRole, target)'];
+    return ['__updateAriaAttributes(opened, role, target)'];
   }
 
   /**
@@ -460,9 +474,8 @@ class Popover extends PopoverPositionMixin(
   constructor() {
     super();
 
-    this.__overlayId = `vaadin-popover-${generateUniqueId()}`;
+    this.__generatedId = `vaadin-popover-${generateUniqueId()}`;
 
-    this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
@@ -479,10 +492,7 @@ class Popover extends PopoverPositionMixin(
 
     return html`
       <vaadin-popover-overlay
-        id="${this.__overlayId}"
-        role="${this.overlayRole}"
-        aria-label="${ifDefined(this.accessibleName)}"
-        aria-labelledby="${ifDefined(this.accessibleNameRef)}"
+        id="overlay"
         .renderer="${this.renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
@@ -504,11 +514,14 @@ class Popover extends PopoverPositionMixin(
         @opened-changed="${this.__onOpenedChanged}"
         .restoreFocusOnClose="${this.__shouldRestoreFocus}"
         .restoreFocusNode="${this.target}"
+        exportparts="backdrop, overlay, content, arrow"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
         @vaadin-overlay-open="${this.__onOverlayOpened}"
         @vaadin-overlay-closed="${this.__onOverlayClosed}"
-      ></vaadin-popover-overlay>
+      >
+        <slot></slot>
+      </vaadin-popover-overlay>
     `;
   }
 
@@ -517,6 +530,8 @@ class Popover extends PopoverPositionMixin(
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   *
+   * @deprecated Add content elements as children of the popover using default slot
    */
   requestContentUpdate() {
     if (!this.renderer || !this._overlayElement) {
@@ -530,21 +545,79 @@ class Popover extends PopoverPositionMixin(
   ready() {
     super.ready();
 
-    this._overlayElement = this.$[this.__overlayId];
+    this._overlayElement = this.$.overlay;
+
+    this.setAttribute('tabindex', '0');
+
+    this.addEventListener('focusin', (e) => {
+      this.__onFocusIn(e);
+    });
+
+    this.addEventListener('focusout', (e) => {
+      this.__onFocusOut(e);
+    });
+
+    if (!this.hasAttribute('role')) {
+      this.role = 'dialog';
+    }
+  }
+
+  /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('overlayRole')) {
+      this.role = this.overlayRole;
+    }
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('width') || props.has('height')) {
+      const { width, height } = this;
+      requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
+    }
+
+    if (props.has('accessibleName')) {
+      if (this.accessibleName) {
+        this.setAttribute('aria-label', this.accessibleName);
+      } else {
+        this.removeAttribute('aria-label');
+      }
+    }
+
+    if (props.has('accessibleNameRef')) {
+      if (this.accessibleNameRef) {
+        this.setAttribute('aria-labelledby', this.accessibleNameRef);
+      } else {
+        this.removeAttribute('aria-labelledby');
+      }
+    }
+
+    if (props.has('modal')) {
+      if (this.modal) {
+        this.setAttribute('aria-modal', 'true');
+      } else {
+        this.removeAttribute('aria-modal');
+      }
+    }
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
-    document.documentElement.addEventListener('click', this.__onGlobalClick, true);
+    // If no user ID is provided, set generated ID
+    if (!this.id) {
+      this.id = this.__generatedId;
+    }
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-
-    document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
 
     // Automatically close popover when it is removed from DOM
     // Avoid closing if the popover is just moved in the DOM
@@ -591,7 +664,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __updateAriaAttributes(opened, overlayRole, target) {
+  __updateAriaAttributes(opened, role, target) {
     if (this.__oldTarget) {
       const oldEffectiveTarget = this.__oldTarget.ariaTarget || this.__oldTarget;
       oldEffectiveTarget.removeAttribute('aria-haspopup');
@@ -602,35 +675,18 @@ class Popover extends PopoverPositionMixin(
     if (target) {
       const effectiveTarget = target.ariaTarget || target;
 
-      const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
+      const isDialog = role === 'dialog' || role === 'alertdialog';
       effectiveTarget.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
 
       effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
 
       if (opened) {
-        effectiveTarget.setAttribute('aria-controls', this.__overlayId);
+        effectiveTarget.setAttribute('aria-controls', this.id);
       } else {
         effectiveTarget.removeAttribute('aria-controls');
       }
 
       this.__oldTarget = target;
-    }
-  }
-
-  /**
-   * Overlay's global outside click listener doesn't work when
-   * the overlay is modeless, so we use a separate listener.
-   * @private
-   */
-  __onGlobalClick(event) {
-    if (
-      this.opened &&
-      !this.modal &&
-      !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
-      !this.noCloseOnOutsideClick &&
-      isLastOverlay(this._overlayElement)
-    ) {
-      this._openedStateController.close(true);
     }
   }
 
@@ -654,15 +710,9 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onGlobalKeyDown(event) {
-    // Modal popover uses overlay logic for Esc key and focus trap.
+    // Modal popover uses overlay logic focus trap.
     if (this.modal) {
       return;
-    }
-
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && isLastOverlay(this._overlayElement)) {
-      // Prevent closing parent overlay (e.g. dialog)
-      event.stopPropagation();
-      this._openedStateController.close(true);
     }
 
     // Include popover content in the Tab order after the target.
@@ -677,20 +727,18 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onGlobalTab(event) {
-    const overlayPart = this._overlayElement.$.overlay;
-
-    // Move focus to the popover content on target element Tab
+    // Move focus to the popover on target element Tab
     if (this.target && isElementFocused(this.__getTargetFocusable())) {
       event.preventDefault();
-      overlayPart.focus();
+      this.focus();
       return;
     }
 
     // Move focus to the next element after target on content Tab
-    const lastFocusable = this.__getLastFocusable(overlayPart);
+    const lastFocusable = this.__getLastFocusable(this);
     if (lastFocusable && isElementFocused(lastFocusable)) {
       const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
-      if (focusable && focusable !== overlayPart) {
+      if (focusable && focusable !== this) {
         event.preventDefault();
         focusable.focus();
         return;
@@ -700,7 +748,7 @@ class Popover extends PopoverPositionMixin(
     // Prevent focusing the popover content on previous element Tab
     const activeElement = getDeepActiveElement();
     const nextFocusable = this.__getNextBodyFocusable(activeElement);
-    if (nextFocusable === overlayPart && lastFocusable) {
+    if (nextFocusable === this && lastFocusable) {
       // Move focus to the last overlay focusable and do NOT prevent keydown
       // to move focus outside the popover content (e.g. to the URL bar).
       lastFocusable.focus();
@@ -709,16 +757,14 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onGlobalShiftTab(event) {
-    const overlayPart = this._overlayElement.$.overlay;
-
     // Prevent restoring focus after target blur on Shift + Tab
     if (this.target && isElementFocused(this.__getTargetFocusable()) && this.__shouldRestoreFocus) {
       this.__shouldRestoreFocus = false;
       return;
     }
 
-    // Move focus back to the target on overlay content Shift + Tab
-    if (this.target && isElementFocused(overlayPart)) {
+    // Move focus back to the target on popover Shift + Tab
+    if (this.target && isElementFocused(this)) {
       event.preventDefault();
       this.__getTargetFocusable().focus();
       return;
@@ -727,7 +773,7 @@ class Popover extends PopoverPositionMixin(
     // Move focus back to the popover on next element Shift + Tab
     const nextFocusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
     if (nextFocusable && isElementFocused(nextFocusable)) {
-      const lastFocusable = this.__getLastFocusable(overlayPart);
+      const lastFocusable = this.__getLastFocusable(this);
       if (lastFocusable) {
         event.preventDefault();
         lastFocusable.focus();
@@ -780,14 +826,18 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetFocusOut(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
+    // Do not close if there is a nested overlay that should be closed through some method first.
     // This covers the case when focus moves to the nested popover opened
     // without focusing parent popover overlay (e.g. using hover trigger).
-    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
+    if (
+      this._overlayElement.opened &&
+      !isLastOverlay(this._overlayElement) &&
+      hasOnlyNestedOverlays(this._overlayElement)
+    ) {
       return;
     }
 
-    if ((this.__hasTrigger('focus') && this.__mouseDownInside) || this._overlayElement.contains(event.relatedTarget)) {
+    if ((this.__hasTrigger('focus') && this.__mouseDownInside) || this.contains(event.relatedTarget)) {
       return;
     }
 
@@ -809,13 +859,16 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
-    // Do not close the popover on target focusout if the overlay is not the last one.
-    // This happens e.g. when opening the nested popover that uses non-modal overlay.
-    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
+    // Do not close if the pointer moves to the overlay
+    if (this.contains(event.relatedTarget)) {
       return;
     }
-
-    if (this._overlayElement.contains(event.relatedTarget)) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
+    if (
+      this._overlayElement.opened &&
+      !isLastOverlay(this._overlayElement) &&
+      hasOnlyNestedOverlays(this._overlayElement)
+    ) {
       return;
     }
 
@@ -823,7 +876,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onOverlayFocusIn() {
+  __onFocusIn() {
     this.__focusInside = true;
 
     // When using Tab to move focus, restoring focus is reset. However, if pressing Tab
@@ -834,19 +887,19 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onOverlayFocusOut(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
+  __onFocusOut(event) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
     // This covers the following cases of nested overlay based components:
     // 1. Moving focus to the nested overlay (e.g. vaadin-select, vaadin-menu-bar)
     // 2. Closing not focused nested overlay on outside (e.g. vaadin-combo-box)
-    if (!isLastOverlay(this._overlayElement)) {
+    if (!isLastOverlay(this._overlayElement) && hasOnlyNestedOverlays(this._overlayElement)) {
       return;
     }
 
     if (
       (this.__hasTrigger('focus') && this.__mouseDownInside) ||
       event.relatedTarget === this.target ||
-      this._overlayElement.contains(event.relatedTarget)
+      this.contains(event.relatedTarget)
     ) {
       return;
     }
@@ -881,14 +934,12 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
-    // This happens when opening the nested component that uses "modal" overlay
-    // setting `pointer-events: none` on the body (combo-box, date-picker etc).
-    if (!isLastOverlay(this._overlayElement)) {
+    // Do not close if the pointer moves to the target
+    if (event.relatedTarget === this.target) {
       return;
     }
-
-    if (event.relatedTarget === this.target) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
+    if (!isLastOverlay(this._overlayElement) && hasOnlyNestedOverlays(this._overlayElement)) {
       return;
     }
 
@@ -904,6 +955,11 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__hasTrigger('focus')) {
+      // Do not restore focus if closed on focusout on Tab
+      if (isKeyboardActive()) {
+        this.__shouldRestoreFocus = false;
+      }
+
       this._openedStateController.close(true);
     }
   }
@@ -929,7 +985,7 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOverlayOpened() {
     if (this.autofocus && !this.modal) {
-      this._overlayElement.$.overlay.focus();
+      this.focus();
     }
   }
 
@@ -944,7 +1000,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     // Restore pointer-events set when opening on hover.
-    if (this.modal && this.target.style.pointerEvents) {
+    if (this.modal && this.target && this.target.style.pointerEvents) {
       this.target.style.pointerEvents = '';
     }
 
@@ -974,13 +1030,6 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __hasTrigger(trigger) {
     return Array.isArray(this.trigger) && this.trigger.includes(trigger);
-  }
-
-  /** @private */
-  __sizeChanged(width, height, overlay) {
-    if (overlay) {
-      requestAnimationFrame(() => overlay.setBounds({ width, height }, false));
-    }
   }
 
   /**

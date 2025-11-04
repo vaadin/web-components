@@ -1,0 +1,13 @@
+:where(:root),
+:where(:host) {
+  --vaadin-chip-padding: 0.4em;
+  --vaadin-chip-background: var(--vaadin-background-container-strong);
+}
+
+vaadin-multi-select-combo-box-chip {
+  --vaadin-chip-height: 1lh;
+  --vaadin-icon-size: 1.25em;
+  --vaadin-chip-padding: 0.4em;
+  --vaadin-chip-border-radius: var(--vaadin-radius-s);
+  --vaadin-chip-border-width: 0px;
+}

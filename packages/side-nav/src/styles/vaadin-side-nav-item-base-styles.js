@@ -3,20 +3,24 @@
  * Copyright (c) 2023 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { sharedStyles } from './vaadin-side-nav-shared-base-styles.js';
 
 const sideNavItem = css`
   [part='content'] {
     display: flex;
     align-items: center;
+    min-width: 0;
+    max-width: 100%;
     padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
-    gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline));
+    --_gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
+    gap: var(--_gap);
     font-size: var(--vaadin-side-nav-item-font-size, 1em);
     font-weight: var(--vaadin-side-nav-item-font-weight, 500);
     line-height: var(--vaadin-side-nav-item-line-height, inherit);
-    color: var(--vaadin-side-nav-item-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-side-nav-item-text-color, var(--vaadin-text-color-secondary));
     background: var(--vaadin-side-nav-item-background, transparent);
     background-origin: border-box;
     border: var(--vaadin-side-nav-item-border-width, 0) solid var(--vaadin-side-nav-item-border-color, transparent);
@@ -27,7 +31,7 @@ const sideNavItem = css`
 
   :host([current]) [part='content'] {
     --vaadin-side-nav-item-background: var(--vaadin-background-container);
-    --vaadin-side-nav-item-color: var(--vaadin-color);
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
   }
 
   :host([disabled]) {
@@ -35,7 +39,7 @@ const sideNavItem = css`
   }
 
   :host([disabled]) [part='content'] {
-    --vaadin-side-nav-item-color: var(--vaadin-color-disabled);
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color-disabled);
   }
 
   [part='link'] {
@@ -68,14 +72,6 @@ const sideNavItem = css`
     flex: none;
   }
 
-  /* Reserved space for icon */
-  slot[name='prefix']::before {
-    content: var(--_has-prefix-icon);
-    display: block;
-    width: var(--vaadin-icon-size, 1lh);
-    flex: none;
-  }
-
   [part='content']:not(:has([href])):has([part='toggle-button']:focus-visible),
   [part='content']:has(:not([part='toggle-button']):focus-visible),
   [part='content']:has([href]) [part='toggle-button']:focus-visible {
@@ -89,34 +85,40 @@ const sideNavItem = css`
   /* Hierarchy indentation */
   [part='content']::before {
     content: '';
-    --_hierarchy-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-child-indent, var(--vaadin-icon-size, 1lh)));
-    --_icon-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline)));
-    width: calc(var(--_hierarchy-indent) + var(--_icon-indent));
+    width: calc(
+      var(--vaadin-side-nav-child-indent, 1em) * var(--_level, 0) + var(--_icon-indent, 0) *
+        (var(--vaadin-icon-size, 1lh) + var(--_gap))
+    );
     flex: none;
-    margin-inline-start: calc(var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline)) * -1);
+    margin-inline-start: calc(var(--_gap) * -1);
   }
 
-  slot[name='children'] {
+  [part='children'] {
     --_level: calc(var(--_level-2, 0) + 1);
   }
 
-  slot[name='children']::slotted(*) {
+  [part='children'] ::slotted(*) {
     --_level-2: var(--_level);
   }
 
   @media (forced-colors: active) {
+    [part='content'] {
+      border: 1px solid Canvas !important;
+    }
+
     :host([current]) [part='content'] {
-      color: Highlight;
+      color: Highlight !important;
+      border-color: Highlight !important;
     }
 
     :host([disabled]) [part='content'] {
-      --vaadin-side-nav-item-color: GrayText;
+      --vaadin-side-nav-item-text-color: GrayText !important;
     }
 
     :host([disabled]) [part='toggle-button']::before {
-      background: GrayText;
+      background: GrayText !important;
     }
   }
 `;
 
-export const sideNavItemStyles = [sharedStyles, sideNavItem];
+export const sideNavItemStyles = [sharedStyles, screenReaderOnly, sideNavItem];

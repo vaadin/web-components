@@ -13,13 +13,11 @@ import { cssImportPlugin, enforceThemePlugin } from './web-dev-server.config.js'
 dotenv.config();
 
 const argv = minimist(process.argv.slice(2));
-const hasPortedParam = process.argv.includes('--ported');
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows, which you can specify either by setting the `size` property, or by providing it to the second argument of the `dataProvider` function `callback` call.',
-  'The Material theme is deprecated and will be removed in Vaadin 25.',
-  /^WARNING: Since Vaadin .* is deprecated.*/u,
+  /is deprecated/u,
   /Lit is in dev mode/u,
 ];
 
@@ -99,12 +97,14 @@ const getAllVisualPackages = () => {
 };
 
 /**
- * Get all available packages with visual tests for base styles.
+ * Get all available packages with visual tests for given theme.
  */
-const getAllBasePackages = () => {
+const getAllThemePackages = (theme) => {
   return fs
     .readdirSync('packages')
-    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/base`));
+    .filter(
+      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/${theme}`),
+    );
 };
 
 /**
@@ -266,7 +266,9 @@ const createUnitTestsConfig = (config) => {
 const createVisualTestsConfig = (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
-    visualPackages = getAllBasePackages();
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
+  } else if (theme === 'aura') {
+    visualPackages = getAllThemePackages('aura');
   } else {
     visualPackages = getAllVisualPackages();
   }
@@ -329,15 +331,11 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         update: process.env.TEST_ENV === 'update',
       }),
 
-      // yarn test:base
-      theme === 'base' && enforceThemePlugin('base'),
+      // Used by all themes
+      enforceThemePlugin(theme),
 
-      // yarn test:lumo (uses legacy lumo styles defined in js files)
-      theme === 'lumo' && !hasPortedParam && enforceThemePlugin('legacy-lumo'),
-
-      // yarn test:lumo --ported (uses base styles and lumo styles defined in css files)
-      theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
-      theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+      // Lumo / Aura CSS
+      ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(),

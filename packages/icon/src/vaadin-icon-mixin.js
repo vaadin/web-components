@@ -5,6 +5,7 @@
  */
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
 import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
 
 const srcCache = new Map();
@@ -14,9 +15,10 @@ const Iconset = customElements.get('vaadin-iconset');
 /**
  * @polymerMixin
  * @mixes SlotStylesMixin
+ * @mixes IconFontSizeMixin
  */
 export const IconMixin = (superClass) =>
-  class extends SlotStylesMixin(superClass) {
+  class extends IconFontSizeMixin(SlotStylesMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -50,9 +52,9 @@ export const IconMixin = (superClass) =>
         /**
          * The SVG source to be loaded as the icon. It can be:
          * - an URL to a file containing the icon
-         * - an URL in the format "/path/to/file.svg#objectID", where the "objectID" refers to an ID attribute contained
+         * - an URL in the format `/path/to/file.svg#objectID`, where the `objectID` refers to an ID attribute contained
          *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
-         * - a string in the format "data:image/svg+xml,<svg>...</svg>". You may need to use the "encodeURIComponent"
+         * - a string in the format `data:image/svg+xml,<svg>...</svg>`. You may need to use the `encodeURIComponent`
          *   function for the SVG content passed
          *
          * @type {string}

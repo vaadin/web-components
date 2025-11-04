@@ -4,12 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import type { LoginMixinClass } from './vaadin-login-mixin.js';
 
 export declare function LoginOverlayMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<LoginMixinClass> & Constructor<LoginOverlayMixinClass> & Constructor<OverlayClassMixinClass> & T;
+): Constructor<LoginOverlayMixinClass> & T;
 
 export declare class LoginOverlayMixinClass {
   /**

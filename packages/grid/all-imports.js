@@ -1,4 +1,4 @@
-import './theme/lumo/all-imports.js';
+import './src/all-imports.js';
 
 export * from './vaadin-grid-column-group.js';
 export * from './vaadin-grid-column.js';

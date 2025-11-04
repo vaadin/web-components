@@ -279,16 +279,27 @@ describe('vaadin-avatar', () => {
         container.appendChild(avatar);
 
         const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+        avatar.setAttribute('tabindex', '0');
         tabKeyDown(avatar);
         avatar.focus();
         expect(overlay.opened).to.be.true;
+      });
+
+      it('should set has-tooltip attribute on the avatar', () => {
+        expect(avatar.hasAttribute('has-tooltip')).to.be.true;
+      });
+
+      it('should remove has-tooltip attribute from the avata when withTooltip is set to false ', async () => {
+        avatar.withTooltip = false;
+        await nextUpdate(avatar);
+        expect(avatar.hasAttribute('has-tooltip')).to.be.false;
       });
     });
   });
 
   describe('focus', () => {
-    it('should set tabindex="0" on the avatar', () => {
-      expect(avatar.getAttribute('tabindex')).to.equal('0');
+    beforeEach(() => {
+      avatar.setAttribute('tabindex', '0');
     });
 
     it('should set focused attribute on avatar focusin', () => {
@@ -324,11 +335,11 @@ describe('vaadin-avatar', () => {
         document.documentElement.style.setProperty('--vaadin-user-color-0', 'red');
       });
 
-      it('should set box-shadow based on color index', async () => {
+      it('should set border color based on color index', async () => {
         avatar.colorIndex = 0;
         await nextUpdate(avatar);
-        const { boxShadow } = getComputedStyle(avatar, '::before');
-        expect(['rgb(255, 0, 0)', 'red'].some((v) => boxShadow.indexOf(v) > -1)).to.be.true;
+        const { borderColor } = getComputedStyle(avatar, '::before');
+        expect(['rgb(255, 0, 0)', 'red'].some((v) => borderColor.indexOf(v) > -1)).to.be.true;
       });
 
       it('should set attribute based on color index', async () => {
@@ -339,28 +350,6 @@ describe('vaadin-avatar', () => {
         avatar.colorIndex = null;
         await nextUpdate(avatar);
         expect(avatar.hasAttribute('has-color-index')).to.be.false;
-      });
-    });
-
-    describe('incorrect index', () => {
-      beforeEach(() => {
-        sinon.stub(console, 'warn');
-      });
-
-      afterEach(() => {
-        console.warn.restore();
-      });
-
-      it('should not set attribute for invalid index', async () => {
-        avatar.colorIndex = 99;
-        await nextUpdate(avatar);
-        expect(avatar.hasAttribute('has-color-index')).to.be.false;
-      });
-
-      it('should warn about invalid css property used', async () => {
-        avatar.colorIndex = 99;
-        await nextUpdate(avatar);
-        expect(console.warn.called).to.be.true;
       });
     });
   });

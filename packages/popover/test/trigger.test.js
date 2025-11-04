@@ -117,11 +117,11 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close on mouseleave from target to overlay', async () => {
+    it('should not close on mouseleave from target to popover content', async () => {
       mouseenter(target);
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      mouseleave(target, overlay);
+      mouseleave(target, popover.firstElementChild);
       await nextUpdate(popover);
 
       expect(overlay.opened).to.be.true;
@@ -138,12 +138,12 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close on mouseleave from overlay back to target', async () => {
+    it('should not close on mouseleave from popover content back to target', async () => {
       mouseenter(target);
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      mouseleave(target, overlay);
-      mouseleave(overlay, target);
+      mouseleave(target, popover.firstElementChild);
+      mouseleave(popover.firstElementChild, target);
       await nextUpdate(popover);
 
       expect(overlay.opened).to.be.true;
@@ -195,11 +195,11 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close on target focusout to the overlay', async () => {
+    it('should not close on target focusout to the popover content', async () => {
       focusin(target);
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      focusout(target, overlay);
+      focusout(target, popover.firstElementChild);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
@@ -214,21 +214,21 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close on overlay focusout to the overlay content', async () => {
+    it('should not close on overlay focusout to the popover content content', async () => {
       focusin(target);
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      focusout(overlay, overlay.firstElementChild);
+      focusout(overlay, popover.firstElementChild);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
 
-    it('should not close on overlay focusout back to the target', async () => {
+    it('should not close on popover content focusout back to the target', async () => {
       focusin(target);
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      focusout(target, overlay);
-      focusout(overlay, target);
+      focusout(target, popover.firstElementChild);
+      focusout(popover.firstElementChild, target);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
@@ -267,16 +267,16 @@ describe('trigger', () => {
       });
 
       it('should not close on overlay mousedown when target has focus', async () => {
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
+        await sendMouseToElement({ type: 'click', element: popover.querySelector('div') });
         await nextUpdate();
 
         expect(overlay.opened).to.be.true;
       });
 
       it('should not close on overlay mousedown when overlay has focus', async () => {
-        overlay.querySelector('input').focus();
+        popover.querySelector('input').focus();
 
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
+        await sendMouseToElement({ type: 'click', element: popover.querySelector('div') });
         await nextUpdate();
 
         expect(overlay.opened).to.be.true;
@@ -284,9 +284,9 @@ describe('trigger', () => {
 
       it('should only cancel one target focusout after the overlay mousedown', async () => {
         // Remove the input so that first Tab would leave popover
-        overlay.querySelector('input').remove();
+        popover.querySelector('input').remove();
 
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
+        await sendMouseToElement({ type: 'click', element: popover.querySelector('div') });
         await nextUpdate();
 
         // Tab to focus input next to the target
@@ -297,9 +297,9 @@ describe('trigger', () => {
       });
 
       it('should only cancel one overlay focusout after the overlay mousedown', async () => {
-        overlay.querySelector('input').focus();
+        popover.querySelector('input').focus();
 
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
+        await sendMouseToElement({ type: 'click', element: popover.querySelector('div') });
         await nextUpdate();
 
         // Tab to focus input inside the popover

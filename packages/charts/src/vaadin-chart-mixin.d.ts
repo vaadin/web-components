@@ -86,6 +86,11 @@ export type ChartRedrawEvent = CustomEvent<{ chart: HighchartsChart; originalEve
 export type ChartSelectionEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
+ * Fired when the chart finishes resizing.
+ */
+export type ChartEndResizeEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
+
+/**
  * Fired when the series has finished its initial animation.
  */
 export type ChartSeriesAfterAnimateEvent = CustomEvent<{ series: Series; originalEvent: ChartSeriesEvent }>;
@@ -181,7 +186,7 @@ export type ChartPointDropEvent = CustomEvent<{ point: Point; originalEvent: Cha
 export type ChartPointDragEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
- * Fired when when the minimum and maximum is set for the X axis.
+ * Fired when the minimum and maximum is set for the X axis.
  */
 export type ChartXaxesExtremesSetEvent = CustomEvent<{
   axis: Axis;
@@ -192,7 +197,7 @@ export type ChartXaxesExtremesSetEvent = CustomEvent<{
 }>;
 
 /**
- * Fired when when the minimum and maximum is set for the Y axis.
+ * Fired when the minimum and maximum is set for the Y axis.
  */
 export type ChartYaxesExtremesSetEvent = CustomEvent<{
   axis: Axis;
@@ -226,6 +231,8 @@ export interface ChartCustomEventMap {
   'chart-redraw': ChartRedrawEvent;
 
   'chart-selection': ChartSelectionEvent;
+
+  'chart-end-resize': ChartEndResizeEvent;
 
   'series-after-animate': ChartSeriesAfterAnimateEvent;
 

@@ -108,15 +108,17 @@ describe('keyboard navigation', () => {
 
     describe('with custom parser and formatter', () => {
       beforeEach(() => {
-        timePicker.i18n.parseTime = (text) => {
-          const parts = text.split('.');
-          return {
-            hours: parts[0],
-            minutes: parts[1],
-          };
-        };
-        timePicker.i18n.formatTime = (time) => {
-          return `${time.hours}.${time.minutes}`;
+        timePicker.i18n = {
+          parseTime(text) {
+            const parts = text.split('.');
+            return {
+              hours: parts[0],
+              minutes: parts[1],
+            };
+          },
+          formatTime(time) {
+            return `${time.hours}.${time.minutes}`;
+          },
         };
       });
 
@@ -190,7 +192,7 @@ describe('keyboard navigation', () => {
 
     it('should open the overlay on arrow up', () => {
       arrowUp(inputElement);
-      expect(document.querySelector('vaadin-time-picker-overlay')).to.be.ok;
+      expect(timePicker.opened).to.be.true;
     });
   });
 

@@ -10,7 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { detailsSummary } from './styles/vaadin-details-summary-core-styles.js';
+import { detailsSummary } from './styles/vaadin-details-summary-base-styles.js';
 
 /**
  * The details summary element.
@@ -42,7 +42,7 @@ import { detailsSummary } from './styles/vaadin-details-summary-core-styles.js';
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DetailsSummary extends ButtonMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details-summary';
   }

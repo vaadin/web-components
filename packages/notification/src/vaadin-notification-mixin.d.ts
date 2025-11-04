@@ -1,11 +1,10 @@
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import type { OverlayStackMixinClass } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { Notification } from './vaadin-notification.js';
 
@@ -27,7 +26,7 @@ export type NotificationRenderer = (root: HTMLElement, notification: Notificatio
  */
 export declare function NotificationContainerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<NotificationContainerMixinClass> & Constructor<OverlayStackMixinClass> & T;
+): Constructor<NotificationContainerMixinClass> & T;
 
 export declare class NotificationContainerMixinClass {
   /**

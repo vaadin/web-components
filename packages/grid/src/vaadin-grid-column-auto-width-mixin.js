@@ -30,14 +30,12 @@ export const ColumnAutoWidthMixin = (superClass) =>
       ];
     }
 
-    constructor() {
-      super();
-      this.addEventListener('animationend', this.__onAnimationEndAutoWidth);
-    }
+    /** @protected */
+    updated(props) {
+      super.updated(props);
 
-    /** @private */
-    __onAnimationEndAutoWidth(e) {
-      if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
+      // If the grid was hidden and is now visible
+      if (props.has('__hostVisible') && !props.get('__hostVisible')) {
         this.__tryToRecalculateColumnWidthsIfPending();
       }
     }
@@ -59,9 +57,15 @@ export const ColumnAutoWidthMixin = (superClass) =>
     }
 
     /** @private */
-    __flatSizeChangedAutoWidth() {
+    __flatSizeChangedAutoWidth(flatSize) {
       // Flat size changed, recalculate column widths if pending (asynchronously, to allow grid to render row elements first)
-      requestAnimationFrame(() => this.__tryToRecalculateColumnWidthsIfPending());
+      requestAnimationFrame(() => {
+        if (!!flatSize && !this.__hasHadRenderedRowsForColumnWidthCalculation) {
+          this.recalculateColumnWidths();
+        } else {
+          this.__tryToRecalculateColumnWidthsIfPending();
+        }
+      });
     }
 
     /**
@@ -131,10 +135,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
       return this.__getIntrinsicWidth(innerColumn) + shareOfInnerColumnFromNecessaryExtraSpace;
     }
 
-    /**
-     * @param {!Array<!GridColumn>} cols the columns to auto size based on their content width
-     * @private
-     */
+    /** @private */
     _recalculateColumnWidths() {
       // Flush to make sure DOM is up-to-date when measuring the column widths
       this.__virtualizer.flush();

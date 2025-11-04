@@ -29,27 +29,18 @@ const PRO_LICENSE_HEADER = `
  */
 `;
 
-const PRO_COMPONENTS = [
-  'charts',
-  'board',
-  'cookie-consent',
-  'crud',
-  'dashboard',
-  'grid-pro',
-  'rich-text-editor',
-  'map',
-];
+const PRO_COMPONENTS = ['charts', 'board', 'crud', 'dashboard', 'grid-pro', 'rich-text-editor', 'map'];
 
 export default [
   {
     ignores: [
       'coverage/**/*.js',
       'dist/**/*.js',
+      '**/dist/**/*',
       'packages/**/vendor/*.js',
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
-      'packages/**/theme/**/*.d.ts',
     ],
   },
   ...typescript,
@@ -116,7 +107,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/*', 'test/integration/**', 'dev/**/*'],
+    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -173,7 +164,14 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js', 'packages/**/gulpfile.js'],
+    files: [
+      'scripts/**/*.js',
+      '*.config.js',
+      'wtr-utils.js',
+      'custom-rules/**/*.js',
+      'packages/**/gulpfile.js',
+      'api-docs/.eleventy.js',
+    ],
     languageOptions: {
       globals: {
         ...globals.node,

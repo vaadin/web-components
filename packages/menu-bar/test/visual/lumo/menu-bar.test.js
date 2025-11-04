@@ -1,6 +1,7 @@
 import { arrowDown, fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/src/global/index.css';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/icon.css';
 import '@vaadin/vaadin-lumo-styles/components/menu-bar.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
@@ -255,6 +256,42 @@ describe('menu-bar', () => {
           await visualDiff(div, `${dir}-dropdown-indicators-icon`);
         });
       });
+    });
+  });
+
+  describe('dark', () => {
+    before(() => {
+      document.documentElement.setAttribute('theme', 'dark');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('theme');
+    });
+
+    beforeEach(async () => {
+      div = document.createElement('div');
+      div.style.display = 'inline-block';
+      div.style.padding = '10px';
+
+      element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+      element.items = [
+        { text: 'Home' },
+        {
+          text: 'Reports',
+          children: [{ text: 'View Reports' }, { text: 'Generate Report' }],
+        },
+        { text: 'Dashboard', disabled: true },
+        { text: 'Help' },
+      ];
+
+      await nextResize(element);
+    });
+
+    it('dark', async () => {
+      div.style.height = '150px';
+      element._buttons[1].click();
+      await nextRender();
+      await visualDiff(div, 'dark');
     });
   });
 });

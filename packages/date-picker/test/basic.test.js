@@ -270,7 +270,7 @@ describe('clear button', () => {
   beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
     await nextRender();
-    clearButton = datePicker.shadowRoot.querySelector('[part="clear-button"]');
+    clearButton = datePicker.shadowRoot.querySelector('[part~="clear-button"]');
   });
 
   it('should have clearButtonVisible property', () => {
@@ -362,6 +362,30 @@ describe('clear button', () => {
     click(clearButton);
     expect(datePicker.opened).to.be.not.ok;
   });
+
+  it('should not prevent default on clear button mousedown if input is not focused', () => {
+    datePicker.value = '2001-01-01';
+    const event = new CustomEvent('mousedown', { cancelable: true });
+    clearButton.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.false;
+  });
+
+  it('should prevent default on clear button mousedown if input is focused', () => {
+    datePicker.value = '2001-01-01';
+    datePicker.inputElement.focus();
+    const event = new CustomEvent('mousedown', { cancelable: true });
+    clearButton.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.true;
+  });
+
+  it('should prevent default on clear button mousedown when opened', async () => {
+    datePicker.value = '2001-01-01';
+    await open(datePicker);
+    datePicker.inputElement.blur();
+    const event = new CustomEvent('mousedown', { cancelable: true });
+    clearButton.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.true;
+  });
 });
 
 describe('initial value attribute', () => {
@@ -385,7 +409,7 @@ describe('auto open disabled', () => {
     datePicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
     await nextRender();
     input = datePicker.inputElement;
-    toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
+    toggleButton = datePicker.shadowRoot.querySelector('[part~="toggle-button"]');
     datePicker.autoOpenDisabled = true;
   });
 

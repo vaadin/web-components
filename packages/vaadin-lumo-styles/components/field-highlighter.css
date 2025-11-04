@@ -8,15 +8,16 @@
 @import '../src/components/user-tag.css';
 @import '../src/components/user-tags-overlay.css';
 
-:is(:root, :host)::before {
-  --vaadin-user-tags-overlay-lumo-inject: 1;
-  --vaadin-user-tags-overlay-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-user-tags-overlay-inject: 1;
+  --_lumo-vaadin-user-tags-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_components_user-tags-overlay;
 
-  --vaadin-user-tag-lumo-inject: 1;
-  --vaadin-user-tag-lumo-inject-modules: lumo_components_user-tag;
+  --_lumo-vaadin-user-tag-inject: 1;
+  --_lumo-vaadin-user-tag-inject-modules: lumo_components_user-tag;
 
-  --vaadin-field-outline-lumo-inject: 1;
-  --vaadin-field-outline-lumo-inject-modules: lumo_components_field-outline;
+  --_lumo-vaadin-field-outline-inject: 1;
+  --_lumo-vaadin-field-outline-inject-modules: lumo_components_field-outline;
 }

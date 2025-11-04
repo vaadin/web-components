@@ -13,7 +13,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { textAreaStyles } from './styles/vaadin-text-area-core-styles.js';
+import { textAreaStyles } from './styles/vaadin-text-area-base-styles.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
 
 /**
@@ -45,8 +45,35 @@ import { TextAreaMixin } from './vaadin-text-area-mixin.js';
  * -------------------------------|----------------------------|---------
  * `--vaadin-field-default-width` | Default width of the field | `12em`
  *
- * `<vaadin-text-area>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on the clear button
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
+ * `invalid`            | Set when the element is invalid
+ * `input-prevented`    | Temporarily set when invalid input is prevented
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ *
+ * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -62,7 +89,7 @@ import { TextAreaMixin } from './vaadin-text-area-mixin.js';
  * @mixes TextAreaMixin
  * @mixes ThemableMixin
  */
-export class TextArea extends TextAreaMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-text-area';
   }
@@ -91,7 +118,7 @@ export class TextArea extends TextAreaMixin(LumoInjectionMixin(ThemableMixin(Ele
           <slot name="prefix" slot="prefix"></slot>
           <slot name="textarea"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="clearButton" part="field-button clear-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -101,9 +128,9 @@ export class TextArea extends TextAreaMixin(LumoInjectionMixin(ThemableMixin(Ele
         <div part="error-message">
           <slot name="error-message"></slot>
         </div>
-      </div>
 
-      <slot name="tooltip"></slot>
+        <slot name="tooltip"></slot>
+      </div>
     `;
   }
 

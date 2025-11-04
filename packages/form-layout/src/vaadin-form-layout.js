@@ -7,9 +7,8 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { formLayoutStyles } from './styles/vaadin-form-layout-core-styles.js';
+import { formLayoutStyles } from './styles/vaadin-form-layout-base-styles.js';
 import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
 
 /**
@@ -206,19 +205,13 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-form-layout';
   }
 
   static get styles() {
     return formLayoutStyles;
-  }
-
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
   }
 
   /** @protected */

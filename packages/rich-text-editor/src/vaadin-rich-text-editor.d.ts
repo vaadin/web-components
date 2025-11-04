@@ -34,18 +34,17 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * ```
  *
  * Vaadin Rich Text Editor focuses on the structure, not the styling of content.
- * Therefore, the semantic HTML5 tags such as <h1>, <strong> and <ul> are used,
+ * Therefore, the semantic HTML5 tags such as `<h1>`, `<strong>` and `<ul>` are used,
  * and CSS usage is limited to most common cases, like horizontal text alignment.
  *
  * ### Styling
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `disabled`   | Set to a disabled text editor | :host
- * `readonly`   | Set to a readonly text editor | :host
- * `on`         | Set to a toolbar button applied to the selected text | toolbar-button
+ * Attribute    | Description
+ * -------------|------------------------------
+ * `disabled`   | Set to a disabled text editor
+ * `readonly`   | Set to a readonly text editor
  *
  * The following shadow DOM parts are available for styling:
  *
@@ -54,12 +53,13 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `content`                            | The content wrapper
  * `toolbar`                            | The toolbar wrapper
  * `toolbar-group`                      | The group for toolbar controls
- * `toolbar-group-history`              | The group for histroy controls
+ * `toolbar-group-history`              | The group for history controls
  * `toolbar-group-emphasis`             | The group for emphasis controls
  * `toolbar-group-heading`              | The group for heading controls
  * `toolbar-group-style`                | The group for style controls
  * `toolbar-group-glyph-transformation` | The group for glyph transformation controls
- * `toolbar-group-group-list`           | The group for group list controls
+ * `toolbar-group-list`                 | The group for list controls
+ * `toolbar-group-indent`               | The group for indentation controls
  * `toolbar-group-alignment`            | The group for alignment controls
  * `toolbar-group-rich-text`            | The group for rich text controls
  * `toolbar-group-block`                | The group for preformatted block controls
@@ -81,6 +81,8 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-button-superscript`         | The "superscript" button
  * `toolbar-button-list-ordered`        | The "ordered list" button
  * `toolbar-button-list-bullet`         | The "bullet list" button
+ * `toolbar-button-outdent`             | The "decrease indentation" button
+ * `toolbar-button-indent`              | The "increase indentation" button
  * `toolbar-button-align-left`          | The "left align" button
  * `toolbar-button-align-center`        | The "center align" button
  * `toolbar-button-align-right`         | The "right align" button

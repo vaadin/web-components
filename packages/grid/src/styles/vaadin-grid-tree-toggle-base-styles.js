@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const gridTreeToggleStyles = css`
@@ -36,7 +36,7 @@ export const gridTreeToggleStyles = css`
   }
 
   [part='toggle'] {
-    margin-inline-end: var(--vaadin-gap-container-inline);
+    margin-inline-end: var(--vaadin-gap-s);
   }
 
   [part='toggle']::before {
@@ -45,7 +45,7 @@ export const gridTreeToggleStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask-image: var(--_vaadin-icon-chevron-down);
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   :host(:not([expanded])) [part='toggle']::before {
@@ -54,7 +54,7 @@ export const gridTreeToggleStyles = css`
 
   @media (prefers-reduced-motion: no-preference) {
     [part='toggle']::before {
-      transition: rotate 120ms;
+      transition: var(--_non-focused-row-none, rotate 120ms);
     }
   }
 

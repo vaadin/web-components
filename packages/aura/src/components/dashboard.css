@@ -1,0 +1,113 @@
+:where(:root),
+:where(:host) {
+  --vaadin-dashboard-widget-title-font-weight: var(--aura-font-weight-medium);
+  --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
+  --vaadin-dashboard-header-gap: var(--vaadin-gap-xs);
+  --vaadin-dashboard-widget-border-color: var(--vaadin-border-color-secondary);
+  --vaadin-dashboard-widget-background: var(--aura-surface) padding-box;
+  --vaadin-dashboard-widget-border-radius: var(--vaadin-radius-m);
+}
+
+vaadin-dashboard-widget {
+  border-radius: calc(var(--vaadin-dashboard-widget-border-radius) - var(--vaadin-dashboard-widget-border-width, 1px));
+
+  &::before {
+    inset: calc(var(--vaadin-dashboard-widget-border-width, 1px) * -1);
+    border-radius: var(--vaadin-dashboard-widget-border-radius);
+  }
+
+  &::part(content) {
+    transition: 200ms;
+    transition-property: filter, opacity;
+  }
+
+  &:is([resize-mode], [move-mode])::part(content) {
+    opacity: 0.75;
+    filter: blur(10px);
+    clip-path: inset(0);
+    transition-duration: 50ms;
+  }
+}
+
+vaadin-dashboard-section {
+  vaadin-dashboard-widget {
+    transition: 200ms;
+    transition-property: filter, opacity;
+  }
+
+  &[move-mode] vaadin-dashboard-widget {
+    opacity: 0.75;
+    filter: blur(10px);
+    clip-path: inset(0);
+    transition-duration: 50ms;
+  }
+}
+
+:is(vaadin-dashboard-widget, vaadin-dashboard-section) {
+  &::part(move-forward-button),
+  &::part(move-backward-button),
+  &::part(resize-shrink-height-button),
+  &::part(resize-grow-height-button),
+  &::part(resize-shrink-width-button),
+  &::part(resize-grow-width-button) {
+    background: var(--aura-surface) padding-box;
+    color: var(--vaadin-text-color-secondary);
+    border: 1px solid var(--vaadin-border-color);
+    transition: 120ms color;
+    outline-offset: -1px;
+  }
+
+  &::part(resize-shrink-height-button),
+  &::part(resize-grow-height-button) {
+    margin-top: 0;
+    border-bottom: 0;
+  }
+
+  &::part(move-forward-button),
+  &::part(resize-shrink-width-button),
+  &::part(resize-grow-width-button) {
+    margin-inline-start: 0;
+    border-inline-end: 0;
+  }
+
+  &::part(move-backward-button) {
+    margin-inline-end: 0;
+    border-inline-start: 0;
+  }
+
+  &::part(move-apply-button),
+  &::part(resize-apply-button) {
+    background: var(--aura-accent-color);
+    color: var(--aura-accent-contrast);
+    box-shadow: 0 0 0 3px var(--aura-surface);
+    outline-offset: 2px;
+  }
+
+  &::part(move-button),
+  &::part(remove-button),
+  &::part(resize-button) {
+    color: var(--vaadin-text-color-disabled);
+    transition: 120ms color;
+    outline-offset: -2px;
+  }
+
+  &[editable] {
+    --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
+  }
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-dashboard-widget, vaadin-dashboard-section) {
+    &::part(move-button):hover,
+    &::part(remove-button):hover,
+    &::part(resize-button):hover,
+    &::part(move-forward-button):hover,
+    &::part(move-backward-button):hover,
+    &::part(resize-shrink-height-button):hover,
+    &::part(resize-grow-height-button):hover,
+    &::part(resize-shrink-width-button):hover,
+    &::part(resize-grow-width-button):hover {
+      color: var(--vaadin-text-color);
+    }
+  }
+}

@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { gridSorterStyles } from './styles/vaadin-grid-sorter-core-styles.js';
+import { gridSorterStyles } from './styles/vaadin-grid-sorter-base-styles.js';
 import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
 /**
@@ -44,9 +44,9 @@ import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `direction` | Sort direction of a sorter | :host
+ * Attribute    | Description
+ * -------------|---------------------------
+ * `direction`  | Sort direction of a sorter
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
@@ -57,7 +57,7 @@ import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-grid-sorter';
   }

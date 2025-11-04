@@ -76,6 +76,7 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `field-button`       | Set on the clear button
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
@@ -83,18 +84,21 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description | Part name
- * --------------------|-------------|------------
- * `disabled`          | Set to a disabled text field | :host
- * `has-value`         | Set when the element has a value | :host
- * `has-label`         | Set when the element has a label | :host
- * `has-helper`        | Set when the element has helper text or slot | :host
- * `has-error-message` | Set when the element has an error message | :host
- * `invalid`           | Set when the element is invalid | :host
- * `input-prevented`   | Temporarily set when invalid input is prevented | :host
- * `focused`           | Set when the element is focused | :host
- * `focus-ring`        | Set when the element is keyboard focused | :host
- * `readonly`          | Set to a readonly text field | :host
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `has-tooltip`        | Set when the element has a slotted tooltip
+ * `invalid`            | Set when the element is invalid
+ * `input-prevented`    | Temporarily set when invalid input is prevented
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ *
+ * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

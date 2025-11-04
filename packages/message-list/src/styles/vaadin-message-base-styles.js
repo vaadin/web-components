@@ -3,15 +3,15 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const messageStyles = css`
   :host {
     display: flex;
     flex-direction: row;
-    padding: var(--vaadin-message-padding, var(--vaadin-padding));
-    gap: var(--vaadin-message-gap, var(--vaadin-gap-container-inline) var(--vaadin-gap-container-block));
+    padding: var(--vaadin-message-padding, var(--vaadin-padding-s) var(--vaadin-padding-m));
+    gap: var(--vaadin-message-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
   }
 
   :host([hidden]) {
@@ -42,13 +42,13 @@ export const messageStyles = css`
   [part='name'] {
     font-size: var(--vaadin-message-name-font-size, inherit);
     font-weight: var(--vaadin-message-name-font-weight, 500);
-    color: var(--vaadin-message-name-color, var(--vaadin-color));
+    color: var(--vaadin-message-name-color, var(--vaadin-text-color));
   }
 
   [part='time'] {
-    font-size: var(--vaadin-message-time-font-size, 0.75em);
+    font-size: var(--vaadin-message-time-font-size, max(11px, 0.75em));
     font-weight: var(--vaadin-message-time-font-weight, inherit);
-    color: var(--vaadin-message-time-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-message-time-color, var(--vaadin-text-color-secondary));
   }
 
   [part='message'] {
@@ -56,7 +56,7 @@ export const messageStyles = css`
     font-size: var(--vaadin-message-font-size, inherit);
     font-weight: var(--vaadin-message-font-weight, inherit);
     line-height: var(--vaadin-message-line-height, inherit);
-    color: var(--vaadin-message-color, var(--vaadin-color));
+    color: var(--vaadin-message-text-color, var(--vaadin-text-color));
   }
 
   ::slotted([slot='avatar']) {

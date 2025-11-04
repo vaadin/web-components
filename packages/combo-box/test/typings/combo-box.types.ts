@@ -5,7 +5,6 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
@@ -19,6 +18,7 @@ import type { ComboBoxBaseMixinClass } from '../../src/vaadin-combo-box-base-mix
 import type { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import type { ComboBoxItem } from '../../src/vaadin-combo-box-item';
 import type { ComboBoxItemMixinClass, ComboBoxItemRenderer } from '../../src/vaadin-combo-box-item-mixin';
+import type { ComboBoxItemsMixinClass } from '../../src/vaadin-combo-box-items-mixin';
 import type { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
 import type {
   ComboBox,
@@ -100,6 +100,7 @@ assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
 assertType<(item: TestComboBoxItem) => string>(narrowedComboBox.itemClassNameGenerator);
+assertType<((item: TestComboBoxItem) => string) | undefined>(narrowedComboBox.itemLabelGenerator);
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
@@ -123,6 +124,7 @@ assertType<string>(narrowedComboBox.allowedCharPattern);
 
 // ComboBox mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<ComboBoxItemsMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
@@ -136,7 +138,6 @@ assertType<InputControlMixinClass>(narrowedComboBox);
 assertType<ClearButtonMixinClass>(narrowedComboBox);
 assertType<InputMixinClass>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
-assertType<OverlayClassMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
 assertType<PatternMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);

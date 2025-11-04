@@ -3,9 +3,9 @@
  * Copyright (c) 2022 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { loaderStyles } from '@vaadin/component-base/src/loader-styles.js';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 
 export const tabSheetStyles = [
   loaderStyles,
@@ -14,7 +14,7 @@ export const tabSheetStyles = [
       display: flex;
       flex-direction: column;
       border: var(--vaadin-tabsheet-border-width, 1px) solid
-        var(--vaadin-tabsheet-border-color, var(--vaadin-border-color));
+        var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-secondary));
       border-radius: var(--vaadin-tabsheet-border-radius, var(--vaadin-radius-l));
       overflow: hidden;
     }
@@ -27,8 +27,8 @@ export const tabSheetStyles = [
       position: relative;
       display: flex;
       align-items: center;
-      gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-container-inline));
-      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding));
+      gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-s));
+      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-m));
       box-sizing: border-box;
     }
 
@@ -38,11 +38,15 @@ export const tabSheetStyles = [
       min-width: 128px;
     }
 
+    ::slotted([hidden]) {
+      display: none !important;
+    }
+
     [part='content'] {
       position: relative;
       flex: 1;
       box-sizing: border-box;
-      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding));
+      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-l));
       border-top: var(--vaadin-tabsheet-border-width, 1px) solid transparent;
       margin-top: calc(var(--vaadin-tabsheet-border-width, 1px) * -1);
     }
@@ -54,7 +58,7 @@ export const tabSheetStyles = [
     }
 
     [part='content'][overflow~='top'] {
-      border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color));
+      border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-secondary));
     }
 
     :host([loading]) [part='content'] {
@@ -69,7 +73,7 @@ export const tabSheetStyles = [
     }
 
     :host([theme~='no-padding']) [part='content'] {
-      padding: 0;
+      padding: 0 !important;
     }
   `,
 ];

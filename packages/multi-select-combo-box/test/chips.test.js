@@ -1,18 +1,24 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
-import './multi-select-combo-box-test-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
+import { getChips } from './helpers.js';
 
 describe('chips', () => {
   let comboBox, inputElement;
-
-  const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
   const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+    fixtureSync(`
+      <style>
+        vaadin-multi-select-combo-box {
+          line-height: 1.25;
+          font-family: -apple-system, 'system-ui', Roboto, 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+      </style>
+    `);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
     comboBox.selectedItems = ['orange'];
     await nextRender();
@@ -556,7 +562,7 @@ describe('chips', () => {
     it('should adapt overlay width to the input field width while opened', async () => {
       comboBox.opened = true;
 
-      const overlay = document.querySelector('vaadin-multi-select-combo-box-overlay');
+      const overlay = comboBox.$.overlay;
       const overlayPart = overlay.$.overlay;
       const width = overlayPart.offsetWidth;
       expect(width).to.equal(comboBox.clientWidth);
@@ -565,60 +571,6 @@ describe('chips', () => {
       await nextRender();
       expect(overlayPart.offsetWidth).to.be.lessThan(width);
       expect(overlayPart.offsetWidth).to.be.equal(comboBox.clientWidth);
-    });
-  });
-
-  describe('itemClassNameGenerator', () => {
-    beforeEach(() => {
-      comboBox.autoExpandHorizontally = true;
-    });
-
-    it('should set class name on the selected item chips', async () => {
-      comboBox.itemClassNameGenerator = (item) => item;
-      comboBox.selectedItems = ['apple', 'lemon'];
-      await nextRender();
-
-      const chips = getChips(comboBox);
-      expect(chips[1].className).to.equal('apple');
-      expect(chips[2].className).to.equal('lemon');
-    });
-
-    it('should set class name when generator set after selecting', async () => {
-      comboBox.selectedItems = ['apple', 'lemon'];
-      await nextRender();
-
-      comboBox.itemClassNameGenerator = (item) => item;
-      await nextRender();
-
-      const chips = getChips(comboBox);
-      expect(chips[1].className).to.equal('apple');
-      expect(chips[2].className).to.equal('lemon');
-    });
-
-    it('should remove class name when generator returns empty string', async () => {
-      comboBox.itemClassNameGenerator = (item) => item;
-      comboBox.selectedItems = ['apple', 'lemon'];
-      await nextRender();
-
-      comboBox.itemClassNameGenerator = () => '';
-      await nextRender();
-
-      const chips = getChips(comboBox);
-      expect(chips[1].className).to.equal('');
-      expect(chips[2].className).to.equal('');
-    });
-
-    it('should remove class name when generator is set to null', async () => {
-      comboBox.itemClassNameGenerator = (item) => item;
-      comboBox.selectedItems = ['apple', 'lemon'];
-      await nextRender();
-
-      comboBox.itemClassNameGenerator = null;
-      await nextRender();
-
-      const chips = getChips(comboBox);
-      expect(chips[1].className).to.equal('');
-      expect(chips[2].className).to.equal('');
     });
   });
 });

@@ -209,7 +209,7 @@ export const RadioGroupMixin = (superclass) =>
     }
 
     /**
-     * @param {number} index
+     * @param {HTMLElement} radioButton
      * @private
      */
     __selectNextRadioButton(radioButton) {
@@ -219,7 +219,7 @@ export const RadioGroupMixin = (superclass) =>
     }
 
     /**
-     * @param {number} index
+     * @param {HTMLElement} radioButton
      * @private
      */
     __selectPrevRadioButton(radioButton) {

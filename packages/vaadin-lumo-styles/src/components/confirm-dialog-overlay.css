@@ -4,10 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_confirm-dialog-overlay {
-  #resizerContainer {
-    height: 100%;
-  }
-
   [part='header'] {
     pointer-events: auto;
     margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));

@@ -3,14 +3,16 @@
  * Copyright (c) 2023 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const sharedStyles = css`
   :host {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-container-block));
+    min-width: 0;
+    max-width: 100%;
+    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
     cursor: default;
     -webkit-tap-highlight-color: transparent;
   }
@@ -35,14 +37,14 @@ export const sharedStyles = css`
 
   [part='toggle-button'] {
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-s));
-    color: var(--vaadin-color-subtle);
+    color: var(--vaadin-text-color-secondary);
   }
 
   [part='toggle-button']::before {
     content: '';
     display: block;
     background: currentColor;
-    mask-image: var(--_vaadin-icon-chevron-down);
+    mask: var(--_vaadin-icon-chevron-down) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     rotate: -90deg;
@@ -76,7 +78,11 @@ export const sharedStyles = css`
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-container-block));
+    gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-s));
+  }
+
+  [part='children'] slot {
+    --_icon-indent-2: var(--_icon-indent);
   }
 
   :focus-visible {

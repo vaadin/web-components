@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -48,18 +47,34 @@ export const OverlayFocusMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__ariaModalController = new AriaModalController(this);
       this.__focusTrapController = new FocusTrapController(this);
       this.__focusRestorationController = new FocusRestorationController();
+    }
+
+    /**
+     * Override to specify another element used as a content root,
+     * e.g. slotted into the overlay, rather than overlay itself.
+     * @protected
+     */
+    get _contentRoot() {
+      return this;
     }
 
     /** @protected */
     ready() {
       super.ready();
 
-      this.addController(this.__ariaModalController);
       this.addController(this.__focusTrapController);
       this.addController(this.__focusRestorationController);
+    }
+
+    /**
+     * Override to specify another element used as a focus trap root,
+     * e.g. the overlay's owner element, rather than overlay part.
+     * @protected
+     */
+    get _focusTrapRoot() {
+      return this.$.overlay;
     }
 
     /**
@@ -69,13 +84,13 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _resetFocus() {
       if (this.focusTrap) {
-        this.__ariaModalController.close();
         this.__focusTrapController.releaseFocus();
       }
 
       if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
-        const preventScroll = !isKeyboardActive();
-        this.__focusRestorationController.restoreFocus({ preventScroll });
+        const focusVisible = isKeyboardActive();
+        const preventScroll = !focusVisible;
+        this.__focusRestorationController.restoreFocus({ preventScroll, focusVisible });
       }
     }
 
@@ -97,8 +112,7 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _trapFocus() {
       if (this.focusTrap) {
-        this.__ariaModalController.showModal();
-        this.__focusTrapController.trapFocus(this.$.overlay);
+        this.__focusTrapController.trapFocus(this._focusTrapRoot);
       }
     }
 
@@ -127,15 +141,15 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _deepContains(node) {
-      if (this.contains(node)) {
+      if (this._contentRoot.contains(node)) {
         return true;
       }
       let n = node;
       const doc = node.ownerDocument;
-      // Walk from node to `this` or `document`
-      while (n && n !== doc && n !== this) {
+      // Walk from node to content root or `document`
+      while (n && n !== doc && n !== this._contentRoot) {
         n = n.parentNode || n.host;
       }
-      return n === this;
+      return n === this._contentRoot;
     }
   };

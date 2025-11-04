@@ -7,9 +7,11 @@ import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.j
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { MenuBarButton } from '../../src/vaadin-menu-bar-button.js';
 import type { MenuBarItem } from '../../src/vaadin-menu-bar-item.js';
 import type { MenuBarListBox } from '../../src/vaadin-menu-bar-list-box.js';
 import type { MenuBarI18n, MenuBarMixinClass } from '../../src/vaadin-menu-bar-mixin.js';
+import type { MenuBarSubmenu } from '../../src/vaadin-menu-bar-submenu.js';
 import type { MenuBar, MenuBarItem as MenuItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar.js';
 
 const menu = document.createElement('vaadin-menu-bar');
@@ -19,7 +21,6 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 assertType<boolean | null | undefined>(menu.openOnHover);
 assertType<boolean | null | undefined>(menu.tabNavigation);
 assertType<MenuItem[]>(menu.items);
-assertType<string>(menu.overlayClass);
 
 assertType<ResizeMixinClass>(menu);
 assertType<FocusMixinClass>(menu);
@@ -77,3 +78,16 @@ assertType<MenuBarListBox>(listBox);
 assertType<DirMixinClass>(listBox);
 assertType<ListMixinClass>(listBox);
 assertType<ThemableMixinClass>(listBox);
+
+// Button
+const button = document.createElement('vaadin-menu-bar-button');
+
+assertType<MenuBarButton>(button);
+assertType<ThemableMixinClass>(button);
+
+// Submenu
+const submenu = document.createElement('vaadin-menu-bar-submenu');
+
+assertType<MenuBarSubmenu>(submenu);
+assertType<ThemePropertyMixinClass>(submenu);
+assertType<boolean>(submenu.opened);

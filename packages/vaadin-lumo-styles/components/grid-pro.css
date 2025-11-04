@@ -6,9 +6,10 @@
 @import '../src/components/grid-pro.css';
 @import '../src/components/grid.css';
 
-:is(:root, :host)::before {
-  --vaadin-grid-pro-lumo-inject: 1;
-  --vaadin-grid-pro-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-grid-pro-inject: 1;
+  --_lumo-vaadin-grid-pro-inject-modules:
     lumo_components_grid,
     lumo_components_grid-pro;
 }

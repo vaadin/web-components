@@ -7,6 +7,10 @@ import { CSSPropertyObserver } from './css-property-observer.js';
 import { injectLumoStyleSheet, removeLumoStyleSheet } from './css-utils.js';
 import { parseStyleSheets } from './lumo-modules.js';
 
+export function getLumoInjectorPropName(lumoInjector) {
+  return `--_lumo-${lumoInjector.is}-inject`;
+}
+
 /**
  * Implements auto-injection of CSS styles from document style sheets
  * into the Shadow DOM of corresponding Vaadin components.
@@ -34,26 +38,26 @@ import { parseStyleSheets } from './lumo-modules.js';
  * }
  *
  * html {
- *   --vaadin-text-field-lumo-inject: 1;
- *   --vaadin-text-field-lumo-inject-modules:
+ *   --_lumo-vaadin-text-field-inject: 1;
+ *   --_lumo-vaadin-text-field-inject-modules:
  *      lumo_base-field,
  *      lumo_text-field;
  *
- *   --vaadin-email-field-lumo-inject: 1;
- *   --vaadin-email-field-lumo-inject-modules:
+ *   --_lumo-vaadin-email-field-inject: 1;
+ *   --_lumo-vaadin-email-field-inject-modules:
  *      lumo_base-field,
  *      lumo_email-field;
  * }
  * ```
  *
- * The class observes the custom property `--{tagName}-lumo-inject`,
+ * The class observes the custom property `--_lumo-{tagName}-inject`,
  * which indicates whether styles are present for the given component
  * in the document style sheets. When the property is set to `1`, the
  * class recursively searches all document style sheets for CSS modules
- * listed in the `--{tagName}-lumo-inject-modules` property that apply to
+ * listed in the `--_lumo-{tagName}-inject-modules` property that apply to
  * the given component tag name. The found rules are then injected
  * into the component's Shadow DOM using the `adoptedStyleSheets` API,
- * in the order specified in the `--{tagName}-lumo-inject-modules` property.
+ * in the order specified in the `--_lumo-{tagName}-inject-modules` property.
  * The same module can be used in multiple components.
  *
  * The class also removes the injected styles when the property is set to `0`.
@@ -82,14 +86,13 @@ export class LumoInjector {
 
   constructor(root = document) {
     this.#root = root;
-    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-lumo-injector', (propertyName) => {
-      const tagName = propertyName.slice(2).replace('-lumo-inject', '');
-      this.#updateStyleSheet(tagName);
-    });
+    this.handlePropertyChange = this.handlePropertyChange.bind(this);
+    this.#cssPropertyObserver = CSSPropertyObserver.for(root);
+    this.#cssPropertyObserver.addEventListener('property-changed', this.handlePropertyChange);
   }
 
   disconnect() {
-    this.#cssPropertyObserver.disconnect();
+    this.#cssPropertyObserver.removeEventListener('property-changed', this.handlePropertyChange);
     this.#styleSheetsByTag.clear();
     this.#componentsByTag.values().forEach((components) => components.forEach(removeLumoStyleSheet));
   }
@@ -98,13 +101,14 @@ export class LumoInjector {
    * Adds a component to the list of elements monitored for style injection.
    * If the styles have already been detected, they are injected into the
    * component's shadow DOM immediately. Otherwise, the class watches the
-   * custom property `--{tagName}-lumo-inject` to trigger injection when
+   * custom property `--_lumo-{tagName}-inject` to trigger injection when
    * the styles are added to the document or root element.
    *
    * @param {HTMLElement} component
    */
   componentConnected(component) {
-    const { is: tagName, lumoInjectPropName } = component.constructor;
+    const { lumoInjector } = component.constructor;
+    const { is: tagName } = lumoInjector;
 
     this.#componentsByTag.set(tagName, this.#componentsByTag.get(tagName) ?? new Set());
     this.#componentsByTag.get(tagName).add(component);
@@ -118,7 +122,9 @@ export class LumoInjector {
     }
 
     this.#initStyleSheet(tagName);
-    this.#cssPropertyObserver.observe(lumoInjectPropName);
+
+    const propName = getLumoInjectorPropName(lumoInjector);
+    this.#cssPropertyObserver.observe(propName);
   }
 
   /**
@@ -128,10 +134,18 @@ export class LumoInjector {
    * @param {HTMLElement} component
    */
   componentDisconnected(component) {
-    const { is: tagName } = component.constructor;
+    const { is: tagName } = component.constructor.lumoInjector;
     this.#componentsByTag.get(tagName)?.delete(component);
 
     removeLumoStyleSheet(component);
+  }
+
+  handlePropertyChange(event) {
+    const { propertyName } = event.detail;
+    const tagName = propertyName.match(/^--_lumo-(.*)-inject$/u)?.[1];
+    if (tagName) {
+      this.#updateStyleSheet(tagName);
+    }
   }
 
   #initStyleSheet(tagName) {

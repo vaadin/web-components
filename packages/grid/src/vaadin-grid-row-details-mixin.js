@@ -68,10 +68,6 @@ export const RowDetailsMixin = (superClass) =>
         entries.forEach(({ target: cell }) => {
           this._updateDetailsCellHeight(cell.parentElement);
         });
-
-        // This workaround is needed until Safari also supports
-        // ResizeObserver.observe with {box: 'border-box'}
-        this.__virtualizer.__adapter._resizeHandler();
       });
     }
 
@@ -124,7 +120,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {!GridItem} item
+     * @param {boolean} detailsOpened
      * @protected
      */
     _toggleDetailsCell(row, detailsOpened) {

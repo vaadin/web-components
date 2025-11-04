@@ -4,7 +4,7 @@ import { aTimeout, change, fire, fixtureSync, nextRender, oneEvent } from '@vaad
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
-import { flushGrid, getBodyCellContent } from './helpers.js';
+import { flushGrid, getBodyCellContent, getDialogEditor } from './helpers.js';
 
 describe('crud', () => {
   let crud, btnSave;
@@ -78,10 +78,10 @@ describe('crud', () => {
         crud,
         crud._grid,
         crud._form,
-        crud.$.dialog,
-        crud.$.dialog.$.overlay,
-        crud.$.confirmCancel,
-        crud.$.confirmDelete,
+        getDialogEditor(crud),
+        getDialogEditor(crud).$.overlay,
+        crud._confirmCancelDialog,
+        crud._confirmDeleteDialog,
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/u));
     });
   });
@@ -414,11 +414,10 @@ describe('crud', () => {
   });
 
   describe('editor-position', () => {
-    let crud, editorDialog;
+    let crud;
 
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      editorDialog = crud.$.dialog;
       await nextRender();
     });
 
@@ -478,23 +477,6 @@ describe('crud', () => {
       await nextRender();
       expect(crud._fullscreen).to.be.true;
     });
-
-    it('should not open dialog on desktop if not in default editor position', () => {
-      crud.editorPosition = 'bottom';
-      crud._fullscreen = false;
-      crud._newButton.click();
-      expect(editorDialog.opened).to.be.false;
-    });
-
-    it('should switch from overlay to below grid if resize happens', async () => {
-      crud.editorPosition = 'bottom';
-      crud._fullscreen = true;
-      crud._newButton.click();
-      await nextRender();
-      expect(editorDialog.opened).to.be.true;
-      crud._fullscreen = false;
-      expect(editorDialog.opened).to.be.false;
-    });
   });
 
   describe('edit-on-click', () => {
@@ -509,8 +491,8 @@ describe('crud', () => {
       crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
       await nextRender();
       flushGrid(crud._grid);
-      confirmCancelDialog = crud.$.confirmCancel;
-      confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+      confirmCancelDialog = crud._confirmCancelDialog;
+      confirmCancelOverlay = confirmCancelDialog.$.overlay;
     });
 
     function fakeClickOnRow(idx) {
@@ -563,7 +545,7 @@ describe('crud', () => {
       crud.__isDirty = true;
       crud._grid.activeItem = null; // A second click will set grid active item to null
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-      confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      confirmCancelDialog.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.false;
     });
 
@@ -590,13 +572,33 @@ describe('crud', () => {
       crud.__isDirty = true;
       crud._newButton.click();
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-      confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      confirmCancelDialog.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.true;
       await aTimeout(0);
       expect(crud._grid.activeItem).to.be.undefined;
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[0]);
+    });
+  });
+
+  describe('exportparts', () => {
+    let dialog;
+
+    beforeEach(() => {
+      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      dialog = getDialogEditor(crud);
+    });
+
+    it('should export all editor dialog overlay parts for styling', () => {
+      const parts = [...dialog.$.overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const dialogExportParts = dialog.getAttribute('exportparts').split(', ');
+      const overlayExportParts = dialog.$.overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(dialogExportParts).to.include(part);
+        expect(overlayExportParts).to.include(part);
+      });
     });
   });
 });

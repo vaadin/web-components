@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const mapStyles = css`
@@ -37,7 +37,7 @@ export const mapStyles = css`
     content: '';
     position: absolute;
     inset: 0;
-    border: 1px solid var(--vaadin-map-border-color, var(--vaadin-border-color));
+    border: 1px solid var(--vaadin-map-border-color, var(--vaadin-border-color-secondary));
     border-radius: inherit;
     z-index: 1;
     pointer-events: none;
@@ -151,9 +151,18 @@ export const mapStyles = css`
   }
 
   .ol-scale-bar-inner {
+    display: flex;
     border: 1px solid rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
     overflow: hidden;
+  }
+
+  .ol-scale-singlebar-even {
+    background: #000;
+  }
+
+  .ol-scale-singlebar-odd {
+    background: #fff;
   }
 
   .ol-scale-step-marker {
@@ -247,7 +256,7 @@ export const mapStyles = css`
     gap: 1em;
     list-style: none;
     margin: 0;
-    color: var(--vaadin-map-attribution-color, var(--vaadin-color-subtle));
+    color: var(--vaadin-map-attribution-text-color, var(--vaadin-text-color-secondary));
     padding: var(--vaadin-padding-container);
     font-size: 0.8em;
   }
@@ -265,7 +274,7 @@ export const mapStyles = css`
   }
 
   .ol-compass:empty::before {
-    mask-image: var(--_vaadin-icon-arrow-up);
+    mask: var(--_vaadin-icon-arrow-up) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-full-screen {
@@ -273,11 +282,11 @@ export const mapStyles = css`
   }
 
   .ol-full-screen button:empty::before {
-    mask-image: var(--_vaadin-icon-fullscreen);
+    mask: var(--_vaadin-icon-fullscreen) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-full-screen .ol-full-screen-true:empty::before {
-    mask-image: var(--_vaadin-icon-cross);
+    mask: var(--_vaadin-icon-cross) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-overviewmap {
@@ -333,7 +342,8 @@ export const mapStyles = css`
   }
 
   .ol-overviewmap button span:empty::before {
-    mask-image: var(--vaadin-map-icon-overview-map-collapse, var(--_vaadin-icon-chevron-down));
+    mask: var(--vaadin-map-icon-overview-map-collapse, var(--_vaadin-icon-chevron-down)) 50% /
+      var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-overviewmap.ol-collapsed button {
@@ -355,11 +365,12 @@ export const mapStyles = css`
   }
 
   .ol-zoom-in:empty::before {
-    mask-image: var(--vaadin-map-icon-zoom-in, var(--_vaadin-icon-plus));
+    mask: var(--vaadin-map-icon-zoom-in, var(--_vaadin-icon-plus)) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-zoom-out:empty::before {
-    mask-image: var(--vaadin-map-icon-zoom-out, var(--_vaadin-icon-minus));
+    mask: var(--vaadin-map-icon-zoom-out, var(--_vaadin-icon-minus)) 50% / var(--vaadin-icon-visual-size, 100%)
+      no-repeat;
   }
 
   .ol-zoom button.ol-zoom-in {
@@ -376,7 +387,7 @@ export const mapStyles = css`
   .ol-attribution:not(.ol-uncollapsible) ul {
     transition: 0.15s opacity;
     background: var(--vaadin-map-control-background, var(--vaadin-background-color));
-    color: var(--vaadin-map-control-color, var(--vaadin-subtle));
+    color: var(--vaadin-map-control-text-color, var(--vaadin-text-color-secondary));
     opacity: 0.65;
     display: flex;
     align-items: center;
@@ -399,7 +410,7 @@ export const mapStyles = css`
   }
 
   .ol-control button:hover {
-    color: var(--vaadin-map-control-color-hover, var(--vaadin-color));
+    color: var(--vaadin-map-control-text-color-hover, var(--vaadin-text-color));
   }
 
   .ol-control button:focus-visible {

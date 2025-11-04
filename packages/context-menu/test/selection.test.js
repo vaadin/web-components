@@ -28,7 +28,7 @@ describe('selection', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
     await nextRender();
 
-    const listBox = overlay.querySelector('#menu');
+    const listBox = menu.querySelector('#menu');
     click(listBox.items[0]);
     expect(menu.opened).to.eql(false);
   });
@@ -41,7 +41,7 @@ describe('selection', () => {
     const spy = sinon.spy();
     menu.addEventListener('opened-changed', spy);
 
-    const item = overlay.querySelector('#menu vaadin-item');
+    const item = menu.querySelector('#menu vaadin-item');
     enter(item);
     await nextRender();
     expect(spy.calledOnce).to.be.true;
@@ -52,7 +52,7 @@ describe('selection', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
     await nextRender();
 
-    const item = overlay.querySelector('#menu vaadin-item');
+    const item = menu.querySelector('#menu vaadin-item');
     expect(document.activeElement).to.eql(item);
   });
 
@@ -61,7 +61,7 @@ describe('selection', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
     await nextRender();
 
-    const item = overlay.querySelector('#menu vaadin-item');
+    const item = menu.querySelector('#menu vaadin-item');
     expect(document.activeElement).to.eql(item);
   });
 });

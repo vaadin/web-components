@@ -12,9 +12,10 @@
 @import '../src/components/text-area.css';
 @import './input-container.css';
 
-:is(:root, :host)::before {
-  --vaadin-text-area-lumo-inject: 1;
-  --vaadin-text-area-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-text-area-inject: 1;
+  --_lumo-vaadin-text-area-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

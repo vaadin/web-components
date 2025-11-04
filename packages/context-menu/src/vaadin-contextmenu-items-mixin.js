@@ -16,14 +16,14 @@ export const ItemsMixin = (superClass) =>
          * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
-         * @property {union: string | object} component - The component to represent the item.
+         * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
          * @property {boolean} checked - If true, the item shows a checkmark next to it
          * @property {boolean} keepOpen - If true, the menu will not be closed on item selection
          * @property {string} className - A space-delimited list of CSS class names to be set on the menu item component.
-         * @property {union: string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
-         * @property {MenuItem[]} children - Array of child menu items
+         * @property {string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
+         * @property {ContextMenuItem[]} children - Array of child menu items
          */
 
         /**
@@ -58,6 +58,12 @@ export const ItemsMixin = (superClass) =>
          */
         items: {
           type: Array,
+          sync: true,
+        },
+
+        /** @protected */
+        _positionTarget: {
+          type: Object,
           sync: true,
         },
       };
@@ -116,10 +122,10 @@ export const ItemsMixin = (superClass) =>
     /** @protected */
     __forwardFocus() {
       const overlay = this._overlayElement;
-      const child = overlay.getFirstChild();
+      const child = overlay._contentRoot.firstElementChild;
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
-        const parent = overlay.parentOverlay.querySelector('[expanded]');
+        const parent = overlay.parentOverlay._contentRoot.querySelector('[expanded]');
         if (parent && parent.hasAttribute('focused') && child) {
           child.focus();
         } else {
@@ -131,14 +137,12 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __openSubMenu(subMenu, itemElement, overlayClass) {
+    __openSubMenu(subMenu, itemElement) {
+      // Update sub-menu items and position target
       this.__updateSubMenuForItem(subMenu, itemElement);
-      subMenu.overlayClass = overlayClass;
 
       const parent = this._overlayElement;
-
       const subMenuOverlay = subMenu._overlayElement;
-      subMenuOverlay.noHorizontalOverlap = true;
       // Store the reference parent overlay
       subMenuOverlay._setParentOverlay(parent);
 
@@ -165,7 +169,8 @@ export const ItemsMixin = (superClass) =>
     __updateSubMenuForItem(subMenu, itemElement) {
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
-      subMenu._overlayElement.positionTarget = itemElement;
+      subMenu._positionTarget = itemElement;
+      subMenu._overlayElement.requestContentUpdate();
     }
 
     /**
@@ -253,10 +258,20 @@ export const ItemsMixin = (superClass) =>
       // Open a submenu on click event when a touch device is used.
       // On desktop, a submenu opens on hover.
       overlay.addEventListener(isTouch ? 'click' : 'mouseover', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
         this.__showSubMenu(event);
       });
 
       overlay.addEventListener('keydown', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
         const { key } = event;
         const isRTL = this.__isRTL;
 
@@ -287,10 +302,6 @@ export const ItemsMixin = (superClass) =>
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
-
-      // Sub-menu doesn't have a target to wrap,
-      // so there is no need to keep it visible.
-      subMenu.setAttribute('hidden', '');
 
       // Close sub-menu when the parent menu closes.
       this.addEventListener('opened-changed', (event) => {
@@ -361,27 +372,33 @@ export const ItemsMixin = (superClass) =>
       }
 
       const subMenu = this._subMenu;
+      const expandedItem = this._listBox.querySelector('[expanded]');
 
-      if (item) {
+      if (item && item !== expandedItem) {
         const { children } = item._item;
 
         // Check if the sub-menu was focused before closing it.
-        const child = subMenu._overlayElement.getFirstChild();
+        const child = subMenu._overlayElement._contentRoot.firstElementChild;
         const isSubmenuFocused = child && child.focused;
 
-        if (subMenu.items !== children) {
+        // Mark previously expanded item as collapsed
+        if (expandedItem) {
+          this.__updateExpanded(expandedItem, false);
+        }
+
+        // Close sub-menu if there are no children for the new item
+        if (!children || !children.length) {
           subMenu.close();
         }
+
         if (!this.opened) {
           return;
         }
 
         if (children && children.length) {
+          // Open or update the submenu if the new item has children
           this.__updateExpanded(item, true);
-
-          // Forward parent overlay class
-          const { overlayClass } = this;
-          this.__openSubMenu(subMenu, item, overlayClass);
+          this.__openSubMenu(subMenu, item);
         } else if (isSubmenuFocused) {
           // If the sub-menu item was focused, focus its parent item.
           subMenu.listenOn.focus();
@@ -394,27 +411,23 @@ export const ItemsMixin = (superClass) =>
 
     /** @protected */
     __getListBox() {
-      return this._overlayElement.querySelector(`${this._tagNamePrefix}-list-box`);
+      return this._overlayElement._contentRoot.querySelector(`${this._tagNamePrefix}-list-box`);
     }
 
     /**
      * @param {!HTMLElement} root
      * @param {!ContextMenu} menu
-     * @param {!ContextMenuRendererContext} context
      * @protected
      */
     __itemsRenderer(root, menu) {
       this.__initMenu(root, menu);
 
-      const subMenu = root.querySelector(this.constructor.is);
-      subMenu.closeOn = menu.closeOn;
-
-      const listBox = this.__getListBox();
-      listBox.innerHTML = '';
+      this._subMenu.closeOn = menu.closeOn;
+      this._listBox.innerHTML = '';
 
       menu.items.forEach((item) => {
         const component = this.__createComponent(item);
-        listBox.appendChild(component);
+        this._listBox.appendChild(component);
       });
     }
 
@@ -455,8 +468,9 @@ export const ItemsMixin = (superClass) =>
         root.appendChild(listBox);
 
         const subMenu = this.__initSubMenu();
+        subMenu.slot = 'submenu';
         this._subMenu = subMenu;
-        root.appendChild(subMenu);
+        this.appendChild(subMenu);
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;

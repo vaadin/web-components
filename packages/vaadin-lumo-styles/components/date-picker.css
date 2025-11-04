@@ -20,9 +20,10 @@
 @import './button.css';
 @import './input-container.css';
 
-:is(:root, :host)::before {
-  --vaadin-date-picker-lumo-inject: 1;
-  --vaadin-date-picker-lumo-inject-modules:
+:root::before,
+:host::before {
+  --_lumo-vaadin-date-picker-inject: 1;
+  --_lumo-vaadin-date-picker-inject-modules:
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -31,19 +32,19 @@
     lumo_mixins_field-base,
     lumo_components_date-picker;
 
-  --vaadin-date-picker-year-lumo-inject: 1;
-  --vaadin-date-picker-year-lumo-inject-modules: lumo_components_date-picker-year;
+  --_lumo-vaadin-date-picker-year-inject: 1;
+  --_lumo-vaadin-date-picker-year-inject-modules: lumo_components_date-picker-year;
 
-  --vaadin-date-picker-overlay-lumo-inject: 1;
-  --vaadin-date-picker-overlay-lumo-inject-modules:
+  --_lumo-vaadin-date-picker-overlay-inject: 1;
+  --_lumo-vaadin-date-picker-overlay-inject-modules:
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
     lumo_components_date-picker-overlay;
 
-  --vaadin-date-picker-overlay-content-lumo-inject: 1;
-  --vaadin-date-picker-overlay-content-lumo-inject-modules: lumo_components_date-picker-overlay-content;
+  --_lumo-vaadin-date-picker-overlay-content-inject: 1;
+  --_lumo-vaadin-date-picker-overlay-content-inject-modules: lumo_components_date-picker-overlay-content;
 
-  --vaadin-month-calendar-lumo-inject: 1;
-  --vaadin-month-calendar-lumo-inject-modules: lumo_components_date-picker-month-calendar;
+  --_lumo-vaadin-month-calendar-inject: 1;
+  --_lumo-vaadin-month-calendar-inject-modules: lumo_components_date-picker-month-calendar;
 }

@@ -107,7 +107,7 @@ snapshots["vaadin-integer-field shadow default"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -126,14 +126,14 @@ snapshots["vaadin-integer-field shadow default"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -146,9 +146,9 @@ snapshots["vaadin-integer-field shadow default"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-integer-field shadow default */
 
@@ -166,7 +166,7 @@ snapshots["vaadin-integer-field shadow step-buttons-visible"] =
   <vaadin-input-container part="input-field">
     <div
       aria-hidden="true"
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -185,13 +185,13 @@ snapshots["vaadin-integer-field shadow step-buttons-visible"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -204,9 +204,9 @@ snapshots["vaadin-integer-field shadow step-buttons-visible"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-integer-field shadow step-buttons-visible */
 
@@ -228,7 +228,7 @@ snapshots["vaadin-integer-field shadow disabled"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -247,14 +247,14 @@ snapshots["vaadin-integer-field shadow disabled"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -267,9 +267,9 @@ snapshots["vaadin-integer-field shadow disabled"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-integer-field shadow disabled */
 
@@ -291,7 +291,7 @@ snapshots["vaadin-integer-field shadow readonly"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -310,14 +310,14 @@ snapshots["vaadin-integer-field shadow readonly"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -330,9 +330,9 @@ snapshots["vaadin-integer-field shadow readonly"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-integer-field shadow readonly */
 
@@ -354,7 +354,7 @@ snapshots["vaadin-integer-field shadow invalid"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -373,14 +373,14 @@ snapshots["vaadin-integer-field shadow invalid"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -393,9 +393,9 @@ snapshots["vaadin-integer-field shadow invalid"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-integer-field shadow invalid */
 
@@ -417,7 +417,7 @@ snapshots["vaadin-integer-field shadow theme"] =
     <div
       aria-hidden="true"
       hidden=""
-      part="decrease-button"
+      part="field-button decrease-button"
       slot="prefix"
     >
     </div>
@@ -436,14 +436,14 @@ snapshots["vaadin-integer-field shadow theme"] =
     <div
       aria-hidden="true"
       id="clearButton"
-      part="clear-button"
+      part="field-button clear-button"
       slot="suffix"
     >
     </div>
     <div
       aria-hidden="true"
       hidden=""
-      part="increase-button"
+      part="field-button increase-button"
       slot="suffix"
     >
     </div>
@@ -456,9 +456,9 @@ snapshots["vaadin-integer-field shadow theme"] =
     <slot name="error-message">
     </slot>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
-<slot name="tooltip">
-</slot>
 `;
 /* end snapshot vaadin-integer-field shadow theme */
 

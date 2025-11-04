@@ -3,19 +3,19 @@
  * Copyright (c) 2024 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const cardStyles = css`
   :host {
     --_content: 0;
     --_footer: 0;
-    --_gap: var(--vaadin-card-gap, var(--vaadin-gap-container-block) var(--vaadin-gap-container-inline));
+    --_gap: var(--vaadin-card-gap, var(--vaadin-gap-m));
     --_header: max(var(--_header-prefix), var(--_title), var(--_subtitle), var(--_header-suffix));
     --_header-prefix: 0;
     --_header-suffix: 0;
     --_media: 0;
-    --_padding: var(--vaadin-card-padding, var(--vaadin-padding));
+    --_padding: var(--vaadin-card-padding, var(--vaadin-padding-m));
     --_subtitle: 0;
     --_title: 0;
     background: var(--vaadin-card-background, var(--vaadin-background-container));
@@ -31,7 +31,8 @@ export const cardStyles = css`
 
   /* Could be an inset outline on the host as well, but let's reserve that for a potential focus outline */
   :host::before {
-    border: var(--vaadin-card-border-width, 0) solid var(--vaadin-card-border-color, var(--vaadin-border-color));
+    border: var(--vaadin-card-border-width, 0) solid
+      var(--vaadin-card-border-color, var(--vaadin-border-color-secondary));
     border-radius: inherit;
     content: '';
     inset: 0;
@@ -133,7 +134,7 @@ export const cardStyles = css`
   }
 
   ::slotted([slot='title']) {
-    color: var(--vaadin-card-title-color, var(--vaadin-color)) !important;
+    color: var(--vaadin-card-title-color, var(--vaadin-text-color)) !important;
     font-size: var(--vaadin-card-title-font-size, inherit) !important;
     font-weight: var(--vaadin-card-title-font-weight, 500) !important;
     line-height: var(--vaadin-card-title-line-height, inherit) !important;
@@ -141,7 +142,7 @@ export const cardStyles = css`
   }
 
   ::slotted([slot='subtitle']) {
-    color: var(--vaadin-card-subtitle-color, var(--vaadin-color-subtle)) !important;
+    color: var(--vaadin-card-subtitle-color, var(--vaadin-text-color-secondary)) !important;
     font-size: var(--vaadin-card-subtitle-font-size, inherit) !important;
     font-weight: var(--vaadin-card-subtitle-font-weight, 400) !important;
     line-height: var(--vaadin-card-subtitle-line-height, inherit) !important;

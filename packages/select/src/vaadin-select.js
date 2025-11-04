@@ -10,6 +10,7 @@ import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -17,7 +18,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { selectStyles } from './styles/vaadin-select-core-styles.js';
+import { selectStyles } from './styles/vaadin-select-base-styles.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
 
 /**
@@ -80,42 +81,50 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * The following custom properties are available for styling:
  *
- * Custom property                    | Description                  | Target element          | Default
- * -----------------------------------|------------------------------|-------------------------|--------
- * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
- * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
+ * Custom property                  | Description                 | Default
+ * ---------------------------------|-----------------------------|--------
+ * `--vaadin-field-default-width`   | Default width of the field  | `12em`
+ * `--vaadin-select-overlay-width`  | Width of the overlay        |
  *
- * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
- * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * The following shadow DOM parts are available for styling:
  *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and toggle button
+ * `field-button`       | Set on the toggle button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `toggle-button`      | The toggle button
+ * `backdrop`           | Backdrop of the overlay
+ * `overlay`            | The overlay container
+ * `content`            | The overlay content
  *
- * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ * The following state attributes are available for styling:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
- *
- * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
- *
- * Attribute | Description                 | Part name
- * ----------|-----------------------------|-----------
- * `opened`  | Set when the select is open | :host
- *
- * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
- * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
- * - the `input-prevented` state attribute is not supported by `<vaadin-select>`.
+ * Attribute            | Description
+ * ---------------------|---------------------------------
+ * `disabled`           | Set when the element is disabled
+ * `has-value`          | Set when the element has a value
+ * `has-label`          | Set when the element has a label
+ * `has-helper`         | Set when the element has helper text or slot
+ * `has-error-message`  | Set when the element has an error message
+ * `invalid`            | Set when the element is invalid
+ * `focused`            | Set when the element is focused
+ * `focus-ring`         | Set when the element is keyboard focused
+ * `readonly`           | Set when the element is readonly
+ * `opened`             | Set when the overlay is opened
+ * `phone`              | Set when the overlay is shown in phone mode
  *
  * ### Internal components
  *
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-select-value-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the button.
- *
- * Note: the `theme` attribute value set on `<vaadin-select>` is
- * propagated to the internal components listed above.
+ * - `<vaadin-select-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-select-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -131,7 +140,7 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  * @mixes SelectBaseMixin
  * @mixes ThemableMixin
  */
-class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-select';
   }
@@ -159,7 +168,12 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(LumoInjectionMix
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" @mousedown="${this._onToggleMouseDown}"></div>
+          <div
+            part="field-button toggle-button"
+            slot="suffix"
+            aria-hidden="true"
+            @mousedown="${this._onToggleMouseDown}"
+          ></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -181,9 +195,12 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(LumoInjectionMix
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"
         ?no-vertical-overlap="${this.noVerticalOverlap}"
+        exportparts="backdrop, overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
-      ></vaadin-select-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
       <div class="sr-only">
@@ -200,7 +217,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(LumoInjectionMix
   /** @private */
   _onOverlayOpen() {
     if (this._menuElement) {
-      this._menuElement.focus();
+      this._menuElement.focus({ focusVisible: isKeyboardActive() });
     }
   }
 

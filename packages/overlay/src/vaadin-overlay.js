@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { overlayStyles } from './styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from './styles/vaadin-overlay-base-styles.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
 
 /**
@@ -50,10 +50,10 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description | Part
- * ---|---|---
- * `opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
- * `closing` | Applied just before the overlay is detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
+ * Attribute | Description
+ * ----------|------------
+ * `opening` | Applied just after the overlay is opened. You can apply a CSS animation for this state.
+ * `closing` | Applied just before the overlay is closed. You can apply a CSS animation for this state.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -77,7 +77,7 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
  * @mixes DirMixin
  * @mixes OverlayMixin
  */
-class Overlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-overlay';
   }

@@ -4,13 +4,12 @@ import '../../src/vaadin-multi-select-combo-box.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-multi-select-combo-box', () => {
-  let multiSelectComboBox, comboBox;
+  let multiSelectComboBox;
 
   beforeEach(async () => {
     resetUniqueId();
     multiSelectComboBox = fixtureSync('<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>');
     await nextRender();
-    comboBox = multiSelectComboBox.$.comboBox;
   });
 
   describe('host', () => {
@@ -74,13 +73,7 @@ describe('vaadin-multi-select-combo-box', () => {
       });
 
       it('overlay', async () => {
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
-      });
-
-      it('overlay class', async () => {
-        multiSelectComboBox.overlayClass = 'custom multi-select-combo-box-overlay';
-        await nextUpdate(multiSelectComboBox);
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+        await expect(multiSelectComboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
   });

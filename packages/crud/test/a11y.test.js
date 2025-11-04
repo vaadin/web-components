@@ -4,7 +4,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getVisibleRows } from './helpers.js';
+import { getDialogEditor, getInlineEditor, getVisibleRows } from './helpers.js';
 
 describe('a11y', () => {
   let crud;
@@ -13,20 +13,30 @@ describe('a11y', () => {
     await setViewport({ width: 1024, height: 768 });
   });
 
+  beforeEach(() => {
+    fixtureSync(`
+      <style>
+        :root {
+          --vaadin-grid-row-border-width: 0px;
+        }
+      </style>
+    `);
+  });
+
   function focusRestorationTests(testId, createFixture) {
     describe(`focus restoration - ${testId}`, () => {
-      let grid, form, overlay, newButton, saveButton, cancelButton, editButtons;
+      let grid, form, dialog, newButton, saveButton, cancelButton, editButtons;
 
       describe('create item', () => {
         beforeEach(async () => {
           crud = createFixture();
           crud.items = [{ title: 'Item 1' }];
           await nextRender();
-          overlay = crud.$.dialog.$.overlay;
+          dialog = getDialogEditor(crud);
           form = crud.querySelector('vaadin-crud-form');
           newButton = crud.querySelector('[slot=new-button]');
           saveButton = crud.querySelector('[slot=save-button]');
-          cancelButton = crud.querySelector('[slot=cancel-button]');
+          cancelButton = crud.querySelector(':scope > [slot=cancel-button]');
           editButtons = crud.querySelectorAll('vaadin-crud-edit');
         });
 
@@ -34,7 +44,7 @@ describe('a11y', () => {
           newButton.focus();
           newButton.click();
           await nextRender();
-          expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
+          expect(getDeepActiveElement()).to.equal(dialog);
         });
 
         it('should restore focus to previous element on new dialog close', async () => {
@@ -81,7 +91,7 @@ describe('a11y', () => {
           form = crud.querySelector('vaadin-crud-form');
           newButton = crud.querySelector('[slot=new-button]');
           saveButton = crud.querySelector('[slot=save-button]');
-          cancelButton = crud.querySelector('[slot=cancel-button]');
+          cancelButton = crud.querySelector(':scope > [slot=cancel-button]');
           editButtons = crud.querySelectorAll('vaadin-crud-edit');
         });
 
@@ -268,7 +278,7 @@ describe('a11y', () => {
         await nextRender();
         newButton = crud.querySelector('[slot=new-button]');
         editButtons = crud.querySelectorAll('vaadin-crud-edit');
-        editor = crud.$.editor;
+        editor = getInlineEditor(crud);
       });
 
       afterEach(async () => {
@@ -301,7 +311,7 @@ describe('a11y', () => {
       await nextRender();
       newButton = crud.querySelector('[slot=new-button]');
       editButtons = crud.querySelectorAll('vaadin-crud-edit');
-      dialog = crud.$.dialog;
+      dialog = getDialogEditor(crud);
     });
 
     afterEach(async () => {
@@ -309,22 +319,22 @@ describe('a11y', () => {
       await nextRender();
     });
 
-    it('should set correct role attribute to the dialog overlay', async () => {
+    it('should set correct role attribute to the dialog', async () => {
       newButton.click();
       await nextRender();
-      expect(dialog.$.overlay.getAttribute('role')).to.equal('dialog');
+      expect(dialog.getAttribute('role')).to.equal('dialog');
     });
 
     it('should set correct aria-label to the new item dialog', async () => {
       newButton.click();
       await nextRender();
-      expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('New item');
+      expect(dialog.getAttribute('aria-label')).to.equal('New item');
     });
 
     it('should set correct aria-label to the edit item dialog', async () => {
       editButtons[0].click();
       await nextRender();
-      expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('Edit item');
+      expect(dialog.getAttribute('aria-label')).to.equal('Edit item');
     });
   });
 });

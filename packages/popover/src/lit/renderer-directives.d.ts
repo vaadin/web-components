@@ -27,7 +27,7 @@ export class PopoverRendererDirective extends LitRendererDirective<Popover, Popo
 }
 
 /**
- * A Lit directive for populating the content of the `<vaadin-popover-overlay>` element.
+ * A Lit directive for populating the content of the `<vaadin-popover>` element.
  *
  * The directive accepts a renderer callback returning a Lit template and assigns it to the popover
  * via the `renderer` property. The renderer is called once to populate the content when assigned
@@ -51,6 +51,7 @@ export class PopoverRendererDirective extends LitRendererDirective<Popover, Popo
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add content elements as children of the popover using default slot
  */
 export declare function popoverRenderer(
   renderer: PopoverLitRenderer,
