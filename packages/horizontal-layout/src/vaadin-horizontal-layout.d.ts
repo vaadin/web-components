@@ -17,6 +17,10 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * </vaadin-horizontal-layout>
  * ```
  *
+ * ### Built-in Theme Variations
+ *
+ * `<vaadin-horizontal-layout>` supports the following theme variations:
+ *
  * Theme variation    | Description
  * -------------------|---------------
  * `theme="margin"`   | Applies the default amount of CSS margin for the host element
