@@ -90,10 +90,7 @@ export const uploadFileStyles = css`
     color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: 500;
-    line-height: inherit;
+    font: inherit;
     padding: var(--vaadin-upload-file-button-padding, var(--vaadin-padding-container));
   }
 
