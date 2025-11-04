@@ -5,9 +5,9 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { type UploadFile, UploadMixin } from './vaadin-upload-mixin.js';
+import { type UploadFile, type UploadFormat, UploadMixin } from './vaadin-upload-mixin.js';
 
-export { UploadFile, UploadI18n, UploadMethod } from './vaadin-upload-mixin.js';
+export { UploadFile, UploadFormat, UploadI18n, UploadMethod } from './vaadin-upload-mixin.js';
 
 type UploadEvent<T> = CustomEvent<T> & { target: Upload };
 
@@ -83,7 +83,13 @@ export type UploadAbortEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFi
  * headers, etc. If the event is defaultPrevented, `vaadin-upload` will not
  * send the request allowing the user to do something on his own.
  */
-export type UploadRequestEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile; formData: FormData }>;
+export type UploadRequestEvent = UploadEvent<{
+  xhr: XMLHttpRequest;
+  file: UploadFile;
+  uploadFormat: UploadFormat;
+  requestBody: FormData | File;
+  formData?: FormData;
+}>;
 
 export interface UploadCustomEventMap {
   'file-reject': UploadFileRejectEvent;
