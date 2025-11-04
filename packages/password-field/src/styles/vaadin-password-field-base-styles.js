@@ -14,4 +14,8 @@ export const passwordFieldStyles = css`
     outline: none;
     --vaadin-input-field-border-color: inherit;
   }
+
+  :host([readonly]) [part~='reveal-button'] {
+    color: var(--vaadin-input-field-button-text-color, var(--vaadin-text-color-secondary));
+  }
 `;
