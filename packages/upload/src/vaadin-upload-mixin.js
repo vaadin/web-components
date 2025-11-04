@@ -279,7 +279,8 @@ export const UploadMixin = (superClass) =>
         },
 
         /**
-         * Specifies the 'name' property at Content-Disposition
+         * Specifies the 'name' property at Content-Disposition for multipart uploads.
+         * This property is ignored when uploadFormat is 'raw'.
          * @attr {string} form-data-name
          * @type {string}
          */
@@ -307,6 +308,18 @@ export const UploadMixin = (superClass) =>
         withCredentials: {
           type: Boolean,
           value: false,
+        },
+
+        /**
+         * Specifies the upload format to use when sending files to the server.
+         * - 'multipart': Send file using multipart/form-data encoding (default)
+         * - 'raw': Send file as raw binary data with the file's MIME type as Content-Type
+         * @attr {string} upload-format
+         * @type {string}
+         */
+        uploadFormat: {
+          type: String,
+          value: 'multipart',
         },
 
         /**
@@ -636,7 +649,7 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _configureXhr(xhr) {
+    _configureXhr(xhr, file = null, isRawUpload = false) {
       if (typeof this.headers === 'string') {
         try {
           this.headers = JSON.parse(this.headers);
@@ -647,6 +660,13 @@ export const UploadMixin = (superClass) =>
       Object.entries(this.headers).forEach(([key, value]) => {
         xhr.setRequestHeader(key, value);
       });
+
+      // Set Content-Type and filename header for raw binary uploads
+      if (isRawUpload && file) {
+        xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+        xhr.setRequestHeader('X-Filename', file.name);
+      }
+
       if (this.timeout) {
         xhr.timeout = this.timeout;
       }
@@ -759,12 +779,17 @@ export const UploadMixin = (superClass) =>
         }
       };
 
-      const formData = new FormData();
+      // Determine upload format and prepare request body
+      const isRawUpload = this.uploadFormat === 'raw';
 
       if (!file.uploadTarget) {
         file.uploadTarget = this.target || '';
       }
-      file.formDataName = this.formDataName;
+
+      // Only set formDataName for multipart uploads
+      if (!isRawUpload) {
+        file.formDataName = this.formDataName;
+      }
 
       const evt = this.dispatchEvent(
         new CustomEvent('upload-before', {
@@ -776,10 +801,19 @@ export const UploadMixin = (superClass) =>
         return;
       }
 
-      formData.append(file.formDataName, file, file.name);
+      let requestBody;
+      if (isRawUpload) {
+        // Raw binary upload - send file directly
+        requestBody = file;
+      } else {
+        // Multipart upload - use FormData
+        const formData = new FormData();
+        formData.append(file.formDataName, file, file.name);
+        requestBody = formData;
+      }
 
       xhr.open(this.method, file.uploadTarget, true);
-      this._configureXhr(xhr);
+      this._configureXhr(xhr, file, isRawUpload);
 
       file.status = this.__effectiveI18n.uploading.status.connecting;
       file.uploading = file.indeterminate = true;
@@ -796,14 +830,26 @@ export const UploadMixin = (superClass) =>
 
       // Custom listener could modify the xhr just before sending it
       // preventing default
+      const eventDetail = {
+        file,
+        xhr,
+        uploadFormat: this.uploadFormat,
+        requestBody,
+      };
+
+      // Expose formData property when using multipart so listeners can modify it
+      if (!isRawUpload) {
+        eventDetail.formData = requestBody;
+      }
+
       const uploadEvt = this.dispatchEvent(
         new CustomEvent('upload-request', {
-          detail: { file, xhr, formData },
+          detail: eventDetail,
           cancelable: true,
         }),
       );
       if (uploadEvt) {
-        xhr.send(formData);
+        xhr.send(requestBody);
       }
     }
 

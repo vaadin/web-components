@@ -68,6 +68,8 @@ export interface UploadI18n {
 
 export type UploadMethod = 'POST' | 'PUT';
 
+export type UploadFormat = 'raw' | 'multipart';
+
 export declare function UploadMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<UploadMixinClass> & Constructor<I18nMixinClass<UploadI18n>> & T;
@@ -170,7 +172,8 @@ export declare class UploadMixinClass {
   maxFileSize: number;
 
   /**
-   * Specifies the 'name' property at Content-Disposition
+   * Specifies the 'name' property at Content-Disposition for multipart uploads.
+   * This property is ignored when uploadFormat is 'raw'.
    * @attr {string} form-data-name
    */
   formDataName: string;
@@ -193,6 +196,14 @@ export declare class UploadMixinClass {
    * such as camera or microphone immediately.
    */
   capture: string | null | undefined;
+
+  /**
+   * Specifies the upload format to use when sending files to the server.
+   * - 'multipart': Send file using multipart/form-data encoding (default)
+   * - 'raw': Send file as raw binary data with the file's MIME type as Content-Type
+   * @attr {string} upload-format
+   */
+  uploadFormat: UploadFormat;
 
   /**
    * The object used to localize this component. To change the default

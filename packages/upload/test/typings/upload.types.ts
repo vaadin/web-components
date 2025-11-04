@@ -120,7 +120,10 @@ upload.addEventListener('upload-request', (event) => {
   assertType<UploadRequestEvent>(event);
   assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
-  assertType<FormData>(event.detail.formData);
+  assertType<XMLHttpRequest>(event.detail.xhr);
+  assertType<'raw' | 'multipart'>(event.detail.uploadFormat);
+  assertType<FormData | File>(event.detail.requestBody);
+  assertType<FormData | undefined>(event.detail.formData);
 });
 
 // I18n

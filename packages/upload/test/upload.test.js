@@ -538,4 +538,133 @@ describe('upload', () => {
       expect(upload.files.length).to.equal(0);
     });
   });
+
+  describe('Upload format', () => {
+    let clock;
+
+    beforeEach(() => {
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should use FormData for multipart format', (done) => {
+      upload.uploadFormat = 'multipart';
+      upload.addEventListener('upload-request', (e) => {
+        expect(e.detail.formData).to.be.instanceOf(FormData);
+        done();
+      });
+      upload._uploadFile(file);
+    });
+
+    it('should send file directly for raw format', (done) => {
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        expect(e.detail.requestBody).to.equal(file);
+        expect(e.detail.requestBody).to.be.instanceOf(Blob);
+        expect(e.detail.formData).to.be.undefined;
+        done();
+      });
+      upload._uploadFile(file);
+    });
+
+    it('should set Content-Type header to file MIME type in raw format', (done) => {
+      const pdfFile = createFile(1000, 'application/pdf');
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const contentType = e.detail.xhr.getRequestHeader('Content-Type');
+        expect(contentType).to.equal('application/pdf');
+        done();
+      });
+      upload._uploadFile(pdfFile);
+    });
+
+    it('should set X-Filename header in raw format', (done) => {
+      const testFile = createFile(1000, 'application/pdf');
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const filename = e.detail.xhr.getRequestHeader('X-Filename');
+        expect(filename).to.equal(testFile.name);
+        done();
+      });
+      upload._uploadFile(testFile);
+    });
+
+    it('should set Content-Type to application/octet-stream when file has no type in raw format', (done) => {
+      const unknownFile = createFile(1000, 'application/pdf');
+      // Override type to be empty to test the fallback logic
+      Object.defineProperty(unknownFile, 'type', {
+        value: '',
+        writable: false,
+      });
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const contentType = e.detail.xhr.getRequestHeader('Content-Type');
+        // Should use our fallback: 'application/octet-stream' (without 'x')
+        expect(contentType).to.equal('application/octet-stream');
+        done();
+      });
+      upload._uploadFile(unknownFile);
+    });
+
+    it('should not set Content-Type header in multipart format', (done) => {
+      upload.uploadFormat = 'multipart';
+      upload.addEventListener('upload-request', (e) => {
+        const contentType = e.detail.xhr.getRequestHeader('Content-Type');
+        expect(contentType).to.be.undefined;
+        done();
+      });
+      upload._uploadFile(file);
+    });
+
+    it('should not set X-Filename header in multipart format', (done) => {
+      upload.uploadFormat = 'multipart';
+      upload.addEventListener('upload-request', (e) => {
+        const filename = e.detail.xhr.getRequestHeader('X-Filename');
+        expect(filename).to.be.undefined;
+        done();
+      });
+      upload._uploadFile(file);
+    });
+
+    it('should ignore formDataName in raw format', (done) => {
+      upload.uploadFormat = 'raw';
+      upload.formDataName = 'my-custom-field';
+      upload.addEventListener('upload-request', (e) => {
+        expect(e.detail.requestBody).to.equal(file);
+        expect(e.detail.requestBody).not.to.be.instanceOf(FormData);
+        expect(e.detail.formData).to.be.undefined;
+        done();
+      });
+      upload._uploadFile(file);
+    });
+
+    it('should successfully complete upload in raw format', async () => {
+      upload.uploadFormat = 'raw';
+      const successSpy = sinon.spy();
+      upload.addEventListener('upload-success', successSpy);
+
+      upload._uploadFile(file);
+      await clock.tickAsync(400);
+
+      expect(successSpy.calledOnce).to.be.true;
+      const e = successSpy.firstCall.args[0];
+      expect(e.detail.file.complete).to.be.true;
+      expect(e.detail.xhr.status).to.equal(200);
+    });
+
+    it('should include uploadFormat and requestBody in upload-request event for raw', (done) => {
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        expect(e.detail.uploadFormat).to.equal('raw');
+        expect(e.detail.requestBody).to.equal(file);
+        expect(e.detail.formData).to.be.undefined;
+        done();
+      });
+      upload._uploadFile(file);
+    });
+  });
 });
