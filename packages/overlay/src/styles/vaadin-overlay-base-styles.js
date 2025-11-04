@@ -77,6 +77,9 @@ export const overlayStyles = css`
     user-select: text;
     white-space: initial;
     word-spacing: initial;
+
+    /* Inherit font-family */
+    font-family: inherit;
   }
 
   [part='backdrop'] {
