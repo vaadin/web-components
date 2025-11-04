@@ -594,12 +594,17 @@ describe('upload', () => {
     });
 
     it('should set Content-Type to application/octet-stream when file has no type in raw format', (done) => {
-      const unknownFile = createFile(1000, '');
+      const unknownFile = createFile(1000, 'application/pdf');
+      // Override type to be empty to test the fallback logic
+      Object.defineProperty(unknownFile, 'type', {
+        value: '',
+        writable: false,
+      });
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
         const contentType = e.detail.xhr.getRequestHeader('Content-Type');
-        // Files created with empty type default to 'application/x-octet-stream' (with 'x')
-        expect(contentType).to.equal('application/x-octet-stream');
+        // Should use our fallback: 'application/octet-stream' (without 'x')
+        expect(contentType).to.equal('application/octet-stream');
         done();
       });
       upload._uploadFile(unknownFile);
