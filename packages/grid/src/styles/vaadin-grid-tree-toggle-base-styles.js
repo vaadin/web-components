@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const gridTreeToggleStyles = css`
   :host {
-    display: flex;
+    display: inline-flex;
     max-width: 100%;
     pointer-events: none;
   }
@@ -33,6 +33,13 @@ export const gridTreeToggleStyles = css`
 
   #level-spacer {
     width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 16px));
+  }
+
+  /* Baseline alignment */
+  #level-spacer::before {
+    content: '\\2003' / '';
+    display: inline-block;
+    width: 0;
   }
 
   [part='toggle'] {
