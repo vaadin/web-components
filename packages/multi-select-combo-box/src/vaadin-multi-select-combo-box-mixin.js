@@ -214,7 +214,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         '__openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
         '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
-        '__updateTopGroup(selectedItemsOnTop, selectedItems, opened, filteredItems)',
+        '__updateTopGroup(selectedItemsOnTop, selectedItems, filteredItems, opened)',
       ];
     }
 
@@ -809,7 +809,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __updateTopGroup(selectedItemsOnTop, selectedItems, opened, filteredItems) {
+    __updateTopGroup(selectedItemsOnTop, selectedItems, filteredItems, opened) {
       if (!selectedItemsOnTop) {
         this._topGroup = [];
       } else if (!opened) {
