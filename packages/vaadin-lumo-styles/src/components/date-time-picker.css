@@ -8,17 +8,17 @@
     --vaadin-field-default-width: auto;
   }
 
-  .slots {
+  [part='input-fields'] {
     display: flex;
     --vaadin-field-default-width: 12em;
   }
 
-  .slots ::slotted([slot='date-picker']) {
+  [part='input-fields'] ::slotted([slot='date-picker']) {
     min-width: 0;
     flex: 1 1 auto;
   }
 
-  .slots ::slotted([slot='time-picker']) {
+  [part='input-fields'] ::slotted([slot='time-picker']) {
     min-width: 0;
     flex: 1 1.65 auto;
   }
