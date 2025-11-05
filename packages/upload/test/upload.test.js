@@ -588,7 +588,7 @@ describe('upload', () => {
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
         const metadata = e.detail.xhr.getRequestHeader('X-Vaadin-Upload-Metadata');
-        expect(metadata).to.equal(`name=${encodeURIComponent(testFile.name)}`);
+        expect(metadata).to.equal(`filename=${encodeURIComponent(testFile.name)}`);
         done();
       });
       upload._uploadFile(testFile);
@@ -604,8 +604,8 @@ describe('upload', () => {
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
         const metadata = e.detail.xhr.getRequestHeader('X-Vaadin-Upload-Metadata');
-        // The encoded filename should be percent-encoded in name=value format
-        expect(metadata).to.equal('name=test%20file%20%231%20%26%20foo.pdf');
+        // The encoded filename should be percent-encoded in filename=value format
+        expect(metadata).to.equal('filename=test%20file%20%231%20%26%20foo.pdf');
         done();
       });
       upload._uploadFile(testFile);
@@ -613,12 +613,12 @@ describe('upload', () => {
 
     it('should build metadata string from object using buildMetadataString helper', () => {
       const metadata = buildMetadataString({
-        name: 'test.pdf',
+        filename: 'test.pdf',
         foo: 'bar',
         special: 'test value & more',
       });
       // Should be in query string format with percent-encoding
-      expect(metadata).to.equal('name=test.pdf&foo=bar&special=test%20value%20%26%20more');
+      expect(metadata).to.equal('filename=test.pdf&foo=bar&special=test%20value%20%26%20more');
     });
 
     it('should set Content-Type to application/octet-stream when file has no type in raw format', (done) => {

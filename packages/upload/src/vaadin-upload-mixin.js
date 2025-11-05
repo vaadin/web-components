@@ -678,7 +678,7 @@ export const UploadMixin = (superClass) =>
         xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
         // Build metadata with filename (extensible for future additions)
         const metadata = {
-          name: file.name,
+          filename: file.name,
         };
         xhr.setRequestHeader('X-Vaadin-Upload-Metadata', buildMetadataString(metadata));
       }
