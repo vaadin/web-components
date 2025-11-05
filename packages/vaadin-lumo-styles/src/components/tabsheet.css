@@ -41,7 +41,8 @@
     position: relative;
     flex: 1;
     box-sizing: border-box;
-    padding: var(--lumo-space-s) var(--lumo-space-m);
+    --vaadin-scroller-padding-block: var(--lumo-space-s);
+    --vaadin-scroller-padding-inline: var(--lumo-space-m);
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
   }
@@ -59,5 +60,7 @@
 
   :host([theme~='no-padding']) [part='content'] {
     padding: 0 !important;
+    --vaadin-scroller-padding-block: 0 !important;
+    --vaadin-scroller-padding-inline: 0 !important;
   }
 }
