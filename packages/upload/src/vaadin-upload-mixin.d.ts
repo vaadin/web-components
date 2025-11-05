@@ -70,6 +70,12 @@ export type UploadMethod = 'POST' | 'PUT';
 
 export type UploadFormat = 'raw' | 'multipart';
 
+/**
+ * Builds a metadata string in URL query format from an object.
+ * Each value is percent-encoded.
+ */
+export declare function buildMetadataString(metadata: Record<string, string>): string;
+
 export declare function UploadMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<UploadMixinClass> & Constructor<I18nMixinClass<UploadI18n>> & T;

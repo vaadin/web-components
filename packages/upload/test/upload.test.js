@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
+import { buildMetadataString } from '../src/vaadin-upload-mixin.js';
 import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('upload', () => {
@@ -582,15 +583,42 @@ describe('upload', () => {
       upload._uploadFile(pdfFile);
     });
 
-    it('should set X-Filename header in raw format', (done) => {
+    it('should set X-Vaadin-Upload-Metadata header in raw format', (done) => {
       const testFile = createFile(1000, 'application/pdf');
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
-        const filename = e.detail.xhr.getRequestHeader('X-Filename');
-        expect(filename).to.equal(testFile.name);
+        const metadata = e.detail.xhr.getRequestHeader('X-Vaadin-Upload-Metadata');
+        expect(metadata).to.equal(`name=${encodeURIComponent(testFile.name)}`);
         done();
       });
       upload._uploadFile(testFile);
+    });
+
+    it('should percent-encode filename with special characters in metadata', (done) => {
+      const testFile = createFile(1000, 'application/pdf');
+      // Override name to include special characters
+      Object.defineProperty(testFile, 'name', {
+        value: 'test file #1 & foo.pdf',
+        writable: false,
+      });
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const metadata = e.detail.xhr.getRequestHeader('X-Vaadin-Upload-Metadata');
+        // The encoded filename should be percent-encoded in name=value format
+        expect(metadata).to.equal('name=test%20file%20%231%20%26%20foo.pdf');
+        done();
+      });
+      upload._uploadFile(testFile);
+    });
+
+    it('should build metadata string from object using buildMetadataString helper', () => {
+      const metadata = buildMetadataString({
+        name: 'test.pdf',
+        foo: 'bar',
+        special: 'test value & more',
+      });
+      // Should be in query string format with percent-encoding
+      expect(metadata).to.equal('name=test.pdf&foo=bar&special=test%20value%20%26%20more');
     });
 
     it('should set Content-Type to application/octet-stream when file has no type in raw format', (done) => {
@@ -620,11 +648,11 @@ describe('upload', () => {
       upload._uploadFile(file);
     });
 
-    it('should not set X-Filename header in multipart format', (done) => {
+    it('should not set X-Vaadin-Upload-Metadata header in multipart format', (done) => {
       upload.uploadFormat = 'multipart';
       upload.addEventListener('upload-request', (e) => {
-        const filename = e.detail.xhr.getRequestHeader('X-Filename');
-        expect(filename).to.be.undefined;
+        const metadata = e.detail.xhr.getRequestHeader('X-Vaadin-Upload-Metadata');
+        expect(metadata).to.be.undefined;
         done();
       });
       upload._uploadFile(file);

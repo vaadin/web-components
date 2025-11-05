@@ -50,6 +50,18 @@ const DEFAULT_I18N = {
   },
 };
 
+/**
+ * Builds a metadata string in URL query format from an object.
+ * Each value is percent-encoded.
+ * @param {Object} metadata - Key-value pairs to encode
+ * @returns {string} - Encoded metadata string (e.g., "name=file.txt&foo=bar")
+ */
+export function buildMetadataString(metadata) {
+  return Object.entries(metadata)
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+    .join('&');
+}
+
 class AddButtonController extends SlotController {
   constructor(host) {
     super(host, 'add-button', 'vaadin-button');
@@ -661,10 +673,14 @@ export const UploadMixin = (superClass) =>
         xhr.setRequestHeader(key, value);
       });
 
-      // Set Content-Type and filename header for raw binary uploads
+      // Set Content-Type and metadata header for raw binary uploads
       if (isRawUpload && file) {
         xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-        xhr.setRequestHeader('X-Filename', file.name);
+        // Build metadata with filename (extensible for future additions)
+        const metadata = {
+          name: file.name,
+        };
+        xhr.setRequestHeader('X-Vaadin-Upload-Metadata', buildMetadataString(metadata));
       }
 
       if (this.timeout) {
