@@ -661,11 +661,6 @@ export const GridMixin = (superClass) =>
       }
 
       row.index = index;
-
-      this._updateRowOrderParts(row, index);
-
-      this.__a11yUpdateRowRowindex(row, index);
-
       this.__ensureRowItem(row);
       this.__ensureRowHierarchy(row);
       this.__updateRow(row);
@@ -678,17 +673,17 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _updateRowOrderParts(row, index = row.index) {
+    __updateRowOrderParts(row) {
       updateBooleanRowStates(row, {
-        first: index === 0,
-        last: index === this._flatSize - 1,
-        odd: index % 2 !== 0,
-        even: index % 2 === 0,
+        first: row.index === 0,
+        last: row.index === this._flatSize - 1,
+        odd: row.index % 2 !== 0,
+        even: row.index % 2 === 0,
       });
     }
 
     /** @private */
-    _updateRowStateParts(row, { item, expanded, selected, detailsOpened }) {
+    __updateRowStateParts(row, { item, expanded, selected, detailsOpened }) {
       updateBooleanRowStates(row, {
         expanded,
         collapsed: this.__isRowExpandable(row),
@@ -710,11 +705,7 @@ export const GridMixin = (superClass) =>
     _renderColumnTree(columnTree) {
       iterateChildren(this.$.items, (row) => {
         this.__initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
-
-        const model = this.__getRowModel(row);
-        this._updateRowOrderParts(row);
-        this._updateRowStateParts(row, model);
-        this._filterDragAndDrop(row, model);
+        this.__updateRow(row);
       });
 
       while (this.$.header.children.length < columnTree.length) {
@@ -791,6 +782,9 @@ export const GridMixin = (superClass) =>
      * @private
      */
     __updateRow(row) {
+      this.__a11yUpdateRowRowindex(row);
+      this.__updateRowOrderParts(row);
+
       const item = this.__getRowItem(row);
       if (item) {
         this.__updateRowLoading(row, false);
@@ -807,7 +801,7 @@ export const GridMixin = (superClass) =>
       this.__a11yUpdateRowLevel(row, model.level);
       this.__a11yUpdateRowSelected(row, model.selected);
 
-      this._updateRowStateParts(row, model);
+      this.__updateRowStateParts(row, model);
 
       this._generateCellClassNames(row, model);
       this._generateCellPartNames(row, model);
