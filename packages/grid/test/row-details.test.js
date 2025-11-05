@@ -329,7 +329,7 @@ describe('row details', () => {
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid>
       `);
-      grid.items = [{ name: 'foo' }];
+      grid.items = [{ name: 'foo' }, { name: 'bar' }];
       await nextFrame();
       bodyRows = getRows(grid.$.items);
     });
@@ -356,6 +356,14 @@ describe('row details', () => {
       await nextFrame();
       const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
       expect(detailsCell.hidden).to.be.false;
+    });
+
+    it('should have order state parts on cells', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = () => {};
+      await nextFrame();
+      expect(bodyRows[0].children[0].getAttribute('part')).to.include('first-row-cell');
+      expect(bodyRows[1].children[0].getAttribute('part')).to.include('last-row-cell');
     });
   });
 

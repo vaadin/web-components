@@ -80,8 +80,8 @@ export const A11yMixin = (superClass) =>
      * @param {number} index
      * @private
      */
-    __a11yUpdateRowRowindex(row, index) {
-      row.setAttribute('aria-rowindex', index + this.__a11yGetHeaderRowCount(this._columnTree) + 1);
+    __a11yUpdateRowRowindex(row) {
+      row.setAttribute('aria-rowindex', row.index + this.__a11yGetHeaderRowCount(this._columnTree) + 1);
     }
 
     /**
