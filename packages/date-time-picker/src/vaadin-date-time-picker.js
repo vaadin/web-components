@@ -35,6 +35,7 @@ import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
  * Part name            | Description
  * ---------------------|----------------
  * `label`              | The slotted label element wrapper
+ * `input-fields`       | The date and time pickers wrapper
  * `helper-text`        | The slotted helper text element wrapper
  * `error-message`      | The slotted error message element wrapper
  * `required-indicator` | The `required` state indicator element
@@ -117,7 +118,7 @@ class DateTimePicker extends DateTimePickerMixin(
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="slots">
+        <div part="input-fields">
           <slot name="date-picker" id="dateSlot"></slot>
           <slot name="time-picker" id="timeSlot"></slot>
         </div>

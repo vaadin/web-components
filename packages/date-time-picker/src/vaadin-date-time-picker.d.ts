@@ -63,6 +63,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * Part name            | Description
  * ---------------------|----------------
  * `label`              | The slotted label element wrapper
+ * `input-fields`       | The date and time pickers wrapper
  * `helper-text`        | The slotted helper text element wrapper
  * `error-message`      | The slotted error message element wrapper
  * `required-indicator` | The `required` state indicator element
