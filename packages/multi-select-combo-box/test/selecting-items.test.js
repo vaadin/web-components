@@ -305,6 +305,18 @@ describe('selecting items', () => {
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
+
+      it('should not include ghost items in the dropdown', async () => {
+        comboBox.opened = true;
+        await nextRender();
+
+        // Remove an item from the combo-box while keeping it open
+        comboBox.items = ['apple', 'banana', 'lemon'];
+        comboBox.selectedItems = ['lemon'];
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
+      });
     });
 
     describe('object items', () => {
@@ -334,6 +346,17 @@ describe('selecting items', () => {
         comboBox.selectedItems = [{ id: '1', label: 'banana' }];
         await nextRender();
         expect(getFirstItem(comboBox).item).to.not.equal(itemReference);
+      });
+
+      it('should not change order while synchronizing selected items', async () => {
+        comboBox.selectedItems = [
+          { id: '1', label: 'banana' },
+          { id: '4', label: 'pear' },
+        ];
+        comboBox.opened = true;
+        comboBox.selectedItems = [{ id: '1', label: 'banana' }];
+        await nextRender();
+        expectItems(['banana', 'pear', 'apple', 'lemon', 'orange']);
       });
     });
 
