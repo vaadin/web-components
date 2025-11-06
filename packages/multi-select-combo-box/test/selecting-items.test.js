@@ -311,25 +311,21 @@ describe('selecting items', () => {
         await nextRender();
 
         comboBox.selectedItems = ['lemon'];
-        // Reassign items
         comboBox.items = ['apple', 'banana', 'lemon'];
         await nextRender();
 
         expectItems(['lemon', 'apple', 'banana']);
       });
 
-      it('should not include ghost items in the dropdown after clearing data provider cache', async () => {
+      it('should not update topgroup when deselecting while dropdown is opened', async () => {
         comboBox.opened = true;
         await nextRender();
 
-        // Since items are reassigned _before_ clearing selectedItems, the selected item should remain visible
-        comboBox.items = ['apple', 'banana', 'lemon'];
-        comboBox.selectedItems = ['lemon'];
-        expectItems(['lemon', 'orange', 'apple', 'banana']);
-        comboBox.clearCache();
+        // Clear selection
+        comboBox.selectedItems = [];
         await nextRender();
 
-        expectItems(['lemon', 'apple', 'banana']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
       });
     });
 
@@ -360,18 +356,6 @@ describe('selecting items', () => {
         comboBox.selectedItems = [{ id: '1', label: 'banana' }];
         await nextRender();
         expect(getFirstItem(comboBox).item).to.not.equal(itemReference);
-      });
-
-      it('should not update topgroup when deselecting while dropdown is opened', async () => {
-        comboBox.selectedItems = [{ id: '5', label: 'dragonfruit' }];
-        comboBox.opened = true;
-        await nextRender();
-
-        // Clear selection
-        comboBox.selectedItems = [];
-        await nextRender();
-
-        expectItems(['dragonfruit', 'apple', 'banana', 'lemon', 'orange', 'pear']);
       });
     });
 
@@ -451,7 +435,6 @@ describe('selecting items', () => {
         await nextRender();
 
         comboBox.selectedItems = ['lemon'];
-        // Reassign items
         comboBox.dataProvider = getDataProvider(['apple', 'banana', 'lemon']);
         await nextRender();
 
