@@ -727,31 +727,18 @@ export const GridMixin = (superClass) =>
         this.$.footer.removeChild(this.$.footer.firstElementChild);
       }
 
-      iterateChildren(this.$.header, (headerRow, index, rows) => {
+      iterateChildren(this.$.header, (headerRow, index) => {
         this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
-
-        updatePart(headerRow, index === 0, 'first-header-row');
-        updatePart(headerRow, index === rows.length - 1, 'last-header-row');
-
-        const cells = getBodyRowCells(headerRow);
-        updateCellsPart(cells, 'first-header-row-cell', index === 0);
-        updateCellsPart(cells, 'last-header-row-cell', index === rows.length - 1);
       });
 
-      iterateChildren(this.$.footer, (footerRow, index, rows) => {
+      iterateChildren(this.$.footer, (footerRow, index) => {
         this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
-
-        updatePart(footerRow, index === 0, 'first-footer-row');
-        updatePart(footerRow, index === rows.length - 1, 'last-footer-row');
-
-        const cells = getBodyRowCells(footerRow);
-        updateCellsPart(cells, 'first-footer-row-cell', index === 0);
-        updateCellsPart(cells, 'last-footer-row-cell', index === rows.length - 1);
       });
 
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
+      this.__updateHeaderAndFooterRowParts();
       this._resizeHandler();
       this._frozenCellsChanged();
       this._updateFirstAndLastColumn();
@@ -761,6 +748,21 @@ export const GridMixin = (superClass) =>
       this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
+    }
+
+    /** @private */
+    __updateHeaderAndFooterRowParts() {
+      ['header', 'footer'].forEach((section) => {
+        const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
+        [...this.$[section].children].forEach((row) => {
+          updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
+          updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
+
+          const cells = getBodyRowCells(row);
+          updateCellsPart(cells, `first-${section}-row-cell`, row === visibleRows.at(0));
+          updateCellsPart(cells, `last-${section}-row-cell`, row === visibleRows.at(-1));
+        });
+      });
     }
 
     /**
