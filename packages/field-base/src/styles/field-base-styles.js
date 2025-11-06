@@ -16,15 +16,14 @@ export const field = css`
     --_has-helper: ;
     --_no-error: initial;
     --_has-error: ;
+    --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
+    --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
     grid-template-columns: 100%;
-    grid-template-rows:
-      var(--_helper-below-field, var(--_has-label, auto 0) 1fr var(--_has-helper, auto) var(--_has-error, auto))
-      var(
-        --_helper-above-field,
-        var(--_has-label, auto) var(--_has-helper, auto) var(--_has-label, 0) 1fr var(--_has-error, auto)
-      );
-    gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
+    grid-template-areas:
+      'label' var(--_helper-above-field, 'helper') 'baseline' 'input' var(--_helper-below-field, 'helper')
+      'error';
+    grid-template-rows: auto var(--_helper-above-field, auto) 0 1fr var(--_helper-below-field, auto) auto;
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
@@ -57,20 +56,10 @@ export const field = css`
 
   /* Baseline alignment guide */
   :host::before {
-    content: '\\2003' / '';
+    content: var(--_has-label, '\\2003' / '');
     grid-column: 1;
-    grid-row: var(--_helper-below-field, var(--_no-label, 1) var(--_has-label, 1 / 3))
-      var(
-        --_helper-above-field,
-        var(--_no-label, var(--_no-helper, 1) var(--_has-helper, 1 / 3))
-          var(--_has-label, var(--_no-helper, 1 / 3) var(--_has-helper, 1 / 4))
-      );
-    align-self: var(--_helper-below-field, var(--_no-label, start) var(--_has-label, end))
-      var(
-        --_helper-above-field,
-        var(--_no-label, var(--_no-helper, start) var(--_has-helper, end))
-          var(--_has-label, var(--_no-helper, end) var(--_has-helper, end))
-      );
+    grid-row: var(--_has-label, label / baseline) var(--_no-label, baseline);
+    align-self: end;
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
@@ -104,7 +93,8 @@ export const field = css`
     color: var(--vaadin-input-field-label-color, var(--vaadin-text-color));
     word-break: break-word;
     position: relative;
-    grid-row: 1;
+    grid-area: label;
+    margin-bottom: var(--_helper-below-field, var(--_gap)) var(--_helper-above-field, var(--_no-helper, var(--_gap)));
   }
 
   ::slotted(label) {
@@ -150,12 +140,7 @@ export const field = css`
   [part='input-field'],
   [part='group-field'],
   [part='input-fields'] {
-    grid-row: var(--_helper-below-field, var(--_no-label, 1) var(--_has-label, 2 / 4))
-      var(
-        --_helper-above-field,
-        var(--_no-label, var(--_no-helper, 1) var(--_has-helper, 2 / 4))
-          var(--_has-label, var(--_no-helper, 2 / 4) var(--_has-helper, 3 / 5))
-      );
+    grid-area: input;
   }
 
   [part='input-field'] {
@@ -177,7 +162,9 @@ export const field = css`
     line-height: var(--vaadin-input-field-helper-line-height, inherit);
     font-weight: var(--vaadin-input-field-helper-font-weight, 400);
     color: var(--vaadin-input-field-helper-color, var(--vaadin-text-color-secondary));
-    grid-row: var(--_helper-below-field, auto) var(--_helper-above-field, var(--_no-label, 1) var(--_has-label, 2));
+    grid-area: helper;
+    margin-top: var(--_helper-above-field, var(--_gap-s)) var(--_helper-below-field, var(--_gap));
+    margin-bottom: var(--_helper-above-field, var(--_gap));
   }
 
   [part='error-message'] {
@@ -187,6 +174,9 @@ export const field = css`
     color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
     display: flex;
     gap: var(--vaadin-gap-xs);
+    grid-area: error;
+    margin-top: var(--_has-helper, var(--_helper-below-field, var(--_gap-s)) var(--_helper-above-field, var(--_gap)))
+      var(--_no-helper, var(--_gap));
   }
 
   [part='error-message']::before {

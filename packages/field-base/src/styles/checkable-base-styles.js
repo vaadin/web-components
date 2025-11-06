@@ -10,7 +10,7 @@ import { css, unsafeCSS } from 'lit';
 export const checkable = (part, propName = part) => css`
   :host {
     align-items: center;
-    gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
+    column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     /*
       Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox
@@ -56,13 +56,20 @@ export const checkable = (part, propName = part) => css`
   [part='label'],
   [part='helper-text'],
   [part='error-message'] {
+    margin-bottom: 0;
     grid-column: 2;
     width: auto;
     min-width: auto;
   }
 
+  [part='helper-text'],
+  [part='error-message'] {
+    margin-top: var(--_gap-s);
+  }
+
   /* Baseline vertical alignment */
   :host::before {
+    content: '\\2003' / '';
     grid-row: 1;
     margin: 0;
     padding: 0;
