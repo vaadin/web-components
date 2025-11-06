@@ -16,16 +16,15 @@ export const gridStyles = css`
     align-self: stretch;
     position: relative;
     box-sizing: border-box;
+    overflow: hidden;
     -webkit-tap-highlight-color: transparent;
     background: var(--vaadin-grid-background, var(--vaadin-background-color));
-    border: var(--_border-width) solid var(--_border-color);
+    border: var(--vaadin-grid-border-width, 1px) solid var(--_border-color);
     cursor: default;
     --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
-    --_border-width: 0;
     --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
-    border-radius: var(--_border-radius);
-    --_border-radius: 0;
+    border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-m));
   }
 
   :host([hidden]),
@@ -39,9 +38,9 @@ export const gridStyles = css`
   }
 
   /* Variant: No outer border */
-  :host(:not([theme~='no-border'])) {
-    --_border-width: var(--vaadin-grid-border-width, 1px);
-    --_border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-m));
+  :host([theme~='no-border']) {
+    border-width: 0;
+    border-radius: 0;
   }
 
   :host([all-rows-visible]) {
@@ -49,11 +48,11 @@ export const gridStyles = css`
     align-self: flex-start;
     min-height: auto;
     flex-grow: 0;
+    flex-shrink: 0;
   }
 
   #scroller {
     contain: layout;
-    border-radius: calc(var(--_border-radius) - var(--_border-width));
     position: relative;
     display: flex;
     width: 100%;
@@ -571,7 +570,7 @@ export const gridStyles = css`
   /* Drag'n'drop styles */
   :host([dragover]) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: calc(var(--_border-width) * -1);
+    outline-offset: calc(var(--vaadin-grid-border-width, 1px) * -1);
   }
 
   [part~='row'][dragover] {
