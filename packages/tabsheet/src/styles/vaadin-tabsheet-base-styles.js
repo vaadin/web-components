@@ -46,9 +46,9 @@ export const tabSheetStyles = [
       position: relative;
       flex: 1;
       box-sizing: border-box;
-      padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding-l));
-      border-top: var(--vaadin-tabsheet-border-width, 1px) solid transparent;
-      margin-top: calc(var(--vaadin-tabsheet-border-width, 1px) * -1);
+      --vaadin-scroller-padding-block: var(--vaadin-tabsheet-padding, var(--vaadin-padding-m));
+      --vaadin-scroller-padding-inline: var(--vaadin-tabsheet-padding, var(--vaadin-padding-m));
+      --vaadin-scroller-overflow-indicator-top-opacity: 1;
     }
 
     [part='content'][focus-ring] {
@@ -57,14 +57,12 @@ export const tabSheetStyles = [
       outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
     }
 
-    [part='content'][overflow~='top'] {
-      border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color-secondary));
+    :host([loading]) [part='content'] {
+      align-content: center;
     }
 
-    :host([loading]) [part='content'] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    [part='loader'] {
+      margin: auto;
     }
 
     :host([theme~='no-border']) {
@@ -74,6 +72,8 @@ export const tabSheetStyles = [
 
     :host([theme~='no-padding']) [part='content'] {
       padding: 0 !important;
+      --vaadin-scroller-padding-block: 0px !important;
+      --vaadin-scroller-padding-inline: 0px !important;
     }
   `,
 ];
