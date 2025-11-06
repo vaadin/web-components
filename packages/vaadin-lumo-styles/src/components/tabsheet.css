@@ -60,7 +60,7 @@
 
   :host([theme~='no-padding']) [part='content'] {
     padding: 0 !important;
-    --vaadin-scroller-padding-block: 0 !important;
-    --vaadin-scroller-padding-inline: 0 !important;
+    --vaadin-scroller-padding-block: 0px !important;
+    --vaadin-scroller-padding-inline: 0px !important;
   }
 }
