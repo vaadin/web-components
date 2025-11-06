@@ -393,6 +393,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * @private
+     */
+    __syncTopGroup() {
+      this._topGroup = this.selectedItemsOnTop ? [...this.selectedItems] : [];
+    }
+
+    /**
      * Clears the cached pages and reloads data from data provider when needed.
      * @override
      */
@@ -404,13 +411,17 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       super.clearCache();
 
-      this._topGroup = [...this.selectedItems];
+      this.__syncTopGroup();
     }
 
+    /**
+     * @private
+     * @override
+     */
     _itemsChanged(items, oldItems) {
       super._itemsChanged(items, oldItems);
 
-      this._topGroup = [...this.selectedItems];
+      this.__syncTopGroup();
     }
 
     /**
