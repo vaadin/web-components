@@ -28,6 +28,7 @@ import {
   iterateRowCells,
   updateBooleanRowStates,
   updateCellsPart,
+  updatePart,
   updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
@@ -710,13 +711,13 @@ export const GridMixin = (superClass) =>
 
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
-        headerRow.setAttribute('part', 'row');
+        headerRow.setAttribute('part', 'row header-row');
         headerRow.setAttribute('role', 'row');
         headerRow.setAttribute('tabindex', '-1');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
-        footerRow.setAttribute('part', 'row');
+        footerRow.setAttribute('part', 'row footer-row');
         footerRow.setAttribute('role', 'row');
         footerRow.setAttribute('tabindex', '-1');
         this.$.footer.appendChild(footerRow);
@@ -729,6 +730,9 @@ export const GridMixin = (superClass) =>
       iterateChildren(this.$.header, (headerRow, index, rows) => {
         this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
+        updatePart(headerRow, index === 0, 'first-header-row');
+        updatePart(headerRow, index === rows.length - 1, 'last-header-row');
+
         const cells = getBodyRowCells(headerRow);
         updateCellsPart(cells, 'first-header-row-cell', index === 0);
         updateCellsPart(cells, 'last-header-row-cell', index === rows.length - 1);
@@ -736,6 +740,9 @@ export const GridMixin = (superClass) =>
 
       iterateChildren(this.$.footer, (footerRow, index, rows) => {
         this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
+
+        updatePart(footerRow, index === 0, 'first-footer-row');
+        updatePart(footerRow, index === rows.length - 1, 'last-footer-row');
 
         const cells = getBodyRowCells(footerRow);
         updateCellsPart(cells, 'first-footer-row-cell', index === 0);

@@ -158,6 +158,8 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * ---------------------------|----------------
  * `row`                      | Row in the internal table
  * `body-row`                 | Body row in the internal table
+ * `header-row`               | Header row in the internal table
+ * `footer-row`               | Footer row in the internal table
  * `collapsed-row`            | Collapsed row
  * `expanded-row`             | Expanded row
  * `selected-row`             | Selected row
@@ -166,7 +168,11 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * `odd-row`                  | Odd row
  * `even-row`                 | Even row
  * `first-row`                | The first body row
+ * `first-header-row`         | The first header row
+ * `first-footer-row`         | The first footer row
  * `last-row`                 | The last body row
+ * `last-header-row`          | The last header row
+ * `last-footer-row`          | The last footer row
  * `dragstart-row`            | Set on the row for one frame when drag is starting.
  * `dragover-above-row`       | Set on the row when the a row is dragged over above
  * `dragover-below-row`       | Set on the row when the a row is dragged over below
