@@ -19,7 +19,7 @@ export const virtualListStyles = css`
     flex: 1;
     align-self: stretch;
     box-sizing: border-box;
-    padding: 0 !important;
+    padding: 0;
     --_indicator-height: var(--vaadin-virtual-list-overflow-indicator-height, 10px);
   }
 
