@@ -32,6 +32,16 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * `focused`    | Set when the element is focused.
  * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
+ * ### Built-in Theme Variants
+ *
+ * `<vaadin-scroller>` supports the following theme variants:
+ *
+ * Theme variant                            | Description
+ * -----------------------------------------|---------------
+ * `theme="overflow-indicators"`            | Shows visual indicators at the top and bottom when the content is scrolled
+ * `theme="overflow-indicator-top"`         | Shows the visual indicator at the top when the content is scrolled
+ * `theme="overflow-indicator-top-bottom"`  | Shows the visual indicator at the bottom when the content is scrolled
+ *
  * ### Custom CSS Properties
  *
  * The following custom CSS properties are available for styling:
