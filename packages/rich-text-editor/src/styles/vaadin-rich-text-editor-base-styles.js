@@ -94,7 +94,7 @@ export const content = css`
     line-height: var(--vaadin-rich-text-editor-content-line-height, inherit);
     outline: none;
     overflow-y: auto;
-    padding: var(--vaadin-rich-text-editor-content-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-rich-text-editor-content-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
     tab-size: calc(var(--_item-indent) * 2);
     text-align: left;
     white-space: pre-wrap;
@@ -132,7 +132,7 @@ export const content = css`
     border-radius: var(--vaadin-radius-s);
     white-space: pre-wrap;
     margin-block: var(--vaadin-padding-s);
-    padding: var(--vaadin-padding-container);
+    padding: var(--vaadin-padding-block) var(--vaadin-padding-inline);
   }
 
   /* lists */
@@ -360,7 +360,7 @@ export const content = css`
 
   blockquote {
     border-inline-start: 4px solid var(--vaadin-border-color-secondary);
-    margin: var(--vaadin-padding-container);
+    margin: var(--vaadin-padding-block) var(--vaadin-padding-inline);
     padding-inline-start: var(--vaadin-padding-s);
   }
 
@@ -412,7 +412,10 @@ const toolbar = css`
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
     font: inherit;
-    padding: var(--vaadin-rich-text-editor-toolbar-button-padding, var(--vaadin-padding-container));
+    padding: var(
+      --vaadin-rich-text-editor-toolbar-button-padding,
+      var(--vaadin-padding-block) var(--vaadin-padding-inline)
+    );
     position: relative;
   }
 

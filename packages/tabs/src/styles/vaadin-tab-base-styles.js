@@ -13,7 +13,7 @@ export const tabStyles = css`
     align-items: center;
     justify-content: center;
     gap: var(--vaadin-tab-gap, var(--vaadin-gap-s));
-    padding: var(--vaadin-tab-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-tab-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
     cursor: var(--vaadin-clickable-cursor);
     font-size: var(--vaadin-tab-font-size, 1em);
     font-weight: var(--vaadin-tab-font-weight, 500);

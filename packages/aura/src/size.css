@@ -31,8 +31,8 @@
     1px
   );
 
-  --vaadin-padding-container: round(var(--vaadin-padding-s) / 1.4, 1px)
-    max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 2, 1px));
+  --vaadin-padding-block: round(var(--vaadin-padding-s) / 1.4, 1px);
+  --vaadin-padding-inline: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 2, 1px));
 
   --vaadin-gap-xs: var(--vaadin-padding-xs);
   --vaadin-gap-s: var(--vaadin-padding-s);

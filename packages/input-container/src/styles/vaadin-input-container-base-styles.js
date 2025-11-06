@@ -21,7 +21,7 @@ export const inputContainerStyles = css`
       var(--vaadin-input-field-border-color, var(--vaadin-border-color));
     box-sizing: border-box;
     cursor: text;
-    padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-input-field-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
     gap: var(--vaadin-input-field-gap, var(--vaadin-gap-s));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
     color: var(--vaadin-input-field-value-color, var(--vaadin-text-color));

@@ -19,7 +19,7 @@ const sideNav = css`
     align-items: center;
     justify-content: start;
     gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
-    padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
     font-size: var(--vaadin-side-nav-label-font-size, max(11px, 0.875em));
     font-weight: var(--vaadin-side-nav-label-font-weight, 500);
     color: var(--vaadin-side-nav-label-color, var(--vaadin-text-color-secondary));
