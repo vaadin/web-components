@@ -392,9 +392,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       announce(this.__effectiveI18n.cleared);
     }
 
-    /**
-     * @private
-     */
+    /** @private */
     __syncTopGroup() {
       this._topGroup = this.selectedItemsOnTop ? [...this.selectedItems] : [];
     }
