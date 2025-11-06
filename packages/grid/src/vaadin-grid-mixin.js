@@ -642,12 +642,12 @@ export const GridMixin = (superClass) =>
 
       if (row.parentElement === this.$.header) {
         this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
-        this.__updateHeaderFooterRowParts('header', [row]);
+        this.__updateHeaderFooterRowParts('header');
       }
 
       if (row.parentElement === this.$.footer) {
         this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
-        this.__updateHeaderFooterRowParts('footer', [row]);
+        this.__updateHeaderFooterRowParts('footer');
       }
 
       // Make sure the section has a tabbable element
@@ -732,16 +732,16 @@ export const GridMixin = (superClass) =>
       iterateChildren(this.$.header, (headerRow, index) => {
         this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
       });
-      this.__updateHeaderFooterRowParts('header', [...this.$.header.children]);
 
       iterateChildren(this.$.footer, (footerRow, index) => {
         this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
       });
-      this.__updateHeaderFooterRowParts('footer', [...this.$.footer.children]);
 
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
+      this.__updateHeaderFooterRowParts('header');
+      this.__updateHeaderFooterRowParts('footer');
       this._resizeHandler();
       this._frozenCellsChanged();
       this._updateFirstAndLastColumn();
@@ -754,9 +754,9 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __updateHeaderFooterRowParts(section, rows) {
+    __updateHeaderFooterRowParts(section) {
       const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
-      rows.forEach((row) => {
+      [...this.$[section].children].forEach((row) => {
         updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
         updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
 
