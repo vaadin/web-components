@@ -48,7 +48,7 @@ export const gridStyles = css`
     align-self: flex-start;
     min-height: auto;
     flex-grow: 0;
-    overflow: visible;
+    flex-shrink: 0;
   }
 
   #scroller {
