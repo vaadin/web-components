@@ -53,7 +53,6 @@ export const gridStyles = css`
 
   #scroller {
     contain: layout;
-    border-radius: inherit;
     position: relative;
     display: flex;
     width: 100%;
