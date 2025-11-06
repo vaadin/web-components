@@ -306,13 +306,27 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
 
-      it('should not include ghost items in the dropdown', async () => {
+      it('should not include ghost items in the dropdown after items change', async () => {
         comboBox.opened = true;
         await nextRender();
 
-        // Remove an item from the combo-box while keeping it open
+        comboBox.selectedItems = ['lemon'];
+        // Reassign items
+        comboBox.items = ['apple', 'banana', 'lemon'];
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
+      });
+
+      it('should not include ghost items in the dropdown after clearing data provider cache', async () => {
+        comboBox.opened = true;
+        await nextRender();
+
+        // Since items are reassigned _before_ clearing selectedItems, the selected item should remain visible
         comboBox.items = ['apple', 'banana', 'lemon'];
         comboBox.selectedItems = ['lemon'];
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.clearCache();
         await nextRender();
 
         expectItems(['lemon', 'apple', 'banana']);
@@ -348,15 +362,16 @@ describe('selecting items', () => {
         expect(getFirstItem(comboBox).item).to.not.equal(itemReference);
       });
 
-      it('should not change order while synchronizing selected items', async () => {
-        comboBox.selectedItems = [
-          { id: '1', label: 'banana' },
-          { id: '4', label: 'pear' },
-        ];
+      it('should not update topgroup when deselecting while dropdown is opened', async () => {
+        comboBox.selectedItems = [{ id: '5', label: 'dragonfruit' }];
         comboBox.opened = true;
-        comboBox.selectedItems = [{ id: '1', label: 'banana' }];
         await nextRender();
-        expectItems(['banana', 'pear', 'apple', 'lemon', 'orange']);
+
+        // Clear selection
+        comboBox.selectedItems = [];
+        await nextRender();
+
+        expectItems(['dragonfruit', 'apple', 'banana', 'lemon', 'orange', 'pear']);
       });
     });
 
@@ -410,6 +425,37 @@ describe('selecting items', () => {
         comboBox.selectedItemsOnTop = false;
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should not include ghost items in the dropdown after clearing data provider cache', async () => {
+        const allItems = ['apple', 'banana', 'lemon', 'orange'];
+        comboBox.dataProvider = (_params, callback) => {
+          callback(allItems, allItems.length);
+        };
+
+        comboBox.opened = true;
+        await nextRender();
+
+        allItems.pop(); // remove 'orange'
+        comboBox.selectedItems = ['lemon'];
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+
+        comboBox.clearCache();
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
+      });
+
+      it('should not include ghost items in the dropdown after data provider change', async () => {
+        comboBox.opened = true;
+        await nextRender();
+
+        comboBox.selectedItems = ['lemon'];
+        // Reassign items
+        comboBox.dataProvider = getDataProvider(['apple', 'banana', 'lemon']);
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
       });
     });
 

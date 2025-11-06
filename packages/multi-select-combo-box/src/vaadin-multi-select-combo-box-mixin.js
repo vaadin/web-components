@@ -214,7 +214,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         '__openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
         '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
-        '__updateTopGroup(selectedItemsOnTop, selectedItems, filteredItems, opened)',
+        '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
     }
 
@@ -403,6 +403,14 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       }
 
       super.clearCache();
+
+      this._topGroup = [...this.selectedItems];
+    }
+
+    _itemsChanged(items, oldItems) {
+      super._itemsChanged(items, oldItems);
+
+      this._topGroup = [...this.selectedItems];
     }
 
     /**
@@ -809,21 +817,27 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __updateTopGroup(selectedItemsOnTop, selectedItems, filteredItems, opened) {
+    __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
       if (!selectedItemsOnTop) {
         this._topGroup = [];
-      } else if (!opened) {
+      } else if (!opened || this.__needToSyncTopGroup()) {
         this._topGroup = [...selectedItems];
-      } else {
-        this._topGroup = (this._topGroup || [])
-          // Filter out items that are no longer selected nor in the filtered items.
-          .filter((item) => this._findIndex(item, [...selectedItems, ...filteredItems], this.itemIdPath) > -1)
-          // Update references to the selected items.
-          .map((item) => {
-            const selectedIndex = this._findIndex(item, selectedItems, this.itemIdPath);
-            return selectedIndex > -1 ? selectedItems[selectedIndex] : item;
-          });
       }
+    }
+
+    /** @private */
+    __needToSyncTopGroup() {
+      // Only sync for object items
+      if (!this.itemIdPath) {
+        return false;
+      }
+      return (
+        this._topGroup &&
+        this._topGroup.some((item) => {
+          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems, this.itemIdPath)];
+          return selectedItem && item !== selectedItem;
+        })
+      );
     }
 
     /** @private */
