@@ -18,6 +18,16 @@
     "color-function-notation": "legacy",
     "custom-property-empty-line-before": ["never", { "ignore": ["after-custom-property"] }],
     "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
-    "no-duplicate-selectors": true
+    "no-duplicate-selectors": true,
+    "declaration-block-no-redundant-longhand-properties": [
+      true,
+      {
+        "ignoreLonghands": [
+          "grid-template-areas",
+          "grid-template-columns",
+          "grid-template-rows"
+        ]
+      }
+    ]
   }
 }
