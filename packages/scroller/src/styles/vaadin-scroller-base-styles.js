@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const scrollerStyles = css`
   :host {
-    --_indicator-height: var(--vaadin-scroller-overflow-indicator-height, 10px);
+    --_indicator-height: var(--vaadin-scroller-overflow-indicator-height, 1px);
     /* Don't let these properties inherit */
     --vaadin-scroller-padding-block: 0px;
     --vaadin-scroller-padding-inline: 0px;
@@ -54,15 +54,14 @@ export const scrollerStyles = css`
     box-sizing: border-box;
     height: var(--_indicator-height);
     margin-inline: calc(var(--vaadin-scroller-padding-inline) * -1);
+    background: var(--vaadin-border-color-secondary);
   }
 
   :host::before {
-    border-top: 1px solid var(--vaadin-border-color-secondary);
     margin-bottom: calc(var(--vaadin-scroller-padding-block) - var(--_indicator-height));
   }
 
   :host::after {
-    border-bottom: 1px solid var(--vaadin-border-color-secondary);
     margin-top: calc(var(--vaadin-scroller-padding-block) - var(--_indicator-height));
   }
 

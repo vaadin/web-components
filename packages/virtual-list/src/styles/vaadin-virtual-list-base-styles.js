@@ -20,7 +20,7 @@ export const virtualListStyles = css`
     align-self: stretch;
     box-sizing: border-box;
     padding: 0;
-    --_indicator-height: var(--vaadin-virtual-list-overflow-indicator-height, 10px);
+    --_indicator-height: var(--vaadin-virtual-list-overflow-indicator-height, 1px);
   }
 
   :host([hidden]) {
@@ -46,15 +46,14 @@ export const virtualListStyles = css`
     pointer-events: none;
     box-sizing: border-box;
     height: var(--_indicator-height);
+    background: var(--vaadin-border-color-secondary);
   }
 
   :host::before {
-    border-top: 1px solid var(--vaadin-border-color-secondary);
     margin-bottom: calc(var(--vaadin-virtual-list-padding-block) - var(--_indicator-height));
   }
 
   :host::after {
-    border-bottom: 1px solid var(--vaadin-border-color-secondary);
     margin-top: calc(var(--vaadin-virtual-list-padding-block) - var(--_indicator-height));
   }
 
