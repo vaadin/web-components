@@ -29,13 +29,34 @@ export { VirtualListDefaultItem, VirtualListItemModel, VirtualListRenderer };
  * }
  * ```
  *
+ * ### Styling
+ *
  * The following state attributes are available for styling:
  *
  * Attribute        | Description
  * -----------------|--------------------------------------------
  * `overflow`       | Set to `top`, `bottom`, both, or none.
  *
- * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
+ * ### Built-in Theme Variants
+ *
+ * `<vaadin-virtual-list>` supports the following theme variants:
+ *
+ * Theme variant                            | Description
+ * -----------------------------------------|---------------
+ * `theme="overflow-indicators"`            | Shows visual indicators at the top and bottom when the content is scrolled
+ * `theme="overflow-indicator-top"`         | Shows the visual indicator at the top when the content is scrolled
+ * `theme="overflow-indicator-top-bottom"`  | Shows the visual indicator at the bottom when the content is scrolled
+ *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                    | Description
+ * ---------------------------------------|-------------
+ * `--vaadin-virtual-list-padding-block`  | The CSS padding applied to top and bottom edges
+ * `--vaadin-virtual-list-padding-inline` | The CSS padding applied to left and right edges
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class VirtualList<TItem = VirtualListDefaultItem> extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
