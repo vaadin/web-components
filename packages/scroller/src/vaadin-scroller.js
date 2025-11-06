@@ -22,13 +22,26 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * </vaadin-scroller>
  * ```
  *
- * The following attributes are exposed for styling:
+ * ### Styling
+ *
+ * The following state attributes are available for styling:
  *
  * Attribute    | Description
  * -------------| -----------
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
  * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
+ *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                | Description
+ * -----------------------------------|-------------
+ * `--vaadin-scroller-padding-block`  | The CSS padding applied to top and bottom edges
+ * `--vaadin-scroller-padding-inline` | The CSS padding applied to left and right edges
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
  * @extends HTMLElement
