@@ -28,6 +28,7 @@ import {
   iterateRowCells,
   updateBooleanRowStates,
   updateCellsPart,
+  updatePart,
   updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
@@ -641,10 +642,12 @@ export const GridMixin = (superClass) =>
 
       if (row.parentElement === this.$.header) {
         this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
+        this.__updateHeaderFooterRowParts('header');
       }
 
       if (row.parentElement === this.$.footer) {
         this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
+        this.__updateHeaderFooterRowParts('footer');
       }
 
       // Make sure the section has a tabbable element
@@ -710,13 +713,13 @@ export const GridMixin = (superClass) =>
 
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
-        headerRow.setAttribute('part', 'row');
+        headerRow.setAttribute('part', 'row header-row');
         headerRow.setAttribute('role', 'row');
         headerRow.setAttribute('tabindex', '-1');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
-        footerRow.setAttribute('part', 'row');
+        footerRow.setAttribute('part', 'row footer-row');
         footerRow.setAttribute('role', 'row');
         footerRow.setAttribute('tabindex', '-1');
         this.$.footer.appendChild(footerRow);
@@ -726,25 +729,19 @@ export const GridMixin = (superClass) =>
         this.$.footer.removeChild(this.$.footer.firstElementChild);
       }
 
-      iterateChildren(this.$.header, (headerRow, index, rows) => {
+      iterateChildren(this.$.header, (headerRow, index) => {
         this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
-
-        const cells = getBodyRowCells(headerRow);
-        updateCellsPart(cells, 'first-header-row-cell', index === 0);
-        updateCellsPart(cells, 'last-header-row-cell', index === rows.length - 1);
       });
 
-      iterateChildren(this.$.footer, (footerRow, index, rows) => {
+      iterateChildren(this.$.footer, (footerRow, index) => {
         this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
-
-        const cells = getBodyRowCells(footerRow);
-        updateCellsPart(cells, 'first-footer-row-cell', index === 0);
-        updateCellsPart(cells, 'last-footer-row-cell', index === rows.length - 1);
       });
 
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
+      this.__updateHeaderFooterRowParts('header');
+      this.__updateHeaderFooterRowParts('footer');
       this._resizeHandler();
       this._frozenCellsChanged();
       this._updateFirstAndLastColumn();
@@ -754,6 +751,20 @@ export const GridMixin = (superClass) =>
       this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
+    }
+
+    /** @private */
+    __updateHeaderFooterRowParts(section) {
+      const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
+      [...this.$[section].children].forEach((row) => {
+        updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
+        updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
+
+        getBodyRowCells(row).forEach((cell) => {
+          updatePart(cell, row === visibleRows.at(0), `first-${section}-row-cell`);
+          updatePart(cell, row === visibleRows.at(-1), `last-${section}-row-cell`);
+        });
+      });
     }
 
     /**
