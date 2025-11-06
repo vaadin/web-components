@@ -642,10 +642,12 @@ export const GridMixin = (superClass) =>
 
       if (row.parentElement === this.$.header) {
         this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
+        this.__updateHeaderFooterRowParts('header', [row]);
       }
 
       if (row.parentElement === this.$.footer) {
         this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
+        this.__updateHeaderFooterRowParts('footer', [row]);
       }
 
       // Make sure the section has a tabbable element
@@ -730,15 +732,16 @@ export const GridMixin = (superClass) =>
       iterateChildren(this.$.header, (headerRow, index) => {
         this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
       });
+      this.__updateHeaderFooterRowParts('header', [...this.$.header.children]);
 
       iterateChildren(this.$.footer, (footerRow, index) => {
         this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
       });
+      this.__updateHeaderFooterRowParts('footer', [...this.$.footer.children]);
 
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
-      this.__updateHeaderAndFooterRowParts();
       this._resizeHandler();
       this._frozenCellsChanged();
       this._updateFirstAndLastColumn();
@@ -751,16 +754,15 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __updateHeaderAndFooterRowParts() {
-      ['header', 'footer'].forEach((section) => {
-        const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
-        [...this.$[section].children].forEach((row) => {
-          updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
-          updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
+    __updateHeaderFooterRowParts(section, rows) {
+      const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
+      rows.forEach((row) => {
+        updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
+        updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
 
-          const cells = getBodyRowCells(row);
-          updateCellsPart(cells, `first-${section}-row-cell`, row === visibleRows.at(0));
-          updateCellsPart(cells, `last-${section}-row-cell`, row === visibleRows.at(-1));
+        getBodyRowCells(row).forEach((cell) => {
+          updatePart(cell, row === visibleRows.at(0), `first-${section}-row-cell`);
+          updatePart(cell, row === visibleRows.at(-1), `last-${section}-row-cell`);
         });
       });
     }

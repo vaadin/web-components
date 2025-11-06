@@ -220,14 +220,14 @@ snapshots["vaadin-grid basic shadow default"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer-row first-footer-row last-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
         <td
           first-column=""
           id="vaadin-grid-cell-2"
-          part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
+          part="cell footer-cell first-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -238,7 +238,7 @@ snapshots["vaadin-grid basic shadow default"] =
         <td
           id="vaadin-grid-cell-3"
           last-column=""
-          part="cell footer-cell last-column-cell first-footer-row-cell last-footer-row-cell"
+          part="cell footer-cell last-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -446,14 +446,14 @@ snapshots["vaadin-grid basic shadow selected"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer-row first-footer-row last-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
         <td
           first-column=""
           id="vaadin-grid-cell-2"
-          part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
+          part="cell footer-cell first-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -464,7 +464,7 @@ snapshots["vaadin-grid basic shadow selected"] =
         <td
           id="vaadin-grid-cell-3"
           last-column=""
-          part="cell footer-cell last-column-cell first-footer-row-cell last-footer-row-cell"
+          part="cell footer-cell last-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -671,14 +671,14 @@ snapshots["vaadin-grid basic shadow details opened"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer-row first-footer-row last-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
         <td
           first-column=""
           id="vaadin-grid-cell-2"
-          part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
+          part="cell footer-cell first-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -689,7 +689,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
         <td
           id="vaadin-grid-cell-3"
           last-column=""
-          part="cell footer-cell last-column-cell first-footer-row-cell last-footer-row-cell"
+          part="cell footer-cell last-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -1341,7 +1341,7 @@ snapshots["vaadin-grid column groups default"] =
       <tr
         aria-rowindex="1"
         hidden=""
-        part="row header-row first-header-row"
+        part="row header-row"
         role="row"
         tabindex="-1"
       >
@@ -1349,7 +1349,7 @@ snapshots["vaadin-grid column groups default"] =
           first-column=""
           id="vaadin-grid-cell-0"
           last-column=""
-          part="cell header-cell first-column-cell last-column-cell first-header-row-cell"
+          part="cell header-cell first-column-cell last-column-cell"
           role="columnheader"
           tabindex="-1"
         >
@@ -1359,14 +1359,14 @@ snapshots["vaadin-grid column groups default"] =
       </tr>
       <tr
         aria-rowindex="2"
-        part="row header-row last-header-row"
+        part="row header-row last-header-row first-header-row"
         role="row"
         tabindex="-1"
       >
         <th
           first-column=""
           id="vaadin-grid-cell-1"
-          part="cell header-cell first-column-cell last-header-row-cell"
+          part="cell header-cell first-column-cell last-header-row-cell first-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
@@ -1377,7 +1377,7 @@ snapshots["vaadin-grid column groups default"] =
         <th
           id="vaadin-grid-cell-2"
           last-column=""
-          part="cell header-cell last-column-cell last-header-row-cell"
+          part="cell header-cell last-column-cell last-header-row-cell first-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
@@ -1490,14 +1490,14 @@ snapshots["vaadin-grid column groups default"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer-row first-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
         <td
           first-column=""
           id="vaadin-grid-cell-3"
-          part="cell footer-cell first-column-cell first-footer-row-cell"
+          part="cell footer-cell first-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
@@ -1508,7 +1508,7 @@ snapshots["vaadin-grid column groups default"] =
         <td
           id="vaadin-grid-cell-4"
           last-column=""
-          part="cell footer-cell last-column-cell first-footer-row-cell"
+          part="cell footer-cell last-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
@@ -1520,7 +1520,7 @@ snapshots["vaadin-grid column groups default"] =
       <tr
         aria-rowindex="5"
         hidden=""
-        part="row footer-row last-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
@@ -1528,7 +1528,7 @@ snapshots["vaadin-grid column groups default"] =
           first-column=""
           id="vaadin-grid-cell-5"
           last-column=""
-          part="cell footer-cell first-column-cell last-column-cell last-footer-row-cell"
+          part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
           tabindex="-1"
         >
@@ -1604,7 +1604,7 @@ snapshots["vaadin-grid column groups with footer"] =
       <tr
         aria-rowindex="1"
         hidden=""
-        part="row header-row first-header-row"
+        part="row header-row"
         role="row"
         tabindex="-1"
       >
@@ -1612,7 +1612,7 @@ snapshots["vaadin-grid column groups with footer"] =
           first-column=""
           id="vaadin-grid-cell-0"
           last-column=""
-          part="cell header-cell first-column-cell last-column-cell first-header-row-cell"
+          part="cell header-cell first-column-cell last-column-cell"
           role="columnheader"
           tabindex="-1"
         >
@@ -1622,14 +1622,14 @@ snapshots["vaadin-grid column groups with footer"] =
       </tr>
       <tr
         aria-rowindex="2"
-        part="row header-row last-header-row"
+        part="row header-row last-header-row first-header-row"
         role="row"
         tabindex="-1"
       >
         <th
           first-column=""
           id="vaadin-grid-cell-1"
-          part="cell header-cell first-column-cell last-header-row-cell"
+          part="cell header-cell first-column-cell last-header-row-cell first-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
@@ -1640,7 +1640,7 @@ snapshots["vaadin-grid column groups with footer"] =
         <th
           id="vaadin-grid-cell-2"
           last-column=""
-          part="cell header-cell last-column-cell last-header-row-cell"
+          part="cell header-cell last-column-cell last-header-row-cell first-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
@@ -1753,14 +1753,14 @@ snapshots["vaadin-grid column groups with footer"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer-row first-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
         <td
           first-column=""
           id="vaadin-grid-cell-3"
-          part="cell footer-cell first-column-cell first-footer-row-cell"
+          part="cell footer-cell first-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
@@ -1771,7 +1771,7 @@ snapshots["vaadin-grid column groups with footer"] =
         <td
           id="vaadin-grid-cell-4"
           last-column=""
-          part="cell footer-cell last-column-cell first-footer-row-cell"
+          part="cell footer-cell last-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
@@ -1783,7 +1783,7 @@ snapshots["vaadin-grid column groups with footer"] =
       <tr
         aria-rowindex="5"
         hidden=""
-        part="row footer-row last-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
@@ -1791,7 +1791,7 @@ snapshots["vaadin-grid column groups with footer"] =
           first-column=""
           id="vaadin-grid-cell-5"
           last-column=""
-          part="cell footer-cell first-column-cell last-column-cell last-footer-row-cell"
+          part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
           tabindex="-1"
         >
@@ -1867,7 +1867,7 @@ snapshots["vaadin-grid column groups with header"] =
       <tr
         aria-rowindex="1"
         hidden=""
-        part="row header-row first-header-row"
+        part="row header-row"
         role="row"
         tabindex="-1"
       >
@@ -1875,7 +1875,7 @@ snapshots["vaadin-grid column groups with header"] =
           first-column=""
           id="vaadin-grid-cell-0"
           last-column=""
-          part="cell header-cell first-column-cell last-column-cell first-header-row-cell"
+          part="cell header-cell first-column-cell last-column-cell"
           role="columnheader"
           tabindex="-1"
         >
@@ -1885,14 +1885,14 @@ snapshots["vaadin-grid column groups with header"] =
       </tr>
       <tr
         aria-rowindex="2"
-        part="row header-row last-header-row"
+        part="row header-row last-header-row first-header-row"
         role="row"
         tabindex="-1"
       >
         <th
           first-column=""
           id="vaadin-grid-cell-1"
-          part="cell header-cell first-column-cell last-header-row-cell"
+          part="cell header-cell first-column-cell last-header-row-cell first-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
@@ -1903,7 +1903,7 @@ snapshots["vaadin-grid column groups with header"] =
         <th
           id="vaadin-grid-cell-2"
           last-column=""
-          part="cell header-cell last-column-cell last-header-row-cell"
+          part="cell header-cell last-column-cell last-header-row-cell first-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
@@ -2016,14 +2016,14 @@ snapshots["vaadin-grid column groups with header"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer-row first-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
         <td
           first-column=""
           id="vaadin-grid-cell-3"
-          part="cell footer-cell first-column-cell first-footer-row-cell"
+          part="cell footer-cell first-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
@@ -2034,7 +2034,7 @@ snapshots["vaadin-grid column groups with header"] =
         <td
           id="vaadin-grid-cell-4"
           last-column=""
-          part="cell footer-cell last-column-cell first-footer-row-cell"
+          part="cell footer-cell last-column-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
@@ -2046,7 +2046,7 @@ snapshots["vaadin-grid column groups with header"] =
       <tr
         aria-rowindex="5"
         hidden=""
-        part="row footer-row last-footer-row"
+        part="row footer-row"
         role="row"
         tabindex="-1"
       >
@@ -2054,7 +2054,7 @@ snapshots["vaadin-grid column groups with header"] =
           first-column=""
           id="vaadin-grid-cell-5"
           last-column=""
-          part="cell footer-cell first-column-cell last-column-cell last-footer-row-cell"
+          part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
           tabindex="-1"
         >
