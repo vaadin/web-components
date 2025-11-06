@@ -73,6 +73,10 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMix
     return avatarGroupStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     return html`

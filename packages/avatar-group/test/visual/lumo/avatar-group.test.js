@@ -20,6 +20,12 @@ describe('avatar-group', () => {
     await visualDiff(div, 'basic');
   });
 
+  it('reverse', async () => {
+    element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
+    element.setAttribute('theme', 'reverse');
+    await visualDiff(div, 'reverse');
+  });
+
   it('max-items-visible', async () => {
     element.maxItemsVisible = 3;
     element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
