@@ -69,7 +69,6 @@ export const checkable = (part, propName = part) => css`
 
   /* Baseline vertical alignment */
   :host::before {
-    content: '\\2003' / '';
     grid-row: 1;
     margin: 0;
     padding: 0;

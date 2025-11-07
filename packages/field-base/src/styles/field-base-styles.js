@@ -20,10 +20,12 @@ export const field = css`
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
     grid-template-columns: 100%;
-    grid-template-areas:
-      'label' var(--_helper-above-field, 'helper') 'baseline' 'input' var(--_helper-below-field, 'helper')
-      'error';
-    grid-template-rows: auto var(--_helper-above-field, auto) 0 1fr var(--_helper-below-field, auto) auto;
+    grid-template:
+      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr var(
+        --_helper-below-field,
+        'helper' auto
+      )
+      'error' auto;
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
@@ -56,10 +58,10 @@ export const field = css`
 
   /* Baseline alignment guide */
   :host::before {
-    content: var(--_has-label, '\\2003' / '');
+    content: '\\2003' / '';
     grid-column: 1;
-    grid-row: var(--_has-label, label / baseline) var(--_no-label, baseline);
-    align-self: end;
+    grid-row: var(--_has-label, label / baseline) var(--_no-label, label / input);
+    align-self: var(--_has-label, end) var(--_no-label, start);
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
