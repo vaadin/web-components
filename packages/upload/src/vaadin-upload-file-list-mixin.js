@@ -135,6 +135,8 @@ export const UploadFileListMixin = (superClass) =>
       // Calculate current file and remaining count
       const currentFile = items.find((f) => f.uploading);
       const completedCount = items.filter((f) => f.complete).length;
+      const errorCount = items.filter((f) => f.error).length;
+      const allComplete = items.every((f) => f.complete || f.error || f.abort);
 
       // Format bytes
       const formatBytes = (bytes) => {
@@ -145,20 +147,38 @@ export const UploadFileListMixin = (superClass) =>
         return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
       };
 
-      // Calculate ETA
-      let etaText = 'calculating...';
-      if (batchStartTime && batchLoadedBytes > 0) {
-        const elapsed = (Date.now() - batchStartTime) / 1000; // seconds
-        const bytesPerSecond = batchLoadedBytes / elapsed;
-        const remainingBytes = batchTotalBytes - batchLoadedBytes;
-        const remainingSeconds = remainingBytes / bytesPerSecond;
-
-        if (remainingSeconds < 60) {
-          etaText = `${Math.ceil(remainingSeconds)}s`;
-        } else if (remainingSeconds < 3600) {
-          etaText = `${Math.ceil(remainingSeconds / 60)}m`;
+      // Determine status text
+      let statusText;
+      if (allComplete) {
+        if (errorCount > 0) {
+          statusText = `Complete with ${errorCount} error${errorCount > 1 ? 's' : ''}`;
         } else {
-          etaText = `${Math.ceil(remainingSeconds / 3600)}h`;
+          statusText = 'All files uploaded successfully';
+        }
+      } else if (currentFile) {
+        statusText = `Uploading: ${currentFile.name}`;
+      } else {
+        statusText = 'Processing...';
+      }
+
+      // Calculate ETA
+      let etaText = '';
+      if (!allComplete) {
+        if (batchStartTime && batchLoadedBytes > 0) {
+          const elapsed = (Date.now() - batchStartTime) / 1000; // seconds
+          const bytesPerSecond = batchLoadedBytes / elapsed;
+          const remainingBytes = batchTotalBytes - batchLoadedBytes;
+          const remainingSeconds = remainingBytes / bytesPerSecond;
+
+          if (remainingSeconds < 60) {
+            etaText = `${Math.ceil(remainingSeconds)}s`;
+          } else if (remainingSeconds < 3600) {
+            etaText = `${Math.ceil(remainingSeconds / 60)}m`;
+          } else {
+            etaText = `${Math.ceil(remainingSeconds / 3600)}h`;
+          }
+        } else {
+          etaText = 'calculating...';
         }
       }
 
@@ -166,10 +186,10 @@ export const UploadFileListMixin = (superClass) =>
         html`
           <li class="batch-mode-container">
             <div class="batch-mode-info">
-              <div class="batch-mode-status"> ${currentFile ? `Uploading: ${currentFile.name}` : 'Processing...'} </div>
+              <div class="batch-mode-status">${statusText}</div>
               <div class="batch-mode-progress-text">
                 ${completedCount} of ${items.length} files • ${batchProgress}% • ${formatBytes(batchLoadedBytes)} /
-                ${formatBytes(batchTotalBytes)} • ETA: ${etaText}
+                ${formatBytes(batchTotalBytes)}${etaText ? ` • ETA: ${etaText}` : ''}
               </div>
             </div>
             <vaadin-progress-bar class="batch-mode-progress-bar" value="${batchProgress / 100}"></vaadin-progress-bar>

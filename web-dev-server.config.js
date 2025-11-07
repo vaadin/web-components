@@ -63,29 +63,14 @@ export function enforceThemePlugin(theme) {
 export function fileUploadEndpointPlugin() {
   return {
     name: 'file-upload-endpoint',
-    async serve(context) {
+    serve(context) {
       // Handle file upload endpoint
       if (context.path === '/api/fileupload' && context.request.method === 'POST') {
-        // Read the request body
-        const chunks = [];
-        try {
-          for await (const chunk of context.request) {
-            chunks.push(chunk);
-          }
-        } catch (err) {
-          console.error('Error reading upload:', err);
-        }
-        const body = Buffer.concat(chunks);
-
         // Log the upload (for demo purposes)
-        console.log(`📤 Received upload: ${body.length} bytes`);
+        console.log(`📤 Received upload request to ${context.path}`);
 
-        // Simulate processing time
-        await new Promise((resolve) => {
-          setTimeout(resolve, 100);
-        });
-
-        // Return success response
+        // Return success response immediately
+        // Note: In dev mode, we don't actually read the body, just acknowledge the upload
         return {
           status: 200,
           headers: {
@@ -94,7 +79,6 @@ export function fileUploadEndpointPlugin() {
           body: JSON.stringify({
             success: true,
             message: 'File uploaded successfully',
-            size: body.length,
           }),
         };
       }
