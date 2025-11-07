@@ -288,14 +288,19 @@ describe('toolbar controls', () => {
           });
 
           it(`should update items in ${style} popup when colorOptions property changes`, async () => {
-            rte.colorOptions = ['#000000', '#0066cc', '#008a00', '#e60000'];
+            rte.colorOptions = ['#0066cc', '#008a00', '#e60000'];
             await nextRender();
 
             getButton(style).click();
             await oneEvent(overlay, 'vaadin-overlay-open');
 
-            const button = popup.querySelectorAll('button')[1];
-            expect(button.dataset.color).to.equal(rte.colorOptions[1]);
+            popup.querySelectorAll('button').forEach((btn, i) => {
+              if (i === 0) {
+                expect(btn.dataset.color).to.equal(style === 'color' ? '#000000' : '#ffffff');
+              } else {
+                expect(btn.dataset.color).to.equal(rte.colorOptions[i - 1]);
+              }
+            });
           });
 
           it('should export all overlay parts for styling', () => {
