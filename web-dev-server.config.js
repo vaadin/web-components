@@ -59,6 +59,49 @@ export function enforceThemePlugin(theme) {
   };
 }
 
+/** @return {import('@web/dev-server').Plugin} */
+export function fileUploadEndpointPlugin() {
+  return {
+    name: 'file-upload-endpoint',
+    async serve(context) {
+      // Handle file upload endpoint
+      if (context.path === '/api/fileupload' && context.request.method === 'POST') {
+        // Read the request body
+        const chunks = [];
+        try {
+          for await (const chunk of context.request) {
+            chunks.push(chunk);
+          }
+        } catch (err) {
+          console.error('Error reading upload:', err);
+        }
+        const body = Buffer.concat(chunks);
+
+        // Log the upload (for demo purposes)
+        console.log(`📤 Received upload: ${body.length} bytes`);
+
+        // Simulate processing time
+        await new Promise((resolve) => {
+          setTimeout(resolve, 100);
+        });
+
+        // Return success response
+        return {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            success: true,
+            message: 'File uploaded successfully',
+            size: body.length,
+          }),
+        };
+      }
+    },
+  };
+}
+
 export default {
   plugins: [
     {
@@ -91,5 +134,8 @@ export default {
 
     // Lumo / Aura CSS
     ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
+
+    // File upload endpoint for testing
+    fileUploadEndpointPlugin(),
   ].filter(Boolean),
 };
