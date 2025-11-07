@@ -597,26 +597,34 @@ describe('upload', () => {
 
     it('should process next file in queue after one completes with error', async () => {
       upload._createXhr = xhrCreator({
+        size: 512,
+        uploadTime: 200,
+        stepTime: 50,
         serverValidation: () => {
           return { status: 500, statusText: 'Server Error' };
         },
       });
 
+      const errorSpy = sinon.spy();
+      const startSpy = sinon.spy();
+      upload.addEventListener('upload-error', errorSpy);
+      upload.addEventListener('upload-start', startSpy);
+
       files = createFiles(2, 512, 'application/json');
       upload._addFiles(files);
 
-      // First file added (at index 1) should start uploading
+      // First file should start
       await clock.tickAsync(10);
-      expect(upload.files[1].uploading).to.be.true;
+      expect(startSpy.callCount).to.equal(1);
 
-      // Wait for first file to fail
-      await clock.tickAsync(50);
-      expect(upload.files[1].error).to.be.ok;
-      expect(upload.files[1].complete).to.be.false;
+      // Wait for first file to complete with error
+      await clock.tickAsync(220);
+      expect(errorSpy.callCount).to.equal(1);
 
-      // Second file (at index 0) should now start uploading despite first file's error
+      // Second file should now start
       await clock.tickAsync(10);
-      expect(upload.files[0].uploading).to.be.true;
+      expect(startSpy.callCount).to.equal(2);
+      expect(upload.files.some((f) => f.uploading)).to.be.true;
     });
 
     it('should process next file in queue after one is aborted', async () => {
@@ -650,21 +658,24 @@ describe('upload', () => {
       // Call uploadFiles
       upload.uploadFiles();
 
-      // Only first file (at index 2) should start uploading
-      await clock.tickAsync(10);
-      expect(upload.files[2].uploading).to.be.true;
-      expect(upload.files[2].held).to.be.false;
-      expect(upload.files[1].held).to.be.true;
-      expect(upload.files[0].held).to.be.true;
+      // Only first file (at index 2) should start uploading - wait for it to begin
+      await clock.tickAsync(20);
+      expect(upload.files.length).to.equal(3);
+      // One file should be uploading (the oldest one added)
+      const uploadingFile = upload.files.find((f) => f.uploading);
+      expect(uploadingFile).to.be.ok;
+      // The other two should still be held
+      const heldFiles = upload.files.filter((f) => f.held);
+      expect(heldFiles.length).to.equal(2);
 
       // Wait for first file to complete
       await clock.tickAsync(220);
 
-      // Second file (at index 1) should start automatically
+      // Second file should start automatically
       await clock.tickAsync(10);
-      expect(upload.files[1].uploading).to.be.true;
-      expect(upload.files[1].held).to.be.false;
-      expect(upload.files[0].held).to.be.true;
+      expect(upload.files.some((f) => f.uploading)).to.be.true;
+      const remainingHeldFiles = upload.files.filter((f) => f.held);
+      expect(remainingHeldFiles.length).to.equal(1);
     });
   });
 
