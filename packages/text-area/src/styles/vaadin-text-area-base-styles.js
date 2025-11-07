@@ -21,6 +21,10 @@ export const textAreaStyles = css`
   [part~='clear-button'] {
     align-self: flex-start;
     position: sticky;
+    top: 0;
+  }
+
+  [part~='clear-button'] {
     top: min(0px, (24px - 1lh) / -2);
   }
 
