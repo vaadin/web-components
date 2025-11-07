@@ -15,6 +15,9 @@ export const button = css`
     -webkit-user-select: none;
     user-select: none;
     position: relative;
+    /* Ensure minimum click target (WCAG) */
+    padding: max(0px, (24px - 1lh) / 2);
+    margin: min(0px, (24px - 1lh) / -2);
   }
 
   /* Icon */
@@ -27,15 +30,6 @@ export const button = css`
     mask-size: var(--vaadin-icon-visual-size, 100%);
     mask-position: 50%;
     mask-repeat: no-repeat;
-  }
-
-  [part$='button']::after {
-    position: absolute;
-    content: '';
-    width: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
-    height: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
-    top: calc(var(--vaadin-padding-xs) * -1);
-    right: calc(var(--vaadin-padding-xs) * -1);
   }
 
   :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part~='clear-button'] {
