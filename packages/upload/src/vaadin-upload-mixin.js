@@ -664,7 +664,7 @@ export const UploadMixin = (superClass) =>
       // Set Content-Type and filename header for raw binary uploads
       if (isRawUpload && file) {
         xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-        xhr.setRequestHeader('X-Filename', file.name);
+        xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
       }
 
       if (this.timeout) {

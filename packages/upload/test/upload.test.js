@@ -593,7 +593,19 @@ describe('upload', () => {
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
         const filename = e.detail.xhr.getRequestHeader('X-Filename');
-        expect(filename).to.equal(testFile.name);
+        expect(filename).to.equal(encodeURIComponent(testFile.name));
+        done();
+      });
+      upload._uploadFile(testFile);
+    });
+
+    it('should encode special characters in X-Filename header in raw format', (done) => {
+      const testFile = createFile(1000, 'application/pdf');
+      testFile.name = 'religion åk4.pdf';
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const filename = e.detail.xhr.getRequestHeader('X-Filename');
+        expect(filename).to.equal('religion%20%C3%A5k4.pdf');
         done();
       });
       upload._uploadFile(testFile);
