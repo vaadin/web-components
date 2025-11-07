@@ -24,6 +24,10 @@ export const textAreaStyles = css`
     top: 0;
   }
 
+  [part~='clear-button'] {
+    top: min(0px, (24px - 1lh) / -2);
+  }
+
   /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
   :host([disabled]) ::slotted(textarea) {
     user-select: none;
