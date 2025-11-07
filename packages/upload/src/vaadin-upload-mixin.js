@@ -45,6 +45,9 @@ const DEFAULT_I18N = {
     start: 'Start',
     remove: 'Remove',
   },
+  batch: {
+    cancelAll: 'Cancel All',
+  },
   units: {
     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
   },
@@ -498,6 +501,7 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('file-abort', this._onFileAbort.bind(this));
       this.addEventListener('file-start', this._onFileStart.bind(this));
       this.addEventListener('file-reject', this._onFileReject.bind(this));
+      this.addEventListener('batch-cancel-all', this._onBatchCancelAll.bind(this));
       this.addEventListener('upload-start', this._onUploadStart.bind(this));
       this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
       this.addEventListener('upload-error', this._onUploadError.bind(this));
@@ -968,6 +972,17 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
+    _abortAllFiles() {
+      // Abort all files in the batch
+      const filesToAbort = [...this.files];
+      filesToAbort.forEach((file) => {
+        if (!file.complete && !file.abort) {
+          this._abortFileUpload(file);
+        }
+      });
+    }
+
+    /** @private */
     _renderFileList() {
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
@@ -1139,6 +1154,11 @@ export const UploadMixin = (superClass) =>
     /** @private */
     _onFileAbort(event) {
       this._abortFileUpload(event.detail.file);
+    }
+
+    /** @private */
+    _onBatchCancelAll() {
+      this._abortAllFiles();
     }
 
     /** @private */

@@ -193,6 +193,11 @@ export const UploadFileListMixin = (superClass) =>
         }
       }
 
+      // Handler for cancel all button
+      const handleCancelAll = () => {
+        this.dispatchEvent(new CustomEvent('batch-cancel-all', { bubbles: true, composed: true }));
+      };
+
       render(
         html`
           <li class="batch-mode-container">
@@ -202,6 +207,19 @@ export const UploadFileListMixin = (superClass) =>
                 ${completedCount} of ${items.length} files • ${batchProgress}% • ${formatBytes(batchLoadedBytes)} /
                 ${formatBytes(batchTotalBytes)}${etaText ? ` • ETA: ${etaText}` : ''}
               </div>
+            </div>
+            <div class="batch-mode-commands">
+              <button
+                type="button"
+                part="batch-cancel-all-button"
+                ?hidden="${allComplete}"
+                @click="${handleCancelAll}"
+                aria-label="${this.i18n && this.i18n.batch && this.i18n.batch.cancelAll
+                  ? this.i18n.batch.cancelAll
+                  : 'Cancel All'}"
+              >
+                ${this.i18n && this.i18n.batch && this.i18n.batch.cancelAll ? this.i18n.batch.cancelAll : 'Cancel All'}
+              </button>
             </div>
             <vaadin-progress-bar class="batch-mode-progress-bar" value="${batchProgress / 100}"></vaadin-progress-bar>
           </li>
