@@ -161,6 +161,13 @@ describe('rich-text-editor', () => {
   });
 
   describe('controls', () => {
+    it('background popup', async () => {
+      element.style.minHeight = '200px';
+      element.shadowRoot.querySelector('[part~="toolbar-button-background"]').click();
+      await oneEvent(element.querySelector('[slot="background-popup"]').$.overlay, 'vaadin-overlay-open');
+      return visualDiff(div, 'background-popup');
+    });
+
     it('color popup', async () => {
       element.style.minHeight = '200px';
       element.shadowRoot.querySelector('[part~="toolbar-button-color"]').click();

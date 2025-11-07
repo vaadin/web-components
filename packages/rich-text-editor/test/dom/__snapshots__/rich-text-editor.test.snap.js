@@ -65,354 +65,354 @@ snapshots["vaadin-rich-text-editor host"] =
   <vaadin-rich-text-editor-popup slot="color-popup">
     <button
       data-color="#000000"
-      style="background: #000000"
+      style="--_btn-background: #000000"
     >
     </button>
     <button
       data-color="#e60000"
-      style="background: #e60000"
+      style="--_btn-background: #e60000"
     >
     </button>
     <button
       data-color="#ff9900"
-      style="background: #ff9900"
+      style="--_btn-background: #ff9900"
     >
     </button>
     <button
       data-color="#ffff00"
-      style="background: #ffff00"
+      style="--_btn-background: #ffff00"
     >
     </button>
     <button
       data-color="#008a00"
-      style="background: #008a00"
+      style="--_btn-background: #008a00"
     >
     </button>
     <button
       data-color="#0066cc"
-      style="background: #0066cc"
+      style="--_btn-background: #0066cc"
     >
     </button>
     <button
       data-color="#9933ff"
-      style="background: #9933ff"
+      style="--_btn-background: #9933ff"
     >
     </button>
     <button
       data-color="#ffffff"
-      style="background: #ffffff"
+      style="--_btn-background: #ffffff"
     >
     </button>
     <button
       data-color="#facccc"
-      style="background: #facccc"
+      style="--_btn-background: #facccc"
     >
     </button>
     <button
       data-color="#ffebcc"
-      style="background: #ffebcc"
+      style="--_btn-background: #ffebcc"
     >
     </button>
     <button
       data-color="#ffffcc"
-      style="background: #ffffcc"
+      style="--_btn-background: #ffffcc"
     >
     </button>
     <button
       data-color="#cce8cc"
-      style="background: #cce8cc"
+      style="--_btn-background: #cce8cc"
     >
     </button>
     <button
       data-color="#cce0f5"
-      style="background: #cce0f5"
+      style="--_btn-background: #cce0f5"
     >
     </button>
     <button
       data-color="#ebd6ff"
-      style="background: #ebd6ff"
+      style="--_btn-background: #ebd6ff"
     >
     </button>
     <button
       data-color="#bbbbbb"
-      style="background: #bbbbbb"
+      style="--_btn-background: #bbbbbb"
     >
     </button>
     <button
       data-color="#f06666"
-      style="background: #f06666"
+      style="--_btn-background: #f06666"
     >
     </button>
     <button
       data-color="#ffc266"
-      style="background: #ffc266"
+      style="--_btn-background: #ffc266"
     >
     </button>
     <button
       data-color="#ffff66"
-      style="background: #ffff66"
+      style="--_btn-background: #ffff66"
     >
     </button>
     <button
       data-color="#66b966"
-      style="background: #66b966"
+      style="--_btn-background: #66b966"
     >
     </button>
     <button
       data-color="#66a3e0"
-      style="background: #66a3e0"
+      style="--_btn-background: #66a3e0"
     >
     </button>
     <button
       data-color="#c285ff"
-      style="background: #c285ff"
+      style="--_btn-background: #c285ff"
     >
     </button>
     <button
       data-color="#888888"
-      style="background: #888888"
+      style="--_btn-background: #888888"
     >
     </button>
     <button
       data-color="#a10000"
-      style="background: #a10000"
+      style="--_btn-background: #a10000"
     >
     </button>
     <button
       data-color="#b26b00"
-      style="background: #b26b00"
+      style="--_btn-background: #b26b00"
     >
     </button>
     <button
       data-color="#b2b200"
-      style="background: #b2b200"
+      style="--_btn-background: #b2b200"
     >
     </button>
     <button
       data-color="#006100"
-      style="background: #006100"
+      style="--_btn-background: #006100"
     >
     </button>
     <button
       data-color="#0047b2"
-      style="background: #0047b2"
+      style="--_btn-background: #0047b2"
     >
     </button>
     <button
       data-color="#6b24b2"
-      style="background: #6b24b2"
+      style="--_btn-background: #6b24b2"
     >
     </button>
     <button
       data-color="#444444"
-      style="background: #444444"
+      style="--_btn-background: #444444"
     >
     </button>
     <button
       data-color="#5c0000"
-      style="background: #5c0000"
+      style="--_btn-background: #5c0000"
     >
     </button>
     <button
       data-color="#663d00"
-      style="background: #663d00"
+      style="--_btn-background: #663d00"
     >
     </button>
     <button
       data-color="#666600"
-      style="background: #666600"
+      style="--_btn-background: #666600"
     >
     </button>
     <button
       data-color="#003700"
-      style="background: #003700"
+      style="--_btn-background: #003700"
     >
     </button>
     <button
       data-color="#002966"
-      style="background: #002966"
+      style="--_btn-background: #002966"
     >
     </button>
     <button
       data-color="#3d1466"
-      style="background: #3d1466"
+      style="--_btn-background: #3d1466"
     >
     </button>
   </vaadin-rich-text-editor-popup>
   <vaadin-rich-text-editor-popup slot="background-popup">
     <button
+      data-color="#ffffff"
+      style="--_btn-background: #ffffff"
+    >
+    </button>
+    <button
       data-color="#000000"
-      style="background: #000000"
+      style="--_btn-background: #000000"
     >
     </button>
     <button
       data-color="#e60000"
-      style="background: #e60000"
+      style="--_btn-background: #e60000"
     >
     </button>
     <button
       data-color="#ff9900"
-      style="background: #ff9900"
+      style="--_btn-background: #ff9900"
     >
     </button>
     <button
       data-color="#ffff00"
-      style="background: #ffff00"
+      style="--_btn-background: #ffff00"
     >
     </button>
     <button
       data-color="#008a00"
-      style="background: #008a00"
+      style="--_btn-background: #008a00"
     >
     </button>
     <button
       data-color="#0066cc"
-      style="background: #0066cc"
+      style="--_btn-background: #0066cc"
     >
     </button>
     <button
       data-color="#9933ff"
-      style="background: #9933ff"
-    >
-    </button>
-    <button
-      data-color="#ffffff"
-      style="background: #ffffff"
+      style="--_btn-background: #9933ff"
     >
     </button>
     <button
       data-color="#facccc"
-      style="background: #facccc"
+      style="--_btn-background: #facccc"
     >
     </button>
     <button
       data-color="#ffebcc"
-      style="background: #ffebcc"
+      style="--_btn-background: #ffebcc"
     >
     </button>
     <button
       data-color="#ffffcc"
-      style="background: #ffffcc"
+      style="--_btn-background: #ffffcc"
     >
     </button>
     <button
       data-color="#cce8cc"
-      style="background: #cce8cc"
+      style="--_btn-background: #cce8cc"
     >
     </button>
     <button
       data-color="#cce0f5"
-      style="background: #cce0f5"
+      style="--_btn-background: #cce0f5"
     >
     </button>
     <button
       data-color="#ebd6ff"
-      style="background: #ebd6ff"
+      style="--_btn-background: #ebd6ff"
     >
     </button>
     <button
       data-color="#bbbbbb"
-      style="background: #bbbbbb"
+      style="--_btn-background: #bbbbbb"
     >
     </button>
     <button
       data-color="#f06666"
-      style="background: #f06666"
+      style="--_btn-background: #f06666"
     >
     </button>
     <button
       data-color="#ffc266"
-      style="background: #ffc266"
+      style="--_btn-background: #ffc266"
     >
     </button>
     <button
       data-color="#ffff66"
-      style="background: #ffff66"
+      style="--_btn-background: #ffff66"
     >
     </button>
     <button
       data-color="#66b966"
-      style="background: #66b966"
+      style="--_btn-background: #66b966"
     >
     </button>
     <button
       data-color="#66a3e0"
-      style="background: #66a3e0"
+      style="--_btn-background: #66a3e0"
     >
     </button>
     <button
       data-color="#c285ff"
-      style="background: #c285ff"
+      style="--_btn-background: #c285ff"
     >
     </button>
     <button
       data-color="#888888"
-      style="background: #888888"
+      style="--_btn-background: #888888"
     >
     </button>
     <button
       data-color="#a10000"
-      style="background: #a10000"
+      style="--_btn-background: #a10000"
     >
     </button>
     <button
       data-color="#b26b00"
-      style="background: #b26b00"
+      style="--_btn-background: #b26b00"
     >
     </button>
     <button
       data-color="#b2b200"
-      style="background: #b2b200"
+      style="--_btn-background: #b2b200"
     >
     </button>
     <button
       data-color="#006100"
-      style="background: #006100"
+      style="--_btn-background: #006100"
     >
     </button>
     <button
       data-color="#0047b2"
-      style="background: #0047b2"
+      style="--_btn-background: #0047b2"
     >
     </button>
     <button
       data-color="#6b24b2"
-      style="background: #6b24b2"
+      style="--_btn-background: #6b24b2"
     >
     </button>
     <button
       data-color="#444444"
-      style="background: #444444"
+      style="--_btn-background: #444444"
     >
     </button>
     <button
       data-color="#5c0000"
-      style="background: #5c0000"
+      style="--_btn-background: #5c0000"
     >
     </button>
     <button
       data-color="#663d00"
-      style="background: #663d00"
+      style="--_btn-background: #663d00"
     >
     </button>
     <button
       data-color="#666600"
-      style="background: #666600"
+      style="--_btn-background: #666600"
     >
     </button>
     <button
       data-color="#003700"
-      style="background: #003700"
+      style="--_btn-background: #003700"
     >
     </button>
     <button
       data-color="#002966"
-      style="background: #002966"
+      style="--_btn-background: #002966"
     >
     </button>
     <button
       data-color="#3d1466"
-      style="background: #3d1466"
+      style="--_btn-background: #3d1466"
     >
     </button>
   </vaadin-rich-text-editor-popup>

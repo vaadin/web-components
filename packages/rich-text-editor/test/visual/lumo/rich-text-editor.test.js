@@ -1,4 +1,4 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/rich-text-editor.css';
@@ -159,6 +159,22 @@ describe('rich-text-editor', () => {
           return visualDiff(div, `${dir}-list-ordered-indent`);
         });
       });
+    });
+  });
+
+  describe('controls', () => {
+    it('background popup', async () => {
+      element.style.minHeight = '200px';
+      element.shadowRoot.querySelector('[part~="toolbar-button-background"]').click();
+      await oneEvent(element.querySelector('[slot="background-popup"]').$.overlay, 'vaadin-overlay-open');
+      return visualDiff(div, 'background-popup');
+    });
+
+    it('color popup', async () => {
+      element.style.minHeight = '200px';
+      element.shadowRoot.querySelector('[part~="toolbar-button-color"]').click();
+      await oneEvent(element.querySelector('[slot="color-popup"]').$.overlay, 'vaadin-overlay-open');
+      return visualDiff(div, 'color-popup');
     });
   });
 });

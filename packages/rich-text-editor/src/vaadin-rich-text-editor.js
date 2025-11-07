@@ -428,7 +428,7 @@ class RichTextEditor extends RichTextEditorMixin(
 
         <vaadin-rich-text-editor-popup
           slot="color-popup"
-          .colors="${this.colorOptions}"
+          .colors="${['#000000', ...[...this.colorOptions].filter((c) => c !== '#000000')]}"
           .opened="${this._colorEditing}"
           @color-selected="${this.__onColorSelected}"
           @opened-changed="${this.__onColorEditingChanged}"
@@ -436,7 +436,7 @@ class RichTextEditor extends RichTextEditorMixin(
 
         <vaadin-rich-text-editor-popup
           slot="background-popup"
-          .colors="${this.colorOptions}"
+          .colors="${['#ffffff', ...[...this.colorOptions].filter((c) => c !== '#ffffff')]}"
           .opened="${this._backgroundEditing}"
           @color-selected="${this.__onBackgroundSelected}"
           @opened-changed="${this.__onBackgroundEditingChanged}"

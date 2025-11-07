@@ -110,7 +110,7 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
       html`
         ${colors.map(
           (color) => html`
-            <button data-color="${color}" style="background: ${color}" @click="${this._onColorClick}"></button>
+            <button data-color="${color}" style="--_btn-background: ${color}" @click="${this._onColorClick}"></button>
           `,
         )}
       `,
