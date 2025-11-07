@@ -116,8 +116,3 @@ vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])
 vaadin-app-layout[has-navbar][has-drawer] > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
   border-top-width: var(--_aura-mdl-border);
 }
-
-vaadin-app-layout[has-navbar] > :is(:not([slot]), [slot='drawer']) vaadin-drawer-toggle:not([theme~='permanent']),
-vaadin-app-layout:not([has-navbar]) > [slot='drawer'] vaadin-drawer-toggle:not([theme~='permanent']) {
-  display: none;
-}
