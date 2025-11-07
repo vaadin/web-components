@@ -77,9 +77,12 @@ export const checkable = (part, propName = part) => css`
     margin: 0;
     align-self: stretch;
     appearance: none;
-    width: 100%;
-    height: 100%;
     cursor: var(--_cursor);
+    /* Ensure minimum click target (WCAG) */
+    width: 2px;
+    height: 2px;
+    scale: 12;
+    margin: auto;
   }
 
   /* Control container (checkbox, radio button) */
