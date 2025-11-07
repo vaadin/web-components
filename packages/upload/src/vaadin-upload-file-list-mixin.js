@@ -64,17 +64,17 @@ export const UploadFileListMixin = (superClass) =>
         },
 
         /**
-         * Batch upload start timestamp.
+         * Array of progress samples for calculating upload speed.
          */
-        batchStartTime: {
-          type: Number,
+        batchProgressSamples: {
+          type: Array,
         },
       };
     }
 
     static get observers() {
       return [
-        '__updateItems(items, i18n, disabled, batchModeFileCountThreshold, batchProgress, batchTotalBytes, batchLoadedBytes, batchStartTime)',
+        '__updateItems(items, i18n, disabled, batchModeFileCountThreshold, batchProgress, batchTotalBytes, batchLoadedBytes, batchProgressSamples)',
       ];
     }
 
@@ -130,7 +130,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     _renderBatchMode() {
-      const { items, batchProgress, batchTotalBytes, batchLoadedBytes, batchStartTime } = this;
+      const { items, batchProgress, batchTotalBytes, batchLoadedBytes, batchProgressSamples } = this;
 
       // Calculate current file and remaining count
       const currentFile = items.find((f) => f.uploading);
@@ -161,21 +161,32 @@ export const UploadFileListMixin = (superClass) =>
         statusText = 'Processing...';
       }
 
-      // Calculate ETA
+      // Calculate ETA based on 10-second rolling average of upload speed
       let etaText = '';
       if (!allComplete) {
-        if (batchStartTime && batchLoadedBytes > 0) {
-          const elapsed = (Date.now() - batchStartTime) / 1000; // seconds
-          const bytesPerSecond = batchLoadedBytes / elapsed;
-          const remainingBytes = batchTotalBytes - batchLoadedBytes;
-          const remainingSeconds = remainingBytes / bytesPerSecond;
+        if (batchProgressSamples && batchProgressSamples.length >= 2) {
+          // Get oldest and newest samples from the window
+          const oldestSample = batchProgressSamples[0];
+          const newestSample = batchProgressSamples[batchProgressSamples.length - 1];
 
-          if (remainingSeconds < 60) {
-            etaText = `${Math.ceil(remainingSeconds)}s`;
-          } else if (remainingSeconds < 3600) {
-            etaText = `${Math.ceil(remainingSeconds / 60)}m`;
+          // Calculate speed based on the sample window
+          const bytesDiff = newestSample.bytes - oldestSample.bytes;
+          const timeDiff = newestSample.timestamp - oldestSample.timestamp; // milliseconds
+
+          if (timeDiff > 0 && bytesDiff > 0) {
+            const bytesPerSecond = bytesDiff / (timeDiff / 1000);
+            const remainingBytes = batchTotalBytes - batchLoadedBytes;
+            const remainingSeconds = remainingBytes / bytesPerSecond;
+
+            if (remainingSeconds < 60) {
+              etaText = `${Math.ceil(remainingSeconds)}s`;
+            } else if (remainingSeconds < 3600) {
+              etaText = `${Math.ceil(remainingSeconds / 60)}m`;
+            } else {
+              etaText = `${Math.ceil(remainingSeconds / 3600)}h`;
+            }
           } else {
-            etaText = `${Math.ceil(remainingSeconds / 3600)}h`;
+            etaText = 'calculating...';
           }
         } else {
           etaText = 'calculating...';

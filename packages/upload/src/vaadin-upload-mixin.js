@@ -382,6 +382,12 @@ export const UploadMixin = (superClass) =>
         _batchStartTime: {
           type: Number,
         },
+
+        /** @private */
+        _batchProgressSamples: {
+          type: Array,
+          value: () => [],
+        },
       };
     }
 
@@ -391,7 +397,7 @@ export const UploadMixin = (superClass) =>
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
         '__updateFileListBatchMode(_fileList, batchModeFileCountThreshold, _batchProgress)',
-        '__updateFileListBatchBytes(_fileList, _batchTotalBytes, _batchLoadedBytes, _batchStartTime)',
+        '__updateFileListBatchBytes(_fileList, _batchTotalBytes, _batchLoadedBytes, _batchProgressSamples)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -612,11 +618,11 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __updateFileListBatchBytes(list, batchTotalBytes, batchLoadedBytes, batchStartTime) {
+    __updateFileListBatchBytes(list, batchTotalBytes, batchLoadedBytes, batchProgressSamples) {
       if (list) {
         list.batchTotalBytes = batchTotalBytes;
         list.batchLoadedBytes = batchLoadedBytes;
-        list.batchStartTime = batchStartTime;
+        list.batchProgressSamples = batchProgressSamples;
       }
     }
 
@@ -990,11 +996,23 @@ export const UploadMixin = (superClass) =>
       // Initialize start time on first upload
       if (!this._batchStartTime && this.files.some((f) => f.uploading)) {
         this._batchStartTime = Date.now();
+        this._batchProgressSamples = [];
+      }
+
+      // Track progress samples for speed calculation (keep last 10 seconds)
+      if (this._batchStartTime && this._batchLoadedBytes > 0) {
+        const now = Date.now();
+        this._batchProgressSamples.push({ timestamp: now, bytes: this._batchLoadedBytes });
+
+        // Remove samples older than 10 seconds
+        const tenSecondsAgo = now - 10000;
+        this._batchProgressSamples = this._batchProgressSamples.filter((sample) => sample.timestamp > tenSecondsAgo);
       }
 
       // Reset when all complete
       if (this.files.length > 0 && this.files.every((f) => f.complete || f.error || f.abort)) {
         this._batchStartTime = null;
+        this._batchProgressSamples = [];
       }
     }
 
