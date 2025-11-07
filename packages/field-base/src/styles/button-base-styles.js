@@ -14,6 +14,7 @@ export const button = css`
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
+    position: relative;
   }
 
   /* Icon */
@@ -26,6 +27,15 @@ export const button = css`
     mask-size: var(--vaadin-icon-visual-size, 100%);
     mask-position: 50%;
     mask-repeat: no-repeat;
+  }
+
+  [part$='button']::after {
+    position: absolute;
+    content: '';
+    width: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+    height: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-padding-xs) * 2);
+    top: calc(var(--vaadin-padding-xs) * -1);
+    right: calc(var(--vaadin-padding-xs) * -1);
   }
 
   :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part~='clear-button'] {
