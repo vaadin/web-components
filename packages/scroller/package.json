@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/scroller",
-  "version": "25.0.0-beta3",
+  "version": "25.0.0-beta4",
   "publishConfig": {
     "access": "public"
   },
@@ -34,16 +34,16 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/a11y-base": "25.0.0-beta3",
-    "@vaadin/component-base": "25.0.0-beta3",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-beta3",
+    "@vaadin/a11y-base": "25.0.0-beta4",
+    "@vaadin/component-base": "25.0.0-beta4",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-beta4",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-beta3",
-    "@vaadin/test-runner-commands": "25.0.0-beta3",
+    "@vaadin/chai-plugins": "25.0.0-beta4",
+    "@vaadin/test-runner-commands": "25.0.0-beta4",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-beta3"
+    "@vaadin/vaadin-lumo-styles": "25.0.0-beta4"
   },
   "web-types": [
     "web-types.json",
