@@ -312,14 +312,14 @@ export const UploadMixin = (superClass) =>
 
         /**
          * Specifies the upload format to use when sending files to the server.
-         * - 'multipart': Send file using multipart/form-data encoding (default)
-         * - 'raw': Send file as raw binary data with the file's MIME type as Content-Type
+         * - 'raw': Send file as raw binary data with the file's MIME type as Content-Type (default)
+         * - 'multipart': Send file using multipart/form-data encoding
          * @attr {string} upload-format
          * @type {string}
          */
         uploadFormat: {
           type: String,
-          value: 'multipart',
+          value: 'raw',
         },
 
         /**
