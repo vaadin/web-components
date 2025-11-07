@@ -287,6 +287,28 @@ describe('selecting items', () => {
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
+
+      it('should not include ghost items in the dropdown after items change', async () => {
+        comboBox.opened = true;
+        await nextRender();
+
+        comboBox.selectedItems = ['lemon'];
+        comboBox.items = ['apple', 'banana', 'lemon'];
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
+      });
+
+      it('should not update topgroup when deselecting while dropdown is opened', async () => {
+        comboBox.opened = true;
+        await nextRender();
+
+        // Clear selection
+        comboBox.selectedItems = [];
+        await nextRender();
+
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+      });
     });
 
     describe('object items', () => {
@@ -369,6 +391,36 @@ describe('selecting items', () => {
         comboBox.selectedItemsOnTop = false;
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should not include ghost items in the dropdown after clearing data provider cache', async () => {
+        const allItems = ['apple', 'banana', 'lemon', 'orange'];
+        comboBox.dataProvider = (_params, callback) => {
+          callback(allItems, allItems.length);
+        };
+
+        comboBox.opened = true;
+        await nextRender();
+
+        allItems.pop(); // remove 'orange'
+        comboBox.selectedItems = ['lemon'];
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+
+        comboBox.clearCache();
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
+      });
+
+      it('should not include ghost items in the dropdown after data provider change', async () => {
+        comboBox.opened = true;
+        await nextRender();
+
+        comboBox.selectedItems = ['lemon'];
+        comboBox.dataProvider = getDataProvider(['apple', 'banana', 'lemon']);
+        await nextRender();
+
+        expectItems(['lemon', 'apple', 'banana']);
       });
     });
 
