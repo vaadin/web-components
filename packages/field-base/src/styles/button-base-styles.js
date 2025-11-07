@@ -14,7 +14,6 @@ export const button = css`
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
-    position: relative;
     /* Ensure minimum click target (WCAG) */
     padding: max(0px, (24px - 1lh) / 2);
     margin: min(0px, (24px - 1lh) / -2);
