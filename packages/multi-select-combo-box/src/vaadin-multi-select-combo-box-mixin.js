@@ -76,6 +76,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         items: {
           type: Array,
           sync: true,
+          observer: '__itemsChanged',
         },
 
         /**
@@ -252,6 +253,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         dataProvider: {
           type: Object,
           sync: true,
+          observer: '__dataProviderChanged',
         },
 
         /**
@@ -451,6 +453,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       announce(this.i18n.cleared);
     }
 
+    /** @private */
+    __syncTopGroup() {
+      this._topGroup = this.selectedItemsOnTop ? [...this.selectedItems] : [];
+    }
+
     /**
      * Clears the cached pages and reloads data from data provider when needed.
      */
@@ -458,6 +465,18 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (this.$ && this.$.comboBox) {
         this.$.comboBox.clearCache();
       }
+
+      this.__syncTopGroup();
+    }
+
+    /** @private */
+    __itemsChanged() {
+      this.__syncTopGroup();
+    }
+
+    /** @private */
+    __dataProviderChanged() {
+      this.__syncTopGroup();
     }
 
     /**
