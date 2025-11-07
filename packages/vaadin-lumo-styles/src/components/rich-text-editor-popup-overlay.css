@@ -4,6 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_rich-text-editor-popup-overlay {
+  :host {
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
   [part='overlay'] {
     margin: var(--lumo-space-xs) 0;
   }
@@ -20,8 +25,29 @@
 
   [part='content'] ::slotted(button) {
     border: none;
+    background-color: var(--_btn-background);
     width: var(--_button-size);
     height: var(--_button-size);
     margin: var(--_button-margin);
+  }
+
+  [part='content'] ::slotted(button:focus-visible) {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_focus-ring-width) * -1 + 1px);
+  }
+
+  [part='content'] ::slotted(button:first-of-type) {
+    position: relative;
+    border: solid 1px var(--lumo-contrast-10pct);
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0%,
+      transparent 47%,
+      red 50%,
+      transparent 53%,
+      transparent 100%
+    );
+    background-color: transparent;
+    background-clip: padding-box;
   }
 }
