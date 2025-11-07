@@ -89,6 +89,16 @@
   --vaadin-user-color-4: #bf16f3;
   --vaadin-user-color-5: #084391;
   --vaadin-user-color-6: #078836;
+
+  /* Base styles colors */
+  --vaadin-text-color: var(--lumo-body-text-color);
+  --vaadin-text-color-secondary: var(--lumo-secondary-text-color);
+  --vaadin-text-color-disabled: var(--lumo-disabled-text-color);
+  --vaadin-border-color: var(--lumo-contrast-30pct);
+  --vaadin-border-color-secondary: var(--lumo-contrast-10pct);
+  --vaadin-background-color: var(--lumo-base-color);
+  --vaadin-background-container: var(--lumo-contrast-5pct);
+  --vaadin-background-container-strong: var(--lumo-contrast-10pct);
 }
 
 /* forced-colors mode adjustments */
