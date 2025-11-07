@@ -19,13 +19,12 @@ export const field = css`
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
-    grid-template-columns: 100%;
     grid-template:
       'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr var(
         --_helper-below-field,
         'helper' auto
       )
-      'error' auto;
+      'error' auto / 100%;
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
