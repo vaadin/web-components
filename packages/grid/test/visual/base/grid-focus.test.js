@@ -3,8 +3,8 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-grid.js';
 import '../../../src/vaadin-grid-column-group.js';
-import { flushGrid } from '../helpers.js';
-import { users } from './users.js';
+import { flushGrid } from '../../helpers.js';
+import { users } from '../users.js';
 
 export function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

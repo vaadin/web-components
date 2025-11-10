@@ -5,8 +5,8 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/grid.css';
 import '../../../vaadin-grid.js';
 import '../../../vaadin-grid-column-group.js';
-import { flushGrid } from '../helpers.js';
-import { users } from './users.js';
+import { flushGrid } from '../../helpers.js';
+import { users } from '../users.js';
 
 describe('grid focus', () => {
   let element;
