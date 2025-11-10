@@ -168,6 +168,7 @@ describe('grid focus', () => {
     it('details opened', async () => {
       element.openItemDetails(element.items.at(-1));
       await nextRender();
+      await sendKeys({ press: 'ArrowDown' }); // ensure details row is visible
       await visualDiff(element, 'last-body-row-details-opened');
     });
 
