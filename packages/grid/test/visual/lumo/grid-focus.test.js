@@ -1,11 +1,5 @@
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/grid.css';
-import '@vaadin/vaadin-lumo-styles/components/grid-selection-column.css';
-import '@vaadin/vaadin-lumo-styles/components/grid-sort-column.css';
-import '@vaadin/vaadin-lumo-styles/components/grid-tree-column.css';
 import '../../../vaadin-grid.js';
 import '../../../vaadin-grid-column-group.js';
-import '../../../vaadin-grid-selection-column.js';
-import '../../../vaadin-grid-sort-column.js';
-import '../../../vaadin-grid-tree-column.js';
 import '../grid-focus.common.js';
