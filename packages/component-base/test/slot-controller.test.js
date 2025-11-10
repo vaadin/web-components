@@ -336,6 +336,166 @@ const runTests = (defineHelper, baseMixin) => {
     });
   });
 
+  describe('data-slot-ignore attribute', () => {
+    let defaultNode;
+
+    describe('single slot with observe enabled', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        controller = new SlotController(element, 'foo', 'div', {
+          initializer: (node) => {
+            node.textContent = 'default content';
+          },
+        });
+        element.addController(controller);
+        defaultNode = element.querySelector('[slot="foo"]');
+        // Wait for initial slotchange event
+        await nextFrame();
+      });
+
+      it('should ignore element with data-slot-ignore when checking slot children', () => {
+        const ignored = document.createElement('div');
+        ignored.setAttribute('slot', 'foo');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        const slotChildren = controller.getSlotChildren();
+        expect(slotChildren).to.not.include(ignored);
+        expect(slotChildren).to.include(defaultNode);
+      });
+
+      it('should not remove default node when element with data-slot-ignore is added', async () => {
+        const ignored = document.createElement('div');
+        ignored.setAttribute('slot', 'foo');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        await nextFrame();
+        expect(defaultNode.isConnected).to.be.true;
+        expect(defaultNode.textContent).to.equal('default content');
+      });
+
+      it('should remove default node when non-ignored element is added', async () => {
+        const ignored = document.createElement('div');
+        ignored.setAttribute('slot', 'foo');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        await nextFrame();
+        expect(defaultNode.isConnected).to.be.true;
+
+        const custom = document.createElement('div');
+        custom.setAttribute('slot', 'foo');
+        custom.textContent = 'custom';
+        element.appendChild(custom);
+
+        await nextFrame();
+        expect(defaultNode.isConnected).to.be.false;
+        expect(controller.node).to.equal(custom);
+      });
+
+      it('should not call initCustomNode for element with data-slot-ignore', async () => {
+        const initSpy = sinon.spy(controller, 'initCustomNode');
+
+        const ignored = document.createElement('div');
+        ignored.setAttribute('slot', 'foo');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        await nextFrame();
+        expect(initSpy.called).to.be.false;
+      });
+    });
+
+    describe('multiple slot with observe enabled', () => {
+      let defaultNode;
+
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        controller = new SlotController(element, '', 'div', {
+          initializer: (node) => {
+            node.textContent = 'default content';
+          },
+          multiple: true,
+        });
+        element.addController(controller);
+        defaultNode = element.querySelector(':not([slot])');
+        // Wait for initial slotchange event
+        await nextFrame();
+      });
+
+      it('should ignore element with data-slot-ignore in multiple mode', () => {
+        const ignored = document.createElement('div');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        const slotChildren = controller.getSlotChildren();
+        expect(slotChildren).to.not.include(ignored);
+        expect(slotChildren).to.include(defaultNode);
+      });
+
+      it('should not remove default node when element with data-slot-ignore is added in multiple mode', async () => {
+        const ignored = document.createElement('div');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        await nextFrame();
+        expect(defaultNode.isConnected).to.be.true;
+        expect(controller.nodes).to.include(defaultNode);
+        expect(controller.nodes).to.not.include(ignored);
+      });
+
+      it('should remove default node when non-ignored element is added in multiple mode', async () => {
+        const ignored = document.createElement('div');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        await nextFrame();
+        expect(defaultNode.isConnected).to.be.true;
+
+        const custom = document.createElement('div');
+        custom.textContent = 'custom';
+        element.appendChild(custom);
+
+        await nextFrame();
+        expect(defaultNode.isConnected).to.be.false;
+        expect(controller.nodes).to.include(custom);
+        expect(controller.nodes).to.not.include(defaultNode);
+        expect(controller.nodes).to.not.include(ignored);
+      });
+
+      it('should allow multiple custom elements alongside ignored elements', async () => {
+        const custom1 = document.createElement('div');
+        custom1.textContent = 'custom1';
+        element.appendChild(custom1);
+
+        const ignored = document.createElement('div');
+        ignored.setAttribute('data-slot-ignore', '');
+        ignored.textContent = 'ignored';
+        element.appendChild(ignored);
+
+        const custom2 = document.createElement('div');
+        custom2.textContent = 'custom2';
+        element.appendChild(custom2);
+
+        await nextFrame();
+
+        expect(defaultNode.isConnected).to.be.false;
+        expect(controller.nodes).to.have.lengthOf(2);
+        expect(controller.nodes).to.include(custom1);
+        expect(controller.nodes).to.include(custom2);
+        expect(controller.nodes).to.not.include(ignored);
+      });
+    });
+  });
+
   describe('multiple nodes', () => {
     let children, initializeSpy;
 
