@@ -9,7 +9,7 @@ import { css, unsafeCSS } from 'lit';
 // postcss-lit-disable-next-line
 export const checkable = (part, propName = part) => css`
   :host {
-    align-items: center;
+    align-items: baseline;
     column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     /*
@@ -103,6 +103,9 @@ export const checkable = (part, propName = part) => css`
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
     cursor: var(--_cursor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   :host(:is([checked], [indeterminate])) {
@@ -135,14 +138,15 @@ export const checkable = (part, propName = part) => css`
 
   /* Checked indicator (checkmark, dot) */
   [part='${unsafeCSS(part)}']::after {
-    content: '';
-    position: absolute;
+    content: '\\2003' / '';
     background: currentColor;
     border-radius: inherit;
+    display: flex;
+    align-items: center;
   }
 
   :host(:not([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
-    display: none;
+    opacity: 0;
   }
 
   @media (forced-colors: active) {
