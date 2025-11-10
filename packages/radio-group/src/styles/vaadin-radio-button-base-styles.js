@@ -17,9 +17,6 @@ const radioButton = css`
   }
 
   [part='radio']::after {
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
     width: var(--vaadin-radio-button-dot-size, var(--vaadin-radio-button-marker-size, 50%));
     height: var(--vaadin-radio-button-dot-size, var(--vaadin-radio-button-marker-size, 50%));
     border-radius: 50%;
