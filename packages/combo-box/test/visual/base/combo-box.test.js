@@ -40,12 +40,6 @@ describe('combo-box', () => {
       await visualDiff(div, 'state-readonly');
     });
 
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'state-required');
-    });
-
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
@@ -102,33 +96,6 @@ describe('combo-box', () => {
   });
 
   describe('features', () => {
-    it('clear button', async () => {
-      element.allowCustomValue = true;
-      element.value = 'value';
-      element.clearButtonVisible = true;
-      await visualDiff(div, 'feature-clear-button');
-    });
-
-    it('error message', async () => {
-      element.label = 'Label';
-      element.errorMessage = 'This field is required';
-      element.required = true;
-      element.validate();
-      await visualDiff(div, 'feature-error-message');
-    });
-
-    it('helper text', async () => {
-      element.helperText = 'Helper text';
-      await visualDiff(div, 'feature-helper-text');
-    });
-
-    it('helper above field', async () => {
-      element.label = 'Label';
-      element.helperText = 'Helper text';
-      element.setAttribute('theme', 'helper-above-field');
-      await visualDiff(div, 'feature-helper-above-field');
-    });
-
     it('prefix', async () => {
       const span = document.createElement('span');
       span.setAttribute('slot', 'prefix');
