@@ -59,12 +59,11 @@ describe('text-area', () => {
   });
 
   describe('multi-line', () => {
-    let native, container, inputField;
+    let native, inputField;
 
     beforeEach(() => {
       native = textArea.inputElement;
       inputField = textArea.shadowRoot.querySelector('[part=input-field]');
-      container = textArea.shadowRoot.querySelector('.vaadin-text-area-container');
     });
 
     it('should grow height with unwrapped text', async () => {
@@ -94,7 +93,6 @@ describe('text-area', () => {
       await nextUpdate(textArea);
 
       expect(parseFloat(window.getComputedStyle(textArea).height)).to.be.lte(100);
-      expect(parseFloat(window.getComputedStyle(container).height)).to.be.lte(100);
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.lte(100);
     });
 
@@ -102,7 +100,6 @@ describe('text-area', () => {
       textArea.style.minHeight = '125px';
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
-      expect(window.getComputedStyle(container).height).to.be.equal('125px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
 
       // Check that value modification doesn't break min-height rule
@@ -110,7 +107,6 @@ describe('text-area', () => {
       await nextUpdate(textArea);
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
-      expect(window.getComputedStyle(container).height).to.be.equal('125px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
     });
 
@@ -119,7 +115,6 @@ describe('text-area', () => {
       textArea.style.maxHeight = '175px';
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('100px');
-      expect(window.getComputedStyle(container).height).to.be.equal('100px');
 
       // Check that value modification doesn't break min-height rule
       textArea.value = `
@@ -138,7 +133,6 @@ describe('text-area', () => {
       await nextUpdate(textArea);
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
-      expect(window.getComputedStyle(container).height).to.be.equal('175px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(150);
     });
 

@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Field Baseline Alignment</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/custom-field';
+      import '@vaadin/date-time-picker';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/number-field';
+      import '@vaadin/select';
+      import '@vaadin/radio-group';
+      import '@vaadin/text-area';
+      import '@vaadin/text-field';
+
+      const select = document.querySelectorAll('vaadin-select').forEach((select) => {
+        select.items = [
+          { label: 'A', value: 'a' },
+          { label: 'B', value: 'b' },
+          { label: 'C', value: 'c' },
+        ];
+      });
+
+      document.querySelector('#flex').addEventListener('change', (e) => {
+        document.documentElement.classList.toggle('use-flex', e.target.checked);
+      });
+    </script>
+    <style>
+      .use-flex section {
+        display: flex;
+        align-items: baseline;
+        gap: 0.3em;
+
+        > * {
+          flex: none;
+        }
+
+        > span:first-child {
+          position: relative;
+          z-index: 1;
+
+          &::before {
+            content: '';
+            position: absolute;
+            width: 200vw;
+            height: 1px;
+            background: rgba(255, 0, 0, 0.612);
+            top: calc(1em + 1px);
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-checkbox id="flex" label="Use flex layout & show baseline"></vaadin-checkbox>
+    <h2 class="heading">Plain</h2>
+    <section>
+      <span>Inline text</span>
+      <vaadin-button>
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+        Button
+      </vaadin-button>
+      <vaadin-checkbox checked></vaadin-checkbox>
+      <vaadin-text-field placeholder="Text Field">
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+      <vaadin-text-area placeholder="Text Area"></vaadin-text-area>
+      <vaadin-date-time-picker date-placeholder="Date-Time" time-placeholder="Picker"></vaadin-date-time-picker>
+      <vaadin-select placeholder="Select"></vaadin-select>
+      <vaadin-checkbox-group theme="horizontal">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-checkbox-group>
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-radio-group>
+        <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+        <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+        <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
+      </vaadin-radio-group>
+      <vaadin-custom-field>
+        <vaadin-text-field placeholder="Custom"></vaadin-text-field>
+        <vaadin-number-field placeholder="Field"></vaadin-number-field>
+      </vaadin-custom-field>
+    </section>
+
+    <h2 class="heading">Labels</h2>
+    <section>
+      <span>Inline text</span>
+      <vaadin-button>
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+        Button
+      </vaadin-button>
+      <vaadin-checkbox checked label="Label"></vaadin-checkbox>
+      <vaadin-text-field placeholder="Text Field" label="Label that wraps on multiple lines">
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+      <vaadin-text-area placeholder="Text Area" label="Label"></vaadin-text-area>
+      <vaadin-date-time-picker
+        date-placeholder="Date-Time"
+        time-placeholder="Picker"
+        label="Label"
+      ></vaadin-date-time-picker>
+      <vaadin-select placeholder="Select" label="Label"></vaadin-select>
+      <vaadin-checkbox-group theme="horizontal" label="Label">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-checkbox-group label="Label">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-radio-group label="Label">
+        <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+        <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+        <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
+      </vaadin-radio-group>
+      <vaadin-custom-field label="Label that is long but doesn't wrap">
+        <vaadin-text-field placeholder="Custom"></vaadin-text-field>
+        <vaadin-number-field placeholder="Field"></vaadin-number-field>
+      </vaadin-custom-field>
+    </section>
+
+    <h2 class="heading">Helper Texts</h2>
+    <section>
+      <span>Inline text</span>
+      <vaadin-button>
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+        Button
+      </vaadin-button>
+      <vaadin-checkbox checked label="Label" helper-text="Description text"></vaadin-checkbox>
+      <vaadin-text-field
+        placeholder="Text Field"
+        label="Label that wraps on multiple lines"
+        helper-text="Description text"
+      >
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+      <vaadin-text-area placeholder="Text Area" label="Label" helper-text="Description text"></vaadin-text-area>
+      <vaadin-date-time-picker
+        date-placeholder="Date-Time"
+        time-placeholder="Picker"
+        label="Label"
+        helper-text="Description text"
+      ></vaadin-date-time-picker>
+      <vaadin-select placeholder="Select" label="Label" helper-text="Description text"></vaadin-select>
+      <vaadin-checkbox-group theme="horizontal" label="Label" helper-text="Description text">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-checkbox-group label="Label" helper-text="Description text">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-radio-group label="Label" helper-text="Description text">
+        <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+        <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+        <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
+      </vaadin-radio-group>
+      <vaadin-custom-field label="Label that is long but doesn't wrap" helper-text="Description text">
+        <vaadin-text-field placeholder="Custom"></vaadin-text-field>
+        <vaadin-number-field placeholder="Field"></vaadin-number-field>
+      </vaadin-custom-field>
+    </section>
+
+    <h2 class="heading">Helper Above Field</h2>
+    <section>
+      <span>Inline text</span>
+      <vaadin-button>
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+        Button
+      </vaadin-button>
+      <vaadin-checkbox checked label="Label" helper-text="Description text" theme="helper-above-field">
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      </vaadin-checkbox>
+      <vaadin-text-field
+        placeholder="Text Field"
+        label="Label that wraps on multiple lines"
+        helper-text="Description text"
+        theme="helper-above-field"
+      ></vaadin-text-field>
+      <vaadin-text-area
+        placeholder="Text Area"
+        label="Label"
+        helper-text="Description text"
+        theme="helper-above-field"
+      ></vaadin-text-area>
+      <vaadin-date-time-picker
+        date-placeholder="Date-Time"
+        time-placeholder="Picker"
+        label="Label"
+        helper-text="Description text"
+        theme="helper-above-field"
+      ></vaadin-date-time-picker>
+      <vaadin-select
+        placeholder="Select"
+        label="Label"
+        helper-text="Description text"
+        theme="helper-above-field"
+      ></vaadin-select>
+      <vaadin-checkbox-group theme="horizontal helper-above-field" label="Label" helper-text="Description text">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-checkbox-group label="Label" helper-text="Description text" theme="helper-above-field">
+        <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-radio-group label="Label" helper-text="Description text" theme="helper-above-field">
+        <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+        <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+        <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
+      </vaadin-radio-group>
+      <vaadin-custom-field
+        label="Label that is long but doesn't wrap"
+        helper-text="Description text"
+        theme="helper-above-field"
+      >
+        <vaadin-text-field placeholder="Custom"></vaadin-text-field>
+        <vaadin-number-field placeholder="Field"></vaadin-number-field>
+      </vaadin-custom-field>
+    </section>
+
+    <h2 class="heading">Error Messages</h2>
+    <section>
+      <span>Inline text</span>
+      <vaadin-button>
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+        Button
+      </vaadin-button>
+      <vaadin-checkbox
+        checked
+        label="Label"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      ></vaadin-checkbox>
+      <vaadin-text-field
+        placeholder="Text Field"
+        label="Label that wraps on multiple lines"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      >
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+      <vaadin-text-area
+        placeholder="Text Area"
+        label="Label"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      ></vaadin-text-area>
+      <vaadin-date-time-picker
+        date-placeholder="Date-Time"
+        time-placeholder="Picker"
+        label="Label"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      ></vaadin-date-time-picker>
+      <vaadin-select
+        placeholder="Select"
+        label="Label"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      ></vaadin-select>
+      <vaadin-checkbox-group label="Label" helper-text="Description text" invalid error-message="Something is wrong">
+        <vaadin-checkbox value="a" label="A"></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+        <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-radio-group label="Label" helper-text="Description text" invalid error-message="Something is wrong">
+        <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+        <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+        <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
+      </vaadin-radio-group>
+      <vaadin-custom-field
+        label="Label that is long but doesn't wrap"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      >
+        <vaadin-text-field placeholder="Custom"></vaadin-text-field>
+        <vaadin-number-field placeholder="Field"></vaadin-number-field>
+      </vaadin-custom-field>
+    </section>
+
+    <h2 class="heading">Mixed</h2>
+    <section>
+      <span>Inline text</span>
+      <vaadin-button>
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+        Button
+      </vaadin-button>
+      <vaadin-checkbox
+        checked
+        label="Label"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+      ></vaadin-checkbox>
+      <vaadin-text-field placeholder="Text Field" label="Label that wraps on multiple lines">
+        <vaadin-icon icon="vaadin:file" slot="prefix"></vaadin-icon>
+      </vaadin-text-field>
+      <vaadin-text-area placeholder="Text Area" helper-text="Description text"></vaadin-text-area>
+      <vaadin-date-time-picker
+        date-placeholder="Date-Time"
+        time-placeholder="Picker"
+        invalid
+        error-message="Something is wrong"
+      ></vaadin-date-time-picker>
+      <vaadin-select placeholder="Select" label="Label" invalid error-message="Something is wrong"></vaadin-select>
+      <vaadin-checkbox-group label="Label" theme="horizontal">
+        <vaadin-checkbox value="a" label="A"></vaadin-checkbox>
+        <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-radio-group label="Label" invalid error-message="Something is wrong">
+        <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+        <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+      </vaadin-radio-group>
+      <vaadin-custom-field
+        label="Label that is long but doesn't wrap"
+        helper-text="Description text"
+        invalid
+        error-message="Something is wrong"
+        theme="helper-above-field"
+      >
+        <vaadin-text-field placeholder="Custom"></vaadin-text-field>
+        <vaadin-number-field placeholder="Field"></vaadin-number-field>
+      </vaadin-custom-field>
+    </section>
+  </body>
+</html>

@@ -4,29 +4,30 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/component-base/src/styles/style-props.js';
-import { css, unsafeCSS } from 'lit';
+import { css } from 'lit';
 
-export const group = (name = 'checkbox') => css`
-  :host {
-    width: fit-content;
-    gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--vaadin-gap-xs));
+export const group = css`
+  [part='label'],
+  [part='helper-text'],
+  [part='error-message'] {
+    width: auto;
+    min-width: auto;
   }
 
-  .vaadin-group-field-container {
-    display: contents;
-  }
-
-  :host,
   [part='group-field'] {
     display: flex;
     flex-direction: column;
-  }
-
-  [part='group-field'] {
     gap: var(--vaadin-gap-xs) var(--vaadin-gap-xl);
   }
 
   :host([theme~='horizontal']) [part='group-field'] {
     flex-flow: row wrap;
+    align-items: center;
+  }
+
+  :host([has-label][theme~='horizontal']) [part='group-field'] {
+    padding: var(--vaadin-padding-container);
+    padding-inline: 0;
+    border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
   }
 `;

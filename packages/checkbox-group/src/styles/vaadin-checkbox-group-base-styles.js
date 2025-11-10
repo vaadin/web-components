@@ -6,4 +6,4 @@
 import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { group } from '@vaadin/field-base/src/styles/group-base-styles.js';
 
-export const checkboxGroupStyles = [field, group('checkbox')];
+export const checkboxGroupStyles = [field, group];
