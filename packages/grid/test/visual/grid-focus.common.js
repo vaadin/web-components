@@ -72,6 +72,7 @@ describe('grid focus', () => {
     it('last cell', async () => {
       await sendKeys({ press: 'ArrowRight' });
       await sendKeys({ press: 'End' });
+      await sendKeys({ press: 'ArrowRight' }); // ensure last cell is fully visible
       await visualDiff(element, 'first-header-row-last-cell');
     });
   });
@@ -96,6 +97,7 @@ describe('grid focus', () => {
     it('last cell', async () => {
       await sendKeys({ press: 'ArrowRight' });
       await sendKeys({ press: 'End' });
+      await sendKeys({ press: 'ArrowRight' }); // ensure last cell is fully visible
       await visualDiff(element, 'last-header-row-last-cell');
     });
   });
@@ -120,6 +122,7 @@ describe('grid focus', () => {
     it('last cell', async () => {
       await sendKeys({ press: 'ArrowRight' });
       await sendKeys({ press: 'End' });
+      await sendKeys({ press: 'ArrowRight' }); // ensure last cell is fully visible
       await visualDiff(element, 'first-body-row-last-cell');
     });
 
@@ -160,6 +163,7 @@ describe('grid focus', () => {
     it('last cell', async () => {
       await sendKeys({ press: 'ArrowRight' });
       await sendKeys({ press: 'End' });
+      await sendKeys({ press: 'ArrowRight' }); // ensure last cell is fully visible
       await visualDiff(element, 'last-body-row-last-cell');
     });
 
@@ -220,6 +224,7 @@ describe('grid focus', () => {
       await sendKeys({ press: 'ArrowLeft' });
       await sendKeys({ press: 'End' });
       await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'ArrowRight' }); // ensure last cell is fully visible
       await visualDiff(element, 'without-footer-last-body-row-cell');
     });
   });
