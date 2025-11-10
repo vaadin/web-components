@@ -173,19 +173,19 @@ export const gridStyles = css`
 
   :host([overflow~='top']) [part~='last-header-row']::before {
     content: '';
-    inset-block-end: calc(var(--_row-border-width) * -1);
-    border-block-end-style: solid;
+    bottom: calc(var(--_row-border-width) * -1);
+    border-bottom-style: solid;
   }
 
   :host([overflow~='bottom']) [part~='first-footer-row']::before,
   :host(:not([overflow~='top'])) #scroller:not([empty-state]) [part~='first-footer-row']::before {
     content: '';
-    inset-block-start: calc(var(--_row-border-width) * -1);
-    border-block-start-style: solid;
+    top: calc(var(--_row-border-width) * -1);
+    border-top-style: solid;
   }
 
   [part~='body-row'] {
-    scroll-margin-block-end: var(--_row-border-width);
+    scroll-margin-bottom: var(--_row-border-width);
   }
 
   /* stylelint-disable-next-line no-duplicate-selectors */
@@ -198,7 +198,7 @@ export const gridStyles = css`
   [part~='footer-cell']:not([part~='first-footer-row-cell']),
   [part~='body-cell']:not([part~='first-row-cell']),
   #table[has-header] [part~='first-row-cell'] {
-    border-block-start-style: solid;
+    border-top-style: solid;
   }
 
   [part~='details-opened-row-cell'],
@@ -206,7 +206,7 @@ export const gridStyles = css`
   #table[has-footer] [part~='last-row'] [part~='details-cell'],
   :host(:not([overflow~='bottom']):not([overflow~='top'])) [part~='last-row-cell'],
   :host(:not([overflow~='bottom']):not([overflow~='top'])) [part~='last-row'] [part~='details-cell'] {
-    border-block-end-style: solid;
+    border-bottom-style: solid;
   }
 
   [part~='header-cell']:not([part~='first-column-cell']),
@@ -346,11 +346,11 @@ export const gridStyles = css`
   }
 
   #table[has-header] #emptystatecell {
-    border-block-start-style: solid;
+    border-top-style: solid;
   }
 
   #table[has-footer] #emptystatecell {
-    border-block-end-style: solid;
+    border-bottom-style: solid;
   }
 
   #emptystatecell:focus-visible {
@@ -506,23 +506,23 @@ export const gridStyles = css`
 
   [part~='first-header-row-cell']::after,
   #table:not([has-header]) [part~='first-row-cell']::after {
-    inset-block-start: 0;
+    top: 0;
   }
 
   [part~='first-footer-row']::after {
-    inset-block-start: calc(var(--_row-border-width) * -1);
+    top: calc(var(--_row-border-width) * -1);
   }
 
   [part~='last-row']::after,
   [part~='last-footer-row']::after,
   [part~='last-footer-row-cell']::after {
-    inset-block-end: 0;
+    bottom: 0;
   }
 
   [part~='last-row'] [part~='details-cell']::after,
   [part~='last-row']:not([part~='details-opened-row']) [part~='last-row-cell']::after {
     :host([overflow~='top']) #table:not([has-footer]) & {
-      inset-block-end: 0;
+      bottom: 0;
     }
   }
 
