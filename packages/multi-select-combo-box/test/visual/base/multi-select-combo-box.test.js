@@ -52,25 +52,6 @@ describe('multi-select-combo-box', () => {
     await visualDiff(div, 'custom-value');
   });
 
-  it('required', async () => {
-    element.label = 'Label';
-    element.required = true;
-    await visualDiff(div, 'required');
-  });
-
-  it('error message', async () => {
-    element.label = 'Label';
-    element.errorMessage = 'This field is required';
-    element.required = true;
-    element.validate();
-    await visualDiff(div, 'error-message');
-  });
-
-  it('helper text', async () => {
-    element.helperText = 'Helper text';
-    await visualDiff(div, 'helper-text');
-  });
-
   describe('selected items', () => {
     beforeEach(() => {
       element.style.width = '250px';

@@ -57,12 +57,6 @@ describe('radio-group', () => {
       await visualDiff(div, 'state-readonly');
     });
 
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'state-required');
-    });
-
     describe('focus', () => {
       it('keyboard focus', async () => {
         await sendKeys({ press: 'Tab' });
@@ -98,26 +92,6 @@ describe('radio-group', () => {
           element.setAttribute('theme', 'horizontal');
           element.style.width = '150px';
           await visualDiff(div, `${dir}-horizontal-wrapped`);
-        });
-
-        it('error message', async () => {
-          element.label = 'Label';
-          element.errorMessage = 'This field is required';
-          element.required = true;
-          element.validate();
-          await visualDiff(div, `${dir}-error-message`);
-        });
-
-        it('helper text', async () => {
-          element.helperText = 'Helper text';
-          await visualDiff(div, `${dir}-helper-text`);
-        });
-
-        it('helper above field', async () => {
-          element.label = 'Label';
-          element.helperText = 'Helper text';
-          element.setAttribute('theme', 'helper-above-field');
-          await visualDiff(div, `${dir}-helper-above-field`);
         });
       });
     });

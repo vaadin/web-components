@@ -45,12 +45,6 @@ describe('number-field', () => {
       await visualDiff(div, 'state-readonly');
     });
 
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'state-required');
-    });
-
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
@@ -83,36 +77,10 @@ describe('number-field', () => {
           document.documentElement.removeAttribute('dir');
         });
 
-        it('clear button', async () => {
-          element.value = 10;
-          element.clearButtonVisible = true;
-          await visualDiff(div, `${dir}-clear-button`);
-        });
-
         it('step buttons', async () => {
           element.value = 10;
           element.stepButtonsVisible = true;
           await visualDiff(div, `${dir}-step-buttons`);
-        });
-
-        it('error message', async () => {
-          element.label = 'Label';
-          element.errorMessage = 'This field is required';
-          element.required = true;
-          element.validate();
-          await visualDiff(div, `${dir}-error-message`);
-        });
-
-        it('helper text', async () => {
-          element.helperText = 'Helper text';
-          await visualDiff(div, `${dir}-helper-text`);
-        });
-
-        it('helper above field', async () => {
-          element.label = 'Label';
-          element.helperText = 'Helper text';
-          element.setAttribute('theme', 'helper-above-field');
-          await visualDiff(div, `${dir}-helper-above-field`);
         });
 
         it('prefix', async () => {

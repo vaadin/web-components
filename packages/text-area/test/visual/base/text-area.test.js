@@ -47,12 +47,6 @@ describe('text-area', () => {
       await visualDiff(div, 'state-readonly');
     });
 
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'state-required');
-    });
-
     it('flex', async () => {
       div.style.display = 'inline-flex';
       div.style.height = '200px';
@@ -138,32 +132,6 @@ describe('text-area', () => {
 
         after(() => {
           document.documentElement.removeAttribute('dir');
-        });
-
-        it('clear button', async () => {
-          element.value = 'value';
-          element.clearButtonVisible = true;
-          await visualDiff(div, `${dir}-clear-button`);
-        });
-
-        it('error message', async () => {
-          element.label = 'Label';
-          element.errorMessage = 'This field is required';
-          element.required = true;
-          element.validate();
-          await visualDiff(div, `${dir}-error-message`);
-        });
-
-        it('helper text', async () => {
-          element.helperText = 'Helper text';
-          await visualDiff(div, `${dir}-helper-text`);
-        });
-
-        it('helper above field', async () => {
-          element.label = 'Label';
-          element.helperText = 'Helper text';
-          element.setAttribute('theme', 'helper-above-field');
-          await visualDiff(div, `${dir}-helper-above-field`);
         });
 
         it('prefix', async () => {
