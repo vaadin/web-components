@@ -100,7 +100,7 @@ export const field = css`
     font-weight: var(--vaadin-input-field-error-font-weight, 400);
     color: var(--vaadin-input-field-error-color, var(--vaadin-text-color));
     display: flex;
-    gap: var(--vaadin-gap-s);
+    gap: var(--vaadin-gap-xs);
   }
 
   [part='error-message']::before {
