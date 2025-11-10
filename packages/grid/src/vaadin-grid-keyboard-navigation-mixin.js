@@ -1015,9 +1015,8 @@ export const KeyboardNavigationMixin = (superClass) =>
       const dstCellRect = dstCell.getBoundingClientRect();
       const dstRow = dstCell.parentNode;
       const dstCellIndex = Array.from(dstRow.children).indexOf(dstCell);
-      const tableRect = this.$.table.getBoundingClientRect();
-      let leftBoundary = tableRect.left,
-        rightBoundary = tableRect.right;
+      let leftBoundary = this.$.table.getBoundingClientRect().left;
+      let rightBoundary = leftBoundary + this.$.table.clientWidth;
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') || isDetailsCell(cell)) {
