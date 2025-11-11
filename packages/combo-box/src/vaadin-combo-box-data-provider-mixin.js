@@ -192,6 +192,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       } else {
         this._forceNextRequest = true;
       }
+
+      if (typeof this.__syncSelectedItemOnTop === 'function') {
+        this.__syncSelectedItemOnTop();
+      }
     }
 
     /**

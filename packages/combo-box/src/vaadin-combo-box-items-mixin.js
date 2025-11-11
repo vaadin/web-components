@@ -230,6 +230,10 @@ export const ComboBoxItemsMixin = (superClass) =>
         // Only clear filteredItems if the component had items previously but got cleared
         this.filteredItems = null;
       }
+
+      if (typeof this.__syncSelectedItemOnTop === 'function') {
+        this.__syncSelectedItemOnTop();
+      }
     }
 
     /** @private */

@@ -99,6 +99,23 @@ export const ComboBoxMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * Set to true to display the selected item at the top of the overlay.
+         * @attr {boolean} selected-item-on-top
+         */
+        selectedItemOnTop: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
+        /** @private */
+        _selectedItemOnTop: {
+          type: Object,
+          observer: '_selectedItemOnTopChanged',
+          sync: true,
+        },
+
         /** @private */
         __keepOverlayOpened: {
           type: Boolean,
@@ -112,6 +129,7 @@ export const ComboBoxMixin = (superClass) =>
         '_openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
+        '__updateSelectedItemOnTop(selectedItemOnTop, selectedItem, opened)',
       ];
     }
 
@@ -508,7 +526,25 @@ export const ComboBoxMixin = (superClass) =>
      * @protected
      * @override
      */
-    _setDropdownItems(newItems) {
+    _setDropdownItems(items) {
+      if (this.filter || !this.selectedItemOnTop) {
+        this.__setDropdownItems(items);
+        return;
+      }
+
+      if (items && items.length && this._selectedItemOnTop) {
+        // Filter out the selected item from the list.
+        const filteredItems = items.filter((item) => !this._isSameItem(item, this._selectedItemOnTop));
+
+        this.__setDropdownItems([this._selectedItemOnTop].concat(filteredItems));
+        return;
+      }
+
+      this.__setDropdownItems(items);
+    }
+
+    /** @private */
+    __setDropdownItems(newItems) {
       const oldItems = this._dropdownItems;
       this._dropdownItems = newItems;
 
@@ -553,6 +589,60 @@ export const ComboBoxMixin = (superClass) =>
       }
 
       super._handleFocusOut();
+    }
+
+    /** @private */
+    __syncSelectedItemOnTop() {
+      this._selectedItemOnTop = this.selectedItemOnTop && this.selectedItem ? this.selectedItem : null;
+    }
+
+    /** @private */
+    _selectedItemOnTopChanged(selectedItemOnTop, oldSelectedItemOnTop) {
+      // Update the dropdown items whenever _selectedItemOnTop changes
+      // This includes both setting a new item on top and clearing it
+      if (selectedItemOnTop !== undefined || oldSelectedItemOnTop !== undefined) {
+        this._setDropdownItems(this.filteredItems);
+      }
+    }
+
+    /** @private */
+    __updateSelectedItemOnTop(selectedItemOnTop, selectedItem, opened) {
+      if (!selectedItemOnTop) {
+        this._selectedItemOnTop = null;
+      } else {
+        // Always update for string items or when not opened
+        // For object items with itemIdPath, only update when needed
+        if (!this.itemIdPath || !opened || this.__needToSyncSelectedItemOnTop()) {
+          this._selectedItemOnTop = selectedItem || null;
+        }
+      }
+    }
+
+    /** @private */
+    __needToSyncSelectedItemOnTop() {
+      // Only sync for object items
+      if (!this.itemIdPath) {
+        return false;
+      }
+      return (
+        this._selectedItemOnTop &&
+        this.selectedItem &&
+        this._selectedItemOnTop !== this.selectedItem &&
+        this._selectedItemOnTop[this.itemIdPath] === this.selectedItem[this.itemIdPath]
+      );
+    }
+
+    /** @private */
+    _isSameItem(item1, item2) {
+      if (!item1 || !item2) {
+        return item1 === item2;
+      }
+
+      if (this.itemIdPath) {
+        return item1[this.itemIdPath] === item2[this.itemIdPath];
+      }
+
+      return item1 === item2;
     }
 
     /**
