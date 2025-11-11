@@ -61,8 +61,8 @@
   }
 
   &[theme~='danger'] {
-    --aura-accent-light: var(--aura-red);
-    --aura-accent-dark: var(--aura-red);
+    --aura-accent-color-light: var(--aura-red);
+    --aura-accent-color-dark: var(--aura-red);
     color: var(--aura-red-text);
   }
 }
