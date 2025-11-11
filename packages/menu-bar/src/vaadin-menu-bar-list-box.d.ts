@@ -5,12 +5,13 @@
  */
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  */
-declare class MenuBarListBox extends ListMixin(DirMixin(ThemableMixin(HTMLElement))) {}
+declare class MenuBarListBox extends SlotStylesMixin(ListMixin(DirMixin(ThemableMixin(HTMLElement)))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
