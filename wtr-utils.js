@@ -170,6 +170,8 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
+  const filesGlob = argv.glob || '*';
+
   if (theme === 'base') {
     packages = packages.filter((pkg) => !pkg.includes('lumo'));
   }
@@ -177,7 +179,10 @@ const getVisualTestGroups = (packages, theme) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
-      files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
+      files: [
+        `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
+        `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
+      ],
     };
   });
 };
