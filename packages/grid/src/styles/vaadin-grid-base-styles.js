@@ -234,15 +234,19 @@ export const gridStyles = css`
   }
 
   #table:not([has-footer]) [part~='last-row'] {
-    &::after {
-      bottom: 0;
-    }
-
-    [part~='cell']:not([part~='details-opened-row-cell']) {
-      border-bottom-style: none;
-
+    :host([all-rows-visible]) &,
+    :host([overflow~='top']) &,
+    :host([overflow~='bottom']) & {
       &::after {
         bottom: 0;
+      }
+
+      [part~='cell']:not([part~='details-opened-row-cell']) {
+        border-bottom-style: none;
+
+        &::after {
+          bottom: 0;
+        }
       }
     }
   }
