@@ -105,7 +105,7 @@ vaadin-tab {
     var(--aura-accent-color-light) calc(70% - 15% * var(--aura-contrast)),
     var(--vaadin-text-color)
   );
-  --aura-accent-text-dark: color-mix(
+  --aura-accent-text-color-dark: color-mix(
     in srgb,
     var(--aura-accent-color-dark) calc(70% - 15% * var(--aura-contrast)),
     var(--vaadin-text-color)
@@ -113,7 +113,7 @@ vaadin-tab {
 
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
   --aura-accent-contrast: light-dark(var(--aura-accent-contrast-light), var(--aura-accent-contrast-dark));
-  --aura-accent-text: light-dark(var(--aura-accent-text-color-light), var(--aura-accent-text-dark));
+  --aura-accent-text: light-dark(var(--aura-accent-text-color-light), var(--aura-accent-text-color-dark));
 }
 
 @supports (color: hsl(0 0 0)) {
