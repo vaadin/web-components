@@ -1008,9 +1008,59 @@ describe('keyboard navigation', () => {
       expect(grid.shadowRoot.activeElement.parentNode.index).to.equal(grid.size - 1);
     });
 
+    ['ltr', 'rtl'].forEach((direction) => {
+      describe(`horizontal scrolling (${direction})`, () => {
+        before(() => {
+          document.documentElement.setAttribute('dir', direction);
+        });
+
+        after(() => {
+          document.documentElement.removeAttribute('dir');
+        });
+
+        beforeEach(() => {
+          grid.style.width = '100px'; // Column default min width is 100px
+          grid.$.table.style.overflow = 'scroll'; // Force scrollbars to be visible
+        });
+
+        it('should scroll cells visible with home', async () => {
+          focusItem(0);
+          grid.$.table.scrollLeft = (direction === 'ltr' ? 1 : -1) * 999999999;
+
+          flushGrid(grid);
+          home();
+          await nextFrame();
+
+          expect(grid.$.table.scrollLeft).to.equal(0);
+        });
+
+        it(`should scroll cells visible with end`, async () => {
+          await nextFrame();
+
+          focusItem(0);
+          await nextFrame();
+
+          end();
+          await nextFrame();
+
+          flushGrid(grid);
+
+          // Force reflow to workaround a Safari rendering issue
+          if (isDesktopSafari) {
+            grid.style.display = 'flex';
+            await nextFrame();
+            grid.style.display = '';
+          }
+
+          expect(Math.abs(grid.$.table.scrollLeft)).to.equal(grid.$.table.scrollWidth - grid.$.table.clientWidth);
+        });
+      });
+    });
+
     describe('horizontal scrolling', () => {
       beforeEach(() => {
         grid.style.width = '100px'; // Column default min width is 100px
+        grid.$.table.style.overflow = 'scroll'; // Force scrollbars to be visible
       });
 
       it('should scroll cells visible with right arrow on header', () => {
@@ -1062,40 +1112,8 @@ describe('keyboard navigation', () => {
         expect(grid.$.table.scrollLeft).to.equal(0);
       });
 
-      it('should scroll cells visible with home', () => {
-        focusItem(0);
-        grid.$.table.scrollLeft = 999999999;
-
-        flushGrid(grid);
-        home();
-
-        expect(grid.$.table.scrollLeft).to.equal(0);
-      });
-
-      it('should scroll cells visible with end', async () => {
-        await nextFrame();
-
-        focusItem(0);
-        await nextFrame();
-
-        end();
-        await nextFrame();
-
-        flushGrid(grid);
-
-        // Force reflow to workaround a Safari rendering issue
-        if (isDesktopSafari) {
-          grid.style.display = 'flex';
-          await nextFrame();
-          grid.style.display = '';
-        }
-
-        expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
-      });
-
       it('should scroll cell visible under from frozen cells with left arrow', async () => {
-        const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-        grid.style.width = `${200 + scrollbarWidth}px`; // Column default min width is 100px
+        grid.style.width = '200px'; // Column default min width is 100px
         grid.style.border = 'none';
         grid._columnTree[0][0].frozen = true;
 
@@ -1108,8 +1126,7 @@ describe('keyboard navigation', () => {
       });
 
       it('should scroll cell visible under from frozen to end cells with right arrow', async () => {
-        const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-        grid.style.width = `${200 + scrollbarWidth}px`; // Column default min width is 100px
+        grid.style.width = '200px'; // Column default min width is 100px
         grid.style.border = 'none';
         grid._columnTree[0][2].frozenToEnd = true;
         await aTimeout(0);
@@ -1119,7 +1136,7 @@ describe('keyboard navigation', () => {
         left();
         await aTimeout(0);
         right();
-        expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
+        expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.clientWidth);
       });
 
       it('should scroll cells visible with left arrow on footer', async () => {
