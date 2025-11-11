@@ -25,11 +25,13 @@ vaadin-side-nav-item:not([disabled])::part(content):hover {
 
 vaadin-side-nav-item[current]::part(content) {
   --_accent: light-dark(
-    oklch(from var(--aura-accent-light) calc(l + 0.2) c h / min(0.3, c / 2)),
+    oklch(from var(--aura-accent-color-light) calc(l + 0.2) c h / min(0.3, c / 2)),
     oklch(from var(--aura-accent-dark) calc(l - 0.2) c h / min(0.3, c / 2))
   );
   --_accent-border: light-dark(
-    oklch(from var(--aura-accent-light) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast))),
+    oklch(
+      from var(--aura-accent-color-light) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast))
+    ),
     oklch(from var(--aura-accent-dark) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast)))
   );
   --vaadin-side-nav-item-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
