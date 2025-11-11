@@ -65,6 +65,7 @@ export const inputContainerStyles = css`
     color: inherit;
     background: transparent;
     cursor: inherit;
+    text-align: inherit;
     caret-color: var(--vaadin-input-field-value-color);
   }
 
