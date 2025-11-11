@@ -3,7 +3,7 @@
   --aura-contrast: 1;
 
   --aura-accent-color-light: hsl(220, 80%, 47%);
-  --aura-accent-dark: hsl(220, 75%, 55%);
+  --aura-accent-color-dark: hsl(220, 75%, 55%);
 
   --_color-base: light-dark(
     oklch(from var(--aura-background-light) 0.1 calc(c / 2 + c * (1 - c)) h),
@@ -97,7 +97,7 @@ vaadin-tab {
     from var(--aura-accent-color-light) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
   );
   --aura-accent-contrast-dark: oklch(
-    from var(--aura-accent-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    from var(--aura-accent-color-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
   );
 
   --aura-accent-text-light: color-mix(
@@ -107,11 +107,11 @@ vaadin-tab {
   );
   --aura-accent-text-dark: color-mix(
     in srgb,
-    var(--aura-accent-dark) calc(70% - 15% * var(--aura-contrast)),
+    var(--aura-accent-color-dark) calc(70% - 15% * var(--aura-contrast)),
     var(--vaadin-text-color)
   );
 
-  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-dark));
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
   --aura-accent-contrast: light-dark(var(--aura-accent-contrast-light), var(--aura-accent-contrast-dark));
   --aura-accent-text: light-dark(var(--aura-accent-text-light), var(--aura-accent-text-dark));
 }

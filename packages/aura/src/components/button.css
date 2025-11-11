@@ -8,13 +8,15 @@
   position: relative;
   --_accent: light-dark(
     oklch(from var(--aura-accent-color-light) calc(l + 0.2) c h / min(0.3, c / 2)),
-    oklch(from var(--aura-accent-dark) calc(l - 0.2) c h / min(0.3, c / 2))
+    oklch(from var(--aura-accent-color-dark) calc(l - 0.2) c h / min(0.3, c / 2))
   );
   --_accent-border: light-dark(
     oklch(
       from var(--aura-accent-color-light) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast))
     ),
-    oklch(from var(--aura-accent-dark) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast)))
+    oklch(
+      from var(--aura-accent-color-dark) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast))
+    )
   );
   --_background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
 }
@@ -137,11 +139,11 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='accent'])) {
   --aura-accent-color-light: var(--aura-text-light);
-  --aura-accent-dark: var(--aura-text-dark);
+  --aura-accent-color-dark: var(--aura-text-dark);
 }
 
 /* prettier-ignore */
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):is([theme~='danger'], [theme~='error']) {
   --aura-accent-color-light: var(--aura-red);
-  --aura-accent-dark: var(--aura-red);
+  --aura-accent-color-dark: var(--aura-red);
 }
