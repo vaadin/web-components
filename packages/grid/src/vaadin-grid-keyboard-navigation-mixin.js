@@ -603,7 +603,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._scrollHorizontallyToCell(dstCell);
         }
 
-        dstCell.focus();
+        dstCell.focus({ preventScroll: true });
       }
     }
 
@@ -1015,8 +1015,10 @@ export const KeyboardNavigationMixin = (superClass) =>
       const dstCellRect = dstCell.getBoundingClientRect();
       const dstRow = dstCell.parentNode;
       const dstCellIndex = Array.from(dstRow.children).indexOf(dstCell);
-      let leftBoundary = this.$.table.getBoundingClientRect().left;
-      let rightBoundary = leftBoundary + this.$.table.clientWidth;
+      const tableRect = this.$.table.getBoundingClientRect();
+      const scrollbarWidth = this.$.table.clientWidth - this.$.table.offsetWidth;
+      let leftBoundary = tableRect.left - (this.__isRTL ? scrollbarWidth : 0);
+      let rightBoundary = tableRect.right + (this.__isRTL ? 0 : scrollbarWidth);
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') || isDetailsCell(cell)) {
@@ -1039,10 +1041,10 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       if (dstCellRect.left < leftBoundary) {
-        this.$.table.scrollLeft += Math.round(dstCellRect.left - leftBoundary);
+        this.$.table.scrollLeft += dstCellRect.left - leftBoundary;
       }
       if (dstCellRect.right > rightBoundary) {
-        this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
+        this.$.table.scrollLeft += dstCellRect.right - rightBoundary;
       }
     }
 
