@@ -1,7 +1,7 @@
 :where(:root),
 :where(:host) {
   --aura-shadow-color: light-dark(
-    oklch(from var(--aura-background-light) calc(l - l * 0.8) calc(c / 10) h / 0.2),
+    oklch(from var(--aura-background-color-light) calc(l - l * 0.8) calc(c / 10) h / 0.2),
     oklch(from var(--aura-background-dark) calc(l - l * 0.8) calc(c / 10) h / 0.2)
   );
   --aura-shadow-m: 0 8px 16px -3px var(--aura-shadow-color);
