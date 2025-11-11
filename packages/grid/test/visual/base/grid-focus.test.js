@@ -21,6 +21,10 @@ describe('grid focus', () => {
           <vaadin-grid-column data-name="Last" width="200px"></vaadin-grid-column>
         </vaadin-grid-column-group>
         <vaadin-grid-column data-name="City" width="200px"></vaadin-grid-column>
+
+        <div slot="empty-state">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.
+        </div>
       </vaadin-grid>
       <style>
         vaadin-grid {
@@ -102,6 +106,57 @@ describe('grid focus', () => {
     });
   });
 
+  describe('first footer row', () => {
+    beforeEach(async () => {
+      // Focus first footer row
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowLeft' });
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'first-footer-row');
+    });
+
+    it('first cell', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await visualDiff(element, 'first-footer-row-first-cell');
+    });
+
+    it('last cell', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'End' });
+      await visualDiff(element, 'first-footer-row-last-cell');
+    });
+  });
+
+  describe('last footer row', () => {
+    beforeEach(async () => {
+      // Focus last footer row
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowLeft' });
+      await sendKeys({ press: 'ArrowDown' });
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'last-footer-row');
+    });
+
+    it('first cell', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await visualDiff(element, 'last-footer-row-first-cell');
+    });
+
+    it('last cell', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'End' });
+      await visualDiff(element, 'last-footer-row-last-cell');
+    });
+  });
+
   describe('first body row', () => {
     beforeEach(async () => {
       // Focus first body row
@@ -168,7 +223,10 @@ describe('grid focus', () => {
     it('details opened', async () => {
       element.openItemDetails(element.items.at(-1));
       await nextRender();
-      await sendKeys({ press: 'ArrowDown' }); // ensure details row is visible
+
+      // Ensure the details row is fully visible
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
       await visualDiff(element, 'last-body-row-details-opened');
     });
 
@@ -207,23 +265,58 @@ describe('grid focus', () => {
         column.footerRenderer = null;
       });
       await nextRender();
-    });
-
-    it('last body row', async () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'ArrowLeft' });
       await sendKeys({ press: 'End' });
+    });
+
+    it('last body row', async () => {
       await visualDiff(element, 'without-footer-last-body-row');
     });
 
     it('last body row cell', async () => {
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'ArrowLeft' });
-      await sendKeys({ press: 'End' });
       await sendKeys({ press: 'ArrowRight' });
       await visualDiff(element, 'without-footer-last-body-row-cell');
+    });
+
+    it('last body row details opened', async () => {
+      element.openItemDetails(element.items.at(-1));
+      await nextRender();
+
+      // Ensure the details row is fully visible
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+      await visualDiff(element, 'without-footer-last-body-row-details-opened');
+    });
+
+    it('last body row details opened cell', async () => {
+      element.openItemDetails(element.items.at(-1));
+      await nextRender();
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'ArrowDown' });
+      await visualDiff(element, 'without-footer-last-body-row-details-opened-cell');
+    });
+  });
+
+  describe('empty state', () => {
+    beforeEach(async () => {
+      element.items = [];
+      await nextRender();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'empty-state');
+    });
+
+    it('without header and footer', async () => {
+      [...element.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group')].forEach((column) => {
+        column.headerRenderer = null;
+        column.footerRenderer = null;
+      });
+      await visualDiff(element, 'empty-state-without-header-and-footer');
     });
   });
 
