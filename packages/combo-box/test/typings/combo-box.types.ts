@@ -107,6 +107,7 @@ assertType<string>(narrowedComboBox.itemValuePath);
 assertType<boolean>(narrowedComboBox.loading);
 assertType<ComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
 assertType<TestComboBoxItem | null | undefined>(narrowedComboBox.selectedItem);
+assertType<boolean>(narrowedComboBox.selectedItemOnTop);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);
 assertType<boolean>(narrowedComboBox.disabled);

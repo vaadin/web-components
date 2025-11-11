@@ -55,6 +55,17 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
   selectedItem: TItem;
 
   /**
+   * When set to `true`, the selected item will be displayed on top of the
+   * dropdown list.
+   */
+  selectedItemOnTop: boolean;
+
+  /**
+   * The filter string used for filtering items.
+   */
+  filter: string;
+
+  /**
    * Used to propagate the `theme` attribute from the host element.
    */
   theme: string;

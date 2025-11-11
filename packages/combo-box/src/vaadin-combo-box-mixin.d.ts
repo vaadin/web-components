@@ -89,6 +89,13 @@ export declare class ComboBoxMixinClass<TItem> {
   itemIdPath: string | null | undefined;
 
   /**
+   * When set to `true`, the selected item will be displayed on top of the
+   * dropdown list while also remaining in its original position.
+   * @attr {boolean} selected-item-on-top
+   */
+  selectedItemOnTop: boolean;
+
+  /**
    * Requests an update for the content of items.
    * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
    *
