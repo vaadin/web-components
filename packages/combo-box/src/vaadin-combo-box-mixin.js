@@ -171,7 +171,7 @@ export const ComboBoxMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer', 'selectedItem', 'selectedItemOnTop'].forEach((prop) => {
+      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer', 'selectedItem', 'selectedItemOnTop', 'filter'].forEach((prop) => {
         if (props.has(prop)) {
           this._scroller[prop] = this[prop];
         }

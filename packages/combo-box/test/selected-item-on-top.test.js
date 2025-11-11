@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
-import { getAllItems, getViewportItems, setInputValue } from './helpers.js';
+import { flushComboBox, getAllItems, getViewportItems, setInputValue } from './helpers.js';
 
 describe('selected item on top', () => {
   let comboBox, input;
@@ -174,6 +174,35 @@ describe('selected item on top', () => {
       items.forEach((item) => {
         expect(item.hasAttribute('selected-item-on-top')).to.be.false;
       });
+    });
+
+    it('should remove attribute when filtering starts and restore when filter is cleared', async () => {
+      comboBox.selectedItem = 'Banana';
+      comboBox.selectedItemOnTop = true;
+      comboBox.open();
+      await nextRender();
+
+      let items = getAllItems(comboBox);
+      expect(items[0].hasAttribute('selected-item-on-top')).to.be.true;
+
+      // Start filtering
+      setInputValue(comboBox, 'err');
+      await nextRender();
+
+      items = getAllItems(comboBox);
+      items.forEach((item) => {
+        expect(item.hasAttribute('selected-item-on-top')).to.be.false;
+      });
+
+      // Clear filter
+      setInputValue(comboBox, '');
+      await nextRender();
+      flushComboBox(comboBox); // Force virtualizer to update all items
+      await nextRender();
+
+      items = getAllItems(comboBox);
+      expect(items[0].textContent.trim()).to.equal('Banana');
+      expect(items[0].hasAttribute('selected-item-on-top')).to.be.true;
     });
   });
 

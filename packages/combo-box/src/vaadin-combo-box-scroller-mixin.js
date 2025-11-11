@@ -96,6 +96,14 @@ export const ComboBoxScrollerMixin = (superClass) =>
         },
 
         /**
+         * The current filter string used to filter items.
+         */
+        filter: {
+          type: String,
+          observer: '__filterChanged',
+        },
+
+        /**
          * Function used to set a label for every combo-box item.
          */
         getItemLabel: {
@@ -278,6 +286,11 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /** @private */
+    __filterChanged() {
+      this.requestContentUpdate();
+    }
+
+    /** @private */
     __itemClassNameGeneratorChanged(generator, oldGenerator) {
       if (generator || oldGenerator) {
         this.requestContentUpdate();
@@ -347,8 +360,10 @@ export const ComboBoxScrollerMixin = (superClass) =>
       el.setAttribute('aria-posinset', index + 1);
       el.setAttribute('aria-setsize', this.items.length);
 
-      // Add attribute when item is selected and displayed on top
-      if (this.selectedItemOnTop && index === 0 && selected) {
+      // Add attribute when item is selected and displayed on top (not when filtering)
+      // Filter is considered active if it's a non-empty string
+      const isFiltering = this.filter && this.filter.length > 0;
+      if (this.selectedItemOnTop && !isFiltering && index === 0 && selected) {
         el.setAttribute('selected-item-on-top', '');
       } else {
         el.removeAttribute('selected-item-on-top');
