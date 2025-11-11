@@ -89,6 +89,13 @@ export const ComboBoxScrollerMixin = (superClass) =>
         },
 
         /**
+         * Set to true to display the selected item at the top of the overlay.
+         */
+        selectedItemOnTop: {
+          type: Boolean,
+        },
+
+        /**
          * Function used to set a label for every combo-box item.
          */
         getItemLabel: {
@@ -339,6 +346,13 @@ export const ComboBoxScrollerMixin = (superClass) =>
       el.setAttribute('aria-selected', selected.toString());
       el.setAttribute('aria-posinset', index + 1);
       el.setAttribute('aria-setsize', this.items.length);
+
+      // Add attribute when item is selected and displayed on top
+      if (this.selectedItemOnTop && index === 0 && selected) {
+        el.setAttribute('selected-item-on-top', '');
+      } else {
+        el.removeAttribute('selected-item-on-top');
+      }
 
       if (this.theme) {
         el.setAttribute('theme', this.theme);

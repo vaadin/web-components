@@ -26,4 +26,15 @@ export const comboBoxScrollerStyles = css`
   #selector > * {
     forced-color-adjust: auto;
   }
+
+  /* Divider after selected item when displayed on top */
+  ::slotted([selected-item-on-top])::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--lumo-contrast-10pct, rgba(0, 0, 0, 0.1));
+  }
 `;

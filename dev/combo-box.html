@@ -8,7 +8,14 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <vaadin-combo-box label="Country"></vaadin-combo-box>
+    <h3>Selected Item On Top with Data Provider</h3>
+    <vaadin-combo-box label="Country" selected-item-on-top></vaadin-combo-box>
+
+    <h3>Selected Item On Top with Simple Items</h3>
+    <vaadin-combo-box id="simple" label="Fruit" selected-item-on-top></vaadin-combo-box>
+
+    <h3>Default Behavior (No Selected Item On Top)</h3>
+    <vaadin-combo-box id="default" label="Fruit"></vaadin-combo-box>
 
     <script type="module">
       import '@vaadin/combo-box';
@@ -28,6 +35,17 @@
           }, 100);
         }
       };
+
+      // Simple example with items
+      const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape', 'Honeydew'];
+
+      const simpleComboBox = document.querySelector('#simple');
+      simpleComboBox.items = fruits;
+      simpleComboBox.value = 'Cherry'; // Pre-select Cherry to see it on top
+
+      const defaultComboBox = document.querySelector('#default');
+      defaultComboBox.items = fruits;
+      defaultComboBox.value = 'Cherry'; // Pre-select Cherry but not on top
     </script>
   </body>
 </html>

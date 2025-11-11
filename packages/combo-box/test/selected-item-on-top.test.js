@@ -124,6 +124,52 @@ describe('selected item on top', () => {
       const items = getViewportItems(comboBox);
       expect(items[0].textContent.trim()).to.equal('Cherry');
     });
+
+    it('should add selected-item-on-top attribute to first item when selected', async () => {
+      comboBox.selectedItem = 'Banana';
+      comboBox.selectedItemOnTop = true;
+      comboBox.open();
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      expect(items[0].hasAttribute('selected-item-on-top')).to.be.true;
+      expect(items[1].hasAttribute('selected-item-on-top')).to.be.false;
+    });
+
+    it('should remove selected-item-on-top attribute when feature is disabled', async () => {
+      comboBox.selectedItem = 'Banana';
+      comboBox.selectedItemOnTop = true;
+      comboBox.open();
+      await nextRender();
+
+      let items = getAllItems(comboBox);
+      expect(items[0].hasAttribute('selected-item-on-top')).to.be.true;
+
+      comboBox.close();
+      comboBox.selectedItemOnTop = false;
+      comboBox.open();
+      await nextRender();
+
+      items = getAllItems(comboBox);
+      expect(items[0].hasAttribute('selected-item-on-top')).to.be.false;
+      expect(items[1].hasAttribute('selected-item-on-top')).to.be.false;
+    });
+
+    it('should not add attribute when filtering', async () => {
+      comboBox.selectedItem = 'Banana';
+      comboBox.selectedItemOnTop = true;
+      comboBox.open();
+      await nextRender();
+
+      setInputValue(comboBox, 'err');
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      // Cherry and Elderberry - neither should have the attribute
+      items.forEach((item) => {
+        expect(item.hasAttribute('selected-item-on-top')).to.be.false;
+      });
+    });
   });
 
   describe('object items', () => {
