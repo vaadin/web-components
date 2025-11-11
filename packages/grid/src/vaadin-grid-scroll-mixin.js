@@ -178,13 +178,17 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      const dstRect = element.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const elementComputedStyle = getComputedStyle(element);
+      const elementTop = elementRect.top + parseInt(elementComputedStyle.scrollMarginTop || 0);
+      const elementBottom = elementRect.bottom + parseInt(elementComputedStyle.scrollMarginBottom || 0);
+
       const footerTop = this.$.footer.getBoundingClientRect().top;
       const headerBottom = this.$.header.getBoundingClientRect().bottom;
-      if (dstRect.bottom > footerTop) {
-        this.$.table.scrollTop += dstRect.bottom - footerTop;
-      } else if (dstRect.top < headerBottom) {
-        this.$.table.scrollTop -= headerBottom - dstRect.top;
+      if (elementBottom > footerTop) {
+        this.$.table.scrollTop += elementBottom - footerTop;
+      } else if (elementTop < headerBottom) {
+        this.$.table.scrollTop -= headerBottom - elementTop;
       }
     }
 
@@ -449,6 +453,16 @@ export const ScrollMixin = (superClass) =>
       if (focusedRow) {
         // Update the horizontal scroll position property of the focused row
         this.__updateRowScrollPositionProperty(focusedRow);
+      }
+
+      const lastHeaderRow = this.$.header.querySelector("[part~='last-header-row']");
+      if (lastHeaderRow) {
+        this.__updateRowScrollPositionProperty(lastHeaderRow);
+      }
+
+      const firstFooterRow = this.$.footer.querySelector("[part~='first-footer-row']");
+      if (firstFooterRow) {
+        this.__updateRowScrollPositionProperty(firstFooterRow);
       }
     }
 
