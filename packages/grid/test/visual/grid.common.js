@@ -421,4 +421,30 @@ describe('grid', () => {
       await visualDiff(element, 'empty-state');
     });
   });
+
+  describe('all rows visible', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 500px" all-rows-visible>
+          <vaadin-grid-column path="name.first" header="Header"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.querySelector('vaadin-grid-column').footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+
+      element.items = users.slice(0, 10);
+      flushGrid(element);
+      await nextRender();
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'all-rows-visible');
+    });
+
+    it('without footer', async () => {
+      element.querySelector('vaadin-grid-column').footerRenderer = null;
+      await visualDiff(element, 'all-rows-visible-without-footer');
+    });
+  });
 });
