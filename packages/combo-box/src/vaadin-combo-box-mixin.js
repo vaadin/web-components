@@ -533,10 +533,8 @@ export const ComboBoxMixin = (superClass) =>
       }
 
       if (items && items.length && this._selectedItemOnTop) {
-        // Filter out the selected item from the list.
-        const filteredItems = items.filter((item) => !this._isSameItem(item, this._selectedItemOnTop));
-
-        this.__setDropdownItems([this._selectedItemOnTop].concat(filteredItems));
+        // Add the selected item on top while keeping it in its original position too.
+        this.__setDropdownItems([this._selectedItemOnTop].concat(items));
         return;
       }
 

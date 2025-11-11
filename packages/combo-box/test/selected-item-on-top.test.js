@@ -40,7 +40,9 @@ describe('selected item on top', () => {
       const items = getViewportItems(comboBox);
       expect(items[0].textContent.trim()).to.equal('Banana');
       expect(items[1].textContent.trim()).to.equal('Apple');
-      expect(items[2].textContent.trim()).to.equal('Cherry');
+      expect(items[2].textContent.trim()).to.equal('Banana'); // Banana in original position
+      expect(items[3].textContent.trim()).to.equal('Cherry');
+      expect(items.length).to.equal(6); // 5 original items + 1 duplicate
     });
 
     it('should update position when selection changes', async () => {
@@ -60,7 +62,7 @@ describe('selected item on top', () => {
       expect(items[1].textContent.trim()).to.equal('Apple');
     });
 
-    it('should not duplicate selected item in the list', async () => {
+    it('should show selected item both on top and in original position', async () => {
       comboBox.selectedItem = 'Cherry';
       comboBox.selectedItemOnTop = true;
       comboBox.open();
@@ -68,7 +70,10 @@ describe('selected item on top', () => {
 
       const items = getViewportItems(comboBox);
       const cherryItems = items.filter((item) => item.textContent.trim() === 'Cherry');
-      expect(cherryItems.length).to.equal(1);
+      expect(cherryItems.length).to.equal(2);
+      expect(items[0].textContent.trim()).to.equal('Cherry');
+      // Cherry should also appear in its original position (index 2 in the original array)
+      expect(items[3].textContent.trim()).to.equal('Cherry');
     });
 
     it('should show all items when no item is selected', async () => {
@@ -304,8 +309,9 @@ describe('selected item on top', () => {
       await nextRender();
 
       const items = getViewportItems(comboBox);
-      expect(items.length).to.equal(1);
+      expect(items.length).to.equal(2); // Item appears both on top and in original position
       expect(items[0].textContent.trim()).to.equal('Only Item');
+      expect(items[1].textContent.trim()).to.equal('Only Item');
     });
 
     it('should handle clearing selection', async () => {
