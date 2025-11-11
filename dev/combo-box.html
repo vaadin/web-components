@@ -8,12 +8,21 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <h3>Selected Item On Top with Data Provider (Object Items)</h3>
-    <vaadin-combo-box label="Country" selected-item-on-top item-label-path="name" item-value-path="id" item-id-path="id"></vaadin-combo-box>
-    <p id="selected-country">Selected: <span></span></p>
+    <h3>Selected Item On Top with Data Provider (String Items)</h3>
+    <vaadin-combo-box
+      label="Country"
+      selected-item-on-top
+    ></vaadin-combo-box>
 
     <h3>Selected Item On Top with Simple Object Items</h3>
-    <vaadin-combo-box id="simple" label="Fruit" selected-item-on-top item-label-path="name" item-value-path="id" item-id-path="id"></vaadin-combo-box>
+    <vaadin-combo-box
+      id="simple"
+      label="Fruit"
+      selected-item-on-top
+      item-label-path="name"
+      item-value-path="id"
+      item-id-path="id"
+    ></vaadin-combo-box>
 
     <h3>Default Behavior (No Selected Item On Top)</h3>
     <vaadin-combo-box id="default" label="Fruit"></vaadin-combo-box>
@@ -37,17 +46,6 @@
           }, 100);
         }
       };
-
-      // Show selected country details
-      comboBox.addEventListener('selected-item-changed', (e) => {
-        const item = e.detail.value;
-        const span = document.querySelector('#selected-country span');
-        if (item) {
-          span.textContent = `${item.name} (ID: ${item.id})`;
-        } else {
-          span.textContent = 'None';
-        }
-      });
 
       // Object items example
       const fruits = [

@@ -235,7 +235,15 @@ export const ComboBoxScrollerMixin = (superClass) =>
       if (item instanceof ComboBoxPlaceholder) {
         return false;
       } else if (itemIdPath && item !== undefined && selectedItem !== undefined) {
-        return get(itemIdPath, item) === get(itemIdPath, selectedItem);
+        const itemId = get(itemIdPath, item);
+        const selectedItemId = get(itemIdPath, selectedItem);
+        // Only compare by ID if BOTH IDs are defined (not null or undefined)
+        // This prevents undefined === undefined from matching all items without IDs
+        if (itemId != null && selectedItemId != null) {
+          return itemId === selectedItemId;
+        }
+        // If either ID is undefined/null but itemIdPath is set,
+        // fall back to reference comparison for that specific item
       }
       return item === selectedItem;
     }

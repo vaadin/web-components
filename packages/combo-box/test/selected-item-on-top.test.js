@@ -353,6 +353,101 @@ describe('selected item on top', () => {
       expect(items.length).to.equal(1);
       expect(items[0].textContent.trim()).to.equal('Item 1');
     });
+
+    it('should work with object items and itemIdPath from data provider', async () => {
+      const objectItems = [
+        { name: 'Item 0', id: 'item-0' },
+        { name: 'Item 1', id: 'item-1' },
+        { name: 'Item 2', id: 'item-2' },
+        { name: 'Item 3', id: 'item-3' },
+        { name: 'Item 4', id: 'item-4' },
+      ];
+
+      comboBox.itemLabelPath = 'name';
+      comboBox.itemIdPath = 'id';
+      comboBox.selectedItemOnTop = true;
+
+      comboBox.dataProvider = (params, callback) => {
+        const { page, pageSize } = params;
+        const start = page * pageSize;
+        const end = start + pageSize;
+        callback(objectItems.slice(start, end), objectItems.length);
+      };
+
+      comboBox.open();
+      await nextRender();
+
+      // Select an item
+      const allItems = getAllItems(comboBox);
+      allItems[2].click();
+      await nextRender();
+
+      // Close and reopen
+      comboBox.close();
+      await nextRender();
+      comboBox.open();
+      await nextRender();
+
+      // Check that only the selected item is marked as selected, not all items
+      const itemsAfterReopen = getAllItems(comboBox);
+      const selectedItems = itemsAfterReopen.filter((item) => item.hasAttribute('selected'));
+
+      // Should have exactly 2 selected items (top and original position)
+      expect(selectedItems.length).to.equal(2);
+      expect(selectedItems[0].textContent.trim()).to.equal('Item 2');
+      expect(selectedItems[1].textContent.trim()).to.equal('Item 2');
+    });
+
+    it('should not mark all items as selected when itemIdPath is set but IDs are undefined', async () => {
+      // This test verifies the fix for a bug where setting itemIdPath on string items
+      // would cause all items to show as selected because undefined === undefined
+      const stringItems = ['Item 0', 'Item 1', 'Item 2', 'Item 3'];
+
+      // Incorrectly set itemIdPath on string items (accessing .id on strings returns undefined)
+      comboBox.itemIdPath = 'id';
+      comboBox.selectedItemOnTop = true;
+
+      comboBox.dataProvider = (params, callback) => {
+        callback(stringItems, stringItems.length);
+      };
+
+      comboBox.open();
+      await nextRender();
+
+      // Select an item
+      let allItems = getAllItems(comboBox);
+      allItems[2].click(); // Item 2
+      await nextRender();
+
+      // Reopen to check selection rendering
+      comboBox.close();
+      await nextRender();
+      comboBox.open();
+      await nextRender();
+
+      // Get items again after reopening
+      allItems = getAllItems(comboBox);
+
+      // Before the fix: all items would be selected because undefined === undefined
+      // After the fix: only the selected item should be selected (top and original position)
+      const selectedItems = allItems.filter((item) => item.hasAttribute('selected'));
+
+      // Should have exactly 2 selected items (top and original position of Item 2)
+      // NOT all 5 items (Item 2 appears twice due to selectedItemOnTop, plus Item 0, 1, 3)
+      expect(selectedItems.length).to.equal(2);
+      selectedItems.forEach((item) => {
+        expect(item.textContent.trim()).to.equal('Item 2');
+      });
+
+      // Other items should NOT be selected
+      const item0Items = allItems.filter((item) => item.textContent.trim() === 'Item 0');
+      const item1Items = allItems.filter((item) => item.textContent.trim() === 'Item 1');
+      const item3Items = allItems.filter((item) => item.textContent.trim() === 'Item 3');
+
+      item0Items.forEach((item) => expect(item.hasAttribute('selected')).to.be.false);
+      item1Items.forEach((item) => expect(item.hasAttribute('selected')).to.be.false);
+      item3Items.forEach((item) => expect(item.hasAttribute('selected')).to.be.false);
+    });
   });
 
   describe('edge cases', () => {
