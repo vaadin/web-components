@@ -171,7 +171,15 @@ export const ComboBoxMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer', 'selectedItem', 'selectedItemOnTop', 'filter'].forEach((prop) => {
+      [
+        'loading',
+        'itemIdPath',
+        'itemClassNameGenerator',
+        'renderer',
+        'selectedItem',
+        'selectedItemOnTop',
+        'filter',
+      ].forEach((prop) => {
         if (props.has(prop)) {
           this._scroller[prop] = this[prop];
         }
@@ -609,8 +617,11 @@ export const ComboBoxMixin = (superClass) =>
         this._selectedItemOnTop = null;
       } else {
         // Always update for string items or when not opened
-        // For object items with itemIdPath, only update when needed
-        if (!this.itemIdPath || !opened || this.__needToSyncSelectedItemOnTop()) {
+        // For object items with itemIdPath, update when:
+        // - not opened
+        // - _selectedItemOnTop is null (nothing on top yet)
+        // - needs sync (different reference, same ID)
+        if (!this.itemIdPath || !opened || !this._selectedItemOnTop || this.__needToSyncSelectedItemOnTop()) {
           this._selectedItemOnTop = selectedItem || null;
         }
       }

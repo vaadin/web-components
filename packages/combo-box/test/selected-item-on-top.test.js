@@ -265,6 +265,47 @@ describe('selected item on top', () => {
       items = getViewportItems(comboBox);
       expect(items[0].textContent.trim()).to.equal('Banana');
     });
+
+    it('should mark both top and original items as selected with itemIdPath', async () => {
+      comboBox.itemIdPath = 'value';
+      comboBox.selectedItemOnTop = true;
+      comboBox.selectedItem = comboBox.items[1]; // Banana
+      comboBox.open();
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      // First Banana (on top)
+      expect(items[0].textContent.trim()).to.equal('Banana');
+      expect(items[0].hasAttribute('selected')).to.be.true;
+
+      // Second Banana (in original position - index 2 after Apple)
+      expect(items[2].textContent.trim()).to.equal('Banana');
+      expect(items[2].hasAttribute('selected')).to.be.true;
+    });
+
+    it('should mark both items as selected when manually setting selectedItem with different reference', async () => {
+      comboBox.itemIdPath = 'value';
+      comboBox.selectedItemOnTop = true;
+      comboBox.open();
+      await nextRender();
+
+      // Manually set selectedItem to a NEW object with same ID as one in the list
+      const newBananaReference = { label: 'Banana', value: 'banana' };
+      comboBox.selectedItem = newBananaReference;
+      await nextRender();
+      flushComboBox(comboBox);
+      await nextRender();
+
+      const items = getAllItems(comboBox);
+      const bananaItems = items.filter((item) => item.textContent.trim() === 'Banana');
+
+      // Should have two Banana items
+      expect(bananaItems.length).to.equal(2);
+
+      // Both should be marked as selected
+      expect(bananaItems[0].hasAttribute('selected')).to.be.true;
+      expect(bananaItems[1].hasAttribute('selected')).to.be.true;
+    });
   });
 
   describe('with data provider', () => {

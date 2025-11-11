@@ -8,11 +8,12 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <h3>Selected Item On Top with Data Provider</h3>
-    <vaadin-combo-box label="Country" selected-item-on-top></vaadin-combo-box>
+    <h3>Selected Item On Top with Data Provider (Object Items)</h3>
+    <vaadin-combo-box label="Country" selected-item-on-top item-label-path="name" item-value-path="id" item-id-path="id"></vaadin-combo-box>
+    <p id="selected-country">Selected: <span></span></p>
 
-    <h3>Selected Item On Top with Simple Items</h3>
-    <vaadin-combo-box id="simple" label="Fruit" selected-item-on-top></vaadin-combo-box>
+    <h3>Selected Item On Top with Simple Object Items</h3>
+    <vaadin-combo-box id="simple" label="Fruit" selected-item-on-top item-label-path="name" item-value-path="id" item-id-path="id"></vaadin-combo-box>
 
     <h3>Default Behavior (No Selected Item On Top)</h3>
     <vaadin-combo-box id="default" label="Fruit"></vaadin-combo-box>
@@ -22,6 +23,7 @@
 
       const comboBox = document.querySelector('vaadin-combo-box');
 
+      // Data provider returns object items: { name, id }
       comboBox.dataProvider = async (params, callback) => {
         const index = params.page * params.pageSize;
         const response = await fetch(
@@ -36,15 +38,36 @@
         }
       };
 
-      // Simple example with items
-      const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape', 'Honeydew'];
+      // Show selected country details
+      comboBox.addEventListener('selected-item-changed', (e) => {
+        const item = e.detail.value;
+        const span = document.querySelector('#selected-country span');
+        if (item) {
+          span.textContent = `${item.name} (ID: ${item.id})`;
+        } else {
+          span.textContent = 'None';
+        }
+      });
+
+      // Object items example
+      const fruits = [
+        { name: 'Apple', id: 'apple', color: 'red' },
+        { name: 'Banana', id: 'banana', color: 'yellow' },
+        { name: 'Cherry', id: 'cherry', color: 'red' },
+        { name: 'Date', id: 'date', color: 'brown' },
+        { name: 'Elderberry', id: 'elderberry', color: 'purple' },
+        { name: 'Fig', id: 'fig', color: 'purple' },
+        { name: 'Grape', id: 'grape', color: 'green' },
+        { name: 'Honeydew', id: 'honeydew', color: 'green' },
+      ];
 
       const simpleComboBox = document.querySelector('#simple');
       simpleComboBox.items = fruits;
-      simpleComboBox.value = 'Cherry'; // Pre-select Cherry to see it on top
+      simpleComboBox.value = 'cherry'; // Pre-select Cherry to see it on top
 
+      // String items example
       const defaultComboBox = document.querySelector('#default');
-      defaultComboBox.items = fruits;
+      defaultComboBox.items = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape', 'Honeydew'];
       defaultComboBox.value = 'Cherry'; // Pre-select Cherry but not on top
     </script>
   </body>
