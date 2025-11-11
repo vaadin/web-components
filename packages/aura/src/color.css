@@ -7,7 +7,7 @@
 
   --_color-base: light-dark(
     oklch(from var(--aura-background-color-light) 0.1 calc(c / 2 + c * (1 - c)) h),
-    oklch(from var(--aura-background-dark) 1 c h)
+    oklch(from var(--aura-background-color-dark) 1 c h)
   );
   --aura-text-light: color-mix(in srgb, var(--_color-base) calc(90% + 5% * var(--aura-contrast)), transparent);
   --aura-text-dark: color-mix(in srgb, #fff calc(90% + 5% * var(--aura-contrast)), transparent);
@@ -24,7 +24,7 @@
 
   --_border-color-base: light-dark(
     oklch(from var(--aura-background-color-light) 0.1 c h),
-    oklch(from var(--aura-background-dark) 0.85 c h)
+    oklch(from var(--aura-background-color-dark) 0.85 c h)
   );
   --vaadin-border-color: color-mix(
     in srgb,
@@ -38,9 +38,9 @@
 
   /* Using static values (vs relative colors) for these backgrounds improves first paint rendering performance quite much (~200ms) */
   --aura-background-color-light: oklch(95% 0.005 260);
-  --aura-background-dark: oklch(20% 0.01 260);
+  --aura-background-color-dark: oklch(20% 0.01 260);
 
-  --aura-background: light-dark(var(--aura-background-color-light), var(--aura-background-dark));
+  --aura-background: light-dark(var(--aura-background-color-light), var(--aura-background-color-dark));
 
   --_bg-alt: oklch(
     from var(--aura-background) calc(l + c) min(c, c * 2 - l/20) calc(h + 180 * var(--_safari-17-deg, 1deg) * l * c * 4)
@@ -49,7 +49,7 @@
     circle at 0% 0%,
     light-dark(
       oklch(from var(--aura-background-color-light) min(1, l + c * 3) min(c, c * 3) h),
-      oklch(from var(--aura-background-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
+      oklch(from var(--aura-background-color-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
     ),
     transparent 30%
   );
