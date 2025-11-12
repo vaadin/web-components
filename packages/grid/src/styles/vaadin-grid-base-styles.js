@@ -6,8 +6,8 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
-/* stylelint-disable no-duplicate-selectors */
 export const gridStyles = css`
+  /* stylelint-disable no-duplicate-selectors */
   :host {
     display: flex;
     max-width: 100%;
