@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, keyboardEventFor, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { formatISODate, getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
@@ -333,6 +333,13 @@ describe('keyboard', () => {
 
         await sendKeys({ press: 'Escape' });
         expect(document.activeElement).to.equal(input);
+      });
+
+      it('should stop propagation on Esc when closing overlay', () => {
+        const event = keyboardEventFor('keydown', 27, [], 'Escape');
+        const spy = sinon.spy(event, 'stopPropagation');
+        datePicker.inputElement.dispatchEvent(event);
+        expect(spy.calledOnce).to.be.true;
       });
     });
   });
