@@ -81,10 +81,10 @@ export function updateState(element, attribute, value) {
 
 /**
  * @param {!HTMLElement} element
- * @param {boolean | string | null | undefined} value
  * @param {string} part
+ * @param {boolean | string | null | undefined} value
  */
-export function updatePart(element, value, part) {
+export function updatePart(element, part, value) {
   if (value || value === '') {
     addValueToAttribute(element, 'part', part);
   } else {
@@ -99,7 +99,7 @@ export function updatePart(element, value, part) {
  */
 export function updateCellsPart(cells, part, value) {
   cells.forEach((cell) => {
-    updatePart(cell, value, part);
+    updatePart(cell, part, value);
   });
 }
 
@@ -117,7 +117,7 @@ export function updateBooleanRowStates(row, states) {
     const rowPart = `${state}-row`;
 
     // Row part attribute
-    updatePart(row, value, rowPart);
+    updatePart(row, rowPart, value);
 
     // Cells part attribute
     updateCellsPart(cells, `${rowPart}-cell`, value);
@@ -140,14 +140,14 @@ export function updateStringRowStates(row, states) {
     // remove previous part from row and cells if there was any
     if (prevValue) {
       const prevRowPart = `${state}-${prevValue}-row`;
-      updatePart(row, false, prevRowPart);
+      updatePart(row, prevRowPart, false);
       updateCellsPart(cells, `${prevRowPart}-cell`, false);
     }
 
     // set new part to rows and cells if there is a value
     if (value) {
       const rowPart = `${state}-${value}-row`;
-      updatePart(row, value, rowPart);
+      updatePart(row, rowPart, value);
       updateCellsPart(cells, `${rowPart}-cell`, value);
     }
   });
@@ -166,11 +166,11 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
 
   // Remove old part from the attribute
   if (oldPart) {
-    updatePart(cell, false, oldPart);
+    updatePart(cell, oldPart, false);
   }
 
   // Add new part to the cell attribute
-  updatePart(cell, value, part || `${attribute}-cell`);
+  updatePart(cell, part || `${attribute}-cell`, value);
 }
 
 /**

@@ -757,12 +757,12 @@ export const GridMixin = (superClass) =>
     __updateHeaderFooterRowParts(section) {
       const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
       [...this.$[section].children].forEach((row) => {
-        updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
-        updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
+        updatePart(row, `first-${section}-row`, row === visibleRows.at(0));
+        updatePart(row, `last-${section}-row`, row === visibleRows.at(-1));
 
         getBodyRowCells(row).forEach((cell) => {
-          updatePart(cell, row === visibleRows.at(0), `first-${section}-row-cell`);
-          updatePart(cell, row === visibleRows.at(-1), `last-${section}-row-cell`);
+          updatePart(cell, `first-${section}-row-cell`, row === visibleRows.at(0));
+          updatePart(cell, `last-${section}-row-cell`, row === visibleRows.at(-1));
         });
       });
     }

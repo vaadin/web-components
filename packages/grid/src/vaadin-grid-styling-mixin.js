@@ -131,7 +131,7 @@ export const StylingMixin = (superClass) =>
         if (cell.__generatedParts) {
           cell.__generatedParts.forEach((partName) => {
             // Remove previously generated part names
-            updatePart(cell, null, partName);
+            updatePart(cell, partName, null);
           });
         }
         if (this.cellPartNameGenerator && !row.hasAttribute('loading')) {
@@ -140,7 +140,7 @@ export const StylingMixin = (superClass) =>
           if (cell.__generatedParts) {
             cell.__generatedParts.forEach((partName) => {
               // Add the newly generated names to part
-              updatePart(cell, true, partName);
+              updatePart(cell, partName, true);
             });
           }
         }
