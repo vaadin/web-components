@@ -20,22 +20,16 @@ export const ColumnResizingMixin = (superClass) =>
       scroller.addEventListener('touchmove', (e) => scroller.hasAttribute('column-resizing') && e.preventDefault());
 
       // Disable contextmenu on any resize separator.
-      scroller.addEventListener(
-        'contextmenu',
-        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault(),
-      );
+      scroller.addEventListener('contextmenu', (e) => e.target.part.contains('resize-handle') && e.preventDefault());
 
       // Disable native cell focus when resizing
-      scroller.addEventListener(
-        'mousedown',
-        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault(),
-      );
+      scroller.addEventListener('mousedown', (e) => e.target.part.contains('resize-handle') && e.preventDefault());
     }
 
     /** @private */
     _onHeaderTrack(e) {
       const handle = e.target;
-      if (handle.getAttribute('part') === 'resize-handle') {
+      if (handle.part.contains('resize-handle')) {
         const cell = handle.parentElement;
         let column = cell._column;
 

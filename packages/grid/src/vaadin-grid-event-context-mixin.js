@@ -40,8 +40,8 @@ export const EventContextMixin = (superClass) =>
         return context;
       }
 
-      context.section = ['body', 'header', 'footer', 'details'].find(
-        (section) => cell.getAttribute('part').indexOf(section) > -1,
+      context.section = ['body', 'header', 'footer', 'details'].find((section) =>
+        cell.getAttribute('part').includes(section),
       );
 
       if (cell._column) {

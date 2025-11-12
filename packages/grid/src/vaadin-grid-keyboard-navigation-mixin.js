@@ -6,7 +6,7 @@
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { updatePart } from './vaadin-grid-helpers.js';
 
 function isRow(element) {
   return element instanceof HTMLTableRowElement;
@@ -169,11 +169,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _focusedCellChanged(focusedCell, oldFocusedCell) {
       if (oldFocusedCell) {
-        removeValueFromAttribute(oldFocusedCell, 'part', 'focused-cell');
+        updatePart(oldFocusedCell, 'focused-cell', false);
       }
 
       if (focusedCell) {
-        addValueToAttribute(focusedCell, 'part', 'focused-cell');
+        updatePart(focusedCell, 'focused-cell', true);
       }
     }
 

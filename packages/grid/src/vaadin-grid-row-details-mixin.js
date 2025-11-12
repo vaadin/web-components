@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren } from './vaadin-grid-helpers.js';
+import { iterateChildren, updatePart } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -109,7 +109,8 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _configureDetailsCell(cell) {
-      cell.setAttribute('part', 'cell details-cell');
+      updatePart(cell, 'cell', true);
+      updatePart(cell, 'details-cell', true);
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
       cell.toggleAttribute('frozen', true);

@@ -7,7 +7,7 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
-import { updateCellState } from './vaadin-grid-helpers.js';
+import { updateCellState, updatePart } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -518,7 +518,7 @@ export const ColumnBaseMixin = (superClass) =>
 
             if (resizable) {
               const handle = document.createElement('div');
-              handle.setAttribute('part', 'resize-handle');
+              updatePart(handle, 'resize-handle', true);
               cell.appendChild(handle);
             }
           }
