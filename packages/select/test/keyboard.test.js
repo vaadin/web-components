@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, keyboardEventFor, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-select.js';
@@ -110,6 +110,18 @@ describe('keyboard', () => {
 
       expect(select.hasAttribute('focus-ring')).to.be.true;
       expect(valueButton.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should stop propagation on Esc when closing overlay', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'Enter' });
+      await nextRender();
+
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const spy = sinon.spy(event, 'stopPropagation');
+      menu.dispatchEvent(event);
+      expect(spy.calledOnce).to.be.true;
     });
   });
 
