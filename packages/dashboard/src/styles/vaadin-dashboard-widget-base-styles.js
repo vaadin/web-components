@@ -95,7 +95,10 @@ const widgetStyles = css`
 
   /* Widget parts */
   header {
-    padding: var(--vaadin-dashboard-widget-header-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
+    padding: var(
+      --vaadin-dashboard-widget-header-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
   }
 
   :host([editable]) header {

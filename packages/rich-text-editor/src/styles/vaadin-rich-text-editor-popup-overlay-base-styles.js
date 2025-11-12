@@ -13,7 +13,10 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-st
 
 export const richTextEditorPopupOverlay = css`
   [part='overlay'] {
-    padding: var(--vaadin-rich-text-editor-overlay-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
+    padding: var(
+      --vaadin-rich-text-editor-overlay-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
   }
 
   [part='content'] {

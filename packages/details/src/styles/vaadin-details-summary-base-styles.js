@@ -24,7 +24,10 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
     height: var(--${unsafeCSS(partName)}-height, auto);
     outline: calc(var(--vaadin-focus-ring-width) * var(--_focus-ring, 0)) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
-    padding: var(--${unsafeCSS(partName)}-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
+    padding: var(
+      --${unsafeCSS(partName)}-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;

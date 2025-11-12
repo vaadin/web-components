@@ -40,8 +40,8 @@ addGlobalThemeStyles(
         --vaadin-padding-m: 12px;
         --vaadin-padding-l: 16px;
         --vaadin-padding-xl: 24px;
-        --vaadin-padding-block: var(--vaadin-padding-xs);
-        --vaadin-padding-inline: var(--vaadin-padding-s);
+        --vaadin-padding-block-container: var(--vaadin-padding-xs);
+        --vaadin-padding-inline-container: var(--vaadin-padding-s);
 
         /* Gap/spacing */
         --vaadin-gap-xs: 6px;

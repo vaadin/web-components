@@ -9,7 +9,10 @@ import { css } from 'lit';
 export const textAreaStyles = css`
   [part='input-field'] {
     overflow: auto;
-    scroll-padding: var(--vaadin-input-field-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
+    scroll-padding: var(
+      --vaadin-input-field-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
   }
 
   ::slotted(textarea) {

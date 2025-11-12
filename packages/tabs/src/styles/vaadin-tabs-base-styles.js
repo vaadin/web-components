@@ -49,7 +49,7 @@ export const tabsStyles = css`
     cursor: var(--vaadin-clickable-cursor);
     box-sizing: border-box;
     height: 100%;
-    padding: var(--vaadin-tab-padding, var(--vaadin-padding-block) var(--vaadin-padding-inline));
+    padding: var(--vaadin-tab-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
     background: var(--vaadin-background-color);
     display: flex;
     align-items: center;
