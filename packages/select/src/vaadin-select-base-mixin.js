@@ -324,6 +324,21 @@ export const SelectBaseMixin = (superClass) =>
       this.opened = !this.readonly;
     }
 
+    /**
+     * Override an event listener from `KeyboardMixin`
+     * stop propagation when closing overlay on Escape.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onEscape(event) {
+      if (this.opened) {
+        event.stopPropagation();
+        this.opened = false;
+      }
+    }
+
     /** @private */
     _onToggleMouseDown(event) {
       // Prevent mousedown event to avoid blur and preserve focused state
@@ -343,6 +358,8 @@ export const SelectBaseMixin = (superClass) =>
      * @override
      */
     _onKeyDown(e) {
+      super._onKeyDown(e);
+
       if (e.target === this.focusElement && !this.readonly && !this.disabled && !this.opened) {
         if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
           e.preventDefault();
