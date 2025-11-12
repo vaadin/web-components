@@ -5,7 +5,6 @@
  */
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * Returns the cells of the given row, excluding the details cell.
@@ -85,11 +84,7 @@ export function updateState(element, attribute, value) {
  * @param {boolean | string | null | undefined} value
  */
 export function updatePart(element, part, value) {
-  if (value || value === '') {
-    addValueToAttribute(element, 'part', part);
-  } else {
-    removeValueFromAttribute(element, 'part', part);
-  }
+  element.part.toggle(part, value || value === '');
 }
 
 /**
