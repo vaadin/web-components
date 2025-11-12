@@ -238,16 +238,13 @@ export const gridStyles = css`
     :host([all-rows-visible]) &,
     :host([overflow~='top']) &,
     :host([overflow~='bottom']) & {
-      &::after {
+      &::after,
+      [part~='cell']:not([part~='details-opened-row-cell'])::after {
         bottom: 0;
       }
 
       [part~='cell']:not([part~='details-opened-row-cell']) {
         border-bottom-style: none;
-
-        &::after {
-          bottom: 0;
-        }
       }
     }
   }
@@ -270,10 +267,7 @@ export const gridStyles = css`
   }
 
   [part~='last-footer-row'] {
-    &::after {
-      bottom: 0;
-    }
-
+    &::after,
     [part~='cell']::after {
       bottom: 0;
     }
