@@ -567,7 +567,8 @@ export const GridMixin = (superClass) =>
                 column._emptyCells.push(cell);
               }
             }
-            cell.part.add('cell', `${section}-cell`);
+            updatePart(cell, 'cell', true);
+            updatePart(cell, `${section}-cell`, true);
           }
 
           if (!cell._content.parentElement) {
