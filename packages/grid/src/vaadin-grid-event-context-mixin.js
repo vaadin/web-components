@@ -41,7 +41,7 @@ export const EventContextMixin = (superClass) =>
       }
 
       context.section = ['body', 'header', 'footer', 'details'].find((section) =>
-        cell.getAttribute('part').includes(section),
+        cell.part.contains(`${section}-cell`),
       );
 
       if (cell._column) {
