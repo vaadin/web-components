@@ -85,6 +85,7 @@ export function updateState(element, attribute, value) {
  */
 export function updatePart(element, part, value) {
   element.part.toggle(part, value || value === '');
+  element.part.length === 0 && element.removeAttribute('part');
 }
 
 /**
