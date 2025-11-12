@@ -8,7 +8,6 @@ import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { listBoxStyles } from '@vaadin/list-box/src/styles/vaadin-list-box-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -20,13 +19,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ListMixin
- * @mixes SlotStylesMixin
  * @mixes ThemableMixin
  * @protected
  */
-class ContextMenuListBox extends SlotStylesMixin(
-  ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
-) {
+class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-context-menu-list-box';
   }
@@ -54,22 +50,6 @@ class ContextMenuListBox extends SlotStylesMixin(
    */
   get _scrollerElement() {
     return this.shadowRoot.querySelector('[part="items"]');
-  }
-
-  /** @protected */
-  get slotStyles() {
-    const listTag = this.localName;
-    const itemTag = listTag.replace('list-box', 'item');
-
-    // Needed to hide sub-menu indicator for child items if there are
-    // no nested items with a sub-menu, since we can't use :host(:has)
-    return [
-      `
-        ${listTag}:not(:has([aria-haspopup='true'])) ${itemTag}::after {
-          display: none;
-        }
-      `,
-    ];
   }
 
   /** @protected */

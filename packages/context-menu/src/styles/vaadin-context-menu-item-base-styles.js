@@ -8,7 +8,7 @@ import { css } from 'lit';
 import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 
 const menuItemStyles = css`
-  :host::after {
+  :host([aria-haspopup='true'])::after {
     background: var(--vaadin-text-color-secondary);
     content: '';
     display: block;
@@ -23,9 +23,8 @@ const menuItemStyles = css`
     rotate: 90deg;
   }
 
-  /* TODO would be nice to only reserve the space for these if
-    one or mote items in the list is checkable or has child items */
-  :host([aria-haspopup='true'])::after,
+  /* TODO would be nice to only reserve the space if
+    one or mote items in the list is checkable  */
   :host([menu-item-checked]) [part='checkmark'] {
     visibility: visible;
   }
