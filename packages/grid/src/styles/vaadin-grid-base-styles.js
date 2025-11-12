@@ -306,9 +306,15 @@ export const gridStyles = css`
   }
 
   [part~='body-cell'] {
+    --_cell-highlight-background-image: linear-gradient(
+      var(--vaadin-grid-row-highlight-background-color, transparent),
+      var(--vaadin-grid-row-highlight-background-color, transparent)
+    );
+
     background-image:
       var(--_row-hover-background-image, none), var(--_row-selected-background-image, none),
-      var(--_row-odd-background-image, none), var(--_cell-background-image, none);
+      var(--_cell-highlight-background-image, none), var(--_row-odd-background-image, none),
+      var(--_cell-background-image, none);
   }
 
   [part~='body-row'][selected] {
