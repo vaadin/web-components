@@ -7,6 +7,7 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const gridStyles = css`
+  /* stylelint-disable no-duplicate-selectors */
   :host {
     display: flex;
     max-width: 100%;
@@ -163,50 +164,113 @@ export const gridStyles = css`
 
   /* Row and cell borders */
 
-  [part~='last-header-row']::before,
-  [part~='first-footer-row']::before {
-    position: absolute;
-    inset-inline: 0;
+  [part~='row'] {
+    &::after {
+      top: 0;
+      bottom: calc(var(--_row-border-width) * -1);
+    }
+  }
+
+  [part~='cell'] {
     border-block: var(--_row-border-width) var(--_border-color);
-    transform: translateX(var(--_grid-horizontal-scroll-position));
-  }
-
-  :host([overflow~='top']) [part~='last-header-row']::before {
-    content: '';
-    bottom: calc(var(--_row-border-width) * -1);
-    border-bottom-style: solid;
-  }
-
-  :host([overflow~='bottom']) [part~='first-footer-row']::before,
-  :host(:not([overflow~='top'])) #scroller:not([empty-state]) [part~='first-footer-row']::before {
-    content: '';
-    top: calc(var(--_row-border-width) * -1);
+    border-inline: var(--_column-border-width) var(--_border-color);
     border-top-style: solid;
+
+    &::after {
+      top: calc(var(--_row-border-width) * -1);
+      bottom: calc(var(--_row-border-width) * -1);
+    }
+  }
+
+  [part~='last-header-row'],
+  [part~='first-footer-row'] {
+    &::before {
+      position: absolute;
+      inset-inline: 0;
+      border-block: var(--_row-border-width) var(--_border-color);
+      transform: translateX(var(--_grid-horizontal-scroll-position));
+    }
+  }
+
+  [part~='first-header-row'] {
+    [part~='cell'] {
+      border-top-style: none;
+    }
+
+    [part~='cell']::after {
+      top: 0;
+    }
+  }
+
+  [part~='last-header-row'] {
+    :host([overflow~='top']) &::before {
+      content: '';
+      bottom: calc(var(--_row-border-width) * -1);
+      border-bottom-style: solid;
+    }
+  }
+
+  #table:not([has-header]) [part~='first-row'] {
+    [part~='body-cell'] {
+      border-top-style: none;
+    }
+
+    [part~='body-cell']::after {
+      top: 0;
+    }
   }
 
   [part~='body-row'] {
     scroll-margin-bottom: var(--_row-border-width);
   }
 
-  /* stylelint-disable-next-line no-duplicate-selectors */
-  [part~='cell'] {
-    border-block: var(--_row-border-width) var(--_border-color);
-    border-inline: var(--_column-border-width) var(--_border-color);
+  [part~='last-row'] {
+    &::after {
+      bottom: 0;
+    }
+
+    [part~='cell']:not([part~='details-opened-row-cell']) {
+      border-bottom-style: solid;
+    }
   }
 
-  [part~='header-cell']:not([part~='first-header-row-cell']),
-  [part~='footer-cell']:not([part~='first-footer-row-cell']),
-  [part~='body-cell']:not([part~='first-row-cell']),
-  #table[has-header] [part~='first-row-cell'] {
-    border-top-style: solid;
+  #table:not([has-footer]) [part~='last-row'] {
+    :host([all-rows-visible]) &,
+    :host([overflow~='top']) &,
+    :host([overflow~='bottom']) & {
+      &::after,
+      [part~='cell']:not([part~='details-opened-row-cell'])::after {
+        bottom: 0;
+      }
+
+      [part~='cell']:not([part~='details-opened-row-cell']) {
+        border-bottom-style: none;
+      }
+    }
   }
 
-  [part~='details-opened-row-cell'],
-  #table[has-footer] [part~='last-row-cell'],
-  #table[has-footer] [part~='last-row'] [part~='details-cell'],
-  :host(:not([overflow~='bottom']):not([overflow~='top'])) [part~='last-row-cell'],
-  :host(:not([overflow~='bottom']):not([overflow~='top'])) [part~='last-row'] [part~='details-cell'] {
-    border-bottom-style: solid;
+  [part~='first-footer-row'] {
+    &::after {
+      top: calc(var(--_row-border-width) * -1);
+    }
+
+    [part~='cell'] {
+      border-top-style: none;
+    }
+
+    :host([overflow~='bottom']) &::before,
+    :host(:not([overflow~='top']):not([all-rows-visible])) #scroller:not([empty-state]) &::before {
+      content: '';
+      top: calc(var(--_row-border-width) * -1);
+      border-top-style: solid;
+    }
+  }
+
+  [part~='last-footer-row'] {
+    &::after,
+    [part~='cell']::after {
+      bottom: 0;
+    }
   }
 
   [part~='header-cell']:not([part~='first-column-cell']),
@@ -225,12 +289,10 @@ export const gridStyles = css`
 
   /* Row and cell background */
 
-  /* stylelint-disable-next-line no-duplicate-selectors */
   [part~='row'] {
     background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
   }
 
-  /* stylelint-disable-next-line no-duplicate-selectors */
   [part~='cell'] {
     background-color: inherit;
     background-repeat: no-repeat;
@@ -477,14 +539,14 @@ export const gridStyles = css`
   :is([part~='row'], [part~='cell'])::after {
     position: absolute;
     z-index: 3;
-    inset: 0;
+    inset-inline: 0;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='cell']::after {
-    inset-block: calc(var(--_row-border-width) * -1);
+  [part~='row']::after {
+    transform: translateX(var(--_grid-horizontal-scroll-position));
   }
 
   [part~='cell']:where(:not([part~='details-cell']))::after {
@@ -497,33 +559,6 @@ export const gridStyles = css`
 
   [part~='last-column-cell']::after {
     inset-inline-end: 0;
-  }
-
-  [part~='row']::after {
-    inset: 0 0 calc(var(--_row-border-width) * -1);
-    transform: translateX(var(--_grid-horizontal-scroll-position));
-  }
-
-  [part~='first-header-row-cell']::after,
-  #table:not([has-header]) [part~='first-row-cell']::after {
-    top: 0;
-  }
-
-  [part~='first-footer-row']::after {
-    top: calc(var(--_row-border-width) * -1);
-  }
-
-  [part~='last-row']::after,
-  [part~='last-footer-row']::after,
-  [part~='last-footer-row-cell']::after {
-    bottom: 0;
-  }
-
-  [part~='last-row'] [part~='details-cell']::after,
-  [part~='last-row']:not([part~='details-opened-row']) [part~='last-row-cell']::after {
-    :host([overflow~='top']) #table:not([has-footer]) & {
-      bottom: 0;
-    }
   }
 
   :host([navigating]) [part~='row']:focus,

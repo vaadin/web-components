@@ -196,6 +196,9 @@ import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
       // Disable cell padding for this test
       fixtureSync(`
         <style>
+          vaadin-grid {
+            --vaadin-grid-row-border-width: 0px;
+          }
           vaadin-grid-cell-content {
             padding: 0;
           }
