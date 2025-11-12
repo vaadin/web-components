@@ -889,11 +889,11 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @protected */
-    _onOverlayEscapePress() {
+    _onOverlayEscapePress(event) {
+      event.stopPropagation();
       this._focusedDate = this._selectedDate;
-      this._closedByEscape = true;
+      this._applyInputValue(this._selectedDate);
       this._close();
-      this._closedByEscape = false;
     }
 
     /** @protected */
@@ -984,9 +984,6 @@ export const DatePickerMixin = (subclass) =>
       }
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
-      if (this._closedByEscape) {
-        this._applyInputValue(this._selectedDate);
-      }
       this.__commitParsedOrFocusedDate();
 
       if (this.inputElement && this.inputElement.selectionStart) {
@@ -1163,8 +1160,8 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _onEscape(event) {
-      // Closing overlay is handled in vaadin-overlay-escape-press event listener.
       if (this.opened) {
+        this._onOverlayEscapePress(event);
         return;
       }
 

@@ -227,7 +227,6 @@ class DatePicker extends DatePickerMixin(
         theme="${ifDefined(this._theme)}"
         .opened="${this.opened}"
         @opened-changed="${this._onOpenedChanged}"
-        @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
         @vaadin-overlay-open="${this._onOverlayOpened}"
         @vaadin-overlay-close="${this._onVaadinOverlayClose}"
         @vaadin-overlay-closing="${this._onOverlayClosed}"
