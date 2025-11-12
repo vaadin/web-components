@@ -16,8 +16,10 @@ export const overlayStyles = css`
 
     /* Default position constraints. Themes can
           override this to adjust the gap between the overlay and the viewport. */
-    inset: var(--vaadin-overlay-viewport-inset, 8px);
-    bottom: var(--vaadin-overlay-viewport-bottom);
+    inset: max(env(safe-area-inset-top, 0px), var(--vaadin-overlay-viewport-inset, 8px))
+      max(env(safe-area-inset-right, 0px), var(--vaadin-overlay-viewport-inset, 8px))
+      max(env(safe-area-inset-bottom, 0px), var(--vaadin-overlay-viewport-bottom))
+      max(env(safe-area-inset-left, 0px), var(--vaadin-overlay-viewport-inset, 8px));
 
     /* Override native [popover] user agent styles */
     width: auto;
