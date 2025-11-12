@@ -295,12 +295,10 @@ export const gridStyles = css`
 
   /* Row and cell background */
 
-  /* stylelint-disable-next-line no-duplicate-selectors */
   [part~='row'] {
     background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
   }
 
-  /* stylelint-disable-next-line no-duplicate-selectors */
   [part~='cell'] {
     background-color: inherit;
     background-repeat: no-repeat;
