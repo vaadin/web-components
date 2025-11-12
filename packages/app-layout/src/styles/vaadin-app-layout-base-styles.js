@@ -17,8 +17,18 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
     --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
-    padding-block: var(--vaadin-app-layout-navbar-offset-top) var(--vaadin-app-layout-navbar-offset-bottom);
-    padding-inline-start: var(--vaadin-app-layout-navbar-offset-left);
+    padding-top: max(var(--vaadin-app-layout-navbar-offset-top), var(--safe-area-inset-top));
+    padding-bottom: max(var(--vaadin-app-layout-navbar-offset-bottom), var(--safe-area-inset-bottom));
+  }
+
+  :host(:dir(ltr)) [content] {
+    padding-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
+    padding-right: var(--safe-area-inset-right);
+  }
+
+  :host(:dir(rtl)) [content] {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
   }
 
   :host([hidden]),
@@ -37,8 +47,7 @@ export const appLayoutStyles = css`
   }
 
   :host([overlay]) {
-    --vaadin-app-layout-drawer-offset-left: 0;
-    --vaadin-app-layout-navbar-offset-left: 0;
+    --vaadin-app-layout-drawer-offset-left: 0px;
   }
 
   :host(:not([no-scroll])) [content] {
@@ -110,13 +119,36 @@ export const appLayoutStyles = css`
     max-width: 90%;
     width: var(--_vaadin-app-layout-drawer-width);
     box-sizing: border-box;
-    padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+    padding-block: var(--safe-area-inset-top) var(--safe-area-inset-bottom);
     outline: none;
     /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
     visibility: hidden;
     display: flex;
     flex-direction: column;
     background: var(--vaadin-app-layout-drawer-background, transparent);
+  }
+
+  [part='drawer']:dir(ltr) {
+    padding-left: var(--safe-area-inset-left);
+  }
+
+  [part='drawer']:dir(rtl) {
+    padding-right: var(--safe-area-inset-right);
+  }
+
+  :host([has-navbar]:not([overlay])) [part='drawer'],
+  :host([has-navbar]) [content] {
+    --safe-area-inset-top: 0px;
+  }
+
+  :host([has-drawer]:not([overlay])[drawer-opened]) [content] {
+    &:dir(ltr) {
+      --safe-area-inset-left: 0px;
+    }
+
+    &:dir(rtl) {
+      --safe-area-inset-right: 0px;
+    }
   }
 
   :host([drawer-opened]) [part='drawer'] {

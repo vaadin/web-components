@@ -2,8 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Aura</title>
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
@@ -30,6 +32,7 @@
       import '@vaadin/date-time-picker';
       import '@vaadin/grid';
       import '@vaadin/grid/src/vaadin-grid-selection-column.js';
+      import '@vaadin/horizontal-layout';
       import '@vaadin/icon';
       import '@vaadin/master-detail-layout';
       import '@vaadin/menu-bar';
@@ -274,17 +277,13 @@
 
     <style>
       html {
+        height: calc(100% + env(safe-area-inset-top, 0px));
         --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
       }
 
-      html,
-      body,
-      vaadin-app-layout {
+      body {
         margin: 0;
         height: 100%;
-      }
-
-      body {
         transition: none !important;
       }
 
@@ -515,7 +514,7 @@
             <mdl-back-button></mdl-back-button>
             <h1>Components</h1>
           </header>
-          <vaadin-scroller theme="overflow-indicator-top">
+          <vaadin-scroller theme="overflow-indicators">
             <style>
               .components-view {
                 container-type: inline-size;
@@ -809,6 +808,10 @@
               </div>
             </div>
           </vaadin-scroller>
+          <footer style="display: flex; justify-content: space-between;">
+            <span theme="small">20 components</span>
+            <vaadin-button theme="small">Browse…</vaadin-button>
+          </footer>
         </main>
       </vaadin-master-detail-layout>
     </vaadin-app-layout>

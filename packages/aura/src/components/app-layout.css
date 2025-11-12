@@ -3,10 +3,11 @@
   --aura-app-layout-inset: 1.5vmin;
   --aura-app-layout-radius: var(--vaadin-radius-l);
   --_aura-mdl-border: 1px;
-  --vaadin-app-layout-navbar-padding-top: 0;
-  --vaadin-app-layout-navbar-padding-bottom: 0;
-  --vaadin-app-layout-navbar-padding-inline-start: 0;
-  --vaadin-app-layout-navbar-padding-inline-end: 0;
+  /* Use px to ensure calc/min/max work */
+  --vaadin-app-layout-navbar-padding-top: 0px;
+  --vaadin-app-layout-navbar-padding-bottom: 0px;
+  --vaadin-app-layout-navbar-padding-inline-start: 0px;
+  --vaadin-app-layout-navbar-padding-inline-end: 0px;
 }
 
 /* Aligned with App Layout overlay breakpoint */
@@ -24,15 +25,11 @@ vaadin-app-layout {
   padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
 }
 
-vaadin-app-layout[overlay] {
-  &::part(navbar),
-  &::part(drawer) {
-    --vaadin-app-layout-navbar-background: var(--aura-surface);
-    --vaadin-app-layout-drawer-background: var(--aura-surface);
-    --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-    -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
-    backdrop-filter: var(--aura-overlay-backdrop-filter);
-  }
+vaadin-app-layout[overlay]::part(drawer) {
+  --vaadin-app-layout-drawer-background: var(--aura-surface);
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+  backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
 vaadin-app-layout:is([overlay], :not([drawer-opened])) {
@@ -41,10 +38,9 @@ vaadin-app-layout:is([overlay], :not([drawer-opened])) {
 
 vaadin-app-layout::part(navbar) {
   justify-content: space-between;
-}
-
-vaadin-app-layout:not([overlay])::part(navbar) {
   --vaadin-app-layout-navbar-background: transparent;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 
 vaadin-app-layout:not([overlay])::part(drawer) {
@@ -53,16 +49,18 @@ vaadin-app-layout:not([overlay])::part(drawer) {
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {
-  padding-inline: var(--vaadin-padding-m);
+  --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
   scrollbar-width: thin;
 }
 
 vaadin-app-layout > vaadin-scroller:nth-child(1 of [slot='drawer']) {
-  padding-top: var(--vaadin-padding-s);
+  /* TODO would need a dedicated padding-top property */
+  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
 }
 
 vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
-  padding-bottom: var(--vaadin-padding-s);
+  /* TODO would need a dedicated padding-bottom property */
+  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
 }
 
 vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
@@ -80,6 +78,32 @@ vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot
 }
 
 vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+  margin-inline: calc(var(--safe-area-inset-left) * -1) calc(var(--safe-area-inset-right) * -1);
+  padding-inline: var(--safe-area-inset-left) var(--safe-area-inset-right);
+  max-width: calc(100% + var(--safe-area-inset-left) + var(--safe-area-inset-right));
+  margin-block: calc(var(--safe-area-inset-top) * -1) calc(var(--safe-area-inset-bottom) * -1);
+  padding-block: var(--safe-area-inset-top) var(--safe-area-inset-bottom);
+  height: calc(100% + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
+  max-height: calc(100% + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
+
+  &::part(detail) {
+    padding-top: var(--safe-area-inset-top);
+    padding-bottom: var(--safe-area-inset-bottom);
+  }
+
+  &:dir(ltr)::part(detail) {
+    padding-right: var(--safe-area-inset-right);
+  }
+
+  &:dir(rtl)::part(detail) {
+    padding-left: var(--safe-area-inset-left);
+  }
+
+  &[stack]::part(detail) {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: var(--safe-area-inset-right);
+  }
+
   & > vaadin-master-detail-layout,
   &:not([drawer])::part(detail) {
     border-start-end-radius: var(--_app-layout-radius);
@@ -99,7 +123,7 @@ vaadin-app-layout[has-navbar][has-drawer] {
   padding-top: var(--_vaadin-app-layout-navbar-offset-size);
 
   &::part(drawer) {
-    padding-top: 0;
+    padding-top: var(--safe-area-inset-top);
   }
 }
 

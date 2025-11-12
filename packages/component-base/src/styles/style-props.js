@@ -89,6 +89,12 @@ addGlobalThemeStyles(
         /* Cursors for interactive elements */
         --vaadin-clickable-cursor: pointer;
         --vaadin-disabled-cursor: not-allowed;
+
+        /* Use units so that the values can be used in calc() */
+        --safe-area-inset-top: env(safe-area-inset-top, 0px);
+        --safe-area-inset-right: env(safe-area-inset-right, 0px);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-area-inset-left: env(safe-area-inset-left, 0px);
       }
 
       @media (forced-colors: active) {
