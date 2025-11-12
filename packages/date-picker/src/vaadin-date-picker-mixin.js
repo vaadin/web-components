@@ -1160,7 +1160,6 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _onEscape(event) {
-      // Closing overlay is handled in vaadin-overlay-escape-press event listener.
       if (this.opened) {
         this._onOverlayEscapePress(event);
         return;
