@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, keyboardEventFor, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
@@ -163,7 +163,6 @@ describe('selecting items', () => {
       await sendMouse({ type: 'click', position: [400, 400] });
 
       await sendKeys({ press: 'ArrowDown' });
-      await oneEvent(comboBox._overlayElement, 'vaadin-overlay-open');
 
       const item = getFirstItem(comboBox);
       expect(item.hasAttribute('focused')).to.be.false;
