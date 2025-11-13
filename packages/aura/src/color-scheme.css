@@ -1,10 +1,17 @@
 :where(:root),
 :where(:host) {
-  --aura-color-scheme: light;
-  --aura-content-color-scheme: var(--aura-color-scheme);
-  --aura-notification-color-scheme: var(--aura-color-scheme);
+  --aura-content-color-scheme: inherit;
+  --aura-notification-color-scheme: inherit;
 }
 
-html {
-  color-scheme: var(--aura-color-scheme);
+[theme~='light'] {
+  color-scheme: light;
+}
+
+[theme~='dark'] {
+  color-scheme: dark;
+}
+
+[theme~='light-dark'] {
+  color-scheme: light dark;
 }
