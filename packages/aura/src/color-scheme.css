@@ -18,5 +18,5 @@ html {
 }
 
 [theme~='light-dark'] {
-  --aura-color-scheme: light-dark;
+  --aura-color-scheme: light dark;
 }
