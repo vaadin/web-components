@@ -121,13 +121,13 @@ export const gridStyles = css`
   }
 
   #header th,
-  [part~='reorder-ghost'] {
+  .reorder-ghost {
     font-size: var(--vaadin-grid-header-font-size, 1em);
     font-weight: var(--vaadin-grid-header-font-weight, 500);
     color: var(--vaadin-grid-header-text-color, var(--vaadin-text-color));
   }
 
-  [part~='row'] {
+  .row {
     display: flex;
     width: 100%;
     box-sizing: border-box;
@@ -135,28 +135,28 @@ export const gridStyles = css`
     position: relative;
   }
 
-  [part~='row']:not(:focus-within) {
+  .row:not(:focus-within) {
     --_non-focused-row-none: none;
   }
 
-  [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
+  .row[loading] .body-cell ::slotted(vaadin-grid-cell-content) {
     visibility: hidden;
   }
 
-  [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+  [column-rendering='lazy'] .body-cell:not([frozen]):not([frozen-to-end]) {
     transform: translateX(var(--_grid-lazy-columns-start));
   }
 
-  #items [part~='row']:empty {
+  #items .row:empty {
     height: 100%;
   }
 
-  [part~='cell'] {
+  .cell {
     padding: 0;
     box-sizing: border-box;
   }
 
-  [part~='cell']:where(:not([part~='details-cell'])) {
+  .cell:where(:not(.details-cell)) {
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
@@ -173,29 +173,29 @@ export const gridStyles = css`
     ::before - header bottom and footer top borders that only appear when scrolling
   */
 
-  [part~='row']::after {
+  .row::after {
     top: 0;
     bottom: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='body-row'] {
+  .body-row {
     scroll-margin-bottom: var(--_row-border-width);
   }
 
-  [part~='cell'] {
+  .cell {
     border-block: var(--_row-border-width) var(--_border-color);
     border-top-style: solid;
   }
 
-  [part~='cell']::after {
+  .cell::after {
     top: calc(var(--_row-border-width) * -1);
     bottom: calc(var(--_row-border-width) * -1);
   }
 
   /* Block borders / Last header row and first footer row */
 
-  [part~='last-header-row']::before,
-  [part~='first-footer-row']::before {
+  .last-header-row::before,
+  .first-footer-row::before {
     position: absolute;
     inset-inline: 0;
     border-block: var(--_row-border-width) var(--_border-color);
@@ -204,17 +204,17 @@ export const gridStyles = css`
 
   /* Block borders / First header row */
 
-  [part~='first-header-row-cell'] {
+  .first-header-row-cell {
     border-top-style: none;
   }
 
-  [part~='first-header-row-cell']::after {
+  .first-header-row-cell::after {
     top: 0;
   }
 
   /* Block borders / Last header row */
 
-  :host([overflow~='top']) [part~='last-header-row']::before {
+  :host([overflow~='top']) .last-header-row::before {
     content: '';
     bottom: calc(var(--_row-border-width) * -1);
     border-bottom-style: solid;
@@ -222,22 +222,22 @@ export const gridStyles = css`
 
   /* Block borders / First body row */
 
-  #table:not([has-header]) [part~='first-row-cell'] {
+  #table:not([has-header]) .first-row-cell {
     border-top-style: none;
   }
 
-  #table:not([has-header]) [part~='first-row-cell']::after {
+  #table:not([has-header]) .first-row-cell::after {
     top: 0;
   }
 
   /* Block borders / Last body row */
 
-  [part~='last-row']::after {
+  .last-row::after {
     bottom: 0;
   }
 
-  [part~='last-row'] [part~='details-cell'],
-  [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
+  .last-row .details-cell,
+  .last-row-cell:not(.details-opened-row-cell) {
     border-bottom-style: solid;
   }
 
@@ -246,8 +246,8 @@ export const gridStyles = css`
   :host([all-rows-visible]),
   :host([overflow~='top']),
   :host([overflow~='bottom']) {
-    #table:not([has-footer]) [part~='last-row'] [part~='details-cell'],
-    #table:not([has-footer]) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
+    #table:not([has-footer]) .last-row .details-cell,
+    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell) {
       border-bottom-style: none;
 
       &::after {
@@ -258,17 +258,17 @@ export const gridStyles = css`
 
   /* Block borders / First footer row */
 
-  [part~='first-footer-row']::after {
+  .first-footer-row::after {
     top: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='first-footer-row-cell'] {
+  .first-footer-row-cell {
     border-top-style: none;
   }
 
   :host([overflow~='bottom']),
   :host(:not([overflow~='top']):not([all-rows-visible])) #scroller:not([empty-state]) {
-    [part~='first-footer-row']::before {
+    .first-footer-row::before {
       content: '';
       top: calc(var(--_row-border-width) * -1);
       border-top-style: solid;
@@ -277,38 +277,38 @@ export const gridStyles = css`
 
   /* Block borders / Last footer row */
 
-  [part~='last-footer-row']::after,
-  [part~='last-footer-row-cell']::after {
+  .last-footer-row::after,
+  .last-footer-row-cell::after {
     bottom: 0;
   }
 
   /* Inline borders */
 
-  [part~='cell'] {
+  .cell {
     border-inline: var(--_column-border-width) var(--_border-color);
   }
 
-  [part~='header-cell']:not([part~='first-column-cell']),
-  [part~='footer-cell']:not([part~='first-column-cell']),
-  [part~='body-cell']:not([part~='first-column-cell']) {
+  .header-cell:not(.first-column-cell),
+  .footer-cell:not(.first-column-cell),
+  .body-cell:not(.first-column-cell) {
     border-inline-start-style: solid;
   }
 
-  [part~='last-frozen-cell']:not([part~='last-column-cell']) {
+  .last-frozen-cell:not(.last-column-cell) {
     border-inline-end-style: solid;
 
-    & + [part~='cell'] {
+    & + .cell {
       border-inline-start-style: none;
     }
   }
 
   /* Row and cell background */
 
-  [part~='row'] {
+  .row {
     background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
   }
 
-  [part~='cell'] {
+  .cell {
     --_cell-background-image: linear-gradient(
       var(--vaadin-grid-cell-background-color, transparent),
       var(--vaadin-grid-cell-background-color, transparent)
@@ -320,7 +320,7 @@ export const gridStyles = css`
     background-image: var(--_cell-background-image);
   }
 
-  [part~='body-cell'] {
+  .body-cell {
     --_cell-highlight-background-image: linear-gradient(
       var(--vaadin-grid-row-highlight-background-color, transparent),
       var(--vaadin-grid-row-highlight-background-color, transparent)
@@ -332,7 +332,7 @@ export const gridStyles = css`
       var(--_cell-background-image, none);
   }
 
-  [part~='body-row'][selected] {
+  .body-row[selected] {
     --_row-selected-background-color: var(
       --vaadin-grid-row-selected-background-color,
       color-mix(in srgb, currentColor 8%, transparent)
@@ -344,7 +344,7 @@ export const gridStyles = css`
   }
 
   @media (any-hover: hover) {
-    [part~='body-row']:hover {
+    .body-row:hover {
       --_row-hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
       --_row-hover-background-image: linear-gradient(
         var(--_row-hover-background-color),
@@ -363,27 +363,27 @@ export const gridStyles = css`
 
   /* Variant: wrap cell contents */
 
-  :host([theme~='wrap-cell-content']) [part~='cell']:not([part~='details-cell']) {
+  :host([theme~='wrap-cell-content']) .cell:not(.details-cell) {
     white-space: normal;
   }
 
   /* Raise highlighted rows above others */
-  [part~='row'],
-  [part~='frozen-cell'],
-  [part~='frozen-to-end-cell'] {
+  .row,
+  .frozen-cell,
+  .frozen-to-end-cell {
     &:focus,
     &:focus-within {
       z-index: 3;
     }
   }
 
-  [part~='details-cell'] {
+  .details-cell {
     position: absolute;
     bottom: 0;
     width: 100%;
   }
 
-  [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  .cell ::slotted(vaadin-grid-cell-content) {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -441,13 +441,13 @@ export const gridStyles = css`
   }
 
   /* Reordering styles */
-  :host([reordering]) [part~='cell'] ::slotted(vaadin-grid-cell-content),
-  :host([reordering]) [part~='resize-handle'],
-  #scroller[no-content-pointer-events] [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  :host([reordering]) .cell ::slotted(vaadin-grid-cell-content),
+  :host([reordering]) .resize-handle,
+  #scroller[no-content-pointer-events] .cell ::slotted(vaadin-grid-cell-content) {
     pointer-events: none;
   }
 
-  [part~='reorder-ghost'] {
+  .reorder-ghost {
     visibility: hidden;
     position: fixed;
     pointer-events: none;
@@ -467,12 +467,12 @@ export const gridStyles = css`
     user-select: none;
   }
 
-  :host([reordering]) [part~='cell'] {
+  :host([reordering]) .cell {
     /* TODO expose a custom property to control this */
     --_reorder-curtain-filter: brightness(0.9) contrast(1.1);
   }
 
-  :host([reordering]) [part~='cell']::after {
+  :host([reordering]) .cell::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -482,17 +482,17 @@ export const gridStyles = css`
     outline: 0;
   }
 
-  :host([reordering]) [part~='cell'][reorder-status='allowed'] {
+  :host([reordering]) .cell[reorder-status='allowed'] {
     /* TODO expose a custom property to control this */
     --_reorder-curtain-filter: brightness(0.94) contrast(1.07);
   }
 
-  :host([reordering]) [part~='cell'][reorder-status='dragging'] {
+  :host([reordering]) .cell[reorder-status='dragging'] {
     --_reorder-curtain-filter: none;
   }
 
   /* Resizing styles */
-  [part~='resize-handle'] {
+  .resize-handle {
     position: absolute;
     top: 0;
     inset-inline-end: 0;
@@ -506,17 +506,17 @@ export const gridStyles = css`
     translate: var(--_column-border-width);
   }
 
-  [part~='last-column-cell'] [part~='resize-handle'] {
+  .last-column-cell .resize-handle {
     translate: 0;
   }
 
-  :host(:not([reordering])) *:not([column-resizing]) [part='resize-handle']:hover,
-  [part='resize-handle']:active {
+  :host(:not([reordering])) *:not([column-resizing]) .resize-handle:hover,
+  .resize-handle:active {
     opacity: 1;
     transition-delay: 0.15s;
   }
 
-  [part~='resize-handle']::before {
+  .resize-handle::before {
     position: absolute;
     content: '';
     height: 100%;
@@ -524,25 +524,25 @@ export const gridStyles = css`
     translate: calc(-50% + var(--vaadin-focus-ring-width) / 2);
   }
 
-  :host([dir='rtl']) [part~='resize-handle']::before {
+  :host([dir='rtl']) .resize-handle::before {
     translate: calc(50% - var(--vaadin-focus-ring-width) / 2);
   }
 
-  [first-frozen-to-end] [part~='resize-handle']::before,
-  :is([last-column], [last-frozen]) [part~='resize-handle']::before {
+  [first-frozen-to-end] .resize-handle::before,
+  :is([last-column], [last-frozen]) .resize-handle::before {
     width: 8px;
     translate: 0;
   }
 
-  :is([last-column], [last-frozen]) [part~='resize-handle']::before {
+  :is([last-column], [last-frozen]) .resize-handle::before {
     inset-inline-end: 0;
   }
 
-  [frozen-to-end] :is([part~='resize-handle'], [part~='resize-handle']::before) {
+  [frozen-to-end] :is(.resize-handle, .resize-handle::before) {
     inset-inline: 0 auto;
   }
 
-  [frozen-to-end] [part~='resize-handle'] {
+  [frozen-to-end] .resize-handle {
     translate: calc(var(--_column-border-width) * -1);
   }
 
@@ -556,7 +556,7 @@ export const gridStyles = css`
   }
 
   /* Focus outline element, also used for d'n'd indication */
-  :is([part~='row'], [part~='cell'])::after {
+  :is(.row, .cell)::after {
     position: absolute;
     z-index: 3;
     inset-inline: 0;
@@ -565,36 +565,36 @@ export const gridStyles = css`
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='row']::after {
+  .row::after {
     transform: translateX(var(--_grid-horizontal-scroll-position));
   }
 
-  [part~='cell']:where(:not([part~='details-cell']))::after {
+  .cell:where(:not(.details-cell))::after {
     inset-inline: calc(var(--_column-border-width) * -1);
   }
 
-  [part~='first-column-cell']::after {
+  .first-column-cell::after {
     inset-inline-start: 0;
   }
 
-  [part~='last-column-cell']::after {
+  .last-column-cell::after {
     inset-inline-end: 0;
   }
 
-  :host([navigating]) [part~='row']:focus,
-  :host([navigating]) [part~='cell']:focus {
+  :host([navigating]) .row:focus,
+  :host([navigating]) .cell:focus {
     outline: 0;
   }
 
-  [part~='row']:focus-visible,
-  [part~='cell']:focus-visible {
+  .row:focus-visible,
+  .cell:focus-visible {
     outline: 0;
   }
 
-  [part~='row']:focus-visible::after,
-  [part~='cell']:focus-visible::after,
-  :host([navigating]) [part~='row']:focus::after,
-  :host([navigating]) [part~='cell']:focus::after {
+  .row:focus-visible::after,
+  .cell:focus-visible::after,
+  :host([navigating]) .row:focus::after,
+  :host([navigating]) .cell:focus::after {
     content: '';
   }
 
@@ -604,48 +604,48 @@ export const gridStyles = css`
     outline-offset: calc(var(--vaadin-grid-border-width, 1px) * -1);
   }
 
-  [part~='row'][dragover] {
+  .row[dragover] {
     z-index: 100 !important;
   }
 
-  [part~='row'][dragover]::after {
+  .row[dragover]::after {
     content: '';
   }
 
-  [part~='row'][dragover='above']::after {
+  .row[dragover='above']::after {
     outline: 0;
     border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  [part~='row']:not([part~='first-row'])[dragover='above']::after {
+  .row:not(.first-row)[dragover='above']::after {
     top: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  [part~='row'][dragover='below']::after {
+  .row[dragover='below']::after {
     outline: 0;
     border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  [part~='row']:not([part~='last-row'])[dragover='below']::after {
+  .row:not(.last-row)[dragover='below']::after {
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  [part~='row'][dragstart] [part~='cell'] {
+  .row[dragstart] .cell {
     border-block: none !important;
     padding-block: var(--_row-border-width) !important;
   }
 
-  [part~='row'][dragstart] [part~='cell'][last-column] {
+  .row[dragstart] .cell[last-column] {
     border-radius: 0 3px 3px 0;
   }
 
-  [part~='row'][dragstart] [part~='cell'][first-column] {
+  .row[dragstart] .cell[first-column] {
     border-radius: 3px 0 0 3px;
   }
 
   /* Indicates the number of dragged rows */
   /* TODO export custom properties to control styles */
-  #scroller [part~='row'][dragstart]:not([dragstart=''])::before {
+  #scroller .row[dragstart]:not([dragstart=''])::before {
     position: absolute;
     left: var(--_grid-drag-start-x);
     top: var(--_grid-drag-start-y);
@@ -669,12 +669,12 @@ export const gridStyles = css`
     visibility: hidden;
   }
 
-  #sizer [part~='details-cell'],
-  #sizer [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  #sizer .details-cell,
+  #sizer .cell ::slotted(vaadin-grid-cell-content) {
     display: none !important;
   }
 
-  #sizer [part~='cell'] {
+  #sizer .cell {
     display: block;
     flex-shrink: 0;
     line-height: 0;
@@ -685,7 +685,7 @@ export const gridStyles = css`
     border: none !important;
   }
 
-  #sizer [part~='cell']::before {
+  #sizer .cell::before {
     content: '-';
   }
 `;
