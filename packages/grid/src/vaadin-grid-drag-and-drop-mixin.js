@@ -447,7 +447,7 @@ export const DragAndDropMixin = (superClass) =>
       return rows
         .map((row) => {
           return Array.from(row.children)
-            .filter((cell) => !cell.hidden && cell.getAttribute('part').indexOf('details-cell') === -1)
+            .filter((cell) => !cell.hidden && !cell.part.contains('details-cell'))
             .sort((a, b) => {
               return a._column._order > b._column._order ? 1 : -1;
             })
