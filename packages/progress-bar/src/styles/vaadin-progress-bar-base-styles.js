@@ -10,7 +10,7 @@ export const progressBarStyles = css`
   :host {
     display: block;
     width: 100%; /* prevent collapsing inside non-stretching column flex */
-    height: 0.5lh;
+    height: var(--vaadin-progress-bar-height, 0.5lh);
     contain: layout size;
   }
 
