@@ -302,7 +302,7 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           <tbody id="items" role="rowgroup"></tbody>
           <tbody id="emptystatebody">
             <tr id="emptystaterow">
-              <td part="empty-state" id="emptystatecell" tabindex="0">
+              <td part="empty-state" class="empty-state" id="emptystatecell" tabindex="0">
                 <slot name="empty-state" id="emptystateslot"></slot>
               </td>
             </tr>
