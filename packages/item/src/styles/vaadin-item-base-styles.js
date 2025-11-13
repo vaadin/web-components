@@ -16,6 +16,7 @@ export const itemStyles = css`
     gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-s));
     height: var(--vaadin-item-height, auto);
     padding: var(--vaadin-item-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
+    -webkit-tap-highlight-color: transparent;
   }
 
   :host([focused]) {
