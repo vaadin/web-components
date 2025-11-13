@@ -310,7 +310,7 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           <tfoot id="footer" role="rowgroup"></tfoot>
         </table>
 
-        <div part="reorder-ghost"></div>
+        <div part="reorder-ghost" class="reorder-ghost"></div>
       </div>
 
       <slot name="tooltip"></slot>
