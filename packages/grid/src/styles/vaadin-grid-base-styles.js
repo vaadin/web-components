@@ -242,15 +242,13 @@ export const gridStyles = css`
   :host([all-rows-visible]),
   :host([overflow~='top']),
   :host([overflow~='bottom']) {
-    #table:not([has-footer]) [part~='last-row']::after,
-    #table:not([has-footer]) [part~='last-row'] [part~='details-cell']::after,
-    #table:not([has-footer]) [part~='last-row-cell']:not([part~='details-opened-row-cell'])::after {
-      bottom: 0;
-    }
-
     #table:not([has-footer]) [part~='last-row'] [part~='details-cell'],
     #table:not([has-footer]) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
-      border-bottom-style: solid;
+      border-bottom-style: none;
+
+      &::after {
+        bottom: 0;
+      }
     }
   }
 
