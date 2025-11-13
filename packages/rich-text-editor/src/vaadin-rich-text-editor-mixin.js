@@ -13,6 +13,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 
 const Quill = window.Quill;
 
@@ -97,8 +98,17 @@ const DEFAULT_I18N = {
 /**
  * @polymerMixin
  */
-export const RichTextEditorMixin = (superClass) =>
-  class RichTextEditorMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
+export const RichTextEditorMixin = (superClass) => {
+  class RichTextEditorMixinClass extends FieldMixin(I18nMixin(DEFAULT_I18N, superClass)) {
+    constructor() {
+      super();
+      this.ariaTarget = this;
+      this._errorController.addEventListener('slot-content-changed', (event) => {
+        const { hasContent, node } = event.detail;
+        this.__updateDescriptions(hasContent, node, 'error');
+      });
+    }
+
     static get properties() {
       return {
         /**
@@ -243,7 +253,11 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
+      return [
+        '_valueChanged(value, _editor)',
+        '_disabledChanged(disabled, readonly, _editor)',
+        '__constraintsChanged(required)',
+      ];
     }
 
     /**
@@ -291,6 +305,19 @@ export const RichTextEditorMixin = (superClass) =>
       super.disconnectedCallback();
 
       this._editor.emitter.disconnect();
+
+      if (this.__labelTextObserver) {
+        this.__labelTextObserver.disconnect();
+        this.__labelTextObserver = null;
+      }
+      if (this.__helperTextObserver) {
+        this.__helperTextObserver.disconnect();
+        this.__helperTextObserver = null;
+      }
+      if (this.__errorTextObserver) {
+        this.__errorTextObserver.disconnect();
+        this.__errorTextObserver = null;
+      }
     }
 
     /** @private */
@@ -324,6 +351,19 @@ export const RichTextEditorMixin = (superClass) =>
       this._editor.emitter.connect();
     }
 
+    /**
+     * @return {boolean}
+     * @override
+     */
+    checkValidity() {
+      return !this.required || this.__hasValue();
+    }
+
+    /** @private */
+    __hasValue() {
+      return this.value !== '' && this.value !== '[{"insert":"\\n"}]';
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -346,10 +386,27 @@ export const RichTextEditorMixin = (superClass) =>
 
       this.__setDirection(this.__dir);
 
-      const editorContent = editor.querySelector('.ql-editor');
+      const editorContent = this.__getEditorContent();
 
       editorContent.setAttribute('role', 'textbox');
       editorContent.setAttribute('aria-multiline', 'true');
+
+      if (this.hasAttribute('has-label')) {
+        const labelNode = this._labelNode;
+        this.__updateLabels(true, labelNode);
+      }
+
+      this.__updateRequired(this.required);
+
+      if (this.hasAttribute('has-helper')) {
+        const helperNode = this._helperNode;
+        this.__updateDescriptions(true, helperNode, 'helper');
+      }
+
+      if (this.hasAttribute('has-error-message')) {
+        const errorNode = this._errorNode;
+        this.__updateDescriptions(true, errorNode, 'error');
+      }
 
       this._editor.on('text-change', () => {
         const timeout = 200;
@@ -919,6 +976,170 @@ export const RichTextEditorMixin = (superClass) =>
       }
     }
 
+    /**
+     * @private
+     * @override
+     */
+    __labelChanged(hasLabel, labelNode) {
+      super.__labelChanged(hasLabel, labelNode);
+      this.__updateLabels(hasLabel, labelNode);
+    }
+
+    /**
+     * @private
+     * @override
+     */
+    __helperChanged(hasHelper, helperNode) {
+      super.__helperChanged(hasHelper, helperNode);
+      this.__updateDescriptions(hasHelper, helperNode, 'helper');
+    }
+
+    /** @private */
+    __constraintsChanged(...constraints) {
+      const hasConstraints = this.__hasValidConstraints(constraints);
+      const isLastConstraintRemoved = this.__previousHasConstraints && !hasConstraints;
+      if ((this.__hasValue() || this.invalid) && hasConstraints) {
+        this._requestValidation();
+      } else if (isLastConstraintRemoved && !this.manualValidation) {
+        this._setInvalid(false);
+      }
+      this.__previousHasConstraints = hasConstraints;
+    }
+
+    /**
+     * @param {boolean} required
+     * @protected
+     * @override
+     */
+    _requiredChanged(required) {
+      super._requiredChanged(required);
+      this.__updateRequired(required);
+    }
+
+    /** @private */
+    __updateLabels(hasLabel, labelNode) {
+      if (!this._toolbar || !this.__getEditorContent()) {
+        return;
+      }
+      if (this.__labelTextObserver) {
+        this.__labelTextObserver.disconnect();
+        this.__labelTextObserver = null;
+      }
+      if (hasLabel && labelNode) {
+        this.__updateLabelText(labelNode);
+        this.__labelTextObserver = new MutationObserver(() => {
+          this.__updateLabelText(labelNode);
+        });
+        this.__labelTextObserver.observe(labelNode, {
+          childList: true,
+          characterData: true,
+          subtree: true,
+        });
+      } else {
+        this._toolbar.removeAttribute('aria-label');
+        this.__getEditorContent().removeAttribute('aria-label');
+      }
+    }
+
+    /** @private */
+    __updateLabelText(labelNode) {
+      const labelText = labelNode.textContent.trim();
+      if (labelText) {
+        this._toolbar.setAttribute('aria-label', labelText);
+        this.__getEditorContent().setAttribute('aria-label', labelText);
+      } else {
+        this._toolbar.removeAttribute('aria-label');
+        this.__getEditorContent().removeAttribute('aria-label');
+      }
+    }
+
+    /** @private */
+    __updateDescriptions(hasContent, node, type) {
+      if (!this._toolbar || !this.__getEditorContent()) {
+        return;
+      }
+      const descId = type === 'helper' ? 'rte-shadow-helper-desc' : 'rte-shadow-error-desc';
+      const observerKey = type === 'helper' ? '__helperTextObserver' : '__errorTextObserver';
+      if (hasContent && node) {
+        this.__addDescription(node, descId, observerKey);
+      } else {
+        this.__removeDescription(descId, observerKey);
+      }
+    }
+
+    /** @private */
+    __removeDescription(descId, observerKey) {
+      const descElement = this.shadowRoot.querySelector(`#${descId}`);
+      if (descElement) {
+        descElement.remove();
+      }
+      const editorContent = this.__getEditorContent();
+      const currentDescribedBy = editorContent.getAttribute('aria-describedby');
+      if (currentDescribedBy) {
+        const ids = currentDescribedBy.split(' ').filter((id) => id !== descId);
+        if (ids.length > 0) {
+          editorContent.setAttribute('aria-describedby', ids.join(' '));
+        } else {
+          editorContent.removeAttribute('aria-describedby');
+        }
+      }
+      if (this[observerKey]) {
+        this[observerKey].disconnect();
+        this[observerKey] = null;
+      }
+    }
+
+    /** @private */
+    __addDescription(node, descId, observerKey) {
+      let descElement = this.shadowRoot.querySelector(`#${descId}`);
+      if (!descElement) {
+        descElement = document.createElement('div');
+        descElement.id = descId;
+        descElement.hidden = true;
+        this.shadowRoot.appendChild(descElement);
+      }
+      descElement.textContent = node.textContent.trim();
+      if (this[observerKey]) {
+        this[observerKey].disconnect();
+      }
+      this[observerKey] = new MutationObserver(() => {
+        const updatedText = node.textContent.trim();
+        if (descElement && descElement.textContent !== updatedText) {
+          descElement.textContent = updatedText;
+        }
+      });
+      this[observerKey].observe(node, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+      const editorContent = this.__getEditorContent();
+      const currentDescribedBy = editorContent.getAttribute('aria-describedby');
+      const ids = currentDescribedBy ? currentDescribedBy.split(' ') : [];
+      if (!ids.includes(descId)) {
+        ids.push(descId);
+      }
+      editorContent.setAttribute('aria-describedby', ids.join(' '));
+    }
+
+    /** @private */
+    __updateRequired(required) {
+      const editorContent = this.__getEditorContent();
+      if (!editorContent) {
+        return;
+      }
+      if (required) {
+        editorContent.setAttribute('aria-required', 'true');
+      } else {
+        editorContent.removeAttribute('aria-required');
+      }
+    }
+
+    /** @private */
+    __getEditorContent() {
+      return this.shadowRoot.querySelector('.ql-editor');
+    }
+
     /** @private */
     _disabledChanged(disabled, readonly, editor) {
       if (disabled === undefined || readonly === undefined || editor === undefined) {
@@ -943,6 +1164,16 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     /** @private */
+    __hasValidConstraints(constraints) {
+      return constraints.some((c) => this.__isValidConstraint(c));
+    }
+
+    /** @private */
+    __isValidConstraint(constraint) {
+      return Boolean(constraint) || constraint === 0;
+    }
+
+    /** @private */
     _valueChanged(value, editor) {
       if (value && this.__pendingHtmlValue) {
         // A non-empty value is set explicitly. Clear pending htmlValue to prevent it from overriding the value.
@@ -954,12 +1185,19 @@ export const RichTextEditorMixin = (superClass) =>
       }
 
       if (value == null || value === '[{"insert":"\\n"}]') {
+        this.__clearingValue = true;
         this.value = '';
         return;
       }
 
       if (value === '') {
         this._clear();
+        if (this.__clearingValue) {
+          if (this.invalid || this.__previousHasConstraints) {
+            this._requestValidation();
+          }
+          this.__clearingValue = false;
+        }
         return;
       }
 
@@ -991,5 +1229,12 @@ export const RichTextEditorMixin = (superClass) =>
         // Value changed from outside
         this.__lastCommittedChange = this.value;
       }
+
+      if (this.invalid || this.__previousHasConstraints) {
+        this._requestValidation();
+      }
     }
-  };
+  }
+
+  return RichTextEditorMixinClass;
+};

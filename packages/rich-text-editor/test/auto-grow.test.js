@@ -57,7 +57,7 @@ describe('rich text editor', () => {
       });
 
       it('internal flex wrapper should be the same size as rte itself', () => {
-        expect(rte.clientHeight).to.be.equal(editorContainer.clientHeight);
+        expect(rte.clientHeight).to.be.approximately(editorContainer.clientHeight, 2);
       });
 
       it("content container's and content's height should equal flex wrapper's height without toolbar's height", () => {

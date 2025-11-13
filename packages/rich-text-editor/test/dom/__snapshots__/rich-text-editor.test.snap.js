@@ -16,19 +16,19 @@ snapshots["vaadin-rich-text-editor host"] =
   >
     <vaadin-text-field style="width: 100%;">
       <label
-        for="input-vaadin-text-field-3"
-        id="label-vaadin-text-field-0"
+        for="input-vaadin-text-field-6"
+        id="label-vaadin-text-field-3"
         slot="label"
       >
       </label>
       <div
         hidden=""
-        id="error-message-vaadin-text-field-2"
+        id="error-message-vaadin-text-field-5"
         slot="error-message"
       >
       </div>
       <input
-        id="input-vaadin-text-field-3"
+        id="input-vaadin-text-field-6"
         slot="input"
         type="text"
       >
@@ -416,12 +416,23 @@ snapshots["vaadin-rich-text-editor host"] =
     >
     </button>
   </vaadin-rich-text-editor-popup>
+  <label
+    id="label-vaadin-rich-text-editor-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-rich-text-editor-2"
+    slot="error-message"
+  >
+  </div>
   <vaadin-tooltip
     modeless=""
     slot="tooltip"
   >
     <div
-      id="vaadin-tooltip-4"
+      id="vaadin-tooltip-7"
       role="tooltip"
       slot="overlay"
     >
@@ -432,311 +443,330 @@ snapshots["vaadin-rich-text-editor host"] =
 /* end snapshot vaadin-rich-text-editor host */
 
 snapshots["vaadin-rich-text-editor shadow"] = 
-`<div class="vaadin-rich-text-editor-container">
-  <div
-    class="ql-toolbar"
-    part="toolbar"
-    role="toolbar"
-  >
-    <span part="toolbar-group toolbar-group-history">
-      <button
-        aria-label="undo"
-        id="btn-undo"
-        part="toolbar-button toolbar-button-undo"
-        type="button"
-      >
-      </button>
-      <button
-        aria-label="redo"
-        id="btn-redo"
-        part="toolbar-button toolbar-button-redo"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-emphasis">
-      <button
-        aria-label="bold"
-        aria-pressed="false"
-        class="ql-bold"
-        id="btn-bold"
-        part="toolbar-button toolbar-button-bold"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-      <button
-        aria-label="italic"
-        aria-pressed="false"
-        class="ql-italic"
-        id="btn-italic"
-        part="toolbar-button toolbar-button-italic"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-      <button
-        aria-label="underline"
-        aria-pressed="false"
-        class="ql-underline"
-        id="btn-underline"
-        part="toolbar-button toolbar-button-underline"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-      <button
-        aria-label="strike"
-        aria-pressed="false"
-        class="ql-strike"
-        id="btn-strike"
-        part="toolbar-button toolbar-button-strike"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-style">
-      <button
-        aria-expanded="false"
-        aria-label="color"
-        id="btn-color"
-        part="toolbar-button toolbar-button-color"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-      <button
-        aria-expanded="false"
-        aria-label="background"
-        id="btn-background"
-        part="toolbar-button toolbar-button-background"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-heading">
-      <button
-        aria-label="h1"
-        aria-pressed="false"
-        class="ql-header"
-        id="btn-h1"
-        part="toolbar-button toolbar-button-h1"
-        tabindex="-1"
-        type="button"
-        value="1"
-      >
-      </button>
-      <button
-        aria-label="h2"
-        aria-pressed="false"
-        class="ql-header"
-        id="btn-h2"
-        part="toolbar-button toolbar-button-h2"
-        tabindex="-1"
-        type="button"
-        value="2"
-      >
-      </button>
-      <button
-        aria-label="h3"
-        aria-pressed="false"
-        class="ql-header"
-        id="btn-h3"
-        part="toolbar-button toolbar-button-h3"
-        tabindex="-1"
-        type="button"
-        value="3"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-glyph-transformation">
-      <button
-        aria-label="subscript"
-        aria-pressed="false"
-        class="ql-script"
-        id="btn-subscript"
-        part="toolbar-button toolbar-button-subscript"
-        tabindex="-1"
-        type="button"
-        value="sub"
-      >
-      </button>
-      <button
-        aria-label="superscript"
-        aria-pressed="false"
-        class="ql-script"
-        id="btn-superscript"
-        part="toolbar-button toolbar-button-superscript"
-        tabindex="-1"
-        type="button"
-        value="super"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-list">
-      <button
-        aria-label="list ordered"
-        aria-pressed="false"
-        class="ql-list"
-        id="btn-ol"
-        part="toolbar-button toolbar-button-list-ordered"
-        tabindex="-1"
-        type="button"
-        value="ordered"
-      >
-      </button>
-      <button
-        aria-label="list bullet"
-        aria-pressed="false"
-        class="ql-list"
-        id="btn-ul"
-        part="toolbar-button toolbar-button-list-bullet"
-        tabindex="-1"
-        type="button"
-        value="bullet"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-indent">
-      <button
-        aria-label="outdent"
-        aria-pressed="false"
-        class="ql-indent"
-        id="btn-outdent"
-        part="toolbar-button toolbar-button-outdent"
-        tabindex="-1"
-        type="button"
-        value="-1"
-      >
-      </button>
-      <button
-        aria-label="indent"
-        aria-pressed="false"
-        class="ql-indent"
-        id="btn-indent"
-        part="toolbar-button toolbar-button-indent"
-        tabindex="-1"
-        type="button"
-        value="+1"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-alignment">
-      <button
-        aria-label="align left"
-        aria-pressed="false"
-        class="ql-align"
-        id="btn-left"
-        part="toolbar-button toolbar-button-align-left"
-        tabindex="-1"
-        type="button"
-        value=""
-      >
-      </button>
-      <button
-        aria-label="align center"
-        aria-pressed="false"
-        class="ql-align"
-        id="btn-center"
-        part="toolbar-button toolbar-button-align-center"
-        tabindex="-1"
-        type="button"
-        value="center"
-      >
-      </button>
-      <button
-        aria-label="align right"
-        aria-pressed="false"
-        class="ql-align"
-        id="btn-right"
-        part="toolbar-button toolbar-button-align-right"
-        tabindex="-1"
-        type="button"
-        value="right"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-rich-text">
-      <button
-        aria-label="image"
-        id="btn-image"
-        part="toolbar-button toolbar-button-image"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-      <button
-        aria-label="link"
-        aria-pressed="false"
-        id="btn-link"
-        part="toolbar-button toolbar-button-link"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-block">
-      <button
-        aria-label="blockquote"
-        aria-pressed="false"
-        class="ql-blockquote"
-        id="btn-blockquote"
-        part="toolbar-button toolbar-button-blockquote"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-      <button
-        aria-label="code block"
-        aria-pressed="false"
-        class="ql-code-block"
-        id="btn-code"
-        part="toolbar-button toolbar-button-code-block"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-    </span>
-    <span part="toolbar-group toolbar-group-format">
-      <button
-        aria-label="clean"
-        aria-pressed="false"
-        class="ql-clean"
-        id="btn-clean"
-        part="toolbar-button toolbar-button-clean"
-        tabindex="-1"
-        type="button"
-      >
-      </button>
-    </span>
-    <input
-      accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
-      id="fileInput"
-      type="file"
+`<div class="vaadin-field-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
     >
+    </span>
   </div>
-  <div
-    class="ql-container"
-    part="content"
-  >
+  <div class="vaadin-rich-text-editor-container">
     <div
-      aria-multiline="true"
-      class="ql-blank ql-editor"
-      contenteditable="true"
-      role="textbox"
+      class="ql-toolbar"
+      part="toolbar"
+      role="toolbar"
     >
-      <p>
-        <br>
-      </p>
+      <span part="toolbar-group toolbar-group-history">
+        <button
+          aria-label="undo"
+          id="btn-undo"
+          part="toolbar-button toolbar-button-undo"
+          type="button"
+        >
+        </button>
+        <button
+          aria-label="redo"
+          id="btn-redo"
+          part="toolbar-button toolbar-button-redo"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-emphasis">
+        <button
+          aria-label="bold"
+          aria-pressed="false"
+          class="ql-bold"
+          id="btn-bold"
+          part="toolbar-button toolbar-button-bold"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+        <button
+          aria-label="italic"
+          aria-pressed="false"
+          class="ql-italic"
+          id="btn-italic"
+          part="toolbar-button toolbar-button-italic"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+        <button
+          aria-label="underline"
+          aria-pressed="false"
+          class="ql-underline"
+          id="btn-underline"
+          part="toolbar-button toolbar-button-underline"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+        <button
+          aria-label="strike"
+          aria-pressed="false"
+          class="ql-strike"
+          id="btn-strike"
+          part="toolbar-button toolbar-button-strike"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-style">
+        <button
+          aria-expanded="false"
+          aria-label="color"
+          id="btn-color"
+          part="toolbar-button toolbar-button-color"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+        <button
+          aria-expanded="false"
+          aria-label="background"
+          id="btn-background"
+          part="toolbar-button toolbar-button-background"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-heading">
+        <button
+          aria-label="h1"
+          aria-pressed="false"
+          class="ql-header"
+          id="btn-h1"
+          part="toolbar-button toolbar-button-h1"
+          tabindex="-1"
+          type="button"
+          value="1"
+        >
+        </button>
+        <button
+          aria-label="h2"
+          aria-pressed="false"
+          class="ql-header"
+          id="btn-h2"
+          part="toolbar-button toolbar-button-h2"
+          tabindex="-1"
+          type="button"
+          value="2"
+        >
+        </button>
+        <button
+          aria-label="h3"
+          aria-pressed="false"
+          class="ql-header"
+          id="btn-h3"
+          part="toolbar-button toolbar-button-h3"
+          tabindex="-1"
+          type="button"
+          value="3"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-glyph-transformation">
+        <button
+          aria-label="subscript"
+          aria-pressed="false"
+          class="ql-script"
+          id="btn-subscript"
+          part="toolbar-button toolbar-button-subscript"
+          tabindex="-1"
+          type="button"
+          value="sub"
+        >
+        </button>
+        <button
+          aria-label="superscript"
+          aria-pressed="false"
+          class="ql-script"
+          id="btn-superscript"
+          part="toolbar-button toolbar-button-superscript"
+          tabindex="-1"
+          type="button"
+          value="super"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-list">
+        <button
+          aria-label="list ordered"
+          aria-pressed="false"
+          class="ql-list"
+          id="btn-ol"
+          part="toolbar-button toolbar-button-list-ordered"
+          tabindex="-1"
+          type="button"
+          value="ordered"
+        >
+        </button>
+        <button
+          aria-label="list bullet"
+          aria-pressed="false"
+          class="ql-list"
+          id="btn-ul"
+          part="toolbar-button toolbar-button-list-bullet"
+          tabindex="-1"
+          type="button"
+          value="bullet"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-indent">
+        <button
+          aria-label="outdent"
+          aria-pressed="false"
+          class="ql-indent"
+          id="btn-outdent"
+          part="toolbar-button toolbar-button-outdent"
+          tabindex="-1"
+          type="button"
+          value="-1"
+        >
+        </button>
+        <button
+          aria-label="indent"
+          aria-pressed="false"
+          class="ql-indent"
+          id="btn-indent"
+          part="toolbar-button toolbar-button-indent"
+          tabindex="-1"
+          type="button"
+          value="+1"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-alignment">
+        <button
+          aria-label="align left"
+          aria-pressed="false"
+          class="ql-align"
+          id="btn-left"
+          part="toolbar-button toolbar-button-align-left"
+          tabindex="-1"
+          type="button"
+          value=""
+        >
+        </button>
+        <button
+          aria-label="align center"
+          aria-pressed="false"
+          class="ql-align"
+          id="btn-center"
+          part="toolbar-button toolbar-button-align-center"
+          tabindex="-1"
+          type="button"
+          value="center"
+        >
+        </button>
+        <button
+          aria-label="align right"
+          aria-pressed="false"
+          class="ql-align"
+          id="btn-right"
+          part="toolbar-button toolbar-button-align-right"
+          tabindex="-1"
+          type="button"
+          value="right"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-rich-text">
+        <button
+          aria-label="image"
+          id="btn-image"
+          part="toolbar-button toolbar-button-image"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+        <button
+          aria-label="link"
+          aria-pressed="false"
+          id="btn-link"
+          part="toolbar-button toolbar-button-link"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-block">
+        <button
+          aria-label="blockquote"
+          aria-pressed="false"
+          class="ql-blockquote"
+          id="btn-blockquote"
+          part="toolbar-button toolbar-button-blockquote"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+        <button
+          aria-label="code block"
+          aria-pressed="false"
+          class="ql-code-block"
+          id="btn-code"
+          part="toolbar-button toolbar-button-code-block"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+      </span>
+      <span part="toolbar-group toolbar-group-format">
+        <button
+          aria-label="clean"
+          aria-pressed="false"
+          class="ql-clean"
+          id="btn-clean"
+          part="toolbar-button toolbar-button-clean"
+          tabindex="-1"
+          type="button"
+        >
+        </button>
+      </span>
+      <input
+        accept="image/png, image/gif, image/jpeg, image/bmp, image/x-icon"
+        id="fileInput"
+        type="file"
+      >
+    </div>
+    <div
+      class="ql-container"
+      part="content"
+    >
+      <div
+        aria-multiline="true"
+        class="ql-blank ql-editor"
+        contenteditable="true"
+        role="textbox"
+      >
+        <p>
+          <br>
+        </p>
+      </div>
+    </div>
+    <div
+      aria-live="polite"
+      class="announcer"
+    >
     </div>
   </div>
-  <div
-    aria-live="polite"
-    class="announcer"
-  >
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
   </div>
 </div>
 <slot name="tooltip">
