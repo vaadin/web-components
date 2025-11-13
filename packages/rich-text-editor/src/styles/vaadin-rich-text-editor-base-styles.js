@@ -13,10 +13,6 @@ import { icons } from './vaadin-rich-text-editor-base-icons.js';
 
 const base = css`
   :host {
-    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
-    border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
-    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -41,7 +37,11 @@ const base = css`
     flex-direction: column;
     max-height: inherit;
     min-height: inherit;
-    border-radius: inherit;
+    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
+    border: var(--vaadin-input-field-border-width, 1px) solid
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
+    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
+    outline-offset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
     contain: paint;
   }
 
