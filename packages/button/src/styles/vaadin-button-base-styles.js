@@ -22,7 +22,7 @@ export const buttonStyles = css`
     flex-shrink: 0;
     height: var(--vaadin-button-height, auto);
     margin: var(--vaadin-button-margin, 0);
-    padding: var(--vaadin-button-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-button-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
     font-family: var(--vaadin-button-font-family, inherit);
     font-size: var(--vaadin-button-font-size, inherit);
     line-height: var(--vaadin-button-line-height, inherit);

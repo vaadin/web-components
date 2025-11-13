@@ -91,7 +91,10 @@ export const uploadFileStyles = css`
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
     font: inherit;
-    padding: var(--vaadin-upload-file-button-padding, var(--vaadin-padding-container));
+    padding: var(
+      --vaadin-upload-file-button-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
   }
 
   button:focus-visible {
