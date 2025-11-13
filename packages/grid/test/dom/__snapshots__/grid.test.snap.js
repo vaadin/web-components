@@ -212,6 +212,7 @@ snapshots["vaadin-grid basic shadow default"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -457,6 +458,7 @@ snapshots["vaadin-grid basic shadow selected"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -701,6 +703,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -900,6 +903,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -1089,6 +1093,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -1324,6 +1329,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -1592,6 +1598,7 @@ snapshots["vaadin-grid column groups default"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
