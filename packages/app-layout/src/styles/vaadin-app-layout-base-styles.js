@@ -56,6 +56,7 @@ export const appLayoutStyles = css`
 
   [content] {
     height: 100%;
+    transition: inherit;
   }
 
   @media (pointer: coarse) and (max-width: 800px) and (min-height: 500px) {
@@ -198,10 +199,6 @@ export const appLayoutStyles = css`
 
   :host([dir='rtl'][drawer-opened]) [part='drawer'] {
     transform: translateX(0%);
-  }
-
-  :host([drawer-opened]:not([overlay])) {
-    padding-inline-start: var(--vaadin-app-layout-drawer-offset-left);
   }
 
   @media (max-width: 800px), (max-height: 600px) {
