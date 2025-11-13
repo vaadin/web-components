@@ -294,31 +294,27 @@ export const gridStyles = css`
   }
 
   [part~='cell'] {
-    background-color: inherit;
-    background-repeat: no-repeat;
-    background-origin: padding-box;
-    background-image: linear-gradient(
+    --_cell-background-image: linear-gradient(
       var(--vaadin-grid-cell-background-color, transparent),
       var(--vaadin-grid-cell-background-color, transparent)
     );
+
+    background-color: inherit;
+    background-repeat: no-repeat;
+    background-origin: padding-box;
+    background-image: var(--_cell-background-image);
   }
 
   [part~='body-cell'] {
+    --_cell-highlight-background-image: linear-gradient(
+      var(--vaadin-grid-row-highlight-background-color, transparent),
+      var(--vaadin-grid-row-highlight-background-color, transparent)
+    );
+
     background-image:
-      linear-gradient(var(--_row-hover-background-color, transparent), var(--_row-hover-background-color, transparent)),
-      linear-gradient(
-        var(--_row-selected-background-color, transparent),
-        var(--_row-selected-background-color, transparent)
-      ),
-      linear-gradient(
-        var(--vaadin-grid-row-highlight-background-color, transparent),
-        var(--vaadin-grid-row-highlight-background-color, transparent)
-      ),
-      linear-gradient(var(--_row-odd-background-color, transparent), var(--_row-odd-background-color, transparent)),
-      linear-gradient(
-        var(--vaadin-grid-cell-background-color, transparent),
-        var(--vaadin-grid-cell-background-color, transparent)
-      );
+      var(--_row-hover-background-image, none), var(--_row-selected-background-image, none),
+      var(--_cell-highlight-background-image, none), var(--_row-odd-background-image, none),
+      var(--_cell-background-image, none);
   }
 
   [part~='body-row'][selected] {
@@ -326,11 +322,19 @@ export const gridStyles = css`
       --vaadin-grid-row-selected-background-color,
       color-mix(in srgb, currentColor 8%, transparent)
     );
+    --_row-selected-background-image: linear-gradient(
+      var(--_row-selected-background-color),
+      var(--_row-selected-background-color)
+    );
   }
 
   @media (any-hover: hover) {
     [part~='body-row']:hover {
       --_row-hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
+      --_row-hover-background-image: linear-gradient(
+        var(--_row-hover-background-color),
+        var(--_row-hover-background-color)
+      );
     }
   }
 
@@ -339,6 +343,7 @@ export const gridStyles = css`
       --vaadin-grid-row-odd-background-color,
       color-mix(in srgb, var(--vaadin-text-color) 4%, transparent)
     );
+    --_row-odd-background-image: linear-gradient(var(--_row-odd-background-color), var(--_row-odd-background-color));
   }
 
   /* Variant: wrap cell contents */
