@@ -162,115 +162,128 @@ export const gridStyles = css`
     white-space: nowrap;
   }
 
-  /* Row and cell borders */
+  /*
+    Block borders
 
-  [part~='row'] {
-    &::after {
-      top: 0;
-      bottom: calc(var(--_row-border-width) * -1);
-    }
-  }
+    ::after - row and cell focus outline
+    ::before - header bottom and footer top borders that only appear when scrolling
+  */
 
-  [part~='cell'] {
-    border-block: var(--_row-border-width) var(--_border-color);
-    border-inline: var(--_column-border-width) var(--_border-color);
-    border-top-style: solid;
-
-    &::after {
-      top: calc(var(--_row-border-width) * -1);
-      bottom: calc(var(--_row-border-width) * -1);
-    }
-  }
-
-  [part~='last-header-row'],
-  [part~='first-footer-row'] {
-    &::before {
-      position: absolute;
-      inset-inline: 0;
-      border-block: var(--_row-border-width) var(--_border-color);
-      transform: translateX(var(--_grid-horizontal-scroll-position));
-    }
-  }
-
-  [part~='first-header-row'] {
-    [part~='cell'] {
-      border-top-style: none;
-    }
-
-    [part~='cell']::after {
-      top: 0;
-    }
-  }
-
-  [part~='last-header-row'] {
-    :host([overflow~='top']) &::before {
-      content: '';
-      bottom: calc(var(--_row-border-width) * -1);
-      border-bottom-style: solid;
-    }
-  }
-
-  #table:not([has-header]) [part~='first-row'] {
-    [part~='body-cell'] {
-      border-top-style: none;
-    }
-
-    [part~='body-cell']::after {
-      top: 0;
-    }
+  [part~='row']::after {
+    top: 0;
+    bottom: calc(var(--_row-border-width) * -1);
   }
 
   [part~='body-row'] {
     scroll-margin-bottom: var(--_row-border-width);
   }
 
-  [part~='last-row'] {
-    &::after {
+  [part~='cell'] {
+    border-block: var(--_row-border-width) var(--_border-color);
+    border-top-style: solid;
+  }
+
+  [part~='cell']::after {
+    top: calc(var(--_row-border-width) * -1);
+    bottom: calc(var(--_row-border-width) * -1);
+  }
+
+  /* Block borders / Last header row and first footer row */
+
+  [part~='last-header-row']::before,
+  [part~='first-footer-row']::before {
+    position: absolute;
+    inset-inline: 0;
+    border-block: var(--_row-border-width) var(--_border-color);
+    transform: translateX(var(--_grid-horizontal-scroll-position));
+  }
+
+  /* Block borders / First header row */
+
+  [part~='first-header-row-cell'] {
+    border-top-style: none;
+  }
+
+  [part~='first-header-row-cell']::after {
+    top: 0;
+  }
+
+  /* Block borders / Last header row */
+
+  :host([overflow~='top']) [part~='last-header-row']::before {
+    content: '';
+    bottom: calc(var(--_row-border-width) * -1);
+    border-bottom-style: solid;
+  }
+
+  /* Block borders / First body row */
+
+  #table:not([has-header]) [part~='first-row-cell'] {
+    border-top-style: none;
+  }
+
+  #table:not([has-header]) [part~='first-row-cell']::after {
+    top: 0;
+  }
+
+  /* Block borders / Last body row */
+
+  [part~='last-row']::after {
+    bottom: 0;
+  }
+
+  [part~='last-row'] [part~='details-cell'],
+  [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
+    border-bottom-style: solid;
+  }
+
+  /* Block borders / Last body row without footer */
+
+  :host([all-rows-visible]),
+  :host([overflow~='top']),
+  :host([overflow~='bottom']) {
+    #table:not([has-footer]) [part~='last-row']::after,
+    #table:not([has-footer]) [part~='last-row'] [part~='details-cell']::after,
+    #table:not([has-footer]) [part~='last-row-cell']:not([part~='details-opened-row-cell'])::after {
       bottom: 0;
     }
 
-    [part~='cell']:not([part~='details-opened-row-cell']) {
+    #table:not([has-footer]) [part~='last-row'] [part~='details-cell'],
+    #table:not([has-footer]) [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
       border-bottom-style: solid;
     }
   }
 
-  #table:not([has-footer]) [part~='last-row'] {
-    :host([all-rows-visible]) &,
-    :host([overflow~='top']) &,
-    :host([overflow~='bottom']) & {
-      &::after,
-      [part~='cell']:not([part~='details-opened-row-cell'])::after {
-        bottom: 0;
-      }
+  /* Block borders / First footer row */
 
-      [part~='cell']:not([part~='details-opened-row-cell']) {
-        border-bottom-style: none;
-      }
-    }
+  [part~='first-footer-row']::after {
+    top: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='first-footer-row'] {
-    &::after {
-      top: calc(var(--_row-border-width) * -1);
-    }
+  [part~='first-footer-row-cell'] {
+    border-top-style: none;
+  }
 
-    [part~='cell'] {
-      border-top-style: none;
-    }
-
-    :host([overflow~='bottom']) &::before,
-    :host(:not([overflow~='top']):not([all-rows-visible])) #scroller:not([empty-state]) &::before {
+  :host([overflow~='bottom']),
+  :host(:not([overflow~='top']):not([all-rows-visible])) #scroller:not([empty-state]) {
+    [part~='first-footer-row']::before {
       content: '';
       top: calc(var(--_row-border-width) * -1);
       border-top-style: solid;
     }
   }
 
-  [part~='last-footer-row'] {
-    &::after,
-    [part~='cell']::after {
-      bottom: 0;
-    }
+  /* Block borders / Last footer row */
+
+  [part~='last-footer-row']::after,
+  [part~='last-footer-row-cell']::after {
+    bottom: 0;
+  }
+
+  /* Inline borders */
+
+  [part~='cell'] {
+    border-inline: var(--_column-border-width) var(--_border-color);
   }
 
   [part~='header-cell']:not([part~='first-column-cell']),
