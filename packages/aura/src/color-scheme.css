@@ -8,3 +8,15 @@
 html {
   color-scheme: var(--aura-color-scheme);
 }
+
+[theme~='light'] {
+  --aura-color-scheme: light;
+}
+
+[theme~='dark'] {
+  --aura-color-scheme: dark;
+}
+
+[theme~='light-dark'] {
+  --aura-color-scheme: light-dark;
+}
