@@ -56,6 +56,10 @@
     }
   }
 
+  &:active {
+    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  }
+
   &[aria-expanded='true']:not(:hover) {
     background: var(--vaadin-background-container-strong);
   }
