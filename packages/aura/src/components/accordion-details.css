@@ -1,5 +1,5 @@
 :is(vaadin-details, vaadin-accordion-panel):not([theme~='no-padding'])::part(content) {
-  padding: var(--vaadin-padding-container);
+  padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
   padding-top: 0;
 }
 

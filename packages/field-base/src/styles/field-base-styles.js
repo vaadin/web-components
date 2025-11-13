@@ -63,7 +63,10 @@ export const field = css`
     align-self: var(--_has-label, end) var(--_no-label, start);
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
-    padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
+    padding: var(
+      --vaadin-input-field-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
     margin-bottom: var(--_no-label, 0)

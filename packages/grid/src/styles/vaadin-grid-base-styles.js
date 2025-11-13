@@ -25,6 +25,10 @@ export const gridStyles = css`
     --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
+    --_cell-padding: var(
+      --vaadin-grid-cell-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
     border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-m));
   }
 
@@ -383,7 +387,7 @@ export const gridStyles = css`
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
+    padding: var(--_cell-padding);
     flex: 1;
     min-height: 1lh;
     min-width: 0;
@@ -418,7 +422,7 @@ export const gridStyles = css`
     display: block;
     flex: 1;
     overflow: auto;
-    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
+    padding: var(--_cell-padding);
     outline: none;
     border-block: var(--_row-border-width) var(--_border-color);
   }
@@ -450,7 +454,7 @@ export const gridStyles = css`
     box-shadow:
       0 0 0 1px hsla(0deg, 0%, 0%, 0.2),
       0 8px 24px -2px hsla(0deg, 0%, 0%, 0.2);
-    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container)) !important;
+    padding: var(--_cell-padding) !important;
     border-radius: 3px;
 
     /* Prevent overflowing the grid in Firefox */

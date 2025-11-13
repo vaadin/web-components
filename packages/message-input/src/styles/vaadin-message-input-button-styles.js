@@ -10,7 +10,10 @@ export const messageInputButtonStyles = css`
   :host {
     flex: none;
     align-self: end;
-    margin: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
+    margin: var(
+      --vaadin-input-field-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
     --vaadin-button-border-width: 0;
     --vaadin-button-background: transparent;
     --vaadin-button-text-color: var(--vaadin-text-color);
