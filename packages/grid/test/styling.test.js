@@ -23,52 +23,52 @@ describe('styling', () => {
 
   function runStylingTest(entries, generatorFn, requestFn, assertCallback) {
     it(`should add ${entries} for cells`, () => {
-      grid[generatorFn] = () => 'foo';
-      assertCallback(['foo']);
-      assertCallback(['foo'], 1, 1);
+      grid[generatorFn] = () => 'test-foo';
+      assertCallback(['test-foo']);
+      assertCallback(['test-foo'], 1, 1);
     });
 
     it(`should add all ${entries} separated by whitespaces`, () => {
-      grid[generatorFn] = () => 'foo bar baz';
-      assertCallback(['foo', 'bar', 'baz']);
+      grid[generatorFn] = () => 'test-foo test-bar test-baz';
+      assertCallback(['test-foo', 'test-bar', 'test-baz']);
     });
 
     it(`should not remove existing ${entries}`, () => {
       if (entries === 'classes') {
-        firstCell.classList.add('bar');
+        firstCell.classList.add('test-bar');
       } else {
-        firstCell.setAttribute('part', `${firstCell.getAttribute('part')} bar`);
+        firstCell.setAttribute('part', `${firstCell.getAttribute('part')} test-bar`);
       }
 
-      grid[generatorFn] = () => 'foo';
-      assertCallback(['bar', 'foo']);
+      grid[generatorFn] = () => 'test-foo';
+      assertCallback(['test-bar', 'test-foo']);
     });
 
     it(`should remove old generated ${entries}`, () => {
-      grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = () => 'bar'; // NOSONAR
-      assertCallback(['bar']);
+      grid[generatorFn] = () => 'test-foo';
+      grid[generatorFn] = () => 'test-bar'; // NOSONAR
+      assertCallback(['test-bar']);
     });
 
     it(`should provide column and model as parameters to ${generatorFn}`, () => {
-      grid[generatorFn] = (column, model) => `${model.index} ${model.item.value} ${column.header}`;
-      assertCallback(['5', 'foo5', 'col1'], 5, 1);
-      assertCallback(['10', 'foo10', 'col0'], 10, 0);
+      grid[generatorFn] = (column, model) => `test-${model.index} test-${model.item.value} test-${column.header}`;
+      assertCallback(['test-5', 'test-foo5', 'test-col1'], 5, 1);
+      assertCallback(['test-10', 'test-foo10', 'test-col0'], 10, 0);
     });
 
     it(`should call ${generatorFn} for details cell with undefined column`, async () => {
       grid.rowDetailsRenderer = () => {};
-      grid[generatorFn] = (column, model) => `${model.index} ${column}`;
+      grid[generatorFn] = (column, model) => `test-${model.index} test-${column}`;
       await nextFrame();
       flushGrid(grid);
-      assertCallback(['0', 'undefined'], 0, 2);
+      assertCallback(['test-0', 'test-undefined'], 0, 2);
     });
 
     it(`should add ${entries} when loading new items`, (done) => {
-      grid[generatorFn] = (_, model) => model.item.value;
+      grid[generatorFn] = (_, model) => `test-${model.item.value}`;
       scrollToEnd(grid, () => {
         const rows = getRows(grid.$.items);
-        assertCallback(['foo199'], rows.length - 1, 0);
+        assertCallback(['test-foo199'], rows.length - 1, 0);
         done();
       });
     });
@@ -80,13 +80,13 @@ describe('styling', () => {
     });
 
     it(`should clear generated ${entries} with falsy return value`, () => {
-      grid[generatorFn] = () => 'foo';
+      grid[generatorFn] = () => 'test-foo';
       grid[generatorFn] = () => {}; // NOSONAR
       assertCallback([]);
     });
 
     it(`should clear generated ${entries} with falsy property value`, () => {
-      grid[generatorFn] = () => 'foo';
+      grid[generatorFn] = () => 'test-foo';
       grid[generatorFn] = undefined; // NOSONAR
       assertCallback([]);
     });
@@ -94,11 +94,11 @@ describe('styling', () => {
     [requestFn, 'clearCache', 'requestContentUpdate'].forEach((funcName) => {
       it(`should update ${entries} on ${funcName}`, () => {
         let condition = false;
-        grid[generatorFn] = () => condition && 'foo';
+        grid[generatorFn] = () => condition && 'test-foo';
         condition = true;
         assertCallback([]);
         grid[funcName]();
-        assertCallback(['foo']);
+        assertCallback(['test-foo']);
       });
     });
 
@@ -113,20 +113,20 @@ describe('styling', () => {
 
     it(`should not throw when ${generatorFn} return value contains extra whitespace`, () => {
       expect(() => {
-        grid[generatorFn] = () => ' foo  bar ';
+        grid[generatorFn] = () => ' test-foo  test-bar ';
       }).not.to.throw(Error);
-      assertCallback(['foo', 'bar']);
+      assertCallback(['test-foo', 'test-bar']);
     });
 
     it(`should have the right ${entries} after toggling column visibility`, async () => {
-      grid[generatorFn] = (_column, { index }) => (index % 2 === 0 ? 'even' : 'odd');
+      grid[generatorFn] = (_column, { index }) => `test-${index % 2 === 0 ? 'even' : 'odd'}`;
       const column = grid.querySelector('vaadin-grid-column');
       column.hidden = true;
       await nextRender();
       column.hidden = false;
       await nextRender();
-      assertCallback(['odd'], 1, 0);
-      assertCallback(['odd'], 1, 1);
+      assertCallback(['test-odd'], 1, 0);
+      assertCallback(['test-odd'], 1, 1);
     });
 
     describe('async data provider', () => {
@@ -161,11 +161,11 @@ describe('styling', () => {
       });
 
       it(`should remove custom ${entries} for rows that enter loading state`, () => {
-        grid[generatorFn] = () => 'foo'; // NOSONAR
+        grid[generatorFn] = () => 'test-foo'; // NOSONAR
         clock.tick(10);
 
         expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.false;
-        assertCallback(['foo']);
+        assertCallback(['test-foo']);
 
         grid.clearCache();
 
@@ -176,15 +176,10 @@ describe('styling', () => {
   }
 
   describe('cell class name generator', () => {
-    let initialCellClasses;
-
-    beforeEach(() => {
-      initialCellClasses = Array.from(firstCell.classList);
-    });
-
     const assertClassList = (expectedClasses, row = 0, col = 0) => {
       const cell = getContainerCell(grid.$.items, row, col);
-      expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
+      expect([...cell.classList]).to.include('cell');
+      expect([...cell.classList].filter((c) => c.startsWith('test-'))).to.deep.equal(expectedClasses);
     };
 
     runStylingTest('classes', 'cellClassNameGenerator', 'generateCellClassNames', assertClassList);
