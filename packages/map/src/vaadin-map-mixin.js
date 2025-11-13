@@ -58,6 +58,7 @@ export const MapMixin = (superClass) =>
       // Add map container to shadow root, trigger OL resize calculation
       this.shadowRoot.appendChild(this._mapTarget);
       this.__addMapFocusListeners();
+      this.__addDropListeners();
     }
 
     /**
@@ -99,5 +100,46 @@ export const MapMixin = (superClass) =>
      */
     _shouldSetFocus(_event) {
       return false;
+    }
+
+    /** @private */
+    __addDropListeners() {
+      this.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      this.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const coordinate = this.__getDropCoordinates(e);
+        if (!coordinate) {
+          return;
+        }
+        const dragData =
+          e.dataTransfer.types &&
+          Array.from(e.dataTransfer.types).map((type) => {
+            return {
+              type,
+              data: e.dataTransfer.getData(type),
+            };
+          });
+        const mapDropEvent = new CustomEvent('map-drop', {
+          bubbles: true,
+          cancelable: false,
+          detail: {
+            coordinate,
+            dragData,
+          },
+        });
+        mapDropEvent.originalEvent = e;
+        this.dispatchEvent(mapDropEvent);
+      });
+    }
+
+    /** @private */
+    __getDropCoordinates(e) {
+      const rect = this._mapTarget.getBoundingClientRect();
+      const pixel = [e.clientX - rect.left, e.clientY - rect.top];
+      return this._configuration.getCoordinateFromPixel(pixel);
     }
   };

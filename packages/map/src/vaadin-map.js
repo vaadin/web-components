@@ -51,6 +51,8 @@ import { MapMixin } from './vaadin-map-mixin.js';
  * </script>
  * ```
  *
+ * @fires {CustomEvent} map-drop - Fired when an external element is dropped onto the map.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes MapMixin

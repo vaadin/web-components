@@ -99,3 +99,79 @@ describe('resize', () => {
     expect(updatedRect.width).to.equal(200);
   });
 });
+
+describe('map-drop event', () => {
+  let map;
+
+  beforeEach(async () => {
+    map = fixtureSync('<vaadin-map></vaadin-map>');
+    map.style.width = '400px';
+    map.style.height = '400px';
+    // Configure map with a view
+    map.configuration.addLayer(new TileLayer({ source: new OSM() }));
+    map.configuration.setView(new View({ center: [0, 0], zoom: 3 }));
+    await nextMapRender(map);
+  });
+
+  const dispatchDropEvent = () => {
+    const dropEvent = new DragEvent('drop', {
+      bubbles: true,
+      cancelable: true,
+      clientX: 200,
+      clientY: 200,
+      dataTransfer: new DataTransfer(),
+    });
+    dropEvent.dataTransfer.setData('text/plain', 'test data');
+    map.dispatchEvent(dropEvent);
+  };
+
+  it('should fire map-drop event when an element is dropped', (done) => {
+    map.addEventListener('map-drop', (e) => {
+      expect(e.detail).to.exist;
+      done();
+    });
+    dispatchDropEvent();
+  });
+
+  it('should include drag data in map-drop event', (done) => {
+    map.addEventListener('map-drop', (e) => {
+      expect(e.detail.dragData).to.be.an('array');
+      expect(e.detail.dragData).to.have.lengthOf(1);
+      expect(e.detail.dragData[0].type).to.equal('text/plain');
+      expect(e.detail.dragData[0].data).to.equal('test data');
+      done();
+    });
+    dispatchDropEvent();
+  });
+
+  it('should include coordinate in map-drop event', (done) => {
+    map.addEventListener('map-drop', (e) => {
+      const coordinate = e.detail.coordinate;
+      expect(coordinate).to.be.an('array');
+      expect(coordinate).to.have.lengthOf(2);
+      expect(coordinate[0]).to.be.a('number');
+      expect(coordinate[1]).to.be.a('number');
+      done();
+    });
+    dispatchDropEvent();
+  });
+
+  it('should include originalEvent in map-drop event', (done) => {
+    map.addEventListener('map-drop', (e) => {
+      expect(e.originalEvent).to.exist;
+      expect(e.originalEvent).to.be.instanceOf(DragEvent);
+      expect(e.originalEvent.type).to.equal('drop');
+      done();
+    });
+    dispatchDropEvent();
+  });
+
+  it('should allow drops via dragover handler', () => {
+    const dragoverEvent = new DragEvent('dragover', {
+      bubbles: true,
+      cancelable: true,
+    });
+    const prevented = !map.dispatchEvent(dragoverEvent);
+    expect(prevented).to.be.true;
+  });
+});

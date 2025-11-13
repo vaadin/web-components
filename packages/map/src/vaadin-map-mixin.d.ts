@@ -13,6 +13,20 @@ import type OpenLayersMap from 'ol/Map.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
+/**
+ * Fired when an element from an external drag source is dropped onto the map.
+ */
+export type MapDropEvent = CustomEvent<{
+  coordinate: number[];
+  dragData: Array<{ type: string; data: string }>;
+}>;
+
+export interface MapCustomEventMap {
+  'map-drop': MapDropEvent;
+}
+
+export interface MapEventMap extends HTMLElementEventMap, MapCustomEventMap {}
+
 export declare function MapMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<MapMixinClass> & Constructor<ResizeMixinClass> & Constructor<FocusMixinClass> & T;
@@ -25,4 +39,16 @@ export declare class MapMixinClass {
    * @returns {*}
    */
   get configuration(): OpenLayersMap;
+
+  addEventListener<K extends keyof MapEventMap>(
+    type: K,
+    listener: (this: Map, ev: MapEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof MapEventMap>(
+    type: K,
+    listener: (this: Map, ev: MapEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
