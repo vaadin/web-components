@@ -16,6 +16,7 @@ export const masterDetailLayoutStyles = css`
     max-width: 100%;
     max-height: 100%;
     position: relative; /* Keep the positioning context stable across all modes */
+    z-index: 0; /* Create a new stacking context, don't let "layout contained" detail element stack outside it */
     overflow: hidden;
   }
 
@@ -60,6 +61,24 @@ export const masterDetailLayoutStyles = css`
 
   :host(:is([drawer], [stack])[containment='viewport']) :is([part='_detail-internal'], [part='backdrop']) {
     position: fixed;
+  }
+
+  :host(:is([drawer], [stack])[containment='viewport']) [part='detail'] {
+    padding-top: var(--safe-area-inset-top);
+    padding-bottom: var(--safe-area-inset-bottom);
+  }
+
+  :host([containment='viewport']:dir(ltr)) [part='detail'] {
+    padding-right: var(--safe-area-inset-right);
+  }
+
+  :host([containment='viewport']:dir(rtl)) [part='detail'] {
+    padding-left: var(--safe-area-inset-left);
+  }
+
+  :host([stack][containment='viewport']) [part='detail'] {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: var(--safe-area-inset-right);
   }
 
   /* Sizing styles */
