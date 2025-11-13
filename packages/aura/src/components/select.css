@@ -28,3 +28,7 @@ vaadin-select[theme~='subtle'][focus-ring]::part(toggle-button) {
 vaadin-select[theme~='auto-size'] {
   --vaadin-field-default-width: auto;
 }
+
+vaadin-select-value-button {
+  font-weight: var(--aura-font-weight-medium);
+}
