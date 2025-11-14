@@ -10,60 +10,22 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
 // which overrides them with values that heavily rely on relative colors. It was found that without an
 // explicit `<color>` type, the browser (at least Chrome) can't optimize these properties properly, which
 // leads to a dramatic performance drop (around 40% slower render time).
-CSS.registerProperty({
-  name: '--vaadin-background-color',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-border-color',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-border-color-secondary',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-text-color',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-text-color-secondary',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-background-container',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-background-container-strong',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
-});
-
-CSS.registerProperty({
-  name: '--vaadin-text-color-disabled',
-  syntax: '<color>',
-  inherits: true,
-  initialValue: 'white',
+[
+  '--vaadin-text-color',
+  '--vaadin-text-color-disabled',
+  '--vaadin-text-color-secondary',
+  '--vaadin-border-color',
+  '--vaadin-border-color-secondary',
+  '--vaadin-background-color',
+  '--vaadin-background-container',
+  '--vaadin-background-container-strong',
+].forEach((propertyName) => {
+  CSS.registerProperty({
+    name: propertyName,
+    syntax: '<color>',
+    inherits: true,
+    initialValue: 'white',
+  });
 });
 
 addGlobalThemeStyles(
