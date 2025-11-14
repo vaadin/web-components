@@ -6,6 +6,66 @@
 import { css } from 'lit';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
+// NOTE: Explicitly register base color CSS custom properties here to avoid performance issues in Aura,
+// which overrides them with values that heavily rely on relative colors. It was found that without an
+// explicit `<color>` type, the browser (at least Chrome) can't optimize these properties properly, which
+// leads to a dramatic performance drop (around 40% slower render time).
+CSS.registerProperty({
+  name: '--vaadin-background-color',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-border-color',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-border-color-secondary',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-text-color',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-text-color-secondary',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-background-container',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-background-container-strong',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-text-color-disabled',
+  syntax: '<color>',
+  inherits: true,
+  initialValue: 'white',
+});
+
 addGlobalThemeStyles(
   'vaadin-base',
   css`
