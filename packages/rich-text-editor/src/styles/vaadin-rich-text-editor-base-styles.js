@@ -17,10 +17,15 @@ const base = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    gap: var(--vaadin-input-field-label-spacing, var(--vaadin-gap-xs));
   }
 
   :host([hidden]) {
     display: none !important;
+  }
+
+  :host::before {
+    display: none;
   }
 
   .announcer {
@@ -32,20 +37,12 @@ const base = css`
     display: none;
   }
 
-  .vaadin-field-container {
-    display: flex;
-    flex-direction: column;
-    flex: auto;
-    gap: var(--vaadin-input-field-label-spacing, var(--vaadin-gap-xs));
-    min-height: 0;
-  }
-
   .vaadin-rich-text-editor-container {
     display: flex;
     flex: auto;
     flex-direction: column;
     max-height: inherit;
-    min-height: inherit;
+    min-height: 0;
     background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
     border: var(--vaadin-input-field-border-width, 1px) solid
       var(--vaadin-input-field-border-color, var(--vaadin-border-color));
