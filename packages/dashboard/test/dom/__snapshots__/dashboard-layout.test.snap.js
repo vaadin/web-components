@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-dashboard-layout host"] = 
-`<vaadin-dashboard-layout>
+`<vaadin-dashboard-layout root-heading-level="2">
 </vaadin-dashboard-layout>
 `;
 /* end snapshot vaadin-dashboard-layout host */
