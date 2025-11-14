@@ -59,6 +59,7 @@ snapshots["vaadin-grid basic shadow default"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell"
           first-column=""
           id="vaadin-grid-cell-4"
           part="cell body-cell first-column-cell"
@@ -70,6 +71,7 @@ snapshots["vaadin-grid basic shadow default"] =
           </slot>
         </td>
         <td
+          class="body-cell cell last-column-cell"
           id="vaadin-grid-cell-5"
           last-column=""
           part="cell body-cell last-column-cell"
@@ -89,12 +91,14 @@ snapshots["vaadin-grid basic shadow default"] =
     >
       <tr
         aria-rowindex="1"
+        class="first-header-row header-row last-header-row row"
         part="row header-row first-header-row last-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-0"
           part="cell header-cell first-column-cell first-header-row-cell last-header-row-cell"
@@ -106,6 +110,7 @@ snapshots["vaadin-grid basic shadow default"] =
           </slot>
         </th>
         <th
+          class="cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           id="vaadin-grid-cell-1"
           last-column=""
           part="cell header-cell last-column-cell first-header-row-cell last-header-row-cell"
@@ -126,6 +131,7 @@ snapshots["vaadin-grid basic shadow default"] =
       <tr
         aria-rowindex="2"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -137,6 +143,7 @@ snapshots["vaadin-grid basic shadow default"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell"
           first-column=""
           id="vaadin-grid-cell-6"
           part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -149,6 +156,7 @@ snapshots["vaadin-grid basic shadow default"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-row-cell last-column-cell"
           id="vaadin-grid-cell-7"
           last-column=""
           part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -163,6 +171,7 @@ snapshots["vaadin-grid basic shadow default"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -174,6 +183,7 @@ snapshots["vaadin-grid basic shadow default"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-8"
           part="cell body-cell first-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -186,6 +196,7 @@ snapshots["vaadin-grid basic shadow default"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell last-column-cell last-row-cell odd-row-cell"
           id="vaadin-grid-cell-9"
           last-column=""
           part="cell body-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -201,6 +212,7 @@ snapshots["vaadin-grid basic shadow default"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -220,6 +232,7 @@ snapshots["vaadin-grid basic shadow default"] =
     >
       <tr
         aria-rowindex="4"
+        class="footer-row row"
         hidden=""
         part="row footer-row"
         role="row"
@@ -227,6 +240,7 @@ snapshots["vaadin-grid basic shadow default"] =
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell footer-cell"
           first-column=""
           id="vaadin-grid-cell-2"
           part="cell footer-cell first-column-cell"
@@ -238,6 +252,7 @@ snapshots["vaadin-grid basic shadow default"] =
           </slot>
         </td>
         <td
+          class="cell footer-cell last-column-cell"
           id="vaadin-grid-cell-3"
           last-column=""
           part="cell footer-cell last-column-cell"
@@ -251,7 +266,10 @@ snapshots["vaadin-grid basic shadow default"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -286,6 +304,7 @@ snapshots["vaadin-grid basic shadow selected"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell"
           first-column=""
           id="vaadin-grid-cell-4"
           part="cell body-cell first-column-cell"
@@ -297,6 +316,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           </slot>
         </td>
         <td
+          class="body-cell cell last-column-cell"
           id="vaadin-grid-cell-5"
           last-column=""
           part="cell body-cell last-column-cell"
@@ -316,12 +336,14 @@ snapshots["vaadin-grid basic shadow selected"] =
     >
       <tr
         aria-rowindex="1"
+        class="first-header-row header-row last-header-row row"
         part="row header-row first-header-row last-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-0"
           part="cell header-cell first-column-cell first-header-row-cell last-header-row-cell"
@@ -333,6 +355,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           </slot>
         </th>
         <th
+          class="cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           id="vaadin-grid-cell-1"
           last-column=""
           part="cell header-cell last-column-cell first-header-row-cell last-header-row-cell"
@@ -353,6 +376,7 @@ snapshots["vaadin-grid basic shadow selected"] =
       <tr
         aria-rowindex="2"
         aria-selected="true"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row selected-row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -365,6 +389,7 @@ snapshots["vaadin-grid basic shadow selected"] =
       >
         <td
           aria-selected="true"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell selected-row-cell"
           first-column=""
           id="vaadin-grid-cell-6"
           part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell selected-row-cell"
@@ -377,6 +402,7 @@ snapshots["vaadin-grid basic shadow selected"] =
         </td>
         <td
           aria-selected="true"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-row-cell last-column-cell selected-row-cell"
           id="vaadin-grid-cell-7"
           last-column=""
           part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell selected-row-cell"
@@ -391,6 +417,7 @@ snapshots["vaadin-grid basic shadow selected"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -402,6 +429,7 @@ snapshots["vaadin-grid basic shadow selected"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-8"
           part="cell body-cell first-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -414,6 +442,7 @@ snapshots["vaadin-grid basic shadow selected"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell last-column-cell last-row-cell odd-row-cell"
           id="vaadin-grid-cell-9"
           last-column=""
           part="cell body-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -429,6 +458,7 @@ snapshots["vaadin-grid basic shadow selected"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -448,6 +478,7 @@ snapshots["vaadin-grid basic shadow selected"] =
     >
       <tr
         aria-rowindex="4"
+        class="footer-row row"
         hidden=""
         part="row footer-row"
         role="row"
@@ -455,6 +486,7 @@ snapshots["vaadin-grid basic shadow selected"] =
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell footer-cell"
           first-column=""
           id="vaadin-grid-cell-2"
           part="cell footer-cell first-column-cell"
@@ -466,6 +498,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           </slot>
         </td>
         <td
+          class="cell footer-cell last-column-cell"
           id="vaadin-grid-cell-3"
           last-column=""
           part="cell footer-cell last-column-cell"
@@ -479,7 +512,10 @@ snapshots["vaadin-grid basic shadow selected"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -514,6 +550,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell"
           first-column=""
           id="vaadin-grid-cell-4"
           part="cell body-cell first-column-cell"
@@ -525,6 +562,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           </slot>
         </td>
         <td
+          class="body-cell cell last-column-cell"
           id="vaadin-grid-cell-5"
           last-column=""
           part="cell body-cell last-column-cell"
@@ -544,12 +582,14 @@ snapshots["vaadin-grid basic shadow details opened"] =
     >
       <tr
         aria-rowindex="1"
+        class="first-header-row header-row last-header-row row"
         part="row header-row first-header-row last-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-0"
           part="cell header-cell first-column-cell first-header-row-cell last-header-row-cell"
@@ -561,6 +601,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           </slot>
         </th>
         <th
+          class="cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           id="vaadin-grid-cell-1"
           last-column=""
           part="cell header-cell last-column-cell first-header-row-cell last-header-row-cell"
@@ -581,6 +622,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
       <tr
         aria-rowindex="2"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -592,6 +634,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell"
           first-column=""
           id="vaadin-grid-cell-6"
           part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -604,6 +647,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-row-cell last-column-cell"
           id="vaadin-grid-cell-7"
           last-column=""
           part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -618,6 +662,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -629,6 +674,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-8"
           part="cell body-cell first-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -641,6 +687,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell last-column-cell last-row-cell odd-row-cell"
           id="vaadin-grid-cell-9"
           last-column=""
           part="cell body-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -656,6 +703,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -675,6 +723,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
     >
       <tr
         aria-rowindex="4"
+        class="footer-row row"
         hidden=""
         part="row footer-row"
         role="row"
@@ -682,6 +731,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell footer-cell"
           first-column=""
           id="vaadin-grid-cell-2"
           part="cell footer-cell first-column-cell"
@@ -693,6 +743,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           </slot>
         </td>
         <td
+          class="cell footer-cell last-column-cell"
           id="vaadin-grid-cell-3"
           last-column=""
           part="cell footer-cell last-column-cell"
@@ -706,7 +757,10 @@ snapshots["vaadin-grid basic shadow details opened"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -742,6 +796,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell last-column-cell"
           first-column=""
           id="vaadin-grid-cell-5"
           last-column=""
@@ -762,12 +817,14 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     >
       <tr
         aria-rowindex="1"
+        class="first-header-row header-row last-header-row row"
         part="row header-row first-header-row last-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-1"
           last-column=""
@@ -789,6 +846,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
       <tr
         aria-rowindex="2"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -800,6 +858,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell last-column-cell"
           first-column=""
           id="vaadin-grid-cell-7"
           last-column=""
@@ -815,6 +874,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -826,6 +886,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-9"
           last-column=""
@@ -842,6 +903,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -861,6 +923,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
     >
       <tr
         aria-rowindex="4"
+        class="footer-row row"
         hidden=""
         part="row footer-row"
         role="row"
@@ -868,6 +931,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell footer-cell last-column-cell"
           first-column=""
           id="vaadin-grid-cell-3"
           last-column=""
@@ -882,7 +946,10 @@ snapshots["vaadin-grid basic shadow hidden column"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -918,6 +985,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell last-column-cell"
           first-column=""
           id="vaadin-grid-cell-5"
           last-column=""
@@ -938,12 +1006,14 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     >
       <tr
         aria-rowindex="1"
+        class="first-header-row header-row last-header-row row"
         part="row header-row first-header-row last-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-1"
           last-column=""
@@ -965,6 +1035,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
       <tr
         aria-rowindex="2"
         aria-selected="true"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row selected-row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -977,6 +1048,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
       >
         <td
           aria-selected="true"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell last-column-cell selected-row-cell"
           first-column=""
           id="vaadin-grid-cell-7"
           last-column=""
@@ -992,6 +1064,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -1003,6 +1076,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-9"
           last-column=""
@@ -1019,6 +1093,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -1038,6 +1113,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
     >
       <tr
         aria-rowindex="4"
+        class="footer-row row"
         hidden=""
         part="row footer-row"
         role="row"
@@ -1045,6 +1121,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell footer-cell last-column-cell"
           first-column=""
           id="vaadin-grid-cell-3"
           last-column=""
@@ -1059,7 +1136,10 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -1096,6 +1176,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell"
           first-column=""
           id="vaadin-grid-cell-4"
           part="cell body-cell first-column-cell"
@@ -1107,6 +1188,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           </slot>
         </td>
         <td
+          class="body-cell cell last-column-cell"
           id="vaadin-grid-cell-5"
           last-column=""
           part="cell body-cell last-column-cell"
@@ -1126,12 +1208,14 @@ snapshots["vaadin-grid basic shadow with footer"] =
     >
       <tr
         aria-rowindex="1"
+        class="first-header-row header-row last-header-row row"
         part="row header-row first-header-row last-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-0"
           part="cell header-cell first-column-cell first-header-row-cell last-header-row-cell"
@@ -1143,6 +1227,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           </slot>
         </th>
         <th
+          class="cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           id="vaadin-grid-cell-1"
           last-column=""
           part="cell header-cell last-column-cell first-header-row-cell last-header-row-cell"
@@ -1163,6 +1248,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
       <tr
         aria-rowindex="2"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -1174,6 +1260,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell"
           first-column=""
           id="vaadin-grid-cell-6"
           part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1186,6 +1273,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-row-cell last-column-cell"
           id="vaadin-grid-cell-7"
           last-column=""
           part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1200,6 +1288,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -1211,6 +1300,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-8"
           part="cell body-cell first-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1223,6 +1313,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell last-column-cell last-row-cell odd-row-cell"
           id="vaadin-grid-cell-9"
           last-column=""
           part="cell body-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1238,6 +1329,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -1257,12 +1349,14 @@ snapshots["vaadin-grid basic shadow with footer"] =
     >
       <tr
         aria-rowindex="4"
+        class="first-footer-row footer-row last-footer-row row"
         part="row footer-row first-footer-row last-footer-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell first-footer-row-cell footer-cell last-footer-row-cell"
           first-column=""
           id="vaadin-grid-cell-2"
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
@@ -1274,6 +1368,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           </slot>
         </td>
         <td
+          class="cell first-footer-row-cell footer-cell last-column-cell last-footer-row-cell"
           id="vaadin-grid-cell-3"
           last-column=""
           part="cell footer-cell last-column-cell first-footer-row-cell last-footer-row-cell"
@@ -1287,7 +1382,10 @@ snapshots["vaadin-grid basic shadow with footer"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -1323,6 +1421,7 @@ snapshots["vaadin-grid column groups default"] =
     <tbody>
       <tr>
         <td
+          class="body-cell cell first-column-cell"
           first-column=""
           id="vaadin-grid-cell-6"
           part="cell body-cell first-column-cell"
@@ -1334,6 +1433,7 @@ snapshots["vaadin-grid column groups default"] =
           </slot>
         </td>
         <td
+          class="body-cell cell last-column-cell"
           id="vaadin-grid-cell-7"
           last-column=""
           part="cell body-cell last-column-cell"
@@ -1353,6 +1453,7 @@ snapshots["vaadin-grid column groups default"] =
     >
       <tr
         aria-rowindex="1"
+        class="header-row row"
         hidden=""
         part="row header-row"
         role="row"
@@ -1360,6 +1461,7 @@ snapshots["vaadin-grid column groups default"] =
       >
         <th
           aria-colspan="2"
+          class="cell first-column-cell header-cell last-column-cell"
           colspan="2"
           first-column=""
           id="vaadin-grid-cell-0"
@@ -1375,12 +1477,14 @@ snapshots["vaadin-grid column groups default"] =
       </tr>
       <tr
         aria-rowindex="2"
+        class="first-header-row header-row last-header-row row"
         part="row header-row last-header-row first-header-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <th
+          class="cell first-column-cell first-header-row-cell header-cell last-header-row-cell"
           first-column=""
           id="vaadin-grid-cell-1"
           part="cell header-cell first-column-cell last-header-row-cell first-header-row-cell"
@@ -1392,6 +1496,7 @@ snapshots["vaadin-grid column groups default"] =
           </slot>
         </th>
         <th
+          class="cell first-header-row-cell header-cell last-column-cell last-header-row-cell"
           id="vaadin-grid-cell-2"
           last-column=""
           part="cell header-cell last-column-cell last-header-row-cell first-header-row-cell"
@@ -1412,6 +1517,7 @@ snapshots["vaadin-grid column groups default"] =
       <tr
         aria-rowindex="2"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row even-row first-row row"
         drag-disabled=""
         drop-disabled=""
         even=""
@@ -1423,6 +1529,7 @@ snapshots["vaadin-grid column groups default"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell"
           first-column=""
           id="vaadin-grid-cell-8"
           part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1435,6 +1542,7 @@ snapshots["vaadin-grid column groups default"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-row-cell last-column-cell"
           id="vaadin-grid-cell-9"
           last-column=""
           part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1449,6 +1557,7 @@ snapshots["vaadin-grid column groups default"] =
       <tr
         aria-rowindex="3"
         aria-selected="false"
+        class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
         drag-disabled=""
         drop-disabled=""
         last=""
@@ -1460,6 +1569,7 @@ snapshots["vaadin-grid column groups default"] =
       >
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-row-cell odd-row-cell"
           first-column=""
           id="vaadin-grid-cell-10"
           part="cell body-cell first-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1472,6 +1582,7 @@ snapshots["vaadin-grid column groups default"] =
         </td>
         <td
           aria-selected="false"
+          class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell last-column-cell last-row-cell odd-row-cell"
           id="vaadin-grid-cell-11"
           last-column=""
           part="cell body-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
@@ -1487,6 +1598,7 @@ snapshots["vaadin-grid column groups default"] =
     <tbody id="emptystatebody">
       <tr id="emptystaterow">
         <td
+          class="empty-state"
           id="emptystatecell"
           part="empty-state"
           tabindex="0"
@@ -1506,12 +1618,14 @@ snapshots["vaadin-grid column groups default"] =
     >
       <tr
         aria-rowindex="4"
+        class="first-footer-row footer-row last-footer-row row"
         part="row footer-row first-footer-row last-footer-row"
         role="row"
         style="--_grid-horizontal-scroll-position: 0px;"
         tabindex="-1"
       >
         <td
+          class="cell first-column-cell first-footer-row-cell footer-cell last-footer-row-cell"
           first-column=""
           id="vaadin-grid-cell-3"
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
@@ -1523,6 +1637,7 @@ snapshots["vaadin-grid column groups default"] =
           </slot>
         </td>
         <td
+          class="cell first-footer-row-cell footer-cell last-column-cell last-footer-row-cell"
           id="vaadin-grid-cell-4"
           last-column=""
           part="cell footer-cell last-column-cell first-footer-row-cell last-footer-row-cell"
@@ -1536,6 +1651,7 @@ snapshots["vaadin-grid column groups default"] =
       </tr>
       <tr
         aria-rowindex="5"
+        class="footer-row row"
         hidden=""
         part="row footer-row"
         role="row"
@@ -1543,6 +1659,7 @@ snapshots["vaadin-grid column groups default"] =
       >
         <td
           aria-colspan="2"
+          class="cell first-column-cell footer-cell last-column-cell"
           colspan="2"
           first-column=""
           id="vaadin-grid-cell-5"
@@ -1558,7 +1675,10 @@ snapshots["vaadin-grid column groups default"] =
       </tr>
     </tfoot>
   </table>
-  <div part="reorder-ghost">
+  <div
+    class="reorder-ghost"
+    part="reorder-ghost"
+  >
   </div>
 </div>
 <slot name="tooltip">
@@ -1579,12 +1699,14 @@ snapshots["vaadin-grid column groups with header"] =
 >
   <tr
     aria-rowindex="1"
+    class="first-header-row header-row row"
     part="row header-row first-header-row"
     role="row"
     tabindex="-1"
   >
     <th
       aria-colspan="2"
+      class="cell first-column-cell first-header-row-cell header-cell last-column-cell"
       colspan="2"
       first-column=""
       id="vaadin-grid-cell-0"
@@ -1600,12 +1722,14 @@ snapshots["vaadin-grid column groups with header"] =
   </tr>
   <tr
     aria-rowindex="2"
+    class="header-row last-header-row row"
     part="row header-row last-header-row"
     role="row"
     style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="-1"
   >
     <th
+      class="cell first-column-cell header-cell last-header-row-cell"
       first-column=""
       id="vaadin-grid-cell-1"
       part="cell header-cell first-column-cell last-header-row-cell"
@@ -1617,6 +1741,7 @@ snapshots["vaadin-grid column groups with header"] =
       </slot>
     </th>
     <th
+      class="cell header-cell last-column-cell last-header-row-cell"
       id="vaadin-grid-cell-2"
       last-column=""
       part="cell header-cell last-column-cell last-header-row-cell"
@@ -1640,12 +1765,14 @@ snapshots["vaadin-grid column groups with footer"] =
 >
   <tr
     aria-rowindex="4"
+    class="first-footer-row footer-row row"
     part="row footer-row first-footer-row"
     role="row"
     style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="-1"
   >
     <td
+      class="cell first-column-cell first-footer-row-cell footer-cell"
       first-column=""
       id="vaadin-grid-cell-3"
       part="cell footer-cell first-column-cell first-footer-row-cell"
@@ -1657,6 +1784,7 @@ snapshots["vaadin-grid column groups with footer"] =
       </slot>
     </td>
     <td
+      class="cell first-footer-row-cell footer-cell last-column-cell"
       id="vaadin-grid-cell-4"
       last-column=""
       part="cell footer-cell last-column-cell first-footer-row-cell"
@@ -1670,12 +1798,14 @@ snapshots["vaadin-grid column groups with footer"] =
   </tr>
   <tr
     aria-rowindex="5"
+    class="footer-row last-footer-row row"
     part="row footer-row last-footer-row"
     role="row"
     tabindex="-1"
   >
     <td
       aria-colspan="2"
+      class="cell first-column-cell footer-cell last-column-cell last-footer-row-cell"
       colspan="2"
       first-column=""
       id="vaadin-grid-cell-5"
