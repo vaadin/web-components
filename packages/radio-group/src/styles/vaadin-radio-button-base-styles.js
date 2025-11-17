@@ -10,16 +10,14 @@ import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 const radioButton = css`
   [part='radio'] {
     border-radius: 50%;
-    color: var(
-      --vaadin-radio-button-dot-color,
-      var(--vaadin-radio-button-marker-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)))
-    );
+    color: var(--vaadin-radio-button-dot-color, var(--_color));
   }
 
   [part='radio']::after {
     width: var(--vaadin-radio-button-dot-size, var(--vaadin-radio-button-marker-size, 50%));
     height: var(--vaadin-radio-button-dot-size, var(--vaadin-radio-button-marker-size, 50%));
     border-radius: 50%;
+    filter: var(--vaadin-radio-button-dot-color, var(--_filter));
   }
 `;
 
