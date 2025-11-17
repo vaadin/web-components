@@ -17,8 +17,6 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
   '--vaadin-border-color',
   '--vaadin-border-color-secondary',
   '--vaadin-background-color',
-  '--vaadin-background-container',
-  '--vaadin-background-container-strong',
 ].forEach((propertyName) => {
   CSS.registerProperty({
     name: propertyName,
