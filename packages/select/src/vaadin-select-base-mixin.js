@@ -364,7 +364,14 @@ export const SelectBaseMixin = (superClass) =>
         if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
           e.preventDefault();
           this.opened = true;
-        } else if (/[\p{L}\p{Nd}]/u.test(e.key) && e.key.length === 1) {
+        } else if (
+          /[\p{L}\p{Nd}]/u.test(e.key) &&
+          e.key.length === 1 &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.altKey &&
+          !e.shiftKey
+        ) {
           const selected = this._menuElement.selected;
           const currentIdx = selected !== undefined ? selected : -1;
           const newIdx = this._menuElement._searchKey(currentIdx, e.key);
