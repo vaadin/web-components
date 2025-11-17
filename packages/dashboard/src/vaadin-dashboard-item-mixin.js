@@ -302,7 +302,7 @@ export const DashboardItemMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this.__updateRootHeadingLevel();
-      this.__setupHeadingLevelObserver();
+      this.__addHeadingLevelObserver();
     }
 
     /** @protected */
@@ -398,7 +398,7 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __setupHeadingLevelObserver() {
+    __addHeadingLevelObserver() {
       this.__removeHeadingLevelObserver();
       const parentLayout = getParentLayout(this);
       if (parentLayout) {
