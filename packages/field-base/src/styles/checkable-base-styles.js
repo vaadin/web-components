@@ -98,7 +98,8 @@ export const checkable = (part, propName = part) => css`
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
-    color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)));
+    --_color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
+    color: var(--_color);
     height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
@@ -111,7 +112,6 @@ export const checkable = (part, propName = part) => css`
   :host(:is([checked], [indeterminate])) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-text-color);
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-marker-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   }
 
   :host([disabled]) {
@@ -143,6 +143,8 @@ export const checkable = (part, propName = part) => css`
     border-radius: inherit;
     display: flex;
     align-items: center;
+    --_filter: var(--vaadin-${unsafeCSS(propName)}-marker-color, saturate(0) invert(1) hue-rotate(180deg) contrast(100) brightness(100));
+    filter: var(--_filter);
   }
 
   :host(:not([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
