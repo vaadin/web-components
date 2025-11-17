@@ -17,6 +17,8 @@
 ) {
   font-weight: var(--aura-font-weight-medium);
   --vaadin-item-checkmark-color: var(--aura-accent-text);
+  -webkit-user-select: none;
+  user-select: none;
 
   &::part(checkmark) {
     --vaadin-icon-visual-size: 75%;
