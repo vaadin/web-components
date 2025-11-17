@@ -1,7 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../src/vaadin-dashboard-section.js';
-import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
+import '../vaadin-dashboard-layout.js';
+import '../vaadin-dashboard-section.js';
+import '../vaadin-dashboard-widget.js';
+import type { DashboardSection } from '../vaadin-dashboard-section.js';
 import {
   getDraggable,
   getMoveApplyButton,
