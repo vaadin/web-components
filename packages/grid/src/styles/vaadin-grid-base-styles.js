@@ -139,7 +139,7 @@ export const gridStyles = css`
     --_non-focused-row-none: none;
   }
 
-  .row[loading] .body-cell ::slotted(vaadin-grid-cell-content) {
+  .body-row[loading] .body-cell ::slotted(vaadin-grid-cell-content) {
     visibility: hidden;
   }
 
@@ -332,7 +332,7 @@ export const gridStyles = css`
       var(--_cell-background-image, none);
   }
 
-  .body-row[selected] {
+  .selected-row {
     --_row-selected-background-color: var(
       --vaadin-grid-row-selected-background-color,
       color-mix(in srgb, currentColor 8%, transparent)
@@ -353,7 +353,7 @@ export const gridStyles = css`
     }
   }
 
-  :host([theme~='row-stripes']) [part~='odd-row'] {
+  :host([theme~='row-stripes']) .odd-row {
     --_row-odd-background-color: var(
       --vaadin-grid-row-odd-background-color,
       color-mix(in srgb, var(--vaadin-text-color) 4%, transparent)
