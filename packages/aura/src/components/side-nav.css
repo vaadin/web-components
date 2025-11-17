@@ -12,18 +12,22 @@ vaadin-side-nav + vaadin-side-nav {
 }
 
 vaadin-side-nav-item::part(content) {
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background-color 120ms;
   --aura-surface-level: 3;
 }
 
-vaadin-side-nav-item:not([disabled])::part(content):hover {
-  --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+vaadin-side-nav-item:not([disabled], [current])::part(content):active {
+  --vaadin-side-nav-item-background: var(--vaadin-background-container);
+}
+
+@media (any-hover: hover) {
+  vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
+    transition: color 120ms;
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+  }
 }
 
 vaadin-side-nav-item[current]::part(content) {
+  transition: none;
   --_accent: light-dark(
     oklch(from var(--aura-accent-color-light) calc(l + 0.2) c h / min(0.3, c / 2)),
     oklch(from var(--aura-accent-color-dark) calc(l - 0.2) c h / min(0.3, c / 2))
