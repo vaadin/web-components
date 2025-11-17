@@ -33,6 +33,8 @@ export declare class DashboardLayoutMixinClass {
    * - sections will have the attribute `aria-level` with value 1
    * - non-nested widgets will have the attribute `aria-level` with value 1
    * - nested widgets will have the attribute `aria-level` with value 2
+   *
+   * @attr {number} root-heading-level
    */
   rootHeadingLevel: number | null | undefined;
 }
