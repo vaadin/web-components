@@ -21,6 +21,7 @@ export const tabStyles = css`
     color: var(--vaadin-tab-text-color, var(--vaadin-text-color-secondary));
     background: var(--vaadin-tab-background, transparent);
     border-radius: var(--vaadin-tab-border-radius, var(--vaadin-radius-m));
+    border: var(--vaadin-tab-border-width, 0) solid var(--vaadin-tab-border-color, var(--vaadin-border-color-secondary));
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
