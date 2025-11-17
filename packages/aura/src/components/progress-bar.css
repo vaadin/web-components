@@ -4,7 +4,7 @@
   --vaadin-progress-bar-value-background: linear-gradient(
     90deg,
     var(--aura-accent-color),
-    color-mix(in hsl, var(--aura-accent-color) 60%, hsl(45, 31%, 95%))
+    color-mix(in hsl, var(--aura-accent-color) 60%, hsl(45, 0%, 95%))
   );
 }
 
