@@ -165,6 +165,7 @@ class AuraSchemeControl extends AuraControl {
     // Clear storage and remove inline override
     localStorage.removeItem(this.#storageKey());
     document.documentElement.style.removeProperty(this.#prop);
+    this.#forceRepaint();
 
     // Re-read stylesheet-driven value; default to "light dark"
     const token = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
@@ -195,6 +196,7 @@ class AuraSchemeControl extends AuraControl {
 
   #setVar(value) {
     document.documentElement.style.setProperty(this.#prop, value);
+    this.#forceRepaint();
   }
 
   // ----- Helpers -----
@@ -212,6 +214,19 @@ class AuraSchemeControl extends AuraControl {
     inputs.forEach((i) => {
       i.checked = i.value === value;
     });
+  }
+
+  #forceRepaint() {
+    // Force repaint. This is needed in Safari 17, but only when the property is updated at runtime.
+    if (!this.__repaintActive) {
+      this.__repaintActive = true;
+      const previousValue = document.documentElement.style.getPropertyValue('--aura-background-color-light');
+      document.documentElement.style.setProperty('--aura-background-color-light', '#000');
+      requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--aura-background-color-light', previousValue);
+        this.__repaintActive = false;
+      });
+    }
   }
 }
 
