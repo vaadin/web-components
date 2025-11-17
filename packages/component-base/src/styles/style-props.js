@@ -19,13 +19,14 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
   '--vaadin-background-color',
   '--vaadin-background-container',
   '--vaadin-background-container-strong',
-  '--vaadin-focus-ring-color',
 ].forEach((propertyName) => {
   CSS.registerProperty({
     name: propertyName,
     syntax: '<color>',
     inherits: true,
-    initialValue: 'transparent',
+    // Use this initial value so the color stays visible when the property
+    // is set to an invalid value to make debugging a bit easier.
+    initialValue: 'light-dark(black, white)',
   });
 });
 
