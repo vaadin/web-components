@@ -753,7 +753,6 @@ export const GridMixin = (superClass) =>
       this._resetKeyboardNavigation();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
-      this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
     }
@@ -788,7 +787,6 @@ export const GridMixin = (superClass) =>
 
       if (loading) {
         // Run style generators for the loading row to have custom names cleared
-        this._generateCellClassNames(row);
         this._generateCellPartNames(row);
       }
     }
@@ -819,7 +817,6 @@ export const GridMixin = (superClass) =>
 
       this.__updateRowStateParts(row, model);
 
-      this._generateCellClassNames(row, model);
       this._generateCellPartNames(row, model);
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);

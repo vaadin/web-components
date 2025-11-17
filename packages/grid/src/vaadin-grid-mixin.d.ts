@@ -31,15 +31,10 @@ import type { GridRowDetailsRenderer, RowDetailsMixinClass } from './vaadin-grid
 import type { ScrollMixinClass } from './vaadin-grid-scroll-mixin.js';
 import type { SelectionMixinClass } from './vaadin-grid-selection-mixin.js';
 import type { SortMixinClass } from './vaadin-grid-sort-mixin.js';
-import type {
-  GridCellClassNameGenerator,
-  GridCellPartNameGenerator,
-  StylingMixinClass,
-} from './vaadin-grid-styling-mixin.js';
+import type { GridCellPartNameGenerator, StylingMixinClass } from './vaadin-grid-styling-mixin.js';
 
 export {
   GridBodyRenderer,
-  GridCellClassNameGenerator,
   GridCellPartNameGenerator,
   GridDataProvider,
   GridDataProviderCallback,
