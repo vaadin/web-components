@@ -302,13 +302,13 @@ export const DashboardItemMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this.__updateRootHeadingLevel();
-      this.__addHeadingLevelObserver();
+      this.__addHeadingLevelListener();
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.__removeHeadingLevelObserver();
+      this.__removeHeadingLevelListener();
     }
 
     /** @private */
@@ -398,8 +398,8 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __addHeadingLevelObserver() {
-      this.__removeHeadingLevelObserver();
+    __addHeadingLevelListener() {
+      this.__removeHeadingLevelListener();
       const parentLayout = getParentLayout(this);
       if (parentLayout) {
         this.__rootHeadingLevelListenerTarget = parentLayout;
@@ -411,7 +411,7 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __removeHeadingLevelObserver() {
+    __removeHeadingLevelListener() {
       if (this.__rootHeadingLevelListenerTarget) {
         this.__rootHeadingLevelListenerTarget.removeEventListener(
           'dashboard-root-heading-level-changed',
