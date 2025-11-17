@@ -6,6 +6,28 @@
 import { css } from 'lit';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
+// NOTE: Base color CSS custom properties are explicitly registered as `<color>`
+// here to avoid performance issues in Aura. Aura overrides these properties with
+// values that use complex, nested relative color functions, and without explicit
+// typing, Chrome 142 was found to render components that use them roughly 40% slower.
+[
+  '--vaadin-text-color',
+  '--vaadin-text-color-disabled',
+  '--vaadin-text-color-secondary',
+  '--vaadin-border-color',
+  '--vaadin-border-color-secondary',
+  '--vaadin-background-color',
+].forEach((propertyName) => {
+  CSS.registerProperty({
+    name: propertyName,
+    syntax: '<color>',
+    inherits: true,
+    // Use this initial value so the color stays visible when the property
+    // is set to an invalid value to make debugging a bit easier.
+    initialValue: 'light-dark(black, white)',
+  });
+});
+
 addGlobalThemeStyles(
   'vaadin-base',
   css`
