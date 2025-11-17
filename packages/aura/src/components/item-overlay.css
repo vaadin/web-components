@@ -1,7 +1,7 @@
 :where(:root),
 :where(:host) {
   --vaadin-item-overlay-padding: var(--vaadin-gap-xs);
-  --vaadin-item-border-radius: calc(var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
+  --vaadin-item-border-radius: max(var(--vaadin-radius-s), var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
   --vaadin-item-checkmark-color: var(--aura-accent-text);
 }
 
