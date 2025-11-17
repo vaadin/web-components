@@ -102,7 +102,7 @@ export function fireRemove(element) {
   element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true }));
 }
 
-function __findFilteredAncestorInstance(node, elementFilter) {
+function findFilteredAncestorInstance(node, elementFilter) {
   while (node) {
     if (elementFilter(node)) {
       return node;
@@ -131,7 +131,7 @@ function __findFilteredAncestorInstance(node, elementFilter) {
  * @returns {HTMLElement | null}
  */
 export function findAncestorInstance(node, baseClass) {
-  return __findFilteredAncestorInstance(node, (el) => {
+  return findFilteredAncestorInstance(node, (el) => {
     return el instanceof baseClass;
   });
 }
@@ -143,5 +143,5 @@ export function findAncestorInstance(node, baseClass) {
  * @returns {HTMLElement | null}
  */
 export function getParentLayout(node) {
-  return __findFilteredAncestorInstance(node, (el) => el.__hasVaadinDashboardLayoutMixin);
+  return findFilteredAncestorInstance(node, (el) => el.__hasVaadinDashboardLayoutMixin);
 }
