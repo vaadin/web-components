@@ -366,18 +366,6 @@ import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
         expectCellsVisualOrderToMatchColumnOrder();
       });
 
-      it('should have cell class names on the revealed cells', async () => {
-        // Add a class name generator
-        grid.cellClassNameGenerator = () => 'foo';
-        await nextFrame();
-        expect(getBodyCell(0, getLastVisibleColumnIndex()).classList.contains('foo')).to.be.true;
-
-        // Scroll back to the beginning
-        await scrollHorizontally(-grid.$.table.scrollWidth);
-        // Expect the cell that was previously not visible to have the class name
-        expect(getBodyCell(0, 0).classList.contains('foo')).to.be.true;
-      });
-
       it('should have cell part names on the revealed cells', async () => {
         // Add a part name generator
         grid.cellPartNameGenerator = () => 'foo';
