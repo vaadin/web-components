@@ -15,7 +15,3 @@ vaadin-menu-bar-button[slot='overflow'] {
   font-family: system-ui, sans-serif;
   font-weight: 600;
 }
-
-vaadin-menu-bar-submenu {
-  --vaadin-overlay-backdrop-background: transparent;
-}

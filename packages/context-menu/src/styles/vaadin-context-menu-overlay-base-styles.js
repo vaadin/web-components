@@ -31,6 +31,10 @@ const contextMenuOverlay = css`
   :host([position^='end'][end-aligned]) [part='overlay'] {
     margin-inline-end: var(--vaadin-context-menu-offset-end, var(--_default-offset));
   }
+
+  [part='backdrop'] {
+    background: transparent;
+  }
 `;
 
 export const contextMenuOverlayStyles = [overlayStyles, menuOverlayStyles, contextMenuOverlay];
