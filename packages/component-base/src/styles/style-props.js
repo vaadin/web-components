@@ -19,6 +19,7 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
   '--vaadin-background-color',
   '--vaadin-background-container',
   '--vaadin-background-container-strong',
+  '--vaadin-focus-ring-color',
 ].forEach((propertyName) => {
   CSS.registerProperty({
     name: propertyName,
