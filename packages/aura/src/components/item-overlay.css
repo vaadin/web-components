@@ -38,9 +38,12 @@
         --vaadin-text-color: var(--aura-accent-contrast-color);
         --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
         --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+        --vaadin-icon-color: var(--aura-accent-contrast-color);
         --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
 
         > * {
+          --aura-accent-color: var(--aura-accent-contrast-color);
+          --aura-accent-text-color: var(--aura-accent-contrast-color);
           --aura-red: var(--aura-accent-contrast-color);
           --aura-red-text: var(--aura-accent-contrast-color);
           --aura-orange: var(--aura-accent-contrast-color);
@@ -66,10 +69,14 @@
     background: var(--vaadin-background-container-strong);
   }
 
-  &[theme~='danger'] {
-    --aura-accent-color-light: var(--aura-red);
-    --aura-accent-color-dark: var(--aura-red);
+  &:where([theme~='danger']) {
     color: var(--aura-red-text);
+
+    > * {
+      --aura-accent-color-light: var(--aura-accent-color-light-initial);
+      --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
+      --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
+    }
   }
 }
 

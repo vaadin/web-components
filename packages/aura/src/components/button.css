@@ -6,19 +6,8 @@
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
   transition: scale 180ms;
   position: relative;
-  --_accent: light-dark(
-    oklch(from var(--aura-accent-color-light) calc(l + 0.2) c h / min(0.3, c / 2)),
-    oklch(from var(--aura-accent-color-dark) calc(l - 0.2) c h / min(0.3, c / 2))
-  );
-  --_accent-border: light-dark(
-    oklch(
-      from var(--aura-accent-color-light) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast))
-    ),
-    oklch(
-      from var(--aura-accent-color-dark) l calc(c / 2) h / calc(min(0.15, 0.1 + c / 2) + 0.1 * var(--aura-contrast))
-    )
-  );
-  --_background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface-color) padding-box;
+  --_background: var(--aura-accent-surface) padding-box;
+  --vaadin-button-text-color: var(--aura-accent-text-color);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='tertiary'])) {
@@ -30,12 +19,11 @@
 /* prettier-ignore */
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([theme~='primary'], [theme~='tertiary']) {
   background: var(--vaadin-button-background, var(--_background));
-  --vaadin-button-border-color: var(--_accent-border);
+  --vaadin-button-border-color: var(--aura-accent-border-color);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='primary'])) {
   outline-offset: calc(var(--vaadin-button-border-width, 1px) * -1);
-  --vaadin-button-text-color: var(--aura-accent-text-color);
 }
 
 /*
@@ -68,6 +56,27 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-background: var(--aura-accent-color);
   --vaadin-button-border-color: var(--vaadin-border-color-secondary);
   --vaadin-button-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
+  --vaadin-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+
+  > * {
+    --aura-accent-color: var(--vaadin-button-text-color);
+    --aura-accent-text-color: var(--vaadin-button-text-color);
+    --aura-red: var(--vaadin-button-text-color);
+    --aura-red-text: var(--vaadin-button-text-color);
+    --aura-orange: var(--vaadin-button-text-color);
+    --aura-orange-text: var(--vaadin-button-text-color);
+    --aura-yellow: var(--vaadin-button-text-color);
+    --aura-yellow-text: var(--vaadin-button-text-color);
+    --aura-green: var(--vaadin-button-text-color);
+    --aura-green-text: var(--vaadin-button-text-color);
+    --aura-blue: var(--vaadin-button-text-color);
+    --aura-blue-text: var(--vaadin-button-text-color);
+    --aura-purple: var(--vaadin-button-text-color);
+    --aura-purple-text: var(--vaadin-button-text-color);
+  }
 }
 
 /* prettier-ignore */
@@ -135,15 +144,9 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   }
 }
 
-/* Color variants */
-
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='accent'])) {
-  --aura-accent-color-light: var(--aura-text-color-light);
-  --aura-accent-color-dark: var(--aura-text-color-dark);
-}
-
-/* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):is([theme~='danger'], [theme~='error']) {
-  --aura-accent-color-light: var(--aura-red);
-  --aura-accent-color-dark: var(--aura-red);
+/* Restore accent color for child elements like badges */
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) > * {
+  --aura-accent-color-light: var(--aura-accent-color-light-initial);
+  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
 }
