@@ -11,7 +11,7 @@ vaadin-confirm-dialog {
 
 vaadin-dialog::part(overlay),
 vaadin-confirm-dialog::part(overlay) {
-  --vaadin-dialog-background: var(--aura-surface);
+  --vaadin-dialog-background: var(--aura-surface-color);
   --aura-surface-level: 4;
 
   /* TODO probably should be in base styles */

@@ -1,6 +1,6 @@
 :where(:root),
 :where(:host) {
-  --vaadin-crud-background: var(--aura-surface) padding-box;
+  --vaadin-crud-background: var(--aura-surface-color) padding-box;
 }
 
 vaadin-crud-edit {
@@ -9,7 +9,7 @@ vaadin-crud-edit {
 }
 
 vaadin-crud::part(editor) {
-  background: var(--aura-surface);
+  background: var(--aura-surface-color);
 }
 
 vaadin-crud vaadin-confirm-dialog {

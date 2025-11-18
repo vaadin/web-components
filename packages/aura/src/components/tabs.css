@@ -12,8 +12,8 @@ vaadin-tabs {
 }
 
 vaadin-tabs:not([theme~='accent']) {
-  --aura-accent-color-light: var(--aura-text-light);
-  --aura-accent-color-dark: var(--aura-text-dark);
+  --aura-accent-color-light: var(--aura-text-color-light);
+  --aura-accent-color-dark: var(--aura-text-color-dark);
 }
 
 vaadin-tabs::part(tabs) {
@@ -50,7 +50,7 @@ vaadin-tabs[overflow~='end'] {
 
 vaadin-tabs::part(back-button),
 vaadin-tabs::part(forward-button) {
-  background: var(--aura-surface-solid) padding-box;
+  background: var(--aura-surface-color-solid) padding-box;
   border: 1px solid var(--vaadin-border-color);
   border-radius: var(--vaadin-radius-m);
   padding: var(--vaadin-padding-xs);
@@ -95,8 +95,8 @@ vaadin-tab[selected] {
       from var(--aura-accent-color-dark) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast))
     )
   );
-  --vaadin-tab-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
-  --vaadin-tab-text-color: var(--aura-accent-text);
+  --vaadin-tab-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface-color) padding-box;
+  --vaadin-tab-text-color: var(--aura-accent-text-color);
   border-color: var(--_accent-border);
   box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
 }
@@ -105,7 +105,7 @@ vaadin-tab[selected] {
 
 vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
   --vaadin-tab-background: var(--aura-accent-color) border-box;
-  --vaadin-tab-text-color: var(--aura-accent-contrast);
+  --vaadin-tab-text-color: var(--aura-accent-contrast-color);
   outline-offset: 1px;
 }
 
@@ -114,7 +114,7 @@ vaadin-tabs[theme~='filled'] vaadin-tab[selected] > :not([slot='tooltip']) {
   --vaadin-text-color: var(--vaadin-tab-text-color);
   --vaadin-text-color-secondary: var(--vaadin-tab-text-color);
   --aura-accent-color: var(--vaadin-tab-text-color);
-  --aura-accent-text: var(--vaadin-tab-text-color);
+  --aura-accent-text-color: var(--vaadin-tab-text-color);
   --aura-red: var(--vaadin-tab-text-color);
   --aura-red-text: var(--vaadin-tab-text-color);
   --aura-orange: var(--vaadin-tab-text-color);

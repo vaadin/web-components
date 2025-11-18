@@ -4,11 +4,11 @@
   --vaadin-card-padding: var(--vaadin-padding-l);
   --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
   --vaadin-card-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-card-background: var(--aura-surface) padding-box;
+  --vaadin-card-background: var(--aura-surface-color) padding-box;
 }
 
 vaadin-card {
-  --vaadin-card-background: var(--aura-surface) padding-box;
+  --vaadin-card-background: var(--aura-surface-color) padding-box;
   --aura-surface-level: 2;
 }
 
