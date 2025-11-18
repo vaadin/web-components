@@ -360,6 +360,10 @@ export const SelectBaseMixin = (superClass) =>
     _onKeyDown(e) {
       super._onKeyDown(e);
 
+      if (e.altKey || e.shiftKey || e.ctrlKey || e.metaKey) {
+        return;
+      }
+
       if (e.target === this.focusElement && !this.readonly && !this.disabled && !this.opened) {
         if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
           e.preventDefault();

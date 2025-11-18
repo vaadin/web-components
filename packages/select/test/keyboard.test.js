@@ -181,5 +181,16 @@ describe('keyboard', () => {
         expect(clone.hasAttribute(attr)).to.be.false;
       });
     });
+
+    ['ctrl', 'meta', 'alt', 'shift'].forEach((modifierKey) => {
+      it(`should not select item when ${modifierKey}+key is pressed`, async () => {
+        // 79 is the key code for 'o'
+        const event = keyboardEventFor('keydown', 79, [modifierKey], 'o');
+        valueButton.dispatchEvent(event);
+        await nextUpdate(select);
+
+        expect(select.value).to.equal('');
+      });
+    });
   });
 });
