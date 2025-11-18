@@ -19,7 +19,7 @@
 }
 
 :is(vaadin-details, vaadin-accordion-panel)[theme~='filled'] {
-  background: var(--aura-surface) padding-box;
+  background: var(--aura-surface-color) padding-box;
   border-radius: var(--vaadin-radius-m);
   border: 1px solid var(--vaadin-border-color-secondary);
 

@@ -22,7 +22,7 @@
 }
 
 ::part(overlay) {
-  --vaadin-overlay-background: var(--aura-surface);
+  --vaadin-overlay-background: var(--aura-surface-color);
   --aura-surface-level: 4;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   box-shadow: var(--aura-overlay-shadow);

@@ -30,7 +30,7 @@ class AuraSchemeControl extends AuraControl {
           gap: 0;
           border: 1px solid var(--vaadin-border-color);
           border-radius: var(--vaadin-radius-m);
-          background: var(--aura-surface) padding-box;
+          background: var(--aura-surface-color) padding-box;
           overflow: hidden;
         }
 

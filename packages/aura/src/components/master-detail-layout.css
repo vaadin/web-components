@@ -1,11 +1,11 @@
 vaadin-master-detail-layout::part(detail) {
   --aura-surface-level: 2;
-  background: var(--aura-surface) padding-box;
+  background: var(--aura-surface-color) padding-box;
 }
 
 vaadin-master-detail-layout[drawer]::part(detail) {
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-  background: var(--aura-surface) padding-box;
+  background: var(--aura-surface-color) padding-box;
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
   box-shadow:

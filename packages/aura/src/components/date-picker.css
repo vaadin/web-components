@@ -4,7 +4,7 @@
   --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
   /* TODO add/use selection color */
   --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
-  --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast);
+  --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast-color);
 }
 
 :where(:root),
@@ -16,13 +16,13 @@
 
 vaadin-date-picker-month-scroller,
 vaadin-date-picker-overlay-content::part(toolbar) {
-  background: var(--aura-surface);
+  background: var(--aura-surface-color);
 }
 
 vaadin-date-picker-year-scroller::before {
   width: 12px;
   height: 12px;
-  background: var(--aura-surface-solid) padding-box;
+  background: var(--aura-surface-color-solid) padding-box;
 }
 
 vaadin-date-picker-year::part(year-number) {
@@ -39,7 +39,7 @@ vaadin-date-picker-year[selected] {
 }
 
 vaadin-date-picker-year[selected]::part(year-number) {
-  color: var(--aura-accent-text);
+  color: var(--aura-accent-text-color);
 }
 
 vaadin-date-picker-year[selected]::after {

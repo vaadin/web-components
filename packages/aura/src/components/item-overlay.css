@@ -2,7 +2,7 @@
 :where(:host) {
   --vaadin-item-overlay-padding: var(--vaadin-gap-xs);
   --vaadin-item-border-radius: max(var(--vaadin-radius-s), var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
-  --vaadin-item-checkmark-color: var(--aura-accent-text);
+  --vaadin-item-checkmark-color: var(--aura-accent-text-color);
 }
 
 :is(
@@ -16,7 +16,7 @@
   vaadin-select-item[role]
 ) {
   font-weight: var(--aura-font-weight-medium);
-  --vaadin-item-checkmark-color: var(--aura-accent-text);
+  --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   -webkit-user-select: none;
   user-select: none;
 
@@ -34,25 +34,25 @@
 
       &[theme~='filled'] {
         background: var(--aura-accent-color);
-        color: var(--aura-accent-contrast);
-        --vaadin-text-color: var(--aura-accent-contrast);
-        --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast) 70%, transparent);
-        --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast) 50%, transparent);
-        --vaadin-item-checkmark-color: var(--aura-accent-contrast);
+        color: var(--aura-accent-contrast-color);
+        --vaadin-text-color: var(--aura-accent-contrast-color);
+        --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+        --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+        --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
 
         > * {
-          --aura-red: var(--aura-accent-contrast);
-          --aura-red-text: var(--aura-accent-contrast);
-          --aura-orange: var(--aura-accent-contrast);
-          --aura-orange-text: var(--aura-accent-contrast);
-          --aura-yellow: var(--aura-accent-contrast);
-          --aura-yellow-text: var(--aura-accent-contrast);
-          --aura-green: var(--aura-accent-contrast);
-          --aura-green-text: var(--aura-accent-contrast);
-          --aura-blue: var(--aura-accent-contrast);
-          --aura-blue-text: var(--aura-accent-contrast);
-          --aura-purple: var(--aura-accent-contrast);
-          --aura-purple-text: var(--aura-accent-contrast);
+          --aura-red: var(--aura-accent-contrast-color);
+          --aura-red-text: var(--aura-accent-contrast-color);
+          --aura-orange: var(--aura-accent-contrast-color);
+          --aura-orange-text: var(--aura-accent-contrast-color);
+          --aura-yellow: var(--aura-accent-contrast-color);
+          --aura-yellow-text: var(--aura-accent-contrast-color);
+          --aura-green: var(--aura-accent-contrast-color);
+          --aura-green-text: var(--aura-accent-contrast-color);
+          --aura-blue: var(--aura-accent-contrast-color);
+          --aura-blue-text: var(--aura-accent-contrast-color);
+          --aura-purple: var(--aura-accent-contrast-color);
+          --aura-purple-text: var(--aura-accent-contrast-color);
         }
       }
     }

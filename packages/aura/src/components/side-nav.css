@@ -40,8 +40,9 @@ vaadin-side-nav-item[current]::part(content) {
       from var(--aura-accent-color-dark) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast))
     )
   );
-  --vaadin-side-nav-item-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
-  --vaadin-side-nav-item-text-color: var(--aura-accent-text);
+  --vaadin-side-nav-item-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface-color)
+    padding-box;
+  --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
   --vaadin-side-nav-item-border-color: var(--_accent-border);
 }
 
@@ -49,7 +50,7 @@ vaadin-side-nav-item[current]::part(content) {
 
 vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
-  --vaadin-side-nav-item-text-color: var(--aura-accent-contrast);
+  --vaadin-side-nav-item-text-color: var(--aura-accent-contrast-color);
   outline-offset: 2px;
 }
 
@@ -58,7 +59,7 @@ vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current] > :not([slot='chi
   --vaadin-text-color: var(--vaadin-side-nav-item-text-color);
   --vaadin-text-color-secondary: var(--vaadin-side-nav-item-text-color);
   --aura-accent-color: var(--vaadin-side-nav-item-text-color);
-  --aura-accent-text: var(--vaadin-side-nav-item-text-color);
+  --aura-accent-text-color: var(--vaadin-side-nav-item-text-color);
   --aura-red: var(--vaadin-side-nav-item-text-color);
   --aura-red-text: var(--vaadin-side-nav-item-text-color);
   --aura-orange: var(--vaadin-side-nav-item-text-color);

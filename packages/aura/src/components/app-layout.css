@@ -26,7 +26,7 @@ vaadin-app-layout {
 }
 
 vaadin-app-layout[overlay]::part(drawer) {
-  --vaadin-app-layout-drawer-background: var(--aura-surface);
+  --vaadin-app-layout-drawer-background: var(--aura-surface-color);
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
@@ -66,7 +66,7 @@ vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
 vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
   color-scheme: var(--aura-content-color-scheme);
   color: var(--vaadin-text-color);
-  background: linear-gradient(var(--aura-surface), var(--aura-surface)), var(--aura-app-background);
+  background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
   background-clip: padding-box;
   background-origin: border-box;
   min-height: 100%;
