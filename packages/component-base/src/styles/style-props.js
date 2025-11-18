@@ -120,6 +120,13 @@ addGlobalThemeStyles(
         --safe-area-inset-left: env(safe-area-inset-left, 0px);
       }
 
+      @supports not (color: hsl(0 0 0)) {
+        :where(:root),
+        :where(:host) {
+          --_vaadin-safari-17-deg: 1deg;
+        }
+      }
+
       @media (forced-colors: active) {
         html {
           --vaadin-background-color: Canvas;
