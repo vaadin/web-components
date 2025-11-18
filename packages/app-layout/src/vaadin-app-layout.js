@@ -144,6 +144,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       <div hidden>
         <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this.__onNavbarSlotChange}"></slot>
       </div>
+      <div id="cssPropertyObserver"></div>
     `;
   }
 }

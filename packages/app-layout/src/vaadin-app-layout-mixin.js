@@ -7,8 +7,23 @@ import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { CSSPropertyObserver } from '@vaadin/component-base/src/css-property-observer.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+
+CSS.registerProperty({
+  name: '--vaadin-app-layout-touch-optimized',
+  syntax: 'true | false',
+  inherits: true,
+  initialValue: 'false',
+});
+
+CSS.registerProperty({
+  name: '--vaadin-app-layout-drawer-overlay',
+  syntax: 'true | false',
+  inherits: true,
+  initialValue: 'false',
+});
 
 /**
  * @typedef {import('./vaadin-app-layout.js').AppLayoutI18n} AppLayoutI18n
@@ -180,6 +195,16 @@ export const AppLayoutMixin = (superclass) =>
       this.addController(this.__focusTrapController);
       this.__setAriaExpanded();
 
+      this.__cssPropertyObserver = new CSSPropertyObserver(this.$.cssPropertyObserver, (propertyName) => {
+        if (propertyName === '--vaadin-app-layout-touch-optimized') {
+          this._updateTouchOptimizedMode();
+        }
+        if (propertyName === '--vaadin-app-layout-drawer-overlay') {
+          this._updateOverlayMode();
+        }
+      });
+      this.__cssPropertyObserver.observe('--vaadin-app-layout-touch-optimized', '--vaadin-app-layout-drawer-overlay');
+
       this.$.drawer.addEventListener('transitionstart', () => {
         this.__isDrawerAnimating = true;
       });
@@ -328,8 +353,6 @@ export const AppLayoutMixin = (superclass) =>
     /** @private */
     _resize() {
       this._blockAnimationUntilAfterNextRender();
-      this._updateTouchOptimizedMode();
-      this._updateOverlayMode();
     }
 
     /** @protected */

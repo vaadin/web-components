@@ -3,9 +3,9 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { CSSPropertyObserver } from './css-property-observer.js';
 import { injectLumoStyleSheet, removeLumoStyleSheet } from './css-utils.js';
 import { parseStyleSheets } from './lumo-modules.js';
+import { RootCSSPropertyObserver } from './root-css-property-observer.js';
 
 export function getLumoInjectorPropName(lumoInjector) {
   return `--_lumo-${lumoInjector.is}-inject`;
@@ -87,7 +87,7 @@ export class LumoInjector {
   constructor(root = document) {
     this.#root = root;
     this.handlePropertyChange = this.handlePropertyChange.bind(this);
-    this.#cssPropertyObserver = CSSPropertyObserver.for(root);
+    this.#cssPropertyObserver = RootCSSPropertyObserver.for(root);
     this.#cssPropertyObserver.addEventListener('property-changed', this.handlePropertyChange);
   }
 
