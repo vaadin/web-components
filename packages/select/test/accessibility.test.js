@@ -376,7 +376,7 @@ describe('accessibility', () => {
       it('should set focus-ring on the item when opened with keyboard', async () => {
         select.focus();
         await sendKeys({ press: 'Enter' });
-        await oneEvent(overlay, 'vaadin-overlay-open');
+        await nextRender();
 
         const item = listBox.querySelector('vaadin-select-item');
         expect(item.hasAttribute('focus-ring')).to.be.true;
