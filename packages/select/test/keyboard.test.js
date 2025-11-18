@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, keyboardEventFor, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-select.js';
@@ -166,6 +166,17 @@ describe('keyboard', () => {
 
         const clone = valueButton.firstChild;
         expect(clone.hasAttribute(attr)).to.be.false;
+      });
+    });
+
+    ['ctrl', 'meta', 'alt', 'shift'].forEach((modifierKey) => {
+      it(`should not select item when ${modifierKey}+key is pressed`, async () => {
+        // 79 is the key code for 'o'
+        const event = keyboardEventFor('keydown', 79, [modifierKey], 'o');
+        valueButton.dispatchEvent(event);
+        await nextUpdate(select);
+
+        expect(select.value).to.equal('');
       });
     });
   });
