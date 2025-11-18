@@ -18,12 +18,24 @@ export { AvatarI18n } from './vaadin-avatar-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are exposed for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name | Description
  * --------- | ---------------
  * `abbr`    | The abbreviation element
  * `icon`    | The icon element
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property            | Description
+ * -------------------------------|-------------
+ * `--vaadin-avatar-background`   | Background color of the avatar
+ * `--vaadin-avatar-border-color` | Border color of the avatar
+ * `--vaadin-avatar-border-width` | Border width of the avatar
+ * `--vaadin-avatar-font-size`    | Font size of the avatar
+ * `--vaadin-avatar-font-weight`  | Font weight of the avatar
+ * `--vaadin-avatar-size`         | Size of the avatar
+ * `--vaadin-avatar-text-color`   | Text color of the avatar
  *
  * The following state attributes are available for styling:
  *
