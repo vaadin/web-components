@@ -103,6 +103,7 @@ export default [
       'prefer-destructuring': 'off',
       'prefer-object-has-own': 'off',
       'prefer-promise-reject-errors': 'off',
+      'preserve-caught-error': 'off',
       radix: 'off',
     },
   },
@@ -179,6 +180,7 @@ export default [
     },
     rules: {
       'no-console': 'off',
+      'preserve-caught-error': 'off',
     },
   },
   {
