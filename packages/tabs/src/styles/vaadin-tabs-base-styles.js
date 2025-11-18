@@ -12,6 +12,12 @@ export const tabsStyles = css`
     max-width: 100%;
     max-height: 100%;
     position: relative;
+    box-sizing: border-box;
+    padding: var(--vaadin-tabs-padding);
+    background: var(--vaadin-tabs-background);
+    border-radius: var(--vaadin-tabs-border-radius);
+    border: var(--vaadin-tabs-border-width, 0) solid
+      var(--vaadin-tabs-border-color, var(--vaadin-border-color-secondary));
   }
 
   :host([hidden]) {
