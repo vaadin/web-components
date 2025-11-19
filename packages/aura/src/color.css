@@ -50,6 +50,7 @@
 :where(:host),
 vaadin-app-layout > :not([slot]),
 vaadin-notification-container,
+vaadin-avatar,
 vaadin-button,
 vaadin-context-menu-item,
 vaadin-crud-edit,
