@@ -279,6 +279,16 @@
       html {
         height: calc(100% + env(safe-area-inset-top, 0px));
         --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
+        --aura-accent-color-light: var(--aura-blue);
+        --aura-accent-color-dark: var(--aura-blue);
+        --vaadin-user-color: var(--aura-accent-color);
+        --vaadin-focus-ring-color: var(--aura-blue);
+      }
+
+      /* prettier-ignore */
+      :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-side-nav, vaadin-tabs):not([theme~="accent"]) {
+        --aura-accent-color-light: var(--aura-text-color-light);
+        --aura-accent-color-dark: var(--aura-text-color-dark);
       }
 
       body {
@@ -360,7 +370,7 @@
           <vaadin-side-nav-item path="">
             <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
             Dashboard
-            <span theme="badge accent" slot="suffix" aria-label="(2 new items)">2</span>
+            <span theme="badge" slot="suffix" aria-label="(2 new items)">2</span>
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>
@@ -442,6 +452,7 @@
               label="--aura-background-color-dark"
             ></aura-color-control>
             <aura-number-control property="--aura-contrast" min="0" max="2" step="0.1"></aura-number-control>
+            <aura-number-control property="--aura-surface-level" min="-2" max="2" step="0.1"></aura-number-control>
             <aura-number-control
               property="--aura-overlay-surface-opacity"
               min="0.5"
@@ -474,11 +485,11 @@
             <h1>Dashboard</h1>
           </header>
           <vaadin-scroller theme="overflow-indicators">
-            <vaadin-side-nav theme="filled">
+            <vaadin-side-nav theme="filled accent">
               <vaadin-side-nav-item path="#components">
                 <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
                 <span>Components</span>
-                <span theme="badge accent" slot="suffix" aria-label="(2 new items)">2</span>
+                <span theme="badge" slot="suffix" aria-label="(2 new items)">2</span>
               </vaadin-side-nav-item>
               <vaadin-side-nav-item>
                 <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
@@ -614,8 +625,8 @@
 
                 <div class="aura-surface component wide tall">
                   <div class="badges">
-                    <span theme="badge">Default</span>
-                    <span theme="badge accent">Accent</span>
+                    <span theme="badge neutral">Neutral</span>
+                    <span theme="badge">Accent</span>
                     <span theme="badge green">Green</span>
                     <span theme="badge blue">Blue</span>
                     <span theme="badge purple">Purple</span>
@@ -625,8 +636,8 @@
                   </div>
 
                   <div class="badges">
-                    <span theme="filled badge">Default</span>
-                    <span theme="filled badge accent">Accent</span>
+                    <span theme="filled badge neutral">Neutral</span>
+                    <span theme="filled badge">Accent</span>
                     <span theme="filled badge green">Green</span>
                     <span theme="filled badge blue">Blue</span>
                     <span theme="filled badge purple">Purple</span>
@@ -636,10 +647,10 @@
                   </div>
 
                   <div class="badges">
-                    <span theme="badge">
+                    <span theme="badge neutral">
                       <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
                     </span>
-                    <span theme="badge accent">
+                    <span theme="badge">
                       <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
                     </span>
                     <span theme="badge green">
@@ -663,10 +674,10 @@
                   </div>
 
                   <div class="badges">
-                    <span theme="badge filled">
+                    <span theme="badge filled neutral">
                       <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
                     </span>
-                    <span theme="badge filled accent">
+                    <span theme="badge filled">
                       <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
                     </span>
                     <span theme="badge filled green">
@@ -707,7 +718,7 @@
 
                 <div class="aura-surface component wide">
                   <vaadin-tabs>
-                    <vaadin-tab>Details<span theme="badge accent">2</span></vaadin-tab>
+                    <vaadin-tab>Details<span theme="badge">2</span></vaadin-tab>
                     <vaadin-tab>Preferences</vaadin-tab>
                     <vaadin-tab>Settings</vaadin-tab>
                   </vaadin-tabs>

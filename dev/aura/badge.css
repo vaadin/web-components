@@ -6,52 +6,32 @@
   font-size: var(--aura-font-size-s);
   font-weight: var(--aura-font-weight-medium);
   height: calc(1lh - 2px);
-  border: 1px solid var(--_bg);
-  --_bg: color-mix(in srgb, var(--color) 12%, transparent);
-  background: var(--_bg);
+  border: 1px solid var(--aura-accent-border-color);
+  background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  background-clip: padding-box;
+  color: var(--aura-accent-text-color);
   padding: 0 0.5em;
   border-radius: var(--vaadin-radius-l);
   min-width: calc(1lh - 1em - 2px);
-  --color: var(--vaadin-text-color);
-  --text-opacity: 70%;
-  color: color-mix(
-    in srgb,
-    var(--color) calc(var(--text-opacity) - 15% * var(--aura-contrast)),
-    var(--vaadin-text-color)
-  );
   --vaadin-icon-size: 0.75lh;
 }
 
-[theme~='badge'][theme~='accent'] {
-  --color: var(--aura-accent-color);
-}
-
-[theme~='badge'][theme~='blue'] {
-  --color: var(--aura-blue);
-}
-
-[theme~='badge'][theme~='red'] {
-  --color: var(--aura-red);
-}
-
-[theme~='badge'][theme~='green'] {
-  --color: var(--aura-green);
-}
-
-[theme~='badge'][theme~='yellow'] {
-  --color: var(--aura-yellow);
-  --text-opacity: 60%;
-}
-
-[theme~='badge'][theme~='orange'] {
-  --color: var(--aura-orange);
-}
-
-[theme~='badge'][theme~='purple'] {
-  --color: var(--aura-purple);
+[theme~='badge'][theme~='neutral'] {
+  --aura-accent-color-light: var(--aura-text-color-light);
+  --aura-accent-color-dark: var(--aura-text-color-dark);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
 [theme~='badge'][theme~='filled'] {
-  --_bg: color-mix(in srgb, var(--vaadin-text-color) 5%, var(--color));
-  color: oklch(from var(--_bg) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1));
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+  border-color: transparent;
+}
+
+[theme~='badge'][theme~='point']::before {
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
 }
