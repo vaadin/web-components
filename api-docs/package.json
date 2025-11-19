@@ -1,6 +1,6 @@
 {
   "name": "api-docs",
-  "version": "25.0.0-beta4",
+  "version": "25.0.0-beta5",
   "private": true,
   "description": "Documentation site for Vaadin web components API",
   "license": "Apache-2.0",
