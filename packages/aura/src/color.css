@@ -87,8 +87,8 @@ vaadin-tab,
     transparent
   );
   --vaadin-border-color-secondary: light-dark(
-    color-mix(in srgb, var(--_border-color-base) max(5%, 5% + 3% * var(--aura-contrast)), transparent),
-    color-mix(in srgb, var(--_border-color-base) max(10%, 5% + 5% * var(--aura-contrast)), transparent)
+    color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 3% * var(--aura-contrast)), transparent),
+    color-mix(in srgb, var(--_border-color-base) max(8%, 7% + 3% * var(--aura-contrast)), transparent)
   );
   --aura-accent-contrast-color-light: oklch(
     from var(--aura-accent-color-light) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
@@ -115,8 +115,8 @@ vaadin-tab,
   --aura-accent-surface: linear-gradient(var(--_accent-blend), var(--_accent-blend)) var(--aura-surface-color);
   --aura-accent-border-color: color-mix(
     in srgb,
-    var(--aura-accent-color) calc(10% + 5% * var(--aura-contrast)),
-    var(--vaadin-border-color) calc(40% + 10% * var(--aura-contrast))
+    var(--aura-accent-text-color) calc(14% + 2% * var(--aura-contrast)),
+    var(--vaadin-border-color) calc(28% + 2% * var(--aura-contrast))
   );
   --_color-base: light-dark(
     oklch(from var(--aura-background-color-light) 0.1 calc(c / 2 + c * (1 - c)) h),
