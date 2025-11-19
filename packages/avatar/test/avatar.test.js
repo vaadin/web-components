@@ -338,8 +338,8 @@ describe('vaadin-avatar', () => {
       it('should set border color based on color index', async () => {
         avatar.colorIndex = 0;
         await nextUpdate(avatar);
-        const { borderColor } = getComputedStyle(avatar, '::before');
-        expect(['rgb(255, 0, 0)', 'red'].some((v) => borderColor.indexOf(v) > -1)).to.be.true;
+        const { outlineColor } = getComputedStyle(avatar, '::before');
+        expect(['rgb(255, 0, 0)', 'red'].some((v) => outlineColor.indexOf(v) > -1)).to.be.true;
       });
 
       it('should set attribute based on color index', async () => {
