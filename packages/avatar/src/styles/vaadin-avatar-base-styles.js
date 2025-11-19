@@ -35,9 +35,10 @@ export const avatarStyles = css`
   :host::before {
     position: absolute;
     content: '';
-    inset: 0;
+    inset: calc(var(--vaadin-focus-ring-width) * -1);
     border-radius: inherit;
-    border: var(--vaadin-avatar-border-width, 1px) solid var(--vaadin-avatar-border-color, transparent);
+    outline: var(--vaadin-avatar-border-width, 1px) solid var(--vaadin-avatar-border-color, transparent);
+    outline-offset: calc((var(--vaadin-focus-ring-width) + var(--vaadin-avatar-border-width, 1px)) * -1);
   }
 
   :host([role='button']) {
@@ -71,9 +72,6 @@ export const avatarStyles = css`
     color: oklch(
       from var(--vaadin-avatar-user-color) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
     );
-  }
-
-  :host([has-color-index])::before {
     --vaadin-avatar-border-width: 2px;
     --vaadin-avatar-border-color: var(--vaadin-avatar-user-color);
   }
