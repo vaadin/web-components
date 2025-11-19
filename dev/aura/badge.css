@@ -8,6 +8,7 @@
   height: calc(1lh - 2px);
   border: 1px solid var(--aura-accent-border-color);
   background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  background-clip: padding-box;
   color: var(--aura-accent-text-color);
   padding: 0 0.5em;
   border-radius: var(--vaadin-radius-l);
