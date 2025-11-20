@@ -39,5 +39,4 @@ vaadin-notification-card vaadin-card {
 
 vaadin-notification-card vaadin-button {
   --aura-surface-level: 8;
-  --aura-surface-opacity: 0.3;
 }
