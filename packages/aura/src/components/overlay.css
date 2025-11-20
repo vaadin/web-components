@@ -19,6 +19,7 @@
   @media (prefers-reduced-transparency: reduce) {
     --aura-overlay-surface-opacity: 1 !important;
   }
+  --vaadin-popover-border-radius: var(--vaadin-radius-l);
 }
 
 ::part(overlay) {
