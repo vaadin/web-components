@@ -355,7 +355,7 @@
     <vaadin-app-layout>
       <header slot="drawer" class="aura-view-header">
         <vaadin-avatar
-          theme="vaadin square"
+          theme="vaadin square filled"
           color-index="0"
           style="--vaadin-avatar-size: 1.25lh; margin-inline: var(--vaadin-padding-s)"
         ></vaadin-avatar>
@@ -545,7 +545,7 @@
 
               .components-view .component {
                 display: flex;
-                height: calc(200px - var(--vaadin-gap-s));
+                height: 200px;
                 align-items: center;
                 justify-content: center;
                 border-radius: var(--vaadin-radius-m);
@@ -566,7 +566,7 @@
 
               .components-view .component.tall {
                 height: 100%;
-                min-height: 400px;
+                min-height: calc(400px + var(--vaadin-gap-s));
                 grid-row: auto / span 2;
               }
 
@@ -739,7 +739,7 @@
                   </div>
                 </div>
 
-                <div class="aura-surface component wide">
+                <div class="aura-surface component wide tall">
                   <vaadin-rich-text-editor placeholder="Write something…"></vaadin-rich-text-editor>
                 </div>
 
