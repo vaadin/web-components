@@ -4,6 +4,7 @@
   --vaadin-side-nav-label-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-border-width: 1px;
+  --vaadin-side-nav-item-gap: var(--vaadin-gap-xs);
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
 }
 
@@ -40,6 +41,11 @@ vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-accent-surface) padding-box;
   --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
   --vaadin-side-nav-item-border-color: var(--aura-accent-border-color);
+}
+
+vaadin-side-nav::part(toggle-button),
+vaadin-side-nav-item::part(toggle-button) {
+  --vaadin-icon-visual-size: 0.9lh;
 }
 
 /* Filled variant */

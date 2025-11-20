@@ -29,6 +29,11 @@ vaadin-message-input:not([readonly], [disabled]) {
 
 ::part(field-button) {
   transition: color 100ms;
+  --vaadin-icon-visual-size: 90%;
+}
+
+::part(clear-button) {
+  --vaadin-icon-visual-size: 75%;
 }
 
 :not([readonly], [disabled])::part(field-button):active {
