@@ -4,11 +4,7 @@ export function appendStyles(html) {
   const preventFouc = `
     <style>
       body:not(.resolved) {
-        opacity: 0;
-      }
-
-      body {
-        transition: opacity 0.2s;
+        display: none;
       }
     </style>
 
