@@ -8,13 +8,6 @@
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
 }
 
-/* Restore accent color for child elements like badges */
-:where(vaadin-side-nav-item) > * {
-  --aura-accent-color-light: var(--aura-accent-color-light-initial);
-  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
-  --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
-}
-
 vaadin-side-nav + vaadin-side-nav {
   margin-top: var(--vaadin-gap-l);
 }
@@ -50,7 +43,7 @@ vaadin-side-nav-item::part(toggle-button) {
 
 /* Filled variant */
 
-vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current]::part(content) {
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
   --vaadin-side-nav-item-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--vaadin-side-nav-item-text-color);
@@ -58,22 +51,4 @@ vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current]::part(content) {
   --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
   --vaadin-icon-color: var(--aura-accent-contrast-color);
   outline-offset: 2px;
-}
-
-/* Badges and other content that uses the palette inside a filled nav item */
-vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']) {
-  --aura-accent-color: var(--vaadin-side-nav-item-text-color);
-  --aura-accent-text-color: var(--vaadin-side-nav-item-text-color);
-  --aura-red: var(--vaadin-side-nav-item-text-color);
-  --aura-red-text: var(--vaadin-side-nav-item-text-color);
-  --aura-orange: var(--vaadin-side-nav-item-text-color);
-  --aura-orange-text: var(--vaadin-side-nav-item-text-color);
-  --aura-yellow: var(--vaadin-side-nav-item-text-color);
-  --aura-yellow-text: var(--vaadin-side-nav-item-text-color);
-  --aura-green: var(--vaadin-side-nav-item-text-color);
-  --aura-green-text: var(--vaadin-side-nav-item-text-color);
-  --aura-blue: var(--vaadin-side-nav-item-text-color);
-  --aura-blue-text: var(--vaadin-side-nav-item-text-color);
-  --aura-purple: var(--vaadin-side-nav-item-text-color);
-  --aura-purple-text: var(--vaadin-side-nav-item-text-color);
 }

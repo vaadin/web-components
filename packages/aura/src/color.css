@@ -61,7 +61,16 @@ vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
 vaadin-tab,
-:where([theme]) {
+:where(
+  .aura-accent-color,
+  .aura-accent-neutral,
+  .aura-accent-red,
+  .aura-accent-orange,
+  .aura-accent-yellow,
+  .aura-accent-green,
+  .aura-accent-blue,
+  .aura-accent-purple
+) {
   --aura-text-color-light: oklch(
     from var(--aura-background-color-light) calc(0.2 - 0.05 * var(--aura-contrast)) calc(c * 0.1) h
   );
@@ -109,11 +118,24 @@ vaadin-tab,
     var(--aura-accent-contrast-color-dark)
   );
   --aura-accent-text-color: light-dark(var(--aura-accent-text-color-light), var(--aura-accent-text-color-dark));
-  --_accent-blend: light-dark(
-    oklch(from var(--aura-accent-color-light) calc(l + 0.1) c h / min(0.1, c * l / 2)),
-    oklch(from var(--aura-accent-color-dark) calc(l - 0.1) c h / min(0.1, c * l / 2))
+  --_accent-blend-light: oklch(
+    from var(--aura-accent-color-light) calc(l) c h / min(0.1, c * var(--aura-surface-opacity))
   );
-  --aura-accent-surface: linear-gradient(var(--_accent-blend), var(--_accent-blend)) var(--aura-surface-color);
+  --_accent-blend-dark: oklch(
+    from var(--aura-accent-color-dark) calc(l) c h / min(0.1, c * var(--aura-surface-opacity))
+  );
+  --aura-accent-surface: light-dark(
+    color-mix(
+      in srgb,
+      var(--_accent-blend-light),
+      var(--aura-surface-color-solid) calc(var(--aura-surface-opacity) * 100%)
+    ),
+    color-mix(
+      in srgb,
+      var(--_accent-blend-dark),
+      var(--aura-surface-color-solid) calc(var(--aura-surface-opacity) * 50%)
+    )
+  );
   --aura-accent-border-color: color-mix(
     in srgb,
     var(--aura-accent-text-color) calc(14% + 2% * var(--aura-contrast)),
@@ -145,38 +167,66 @@ vaadin-tab,
   color: var(--aura-accent-text-color);
 }
 
-:is(#id, [theme~='danger'], [theme~='error'], [theme~='red']) {
+:is(#id, .aura-accent-neutral) {
+  --aura-accent-color-light: var(--aura-text-color-light);
+  --aura-accent-color-dark: var(--aura-text-color-dark);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+:is(#id, [theme~='danger'], [theme~='error'], .aura-accent-red) {
   --aura-accent-color-light: var(--aura-red);
   --aura-accent-color-dark: var(--aura-red);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, [theme~='green'], [theme~='success']) {
+:is(#id, .aura-accent-green) {
   --aura-accent-color-light: var(--aura-green);
   --aura-accent-color-dark: var(--aura-green);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, [theme~='yellow'], [theme~='warning']) {
+:is(#id, .aura-accent-yellow) {
   --aura-accent-color-light: var(--aura-yellow);
   --aura-accent-color-dark: var(--aura-yellow);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, [theme~='orange']) {
+:is(#id, .aura-accent-orange) {
   --aura-accent-color-light: var(--aura-orange);
   --aura-accent-color-dark: var(--aura-orange);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, [theme~='purple']) {
+:is(#id, .aura-accent-purple) {
   --aura-accent-color-light: var(--aura-purple);
   --aura-accent-color-dark: var(--aura-purple);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, [theme~='blue'], [theme~='info']) {
+:is(#id, .aura-accent-blue) {
   --aura-accent-color-light: var(--aura-blue);
   --aura-accent-color-dark: var(--aura-blue);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
+/* Restore accent color for child elements like badges */
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle) > *,
+:where(vaadin-tab) > *,
+:where(vaadin-side-nav-item) > * {
+  --aura-accent-color-light: var(--aura-accent-color-light-initial);
+  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
+}
+
+/* Badges and other content that uses contrast color inside filled variants */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'] > *,
+vaadin-tabs[theme~='filled'] > vaadin-tab[selected] > :not([slot='tooltip']),
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']) {
+  --vaadin-icon-color: currentColor;
+  --vaadin-text-color: currentColor;
+  --vaadin-text-color-secondary: color-mix(in srgb, currentColor 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, currentColor 50%, transparent);
+  --aura-accent-text-color: currentColor;
+  --aura-accent-border-color: color-mix(in srgb, currentColor 30%, transparent);
+  --aura-accent-surface: color-mix(in srgb, currentColor 10%, transparent);
 }

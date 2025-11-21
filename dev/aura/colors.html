@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura Colors</title>
+    <script type="module" src="../common.js"></script>
+    <link rel="stylesheet" href="../../packages/aura/aura.css" />
+    <link rel="stylesheet" href="./badge.css" />
+
+    <script type="module">
+      window.Vaadin = {};
+      window.Vaadin.featureFlags = {};
+      window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+    </script>
+    <script type="module">
+      import './aura-scheme-control.js';
+      import './aura-color-control.js';
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/side-nav';
+      import '@vaadin/tabs';
+
+      const accentColors = ['Neutral', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple'];
+
+      // Generate variations
+      document
+        .querySelectorAll('.generate-variations > :is(vaadin-button, vaadin-tabs, vaadin-side-nav)')
+        .forEach((component) => {
+          accentColors.forEach((color) => {
+            const clone = component.cloneNode(true);
+            clone.classList.add('aura-accent-' + color.toLowerCase());
+            component.parentElement.append(clone);
+          });
+
+          const clone = component.parentElement.cloneNode(true);
+          clone.querySelectorAll('vaadin-button, vaadin-tabs, vaadin-side-nav').forEach((component) => {
+            if (component.localName === 'vaadin-button') {
+              component.setAttribute('theme', 'primary');
+            } else {
+              component.setAttribute('theme', 'filled');
+            }
+          });
+          component.parentElement.parentElement.append(clone);
+        });
+
+      document.querySelector('#filled-badges').addEventListener('change', (e) => {
+        document.querySelectorAll('.aura-badge').forEach((badge) => {
+          badge.classList.toggle('aura-badge-filled', e.target.checked);
+        });
+      });
+
+      document.querySelector('#colored-badges').addEventListener('change', (e) => {
+        document.querySelectorAll(`.generate-variations`).forEach((section) => {
+          accentColors.forEach((color, i) => {
+            section.querySelectorAll(`:scope > :nth-child(${i + 1}) .aura-badge`).forEach((badge) => {
+              badge.classList.toggle('aura-accent-' + color.toLowerCase(), e.target.checked);
+              badge.textContent = e.target.checked ? color : 'Accent';
+            });
+          });
+        });
+      });
+
+      document.querySelector('#point-badges').addEventListener('change', (e) => {
+        document.querySelectorAll('.aura-badge').forEach((badge) => {
+          badge.classList.toggle('aura-badge-point', e.target.checked);
+        });
+      });
+    </script>
+
+    <style>
+      html {
+        --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
+      }
+
+      .section {
+        gap: var(--vaadin-gap-s);
+      }
+
+      .section.section p {
+        color: var(--vaadin-text-color-secondary);
+      }
+
+      .surfaces {
+        gap: 0;
+        border-radius: var(--vaadin-radius-l);
+        border: 1px solid var(--vaadin-border-color-secondary);
+        contain: paint;
+        margin-top: -0.75em;
+      }
+
+      .surfaces .aura-surface {
+        flex: 1;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .level--1 {
+        --aura-surface-level: -1;
+      }
+
+      .level-0 {
+        --aura-surface-level: 0;
+      }
+
+      .level-2 {
+        --aura-surface-level: 2;
+      }
+
+      .level-3 {
+        --aura-surface-level: 3;
+      }
+
+      .level-4 {
+        --aura-surface-level: 4;
+      }
+
+      .surfaces.accent .aura-surface {
+        background: var(--aura-accent-surface) padding-box;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section">
+      <aura-scheme-control property="color-scheme"></aura-scheme-control>
+      <aura-color-control property="--aura-background-color-light" label="Background (Light)"></aura-color-control>
+      <aura-color-control property="--aura-accent-color-light" label="Accent (Light)"></aura-color-control>
+      <aura-color-control property="--aura-background-color-dark" label="Background (Dark)"></aura-color-control>
+      <aura-color-control property="--aura-accent-color-dark" label="Accent (Dark)"></aura-color-control>
+    </section>
+
+    <h3 class="heading">Surface Colors</h3>
+    <section class="section surfaces">
+      <div class="aura-surface level--1">-1</div>
+      <div class="aura-surface level-0">0</div>
+      <div class="aura-surface level-1">1</div>
+      <div class="aura-surface level-2">2</div>
+      <div class="aura-surface level-3">3</div>
+      <div class="aura-surface level-4">4</div>
+    </section>
+    <section class="section surfaces accent">
+      <div class="aura-surface aura-accent-color level--1">-1</div>
+      <div class="aura-surface aura-accent-color level-0">0</div>
+      <div class="aura-surface aura-accent-color level-1">1</div>
+      <div class="aura-surface aura-accent-color level-2">2</div>
+      <div class="aura-surface aura-accent-color level-3">3</div>
+      <div class="aura-surface aura-accent-color level-4">4</div>
+    </section>
+
+    <h3 class="heading">Accent Colors</h3>
+
+    <vaadin-checkbox-group label="Badges">
+      <vaadin-checkbox label="Filled" id="filled-badges" value="filled"></vaadin-checkbox>
+      <vaadin-checkbox label="Colored" id="colored-badges" value="colored"></vaadin-checkbox>
+      <vaadin-checkbox label="Point" id="point-badges" value="point"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+
+    <section class="section">
+      <span class="aura-badge aura-accent-color">Accent</span>
+      <span class="aura-badge aura-accent-neutral">Neutral</span>
+      <span class="aura-badge aura-accent-red">Red</span>
+      <span class="aura-badge aura-accent-orange">Orange</span>
+      <span class="aura-badge aura-accent-yellow">Yellow</span>
+      <span class="aura-badge aura-accent-green">Green</span>
+      <span class="aura-badge aura-accent-blue">Blue</span>
+      <span class="aura-badge aura-accent-purple">Purple</span>
+    </section>
+
+    <section class="section generate-variations">
+      <vaadin-button>
+        Button
+        <span class="aura-badge aura-accent-color" slot="suffix">Accent</span>
+      </vaadin-button>
+    </section>
+
+    <section class="section generate-variations">
+      <vaadin-tabs>
+        <vaadin-tab>
+          Tab
+          <span class="aura-badge aura-accent-color">Accent</span>
+        </vaadin-tab>
+        <vaadin-tab>
+          Tab
+          <span class="aura-badge aura-accent-color">Accent</span>
+        </vaadin-tab>
+      </vaadin-tabs>
+    </section>
+
+    <section class="section generate-variations">
+      <vaadin-side-nav>
+        <vaadin-side-nav-item path="">
+          Nav Item
+          <span class="aura-badge aura-accent-color" slot="suffix">Accent</span>
+        </vaadin-side-nav-item>
+        <vaadin-side-nav-item path="foo">
+          Nav Item
+          <span class="aura-badge aura-accent-color" slot="suffix">Accent</span>
+        </vaadin-side-nav-item>
+      </vaadin-side-nav>
+    </section>
+  </body>
+</html>
