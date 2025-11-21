@@ -59,6 +59,33 @@ export function enforceThemePlugin(theme) {
   };
 }
 
+/** @return {import('@web/dev-server').Plugin} */
+export function fileUploadEndpointPlugin() {
+  return {
+    name: 'file-upload-endpoint',
+    serve(context) {
+      // Handle file upload endpoint
+      if (context.path === '/api/fileupload' && context.request.method === 'POST') {
+        // Log the upload (for demo purposes)
+        console.log(`📤 Received upload request to ${context.path}`);
+
+        // Return success response immediately
+        // Note: In dev mode, we don't actually read the body, just acknowledge the upload
+        return {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            success: true,
+            message: 'File uploaded successfully',
+          }),
+        };
+      }
+    },
+  };
+}
+
 export default {
   plugins: [
     {
@@ -91,5 +118,8 @@ export default {
 
     // Lumo / Aura CSS
     ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
+
+    // File upload endpoint for testing
+    fileUploadEndpointPlugin(),
   ].filter(Boolean),
 };

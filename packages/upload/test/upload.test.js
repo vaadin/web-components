@@ -443,16 +443,21 @@ describe('upload', () => {
       upload.files.forEach((file) => {
         expect(file.uploading).not.to.be.ok;
       });
+      let firstUploadStartFired = false;
       upload.addEventListener('upload-start', (e) => {
-        expect(e.detail.xhr).to.be.ok;
-        expect(e.detail.file).to.be.ok;
-        expect(e.detail.file.name).to.equal(tempFileName);
-        expect(e.detail.file.uploading).to.be.ok;
+        if (!firstUploadStartFired) {
+          firstUploadStartFired = true;
+          expect(e.detail.xhr).to.be.ok;
+          expect(e.detail.file).to.be.ok;
+          expect(e.detail.file.name).to.equal(tempFileName);
+          expect(e.detail.file.uploading).to.be.ok;
 
-        for (let i = 0; i < upload.files.length - 1; i++) {
-          expect(upload.files[i].uploading).not.to.be.ok;
+          for (let i = 0; i < upload.files.length - 1; i++) {
+            expect(upload.files[i].uploading).not.to.be.ok;
+          }
+          done();
         }
-        done();
+        // With queue behavior, other files will start after the first completes - ignore those events
       });
       upload.uploadFiles([upload.files[2]]);
     });
@@ -542,6 +547,141 @@ describe('upload', () => {
       removeFile(upload, 0);
       await clock.tickAsync(1);
       expect(upload.files.length).to.equal(0);
+    });
+  });
+
+  describe('Upload Queue', () => {
+    let clock, files;
+
+    beforeEach(() => {
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should upload multiple files one at a time', async () => {
+      files = createFiles(3, 512, 'application/json');
+      upload._addFiles(files);
+
+      // Files are prepended, so files[0] is at index 2, files[1] at index 1, files[2] at index 0
+      // First file added (files[0]) should start uploading
+      await clock.tickAsync(10);
+      expect(upload.files[2].uploading).to.be.true;
+      expect(upload.files[2].held).to.be.false;
+      expect(upload.files[1].held).to.be.true;
+      expect(upload.files[0].held).to.be.true;
+
+      // Wait for first file to complete (connectTime + uploadTime + serverTime = 10 + 200 + 10 = 220ms)
+      await clock.tickAsync(220);
+      expect(upload.files[2].complete).to.be.true;
+      expect(upload.files[2].uploading).to.be.false;
+
+      // Second file (files[1]) should now start uploading
+      await clock.tickAsync(10);
+      expect(upload.files[1].uploading).to.be.true;
+      expect(upload.files[1].held).to.be.false;
+      expect(upload.files[0].held).to.be.true;
+
+      // Wait for second file to complete
+      await clock.tickAsync(220);
+      expect(upload.files[1].complete).to.be.true;
+      expect(upload.files[1].uploading).to.be.false;
+
+      // Third file (files[2]) should now start uploading
+      await clock.tickAsync(10);
+      expect(upload.files[0].uploading).to.be.true;
+      expect(upload.files[0].held).to.be.false;
+
+      // Wait for third file to complete
+      await clock.tickAsync(220);
+      expect(upload.files[0].complete).to.be.true;
+      expect(upload.files[0].uploading).to.be.false;
+    });
+
+    it('should process next file in queue after one completes with error', async () => {
+      upload._createXhr = xhrCreator({
+        size: 512,
+        uploadTime: 200,
+        stepTime: 50,
+        serverValidation: () => {
+          return { status: 500, statusText: 'Server Error' };
+        },
+      });
+
+      const errorSpy = sinon.spy();
+      const startSpy = sinon.spy();
+      upload.addEventListener('upload-error', errorSpy);
+      upload.addEventListener('upload-start', startSpy);
+
+      files = createFiles(2, 512, 'application/json');
+      upload._addFiles(files);
+
+      // First file should start
+      await clock.tickAsync(10);
+      expect(startSpy.callCount).to.equal(1);
+
+      // Wait for first file to complete with error
+      await clock.tickAsync(220);
+      expect(errorSpy.callCount).to.equal(1);
+
+      // Second file should now start
+      await clock.tickAsync(10);
+      expect(startSpy.callCount).to.equal(2);
+      expect(upload.files.some((f) => f.uploading)).to.be.true;
+    });
+
+    it('should process next file in queue after one is aborted', async () => {
+      files = createFiles(2, 512, 'application/json');
+      upload._addFiles(files);
+
+      // First file added (at index 1) should start uploading
+      await clock.tickAsync(10);
+      expect(upload.files[1].uploading).to.be.true;
+      expect(upload.files[0].held).to.be.true;
+
+      // Abort the first file (at index 1)
+      upload._abortFileUpload(upload.files[1]);
+
+      // Second file (now at index 0 after first is removed) should now start uploading
+      await clock.tickAsync(10);
+      expect(upload.files[0].uploading).to.be.true;
+    });
+
+    it('should only start one file when uploadFiles is called with multiple files', async () => {
+      upload.noAuto = true;
+      files = createFiles(3, 512, 'application/json');
+      upload._addFiles(files);
+
+      // No files should be uploading yet - all should be held
+      await clock.tickAsync(10);
+      expect(upload.files[0].held).to.be.true;
+      expect(upload.files[1].held).to.be.true;
+      expect(upload.files[2].held).to.be.true;
+
+      // Call uploadFiles
+      upload.uploadFiles();
+
+      // Only first file (at index 2) should start uploading - wait for it to begin
+      await clock.tickAsync(20);
+      expect(upload.files.length).to.equal(3);
+      // One file should be uploading (the oldest one added)
+      const uploadingFile = upload.files.find((f) => f.uploading);
+      expect(uploadingFile).to.be.ok;
+      // The other two should still be held
+      const heldFiles = upload.files.filter((f) => f.held);
+      expect(heldFiles.length).to.equal(2);
+
+      // Wait for first file to complete
+      await clock.tickAsync(220);
+
+      // Second file should start automatically
+      await clock.tickAsync(10);
+      expect(upload.files.some((f) => f.uploading)).to.be.true;
+      const remainingHeldFiles = upload.files.filter((f) => f.held);
+      expect(remainingHeldFiles.length).to.equal(1);
     });
   });
 
