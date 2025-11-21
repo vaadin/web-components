@@ -7,6 +7,13 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
+CSS.registerProperty({
+  name: '--_min-width-labels-aside',
+  syntax: '<length>',
+  inherits: false,
+  initialValue: '0px',
+});
+
 addGlobalThemeStyles(
   'vaadin-form-layout-base',
   css`
@@ -130,10 +137,6 @@ export const formLayoutStyles = css`
       without a predefined width.
     */
     width: var(--_max-width);
-  }
-
-  :host([auto-responsive]) #layout::before {
-    background-position-y: var(--_min-width-labels-aside);
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
