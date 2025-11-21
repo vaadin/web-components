@@ -695,7 +695,24 @@ export const UploadMixin = (superClass) =>
         files = [files];
       }
       files = files.filter((file) => !file.complete);
-      Array.prototype.forEach.call(files, this._uploadFile.bind(this));
+      // Upload only the first file in the queue, not all at once
+      if (files.length > 0) {
+        this._uploadFile(files[0]);
+      }
+    }
+
+    /** @private */
+    _processNextFileInQueue() {
+      // Find the next file that is queued but not yet uploaded
+      // Search from the end since files are prepended (newest first)
+      // This ensures files upload in the order they were added
+      const nextFile = this.files
+        .slice()
+        .reverse()
+        .find((file) => !file.complete && !file.uploading && !file.abort);
+      if (nextFile) {
+        this._uploadFile(nextFile);
+      }
     }
 
     /** @private */
@@ -776,6 +793,8 @@ export const UploadMixin = (superClass) =>
             }),
           );
           this._renderFileList();
+          // Process the next file in the queue after this one completes
+          this._processNextFileInQueue();
         }
       };
 
@@ -881,6 +900,8 @@ export const UploadMixin = (superClass) =>
           file.xhr.abort();
         }
         this._removeFile(file);
+        // Process the next file in the queue after aborting this one
+        this._processNextFileInQueue();
       }
     }
 
@@ -934,7 +955,11 @@ export const UploadMixin = (superClass) =>
       this.files = [file, ...this.files];
 
       if (!this.noAuto) {
-        this._uploadFile(file);
+        // Only start uploading if no other file is currently being uploaded
+        const isAnyFileUploading = this.files.some((f) => f.uploading);
+        if (!isAnyFileUploading) {
+          this._uploadFile(file);
+        }
       }
     }
 
