@@ -230,7 +230,7 @@
         const grid = view.querySelector('vaadin-grid');
         grid.items = generateItems(20);
         grid.selectedItems = [grid.items[0]];
-        const badgeColors = ['accent', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'];
+        const badgeColors = ['neutral', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'];
         grid.querySelector('vaadin-grid-column[header="Status"]').renderer = (root, col, model) => {
           root.innerHTML = `<span class="aura-badge aura-accent-${badgeColors[model.index % badgeColors.length]}">Status</span>`;
         };
