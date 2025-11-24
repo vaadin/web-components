@@ -3,7 +3,7 @@
   --vaadin-tab-border-radius: var(--vaadin-radius-m);
   --vaadin-tab-font-weight: var(--aura-font-weight-medium);
   --vaadin-tabs-gap: 2px;
-  --vaadin-tabs-border-radius: calc(var(--vaadin-tab-border-radius) + 3px);
+  --vaadin-tabs-border-radius: calc(var(--vaadin-tab-border-radius) + var(--vaadin-tabs-padding));
   --vaadin-tabs-padding: 3px;
 }
 
