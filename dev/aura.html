@@ -119,7 +119,15 @@
                   { text: 'Move to Project…' },
                   { text: 'Move to Folder…' },
                   { component: 'hr' },
-                  { text: 'Advanced Options…' },
+                  {
+                    text: 'Advanced Options',
+                    children: [
+                      { text: 'Show All', checked: true },
+                      { text: 'Show Hidden Items', checkable: true, checked: false },
+                      { component: 'hr' },
+                      { text: 'Open…' },
+                    ],
+                  },
                 ],
               },
               { component: 'hr' },
