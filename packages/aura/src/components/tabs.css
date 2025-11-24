@@ -89,7 +89,7 @@ vaadin-tab[selected] {
 
 /* Filled variant */
 
-vaadin-tabs[theme~='filled'] > vaadin-tab[selected] {
+vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
   --vaadin-tab-background: var(--aura-accent-color) border-box;
   --vaadin-tab-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--aura-accent-contrast-color);
