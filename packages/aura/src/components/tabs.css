@@ -87,16 +87,9 @@ vaadin-tab[selected] {
   box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
 }
 
-/* Restore accent color for child elements like badges */
-:where(vaadin-tab) > * {
-  --aura-accent-color-light: var(--aura-accent-color-light-initial);
-  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
-  --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
-}
-
 /* Filled variant */
 
-vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
+vaadin-tabs[theme~='filled'] > vaadin-tab[selected] {
   --vaadin-tab-background: var(--aura-accent-color) border-box;
   --vaadin-tab-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--aura-accent-contrast-color);
@@ -104,22 +97,4 @@ vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
   --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
   --vaadin-icon-color: var(--aura-accent-contrast-color);
   outline-offset: 1px;
-}
-
-/* Badges and other content that uses the palette inside a filled nav item */
-vaadin-tabs[theme~='filled'] vaadin-tab[selected] > :not([slot='tooltip']) {
-  --aura-accent-color: var(--vaadin-tab-text-color);
-  --aura-accent-text-color: var(--vaadin-tab-text-color);
-  --aura-red: var(--vaadin-tab-text-color);
-  --aura-red-text: var(--vaadin-tab-text-color);
-  --aura-orange: var(--vaadin-tab-text-color);
-  --aura-orange-text: var(--vaadin-tab-text-color);
-  --aura-yellow: var(--vaadin-tab-text-color);
-  --aura-yellow-text: var(--vaadin-tab-text-color);
-  --aura-green: var(--vaadin-tab-text-color);
-  --aura-green-text: var(--vaadin-tab-text-color);
-  --aura-blue: var(--vaadin-tab-text-color);
-  --aura-blue-text: var(--vaadin-tab-text-color);
-  --aura-purple: var(--vaadin-tab-text-color);
-  --aura-purple-text: var(--vaadin-tab-text-color);
 }

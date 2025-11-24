@@ -56,27 +56,6 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-background: var(--aura-accent-color);
   --vaadin-button-border-color: var(--vaadin-border-color-secondary);
   --vaadin-button-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
-  --vaadin-text-color: var(--aura-accent-contrast-color);
-  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
-  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
-  --vaadin-icon-color: var(--aura-accent-contrast-color);
-
-  > * {
-    --aura-accent-color: var(--vaadin-button-text-color);
-    --aura-accent-text-color: var(--vaadin-button-text-color);
-    --aura-red: var(--vaadin-button-text-color);
-    --aura-red-text: var(--vaadin-button-text-color);
-    --aura-orange: var(--vaadin-button-text-color);
-    --aura-orange-text: var(--vaadin-button-text-color);
-    --aura-yellow: var(--vaadin-button-text-color);
-    --aura-yellow-text: var(--vaadin-button-text-color);
-    --aura-green: var(--vaadin-button-text-color);
-    --aura-green-text: var(--vaadin-button-text-color);
-    --aura-blue: var(--vaadin-button-text-color);
-    --aura-blue-text: var(--vaadin-button-text-color);
-    --aura-purple: var(--vaadin-button-text-color);
-    --aura-purple-text: var(--vaadin-button-text-color);
-  }
 }
 
 /* prettier-ignore */
@@ -142,11 +121,4 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   vaadin-menu-bar-button:not(:first-of-type) {
     border-inline-start-color: transparent;
   }
-}
-
-/* Restore accent color for child elements like badges */
-:where(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) > * {
-  --aura-accent-color-light: var(--aura-accent-color-light-initial);
-  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
-  --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
 }

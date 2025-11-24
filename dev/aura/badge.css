@@ -1,4 +1,4 @@
-[theme~='badge'] {
+.aura-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -7,7 +7,7 @@
   font-weight: var(--aura-font-weight-medium);
   height: calc(1lh - 2px);
   border: 1px solid var(--aura-accent-border-color);
-  background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  background: var(--aura-accent-surface) padding-box;
   background-clip: padding-box;
   color: var(--aura-accent-text-color);
   padding: 0 0.5em;
@@ -16,19 +16,31 @@
   --vaadin-icon-size: 0.75lh;
 }
 
-[theme~='badge'][theme~='neutral'] {
-  --aura-accent-color-light: var(--aura-text-color-light);
-  --aura-accent-color-dark: var(--aura-text-color-dark);
-  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
-}
-
-[theme~='badge'][theme~='filled'] {
+.aura-badge.aura-badge-filled {
   background: var(--aura-accent-color);
   color: var(--aura-accent-contrast-color);
-  border-color: transparent;
 }
 
-[theme~='badge'][theme~='point']::before {
+/* Special case for filled badges within filled variants */
+/* TODO is there a way to solve this without explicitly listing the special cases */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'],
+vaadin-tabs[theme~='filled'] > vaadin-tab[selected],
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current] {
+  > .aura-badge-filled:not(
+      .aura-accent-red,
+      .aura-accent-orange,
+      .aura-accent-yellow,
+      .aura-accent-green,
+      .aura-accent-blue,
+      .aura-accent-purple
+    ) {
+    border-color: transparent;
+    background: var(--aura-accent-contrast-color);
+    color: var(--aura-accent-color);
+  }
+}
+
+.aura-badge.aura-badge-point::before {
   content: '';
   width: 0.5em;
   height: 0.5em;
