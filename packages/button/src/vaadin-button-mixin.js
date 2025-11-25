@@ -29,7 +29,7 @@ export const ButtonMixin = (superClass) =>
       });
 
       // Set tabindex to 0 by default
-      this.tabindex = 0;
+      this.tabIndex = 0;
     }
 
     /**

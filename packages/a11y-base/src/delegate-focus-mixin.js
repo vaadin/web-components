@@ -66,6 +66,16 @@ export const DelegateFocusMixin = dedupeMixin(
         this._boundOnFocus = this._onFocus.bind(this);
       }
 
+      /**
+       * Override to indicate that the component should not set tabindex attribute
+       * on the host element but instead delegate it to an element in light DOM.
+       * @protected
+       * @override
+       */
+      get _shouldUseHostTabIndex() {
+        return false;
+      }
+
       /** @protected */
       ready() {
         super.ready();
@@ -74,6 +84,17 @@ export const DelegateFocusMixin = dedupeMixin(
           requestAnimationFrame(() => {
             this.focus();
           });
+        }
+      }
+
+      /** @protected */
+      updated(props) {
+        super.updated(props);
+
+        // Use `updated` instead of individual observer to make sure
+        // we forward `tabIndex` after `focusElement` is initialized.
+        if (props.has('tabIndex')) {
+          this.__forwardTabIndex(this.tabIndex);
         }
       }
 
@@ -205,26 +226,14 @@ export const DelegateFocusMixin = dedupeMixin(
         }
       }
 
-      /**
-       * Override an observer from `TabindexMixin`.
-       * Do not call super to remove tabindex attribute
-       * from the host after it has been forwarded.
-       * @param {string} tabindex
-       * @protected
-       * @override
-       */
-      _tabindexChanged(tabindex) {
-        this.__forwardTabIndex(tabindex);
-      }
-
       /** @private */
       __forwardTabIndex(tabindex) {
-        if (tabindex !== undefined && this.focusElement) {
+        if (tabindex != null && this.focusElement) {
           this.focusElement.tabIndex = tabindex;
 
           // Preserve tabindex="-1" on the host element
           if (tabindex !== -1) {
-            this.tabindex = undefined;
+            this.removeAttribute('tabindex');
           }
         }
 
@@ -233,11 +242,6 @@ export const DelegateFocusMixin = dedupeMixin(
           if (tabindex !== -1) {
             this._lastTabIndex = tabindex;
           }
-          this.tabindex = undefined;
-        }
-
-        // Lit does not remove attribute when setting property to undefined
-        if (tabindex === undefined && this.hasAttribute('tabindex')) {
           this.removeAttribute('tabindex');
         }
       }
