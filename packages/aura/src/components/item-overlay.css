@@ -3,7 +3,7 @@
   --vaadin-item-overlay-padding: var(--vaadin-gap-xs);
   --vaadin-item-border-radius: max(var(--vaadin-radius-s), var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
   --vaadin-item-checkmark-color: var(--aura-accent-text-color);
-  --vaadin-item-gap: var(--vaadin-gap-xs);
+  --vaadin-item-gap: var(--vaadin-gap-s);
 }
 
 :is(
@@ -28,17 +28,18 @@
 
   &::part(checkmark) {
     --vaadin-icon-visual-size: 75%;
-    margin-inline-start: calc(var(--vaadin-item-gap) * -1);
+    margin-inline-start: calc(var(--vaadin-gap-xs) * -1);
   }
 
   &[aria-haspopup='true']::after {
     --vaadin-icon-visual-size: 90%;
-    margin-inline-end: calc(var(--vaadin-item-gap) * -1);
+    margin-inline-end: calc(var(--vaadin-gap-xs) * -1);
   }
 
   &::part(content) {
     display: flex;
-    padding-inline: var(--vaadin-item-gap);
+    padding-inline: var(--vaadin-gap-xs);
+    gap: var(--vaadin-item-gap);
   }
 
   @media (any-hover: hover) {
@@ -79,6 +80,6 @@
 /* TODO is there a better selector? */
 [role='menu'] [role='separator'] {
   margin-block: var(--vaadin-gap-xs);
-  margin-inline: calc(var(--vaadin-item-gap) + var(--vaadin-padding-inline-container));
+  margin-inline: calc(var(--vaadin-gap-xs) + var(--vaadin-padding-inline-container));
   border-color: var(--vaadin-border-color);
 }
