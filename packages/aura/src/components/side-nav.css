@@ -46,7 +46,7 @@ vaadin-side-nav-item::part(toggle-button) {
 
 /* Filled variant */
 
-vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current]::part(content) {
+vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
   --vaadin-side-nav-item-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--vaadin-side-nav-item-text-color);
