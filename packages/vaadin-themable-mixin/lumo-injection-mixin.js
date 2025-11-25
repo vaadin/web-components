@@ -68,8 +68,16 @@ export const LumoInjectionMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
+      const root = findRoot(this);
+
+      // Do not initialize LumoInjector if it's disabled at the root.
+      // For example, Copilot does this because it uses its own styles
+      // on top of the base styles, and Lumo injection would interfere.
+      if (root.__lumoInjectorDisabled) {
+        return;
+      }
+
       if (this.isConnected) {
-        const root = findRoot(this);
         root.__lumoInjector ||= new LumoInjector(root);
         this.__lumoInjector = root.__lumoInjector;
         this.__lumoInjector.componentConnected(this);

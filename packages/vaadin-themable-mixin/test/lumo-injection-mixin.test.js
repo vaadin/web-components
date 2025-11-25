@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { css, html, LitElement } from 'lit';
 import { LumoInjectionMixin } from '../lumo-injection-mixin.js';
 import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
@@ -425,6 +425,29 @@ describe('Lumo injection', () => {
         host.shadowRoot.adoptedStyleSheets.pop();
 
         await contentTransition();
+        assertBaseStyle();
+      });
+    });
+
+    describe('injection disabled', () => {
+      beforeEach(async () => {
+        host.__lumoInjectorDisabled = true;
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+      });
+
+      it('should not inject styles', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        document.head.appendChild(style);
+
+        await nextFrame();
+        assertBaseStyle();
+
+        style.remove();
+
+        await nextFrame();
         assertBaseStyle();
       });
     });
