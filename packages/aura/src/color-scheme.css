@@ -3,15 +3,3 @@
   --aura-content-color-scheme: inherit;
   --aura-notification-color-scheme: inherit;
 }
-
-[theme~='light'] {
-  color-scheme: light;
-}
-
-[theme~='dark'] {
-  color-scheme: dark;
-}
-
-[theme~='light-dark'] {
-  color-scheme: light dark;
-}
