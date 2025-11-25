@@ -3,7 +3,7 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { CSSPropertyObserver } from './css-property-observer.js';
+import { RootCSSPropertyObserver } from './root-css-property-observer.js';
 
 // Register CSS custom properties for observing theme changes
 CSS.registerProperty({
@@ -43,7 +43,7 @@ export class ThemeDetector extends EventTarget {
     this.#root = root;
     this.#detectTheme();
 
-    this.#observer = CSSPropertyObserver.for(this.#root);
+    this.#observer = RootCSSPropertyObserver.for(this.#root);
     this.#observer.observe('--vaadin-aura-theme');
     this.#observer.observe('--vaadin-lumo-theme');
     this.#observer.addEventListener('property-changed', this.#boundHandleThemeChange);
