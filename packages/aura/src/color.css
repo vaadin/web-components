@@ -8,8 +8,8 @@
   --aura-accent-color-light-initial: var(--aura-accent-color-light);
   --aura-accent-color-dark-initial: var(--aura-accent-color-dark);
 
-  --aura-background-color-light: #eceff2;
-  --aura-background-color-dark: #13161b;
+  --aura-background-color-light: oklch(0.95 0.005 248);
+  --aura-background-color-dark: oklch(0.2 0.01 260);
 
   --_bg-alt: light-dark(
     oklch(
