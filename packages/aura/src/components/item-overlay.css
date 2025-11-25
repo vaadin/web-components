@@ -3,6 +3,7 @@
   --vaadin-item-overlay-padding: var(--vaadin-gap-xs);
   --vaadin-item-border-radius: max(var(--vaadin-radius-s), var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
   --vaadin-item-checkmark-color: var(--aura-accent-text-color);
+  --vaadin-item-gap: var(--vaadin-gap-s);
 }
 
 :is(
@@ -19,18 +20,31 @@
   --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   -webkit-user-select: none;
   user-select: none;
+  --_highlight-color: light-dark(
+    oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
+    oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
+  );
+  gap: 0;
 
   &::part(checkmark) {
     --vaadin-icon-visual-size: 75%;
+    margin-inline-start: calc(var(--vaadin-gap-xs) * -1);
+  }
+
+  &[aria-haspopup='true']::after {
+    --vaadin-icon-visual-size: 90%;
+    margin-inline-end: calc(var(--vaadin-gap-xs) * -1);
   }
 
   &::part(content) {
     display: flex;
+    padding-inline: var(--vaadin-gap-xs);
+    gap: var(--vaadin-item-gap);
   }
 
   @media (any-hover: hover) {
     &:not([disabled], [aria-disabled='true']):hover {
-      background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+      background: var(--_highlight-color);
 
       &[theme~='filled'] {
         background: var(--aura-accent-color);
@@ -40,29 +54,12 @@
         --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
         --vaadin-icon-color: var(--aura-accent-contrast-color);
         --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
-
-        > * {
-          --aura-accent-color: var(--aura-accent-contrast-color);
-          --aura-accent-text-color: var(--aura-accent-contrast-color);
-          --aura-red: var(--aura-accent-contrast-color);
-          --aura-red-text: var(--aura-accent-contrast-color);
-          --aura-orange: var(--aura-accent-contrast-color);
-          --aura-orange-text: var(--aura-accent-contrast-color);
-          --aura-yellow: var(--aura-accent-contrast-color);
-          --aura-yellow-text: var(--aura-accent-contrast-color);
-          --aura-green: var(--aura-accent-contrast-color);
-          --aura-green-text: var(--aura-accent-contrast-color);
-          --aura-blue: var(--aura-accent-contrast-color);
-          --aura-blue-text: var(--aura-accent-contrast-color);
-          --aura-purple: var(--aura-accent-contrast-color);
-          --aura-purple-text: var(--aura-accent-contrast-color);
-        }
       }
     }
   }
 
   &:active {
-    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+    background: var(--_highlight-color);
   }
 
   &[aria-expanded='true']:not(:hover) {
@@ -83,8 +80,6 @@
 /* TODO is there a better selector? */
 [role='menu'] [role='separator'] {
   margin-block: var(--vaadin-gap-xs);
-  margin-inline-start: calc(
-    var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--vaadin-gap-s)) + var(--vaadin-gap-xs) * 2
-  );
+  margin-inline: calc(var(--vaadin-gap-xs) + var(--vaadin-padding-inline-container));
   border-color: var(--vaadin-border-color);
 }

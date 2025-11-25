@@ -100,6 +100,26 @@
         }));
       };
 
+      function createMenuItemWithFeatures(text, iconName, badgeLabel) {
+        const item = document.createElement('vaadin-menu-bar-item');
+        const icon = document.createElement('vaadin-icon');
+        const badge = document.createElement('span');
+
+        if (iconName) {
+          icon.setAttribute('src', `./assets/lucide-icons/${iconName}.svg`);
+          item.append(icon);
+        }
+        if (text) {
+          item.append(document.createTextNode(text));
+        }
+        if (badgeLabel) {
+          badge.classList.add('aura-badge', 'aura-accent-purple');
+          badge.textContent = badgeLabel;
+          item.append(badge);
+        }
+        return item;
+      }
+
       function initComponentsView() {
         const view = document.querySelector('.components-view');
 
@@ -112,14 +132,22 @@
               { text: 'Edit' },
               { text: 'Duplicate' },
               { component: 'hr' },
-              { text: 'Archive' },
+              { component: createMenuItemWithFeatures('Archive', 'layers', '2') },
               {
                 text: 'More',
                 children: [
                   { text: 'Move to Project…' },
                   { text: 'Move to Folder…' },
                   { component: 'hr' },
-                  { text: 'Advanced Options…' },
+                  {
+                    text: 'Advanced Options',
+                    children: [
+                      { text: 'Show All', checked: true },
+                      { text: 'Show Hidden Items' },
+                      { component: 'hr' },
+                      { text: 'Open…' },
+                    ],
+                  },
                 ],
               },
               { component: 'hr' },
