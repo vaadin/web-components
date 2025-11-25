@@ -53,23 +53,6 @@
         --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
         --vaadin-icon-color: var(--aura-accent-contrast-color);
         --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
-
-        > * {
-          --aura-accent-color: var(--aura-accent-contrast-color);
-          --aura-accent-text-color: var(--aura-accent-contrast-color);
-          --aura-red: var(--aura-accent-contrast-color);
-          --aura-red-text: var(--aura-accent-contrast-color);
-          --aura-orange: var(--aura-accent-contrast-color);
-          --aura-orange-text: var(--aura-accent-contrast-color);
-          --aura-yellow: var(--aura-accent-contrast-color);
-          --aura-yellow-text: var(--aura-accent-contrast-color);
-          --aura-green: var(--aura-accent-contrast-color);
-          --aura-green-text: var(--aura-accent-contrast-color);
-          --aura-blue: var(--aura-accent-contrast-color);
-          --aura-blue-text: var(--aura-accent-contrast-color);
-          --aura-purple: var(--aura-accent-contrast-color);
-          --aura-purple-text: var(--aura-accent-contrast-color);
-        }
       }
     }
   }

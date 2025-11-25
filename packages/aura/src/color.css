@@ -221,7 +221,16 @@ vaadin-tab,
 /* Badges and other content that uses contrast color inside filled variants */
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'] > *,
 vaadin-tabs[theme~='filled'] > vaadin-tab[selected] > :not([slot='tooltip']),
-vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']) {
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']),
+:is(
+    vaadin-combo-box-item,
+    vaadin-context-menu-item,
+    vaadin-item,
+    vaadin-menu-bar-item,
+    vaadin-multi-select-combo-box-item,
+    vaadin-select-item[role]
+  )[theme~='filled']:not([disabled], [aria-disabled='true']):hover
+  > * {
   --vaadin-icon-color: currentColor;
   --vaadin-text-color: currentColor;
   --vaadin-text-color-secondary: color-mix(in srgb, currentColor 70%, transparent);
