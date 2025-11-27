@@ -62,5 +62,50 @@
       <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
       <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
     </vaadin-radio-group>
+    <hr style="margin-block: 24px" />
+    <h3>Batch Mode Demo (threshold: 5 files) - Simulated XHR</h3>
+    <p>Upload more than 5 files to see batch mode. Use the button below to add test files.</p>
+    <vaadin-button id="add-batch-files">Add 10 Test Files</vaadin-button>
+    <vaadin-upload id="batch-upload" batch-mode-file-count-threshold="5" target="/api/fileupload"></vaadin-upload>
+
+    <hr style="margin-block: 24px" />
+    <h3>Batch Mode Demo - Real Endpoint</h3>
+    <p>This upload uses the real /api/fileupload endpoint. Select multiple files to test batch mode.</p>
+    <vaadin-upload id="real-upload" batch-mode-file-count-threshold="5" target="/api/fileupload"></vaadin-upload>
+
+    <script type="module">
+      import '@vaadin/button';
+      import { createFiles, xhrCreator } from '@vaadin/upload/test/helpers.js';
+
+      const batchUpload = document.querySelector('#batch-upload');
+      const addBatchFilesBtn = document.querySelector('#add-batch-files');
+
+      // Configure fake XHR for batch upload with slower speed to see progress
+      batchUpload._createXhr = xhrCreator({ size: 512, uploadTime: 2000, stepTime: 500 });
+
+      addBatchFilesBtn.addEventListener('click', () => {
+        // Create 10 test files with varying sizes
+        const testFiles = [];
+        for (let i = 0; i < 10; i++) {
+          const size = 100000 + Math.random() * 500000; // 100KB - 600KB
+          const fileBlob = createFiles(1, size, 'application/pdf')[0];
+          fileBlob.name = `TestFile_${i + 1}.pdf`;
+          testFiles.push(fileBlob);
+        }
+
+        // Add files to the upload component
+        batchUpload._addFiles(testFiles);
+      });
+
+      // Real upload component doesn't need XHR override - it will use the actual endpoint
+      const realUpload = document.querySelector('#real-upload');
+      // Add event listeners to see what's happening
+      realUpload.addEventListener('upload-success', (e) => {
+        console.log('✅ Upload success:', e.detail.file.name);
+      });
+      realUpload.addEventListener('upload-error', (e) => {
+        console.error('❌ Upload error:', e.detail.file.name, e.detail.file.error);
+      });
+    </script>
   </body>
 </html>

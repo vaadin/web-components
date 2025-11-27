@@ -336,8 +336,12 @@ describe('adding files', () => {
       upload.addEventListener('upload-start', uploadStartSpy);
 
       files.forEach(upload._addFile.bind(upload));
-      expect(uploadStartSpy.calledTwice).to.be.true;
-      expect(upload.files[0].held).to.be.false;
+      // With queue behavior, only the first file starts uploading immediately
+      expect(uploadStartSpy.calledOnce).to.be.true;
+      // Files are prepended, so the first file added is at index 1
+      expect(upload.files[1].held).to.be.false;
+      // Second file (at index 0) should be held in queue
+      expect(upload.files[0].held).to.be.true;
     });
 
     it('should not automatically start upload when noAuto flag is set', () => {
