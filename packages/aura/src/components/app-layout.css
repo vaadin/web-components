@@ -3,11 +3,9 @@
   --aura-app-layout-inset: 1.5vmin;
   --aura-app-layout-radius: var(--vaadin-radius-l);
   --aura-app-layout-border-width: 1px;
-  /* Use px to ensure calc/min/max work */
-  --vaadin-app-layout-navbar-padding-top: 0px;
-  --vaadin-app-layout-navbar-padding-bottom: 0px;
-  --vaadin-app-layout-navbar-padding-inline-start: 0px;
-  --vaadin-app-layout-navbar-padding-inline-end: 0px;
+  --vaadin-app-layout-navbar-padding-top: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+  --vaadin-app-layout-navbar-padding-inline-start: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+  --vaadin-app-layout-navbar-padding-inline-end: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
 }
 
 /* Aligned with App Layout overlay breakpoint */

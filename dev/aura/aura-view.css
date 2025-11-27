@@ -34,7 +34,7 @@
 .aura-view-header,
 .aura-view[slot='navbar'] > footer,
 .aura-view-footer[slot='navbar'] {
-  padding-top: max(var(--vaadin-padding-m), var(--safe-area-inset-top));
+  padding-top: max(var(--vaadin-padding-s), var(--safe-area-inset-top));
 }
 
 .aura-view[slot='navbar'] > :is(header, footer),
@@ -42,6 +42,17 @@
 .aura-view[slot='drawer'] > header,
 .aura-view-header[slot='drawer'] {
   margin-top: calc(var(--safe-area-inset-top) * -1);
+}
+
+.aura-view[slot='navbar'] > :is(header, footer),
+:is(.aura-view-header, .aura-view-footer)[slot='navbar'] {
+  padding: 0;
+  padding-top: var(--safe-area-inset-top);
+}
+
+.aura-view[slot='navbar'] > footer,
+.aura-view-footer[slot='navbar'] {
+  margin-inline-start: auto;
 }
 
 .aura-view:not([slot='navbar']) > footer,
