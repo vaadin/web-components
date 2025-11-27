@@ -39,7 +39,6 @@ vaadin-app-layout:not(:has([slot='drawer'])) {
 }
 
 vaadin-app-layout::part(navbar) {
-  justify-content: space-between;
   --vaadin-app-layout-navbar-background: transparent;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
