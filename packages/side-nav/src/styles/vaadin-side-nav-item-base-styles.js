@@ -45,6 +45,10 @@ const sideNavItem = css`
     --vaadin-side-nav-item-text-color: var(--vaadin-text-color-disabled);
   }
 
+  :host(:not([has-children])) {
+    gap: 0;
+  }
+
   [part='link'] {
     flex: auto;
     min-width: 0;
