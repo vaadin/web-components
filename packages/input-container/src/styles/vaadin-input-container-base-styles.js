@@ -118,6 +118,18 @@ export const inputContainerStyles = css`
     --vaadin-input-field-border-color: transparent;
   }
 
+  :host([theme~='align-start']) ::slotted(:not([slot$='fix'])) {
+    text-align: start;
+  }
+
+  :host([theme~='align-center']) ::slotted(:not([slot$='fix'])) {
+    text-align: center;
+  }
+
+  :host([theme~='align-end']) ::slotted(:not([slot$='fix'])) {
+    text-align: end;
+  }
+
   @media (forced-colors: active) {
     :host {
       --vaadin-input-field-background: Field;
