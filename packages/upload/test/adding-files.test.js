@@ -19,7 +19,7 @@ describe('adding files', () => {
 
   beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
-    upload.target = 'http://foo.com/bar';
+    upload.target = 'https://foo.com/bar';
     upload._createXhr = xhrCreator({ size: testFileSize, uploadTime: 200, stepTime: 50 });
     await nextRender();
     files = createFiles(2, testFileSize, 'application/x-octet-stream');

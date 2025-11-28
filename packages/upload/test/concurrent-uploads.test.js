@@ -9,7 +9,7 @@ describe('concurrent uploads', () => {
 
   beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
-    upload.target = 'http://foo.com/bar';
+    upload.target = 'https://foo.com/bar';
     await nextRender();
   });
 

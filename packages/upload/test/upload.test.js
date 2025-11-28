@@ -9,7 +9,7 @@ describe('upload', () => {
 
   beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
-    upload.target = 'http://foo.com/bar';
+    upload.target = 'https://foo.com/bar';
     file = createFile(100000, 'application/unknown');
     await nextRender();
   });
