@@ -332,6 +332,7 @@ describe('adding files', () => {
 
   describe('start upload', () => {
     it('should automatically start upload', () => {
+      upload.maxConcurrentUploads = 1;
       const uploadStartSpy = sinon.spy();
       upload.addEventListener('upload-start', uploadStartSpy);
 

@@ -28,6 +28,29 @@ Once installed, import the component in your application:
 import '@vaadin/upload';
 ```
 
+## Performance Considerations
+
+When uploading large numbers of files, the component automatically throttles concurrent uploads to prevent browser performance degradation. By default, a maximum of 3 files are uploaded simultaneously, with additional files queued automatically.
+
+You can customize this limit using the `max-concurrent-uploads` attribute:
+
+```html
+<!-- Limit to 5 concurrent uploads -->
+<vaadin-upload max-concurrent-uploads="5"></vaadin-upload>
+```
+
+```js
+// Or set it programmatically
+upload.maxConcurrentUploads = 5;
+```
+
+This helps prevent:
+- Browser XHR limitations (failures when uploading 2000+ files simultaneously)
+- Performance degradation with hundreds of concurrent uploads
+- Network congestion on slower connections
+
+The default value of 3 balances upload performance with network resource conservation.
+
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

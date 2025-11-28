@@ -323,6 +323,20 @@ export const UploadMixin = (superClass) =>
         },
 
         /**
+         * Specifies the maximum number of files that can be uploaded simultaneously.
+         * This helps prevent browser performance degradation and XHR limitations when
+         * uploading large numbers of files. Files exceeding this limit will be queued
+         * and uploaded as active uploads complete.
+         * @attr {number} max-concurrent-uploads
+         * @type {number}
+         */
+        maxConcurrentUploads: {
+          type: Number,
+          value: 3,
+          sync: true,
+        },
+
+        /**
          * Pass-through to input's capture attribute. Allows user to trigger device inputs
          * such as camera or microphone immediately.
          */
@@ -346,6 +360,18 @@ export const UploadMixin = (superClass) =>
         /** @private */
         _files: {
           type: Array,
+        },
+
+        /** @private */
+        _uploadQueue: {
+          type: Array,
+          value: () => [],
+        },
+
+        /** @private */
+        _activeUploads: {
+          type: Number,
+          value: 0,
         },
       };
     }
@@ -695,23 +721,21 @@ export const UploadMixin = (superClass) =>
         files = [files];
       }
       files = files.filter((file) => !file.complete);
-      // Upload only the first file in the queue, not all at once
-      if (files.length > 0) {
-        this._uploadFile(files[0]);
-      }
+      Array.prototype.forEach.call(files, this._uploadFile.bind(this));
     }
 
-    /** @private */
-    _processNextFileInQueue() {
-      // Find the next file that is queued but not yet uploaded
-      // Search from the end since files are prepended (newest first)
-      // This ensures files upload in the order they were added
-      const nextFile = this.files
-        .slice()
-        .reverse()
-        .find((file) => !file.complete && !file.uploading && !file.abort);
-      if (nextFile) {
-        this._uploadFile(nextFile);
+    /**
+     * Process the upload queue by starting uploads for queued files
+     * if there is available capacity.
+     * @private
+     */
+    _processQueue() {
+      // Process as many queued files as we have capacity for
+      while (this._uploadQueue.length > 0 && this._activeUploads < this.maxConcurrentUploads) {
+        const nextFile = this._uploadQueue.shift();
+        if (nextFile && !nextFile.complete && !nextFile.uploading) {
+          this._uploadFile(nextFile);
+        }
       }
     }
 
@@ -720,6 +744,27 @@ export const UploadMixin = (superClass) =>
       if (file.uploading) {
         return;
       }
+
+      // Check if we've reached the concurrent upload limit
+      if (this._activeUploads >= this.maxConcurrentUploads) {
+        // Add to queue if not already queued
+        if (!this._uploadQueue.includes(file)) {
+          this._uploadQueue.push(file);
+          file.held = true;
+          file.status = this.__effectiveI18n.uploading.status.held;
+          this._renderFileList();
+        }
+        return;
+      }
+
+      // Remove from queue if it was queued
+      const queueIndex = this._uploadQueue.indexOf(file);
+      if (queueIndex >= 0) {
+        this._uploadQueue.splice(queueIndex, 1);
+      }
+
+      // Increment active uploads counter
+      this._activeUploads += 1;
 
       const ini = Date.now();
       const xhr = (file.xhr = this._createXhr());
@@ -762,7 +807,13 @@ export const UploadMixin = (superClass) =>
         if (xhr.readyState === 4) {
           clearTimeout(stalledId);
           file.indeterminate = file.uploading = false;
+
+          // Decrement active uploads counter
+          this._activeUploads -= 1;
+
           if (file.abort) {
+            // Process queue even on abort
+            this._processQueue();
             return;
           }
           file.status = '';
@@ -776,6 +827,8 @@ export const UploadMixin = (superClass) =>
           );
 
           if (!evt) {
+            // Process queue even if event was cancelled
+            this._processQueue();
             return;
           }
           if (xhr.status === 0) {
@@ -793,8 +846,9 @@ export const UploadMixin = (superClass) =>
             }),
           );
           this._renderFileList();
-          // Process the next file in the queue after this one completes
-          this._processNextFileInQueue();
+
+          // Process the queue to start the next upload
+          this._processQueue();
         }
       };
 
@@ -896,12 +950,24 @@ export const UploadMixin = (superClass) =>
       );
       if (evt) {
         file.abort = true;
+
+        // Remove from queue if it was queued
+        const queueIndex = this._uploadQueue.indexOf(file);
+        if (queueIndex >= 0) {
+          this._uploadQueue.splice(queueIndex, 1);
+        }
+
+        // Decrement active uploads if file was uploading
+        if (file.uploading) {
+          this._activeUploads -= 1;
+        }
+
         if (file.xhr) {
           file.xhr.abort();
         }
         this._removeFile(file);
-        // Process the next file in the queue after aborting this one
-        this._processNextFileInQueue();
+        // Process the queue to start the next upload
+        this._processQueue();
       }
     }
 
@@ -955,11 +1021,7 @@ export const UploadMixin = (superClass) =>
       this.files = [file, ...this.files];
 
       if (!this.noAuto) {
-        // Only start uploading if no other file is currently being uploaded
-        const isAnyFileUploading = this.files.some((f) => f.uploading);
-        if (!isAnyFileUploading) {
-          this._uploadFile(file);
-        }
+        this._uploadFile(file);
       }
     }
 

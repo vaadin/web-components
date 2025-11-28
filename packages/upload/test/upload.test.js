@@ -555,6 +555,7 @@ describe('upload', () => {
 
     beforeEach(() => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
+      upload.maxConcurrentUploads = 1;
       clock = sinon.useFakeTimers();
     });
 
