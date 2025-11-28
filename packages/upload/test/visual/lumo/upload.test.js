@@ -36,12 +36,29 @@ describe('upload', () => {
         await visualDiff(div, `${dir}-nodrop`);
       });
 
+      it('dragover-valid', async () => {
+        element.setAttribute('dragover-valid', '');
+        await visualDiff(div, `${dir}-dragover-valid`);
+      });
+
       it('files', async () => {
         element.files = [
           { name: 'Don Quixote.pdf', progress: 100, complete: true },
           { name: 'Hamlet.pdf', progress: 100, complete: true },
         ];
         await visualDiff(div, `${dir}-files`);
+      });
+
+      it('max-height', async () => {
+        element.style.maxHeight = '200px';
+        element.files = [
+          { name: 'File 1.pdf', progress: 100, complete: true },
+          { name: 'File 2.pdf', progress: 100, complete: true },
+          { name: 'File 3.pdf', progress: 100, complete: true },
+          { name: 'File 4.pdf', progress: 100, complete: true },
+          { name: 'File 5.pdf', progress: 100, complete: true },
+        ];
+        await visualDiff(div, `${dir}-max-height`);
       });
     });
   });

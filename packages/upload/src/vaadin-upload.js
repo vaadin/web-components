@@ -75,6 +75,10 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
     return uploadStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     return html`
