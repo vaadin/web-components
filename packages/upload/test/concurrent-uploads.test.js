@@ -227,12 +227,12 @@ describe('concurrent uploads', () => {
       expect(upload._activeUploads).to.equal(2);
       expect(upload._uploadQueue.length).to.equal(3);
 
-      // Wait for first uploads to fail and queue to be processed
-      await clock.tickAsync(200);
+      // Wait for first 2 uploads to fail (uploadTime + stepTime + serverTime = 100 + 25 + 10 = 135ms)
+      await clock.tickAsync(150);
 
-      // Should continue processing queue despite errors
-      expect(upload._activeUploads).to.be.greaterThan(0);
-      expect(upload._uploadQueue.length).to.be.lessThan(3);
+      // After first 2 fail, next 2 should start from queue
+      expect(upload._activeUploads).to.equal(2);
+      expect(upload._uploadQueue.length).to.equal(1);
     });
 
     it('should handle response event cancellation', async () => {
@@ -281,17 +281,6 @@ describe('concurrent uploads', () => {
       await clock.tickAsync(10);
 
       expect(upload._activeUploads).to.equal(20);
-      expect(upload._uploadQueue.length).to.equal(0);
-    });
-
-    it('should allow unlimited uploads when maxConcurrentUploads is very high', async () => {
-      const files = createFiles(15, 100, 'application/json');
-      upload.maxConcurrentUploads = 100;
-
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      expect(upload._activeUploads).to.equal(15);
       expect(upload._uploadQueue.length).to.equal(0);
     });
   });
