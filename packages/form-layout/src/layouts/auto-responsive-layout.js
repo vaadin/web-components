@@ -172,8 +172,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
 
   /** @private */
   get __minWidthLabelsAside() {
-    const { backgroundPositionY } = getComputedStyle(this.host.$.layout, '::before');
-    return parseFloat(backgroundPositionY);
+    return parseFloat(getComputedStyle(this.host).getPropertyValue('--_min-width-labels-aside'));
   }
 
   /** @private */
