@@ -28,7 +28,7 @@ export const menuBarStyles = css`
     --_rad-button: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
   }
 
-  ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
+  :host(:not([has-single-button])) ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
     margin-inline-start: min(var(--_bw) * -1 + var(--_gap) * 1000, 0px);
   }
 
