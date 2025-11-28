@@ -1,4 +1,3 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { flushGrid } from '../helpers.js';
@@ -244,47 +243,6 @@ describe('grid', () => {
         });
       });
 
-      describe('row focus', () => {
-        beforeEach(async () => {
-          element = fixtureSync(`
-            <vaadin-grid style="width: 550px">
-              <vaadin-grid-column-group header="Name" frozen>
-                <vaadin-grid-column path="name.first" width="200px" flex-shrink="0"></vaadin-grid-column>
-                <vaadin-grid-column path="name.last" width="200px" flex-shrink="0"></vaadin-grid-column>
-              </vaadin-grid-column-group>
-              <vaadin-grid-column path="location.city" width="200px" flex-shrink="0"></vaadin-grid-column>
-            </vaadin-grid>
-          `);
-          element.items = users;
-          flushGrid(element);
-
-          // Scroll all the way to end
-          element.$.table.scrollLeft = element.__isRTL ? -1000 : 1000;
-
-          // Focus a header row
-          await sendKeys({ press: 'Tab' });
-          // Switch to row focus mode
-          await sendKeys({ press: element.__isRTL ? 'ArrowRight' : 'ArrowLeft' });
-          // Tab to body row
-          await sendKeys({ press: 'Tab' });
-
-          await nextRender();
-        });
-
-        it('row focus', async () => {
-          await visualDiff(element, `${dir}-row-focus`);
-        });
-
-        it('row focus - header', async () => {
-          // Focus a header row
-          element.tabIndex = 0;
-          element.focus();
-          await sendKeys({ press: 'Tab' });
-
-          await visualDiff(element, `${dir}-row-focus-header`);
-        });
-      });
-
       describe('frozen', () => {
         beforeEach(() => {
           element = fixtureSync(`
@@ -461,6 +419,32 @@ describe('grid', () => {
 
     it('default', async () => {
       await visualDiff(element, 'empty-state');
+    });
+  });
+
+  describe('all rows visible', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 500px" all-rows-visible>
+          <vaadin-grid-column path="name.first" header="Header"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.querySelector('vaadin-grid-column').footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+
+      element.items = users.slice(0, 10);
+      flushGrid(element);
+      await nextRender();
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'all-rows-visible');
+    });
+
+    it('without footer', async () => {
+      element.querySelector('vaadin-grid-column').footerRenderer = null;
+      await visualDiff(element, 'all-rows-visible-without-footer');
     });
   });
 });

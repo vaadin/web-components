@@ -62,11 +62,6 @@ describe('date-picker', () => {
           document.documentElement.removeAttribute('dir');
         });
 
-        it('label', async () => {
-          element.label = 'Label';
-          await visualDiff(div, `${dir}-label`);
-        });
-
         it('placeholder', async () => {
           element.placeholder = 'Placeholder';
           await visualDiff(div, `${dir}-placeholder`);
@@ -75,38 +70,6 @@ describe('date-picker', () => {
         it('value', async () => {
           element.value = '1991-12-20';
           await visualDiff(div, `${dir}-value`);
-        });
-
-        it('clear button', async () => {
-          element.value = '1991-12-20';
-          element.clearButtonVisible = true;
-          await visualDiff(div, `${dir}-clear-button`);
-        });
-
-        it('required', async () => {
-          element.label = 'Label';
-          element.required = true;
-          await visualDiff(div, `${dir}-required`);
-        });
-
-        it('error message', async () => {
-          element.label = 'Label';
-          element.errorMessage = 'This field is required';
-          element.required = true;
-          element.validate();
-          await visualDiff(div, `${dir}-error-message`);
-        });
-
-        it('helper text', async () => {
-          element.helperText = 'Helper text';
-          await visualDiff(div, `${dir}-helper-text`);
-        });
-
-        it('helper above field', async () => {
-          element.label = 'Label';
-          element.helperText = 'Helper text';
-          element.setAttribute('theme', 'helper-above-field');
-          await visualDiff(div, `${dir}-helper-above-field`);
         });
 
         it('prefix slot', async () => {

@@ -9,7 +9,10 @@ import { css } from 'lit';
 export const textAreaStyles = css`
   [part='input-field'] {
     overflow: auto;
-    scroll-padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
+    scroll-padding: var(
+      --vaadin-input-field-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
   }
 
   ::slotted(textarea) {
@@ -22,6 +25,10 @@ export const textAreaStyles = css`
     align-self: flex-start;
     position: sticky;
     top: 0;
+  }
+
+  [part~='clear-button'] {
+    top: min(0px, (24px - 1lh) / -2);
   }
 
   /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */

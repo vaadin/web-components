@@ -354,9 +354,10 @@ export const GridMixin = (superClass) =>
       const rows = [];
       for (let i = 0; i < count; i++) {
         const row = document.createElement('tr');
-        row.setAttribute('part', 'row body-row');
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
+        updatePart(row, 'row', true);
+        updatePart(row, 'body-row', true);
         if (this._columnTree) {
           this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
@@ -503,7 +504,8 @@ export const GridMixin = (superClass) =>
               }
               column._cells.push(cell);
             }
-            cell.setAttribute('part', 'cell body-cell');
+            updatePart(cell, 'cell', true);
+            updatePart(cell, 'body-cell', true);
             cell.__parentRow = row;
             // Cache the cell reference
             row.__cells.push(cell);
@@ -565,7 +567,8 @@ export const GridMixin = (superClass) =>
                 column._emptyCells.push(cell);
               }
             }
-            cell.part.add('cell', `${section}-cell`);
+            updatePart(cell, 'cell', true);
+            updatePart(cell, `${section}-cell`, true);
           }
 
           if (!cell._content.parentElement) {
@@ -713,15 +716,17 @@ export const GridMixin = (superClass) =>
 
       while (this.$.header.children.length < columnTree.length) {
         const headerRow = document.createElement('tr');
-        headerRow.setAttribute('part', 'row header-row');
         headerRow.setAttribute('role', 'row');
         headerRow.setAttribute('tabindex', '-1');
+        updatePart(headerRow, 'row', true);
+        updatePart(headerRow, 'header-row', true);
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('tr');
-        footerRow.setAttribute('part', 'row footer-row');
         footerRow.setAttribute('role', 'row');
         footerRow.setAttribute('tabindex', '-1');
+        updatePart(footerRow, 'row', true);
+        updatePart(footerRow, 'footer-row', true);
         this.$.footer.appendChild(footerRow);
       }
       while (this.$.header.children.length > columnTree.length) {
@@ -748,7 +753,6 @@ export const GridMixin = (superClass) =>
       this._resetKeyboardNavigation();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
-      this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
     }
@@ -757,12 +761,12 @@ export const GridMixin = (superClass) =>
     __updateHeaderFooterRowParts(section) {
       const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
       [...this.$[section].children].forEach((row) => {
-        updatePart(row, row === visibleRows.at(0), `first-${section}-row`);
-        updatePart(row, row === visibleRows.at(-1), `last-${section}-row`);
+        updatePart(row, `first-${section}-row`, row === visibleRows.at(0));
+        updatePart(row, `last-${section}-row`, row === visibleRows.at(-1));
 
         getBodyRowCells(row).forEach((cell) => {
-          updatePart(cell, row === visibleRows.at(0), `first-${section}-row-cell`);
-          updatePart(cell, row === visibleRows.at(-1), `last-${section}-row-cell`);
+          updatePart(cell, `first-${section}-row-cell`, row === visibleRows.at(0));
+          updatePart(cell, `last-${section}-row-cell`, row === visibleRows.at(-1));
         });
       });
     }
@@ -783,7 +787,6 @@ export const GridMixin = (superClass) =>
 
       if (loading) {
         // Run style generators for the loading row to have custom names cleared
-        this._generateCellClassNames(row);
         this._generateCellPartNames(row);
       }
     }
@@ -814,7 +817,6 @@ export const GridMixin = (superClass) =>
 
       this.__updateRowStateParts(row, model);
 
-      this._generateCellClassNames(row, model);
       this._generateCellPartNames(row, model);
       this._filterDragAndDrop(row, model);
       this.__updateDragSourceParts(row, model);

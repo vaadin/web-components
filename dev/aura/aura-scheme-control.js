@@ -30,7 +30,7 @@ class AuraSchemeControl extends AuraControl {
           gap: 0;
           border: 1px solid var(--vaadin-border-color);
           border-radius: var(--vaadin-radius-m);
-          background: var(--aura-surface) padding-box;
+          background: var(--aura-surface-color) padding-box;
           overflow: hidden;
         }
 
@@ -156,7 +156,7 @@ class AuraSchemeControl extends AuraControl {
 
     // 2) Else read from computed CSS on :root
     const computed = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim(); // "light" | "dark" | "light dark" | ""
-    const initial = this.#isValid(computed) ? computed : 'light dark';
+    const initial = this.#isValid(computed) ? computed : 'normal';
     this.#select(initial);
     // Don’t override stylesheet on load; only reflect the choice in UI.
   }
@@ -168,7 +168,7 @@ class AuraSchemeControl extends AuraControl {
 
     // Re-read stylesheet-driven value; default to "light dark"
     const token = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
-    const value = this.#isValid(token) ? token : 'light dark';
+    const value = this.#isValid(token) ? token : 'normal';
 
     // Update UI (no persist, no inline set)
     this.#select(value);

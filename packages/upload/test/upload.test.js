@@ -156,7 +156,9 @@ describe('upload', () => {
         upload._uploadFile(file);
       });
 
-      it('should fire the upload-before with configurable form data name', (done) => {
+      it('should fire the upload-before with configurable form data name in multipart mode', (done) => {
+        upload.uploadFormat = 'multipart';
+
         function MockFormData() {
           this.data = [];
         }
@@ -183,7 +185,9 @@ describe('upload', () => {
         window.FormData = OriginalFormData;
       });
 
-      it('should use formDataName property as a default form data name', (done) => {
+      it('should use formDataName property as a default form data name in multipart mode', (done) => {
+        upload.uploadFormat = 'multipart';
+
         upload.addEventListener('upload-before', (e) => {
           expect(e.detail.file.formDataName).to.equal('attachment');
           done();
@@ -201,7 +205,9 @@ describe('upload', () => {
         expect(file.xhr.readyState).to.equal(0);
       });
 
-      it('should fire upload-request event', (done) => {
+      it('should fire upload-request event in multipart mode', (done) => {
+        upload.uploadFormat = 'multipart';
+
         upload.addEventListener('upload-request', (e) => {
           expect(e.detail.file).to.be.ok;
           expect(e.detail.xhr).to.be.ok;
@@ -727,7 +733,19 @@ describe('upload', () => {
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
         const filename = e.detail.xhr.getRequestHeader('X-Filename');
-        expect(filename).to.equal(testFile.name);
+        expect(filename).to.equal(encodeURIComponent(testFile.name));
+        done();
+      });
+      upload._uploadFile(testFile);
+    });
+
+    it('should encode special characters in X-Filename header in raw format', (done) => {
+      const testFile = createFile(1000, 'application/pdf');
+      testFile.name = 'religion åk4.pdf';
+      upload.uploadFormat = 'raw';
+      upload.addEventListener('upload-request', (e) => {
+        const filename = e.detail.xhr.getRequestHeader('X-Filename');
+        expect(filename).to.equal('religion%20%C3%A5k4.pdf');
         done();
       });
       upload._uploadFile(testFile);
@@ -796,7 +814,7 @@ describe('upload', () => {
       expect(e.detail.xhr.status).to.equal(200);
     });
 
-    it('should include uploadFormat and requestBody in upload-request event for raw', (done) => {
+    it('should include uploadFormat and requestBody in upload-request event in raw format', (done) => {
       upload.uploadFormat = 'raw';
       upload.addEventListener('upload-request', (e) => {
         expect(e.detail.uploadFormat).to.equal('raw');

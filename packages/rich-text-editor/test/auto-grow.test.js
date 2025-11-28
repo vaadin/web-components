@@ -42,7 +42,11 @@ describe('rich text editor', () => {
   ['height', 'min-height', 'max-height'].forEach((definedValue, key) => {
     describe(`defined ${definedValue}`, () => {
       beforeEach(async () => {
-        rte = fixtureSync(`<vaadin-rich-text-editor style="${definedValue}: 500px"></vaadin-rich-text-editor>`);
+        rte = fixtureSync(`
+          <vaadin-rich-text-editor
+            style="${definedValue}: 500px; --vaadin-input-field-border-width: 0px"
+          ></vaadin-rich-text-editor>
+        `);
         await nextRender();
         editorContainer = rte.shadowRoot.querySelector('.vaadin-rich-text-editor-container');
         editorContentContainer = rte.shadowRoot.querySelector('.ql-container');

@@ -29,6 +29,12 @@ describe('radio-button', () => {
       await visualDiff(div, 'state-empty');
     });
 
+    it('multi-line', async () => {
+      element.label = 'Long label that wraps into multiple lines';
+      element.style.maxWidth = '150px';
+      await visualDiff(div, 'state-multi-line');
+    });
+
     describe('disabled', () => {
       beforeEach(() => {
         element.disabled = true;

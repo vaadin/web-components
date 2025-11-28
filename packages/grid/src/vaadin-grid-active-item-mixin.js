@@ -73,7 +73,7 @@ export const ActiveItemMixin = (superClass) =>
         // No clicked cell available
         !cell ||
         // Cell is a details cell
-        cell.getAttribute('part').includes('details-cell') ||
+        cell.part.contains('details-cell') ||
         // Cell is the empty state cell
         cell === this.$.emptystatecell ||
         // Cell content is focused

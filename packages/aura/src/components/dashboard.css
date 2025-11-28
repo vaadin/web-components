@@ -4,7 +4,7 @@
   --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
   --vaadin-dashboard-header-gap: var(--vaadin-gap-xs);
   --vaadin-dashboard-widget-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-dashboard-widget-background: var(--aura-surface) padding-box;
+  --vaadin-dashboard-widget-background: var(--aura-surface-color) padding-box;
   --vaadin-dashboard-widget-border-radius: var(--vaadin-radius-m);
 }
 
@@ -50,7 +50,7 @@ vaadin-dashboard-section {
   &::part(resize-grow-height-button),
   &::part(resize-shrink-width-button),
   &::part(resize-grow-width-button) {
-    background: var(--aura-surface) padding-box;
+    background: var(--aura-surface-color) padding-box;
     color: var(--vaadin-text-color-secondary);
     border: 1px solid var(--vaadin-border-color);
     transition: 120ms color;
@@ -78,8 +78,8 @@ vaadin-dashboard-section {
   &::part(move-apply-button),
   &::part(resize-apply-button) {
     background: var(--aura-accent-color);
-    color: var(--aura-accent-contrast);
-    box-shadow: 0 0 0 3px var(--aura-surface);
+    color: var(--aura-accent-contrast-color);
+    box-shadow: 0 0 0 3px var(--aura-surface-color);
     outline-offset: 2px;
   }
 

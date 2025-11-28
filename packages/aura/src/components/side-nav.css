@@ -11,56 +11,47 @@ vaadin-side-nav + vaadin-side-nav {
   margin-top: var(--vaadin-gap-l);
 }
 
-vaadin-side-nav-item::part(content) {
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background-color 120ms;
-  --aura-surface-level: 3;
+vaadin-side-nav::part(label) {
+  gap: var(--vaadin-gap-xs);
 }
 
-vaadin-side-nav-item:not([disabled])::part(content):hover {
-  --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+vaadin-side-nav-item::part(content) {
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.6;
+}
+
+vaadin-side-nav-item:not([disabled], [current])::part(content):active {
+  --vaadin-side-nav-item-background: var(--vaadin-background-container);
+}
+
+@media (any-hover: hover) {
+  vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
+    transition: color 120ms;
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+  }
 }
 
 vaadin-side-nav-item[current]::part(content) {
-  --_accent: light-dark(
-    oklch(from var(--aura-accent-light) calc(l + 0.2) c h / min(0.3, c / 2)),
-    oklch(from var(--aura-accent-dark) calc(l - 0.2) c h / min(0.3, c / 2))
-  );
-  --_accent-border: light-dark(
-    oklch(from var(--aura-accent-light) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast))),
-    oklch(from var(--aura-accent-dark) l calc(c / 2) h / calc(min(0.15, 0.05 + c / 2) + 0.1 * var(--aura-contrast)))
-  );
-  --vaadin-side-nav-item-background: linear-gradient(var(--_accent), var(--_accent)) var(--aura-surface) padding-box;
-  --vaadin-side-nav-item-text-color: var(--aura-accent-text);
-  --vaadin-side-nav-item-border-color: var(--_accent-border);
+  transition: none;
+  --_accent-border: color-mix(in srgb, var(--aura-accent-color) 10%, var(--vaadin-border-color-secondary) 50%);
+  --vaadin-side-nav-item-background: var(--aura-accent-surface) padding-box;
+  --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
+  --vaadin-side-nav-item-border-color: var(--aura-accent-border-color);
+}
+
+vaadin-side-nav::part(toggle-button),
+vaadin-side-nav-item::part(toggle-button) {
+  --vaadin-icon-visual-size: 0.9lh;
 }
 
 /* Filled variant */
 
 vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
-  --vaadin-side-nav-item-text-color: var(--aura-accent-contrast);
-  outline-offset: 2px;
-}
-
-/* Badges and other content that uses the palette inside a filled nav item */
-vaadin-side-nav[theme~='filled'] vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']) {
+  --vaadin-side-nav-item-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--vaadin-side-nav-item-text-color);
-  --vaadin-text-color-secondary: var(--vaadin-side-nav-item-text-color);
-  --aura-accent-color: var(--vaadin-side-nav-item-text-color);
-  --aura-accent-text: var(--vaadin-side-nav-item-text-color);
-  --aura-red: var(--vaadin-side-nav-item-text-color);
-  --aura-red-text: var(--vaadin-side-nav-item-text-color);
-  --aura-orange: var(--vaadin-side-nav-item-text-color);
-  --aura-orange-text: var(--vaadin-side-nav-item-text-color);
-  --aura-yellow: var(--vaadin-side-nav-item-text-color);
-  --aura-yellow-text: var(--vaadin-side-nav-item-text-color);
-  --aura-green: var(--vaadin-side-nav-item-text-color);
-  --aura-green-text: var(--vaadin-side-nav-item-text-color);
-  --aura-blue: var(--vaadin-side-nav-item-text-color);
-  --aura-blue-text: var(--vaadin-side-nav-item-text-color);
-  --aura-purple: var(--vaadin-side-nav-item-text-color);
-  --aura-purple-text: var(--vaadin-side-nav-item-text-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+  outline-offset: 2px;
 }

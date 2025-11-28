@@ -9,6 +9,7 @@ const unitTestsConfig = createUnitTestsConfig({
       launchOptions: {
         channel: 'chrome',
         headless: true,
+        ignoreDefaultArgs: ['--hide-scrollbars'],
       },
     }),
   ],

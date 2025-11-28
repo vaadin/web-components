@@ -14,7 +14,10 @@ const sideNavItem = css`
     align-items: center;
     min-width: 0;
     max-width: 100%;
-    padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
+    padding: var(
+      --vaadin-side-nav-item-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
     --_gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
     gap: var(--_gap);
     font-size: var(--vaadin-side-nav-item-font-size, 1em);
@@ -40,6 +43,10 @@ const sideNavItem = css`
 
   :host([disabled]) [part='content'] {
     --vaadin-side-nav-item-text-color: var(--vaadin-text-color-disabled);
+  }
+
+  :host(:not([has-children])) {
+    gap: 0;
   }
 
   [part='link'] {

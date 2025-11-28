@@ -21,7 +21,8 @@ export const notificationContainerStyles = css`
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: var(--_padding);
+    padding: max(env(safe-area-inset-top, 0px), var(--_padding)) max(env(safe-area-inset-right, 0px), var(--_padding))
+      max(env(safe-area-inset-bottom, 0px), var(--_padding)) max(env(safe-area-inset-left, 0px), var(--_padding));
     border: 0;
     background: transparent;
     pointer-events: none;

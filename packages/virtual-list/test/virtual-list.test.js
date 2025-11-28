@@ -95,7 +95,7 @@ describe('virtual-list', () => {
     });
 
     it('should have full width items', () => {
-      expect(list.firstElementChild.offsetWidth).to.equal(list.offsetWidth);
+      expect(list.firstElementChild.offsetWidth).to.equal(list.clientWidth);
     });
 
     it('should have a first visible index', () => {

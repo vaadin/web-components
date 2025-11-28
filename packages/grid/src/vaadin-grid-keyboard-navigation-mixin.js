@@ -6,7 +6,7 @@
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { updatePart } from './vaadin-grid-helpers.js';
 
 function isRow(element) {
   return element instanceof HTMLTableRowElement;
@@ -169,11 +169,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _focusedCellChanged(focusedCell, oldFocusedCell) {
       if (oldFocusedCell) {
-        removeValueFromAttribute(oldFocusedCell, 'part', 'focused-cell');
+        updatePart(oldFocusedCell, 'focused-cell', false);
       }
 
       if (focusedCell) {
-        addValueToAttribute(focusedCell, 'part', 'focused-cell');
+        updatePart(focusedCell, 'focused-cell', true);
       }
     }
 
@@ -603,7 +603,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._scrollHorizontallyToCell(dstCell);
         }
 
-        dstCell.focus();
+        dstCell.focus({ preventScroll: true });
       }
     }
 
@@ -1016,8 +1016,9 @@ export const KeyboardNavigationMixin = (superClass) =>
       const dstRow = dstCell.parentNode;
       const dstCellIndex = Array.from(dstRow.children).indexOf(dstCell);
       const tableRect = this.$.table.getBoundingClientRect();
-      let leftBoundary = tableRect.left,
-        rightBoundary = tableRect.right;
+      const scrollbarWidth = this.$.table.clientWidth - this.$.table.offsetWidth;
+      let leftBoundary = tableRect.left - (this.__isRTL ? scrollbarWidth : 0);
+      let rightBoundary = tableRect.right + (this.__isRTL ? 0 : scrollbarWidth);
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') || isDetailsCell(cell)) {
@@ -1040,10 +1041,10 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       if (dstCellRect.left < leftBoundary) {
-        this.$.table.scrollLeft += Math.round(dstCellRect.left - leftBoundary);
+        this.$.table.scrollLeft += dstCellRect.left - leftBoundary;
       }
       if (dstCellRect.right > rightBoundary) {
-        this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
+        this.$.table.scrollLeft += dstCellRect.right - rightBoundary;
       }
     }
 

@@ -7,6 +7,7 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const gridStyles = css`
+  /* stylelint-disable no-duplicate-selectors */
   :host {
     display: flex;
     max-width: 100%;
@@ -24,6 +25,10 @@ export const gridStyles = css`
     --_border-color: var(--vaadin-grid-border-color, var(--vaadin-border-color-secondary));
     --_row-border-width: var(--vaadin-grid-row-border-width, 1px);
     --_column-border-width: var(--vaadin-grid-column-border-width, 0px);
+    --_cell-padding: var(
+      --vaadin-grid-cell-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
     border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-m));
   }
 
@@ -94,13 +99,6 @@ export const gridStyles = css`
     position: sticky;
     left: 0;
     width: 100%;
-  }
-
-  :host([overflow~='top']) #header,
-  :host([overflow~='bottom']) #footer,
-  :host([navigating]) #header:has(tr:last-child:focus-within),
-  :host([navigating]) #footer:has(tr:first-child:focus-within),
-  [empty-state] #header {
     z-index: 2;
   }
 
@@ -123,13 +121,13 @@ export const gridStyles = css`
   }
 
   #header th,
-  [part~='reorder-ghost'] {
+  .reorder-ghost {
     font-size: var(--vaadin-grid-header-font-size, 1em);
     font-weight: var(--vaadin-grid-header-font-weight, 500);
     color: var(--vaadin-grid-header-text-color, var(--vaadin-text-color));
   }
 
-  [part~='row'] {
+  .row {
     display: flex;
     width: 100%;
     box-sizing: border-box;
@@ -137,51 +135,28 @@ export const gridStyles = css`
     position: relative;
   }
 
-  [part~='row']:not(:focus-within) {
+  .row:not(:focus-within) {
     --_non-focused-row-none: none;
   }
 
-  [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
+  .body-row[loading] .body-cell ::slotted(vaadin-grid-cell-content) {
     visibility: hidden;
   }
 
-  [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+  [column-rendering='lazy'] .body-cell:not([frozen]):not([frozen-to-end]) {
     transform: translateX(var(--_grid-lazy-columns-start));
   }
 
-  #items [part~='row']:empty {
+  #items .row:empty {
     height: 100%;
   }
 
-  [part~='cell'] {
+  .cell {
     padding: 0;
     box-sizing: border-box;
-    background: var(--vaadin-grid-cell-background, var(--vaadin-background-color));
-    border-block: var(--_row-border-width) solid var(--_border-color);
-    margin-top: calc(var(--_row-border-width) * -1);
-
-    /*
-    Box-shadows are used to create a "fake" border at the end of the cell/row, which is visible when a row/cell ends
-    before the edge of the grid viewport, as well as frozen columns and rows (header and footer).
-    If there are frozen columns, we'll make the "fake box-shadow border" on the header and footer opaque by rendering
-    both the border color and cell background color, so that a semi-transparent border color doesn't "stack" when
-    scrolling horizontally.
-    */
-    --_fake-border:
-      0 calc(var(--_top, 0) * var(--_row-border-width) * -1) 0 0 var(--_border-color),
-      0 calc(var(--_top-opaque, 0) * var(--_row-border-width) * -1) 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
-      0 calc(var(--_bottom, 0) * var(--_row-border-width)) 0 0 var(--_border-color),
-      0 calc(var(--_bottom-opaque, 0) * var(--_row-border-width)) 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color)),
-      calc(var(--_start, 0) * var(--_column-border-width) * -1) 0 0 0 var(--_border-color),
-      calc(var(--_end, 0) * var(--_column-border-width)) 0 0 0 var(--_border-color),
-      calc(var(--_end-opaque, 0) * var(--_column-border-width)) 0 0 0
-        var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
-    box-shadow: var(--_fake-border);
   }
 
-  [part~='cell']:where(:not([part~='details-cell'])) {
+  .cell:where(:not(.details-cell)) {
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
@@ -189,152 +164,230 @@ export const gridStyles = css`
     position: relative;
     align-items: center;
     white-space: nowrap;
-    border-inline-start: var(--_column-border-width) solid var(--_border-color);
   }
 
-  [part~='first-column-cell'] {
-    border-inline-start: 0;
+  /*
+    Block borders
+
+    ::after - row and cell focus outline
+    ::before - header bottom and footer top borders that only appear when scrolling
+  */
+
+  .row::after {
+    top: 0;
+    bottom: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='first-header-row-cell'],
-  [part~='first-footer-row-cell'],
-  [part~='first-row-cell'] {
-    margin-top: 0;
-    border-top: 0;
+  .body-row {
+    scroll-margin-bottom: var(--_row-border-width);
   }
 
-  table[has-header] [part~='first-row-cell'] {
-    border-top: var(--_row-border-width) solid var(--_border-color);
+  .cell {
+    border-block: var(--_row-border-width) var(--_border-color);
+    border-top-style: solid;
   }
 
-  [part~='last-column-cell'] {
-    --_end: 1;
+  .cell::after {
+    top: calc(var(--_row-border-width) * -1);
+    bottom: calc(var(--_row-border-width) * -1);
   }
 
-  [part~='last-column-cell']:is([part~='header-cell'], [part~='footer-cell']) {
-    --_end-opaque: 1;
+  /* Block borders / Last header row and first footer row */
+
+  .last-header-row::before,
+  .first-footer-row::before {
+    position: absolute;
+    inset-inline: 0;
+    border-block: var(--_row-border-width) var(--_border-color);
+    transform: translateX(var(--_grid-horizontal-scroll-position));
   }
 
-  [part~='last-row-cell']:where(:not([part~='details-opened-row-cell'])),
-  [part~='last-footer-row-cell'] {
-    border-bottom: 0;
-    --_bottom: 1;
+  /* Block borders / First header row */
+
+  .first-header-row-cell {
+    border-top-style: none;
   }
 
-  [part~='last-frozen-cell'] {
-    --_end: 1;
+  .first-header-row-cell::after {
+    top: 0;
   }
 
-  [part~='last-frozen-cell'] + [part~='cell'] {
-    border-inline-start-color: transparent;
+  /* Block borders / Last header row */
+
+  :host([overflow~='top']) .last-header-row::before {
+    content: '';
+    bottom: calc(var(--_row-border-width) * -1);
+    border-bottom-style: solid;
   }
 
-  [part~='first-frozen-to-end-cell'] {
-    border-inline-start: 0;
-    --_start: 1;
+  /* Block borders / First body row */
+
+  #table:not([has-header]) .first-row-cell {
+    border-top-style: none;
   }
 
-  [part~='last-header-row-cell'] {
-    border-bottom: 0;
+  #table:not([has-header]) .first-row-cell::after {
+    top: 0;
   }
 
-  :host([overflow~='top']) [part~='last-header-row-cell'],
-  [empty-state] [part~='last-header-row-cell'] {
-    --_bottom: 1;
+  /* Block borders / Last body row */
+
+  .last-row::after {
+    bottom: 0;
   }
 
-  #header:has(:is([frozen], [frozen-to-end])) [part~='last-header-row-cell'] {
-    --_bottom-opaque: 1;
+  .last-row .details-cell,
+  .last-row-cell:not(.details-opened-row-cell) {
+    border-bottom-style: solid;
   }
 
-  :host([overflow~='bottom']) [part~='first-footer-row-cell'],
-  [empty-state] [part~='first-footer-row-cell'] {
-    --_top: 1;
+  /* Block borders / Last body row without footer */
+
+  :host([all-rows-visible]),
+  :host([overflow~='top']),
+  :host([overflow~='bottom']) {
+    #table:not([has-footer]) .last-row .details-cell,
+    #table:not([has-footer]) .last-row-cell:not(.details-opened-row-cell) {
+      border-bottom-style: none;
+
+      &::after {
+        bottom: 0;
+      }
+    }
   }
 
-  #footer:has(:is([frozen], [frozen-to-end])) [part~='first-footer-row-cell'] {
-    --_top-opaque: 1;
+  /* Block borders / First footer row */
+
+  .first-footer-row::after {
+    top: calc(var(--_row-border-width) * -1);
   }
 
-  table[has-footer] [part~='last-row-cell']:not([part~='details-opened-row-cell']) {
-    border-bottom: var(--_row-border-width) solid var(--_border-color);
-    --_bottom: 0;
+  .first-footer-row-cell {
+    border-top-style: none;
   }
 
-  [part~='body-cell']:where(:not([part~='details-cell'])) {
-    --_highlight-background-color: var(--vaadin-grid-row-highlight-background-color, transparent);
-    --_highlight-background-image: linear-gradient(
-      var(--_highlight-background-color),
-      var(--_highlight-background-color)
+  :host([overflow~='bottom']),
+  :host(:not([overflow~='top']):not([all-rows-visible])) #scroller:not([empty-state]) {
+    .first-footer-row::before {
+      content: '';
+      top: calc(var(--_row-border-width) * -1);
+      border-top-style: solid;
+    }
+  }
+
+  /* Block borders / Last footer row */
+
+  .last-footer-row::after,
+  .last-footer-row-cell::after {
+    bottom: 0;
+  }
+
+  /* Inline borders */
+
+  .cell {
+    border-inline: var(--_column-border-width) var(--_border-color);
+  }
+
+  .header-cell:not(.first-column-cell),
+  .footer-cell:not(.first-column-cell),
+  .body-cell:not(.first-column-cell) {
+    border-inline-start-style: solid;
+  }
+
+  .last-frozen-cell:not(.last-column-cell) {
+    border-inline-end-style: solid;
+
+    & + .cell {
+      border-inline-start-style: none;
+    }
+  }
+
+  /* Row and cell background */
+
+  .row {
+    background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
+  }
+
+  .cell {
+    --_cell-background-image: linear-gradient(
+      var(--vaadin-grid-cell-background-color, transparent),
+      var(--vaadin-grid-cell-background-color, transparent)
     );
-    background:
-      var(--_hover-background-image, none), var(--_selected-background-image, none), var(--_highlight-background-image),
-      var(--vaadin-grid-cell-background-color, var(--vaadin-background-color));
+
+    background-color: inherit;
+    background-repeat: no-repeat;
+    background-origin: padding-box;
+    background-image: var(--_cell-background-image);
+  }
+
+  .body-cell {
+    --_cell-highlight-background-image: linear-gradient(
+      var(--vaadin-grid-row-highlight-background-color, transparent),
+      var(--vaadin-grid-row-highlight-background-color, transparent)
+    );
+
+    background-image:
+      var(--_row-hover-background-image, none), var(--_row-selected-background-image, none),
+      var(--_cell-highlight-background-image, none), var(--_row-odd-background-image, none),
+      var(--_cell-background-image, none);
+  }
+
+  .selected-row {
+    --_row-selected-background-color: var(
+      --vaadin-grid-row-selected-background-color,
+      color-mix(in srgb, currentColor 8%, transparent)
+    );
+    --_row-selected-background-image: linear-gradient(
+      var(--_row-selected-background-color),
+      var(--_row-selected-background-color)
+    );
+  }
+
+  @media (any-hover: hover) {
+    .body-row:hover {
+      --_row-hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
+      --_row-hover-background-image: linear-gradient(
+        var(--_row-hover-background-color),
+        var(--_row-hover-background-color)
+      );
+    }
+  }
+
+  :host([theme~='row-stripes']) .odd-row {
+    --_row-odd-background-color: var(
+      --vaadin-grid-row-odd-background-color,
+      color-mix(in srgb, var(--vaadin-text-color) 4%, transparent)
+    );
+    --_row-odd-background-image: linear-gradient(var(--_row-odd-background-color), var(--_row-odd-background-color));
   }
 
   /* Variant: wrap cell contents */
 
-  :host([theme~='wrap-cell-content']) [part~='cell']:not([part~='details-cell']) {
+  :host([theme~='wrap-cell-content']) .cell:not(.details-cell) {
     white-space: normal;
   }
 
-  /* Variant: row stripes */
-  [part~='odd-row'] {
-    --vaadin-grid-cell-background-color: var(--vaadin-grid-row-odd-background-color, var(--vaadin-background-color));
-  }
-
-  :host([theme~='row-stripes']) [part~='odd-row'] {
-    --vaadin-grid-cell-background-color: var(
-      --vaadin-grid-row-odd-background-color,
-      color-mix(in srgb, var(--vaadin-text-color) 4%, var(--vaadin-background-color))
-    );
-  }
-
   /* Raise highlighted rows above others */
-
-  [part~='row']:focus,
-  [part~='row']:focus-within,
-  [part~='body-row']:where([selected]) {
-    z-index: 3;
-  }
-
-  @container style(--vaadin-grid-row-odd-background-color) {
-    [part~='odd-row'] {
-      z-index: 1;
+  .row,
+  .frozen-cell,
+  .frozen-to-end-cell {
+    &:focus,
+    &:focus-within {
+      z-index: 3;
     }
   }
 
-  /* Row hover */
-  @media (any-hover: hover) {
-    @container style(--vaadin-grid-row-hover-background-color) {
-      [part~='body-row']:hover {
-        z-index: 2;
-      }
-    }
-
-    [part~='body-row']:hover [part~='cell']:where(:not([part~='details-cell'])) {
-      --_hover-background-color: var(--vaadin-grid-row-hover-background-color, transparent);
-      --_hover-background-image: linear-gradient(var(--_hover-background-color), var(--_hover-background-color));
-    }
-  }
-
-  [part~='details-cell'] {
+  .details-cell {
     position: absolute;
     bottom: 0;
     width: 100%;
-    margin-top: 0;
-    border-top: 0;
   }
 
-  [part~='last-row-cell'] + [part~='details-cell'] {
-    border-bottom: 0;
-  }
-
-  [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  .cell ::slotted(vaadin-grid-cell-content) {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
+    padding: var(--_cell-padding);
     flex: 1;
     min-height: 1lh;
     min-width: 0;
@@ -344,15 +397,6 @@ export const gridStyles = css`
   [frozen-to-end] {
     z-index: 2;
     will-change: transform;
-  }
-
-  /* Selected row */
-  [part~='body-row'][selected] {
-    --_selected-background-color: var(
-      --vaadin-grid-row-selected-background-color,
-      color-mix(in srgb, currentColor 8%, transparent)
-    );
-    --_selected-background-image: linear-gradient(var(--_selected-background-color), var(--_selected-background-color));
   }
 
   /* Empty state */
@@ -367,7 +411,6 @@ export const gridStyles = css`
     inset: 0;
     flex: 1;
     overflow: hidden;
-    margin-top: calc(var(--_row-border-width) * -1);
   }
 
   #emptystaterow {
@@ -379,9 +422,17 @@ export const gridStyles = css`
     display: block;
     flex: 1;
     overflow: auto;
-    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
-    border-top: var(--_row-border-width) solid transparent;
+    padding: var(--_cell-padding);
     outline: none;
+    border-block: var(--_row-border-width) var(--_border-color);
+  }
+
+  #table[has-header] #emptystatecell {
+    border-top-style: solid;
+  }
+
+  #table[has-footer] #emptystatecell {
+    border-bottom-style: solid;
   }
 
   #emptystatecell:focus-visible {
@@ -390,20 +441,20 @@ export const gridStyles = css`
   }
 
   /* Reordering styles */
-  :host([reordering]) [part~='cell'] ::slotted(vaadin-grid-cell-content),
-  :host([reordering]) [part~='resize-handle'],
-  #scroller[no-content-pointer-events] [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  :host([reordering]) .cell ::slotted(vaadin-grid-cell-content),
+  :host([reordering]) .resize-handle,
+  #scroller[no-content-pointer-events] .cell ::slotted(vaadin-grid-cell-content) {
     pointer-events: none;
   }
 
-  [part~='reorder-ghost'] {
+  .reorder-ghost {
     visibility: hidden;
     position: fixed;
     pointer-events: none;
     box-shadow:
       0 0 0 1px hsla(0deg, 0%, 0%, 0.2),
       0 8px 24px -2px hsla(0deg, 0%, 0%, 0.2);
-    padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container)) !important;
+    padding: var(--_cell-padding) !important;
     border-radius: 3px;
 
     /* Prevent overflowing the grid in Firefox */
@@ -416,12 +467,12 @@ export const gridStyles = css`
     user-select: none;
   }
 
-  :host([reordering]) [part~='cell'] {
+  :host([reordering]) .cell {
     /* TODO expose a custom property to control this */
     --_reorder-curtain-filter: brightness(0.9) contrast(1.1);
   }
 
-  :host([reordering]) [part~='cell']::after {
+  :host([reordering]) .cell::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -431,17 +482,17 @@ export const gridStyles = css`
     outline: 0;
   }
 
-  :host([reordering]) [part~='cell'][reorder-status='allowed'] {
+  :host([reordering]) .cell[reorder-status='allowed'] {
     /* TODO expose a custom property to control this */
     --_reorder-curtain-filter: brightness(0.94) contrast(1.07);
   }
 
-  :host([reordering]) [part~='cell'][reorder-status='dragging'] {
+  :host([reordering]) .cell[reorder-status='dragging'] {
     --_reorder-curtain-filter: none;
   }
 
   /* Resizing styles */
-  [part~='resize-handle'] {
+  .resize-handle {
     position: absolute;
     top: 0;
     inset-inline-end: 0;
@@ -455,17 +506,17 @@ export const gridStyles = css`
     translate: var(--_column-border-width);
   }
 
-  [part~='last-column-cell'] [part~='resize-handle'] {
+  .last-column-cell .resize-handle {
     translate: 0;
   }
 
-  :host(:not([reordering])) *:not([column-resizing]) [part='resize-handle']:hover,
-  [part='resize-handle']:active {
+  :host(:not([reordering])) *:not([column-resizing]) .resize-handle:hover,
+  .resize-handle:active {
     opacity: 1;
     transition-delay: 0.15s;
   }
 
-  [part~='resize-handle']::before {
+  .resize-handle::before {
     position: absolute;
     content: '';
     height: 100%;
@@ -473,25 +524,25 @@ export const gridStyles = css`
     translate: calc(-50% + var(--vaadin-focus-ring-width) / 2);
   }
 
-  :host([dir='rtl']) [part~='resize-handle']::before {
+  :host([dir='rtl']) .resize-handle::before {
     translate: calc(50% - var(--vaadin-focus-ring-width) / 2);
   }
 
-  [first-frozen-to-end] [part~='resize-handle']::before,
-  :is([last-column], [last-frozen]) [part~='resize-handle']::before {
+  [first-frozen-to-end] .resize-handle::before,
+  :is([last-column], [last-frozen]) .resize-handle::before {
     width: 8px;
     translate: 0;
   }
 
-  :is([last-column], [last-frozen]) [part~='resize-handle']::before {
+  :is([last-column], [last-frozen]) .resize-handle::before {
     inset-inline-end: 0;
   }
 
-  [frozen-to-end] :is([part~='resize-handle'], [part~='resize-handle']::before) {
+  [frozen-to-end] :is(.resize-handle, .resize-handle::before) {
     inset-inline: 0 auto;
   }
 
-  [frozen-to-end] [part~='resize-handle'] {
+  [frozen-to-end] .resize-handle {
     translate: calc(var(--_column-border-width) * -1);
   }
 
@@ -505,65 +556,45 @@ export const gridStyles = css`
   }
 
   /* Focus outline element, also used for d'n'd indication */
-  :is([part~='row'], [part~='cell'])::after {
+  :is(.row, .cell)::after {
     position: absolute;
-    inset: calc(var(--_row-border-width) * -1) calc(var(--_column-border-width) * -1);
     z-index: 3;
+    inset-inline: 0;
     pointer-events: none;
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='first-column-cell']::after {
+  .row::after {
+    transform: translateX(var(--_grid-horizontal-scroll-position));
+  }
+
+  .cell:where(:not(.details-cell))::after {
+    inset-inline: calc(var(--_column-border-width) * -1);
+  }
+
+  .first-column-cell::after {
     inset-inline-start: 0;
   }
 
-  [part~='last-column-cell']::after {
+  .last-column-cell::after {
     inset-inline-end: 0;
   }
 
-  #header [part~='row']:first-child::after,
-  [part~='first-header-row-cell']::after,
-  [part*='first-row']::after {
-    top: 0;
-  }
-
-  table[has-header] [part~='first-row-cell']::after {
-    top: calc(var(--_row-border-width) * -1);
-  }
-
-  #footer [part~='row']:last-child::after,
-  [part~='last-footer-row-cell']::after,
-  [part~='last-row']::after,
-  [part~='last-row-cell']::after {
-    bottom: 0;
-  }
-
-  #header [part~='row']:last-child::after,
-  table[has-footer] [part*='last-row']::after {
-    bottom: calc(var(--_row-border-width) * -1);
-  }
-
-  :host([navigating]) [part~='row']:focus,
-  :host([navigating]) [part~='cell']:focus {
+  :host([navigating]) .row:focus,
+  :host([navigating]) .cell:focus {
     outline: 0;
   }
 
-  [part~='row']::after {
-    transform: translateX(var(--_grid-horizontal-scroll-position));
-    inset-inline: 0;
-    bottom: 0;
-  }
-
-  [part~='row']:focus-visible,
-  [part~='cell']:focus-visible {
+  .row:focus-visible,
+  .cell:focus-visible {
     outline: 0;
   }
 
-  [part~='row']:focus-visible::after,
-  [part~='cell']:focus-visible::after,
-  :host([navigating]) [part~='row']:focus::after,
-  :host([navigating]) [part~='cell']:focus::after {
+  .row:focus-visible::after,
+  .cell:focus-visible::after,
+  :host([navigating]) .row:focus::after,
+  :host([navigating]) .cell:focus::after {
     content: '';
   }
 
@@ -573,50 +604,48 @@ export const gridStyles = css`
     outline-offset: calc(var(--vaadin-grid-border-width, 1px) * -1);
   }
 
-  [part~='row'][dragover] {
+  .row[dragover] {
     z-index: 100 !important;
   }
 
-  [part~='row'][dragover]::after {
+  .row[dragover]::after {
     content: '';
   }
 
-  [part~='row'][dragover='above']::after {
+  .row[dragover='above']::after {
     outline: 0;
     border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  [part~='row']:not([part*='first-row'])[dragover='above']::after,
-  table[has-header] [part*='first-row'][dragover='above']::after {
+  .row:not(.first-row)[dragover='above']::after {
     top: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  [part~='row'][dragover='below']::after {
+  .row[dragover='below']::after {
     outline: 0;
     border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  [part~='row']:not([part*='last-row'])[dragover='below']::after,
-  table[has-footer] [part*='last-row'][dragover='below']::after {
+  .row:not(.last-row)[dragover='below']::after {
     bottom: calc(var(--vaadin-focus-ring-width) / -2);
   }
 
-  [part~='row'][dragstart] [part~='cell'] {
-    border-block-color: transparent !important;
-    box-shadow: none;
+  .row[dragstart] .cell {
+    border-block: none !important;
+    padding-block: var(--_row-border-width) !important;
   }
 
-  [part~='row'][dragstart] [part~='cell'][last-column] {
+  .row[dragstart] .cell[last-column] {
     border-radius: 0 3px 3px 0;
   }
 
-  [part~='row'][dragstart] [part~='cell'][first-column] {
+  .row[dragstart] .cell[first-column] {
     border-radius: 3px 0 0 3px;
   }
 
   /* Indicates the number of dragged rows */
   /* TODO export custom properties to control styles */
-  #scroller [part~='row'][dragstart]:not([dragstart=''])::before {
+  #scroller .row[dragstart]:not([dragstart=''])::before {
     position: absolute;
     left: var(--_grid-drag-start-x);
     top: var(--_grid-drag-start-y);
@@ -640,12 +669,12 @@ export const gridStyles = css`
     visibility: hidden;
   }
 
-  #sizer [part~='details-cell'],
-  #sizer [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  #sizer .details-cell,
+  #sizer .cell ::slotted(vaadin-grid-cell-content) {
     display: none !important;
   }
 
-  #sizer [part~='cell'] {
+  #sizer .cell {
     display: block;
     flex-shrink: 0;
     line-height: 0;
@@ -656,19 +685,7 @@ export const gridStyles = css`
     border: none !important;
   }
 
-  #sizer [part~='cell']::before {
+  #sizer .cell::before {
     content: '-';
-  }
-
-  @media (forced-colors: active) {
-    :host([overflow~='top']) [part~='last-header-row-cell'] {
-      border-bottom: var(--_row-border-width) solid;
-      margin-bottom: calc(var(--_row-border-width) * -1);
-    }
-
-    :host([overflow~='bottom']) [part~='first-footer-row-cell'] {
-      border-top: var(--_row-border-width) solid;
-      margin-top: calc(var(--_row-border-width) * -1);
-    }
   }
 `;

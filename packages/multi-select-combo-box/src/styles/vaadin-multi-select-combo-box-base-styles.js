@@ -56,8 +56,8 @@ export const multiSelectComboBoxStyles = [
       display: contents;
     }
 
-    :host([auto-expand-horizontally]) [class$='container'] {
-      width: auto;
+    :host([auto-expand-horizontally]) {
+      --vaadin-field-default-width: auto;
     }
   `,
 ];

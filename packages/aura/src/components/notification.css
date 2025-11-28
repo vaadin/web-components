@@ -10,7 +10,7 @@ vaadin-notification-container {
 
 vaadin-notification-card::part(overlay) {
   --aura-surface-level: 4;
-  --vaadin-notification-background: var(--aura-surface);
+  --vaadin-notification-background: var(--aura-surface-color);
 
   /* TODO probably should be in base styles */
   /* Keeps notifications on top of MDL view transitions */
@@ -39,5 +39,4 @@ vaadin-notification-card vaadin-card {
 
 vaadin-notification-card vaadin-button {
   --aura-surface-level: 8;
-  --aura-surface-opacity: 0.3;
 }

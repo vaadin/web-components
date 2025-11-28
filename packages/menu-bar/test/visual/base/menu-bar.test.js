@@ -29,7 +29,13 @@ describe('menu-bar', () => {
             { text: 'Home' },
             {
               text: 'Reports',
-              children: [{ text: 'View Reports' }, { text: 'Generate Report' }],
+              children: [
+                { text: 'View Reports' },
+                {
+                  text: 'Generate Report',
+                  children: [{ text: 'Monthly' }, { text: 'Yearly' }],
+                },
+              ],
             },
             { text: 'Dashboard', disabled: true },
             { text: 'Help' },

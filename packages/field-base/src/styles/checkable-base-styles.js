@@ -9,9 +9,8 @@ import { css, unsafeCSS } from 'lit';
 // postcss-lit-disable-next-line
 export const checkable = (part, propName = part) => css`
   :host {
-    align-items: center;
-    display: inline-grid;
-    gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
+    align-items: baseline;
+    column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     /*
       Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox
@@ -29,10 +28,6 @@ export const checkable = (part, propName = part) => css`
 
   :host(:not([has-label])) {
     column-gap: 0;
-  }
-
-  .vaadin-${unsafeCSS(propName)}-container {
-    display: contents;
   }
 
   [part='${unsafeCSS(part)}'],
@@ -58,17 +53,26 @@ export const checkable = (part, propName = part) => css`
     grid-column: 1;
   }
 
+  [part='label'],
   [part='helper-text'],
   [part='error-message'] {
+    margin-bottom: 0;
     grid-column: 2;
+    width: auto;
+    min-width: auto;
+  }
+
+  [part='helper-text'],
+  [part='error-message'] {
+    margin-top: var(--_gap-s);
   }
 
   /* Baseline vertical alignment */
   :host::before {
-    content: '\\2003';
-    grid-column: 1;
     grid-row: 1;
-    width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
   }
 
   /* visually hidden */
@@ -77,9 +81,12 @@ export const checkable = (part, propName = part) => css`
     margin: 0;
     align-self: stretch;
     appearance: none;
-    width: 100%;
-    height: 100%;
     cursor: var(--_cursor);
+    /* Ensure minimum click target (WCAG) */
+    width: 2px;
+    height: 2px;
+    scale: 12;
+    margin: auto;
   }
 
   /* Control container (checkbox, radio button) */
@@ -91,17 +98,20 @@ export const checkable = (part, propName = part) => css`
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
-    color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)));
+    --_color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
+    color: var(--_color);
     height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
     position: relative;
     cursor: var(--_cursor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   :host(:is([checked], [indeterminate])) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-text-color);
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-    --vaadin-${unsafeCSS(propName)}-marker-color: oklch(from var(--vaadin-${unsafeCSS(propName)}-background) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   }
 
   :host([disabled]) {
@@ -128,14 +138,17 @@ export const checkable = (part, propName = part) => css`
 
   /* Checked indicator (checkmark, dot) */
   [part='${unsafeCSS(part)}']::after {
-    content: '';
-    position: absolute;
+    content: '\\2003' / '';
     background: currentColor;
     border-radius: inherit;
+    display: flex;
+    align-items: center;
+    --_filter: var(--vaadin-${unsafeCSS(propName)}-marker-color, saturate(0) invert(1) hue-rotate(180deg) contrast(100) brightness(100));
+    filter: var(--_filter);
   }
 
   :host(:not([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
-    display: none;
+    opacity: 0;
   }
 
   @media (forced-colors: active) {

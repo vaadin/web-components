@@ -2,12 +2,12 @@
 :where(:host) {
   --vaadin-overlay-border-width: 0px;
   --vaadin-overlay-backdrop-background: light-dark(
-    oklch(from var(--aura-background-light) calc(l * 0.1) c h / 0.15),
+    oklch(from var(--aura-background-color-light) calc(l * 0.1) c h / 0.15),
     hsla(0deg, 0%, 0%, 0.3)
   );
   --aura-overlay-outline-color: light-dark(
-    oklch(from var(--aura-background-light) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast))),
-    oklch(from var(--aura-background-dark) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast)))
+    oklch(from var(--aura-background-color-light) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast))),
+    oklch(from var(--aura-background-color-dark) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast)))
   );
   --aura-overlay-inner-outline-color: hsla(0deg, 0%, 100%, max(3%, 2% + 4% * var(--aura-contrast)));
   --aura-overlay-shadow:
@@ -19,10 +19,11 @@
   @media (prefers-reduced-transparency: reduce) {
     --aura-overlay-surface-opacity: 1 !important;
   }
+  --vaadin-popover-border-radius: var(--vaadin-radius-l);
 }
 
 ::part(overlay) {
-  --vaadin-overlay-background: var(--aura-surface);
+  --vaadin-overlay-background: var(--aura-surface-color);
   --aura-surface-level: 4;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   box-shadow: var(--aura-overlay-shadow);

@@ -21,175 +21,6 @@ describe('styling', () => {
     firstCell = getContainerCell(grid.$.items, 0, 0);
   });
 
-  function runStylingTest(entries, generatorFn, requestFn, assertCallback) {
-    it(`should add ${entries} for cells`, () => {
-      grid[generatorFn] = () => 'foo';
-      assertCallback(['foo']);
-      assertCallback(['foo'], 1, 1);
-    });
-
-    it(`should add all ${entries} separated by whitespaces`, () => {
-      grid[generatorFn] = () => 'foo bar baz';
-      assertCallback(['foo', 'bar', 'baz']);
-    });
-
-    it(`should not remove existing ${entries}`, () => {
-      if (entries === 'classes') {
-        firstCell.classList.add('bar');
-      } else {
-        firstCell.setAttribute('part', `${firstCell.getAttribute('part')} bar`);
-      }
-
-      grid[generatorFn] = () => 'foo';
-      assertCallback(['bar', 'foo']);
-    });
-
-    it(`should remove old generated ${entries}`, () => {
-      grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = () => 'bar'; // NOSONAR
-      assertCallback(['bar']);
-    });
-
-    it(`should provide column and model as parameters to ${generatorFn}`, () => {
-      grid[generatorFn] = (column, model) => `${model.index} ${model.item.value} ${column.header}`;
-      assertCallback(['5', 'foo5', 'col1'], 5, 1);
-      assertCallback(['10', 'foo10', 'col0'], 10, 0);
-    });
-
-    it(`should call ${generatorFn} for details cell with undefined column`, async () => {
-      grid.rowDetailsRenderer = () => {};
-      grid[generatorFn] = (column, model) => `${model.index} ${column}`;
-      await nextFrame();
-      flushGrid(grid);
-      assertCallback(['0', 'undefined'], 0, 2);
-    });
-
-    it(`should add ${entries} when loading new items`, (done) => {
-      grid[generatorFn] = (_, model) => model.item.value;
-      scrollToEnd(grid, () => {
-        const rows = getRows(grid.$.items);
-        assertCallback(['foo199'], rows.length - 1, 0);
-        done();
-      });
-    });
-
-    it(`should not throw when ${generatorFn} returns falsy value`, () => {
-      expect(() => {
-        grid[generatorFn] = () => {};
-      }).not.to.throw(Error);
-    });
-
-    it(`should clear generated ${entries} with falsy return value`, () => {
-      grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = () => {}; // NOSONAR
-      assertCallback([]);
-    });
-
-    it(`should clear generated ${entries} with falsy property value`, () => {
-      grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = undefined; // NOSONAR
-      assertCallback([]);
-    });
-
-    [requestFn, 'clearCache', 'requestContentUpdate'].forEach((funcName) => {
-      it(`should update ${entries} on ${funcName}`, () => {
-        let condition = false;
-        grid[generatorFn] = () => condition && 'foo';
-        condition = true;
-        assertCallback([]);
-        grid[funcName]();
-        assertCallback(['foo']);
-      });
-    });
-
-    it(`should not run ${generatorFn} for hidden rows`, () => {
-      grid.items = [];
-      expect(grid.$.items.firstElementChild).to.have.property('hidden', true);
-
-      const spy = sinon.spy();
-      grid[generatorFn] = spy;
-      expect(spy.called).to.be.false;
-    });
-
-    it(`should not throw when ${generatorFn} return value contains extra whitespace`, () => {
-      expect(() => {
-        grid[generatorFn] = () => ' foo  bar ';
-      }).not.to.throw(Error);
-      assertCallback(['foo', 'bar']);
-    });
-
-    it(`should have the right ${entries} after toggling column visibility`, async () => {
-      grid[generatorFn] = (_column, { index }) => (index % 2 === 0 ? 'even' : 'odd');
-      const column = grid.querySelector('vaadin-grid-column');
-      column.hidden = true;
-      await nextRender();
-      column.hidden = false;
-      await nextRender();
-      assertCallback(['odd'], 1, 0);
-      assertCallback(['odd'], 1, 1);
-    });
-
-    describe('async data provider', () => {
-      let clock;
-
-      beforeEach(() => {
-        clock = sinon.useFakeTimers({
-          shouldClearNativeTimers: true,
-        });
-
-        grid.dataProvider = (params, callback) => {
-          setTimeout(() => infiniteDataProvider(params, callback), 10);
-        };
-      });
-
-      afterEach(() => {
-        clock.restore();
-      });
-
-      it(`should only run ${generatorFn} for the rows that are loaded`, () => {
-        const spy = sinon.spy();
-        grid[generatorFn] = spy;
-        spy.resetHistory();
-
-        grid[requestFn]();
-        expect(spy.called).to.be.false;
-
-        clock.tick(10);
-        grid[requestFn]();
-        expect(spy.called).to.be.true;
-        expect(spy.getCalls().filter((call) => call.args[1].index === 0).length).to.be.lessThan(5); // NOSONAR
-      });
-
-      it(`should remove custom ${entries} for rows that enter loading state`, () => {
-        grid[generatorFn] = () => 'foo'; // NOSONAR
-        clock.tick(10);
-
-        expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.false;
-        assertCallback(['foo']);
-
-        grid.clearCache();
-
-        expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.true;
-        assertCallback([]);
-      });
-    });
-  }
-
-  describe('cell class name generator', () => {
-    let initialCellClasses;
-
-    beforeEach(() => {
-      initialCellClasses = Array.from(firstCell.classList);
-    });
-
-    const assertClassList = (expectedClasses, row = 0, col = 0) => {
-      const cell = getContainerCell(grid.$.items, row, col);
-      expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
-    };
-
-    runStylingTest('classes', 'cellClassNameGenerator', 'generateCellClassNames', assertClassList);
-  });
-
   describe('cell part name generator', () => {
     let initialCellPart;
 
@@ -213,7 +44,153 @@ describe('styling', () => {
       }
     };
 
-    runStylingTest('parts', 'cellPartNameGenerator', 'generateCellPartNames', assertPartNames);
+    it(`should add parts for cells`, () => {
+      grid.cellPartNameGenerator = () => 'test-foo';
+      assertPartNames(['test-foo']);
+      assertPartNames(['test-foo'], 1, 1);
+    });
+
+    it(`should add all parts separated by whitespaces`, () => {
+      grid.cellPartNameGenerator = () => 'test-foo test-bar test-baz';
+      assertPartNames(['test-foo', 'test-bar', 'test-baz']);
+    });
+
+    it(`should not remove existing parts`, () => {
+      firstCell.setAttribute('part', `${firstCell.getAttribute('part')} test-bar`);
+      grid.cellPartNameGenerator = () => 'test-foo';
+      assertPartNames(['test-bar', 'test-foo']);
+    });
+
+    it(`should remove old generated parts`, () => {
+      grid.cellPartNameGenerator = () => 'test-foo';
+      grid.cellPartNameGenerator = () => 'test-bar'; // NOSONAR
+      assertPartNames(['test-bar']);
+    });
+
+    it(`should provide column and model as parameters to cellPartNameGenerator`, () => {
+      grid.cellPartNameGenerator = (column, model) =>
+        `test-${model.index} test-${model.item.value} test-${column.header}`;
+      assertPartNames(['test-5', 'test-foo5', 'test-col1'], 5, 1);
+      assertPartNames(['test-10', 'test-foo10', 'test-col0'], 10, 0);
+    });
+
+    it(`should call cellPartNameGenerator for details cell with undefined column`, async () => {
+      grid.rowDetailsRenderer = () => {};
+      grid.cellPartNameGenerator = (column, model) => `test-${model.index} test-${column}`;
+      await nextFrame();
+      flushGrid(grid);
+      assertPartNames(['test-0', 'test-undefined'], 0, 2);
+    });
+
+    it(`should add parts when loading new items`, (done) => {
+      grid.cellPartNameGenerator = (_, model) => `test-${model.item.value}`;
+      scrollToEnd(grid, () => {
+        const rows = getRows(grid.$.items);
+        assertPartNames(['test-foo199'], rows.length - 1, 0);
+        done();
+      });
+    });
+
+    it(`should not throw when cellPartNameGenerator returns falsy value`, () => {
+      expect(() => {
+        grid.cellPartNameGenerator = () => {};
+      }).not.to.throw(Error);
+    });
+
+    it(`should clear generated parts with falsy return value`, () => {
+      grid.cellPartNameGenerator = () => 'test-foo';
+      grid.cellPartNameGenerator = () => {}; // NOSONAR
+      assertPartNames([]);
+    });
+
+    it(`should clear generated parts with falsy property value`, () => {
+      grid.cellPartNameGenerator = () => 'test-foo';
+      grid.cellPartNameGenerator = undefined; // NOSONAR
+      assertPartNames([]);
+    });
+
+    ['generateCellPartNames', 'clearCache', 'requestContentUpdate'].forEach((funcName) => {
+      it(`should update parts on ${funcName}`, () => {
+        let condition = false;
+        grid.cellPartNameGenerator = () => condition && 'test-foo';
+        condition = true;
+        assertPartNames([]);
+        grid[funcName]();
+        assertPartNames(['test-foo']);
+      });
+    });
+
+    it(`should not run cellPartNameGenerator for hidden rows`, () => {
+      grid.items = [];
+      expect(grid.$.items.firstElementChild).to.have.property('hidden', true);
+
+      const spy = sinon.spy();
+      grid.cellPartNameGenerator = spy;
+      expect(spy.called).to.be.false;
+    });
+
+    it(`should not throw when cellPartNameGenerator return value contains extra whitespace`, () => {
+      expect(() => {
+        grid.cellPartNameGenerator = () => ' test-foo  test-bar ';
+      }).not.to.throw(Error);
+      assertPartNames(['test-foo', 'test-bar']);
+    });
+
+    it(`should have the right parts after toggling column visibility`, async () => {
+      grid.cellPartNameGenerator = (_column, { index }) => `test-${index % 2 === 0 ? 'even' : 'odd'}`;
+      const column = grid.querySelector('vaadin-grid-column');
+      column.hidden = true;
+      await nextRender();
+      column.hidden = false;
+      await nextRender();
+      assertPartNames(['test-odd'], 1, 0);
+      assertPartNames(['test-odd'], 1, 1);
+    });
+
+    describe('async data provider', () => {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({
+          shouldClearNativeTimers: true,
+        });
+
+        grid.dataProvider = (params, callback) => {
+          setTimeout(() => infiniteDataProvider(params, callback), 10);
+        };
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it(`should only run cellPartNameGenerator for the rows that are loaded`, () => {
+        const spy = sinon.spy();
+        grid.cellPartNameGenerator = spy;
+        spy.resetHistory();
+
+        grid.generateCellPartNames();
+        expect(spy.called).to.be.false;
+
+        clock.tick(10);
+        grid.generateCellPartNames();
+        expect(spy.called).to.be.true;
+        expect(spy.getCalls().filter((call) => call.args[1].index === 0).length).to.be.lessThan(5); // NOSONAR
+      });
+
+      it(`should remove custom parts for rows that enter loading state`, () => {
+        grid.cellPartNameGenerator = () => 'test-foo'; // NOSONAR
+        clock.tick(10);
+
+        expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.false;
+        assertPartNames(['test-foo']);
+
+        grid.clearCache();
+
+        expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.true;
+        assertPartNames([]);
+      });
+    });
   });
 
   describe('header and footer part name', () => {

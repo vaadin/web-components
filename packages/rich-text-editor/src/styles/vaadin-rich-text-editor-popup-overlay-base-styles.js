@@ -13,7 +13,10 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-st
 
 export const richTextEditorPopupOverlay = css`
   [part='overlay'] {
-    padding: var(--vaadin-rich-text-editor-overlay-padding, var(--vaadin-padding-container));
+    padding: var(
+      --vaadin-rich-text-editor-overlay-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
   }
 
   [part='content'] {
@@ -23,6 +26,7 @@ export const richTextEditorPopupOverlay = css`
   }
 
   [part='content'] ::slotted(button) {
+    background-color: var(--_btn-background);
     border: var(--vaadin-rich-text-editor-overlay-color-option-border-width, 1px) solid
       var(--vaadin-rich-text-editor-overlay-color-option-border-color, transparent);
     border-radius: var(--vaadin-rich-text-editor-overlay-color-option-border-radius, 9999px);
@@ -31,6 +35,19 @@ export const richTextEditorPopupOverlay = css`
     height: var(--vaadin-rich-text-editor-overlay-color-option-height, 1lh);
     padding: 0;
     width: var(--vaadin-rich-text-editor-overlay-color-option-width, 1lh);
+  }
+
+  [part='content'] ::slotted(button:first-of-type) {
+    background-color: transparent;
+    border-color: var(--vaadin-border-color-secondary);
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0%,
+      transparent 47%,
+      red 50%,
+      transparent 53%,
+      transparent 100%
+    );
   }
 
   [part='content'] ::slotted(button:focus-visible) {

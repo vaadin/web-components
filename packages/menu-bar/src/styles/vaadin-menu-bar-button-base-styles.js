@@ -22,13 +22,13 @@ export const menuBarButtonStyles = css`
     gap: inherit;
   }
 
-  :host(:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix'] {
+  :host(:not([slot='overflow'])[aria-haspopup]) [part='suffix'] {
     display: flex;
     align-items: center;
     gap: inherit;
   }
 
-  :host(:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix']::after {
+  :host(:not([slot='overflow'])[aria-haspopup]) [part='suffix']::after {
     background: currentColor;
     content: '';
     height: var(--vaadin-icon-size, 1lh);

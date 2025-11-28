@@ -129,6 +129,10 @@ export class SlotController extends EventTarget {
   getSlotChildren() {
     const { slotName } = this;
     return Array.from(this.host.childNodes).filter((node) => {
+      // Ignore nodes with data-slot-ignore attribute
+      if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-slot-ignore')) {
+        return false;
+      }
       // Either an element (any slot) or a text node (only un-named slot).
       return (
         (node.nodeType === Node.ELEMENT_NODE && node.slot === slotName) ||
@@ -203,7 +207,13 @@ export class SlotController extends EventTarget {
 
       // Calling `slot.assignedNodes()` includes whitespace text nodes in case of default slot:
       // unlike comment nodes, they are not filtered out. So we need to manually ignore them.
-      const newNodes = addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
+      // Also ignore nodes with data-slot-ignore attribute.
+      const newNodes = addedNodes.filter(
+        (node) =>
+          !isEmptyTextNode(node) &&
+          !current.includes(node) &&
+          !(node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-slot-ignore')),
+      );
 
       if (removedNodes.length) {
         this.nodes = current.filter((node) => !removedNodes.includes(node));

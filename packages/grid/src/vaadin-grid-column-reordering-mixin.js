@@ -134,7 +134,7 @@ export const ColumnReorderingMixin = (superClass) =>
       }
 
       const headerCell = this._cellFromPoint(e.detail.x, e.detail.y);
-      if (!headerCell || !headerCell.getAttribute('part').includes('header-cell')) {
+      if (!headerCell || !headerCell.part.contains('header-cell')) {
         return;
       }
 

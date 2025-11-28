@@ -10,16 +10,14 @@ import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 
 const checkbox = css`
   [part='checkbox'] {
-    color: var(
-      --vaadin-checkbox-checkmark-color,
-      var(--vaadin-checkbox-marker-color, var(--vaadin-input-field-text-color, var(--vaadin-text-color)))
-    );
+    color: var(--vaadin-checkbox-checkmark-color, var(--_color));
   }
 
   [part='checkbox']::after {
     inset: 0;
     mask: var(--_vaadin-icon-checkmark) 50% /
       var(--vaadin-checkbox-checkmark-size, var(--vaadin-checkbox-marker-size, 100%)) no-repeat;
+    filter: var(--vaadin-checkbox-checkmark-color, var(--_filter));
   }
 
   :host([readonly]) {

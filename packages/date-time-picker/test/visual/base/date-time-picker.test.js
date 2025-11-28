@@ -28,11 +28,6 @@ describe('date-time-picker', () => {
       await visualDiff(div, 'readonly');
     });
 
-    it('label', async () => {
-      element.label = 'Label';
-      await visualDiff(div, 'label');
-    });
-
     it('focused', async () => {
       element.label = 'Label';
       element.focus();
@@ -49,35 +44,6 @@ describe('date-time-picker', () => {
       element.value = '2019-09-16T15:00';
       await visualDiff(div, 'value');
     });
-
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'required');
-    });
-
-    it('error message', async () => {
-      element.label = 'Label';
-      element.errorMessage = 'This field is required';
-      element.required = true;
-      element.validate();
-      await visualDiff(div, 'error-message');
-    });
-
-    it('helper text', async () => {
-      element.helperText = 'Helper text';
-      await visualDiff(div, 'helper-text');
-    });
-
-    it('helper above field', async () => {
-      element.label = 'Label';
-      element.errorMessage = 'This field is required';
-      element.required = true;
-      element.validate();
-      element.helperText = 'Helper text';
-      element.setAttribute('theme', 'helper-above-field');
-      await visualDiff(div, 'helper-above-field');
-    });
   });
 
   describe('RTL', () => {
@@ -91,14 +57,6 @@ describe('date-time-picker', () => {
 
     it('RTL', async () => {
       await visualDiff(div, 'rtl-basic');
-    });
-
-    it('RTL error message', async () => {
-      element.label = 'Label';
-      element.errorMessage = 'This field is required';
-      element.required = true;
-      element.validate();
-      await visualDiff(div, 'rtl-error-message');
     });
   });
 });

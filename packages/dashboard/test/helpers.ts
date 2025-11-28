@@ -368,3 +368,7 @@ export async function updateComplete(dashboard: HTMLElement): Promise<void> {
   await nextFrame();
   await aTimeout(0);
 }
+
+export function assertHeadingLevel(item: DashboardWidget | DashboardSection, expectedHeadingLevel: number): void {
+  expect(getTitleElement(item).getAttribute('aria-level')).to.equal(expectedHeadingLevel.toString());
+}

@@ -9,9 +9,6 @@
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
-    background: transparent;
-    border: none;
-    border-radius: 0;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -23,6 +20,12 @@
 
   :host(:focus-within) {
     outline: none;
+  }
+
+  .vaadin-rich-text-editor-container {
+    background: transparent;
+    border: none;
+    border-radius: 0;
   }
 
   [part='content'] {

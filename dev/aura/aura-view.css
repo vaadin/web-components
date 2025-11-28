@@ -1,15 +1,26 @@
 .aura-view {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  box-sizing: border-box;
+  margin-block: calc(var(--safe-area-inset-top) * -1) calc(var(--safe-area-inset-bottom) * -1);
+  padding-block: var(--safe-area-inset-top) var(--safe-area-inset-bottom);
+  height: calc(100% + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
 }
 
-.aura-view > :not(header, footer) {
+.aura-view > :not(header, footer, .aura-view-header, .aura-view-footer) {
   flex: 1;
 }
 
 .aura-view > vaadin-scroller {
-  padding-inline: var(--vaadin-padding-m);
+  --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
+}
+
+.aura-view:not(:has(header, .aura-view-header)) > vaadin-scroller {
+  padding-top: var(--safe-area-inset-top);
+}
+
+.aura-view:not(:has(footer, .aura-view-footer)) > vaadin-scroller {
+  padding-bottom: var(--safe-area-inset-bottom);
 }
 
 .aura-view > :is(header, footer),
@@ -17,6 +28,41 @@
   padding: var(--vaadin-padding-m);
   display: flex;
   align-items: center;
+}
+
+.aura-view > header,
+.aura-view-header,
+.aura-view[slot='navbar'] > footer,
+.aura-view-footer[slot='navbar'] {
+  padding-top: max(var(--vaadin-padding-s), var(--safe-area-inset-top));
+}
+
+.aura-view[slot='navbar'] > :is(header, footer),
+:is(.aura-view-header, .aura-view-footer)[slot='navbar'],
+.aura-view[slot='drawer'] > header,
+.aura-view-header[slot='drawer'] {
+  margin-top: calc(var(--safe-area-inset-top) * -1);
+}
+
+.aura-view[slot='navbar'] > :is(header, footer),
+:is(.aura-view-header, .aura-view-footer)[slot='navbar'] {
+  padding: 0;
+  padding-top: var(--safe-area-inset-top);
+}
+
+.aura-view[slot='navbar'] > footer,
+.aura-view-footer[slot='navbar'] {
+  margin-inline-start: auto;
+}
+
+.aura-view:not([slot='navbar']) > footer,
+.aura-view-footer:not([slot='navbar']) {
+  padding-bottom: max(var(--vaadin-padding-m), var(--safe-area-inset-bottom));
+}
+
+.aura-view[slot='drawer'] > footer,
+.aura-view-footer[slot='drawer'] {
+  margin-bottom: calc(var(--safe-area-inset-bottom) * -1);
 }
 
 :is(.aura-view > header, .aura-view-header) :is(h1, h2, h3, h4, h5, h6, .aura-view-heading) {
@@ -37,7 +83,7 @@
   }
 }
 
-vaadin-app-layout:is([drawer-opened], :has(> [slot='navbar'] vaadin-drawer-toggle))
+vaadin-app-layout:is([drawer-opened]:not([overlay]), :has(> [slot='navbar'] vaadin-drawer-toggle))
   :is(.aura-view > header, .aura-view-header)
   vaadin-drawer-toggle:not([theme~='permanent']),
 vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'].aura-view > header mdl-back-button,

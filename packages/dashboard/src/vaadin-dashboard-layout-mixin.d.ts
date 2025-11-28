@@ -25,4 +25,16 @@ export declare class DashboardLayoutMixinClass {
    * @attr {boolean} dense-layout
    */
   denseLayout: boolean;
+
+  /**
+   * Root heading level for sections and widgets. Defaults to 2.
+   *
+   * If changed to e.g. 1:
+   * - sections will have the attribute `aria-level` with value 1
+   * - non-nested widgets will have the attribute `aria-level` with value 1
+   * - nested widgets will have the attribute `aria-level` with value 2
+   *
+   * @attr {number} root-heading-level
+   */
+  rootHeadingLevel: number | null | undefined;
 }

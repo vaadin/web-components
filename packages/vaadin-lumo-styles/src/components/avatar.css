@@ -8,8 +8,8 @@
     --vaadin-avatar-outline-width: var(--vaadin-focus-ring-width, 2px);
     border: var(--vaadin-avatar-outline-width) solid transparent;
     margin: calc(var(--vaadin-avatar-outline-width) * -1);
-    color: var(--lumo-secondary-text-color);
-    background-color: var(--lumo-contrast-10pct);
+    color: var(--vaadin-avatar-text-color, var(--lumo-secondary-text-color));
+    background-color: var(--vaadin-avatar-background, var(--lumo-contrast-10pct));
     outline: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -43,7 +43,7 @@
   }
 
   :host([has-color-index])::before {
-    border: none;
+    outline: none;
     box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
   }
 

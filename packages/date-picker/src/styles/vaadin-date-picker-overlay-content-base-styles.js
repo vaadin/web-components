@@ -36,7 +36,7 @@ export const overlayContentStyles = css`
     font-weight: var(--vaadin-button-font-weight, 500);
     height: var(--vaadin-button-height, auto);
     line-height: var(--vaadin-button-line-height, inherit);
-    padding: var(--vaadin-button-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-button-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
     cursor: var(--vaadin-clickable-cursor);
   }
 

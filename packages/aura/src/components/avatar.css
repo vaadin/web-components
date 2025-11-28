@@ -1,16 +1,38 @@
 :where(:root),
 :where(:host) {
-  --vaadin-avatar-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-avatar-background: var(--vaadin-background-container);
+  --vaadin-avatar-border-color: var(--aura-accent-border-color);
   --vaadin-avatar-font-weight: var(--aura-font-weight-medium);
   --vaadin-avatar-font-size: var(--aura-font-size-m);
 }
 
-vaadin-avatar:not([img]) {
+vaadin-avatar {
+  color: var(--vaadin-avatar-text-color, var(--aura-accent-text-color));
   --_shade: color-mix(in srgb, var(--vaadin-border-color) 20%, transparent);
-  background-image: linear-gradient(
-    light-dark(transparent, var(--_shade)),
-    transparent 50%,
-    light-dark(var(--_shade), transparent)
+  background: var(
+    --vaadin-avatar-background,
+    linear-gradient(light-dark(transparent, var(--_shade)), transparent 50%, light-dark(var(--_shade), transparent)),
+    var(--aura-accent-surface)
   );
+  background-clip: content-box;
+}
+
+vaadin-avatar:where([has-color-index]) {
+  --aura-accent-color-light: var(--vaadin-avatar-user-color);
+  --aura-accent-color-dark: var(--vaadin-avatar-user-color);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+  color: var(--vaadin-avatar-text-color, var(--aura-accent-text-color));
+  --vaadin-avatar-background: var(--vaadin-accent-surface);
+  --vaadin-avatar-text-color: var(--aura-accent-text-color);
+  --vaadin-avatar-border-color: var(--aura-accent-border-color);
+  --vaadin-avatar-border-width: 1px;
+}
+
+vaadin-avatar[img][has-color-index] {
+  --vaadin-avatar-border-color: var(--aura-accent-color);
+  --vaadin-avatar-border-width: 2px;
+}
+
+vaadin-avatar[theme~='filled'] {
+  background: var(--aura-accent-color) content-box;
+  color: var(--aura-accent-contrast-color);
 }
