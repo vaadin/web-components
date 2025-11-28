@@ -78,7 +78,6 @@ export const checkable = (part, propName = part) => css`
   /* visually hidden */
   ::slotted(input) {
     cursor: inherit;
-    margin: 0;
     align-self: stretch;
     appearance: none;
     cursor: var(--_cursor);
@@ -86,7 +85,7 @@ export const checkable = (part, propName = part) => css`
     width: 2px;
     height: 2px;
     scale: 12;
-    margin: auto;
+    margin: auto !important;
   }
 
   /* Control container (checkbox, radio button) */
