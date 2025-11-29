@@ -45,6 +45,21 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * `dragover-valid`     | Set when the dragged file is valid with `maxFiles` and `accept` criteria
  * `max-files-reached`  | Set when maximum number of files that the user is allowed to add has been reached
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                      | Description
+ * -----------------------------------------|-------------
+ * `--vaadin-upload-background`             | The host element background
+ * `--vaadin-upload-border-color`           | The host element border color
+ * `--vaadin-upload-border-radius`          | The host element border radius
+ * `--vaadin-upload-border-width`           | The host element border width
+ * `--vaadin-upload-padding`                | The host element padding
+ * `--vaadin-upload-drop-label-color`       | The drop label color
+ * `--vaadin-upload-drop-label-font-size`   | The drop label font size
+ * `--vaadin-upload-drop-label-font-weight` | The drop label font weight
+ * `--vaadin-upload-drop-label-gap`         | The drop label gap
+ * `--vaadin-upload-drop-label-line-height` | The drop label line height
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
@@ -73,6 +88,10 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
   static get styles() {
     return uploadStyles;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

@@ -21,7 +21,8 @@ export const uploadStyles = css`
 
   :host([dragover-valid]) {
     --vaadin-upload-background: var(--vaadin-background-container);
-    --vaadin-upload-border: 1px dashed var(--vaadin-text-color);
+    --vaadin-upload-border-color: var(--vaadin-text-color);
+    border-style: dashed;
   }
 
   :host([hidden]) {
