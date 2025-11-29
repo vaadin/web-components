@@ -108,4 +108,40 @@ describe('select', () => {
       await visualDiff(div, 'value-multiline');
     });
   });
+
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      beforeEach(async () => {
+        div.style.height = '200px';
+        div.style.width = '200px';
+        element.value = 'value-1';
+        await sendKeys({ press: 'Tab' });
+        element.opened = true;
+        await nextFrame();
+      });
+
+      it('align-start', async () => {
+        element.setAttribute('theme', 'align-start');
+        await visualDiff(div, `${dir}-align-start`);
+      });
+
+      it('align-center', async () => {
+        element.setAttribute('theme', 'align-center');
+        await visualDiff(div, `${dir}-align-center`);
+      });
+
+      it('align-end', async () => {
+        element.setAttribute('theme', 'align-end');
+        await visualDiff(div, `${dir}-align-end`);
+      });
+    });
+  });
 });

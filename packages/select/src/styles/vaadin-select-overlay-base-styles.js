@@ -22,4 +22,16 @@ export const selectOverlayStyles = css`
   [part='backdrop'] {
     background: transparent;
   }
+
+  :host([theme~='align-start']) [part='overlay'] {
+    text-align: start;
+  }
+
+  :host([theme~='align-center']) [part='overlay'] {
+    text-align: center;
+  }
+
+  :host([theme~='align-end']) [part='overlay'] {
+    text-align: end;
+  }
 `;
