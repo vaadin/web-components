@@ -1,4 +1,5 @@
 {
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "packages": ["test/*", "packages/*", "api-docs", "dev"],
   "npmClient": "yarn",
   "version": "25.0.0-beta6"
