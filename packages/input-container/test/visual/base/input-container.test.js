@@ -116,6 +116,18 @@ describe('input-container', () => {
         element.setAttribute('theme', 'align-end');
         await visualDiff(div, `${dir}-align-end`);
       });
+
+      it('align-left', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-left');
+        await visualDiff(div, `${dir}-align-left`);
+      });
+
+      it('align-right', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-right');
+        await visualDiff(div, `${dir}-align-right`);
+      });
     });
   });
 });

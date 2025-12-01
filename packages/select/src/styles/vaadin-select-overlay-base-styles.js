@@ -34,4 +34,12 @@ export const selectOverlayStyles = css`
   :host([theme~='align-end']) [part='overlay'] {
     text-align: end;
   }
+
+  :host([theme~='align-left']) [part='overlay'] {
+    text-align: left;
+  }
+
+  :host([theme~='align-right']) [part='overlay'] {
+    text-align: right;
+  }
 `;

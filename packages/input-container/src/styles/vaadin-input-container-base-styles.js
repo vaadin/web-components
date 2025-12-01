@@ -130,6 +130,14 @@ export const inputContainerStyles = css`
     text-align: end;
   }
 
+  :host([theme~='align-left']) slot:not([name])::slotted(*) {
+    text-align: left;
+  }
+
+  :host([theme~='align-right']) slot:not([name])::slotted(*) {
+    text-align: right;
+  }
+
   @media (forced-colors: active) {
     :host {
       --vaadin-input-field-background: Field;
