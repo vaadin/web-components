@@ -118,15 +118,15 @@ export const inputContainerStyles = css`
     --vaadin-input-field-border-color: transparent;
   }
 
-  :host([theme~='align-start']) ::slotted(:not([slot$='fix'])) {
+  :host([theme~='align-start']) slot:not([name])::slotted(*) {
     text-align: start;
   }
 
-  :host([theme~='align-center']) ::slotted(:not([slot$='fix'])) {
+  :host([theme~='align-center']) slot:not([name])::slotted(*) {
     text-align: center;
   }
 
-  :host([theme~='align-end']) ::slotted(:not([slot$='fix'])) {
+  :host([theme~='align-end']) slot:not([name])::slotted(*) {
     text-align: end;
   }
 
