@@ -10,6 +10,7 @@
   color-scheme: light;
 }
 
+:host([theme~='dark']),
 [theme~='dark'] {
   /* Base (background) */
   --lumo-base-color: hsl(214, 35%, 21%);
