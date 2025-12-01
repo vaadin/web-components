@@ -2,8 +2,8 @@
 :where(:host) {
   --aura-contrast-level: 1;
 
-  --aura-accent-color-light: var(--aura-text-color-light);
-  --aura-accent-color-dark: var(--aura-text-color-dark);
+  --aura-accent-color-light: var(--aura-neutral-light);
+  --aura-accent-color-dark: var(--aura-neutral-dark);
 
   --aura-accent-color-light-initial: var(--aura-accent-color-light);
   --aura-accent-color-dark-initial: var(--aura-accent-color-dark);
@@ -71,13 +71,13 @@ vaadin-tab,
   .aura-accent-blue,
   .aura-accent-purple
 ) {
-  --aura-text-color-light: oklch(
+  --aura-neutral-light: oklch(
     from var(--aura-background-color-light) calc(0.2 - 0.05 * var(--aura-contrast-level)) calc(c * 0.1) h
   );
-  --aura-text-color-dark: oklch(
+  --aura-neutral-dark: oklch(
     from var(--aura-background-color-dark) calc(0.9 + 0.1 * var(--aura-contrast-level)) calc(c * l) h
   );
-  --vaadin-text-color: light-dark(var(--aura-text-color-light), var(--aura-text-color-dark));
+  --vaadin-text-color: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
   --vaadin-text-color-secondary: light-dark(
     oklch(
       from var(--aura-background-color-light) calc(l * 0.55 - 0.05 * var(--aura-contrast-level) + c / 2) calc(c * 0.6) h
@@ -172,8 +172,8 @@ vaadin-tab,
 }
 
 :is(#id, .aura-accent-neutral) {
-  --aura-accent-color-light: var(--aura-text-color-light);
-  --aura-accent-color-dark: var(--aura-text-color-dark);
+  --aura-accent-color-light: var(--aura-neutral-light);
+  --aura-accent-color-dark: var(--aura-neutral-dark);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
