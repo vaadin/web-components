@@ -40,7 +40,7 @@
   --vaadin-card-title-line-height: var(
     --lumo-line-height-xs
   );
-  --vaadin-card-subtitle-font-color: var(
+  --vaadin-card-subtitle-color: var(
     --lumo-secondary-text-color
   );
   --vaadin-card-subtitle-font-size: var(
