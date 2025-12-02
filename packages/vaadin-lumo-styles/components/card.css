@@ -30,7 +30,7 @@
     --lumo-space-m
   );
   --vaadin-card-shadow: none;
-  --vaadin-card-title-font-color: var(
+  --vaadin-card-title-color: var(
     --lumo-header-text-color
   );
   --vaadin-card-title-font-size: var(
@@ -40,7 +40,7 @@
   --vaadin-card-title-line-height: var(
     --lumo-line-height-xs
   );
-  --vaadin-card-subtitle-font-color: var(
+  --vaadin-card-subtitle-color: var(
     --lumo-secondary-text-color
   );
   --vaadin-card-subtitle-font-size: var(
