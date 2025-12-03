@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from './add-global-styles.js';
 
 // NOTE: Base color CSS custom properties are explicitly registered as `<color>`
 // here to avoid performance issues in Aura. Aura overrides these properties with
@@ -28,7 +28,7 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
   });
 });
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'vaadin-base',
   css`
     @layer vaadin.base {
