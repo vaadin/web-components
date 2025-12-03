@@ -3,6 +3,7 @@ import {
   arrowDown,
   arrowRight,
   arrowUp,
+  aTimeout,
   end,
   fixtureSync,
   focusin,
@@ -204,6 +205,54 @@ describe('message-list', () => {
         ];
         await nextRender();
         expect(messageList.scrollTop).to.be.equal(0);
+      });
+
+      it('should scroll to bottom on appending message text', async () => {
+        // Scroll to end
+        messageList.scrollBy(0, 1000);
+        await nextRender();
+
+        // Append text to last message
+        messageList.items.at(-1).text += '\nfoo';
+        messageList.items = [...messageList.items];
+        await nextRender();
+        await nextRender();
+
+        // Verify scrolled to bottom
+        expect(messageList.scrollTop).to.be.closeTo(messageList.scrollHeight - messageList.clientHeight, 1);
+      });
+
+      it('should not scroll if not at the bottom on appending message text', async () => {
+        const scrollTopBeforeAppend = messageList.scrollTop;
+
+        // Append text to last message while still at top
+        messageList.items.at(-1).text += '\nfoo';
+        messageList.items = [...messageList.items];
+        await nextRender();
+        await nextRender();
+
+        // Verify scroll position unchanged
+        expect(messageList.scrollTop).to.be.equal(scrollTopBeforeAppend);
+      });
+
+      it('should not snap to bottom after snap duration expires', async () => {
+        // Scroll to end
+        messageList.scrollBy(0, 1000);
+        await nextRender();
+
+        // Append text to last message
+        messageList.items.at(-1).text += '\nfoo';
+        messageList.items = [...messageList.items];
+
+        // Wait for snap behavior to expire (500ms + buffer)
+        await aTimeout(600);
+
+        // Now scroll up manually
+        const scrollTopBefore = messageList.scrollTop;
+        messageList.scrollTop -= 20;
+
+        // Should be able to scroll up freely
+        expect(messageList.scrollTop).to.be.equal(scrollTopBefore - 20);
       });
     });
 
