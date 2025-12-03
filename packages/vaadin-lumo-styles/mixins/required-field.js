@@ -62,7 +62,7 @@ const requiredField = css`
   }
 
   :host([required]) [part='required-indicator']::after {
-    content: var(--vaadin-input-field-required-indicator, var(--lumo-required-field-indicator, '\2022'));
+    content: var(--vaadin-input-field-required-indicator, var(--lumo-required-field-indicator, '\\2022'));
     color: var(
       --vaadin-input-field-required-indicator-color,
       var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
