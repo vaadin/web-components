@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/login",
-  "version": "25.0.0-beta6",
+  "version": "25.0.0-beta7",
   "publishConfig": {
     "access": "public"
   },
@@ -34,21 +34,21 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/button": "25.0.0-beta6",
-    "@vaadin/component-base": "25.0.0-beta6",
-    "@vaadin/overlay": "25.0.0-beta6",
-    "@vaadin/password-field": "25.0.0-beta6",
-    "@vaadin/text-field": "25.0.0-beta6",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-beta6",
+    "@vaadin/button": "25.0.0-beta7",
+    "@vaadin/component-base": "25.0.0-beta7",
+    "@vaadin/overlay": "25.0.0-beta7",
+    "@vaadin/password-field": "25.0.0-beta7",
+    "@vaadin/text-field": "25.0.0-beta7",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-beta7",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/a11y-base": "25.0.0-beta6",
-    "@vaadin/chai-plugins": "25.0.0-beta6",
-    "@vaadin/checkbox": "25.0.0-beta6",
-    "@vaadin/test-runner-commands": "25.0.0-beta6",
+    "@vaadin/a11y-base": "25.0.0-beta7",
+    "@vaadin/chai-plugins": "25.0.0-beta7",
+    "@vaadin/checkbox": "25.0.0-beta7",
+    "@vaadin/test-runner-commands": "25.0.0-beta7",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-beta6",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-beta7",
     "sinon": "^21.0.0"
   },
   "web-types": [
