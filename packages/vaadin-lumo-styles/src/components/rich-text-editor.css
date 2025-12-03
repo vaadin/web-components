@@ -23,7 +23,7 @@
   }
 
   .vaadin-rich-text-editor-container {
-    background: transparent;
+    background: var(--vaadin-rich-text-editor-background, transparent);
     border: none;
     border-radius: 0;
   }
@@ -33,22 +33,22 @@
   }
 
   [part='toolbar'] {
-    background-color: var(--lumo-contrast-5pct);
-    padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
-    gap: 0;
+    background-color: var(--vaadin-rich-text-editor-toolbar-background, var(--lumo-contrast-5pct));
+    padding: var(--vaadin-rich-text-editor-toolbar-padding, calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs));
+    gap: var(--vaadin-rich-text-editor-toolbar-gap, 0);
   }
 
   [part~='toolbar-button'] {
-    padding: 0;
+    padding: var(--vaadin-rich-text-editor-toolbar-button-padding, 0);
     font: inherit;
     line-height: 1;
     text-transform: none;
-    background: transparent;
-    border: none;
+    background: var(--vaadin-rich-text-editor-toolbar-button-background, transparent);
+    border-width: var(--vaadin-rich-text-editor-toolbar-button-border-width, 0);
     width: var(--lumo-size-m);
     height: var(--lumo-size-m);
     border-radius: var(--lumo-border-radius-m);
-    color: var(--lumo-contrast-60pct);
+    color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--lumo-contrast-60pct));
     margin: 2px 1px;
     cursor: var(--lumo-clickable-cursor);
     transition:
@@ -58,8 +58,8 @@
 
   [part~='toolbar-button']:not([part~='toolbar-button-pressed']):hover {
     outline: none;
-    background-color: var(--lumo-contrast-5pct);
-    color: var(--lumo-contrast-80pct);
+    --vaadin-rich-text-editor-toolbar-button-background: var(--lumo-contrast-5pct);
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-contrast-80pct);
   }
 
   [part~='toolbar-button']::before {
@@ -202,7 +202,7 @@
   }
 
   :host([disabled]) [part~='toolbar-button'] {
-    background-color: transparent;
+    --vaadin-rich-text-editor-toolbar-button-background: transparent;
   }
 
   [part~='toolbar-button']:focus,
@@ -213,18 +213,18 @@
 
   @media (hover: none) {
     [part~='toolbar-button']:hover {
-      background-color: transparent;
+      --vaadin-rich-text-editor-toolbar-button-background: transparent;
     }
   }
 
   [part~='toolbar-button-pressed'] {
-    background-color: var(--vaadin-selection-color, var(--lumo-primary-color));
-    color: var(--lumo-primary-contrast-color);
+    --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-selection-color, var(--lumo-primary-color));
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-primary-contrast-color);
   }
 
   [part~='toolbar-button']:not([part~='toolbar-button-pressed']):active {
-    background-color: var(--lumo-contrast-10pct);
-    color: var(--lumo-contrast-90pct);
+    --vaadin-rich-text-editor-toolbar-button-background: var(--lumo-contrast-10pct);
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-contrast-90pct);
   }
 
   [part~='toolbar-button-undo']::before {
@@ -310,8 +310,7 @@
   }
 
   :host([theme~='no-border']) [part='toolbar'] {
-    padding-top: var(--lumo-space-s);
-    padding-bottom: var(--lumo-space-s);
+    --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-s) var(--lumo-space-xs);
   }
 
   /* Compact */
@@ -320,11 +319,11 @@
   }
 
   :host([theme~='compact']) [part='toolbar'] {
-    padding: var(--lumo-space-xs) 0;
+    --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-xs) 0;
   }
 
   :host([theme~='compact'][theme~='no-border']) [part='toolbar'] {
-    padding: calc(var(--lumo-space-xs) + 1px) 0;
+    --vaadin-rich-text-editor-toolbar-padding: calc(var(--lumo-space-xs) + 1px) 0;
   }
 
   :host([theme~='compact']) [part~='toolbar-button'] {
@@ -337,8 +336,8 @@
   }
 
   .ql-editor {
-    color: inherit;
-    padding: var(--lumo-space-s) var(--lumo-space-m);
+    color: var(--vaadin-rich-text-editor-content-color, inherit);
+    padding: var(--vaadin-rich-text-editor-content-padding, var(--lumo-space-s) var(--lumo-space-m));
   }
 
   .ql-code-block-container {
