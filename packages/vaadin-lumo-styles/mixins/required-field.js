@@ -62,8 +62,11 @@ const requiredField = css`
   }
 
   :host([required]) [part='required-indicator']::after {
-    content: var(--lumo-required-field-indicator, '\\2022');
-    color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+    content: var(--vaadin-input-field-required-indicator, var(--lumo-required-field-indicator, '\2022'));
+    color: var(
+      --vaadin-input-field-required-indicator-color,
+      var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
+    );
     position: absolute;
     right: 0;
     width: 1em;
@@ -71,7 +74,10 @@ const requiredField = css`
   }
 
   :host([invalid]) [part='required-indicator']::after {
-    color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+    color: var(
+      --vaadin-input-field-required-indicator-color,
+      var(--lumo-required-field-indicator-color, var(--lumo-error-text-color))
+    );
   }
 
   [part='error-message'] {
