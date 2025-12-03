@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from './add-global-styles.js';
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'vaadin-base-user-colors',
   css`
     @layer vaadin.base {
