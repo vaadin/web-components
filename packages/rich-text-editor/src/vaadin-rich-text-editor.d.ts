@@ -92,6 +92,25 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-button-code-block`          | The "code block" button
  * `toolbar-button-clean`               | The "clean formatting" button
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property            |
+ * :-------------------------------|
+ * `--vaadin-rich-text-editor-background` |
+ * `--vaadin-rich-text-editor-content-color` |
+ * `--vaadin-rich-text-editor-content-font-size` |
+ * `--vaadin-rich-text-editor-content-line-height` |
+ * `--vaadin-rich-text-editor-content-padding` |
+ * `--vaadin-rich-text-editor-toolbar-background` |
+ * `--vaadin-rich-text-editor-toolbar-gap` |
+ * `--vaadin-rich-text-editor-toolbar-padding` |
+ * `--vaadin-rich-text-editor-toolbar-button-background` |
+ * `--vaadin-rich-text-editor-toolbar-button-border-width` |
+ * `--vaadin-rich-text-editor-toolbar-button-border-color` |
+ * `--vaadin-rich-text-editor-toolbar-button-border-radius` |
+ * `--vaadin-rich-text-editor-toolbar-button-text-color` |
+ * `--vaadin-rich-text-editor-toolbar-button-padding` |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
