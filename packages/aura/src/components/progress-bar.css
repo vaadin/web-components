@@ -9,7 +9,7 @@
 }
 
 vaadin-progress-bar {
-  height: var(--vaadin-gap-s);
+  height: var(--vaadin-progress-bar-height, var(--vaadin-gap-s));
 
   &[dir='rtl']::part(value) {
     scale: -1;
