@@ -1,6 +1,7 @@
 :where(:root),
 :where(:host) {
   --vaadin-progress-bar-border-width: 0px;
+  --vaadin-progress-bar-height: var(--vaadin-gap-s);
   --vaadin-progress-bar-value-background: linear-gradient(
     90deg,
     var(--aura-accent-color),
@@ -8,10 +9,6 @@
   );
 }
 
-vaadin-progress-bar {
-  height: var(--vaadin-progress-bar-height, var(--vaadin-gap-s));
-
-  &[dir='rtl']::part(value) {
-    scale: -1;
-  }
+vaadin-progress-bar[dir='rtl']::part(value) {
+  scale: -1;
 }
