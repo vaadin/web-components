@@ -37,12 +37,12 @@ const gridPro = css`
 
   @media (any-hover: hover) {
     [part~='body-cell']:is([part~='editable-cell'], :has([part~='editable-cell'])):hover {
-      --vaadin-grid-row-hover-background-color: var(--_highlight-color);
+      --vaadin-grid-cell-background-color: var(--_highlight-color);
     }
   }
 
   :host([navigating]) [part~='body-cell']:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus)) {
-    --vaadin-grid-row-highlight-background-color: var(--_highlight-color);
+    --vaadin-grid-cell-background-color: var(--_highlight-color);
   }
 
   /* Indicate editable cells */
