@@ -94,7 +94,7 @@ export const CheckboxMixin = (superclass) =>
 
       // Set tabindex to 0 by default to not lose focus on click in Safari
       // See https://github.com/vaadin/web-components/pull/6780
-      this.tabindex = 0;
+      this.tabIndex = 0;
     }
 
     /** @protected */

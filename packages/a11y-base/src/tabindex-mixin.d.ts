@@ -20,7 +20,7 @@ export declare class TabindexMixinClass {
   /**
    * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
    */
-  tabindex: number | null | undefined;
+  tabIndex: number;
 
   /**
    * Stores the last known tabindex since the element has been disabled.
