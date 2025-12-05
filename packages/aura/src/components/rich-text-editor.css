@@ -46,7 +46,6 @@ vaadin-rich-text-editor::part(toolbar-button) {
     background-color 80ms,
     scale 180ms;
   outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
-  border: 1px solid transparent;
   position: relative;
 }
 
