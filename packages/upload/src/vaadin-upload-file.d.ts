@@ -65,6 +65,34 @@ export interface UploadFileEventMap extends HTMLElementEventMap, UploadFileCusto
  * `uploading`      | Uploading is in progress.
  * `complete`       | Uploading has finished successfully.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * `--vaadin-upload-file-border-radius`         |
+ * `--vaadin-upload-file-button-background`     |
+ * `--vaadin-upload-file-button-border-color`   |
+ * `--vaadin-upload-file-button-border-radius`  |
+ * `--vaadin-upload-file-button-border-width`   |
+ * `--vaadin-upload-file-button-text-color`     |
+ * `--vaadin-upload-file-button-padding`        |
+ * `--vaadin-upload-file-done-color`            |
+ * `--vaadin-upload-file-error-color`           |
+ * `--vaadin-upload-file-error-font-size`       |
+ * `--vaadin-upload-file-error-font-weight`     |
+ * `--vaadin-upload-file-error-line-height`     |
+ * `--vaadin-upload-file-gap`                   |
+ * `--vaadin-upload-file-name-color`            |
+ * `--vaadin-upload-file-name-font-size`        |
+ * `--vaadin-upload-file-name-font-weight`      |
+ * `--vaadin-upload-file-name-line-height`      |
+ * `--vaadin-upload-file-padding`               |
+ * `--vaadin-upload-file-status-color`          |
+ * `--vaadin-upload-file-status-font-size`      |
+ * `--vaadin-upload-file-status-font-weight`    |
+ * `--vaadin-upload-file-status-line-height`    |
+ * `--vaadin-upload-file-warning-color`         |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class UploadFile extends UploadFileMixin(ThemableMixin(HTMLElement)) {
