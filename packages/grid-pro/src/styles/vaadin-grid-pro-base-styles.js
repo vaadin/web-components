@@ -36,19 +36,18 @@ const gridPro = css`
   /* On macOS the editable-cell part is a button inside the body cell. On other platforms the body cell is the editable-cell part. */
 
   @media (any-hover: hover) {
-    [part~='body-cell']:is([part~='editable-cell'], :has([part~='editable-cell'])):hover {
+    .body-cell:is([part~='editable-cell'], :has([part~='editable-cell'])):hover {
       --vaadin-grid-cell-background-color: var(--_highlight-color);
     }
   }
 
-  :host([navigating]) [part~='body-cell']:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus)) {
+  :host([navigating]) .body-cell:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus)) {
     --vaadin-grid-cell-background-color: var(--_highlight-color);
   }
 
   /* Indicate editable cells */
 
-  :host([theme~='highlight-editable-cells'])
-    [part~='body-cell']:is([part~='editable-cell'], :has([part~='editable-cell'])) {
+  :host([theme~='highlight-editable-cells']) .body-cell:is([part~='editable-cell'], :has([part~='editable-cell'])) {
     --vaadin-grid-row-highlight-background-color: var(
       --vaadin-grid-pro-editable-cell-background-color,
       var(--_highlight-color)
@@ -57,16 +56,17 @@ const gridPro = css`
 
   /* Indicate read-only cells */
 
-  :host([theme~='highlight-read-only-cells'])
-    [part~='body-cell']:not([part~='editable-cell'], :has([part~='editable-cell'])) {
-    --_highlight-background-image: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 30%,
-        var(--_highlight-color2) 30%,
-        var(--_highlight-color2) 50%
-      )
-      padding-box 0 0 / 6px 6px;
+  :host([theme~='highlight-read-only-cells']) .body-cell:not([part~='editable-cell'], :has([part~='editable-cell'])) {
+    --_cell-highlight-background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 30%,
+      var(--_highlight-color2) 30%,
+      var(--_highlight-color2) 50%
+    );
+    background-repeat: repeat;
+    background-size: 6px 6px;
+    background-clip: padding-box;
   }
 
   /* Loading editor cell styles are used by Flow GridPro */
