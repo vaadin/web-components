@@ -145,4 +145,31 @@ describe('upload', () => {
       await visualDiff(div, 'state-max-files-reached');
     });
   });
+
+  describe('drop-label-content slot', () => {
+    it('custom content', async () => {
+      element = fixtureSync(
+        `<vaadin-upload>
+          <div slot="drop-label-content" style="display: flex; align-items: center; justify-content: center; padding: 8px; border: 1px dashed gray; border-radius: 4px; background: #f5f5f5;">
+            <span>Custom drop area content</span>
+          </div>
+        </vaadin-upload>`,
+        div,
+      );
+      await visualDiff(div, 'drop-label-content-custom');
+    });
+
+    it('custom content with files', async () => {
+      element = fixtureSync(
+        `<vaadin-upload>
+          <div slot="drop-label-content" style="display: flex; align-items: center; justify-content: center; padding: 8px; border: 1px dashed gray; border-radius: 4px; background: #f5f5f5;">
+            <span>Custom drop area content</span>
+          </div>
+        </vaadin-upload>`,
+        div,
+      );
+      element.files = [{ name: 'Don Quixote.pdf', progress: 100, complete: true }];
+      await visualDiff(div, 'drop-label-content-custom-with-files');
+    });
+  });
 });

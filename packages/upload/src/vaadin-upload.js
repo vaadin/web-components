@@ -125,10 +125,12 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
     return html`
       <div part="primary-buttons">
         <slot name="add-button"></slot>
-        <div part="drop-label" ?hidden="${this.nodrop}" id="dropLabelContainer" aria-hidden="true">
-          <slot name="drop-label-icon"></slot>
-          <slot name="drop-label"></slot>
-        </div>
+        <slot name="drop-label-content">
+          <div part="drop-label" ?hidden="${this.nodrop}" id="dropLabelContainer" aria-hidden="true">
+            <slot name="drop-label-icon"></slot>
+            <slot name="drop-label"></slot>
+          </div>
+        </slot>
       </div>
       <slot name="file-list"></slot>
       <slot></slot>
