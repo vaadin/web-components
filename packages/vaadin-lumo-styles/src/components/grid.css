@@ -156,7 +156,14 @@
 
   .cell {
     outline: none;
-    min-height: var(--lumo-size-m);
+    /*
+      Min height is critical for the virtualizer to avoid creating excessive rows,
+      so we provide a fallback value here to ensure it stays non-zero even if the
+      Lumo variables are temporarily undefined. This can happen for a short moment
+      when the Lumo stylesheet is removed from the document but LumoInjector hasn't
+      cleaned up the component styles yet.
+    */
+    min-height: var(--lumo-size-m, 2.25rem);
     background-color: var(--vaadin-grid-cell-background, var(--lumo-base-color));
     cursor: default;
     --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
