@@ -53,6 +53,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * `--vaadin-upload-border-color`               |
  * `--vaadin-upload-border-radius`              |
  * `--vaadin-upload-border-width`               |
+ * `--vaadin-upload-gap`                        |
  * `--vaadin-upload-padding`                    |
  * `--vaadin-upload-drop-label-color`           |
  * `--vaadin-upload-drop-label-font-size`       |
