@@ -9,6 +9,7 @@
     <title>Aura</title>
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
+    <link rel="stylesheet" href="./aura/aura-extras.css" />
     <link rel="stylesheet" href="./aura/badge.css" />
     <script type="module">
       window.Vaadin ||= {};
@@ -16,276 +17,13 @@
       window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
     </script>
     <script type="module">
-      import './aura/aura-color-control.js';
-      import './aura/aura-font-family-control.js';
-      import './aura/aura-inset-control.js';
-      import './aura/aura-number-control.js';
-      import './aura/aura-scheme-control.js';
+      import './aura/aura-theme-editor.js';
+      import './aura/components-view.js';
+      import './aura/dashboard-view.js';
       import '@vaadin/app-layout';
       import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
-      import '@vaadin/avatar';
-      import '@vaadin/avatar-group';
-      import '@vaadin/card';
-      import '@vaadin/checkbox';
-      import '@vaadin/checkbox-group';
-      import '@vaadin/combo-box';
-      import '@vaadin/date-time-picker';
-      import '@vaadin/grid';
-      import '@vaadin/grid/src/vaadin-grid-selection-column.js';
-      import '@vaadin/horizontal-layout';
-      import '@vaadin/icon';
-      import '@vaadin/master-detail-layout';
-      import '@vaadin/menu-bar';
-      import '@vaadin/message-list';
-      import '@vaadin/message-input';
-      import '@vaadin/multi-select-combo-box';
-      import '@vaadin/popover';
-      import '@vaadin/progress-bar';
-      import '@vaadin/radio-group';
-      import '@vaadin/rich-text-editor';
-      import '@vaadin/select';
-      import '@vaadin/scroller';
-      import '@vaadin/side-nav';
-      import '@vaadin/tabs';
-      import '@vaadin/text-field';
-      import '@vaadin/vertical-layout';
-      import { html, render } from 'lit';
-      import { Button } from '@vaadin/button';
-      import { Notification } from '@vaadin/notification';
-
-      function clearLocalStorage() {
-        for (let i = localStorage.length - 1; i >= 0; i--) {
-          const key = localStorage.key(i);
-          if (/^aura/u.test(key)) {
-            localStorage.removeItem(key);
-          }
-        }
-      }
-
-      document.querySelector('#resetAll').addEventListener('click', () => {
-        clearLocalStorage();
-        window.location.reload();
-      });
-
-      const useNavbarToggle = document.querySelector('#useNavbar');
-      useNavbarToggle.addEventListener('change', (e) => {
-        useNavbar(e.target.checked);
-      });
-
-      function useNavbar(useNavbar) {
-        useNavbarToggle.checked = useNavbar;
-        const drawerToggle = document.querySelector('vaadin-app-layout > header[slot] vaadin-drawer-toggle');
-        if (useNavbar) {
-          localStorage.setItem('aura-navbar', useNavbar);
-          document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'navbar');
-          document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'navbar');
-          document.querySelector('vaadin-app-layout > header[slot]').prepend(drawerToggle);
-        } else {
-          localStorage.removeItem('aura-navbar');
-          document.querySelector('vaadin-app-layout > header[slot]').setAttribute('slot', 'drawer');
-          document.querySelector('vaadin-app-layout > footer[slot]').setAttribute('slot', 'drawer');
-          document.querySelector('vaadin-app-layout > header[slot]').append(drawerToggle);
-        }
-      }
-
-      useNavbar(localStorage.getItem('aura-navbar') !== null);
-
-      const generateItems = (count) => {
-        return Array.from({ length: count }, (_, i) => ({
-          name: `First Lastname ${i + 1}`,
-          email: `first.lastname${i + 1}@example.com`,
-          address: `${i + 1} Main Street`,
-          city: `City ${i + 1}`,
-          country: `Country ${i + 1}`,
-        }));
-      };
-
-      function createMenuItemWithFeatures(text, iconName, badgeLabel) {
-        const item = document.createElement('vaadin-menu-bar-item');
-        const icon = document.createElement('vaadin-icon');
-        const badge = document.createElement('span');
-
-        if (iconName) {
-          icon.setAttribute('src', `./assets/lucide-icons/${iconName}.svg`);
-          item.append(icon);
-        }
-        if (text) {
-          item.append(document.createTextNode(text));
-        }
-        if (badgeLabel) {
-          badge.classList.add('aura-badge', 'aura-accent-purple');
-          badge.textContent = badgeLabel;
-          item.append(badge);
-        }
-        return item;
-      }
-
-      function initComponentsView() {
-        const view = document.querySelector('.components-view');
-
-        // Menu Bar
-        const menuBar = view.querySelector('vaadin-menu-bar');
-        menuBar.items = [
-          {
-            text: 'Actions',
-            children: [
-              { text: 'Edit' },
-              { text: 'Duplicate' },
-              { component: 'hr' },
-              { component: createMenuItemWithFeatures('Archive', 'layers', '2') },
-              {
-                text: 'More',
-                children: [
-                  { text: 'Move to Project…' },
-                  { text: 'Move to Folder…' },
-                  { component: 'hr' },
-                  {
-                    text: 'Advanced Options',
-                    children: [
-                      { text: 'Show All', checked: true },
-                      { text: 'Show Hidden Items' },
-                      { component: 'hr' },
-                      { text: 'Open…' },
-                    ],
-                  },
-                ],
-              },
-              { component: 'hr' },
-              { text: 'Share' },
-              { text: 'Add to Favorites' },
-              { component: 'hr' },
-              { text: 'Delete', theme: 'danger' },
-            ],
-          },
-        ];
-        view.querySelector('#filled-menu-bar').addEventListener('change', (e) => {
-          if (e.target.checked) {
-            menuBar.setAttribute('theme', 'filled');
-            menuBar.items[0].children[9].theme = 'danger filled';
-          } else {
-            menuBar.removeAttribute('theme');
-            menuBar.items[0].children[9].theme = 'danger';
-          }
-        });
-
-        // Select
-        view.querySelector('vaadin-select').renderer = (root) => {
-          render(
-            html`
-              <vaadin-select-list-box>
-                <vaadin-select-item value="1">Option 1</vaadin-select-item>
-                <vaadin-select-item value="2">Option 2</vaadin-select-item>
-                <vaadin-select-item value="3">Option 3</vaadin-select-item>
-              </vaadin-select-list-box>
-            `,
-            root,
-          );
-        };
-        view.querySelector('vaadin-select').value = '1';
-
-        // Combo Box
-        view.querySelectorAll('vaadin-combo-box, vaadin-multi-select-combo-box').forEach((comboBox) => {
-          comboBox.dataProvider = async (params, callback) => {
-            const index = params.page * params.pageSize;
-            const response = await fetch(
-              `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
-            );
-            if (response.ok) {
-              const { result, size } = await response.json();
-              // Emulate network latency for demo purpose
-              setTimeout(() => {
-                callback(result, size);
-              }, 1000);
-            }
-          };
-
-          if (!comboBox.placeholder) {
-            if (comboBox.localName.startsWith('vaadin-multi-select')) {
-              comboBox.selectedItems = ['Andorra', 'United Arab Emirates'];
-            } else {
-              comboBox.selectedItem = 'Andorra';
-            }
-          }
-        });
-
-        // Message List
-        view.querySelector('vaadin-message-list').items = [
-          {
-            userName: 'Matt Mambo',
-            text: 'Nature does not hurry, yet everything gets accomplished.',
-            time: '2 minutes ago',
-            userColorIndex: 1,
-          },
-          {
-            userName: 'Lindsey Listy',
-            text: 'Using your talent, hobby or profession in a way that makes you contribute with something good to this world is truly the way to go.',
-            time: 'just now',
-            userColorIndex: 2,
-          },
-        ];
-
-        // Notification
-        view.querySelector('#showNotificationBtn').addEventListener('click', () => {
-          const notification = Notification.show(
-            html`<vaadin-card theme="horizontal footer-end no-frame">
-              <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="media"></vaadin-icon>
-              <div slot="title">New Message from Olivia</div>
-              <div>The AI chat UI is evolving with the integration of components…</div>
-              <vaadin-button slot="footer">Show</vaadin-button>
-              <vaadin-button slot="footer">Dismiss</vaadin-button>
-            </vaadin-card>`,
-            { duration: 0, position: 'top-end' },
-          );
-          notification._overlayElement
-            .querySelectorAll('vaadin-button')
-            .forEach((button) => button.addEventListener('click', () => notification.close()));
-        });
-
-        // Avatar Group
-        view.querySelector('vaadin-avatar-group').items = [
-          { name: 'AA', colorIndex: 0 },
-          { name: 'BB', colorIndex: 1 },
-          { name: 'CC', colorIndex: 2 },
-          { name: 'DD', colorIndex: 3 },
-          { name: 'EE', colorIndex: 4 },
-          { name: 'FF', colorIndex: 5 },
-          { name: 'GG', colorIndex: 6 },
-          { name: 'HH', colorIndex: 7 },
-          { name: 'II', colorIndex: 8 },
-        ];
-
-        // Grid
-        const grid = view.querySelector('vaadin-grid');
-        grid.items = generateItems(20);
-        grid.selectedItems = [grid.items[0]];
-        const badgeColors = ['neutral', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'];
-        grid.querySelector('vaadin-grid-column[header="Status"]').renderer = (root, col, model) => {
-          root.innerHTML = `<span class="aura-badge aura-accent-${badgeColors[model.index % badgeColors.length]}">Status</span>`;
-        };
-        grid.querySelector('vaadin-grid-column.avatar').renderer = (root, col, model) => {
-          root.innerHTML = `<vaadin-avatar name="${model.item.name}" color-index="${model.index % 9}"></vaadin-avatar>`;
-        };
-      }
-
-      initComponentsView();
-
-      customElements.define(
-        'mdl-back-button',
-        class extends Button {
-          constructor() {
-            super();
-            this.setAttribute('theme', 'tertiary');
-            const icon = document.createElement('vaadin-icon');
-            icon.setAttribute('src', './assets/lucide-icons/arrow-left.svg');
-            this.append(icon);
-            this.addEventListener('click', () => {
-              const inner = this.closest('[slot="detail"]');
-              const outer = inner.parentNode.closest('vaadin-master-detail-layout');
-              outer?._setDetail(null);
-            });
-          }
-        },
-      );
+      import '@vaadin/icons';
+      import '@vaadin/item';
 
       // Fake navigation: prevent navigation, update 'current' item manually
       document.querySelectorAll('vaadin-side-nav').forEach((nav) => {
@@ -298,141 +36,107 @@
               .parentNode.querySelectorAll('vaadin-side-nav-item')
               .forEach((item) => item.removeAttribute('current'));
             item.setAttribute('current', '');
+
+            if (item.dataset.viewName) {
+              document.querySelector('vaadin-app-layout > :not([slot])').remove();
+              const view = document.createElement(item.dataset.viewName);
+              document.querySelector('vaadin-app-layout').append(view);
+            }
           }
         });
       });
     </script>
-
-    <style>
-      html {
-        height: calc(100% + env(safe-area-inset-top, 0px));
-        --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
-        --aura-accent-color-light: var(--aura-blue);
-        --aura-accent-color-dark: var(--aura-blue);
-        --vaadin-user-color: var(--aura-accent-color);
-      }
-
-      /* prettier-ignore */
-      :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-side-nav, vaadin-tabs):not([theme~="accent"]) {
-        --aura-accent-color-light: var(--aura-neutral-light);
-        --aura-accent-color-dark: var(--aura-neutral-dark);
-      }
-
-      body {
-        margin: 0;
-        height: 100%;
-        transition: none !important;
-      }
-
-      [theme~='small'] {
-        --aura-base-size: 12;
-        --aura-base-font-size: 13;
-      }
-
-      vaadin-avatar[theme~='vaadin']::part(icon) {
-        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none"><path d="M11.1854 7.48145C11.7551 7.48145 12.2184 7.95693 12.2186 8.54199C12.2186 8.72558 12.1719 8.90779 12.0819 9.06934L8.86023 15.1895C8.8531 15.2033 8.84588 15.2156 8.83875 15.2285C8.69333 15.5564 8.3724 15.7852 7.9989 15.7852C7.62026 15.7851 7.29542 15.55 7.1532 15.2148C7.14827 15.206 7.14334 15.1978 7.13855 15.1885L3.91687 9.06738C3.82776 8.90728 3.78015 8.72555 3.78015 8.54199C3.78037 7.95699 4.24389 7.48154 4.81335 7.48145C5.27105 7.48145 5.58212 7.7112 5.7948 8.20996L7.99988 12.4307L10.2069 8.20508C10.4171 7.71153 10.7278 7.48156 11.1854 7.48145Z" fill="currentColor"/><path d="M15.2108 1C15.6505 1.00007 15.9997 1.36209 15.9999 1.80859V3.14258C15.9999 4.71011 15.2872 5.49403 13.6552 5.49414H10.035C8.95299 5.49419 8.84659 5.95787 8.84656 6.4082C8.84656 6.45438 8.84269 6.49396 8.83777 6.53613C8.81197 6.98687 8.4453 7.34557 7.995 7.3457C7.54459 7.3457 7.17686 6.98894 7.15125 6.53809C7.14633 6.49582 7.14343 6.45432 7.14343 6.4082C7.1434 5.95784 7.03606 5.49414 5.95398 5.49414H2.33484C0.702567 5.49414 -9.57545e-05 4.71022 -0.00012207 3.14258V1.80859C5.05523e-05 1.36204 0.337484 1 0.777222 1C1.21691 1.00006 1.55049 1.36208 1.55066 1.80859V2.25977C1.55078 2.76409 1.89158 3.13184 2.6366 3.13184H6.18542C7.79968 3.13207 7.92422 4.34896 7.97742 4.99316H8.01257C8.06578 4.3489 8.19 3.13184 9.80457 3.13184H13.3534C14.0982 3.13177 14.4157 2.77682 14.4159 2.27246L14.4178 1.80859C14.418 1.36204 14.7711 1 15.2108 1Z" fill="currentColor"/></svg>');
-        mask-size: 60%;
-      }
-
-      vaadin-avatar[theme~='square'] {
-        border-radius: var(--vaadin-radius-m);
-      }
-
-      /* TODO re-evaluate MDL API, how to achieve this */
-      .dashboard-section::part(master) {
-        flex-basis: 15em;
-        flex-grow: 0.1;
-      }
-
-      .dashboard-section::part(detail) {
-        flex-basis: 85em;
-        flex-grow: 2;
-      }
-
-      /* TODO part of Aura? */
-      hr {
-        place-self: stretch;
-        margin: var(--vaadin-gap-m) 0;
-        border: 0;
-        background: var(--vaadin-border-color-secondary);
-        min-height: 1px;
-        max-height: 1px;
-      }
-
-      /* Considering these as built-in variants, but perhaps they should be another component like https://github.com/vaadin/web-components/issues/7958 */
-      vaadin-card[theme~='no-frame'] {
-        --vaadin-card-padding: 0px;
-        --vaadin-card-background: transparent;
-      }
-
-      vaadin-card[theme~='footer-end'] {
-        --_footer: 0;
-        grid-template-rows: repeat(var(--_content), auto) 1fr;
-      }
-
-      vaadin-card[theme~='footer-end']::part(footer) {
-        grid-column: -1;
-        grid-row: 1 / span calc(var(--_header) + var(--_content));
-        align-self: center;
-        flex-direction: column;
-      }
-    </style>
   </head>
   <body>
     <vaadin-app-layout>
       <header slot="drawer" class="aura-view-header">
-        <vaadin-avatar
-          theme="vaadin square filled"
-          color-index="0"
-          style="--vaadin-avatar-size: 1.25lh; margin-inline: var(--vaadin-padding-s)"
-        ></vaadin-avatar>
+        <!-- TODO need to figure out a way to align things in the header with the side nav items. CSS subgrid perhaps? -->
+        <vaadin-avatar theme="vaadin square filled" style="--vaadin-avatar-size: 1.25lh; margin-inline: calc(var(--vaadin-padding-inline-container) - var(--vaadin-side-nav-item-border-width) - (var(--vaadin-avatar-size) - var(--vaadin-icon-size, 1lh)) / 2);"></vaadin-avatar>
         <div class="aura-view-heading">Aura</div>
         <vaadin-drawer-toggle theme="tertiary permanent"></vaadin-drawer-toggle>
       </header>
 
       <vaadin-scroller slot="drawer" theme="overflow-indicators">
-        <vaadin-side-nav collapsible>
-          <span slot="label">General</span>
+        <vaadin-side-nav>
+          <vaadin-side-nav-item data-view-name="components-view">
+            <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
+            Overview
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
 
-          <vaadin-side-nav-item path="">
-            <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
-            Dashboard
+        <hr>
+
+        <vaadin-side-nav collapsible>
+          <span slot="label">Dashboard</span>
+
+          <vaadin-side-nav-item path="" data-view-name="dashboard-view">
+            <vaadin-icon src="./assets/lucide-icons/layout-panel-left.svg" slot="prefix"></vaadin-icon>
+            Overview
             <span class="aura-badge aura-accent-color" slot="suffix" aria-label="(2 new items)">2</span>
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:dollar" slot="prefix"></vaadin-icon>
+            Revenue
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:line-chart" slot="prefix"></vaadin-icon>
+            Engagement
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
             <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
-            Projects
+            Products
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>
-            <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="prefix"></vaadin-icon>
-            Documents
+            <vaadin-icon icon="vaadin:area-select" slot="prefix"></vaadin-icon>
+            Integrations
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>
-            <vaadin-icon src="./assets/lucide-icons/calendar.svg" slot="prefix"></vaadin-icon>
-            Calendar
+            <vaadin-icon icon="vaadin:invoice" slot="prefix"></vaadin-icon>
+            Billing
           </vaadin-side-nav-item>
         </vaadin-side-nav>
 
+        <hr>
+
         <vaadin-side-nav collapsible>
-          <span slot="label">Organization</span>
-
-          <vaadin-side-nav-item>
-            <vaadin-icon src="./assets/lucide-icons/chart-pie.svg" slot="prefix"></vaadin-icon>
-            Reporting
-          </vaadin-side-nav-item>
-
-          <vaadin-side-nav-item>
-            <vaadin-icon src="./assets/lucide-icons/list-todo.svg" slot="prefix"></vaadin-icon>
-            Tasks
-          </vaadin-side-nav-item>
+          <span slot="label">Users</span>
 
           <vaadin-side-nav-item>
             <vaadin-icon src="./assets/lucide-icons/users.svg" slot="prefix"></vaadin-icon>
-            Users
+            Manage
           </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:credit-card" slot="prefix"></vaadin-icon>
+            Billing
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon src="./assets/lucide-icons/user-plus.svg" slot="prefix"></vaadin-icon>
+            Invite
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:key-o" slot="prefix"></vaadin-icon>
+            API Keys
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+
+        <hr>
+
+        <vaadin-side-nav collapsible collapsed>
+          <span slot="label">Modules</span>
+        </vaadin-side-nav>
+
+        <hr>
+
+        <vaadin-side-nav collapsible collapsed>
+          <span slot="label">Extensions</span>
         </vaadin-side-nav>
       </vaadin-scroller>
 
@@ -441,417 +145,13 @@
           <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh" slot="prefix" tabindex="-1"></vaadin-avatar>
           <span>John Smith</span>
         </vaadin-button>
-        <vaadin-button theme="tertiary" id="theme-editor-btn" aria-label="Edit Theme">
-          <vaadin-icon src="./assets/lucide-icons/palette.svg"></vaadin-icon>
-          <vaadin-tooltip slot="tooltip" text="Edit Theme"></vaadin-tooltip>
-        </vaadin-button>
-        <vaadin-popover for="theme-editor-btn" position="top-start" width="320px" theme="small">
-          <vaadin-vertical-layout
-            class="editor"
-            theme="padding"
-            style="gap: var(--vaadin-gap-xl); align-items: stretch"
-          >
-            <h3>Edit Theme</h3>
-            <vaadin-checkbox label="Use Navbar" id="useNavbar"></vaadin-checkbox>
-            <aura-scheme-control property="color-scheme" label="color-scheme"></aura-scheme-control>
-            <aura-scheme-control
-              property="--aura-content-color-scheme"
-              label="--aura-content-color-scheme"
-            ></aura-scheme-control>
-            <aura-scheme-control
-              property="--aura-notification-color-scheme"
-              label="--aura-notification-color-scheme"
-            ></aura-scheme-control>
-            <aura-color-control
-              property="--aura-accent-color-light"
-              label="--aura-accent-color-light"
-            ></aura-color-control>
-            <aura-color-control
-              property="--aura-background-color-light"
-              label="--aura-background-color-light"
-            ></aura-color-control>
-            <aura-color-control
-              property="--aura-accent-color-dark"
-              label="--aura-accent-color-dark"
-            ></aura-color-control>
-            <aura-color-control
-              property="--aura-background-color-dark"
-              label="--aura-background-color-dark"
-            ></aura-color-control>
-            <aura-number-control property="--aura-contrast-level" min="0" max="2" step="0.1"></aura-number-control>
-            <aura-number-control property="--aura-surface-level" min="-2" max="2" step="0.1"></aura-number-control>
-            <aura-number-control
-              property="--aura-overlay-surface-opacity"
-              min="0.5"
-              max="1"
-              step="0.01"
-            ></aura-number-control>
-            <aura-inset-control></aura-inset-control>
-            <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
-            <aura-number-control property="--aura-base-size" min="12" max="20"></aura-number-control>
-            <aura-number-control
-              property="--aura-base-font-size"
-              label="--aura-base-font-size"
-              min="12"
-              max="18"
-            ></aura-number-control>
-            <aura-font-family-control label="--aura-font-family"></aura-font-family-control>
-            <hr />
-            <vaadin-button id="resetAll">
-              <vaadin-icon src="./assets/lucide-icons/rotate-ccw.svg" slot="prefix"></vaadin-icon>
-              Reset All
-            </vaadin-button>
-          </vaadin-vertical-layout>
-        </vaadin-popover>
+        <aura-theme-editor></aura-theme-editor>
       </footer>
 
-      <vaadin-master-detail-layout master-min-size="14rem" detail-min-size="40rem" class="dashboard-section">
-        <div class="aura-view">
-          <header>
-            <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
-            <h1>Dashboard</h1>
-          </header>
-          <vaadin-scroller theme="overflow-indicators">
-            <vaadin-side-nav theme="filled accent">
-              <vaadin-side-nav-item path="#components">
-                <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
-                <span>Components</span>
-                <span class="aura-badge aura-accent-color" slot="suffix" aria-label="(2 new items)">2</span>
-              </vaadin-side-nav-item>
-              <vaadin-side-nav-item>
-                <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
-                <span>Grid View</span>
-              </vaadin-side-nav-item>
-              <vaadin-side-nav-item>
-                <vaadin-icon src="./assets/lucide-icons/chart-pie.svg" slot="prefix"></vaadin-icon>
-                <span>Reporting</span>
-              </vaadin-side-nav-item>
-              <vaadin-side-nav-item>
-                <vaadin-icon src="./assets/lucide-icons/cog.svg" slot="prefix"></vaadin-icon>
-                <span>Settings</span>
-                <vaadin-side-nav-item slot="children">
-                  <span>Account</span>
-                </vaadin-side-nav-item>
-                <vaadin-side-nav-item slot="children">
-                  <span>Preferences</span>
-                </vaadin-side-nav-item>
-                <vaadin-side-nav-item slot="children">
-                  <span>Subscription</span>
-                </vaadin-side-nav-item> </vaadin-side-nav-item
-              ><vaadin-side-nav-item>
-                <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="prefix"></vaadin-icon>
-                <span>Support</span>
-                <span class="aura-badge aura-accent-green" slot="suffix">Online</span>
-              </vaadin-side-nav-item>
-            </vaadin-side-nav>
-          </vaadin-scroller>
-        </div>
+      <main style="height: 100%;">
+        <dashboard-view></dashboard-view>
+      </main>
 
-        <main class="aura-view" slot="detail">
-          <header>
-            <mdl-back-button></mdl-back-button>
-            <h1>Components</h1>
-          </header>
-          <vaadin-scroller theme="overflow-indicators">
-            <style>
-              .components-view {
-                container-type: inline-size;
-                container-name: kitchen-sink;
-              }
-
-              .components-view .grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                grid-auto-flow: dense;
-                --vaadin-field-default-width: 100%;
-                align-items: stretch;
-                gap: var(--vaadin-gap-s);
-                padding: var(--vaadin-padding-l) var(--vaadin-padding-xs);
-                padding-top: 0;
-              }
-
-              .components-view .component {
-                display: flex;
-                height: 200px;
-                align-items: center;
-                justify-content: center;
-                border-radius: var(--vaadin-radius-m);
-                border: 1px solid var(--vaadin-border-color-secondary);
-                gap: var(--vaadin-gap-s);
-                padding: var(--vaadin-padding-l);
-                box-sizing: border-box;
-                position: relative;
-                overflow: hidden;
-                background: var(--aura-surface-color);
-                --aura-surface-level: 3;
-                background-clip: padding-box;
-              }
-
-              .components-view .component.column {
-                flex-direction: column;
-              }
-
-              .components-view .component.tall {
-                height: 100%;
-                min-height: calc(400px + var(--vaadin-gap-s));
-                grid-row: auto / span 2;
-              }
-
-              @container kitchen-sink (min-width: 400px) {
-                .components-view .component.wide,
-                .components-view .component.widest {
-                  grid-column: auto / span 2;
-                }
-              }
-
-              @container kitchen-sink (min-width: 600px) {
-                .components-view .component.widest {
-                  grid-column: auto / span 3;
-                }
-              }
-
-              .components-view .component.no-padding {
-                padding: 0;
-              }
-
-              .components-view .badges {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: var(--vaadin-gap-s);
-              }
-
-              .components-view .sizes {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-              }
-
-              .components-view .sizes > div {
-                background: var(--aura-accent-color);
-                height: 4px;
-                width: var(--size);
-              }
-            </style>
-            <div class="components-view">
-              <div class="grid">
-                <div class="aura-surface component wide">
-                  <vaadin-button theme="primary">Primary</vaadin-button>
-                  <vaadin-button>Default</vaadin-button>
-                  <vaadin-button theme="tertiary">Tertiary</vaadin-button>
-                </div>
-
-                <div class="aura-surface component">
-                  <div class="flex justify-center">
-                    <vaadin-button id="showNotificationBtn">
-                      <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
-                      Show Notification
-                    </vaadin-button>
-                  </div>
-                </div>
-
-                <div class="aura-surface component wide tall">
-                  <div class="badges">
-                    <span class="aura-badge aura-accent-color">Accent</span>
-                    <span class="aura-badge aura-accent-neutral">Neutral</span>
-                    <span class="aura-badge aura-accent-red">Red</span>
-                    <span class="aura-badge aura-accent-orange">Orange</span>
-                    <span class="aura-badge aura-accent-yellow">Yellow</span>
-                    <span class="aura-badge aura-accent-green">Green</span>
-                    <span class="aura-badge aura-accent-blue">Blue</span>
-                    <span class="aura-badge aura-accent-purple">Purple</span>
-                  </div>
-
-                  <div class="badges">
-                    <span class="aura-badge aura-badge-filled">Accent</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-neutral">Neutral</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-red">Red</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-orange">Orange</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-yellow">Yellow</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-green">Green</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-blue">Blue</span>
-                    <span class="aura-badge aura-badge-filled aura-accent-purple">Purple</span>
-                  </div>
-
-                  <div class="badges">
-                    <span class="aura-badge aura-accent-color">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-neutral">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-red">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-orange">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-yellow">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-green">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-blue">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-accent-purple">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                  </div>
-
-                  <div class="badges">
-                    <span class="aura-badge aura-badge-filled">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-neutral">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-red">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-orange">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-yellow">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-green">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-blue">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                    <span class="aura-badge aura-badge-filled aura-accent-purple">
-                      <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-radio-group label="Options">
-                    <vaadin-radio-button label="Option 1" value="1" checked></vaadin-radio-button>
-                    <vaadin-radio-button label="Option 2" value="2"></vaadin-radio-button>
-                    <vaadin-radio-button label="Option 3" value="3"></vaadin-radio-button>
-                  </vaadin-radio-group>
-                </div>
-
-                <div class="aura-surface component column">
-                  <vaadin-menu-bar></vaadin-menu-bar>
-                  <vaadin-checkbox id="filled-menu-bar" label="Filled">
-                    <vaadin-tooltip slot="tooltip" text="Apply the filled variant on the menu items"></vaadin-tooltip>
-                  </vaadin-checkbox>
-                </div>
-
-                <div class="aura-surface component wide">
-                  <vaadin-tabs>
-                    <vaadin-tab>Details<span class="aura-badge aura-accent-color">2</span></vaadin-tab>
-                    <vaadin-tab>Preferences</vaadin-tab>
-                    <vaadin-tab>Settings</vaadin-tab>
-                  </vaadin-tabs>
-                </div>
-
-                <div class="aura-surface component wide">
-                  <vaadin-date-time-picker style="width: 20em" value="2025-09-09T12:00"></vaadin-date-time-picker>
-                </div>
-
-                <div class="aura-surface component">
-                  <div class="sizes">
-                    <h5>Sizes</h5>
-                    <div class="xs" style="--size: var(--vaadin-padding-xs)"></div>
-                    <div class="s" style="--size: var(--vaadin-padding-s)"></div>
-                    <div class="m" style="--size: var(--vaadin-padding-m)"></div>
-                    <div class="l" style="--size: var(--vaadin-padding-l)"></div>
-                    <div class="xl" style="--size: var(--vaadin-padding-xl)"></div>
-                  </div>
-                </div>
-
-                <div class="aura-surface component wide tall">
-                  <vaadin-rich-text-editor placeholder="Write something…"></vaadin-rich-text-editor>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-checkbox-group label="Options">
-                    <vaadin-checkbox label="Option 1" value="1" checked></vaadin-checkbox>
-                    <vaadin-checkbox label="Option 2" value="2"></vaadin-checkbox>
-                    <vaadin-checkbox label="Option 3" value="3"></vaadin-checkbox>
-                  </vaadin-checkbox-group>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-combo-box item-label-path="name" item-value-path="id" label="Country"></vaadin-combo-box>
-                </div>
-
-                <div class="aura-surface component">
-                  <div class="type-scale" style="font-weight: var(--aura-font-weight-semibold)">
-                    <div style="font-size: var(--aura-font-size-xl); line-height: var(--aura-line-height-xl)">
-                      Heading
-                    </div>
-                    <div style="font-size: var(--aura-font-size-l); line-height: var(--aura-line-height-l)">
-                      Heading
-                    </div>
-                    <div style="font-size: var(--aura-font-size-m); line-height: var(--aura-line-height-m)">
-                      Heading
-                    </div>
-                    <div style="font-size: var(--aura-font-size-s); line-height: var(--aura-line-height-x)">
-                      Heading
-                    </div>
-                    <div style="font-size: var(--aura-font-size-xs); line-height: var(--aura-line-height-xs)">
-                      Heading
-                    </div>
-                  </div>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-select label="Options"></vaadin-select>
-                </div>
-
-                <div class="aura-surface component widest tall no-padding">
-                  <vaadin-grid theme="no-border">
-                    <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-                    <vaadin-grid-column class="avatar" auto-width flex-grow="0"></vaadin-grid-column>
-                    <vaadin-grid-column path="name"></vaadin-grid-column>
-                    <vaadin-grid-column path="email"></vaadin-grid-column>
-                    <vaadin-grid-column header="Status"></vaadin-grid-column>
-                  </vaadin-grid>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-avatar-group></vaadin-avatar-group>
-                </div>
-
-                <div class="aura-surface component tall wide column">
-                  <vaadin-message-list></vaadin-message-list>
-                  <vaadin-message-input></vaadin-message-input>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-text-field clear-button-visible value="Projects">
-                    <vaadin-icon src="./assets/lucide-icons/folder.svg" slot="prefix"></vaadin-icon>
-                  </vaadin-text-field>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-progress-bar value="0.5"></vaadin-progress-bar>
-                </div>
-
-                <div class="aura-surface component">
-                  <vaadin-multi-select-combo-box
-                    class="Countries"
-                    class="w-full"
-                    item-label-path="name"
-                    item-value-path="id"
-                  ></vaadin-multi-select-combo-box>
-                </div>
-              </div>
-            </div>
-          </vaadin-scroller>
-          <footer style="display: flex; justify-content: space-between">
-            <span theme="small">20 components</span>
-            <vaadin-button theme="small">Browse…</vaadin-button>
-          </footer>
-        </main>
-      </vaadin-master-detail-layout>
     </vaadin-app-layout>
   </body>
 </html>
