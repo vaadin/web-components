@@ -10,6 +10,10 @@
   --vaadin-button-text-color: var(--aura-accent-text-color);
 }
 
+vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
+  opacity: 0.6;
+}
+
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='tertiary'])) {
   --aura-surface-level: 6;
   --aura-surface-opacity: 0.3;
