@@ -22,8 +22,12 @@ export const uploadFileListStyles = css`
     padding: 0;
   }
 
-  ::slotted(:first-child) {
+  :host(:not([file-list-above])) ::slotted(:first-child) {
     margin-top: var(--vaadin-upload-gap, var(--vaadin-gap-s));
+  }
+
+  :host([file-list-above]) ::slotted(:last-child) {
+    margin-bottom: var(--vaadin-upload-gap, var(--vaadin-gap-s));
   }
 
   ::slotted(li:not(:last-of-type)) {
