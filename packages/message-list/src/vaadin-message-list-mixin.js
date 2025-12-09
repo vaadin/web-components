@@ -28,9 +28,18 @@ export const MessageListMixin = (superClass) =>
          *   userImg: string,
          *   userColorIndex: number,
          *   className: string,
-         *   theme: string
+         *   theme: string,
+         *   attachments: Array<{
+         *     name: string,
+         *     url: string,
+         *     type: string
+         *   }>
          * }>
          * ```
+         *
+         * When a message has attachments, they are rendered in the prefix slot by default.
+         * Image attachments (type starting with "image/") show a thumbnail preview,
+         * while other attachments show a document icon with the file name.
          */
         items: {
           type: Array,
@@ -178,7 +187,7 @@ export const MessageListMixin = (superClass) =>
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
                 >${this.prefixRenderer
                   ? html`<div slot="prefix" ${ref((el) => this._renderPrefix(el, item, index))}></div>`
-                  : ''}${this.markdown
+                  : this.__renderDefaultAttachments(item)}${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
                   : item.text}${this.suffixRenderer
                   ? html`<div slot="suffix" ${ref((el) => this._renderSuffix(el, item, index))}></div>`
@@ -204,6 +213,60 @@ export const MessageListMixin = (superClass) =>
       if (root && this.suffixRenderer) {
         this.suffixRenderer(root, item, { index });
       }
+    }
+
+    /**
+     * Renders default attachment display when no custom prefixRenderer is set.
+     * @param {Object} item - The message item
+     * @return {import('lit').TemplateResult | string}
+     * @private
+     */
+    __renderDefaultAttachments(item) {
+      const attachments = item.attachments;
+      if (!attachments || attachments.length === 0) {
+        return '';
+      }
+
+      return html`
+        <div slot="prefix" class="vaadin-message-attachments">
+          ${attachments.map((attachment) => this.__renderAttachment(attachment))}
+        </div>
+      `;
+    }
+
+    /**
+     * Renders a single attachment.
+     * @param {Object} attachment - The attachment object with name, url, and type properties
+     * @return {import('lit').TemplateResult}
+     * @private
+     */
+    __renderAttachment(attachment) {
+      const isImage = attachment.type && attachment.type.startsWith('image/');
+
+      if (isImage) {
+        return html`
+          <a
+            class="vaadin-message-attachment vaadin-message-attachment-image"
+            href="${attachment.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="${attachment.url}" alt="${attachment.name || ''}" />
+          </a>
+        `;
+      }
+
+      return html`
+        <a
+          class="vaadin-message-attachment vaadin-message-attachment-file"
+          href="${attachment.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="vaadin-message-attachment-icon"></span>
+          <span class="vaadin-message-attachment-name">${attachment.name || attachment.url}</span>
+        </a>
+      `;
     }
 
     /** @private */
