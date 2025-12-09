@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../src/vaadin-popover.js';
@@ -358,6 +359,7 @@ describe('position', () => {
     describe('centered position with sufficient space', () => {
       beforeEach(async () => {
         // Place target in center with sufficient space
+        await setViewport({ width: 1024, height: 768 });
         const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
         const centerX = viewportWidth / 2 - 50; // Center a 100px wide element
         constraintTarget = fixtureSync(
