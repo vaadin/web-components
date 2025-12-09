@@ -98,6 +98,25 @@ export class LumoInjector {
   }
 
   /**
+   * Forces all monitored components to re-evaluate and update their
+   * injected styles.
+   *
+   * This method can be used to force LumoInjector to clean up component
+   * styles synchonously after the Lumo stylesheet has been removed from
+   * the root element.Without this, there may be a short FOUC, when the
+   * Lumo styles are already removed from the root but still present in
+   * the component Shadow DOMs, since those are removed asynchronously on
+   * `transitionstart` (CSSPropertyObserver). This is problematic for grid
+   * in particular, as that short period is enough to cause the virtualizer
+   * to create excessive rows (ResizeObserver).
+   */
+  forceUpdate() {
+    for (const tagName of this.#styleSheetsByTag.keys()) {
+      this.#updateStyleSheet(tagName);
+    }
+  }
+
+  /**
    * Adds a component to the list of elements monitored for style injection.
    * If the styles have already been detected, they are injected into the
    * component's shadow DOM immediately. Otherwise, the class watches the
