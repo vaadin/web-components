@@ -25,6 +25,30 @@ export const uploadFileStyles = css`
     display: none;
   }
 
+  /* Hide thumbnail by default, only show with thumbnails theme */
+  [part='thumbnail'] {
+    display: none;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    object-fit: cover;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  :host([theme~='thumbnails']) [part='thumbnail'] {
+    display: block;
+  }
+
+  /* Position done-icon as overlay on thumbnail */
+  :host([theme~='thumbnails']) [part='thumbnail'] ~ [part='done-icon']:not([hidden]) {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.7);
+  }
+
   [part='done-icon']:not([hidden]),
   [part='warning-icon']:not([hidden]) {
     display: flex;
