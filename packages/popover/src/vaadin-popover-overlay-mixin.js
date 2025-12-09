@@ -60,11 +60,9 @@ export const PopoverOverlayMixin = (superClass) =>
             isCentered = false;
           }
 
-          if (finalLeft >= 0) {
-            this.style.left = `${finalLeft}px`;
-            if (isCentered) {
-              this.setAttribute('arrow-centered', '');
-            }
+          this.style.left = `${Math.max(0, finalLeft)}px`;
+          if (isCentered) {
+            this.setAttribute('arrow-centered', '');
           }
         }
 
@@ -83,11 +81,9 @@ export const PopoverOverlayMixin = (superClass) =>
             isCentered = false;
           }
 
-          if (finalRight >= 0) {
-            this.style.right = `${finalRight}px`;
-            if (isCentered) {
-              this.setAttribute('arrow-centered', '');
-            }
+          this.style.right = `${Math.max(0, finalRight)}px`;
+          if (isCentered) {
+            this.setAttribute('arrow-centered', '');
           }
         }
       }
