@@ -370,11 +370,11 @@ describe('position', () => {
 
       it('should center the popover when there is sufficient space', async () => {
         const { overlayRect, targetRect } = await openAndMeasure();
-        const targetCenter = targetRect.left + targetRect.width / 2;
-        const overlayCenter = overlayRect.left + overlayRect.width / 2;
 
-        // Should be centered (within 2px tolerance for rounding)
-        expect(Math.abs(targetCenter - overlayCenter)).to.be.lessThan(2);
+        const offset = targetRect.width / 2 - overlayRect.width / 2;
+        const expectedLeft = targetRect.left + offset;
+
+        expect(overlayRect.left).to.be.closeTo(expectedLeft, 1);
       });
 
       it('should stay within viewport even when centered', async () => {
