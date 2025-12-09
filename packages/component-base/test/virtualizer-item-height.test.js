@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { idlePeriod } from '../src/async.js';
 import { Virtualizer } from '../src/virtualizer.js';
 
 async function contentUpdate() {
@@ -244,6 +245,64 @@ describe('virtualizer - item height - initial render', () => {
     it('should have created the items in the expected amount of batches', () => {
       expect(createElements.callCount).to.equal(2);
     });
+  });
+});
+
+describe('virtualizer - item height - resize with late idle callback', () => {
+  let virtualizer, scrollTarget;
+
+  beforeEach(async () => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 300px;">
+        <div class="container"></div>
+      </div>
+    `);
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => {
+        return Array.from({ length: count }, () => {
+          const el = document.createElement('div');
+          el.style.width = '100%';
+          el.style.height = '100px';
+          el.classList.add('item');
+          return el;
+        });
+      },
+      updateElement: (el, index) => {
+        el.id = `item-${index}`;
+      },
+      scrollTarget,
+      scrollContainer: scrollTarget.firstElementChild,
+    });
+    virtualizer.size = 1000;
+
+    await nextResize(scrollTarget);
+    await nextFrame();
+  });
+
+  beforeEach(() => {
+    // Simulate a late idle callback. Must be longer than (nextResize + nextFrame) * 2
+    const timeout = 200;
+    sinon.stub(idlePeriod, 'run').callsFake((callback) => setTimeout(callback, timeout));
+    sinon.stub(idlePeriod, 'cancel').callsFake((handle) => clearTimeout(handle));
+  });
+
+  afterEach(() => {
+    idlePeriod.run.restore();
+    idlePeriod.cancel.restore();
+  });
+
+  it('should keep number of physical elements reasonable when item heights decrease', async () => {
+    const itemCount = scrollTarget.querySelectorAll('.item').length;
+
+    scrollTarget.querySelector('#item-0').style.height = '10px';
+    await nextResize(scrollTarget);
+    await nextFrame();
+    scrollTarget.querySelector('#item-1').style.height = '10px';
+    await nextResize(scrollTarget);
+    await nextFrame();
+
+    expect(scrollTarget.querySelectorAll('.item').length).to.equal(itemCount + 3);
   });
 });
 
