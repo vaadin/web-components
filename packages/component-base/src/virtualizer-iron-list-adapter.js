@@ -758,7 +758,7 @@ export class IronListAdapter {
    * @override
    */
   _increasePoolIfNeeded(count) {
-    if (this._physicalCount > 2 && count) {
+    if (this._physicalCount > 2 && this._physicalAverage > 0 && count > 0) {
       // The iron-list logic has already created some physical items and
       // has decided to create more. Since each item creation round is
       // expensive, let's try to create the remaining items in one go.
