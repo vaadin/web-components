@@ -115,8 +115,31 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
 
       // Set initial messages
       list.items = [
-        createItem('Hello! Can you help me with a question?'),
-        createItem("Of course! I'm here to help. What's your question?", true),
+        {
+          text: "Can you help me analyze these Q3 financial documents? I need a summary of the key findings and any concerns you spot.",
+          time: 'Yesterday',
+          userName: 'User',
+          userColorIndex: 1,
+          attachments: [
+            { name: 'proposal.pdf', url: '#proposal.pdf', type: 'application/pdf' },
+            {
+              name: 'budget.xlsx',
+              url: '#budget.xlsx',
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            },
+            {
+              name: 'chart.png',
+              url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300',
+              type: 'image/png',
+            },
+          ],
+        },
+        {
+          text: "I've reviewed your Q3 financial documents. Here's a summary:\n\n**Key Findings:**\n- Revenue increased 12% compared to Q2\n- Operating costs remained stable\n- The chart shows positive growth trends\n\n**Concerns:**\n- Marketing spend is 15% over budget\n- Cash flow projections need revision\n\nWould you like me to elaborate on any of these points?",
+          time: 'Yesterday',
+          userName: 'Assistant',
+          userColorIndex: 2,
+        },
       ];
 
       // Handle new messages from user
