@@ -60,6 +60,15 @@ describe('upload', () => {
         ];
         await visualDiff(div, `${dir}-max-height`);
       });
+
+      it('file-list-above', async () => {
+        element.fileListAbove = true;
+        element.files = [
+          { name: 'Don Quixote.pdf', progress: 100, complete: true },
+          { name: 'Hamlet.pdf', progress: 100, complete: true },
+        ];
+        await visualDiff(div, `${dir}-file-list-above`);
+      });
     });
   });
 

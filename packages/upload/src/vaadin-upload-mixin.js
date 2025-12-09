@@ -323,6 +323,14 @@ export const UploadMixin = (superClass) =>
         },
 
         /**
+         * When true, the file list is rendered above the upload button instead of below.
+         * @type {boolean}
+         */
+        fileListAbove: {
+          type: Boolean,
+        },
+
+        /**
          * Pass-through to input's capture attribute. Allows user to trigger device inputs
          * such as camera or microphone immediately.
          */
@@ -355,6 +363,7 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
+        '__updateFileListAbove(_fileList, fileListAbove)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -563,6 +572,13 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
+      }
+    }
+
+    /** @private */
+    __updateFileListAbove(list, fileListAbove) {
+      if (list) {
+        list.toggleAttribute('file-list-above', !!fileListAbove);
       }
     }
 

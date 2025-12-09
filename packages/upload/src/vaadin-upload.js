@@ -123,6 +123,7 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   /** @protected */
   render() {
     return html`
+      ${this.fileListAbove ? html`<slot name="file-list"></slot>` : ''}
       <div part="primary-buttons">
         <slot name="add-button"></slot>
         <div part="drop-label" ?hidden="${this.nodrop}" id="dropLabelContainer" aria-hidden="true">
@@ -130,7 +131,7 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
           <slot name="drop-label"></slot>
         </div>
       </div>
-      <slot name="file-list"></slot>
+      ${!this.fileListAbove ? html`<slot name="file-list"></slot>` : ''}
       <slot></slot>
       <input
         type="file"
