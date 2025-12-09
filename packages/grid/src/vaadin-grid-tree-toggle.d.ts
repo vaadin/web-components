@@ -49,8 +49,7 @@ export * from './vaadin-grid-tree-toggle-mixin.js';
  * `expanded` | When present, the toggle is expanded
  * `leaf`     | When present, the toggle is not expandable, i. e., the current item is a leaf
  *
- * The following custom CSS properties are available on
- * the `<vaadin-grid-tree-toggle>` element:
+ * The following custom CSS properties are available for styling:
  *
  * Custom CSS property | Description | Default
  * ---|---|---
