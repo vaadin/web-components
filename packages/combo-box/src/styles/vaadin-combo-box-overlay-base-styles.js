@@ -32,7 +32,7 @@ export const comboBoxOverlayStyles = [
     @media (forced-colors: active) {
       [part='loader'] {
         forced-color-adjust: none;
-        --vaadin-combo-box-spinner-color: CanvasText;
+        --vaadin-spinner-color: CanvasText;
       }
     }
 
