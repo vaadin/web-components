@@ -20,23 +20,14 @@
         height: 100%;
       }
 
-      vaadin-scroller {
-        flex: 1;
-        scroll-snap-type: y proximity;
-      }
-
-      vaadin-scroller::after {
-        display: block;
-        content: '';
-        scroll-snap-align: end;
-        min-height: 1px;
+      vaadin-message-list {
+        flex: 1 1 auto;
       }
     </style>
 
     <script type="module">
       import '@vaadin/message-input';
       import '@vaadin/message-list';
-      import '@vaadin/scroller';
 
       /**
        * Simulates streaming text from an AI model
@@ -132,7 +123,6 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
       input.addEventListener('submit', async (e) => {
         // Add user message to the list
         list.items = [...list.items, createItem(e.detail.value)];
-        input.disabled = true;
 
         // Create empty assistant message that will be populated gradually
         const newAssistantItem = createItem('', true);
@@ -144,18 +134,14 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
             // Force UI update by creating a new array
             list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
           })
-          .onComplete(() => {
-            input.disabled = false;
-          });
+          .onComplete(() => {});
       });
     </script>
   </head>
 
   <body>
     <div id="chat">
-      <vaadin-scroller>
-        <vaadin-message-list markdown></vaadin-message-list>
-      </vaadin-scroller>
+      <vaadin-message-list markdown></vaadin-message-list>
       <vaadin-message-input></vaadin-message-input>
     </div>
   </body>
