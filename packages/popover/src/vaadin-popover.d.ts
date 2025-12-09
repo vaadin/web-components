@@ -53,7 +53,7 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  *
  * ### Custom CSS Properties
  *
- * The following custom CSS properties are available on the `<vaadin-popover>` element:
+ * The following custom CSS properties are available for styling:
  *
  * Custom CSS property              | Description
  * ---------------------------------|-------------

@@ -59,7 +59,7 @@ export interface TooltipEventMap extends HTMLElementEventMap, TooltipCustomEvent
  *
  * ### Custom CSS Properties
  *
- * The following custom CSS properties are available on the `<vaadin-tooltip>` element:
+ * The following custom CSS properties are available for styling:
  *
  * Custom CSS property              | Description
  * ---------------------------------|-------------
