@@ -29,13 +29,6 @@ export const comboBoxOverlayStyles = [
       --_items-min-height: calc(var(--vaadin-icon-size, 1lh) + 4px);
     }
 
-    @media (forced-colors: active) {
-      [part='loader'] {
-        forced-color-adjust: none;
-        --vaadin-combo-box-spinner-color: CanvasText;
-      }
-    }
-
     [part='loader'] {
       position: absolute;
       inset: calc(var(--vaadin-item-overlay-padding, 4px) + 2px);
