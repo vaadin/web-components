@@ -5,6 +5,7 @@
  */
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { ref } from 'lit/directives/ref.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 
 /**
@@ -58,6 +59,30 @@ export const MessageListMixin = (superClass) =>
           value: false,
           observer: '__announceChanged',
           sync: true,
+        },
+
+        /**
+         * A function that is called for each message item to render custom content
+         * into the prefix slot of the message. This is useful for adding attachments,
+         * charts, or other rich content above the message text.
+         *
+         * @type {function(HTMLElement, Object, Object): void}
+         */
+        prefixRenderer: {
+          type: Function,
+          observer: '__prefixRendererChanged',
+        },
+
+        /**
+         * A function that is called for each message item to render custom content
+         * into the suffix slot of the message. This is useful for adding feedback buttons,
+         * actions, or other interactive content below the message text.
+         *
+         * @type {function(HTMLElement, Object, Object): void}
+         */
+        suffixRenderer: {
+          type: Function,
+          observer: '__suffixRendererChanged',
         },
       };
     }
@@ -122,6 +147,16 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
+    __prefixRendererChanged() {
+      this._renderMessages(this.items);
+    }
+
+    /** @private */
+    __suffixRendererChanged() {
+      this._renderMessages(this.items);
+    }
+
+    /** @private */
     _renderMessages(items) {
       // Check if markdown component is still loading
       const loadingMarkdown = this.markdown && !customElements.get('vaadin-markdown');
@@ -129,7 +164,7 @@ export const MessageListMixin = (superClass) =>
       render(
         html`
           ${items.map(
-            (item) => html`
+            (item, index) => html`
               <vaadin-message
                 role="listitem"
                 .time="${item.time}"
@@ -141,9 +176,13 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
-                >${this.markdown
+                >${this.prefixRenderer
+                  ? html`<div slot="prefix" ${ref((el) => this._renderPrefix(el, item, index))}></div>`
+                  : ''}${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
-                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                  : item.text}${this.suffixRenderer
+                  ? html`<div slot="suffix" ${ref((el) => this._renderSuffix(el, item, index))}></div>`
+                  : ''}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
@@ -151,6 +190,20 @@ export const MessageListMixin = (superClass) =>
         this,
         { host: this },
       );
+    }
+
+    /** @private */
+    _renderPrefix(root, item, index) {
+      if (root && this.prefixRenderer) {
+        this.prefixRenderer(root, item, { index });
+      }
+    }
+
+    /** @private */
+    _renderSuffix(root, item, index) {
+      if (root && this.suffixRenderer) {
+        this.suffixRenderer(root, item, { index });
+      }
     }
 
     /** @private */
