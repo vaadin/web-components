@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/dialog",
-  "version": "25.0.0-beta7",
+  "version": "25.0.0-rc1",
   "publishConfig": {
     "access": "public"
   },
@@ -36,18 +36,18 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/component-base": "25.0.0-beta7",
-    "@vaadin/lit-renderer": "25.0.0-beta7",
-    "@vaadin/overlay": "25.0.0-beta7",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-beta7",
+    "@vaadin/component-base": "25.0.0-rc1",
+    "@vaadin/lit-renderer": "25.0.0-rc1",
+    "@vaadin/overlay": "25.0.0-rc1",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-rc1",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/a11y-base": "25.0.0-beta7",
-    "@vaadin/chai-plugins": "25.0.0-beta7",
-    "@vaadin/test-runner-commands": "25.0.0-beta7",
+    "@vaadin/a11y-base": "25.0.0-rc1",
+    "@vaadin/chai-plugins": "25.0.0-rc1",
+    "@vaadin/test-runner-commands": "25.0.0-rc1",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-beta7",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-rc1",
     "sinon": "^21.0.0"
   },
   "web-types": [
