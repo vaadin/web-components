@@ -29,9 +29,18 @@ export const MessageListMixin = (superClass) =>
          *   userImg: string,
          *   userColorIndex: number,
          *   className: string,
-         *   theme: string
+         *   theme: string,
+         *   attachments: Array<{
+         *     name: string,
+         *     url: string,
+         *     type: string
+         *   }>
          * }>
          * ```
+         *
+         * When a message has attachments, they are rendered in the attachments slot.
+         * Image attachments (type starting with "image/") show a thumbnail preview,
+         * while other attachments show a document icon with the file name.
          */
         items: {
           type: Array,
@@ -146,7 +155,7 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
-                >${this.markdown
+                >${this.__renderAttachments(item)}${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
                   : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
@@ -156,6 +165,60 @@ export const MessageListMixin = (superClass) =>
         this,
         { host: this },
       );
+    }
+
+    /**
+     * Renders attachments for a message item.
+     * @param {Object} item - The message item
+     * @return {import('lit').TemplateResult | string}
+     * @private
+     */
+    __renderAttachments(item) {
+      const attachments = item.attachments;
+      if (!attachments || attachments.length === 0) {
+        return '';
+      }
+
+      return html`
+        <div slot="attachments" class="vaadin-message-attachments">
+          ${attachments.map((attachment) => this.__renderAttachment(attachment))}
+        </div>
+      `;
+    }
+
+    /**
+     * Renders a single attachment.
+     * @param {Object} attachment - The attachment object with name, url, and type properties
+     * @return {import('lit').TemplateResult}
+     * @private
+     */
+    __renderAttachment(attachment) {
+      const isImage = attachment.type && attachment.type.startsWith('image/');
+
+      if (isImage) {
+        return html`
+          <a
+            class="vaadin-message-attachment vaadin-message-attachment-image"
+            href="${attachment.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="${attachment.url}" alt="${attachment.name || ''}" />
+          </a>
+        `;
+      }
+
+      return html`
+        <a
+          class="vaadin-message-attachment vaadin-message-attachment-file"
+          href="${attachment.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="vaadin-message-attachment-icon"></span>
+          <span class="vaadin-message-attachment-name">${attachment.name || attachment.url}</span>
+        </a>
+      `;
     }
 
     /** @private */
