@@ -34,6 +34,21 @@ import { detailsSummary } from './styles/vaadin-details-summary-base-styles.js';
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                        |
+ * :------------------------------------------|
+ * | `--vaadin-details-summary-background`    |
+ * | `--vaadin-details-summary-border-color`  |
+ * | `--vaadin-details-summary-border-radius` |
+ * | `--vaadin-details-summary-border-width`  |
+ * | `--vaadin-details-summary-font-size`     |
+ * | `--vaadin-details-summary-font-weight`   |
+ * | `--vaadin-details-summary-gap`           |
+ * | `--vaadin-details-summary-height`        |
+ * | `--vaadin-details-summary-padding`       |
+ * | `--vaadin-details-summary-text-color`    |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
