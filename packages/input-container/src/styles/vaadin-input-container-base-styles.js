@@ -128,14 +128,17 @@ export const inputContainerStyles = css`
 
   :host([theme~='align-end']) slot:not([name])::slotted(*) {
     text-align: end;
+    justify-content: end;
   }
 
   :host([theme~='align-left']) slot:not([name])::slotted(*) {
     text-align: left;
+    justify-content: left;
   }
 
   :host([theme~='align-right']) slot:not([name])::slotted(*) {
     text-align: right;
+    justify-content: right;
   }
 
   @media (forced-colors: active) {
