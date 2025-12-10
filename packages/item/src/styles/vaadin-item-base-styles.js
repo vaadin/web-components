@@ -13,7 +13,7 @@ export const itemStyles = css`
     box-sizing: border-box;
     cursor: var(--vaadin-clickable-cursor);
     display: flex;
-    gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-s));
+    column-gap: var(--vaadin-item-gap, var(--vaadin-gap-s));
     height: var(--vaadin-item-height, auto);
     padding: var(--vaadin-item-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
     -webkit-tap-highlight-color: transparent;
@@ -55,6 +55,9 @@ export const itemStyles = css`
 
   [part='content'] {
     flex: 1;
+    display: flex;
+    align-items: center;
+    column-gap: inherit;
   }
 
   @media (forced-colors: active) {
