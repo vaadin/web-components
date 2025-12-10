@@ -51,16 +51,23 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * -----------------|----------------------------------------
  * `position`       | Reflects the `position` property value.
  *
- * ### Custom CSS Properties
- *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property              | Description
- * ---------------------------------|-------------
- * `--vaadin-popover-offset-top`    | Used as an offset when the popover is aligned vertically below the target
- * `--vaadin-popover-offset-bottom` | Used as an offset when the popover is aligned vertically above the target
- * `--vaadin-popover-offset-start`  | Used as an offset when the popover is aligned horizontally after the target
- * `--vaadin-popover-offset-end`    | Used as an offset when the popover is aligned horizontally before the target
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * |`--vaadin-overlay-backdrop-background`  |
+ * |`--vaadin-popover-arrow-border-radius`  |
+ * |`--vaadin-popover-arrow-size`           |
+ * |`--vaadin-popover-background`           |
+ * |`--vaadin-popover-border-color`         |
+ * |`--vaadin-popover-border-radius`        |
+ * |`--vaadin-popover-border-width`         |
+ * |`--vaadin-popover-offset-bottom`        |
+ * |`--vaadin-popover-offset-end`           |
+ * |`--vaadin-popover-offset-start`         |
+ * |`--vaadin-popover-offset-top`           |
+ * |`--vaadin-popover-padding`              |
+ * |`--vaadin-popover-shadow`               |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
