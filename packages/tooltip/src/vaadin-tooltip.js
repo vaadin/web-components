@@ -49,16 +49,25 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * `markdown`       | Reflects the `markdown` property value.
  * `position`       | Reflects the `position` property value.
  *
- * ### Custom CSS Properties
- *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property              | Description
- * ---------------------------------|-------------
- * `--vaadin-tooltip-offset-top`    | Used as an offset when the tooltip is aligned vertically below the target
- * `--vaadin-tooltip-offset-bottom` | Used as an offset when the tooltip is aligned vertically above the target
- * `--vaadin-tooltip-offset-start`  | Used as an offset when the tooltip is aligned horizontally after the target
- * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
+ * Custom CSS property                |
+ * :----------------------------------|
+ * | `--vaadin-tooltip-background`    |
+ * | `--vaadin-tooltip-border-color`  |
+ * | `--vaadin-tooltip-border-radius` |
+ * | `--vaadin-tooltip-border-width`  |
+ * | `--vaadin-tooltip-font-size`     |
+ * | `--vaadin-tooltip-font-weight`   |
+ * | `--vaadin-tooltip-line-height`   |
+ * | `--vaadin-tooltip-max-width`     |
+ * | `--vaadin-tooltip-offset-bottom` |
+ * | `--vaadin-tooltip-offset-end`    |
+ * | `--vaadin-tooltip-offset-start`  |
+ * | `--vaadin-tooltip-offset-top`    |
+ * | `--vaadin-tooltip-padding`       |
+ * | `--vaadin-tooltip-shadow`        |
+ * | `--vaadin-tooltip-text-color`    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
