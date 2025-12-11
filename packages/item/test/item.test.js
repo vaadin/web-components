@@ -37,8 +37,8 @@ describe('vaadin-item', () => {
     expect(slot.parentElement).to.equal(content);
   });
 
-  it('should have a block context for content part', () => {
+  it('should have a flex container for content part', () => {
     const content = item.shadowRoot.querySelector('[part="content"]');
-    expect(getComputedStyle(content).display).to.equal('block');
+    expect(getComputedStyle(content).display).to.equal('flex');
   });
 });
