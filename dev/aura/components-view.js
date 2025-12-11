@@ -170,19 +170,24 @@ function initView(view) {
 
   // Notification
   view.querySelector('#showNotificationBtn').addEventListener('click', () => {
-    const notification = Notification.show(
-      html`<vaadin-card theme="horizontal footer-end no-frame">
-        <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="media"></vaadin-icon>
-        <div slot="title">New Message from Olivia</div>
-        <div>The AI chat UI is evolving with the integration of components…</div>
-        <vaadin-button slot="footer">Show</vaadin-button>
-        <vaadin-button slot="footer">Dismiss</vaadin-button>
-      </vaadin-card>`,
+    let notification;
+
+    const close = () => {
+      notification.close();
+    };
+
+    notification = Notification.show(
+      html`
+        <vaadin-card theme="horizontal footer-end no-frame">
+          <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="media"></vaadin-icon>
+          <div slot="title">New Message from Olivia</div>
+          <div>The AI chat UI is evolving with the integration of components…</div>
+          <vaadin-button slot="footer" @click="${close}">Show</vaadin-button>
+          <vaadin-button slot="footer" @click="${close}">Dismiss</vaadin-button>
+        </vaadin-card>
+      `,
       { duration: 0, position: 'top-end' },
     );
-    notification._overlayElement
-      .querySelectorAll('vaadin-button')
-      .forEach((button) => button.addEventListener('click', () => notification.close()));
   });
 
   // Avatar Group
