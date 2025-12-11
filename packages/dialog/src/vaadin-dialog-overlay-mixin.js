@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
@@ -90,6 +91,91 @@ export const DialogOverlayMixin = (superClass) =>
       this.shadowRoot.addEventListener('slotchange', () => {
         this.__updateOverflow();
       });
+
+      // Observe header-content and footer slots for dynamic content
+      this.__observeHeaderSlot();
+      this.__observeFooterSlot();
+    }
+
+    /** @private */
+    __observeHeaderSlot() {
+      const slot = this.shadowRoot.querySelector('slot[name="header-content"]');
+      if (slot) {
+        this.__headerSlotObserver = new SlotObserver(slot, () => {
+          this.__updateHasHeader();
+        });
+      }
+    }
+
+    /** @private */
+    __observeFooterSlot() {
+      const slot = this.shadowRoot.querySelector('slot[name="footer"]');
+      if (slot) {
+        this.__footerSlotObserver = new SlotObserver(slot, () => {
+          this.__updateHasFooter();
+        });
+      }
+    }
+
+    /** @private */
+    __hasSlottedContent(slotName) {
+      const slot = this.shadowRoot.querySelector(`slot[name="${slotName}"]`);
+      if (!slot) {
+        return false;
+      }
+
+      const nodes = slot.assignedNodes({ flatten: true });
+      return nodes.some((node) => {
+        // Ignore vaadin-dialog-content elements as they are created by renderers
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'VAADIN-DIALOG-CONTENT') {
+          return false;
+        }
+        // Ignore empty slot elements (they're just forwarding slots)
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SLOT') {
+          // Check if the slot itself has any assigned content
+          const slotElement = node;
+          const slotContent = slotElement.assignedNodes({ flatten: true });
+          if (slotContent.length === 0) {
+            return false;
+          }
+          // Check if the slot has meaningful content (excluding vaadin-dialog-content)
+          return slotContent.some((slotNode) => {
+            if (slotNode.nodeType === Node.ELEMENT_NODE) {
+              if (slotNode.tagName === 'VAADIN-DIALOG-CONTENT') {
+                return false;
+              }
+              return slotNode.hasChildNodes() || slotNode.textContent.trim().length > 0;
+            }
+            if (slotNode.nodeType === Node.TEXT_NODE) {
+              return slotNode.textContent.trim().length > 0;
+            }
+            return false;
+          });
+        }
+        // Check for element nodes with content or non-empty text nodes
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          // Check if the element has any child nodes or text content
+          return node.hasChildNodes() || node.textContent.trim().length > 0;
+        }
+        if (node.nodeType === Node.TEXT_NODE) {
+          return node.textContent.trim().length > 0;
+        }
+        return false;
+      });
+    }
+
+    /** @private */
+    __updateHasHeader() {
+      const hasSlottedHeader = this.__hasSlottedContent('header-content');
+      const hasHeader = !!this.headerRenderer || hasSlottedHeader;
+      setOverlayStateAttribute(this, 'has-header', hasHeader);
+    }
+
+    /** @private */
+    __updateHasFooter() {
+      const hasSlottedFooter = this.__hasSlottedContent('footer');
+      const hasFooter = !!this.footerRenderer || hasSlottedFooter;
+      setOverlayStateAttribute(this, 'has-footer', hasFooter);
     }
 
     /** @private */
@@ -133,8 +219,9 @@ export const DialogOverlayMixin = (superClass) =>
       this._oldOpenedFooterHeader = opened;
 
       // Set attributes here to update styles before detecting content overflow
-      setOverlayStateAttribute(this, 'has-header', !!headerRenderer);
-      setOverlayStateAttribute(this, 'has-footer', !!footerRenderer);
+      // Check both renderers and slotted content
+      this.__updateHasHeader();
+      this.__updateHasFooter();
 
       if (headerRendererChanged) {
         if (headerRenderer) {
