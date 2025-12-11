@@ -107,6 +107,53 @@ describe('dashboard', () => {
     expect(dashboard.items).to.eql([{ id: '0' }]);
   });
 
+  it('should dispatch a dashboard-item-before-remove event before removal', () => {
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-before-remove', spy);
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0].detail.item).to.eql({ id: '1' });
+    expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }, { id: '1' }]);
+  });
+
+  it('should cancel removal when preventDefault is called on dashboard-item-before-remove', () => {
+    const originalItems = dashboard.items;
+    dashboard.addEventListener('dashboard-item-before-remove', (e) => {
+      e.preventDefault();
+    });
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(dashboard.items).to.equal(originalItems);
+    expect(dashboard.items).to.eql([{ id: '0' }, { id: '1' }]);
+  });
+
+  it('should not fire dashboard-item-removed when dashboard-item-before-remove is prevented', () => {
+    const beforeRemoveSpy = sinon.spy();
+    const removedSpy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-before-remove', (e) => {
+      beforeRemoveSpy();
+      e.preventDefault();
+    });
+    dashboard.addEventListener('dashboard-item-removed', removedSpy);
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(beforeRemoveSpy).to.be.calledOnce;
+    expect(removedSpy).to.not.be.called;
+  });
+
+  it('should fire both events in correct order when not prevented', () => {
+    const beforeRemoveSpy = sinon.spy();
+    const removedSpy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-before-remove', beforeRemoveSpy);
+    dashboard.addEventListener('dashboard-item-removed', removedSpy);
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(beforeRemoveSpy).to.be.calledOnce;
+    expect(removedSpy).to.be.calledOnce;
+    expect(beforeRemoveSpy).to.have.been.calledBefore(removedSpy);
+  });
+
   it('should dispatch an dashboard-item-removed event', () => {
     const spy = sinon.spy();
     dashboard.addEventListener('dashboard-item-removed', spy);

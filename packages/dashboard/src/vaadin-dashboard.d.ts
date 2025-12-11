@@ -86,6 +86,15 @@ export type DashboardItemResizedEvent<TItem extends DashboardItem> = CustomEvent
 }>;
 
 /**
+ * Fired before an item is removed. Calling preventDefault() on the event will cancel the removal.
+ */
+export type DashboardItemBeforeRemoveEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem | DashboardSectionItem<TItem>;
+
+  items: Array<TItem | DashboardSectionItem<TItem>>;
+}>;
+
+/**
  * Fired when an item was removed
  */
 export type DashboardItemRemovedEvent<TItem extends DashboardItem> = CustomEvent<{
@@ -122,6 +131,8 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-moved': DashboardItemMovedEvent<TItem>;
 
   'dashboard-item-resized': DashboardItemResizedEvent<TItem>;
+
+  'dashboard-item-before-remove': DashboardItemBeforeRemoveEvent<TItem>;
 
   'dashboard-item-removed': DashboardItemRemovedEvent<TItem>;
 

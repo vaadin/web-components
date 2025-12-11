@@ -5,6 +5,7 @@ import type {
   Dashboard,
   DashboardI18n,
   DashboardItem,
+  DashboardItemBeforeRemoveEvent,
   DashboardItemMovedEvent,
   DashboardItemMoveModeChangedEvent,
   DashboardItemRemovedEvent,
@@ -87,6 +88,13 @@ narrowedDashboard.addEventListener('dashboard-item-moved', (event) => {
 narrowedDashboard.addEventListener('dashboard-item-resized', (event) => {
   assertType<DashboardItemResizedEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem>(event.detail.item);
+  assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-before-remove', (event) => {
+  assertType<DashboardItemBeforeRemoveEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
+  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
 });
 

@@ -93,6 +93,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  *
  * @fires {CustomEvent} dashboard-item-moved - Fired when an item was moved
  * @fires {CustomEvent} dashboard-item-resized - Fired when an item was resized
+ * @fires {CustomEvent} dashboard-item-before-remove - Fired before an item is removed. Calling preventDefault() on the event will cancel the removal.
  * @fires {CustomEvent} dashboard-item-removed - Fired when an item was removed
  * @fires {CustomEvent} dashboard-item-selected-changed - Fired when an item selected state changed
  * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed
@@ -427,12 +428,24 @@ class Dashboard extends DashboardLayoutMixin(
     e.stopImmediatePropagation();
     const item = getElementItem(e.target);
     const items = getItemsArrayOfItem(item, this.items);
+
+    // Fire before-remove event
+    const beforeRemoveEvent = new CustomEvent('dashboard-item-before-remove', {
+      cancelable: true,
+      detail: { item, items: [...this.items] },
+    });
+    this.dispatchEvent(beforeRemoveEvent);
+
+    // Check if removal was prevented
+    if (beforeRemoveEvent.defaultPrevented) {
+      return;
+    }
+
+    // Proceed with removal
     items.splice(items.indexOf(item), 1);
     this.items = [...this.items];
     this.toggleAttribute('item-selected', false);
-    this.dispatchEvent(
-      new CustomEvent('dashboard-item-removed', { cancelable: true, detail: { item, items: this.items } }),
-    );
+    this.dispatchEvent(new CustomEvent('dashboard-item-removed', { detail: { item, items: this.items } }));
   }
 
   /** @private */
@@ -514,6 +527,15 @@ class Dashboard extends DashboardLayoutMixin(
    * Fired when an item was resized
    *
    * @event dashboard-item-resized
+   */
+
+  /**
+   * Fired before an item is removed
+   *
+   * @event dashboard-item-before-remove
+   * @param {Object} detail
+   * @param {Object} detail.item the item to be removed
+   * @param {Array} detail.items the current items array
    */
 
   /**
