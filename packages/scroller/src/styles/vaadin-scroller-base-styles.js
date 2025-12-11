@@ -58,14 +58,12 @@ export const scrollerStyles = css`
 
   :host::before {
     top: calc(var(--vaadin-scroller-padding-block) * -1);
-    margin-top: calc(var(--vaadin-scroller-padding-block) * -1);
-    margin-bottom: calc(var(--vaadin-scroller-padding-block) - var(--_indicator-height));
+    margin-bottom: calc(var(--_indicator-height) * -1);
   }
 
   :host::after {
     bottom: calc(var(--vaadin-scroller-padding-block) * -1);
     margin-top: calc(var(--_indicator-height) * -1);
-    margin-bottom: calc(var(--vaadin-scroller-padding-block) * -1);
   }
 
   :host([overflow~='top'])::before {
