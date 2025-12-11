@@ -51,7 +51,16 @@
     <vaadin-app-layout>
       <header slot="drawer" class="aura-view-header">
         <!-- TODO need to figure out a way to align things in the header with the side nav items. CSS subgrid perhaps? -->
-        <vaadin-avatar theme="vaadin square filled" style="--vaadin-avatar-size: 1.25lh; margin-inline: calc(var(--vaadin-padding-inline-container) - var(--vaadin-side-nav-item-border-width) - (var(--vaadin-avatar-size) - var(--vaadin-icon-size, 1lh)) / 2);"></vaadin-avatar>
+        <vaadin-avatar
+          theme="vaadin square filled"
+          style="
+            --vaadin-avatar-size: 1.25lh;
+            margin-inline: calc(
+              var(--vaadin-padding-inline-container) - var(--vaadin-side-nav-item-border-width) -
+                (var(--vaadin-avatar-size) - var(--vaadin-icon-size, 1lh)) / 2
+            );
+          "
+        ></vaadin-avatar>
         <div class="aura-view-heading">Aura</div>
         <vaadin-drawer-toggle theme="tertiary permanent"></vaadin-drawer-toggle>
       </header>
@@ -64,7 +73,7 @@
           </vaadin-side-nav-item>
         </vaadin-side-nav>
 
-        <hr>
+        <hr />
 
         <vaadin-side-nav collapsible>
           <span slot="label">Dashboard</span>
@@ -101,7 +110,7 @@
           </vaadin-side-nav-item>
         </vaadin-side-nav>
 
-        <hr>
+        <hr />
 
         <vaadin-side-nav collapsible>
           <span slot="label">Users</span>
@@ -127,13 +136,13 @@
           </vaadin-side-nav-item>
         </vaadin-side-nav>
 
-        <hr>
+        <hr />
 
         <vaadin-side-nav collapsible collapsed>
           <span slot="label">Modules</span>
         </vaadin-side-nav>
 
-        <hr>
+        <hr />
 
         <vaadin-side-nav collapsible collapsed>
           <span slot="label">Extensions</span>
@@ -148,10 +157,9 @@
         <aura-theme-editor></aura-theme-editor>
       </footer>
 
-      <main style="height: 100%;">
+      <main style="height: 100%">
         <dashboard-view></dashboard-view>
       </main>
-
     </vaadin-app-layout>
   </body>
 </html>
