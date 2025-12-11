@@ -1,9 +1,3 @@
-vaadin-select-item::part(content) {
-  display: flex;
-  align-items: center;
-  gap: inherit;
-}
-
 vaadin-select-value-button {
   font-weight: var(--aura-font-weight-medium);
 }
