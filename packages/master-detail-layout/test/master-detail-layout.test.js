@@ -144,6 +144,23 @@ describe('vaadin-master-detail-layout', () => {
         expect(layout.offsetWidth).to.equal(480);
         expect(master.offsetWidth).to.equal(layout.offsetWidth);
       });
+
+      it('should expand master to fill layout when detail is removed with masterSize set', async () => {
+        layout.masterSize = '400px';
+        await nextRender();
+
+        // Master should have fixed width when detail is present
+        expect(master.offsetWidth).to.equal(400);
+
+        // Remove detail
+        detailContent.remove();
+        await nextRender();
+
+        // Master should expand to fill layout when detail is removed
+        expect(layout.hasAttribute('has-detail')).to.be.false;
+        expect(master.offsetWidth).to.equal(layout.offsetWidth);
+        expect(master.offsetWidth).to.be.greaterThan(400);
+      });
     });
 
     describe('vertical', () => {
