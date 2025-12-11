@@ -92,6 +92,8 @@ export type DashboardItemBeforeRemoveEvent<TItem extends DashboardItem> = Custom
   item: TItem | DashboardSectionItem<TItem>;
 
   items: Array<TItem | DashboardSectionItem<TItem>>;
+
+  section: DashboardSectionItem<TItem> | undefined;
 }>;
 
 /**
@@ -101,6 +103,8 @@ export type DashboardItemRemovedEvent<TItem extends DashboardItem> = CustomEvent
   item: TItem | DashboardSectionItem<TItem>;
 
   items: Array<TItem | DashboardSectionItem<TItem>>;
+
+  section: DashboardSectionItem<TItem> | undefined;
 }>;
 
 /**

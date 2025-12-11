@@ -428,11 +428,12 @@ class Dashboard extends DashboardLayoutMixin(
     e.stopImmediatePropagation();
     const item = getElementItem(e.target);
     const items = getItemsArrayOfItem(item, this.items);
+    const section = this.items.find((i) => i.items && i.items.includes(item));
 
     // Fire before-remove event
     const beforeRemoveEvent = new CustomEvent('dashboard-item-before-remove', {
       cancelable: true,
-      detail: { item, items: [...this.items] },
+      detail: { item, items: [...this.items], section },
     });
     this.dispatchEvent(beforeRemoveEvent);
 
@@ -445,7 +446,7 @@ class Dashboard extends DashboardLayoutMixin(
     items.splice(items.indexOf(item), 1);
     this.items = [...this.items];
     this.toggleAttribute('item-selected', false);
-    this.dispatchEvent(new CustomEvent('dashboard-item-removed', { detail: { item, items: this.items } }));
+    this.dispatchEvent(new CustomEvent('dashboard-item-removed', { detail: { item, items: this.items, section } }));
   }
 
   /** @private */

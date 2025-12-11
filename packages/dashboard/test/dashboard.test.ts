@@ -115,6 +115,27 @@ describe('dashboard', () => {
     expect(spy).to.be.calledOnce;
     expect(spy.firstCall.args[0].detail.item).to.eql({ id: '1' });
     expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }, { id: '1' }]);
+    expect(spy.firstCall.args[0].detail.section).to.be.undefined;
+  });
+
+  it('should include section in dashboard-item-before-remove event for nested items', async () => {
+    const sectionItem: DashboardSectionItem<TestDashboardItem> = {
+      title: 'Section',
+      items: [{ id: '2' }, { id: '3' }],
+    };
+    dashboard.items = [{ id: '0' }, { id: '1' }, sectionItem];
+    await updateComplete(dashboard);
+
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-before-remove', spy);
+    const widget = getElementFromCell(dashboard, 1, 0);
+    const section = widget?.closest('vaadin-dashboard-section');
+    expect(section).to.be.ok;
+    getRemoveButton(widget as DashboardWidget).click();
+
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0].detail.item).to.eql({ id: '2' });
+    expect(spy.firstCall.args[0].detail.section).to.equal(sectionItem);
   });
 
   it('should cancel removal when preventDefault is called on dashboard-item-before-remove', () => {
@@ -162,6 +183,27 @@ describe('dashboard', () => {
     expect(spy).to.be.calledOnce;
     expect(spy.firstCall.args[0].detail.item).to.eql({ id: '1' });
     expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }]);
+    expect(spy.firstCall.args[0].detail.section).to.be.undefined;
+  });
+
+  it('should include section in dashboard-item-removed event for nested items', async () => {
+    const sectionItem: DashboardSectionItem<TestDashboardItem> = {
+      title: 'Section',
+      items: [{ id: '2' }, { id: '3' }],
+    };
+    dashboard.items = [{ id: '0' }, { id: '1' }, sectionItem];
+    await updateComplete(dashboard);
+
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-removed', spy);
+    const widget = getElementFromCell(dashboard, 1, 0);
+    const section = widget?.closest('vaadin-dashboard-section');
+    expect(section).to.be.ok;
+    getRemoveButton(widget as DashboardWidget).click();
+
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0].detail.item).to.eql({ id: '2' });
+    expect(spy.firstCall.args[0].detail.section).to.equal(sectionItem);
   });
 
   it('should not dispatch an item-remove event', async () => {

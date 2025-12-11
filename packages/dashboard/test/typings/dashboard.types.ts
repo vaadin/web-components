@@ -96,6 +96,7 @@ narrowedDashboard.addEventListener('dashboard-item-before-remove', (event) => {
   assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
   assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
+  assertType<DashboardSectionItem<TestDashboardItem> | undefined>(event.detail.section);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
@@ -103,6 +104,7 @@ narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
   assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
   assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
+  assertType<DashboardSectionItem<TestDashboardItem> | undefined>(event.detail.section);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-selected-changed', (event) => {
