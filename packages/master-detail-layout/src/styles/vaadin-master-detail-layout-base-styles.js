@@ -96,17 +96,22 @@ export const masterDetailLayoutStyles = css`
     flex-basis: 50%;
   }
 
+  /* When detail is hidden, master should fill available space */
+  :host(:not([has-detail])) [part='master'] {
+    flex-basis: 100%;
+  }
+
   /* Fixed size */
   :host([has-master-size]) [part='master'],
   :host([has-detail-size]) [part='detail'] {
     flex-shrink: 0;
   }
 
-  :host([orientation='horizontal'][has-master-size][has-detail]) [part='master'] {
+  :host([orientation='horizontal'][has-master-size]) [part='master'] {
     width: var(--_master-size);
   }
 
-  :host([orientation='vertical'][has-master-size][has-detail]) [part='master'] {
+  :host([orientation='vertical'][has-master-size]) [part='master'] {
     height: var(--_master-size);
   }
 
