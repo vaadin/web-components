@@ -211,10 +211,10 @@ customElements.define(
                 </vaadin-horizontal-layout>
               </div>
 
-              <vaadin-scroller theme="overflow-indicator-top" style="--vaadin-scroller-padding-inline: 0px;">
+              <vaadin-scroller theme="overflow-indicator-top" style="--vaadin-scroller-padding-inline: 0px">
                 <vaadin-horizontal-layout
                   theme="wrap spacing"
-                  style="padding-inline: var(--vaadin-padding-m); align-items: center;"
+                  style="padding-inline: var(--vaadin-padding-m); align-items: center"
                 >
                   <vaadin-tabs selected="0">
                     <vaadin-tab>Overview</vaadin-tab>
@@ -233,7 +233,7 @@ customElements.define(
 
                 <!-- Top cards with charts -->
                 <vaadin-dashboard-layout
-                  style="--vaadin-dashboard-gap: var(--vaadin-gap-l); --vaadin-dashboard-col-max-count: 3;"
+                  style="--vaadin-dashboard-gap: var(--vaadin-gap-l); --vaadin-dashboard-col-max-count: 3"
                 >
                   <!-- Revenue Overview -->
                   <vaadin-dashboard-widget widget-title="Revenue Overview" class="kpi">
@@ -244,17 +244,17 @@ customElements.define(
                     <vaadin-chart
                       type="line"
                       additional-options='{
-                "plotOptions": {
-                  "series": {
-                    "marker": { "enabled": false }
-                  }
-                },
-                "yAxis": {
-                  "title": {
-                    "enabled": false
-                  }
-                }
-              }'
+                        "plotOptions": {
+                          "series": {
+                            "marker": { "enabled": false }
+                          }
+                        },
+                        "yAxis": {
+                          "title": {
+                            "enabled": false
+                          }
+                        }
+                      }'
                     >
                       <vaadin-chart-series
                         title="Revenue"
@@ -293,17 +293,17 @@ customElements.define(
                     <vaadin-chart
                       type="line"
                       additional-options='{
-                "plotOptions": {
-                  "series": {
-                    "marker": { "enabled": false }
-                  }
-                },
-                "yAxis": {
-                  "title": {
-                    "enabled": false
-                  }
-                }
-              }'
+                        "plotOptions": {
+                          "series": {
+                            "marker": { "enabled": false }
+                          }
+                        },
+                        "yAxis": {
+                          "title": {
+                            "enabled": false
+                          }
+                        }
+                      }'
                     >
                       <vaadin-chart-series
                         title="SMB"
@@ -346,17 +346,17 @@ customElements.define(
                     <vaadin-chart
                       type="line"
                       additional-options='{
-                "plotOptions": {
-                  "series": {
-                    "marker": { "enabled": false }
-                  }
-                },
-                "yAxis": {
-                  "title": {
-                    "enabled": false
-                  }
-                }
-              }'
+                        "plotOptions": {
+                          "series": {
+                            "marker": { "enabled": false }
+                          }
+                        },
+                        "yAxis": {
+                          "title": {
+                            "enabled": false
+                          }
+                        }
+                      }'
                     >
                       <vaadin-chart-series
                         title="Automation Engine"
@@ -389,7 +389,12 @@ customElements.define(
 
                   <vaadin-dashboard-widget
                     widget-title="Portfolio Assets"
-                    style="--vaadin-dashboard-widget-colspan: var(--vaadin-dashboard-col-max-count); --vaadin-grid-cell-background-color: transparent; --vaadin-grid-row-background-color: transparent; --vaadin-grid-background: transparent;"
+                    style="
+                      --vaadin-dashboard-widget-colspan: var(--vaadin-dashboard-col-max-count);
+                      --vaadin-grid-cell-background-color: transparent;
+                      --vaadin-grid-row-background-color: transparent;
+                      --vaadin-grid-background: transparent;
+                    "
                   >
                     <vaadin-horizontal-layout slot="header-content" theme="spacing">
                       <vaadin-text-field placeholder="Search..." clear-button-visible theme="small">
