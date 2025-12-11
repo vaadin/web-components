@@ -25,21 +25,26 @@ export const selectOverlayStyles = css`
 
   :host([theme~='align-start']) [part='overlay'] {
     text-align: start;
+    --vaadin-item-text-align: start;
   }
 
   :host([theme~='align-center']) [part='overlay'] {
     text-align: center;
+    --vaadin-item-text-align: center;
   }
 
   :host([theme~='align-end']) [part='overlay'] {
     text-align: end;
+    --vaadin-item-text-align: end;
   }
 
   :host([theme~='align-left']) [part='overlay'] {
     text-align: left;
+    --vaadin-item-text-align: left;
   }
 
   :host([theme~='align-right']) [part='overlay'] {
     text-align: right;
+    --vaadin-item-text-align: right;
   }
 `;

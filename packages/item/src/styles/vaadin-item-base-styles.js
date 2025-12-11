@@ -58,6 +58,7 @@ export const itemStyles = css`
     display: flex;
     align-items: center;
     column-gap: inherit;
+    justify-content: var(--vaadin-item-text-align, start);
   }
 
   @media (forced-colors: active) {
