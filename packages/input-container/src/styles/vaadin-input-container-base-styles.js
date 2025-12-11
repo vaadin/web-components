@@ -120,32 +120,22 @@ export const inputContainerStyles = css`
 
   :host([theme~='align-start']) slot:not([name])::slotted(*) {
     text-align: start;
-    justify-content: start;
-    --vaadin-item-text-align: start;
   }
 
   :host([theme~='align-center']) slot:not([name])::slotted(*) {
     text-align: center;
-    justify-content: center;
-    --vaadin-item-text-align: center;
   }
 
   :host([theme~='align-end']) slot:not([name])::slotted(*) {
     text-align: end;
-    justify-content: end;
-    --vaadin-item-text-align: end;
   }
 
   :host([theme~='align-left']) slot:not([name])::slotted(*) {
     text-align: left;
-    justify-content: left;
-    --vaadin-item-text-align: left;
   }
 
   :host([theme~='align-right']) slot:not([name])::slotted(*) {
     text-align: right;
-    justify-content: right;
-    --vaadin-item-text-align: right;
   }
 
   @media (forced-colors: active) {
