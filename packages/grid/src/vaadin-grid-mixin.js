@@ -486,12 +486,9 @@ export const GridMixin = (superClass) =>
         row.__detailsCell = null;
       }
 
-      // Sort columns by _order to ensure cells are added in visual order
-      const sortedColumns = columns
+      columns
         .filter((column) => !column.hidden)
-        .sort((a, b) => a._order - b._order);
-
-      sortedColumns.forEach((column, index, cols) => {
+        .forEach((column, index, cols) => {
           let cell;
 
           if (section === 'body') {

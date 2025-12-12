@@ -391,15 +391,13 @@ export const KeyboardNavigationMixin = (superClass) =>
             this.collapseItem(activeRow._item);
             return;
           }
-        } else {
+        } else if (activeCell === activeRow.firstElementChild || isDetailsCell(activeCell)) {
           // In cell focus mode
-          // Cells are physically ordered in the DOM, so first child is the first column cell
-          if (activeCell === activeRow.firstElementChild || isDetailsCell(activeCell)) {
-            // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
-            this.__rowFocusMode = true;
-            this._onRowNavigation(activeRow, 0);
-            return;
-          }
+
+          // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
+          this.__rowFocusMode = true;
+          this._onRowNavigation(activeRow, 0);
+          return;
         }
       }
 
