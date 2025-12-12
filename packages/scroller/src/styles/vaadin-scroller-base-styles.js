@@ -60,13 +60,13 @@ export const scrollerStyles = css`
   :host::before {
     top: 0;
     margin-bottom: calc(var(--_indicator-height) * -1);
-    transform: translateY(calc(var(--vaadin-scroller-padding-block) * -1));
+    translate: 0 calc(var(--vaadin-scroller-padding-block) * -1);
   }
 
   :host::after {
     bottom: 0;
     margin-top: calc(var(--_indicator-height) * -1);
-    transform: translateY(calc(var(--vaadin-scroller-padding-block) * 1));
+    translate: 0 calc(var(--vaadin-scroller-padding-block) * 1);
   }
 
   :host([overflow~='top'])::before {
