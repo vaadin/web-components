@@ -3,23 +3,6 @@ html {
   --aura-accent-color-light: var(--aura-blue);
   --aura-accent-color-dark: var(--aura-blue);
   --vaadin-user-color: var(--aura-accent-color);
-
-  /* --aura-accent-color-light: var(--aura-orange);
-  --aura-accent-color-dark: var(--aura-purple); */
-
-  /* Purple and yellow */
-  /* --aura-accent-color-light: #46229a;
-  --aura-background-color-dark: #1b0f38;
-  --aura-accent-color-dark: #ffd06b;
-  --aura-background-color-light: #ffd06b;
-  color-scheme: dark;
-  --aura-content-color-scheme: light dark; */
-
-  /* Vibrant purple */
-  /* --aura-accent-color-light: #7A02C5;
-  --aura-background-color-light: #D2ADFF;
-  --aura-accent-color-dark: #D666FF;
-  --aura-background-color-dark: #401575; */
   /* TODO how to use a different surface level in dark mode? */
 }
 
