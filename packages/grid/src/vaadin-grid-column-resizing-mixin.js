@@ -37,8 +37,11 @@ export const ColumnResizingMixin = (superClass) =>
 
         // Get the target column to resize
         while (column.localName === 'vaadin-grid-column-group') {
-          // Child columns are in DOM order, so the last visible one is the rightmost
-          column = column._childColumns.filter((column) => !column.hidden).pop();
+          column = column._childColumns
+            .slice(0)
+            .sort((a, b) => a._order - b._order)
+            .filter((column) => !column.hidden)
+            .pop();
         }
 
         const isRTL = this.__isRTL;
