@@ -479,11 +479,17 @@ export const ColumnReorderingMixin = (superClass) =>
               row.insertBefore(cellsOfFirst[i], firstCellOfSecond);
             }
           }
+
+          // Update the cached __cells array to match the new DOM order
+          if (row.__cells) {
+            row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+          }
         }
       });
 
       // Reorder cells in sizer row
-      const sizerCells = [...this.$.sizer.children];
+      const sizerRow = this.$.sizer;
+      const sizerCells = [...sizerRow.children];
       const sizerCellsOfFirst = sizerCells.filter((cell) => cellBelongsTo(cell, firstColumn));
       const sizerCellsOfSecond = sizerCells.filter((cell) => cellBelongsTo(cell, secondColumn));
 
@@ -495,13 +501,18 @@ export const ColumnReorderingMixin = (superClass) =>
           // Insert in reverse order to maintain the original order within the group
           const lastSizerCellOfFirst = sizerCellsOfFirst[sizerCellsOfFirst.length - 1];
           for (let i = sizerCellsOfSecond.length - 1; i >= 0; i--) {
-            this.$.sizer.insertBefore(sizerCellsOfSecond[i], lastSizerCellOfFirst.nextSibling);
+            sizerRow.insertBefore(sizerCellsOfSecond[i], lastSizerCellOfFirst.nextSibling);
           }
         } else {
           // Insert in reverse order to maintain the original order within the group
           for (let i = sizerCellsOfFirst.length - 1; i >= 0; i--) {
-            this.$.sizer.insertBefore(sizerCellsOfFirst[i], firstSizerCellOfSecond);
+            sizerRow.insertBefore(sizerCellsOfFirst[i], firstSizerCellOfSecond);
           }
+        }
+
+        // Update the cached __cells array to match the new DOM order
+        if (sizerRow.__cells) {
+          sizerRow.__cells = Array.from(sizerRow.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
         }
       }
     }
