@@ -393,8 +393,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           }
         } else {
           // In cell focus mode
-          const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
-          if (activeCell === activeRowCells[0] || isDetailsCell(activeCell)) {
+          // Cells are physically ordered in the DOM, so first child is the first column cell
+          if (activeCell === activeRow.firstElementChild || isDetailsCell(activeCell)) {
             // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
             this.__rowFocusMode = true;
             this._onRowNavigation(activeRow, 0);

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
@@ -399,6 +400,61 @@ describe('reordering simple grid', () => {
         dragAndDropOver(headerContent[0], getVisualCellContent(grid.$.items, 0, 1));
         expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.be.equal('Age');
         expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.be.equal('Name');
+      });
+    });
+
+    describe('tab navigation', () => {
+      beforeEach(async () => {
+        grid = fixtureSync(`
+          <vaadin-grid column-reordering-allowed>
+            <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
+            <vaadin-grid-column id="col2" header="Col2"></vaadin-grid-column>
+            <vaadin-grid-column id="col3" header="Col3"></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+
+        grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+          col.renderer = (root, column) => {
+            root.innerHTML = `<input id="input-${column.id}">`;
+          };
+        });
+
+        grid.items = [{ name: 'foo' }];
+        flushGrid(grid);
+        await aTimeout(0);
+
+        // Use visual cell content lookup like other tests do
+        headerContent = [getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1)];
+      });
+
+      it('should tab through focusable elements in visual order after reordering', async () => {
+        // Initial order: col1, col2, col3
+        // Drag col1 over col2 -> new order: col2, col1, col3
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        flushGrid(grid);
+
+        // Focus first input and tab through
+        grid.querySelector('#input-col2').focus();
+        expect(document.activeElement.id).to.equal('input-col2');
+        await sendKeys({ press: 'Tab' });
+        expect(document.activeElement.id).to.equal('input-col1');
+        await sendKeys({ press: 'Tab' });
+        expect(document.activeElement.id).to.equal('input-col3');
+      });
+
+      it('should shift+tab through focusable elements in reverse visual order after reordering', async () => {
+        // Initial order: col1, col2, col3
+        // Drag col1 over col2 -> new order: col2, col1, col3
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        flushGrid(grid);
+
+        // Focus last input and shift+tab back
+        grid.querySelector('#input-col3').focus();
+        expect(document.activeElement.id).to.equal('input-col3');
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(document.activeElement.id).to.equal('input-col1');
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(document.activeElement.id).to.equal('input-col2');
       });
     });
   });

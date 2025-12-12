@@ -446,11 +446,9 @@ export const DragAndDropMixin = (superClass) =>
     __formatDefaultTransferData(rows) {
       return rows
         .map((row) => {
+          // Cells are physically ordered in the DOM
           return Array.from(row.children)
             .filter((cell) => !cell.hidden && !cell.part.contains('details-cell'))
-            .sort((a, b) => {
-              return a._column._order > b._column._order ? 1 : -1;
-            })
             .map((cell) => cell._content.textContent.trim())
             .filter((content) => content)
             .join('\t');
