@@ -30,4 +30,19 @@ export const uploadFileListStyles = css`
     border-bottom: var(--vaadin-upload-file-list-divider-width, 1px) solid
       var(--vaadin-upload-file-list-divider-color, var(--vaadin-border-color-secondary));
   }
+
+  /* Thumbnails theme variant */
+  :host([theme~='thumbnails']) [part='list'] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vaadin-gap-s);
+  }
+
+  :host([theme~='thumbnails']) ::slotted(:first-child) {
+    margin-top: 0;
+  }
+
+  :host([theme~='thumbnails']) ::slotted(li) {
+    border-bottom: none;
+  }
 `;

@@ -354,7 +354,7 @@ export const UploadMixin = (superClass) =>
       return [
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
-        '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
+        '__updateFileList(_fileList, files, __effectiveI18n, disabled, _theme)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -563,6 +563,11 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
+        if (this._theme) {
+          list.setAttribute('theme', this._theme);
+        } else {
+          list.removeAttribute('theme');
+        }
       }
     }
 
