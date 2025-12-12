@@ -41,23 +41,50 @@ export const PopoverOverlayMixin = (superClass) =>
       if (this.position === 'bottom' || this.position === 'top') {
         const targetRect = this.positionTarget.getBoundingClientRect();
         const overlayRect = this.$.overlay.getBoundingClientRect();
+        const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
 
         const offset = targetRect.width / 2 - overlayRect.width / 2;
 
         if (this.style.left) {
-          const left = overlayRect.left + offset;
-          if (left > 0) {
-            this.style.left = `${left}px`;
-            // Center the pointer arrow horizontally
+          const centeredLeft = overlayRect.left + offset;
+
+          // Constrain to viewport bounds
+          let finalLeft = centeredLeft;
+          let isCentered = true;
+
+          if (centeredLeft < 0) {
+            finalLeft = 0;
+            isCentered = false;
+          } else if (centeredLeft + overlayRect.width > viewportWidth) {
+            finalLeft = viewportWidth - overlayRect.width;
+            isCentered = false;
+          }
+
+          const clampedLeft = isCentered ? finalLeft : Math.max(0, finalLeft);
+          this.style.left = `${clampedLeft}px`;
+          if (isCentered) {
             this.setAttribute('arrow-centered', '');
           }
         }
 
         if (this.style.right) {
-          const right = parseFloat(this.style.right) + offset;
-          if (right > 0) {
-            this.style.right = `${right}px`;
-            // Center the pointer arrow horizontally
+          const centeredRight = parseFloat(this.style.right) + offset;
+          const centeredOverlayLeft = overlayRect.left - offset;
+
+          let finalRight = centeredRight;
+          let isCentered = true;
+
+          if (centeredOverlayLeft < 0) {
+            finalRight = centeredRight + centeredOverlayLeft;
+            isCentered = false;
+          } else if (centeredOverlayLeft + overlayRect.width > viewportWidth) {
+            finalRight = centeredRight + (centeredOverlayLeft + overlayRect.width - viewportWidth);
+            isCentered = false;
+          }
+
+          const clampedRight = isCentered ? finalRight : Math.max(0, finalRight);
+          this.style.right = `${clampedRight}px`;
+          if (isCentered) {
             this.setAttribute('arrow-centered', '');
           }
         }
