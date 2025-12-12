@@ -55,3 +55,11 @@ vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
   border-radius: 50%;
   background: currentColor;
 }
+
+.aura-badge:empty {
+  padding: 0;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  inset-inline-end: 5px;
+}
