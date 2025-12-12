@@ -401,6 +401,33 @@ describe('tabsheet - lazy tabs', () => {
   });
 });
 
+describe('tabsheet - full height content', () => {
+  let tabsheet;
+
+  beforeEach(async () => {
+    tabsheet = fixtureSync(`
+      <vaadin-tabsheet style="height: 300px;">
+        <vaadin-tabs slot="tabs">
+          <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+        </vaadin-tabs>
+
+        <div tab="tab-1" style="height: 100%;">Panel 1</div>
+      </vaadin-tabsheet>
+    `);
+
+    await nextFrame();
+  });
+
+  it('should not overflow when panel has height 100%', () => {
+    const panel = tabsheet.querySelector('[tab="tab-1"]');
+    const tabsheetRect = tabsheet.getBoundingClientRect();
+    const panelRect = panel.getBoundingClientRect();
+
+    // Panel bottom should not exceed tabsheet bottom
+    expect(panelRect.bottom).to.be.at.most(tabsheetRect.bottom);
+  });
+});
+
 describe('tabsheet - tabs without ID', () => {
   let tabsheet, tabs;
 
