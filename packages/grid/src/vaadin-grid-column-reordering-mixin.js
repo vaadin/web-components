@@ -431,20 +431,13 @@ export const ColumnReorderingMixin = (superClass) =>
         return;
       }
 
-      // Check if the cells need to be swapped (second currently comes before first in DOM)
-      if (cells.indexOf(cellsOfSecond[0]) < cells.indexOf(cellsOfFirst[0])) {
-        // Move second's cells after first's cells (insert in reverse to maintain order)
-        const insertAfter = cellsOfFirst[cellsOfFirst.length - 1];
-        for (let i = cellsOfSecond.length - 1; i >= 0; i--) {
-          row.insertBefore(cellsOfSecond[i], insertAfter.nextSibling);
-        }
-      } else {
-        // Move first's cells before second's cells (insert in reverse to maintain order)
-        const insertBefore = cellsOfSecond[0];
-        for (let i = cellsOfFirst.length - 1; i >= 0; i--) {
-          row.insertBefore(cellsOfFirst[i], insertBefore);
-        }
+      // If first column's cells are already before second's, no swap needed
+      if (cells.indexOf(cellsOfFirst[0]) < cells.indexOf(cellsOfSecond[0])) {
+        return;
       }
+
+      // Move first column's cells before second column's first cell
+      cellsOfFirst.forEach((cell) => row.insertBefore(cell, cellsOfSecond[0]));
 
       // Update the cached __cells array to match the new DOM order
       row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
