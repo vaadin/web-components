@@ -48,6 +48,7 @@ export const scrollerStyles = css`
     display: block;
     opacity: 0;
     position: sticky;
+    inset: 0 calc(var(--vaadin-scroller-padding-inline) * -1);
     z-index: 9999;
     pointer-events: none;
     box-sizing: border-box;
