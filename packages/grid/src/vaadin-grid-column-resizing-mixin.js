@@ -93,7 +93,6 @@ export const ColumnResizingMixin = (superClass) =>
           column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
-        // Cells are physically ordered in the DOM
         const targetCellIndex = columnRowCells.indexOf(targetCell);
         columnRowCells.forEach((cell, index) => {
           if (index < targetCellIndex) {
