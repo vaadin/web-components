@@ -10,6 +10,7 @@ export const iconStyles = css`
     display: var(--_display-test-override, inline-flex) !important;
     justify-content: center !important;
     align-items: center !important;
+    font-size: inherit !important;
     box-sizing: border-box;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
