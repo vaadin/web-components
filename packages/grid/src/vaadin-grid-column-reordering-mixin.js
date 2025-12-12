@@ -388,75 +388,26 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
+     * Swaps column orders and physically reorders cells in all rows.
      * @param {!GridColumn} column1
      * @param {!GridColumn} column2
      * @protected
      */
     _swapColumnOrders(column1, column2) {
+      // Swap order values and determine which column should come first
       [column1._order, column2._order] = [column2._order, column1._order];
-      this.__reorderCellsOnSwap(column1, column2);
-      this._debounceUpdateFrozenColumn();
-      this._updateFirstAndLastColumn();
-    }
-
-    /**
-     * Returns whether a column belongs to a given column or column group.
-     * @param {GridColumn} column - The column to check
-     * @param {GridColumn} columnOrGroup - The column or column group
-     * @return {boolean}
-     * @private
-     */
-    __columnBelongsTo(column, columnOrGroup) {
-      if (column === columnOrGroup) {
-        return true;
-      }
-      // Check if columnOrGroup is a parent of column
-      return columnOrGroup.contains && columnOrGroup.contains(column);
-    }
-
-    /**
-     * Reorders cells within a single row to swap the positions of two column groups.
-     * @param {!HTMLElement} row
-     * @param {!GridColumn} firstColumn - column that should come first (lower _order)
-     * @param {!GridColumn} secondColumn - column that should come second (higher _order)
-     * @private
-     */
-    __reorderCellsInRow(row, firstColumn, secondColumn) {
-      const cells = [...row.children];
-      const cellBelongsTo = (cell, columnOrGroup) => this.__columnBelongsTo(cell._column, columnOrGroup);
-      const cellsOfFirst = cells.filter((cell) => cellBelongsTo(cell, firstColumn));
-      const cellsOfSecond = cells.filter((cell) => cellBelongsTo(cell, secondColumn));
-
-      if (cellsOfFirst.length === 0 || cellsOfSecond.length === 0) {
-        return;
-      }
-
-      // If first column's cells are already before second's, no swap needed
-      if (cells.indexOf(cellsOfFirst[0]) < cells.indexOf(cellsOfSecond[0])) {
-        return;
-      }
-
-      // Move first column's cells before second column's first cell
-      cellsOfFirst.forEach((cell) => row.insertBefore(cell, cellsOfSecond[0]));
-
-      // Update the cached __cells array to match the new DOM order
-      row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
-    }
-
-    /**
-     * Physically reorders cells in all rows after a column swap.
-     * @param {!GridColumn} column1
-     * @param {!GridColumn} column2
-     * @private
-     */
-    __reorderCellsOnSwap(column1, column2) {
-      // Determine which column should come first based on their new _order values
       const [firstColumn, secondColumn] = column1._order < column2._order ? [column1, column2] : [column2, column1];
 
-      // Reorder cells in header and footer rows, body rows, and sizer row
+      // Reorder cells in all rows (header, footer, body, sizer)
       [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
-        this.__reorderCellsInRow(row, firstColumn, secondColumn);
+        const cells = [...row.children];
+        const secondColFirstCell = cells.find((c) => secondColumn.contains(c._column));
+        cells.filter((c) => firstColumn.contains(c._column)).forEach((c) => row.insertBefore(c, secondColFirstCell));
+        row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
       });
+
+      this._debounceUpdateFrozenColumn();
+      this._updateFirstAndLastColumn();
     }
 
     /**
