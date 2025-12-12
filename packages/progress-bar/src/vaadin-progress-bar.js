@@ -24,24 +24,31 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------------|----------------
- * `bar` | Progress-bar's background
- * `value` | Progress-bar's foreground
+ * Part name  | Description
+ * -----------|----------------
+ * `bar`      | Progress-bar's background
+ * `value`    | Progress-bar's foreground
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ * The following custom CSS properties are available for styling:
  *
- * The following custom properties are available:
- *
- * Custom property | Description | Default
- * ----------------|-------------|-------------
- * `--vaadin-progress-value` | current progress value (between 0 and 1) | 0
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-progress-bar-animation-duration` |
+ * | `--vaadin-progress-bar-background`         |
+ * | `--vaadin-progress-bar-border-color`       |
+ * | `--vaadin-progress-bar-border-radius`      |
+ * | `--vaadin-progress-bar-border-width`       |
+ * | `--vaadin-progress-bar-height`             |
+ * | `--vaadin-progress-bar-padding`            |
+ * | `--vaadin-progress-bar-value-background`   |
  *
  * The following state attributes are available for styling:
  *
  * Attribute       | Description
  * ----------------|-------------------------------------
  * `indeterminate` | Set to an indeterminate progress bar
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
  * @extends HTMLElement
