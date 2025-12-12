@@ -45,6 +45,9 @@ const DEFAULT_I18N = {
     start: 'Start',
     remove: 'Remove',
   },
+  batch: {
+    cancelAll: 'Cancel All',
+  },
   units: {
     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
   },
@@ -328,6 +331,18 @@ export const UploadMixin = (superClass) =>
          */
         capture: String,
 
+        /**
+         * Number of files that triggers batch mode. When the number of files being uploaded
+         * exceeds this threshold, the UI switches to batch mode showing aggregated progress
+         * instead of individual file progress bars.
+         * @attr {number} batch-mode-file-count-threshold
+         * @type {number}
+         */
+        batchModeFileCountThreshold: {
+          type: Number,
+          value: 5,
+        },
+
         /** @private */
         _addButton: {
           type: Object,
@@ -347,6 +362,35 @@ export const UploadMixin = (superClass) =>
         _files: {
           type: Array,
         },
+
+        /** @private */
+        _batchTotalBytes: {
+          type: Number,
+          value: 0,
+        },
+
+        /** @private */
+        _batchLoadedBytes: {
+          type: Number,
+          value: 0,
+        },
+
+        /** @private */
+        _batchProgress: {
+          type: Number,
+          value: 0,
+        },
+
+        /** @private */
+        _batchStartTime: {
+          type: Number,
+        },
+
+        /** @private */
+        _batchProgressSamples: {
+          type: Array,
+          value: () => [],
+        },
       };
     }
 
@@ -355,6 +399,8 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
+        '__updateFileListBatchMode(_fileList, batchModeFileCountThreshold, _batchProgress)',
+        '__updateFileListBatchBytes(_fileList, _batchTotalBytes, _batchLoadedBytes, _batchProgressSamples)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -455,6 +501,7 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('file-abort', this._onFileAbort.bind(this));
       this.addEventListener('file-start', this._onFileStart.bind(this));
       this.addEventListener('file-reject', this._onFileReject.bind(this));
+      this.addEventListener('batch-cancel-all', this._onBatchCancelAll.bind(this));
       this.addEventListener('upload-start', this._onUploadStart.bind(this));
       this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
       this.addEventListener('upload-error', this._onUploadError.bind(this));
@@ -563,6 +610,23 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
+      }
+    }
+
+    /** @private */
+    __updateFileListBatchMode(list, batchModeFileCountThreshold, batchProgress) {
+      if (list) {
+        list.batchModeFileCountThreshold = batchModeFileCountThreshold;
+        list.batchProgress = batchProgress;
+      }
+    }
+
+    /** @private */
+    __updateFileListBatchBytes(list, batchTotalBytes, batchLoadedBytes, batchProgressSamples) {
+      if (list) {
+        list.batchTotalBytes = batchTotalBytes;
+        list.batchLoadedBytes = batchLoadedBytes;
+        list.batchProgressSamples = batchProgressSamples;
       }
     }
 
@@ -695,7 +759,24 @@ export const UploadMixin = (superClass) =>
         files = [files];
       }
       files = files.filter((file) => !file.complete);
-      Array.prototype.forEach.call(files, this._uploadFile.bind(this));
+      // Upload only the first file in the queue, not all at once
+      if (files.length > 0) {
+        this._uploadFile(files[0]);
+      }
+    }
+
+    /** @private */
+    _processNextFileInQueue() {
+      // Find the next file that is queued but not yet uploaded
+      // Search from the end since files are prepended (newest first)
+      // This ensures files upload in the order they were added
+      const nextFile = this.files
+        .slice()
+        .reverse()
+        .find((file) => !file.complete && !file.uploading && !file.abort);
+      if (nextFile) {
+        this._uploadFile(nextFile);
+      }
     }
 
     /** @private */
@@ -736,6 +817,7 @@ export const UploadMixin = (superClass) =>
           }
         }
 
+        this._updateBatchProgress();
         this._renderFileList();
         this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
       };
@@ -775,7 +857,10 @@ export const UploadMixin = (superClass) =>
               detail: { file, xhr },
             }),
           );
+          this._updateBatchProgress();
           this._renderFileList();
+          // Process the next file in the queue after this one completes
+          this._processNextFileInQueue();
         }
       };
 
@@ -881,7 +966,20 @@ export const UploadMixin = (superClass) =>
           file.xhr.abort();
         }
         this._removeFile(file);
+        // Process the next file in the queue after aborting this one
+        this._processNextFileInQueue();
       }
+    }
+
+    /** @private */
+    _abortAllFiles() {
+      // Abort all files in the batch
+      const filesToAbort = [...this.files];
+      filesToAbort.forEach((file) => {
+        if (!file.complete && !file.abort) {
+          this._abortFileUpload(file);
+        }
+      });
     }
 
     /** @private */
@@ -892,8 +990,51 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
+    _updateBatchProgress() {
+      // Calculate total bytes across all files
+      this._batchTotalBytes = this.files.reduce((sum, file) => sum + (file.size || 0), 0);
+
+      // Calculate loaded bytes: completed files + current file progress
+      this._batchLoadedBytes = this.files.reduce((sum, file) => {
+        if (file.complete) {
+          return sum + (file.size || 0);
+        }
+        if (file.uploading) {
+          return sum + (file.loaded || 0);
+        }
+        return sum;
+      }, 0);
+
+      // Calculate overall progress percentage
+      this._batchProgress = this._batchTotalBytes > 0 ? ~~((this._batchLoadedBytes / this._batchTotalBytes) * 100) : 0;
+
+      // Initialize start time on first upload
+      if (!this._batchStartTime && this.files.some((f) => f.uploading)) {
+        this._batchStartTime = Date.now();
+        this._batchProgressSamples = [];
+      }
+
+      // Track progress samples for speed calculation (keep last 10 seconds)
+      if (this._batchStartTime && this._batchLoadedBytes > 0) {
+        const now = Date.now();
+        this._batchProgressSamples.push({ timestamp: now, bytes: this._batchLoadedBytes });
+
+        // Remove samples older than 10 seconds
+        const tenSecondsAgo = now - 10000;
+        this._batchProgressSamples = this._batchProgressSamples.filter((sample) => sample.timestamp > tenSecondsAgo);
+      }
+
+      // Reset when all complete
+      if (this.files.length > 0 && this.files.every((f) => f.complete || f.error || f.abort)) {
+        this._batchStartTime = null;
+        this._batchProgressSamples = [];
+      }
+    }
+
+    /** @private */
     _addFiles(files) {
       Array.prototype.forEach.call(files, this._addFile.bind(this));
+      this._updateBatchProgress();
     }
 
     /**
@@ -934,7 +1075,11 @@ export const UploadMixin = (superClass) =>
       this.files = [file, ...this.files];
 
       if (!this.noAuto) {
-        this._uploadFile(file);
+        // Only start uploading if no other file is currently being uploaded
+        const isAnyFileUploading = this.files.some((f) => f.uploading);
+        if (!isAnyFileUploading) {
+          this._uploadFile(file);
+        }
       }
     }
 
@@ -1009,6 +1154,11 @@ export const UploadMixin = (superClass) =>
     /** @private */
     _onFileAbort(event) {
       this._abortFileUpload(event.detail.file);
+    }
+
+    /** @private */
+    _onBatchCancelAll() {
+      this._abortAllFiles();
     }
 
     /** @private */
