@@ -51,6 +51,16 @@ import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
  * `loading` | Set when a tab without associated content is selected
  * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                  |
+ * :------------------------------------|
+ * | `--vaadin-tabsheet-border-color`   |
+ * | `--vaadin-tabsheet-border-radius`  |
+ * | `--vaadin-tabsheet-border-width`   |
+ * | `--vaadin-tabsheet-gap`            |
+ * | `--vaadin-tabsheet-padding`        |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.

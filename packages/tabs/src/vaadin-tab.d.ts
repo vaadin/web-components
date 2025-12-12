@@ -26,6 +26,19 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `orientation`  | Set to `horizontal` or `vertical` depending on the direction of items
  * `has-tooltip`  | Set when the tab has a slotted tooltip
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property            |
+ * :------------------------------|
+ * | `--vaadin-tab-background`    |
+ * | `--vaadin-tab-border-color`  |
+ * | `--vaadin-tab-border-width`  |
+ * | `--vaadin-tab-font-size`     |
+ * | `--vaadin-tab-font-weight`   |
+ * | `--vaadin-tab-gap`           |
+ * | `--vaadin-tab-padding`       |
+ * | `--vaadin-tab-text-color`    |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class Tab extends ElementMixin(ThemableMixin(ItemMixin(HTMLElement))) {}

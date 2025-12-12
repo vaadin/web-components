@@ -56,6 +56,19 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
  * `orientation`  | Tabs disposition, valid values are `horizontal` and `vertical`
  * `overflow`     | It's set to `start`, `end`, none or both.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property              |
+ * :--------------------------------|
+ * | `--vaadin-tabs-background`     |
+ * | `--vaadin-tabs-border-color`   |
+ * | `--vaadin-tabs-border-radius`  |
+ * | `--vaadin-tabs-border-width`   |
+ * | `--vaadin-tabs-font-size`      |
+ * | `--vaadin-tabs-font-weight`    |
+ * | `--vaadin-tabs-gap`            |
+ * | `--vaadin-tabs-padding`        |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
