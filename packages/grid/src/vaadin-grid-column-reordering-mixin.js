@@ -401,8 +401,8 @@ export const ColumnReorderingMixin = (superClass) =>
       // Reorder cells in all rows (header, footer, body, sizer)
       [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
         const cells = [...row.children];
-        const secondColFirstCell = cells.find((c) => secondColumn.contains(c._column));
-        cells.filter((c) => firstColumn.contains(c._column)).forEach((c) => row.insertBefore(c, secondColFirstCell));
+        const secondColFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
+        cells.filter((cell) => firstColumn.contains(cell._column)).forEach((cell) => secondColFirstCell.before(cell));
         row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
       });
 
