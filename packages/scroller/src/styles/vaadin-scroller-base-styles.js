@@ -57,13 +57,15 @@ export const scrollerStyles = css`
   }
 
   :host::before {
-    top: calc(var(--vaadin-scroller-padding-block) * -1);
+    top: 0;
     margin-bottom: calc(var(--_indicator-height) * -1);
+    transform: translateY(calc(var(--vaadin-scroller-padding-block) * -1));
   }
 
   :host::after {
-    bottom: calc(var(--vaadin-scroller-padding-block) * -1);
+    bottom: 0;
     margin-top: calc(var(--_indicator-height) * -1);
+    transform: translateY(calc(var(--vaadin-scroller-padding-block) * 1));
   }
 
   :host([overflow~='top'])::before {
