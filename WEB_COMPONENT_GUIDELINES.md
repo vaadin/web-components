@@ -43,7 +43,7 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 **These guidelines use the pure Lit pattern for new components**, which means:
 
 ✅ **Use:**
-- Lit's native `static properties` with `reflect`, `state`, `attribute`
+- Lit's native `static properties` with `reflect`, `attribute` (use `attribute: false` for internal properties)
 - Lit lifecycle methods: `firstUpdated()`, `updated()`, `connectedCallback()`
 - Field initializers for default values
 - `updated()` for reacting to property changes
@@ -80,9 +80,9 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 ### Class Naming
 - **Element class**: PascalCase of component name
   - `vaadin-button` → `Button`
-  - `vaadin-text-field` → `TextField`
+  - `vaadin-date-picker` → `DatePicker`
 - **Mixin**: `{ComponentName}Mixin`
-  - Example: `ButtonMixin`, `TextFieldMixin`
+  - Example: `ButtonMixin`, `DatePickerMixin`
 
 ---
 
@@ -157,7 +157,6 @@ This is the core component file. Follow this exact structure:
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { {componentName}Styles } from './styles/vaadin-{name}-base-styles.js';
 import { {ComponentName}Mixin } from './vaadin-{name}-mixin.js';
@@ -213,8 +212,7 @@ class {ComponentName} extends {ComponentName}Mixin(ElementMixin(ThemableMixin(Li
        * Property description.
        * Can span multiple lines.
        *
-       * @type {boolean}
-       * @attr disabled
+       * @attr {boolean} disabled
        */
       disabled: {
         type: Boolean,
@@ -223,8 +221,6 @@ class {ComponentName} extends {ComponentName}Mixin(ElementMixin(ThemableMixin(Li
 
       /**
        * The value of the component.
-       *
-       * @type {string}
        */
       value: {
         type: String,
@@ -239,18 +235,18 @@ class {ComponentName} extends {ComponentName}Mixin(ElementMixin(ThemableMixin(Li
         <span part="label">
           <slot></slot>
         </span>
-        <slot name="tooltip"></slot>
       </div>
     `;
   }
 
   /** @protected */
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
+  firstUpdated() {
+    super.firstUpdated();
 
-    // Initialize tooltip controller
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
+    // Set default role if not provided
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'button');
+    }
   }
 
   /** @protected */
@@ -323,8 +319,8 @@ export const {ComponentName}Mixin = (superClass) =>
      *
      * @protected
      */
-    firstUpdated(changedProperties) {
-      super.firstUpdated(changedProperties);
+    firstUpdated() {
+      super.firstUpdated();
 
       // Set default role if not provided
       if (!this.hasAttribute('role')) {
@@ -374,9 +370,9 @@ class Component extends
 **For field components**, add field-specific mixins:
 
 ```javascript
-class TextField extends
-  TextFieldMixin(                        // Field-specific logic
-    InputFieldMixin(                     // Input field functionality
+class DatePicker extends
+  DatePickerMixin(                       // Component-specific logic
+    InputControlMixin(                   // Input control functionality
       ElementMixin(
         ThemableMixin(
           LitElement
@@ -399,8 +395,7 @@ static get properties() {
      * Property description goes here.
      * Can be multi-line.
      *
-     * @type {string}
-     * @attr my-property
+     * @attr {string} my-property
      */
     myProperty: {
       type: String,              // Type: String, Number, Boolean, Array, Object
@@ -410,12 +405,10 @@ static get properties() {
 
     /**
      * Internal property (not reflected).
-     *
-     * @type {boolean}
      */
     _internalProp: {
       type: Boolean,
-      state: true,               // Mark as internal reactive state
+      attribute: false,          // Disable attribute (not registered in observedAttributes)
     },
   };
 }
@@ -424,10 +417,11 @@ static get properties() {
 **Property Configuration Options:**
 - `type`: Constructor (String, Number, Boolean, Array, Object)
 - `reflect`: Boolean - sync property value to attribute
-- `attribute`: String | false - custom attribute name, or false to disable attribute
+- `attribute`: String | false - custom attribute name, or false to disable attribute (use false for internal properties)
 - `converter`: Object | Function - custom converter for attribute/property conversion
-- `state`: Boolean - mark as internal reactive state (not reflected to attribute)
 - `hasChanged`: Function - custom comparison function
+
+**Note:** While Lit supports `state: true` for internal reactive properties, the Vaadin codebase typically uses `attribute: false` instead to prevent properties from being registered in observedAttributes.
 
 **Setting Default Values:**
 ```javascript
@@ -528,12 +522,8 @@ class MyComponent extends ... {
    * Called after the first render.
    * Use for initialization that depends on the DOM being rendered.
    */
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
-
-    // Initialize controllers
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
+  firstUpdated() {
+    super.firstUpdated();
 
     // Set ARIA role if not provided
     if (!this.hasAttribute('role')) {
@@ -551,16 +541,6 @@ class MyComponent extends ... {
     if (changedProperties.has('disabled')) {
       this._updateDisabled();
     }
-  }
-
-  /**
-   * Called before update() to determine if an update is needed.
-   * Default implementation checks if any properties changed.
-   * Override to add custom logic.
-   */
-  shouldUpdate(changedProperties) {
-    // Example: only update if specific property changed
-    return changedProperties.has('value') || changedProperties.has('disabled');
   }
 }
 ```
@@ -582,8 +562,8 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 class MyComponent extends ... {
   /** @protected */
-  firstUpdated(changedProperties) {
-    super.firstUpdated(changedProperties);
+  firstUpdated() {
+    super.firstUpdated();
 
     // Tooltip support
     this._tooltipController = new TooltipController(this);
@@ -612,7 +592,6 @@ class MyComponent extends ... {
 - `SlotChildObserveController`: Observe slot children
 - `MediaQueryController`: React to media query changes
 - `OverflowController`: Detect overflow
-- `DataProviderController`: Manage data provider (for grids/lists)
 - `LabelController`: Manage label association
 - `ErrorController`: Manage error messages
 - `HelperController`: Manage helper text
@@ -768,12 +747,6 @@ packages/vaadin-lumo-styles/
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/components/{name}.css';
-
-:root::before,
-:host::before {
-  --_lumo-vaadin-{name}-inject: 1;
-  --_lumo-vaadin-{name}-inject-modules: lumo_components_{name};
-}
 ```
 
 **Theme styles** (`src/components/{name}.css`):
@@ -1635,8 +1608,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
  * The value of the component.
  * Can be any valid string.
  *
- * @type {string}
- * @attr value
+ * @attr {string} value
  */
 ```
 
@@ -1870,7 +1842,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 - Part of a form
 
 **Mixins:**
-- InputFieldMixin or TextFieldMixin
+- InputControlMixin (used by combo-box, date-picker, time-picker, etc.)
 - ValidateMixin
 - InputConstraintsMixin
 - ClearButtonMixin (if clearable)
@@ -1880,7 +1852,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 - Implement label, helper text, error message slots
 - Follow field styling conventions
 
-**Example structure:** See `packages/text-field/`
+**Example structure:** See `packages/date-picker/`, `packages/combo-box/`, or `packages/time-picker/`
 
 ### Pattern 3: Overlay Component (Popup/Dialog)
 
