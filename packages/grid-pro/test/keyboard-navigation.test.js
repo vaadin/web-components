@@ -133,11 +133,13 @@ describe('keyboard navigation', () => {
       ];
       dragAndDropOver(headerContent[0], headerContent[1]);
 
-      const firstCell = getContainerCell(grid.$.items, 1, 1);
+      // After physical DOM reordering, cells are in visual order:
+      // DOM index 0 is visually first, DOM index 1 is visually second
+      const firstCell = getContainerCell(grid.$.items, 1, 0);
       firstCell.focus();
       await sendKeys({ press: 'Enter' });
 
-      const secondCell = getContainerCell(grid.$.items, 1, 0);
+      const secondCell = getContainerCell(grid.$.items, 1, 1);
       const spy = sinon.spy(secondCell, 'focus');
       await sendKeys({ press: 'Tab' });
       expect(spy.calledOnce).to.be.true;
