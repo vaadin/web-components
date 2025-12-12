@@ -415,6 +415,42 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
+     * Reorders cells within a single row to swap the positions of two column groups.
+     * @param {!HTMLElement} row
+     * @param {!GridColumn} firstColumn - column that should come first (lower _order)
+     * @param {!GridColumn} secondColumn - column that should come second (higher _order)
+     * @private
+     */
+    __reorderCellsInRow(row, firstColumn, secondColumn) {
+      const cells = [...row.children];
+      const cellBelongsTo = (cell, columnOrGroup) => this.__columnBelongsTo(cell._column, columnOrGroup);
+      const cellsOfFirst = cells.filter((cell) => cellBelongsTo(cell, firstColumn));
+      const cellsOfSecond = cells.filter((cell) => cellBelongsTo(cell, secondColumn));
+
+      if (cellsOfFirst.length === 0 || cellsOfSecond.length === 0) {
+        return;
+      }
+
+      // Check if the cells need to be swapped (second currently comes before first in DOM)
+      if (cells.indexOf(cellsOfSecond[0]) < cells.indexOf(cellsOfFirst[0])) {
+        // Move second's cells after first's cells (insert in reverse to maintain order)
+        const insertAfter = cellsOfFirst[cellsOfFirst.length - 1];
+        for (let i = cellsOfSecond.length - 1; i >= 0; i--) {
+          row.insertBefore(cellsOfSecond[i], insertAfter.nextSibling);
+        }
+      } else {
+        // Move first's cells before second's cells (insert in reverse to maintain order)
+        const insertBefore = cellsOfSecond[0];
+        for (let i = cellsOfFirst.length - 1; i >= 0; i--) {
+          row.insertBefore(cellsOfFirst[i], insertBefore);
+        }
+      }
+
+      // Update the cached __cells array to match the new DOM order
+      row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+    }
+
+    /**
      * Physically reorders cells in all rows after a column swap.
      * @param {!GridColumn} column1
      * @param {!GridColumn} column2
@@ -424,97 +460,10 @@ export const ColumnReorderingMixin = (superClass) =>
       // Determine which column should come first based on their new _order values
       const [firstColumn, secondColumn] = column1._order < column2._order ? [column1, column2] : [column2, column1];
 
-      // Helper to check if a cell belongs to a column (handles both regular columns and column groups)
-      const cellBelongsTo = (cell, columnOrGroup) => this.__columnBelongsTo(cell._column, columnOrGroup);
-
-      // Reorder cells in header and footer rows
-      [...this.$.header.children, ...this.$.footer.children].forEach((row) => {
-        const cells = [...row.children];
-        const cellsOfFirst = cells.filter((cell) => cellBelongsTo(cell, firstColumn));
-        const cellsOfSecond = cells.filter((cell) => cellBelongsTo(cell, secondColumn));
-
-        if (cellsOfFirst.length > 0 && cellsOfSecond.length > 0) {
-          const firstCellOfSecond = cellsOfSecond[0];
-          const firstCellOfFirst = cellsOfFirst[0];
-
-          if (cells.indexOf(firstCellOfSecond) < cells.indexOf(firstCellOfFirst)) {
-            // Insert in reverse order to maintain the original order within the group
-            const lastCellOfFirst = cellsOfFirst[cellsOfFirst.length - 1];
-            for (let i = cellsOfSecond.length - 1; i >= 0; i--) {
-              row.insertBefore(cellsOfSecond[i], lastCellOfFirst.nextSibling);
-            }
-          } else {
-            // Insert in reverse order to maintain the original order within the group
-            for (let i = cellsOfFirst.length - 1; i >= 0; i--) {
-              row.insertBefore(cellsOfFirst[i], firstCellOfSecond);
-            }
-          }
-        }
+      // Reorder cells in header and footer rows, body rows, and sizer row
+      [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
+        this.__reorderCellsInRow(row, firstColumn, secondColumn);
       });
-
-      // Reorder cells in body rows - for column groups, we need to move all child column cells
-      [...this.$.items.children].forEach((row) => {
-        // Query DOM directly to get current cell order (not using cache)
-        const cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
-        // Find all cells belonging to each column/group
-        const cellsOfFirst = cells.filter((cell) => cellBelongsTo(cell, firstColumn));
-        const cellsOfSecond = cells.filter((cell) => cellBelongsTo(cell, secondColumn));
-
-        if (cellsOfFirst.length > 0 && cellsOfSecond.length > 0) {
-          const firstCellOfSecond = cellsOfSecond[0];
-          const firstCellOfFirst = cellsOfFirst[0];
-
-          // If second comes before first in DOM, we need to move second's cells after first's cells
-          if (cells.indexOf(firstCellOfSecond) < cells.indexOf(firstCellOfFirst)) {
-            // Move all cells of second column/group after the last cell of first
-            // Insert in reverse order to maintain the original order within the group
-            const lastCellOfFirst = cellsOfFirst[cellsOfFirst.length - 1];
-            for (let i = cellsOfSecond.length - 1; i >= 0; i--) {
-              row.insertBefore(cellsOfSecond[i], lastCellOfFirst.nextSibling);
-            }
-          } else {
-            // Move all cells of first column/group before the first cell of second
-            // Insert in reverse order to maintain the original order within the group
-            for (let i = cellsOfFirst.length - 1; i >= 0; i--) {
-              row.insertBefore(cellsOfFirst[i], firstCellOfSecond);
-            }
-          }
-
-          // Update the cached __cells array to match the new DOM order
-          if (row.__cells) {
-            row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
-          }
-        }
-      });
-
-      // Reorder cells in sizer row
-      const sizerRow = this.$.sizer;
-      const sizerCells = [...sizerRow.children];
-      const sizerCellsOfFirst = sizerCells.filter((cell) => cellBelongsTo(cell, firstColumn));
-      const sizerCellsOfSecond = sizerCells.filter((cell) => cellBelongsTo(cell, secondColumn));
-
-      if (sizerCellsOfFirst.length > 0 && sizerCellsOfSecond.length > 0) {
-        const firstSizerCellOfSecond = sizerCellsOfSecond[0];
-        const firstSizerCellOfFirst = sizerCellsOfFirst[0];
-
-        if (sizerCells.indexOf(firstSizerCellOfSecond) < sizerCells.indexOf(firstSizerCellOfFirst)) {
-          // Insert in reverse order to maintain the original order within the group
-          const lastSizerCellOfFirst = sizerCellsOfFirst[sizerCellsOfFirst.length - 1];
-          for (let i = sizerCellsOfSecond.length - 1; i >= 0; i--) {
-            sizerRow.insertBefore(sizerCellsOfSecond[i], lastSizerCellOfFirst.nextSibling);
-          }
-        } else {
-          // Insert in reverse order to maintain the original order within the group
-          for (let i = sizerCellsOfFirst.length - 1; i >= 0; i--) {
-            sizerRow.insertBefore(sizerCellsOfFirst[i], firstSizerCellOfSecond);
-          }
-        }
-
-        // Update the cached __cells array to match the new DOM order
-        if (sizerRow.__cells) {
-          sizerRow.__cells = Array.from(sizerRow.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
-        }
-      }
     }
 
     /**
