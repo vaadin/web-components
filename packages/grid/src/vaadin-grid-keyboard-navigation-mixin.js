@@ -391,15 +391,13 @@ export const KeyboardNavigationMixin = (superClass) =>
             this.collapseItem(activeRow._item);
             return;
           }
-        } else {
+        } else if (activeCell === activeRow.firstElementChild || isDetailsCell(activeCell)) {
           // In cell focus mode
-          const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
-          if (activeCell === activeRowCells[0] || isDetailsCell(activeCell)) {
-            // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
-            this.__rowFocusMode = true;
-            this._onRowNavigation(activeRow, 0);
-            return;
-          }
+
+          // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
+          this.__rowFocusMode = true;
+          this._onRowNavigation(activeRow, 0);
+          return;
         }
       }
 

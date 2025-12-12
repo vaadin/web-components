@@ -5,6 +5,7 @@
  */
 import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import {
+  getBodyRowCells,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
@@ -446,11 +447,8 @@ export const DragAndDropMixin = (superClass) =>
     __formatDefaultTransferData(rows) {
       return rows
         .map((row) => {
-          return Array.from(row.children)
-            .filter((cell) => !cell.hidden && !cell.part.contains('details-cell'))
-            .sort((a, b) => {
-              return a._column._order > b._column._order ? 1 : -1;
-            })
+          return getBodyRowCells(row)
+            .filter((cell) => !cell.hidden)
             .map((cell) => cell._content.textContent.trim())
             .filter((content) => content)
             .join('\t');
