@@ -412,11 +412,12 @@ describe('reordering simple grid', () => {
             <vaadin-grid-column id="col3" header="Col3"></vaadin-grid-column>
           </vaadin-grid>
         `);
+        const inputRenderer = (root, column) => {
+          root.innerHTML = `<input id="input-${column.id}">`;
+        };
 
         grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
-          col.renderer = (root, column) => {
-            root.innerHTML = `<input id="input-${column.id}">`;
-          };
+          col.renderer = inputRenderer;
         });
 
         grid.items = [{ name: 'foo' }];
