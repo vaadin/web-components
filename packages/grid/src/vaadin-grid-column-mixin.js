@@ -385,10 +385,10 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _orderChanged(order) {
-      this._allCells.forEach((cell) => {
-        cell.style.order = order;
-      });
+    _orderChanged(_order) {
+      // Note: This observer is kept for backwards compatibility but no longer
+      // sets CSS order. Physical DOM reordering is now handled by
+      // __reorderCellsOnSwap in the column reordering mixin.
     }
 
     /** @private */

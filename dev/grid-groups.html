@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Column Groups</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+
+      const grid = document.querySelector('vaadin-grid');
+
+      grid.dataProvider = ({ page, pageSize }, cb) => {
+        const pageItems = [...Array(Math.min(100, pageSize))].map((_, i) => {
+          const index = page * pageSize + i;
+          return {
+            col11: `11-${index}`,
+            col12: `12-${index}`,
+            col21: `21-${index}`,
+            col22: `22-${index}`,
+          };
+        });
+        cb(pageItems, 100);
+      };
+    </script>
+
+    <vaadin-grid style="width: 800px; height: 400px" column-reordering-allowed>
+      <vaadin-grid-column-group header="Group 1">
+        <vaadin-grid-column path="col11" header="11"></vaadin-grid-column>
+        <vaadin-grid-column path="col12" header="12"></vaadin-grid-column>
+      </vaadin-grid-column-group>
+      <vaadin-grid-column-group header="Group 2">
+        <vaadin-grid-column path="col21" header="21"></vaadin-grid-column>
+        <vaadin-grid-column path="col22" header="22"></vaadin-grid-column>
+      </vaadin-grid-column-group>
+    </vaadin-grid>
+  </body>
+</html>

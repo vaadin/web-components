@@ -156,14 +156,12 @@ export const DynamicColumnsMixin = (superClass) =>
      * @protected
      */
     _updateFirstAndLastColumnForRow(row) {
-      Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'))
-        .sort((a, b) => {
-          return a._column._order - b._column._order;
-        })
-        .forEach((cell, cellIndex, children) => {
-          updateCellState(cell, 'first-column', cellIndex === 0);
-          updateCellState(cell, 'last-column', cellIndex === children.length - 1);
-        });
+      // Cells are now physically ordered in the DOM, so we can iterate in DOM order
+      const cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+      cells.forEach((cell, cellIndex) => {
+        updateCellState(cell, 'first-column', cellIndex === 0);
+        updateCellState(cell, 'last-column', cellIndex === cells.length - 1);
+      });
     }
 
     /**

@@ -37,11 +37,8 @@ export const ColumnResizingMixin = (superClass) =>
 
         // Get the target column to resize
         while (column.localName === 'vaadin-grid-column-group') {
-          column = column._childColumns
-            .slice(0)
-            .sort((a, b) => a._order - b._order)
-            .filter((column) => !column.hidden)
-            .pop();
+          // Child columns are in DOM order, so the last visible one is the rightmost
+          column = column._childColumns.filter((column) => !column.hidden).pop();
         }
 
         const isRTL = this.__isRTL;
@@ -76,14 +73,14 @@ export const ColumnResizingMixin = (superClass) =>
           column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
-        columnRowCells
-          .sort((a, b) => a._column._order - b._column._order)
-          .forEach((cell, index, array) => {
-            if (index < array.indexOf(targetCell)) {
-              cell._column.width = `${cell.offsetWidth}px`;
-              cell._column.flexGrow = 0;
-            }
-          });
+        // Cells are physically ordered in the DOM
+        const targetCellIndex = columnRowCells.indexOf(targetCell);
+        columnRowCells.forEach((cell, index) => {
+          if (index < targetCellIndex) {
+            cell._column.width = `${cell.offsetWidth}px`;
+            cell._column.flexGrow = 0;
+          }
+        });
 
         const cellFrozenToEnd = this._frozenToEndCells[0];
 
