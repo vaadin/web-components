@@ -51,9 +51,9 @@ describe('vaadin-icon - icon fonts', () => {
       // Workaround to trigger cqh recalculation in Safari and Firefox
       // https://github.com/vaadin/web-components/issues/8397
       async function iconRender(icon) {
-        icon.style.display = 'block';
+        icon.style.setProperty('--_display-test-override', 'block');
         await nextResize(icon);
-        icon.style.display = '';
+        icon.style.removeProperty('--_display-test-override');
       }
 
       icon.style.padding = '5px';
