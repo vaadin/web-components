@@ -396,7 +396,6 @@ export const gridStyles = css`
   [frozen],
   [frozen-to-end] {
     z-index: 2;
-    will-change: transform;
   }
 
   /* Empty state */
