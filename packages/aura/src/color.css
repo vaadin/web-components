@@ -82,6 +82,7 @@ vaadin-tab,
   --aura-neutral-dark: oklch(
     from var(--aura-background-color-dark) calc(0.9 + 0.1 * var(--aura-contrast-level)) calc(c * l) h
   );
+  --aura-neutral: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
   --vaadin-text-color: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
   --vaadin-text-color-secondary: light-dark(
     oklch(
