@@ -14,6 +14,25 @@ const getAttachedInstances = () =>
     .sort((a, b) => a.__zIndex - b.__zIndex || 0);
 
 /**
+ * Returns true if all the instances on top of the overlay are nested overlays.
+ * @private
+ */
+export const hasOnlyNestedOverlays = (overlay) => {
+  const instances = getAttachedInstances();
+  const next = instances[instances.indexOf(overlay) + 1];
+  if (!next) {
+    return true;
+  }
+
+  // Check if the overlay contains the owner element of another overlay
+  if (next.owner && !overlay._deepContains(next.owner)) {
+    return false;
+  }
+
+  return hasOnlyNestedOverlays(next);
+};
+
+/**
  * Returns all attached overlay instances excluding notification container,
  * which only needs to be in the stack for zIndex but not pointer-events.
  * @private
