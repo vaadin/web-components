@@ -36,9 +36,8 @@ vaadin-crud-dialog::part(overlay) {
 
   --aura-surface-color-solid: light-dark(
     oklch(
-      from var(--aura-background-color-light)
-        min(1, l + ((1 - l) / 4 + 0.06 - var(--aura-surface-opacity) / 20) * var(--aura-surface-level))
-        clamp(0, c - l / 10 * var(--aura-surface-level) + var(--aura-surface-opacity) / 40, c) h
+      from var(--aura-background-color-light) min(1, l + ((1 - l) / 2 + 0.04) * var(--aura-surface-level))
+        clamp(0, c - (c / 3 + (l / 1000)) * var(--aura-surface-level), c) h
     ),
     oklch(
       from var(--aura-background-color-dark)
