@@ -18,7 +18,7 @@ import {
   makeSoloTouchEvent,
 } from './helpers.js';
 
-function getVisualCellContent(section, row, col) {
+function getVisualCell(section, row, col) {
   let cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
   if (section.id === 'footer') {
     cell = section.querySelector('[part~="cell"]');
@@ -30,7 +30,11 @@ function getVisualCellContent(section, row, col) {
   const x = sectionRect.left + col * cellWidth + cellWidth / 2;
   const y = sectionRect.top + sectionBorder + row * cellHeight + cellHeight / 2;
   const grid = section.parentNode.parentNode.parentNode.host;
-  return grid._cellFromPoint(x, y)._content;
+  return grid._cellFromPoint(x, y);
+}
+
+function getVisualCellContent(section, row, col) {
+  return getVisualCell(section, row, col)._content;
 }
 
 function getVisualHeaderCellContent(grid, row, col) {
@@ -456,6 +460,114 @@ describe('reordering simple grid', () => {
         expect(document.activeElement.id).to.equal('input-col1');
         await sendKeys({ press: 'Shift+Tab' });
         expect(document.activeElement.id).to.equal('input-col2');
+      });
+    });
+
+    describe('arrow key navigation', () => {
+      beforeEach(async () => {
+        grid = fixtureSync(`
+          <vaadin-grid column-reordering-allowed>
+            <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
+            <vaadin-grid-column id="col2" header="Col2"></vaadin-grid-column>
+            <vaadin-grid-column id="col3" header="Col3"></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+
+        grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+          col.renderer = (root, column) => {
+            root.textContent = column.id;
+          };
+        });
+
+        grid.items = [{ name: 'foo' }, { name: 'bar' }];
+        flushGrid(grid);
+        await aTimeout(0);
+
+        headerContent = [getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1)];
+      });
+
+      it('should navigate cells with arrow keys in visual order after reordering', async () => {
+        // Initial order: col1, col2, col3
+        // Drag col1 over col2 -> new order: col2, col1, col3
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        flushGrid(grid);
+
+        // Focus the first body cell (visually col2 after reorder)
+        const firstCell = getContainerCell(grid.$.items, 0, 0);
+        firstCell.focus();
+
+        // Navigate right - should go to col1 (visually second)
+        await sendKeys({ press: 'ArrowRight' });
+        const secondCell = getContainerCell(grid.$.items, 0, 1);
+        expect(grid.shadowRoot.activeElement === secondCell).to.be.true;
+
+        // Navigate right again - should go to col3 (visually third)
+        await sendKeys({ press: 'ArrowRight' });
+        const thirdCell = getContainerCell(grid.$.items, 0, 2);
+        expect(grid.shadowRoot.activeElement === thirdCell).to.be.true;
+      });
+
+      it('should navigate header cells with arrow keys in visual order after reordering', async () => {
+        // Initial order: col1, col2, col3
+        // Drag col1 over col2 -> new order: col2, col1, col3
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        flushGrid(grid);
+
+        // Focus the first header cell (visually col2 after reorder)
+        const firstHeaderCell = getContainerCell(grid.$.header, 0, 0);
+        firstHeaderCell.focus();
+
+        // Navigate right - should go to col1 header (visually second)
+        await sendKeys({ press: 'ArrowRight' });
+        const secondHeaderCell = getContainerCell(grid.$.header, 0, 1);
+        expect(grid.shadowRoot.activeElement === secondHeaderCell).to.be.true;
+
+        // Navigate right again - should go to col3 header (visually third)
+        await sendKeys({ press: 'ArrowRight' });
+        const thirdHeaderCell = getContainerCell(grid.$.header, 0, 2);
+        expect(grid.shadowRoot.activeElement === thirdHeaderCell).to.be.true;
+      });
+
+      it('should navigate header cells vertically in column groups with arrow keys after reordering', async () => {
+        grid.hidden = true;
+        // Create a grid with column groups
+        grid = fixtureSync(`
+          <vaadin-grid column-reordering-allowed>
+            <vaadin-grid-column-group header="Group Outer 1">
+              <vaadin-grid-column-group header="Group 1">
+                <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
+                <vaadin-grid-column id="col2" header="Col2"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid-column-group>
+
+            <vaadin-grid-column-group header="Group Outer 2">
+              <vaadin-grid-column-group header="Group 2">
+                <vaadin-grid-column id="col3" header="Col3"></vaadin-grid-column>
+                <vaadin-grid-column id="col4" header="Col4"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid-column-group>
+          </vaadin-grid>
+        `);
+
+        flushGrid(grid);
+        await aTimeout(0);
+
+        // Reorder the parent groups
+        const col1HeaderCell = getVisualCell(grid.$.header, 0, 0);
+        const col2HeaderCell = getVisualCell(grid.$.header, 0, 2);
+        expect(col1HeaderCell._content.textContent).to.equal('Group Outer 1');
+        expect(col2HeaderCell._content.textContent).to.equal('Group Outer 2');
+
+        dragAndDropOver(col1HeaderCell, col2HeaderCell);
+        flushGrid(grid);
+
+        col1HeaderCell.focus();
+
+        await sendKeys({ press: 'ArrowDown' });
+        expect(grid.shadowRoot.activeElement === getVisualCell(grid.$.header, 1, 2)).to.be.true;
+
+        await sendKeys({ press: 'ArrowDown' });
+        expect(grid.shadowRoot.activeElement === getVisualCell(grid.$.header, 2, 2)).to.be.true;
       });
     });
   });
