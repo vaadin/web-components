@@ -106,9 +106,9 @@ function initView(view) {
   view.querySelector('#filled-side-nav').addEventListener('change', (e) => {
     const sideNav = document.querySelector('components-view vaadin-side-nav');
     if (e.target.checked) {
-      sideNav.setAttribute('theme', 'filled accent');
+      sideNav.setAttribute('theme', 'filled');
     } else {
-      sideNav.setAttribute('theme', 'accent');
+      sideNav.removeAttribute('theme');
     }
   });
 
@@ -418,7 +418,7 @@ customElements.define(
                   </div>
 
                   <div class="aura-surface component tall column">
-                    <vaadin-side-nav theme="accent filled">
+                    <vaadin-side-nav theme="filled" class="aura-accent-color">
                       <vaadin-side-nav-item path="">
                         <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
                         <span>Components</span>
@@ -490,7 +490,7 @@ customElements.define(
                   </div>
 
                   <div class="aura-surface component">
-                    <vaadin-checkbox-group label="Options" class="aura-surface">
+                    <vaadin-checkbox-group label="Options">
                       <vaadin-checkbox label="Option 1" value="1" checked></vaadin-checkbox>
                       <vaadin-checkbox label="Option 2" value="2"></vaadin-checkbox>
                       <vaadin-checkbox label="Option 3" value="3"></vaadin-checkbox>
