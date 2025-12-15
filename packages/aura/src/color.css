@@ -176,6 +176,12 @@ vaadin-tab,
   color: var(--aura-accent-text-color);
 }
 
+:is(#id, .aura-accent-color) {
+  --aura-accent-color-light: var(--aura-accent-color-light-initial);
+  --aura-accent-color-dark: var(--aura-accent-color-dark-initial);
+  --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+}
+
 :is(#id, .aura-accent-neutral) {
   --aura-accent-color-light: var(--aura-neutral-light);
   --aura-accent-color-dark: var(--aura-neutral-dark);
