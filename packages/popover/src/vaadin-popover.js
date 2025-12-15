@@ -17,7 +17,10 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { isLastOverlay as isLastOverlayBase } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import {
+  hasOnlyNestedOverlays,
+  isLastOverlay as isLastOverlayBase,
+} from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -753,10 +756,14 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetFocusOut(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
+    // Do not close if there is a nested overlay that should be closed through some method first.
     // This covers the case when focus moves to the nested popover opened
     // without focusing parent popover overlay (e.g. using hover trigger).
-    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
+    if (
+      this._overlayElement.opened &&
+      !isLastOverlay(this._overlayElement) &&
+      hasOnlyNestedOverlays(this._overlayElement)
+    ) {
       return;
     }
 
@@ -782,13 +789,16 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
-    // Do not close the popover on target focusout if the overlay is not the last one.
-    // This happens e.g. when opening the nested popover that uses non-modal overlay.
-    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
+    // Do not close if the pointer moves to the overlay
+    if (this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
-
-    if (this._overlayElement.contains(event.relatedTarget)) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
+    if (
+      this._overlayElement.opened &&
+      !isLastOverlay(this._overlayElement) &&
+      hasOnlyNestedOverlays(this._overlayElement)
+    ) {
       return;
     }
 
@@ -808,11 +818,11 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayFocusOut(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
+    // Do not close if there is a nested overlay that should be closed through some method first.
     // This covers the following cases of nested overlay based components:
     // 1. Moving focus to the nested overlay (e.g. vaadin-select, vaadin-menu-bar)
     // 2. Closing not focused nested overlay on outside (e.g. vaadin-combo-box)
-    if (!isLastOverlay(this._overlayElement)) {
+    if (!isLastOverlay(this._overlayElement) && hasOnlyNestedOverlays(this._overlayElement)) {
       return;
     }
 
@@ -854,14 +864,12 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
-    // Do not close the popover on overlay focusout if it's not the last one.
-    // This happens when opening the nested component that uses "modal" overlay
-    // setting `pointer-events: none` on the body (combo-box, date-picker etc).
-    if (!isLastOverlay(this._overlayElement)) {
+    // Do not close if the pointer moves to the target
+    if (event.relatedTarget === this.target) {
       return;
     }
-
-    if (event.relatedTarget === this.target) {
+    // Do not close if there is a nested overlay that should be closed through some method first.
+    if (!isLastOverlay(this._overlayElement) && hasOnlyNestedOverlays(this._overlayElement)) {
       return;
     }
 
