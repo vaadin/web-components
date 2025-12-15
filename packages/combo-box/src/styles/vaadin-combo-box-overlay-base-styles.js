@@ -31,9 +31,10 @@ export const comboBoxOverlayStyles = [
 
     [part='loader'] {
       position: absolute;
-      inset: calc(var(--vaadin-item-overlay-padding, 4px) + 2px);
+      inset: var(--vaadin-item-overlay-padding, 4px);
       inset-block-end: auto;
       inset-inline-start: auto;
+      margin: 2px;
     }
   `,
 ];
