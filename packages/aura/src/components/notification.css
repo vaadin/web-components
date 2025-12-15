@@ -2,6 +2,7 @@
 :where(:host) {
   --vaadin-notification-border-width: 0px;
   --vaadin-ease-fluid: cubic-bezier(0.78, 0, 0.22, 1);
+  --vaadin-notification-padding: var(--vaadin-padding-m);
 }
 
 vaadin-notification-container {
@@ -33,6 +34,7 @@ vaadin-notification-card::part(overlay) {
 }
 
 vaadin-notification-card vaadin-card {
+  --vaadin-card-border-width: 0px;
   --vaadin-card-gap: var(--vaadin-gap-xs) var(--vaadin-gap-s);
   color: var(--vaadin-text-color-secondary);
 }
