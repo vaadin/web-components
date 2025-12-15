@@ -42,7 +42,7 @@
 
 @supports (color: hsl(0 0 0)) {
   @scope (:root) {
-    :scope {
+    :where(:scope) {
       --aura-app-background:
         var(--_bg-accent),
         radial-gradient(circle at 25% 0% in xyz, var(--aura-background-color) 33%, var(--_bg-alt))
