@@ -6,7 +6,7 @@ html {
   /* TODO how to use a different surface level in dark mode? */
 }
 
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-side-nav, vaadin-tabs):not([theme~='accent']) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-side-nav, vaadin-tabs) {
   --aura-accent-color-light: var(--aura-neutral-light);
   --aura-accent-color-dark: var(--aura-neutral-dark);
 }
