@@ -154,7 +154,7 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  * | `--vaadin-split-layout-handle-size`          |
  * | `--vaadin-split-layout-handle-target-size`   |
  * | `--vaadin-split-layout-splitter-background`  |
- * | `--vaadin-accordion-heading-border-width`    |
+ * | `--vaadin-split-layout-splitter-size`        |
  * | `--vaadin-split-layout-splitter-target-size` |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
