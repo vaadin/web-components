@@ -142,10 +142,20 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description | Theme for Element
- * ----------------|----------------|----------------
- * `splitter` | Split element | vaadin-split-layout
- * `handle` | The handle of the splitter | vaadin-split-layout
+ * Part name  | Description
+ * -----------|--------------
+ * `splitter` | Split element
+ * `handle`   | The handle of the splitter
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                            |
+ * :----------------------------------------------|
+ * | `--vaadin-split-layout-handle-size`          |
+ * | `--vaadin-split-layout-handle-target-size`   |
+ * | `--vaadin-split-layout-splitter-background`  |
+ * | `--vaadin-accordion-heading-border-width`    |
+ * | `--vaadin-split-layout-splitter-target-size` |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
