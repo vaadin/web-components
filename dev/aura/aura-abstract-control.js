@@ -23,6 +23,7 @@ export class AuraControl extends HTMLElement {
       #reset {
         background: transparent;
         border: 0;
+        gap: 0;
       }
 
       #reset:not(:hover, :focus-visible) {
