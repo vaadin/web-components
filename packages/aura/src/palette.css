@@ -1,10 +1,10 @@
 :where(:root),
 :where(:host) {
   --aura-red: oklch(0.59 0.2 25);
-  --aura-orange: oklch(0.61 0.4 90);
-  --aura-yellow: oklch(0.9 0.45 105);
-  --aura-green: oklch(0.6 0.2 150);
-  --aura-blue: oklch(0.61 0.2 260);
+  --aura-orange: oklch(0.61 0.35 87);
+  --aura-yellow: oklch(0.89 0.3 98);
+  --aura-green: oklch(0.6 0.2 155);
+  --aura-blue: oklch(0.55 0.2 264);
   --aura-purple: oklch(0.58 0.22 290);
 
   --aura-red-text: light-dark(
