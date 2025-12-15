@@ -36,6 +36,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * | `--vaadin-progress-bar-height`             |
  * | `--vaadin-progress-bar-padding`            |
  * | `--vaadin-progress-bar-value-background`   |
+ * | `--vaadin-progress-value`                  |
  *
  * The following state attributes are available for styling:
  *
