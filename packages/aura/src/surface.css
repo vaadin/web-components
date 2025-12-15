@@ -9,6 +9,7 @@
 .aura-surface,
 .aura-surface-solid,
 vaadin-accordion-panel[theme~='filled'],
+vaadin-app-layout,
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
 vaadin-button,
