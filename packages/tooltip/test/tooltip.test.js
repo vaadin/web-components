@@ -543,6 +543,8 @@ describe('vaadin-tooltip', () => {
       const overlay2 = tooltip2.shadowRoot.querySelector('vaadin-tooltip-overlay');
 
       mouseenter(target);
+      expect(overlay.opened).to.be.true;
+      expect(overlay2.opened).to.be.true;
 
       escKeyDown(document.body);
       expect(overlay.opened).to.be.false;
