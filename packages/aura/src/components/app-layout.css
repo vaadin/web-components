@@ -32,7 +32,7 @@ vaadin-app-layout[overlay]::part(drawer) {
 }
 
 vaadin-app-layout:is([overlay], :not([drawer-opened])),
-vaadin-app-layout:not(:has([slot='drawer'])) {
+vaadin-app-layout:not([has-drawer]) {
   padding-inline-start: var(--aura-app-layout-inset);
 }
 
@@ -52,21 +52,13 @@ vaadin-app-layout[has-navbar]::part(drawer) {
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {
+  /* TODO would need a dedicated padding-top property */
   --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
+  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
   scrollbar-width: thin;
 }
 
-vaadin-app-layout > vaadin-scroller:nth-child(1 of [slot='drawer']) {
-  /* TODO would need a dedicated padding-top property */
-  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
-}
-
-vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
-  /* TODO would need a dedicated padding-bottom property */
-  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
-}
-
-vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+vaadin-app-layout > :not([slot]) {
   color-scheme: var(--aura-content-color-scheme);
   color: var(--vaadin-text-color);
   background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
@@ -80,7 +72,7 @@ vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot
   border-inline-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
 }
 
-vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+vaadin-app-layout > vaadin-master-detail-layout:not([slot]) {
   margin-inline: calc(var(--safe-area-inset-left) * -1) calc(var(--safe-area-inset-right) * -1);
   padding-inline: var(--safe-area-inset-left) var(--safe-area-inset-right);
   max-width: calc(100% + var(--safe-area-inset-left) + var(--safe-area-inset-right));
@@ -122,16 +114,14 @@ vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth
   }
 }
 
-vaadin-app-layout[has-drawer][drawer-opened]:not([overlay])
-  > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+vaadin-app-layout[has-drawer][drawer-opened]:not([overlay]) > :not([slot]) {
   border-inline-start-width: var(--aura-app-layout-border-width);
 }
 
-vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])
-  > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay]) > :not([slot]) {
   border-start-start-radius: var(--aura-app-layout-radius);
 }
 
-vaadin-app-layout[has-navbar] > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+vaadin-app-layout[has-navbar] > :not([slot]) {
   border-top-width: var(--aura-app-layout-border-width);
 }
