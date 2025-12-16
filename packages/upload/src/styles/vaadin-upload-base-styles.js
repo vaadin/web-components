@@ -48,4 +48,21 @@ export const uploadStyles = css`
     gap: var(--vaadin-upload-drop-label-gap, var(--vaadin-gap-s));
     line-height: var(--vaadin-upload-drop-label-line-height, inherit);
   }
+
+  /* Icon-only variant: shows upload icon instead of button text */
+  :host([theme~='icon-only']) ::slotted(vaadin-button) {
+    font-size: 0;
+    min-width: 0;
+    padding-inline-end: 0;
+  }
+
+  :host([theme~='icon-only']) ::slotted(vaadin-button)::before {
+    background: currentColor;
+    content: '';
+    display: block;
+    font-size: initial;
+    height: var(--vaadin-icon-size, 1lh);
+    mask: var(--_vaadin-icon-upload) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+    width: var(--vaadin-icon-size, 1lh);
+  }
 `;
