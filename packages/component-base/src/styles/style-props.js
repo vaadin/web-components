@@ -32,7 +32,7 @@ addGlobalStyles(
   'vaadin-base',
   css`
     @layer vaadin.base {
-      :where(html) {
+      html {
         /* Background color */
         --vaadin-background-color: light-dark(#fff, #222);
 
@@ -121,7 +121,7 @@ addGlobalStyles(
       }
 
       @supports not (color: hsl(0 0 0)) {
-        :where(html) {
+        html {
           --_vaadin-safari-17-deg: 1deg;
         }
       }
