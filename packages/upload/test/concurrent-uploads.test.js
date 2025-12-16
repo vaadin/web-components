@@ -141,6 +141,68 @@ describe('concurrent uploads', () => {
       expect(upload._activeUploads).to.equal(2);
       expect(upload._uploadQueue.length).to.equal(3);
     });
+
+    it('should hide start button when file is manually started but queued', async () => {
+      const files = createFiles(3, 100, 'application/json');
+      upload.noAuto = true;
+      upload.maxConcurrentUploads = 1;
+
+      upload._addFiles(files);
+      await clock.tickAsync(10);
+
+      // All files should be held (showing start button) initially
+      expect(files[0].held).to.be.true;
+      expect(files[1].held).to.be.true;
+      expect(files[2].held).to.be.true;
+
+      // Start first file manually
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[0] } }));
+      await clock.tickAsync(10);
+
+      // First file should be uploading
+      expect(files[0].uploading).to.be.true;
+      expect(files[0].held).to.be.false;
+
+      // Start second file manually - should be queued but not show start button
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[1] } }));
+      await clock.tickAsync(10);
+
+      // Second file should be queued but with held=false (start button hidden) and 0% status
+      expect(upload._uploadQueue).to.include(files[1]);
+      expect(files[1].held).to.be.false;
+      expect(files[1].progress).to.equal(0);
+      expect(files[1].status).to.equal('0%');
+
+      // Third file was not manually started, should still show start button
+      expect(files[2].held).to.be.true;
+    });
+
+    it('should start queued file after manually started file completes', async () => {
+      const files = createFiles(2, 100, 'application/json');
+      upload.noAuto = true;
+      upload.maxConcurrentUploads = 1;
+
+      upload._addFiles(files);
+      await clock.tickAsync(10);
+
+      // Start first file
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[0] } }));
+      await clock.tickAsync(10);
+
+      // Start second file (will be queued)
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[1] } }));
+      await clock.tickAsync(10);
+
+      expect(files[1].held).to.be.false;
+      expect(upload._uploadQueue).to.include(files[1]);
+
+      // Wait for first file to complete
+      await clock.tickAsync(300);
+
+      // Second file should now be uploading
+      expect(files[1].uploading).to.be.true;
+      expect(upload._uploadQueue).to.not.include(files[1]);
+    });
   });
 
   describe('upload queue with abort', () => {

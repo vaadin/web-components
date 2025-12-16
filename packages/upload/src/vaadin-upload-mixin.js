@@ -750,8 +750,13 @@ export const UploadMixin = (superClass) =>
         // Add to queue if not already queued
         if (!this._uploadQueue.includes(file)) {
           this._uploadQueue.push(file);
-          file.held = true;
-          file.status = this.__effectiveI18n.uploading.status.held;
+          // Only set held = true and "Queued" status if file wasn't manually started by user.
+          // If user clicked "Start", held is already false and status is "0%",
+          // so keep those values to hide the start button and show progress.
+          if (file.held !== false) {
+            file.held = true;
+            file.status = this.__effectiveI18n.uploading.status.held;
+          }
           this._renderFileList();
         }
         return;
@@ -1085,7 +1090,13 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileStart(event) {
-      this._uploadFile(event.detail.file);
+      const file = event.detail.file;
+      // Mark file as started by user - hide start button and show 0% progress
+      file.held = false;
+      file.progress = 0;
+      file.status = '0%';
+      this._renderFileList();
+      this._uploadFile(file);
     }
 
     /** @private */
