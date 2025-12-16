@@ -398,6 +398,30 @@ describe('a11y', () => {
         expect(focusSpy).to.be.calledOnce;
       });
     });
+
+    describe('scroll behavior', () => {
+      it('should not scroll the page when focusing the popover', async () => {
+        // Create a tall element to make the page scrollable
+        const spacer = fixtureSync(`
+          <div style="height: 200vh"></div>
+        `);
+        document.body.insertBefore(spacer, document.body.firstChild);
+
+        // Scroll to the top
+        window.scrollTo(0, 0);
+        expect(window.scrollY).to.equal(0);
+
+        // Open the popover
+        popover.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        // Focus the popover programmatically
+        popover.focus();
+
+        // The page should not have scrolled
+        expect(window.scrollY).to.equal(0);
+      });
+    });
   });
 
   describe('Tab order', () => {

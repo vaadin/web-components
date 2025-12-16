@@ -229,7 +229,7 @@ class Popover extends PopoverPositionMixin(
       :host([opening]),
       :host([closing]) {
         display: block !important;
-        position: absolute;
+        position: fixed;
         outline: none;
       }
 
