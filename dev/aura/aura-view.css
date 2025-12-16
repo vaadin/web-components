@@ -11,7 +11,7 @@
   flex: 1;
 }
 
-.aura-view > vaadin-scroller {
+.aura-view > * {
   --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
 }
 
@@ -28,6 +28,7 @@
   padding: var(--vaadin-padding-m);
   display: flex;
   align-items: center;
+  gap: var(--vaadin-gap-xs);
 }
 
 .aura-view > header,
@@ -42,6 +43,17 @@
 .aura-view[slot='drawer'] > header,
 .aura-view-header[slot='drawer'] {
   margin-top: calc(var(--safe-area-inset-top) * -1);
+}
+
+.aura-view[slot='navbar'] > :is(header, footer),
+:is(.aura-view-header, .aura-view-footer)[slot='navbar'] {
+  padding: 0;
+  padding-top: var(--safe-area-inset-top);
+}
+
+.aura-view[slot='navbar'] > footer,
+.aura-view-footer[slot='navbar'] {
+  margin-inline-start: auto;
 }
 
 .aura-view:not([slot='navbar']) > footer,

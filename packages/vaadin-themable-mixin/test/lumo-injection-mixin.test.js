@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { css, html, LitElement } from 'lit';
 import { LumoInjectionMixin } from '../lumo-injection-mixin.js';
 import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
@@ -21,6 +21,7 @@ class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
 
       [part='content'] {
         transition: background-color 1ms linear;
+        color: black;
         background-color: yellow;
       }
     `;
@@ -97,6 +98,7 @@ const TEST_FOO_STYLES = `
 
   @media lumo_foo {
     [part='content'] {
+      color: red;
       background-color: green;
     }
   }
@@ -428,6 +430,29 @@ describe('Lumo injection', () => {
         assertBaseStyle();
       });
     });
+
+    describe('injection disabled', () => {
+      beforeEach(async () => {
+        host.__lumoInjectorDisabled = true;
+        host.shadowRoot.appendChild(element);
+        await nextRender();
+        content = element.shadowRoot.querySelector('[part="content"]');
+      });
+
+      it('should not inject styles', async () => {
+        const style = document.createElement('style');
+        style.textContent = TEST_FOO_STYLES;
+        document.head.appendChild(style);
+
+        await nextFrame();
+        assertBaseStyle();
+
+        style.remove();
+
+        await nextFrame();
+        assertBaseStyle();
+      });
+    });
   });
 
   describe('nested component', () => {
@@ -534,6 +559,35 @@ describe('Lumo injection', () => {
 
       await contentTransition();
       assertBaseStyle();
+    });
+  });
+
+  describe('forceUpdate', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-foo></test-foo>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should update component styles synchronously on forceUpdate', () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      document.head.appendChild(style);
+
+      document.__lumoInjector.forceUpdate();
+      expect(getComputedStyle(content).color).to.equal('rgb(255, 0, 0)'); // red
+
+      style.remove();
+
+      document.__lumoInjector.forceUpdate();
+      expect(getComputedStyle(content).color).to.equal('rgb(0, 0, 0)'); // black
     });
   });
 

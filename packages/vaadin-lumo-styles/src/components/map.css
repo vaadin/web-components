@@ -20,11 +20,11 @@
   }
 
   :host(:not([theme~='no-border'])) {
-    border-radius: var(--lumo-border-radius-l);
+    border-radius: var(--vaadin-map-border-radius, var(--lumo-border-radius-l));
   }
 
   :host(:not([theme~='no-border']))::before {
-    border: 1px solid var(--lumo-contrast-10pct);
+    border: 1px solid var(--vaadin-map-border-color, var(--lumo-contrast-10pct));
   }
 
   :host([focus-ring]) {
@@ -121,8 +121,8 @@
   }
 
   .ol-control button {
-    width: var(--lumo-size-s);
-    height: var(--lumo-size-s);
+    width: var(--vaadin-map-control-size, var(--lumo-size-s));
+    height: var(--vaadin-map-control-size, var(--lumo-size-s));
     border-radius: inherit;
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-s);

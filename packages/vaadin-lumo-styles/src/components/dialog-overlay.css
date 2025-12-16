@@ -78,9 +78,6 @@
     padding: var(--lumo-space-l);
     flex: 1;
     min-height: 0;
-  }
-
-  :host([overflow]) [part='content'] {
     overflow: auto;
   }
 

@@ -1,10 +1,20 @@
+:where(:root),
+:where(:host) {
+  --vaadin-accordion-heading-gap: var(--vaadin-gap-xs);
+  --vaadin-details-summary-gap: var(--vaadin-gap-xs);
+}
+
 :is(vaadin-details, vaadin-accordion-panel):not([theme~='no-padding'])::part(content) {
   padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
   padding-top: 0;
 }
 
-:is(vaadin-details, vaadin-accordion-panel):not([theme~='no-padding'], [theme~='reverse'])::part(content) {
-  margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-details-summary-gap, var(--vaadin-gap-s)));
+vaadin-details:not([theme~='no-padding'], [theme~='reverse'])::part(content) {
+  margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-details-summary-gap));
+}
+
+vaadin-accordion-panel:not([theme~='no-padding'], [theme~='reverse'])::part(content) {
+  margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-accordion-heading-gap));
 }
 
 :is(vaadin-details, vaadin-accordion-panel)[theme~='reverse'] {

@@ -11,6 +11,7 @@
 @import './src/components/avatar.css';
 @import './src/components/button.css';
 @import './src/components/card.css';
+@import './src/components/charts.css';
 @import './src/components/checkbox-radio.css';
 @import './src/components/confirm-dialog.css';
 @import './src/components/crud.css';
@@ -37,7 +38,11 @@
 :where(:root),
 :where(:host) {
   cursor: default;
-  /* TODO: slightly smaller chevron than the one in base styles - consider if we should do this in base styles */
-  --_vaadin-icon-chevron-down: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
   --vaadin-aura-theme: 1;
+  --_vaadin-icon-checkmark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>');
+  --_vaadin-icon-menu: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>');
+}
+
+vaadin-icon[icon^='vaadin:'] {
+  --vaadin-icon-visual-size: 80%;
 }

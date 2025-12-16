@@ -1,4 +1,4 @@
-[theme~='badge'] {
+.aura-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -6,52 +6,61 @@
   font-size: var(--aura-font-size-s);
   font-weight: var(--aura-font-weight-medium);
   height: calc(1lh - 2px);
-  border: 1px solid var(--_bg);
-  --_bg: color-mix(in srgb, var(--color) 12%, transparent);
-  background: var(--_bg);
+  border: 1px solid var(--aura-accent-border-color);
+  background: var(--aura-accent-surface) padding-box;
+  background-clip: padding-box;
+  color: var(--aura-accent-text-color);
   padding: 0 0.5em;
   border-radius: var(--vaadin-radius-l);
   min-width: calc(1lh - 1em - 2px);
-  --color: var(--vaadin-text-color);
-  --text-opacity: 70%;
-  color: color-mix(
-    in srgb,
-    var(--color) calc(var(--text-opacity) - 15% * var(--aura-contrast)),
-    var(--vaadin-text-color)
-  );
   --vaadin-icon-size: 0.75lh;
+  --aura-surface-level: 1;
 }
 
-[theme~='badge'][theme~='accent'] {
-  --color: var(--aura-accent-color);
+.aura-badge.aura-badge-filled {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
 }
 
-[theme~='badge'][theme~='blue'] {
-  --color: var(--aura-blue);
+/* Special case for filled badges within filled variants */
+/* TODO is there a way to solve this without explicitly listing the special cases */
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'],
+vaadin-tabs[theme~='filled'] > vaadin-tab[selected],
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
+:is(
+    vaadin-combo-box-item,
+    vaadin-context-menu-item,
+    vaadin-item,
+    vaadin-menu-bar-item,
+    vaadin-multi-select-combo-box-item,
+    vaadin-select-item[role]
+  )[theme~='filled']:not([disabled], [aria-disabled='true']):hover {
+  > .aura-badge-filled:not(
+      .aura-accent-red,
+      .aura-accent-orange,
+      .aura-accent-yellow,
+      .aura-accent-green,
+      .aura-accent-blue,
+      .aura-accent-purple
+    ) {
+    border-color: transparent;
+    background: var(--aura-accent-contrast-color);
+    color: var(--aura-accent-color);
+  }
 }
 
-[theme~='badge'][theme~='red'] {
-  --color: var(--aura-red);
+.aura-badge.aura-badge-point::before {
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
 }
 
-[theme~='badge'][theme~='green'] {
-  --color: var(--aura-green);
-}
-
-[theme~='badge'][theme~='yellow'] {
-  --color: var(--aura-yellow);
-  --text-opacity: 60%;
-}
-
-[theme~='badge'][theme~='orange'] {
-  --color: var(--aura-orange);
-}
-
-[theme~='badge'][theme~='purple'] {
-  --color: var(--aura-purple);
-}
-
-[theme~='badge'][theme~='filled'] {
-  --_bg: color-mix(in srgb, var(--vaadin-text-color) 5%, var(--color));
-  color: oklch(from var(--_bg) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1));
+.aura-badge:empty {
+  padding: 0;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  inset-inline-end: 5px;
 }

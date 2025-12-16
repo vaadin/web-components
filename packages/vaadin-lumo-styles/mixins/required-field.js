@@ -16,8 +16,7 @@ const requiredField = css`
     font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
     transition: color 0.2s;
     line-height: 1;
-    padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
-    padding-inline-end: 1em;
+    padding-inline: calc(var(--lumo-border-radius-m) / 4) 1em;
     padding-bottom: 0.5em;
     /* As a workaround for diacritics being cut off, add a top padding and a
     negative margin to compensate */
@@ -63,8 +62,11 @@ const requiredField = css`
   }
 
   :host([required]) [part='required-indicator']::after {
-    content: var(--lumo-required-field-indicator, '\\2022');
-    color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+    content: var(--vaadin-input-field-required-indicator, var(--lumo-required-field-indicator, '\\2022'));
+    color: var(
+      --vaadin-input-field-required-indicator-color,
+      var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
+    );
     position: absolute;
     right: 0;
     width: 1em;
@@ -72,7 +74,10 @@ const requiredField = css`
   }
 
   :host([invalid]) [part='required-indicator']::after {
-    color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+    color: var(
+      --vaadin-input-field-required-indicator-color,
+      var(--lumo-required-field-indicator-color, var(--lumo-error-text-color))
+    );
   }
 
   [part='error-message'] {

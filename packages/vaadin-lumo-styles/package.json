@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "25.0.0-beta4",
+  "version": "25.1.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -44,9 +44,9 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-beta4",
-    "@vaadin/icon": "25.0.0-beta4",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-beta4"
+    "@vaadin/component-base": "25.1.0-alpha0",
+    "@vaadin/icon": "25.1.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "25.1.0-alpha0"
   },
   "devDependencies": {
     "cssnano": "^7.1.1",

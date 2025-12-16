@@ -37,4 +37,11 @@ export const loaderStyles = css`
   :host(:not([loading])) [part~='loader'] {
     display: none;
   }
+
+  @media (forced-colors: active) {
+    [part='loader'] {
+      forced-color-adjust: none;
+      --vaadin-spinner-color: CanvasText;
+    }
+  }
 `;

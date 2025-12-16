@@ -5,7 +5,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
 
 CSS.registerProperty({
   name: '--_min-width-labels-aside',
@@ -14,11 +14,11 @@ CSS.registerProperty({
   initialValue: '0px',
 });
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'vaadin-form-layout-base',
   css`
     @layer vaadin.base {
-      :where(html) {
+      html {
         --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
         --vaadin-form-layout-label-width: 8em;
         --vaadin-form-layout-column-spacing: var(--vaadin-gap-l);

@@ -15,3 +15,16 @@ vaadin-menu-bar-button[slot='overflow'] {
   font-family: system-ui, sans-serif;
   font-weight: 600;
 }
+
+vaadin-menu-bar-button[aria-haspopup='true']::part(suffix)::after {
+  --vaadin-icon-visual-size: 90%;
+}
+
+vaadin-menu-bar-button vaadin-menu-bar-item {
+  padding-inline: 0;
+}
+
+vaadin-menu-bar-button vaadin-menu-bar-item::part(content) {
+  padding-inline: 0;
+  gap: var(--vaadin-button-gap, var(--vaadin-gap-s));
+}

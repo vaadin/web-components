@@ -2,27 +2,26 @@
 :where(:host) {
   --aura-app-layout-inset: 1.5vmin;
   --aura-app-layout-radius: var(--vaadin-radius-l);
-  --_aura-mdl-border: 1px;
-  /* Use px to ensure calc/min/max work */
-  --vaadin-app-layout-navbar-padding-top: 0px;
-  --vaadin-app-layout-navbar-padding-bottom: 0px;
-  --vaadin-app-layout-navbar-padding-inline-start: 0px;
-  --vaadin-app-layout-navbar-padding-inline-end: 0px;
+  --aura-app-layout-border-width: 1px;
+  --vaadin-app-layout-navbar-padding-top: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+  --vaadin-app-layout-navbar-padding-inline-start: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+  --vaadin-app-layout-navbar-padding-inline-end: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
 }
 
 /* Aligned with App Layout overlay breakpoint */
 @media (width <= 800px), (height <= 600px) {
-  html {
+  :where(:root),
+  :where(:host) {
     --aura-app-layout-inset: 0px !important;
-    --_aura-mdl-border: 0px;
+    --aura-app-layout-border-width: 0px;
   }
 }
 
 vaadin-app-layout {
   --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
-  padding-block: var(--aura-app-layout-inset);
+  padding-bottom: var(--aura-app-layout-inset);
   padding-inline-end: var(--aura-app-layout-inset);
-  padding-top: calc(var(--aura-app-layout-inset) + var(--_vaadin-app-layout-navbar-offset-size));
+  padding-top: max(var(--aura-app-layout-inset), var(--_vaadin-app-layout-navbar-offset-size));
 }
 
 vaadin-app-layout[overlay]::part(drawer) {
@@ -32,12 +31,12 @@ vaadin-app-layout[overlay]::part(drawer) {
   backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
-vaadin-app-layout:is([overlay], :not([drawer-opened])) {
+vaadin-app-layout:is([overlay], :not([drawer-opened])),
+vaadin-app-layout:not(:has([slot='drawer'])) {
   padding-inline-start: var(--aura-app-layout-inset);
 }
 
 vaadin-app-layout::part(navbar) {
-  justify-content: space-between;
   --vaadin-app-layout-navbar-background: transparent;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
@@ -46,6 +45,10 @@ vaadin-app-layout::part(navbar) {
 vaadin-app-layout:not([overlay])::part(drawer) {
   padding-block: var(--aura-app-layout-inset);
   padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
+}
+
+vaadin-app-layout[has-navbar]::part(drawer) {
+  padding-top: var(--safe-area-inset-top);
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {
@@ -72,9 +75,9 @@ vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot
   min-height: 100%;
   box-sizing: border-box;
   border-radius: var(--_app-layout-radius);
-  border: var(--_aura-mdl-border) solid var(--vaadin-border-color-secondary);
-  border-block-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
-  border-inline-end-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+  border: var(--aura-app-layout-border-width) solid var(--vaadin-border-color-secondary);
+  border-block-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
+  border-inline-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
 }
 
 vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
@@ -111,7 +114,7 @@ vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth
   }
 
   &::part(backdrop) {
-    border-radius: calc(var(--_app-layout-radius) - var(--_aura-mdl-border));
+    border-radius: calc(var(--_app-layout-radius) - var(--aura-app-layout-border-width));
   }
 
   &:is([drawer][has-detail]) {
@@ -119,17 +122,9 @@ vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth
   }
 }
 
-vaadin-app-layout[has-navbar][has-drawer] {
-  padding-top: var(--_vaadin-app-layout-navbar-offset-size);
-
-  &::part(drawer) {
-    padding-top: var(--safe-area-inset-top);
-  }
-}
-
-vaadin-app-layout[has-drawer]:not([overlay]):not([drawer-opened])
+vaadin-app-layout[has-drawer][drawer-opened]:not([overlay])
   > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
-  border-inline-start-width: min(var(--aura-app-layout-inset), var(--_aura-mdl-border));
+  border-inline-start-width: var(--aura-app-layout-border-width);
 }
 
 vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])
@@ -137,6 +132,6 @@ vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])
   border-start-start-radius: var(--aura-app-layout-radius);
 }
 
-vaadin-app-layout[has-navbar][has-drawer] > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
-  border-top-width: var(--_aura-mdl-border);
+vaadin-app-layout[has-navbar] > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+  border-top-width: var(--aura-app-layout-border-width);
 }

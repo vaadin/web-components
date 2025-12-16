@@ -48,10 +48,7 @@ const menuOverlayExt = css`
   /* Use direct media queries instead of the state attributes ([phone] and [fullscreen]) provided by the elements */
   @media (max-width: 450px), (max-height: 450px) {
     :host {
-      top: 0 !important;
-      right: 0 !important;
-      bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
-      left: 0 !important;
+      inset: 0 0 var(--vaadin-overlay-viewport-bottom, 0) 0 !important;
       align-items: stretch !important;
       justify-content: flex-end !important;
     }

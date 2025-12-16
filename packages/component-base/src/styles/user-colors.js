@@ -4,13 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from './add-global-styles.js';
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'vaadin-base-user-colors',
   css`
     @layer vaadin.base {
-      :where(html) {
+      html {
         --_color-count: 10;
         --_hue-step: round(360 / var(--_color-count), 1);
         --vaadin-user-color-0: var(--vaadin-user-color, oklch(0.52 0.2 240));

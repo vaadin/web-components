@@ -7,11 +7,11 @@ import { css } from 'lit';
 
 export const iconStyles = css`
   :host {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: inherit !important;
     box-sizing: border-box;
-    vertical-align: middle;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     flex: none;
@@ -60,5 +60,9 @@ export const iconStyles = css`
     content: '\\2003' / '';
     display: inline-block;
     width: 0;
+  }
+
+  :host(:is([icon-class], [font-family])) .baseline {
+    font-family: var(--vaadin-icon-baseline-font-family, inherit);
   }
 `;

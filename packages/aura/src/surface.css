@@ -9,6 +9,7 @@
 .aura-surface,
 .aura-surface-solid,
 vaadin-accordion-panel[theme~='filled'],
+vaadin-app-layout,
 vaadin-app-layout::part(navbar),
 vaadin-app-layout::part(drawer),
 vaadin-button,
@@ -23,6 +24,7 @@ vaadin-radio-button::part(radio),
 vaadin-rich-text-editor,
 vaadin-side-nav-item::part(content),
 vaadin-tab,
+vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
 ::part(input-field),
@@ -35,13 +37,15 @@ vaadin-crud-dialog::part(overlay) {
 
   --aura-surface-color-solid: light-dark(
     oklch(
-      from var(--aura-background-color-light)
-        min(1, l + (0.98 - l) * 4 + var(--aura-surface-level) * 0.06 - var(--aura-surface-opacity) / 20)
-        clamp(0, c - l / 10 * var(--aura-surface-level) + var(--aura-surface-opacity) / 40, c) h
+      from var(--aura-background-color-light) min(1, l + ((1 - l) / 2 + 0.04) * var(--aura-surface-level))
+        clamp(0, c - (c / 3 + (l / 1000)) * var(--aura-surface-level), c) h
     ),
     oklch(
       from var(--aura-background-color-dark)
-        calc(max(l + 0.03, 0.25) + var(--aura-surface-level) * 0.022 - var(--aura-surface-opacity) / 40)
+        calc(
+          max(0.03, l) + 0.03 * var(--aura-surface-level) + max(0, 0.2 - max(0.03, l)) *
+            (1.1 - 0.06 * var(--aura-surface-level))
+        )
         clamp(0, c * (1 + l), 0.2) h
     )
   );
