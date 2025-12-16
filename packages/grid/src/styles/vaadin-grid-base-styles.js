@@ -54,6 +54,7 @@ export const gridStyles = css`
     min-height: auto;
     flex-grow: 0;
     flex-shrink: 0;
+    width: 100%;
   }
 
   #scroller {
