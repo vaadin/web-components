@@ -109,6 +109,11 @@ export const DialogOverlayMixin = (superClass) =>
         this.__footerSlotObserver.disconnect();
       }
     }
+
+    /**
+     * Observes the header-content slot for changes and updates the has-header attribute.
+     * @private
+     */
     __observeHeaderSlot() {
       const slot = this.shadowRoot.querySelector('slot[name="header-content"]');
       if (slot) {
@@ -118,7 +123,10 @@ export const DialogOverlayMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Observes the footer slot for changes and updates the has-footer attribute.
+     * @private
+     */
     __observeFooterSlot() {
       const slot = this.shadowRoot.querySelector('slot[name="footer"]');
       if (slot) {
@@ -175,14 +183,20 @@ export const DialogOverlayMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /**
+     * Updates the has-header attribute based on headerRenderer and slotted content.
+     * @private
+     */
     __updateHasHeader() {
       const hasSlottedHeader = this.__hasSlottedContent('header-content');
       const hasHeader = !!this.headerRenderer || hasSlottedHeader;
       setOverlayStateAttribute(this, 'has-header', hasHeader);
     }
 
-    /** @private */
+    /**
+     * Updates the has-footer attribute based on footerRenderer and slotted content.
+     * @private
+     */
     __updateHasFooter() {
       const hasSlottedFooter = this.__hasSlottedContent('footer');
       const hasFooter = !!this.footerRenderer || hasSlottedFooter;
