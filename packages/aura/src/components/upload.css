@@ -35,6 +35,10 @@ vaadin-upload:not([nodrop]) vaadin-button[slot='add-button'] {
   flex: 1;
 }
 
+vaadin-upload[theme~='icon-only']:not([nodrop]) vaadin-button[slot='add-button'] {
+  flex: none;
+}
+
 vaadin-upload::part(drop-label) {
   flex: 100;
   padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);

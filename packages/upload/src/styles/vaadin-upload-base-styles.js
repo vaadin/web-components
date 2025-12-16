@@ -52,11 +52,12 @@ export const uploadStyles = css`
   /* Icon-only variant: shows upload icon instead of button text */
   :host([theme~='icon-only']) ::slotted(vaadin-button) {
     font-size: 0;
+    gap: 0;
     min-width: 0;
-    padding-inline-end: 0;
+    padding-inline: var(--vaadin-padding-block-container);
   }
 
-  :host([theme~='icon-only']) ::slotted(vaadin-button)::before {
+  :host([theme~='icon-only']) ::slotted(vaadin-button)::after {
     background: currentColor;
     content: '';
     display: block;
