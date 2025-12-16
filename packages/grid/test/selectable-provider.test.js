@@ -203,7 +203,8 @@ describe('selectable-provider', () => {
 
   describe('select all', () => {
     it('should hide select all checkbox when using isItemSelectable provider', () => {
-      expect(selectAllCheckbox.hasAttribute('hidden')).to.be.true;
+      expect(selectAllCheckbox.style.visibility).to.equal('hidden');
+      expect(selectAllCheckbox.ariaHidden).to.equal('true');
     });
 
     it('should hide select all checkbox when adding a selection column to an existing grid with an isItemSelectable provider', async () => {
@@ -219,14 +220,16 @@ describe('selectable-provider', () => {
       await nextFrame();
       selectAllCheckbox = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
 
-      expect(selectAllCheckbox.hasAttribute('hidden')).to.be.true;
+      expect(selectAllCheckbox.style.visibility).to.equal('hidden');
+      expect(selectAllCheckbox.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should show select all checkbox when removing isItemSelectable provider', async () => {
       grid.isItemSelectable = null;
       await nextFrame();
 
-      expect(selectAllCheckbox.hasAttribute('hidden')).to.be.false;
+      expect(selectAllCheckbox.style.visibility).to.equal('');
+      expect(selectAllCheckbox.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 
