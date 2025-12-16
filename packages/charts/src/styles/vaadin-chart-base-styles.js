@@ -19,7 +19,7 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import '@vaadin/component-base/src/styles/user-colors.js';
 import { css, unsafeCSS } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
 
 /* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
 // postcss-lit-disable-next-line
@@ -62,7 +62,7 @@ const tooltipStyles = (scope) => css`
   }
 `;
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'vaadin-charts-tooltip',
   css`
     .highcharts-tooltip-container .highcharts-root {
