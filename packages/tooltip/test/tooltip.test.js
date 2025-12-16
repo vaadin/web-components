@@ -521,6 +521,17 @@ describe('vaadin-tooltip', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
+    it('should not call stopPropagation for Esc keydown if tooltip is empty', async () => {
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+
+      mouseenter(target);
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const spy = sinon.spy(event, 'stopPropagation');
+      target.dispatchEvent(event);
+      expect(spy.called).to.be.false;
+    });
+
     it('should not call stopPropagation when not opened', () => {
       mouseenter(target);
       mouseleave(target);
