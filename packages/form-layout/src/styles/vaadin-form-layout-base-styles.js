@@ -11,7 +11,7 @@ addGlobalStyles(
   'vaadin-form-layout-base',
   css`
     @layer vaadin.base {
-      :where(html) {
+      html {
         --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
         --vaadin-form-layout-label-width: 8em;
         --vaadin-form-layout-column-spacing: var(--vaadin-gap-l);
