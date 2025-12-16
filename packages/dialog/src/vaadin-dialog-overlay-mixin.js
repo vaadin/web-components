@@ -97,7 +97,18 @@ export const DialogOverlayMixin = (superClass) =>
       this.__observeFooterSlot();
     }
 
-    /** @private */
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      // Clean up slot observers
+      if (this.__headerSlotObserver) {
+        this.__headerSlotObserver.disconnect();
+      }
+      if (this.__footerSlotObserver) {
+        this.__footerSlotObserver.disconnect();
+      }
+    }
     __observeHeaderSlot() {
       const slot = this.shadowRoot.querySelector('slot[name="header-content"]');
       if (slot) {
