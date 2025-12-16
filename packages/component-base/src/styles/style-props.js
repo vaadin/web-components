@@ -32,7 +32,7 @@ addGlobalStyles(
   'vaadin-base',
   css`
     @layer vaadin.base {
-      :root {
+      html {
         /* Background color */
         --vaadin-background-color: light-dark(#fff, #222);
 
