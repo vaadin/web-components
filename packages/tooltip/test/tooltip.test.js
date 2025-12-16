@@ -413,7 +413,7 @@ describe('vaadin-tooltip', () => {
 
       tabKeyDown(target);
       target.focus();
-      expect(overlay.opened).to.be.false;
+      expect(overlay.opened).to.be.undefined;
     });
 
     it('should close overlay on target focusout', () => {
@@ -433,7 +433,7 @@ describe('vaadin-tooltip', () => {
       await nextUpdate(tooltip);
 
       mouseenter(target);
-      expect(overlay.opened).to.be.false;
+      expect(overlay.opened).to.be.undefined;
     });
 
     it('should close overlay on target mouseleave', () => {
@@ -537,7 +537,7 @@ describe('vaadin-tooltip', () => {
       tabKeyDown(target);
       target.focus();
 
-      const tooltip2 = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      const tooltip2 = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
       tooltip2.target = target;
       await nextRender();
       const overlay2 = tooltip2.shadowRoot.querySelector('vaadin-tooltip-overlay');
