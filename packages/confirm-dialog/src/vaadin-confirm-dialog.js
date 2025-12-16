@@ -94,7 +94,7 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
       :host([opening]),
       :host([closing]) {
         display: block !important;
-        position: absolute;
+        position: fixed;
         outline: none;
       }
 
