@@ -113,14 +113,7 @@
       .section {
         padding-top: 30vh;
         gap: 1em;
-        /* TODO remove once baseline alignment works */
-        align-items: end;
         justify-content: center;
-      }
-
-      /* TODO should be a built-in variant */
-      #duration input {
-        text-align: end;
       }
 
       #duration {
@@ -148,11 +141,11 @@
     <section class="section">
       <vaadin-select label="Position" id="position"></vaadin-select>
 
-      <vaadin-text-field label="Duration" id="duration" placeholder="0–7">
+      <vaadin-text-field label="Duration" id="duration" placeholder="0–7" theme="align-end">
         <span slot="suffix">sec</span>
       </vaadin-text-field>
 
-      <vaadin-button id="show-notification">Show</vaadin-button>
+      <vaadin-button id="show-notification" theme="primary">Show</vaadin-button>
     </section>
   </body>
 </html>

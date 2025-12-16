@@ -28,3 +28,15 @@ vaadin-confirm-dialog::part(message) {
   border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
   z-index: 1;
 }
+
+vaadin-dialog,
+vaadin-confirm-dialog,
+vaadin-crud {
+  --vaadin-overlay-animation-duration: 0.16s;
+  --vaadin-overlay-scale-closed: 0.97;
+
+  &[closing] {
+    --vaadin-overlay-animation-duration: 0.12s;
+    --vaadin-overlay-animation-delay: 60ms;
+  }
+}
