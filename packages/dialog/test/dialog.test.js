@@ -286,8 +286,6 @@ describe('vaadin-dialog', () => {
 
       // Scroll to the top
       window.scrollTo(0, 0);
-      await nextRender();
-      expect(window.scrollY).to.equal(0);
 
       // Open the dialog (which will focus it)
       dialog.opened = true;

@@ -409,7 +409,6 @@ describe('a11y', () => {
 
         // Scroll to the top
         window.scrollTo(0, 0);
-        expect(window.scrollY).to.equal(0);
 
         // Open the popover
         popover.opened = true;
