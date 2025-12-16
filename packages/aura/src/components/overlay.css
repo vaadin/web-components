@@ -34,9 +34,4 @@
   font-weight: var(--aura-font-weight-regular);
   line-height: var(--aura-line-height-m);
   color: var(--vaadin-text-color);
-
-  @container style(--aura-overlay-surface-opacity: 1) {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
 }
