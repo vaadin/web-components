@@ -132,6 +132,34 @@ describe('no autofocus', () => {
   });
 });
 
+describe('scroll behavior', () => {
+  let login, overlay;
+
+  beforeEach(async () => {
+    login = fixtureSync('<vaadin-login-overlay></vaadin-login-overlay>');
+    await nextRender();
+    overlay = login.$.overlay;
+  });
+
+  it('should not scroll the page when opening the overlay', async () => {
+    // Create a tall element to make the page scrollable
+    const spacer = fixtureSync(`
+      <div style="height: 200vh"></div>
+    `);
+    document.body.insertBefore(spacer, document.body.firstChild);
+
+    // Scroll to the top
+    window.scrollTo(0, 0);
+
+    // Open the overlay (which will focus the username field)
+    login.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    // The page should not have scrolled
+    expect(window.scrollY).to.equal(0);
+  });
+});
+
 describe('title and description', () => {
   let login, overlay, titleElement, descriptionElement;
 

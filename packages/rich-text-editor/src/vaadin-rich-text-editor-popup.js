@@ -36,6 +36,7 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
       :host([opening]),
       :host([closing]) {
         display: contents !important;
+        position: fixed;
       }
 
       :host,

@@ -712,6 +712,24 @@ describe('vaadin-confirm-dialog', () => {
       await aTimeout(0);
       expect(getDeepActiveElement()).to.equal(button);
     });
+
+    it('should not scroll the page when opening the dialog', async () => {
+      // Create a tall element to make the page scrollable
+      const spacer = fixtureSync(`
+        <div style="height: 200vh"></div>
+      `);
+      document.body.insertBefore(spacer, document.body.firstChild);
+
+      // Scroll to the top
+      window.scrollTo(0, 0);
+
+      // Open the dialog (which will focus it)
+      confirm.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // The page should not have scrolled
+      expect(window.scrollY).to.equal(0);
+    });
   });
 
   describe('detach and re-attach', () => {
