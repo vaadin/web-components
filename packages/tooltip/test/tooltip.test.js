@@ -399,6 +399,7 @@ describe('vaadin-tooltip', () => {
     beforeEach(async () => {
       target = fixtureSync('<div tabindex="0"></div>');
       tooltip.target = target;
+      tooltip.text = 'Test';
       await nextUpdate(tooltip);
     });
 
@@ -414,6 +415,15 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should not open overlay on keyboard focus when tooltip has no text content', async () => {
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+
+      tabKeyDown(target);
+      target.focus();
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should close overlay on target focusout', () => {
       tabKeyDown(target);
       target.focus();
@@ -424,6 +434,14 @@ describe('vaadin-tooltip', () => {
     it('should open overlay on target mouseenter', () => {
       mouseenter(target);
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open overlay on mouseenter when tooltip has no text content', async () => {
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+
+      mouseenter(target);
+      expect(overlay.opened).to.be.false;
     });
 
     it('should close overlay on target mouseleave', () => {
@@ -501,6 +519,17 @@ describe('vaadin-tooltip', () => {
       const spy = sinon.spy(event, 'stopPropagation');
       target.dispatchEvent(event);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should not call stopPropagation for Esc keydown if tooltip is empty', async () => {
+      tooltip.text = null;
+      await nextUpdate(tooltip);
+
+      mouseenter(target);
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const spy = sinon.spy(event, 'stopPropagation');
+      target.dispatchEvent(event);
+      expect(spy.called).to.be.false;
     });
 
     it('should not call stopPropagation when not opened', () => {
@@ -671,6 +700,7 @@ describe('vaadin-tooltip', () => {
       `);
       target = container.querySelector('div');
       tooltip.target = target;
+      tooltip.text = 'Test';
       await nextFrame();
     });
 
@@ -718,9 +748,11 @@ describe('vaadin-tooltip', () => {
   describe('shouldShow', () => {
     let target;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       target = fixtureSync('<input>');
       tooltip.target = target;
+      tooltip.text = 'Test';
+      await nextUpdate(tooltip);
     });
 
     it('should pass tooltip target as a first parameter to shouldShow on mouseenter', async () => {
@@ -966,6 +998,7 @@ describe('vaadin-tooltip', () => {
       `);
       target = container.querySelector('#second');
       tooltip.target = target;
+      tooltip.text = 'Test';
       await nextFrame();
     });
 
