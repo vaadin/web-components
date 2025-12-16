@@ -121,7 +121,7 @@ addGlobalStyles(
       }
 
       @supports not (color: hsl(0 0 0)) {
-        :where(html) {
+        html {
           --_vaadin-safari-17-deg: 1deg;
         }
       }
