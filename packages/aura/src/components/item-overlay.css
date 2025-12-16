@@ -12,16 +12,14 @@
   --vaadin-item-gap: var(--vaadin-gap-s);
 }
 
-:is(
-  vaadin-avatar-group-menu-item,
-  vaadin-combo-box-item,
-  vaadin-context-menu-item,
-  vaadin-time-picker-item,
-  vaadin-item,
-  vaadin-menu-bar-item,
-  vaadin-multi-select-combo-box-item,
-  vaadin-select-item:where([role])
-) {
+vaadin-avatar-group-menu-item,
+vaadin-combo-box-item,
+vaadin-context-menu-item,
+vaadin-time-picker-item,
+vaadin-item,
+vaadin-menu-bar-item,
+vaadin-multi-select-combo-box-item,
+vaadin-select-item:where([role]) {
   font-weight: var(--aura-font-weight-medium);
   --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   -webkit-user-select: none;
