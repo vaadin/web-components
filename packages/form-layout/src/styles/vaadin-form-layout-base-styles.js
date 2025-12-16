@@ -5,9 +5,9 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'vaadin-form-layout-base',
   css`
     @layer vaadin.base {
