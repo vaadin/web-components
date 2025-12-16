@@ -136,7 +136,50 @@ export const DialogOverlayMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Checks if a node has meaningful content.
+     * @private
+     * @param {Node} node - The node to check
+     * @return {boolean} True if the node has content
+     */
+    __hasNodeContent(node) {
+      // Ignore renderer-created containers
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'VAADIN-DIALOG-CONTENT') {
+        return false;
+      }
+      // Check element nodes
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        return node.hasChildNodes() || node.textContent.trim().length > 0;
+      }
+      // Check text nodes
+      if (node.nodeType === Node.TEXT_NODE) {
+        return node.textContent.trim().length > 0;
+      }
+      return false;
+    }
+
+    /**
+     * Checks if a slot element (nested slot forwarding) has meaningful content.
+     * @private
+     * @param {HTMLSlotElement} slotElement - The slot element to check
+     * @return {boolean} True if the slot has content
+     */
+    __isSlotElementWithContent(slotElement) {
+      const slotContent = slotElement.assignedNodes({ flatten: true });
+      if (slotContent.length === 0) {
+        return false;
+      }
+      // Check if the slot has meaningful content (excluding renderer containers)
+      return slotContent.some((slotNode) => this.__hasNodeContent(slotNode));
+    }
+
+    /**
+     * Checks if a slot has meaningful content, excluding empty elements and renderer containers.
+     * Handles nested slot forwarding by recursively checking slot elements.
+     * @private
+     * @param {string} slotName - The name of the slot to check
+     * @return {boolean} True if the slot has content
+     */
     __hasSlottedContent(slotName) {
       const slot = this.shadowRoot.querySelector(`slot[name="${slotName}"]`);
       if (!slot) {
@@ -149,37 +192,12 @@ export const DialogOverlayMixin = (superClass) =>
         if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'VAADIN-DIALOG-CONTENT') {
           return false;
         }
-        // Ignore empty slot elements (they're just forwarding slots)
+        // Handle nested slot forwarding
         if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SLOT') {
-          // Check if the slot itself has any assigned content
-          const slotElement = node;
-          const slotContent = slotElement.assignedNodes({ flatten: true });
-          if (slotContent.length === 0) {
-            return false;
-          }
-          // Check if the slot has meaningful content (excluding vaadin-dialog-content)
-          return slotContent.some((slotNode) => {
-            if (slotNode.nodeType === Node.ELEMENT_NODE) {
-              if (slotNode.tagName === 'VAADIN-DIALOG-CONTENT') {
-                return false;
-              }
-              return slotNode.hasChildNodes() || slotNode.textContent.trim().length > 0;
-            }
-            if (slotNode.nodeType === Node.TEXT_NODE) {
-              return slotNode.textContent.trim().length > 0;
-            }
-            return false;
-          });
+          return this.__isSlotElementWithContent(node);
         }
-        // Check for element nodes with content or non-empty text nodes
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          // Check if the element has any child nodes or text content
-          return node.hasChildNodes() || node.textContent.trim().length > 0;
-        }
-        if (node.nodeType === Node.TEXT_NODE) {
-          return node.textContent.trim().length > 0;
-        }
-        return false;
+        // Check for regular element and text nodes with content
+        return this.__hasNodeContent(node);
       });
     }
 
