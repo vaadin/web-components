@@ -86,6 +86,22 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  * `has-drawer`   | Set when the element has light DOM content in the drawer slot.
  * `has-navbar`   | Set when the element has light DOM content in the navbar slot.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                  |
+ * :----------------------------------------------------|
+ * | `--vaadin-app-layout-drawer-background`            |
+ * | `--vaadin-app-layout-drawer-width`                 |
+ * | `--vaadin-app-layout-navbar-background`            |
+ * | `--vaadin-app-layout-navbar-gap`                   |
+ * | `--vaadin-app-layout-navbar-padding-bottom`        |
+ * | `--vaadin-app-layout-navbar-padding-inline-end`    |
+ * | `--vaadin-app-layout-navbar-padding-inline-start`  |
+ * | `--vaadin-app-layout-navbar-padding-top`           |
+ * | `--vaadin-app-layout-transition-duration`          |
+ * | `--vaadin-overlay-backdrop-background`             |
+ * | `--vaadin-overlay-shadow`                          |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Component's slots
