@@ -114,7 +114,7 @@ describe('dashboard', () => {
     getRemoveButton(widget as DashboardWidget).click();
     expect(spy).to.be.calledOnce;
     expect(spy.firstCall.args[0].detail.item).to.eql({ id: '1' });
-    expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }, { id: '1' }]);
+    expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }]); // contains the state after removal
     expect(spy.firstCall.args[0].detail.section).to.be.undefined;
   });
 

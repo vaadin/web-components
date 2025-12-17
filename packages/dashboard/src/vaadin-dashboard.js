@@ -433,7 +433,7 @@ class Dashboard extends DashboardLayoutMixin(
     // Fire before-remove event
     const beforeRemoveEvent = new CustomEvent('dashboard-item-before-remove', {
       cancelable: true,
-      detail: { item, items: [...this.items], section },
+      detail: { item, items: this.items, section },
     });
     this.dispatchEvent(beforeRemoveEvent);
 
@@ -534,9 +534,6 @@ class Dashboard extends DashboardLayoutMixin(
    * Fired before an item is removed
    *
    * @event dashboard-item-before-remove
-   * @param {Object} detail
-   * @param {Object} detail.item the item to be removed
-   * @param {Array} detail.items the current items array
    */
 
   /**
