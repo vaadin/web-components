@@ -750,12 +750,15 @@ export const UploadMixin = (superClass) =>
         // Add to queue if not already queued
         if (!this._uploadQueue.includes(file)) {
           this._uploadQueue.push(file);
-          // Only set held = true and "Queued" status if file wasn't manually started by user.
-          // If user clicked "Start", held is already false and status is "0%",
-          // so keep those values to hide the start button and show progress.
-          if (file.held !== false) {
+          // Only show play button (held=true) in noAuto mode for files not manually started.
+          // In auto mode, never show play button for queued files.
+          // If user clicked "Start" in noAuto mode, held is already false and status is "0%".
+          if (this.noAuto && file.held !== false) {
             file.held = true;
             file.status = this.__effectiveI18n.uploading.status.held;
+          } else {
+            // In auto mode or manually started: show "0%" status
+            file.status = '0%';
           }
           this._renderFileList();
         }
@@ -1021,7 +1024,9 @@ export const UploadMixin = (superClass) =>
         return;
       }
       file.loaded = 0;
-      file.held = true;
+      // Only show play button (held=true) in noAuto mode.
+      // In auto mode, files should never show the play button.
+      file.held = this.noAuto;
       file.status = this.__effectiveI18n.uploading.status.held;
       this.files = [file, ...this.files];
 

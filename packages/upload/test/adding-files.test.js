@@ -341,8 +341,8 @@ describe('adding files', () => {
       expect(uploadStartSpy.calledOnce).to.be.true;
       // Files are prepended, so the first file added is at index 1
       expect(upload.files[1].held).to.be.false;
-      // Second file (at index 0) should be held in queue
-      expect(upload.files[0].held).to.be.true;
+      // Second file (at index 0) should be queued but NOT show play button in auto mode
+      expect(upload.files[0].held).to.not.be.true;
     });
 
     it('should not automatically start upload when noAuto flag is set', () => {

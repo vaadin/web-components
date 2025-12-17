@@ -77,11 +77,12 @@ describe('concurrent uploads', () => {
       expect(files[0].uploading).to.be.true;
       expect(files[1].uploading).to.be.true;
 
-      // Remaining files should be queued
-      expect(files[2].held).to.be.true;
-      expect(files[2].status).to.equal(upload.i18n.uploading.status.held);
-      expect(files[3].held).to.be.true;
-      expect(files[4].held).to.be.true;
+      // Remaining files should be queued with "0%" status and no play button (held !== true)
+      // In auto mode, queued files should NOT show the play button
+      expect(files[2].held).to.not.be.true;
+      expect(files[2].status).to.equal('0%');
+      expect(files[3].held).to.not.be.true;
+      expect(files[4].held).to.not.be.true;
     });
 
     it('should process queue as uploads complete', async () => {

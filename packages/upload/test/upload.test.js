@@ -572,8 +572,9 @@ describe('upload', () => {
       await clock.tickAsync(10);
       expect(upload.files[2].uploading).to.be.true;
       expect(upload.files[2].held).to.be.false;
-      expect(upload.files[1].held).to.be.true;
-      expect(upload.files[0].held).to.be.true;
+      // In auto mode, queued files should NOT show play button (held should not be true)
+      expect(upload.files[1].held).to.not.be.true;
+      expect(upload.files[0].held).to.not.be.true;
 
       // Wait for first file to complete (connectTime + uploadTime + serverTime = 10 + 200 + 10 = 220ms)
       await clock.tickAsync(220);
@@ -584,7 +585,8 @@ describe('upload', () => {
       await clock.tickAsync(10);
       expect(upload.files[1].uploading).to.be.true;
       expect(upload.files[1].held).to.be.false;
-      expect(upload.files[0].held).to.be.true;
+      // In auto mode, queued files should NOT show play button
+      expect(upload.files[0].held).to.not.be.true;
 
       // Wait for second file to complete
       await clock.tickAsync(220);
@@ -641,7 +643,8 @@ describe('upload', () => {
       // First file added (at index 1) should start uploading
       await clock.tickAsync(10);
       expect(upload.files[1].uploading).to.be.true;
-      expect(upload.files[0].held).to.be.true;
+      // In auto mode, queued files should NOT show play button
+      expect(upload.files[0].held).to.not.be.true;
 
       // Abort the first file (at index 1)
       upload._abortFileUpload(upload.files[1]);
