@@ -1,6 +1,6 @@
 :where(:root),
 :where(:host) {
-  --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
+  --vaadin-button-shadow: var(--aura-shadow-xs);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
@@ -59,7 +59,7 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-text-color: var(--aura-accent-contrast-color);
   --vaadin-button-background: var(--aura-accent-color);
   --vaadin-button-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-button-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
+  --vaadin-button-shadow: var(--aura-shadow-s);
 }
 
 /* prettier-ignore */
