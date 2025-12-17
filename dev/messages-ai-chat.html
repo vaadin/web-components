@@ -128,13 +128,11 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
         const newAssistantItem = createItem('', true);
 
         // Simulate AI typing response token by token
-        simulateMessageStream()
-          .onNext((token) => {
-            newAssistantItem.text += token;
-            // Force UI update by creating a new array
-            list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
-          })
-          .onComplete(() => {});
+        simulateMessageStream().onNext((token) => {
+          newAssistantItem.text += token;
+          // Force UI update by creating a new array
+          list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
+        });
       });
     </script>
   </head>
