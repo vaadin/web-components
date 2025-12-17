@@ -37,6 +37,12 @@ export const PopoverOverlayMixin = (superClass) =>
 
       this.removeAttribute('arrow-centered');
 
+      // Clear any previous arrow positioning
+      const arrow = this.$.overlay.querySelector('[part="arrow"]');
+      if (arrow) {
+        arrow.style.insetInlineStart = '';
+      }
+
       // Center the overlay horizontally
       if (this.position === 'bottom' || this.position === 'top') {
         const targetRect = this.positionTarget.getBoundingClientRect();
@@ -64,6 +70,8 @@ export const PopoverOverlayMixin = (superClass) =>
           this.style.left = `${clampedLeft}px`;
           if (isCentered) {
             this.setAttribute('arrow-centered', '');
+          } else {
+            this.__repositionArrow(targetRect);
           }
         }
 
@@ -86,8 +94,21 @@ export const PopoverOverlayMixin = (superClass) =>
           this.style.right = `${clampedRight}px`;
           if (isCentered) {
             this.setAttribute('arrow-centered', '');
+          } else {
+            this.__repositionArrow(targetRect);
           }
         }
+      }
+
+      // Calculate arrow offset for aligned horizontal positions (bottom-start, bottom-end, top-start, top-end)
+      if (
+        this.position === 'bottom-start' ||
+        this.position === 'top-start' ||
+        this.position === 'bottom-end' ||
+        this.position === 'top-end'
+      ) {
+        const targetRect = this.positionTarget.getBoundingClientRect();
+        this.__repositionArrow(targetRect);
       }
 
       // Center the overlay vertically
@@ -98,5 +119,24 @@ export const PopoverOverlayMixin = (superClass) =>
         const offset = targetRect.height / 2 - overlayRect.height / 2;
         this.style.top = `${overlayRect.top + offset}px`;
       }
+    }
+
+    /** @private */
+    __repositionArrow(targetRect) {
+      // When constrained, position arrow to point at target center
+      // Use requestAnimationFrame to get fresh measurements after position is applied
+      requestAnimationFrame(() => {
+        if (!this.opened) {
+          return;
+        }
+        const arrow = this.$.overlay.querySelector('[part="arrow"]');
+        if (!arrow) {
+          return;
+        }
+        const freshOverlayRect = this.$.overlay.getBoundingClientRect();
+        const targetCenter = targetRect.left + targetRect.width / 2;
+        const arrowOffset = targetCenter - freshOverlayRect.left;
+        arrow.style.insetInlineStart = `${arrowOffset}px`;
+      });
     }
   };
