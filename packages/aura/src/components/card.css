@@ -35,11 +35,7 @@ vaadin-card[theme~='elevated'] {
   --aura-surface-opacity: 0.7;
   --aura-surface-level: 3;
   background: var(--aura-surface-color) padding-box;
-  --_shadow-color: light-dark(
-    oklch(from var(--aura-background-color-light) calc(l - l * 0.8) calc(c / 10) h / 0.1),
-    oklch(from var(--aura-background-color-dark) calc(l - l * 0.8) calc(c / 10) h / 0.2)
-  );
-  --vaadin-card-shadow: 0 1px 4px -1px var(--_shadow-color);
+  box-shadow: var(--vaadin-card-shadow, var(--aura-shadow-s));
 }
 
 vaadin-card[theme~='stretch-media']:not([theme~='cover-media']) [slot='media']:is(img, video, svg, vaadin-icon) {
