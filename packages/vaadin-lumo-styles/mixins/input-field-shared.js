@@ -130,6 +130,7 @@ const inputField = css`
     25% {
       transform: translateX(4px);
     }
+
     75% {
       transform: translateX(-4px);
     }

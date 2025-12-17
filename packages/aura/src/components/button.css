@@ -1,6 +1,6 @@
 :where(:root),
 :where(:host) {
-  --vaadin-button-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
+  --vaadin-button-shadow: var(--aura-shadow-xs);
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
@@ -8,6 +8,10 @@
   position: relative;
   --_background: var(--aura-accent-surface) padding-box;
   --vaadin-button-text-color: var(--aura-accent-text-color);
+}
+
+vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
+  opacity: 0.6;
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='tertiary'])) {
@@ -31,19 +35,19 @@ Increase padding, but only for buttons that don't have an icon in the default sl
 Buttons that place an icon in the default slot are assumed to be icon-only buttons.
 */
 /* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(:has(:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(:has(> :is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
   --vaadin-button-padding: round(var(--vaadin-padding-s) / 1.4, 1px)
     max(var(--vaadin-padding-m), round(var(--vaadin-radius-m) / 1.5, 1px));
 }
 
 /* Decrease padding when an icon is placed in the prefix or suffix slot */
-:is(vaadin-button, vaadin-menu-bar-button):has([slot='prefix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
+:is(vaadin-button, vaadin-menu-bar-button):has(> [slot='prefix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
 vaadin-drawer-toggle:empty {
   padding-inline-start: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
 }
 
 /* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):has([slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
+:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):has(> [slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
 vaadin-drawer-toggle:empty,
 vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   padding-inline-end: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
@@ -55,7 +59,7 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-text-color: var(--aura-accent-contrast-color);
   --vaadin-button-background: var(--aura-accent-color);
   --vaadin-button-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-button-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
+  --vaadin-button-shadow: var(--aura-shadow-s);
 }
 
 /* prettier-ignore */

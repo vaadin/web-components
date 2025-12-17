@@ -17,10 +17,13 @@
   }
 
   [part='required-indicator']::after {
-    content: var(--lumo-required-field-indicator, '\2022');
+    content: var(--vaadin-input-field-required-indicator, var(--lumo-required-field-indicator, '\2022'));
     transition: opacity 0.2s;
     opacity: 0;
-    color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+    color: var(
+      --vaadin-input-field-required-indicator-color,
+      var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
+    );
     position: relative;
     width: 1em;
     text-align: center;
@@ -31,6 +34,9 @@
   }
 
   :host([invalid]) [part='required-indicator']::after {
-    color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+    color: var(
+      --vaadin-input-field-required-indicator-color,
+      var(--lumo-required-field-indicator-color, var(--lumo-error-text-color))
+    );
   }
 }

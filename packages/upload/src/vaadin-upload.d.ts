@@ -147,6 +147,47 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  * `dragover-valid`     | Set when the dragged file is valid with `maxFiles` and `accept` criteria
  * `max-files-reached`  | Set when maximum number of files that the user is allowed to add has been reached
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * `--vaadin-upload-background`                 |
+ * `--vaadin-upload-border-color`               |
+ * `--vaadin-upload-border-radius`              |
+ * `--vaadin-upload-border-width`               |
+ * `--vaadin-upload-gap`                        |
+ * `--vaadin-upload-padding`                    |
+ * `--vaadin-upload-drop-label-color`           |
+ * `--vaadin-upload-drop-label-font-size`       |
+ * `--vaadin-upload-drop-label-font-weight`     |
+ * `--vaadin-upload-drop-label-gap`             |
+ * `--vaadin-upload-drop-label-line-height`     |
+ * `--vaadin-upload-file-list-divider-color`    |
+ * `--vaadin-upload-file-list-divider-width`    |
+ * `--vaadin-upload-file-border-radius`         |
+ * `--vaadin-upload-file-button-background`     |
+ * `--vaadin-upload-file-button-border-color`   |
+ * `--vaadin-upload-file-button-border-radius`  |
+ * `--vaadin-upload-file-button-border-width`   |
+ * `--vaadin-upload-file-button-text-color`     |
+ * `--vaadin-upload-file-button-padding`        |
+ * `--vaadin-upload-file-done-color`            |
+ * `--vaadin-upload-file-error-color`           |
+ * `--vaadin-upload-file-error-font-size`       |
+ * `--vaadin-upload-file-error-font-weight`     |
+ * `--vaadin-upload-file-error-line-height`     |
+ * `--vaadin-upload-file-gap`                   |
+ * `--vaadin-upload-file-name-color`            |
+ * `--vaadin-upload-file-name-font-size`        |
+ * `--vaadin-upload-file-name-font-weight`      |
+ * `--vaadin-upload-file-name-line-height`      |
+ * `--vaadin-upload-file-padding`               |
+ * `--vaadin-upload-file-status-color`          |
+ * `--vaadin-upload-file-status-font-size`      |
+ * `--vaadin-upload-file-status-font-weight`    |
+ * `--vaadin-upload-file-status-line-height`    |
+ * `--vaadin-upload-file-warning-color`         |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.

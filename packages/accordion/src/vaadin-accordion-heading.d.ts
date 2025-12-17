@@ -38,6 +38,21 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `opened`     | Set when the collapsible content is expanded and visible.
  * `disabled`   | Set when the element is disabled.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-accordion-heading-background`    |
+ * | `--vaadin-accordion-heading-border-color`  |
+ * | `--vaadin-accordion-heading-border-radius` |
+ * | `--vaadin-accordion-heading-border-width`  |
+ * | `--vaadin-accordion-heading-font-size`     |
+ * | `--vaadin-accordion-heading-font-weight`   |
+ * | `--vaadin-accordion-heading-gap`           |
+ * | `--vaadin-accordion-heading-height`        |
+ * | `--vaadin-accordion-heading-padding`       |
+ * | `--vaadin-accordion-heading-text-color`    |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(HTMLElement))) {

@@ -72,7 +72,7 @@ class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(Themabl
       :host([opening]),
       :host([closing]) {
         display: block !important;
-        position: absolute;
+        position: fixed;
         outline: none;
       }
 

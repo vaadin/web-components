@@ -88,4 +88,46 @@ describe('input-container', () => {
       });
     });
   });
+
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('align-start', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-start');
+        await visualDiff(div, `${dir}-align-start`);
+      });
+
+      it('align-center', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-center');
+        await visualDiff(div, `${dir}-align-center`);
+      });
+
+      it('align-end', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-end');
+        await visualDiff(div, `${dir}-align-end`);
+      });
+
+      it('align-left', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-left');
+        await visualDiff(div, `${dir}-align-left`);
+      });
+
+      it('align-right', async () => {
+        input.value = 'Some text';
+        element.setAttribute('theme', 'align-right');
+        await visualDiff(div, `${dir}-align-right`);
+      });
+    });
+  });
 });

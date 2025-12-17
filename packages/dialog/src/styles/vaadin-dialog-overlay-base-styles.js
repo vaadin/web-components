@@ -132,19 +132,34 @@ const dialogResizableOverlay = css`
   [part='content'] {
     flex: 1;
     min-height: 0;
-  }
-
-  :host([overflow]) [part='content'] {
     overflow: auto;
     overscroll-behavior: contain;
+    clip-path: border-box;
+  }
+
+  [part='header'],
+  :host(:not([has-header])) [part='content'] {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  [part='footer'],
+  :host(:not([has-footer])) [part='content'] {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
   }
 
   .resizer-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    border-radius: inherit;
     max-width: 100%;
+    border-radius: calc(
+      var(--vaadin-dialog-border-radius, var(--vaadin-radius-l)) - var(
+          --vaadin-dialog-border-width,
+          var(--vaadin-overlay-border-width, 1px)
+        )
+    );
   }
 
   :host(:not([resizable])) .resizer {

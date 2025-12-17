@@ -34,6 +34,11 @@ describe('upload', () => {
         await visualDiff(div, `${dir}-nodrop`);
       });
 
+      it('dragover-valid', async () => {
+        element.setAttribute('dragover-valid', '');
+        await visualDiff(div, `${dir}-dragover-valid`);
+      });
+
       it('files', async () => {
         element.files = [
           { name: 'Don Quixote.pdf', progress: 100, complete: true },

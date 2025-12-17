@@ -5,13 +5,14 @@
   --vaadin-tabs-gap: 2px;
   --vaadin-tabs-border-radius: calc(var(--vaadin-tab-border-radius) + var(--vaadin-tabs-padding));
   --vaadin-tabs-padding: 3px;
+  --vaadin-tabs-border-width: 1px;
 }
 
 vaadin-tabs {
   contain: paint;
-  --aura-surface-level: -1.5;
+  --aura-surface-level: -1;
   --aura-surface-opacity: 0.3;
-  background: var(--vaadin-tabs-background, var(--aura-surface-color) padding-box);
+  background: var(--vaadin-tabs-background, var(--aura-surface-color));
 }
 
 vaadin-tabs::part(tabs) {
@@ -48,13 +49,13 @@ vaadin-tabs[overflow~='end'] {
 
 vaadin-tabs::part(back-button),
 vaadin-tabs::part(forward-button) {
-  background: var(--aura-surface-color-solid) padding-box;
-  border: 1px solid var(--vaadin-border-color);
+  background: var(--aura-background-color) padding-box;
+  border: 1px solid var(--vaadin-border-color-secondary);
   border-radius: var(--vaadin-radius-m);
   padding: var(--vaadin-padding-xs);
   height: auto;
   align-self: center;
-  box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
+  box-shadow: var(--aura-shadow-s);
   transition: opacity 120ms;
 }
 
@@ -81,15 +82,15 @@ vaadin-tab:not([disabled], [selected]):hover {
 vaadin-tab[selected] {
   --aura-surface-level: 6;
   --aura-surface-opacity: 0.7;
-  --vaadin-tab-background: var(--aura-accent-surface) padding-box;
+  --vaadin-tab-background: var(--aura-accent-surface);
   --vaadin-tab-text-color: var(--aura-accent-text-color);
-  --vaadin-tab-border-color: var(--aura-accent-border-color);
-  box-shadow: 0 1px 4px -1px var(--aura-shadow-color);
+  box-shadow: var(--aura-shadow-s);
+  border-color: hsl(0deg, 100%, 100%, 0.05);
 }
 
 /* Filled variant */
 
-vaadin-tabs[theme~='filled'] vaadin-tab[selected] {
+vaadin-tabs[theme~='filled'] > vaadin-tab[selected] {
   --vaadin-tab-background: var(--aura-accent-color) border-box;
   --vaadin-tab-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--aura-accent-contrast-color);

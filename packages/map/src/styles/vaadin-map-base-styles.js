@@ -274,7 +274,8 @@ export const mapStyles = css`
   }
 
   .ol-compass:empty::before {
-    mask: var(--_vaadin-icon-arrow-up) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+    mask: var(--vaadin-map-icon-compass, var(--_vaadin-icon-arrow-up)) 50% / var(--vaadin-icon-visual-size, 100%)
+      no-repeat;
   }
 
   .ol-full-screen {
@@ -282,11 +283,12 @@ export const mapStyles = css`
   }
 
   .ol-full-screen button:empty::before {
-    mask: var(--_vaadin-icon-fullscreen) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+    mask: var(--vaadin-map-icon-fullscreen, var(--_vaadin-icon-fullscreen)) 50% / var(--vaadin-icon-visual-size, 100%)
+      no-repeat;
   }
 
   .ol-full-screen .ol-full-screen-true:empty::before {
-    mask: var(--_vaadin-icon-cross) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
+    mask: var(--vaadin-map-icon-close, var(--_vaadin-icon-cross)) 50% / var(--vaadin-icon-visual-size, 100%) no-repeat;
   }
 
   .ol-overviewmap {

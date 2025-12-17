@@ -4,39 +4,38 @@
   --vaadin-card-padding: var(--vaadin-padding-l);
   --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
   --vaadin-card-border-color: var(--vaadin-border-color-secondary);
-  --vaadin-card-background: var(--aura-surface-color) padding-box;
+  --vaadin-card-border-width: 1px;
 }
 
 vaadin-card {
-  --vaadin-card-background: var(--aura-surface-color) padding-box;
+  background: var(--vaadin-card-background, var(--aura-surface-color) padding-box);
+  background-clip: padding-box;
   --aura-surface-level: 2;
+  --aura-surface-opacity: 0.5;
+  border: var(--vaadin-card-border-width) solid transparent;
+  --_padding: calc(var(--vaadin-card-padding) - var(--vaadin-card-border-width, 1px));
 }
 
 vaadin-card[theme~='outlined'] {
-  border: var(--vaadin-card-border-width, 1px) solid transparent;
-  --vaadin-card-padding: calc(var(--vaadin-padding-l) - var(--vaadin-card-border-width, 1px));
+  --vaadin-card-border-color: var(--vaadin-border-color);
 }
 
-vaadin-card[theme~='outlined']::before {
-  inset: calc(var(--vaadin-card-border-width, 1px) * -1);
+vaadin-card::before {
+  inset: calc(var(--vaadin-card-border-width) * -1);
 }
 
-vaadin-card[theme~='outlined'][theme~='cover-media'] [slot='media']:is(img, video, svg, vaadin-icon) {
+vaadin-card[theme~='cover-media'] [slot='media']:is(img, video, svg, vaadin-icon) {
   /* TODO relies on internal API - should refactor base styles to support this (background-clip: padding-box) */
-  margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width, 1px)) * -1);
-  margin-top: calc((var(--_padding) + var(--vaadin-card-border-width, 1px)) * -1);
-  width: calc(100% + (var(--_padding) + var(--vaadin-card-border-width, 1px)) * 2);
+  margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
+  margin-top: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
+  width: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
 }
 
 vaadin-card[theme~='elevated'] {
   --aura-surface-opacity: 0.7;
   --aura-surface-level: 3;
-  --_shadow-color: light-dark(
-    oklch(from var(--aura-background-color-light) calc(l - l * 0.8) calc(c / 10) h / 0.1),
-    oklch(from var(--aura-background-color-dark) calc(l - l * 0.8) calc(c / 10) h / 0.2)
-  );
-  --vaadin-card-shadow: 0 1px 6px -1px var(--_shadow-color);
-  background-clip: padding-box;
+  background: var(--aura-surface-color) padding-box;
+  box-shadow: var(--vaadin-card-shadow, var(--aura-shadow-s));
 }
 
 vaadin-card[theme~='stretch-media']:not([theme~='cover-media']) [slot='media']:is(img, video, svg, vaadin-icon) {

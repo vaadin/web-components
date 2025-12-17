@@ -1,21 +1,25 @@
 :where(:root),
 :where(:host) {
-  --vaadin-item-overlay-padding: var(--vaadin-gap-xs);
-  --vaadin-item-border-radius: max(var(--vaadin-radius-s), var(--vaadin-radius-m) - var(--vaadin-item-overlay-padding));
+  --aura-item-overlay-padding-inline: var(--vaadin-padding-xs);
+  --aura-item-overlay-padding-block: var(--vaadin-padding-xs);
+  --vaadin-item-overlay-padding: var(--aura-item-overlay-padding-block) var(--aura-item-overlay-padding-inline);
+  --vaadin-item-border-radius: clamp(
+    0px,
+    var(--aura-item-overlay-padding-inline) * 100,
+    var(--vaadin-radius-m) - min(var(--aura-item-overlay-padding-inline), var(--aura-item-overlay-padding-block))
+  );
   --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   --vaadin-item-gap: var(--vaadin-gap-s);
 }
 
-:is(
-  vaadin-avatar-group-menu-item,
-  vaadin-combo-box-item,
-  vaadin-context-menu-item,
-  vaadin-time-picker-item,
-  vaadin-item,
-  vaadin-menu-bar-item,
-  vaadin-multi-select-combo-box-item,
-  vaadin-select-item[role]
-) {
+vaadin-avatar-group-menu-item,
+vaadin-combo-box-item,
+vaadin-context-menu-item,
+vaadin-time-picker-item,
+vaadin-item,
+vaadin-menu-bar-item,
+vaadin-multi-select-combo-box-item,
+vaadin-select-item:where([role]) {
   font-weight: var(--aura-font-weight-medium);
   --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   -webkit-user-select: none;
@@ -24,20 +28,22 @@
     oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
     oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
   );
+  padding-inline-start: max(0px, var(--vaadin-padding-inline-container) - var(--aura-item-overlay-padding-inline));
   gap: 0;
 
   &::part(checkmark) {
     --vaadin-icon-visual-size: 75%;
-    margin-inline-start: calc(var(--vaadin-gap-xs) * -1);
   }
 
-  &[aria-haspopup='true']::after {
-    --vaadin-icon-visual-size: 90%;
-    margin-inline-end: calc(var(--vaadin-gap-xs) * -1);
+  &[aria-haspopup='true'] {
+    padding-inline-end: max(0px, var(--vaadin-padding-inline-container) - var(--aura-item-overlay-padding-inline));
+
+    &::after {
+      --vaadin-icon-visual-size: 90%;
+    }
   }
 
   &::part(content) {
-    display: flex;
     padding-inline: var(--vaadin-gap-xs);
     gap: var(--vaadin-item-gap);
   }

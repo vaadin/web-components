@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/test-runner-commands",
-  "version": "25.0.0-beta5",
+  "version": "25.1.0-alpha0",
   "private": true,
   "description": "Vaadin web components test runner helpers",
   "license": "Apache-2.0",

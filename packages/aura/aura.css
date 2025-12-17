@@ -11,6 +11,7 @@
 @import './src/components/avatar.css';
 @import './src/components/button.css';
 @import './src/components/card.css';
+@import './src/components/charts.css';
 @import './src/components/checkbox-radio.css';
 @import './src/components/confirm-dialog.css';
 @import './src/components/crud.css';
@@ -32,6 +33,7 @@
 @import './src/components/select.css';
 @import './src/components/side-nav.css';
 @import './src/components/tabs.css';
+@import './src/components/tooltip.css';
 @import './src/components/upload.css';
 
 :where(:root),

@@ -11,13 +11,9 @@ export const checkable = (part, propName = part) => css`
   :host {
     align-items: baseline;
     column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
+    grid-template: none;
     grid-template-columns: auto 1fr;
-    /*
-      Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox
-      inside a flex container with flex-direction: column causes the container to unexpectedly
-      grow to the max available height.
-    */
-    grid-template-rows: minmax(auto, max-content);
+    grid-template-rows: repeat(auto-fill, minmax(0, max-content));
     -webkit-tap-highlight-color: transparent;
     --_cursor: var(--vaadin-clickable-cursor);
   }
@@ -65,6 +61,7 @@ export const checkable = (part, propName = part) => css`
   [part='helper-text'],
   [part='error-message'] {
     margin-top: var(--_gap-s);
+    grid-row: auto;
   }
 
   /* Baseline vertical alignment */
@@ -78,7 +75,6 @@ export const checkable = (part, propName = part) => css`
   /* visually hidden */
   ::slotted(input) {
     cursor: inherit;
-    margin: 0;
     align-self: stretch;
     appearance: none;
     cursor: var(--_cursor);
@@ -86,7 +82,7 @@ export const checkable = (part, propName = part) => css`
     width: 2px;
     height: 2px;
     scale: 12;
-    margin: auto;
+    margin: auto !important;
   }
 
   /* Control container (checkbox, radio button) */

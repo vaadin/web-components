@@ -68,6 +68,24 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * `has-footer`     | Set when the element has footer renderer
  * `overflow`       | Set to `top`, `bottom`, none or both
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * |`--vaadin-dialog-background`            |
+ * |`--vaadin-dialog-border-color`          |
+ * |`--vaadin-dialog-border-radius`         |
+ * |`--vaadin-dialog-border-width`          |
+ * |`--vaadin-dialog-max-width`             |
+ * |`--vaadin-dialog-min-width`             |
+ * |`--vaadin-dialog-padding`               |
+ * |`--vaadin-dialog-shadow`                |
+ * |`--vaadin-dialog-title-color`           |
+ * |`--vaadin-dialog-title-font-size`       |
+ * |`--vaadin-dialog-title-font-weight`     |
+ * |`--vaadin-dialog-title-line-height`     |
+ * |`--vaadin-overlay-backdrop-background`  |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
@@ -102,7 +120,7 @@ class Dialog extends DialogSizeMixin(
       :host([opening]),
       :host([closing]) {
         display: block !important;
-        position: absolute;
+        position: fixed;
         outline: none;
       }
 

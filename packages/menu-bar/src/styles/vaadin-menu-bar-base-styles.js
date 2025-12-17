@@ -17,9 +17,7 @@ export const menuBarStyles = css`
   [part='container'] {
     display: flex;
     flex-wrap: nowrap;
-    margin: calc((var(--vaadin-focus-ring-width) + 2px) * -1);
-    overflow: hidden;
-    padding: calc(var(--vaadin-focus-ring-width) + 2px);
+    contain: layout;
     position: relative;
     width: 100%;
     --_gap: var(--vaadin-menu-bar-gap, 0px);
@@ -28,7 +26,7 @@ export const menuBarStyles = css`
     --_rad-button: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
   }
 
-  ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
+  :host(:not([has-single-button])) ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
     margin-inline-start: min(var(--_bw) * -1 + var(--_gap) * 1000, 0px);
   }
 

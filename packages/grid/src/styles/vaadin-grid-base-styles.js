@@ -54,6 +54,7 @@ export const gridStyles = css`
     min-height: auto;
     flex-grow: 0;
     flex-shrink: 0;
+    width: 100%;
   }
 
   #scroller {
@@ -396,7 +397,6 @@ export const gridStyles = css`
   [frozen],
   [frozen-to-end] {
     z-index: 2;
-    will-change: transform;
   }
 
   /* Empty state */

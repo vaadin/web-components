@@ -9,8 +9,8 @@
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
-    padding: var(--lumo-space-s) var(--lumo-space-m);
-    gap: 0;
+    padding: var(--vaadin-message-padding, var(--lumo-space-s) var(--lumo-space-m));
+    gap: var(--vaadin-message-gap, 0);
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
@@ -27,7 +27,7 @@
   }
 
   [part='name'] {
-    color: inherit;
+    color: var(--vaadin-message-name-color, inherit);
     margin-inline-end: var(--lumo-space-s);
   }
 
@@ -36,12 +36,12 @@
   }
 
   [part='message'] {
-    color: inherit;
+    color: var(--vaadin-message-text-color, inherit);
   }
 
   [part='time'] {
-    color: var(--lumo-secondary-text-color);
-    font-size: var(--lumo-font-size-s);
+    color: var(--vaadin-message-time-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-message-time-font-size, var(--lumo-font-size-s));
   }
 
   ::slotted([slot='avatar']) {

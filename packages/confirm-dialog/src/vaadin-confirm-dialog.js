@@ -38,6 +38,24 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  * `confirm-button` | The "Confirm" button wrapper
  * `reject-button`  | The "Reject" button wrapper
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * |`--vaadin-confirm-dialog-max-width`     |
+ * |`--vaadin-confirm-dialog-min-width`     |
+ * |`--vaadin-dialog-background`            |
+ * |`--vaadin-dialog-border-color`          |
+ * |`--vaadin-dialog-border-radius`         |
+ * |`--vaadin-dialog-border-width`          |
+ * |`--vaadin-dialog-padding`               |
+ * |`--vaadin-dialog-shadow`                |
+ * |`--vaadin-dialog-title-color`           |
+ * |`--vaadin-dialog-title-font-size`       |
+ * |`--vaadin-dialog-title-font-weight`     |
+ * |`--vaadin-dialog-title-line-height`     |
+ * |`--vaadin-overlay-backdrop-background`  |
+ *
  * Use `confirmTheme`, `cancelTheme` and `rejectTheme` properties to customize buttons theme.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
@@ -76,7 +94,7 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
       :host([opening]),
       :host([closing]) {
         display: block !important;
-        position: absolute;
+        position: fixed;
         outline: none;
       }
 

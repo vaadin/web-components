@@ -60,7 +60,7 @@ export const dashboardWidgetAndSectionStyles = css`
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
-    gap: var(--vaadin-dashboard-header-gap, var(--vaadin-gap-s));
+    gap: var(--vaadin-dashboard-widget-header-gap, var(--vaadin-gap-s));
   }
 
   [part='title'] {
