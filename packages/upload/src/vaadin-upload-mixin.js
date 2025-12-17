@@ -375,6 +375,22 @@ export const UploadMixin = (superClass) =>
           type: Object,
         },
 
+        /**
+         * The id of the element to be used as the add button.
+         * The element should be in the DOM by the time when
+         * the attribute is set, otherwise a warning is shown.
+         * @attr {string} add-button-id
+         */
+        addButtonId: {
+          type: String,
+          observer: '__addButtonIdChanged',
+        },
+
+        /** @private */
+        _externalAddButton: {
+          type: Object,
+        },
+
         /** @private */
         _files: {
           type: Array,
@@ -397,6 +413,7 @@ export const UploadMixin = (superClass) =>
     static get observers() {
       return [
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
+        '__updateExternalAddButton(_externalAddButton, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
         '__updateExternalFileList(_externalFileList, files, __effectiveI18n, disabled)',
@@ -504,6 +521,10 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
       this.addEventListener('upload-error', this._onUploadError.bind(this));
 
+      // Bind external add button handlers
+      this.__onExternalAddButtonTouchEnd = this._onAddFilesTouchEnd.bind(this);
+      this.__onExternalAddButtonClick = this._onAddFilesClick.bind(this);
+
       this._addButtonController = new AddButtonController(this);
       this.addController(this._addButtonController);
 
@@ -595,6 +616,13 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
+    __updateExternalAddButton(addButton, maxFilesReached, disabled) {
+      if (addButton) {
+        addButton.disabled = disabled || maxFilesReached;
+      }
+    }
+
+    /** @private */
     __updateDropLabel(dropLabel, maxFiles, effectiveI18n) {
       // Only update text content for the default label element
       if (dropLabel && dropLabel === this._dropLabelController.defaultNode) {
@@ -644,6 +672,49 @@ export const UploadMixin = (superClass) =>
       } else {
         console.warn(`No element with id="${fileListId}" found on the page.`);
       }
+    }
+
+    /** @private */
+    __addButtonIdChanged(addButtonId, oldAddButtonId) {
+      if (oldAddButtonId && this._externalAddButton) {
+        this.__removeExternalAddButtonListeners(this._externalAddButton);
+      }
+
+      if (addButtonId) {
+        this.__setAddButtonByIdDebouncer = Debouncer.debounce(this.__setAddButtonByIdDebouncer, microTask, () =>
+          this.__setAddButtonById(addButtonId),
+        );
+      } else {
+        this._externalAddButton = null;
+      }
+    }
+
+    /** @private */
+    __setAddButtonById(addButtonId) {
+      if (!this.isConnected) {
+        return;
+      }
+
+      const addButton = this.getRootNode().getElementById(addButtonId);
+
+      if (addButton) {
+        this._externalAddButton = addButton;
+        this.__addExternalAddButtonListeners(addButton);
+      } else {
+        console.warn(`No element with id="${addButtonId}" found on the page.`);
+      }
+    }
+
+    /** @private */
+    __addExternalAddButtonListeners(button) {
+      button.addEventListener('touchend', this.__onExternalAddButtonTouchEnd);
+      button.addEventListener('click', this.__onExternalAddButtonClick);
+    }
+
+    /** @private */
+    __removeExternalAddButtonListeners(button) {
+      button.removeEventListener('touchend', this.__onExternalAddButtonTouchEnd);
+      button.removeEventListener('click', this.__onExternalAddButtonClick);
     }
 
     /** @private */
