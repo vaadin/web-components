@@ -15,7 +15,7 @@ vaadin-radio-button::part(radio) {
 vaadin-checkbox:not([readonly], [disabled])::part(checkbox),
 vaadin-radio-button:not([disabled])::part(radio) {
   --aura-surface-level: 4;
-  box-shadow: 0 2px 1px -1px hsla(0, 0%, 0%, 0.07);
+  box-shadow: var(--aura-shadow-xs);
   --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
   background-image: linear-gradient(
     light-dark(transparent, var(--_shade)),
@@ -34,12 +34,14 @@ vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part
   --vaadin-checkbox-background: var(--aura-accent-color);
   --vaadin-checkbox-marker-color: var(--aura-accent-contrast-color);
   --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
 }
 
 vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
   --vaadin-radio-button-background: var(--aura-accent-color);
   --vaadin-radio-button-marker-color: var(--aura-accent-contrast-color);
   --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
 }
 
 vaadin-checkbox:not([readonly], [disabled])::part(checkbox)::before,
