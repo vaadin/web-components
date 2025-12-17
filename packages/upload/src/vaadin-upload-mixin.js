@@ -5,7 +5,9 @@
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
@@ -357,6 +359,22 @@ export const UploadMixin = (superClass) =>
           type: Object,
         },
 
+        /**
+         * The id of the element to be used as the file list.
+         * The element should be in the DOM by the time when
+         * the attribute is set, otherwise a warning is shown.
+         * @attr {string} file-list-id
+         */
+        fileListId: {
+          type: String,
+          observer: '__fileListIdChanged',
+        },
+
+        /** @private */
+        _externalFileList: {
+          type: Object,
+        },
+
         /** @private */
         _files: {
           type: Array,
@@ -381,6 +399,7 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
+        '__updateExternalFileList(_externalFileList, files, __effectiveI18n, disabled)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -589,6 +608,41 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
+      }
+    }
+
+    /** @private */
+    __updateExternalFileList(list, files, effectiveI18n, disabled) {
+      if (list) {
+        list.items = [...files];
+        list.i18n = effectiveI18n;
+        list.disabled = disabled;
+      }
+    }
+
+    /** @private */
+    __fileListIdChanged(fileListId) {
+      if (fileListId) {
+        this.__setFileListByIdDebouncer = Debouncer.debounce(this.__setFileListByIdDebouncer, microTask, () =>
+          this.__setFileListById(fileListId),
+        );
+      } else {
+        this._externalFileList = null;
+      }
+    }
+
+    /** @private */
+    __setFileListById(fileListId) {
+      if (!this.isConnected) {
+        return;
+      }
+
+      const fileList = this.getRootNode().getElementById(fileListId);
+
+      if (fileList) {
+        this._externalFileList = fileList;
+      } else {
+        console.warn(`No element with id="${fileListId}" found on the page.`);
       }
     }
 
@@ -955,6 +1009,9 @@ export const UploadMixin = (superClass) =>
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
       }
+      if (this._externalFileList && typeof this._externalFileList.requestContentUpdate === 'function') {
+        this._externalFileList.requestContentUpdate();
+      }
     }
 
     /** @private */
@@ -1014,7 +1071,10 @@ export const UploadMixin = (superClass) =>
       if (lastFileRemoved) {
         fileIndex -= 1;
       }
-      this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
+      const fileList = this._externalFileList || this._fileList;
+      if (fileList && fileList.children[fileIndex]) {
+        fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
+      }
     }
 
     /**
