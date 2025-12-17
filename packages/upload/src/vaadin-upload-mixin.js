@@ -391,6 +391,24 @@ export const UploadMixin = (superClass) =>
           type: Object,
         },
 
+        /**
+         * The id of the element to be used as the drop area.
+         * The element should be in the DOM by the time when
+         * the attribute is set, otherwise a warning is shown.
+         * When set, the external element will be used for file drops
+         * instead of the upload component itself.
+         * @attr {string} drop-area-id
+         */
+        dropAreaId: {
+          type: String,
+          observer: '__dropAreaIdChanged',
+        },
+
+        /** @private */
+        _externalDropArea: {
+          type: Object,
+        },
+
         /** @private */
         _files: {
           type: Array,
@@ -524,6 +542,11 @@ export const UploadMixin = (superClass) =>
       // Bind external add button handlers
       this.__onExternalAddButtonTouchEnd = this._onAddFilesTouchEnd.bind(this);
       this.__onExternalAddButtonClick = this._onAddFilesClick.bind(this);
+
+      // Bind external drop area handlers
+      this.__onExternalDropAreaDragover = this._onDragover.bind(this);
+      this.__onExternalDropAreaDragleave = this._onDragleave.bind(this);
+      this.__onExternalDropAreaDrop = this._onDrop.bind(this);
 
       this._addButtonController = new AddButtonController(this);
       this.addController(this._addButtonController);
@@ -715,6 +738,51 @@ export const UploadMixin = (superClass) =>
     __removeExternalAddButtonListeners(button) {
       button.removeEventListener('touchend', this.__onExternalAddButtonTouchEnd);
       button.removeEventListener('click', this.__onExternalAddButtonClick);
+    }
+
+    /** @private */
+    __dropAreaIdChanged(dropAreaId, oldDropAreaId) {
+      if (oldDropAreaId && this._externalDropArea) {
+        this.__removeExternalDropAreaListeners(this._externalDropArea);
+      }
+
+      if (dropAreaId) {
+        this.__setDropAreaByIdDebouncer = Debouncer.debounce(this.__setDropAreaByIdDebouncer, microTask, () =>
+          this.__setDropAreaById(dropAreaId),
+        );
+      } else {
+        this._externalDropArea = null;
+      }
+    }
+
+    /** @private */
+    __setDropAreaById(dropAreaId) {
+      if (!this.isConnected) {
+        return;
+      }
+
+      const dropArea = this.getRootNode().getElementById(dropAreaId);
+
+      if (dropArea) {
+        this._externalDropArea = dropArea;
+        this.__addExternalDropAreaListeners(dropArea);
+      } else {
+        console.warn(`No element with id="${dropAreaId}" found on the page.`);
+      }
+    }
+
+    /** @private */
+    __addExternalDropAreaListeners(dropArea) {
+      dropArea.addEventListener('dragover', this.__onExternalDropAreaDragover);
+      dropArea.addEventListener('dragleave', this.__onExternalDropAreaDragleave);
+      dropArea.addEventListener('drop', this.__onExternalDropAreaDrop);
+    }
+
+    /** @private */
+    __removeExternalDropAreaListeners(dropArea) {
+      dropArea.removeEventListener('dragover', this.__onExternalDropAreaDragover);
+      dropArea.removeEventListener('dragleave', this.__onExternalDropAreaDragleave);
+      dropArea.removeEventListener('drop', this.__onExternalDropAreaDrop);
     }
 
     /** @private */
