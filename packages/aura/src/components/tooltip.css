@@ -1,0 +1,7 @@
+vaadin-tooltip::part(overlay) {
+  color: var(--vaadin-tooltip-text-color, var(--vaadin-text-color));
+  font-size: var(--vaadin-tooltip-font-size, var(--aura-font-size-s));
+  font-weight: var(--vaadin-tooltip-font-weight, var(--aura-font-weight-medium));
+  line-height: var(--vaadin-tooltip-line-height, var(--aura-line-height-s));
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
+}

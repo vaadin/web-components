@@ -33,6 +33,7 @@
 @import './src/components/select.css';
 @import './src/components/side-nav.css';
 @import './src/components/tabs.css';
+@import './src/components/tooltip.css';
 @import './src/components/upload.css';
 
 :where(:root),
