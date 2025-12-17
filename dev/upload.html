@@ -9,80 +9,38 @@
 
     <script type="module">
       import '@vaadin/button';
-      import '@vaadin/radio-group';
       import '@vaadin/upload';
       import '@vaadin/upload/src/vaadin-upload-file-list.js';
-      import { createFiles, xhrCreator } from '@vaadin/upload/test/helpers.js';
-
-      const nextUpload = document.querySelector('#next-upload');
-
-      const createFakeXhr = () => {
-        if (nextUpload.value === 'successful') {
-          return xhrCreator({ size: 512, uploadTime: 3000, stepTime: 1000 })();
-        } else if (nextUpload.value === 'rejected') {
-          return new XMLHttpRequest();
-        } else if (nextUpload.value === 'error') {
-          return xhrCreator({
-            serverValidation: () => {
-              return {
-                statusText: 'Error',
-              };
-            },
-          })();
-        }
-      };
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
 
       // Use a fake xhr for testing
-      document.querySelectorAll('vaadin-upload').forEach((upload) => {
-        upload._createXhr = createFakeXhr;
+      document.querySelector('vaadin-upload')._createXhr = xhrCreator({
+        size: 512,
+        uploadTime: 3000,
+        stepTime: 1000,
       });
-
-      const files = [
-        { name: 'Annual Report.docx', complete: true },
-        {
-          name: 'Workflow.pdf',
-          progress: 60,
-          status: '19.7 MB: 60% (remaining time: 00:12:34)',
-        },
-        { name: 'Financials.xlsx', error: 'An error occurred' },
-      ];
-
-      const blobs = createFiles(files.length, 1000, 'application/unknown');
-
-      files.forEach((_, index) => {
-        files[index] = Object.assign(blobs[index], files[index]);
-      });
-
-      document.querySelector('vaadin-upload').files = files;
     </script>
   </head>
 
   <body>
-    <vaadin-upload target="/api/fileupload"></vaadin-upload>
-    <hr style="margin-block: 24px" />
-    <vaadin-upload nodrop target="/api/fileupload"></vaadin-upload>
-    <hr style="margin-block: 24px" />
-    <h3>External file list</h3>
-    <vaadin-upload nodrop target="/api/fileupload" file-list-id="external-file-list"></vaadin-upload>
-    <p>File list below is separate from the upload component:</p>
-    <vaadin-upload-file-list id="external-file-list"></vaadin-upload-file-list>
-    <hr style="margin-block: 24px" />
-    <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
-      <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
-      <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
-      <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
-    </vaadin-radio-group>
-    <hr style="margin-block: 24px" />
-    <h3>no-auto + max-concurrent-uploads=1</h3>
-    <p>Test: Add multiple files, click "Start" on the first file, then try clicking "Start" on another file. The start button should hide and show 0% progress while queued.</p>
-    <vaadin-upload id="no-auto-upload" target="/api/fileupload" no-auto max-concurrent-uploads="1"></vaadin-upload>
-    <script type="module">
-      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
-
-      const noAutoUpload = document.querySelector('#no-auto-upload');
-      noAutoUpload._createXhr = () => {
-        return xhrCreator({ size: 512, uploadTime: 5000, stepTime: 1000 })();
-      };
-    </script>
+    <div style="display: flex; gap: 16px; align-items: flex-start;">
+      <div>
+        <vaadin-button id="add-button">Choose Files...</vaadin-button>
+        <div
+          id="drop-zone"
+          style="margin-top: 8px; padding: 24px; border: 2px dashed #ccc; border-radius: 8px; text-align: center;"
+        >
+          Drop files here
+        </div>
+      </div>
+      <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
+    </div>
+    <vaadin-upload
+      theme="headless"
+      target="/api/fileupload"
+      add-button-id="add-button"
+      drop-area-id="drop-zone"
+      file-list-id="file-list"
+    ></vaadin-upload>
   </body>
 </html>
