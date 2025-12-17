@@ -67,6 +67,9 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
 
   /** @protected */
   render() {
+    const isFileStartVisible = this.held && !this.uploading && !this.complete;
+    const isFileRetryVisible = this.errorMessage;
+
     return html`
       <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
       <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
@@ -83,7 +86,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
           part="start-button"
           file-event="file-start"
           @click="${this._fireFileEvent}"
-          ?hidden="${!this.held}"
+          ?hidden="${!isFileStartVisible}"
           ?disabled="${this.disabled}"
           aria-label="${this.i18n ? this.i18n.file.start : nothing}"
           aria-describedby="name"
@@ -93,7 +96,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
           part="retry-button"
           file-event="file-retry"
           @click="${this._fireFileEvent}"
-          ?hidden="${!this.errorMessage}"
+          ?hidden="${!isFileRetryVisible}"
           ?disabled="${this.disabled}"
           aria-label="${this.i18n ? this.i18n.file.retry : nothing}"
           aria-describedby="name"

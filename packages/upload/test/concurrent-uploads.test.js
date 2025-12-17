@@ -4,6 +4,34 @@ import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import { createFiles, xhrCreator } from './helpers.js';
 
+function assertFileUploading(file) {
+  expect(file.uploading).to.be.true;
+  expect(file.held).to.be.false;
+}
+
+function assertFileNotStarted(file) {
+  expect(file.uploading).to.not.be.true;
+  expect(file.held).to.be.true;
+  expect(file.status).to.equal('Queued');
+}
+
+function assertFileQueued(file) {
+  expect(file.uploading).to.be.true;
+  expect(file.held).to.be.true;
+  expect(file.status).to.equal('Queued');
+}
+
+function assertFileSucceeded(file) {
+  expect(file.error).to.be.not.ok;
+  expect(file.complete).to.be.true;
+  expect(file.uploading).to.be.false;
+}
+
+function assertFileFailed(file) {
+  expect(file.error).to.be.ok;
+  expect(file.uploading).to.be.false;
+}
+
 describe('concurrent uploads', () => {
   let upload;
 
@@ -43,85 +71,50 @@ describe('concurrent uploads', () => {
       clock.restore();
     });
 
-    it('should track active uploads count', async () => {
-      const files = createFiles(3, 100, 'application/json');
-      upload.maxConcurrentUploads = 2;
-
-      expect(upload._activeUploads).to.equal(0);
-
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      expect(upload._activeUploads).to.equal(2);
-    });
-
-    it('should queue files when exceeding concurrent limit', async () => {
-      const files = createFiles(5, 100, 'application/json');
-      upload.maxConcurrentUploads = 2;
-
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(3);
-    });
-
     it('should show queued status for files in queue', async () => {
       const files = createFiles(5, 100, 'application/json');
       upload.maxConcurrentUploads = 2;
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
       // First 2 files should be uploading
-      expect(files[0].uploading).to.be.true;
-      expect(files[1].uploading).to.be.true;
+      files.slice(0, 2).forEach((file) => {
+        expect(file.status).to.not.equal('Queued');
+      });
 
-      // Remaining files should be queued with "0%" status and no play button (held !== true)
-      // In auto mode, queued files should NOT show the play button
-      expect(files[2].held).to.not.be.true;
-      expect(files[2].status).to.equal('0%');
-      expect(files[3].held).to.not.be.true;
-      expect(files[4].held).to.not.be.true;
+      // Remaining files should be queued
+      files.slice(2, -1).forEach((file) => {
+        expect(file.status).to.equal('Queued');
+      });
     });
 
     it('should process queue as uploads complete', async () => {
       const files = createFiles(5, 100, 'application/json');
       upload.maxConcurrentUploads = 2;
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(3);
-
+      files.slice(0, 2).forEach(assertFileUploading);
+      files.slice(2, -1).forEach(assertFileQueued);
       // Wait for first uploads to complete
       await clock.tickAsync(250);
 
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(1);
-
-      // Wait for next batch to complete
-      await clock.tickAsync(250);
-
-      expect(upload._activeUploads).to.equal(1);
-      expect(upload._uploadQueue.length).to.equal(0);
+      files.slice(2, 4).forEach(assertFileUploading);
+      files.slice(4, -1).forEach(assertFileQueued);
     });
 
     it('should handle all uploads completing', async () => {
       const files = createFiles(5, 100, 'application/json');
       upload.maxConcurrentUploads = 2;
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
 
       // Wait for all uploads to complete
       await clock.tickAsync(1000);
 
-      expect(upload._activeUploads).to.equal(0);
-      expect(upload._uploadQueue.length).to.equal(0);
-      files.forEach((file) => {
-        expect(file.complete).to.be.true;
-      });
+      files.forEach(assertFileSucceeded);
     });
 
     it('should work with manual upload mode', async () => {
@@ -132,130 +125,47 @@ describe('concurrent uploads', () => {
       upload._addFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(0);
-      expect(upload._uploadQueue.length).to.equal(0);
+      files.forEach(assertFileNotStarted);
 
       // Start uploads manually
-      upload.uploadFiles();
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(3);
-    });
-
-    it('should hide start button when file is manually started but queued', async () => {
-      const files = createFiles(3, 100, 'application/json');
-      upload.noAuto = true;
-      upload.maxConcurrentUploads = 1;
-
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      // All files should be held (showing start button) initially
-      expect(files[0].held).to.be.true;
-      expect(files[1].held).to.be.true;
-      expect(files[2].held).to.be.true;
-
-      // Start first file manually
-      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[0] } }));
-      await clock.tickAsync(10);
-
-      // First file should be uploading
-      expect(files[0].uploading).to.be.true;
-      expect(files[0].held).to.be.false;
-
-      // Start second file manually - should be queued but not show start button
-      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[1] } }));
-      await clock.tickAsync(10);
-
-      // Second file should be queued but with held=false (start button hidden) and 0% status
-      expect(upload._uploadQueue).to.include(files[1]);
-      expect(files[1].held).to.be.false;
-      expect(files[1].progress).to.equal(0);
-      expect(files[1].status).to.equal('0%');
-
-      // Third file was not manually started, should still show start button
-      expect(files[2].held).to.be.true;
-    });
-
-    it('should start queued file after manually started file completes', async () => {
-      const files = createFiles(2, 100, 'application/json');
-      upload.noAuto = true;
-      upload.maxConcurrentUploads = 1;
-
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      // Start first file
-      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[0] } }));
-      await clock.tickAsync(10);
-
-      // Start second file (will be queued)
-      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file: files[1] } }));
-      await clock.tickAsync(10);
-
-      expect(files[1].held).to.be.false;
-      expect(upload._uploadQueue).to.include(files[1]);
-
-      // Wait for first file to complete
-      await clock.tickAsync(300);
-
-      // Second file should now be uploading
-      expect(files[1].uploading).to.be.true;
-      expect(upload._uploadQueue).to.not.include(files[1]);
+      files.slice(0, 2).forEach(assertFileUploading);
+      files.slice(2, -1).forEach(assertFileQueued);
     });
   });
 
   describe('upload queue with abort', () => {
-    let clock;
-
     beforeEach(() => {
-      upload._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
-      clock = sinon.useFakeTimers({
-        shouldClearNativeTimers: true,
-      });
+      upload._createXhr = sinon.spy(xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 }));
     });
 
-    afterEach(() => {
-      clock.restore();
-    });
+    it('should remove file from queue when aborted', () => {
+      const files = createFiles(2, 100, 'application/json');
+      upload.maxConcurrentUploads = 1;
 
-    it('should remove file from queue when aborted', async () => {
-      const files = createFiles(5, 100, 'application/json');
-      upload.maxConcurrentUploads = 2;
+      upload.uploadFiles(files);
+      expect(upload._createXhr).to.be.calledOnce;
 
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      expect(upload._uploadQueue.length).to.equal(3);
+      upload._createXhr.resetHistory();
 
       // Abort a queued file
-      upload._abortFileUpload(files[3]);
-      await clock.tickAsync(1);
-
-      expect(upload._uploadQueue.length).to.equal(2);
-      expect(upload._uploadQueue.includes(files[3])).to.be.false;
+      upload._abortFileUpload(files[1]);
+      expect(upload._createXhr).to.be.not.called;
     });
 
-    it('should process queue after file is aborted', async () => {
-      const files = createFiles(4, 100, 'application/json');
-      upload.maxConcurrentUploads = 2;
+    it('should process queue after aborting an uploading file', () => {
+      const files = createFiles(2, 100, 'application/json');
+      upload.maxConcurrentUploads = 1;
 
-      upload._addFiles(files);
-      await clock.tickAsync(10);
+      upload.uploadFiles(files);
+      expect(upload._createXhr).to.be.calledOnce;
 
-      const initialActive = upload._activeUploads;
-      const initialQueued = upload._uploadQueue.length;
+      upload._createXhr.resetHistory();
 
-      expect(initialActive).to.equal(2);
-      expect(initialQueued).to.equal(2);
-
-      // Abort a queued file (not an active upload)
-      upload._abortFileUpload(files[3]);
-      await clock.tickAsync(1);
-
-      // File should be removed from queue
-      expect(upload._uploadQueue.length).to.equal(initialQueued - 1);
+      files[0].xhr.abort();
+      expect(upload._createXhr).to.be.calledOnce;
     });
   });
 
@@ -284,18 +194,17 @@ describe('concurrent uploads', () => {
       const files = createFiles(5, 100, 'application/json');
       upload.maxConcurrentUploads = 2;
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(3);
+      files.slice(0, 2).forEach(assertFileUploading);
+      files.slice(2, -1).forEach(assertFileQueued);
 
       // Wait for first 2 uploads to fail (uploadTime + stepTime + serverTime = 100 + 25 + 10 = 135ms)
       await clock.tickAsync(150);
 
       // After first 2 fail, next 2 should start from queue
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(1);
+      files.slice(2, -1).forEach(assertFileUploading);
     });
 
     it('should handle response event cancellation', async () => {
@@ -308,43 +217,32 @@ describe('concurrent uploads', () => {
         e.preventDefault();
       });
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(2);
+      files.slice(0, 2).forEach(assertFileUploading);
+      files.slice(2, -1).forEach(assertFileQueued);
 
       // Wait for uploads to reach completion state
       await clock.tickAsync(250);
 
       // When response is prevented, files stay in uploading state
       // but queue should still be processed once xhr completes
-      expect(upload._activeUploads).to.be.greaterThan(0);
+      files.slice(2, 4).forEach(assertFileUploading);
+      files.slice(4, -1).forEach(assertFileQueued);
     });
   });
 
   describe('unlimited concurrent uploads', () => {
-    let clock;
-
     beforeEach(() => {
       upload._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
-      clock = sinon.useFakeTimers({
-        shouldClearNativeTimers: true,
-      });
     });
 
-    afterEach(() => {
-      clock.restore();
-    });
-
-    it('should allow unlimited uploads when maxConcurrentUploads is Infinity', async () => {
+    it('should allow unlimited uploads when maxConcurrentUploads is Infinity', () => {
       const files = createFiles(20, 100, 'application/json');
       upload.maxConcurrentUploads = Infinity;
-
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      expect(upload._activeUploads).to.equal(20);
-      expect(upload._uploadQueue.length).to.equal(0);
+      upload.uploadFiles(files);
+      files.forEach(assertFileUploading);
     });
   });
 
@@ -364,23 +262,19 @@ describe('concurrent uploads', () => {
 
     it('should respect new limit when increased during uploads', async () => {
       const files = createFiles(10, 100, 'application/json');
-      upload.maxConcurrentUploads = 2;
+      upload.maxConcurrentUploads = 1;
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(2);
-      expect(upload._uploadQueue.length).to.equal(8);
+      files.slice(0, 1).forEach(assertFileUploading);
+      files.slice(1, -1).forEach(assertFileQueued);
 
       // Increase limit
-      upload.maxConcurrentUploads = 5;
+      upload.maxConcurrentUploads = 10;
+      await clock.tickAsync(300);
 
-      // Manually process queue with new limit
-      upload._processQueue();
-      await clock.tickAsync(10);
-
-      expect(upload._activeUploads).to.equal(5);
-      expect(upload._uploadQueue.length).to.equal(5);
+      files.slice(1, -1).forEach(assertFileUploading);
     });
   });
 
@@ -406,13 +300,15 @@ describe('concurrent uploads', () => {
       const files = createFiles(3, 100, 'application/json');
       upload.maxConcurrentUploads = 2;
 
-      upload._addFiles(files);
+      upload.uploadFiles(files);
       await clock.tickAsync(10);
 
-      expect(upload._activeUploads).to.equal(2);
+      files.slice(0, 2).forEach(assertFileUploading);
 
       // Wait for uploads to fail
       await clock.tickAsync(100);
+
+      files.slice(0, 2).forEach(assertFileFailed);
 
       // Replace XHR creator with successful one
       upload._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
@@ -421,58 +317,41 @@ describe('concurrent uploads', () => {
       upload._retryFileUpload(files[0]);
       await clock.tickAsync(10);
 
-      // Should respect concurrent limit
-      expect(upload._activeUploads).to.be.lte(upload.maxConcurrentUploads);
+      assertFileUploading(files[0]);
+      assertFileFailed(files[1]);
     });
   });
 
   describe('edge cases', () => {
-    let clock;
-
     beforeEach(() => {
-      upload._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
-      clock = sinon.useFakeTimers({
-        shouldClearNativeTimers: true,
-      });
+      upload._createXhr = sinon.spy(xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 }));
     });
 
-    afterEach(() => {
-      clock.restore();
-    });
-
-    it('should handle single file with limit of 1', async () => {
+    it('should handle single file with limit of 1', () => {
       const files = createFiles(1, 100, 'application/json');
       upload.maxConcurrentUploads = 1;
 
-      upload._addFiles(files);
-      await clock.tickAsync(10);
-
-      expect(upload._activeUploads).to.equal(1);
-      expect(upload._uploadQueue.length).to.equal(0);
+      upload.uploadFiles(files);
+      expect(upload._createXhr).to.be.calledOnce;
     });
 
     it('should handle zero files', () => {
       upload.maxConcurrentUploads = 5;
-
-      expect(upload._activeUploads).to.equal(0);
-      expect(upload._uploadQueue.length).to.equal(0);
+      expect(upload._createXhr).to.be.not.called;
     });
 
-    it('should not start upload if already uploading', async () => {
+    it('should not start upload if already uploading', () => {
       const files = createFiles(1, 100, 'application/json');
       upload.maxConcurrentUploads = 1;
 
-      upload._uploadFile(files[0]);
-      await clock.tickAsync(10);
+      upload.uploadFiles(files[0]);
+      expect(upload._createXhr).to.be.calledOnce;
 
-      const initialActiveCount = upload._activeUploads;
+      upload._createXhr.resetHistory();
 
       // Try to upload same file again
-      upload._uploadFile(files[0]);
-      await clock.tickAsync(10);
-
-      // Should not increase active count
-      expect(upload._activeUploads).to.equal(initialActiveCount);
+      upload.uploadFiles(files[0]);
+      expect(upload._createXhr).to.be.not.called;
     });
   });
 });

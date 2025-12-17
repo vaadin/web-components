@@ -339,10 +339,14 @@ describe('adding files', () => {
       files.forEach(upload._addFile.bind(upload));
       // With queue behavior, only the first file starts uploading immediately
       expect(uploadStartSpy.calledOnce).to.be.true;
+
       // Files are prepended, so the first file added is at index 1
       expect(upload.files[1].held).to.be.false;
-      // Second file (at index 0) should be queued but NOT show play button in auto mode
-      expect(upload.files[0].held).to.not.be.true;
+      expect(upload.files[1].uploading).to.be.true;
+
+      // Second file (at index 0) should be queued
+      expect(upload.files[0].held).to.be.true;
+      expect(upload.files[0].uploading).to.be.true;
     });
 
     it('should not automatically start upload when noAuto flag is set', () => {
@@ -353,6 +357,7 @@ describe('adding files', () => {
       files.forEach(upload._addFile.bind(upload));
       expect(uploadStartSpy.called).to.be.false;
       expect(upload.files[0].held).to.be.true;
+      expect(upload.files[0].uploading).to.not.be.true;
     });
   });
 

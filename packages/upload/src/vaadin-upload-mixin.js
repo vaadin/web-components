@@ -720,20 +720,36 @@ export const UploadMixin = (superClass) =>
       if (files && !Array.isArray(files)) {
         files = [files];
       }
-      files = files.filter((file) => !file.complete);
-      Array.prototype.forEach.call(files, this._uploadFile.bind(this));
+      files.filter((file) => !file.complete).forEach((file) => this._queueFileUpload(file));
+    }
+
+    /** @private */
+    _queueFileUpload(file) {
+      if (file.uploading) {
+        return;
+      }
+
+      file.held = true;
+      file.uploading = file.indeterminate = true;
+      file.complete = file.abort = file.error = false;
+      file.status = this.__effectiveI18n.uploading.status.held;
+      this._renderFileList();
+
+      this._uploadQueue.push(file);
+      this._processUploadQueue();
     }
 
     /**
      * Process the upload queue by starting uploads for queued files
      * if there is available capacity.
+     *
      * @private
      */
-    _processQueue() {
+    _processUploadQueue() {
       // Process as many queued files as we have capacity for
       while (this._uploadQueue.length > 0 && this._activeUploads < this.maxConcurrentUploads) {
         const nextFile = this._uploadQueue.shift();
-        if (nextFile && !nextFile.complete && !nextFile.uploading) {
+        if (nextFile) {
           this._uploadFile(nextFile);
         }
       }
@@ -741,36 +757,6 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _uploadFile(file) {
-      if (file.uploading) {
-        return;
-      }
-
-      // Check if we've reached the concurrent upload limit
-      if (this._activeUploads >= this.maxConcurrentUploads) {
-        // Add to queue if not already queued
-        if (!this._uploadQueue.includes(file)) {
-          this._uploadQueue.push(file);
-          // Only show play button (held=true) in noAuto mode for files not manually started.
-          // In auto mode, never show play button for queued files.
-          // If user clicked "Start" in noAuto mode, held is already false and status is "0%".
-          if (this.noAuto && file.held !== false) {
-            file.held = true;
-            file.status = this.__effectiveI18n.uploading.status.held;
-          } else {
-            // In auto mode or manually started: show "0%" status
-            file.status = '0%';
-          }
-          this._renderFileList();
-        }
-        return;
-      }
-
-      // Remove from queue if it was queued
-      const queueIndex = this._uploadQueue.indexOf(file);
-      if (queueIndex >= 0) {
-        this._uploadQueue.splice(queueIndex, 1);
-      }
-
       // Increment active uploads counter
       this._activeUploads += 1;
 
@@ -810,6 +796,15 @@ export const UploadMixin = (superClass) =>
         this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
       };
 
+      xhr.onabort = () => {
+        clearTimeout(stalledId);
+        file.indeterminate = file.uploading = false;
+
+        // Decrement active uploads counter
+        this._activeUploads -= 1;
+        this._processUploadQueue();
+      };
+
       // More reliable than xhr.onload
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
@@ -818,10 +813,9 @@ export const UploadMixin = (superClass) =>
 
           // Decrement active uploads counter
           this._activeUploads -= 1;
+          this._processUploadQueue();
 
           if (file.abort) {
-            // Process queue even on abort
-            this._processQueue();
             return;
           }
           file.status = '';
@@ -835,8 +829,6 @@ export const UploadMixin = (superClass) =>
           );
 
           if (!evt) {
-            // Process queue even if event was cancelled
-            this._processQueue();
             return;
           }
           if (xhr.status === 0) {
@@ -854,9 +846,6 @@ export const UploadMixin = (superClass) =>
             }),
           );
           this._renderFileList();
-
-          // Process the queue to start the next upload
-          this._processQueue();
         }
       };
 
@@ -896,9 +885,8 @@ export const UploadMixin = (superClass) =>
       xhr.open(this.method, file.uploadTarget, true);
       this._configureXhr(xhr, file, isRawUpload);
 
+      file.held = false;
       file.status = this.__effectiveI18n.uploading.status.connecting;
-      file.uploading = file.indeterminate = true;
-      file.complete = file.abort = file.error = file.held = false;
 
       xhr.upload.onloadstart = () => {
         this.dispatchEvent(
@@ -943,12 +931,7 @@ export const UploadMixin = (superClass) =>
         }),
       );
       if (evt) {
-        // Clear error and show 0% progress while waiting for upload to start
-        file.error = '';
-        file.progress = 0;
-        file.status = '0%';
-        this._renderFileList();
-        this._uploadFile(file);
+        this._queueFileUpload(file);
         this._updateFocus(this.files.indexOf(file));
       }
     }
@@ -963,24 +946,10 @@ export const UploadMixin = (superClass) =>
       );
       if (evt) {
         file.abort = true;
-
-        // Remove from queue if it was queued
-        const queueIndex = this._uploadQueue.indexOf(file);
-        if (queueIndex >= 0) {
-          this._uploadQueue.splice(queueIndex, 1);
-        }
-
-        // Decrement active uploads if file was uploading
-        if (file.uploading) {
-          this._activeUploads -= 1;
-        }
-
         if (file.xhr) {
           file.xhr.abort();
         }
         this._removeFile(file);
-        // Process the queue to start the next upload
-        this._processQueue();
       }
     }
 
@@ -1029,14 +998,12 @@ export const UploadMixin = (superClass) =>
         return;
       }
       file.loaded = 0;
-      // Only show play button (held=true) in noAuto mode.
-      // In auto mode, files should never show the play button.
-      file.held = this.noAuto;
+      file.held = true;
       file.status = this.__effectiveI18n.uploading.status.held;
       this.files = [file, ...this.files];
 
       if (!this.noAuto) {
-        this._uploadFile(file);
+        this._queueFileUpload(file);
       }
     }
 
@@ -1059,6 +1026,9 @@ export const UploadMixin = (superClass) =>
      * @protected
      */
     _removeFile(file) {
+      this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
+      this._processUploadQueue();
+
       const fileIndex = this.files.indexOf(file);
       if (fileIndex >= 0) {
         this.files = this.files.filter((i) => i !== file);
@@ -1100,13 +1070,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileStart(event) {
-      const file = event.detail.file;
-      // Mark file as started by user - hide start button and show 0% progress
-      file.held = false;
-      file.progress = 0;
-      file.status = '0%';
-      this._renderFileList();
-      this._uploadFile(file);
+      this._queueFileUpload(event.detail.file);
     }
 
     /** @private */
