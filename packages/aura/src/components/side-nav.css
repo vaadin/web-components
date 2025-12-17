@@ -16,10 +16,6 @@ vaadin-side-nav::part(label) {
   transition: color 80ms;
 }
 
-vaadin-side-nav::part(label):hover {
-  color: var(--vaadin-text-color);
-}
-
 vaadin-side-nav-item::part(content) {
   --aura-surface-level: 6;
   --aura-surface-opacity: 0.3;
@@ -31,6 +27,10 @@ vaadin-side-nav-item:not([disabled], [current])::part(content):active {
 }
 
 @media (any-hover: hover) {
+  vaadin-side-nav::part(label):hover {
+    --vaadin-side-nav-label-color: var(--vaadin-text-color);
+  }
+
   vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
     --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
   }
