@@ -943,6 +943,11 @@ export const UploadMixin = (superClass) =>
         }),
       );
       if (evt) {
+        // Clear error and show 0% progress while waiting for upload to start
+        file.error = '';
+        file.progress = 0;
+        file.status = '0%';
+        this._renderFileList();
         this._uploadFile(file);
         this._updateFocus(this.files.indexOf(file));
       }
