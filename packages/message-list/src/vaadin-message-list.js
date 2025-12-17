@@ -63,10 +63,18 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
         display: block;
         overflow: auto;
         padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
+        scroll-padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
+        scroll-snap-type: y proximity;
       }
 
       :host([hidden]) {
         display: none !important;
+      }
+
+      [part='list']::after {
+        content: '';
+        display: block;
+        scroll-snap-align: var(--_vaadin-message-list-scroll-snap-align, none);
       }
     `;
   }
@@ -74,7 +82,7 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
   /** @protected */
   render() {
     return html`
-      <div part="list" role="list">
+      <div part="list" role="list" id="list">
         <slot></slot>
       </div>
     `;
