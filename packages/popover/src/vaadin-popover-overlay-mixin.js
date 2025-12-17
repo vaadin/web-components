@@ -100,7 +100,7 @@ export const PopoverOverlayMixin = (superClass) =>
         }
       }
 
-      // Calculate arrow offset for aligned horizontal positions (bottom-start, bottom-end, top-start, top-end)
+      // Calculate arrow offset for aligned horizontal positions only when constrained
       if (
         this.position === 'bottom-start' ||
         this.position === 'top-start' ||
@@ -108,7 +108,16 @@ export const PopoverOverlayMixin = (superClass) =>
         this.position === 'top-end'
       ) {
         const targetRect = this.positionTarget.getBoundingClientRect();
-        this.__repositionArrow(targetRect);
+        const overlayRect = this.$.overlay.getBoundingClientRect();
+        const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
+        // Only reposition arrow if popover is constrained to viewport edge
+        const isConstrainedLeft = overlayRect.left <= 0.5;
+        const isConstrainedRight = overlayRect.right >= viewportWidth - 0.5;
+
+        if (isConstrainedLeft || isConstrainedRight) {
+          this.__repositionArrow(targetRect);
+        }
       }
 
       // Center the overlay vertically
