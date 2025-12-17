@@ -102,7 +102,7 @@ export const MessageListMixin = (superClass) =>
         this._renderMessages(items);
         this._setTabIndexesByIndex(focusedIndex);
         if (oldItems.length) {
-          this.__debounceAppending();
+          this.__enableScrollSnapping();
         }
 
         requestAnimationFrame(() => {
@@ -166,9 +166,11 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
-    __debounceAppending() {
+    __enableScrollSnapping() {
       this.$.list.style.setProperty('--_vaadin-message-list-scroll-snap-align', 'end');
-      this.__debounceAnimation = Debouncer.debounce(this.__debounceAnimation, timeOut.after(500), () => {
+      // Disable scroll-snapping after a delay to allow the user to freely scroll
+      // without being snapped back to the bottom.
+      this.__debounceScrollSnapping = Debouncer.debounce(this.__debounceScrollSnapping, timeOut.after(500), () => {
         this.$.list.style.removeProperty('--_vaadin-message-list-scroll-snap-align');
       });
     }
