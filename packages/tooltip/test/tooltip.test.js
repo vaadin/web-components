@@ -545,12 +545,14 @@ describe('vaadin-tooltip', () => {
       tabKeyDown(target);
       target.focus();
 
-      const tooltip2 = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      const tooltip2 = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
       tooltip2.target = target;
       await nextRender();
       const overlay2 = tooltip2.shadowRoot.querySelector('vaadin-tooltip-overlay');
 
       mouseenter(target);
+      expect(overlay.opened).to.be.true;
+      expect(overlay2.opened).to.be.true;
 
       escKeyDown(document.body);
       expect(overlay.opened).to.be.false;
