@@ -537,7 +537,8 @@ export const InlineEditingMixin = (superClass) =>
         if (!this._isCellEditable(cell)) {
           // Cell is no longer editable, cancel edit
           this._stopEdit(true, true);
-        } else if (cell.parentNode === row && this.getItemId(model.item) !== this.getItemId(item)) {
+        } else if (cell.parentNode === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
+          // Edited item identity has changed, stop edit
           this._stopEdit();
         }
       }
