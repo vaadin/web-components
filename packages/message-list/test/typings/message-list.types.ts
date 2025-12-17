@@ -3,7 +3,7 @@ import '../../vaadin-message-list.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { MessageListItem } from '../../vaadin-message-list.js';
+import type { MessageListItem, MessageListItemAttachment } from '../../vaadin-message-list.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 
@@ -24,6 +24,13 @@ assertType<string | undefined>(item.userImg);
 assertType<number | undefined>(item.userColorIndex);
 assertType<string | undefined>(item.theme);
 assertType<string | undefined>(item.className);
+assertType<MessageListItemAttachment[] | undefined>(item.attachments);
+
+// Attachment properties
+const attachment: MessageListItemAttachment = item.attachments ? item.attachments[0] : {};
+assertType<string | undefined>(attachment.name);
+assertType<string | undefined>(attachment.url);
+assertType<string | undefined>(attachment.type);
 
 // Mixins
 assertType<ElementMixinClass>(list);

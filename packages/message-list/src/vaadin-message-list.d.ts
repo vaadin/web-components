@@ -8,7 +8,7 @@ import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
-export { MessageListItem } from './vaadin-message-list-mixin.js';
+export { MessageListItem, MessageListItemAttachment } from './vaadin-message-list-mixin.js';
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
