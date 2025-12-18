@@ -797,8 +797,6 @@ export const UploadMixin = (superClass) =>
       };
 
       xhr.onabort = () => {
-        clearTimeout(stalledId);
-        file.indeterminate = file.uploading = false;
 
         // Decrement active uploads counter
         this._activeUploads -= 1;
