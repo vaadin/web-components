@@ -49,8 +49,8 @@ export const uploadStyles = css`
     line-height: var(--vaadin-upload-drop-label-line-height, inherit);
   }
 
-  /* Headless variant - hides all default visual content */
-  :host([theme~='headless']) {
+  /* Headless mode - hides all default visual content */
+  :host([headless]) {
     display: none;
   }
 `;

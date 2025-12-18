@@ -139,6 +139,18 @@ export const UploadMixin = (superClass) =>
         },
 
         /**
+         * When true, the upload component hides its default UI (buttons, drop label,
+         * and file list). Use this when providing external UI elements via
+         * `addButtonId`, `dropAreaId`, and `fileListId` properties.
+         * @type {boolean}
+         */
+        headless: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * The server URL. The default value is an empty string, which means that
          * _window.location_ will be used.
          * @type {string}
