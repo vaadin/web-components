@@ -382,9 +382,14 @@ export const UploadMixin = (superClass) =>
           observer: '__fileListIdChanged',
         },
 
-        /** @private */
-        _externalFileList: {
+        /**
+         * Reference to an external element to be used as the file list.
+         * Defaults to an element referenced with `fileListId` attribute.
+         * @type {HTMLElement | null}
+         */
+        fileList: {
           type: Object,
+          value: null,
         },
 
         /**
@@ -398,9 +403,14 @@ export const UploadMixin = (superClass) =>
           observer: '__addButtonIdChanged',
         },
 
-        /** @private */
-        _externalAddButton: {
+        /**
+         * Reference to an external element to be used as the add button.
+         * Defaults to an element referenced with `addButtonId` attribute.
+         * @type {HTMLElement | null}
+         */
+        addButton: {
           type: Object,
+          value: null,
         },
 
         /**
@@ -416,9 +426,14 @@ export const UploadMixin = (superClass) =>
           observer: '__dropAreaIdChanged',
         },
 
-        /** @private */
-        _externalDropArea: {
+        /**
+         * Reference to an external element to be used as the drop area.
+         * Defaults to an element referenced with `dropAreaId` attribute.
+         * @type {HTMLElement | null}
+         */
+        dropArea: {
           type: Object,
+          value: null,
         },
 
         /** @private */
@@ -443,11 +458,14 @@ export const UploadMixin = (superClass) =>
     static get observers() {
       return [
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
-        '__updateExternalAddButton(_externalAddButton, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
-        '__updateExternalFileList(_externalFileList, files, __effectiveI18n, disabled)',
         '__updateMaxFilesReached(maxFiles, files)',
+        '__fileListChanged(fileList)',
+        '__addButtonChanged(addButton)',
+        '__dropAreaChanged(dropArea)',
+        '__updateExternalFileList(fileList, files, __effectiveI18n, disabled)',
+        '__updateExternalAddButton(addButton, maxFilesReached, disabled)',
       ];
     }
 
@@ -690,7 +708,7 @@ export const UploadMixin = (superClass) =>
           this.__setFileListById(fileListId),
         );
       } else {
-        this._externalFileList = null;
+        this.fileList = null;
       }
     }
 
@@ -703,24 +721,25 @@ export const UploadMixin = (superClass) =>
       const fileList = this.getRootNode().getElementById(fileListId);
 
       if (fileList) {
-        this._externalFileList = fileList;
+        this.fileList = fileList;
       } else {
         console.warn(`No element with id="${fileListId}" found on the page.`);
       }
     }
 
     /** @private */
-    __addButtonIdChanged(addButtonId, oldAddButtonId) {
-      if (oldAddButtonId && this._externalAddButton) {
-        this.__removeExternalAddButtonListeners(this._externalAddButton);
-      }
+    __fileListChanged(_fileList) {
+      // File list doesn't need listeners, just syncing data via observer
+    }
 
+    /** @private */
+    __addButtonIdChanged(addButtonId) {
       if (addButtonId) {
         this.__setAddButtonByIdDebouncer = Debouncer.debounce(this.__setAddButtonByIdDebouncer, microTask, () =>
           this.__setAddButtonById(addButtonId),
         );
       } else {
-        this._externalAddButton = null;
+        this.addButton = null;
       }
     }
 
@@ -733,11 +752,23 @@ export const UploadMixin = (superClass) =>
       const addButton = this.getRootNode().getElementById(addButtonId);
 
       if (addButton) {
-        this._externalAddButton = addButton;
-        this.__addExternalAddButtonListeners(addButton);
+        this.addButton = addButton;
       } else {
         console.warn(`No element with id="${addButtonId}" found on the page.`);
       }
+    }
+
+    /** @private */
+    __addButtonChanged(addButton) {
+      if (this.__previousAddButton) {
+        this.__removeExternalAddButtonListeners(this.__previousAddButton);
+      }
+
+      if (addButton) {
+        this.__addExternalAddButtonListeners(addButton);
+      }
+
+      this.__previousAddButton = addButton;
     }
 
     /** @private */
@@ -753,17 +784,13 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __dropAreaIdChanged(dropAreaId, oldDropAreaId) {
-      if (oldDropAreaId && this._externalDropArea) {
-        this.__removeExternalDropAreaListeners(this._externalDropArea);
-      }
-
+    __dropAreaIdChanged(dropAreaId) {
       if (dropAreaId) {
         this.__setDropAreaByIdDebouncer = Debouncer.debounce(this.__setDropAreaByIdDebouncer, microTask, () =>
           this.__setDropAreaById(dropAreaId),
         );
       } else {
-        this._externalDropArea = null;
+        this.dropArea = null;
       }
     }
 
@@ -776,11 +803,23 @@ export const UploadMixin = (superClass) =>
       const dropArea = this.getRootNode().getElementById(dropAreaId);
 
       if (dropArea) {
-        this._externalDropArea = dropArea;
-        this.__addExternalDropAreaListeners(dropArea);
+        this.dropArea = dropArea;
       } else {
         console.warn(`No element with id="${dropAreaId}" found on the page.`);
       }
+    }
+
+    /** @private */
+    __dropAreaChanged(dropArea) {
+      if (this.__previousDropArea) {
+        this.__removeExternalDropAreaListeners(this.__previousDropArea);
+      }
+
+      if (dropArea) {
+        this.__addExternalDropAreaListeners(dropArea);
+      }
+
+      this.__previousDropArea = dropArea;
     }
 
     /** @private */
@@ -1160,8 +1199,8 @@ export const UploadMixin = (superClass) =>
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
       }
-      if (this._externalFileList && typeof this._externalFileList.requestContentUpdate === 'function') {
-        this._externalFileList.requestContentUpdate();
+      if (this.fileList && typeof this.fileList.requestContentUpdate === 'function') {
+        this.fileList.requestContentUpdate();
       }
     }
 
@@ -1222,9 +1261,9 @@ export const UploadMixin = (superClass) =>
       if (lastFileRemoved) {
         fileIndex -= 1;
       }
-      const fileList = this._externalFileList || this._fileList;
-      if (fileList && fileList.children[fileIndex]) {
-        fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
+      const extFileList = this.fileList || this._fileList;
+      if (extFileList && extFileList.children[fileIndex]) {
+        extFileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
       }
     }
 
