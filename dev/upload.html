@@ -7,72 +7,286 @@
     <title>Upload</title>
     <script type="module" src="./common.js"></script>
 
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .upload-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(0, 0, 0, 0.05);
+        padding: 32px;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .upload-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .upload-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+
+      .upload-header p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      #drop-zone {
+        flex-direction: column;
+        border: 2px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 48px 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: #fafafa;
+      }
+
+      #drop-zone:hover {
+        border-color: #667eea;
+        background: #f5f3ff;
+      }
+
+      #drop-zone[dragover] {
+        border-color: #667eea;
+        background: #ede9fe;
+        transform: scale(1.02);
+      }
+
+      .drop-zone-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .drop-zone-icon svg {
+        width: 32px;
+        height: 32px;
+        color: white;
+      }
+
+      .drop-zone-text {
+        color: #374151;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .drop-zone-hint {
+        color: #9ca3af;
+        font-size: 13px;
+      }
+
+      .upload-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+      }
+
+      #add-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 32px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
+      }
+
+      #add-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.5);
+      }
+
+      #add-button:active {
+        transform: translateY(0);
+      }
+
+      #add-button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+        color: #9ca3af;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e5e7eb;
+      }
+
+      .divider span {
+        padding: 0 16px;
+      }
+
+      #file-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      #file-list:empty {
+        display: none;
+      }
+
+      #file-list:empty + .empty-state {
+        display: block;
+      }
+
+      .empty-state {
+        display: none;
+        text-align: center;
+        padding: 24px;
+        color: #9ca3af;
+        font-size: 14px;
+      }
+
+      /* Style the file list items */
+      vaadin-upload-file {
+        background: #f9fafb;
+        border-radius: 8px;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+      }
+
+      vaadin-upload-file:hover {
+        border-color: #d1d5db;
+        background: #f3f4f6;
+      }
+
+      vaadin-upload-file::part(name) {
+        font-weight: 500;
+        color: #1f2937;
+      }
+
+      vaadin-upload-file::part(status) {
+        color: #6b7280;
+      }
+
+      vaadin-upload-file::part(done-icon) {
+        color: #10b981;
+      }
+
+      vaadin-upload-file::part(error-icon) {
+        color: #ef4444;
+      }
+    </style>
+
     <script type="module">
-      import '@vaadin/radio-group';
-      import '@vaadin/upload';
-      import { createFiles, xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
+      import '@vaadin/upload/src/vaadin-upload-file-list.js';
+      import { UploadOrchestrator } from '@vaadin/upload';
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
 
-      const nextUpload = document.querySelector('#next-upload');
-
-      const upload = document.querySelector('vaadin-upload');
-      // Use a fake xhr for testing
-      upload._createXhr = () => {
-        if (nextUpload.value === 'successful') {
-          return xhrCreator({ size: 512, uploadTime: 3000, stepTime: 1000 })();
-        } else if (nextUpload.value === 'rejected') {
-          return new XMLHttpRequest();
-        } else if (nextUpload.value === 'error') {
-          return xhrCreator({
-            serverValidation: () => {
-              return {
-                statusText: 'Error',
-              };
-            },
-          })();
-        }
-      };
-
-      const files = [
-        { name: 'Annual Report.docx', complete: true },
-        {
-          name: 'Workflow.pdf',
-          progress: 60,
-          status: '19.7 MB: 60% (remaining time: 00:12:34)',
-        },
-        { name: 'Financials.xlsx', error: 'An error occurred' },
-      ];
-
-      const blobs = createFiles(files.length, 1000, 'application/unknown');
-
-      files.forEach((_, index) => {
-        files[index] = Object.assign(blobs[index], files[index]);
+      // Create the orchestrator with external UI elements
+      const orchestrator = new UploadOrchestrator({
+        target: '/api/fileupload',
+        maxFiles: 5,
+        fileList: document.getElementById('file-list'),
+        addButton: document.getElementById('add-button'),
+        dropZone: document.getElementById('drop-zone'),
       });
 
-      upload.files = files;
+      // Use a fake xhr for testing
+      orchestrator._createXhr = xhrCreator({
+        size: 512,
+        uploadTime: 3000,
+        stepTime: 1000,
+      });
+
+      // Listen to events
+      orchestrator.addEventListener('upload-success', (e) => {
+        console.log('File uploaded:', e.detail.file.name);
+      });
+
+      orchestrator.addEventListener('upload-error', (e) => {
+        console.log('Upload error:', e.detail.file.name, e.detail.file.error);
+      });
+
+      orchestrator.addEventListener('file-reject', (e) => {
+        console.log('File rejected:', e.detail.file.name, e.detail.error);
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-upload target="/api/fileupload"></vaadin-upload>
-    <hr style="margin-block: 24px" />
-    <vaadin-upload nodrop target="/api/fileupload"></vaadin-upload>
-    <hr style="margin-block: 24px" />
-    <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
-      <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
-      <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
-      <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
-    </vaadin-radio-group>
-    <hr style="margin-block: 24px" />
-    <h3>no-auto + max-concurrent-uploads=1</h3>
-    <p>Test: Add multiple files, click "Start" on the first file, then try clicking "Start" on another file. The start button should hide and show 0% progress while queued.</p>
-    <vaadin-upload id="no-auto-upload" target="/api/fileupload" no-auto max-concurrent-uploads="1"></vaadin-upload>
-    <script type="module">
-      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+    <div class="upload-container">
+      <div class="upload-header">
+        <h1>Upload Files</h1>
+        <p>Drag and drop your files here or click to browse</p>
+      </div>
 
-      const noAutoUpload = document.querySelector('#no-auto-upload');
-      noAutoUpload._createXhr = () => {
-        return xhrCreator({ size: 512, uploadTime: 5000, stepTime: 1000 })();
-      };
-    </script>
+      <vaadin-upload-drop-zone id="drop-zone">
+        <div class="drop-zone-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+        </div>
+        <div class="drop-zone-text">Drop files here</div>
+        <div class="drop-zone-hint">PNG, JPG, PDF up to 10MB</div>
+      </vaadin-upload-drop-zone>
+
+      <div class="upload-actions">
+        <button id="add-button">Choose Files</button>
+      </div>
+
+      <div class="divider"><span>Uploaded files</span></div>
+
+      <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
+      <div class="empty-state">No files uploaded yet</div>
+    </div>
   </body>
 </html>
