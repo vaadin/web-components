@@ -52,51 +52,37 @@ export const PopoverOverlayMixin = (superClass) =>
         const offset = targetRect.width / 2 - overlayRect.width / 2;
 
         if (this.style.left) {
-          const centeredLeft = overlayRect.left + offset;
+          let left = overlayRect.left + offset;
 
           // Constrain to viewport bounds
-          let finalLeft = centeredLeft;
-          let isCentered = true;
-
-          if (centeredLeft < 0) {
-            finalLeft = 0;
-            isCentered = false;
-          } else if (centeredLeft + overlayRect.width > viewportWidth) {
-            finalLeft = viewportWidth - overlayRect.width;
-            isCentered = false;
-          }
-
-          const clampedLeft = isCentered ? finalLeft : Math.max(0, finalLeft);
-          this.style.left = `${clampedLeft}px`;
-          if (isCentered) {
-            this.setAttribute('arrow-centered', '');
-          } else {
+          if (left < 0) {
+            left = 0;
             this.__repositionArrow(targetRect);
+          } else if (left + overlayRect.width > viewportWidth) {
+            left = viewportWidth - overlayRect.width;
+            this.__repositionArrow(targetRect);
+          } else {
+            this.setAttribute('arrow-centered', '');
           }
+
+          this.style.left = `${left}px`;
         }
 
         if (this.style.right) {
-          const centeredRight = parseFloat(this.style.right) + offset;
+          let right = parseFloat(this.style.right) + offset;
           const centeredOverlayLeft = overlayRect.left - offset;
 
-          let finalRight = centeredRight;
-          let isCentered = true;
-
           if (centeredOverlayLeft < 0) {
-            finalRight = centeredRight + centeredOverlayLeft;
-            isCentered = false;
+            right += centeredOverlayLeft;
+            this.__repositionArrow(targetRect);
           } else if (centeredOverlayLeft + overlayRect.width > viewportWidth) {
-            finalRight = centeredRight + (centeredOverlayLeft + overlayRect.width - viewportWidth);
-            isCentered = false;
+            right += centeredOverlayLeft + overlayRect.width - viewportWidth;
+            this.__repositionArrow(targetRect);
+          } else {
+            this.setAttribute('arrow-centered', '');
           }
 
-          const clampedRight = isCentered ? finalRight : Math.max(0, finalRight);
-          this.style.right = `${clampedRight}px`;
-          if (isCentered) {
-            this.setAttribute('arrow-centered', '');
-          } else {
-            this.__repositionArrow(targetRect);
-          }
+          this.style.right = `${right}px`;
         }
       }
 
