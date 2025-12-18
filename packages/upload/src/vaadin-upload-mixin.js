@@ -141,7 +141,7 @@ export const UploadMixin = (superClass) =>
         /**
          * When true, the upload component hides its default UI (buttons, drop label,
          * and file list). Use this when providing external UI elements via
-         * `addButtonId`, `dropAreaId`, and `fileListId` properties.
+         * `addButtonId`, `dropZoneId`, and `fileListId` properties.
          * @type {boolean}
          */
         headless: {
@@ -414,24 +414,24 @@ export const UploadMixin = (superClass) =>
         },
 
         /**
-         * The id of the element to be used as the drop area.
+         * The id of the element to be used as the drop zone.
          * The element should be in the DOM by the time when
          * the attribute is set, otherwise a warning is shown.
          * When set, the external element will be used for file drops
          * instead of the upload component itself.
-         * @attr {string} drop-area-id
+         * @attr {string} drop-zone-id
          */
-        dropAreaId: {
+        dropZoneId: {
           type: String,
-          observer: '__dropAreaIdChanged',
+          observer: '__dropZoneIdChanged',
         },
 
         /**
-         * Reference to an external element to be used as the drop area.
-         * Defaults to an element referenced with `dropAreaId` attribute.
+         * Reference to an external element to be used as the drop zone.
+         * Defaults to an element referenced with `dropZoneId` attribute.
          * @type {HTMLElement | null}
          */
-        dropArea: {
+        dropZone: {
           type: Object,
           value: null,
         },
@@ -463,7 +463,7 @@ export const UploadMixin = (superClass) =>
         '__updateMaxFilesReached(maxFiles, files)',
         '__fileListChanged(fileList)',
         '__addButtonChanged(addButton)',
-        '__dropAreaChanged(dropArea)',
+        '__dropZoneChanged(dropZone)',
         '__updateExternalFileList(fileList, files, __effectiveI18n, disabled)',
         '__updateExternalAddButton(addButton, maxFilesReached, disabled)',
       ];
@@ -573,10 +573,10 @@ export const UploadMixin = (superClass) =>
       this.__onExternalAddButtonTouchEnd = this._onAddFilesTouchEnd.bind(this);
       this.__onExternalAddButtonClick = this._onAddFilesClick.bind(this);
 
-      // Bind external drop area handlers
-      this.__onExternalDropAreaDragover = this._onDragover.bind(this);
-      this.__onExternalDropAreaDragleave = this._onDragleave.bind(this);
-      this.__onExternalDropAreaDrop = this._onDrop.bind(this);
+      // Bind external drop zone handlers
+      this.__onExternalDropZoneDragover = this._onDragover.bind(this);
+      this.__onExternalDropZoneDragleave = this._onDragleave.bind(this);
+      this.__onExternalDropZoneDrop = this._onDrop.bind(this);
 
       // Bind external file list handlers
       this.__onExternalFileListRetry = this._onFileRetry.bind(this);
@@ -811,56 +811,56 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __dropAreaIdChanged(dropAreaId) {
-      if (dropAreaId) {
-        this.__setDropAreaByIdDebouncer = Debouncer.debounce(this.__setDropAreaByIdDebouncer, microTask, () =>
-          this.__setDropAreaById(dropAreaId),
+    __dropZoneIdChanged(dropZoneId) {
+      if (dropZoneId) {
+        this.__setDropZoneByIdDebouncer = Debouncer.debounce(this.__setDropZoneByIdDebouncer, microTask, () =>
+          this.__setDropZoneById(dropZoneId),
         );
       } else {
-        this.dropArea = null;
+        this.dropZone = null;
       }
     }
 
     /** @private */
-    __setDropAreaById(dropAreaId) {
+    __setDropZoneById(dropZoneId) {
       if (!this.isConnected) {
         return;
       }
 
-      const dropArea = this.getRootNode().getElementById(dropAreaId);
+      const dropZone = this.getRootNode().getElementById(dropZoneId);
 
-      if (dropArea) {
-        this.dropArea = dropArea;
+      if (dropZone) {
+        this.dropZone = dropZone;
       } else {
-        console.warn(`No element with id="${dropAreaId}" found on the page.`);
+        console.warn(`No element with id="${dropZoneId}" found on the page.`);
       }
     }
 
     /** @private */
-    __dropAreaChanged(dropArea) {
-      if (this.__previousDropArea) {
-        this.__removeExternalDropAreaListeners(this.__previousDropArea);
+    __dropZoneChanged(dropZone) {
+      if (this.__previousDropZone) {
+        this.__removeExternalDropZoneListeners(this.__previousDropZone);
       }
 
-      if (dropArea) {
-        this.__addExternalDropAreaListeners(dropArea);
+      if (dropZone) {
+        this.__addExternalDropZoneListeners(dropZone);
       }
 
-      this.__previousDropArea = dropArea;
+      this.__previousDropZone = dropZone;
     }
 
     /** @private */
-    __addExternalDropAreaListeners(dropArea) {
-      dropArea.addEventListener('dragover', this.__onExternalDropAreaDragover);
-      dropArea.addEventListener('dragleave', this.__onExternalDropAreaDragleave);
-      dropArea.addEventListener('drop', this.__onExternalDropAreaDrop);
+    __addExternalDropZoneListeners(dropZone) {
+      dropZone.addEventListener('dragover', this.__onExternalDropZoneDragover);
+      dropZone.addEventListener('dragleave', this.__onExternalDropZoneDragleave);
+      dropZone.addEventListener('drop', this.__onExternalDropZoneDrop);
     }
 
     /** @private */
-    __removeExternalDropAreaListeners(dropArea) {
-      dropArea.removeEventListener('dragover', this.__onExternalDropAreaDragover);
-      dropArea.removeEventListener('dragleave', this.__onExternalDropAreaDragleave);
-      dropArea.removeEventListener('drop', this.__onExternalDropAreaDrop);
+    __removeExternalDropZoneListeners(dropZone) {
+      dropZone.removeEventListener('dragover', this.__onExternalDropZoneDragover);
+      dropZone.removeEventListener('dragleave', this.__onExternalDropZoneDragleave);
+      dropZone.removeEventListener('drop', this.__onExternalDropZoneDrop);
     }
 
     /** @private */
