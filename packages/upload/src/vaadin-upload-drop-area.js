@@ -11,16 +11,17 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { uploadDropAreaStyles } from './styles/vaadin-upload-drop-area-base-styles.js';
 
 /**
- * `<vaadin-upload-drop-area>` is a Web Component for displaying a styled drop area
- * that can be used with `<vaadin-upload>` when using the `drop-area-id` attribute.
+ * `<vaadin-upload-drop-area>` is a Web Component that can be used as a drop area
+ * with `<vaadin-upload>` when using the `drop-area-id` attribute.
  *
- * The component reacts visually when files are dragged over it.
+ * The component has no styling by default. When files are dragged over it,
+ * it displays styling matching `<vaadin-upload>`'s dragover state.
  *
  * ```html
  * <vaadin-upload-drop-area id="drop-area">
  *   Drop files here
  * </vaadin-upload-drop-area>
- * <vaadin-upload theme="headless" drop-area-id="drop-area"></vaadin-upload>
+ * <vaadin-upload headless drop-area-id="drop-area"></vaadin-upload>
  * ```
  *
  * ### Styling
@@ -31,22 +32,13 @@ import { uploadDropAreaStyles } from './styles/vaadin-upload-drop-area-base-styl
  * ------------|--------------------------------------------
  * `dragover`  | Set when files are being dragged over the element
  *
- * The following custom CSS properties are available for styling:
+ * When `dragover` is set, the component uses the same CSS custom properties
+ * as `<vaadin-upload>` for consistent styling:
  *
- * Custom CSS property                               | Description
- * :-------------------------------------------------|:--------------------------------------------
- * `--vaadin-upload-drop-area-background`            | Background color
- * `--vaadin-upload-drop-area-border-color`          | Border color
- * `--vaadin-upload-drop-area-border-radius`         | Border radius
- * `--vaadin-upload-drop-area-border-width`          | Border width
- * `--vaadin-upload-drop-area-color`                 | Text color
- * `--vaadin-upload-drop-area-font-size`             | Font size
- * `--vaadin-upload-drop-area-gap`                   | Gap between content elements
- * `--vaadin-upload-drop-area-min-height`            | Minimum height
- * `--vaadin-upload-drop-area-padding`               | Padding
- * `--vaadin-upload-drop-area-dragover-background`   | Background color when dragging over
- * `--vaadin-upload-drop-area-dragover-border-color` | Border color when dragging over
- * `--vaadin-upload-drop-area-dragover-color`        | Text color when dragging over
+ * - `--vaadin-upload-background`
+ * - `--vaadin-upload-border-color`
+ * - `--vaadin-upload-border-width`
+ * - `--vaadin-upload-border-radius`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
