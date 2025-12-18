@@ -51,13 +51,6 @@ export const uploadStyles = css`
 
   /* Headless variant - hides all default visual content */
   :host([theme~='headless']) {
-    background: transparent;
-    border: none;
-    padding: 0;
-  }
-
-  :host([theme~='headless']) [part='primary-buttons'],
-  :host([theme~='headless']) ::slotted([slot='file-list']) {
     display: none;
   }
 `;
