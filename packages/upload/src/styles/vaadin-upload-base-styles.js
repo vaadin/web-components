@@ -48,9 +48,4 @@ export const uploadStyles = css`
     gap: var(--vaadin-upload-drop-label-gap, var(--vaadin-gap-s));
     line-height: var(--vaadin-upload-drop-label-line-height, inherit);
   }
-
-  /* Headless mode - hides all default visual content */
-  :host([headless]) {
-    display: none;
-  }
 `;

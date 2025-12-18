@@ -5,9 +5,7 @@
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
@@ -136,18 +134,6 @@ export const UploadMixin = (superClass) =>
           type: Boolean,
           reflectToAttribute: true,
           value: isTouch,
-        },
-
-        /**
-         * When true, the upload component hides its default UI (buttons, drop label,
-         * and file list). Use this when providing external UI elements via
-         * `addButtonId`, `dropZoneId`, and `fileListId` properties.
-         * @type {boolean}
-         */
-        headless: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true,
         },
 
         /**
@@ -371,71 +357,6 @@ export const UploadMixin = (superClass) =>
           type: Object,
         },
 
-        /**
-         * The id of the element to be used as the file list.
-         * The element should be in the DOM by the time when
-         * the attribute is set, otherwise a warning is shown.
-         * @attr {string} file-list-id
-         */
-        fileListId: {
-          type: String,
-          observer: '__fileListIdChanged',
-        },
-
-        /**
-         * Reference to an external element to be used as the file list.
-         * Defaults to an element referenced with `fileListId` attribute.
-         * @type {HTMLElement | null}
-         */
-        fileList: {
-          type: Object,
-          value: null,
-        },
-
-        /**
-         * The id of the element to be used as the add button.
-         * The element should be in the DOM by the time when
-         * the attribute is set, otherwise a warning is shown.
-         * @attr {string} add-button-id
-         */
-        addButtonId: {
-          type: String,
-          observer: '__addButtonIdChanged',
-        },
-
-        /**
-         * Reference to an external element to be used as the add button.
-         * Defaults to an element referenced with `addButtonId` attribute.
-         * @type {HTMLElement | null}
-         */
-        addButton: {
-          type: Object,
-          value: null,
-        },
-
-        /**
-         * The id of the element to be used as the drop zone.
-         * The element should be in the DOM by the time when
-         * the attribute is set, otherwise a warning is shown.
-         * When set, the external element will be used for file drops
-         * instead of the upload component itself.
-         * @attr {string} drop-zone-id
-         */
-        dropZoneId: {
-          type: String,
-          observer: '__dropZoneIdChanged',
-        },
-
-        /**
-         * Reference to an external element to be used as the drop zone.
-         * Defaults to an element referenced with `dropZoneId` attribute.
-         * @type {HTMLElement | null}
-         */
-        dropZone: {
-          type: Object,
-          value: null,
-        },
-
         /** @private */
         _files: {
           type: Array,
@@ -461,11 +382,6 @@ export const UploadMixin = (superClass) =>
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
         '__updateMaxFilesReached(maxFiles, files)',
-        '__fileListChanged(fileList)',
-        '__addButtonChanged(addButton)',
-        '__dropZoneChanged(dropZone)',
-        '__updateExternalFileList(fileList, files, __effectiveI18n, disabled)',
-        '__updateExternalAddButton(addButton, maxFilesReached, disabled)',
       ];
     }
 
@@ -569,20 +485,6 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
       this.addEventListener('upload-error', this._onUploadError.bind(this));
 
-      // Bind external add button handlers
-      this.__onExternalAddButtonTouchEnd = this._onAddFilesTouchEnd.bind(this);
-      this.__onExternalAddButtonClick = this._onAddFilesClick.bind(this);
-
-      // Bind external drop zone handlers
-      this.__onExternalDropZoneDragover = this._onDragover.bind(this);
-      this.__onExternalDropZoneDragleave = this._onDragleave.bind(this);
-      this.__onExternalDropZoneDrop = this._onDrop.bind(this);
-
-      // Bind external file list handlers
-      this.__onExternalFileListRetry = this._onFileRetry.bind(this);
-      this.__onExternalFileListAbort = this._onFileAbort.bind(this);
-      this.__onExternalFileListStart = this._onFileStart.bind(this);
-
       this._addButtonController = new AddButtonController(this);
       this.addController(this._addButtonController);
 
@@ -674,13 +576,6 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __updateExternalAddButton(addButton, maxFilesReached, disabled) {
-      if (addButton) {
-        addButton.disabled = disabled || maxFilesReached;
-      }
-    }
-
-    /** @private */
     __updateDropLabel(dropLabel, maxFiles, effectiveI18n) {
       // Only update text content for the default label element
       if (dropLabel && dropLabel === this._dropLabelController.defaultNode) {
@@ -695,172 +590,6 @@ export const UploadMixin = (superClass) =>
         list.i18n = effectiveI18n;
         list.disabled = disabled;
       }
-    }
-
-    /** @private */
-    __updateExternalFileList(list, files, effectiveI18n, disabled) {
-      if (list) {
-        list.items = [...files];
-        list.i18n = effectiveI18n;
-        list.disabled = disabled;
-      }
-    }
-
-    /** @private */
-    __fileListIdChanged(fileListId) {
-      if (fileListId) {
-        this.__setFileListByIdDebouncer = Debouncer.debounce(this.__setFileListByIdDebouncer, microTask, () =>
-          this.__setFileListById(fileListId),
-        );
-      } else {
-        this.fileList = null;
-      }
-    }
-
-    /** @private */
-    __setFileListById(fileListId) {
-      if (!this.isConnected) {
-        return;
-      }
-
-      const fileList = this.getRootNode().getElementById(fileListId);
-
-      if (fileList) {
-        this.fileList = fileList;
-      } else {
-        console.warn(`No element with id="${fileListId}" found on the page.`);
-      }
-    }
-
-    /** @private */
-    __fileListChanged(fileList) {
-      if (this.__previousFileList) {
-        this.__removeExternalFileListListeners(this.__previousFileList);
-      }
-
-      if (fileList) {
-        this.__addExternalFileListListeners(fileList);
-      }
-
-      this.__previousFileList = fileList;
-    }
-
-    /** @private */
-    __addExternalFileListListeners(fileList) {
-      fileList.addEventListener('file-retry', this.__onExternalFileListRetry);
-      fileList.addEventListener('file-abort', this.__onExternalFileListAbort);
-      fileList.addEventListener('file-start', this.__onExternalFileListStart);
-    }
-
-    /** @private */
-    __removeExternalFileListListeners(fileList) {
-      fileList.removeEventListener('file-retry', this.__onExternalFileListRetry);
-      fileList.removeEventListener('file-abort', this.__onExternalFileListAbort);
-      fileList.removeEventListener('file-start', this.__onExternalFileListStart);
-    }
-
-    /** @private */
-    __addButtonIdChanged(addButtonId) {
-      if (addButtonId) {
-        this.__setAddButtonByIdDebouncer = Debouncer.debounce(this.__setAddButtonByIdDebouncer, microTask, () =>
-          this.__setAddButtonById(addButtonId),
-        );
-      } else {
-        this.addButton = null;
-      }
-    }
-
-    /** @private */
-    __setAddButtonById(addButtonId) {
-      if (!this.isConnected) {
-        return;
-      }
-
-      const addButton = this.getRootNode().getElementById(addButtonId);
-
-      if (addButton) {
-        this.addButton = addButton;
-      } else {
-        console.warn(`No element with id="${addButtonId}" found on the page.`);
-      }
-    }
-
-    /** @private */
-    __addButtonChanged(addButton) {
-      if (this.__previousAddButton) {
-        this.__removeExternalAddButtonListeners(this.__previousAddButton);
-      }
-
-      if (addButton) {
-        this.__addExternalAddButtonListeners(addButton);
-      }
-
-      this.__previousAddButton = addButton;
-    }
-
-    /** @private */
-    __addExternalAddButtonListeners(button) {
-      button.addEventListener('touchend', this.__onExternalAddButtonTouchEnd);
-      button.addEventListener('click', this.__onExternalAddButtonClick);
-    }
-
-    /** @private */
-    __removeExternalAddButtonListeners(button) {
-      button.removeEventListener('touchend', this.__onExternalAddButtonTouchEnd);
-      button.removeEventListener('click', this.__onExternalAddButtonClick);
-    }
-
-    /** @private */
-    __dropZoneIdChanged(dropZoneId) {
-      if (dropZoneId) {
-        this.__setDropZoneByIdDebouncer = Debouncer.debounce(this.__setDropZoneByIdDebouncer, microTask, () =>
-          this.__setDropZoneById(dropZoneId),
-        );
-      } else {
-        this.dropZone = null;
-      }
-    }
-
-    /** @private */
-    __setDropZoneById(dropZoneId) {
-      if (!this.isConnected) {
-        return;
-      }
-
-      const dropZone = this.getRootNode().getElementById(dropZoneId);
-
-      if (dropZone) {
-        this.dropZone = dropZone;
-      } else {
-        console.warn(`No element with id="${dropZoneId}" found on the page.`);
-      }
-    }
-
-    /** @private */
-    __dropZoneChanged(dropZone) {
-      if (this.__previousDropZone) {
-        this.__removeExternalDropZoneListeners(this.__previousDropZone);
-      }
-
-      if (dropZone) {
-        this.__addExternalDropZoneListeners(dropZone);
-      }
-
-      this.__previousDropZone = dropZone;
-    }
-
-    /** @private */
-    __addExternalDropZoneListeners(dropZone) {
-      dropZone.addEventListener('dragover', this.__onExternalDropZoneDragover);
-      dropZone.addEventListener('dragleave', this.__onExternalDropZoneDragleave);
-      dropZone.addEventListener('drop', this.__onExternalDropZoneDrop);
-    }
-
-    /** @private */
-    __removeExternalDropZoneListeners(dropZone) {
-      dropZone.removeEventListener('dragover', this.__onExternalDropZoneDragover);
-      dropZone.removeEventListener('dragleave', this.__onExternalDropZoneDragleave);
-      dropZone.removeEventListener('drop', this.__onExternalDropZoneDrop);
     }
 
     /** @private */
@@ -1226,9 +955,17 @@ export const UploadMixin = (superClass) =>
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
       }
-      if (this.fileList && typeof this.fileList.requestContentUpdate === 'function') {
-        this.fileList.requestContentUpdate();
-      }
+    }
+
+    /**
+     * Add files to the upload list programmatically. This method can be used
+     * by external components like drop zones or custom buttons to add files
+     * to the upload component.
+     *
+     * @param {FileList | File[]} files - Files to add to the upload list
+     */
+    addFiles(files) {
+      this._addFiles(files);
     }
 
     /** @private */
@@ -1288,10 +1025,7 @@ export const UploadMixin = (superClass) =>
       if (lastFileRemoved) {
         fileIndex -= 1;
       }
-      const extFileList = this.fileList || this._fileList;
-      if (extFileList && extFileList.children[fileIndex]) {
-        extFileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
-      }
+      this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
     }
 
     /**

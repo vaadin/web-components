@@ -116,7 +116,9 @@
         margin-top: 16px;
       }
 
-      #add-button {
+      /* Style the add button */
+      vaadin-upload-add-button {
+        display: inline-block;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
@@ -129,63 +131,30 @@
         box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
       }
 
-      #add-button:hover {
+      vaadin-upload-add-button:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.5);
       }
 
-      #add-button:active {
+      vaadin-upload-add-button:active {
         transform: translateY(0);
       }
 
-      #add-button[disabled] {
+      vaadin-upload-add-button[disabled] {
         opacity: 0.5;
         cursor: not-allowed;
         transform: none;
       }
 
-      .divider {
-        display: flex;
-        align-items: center;
-        margin: 24px 0;
-        color: #9ca3af;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      .divider::before,
-      .divider::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: #e5e7eb;
-      }
-
-      .divider span {
-        padding: 0 16px;
-      }
-
-      #file-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      #file-list:empty {
-        display: none;
-      }
-
-      #file-list:empty + .empty-state {
+      /* Style the external file list box */
+      vaadin-upload-file-list-box {
         display: block;
+        margin-top: 24px;
       }
 
-      .empty-state {
+      /* Style the upload component - hide all default UI since we use external components */
+      vaadin-upload {
         display: none;
-        text-align: center;
-        padding: 24px;
-        color: #9ca3af;
-        font-size: 14px;
       }
 
       /* Style the file list items */
@@ -223,7 +192,8 @@
     <script type="module">
       import '@vaadin/upload';
       import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
-      import '@vaadin/upload/src/vaadin-upload-file-list.js';
+      import '@vaadin/upload/src/vaadin-upload-add-button.js';
+      import '@vaadin/upload/src/vaadin-upload-file-list-box.js';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
 
       // Use a fake xhr for testing
@@ -242,7 +212,8 @@
         <p>Drag and drop your files here or click to browse</p>
       </div>
 
-      <vaadin-upload-drop-zone id="drop-zone">
+      <!-- Drop zone references the upload using the "for" attribute -->
+      <vaadin-upload-drop-zone id="drop-zone" for="my-upload">
         <div class="drop-zone-icon">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -258,21 +229,15 @@
       </vaadin-upload-drop-zone>
 
       <div class="upload-actions">
-        <button id="add-button">Choose Files</button>
+        <!-- Add button references the upload using the "for" attribute -->
+        <vaadin-upload-add-button for="my-upload">Choose Files</vaadin-upload-add-button>
       </div>
 
-      <div class="divider"><span>Uploaded files</span></div>
+      <!-- External file list box references the upload using the "for" attribute -->
+      <vaadin-upload-file-list-box for="my-upload"></vaadin-upload-file-list-box>
 
-      <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
-      <div class="empty-state">No files uploaded yet</div>
+      <!-- Upload component is hidden, all UI comes from external components -->
+      <vaadin-upload id="my-upload" target="/api/fileupload" nodrop></vaadin-upload>
     </div>
-
-    <vaadin-upload
-      headless
-      target="/api/fileupload"
-      add-button-id="add-button"
-      drop-zone-id="drop-zone"
-      file-list-id="file-list"
-    ></vaadin-upload>
   </body>
 </html>
