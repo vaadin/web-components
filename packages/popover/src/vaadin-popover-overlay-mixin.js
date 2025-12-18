@@ -54,7 +54,6 @@ export const PopoverOverlayMixin = (superClass) =>
         if (this.style.left) {
           let left = overlayRect.left + offset;
 
-          // Constrain to viewport bounds
           if (left < 0) {
             left = 0;
             this.__repositionArrow(targetRect);
@@ -86,7 +85,7 @@ export const PopoverOverlayMixin = (superClass) =>
         }
       }
 
-      // Calculate arrow offset for aligned horizontal positions only when constrained
+      // Constrain aligned horizontal positions to viewport
       if (
         this.position === 'bottom-start' ||
         this.position === 'top-start' ||
@@ -97,22 +96,67 @@ export const PopoverOverlayMixin = (superClass) =>
         const overlayRect = this.$.overlay.getBoundingClientRect();
         const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
 
-        // Only reposition arrow if popover is constrained to viewport edge
-        const isConstrainedLeft = overlayRect.left <= 0.5;
-        const isConstrainedRight = overlayRect.right >= viewportWidth - 0.5;
+        let left = overlayRect.left;
 
-        if (isConstrainedLeft || isConstrainedRight) {
+        if (left < 0) {
+          left = 0;
           this.__repositionArrow(targetRect);
+        } else if (left + overlayRect.width > viewportWidth) {
+          left = viewportWidth - overlayRect.width;
+          this.__repositionArrow(targetRect);
+        } else {
+          this.setAttribute('arrow-centered', '');
         }
+
+        this.style.left = `${left}px`;
       }
 
-      // Center the overlay vertically
+      // Constrain vertically centered positions (start, end)
       if (this.position === 'start' || this.position === 'end') {
         const targetRect = this.positionTarget.getBoundingClientRect();
         const overlayRect = this.$.overlay.getBoundingClientRect();
+        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
 
         const offset = targetRect.height / 2 - overlayRect.height / 2;
-        this.style.top = `${overlayRect.top + offset}px`;
+        let top = overlayRect.top + offset;
+
+        if (top < 0) {
+          top = 0;
+          this.__repositionArrow(targetRect);
+        } else if (top + overlayRect.height > viewportHeight) {
+          top = viewportHeight - overlayRect.height;
+          this.__repositionArrow(targetRect);
+        } else {
+          this.setAttribute('arrow-centered', '');
+        }
+
+        this.style.top = `${top}px`;
+      }
+
+      // Constrain vertically aligned positions (start-top, end-top, start-bottom, end-bottom)
+      if (
+        this.position === 'start-top' ||
+        this.position === 'end-top' ||
+        this.position === 'start-bottom' ||
+        this.position === 'end-bottom'
+      ) {
+        const targetRect = this.positionTarget.getBoundingClientRect();
+        const overlayRect = this.$.overlay.getBoundingClientRect();
+        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+
+        let top = overlayRect.top;
+
+        if (top < 0) {
+          top = 0;
+          this.__repositionArrow(targetRect);
+        } else if (top + overlayRect.height > viewportHeight) {
+          top = viewportHeight - overlayRect.height;
+          this.__repositionArrow(targetRect);
+        } else {
+          this.setAttribute('arrow-centered', '');
+        }
+
+        this.style.top = `${top}px`;
       }
     }
 
