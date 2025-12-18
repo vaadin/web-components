@@ -80,6 +80,13 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       [part='_detail-internal'] {
         display: contents;
         justify-content: end;
+        /* Disable pointer events for the detail wrapper to allow clicks to pass through to the backdrop */
+        pointer-events: none;
+      }
+
+      [part='detail'] {
+        /* Re-enable pointer events for the actual detail content */
+        pointer-events: auto;
       }
 
       :host([orientation='vertical']) [part='_detail-internal'] {
@@ -388,7 +395,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   /** @protected */
   render() {
     return html`
-      <div part="backdrop"></div>
+      <div part="backdrop" @click="${this.__onBackdropClick}"></div>
       <div
         id="master"
         part="master"
@@ -396,7 +403,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       >
         <slot></slot>
       </div>
-      <div part="_detail-internal" @click="${this.__onDetailClick}">
+      <div part="_detail-internal">
         <div
           id="detail"
           part="detail"
@@ -428,12 +435,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __onDetailClick(e) {
-    // The detail wrapper element fully covers the backdrop part, so listen
-    // to click event on it and detect if it was outside the detail content
-    if (!e.composedPath().includes(this.$.detail)) {
-      this.dispatchEvent(new CustomEvent('backdrop-click'));
-    }
+  __onBackdropClick() {
+    this.dispatchEvent(new CustomEvent('backdrop-click'));
   }
 
   /** @private */
