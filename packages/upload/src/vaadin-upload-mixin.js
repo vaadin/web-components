@@ -578,6 +578,11 @@ export const UploadMixin = (superClass) =>
       this.__onExternalDropAreaDragleave = this._onDragleave.bind(this);
       this.__onExternalDropAreaDrop = this._onDrop.bind(this);
 
+      // Bind external file list handlers
+      this.__onExternalFileListRetry = this._onFileRetry.bind(this);
+      this.__onExternalFileListAbort = this._onFileAbort.bind(this);
+      this.__onExternalFileListStart = this._onFileStart.bind(this);
+
       this._addButtonController = new AddButtonController(this);
       this.addController(this._addButtonController);
 
@@ -728,8 +733,30 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __fileListChanged(_fileList) {
-      // File list doesn't need listeners, just syncing data via observer
+    __fileListChanged(fileList) {
+      if (this.__previousFileList) {
+        this.__removeExternalFileListListeners(this.__previousFileList);
+      }
+
+      if (fileList) {
+        this.__addExternalFileListListeners(fileList);
+      }
+
+      this.__previousFileList = fileList;
+    }
+
+    /** @private */
+    __addExternalFileListListeners(fileList) {
+      fileList.addEventListener('file-retry', this.__onExternalFileListRetry);
+      fileList.addEventListener('file-abort', this.__onExternalFileListAbort);
+      fileList.addEventListener('file-start', this.__onExternalFileListStart);
+    }
+
+    /** @private */
+    __removeExternalFileListListeners(fileList) {
+      fileList.removeEventListener('file-retry', this.__onExternalFileListRetry);
+      fileList.removeEventListener('file-abort', this.__onExternalFileListAbort);
+      fileList.removeEventListener('file-start', this.__onExternalFileListStart);
     }
 
     /** @private */
