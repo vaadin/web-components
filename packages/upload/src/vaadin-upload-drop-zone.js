@@ -8,20 +8,20 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { uploadDropAreaStyles } from './styles/vaadin-upload-drop-area-base-styles.js';
+import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styles.js';
 
 /**
- * `<vaadin-upload-drop-area>` is a Web Component that can be used as a drop area
+ * `<vaadin-upload-drop-zone>` is a Web Component that can be used as a drop zone
  * with `<vaadin-upload>` when using the `drop-area-id` attribute.
  *
  * The component has no styling by default. When files are dragged over it,
  * it displays styling matching `<vaadin-upload>`'s dragover state.
  *
  * ```html
- * <vaadin-upload-drop-area id="drop-area">
+ * <vaadin-upload-drop-zone id="drop-zone">
  *   Drop files here
- * </vaadin-upload-drop-area>
- * <vaadin-upload headless drop-area-id="drop-area"></vaadin-upload>
+ * </vaadin-upload-drop-zone>
+ * <vaadin-upload headless drop-area-id="drop-zone"></vaadin-upload>
  * ```
  *
  * ### Styling
@@ -46,13 +46,13 @@ import { uploadDropAreaStyles } from './styles/vaadin-upload-drop-area-base-styl
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class UploadDropArea extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
+class UploadDropZone extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
-    return 'vaadin-upload-drop-area';
+    return 'vaadin-upload-drop-zone';
   }
 
   static get styles() {
-    return uploadDropAreaStyles;
+    return uploadDropZoneStyles;
   }
 
   static get properties() {
@@ -109,6 +109,6 @@ class UploadDropArea extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitEl
   }
 }
 
-defineCustomElement(UploadDropArea);
+defineCustomElement(UploadDropZone);
 
-export { UploadDropArea };
+export { UploadDropZone };

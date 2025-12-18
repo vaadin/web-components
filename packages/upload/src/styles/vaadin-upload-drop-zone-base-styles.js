@@ -6,9 +6,12 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
-export const uploadDropAreaStyles = css`
+export const uploadDropZoneStyles = css`
   :host {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
   }
 
   :host([hidden]) {
@@ -18,6 +21,5 @@ export const uploadDropAreaStyles = css`
   :host([dragover]) {
     background: var(--vaadin-upload-background, var(--vaadin-background-container));
     border: var(--vaadin-upload-border-width, 1px) dashed var(--vaadin-upload-border-color, var(--vaadin-text-color));
-    border-radius: var(--vaadin-upload-border-radius, var(--vaadin-radius-m));
   }
 `;

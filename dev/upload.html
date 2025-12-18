@@ -10,7 +10,7 @@
     <script type="module">
       import '@vaadin/button';
       import '@vaadin/upload';
-      import '@vaadin/upload/src/vaadin-upload-drop-area.js';
+      import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
       import '@vaadin/upload/src/vaadin-upload-file-list.js';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
 
@@ -24,12 +24,15 @@
   </head>
 
   <body>
-    <div style="display: flex; gap: 16px; align-items: flex-start;">
+    <div style="display: flex; gap: 16px; align-items: flex-start">
       <div>
         <vaadin-button id="add-button">Choose Files...</vaadin-button>
-        <vaadin-upload-drop-area id="drop-zone" style="margin-top: 8px;">
+        <vaadin-upload-drop-zone
+          id="drop-zone"
+          style="border: 1px dashed #888; width: 200px; height: 100px; border-radius: 4px"
+        >
           Drop files here
-        </vaadin-upload-drop-area>
+        </vaadin-upload-drop-zone>
       </div>
       <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
     </div>
