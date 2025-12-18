@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { UploadCore, type UploadCoreEventMap } from './vaadin-upload-core.js';
 import type { UploadFile, UploadFormat, UploadI18n, UploadMethod } from './vaadin-upload-mixin.js';
 
 export { UploadFile, UploadFormat, UploadI18n, UploadMethod };
@@ -112,24 +113,7 @@ export interface UploadOrchestratorOptions {
   i18n?: UploadI18n;
 }
 
-export interface UploadOrchestratorEventMap {
-  'file-reject': CustomEvent<{ file: File; error: string }>;
-  'file-remove': CustomEvent<{ file: UploadFile }>;
-  'upload-before': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-request': CustomEvent<{
-    file: UploadFile;
-    xhr: XMLHttpRequest;
-    uploadFormat: UploadFormat;
-    requestBody: File | FormData;
-    formData?: FormData;
-  }>;
-  'upload-start': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-progress': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-response': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-success': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-error': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-retry': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'upload-abort': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
+export interface UploadOrchestratorEventMap extends UploadCoreEventMap {
   'files-changed': CustomEvent<{ value: UploadFile[]; oldValue: UploadFile[] }>;
   'max-files-reached-changed': CustomEvent<{ value: boolean }>;
 }
@@ -160,96 +144,11 @@ export interface UploadOrchestratorEventMap {
  * orchestrator.destroy();
  * ```
  */
-export class UploadOrchestrator extends EventTarget {
+export class UploadOrchestrator extends UploadCore {
   /**
    * Create an UploadOrchestrator instance.
    */
   constructor(options?: UploadOrchestratorOptions);
-
-  /**
-   * Server URL for uploads.
-   */
-  target: string;
-
-  /**
-   * HTTP method (POST or PUT).
-   */
-  method: UploadMethod;
-
-  /**
-   * Custom HTTP headers.
-   */
-  headers: Record<string, string>;
-
-  /**
-   * Upload timeout in milliseconds (0 = no timeout).
-   */
-  timeout: number;
-
-  /**
-   * Maximum number of files allowed.
-   */
-  maxFiles: number;
-
-  /**
-   * Maximum file size in bytes.
-   */
-  maxFileSize: number;
-
-  /**
-   * Accepted file types (MIME types or extensions).
-   */
-  accept: string;
-
-  /**
-   * Form data field name for multipart uploads.
-   */
-  formDataName: string;
-
-  /**
-   * Prevent automatic upload on file addition.
-   */
-  noAuto: boolean;
-
-  /**
-   * Include credentials in XHR.
-   */
-  withCredentials: boolean;
-
-  /**
-   * Upload format: 'raw' or 'multipart'.
-   */
-  uploadFormat: UploadFormat;
-
-  /**
-   * Maximum concurrent uploads.
-   */
-  maxConcurrentUploads: number;
-
-  /**
-   * Disable drag-and-drop.
-   */
-  nodrop: boolean;
-
-  /**
-   * Pass-through to input's capture attribute.
-   */
-  capture: string | undefined;
-
-  /**
-   * The array of files being processed or already uploaded.
-   */
-  files: UploadFile[];
-
-  /**
-   * Whether the maximum number of files has been reached.
-   */
-  readonly maxFilesReached: boolean;
-
-  /**
-   * The localization object.
-   */
-  i18n: UploadI18n;
 
   /**
    * The external file list element.
@@ -271,31 +170,6 @@ export class UploadOrchestrator extends EventTarget {
    * Call this when the orchestrator is no longer needed.
    */
   destroy(): void;
-
-  /**
-   * Add files to the upload list.
-   */
-  addFiles(files: FileList | File[]): void;
-
-  /**
-   * Triggers the upload of any files that are not completed.
-   */
-  uploadFiles(files?: UploadFile | UploadFile[]): void;
-
-  /**
-   * Retry a failed upload.
-   */
-  retryUpload(file: UploadFile): void;
-
-  /**
-   * Abort an upload.
-   */
-  abortUpload(file: UploadFile): void;
-
-  /**
-   * Remove a file from the list.
-   */
-  removeFile(file: UploadFile): void;
 
   /**
    * Open the file picker dialog.
