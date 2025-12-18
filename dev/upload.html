@@ -7,8 +7,220 @@
     <title>Upload</title>
     <script type="module" src="./common.js"></script>
 
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .upload-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(0, 0, 0, 0.05);
+        padding: 32px;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .upload-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .upload-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+
+      .upload-header p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      #drop-zone {
+        flex-direction: column;
+        border: 2px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 48px 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: #fafafa;
+      }
+
+      #drop-zone:hover {
+        border-color: #667eea;
+        background: #f5f3ff;
+      }
+
+      #drop-zone[dragover] {
+        border-color: #667eea;
+        background: #ede9fe;
+        transform: scale(1.02);
+      }
+
+      .drop-zone-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .drop-zone-icon svg {
+        width: 32px;
+        height: 32px;
+        color: white;
+      }
+
+      .drop-zone-text {
+        color: #374151;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .drop-zone-hint {
+        color: #9ca3af;
+        font-size: 13px;
+      }
+
+      .upload-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+      }
+
+      #add-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 32px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
+      }
+
+      #add-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.5);
+      }
+
+      #add-button:active {
+        transform: translateY(0);
+      }
+
+      #add-button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+        color: #9ca3af;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e5e7eb;
+      }
+
+      .divider span {
+        padding: 0 16px;
+      }
+
+      #file-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      #file-list:empty {
+        display: none;
+      }
+
+      #file-list:empty + .empty-state {
+        display: block;
+      }
+
+      .empty-state {
+        display: none;
+        text-align: center;
+        padding: 24px;
+        color: #9ca3af;
+        font-size: 14px;
+      }
+
+      /* Style the file list items */
+      vaadin-upload-file {
+        background: #f9fafb;
+        border-radius: 8px;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+      }
+
+      vaadin-upload-file:hover {
+        border-color: #d1d5db;
+        background: #f3f4f6;
+      }
+
+      vaadin-upload-file::part(name) {
+        font-weight: 500;
+        color: #1f2937;
+      }
+
+      vaadin-upload-file::part(status) {
+        color: #6b7280;
+      }
+
+      vaadin-upload-file::part(done-icon) {
+        color: #10b981;
+      }
+
+      vaadin-upload-file::part(error-icon) {
+        color: #ef4444;
+      }
+    </style>
+
     <script type="module">
-      import '@vaadin/button';
       import '@vaadin/upload';
       import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
       import '@vaadin/upload/src/vaadin-upload-file-list.js';
@@ -24,18 +236,37 @@
   </head>
 
   <body>
-    <div style="display: flex; gap: 16px; align-items: flex-start">
-      <div>
-        <vaadin-button id="add-button">Choose Files...</vaadin-button>
-        <vaadin-upload-drop-zone
-          id="drop-zone"
-          style="border: 1px dashed #888; width: 200px; height: 100px; border-radius: 4px"
-        >
-          Drop files here
-        </vaadin-upload-drop-zone>
+    <div class="upload-container">
+      <div class="upload-header">
+        <h1>Upload Files</h1>
+        <p>Drag and drop your files here or click to browse</p>
       </div>
+
+      <vaadin-upload-drop-zone id="drop-zone">
+        <div class="drop-zone-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+        </div>
+        <div class="drop-zone-text">Drop files here</div>
+        <div class="drop-zone-hint">PNG, JPG, PDF up to 10MB</div>
+      </vaadin-upload-drop-zone>
+
+      <div class="upload-actions">
+        <button id="add-button">Choose Files</button>
+      </div>
+
+      <div class="divider"><span>Uploaded files</span></div>
+
       <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
+      <div class="empty-state">No files uploaded yet</div>
     </div>
+
     <vaadin-upload
       headless
       target="/api/fileupload"
