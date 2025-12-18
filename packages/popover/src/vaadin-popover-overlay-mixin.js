@@ -38,50 +38,25 @@ export const PopoverOverlayMixin = (superClass) =>
       this.removeAttribute('arrow-centered');
 
       // Clear any previous arrow positioning
-      const arrow = this.$.overlay.querySelector('[part="arrow"]');
+      const arrow = this.__getArrow();
       if (arrow) {
         arrow.style.insetInlineStart = '';
       }
 
+      const targetRect = this.__getTargetRect();
+      const overlayRect = this.__getOverlayRect();
+
       // Center the overlay horizontally
       if (this.position === 'bottom' || this.position === 'top') {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-        const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-
         const offset = targetRect.width / 2 - overlayRect.width / 2;
-
         if (this.style.left) {
-          let left = overlayRect.left + offset;
-
-          if (left < 0) {
-            left = 0;
-            this.__repositionArrow(targetRect);
-          } else if (left + overlayRect.width > viewportWidth) {
-            left = viewportWidth - overlayRect.width;
-            this.__repositionArrow(targetRect);
-          } else {
-            this.setAttribute('arrow-centered', '');
-          }
-
-          this.style.left = `${left}px`;
+          const left = overlayRect.left + offset;
+          this.__updateLeft(left, targetRect, overlayRect, true);
         }
-
         if (this.style.right) {
-          let right = parseFloat(this.style.right) + offset;
+          const right = parseFloat(this.style.right) + offset;
           const centeredOverlayLeft = overlayRect.left - offset;
-
-          if (centeredOverlayLeft < 0) {
-            right += centeredOverlayLeft;
-            this.__repositionArrow(targetRect);
-          } else if (centeredOverlayLeft + overlayRect.width > viewportWidth) {
-            right += centeredOverlayLeft + overlayRect.width - viewportWidth;
-            this.__repositionArrow(targetRect);
-          } else {
-            this.setAttribute('arrow-centered', '');
-          }
-
-          this.style.right = `${right}px`;
+          this.__updateRight(right, centeredOverlayLeft, targetRect, overlayRect, true);
         }
       }
 
@@ -92,45 +67,21 @@ export const PopoverOverlayMixin = (superClass) =>
         this.position === 'bottom-end' ||
         this.position === 'top-end'
       ) {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-        const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-
-        let left = overlayRect.left;
-
-        if (left < 0) {
-          left = 0;
-          this.__repositionArrow(targetRect);
-        } else if (left + overlayRect.width > viewportWidth) {
-          left = viewportWidth - overlayRect.width;
-          this.__repositionArrow(targetRect);
-        } else {
-          this.setAttribute('arrow-centered', '');
+        if (this.style.left) {
+          const left = overlayRect.left;
+          this.__updateLeft(left, targetRect, overlayRect, false);
         }
-
-        this.style.left = `${left}px`;
+        if (this.style.right) {
+          const right = parseFloat(this.style.right);
+          this.__updateRight(right, overlayRect.left, targetRect, overlayRect, false);
+        }
       }
 
       // Constrain vertically centered positions (start, end)
       if (this.position === 'start' || this.position === 'end') {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
-
         const offset = targetRect.height / 2 - overlayRect.height / 2;
-        let top = overlayRect.top + offset;
-
-        if (top < 0) {
-          top = 0;
-          this.__repositionArrow(targetRect);
-        } else if (top + overlayRect.height > viewportHeight) {
-          top = viewportHeight - overlayRect.height;
-          this.__repositionArrow(targetRect);
-        } else {
-          this.setAttribute('arrow-centered', '');
-        }
-
-        this.style.top = `${top}px`;
+        const top = overlayRect.top + offset;
+        this.__updateTop(top, targetRect, overlayRect, true);
       }
 
       // Constrain vertically aligned positions (start-top, end-top, start-bottom, end-bottom)
@@ -140,24 +91,63 @@ export const PopoverOverlayMixin = (superClass) =>
         this.position === 'start-bottom' ||
         this.position === 'end-bottom'
       ) {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+        const top = overlayRect.top;
+        this.__updateTop(top, targetRect, overlayRect, false);
+      }
+    }
 
-        let top = overlayRect.top;
-
-        if (top < 0) {
-          top = 0;
+    /** @private */
+    __updateRight(right, centeredOverlayLeft, targetRect, overlayRect, isCentered) {
+      if (centeredOverlayLeft < 0) {
+        right += centeredOverlayLeft;
+        this.__repositionArrow(targetRect);
+      } else {
+        const viewportWidth = this.__getViewportWidth();
+        if (centeredOverlayLeft + overlayRect.width > viewportWidth) {
+          right += centeredOverlayLeft + overlayRect.width - viewportWidth;
           this.__repositionArrow(targetRect);
-        } else if (top + overlayRect.height > viewportHeight) {
-          top = viewportHeight - overlayRect.height;
-          this.__repositionArrow(targetRect);
-        } else {
+        } else if (isCentered) {
           this.setAttribute('arrow-centered', '');
         }
-
-        this.style.top = `${top}px`;
       }
+
+      this.style.right = `${right}px`;
+    }
+
+    /** @private */
+    __updateLeft(left, targetRect, overlayRect, isCentered) {
+      if (left < 0) {
+        left = 0;
+        this.__repositionArrow(targetRect);
+      } else {
+        const viewportWidth = this.__getViewportWidth();
+        if (left + overlayRect.width > viewportWidth) {
+          left = viewportWidth - overlayRect.width;
+          this.__repositionArrow(targetRect);
+        } else if (isCentered) {
+          this.setAttribute('arrow-centered', '');
+        }
+      }
+
+      this.style.left = `${left}px`;
+    }
+
+    /** @private */
+    __updateTop(top, targetRect, overlayRect, isCentered) {
+      if (top < 0) {
+        top = 0;
+        this.__repositionArrow(targetRect);
+      } else {
+        const viewportHeight = this.__getViewportHeight();
+        if (top + overlayRect.height > viewportHeight) {
+          top = viewportHeight - overlayRect.height;
+          this.__repositionArrow(targetRect);
+        } else if (isCentered) {
+          this.setAttribute('arrow-centered', '');
+        }
+      }
+
+      this.style.top = `${top}px`;
     }
 
     /** @private */
@@ -168,14 +158,39 @@ export const PopoverOverlayMixin = (superClass) =>
         if (!this.opened) {
           return;
         }
-        const arrow = this.$.overlay.querySelector('[part="arrow"]');
+        const arrow = this.__getArrow();
         if (!arrow) {
           return;
         }
-        const freshOverlayRect = this.$.overlay.getBoundingClientRect();
+        const overlayRect = this.__getOverlayRect();
         const targetCenter = targetRect.left + targetRect.width / 2;
-        const arrowOffset = targetCenter - freshOverlayRect.left;
+        const arrowOffset = targetCenter - overlayRect.left;
         arrow.style.insetInlineStart = `${arrowOffset}px`;
       });
+    }
+
+    /** @private */
+    __getArrow() {
+      return this.$.overlay.querySelector('[part="arrow"]');
+    }
+
+    /** @private */
+    __getViewportHeight() {
+      return Math.min(window.innerHeight, document.documentElement.clientHeight);
+    }
+
+    /** @private */
+    __getViewportWidth() {
+      return Math.min(window.innerWidth, document.documentElement.clientWidth);
+    }
+
+    /** @private */
+    __getOverlayRect() {
+      return this.$.overlay.getBoundingClientRect();
+    }
+
+    /** @private */
+    __getTargetRect() {
+      return this.positionTarget.getBoundingClientRect();
     }
   };
