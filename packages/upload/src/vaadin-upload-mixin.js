@@ -797,7 +797,6 @@ export const UploadMixin = (superClass) =>
       };
 
       xhr.onabort = () => {
-
         // Decrement active uploads counter
         this._activeUploads -= 1;
         this._processUploadQueue();
