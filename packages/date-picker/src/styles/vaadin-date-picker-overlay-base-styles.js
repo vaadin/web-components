@@ -14,7 +14,8 @@ export const datePickerOverlayStyles = css`
     width: var(
       --vaadin-date-picker-overlay-width,
       calc(
-        var(--vaadin-date-picker-date-width, 2rem) * 7 + var(--vaadin-date-picker-month-padding, 0.5rem) * 2 +
+        var(--vaadin-date-picker-date-width, 2rem) * 7 +
+          var(--vaadin-date-picker-month-padding, var(--vaadin-padding-s)) * 2 +
           var(--vaadin-date-picker-year-scroller-width, 3rem)
       )
     );
