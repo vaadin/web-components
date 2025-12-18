@@ -48,7 +48,7 @@ describe('selectable-provider', () => {
     it('should hide checkboxes for non-selectable items that are not selected', () => {
       for (let i = 0; i < grid.items.length; i++) {
         expect(getItemCheckbox(i).readonly).to.equal(i < 5);
-        expect(getItemCheckbox(i).hidden).to.equal(i < 5);
+        expect(getItemCheckbox(i).checkVisibility({ visibilityProperty: true })).to.equal(i >= 5);
       }
     });
 
@@ -57,7 +57,7 @@ describe('selectable-provider', () => {
 
       for (let i = 0; i < grid.items.length; i++) {
         expect(getItemCheckbox(i).readonly).to.equal(i < 5);
-        expect(getItemCheckbox(i).hidden).to.be.false;
+        expect(getItemCheckbox(i).checkVisibility({ visibilityProperty: true })).to.be.true;
       }
     });
 
@@ -66,7 +66,7 @@ describe('selectable-provider', () => {
       flushGrid(grid);
 
       for (let i = 0; i < grid.items.length; i++) {
-        expect(getItemCheckbox(i).hidden).to.equal(i >= 5);
+        expect(getItemCheckbox(i).checkVisibility({ visibilityProperty: true })).to.equal(i < 5);
       }
     });
   });
@@ -203,8 +203,7 @@ describe('selectable-provider', () => {
 
   describe('select all', () => {
     it('should hide select all checkbox when using isItemSelectable provider', () => {
-      expect(selectAllCheckbox.style.visibility).to.equal('hidden');
-      expect(selectAllCheckbox.ariaHidden).to.equal('true');
+      expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.false;
     });
 
     it('should hide select all checkbox when adding a selection column to an existing grid with an isItemSelectable provider', async () => {
@@ -220,8 +219,7 @@ describe('selectable-provider', () => {
       await nextFrame();
       selectAllCheckbox = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
 
-      expect(selectAllCheckbox.style.visibility).to.equal('hidden');
-      expect(selectAllCheckbox.getAttribute('aria-hidden')).to.equal('true');
+      expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.false;
     });
 
     it('should show select all checkbox when removing isItemSelectable provider', async () => {

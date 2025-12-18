@@ -424,15 +424,13 @@ describe('multi selection column', () => {
     grid.dataProvider = infiniteDataProvider;
     await nextFrame();
 
-    expect(selectAllCheckbox.style.visibility).to.equal('hidden');
-    expect(selectAllCheckbox.getAttribute('aria-hidden')).to.equal('true');
+    expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.false;
   });
 
   it('should show select all checkbox when items is set', () => {
     grid.items = ['foo'];
 
-    expect(selectAllCheckbox.style.visibility).to.equal('');
-    expect(selectAllCheckbox.hasAttribute('aria-hidden')).to.be.false;
+    expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.true;
   });
 
   it('should be possible to override the body renderer', () => {

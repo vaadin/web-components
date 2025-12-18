@@ -162,13 +162,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
       checkbox.indeterminate = this._indeterminate;
-      if (this._selectAllHidden) {
-        checkbox.style.visibility = 'hidden';
-        checkbox.setAttribute('aria-hidden', 'true');
-      } else {
-        checkbox.style.visibility = '';
-        checkbox.removeAttribute('aria-hidden');
-      }
+      checkbox.style.visibility = this._selectAllHidden ? 'hidden' : '';
     }
 
     /**
@@ -193,7 +187,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       const isSelectable = this._grid.__isItemSelectable(item);
       checkbox.readonly = !isSelectable;
-      checkbox.hidden = !isSelectable && !selected;
+
+      const isHidden = !isSelectable && !selected;
+      checkbox.style.visibility = isHidden ? 'hidden' : '';
     }
 
     /**
