@@ -206,6 +206,16 @@ export declare class UploadMixinClass {
   uploadFormat: UploadFormat;
 
   /**
+   * Specifies the maximum number of files that can be uploaded simultaneously.
+   * This helps prevent browser performance degradation and XHR limitations when
+   * uploading large numbers of files. Files exceeding this limit will be queued
+   * and uploaded as active uploads complete.
+   * @attr {number} max-concurrent-uploads
+   * @default 3
+   */
+  maxConcurrentUploads: number;
+
+  /**
    * The object used to localize this component. To change the default
    * localization, replace this with an object that provides all properties, or
    * just the individual properties you want to change.

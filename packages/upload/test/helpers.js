@@ -132,6 +132,11 @@ export function xhrCreator(c) {
     xhr.upload = {
       onprogress() {},
     };
+    xhr.abort = function () {
+      if (xhr.onabort) {
+        xhr.onabort();
+      }
+    };
     xhr.onsend = function () {
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
