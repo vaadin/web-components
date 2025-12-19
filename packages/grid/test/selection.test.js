@@ -9,6 +9,7 @@ import {
   getBodyCellContent,
   getCellContent,
   getFirstVisibleItem,
+  getHeaderCell,
   getLastVisibleItem,
   getRowBodyCells,
   getRowCells,
@@ -422,13 +423,13 @@ describe('multi selection column', () => {
     grid.dataProvider = infiniteDataProvider;
     await nextFrame();
 
-    expect(selectAllCheckbox.hidden).to.be.true;
+    expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.false;
   });
 
   it('should show select all checkbox when items is set', () => {
     grid.items = ['foo'];
 
-    expect(selectAllCheckbox.hidden).to.be.false;
+    expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.true;
   });
 
   it('should be possible to override the body renderer', () => {
@@ -632,6 +633,31 @@ describe('multi selection column', () => {
     selectionColumn.selectAll = true;
 
     expect(grid.selectedItems).to.eql(grid.items);
+  });
+
+  it('should auto-size the column to the same width regardless whether checkboxes are visible or not', async () => {
+    // Start with visible checkboxes
+    grid.querySelectorAll('vaadin-checkbox').forEach((checkbox) => {
+      expect(checkbox.checkVisibility({ visibilityProperty: true })).to.be.true;
+    });
+
+    // Get initial cell width
+    selectionColumn.autoWidth = true;
+    grid.recalculateColumnWidths();
+    const cell = getHeaderCell(grid, 1, 0);
+    const widthWithCheckboxes = cell.getBoundingClientRect().width;
+
+    // Hide all checkboxes
+    grid.isItemSelectable = () => false;
+    await nextFrame();
+    grid.querySelectorAll('vaadin-checkbox').forEach((checkbox) => {
+      expect(checkbox.checkVisibility({ visibilityProperty: true })).to.be.false;
+    });
+
+    // Get cell width with hidden checkboxes
+    grid.recalculateColumnWidths();
+    const widthWithoutCheckboxes = cell.getBoundingClientRect().width;
+    expect(widthWithCheckboxes).to.be.closeTo(widthWithoutCheckboxes, 1);
   });
 
   describe('drag selection', () => {
