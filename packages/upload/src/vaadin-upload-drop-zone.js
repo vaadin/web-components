@@ -12,16 +12,17 @@ import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styl
 
 /**
  * `<vaadin-upload-drop-zone>` is a Web Component that can be used as a drop zone
- * with `<vaadin-upload>` when using the `drop-area-id` attribute.
+ * for file uploads. When files are dropped on the drop zone, they are dispatched
+ * via an event or added to a linked target.
  *
- * The component has no styling by default. When files are dragged over it,
- * it displays styling matching `<vaadin-upload>`'s dragover state.
+ * ```javascript
+ * const dropZone = document.querySelector('vaadin-upload-drop-zone');
+ * dropZone.target = orchestrator;
  *
- * ```html
- * <vaadin-upload-drop-zone id="drop-zone">
- *   Drop files here
- * </vaadin-upload-drop-zone>
- * <vaadin-upload headless drop-area-id="drop-zone"></vaadin-upload>
+ * // Or listen to the files-dropped event
+ * dropZone.addEventListener('files-dropped', (e) => {
+ *   orchestrator.addFiles(e.detail.files);
+ * });
  * ```
  *
  * ### Styling
@@ -45,6 +46,7 @@ import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styl
  * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
+ * @fires {CustomEvent} files-dropped - Fired when files are dropped on the drop zone
  */
 class UploadDropZone extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
@@ -57,6 +59,15 @@ class UploadDropZone extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitEl
 
   static get properties() {
     return {
+      /**
+       * Reference to an UploadOrchestrator or any object with addFiles method.
+       * @type {Object | null}
+       */
+      target: {
+        type: Object,
+        value: null,
+      },
+
       /** @private */
       _dragover: {
         type: Boolean,
@@ -85,22 +96,85 @@ class UploadDropZone extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitEl
   }
 
   /** @private */
-  __onDragover() {
+  __onDragover(event) {
+    event.preventDefault();
     if (!this._dragover) {
       this._dragover = true;
     }
+    event.dataTransfer.dropEffect = 'copy';
   }
 
   /** @private */
-  __onDragleave() {
+  __onDragleave(event) {
+    event.preventDefault();
     if (this._dragover) {
       this._dragover = false;
     }
   }
 
   /** @private */
-  __onDrop() {
+  async __onDrop(event) {
+    event.preventDefault();
     this._dragover = false;
+
+    const files = await this.__getFilesFromDropEvent(event);
+
+    // Dispatch event for listeners
+    this.dispatchEvent(
+      new CustomEvent('files-dropped', {
+        detail: { files },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+
+    // If we have a target with addFiles, call it
+    if (this.target && typeof this.target.addFiles === 'function') {
+      this.target.addFiles(files);
+    }
+  }
+
+  /**
+   * Get the files from the drop event. The dropped items may contain a
+   * combination of files and directories. If a dropped item is a directory,
+   * it will be recursively traversed to get all files.
+   *
+   * @param {DragEvent} dropEvent - The drop event
+   * @returns {Promise<File[]>} - The files from the drop event
+   * @private
+   */
+  __getFilesFromDropEvent(dropEvent) {
+    async function getFilesFromEntry(entry) {
+      if (entry.isFile) {
+        return new Promise((resolve) => {
+          entry.file(resolve, () => resolve([]));
+        });
+      } else if (entry.isDirectory) {
+        const reader = entry.createReader();
+        const entries = await new Promise((resolve) => {
+          reader.readEntries(resolve, () => resolve([]));
+        });
+        const files = await Promise.all(entries.map(getFilesFromEntry));
+        return files.flat();
+      }
+    }
+
+    const containsFolders = Array.from(dropEvent.dataTransfer.items)
+      .filter((item) => !!item)
+      .filter((item) => typeof item.webkitGetAsEntry === 'function')
+      .map((item) => item.webkitGetAsEntry())
+      .some((entry) => !!entry && entry.isDirectory);
+
+    if (!containsFolders) {
+      return Promise.resolve(dropEvent.dataTransfer.files ? Array.from(dropEvent.dataTransfer.files) : []);
+    }
+
+    const filePromises = Array.from(dropEvent.dataTransfer.items)
+      .map((item) => item.webkitGetAsEntry())
+      .filter((entry) => !!entry)
+      .map(getFilesFromEntry);
+
+    return Promise.all(filePromises).then((files) => files.flat());
   }
 
   /** @private */
