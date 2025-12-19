@@ -84,6 +84,21 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * `has-error-message`  | Set when the checkbox has an error message.
  * `has-tooltip`        | Set when the checkbox has a slotted tooltip.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                    |
+ * :--------------------------------------|
+ * | `--vaadin-checkbox-background`       |
+ * | `--vaadin-checkbox-border-color`     |
+ * | `--vaadin-checkbox-border-radius`    |
+ * | `--vaadin-checkbox-border-width`     |
+ * | `--vaadin-checkbox-checkmark-color`  |
+ * | `--vaadin-checkbox-checkmark-size`   |
+ * | `--vaadin-checkbox-gap`              |
+ * | `--vaadin-checkbox-marker-color`     |
+ * | `--vaadin-checkbox-marker-size`      |
+ * | `--vaadin-checkbox-size`             |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the checkbox is checked or unchecked by the user.
