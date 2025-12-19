@@ -79,11 +79,28 @@ export const PopoverOverlayMixin = (superClass) =>
 
       this.removeAttribute('arrow-centered');
 
-      // Center the overlay horizontally
-      if (this.position === 'bottom' || this.position === 'top') {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
+      const targetRect = this.positionTarget.getBoundingClientRect();
+      const overlayRect = this.$.overlay.getBoundingClientRect();
+      const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
 
+      // If the target extends beyond viewport, align the overlay to the respective edge so it isn't cut off
+      // Can skip trying to center the overlay in this case
+      let skipHorizontalCentering = false;
+
+      if (targetRect.left < 0) {
+        this.style.left = '0px';
+        this.style.right = '';
+        skipHorizontalCentering = true;
+      }
+
+      if (targetRect.right > viewportWidth) {
+        this.style.right = '0px';
+        this.style.left = '';
+        skipHorizontalCentering = true;
+      }
+
+      // Center the overlay horizontally
+      if (!skipHorizontalCentering && (this.position === 'bottom' || this.position === 'top')) {
         const offset = targetRect.width / 2 - overlayRect.width / 2;
 
         if (this.style.left) {
