@@ -51,11 +51,14 @@ class UploadAddButton extends ThemableMixin(PolylitMixin(LitElement)) {
     return {
       /**
        * Reference to an UploadManager or any object with addFiles method.
+       * When set, the button will automatically disable when maxFilesReached
+       * becomes true on the target.
        * @type {Object | null}
        */
       target: {
         type: Object,
         value: null,
+        observer: '__targetChanged',
       },
 
       /**
@@ -102,6 +105,7 @@ class UploadAddButton extends ThemableMixin(PolylitMixin(LitElement)) {
     this.__onTouchEnd = this.__onTouchEnd.bind(this);
     this.__onKeyDown = this.__onKeyDown.bind(this);
     this.__onFileInputChange = this.__onFileInputChange.bind(this);
+    this.__onMaxFilesReachedChanged = this.__onMaxFilesReachedChanged.bind(this);
   }
 
   /** @protected */
@@ -212,6 +216,29 @@ class UploadAddButton extends ThemableMixin(PolylitMixin(LitElement)) {
     if (this.target && typeof this.target.addFiles === 'function') {
       this.target.addFiles(files);
     }
+  }
+
+  /** @private */
+  __targetChanged(target, oldTarget) {
+    // Remove listener from old target
+    if (oldTarget && typeof oldTarget.removeEventListener === 'function') {
+      oldTarget.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+    }
+
+    // Add listener to new target
+    if (target && typeof target.addEventListener === 'function') {
+      target.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+
+      // Sync initial state if target has maxFilesReached property
+      if (target.maxFilesReached !== undefined) {
+        this.disabled = target.maxFilesReached;
+      }
+    }
+  }
+
+  /** @private */
+  __onMaxFilesReachedChanged(event) {
+    this.disabled = event.detail.value;
   }
 }
 

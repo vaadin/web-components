@@ -248,11 +248,6 @@
       addButton.target = manager;
       fileListBox.target = manager;
 
-      // Handle max files reached state for the add button
-      manager.addEventListener('max-files-reached-changed', (e) => {
-        addButton.disabled = e.detail.value;
-      });
-
       // Listen to events for logging
       manager.addEventListener('upload-success', (e) => {
         console.log('File uploaded:', e.detail.file.name);
