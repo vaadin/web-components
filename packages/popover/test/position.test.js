@@ -171,4 +171,82 @@ describe('position', () => {
       });
     });
   });
+
+  describe('viewport constraints', () => {
+    let constraintPopover, constraintTarget, constraintOverlay;
+
+    beforeEach(async () => {
+      constraintPopover = fixtureSync('<vaadin-popover></vaadin-popover>');
+      constraintPopover.renderer = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'This is a long popover content that will extend beyond edges';
+          root.appendChild(div);
+        }
+      };
+      await nextRender();
+      constraintOverlay = constraintPopover.shadowRoot.querySelector('vaadin-popover-overlay');
+    });
+
+    async function openAndMeasure() {
+      constraintPopover.opened = true;
+      await oneEvent(constraintOverlay, 'vaadin-overlay-open');
+      const overlayRect = constraintOverlay.$.overlay.getBoundingClientRect();
+      const targetRect = constraintTarget.getBoundingClientRect();
+      return { overlayRect, targetRect };
+    }
+
+    ['bottom', 'bottom-start', 'bottom-end', 'top', 'top-start', 'top-end'].forEach((position) => {
+      ['left', 'right'].forEach((edge) => {
+        describe(`${position} position near ${edge} edge`, () => {
+          beforeEach(async () => {
+            // Place target very close to edge with small width
+            // This ensures centered popover would extend beyond edge
+            const edgeStyle = edge === 'left' ? 'left: 5px' : 'right: 5px';
+            constraintTarget = fixtureSync(
+              `<div style="width: 50px; height: 50px; position: absolute; ${edgeStyle}; top: 200px;"></div>`,
+            );
+            constraintPopover.position = position;
+            constraintPopover.target = constraintTarget;
+            await nextUpdate(constraintPopover);
+          });
+
+          it(`should constrain popover to stay within viewport on ${edge} edge`, async () => {
+            const { overlayRect } = await openAndMeasure();
+            const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
+            // Popover should not extend beyond viewport edges
+            expect(overlayRect.left).to.be.at.least(0);
+            expect(overlayRect.right).to.be.at.most(viewportWidth);
+          });
+        });
+      });
+    });
+
+    ['bottom', 'bottom-start', 'bottom-end', 'top', 'top-start', 'top-end'].forEach((position) => {
+      ['left', 'right'].forEach((edge) => {
+        describe(`${position} position with target outside ${edge} edge`, () => {
+          beforeEach(async () => {
+            // Place target partially outside of viewport
+            const edgeStyle = edge === 'left' ? 'left: -25px' : 'right: -25px';
+            constraintTarget = fixtureSync(
+              `<div style="width: 50px; height: 50px; position: absolute; ${edgeStyle}; top: 200px;"></div>`,
+            );
+            constraintPopover.position = position;
+            constraintPopover.target = constraintTarget;
+            await nextUpdate(constraintPopover);
+          });
+
+          it(`should constrain popover to stay within viewport on ${edge} edge`, async () => {
+            const { overlayRect } = await openAndMeasure();
+            const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
+            // Popover should not extend beyond viewport edges
+            expect(overlayRect.left).to.be.at.least(0);
+            expect(overlayRect.right).to.be.at.most(viewportWidth);
+          });
+        });
+      });
+    });
+  });
 });
