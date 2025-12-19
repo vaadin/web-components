@@ -60,7 +60,9 @@
       }
 
       #drop-zone {
+        display: flex;
         flex-direction: column;
+        align-items: center;
         border: 2px dashed #d1d5db;
         border-radius: 12px;
         padding: 48px 24px;
@@ -166,17 +168,11 @@
         padding: 0 16px;
       }
 
-      #file-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+      #file-list-box {
+        display: block;
       }
 
-      #file-list:empty {
-        display: none;
-      }
-
-      #file-list:empty + .empty-state {
+      #file-list-box:empty + .empty-state {
         display: block;
       }
 
@@ -195,6 +191,8 @@
         padding: 12px 16px;
         border: 1px solid #e5e7eb;
         transition: all 0.2s ease;
+        display: block;
+        margin-bottom: 12px;
       }
 
       vaadin-upload-file:hover {
@@ -222,17 +220,15 @@
 
     <script type="module">
       import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
-      import '@vaadin/upload/src/vaadin-upload-file-list.js';
+      import '@vaadin/upload/src/vaadin-upload-add-button.js';
+      import '@vaadin/upload/src/vaadin-upload-file-list-box.js';
       import { UploadOrchestrator } from '@vaadin/upload';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
 
-      // Create the orchestrator with external UI elements
+      // Create the orchestrator (pure state manager, no UI knowledge)
       const orchestrator = new UploadOrchestrator({
         target: '/api/fileupload',
         maxFiles: 5,
-        fileList: document.getElementById('file-list'),
-        addButton: document.getElementById('add-button'),
-        dropZone: document.getElementById('drop-zone'),
       });
 
       // Use a fake xhr for testing
@@ -242,7 +238,22 @@
         stepTime: 1000,
       });
 
-      // Listen to events
+      // Get UI components
+      const dropZone = document.getElementById('drop-zone');
+      const addButton = document.getElementById('add-button');
+      const fileListBox = document.getElementById('file-list-box');
+
+      // Link components to orchestrator
+      dropZone.target = orchestrator;
+      addButton.target = orchestrator;
+      fileListBox.target = orchestrator;
+
+      // Handle max files reached state for the add button
+      orchestrator.addEventListener('max-files-reached-changed', (e) => {
+        addButton.disabled = e.detail.value;
+      });
+
+      // Listen to events for logging
       orchestrator.addEventListener('upload-success', (e) => {
         console.log('File uploaded:', e.detail.file.name);
       });
@@ -253,6 +264,10 @@
 
       orchestrator.addEventListener('file-reject', (e) => {
         console.log('File rejected:', e.detail.file.name, e.detail.error);
+      });
+
+      orchestrator.addEventListener('files-changed', (e) => {
+        console.log('Files changed:', e.detail.value.length, 'files');
       });
     </script>
   </head>
@@ -280,12 +295,12 @@
       </vaadin-upload-drop-zone>
 
       <div class="upload-actions">
-        <button id="add-button">Choose Files</button>
+        <vaadin-upload-add-button id="add-button">Choose Files</vaadin-upload-add-button>
       </div>
 
       <div class="divider"><span>Uploaded files</span></div>
 
-      <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
+      <vaadin-upload-file-list-box id="file-list-box"></vaadin-upload-file-list-box>
       <div class="empty-state">No files uploaded yet</div>
     </div>
   </body>
