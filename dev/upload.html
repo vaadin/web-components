@@ -13,14 +13,7 @@
       }
 
       body {
-        font-family:
-          -apple-system,
-          BlinkMacSystemFont,
-          'Segoe UI',
-          Roboto,
-          Oxygen,
-          Ubuntu,
-          sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         margin: 0;
@@ -118,7 +111,7 @@
         margin-top: 16px;
       }
 
-      #add-button {
+      #button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         border: none;
@@ -131,16 +124,16 @@
         box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
       }
 
-      #add-button:hover {
+      #button:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.5);
       }
 
-      #add-button:active {
+      #button:active {
         transform: translateY(0);
       }
 
-      #add-button[disabled] {
+      #button[disabled] {
         opacity: 0.5;
         cursor: not-allowed;
         transform: none;
@@ -220,7 +213,7 @@
 
     <script type="module">
       import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
-      import '@vaadin/upload/src/vaadin-upload-add-button.js';
+      import '@vaadin/upload/src/vaadin-upload-button.js';
       import '@vaadin/upload/src/vaadin-upload-file-list-box.js';
       import { UploadManager } from '@vaadin/upload';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
@@ -240,7 +233,7 @@
 
       // Get UI components
       const dropZone = document.getElementById('drop-zone');
-      const addButton = document.getElementById('add-button');
+      const addButton = document.getElementById('button');
       const fileListBox = document.getElementById('file-list-box');
 
       // Link components to manager
@@ -290,7 +283,7 @@
       </vaadin-upload-drop-zone>
 
       <div class="upload-actions">
-        <vaadin-upload-add-button id="add-button">Choose Files</vaadin-upload-add-button>
+        <vaadin-upload-button id="button">Choose Files</vaadin-upload-button>
       </div>
 
       <div class="divider"><span>Uploaded files</span></div>
