@@ -9,15 +9,15 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * `<vaadin-upload-add-button>` is a Web Component that can be used as an
- * add button for file uploads. When clicked, it opens a file picker dialog
+ * `<vaadin-upload-button>` is a Web Component that can be used as a
+ * button for file uploads. When clicked, it opens a file picker dialog
  * and dispatches selected files via an event or calls addFiles on a target.
  *
- * The add button can be linked to an UploadManager by setting the
+ * The button can be linked to an UploadManager by setting the
  * `target` property directly.
  *
  * ```javascript
- * const button = document.querySelector('vaadin-upload-add-button');
+ * const button = document.querySelector('vaadin-upload-button');
  * button.target = manager;
  *
  * // Or listen to the files-selected event
@@ -42,9 +42,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @fires {CustomEvent} files-selected - Fired when files are selected from the picker
  */
-class UploadAddButton extends ThemableMixin(PolylitMixin(LitElement)) {
+class UploadButton extends ThemableMixin(PolylitMixin(LitElement)) {
   static get is() {
-    return 'vaadin-upload-add-button';
+    return 'vaadin-upload-button';
   }
 
   static get properties() {
@@ -242,6 +242,6 @@ class UploadAddButton extends ThemableMixin(PolylitMixin(LitElement)) {
   }
 }
 
-defineCustomElement(UploadAddButton);
+defineCustomElement(UploadButton);
 
-export { UploadAddButton };
+export { UploadButton };

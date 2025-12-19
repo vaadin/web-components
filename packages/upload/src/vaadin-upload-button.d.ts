@@ -8,25 +8,25 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * Fired when files are selected from the picker.
  */
-export type UploadAddButtonFilesSelectedEvent = CustomEvent<{ files: File[] }>;
+export type UploadButtonFilesSelectedEvent = CustomEvent<{ files: File[] }>;
 
-export interface UploadAddButtonCustomEventMap {
-  'files-selected': UploadAddButtonFilesSelectedEvent;
+export interface UploadButtonCustomEventMap {
+  'files-selected': UploadButtonFilesSelectedEvent;
 }
 
-export interface UploadAddButtonEventMap extends HTMLElementEventMap, UploadAddButtonCustomEventMap {}
+export interface UploadButtonEventMap extends HTMLElementEventMap, UploadButtonCustomEventMap {}
 
 /**
- * `<vaadin-upload-add-button>` is a Web Component that can be used as an
- * add button for file uploads. When clicked, it opens a file picker dialog
+ * `<vaadin-upload-button>` is a Web Component that can be used as a
+ * button for file uploads. When clicked, it opens a file picker dialog
  * and dispatches selected files via an event or calls addFiles on a target.
  *
- * The add button can be linked to an UploadManager by setting the
+ * The button can be linked to an UploadManager by setting the
  * `target` property directly. When linked, the button will automatically
  * disable itself when the maximum number of files is reached.
  *
  * ```javascript
- * const button = document.querySelector('vaadin-upload-add-button');
+ * const button = document.querySelector('vaadin-upload-button');
  * button.target = manager;
  *
  * // Or listen to the files-selected event
@@ -46,7 +46,7 @@ export interface UploadAddButtonEventMap extends HTMLElementEventMap, UploadAddB
  * ------------|--------------------------------------------
  * `disabled`  | Set when disabled or max files reached
  */
-declare class UploadAddButton extends ThemableMixin(HTMLElement) {
+declare class UploadButton extends ThemableMixin(HTMLElement) {
   /**
    * Reference to an UploadManager or any object with addFiles method.
    * When set, the button will automatically disable when maxFilesReached
@@ -79,23 +79,23 @@ declare class UploadAddButton extends ThemableMixin(HTMLElement) {
    */
   openFilePicker(): void;
 
-  addEventListener<K extends keyof UploadAddButtonEventMap>(
+  addEventListener<K extends keyof UploadButtonEventMap>(
     type: K,
-    listener: (this: UploadAddButton, ev: UploadAddButtonEventMap[K]) => void,
+    listener: (this: UploadButton, ev: UploadButtonEventMap[K]) => void,
     options?: AddEventListenerOptions | boolean,
   ): void;
 
-  removeEventListener<K extends keyof UploadAddButtonEventMap>(
+  removeEventListener<K extends keyof UploadButtonEventMap>(
     type: K,
-    listener: (this: UploadAddButton, ev: UploadAddButtonEventMap[K]) => void,
+    listener: (this: UploadButton, ev: UploadButtonEventMap[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-upload-add-button': UploadAddButton;
+    'vaadin-upload-button': UploadButton;
   }
 }
 
-export { UploadAddButton };
+export { UploadButton };
