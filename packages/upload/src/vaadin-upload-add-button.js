@@ -13,16 +13,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * add button for file uploads. When clicked, it opens a file picker dialog
  * and dispatches selected files via an event or calls addFiles on a target.
  *
- * The add button can be linked to an UploadOrchestrator by setting the
+ * The add button can be linked to an UploadManager by setting the
  * `target` property directly.
  *
  * ```javascript
  * const button = document.querySelector('vaadin-upload-add-button');
- * button.target = orchestrator;
+ * button.target = manager;
  *
  * // Or listen to the files-selected event
  * button.addEventListener('files-selected', (e) => {
- *   orchestrator.addFiles(e.detail.files);
+ *   manager.addFiles(e.detail.files);
  * });
  * ```
  *
@@ -50,7 +50,7 @@ class UploadAddButton extends ThemableMixin(PolylitMixin(LitElement)) {
   static get properties() {
     return {
       /**
-       * Reference to an UploadOrchestrator or any object with addFiles method.
+       * Reference to an UploadManager or any object with addFiles method.
        * @type {Object | null}
        */
       target: {

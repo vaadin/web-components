@@ -222,17 +222,17 @@
       import '@vaadin/upload/src/vaadin-upload-drop-zone.js';
       import '@vaadin/upload/src/vaadin-upload-add-button.js';
       import '@vaadin/upload/src/vaadin-upload-file-list-box.js';
-      import { UploadOrchestrator } from '@vaadin/upload';
+      import { UploadManager } from '@vaadin/upload';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
 
-      // Create the orchestrator (pure state manager, no UI knowledge)
-      const orchestrator = new UploadOrchestrator({
+      // Create the manager (pure state manager, no UI knowledge)
+      const manager = new UploadManager({
         target: '/api/fileupload',
         maxFiles: 5,
       });
 
       // Use a fake xhr for testing
-      orchestrator._createXhr = xhrCreator({
+      manager._createXhr = xhrCreator({
         size: 512,
         uploadTime: 3000,
         stepTime: 1000,
@@ -243,30 +243,30 @@
       const addButton = document.getElementById('add-button');
       const fileListBox = document.getElementById('file-list-box');
 
-      // Link components to orchestrator
-      dropZone.target = orchestrator;
-      addButton.target = orchestrator;
-      fileListBox.target = orchestrator;
+      // Link components to manager
+      dropZone.target = manager;
+      addButton.target = manager;
+      fileListBox.target = manager;
 
       // Handle max files reached state for the add button
-      orchestrator.addEventListener('max-files-reached-changed', (e) => {
+      manager.addEventListener('max-files-reached-changed', (e) => {
         addButton.disabled = e.detail.value;
       });
 
       // Listen to events for logging
-      orchestrator.addEventListener('upload-success', (e) => {
+      manager.addEventListener('upload-success', (e) => {
         console.log('File uploaded:', e.detail.file.name);
       });
 
-      orchestrator.addEventListener('upload-error', (e) => {
+      manager.addEventListener('upload-error', (e) => {
         console.log('Upload error:', e.detail.file.name, e.detail.file.error);
       });
 
-      orchestrator.addEventListener('file-reject', (e) => {
+      manager.addEventListener('file-reject', (e) => {
         console.log('File rejected:', e.detail.file.name, e.detail.error);
       });
 
-      orchestrator.addEventListener('files-changed', (e) => {
+      manager.addEventListener('files-changed', (e) => {
         console.log('Files changed:', e.detail.value.length, 'files');
       });
     </script>

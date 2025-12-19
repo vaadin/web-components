@@ -17,11 +17,11 @@ import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styl
  *
  * ```javascript
  * const dropZone = document.querySelector('vaadin-upload-drop-zone');
- * dropZone.target = orchestrator;
+ * dropZone.target = manager;
  *
  * // Or listen to the files-dropped event
  * dropZone.addEventListener('files-dropped', (e) => {
- *   orchestrator.addFiles(e.detail.files);
+ *   manager.addFiles(e.detail.files);
  * });
  * ```
  *
@@ -60,7 +60,7 @@ class UploadDropZone extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitEl
   static get properties() {
     return {
       /**
-       * Reference to an UploadOrchestrator or any object with addFiles method.
+       * Reference to an UploadManager or any object with addFiles method.
        * @type {Object | null}
        */
       target: {

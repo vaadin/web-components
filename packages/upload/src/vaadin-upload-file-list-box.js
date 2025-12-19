@@ -11,16 +11,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 /**
  * `<vaadin-upload-file-list-box>` is a Web Component that displays a list of
- * uploaded files. It can be linked to an UploadOrchestrator to automatically
+ * uploaded files. It can be linked to an UploadManager to automatically
  * sync files and forward events.
  *
  * ```javascript
  * const listBox = document.querySelector('vaadin-upload-file-list-box');
- * listBox.target = orchestrator;
+ * listBox.target = manager;
  *
  * // The list box automatically:
- * // - Syncs files from the orchestrator
- * // - Forwards retry/abort/start events back to the orchestrator
+ * // - Syncs files from the manager
+ * // - Forwards retry/abort/start events back to the manager
  * ```
  *
  * @customElement
@@ -35,7 +35,7 @@ class UploadFileListBox extends ThemableMixin(PolylitMixin(LitElement)) {
   static get properties() {
     return {
       /**
-       * Reference to an UploadOrchestrator to link this file list to.
+       * Reference to an UploadManager to link this file list to.
        * @type {Object | null}
        */
       target: {
@@ -99,7 +99,7 @@ class UploadFileListBox extends ThemableMixin(PolylitMixin(LitElement)) {
   ready() {
     super.ready();
 
-    // Listen for file events to forward to the orchestrator
+    // Listen for file events to forward to the manager
     this.addEventListener('file-retry', this.__onFileRetry);
     this.addEventListener('file-abort', this.__onFileAbort);
     this.addEventListener('file-start', this.__onFileStart);
