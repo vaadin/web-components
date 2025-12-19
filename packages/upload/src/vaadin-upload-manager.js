@@ -69,6 +69,7 @@ export class UploadManager extends EventTarget {
    * @param {boolean} [options.withCredentials=false] - Include credentials in XHR
    * @param {string} [options.uploadFormat='raw'] - Upload format: 'raw' or 'multipart'
    * @param {number} [options.maxConcurrentUploads=3] - Maximum concurrent uploads
+   * @param {string} [options.formDataName='file'] - Form field name for multipart uploads
    */
   constructor(options = {}) {
     super();
@@ -85,6 +86,7 @@ export class UploadManager extends EventTarget {
     this.withCredentials = options.withCredentials ?? false;
     this.uploadFormat = options.uploadFormat ?? 'raw';
     this.maxConcurrentUploads = options.maxConcurrentUploads ?? 3;
+    this.formDataName = options.formDataName ?? 'file';
 
     // State
     this._files = [];
@@ -251,6 +253,7 @@ export class UploadManager extends EventTarget {
 
     file.loaded = 0;
     file.held = true;
+    file.formDataName = this.formDataName;
     this.files = [file, ...this._files];
 
     if (!this.noAuto) {
@@ -269,7 +272,7 @@ export class UploadManager extends EventTarget {
 
       this.dispatchEvent(
         new CustomEvent('file-remove', {
-          detail: { file },
+          detail: { file, fileIndex },
         }),
       );
     }
@@ -402,7 +405,7 @@ export class UploadManager extends EventTarget {
       requestBody = file;
     } else {
       const formData = new FormData();
-      formData.append('file', file, file.name);
+      formData.append(file.formDataName || this.formDataName, file, file.name);
       requestBody = formData;
     }
 
