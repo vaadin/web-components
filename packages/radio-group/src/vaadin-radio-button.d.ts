@@ -42,17 +42,21 @@ export * from './vaadin-radio-button-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                    |
- * :--------------------------------------|
- * | `--vaadin-radio-button-background`   |
- * | `--vaadin-radio-button-border-color` |
- * | `--vaadin-radio-button-border-width` |
- * | `--vaadin-radio-button-dot-color`    |
- * | `--vaadin-radio-button-dot-size`     |
- * | `--vaadin-radio-button-gap`          |
- * | `--vaadin-radio-button-marker-color` |
- * | `--vaadin-radio-button-marker-size`  |
- * | `--vaadin-radio-button-size`         |
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-radio-button-background`         |
+ * | `--vaadin-radio-button-border-color`       |
+ * | `--vaadin-radio-button-border-width`       |
+ * | `--vaadin-radio-button-dot-color`          |
+ * | `--vaadin-radio-button-dot-size`           |
+ * | `--vaadin-radio-button-gap`                |
+ * | `--vaadin-radio-button-label-color`        |
+ * | `--vaadin-radio-button-label-font-size`    |
+ * | `--vaadin-radio-button-label-font-weight`  |
+ * | `--vaadin-radio-button-label-line-height`  |
+ * | `--vaadin-radio-button-marker-color`       |
+ * | `--vaadin-radio-button-marker-size`        |
+ * | `--vaadin-radio-button-size`               |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

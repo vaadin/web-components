@@ -86,18 +86,22 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                    |
- * :--------------------------------------|
- * | `--vaadin-checkbox-background`       |
- * | `--vaadin-checkbox-border-color`     |
- * | `--vaadin-checkbox-border-radius`    |
- * | `--vaadin-checkbox-border-width`     |
- * | `--vaadin-checkbox-checkmark-color`  |
- * | `--vaadin-checkbox-checkmark-size`   |
- * | `--vaadin-checkbox-gap`              |
- * | `--vaadin-checkbox-marker-color`     |
- * | `--vaadin-checkbox-marker-size`      |
- * | `--vaadin-checkbox-size`             |
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * | `--vaadin-checkbox-background`         |
+ * | `--vaadin-checkbox-border-color`       |
+ * | `--vaadin-checkbox-border-radius`      |
+ * | `--vaadin-checkbox-border-width`       |
+ * | `--vaadin-checkbox-checkmark-color`    |
+ * | `--vaadin-checkbox-checkmark-size`     |
+ * | `--vaadin-checkbox-gap`                |
+ * | `--vaadin-checkbox-label-color`        |
+ * | `--vaadin-checkbox-label-font-size`    |
+ * | `--vaadin-checkbox-label-font-weight`  |
+ * | `--vaadin-checkbox-label-line-height`  |
+ * | `--vaadin-checkbox-marker-color`       |
+ * | `--vaadin-checkbox-marker-size`        |
+ * | `--vaadin-checkbox-size`               |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
