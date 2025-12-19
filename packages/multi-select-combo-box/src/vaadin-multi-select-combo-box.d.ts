@@ -173,7 +173,8 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
 }
 
 interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
-  extends ComboBoxBaseMixinClass,
+  extends
+    ComboBoxBaseMixinClass,
     ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxItemsMixinClass<TItem>,
     ValidateMixinClass,

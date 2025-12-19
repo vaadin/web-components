@@ -185,12 +185,13 @@ export declare function GridMixin<TItem, T extends Constructor<HTMLElement>>(
   T;
 
 export interface GridMixinClass<TItem>
-  extends DisabledMixinClass,
+  extends
     A11yMixinClass,
     ActiveItemMixinClass<TItem>,
     ArrayDataProviderMixinClass<TItem>,
     ColumnAutoWidthMixinClass,
     DataProviderMixinClass<TItem>,
+    DisabledMixinClass,
     RowDetailsMixinClass<TItem>,
     ScrollMixinClass,
     SelectionMixinClass<TItem>,

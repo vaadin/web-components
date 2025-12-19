@@ -25,9 +25,7 @@ export * from './vaadin-grid-filter-column-mixin.js';
 declare class GridFilterColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridFilterColumn<TItem = GridDefaultItem>
-  extends GridFilterColumnMixinClass,
-    GridColumnMixin<TItem, GridColumn<TItem>>,
-    GridColumn<TItem> {}
+  extends GridFilterColumnMixinClass, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
