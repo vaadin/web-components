@@ -73,6 +73,12 @@ export interface UploadManagerOptions {
    * @default 3
    */
   maxConcurrentUploads?: number;
+
+  /**
+   * Form field name for multipart uploads.
+   * @default 'file'
+   */
+  formDataName?: string;
 }
 
 export interface UploadManagerEventMap {
@@ -189,6 +195,11 @@ export class UploadManager extends EventTarget {
    * Maximum concurrent uploads.
    */
   maxConcurrentUploads: number;
+
+  /**
+   * Form field name for multipart uploads.
+   */
+  formDataName: string;
 
   /**
    * The array of files being processed or already uploaded.
