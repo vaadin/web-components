@@ -27,9 +27,7 @@ export * from './vaadin-grid-sort-column-mixin.js';
 declare class GridSortColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridSortColumn<TItem = GridDefaultItem>
-  extends GridSortColumnMixinClass,
-    GridColumnMixin<TItem, GridColumn<TItem>>,
-    GridColumn<TItem> {
+  extends GridSortColumnMixinClass, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {
   addEventListener<K extends keyof GridSortColumnEventMap>(
     type: K,
     listener: (this: GridSortColumn<TItem>, ev: GridSortColumnEventMap[K]) => void,

@@ -241,7 +241,8 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
 }
 
 interface ComboBox<TItem = ComboBoxDefaultItem>
-  extends ComboBoxDataProviderMixinClass<TItem>,
+  extends
+    ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxItemsMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
     ComboBoxBaseMixinClass,

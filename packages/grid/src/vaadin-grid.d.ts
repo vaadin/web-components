@@ -279,11 +279,7 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 }
 
 interface Grid<TItem = GridDefaultItem>
-  extends DisabledMixinClass,
-    ElementMixinClass,
-    ThemableMixinClass,
-    ThemePropertyMixinClass,
-    GridMixinClass<TItem> {}
+  extends DisabledMixinClass, ElementMixinClass, ThemableMixinClass, ThemePropertyMixinClass, GridMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
