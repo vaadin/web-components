@@ -224,7 +224,14 @@ export const KeyboardNavigationMixin = (superClass) =>
       });
 
       if (wasFocused) {
-        this._itemsFocusable.focus();
+        if (this.shadowRoot.activeElement !== this._itemsFocusable) {
+          // Synchronously blur the old focused element to prevent it from animating tree toggle during a possible expanded state update
+          this.shadowRoot.activeElement.blur();
+        }
+        requestAnimationFrame(() => {
+          // Asynchronously focus the updated focusable element to avoid it from animating tree toggle during a possible expanded state update
+          this._itemsFocusable.focus();
+        });
       }
     }
 
