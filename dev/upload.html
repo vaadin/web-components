@@ -64,10 +64,7 @@
     </vaadin-radio-group>
     <hr style="margin-block: 24px" />
     <h3>no-auto + max-concurrent-uploads=1</h3>
-    <p>
-      Test: Add multiple files, click "Start" on the first file, then try clicking "Start" on another file. The start
-      button should hide and show 0% progress while queued.
-    </p>
+    <p>Test: Add multiple files, click "Start" on the first file, then try clicking "Start" on another file. The start button should hide and show 0% progress while queued.</p>
     <vaadin-upload id="no-auto-upload" target="/api/fileupload" no-auto max-concurrent-uploads="1"></vaadin-upload>
     <script type="module">
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
