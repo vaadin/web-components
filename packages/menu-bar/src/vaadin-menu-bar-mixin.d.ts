@@ -170,8 +170,4 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
 }
 
 export declare interface MenuBarMixinClass
-  extends DisabledMixinClass,
-    FocusMixinClass,
-    KeyboardDirectionMixinClass,
-    KeyboardMixinClass,
-    ResizeMixinClass {}
+  extends DisabledMixinClass, FocusMixinClass, KeyboardDirectionMixinClass, KeyboardMixinClass, ResizeMixinClass {}

@@ -20,8 +20,7 @@ export interface MenuBarCustomEventMap<TItem extends MenuBarItem = MenuBarItem> 
 }
 
 export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
-  extends HTMLElementEventMap,
-    MenuBarCustomEventMap<TItem> {}
+  extends HTMLElementEventMap, MenuBarCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -91,10 +90,7 @@ declare class MenuBar<TItem extends MenuBarItem = MenuBarItem> extends HTMLEleme
 }
 
 interface MenuBar<TItem extends MenuBarItem = MenuBarItem>
-  extends MenuBarMixinClass<TItem>,
-    DisabledMixinClass,
-    ElementMixinClass,
-    ThemableMixinClass {}
+  extends MenuBarMixinClass<TItem>, DisabledMixinClass, ElementMixinClass, ThemableMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

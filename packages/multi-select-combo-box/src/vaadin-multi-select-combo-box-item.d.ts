@@ -32,9 +32,7 @@ import type { MultiSelectComboBox } from './vaadin-multi-select-combo-box.js';
 declare class MultiSelectComboBoxItem extends HTMLElement {}
 
 interface MultiSelectComboBoxItem<TItem = ComboBoxDefaultItem>
-  extends ComboBoxItemMixinClass<TItem, MultiSelectComboBox>,
-    DirMixinClass,
-    ThemableMixinClass {}
+  extends ComboBoxItemMixinClass<TItem, MultiSelectComboBox>, DirMixinClass, ThemableMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {
