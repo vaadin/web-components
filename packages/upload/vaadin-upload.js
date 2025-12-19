@@ -1,3 +1,3 @@
 import './src/vaadin-upload.js';
 export * from './src/vaadin-upload.js';
-export { UploadOrchestrator } from './src/vaadin-upload-orchestrator.js';
+export { UploadManager } from './src/vaadin-upload-manager.js';

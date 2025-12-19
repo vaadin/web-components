@@ -3,11 +3,11 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { UploadFile, UploadFormat, UploadI18n, UploadMethod } from './vaadin-upload-mixin.js';
+import type { UploadFile, UploadFormat, UploadMethod } from './vaadin-upload-mixin.js';
 
-export { UploadFile, UploadFormat, UploadI18n, UploadMethod };
+export { UploadFile, UploadFormat, UploadMethod };
 
-export interface UploadOrchestratorOptions {
+export interface UploadManagerOptions {
   /**
    * Server URL for uploads.
    * @default ''
@@ -51,12 +51,6 @@ export interface UploadOrchestratorOptions {
   accept?: string;
 
   /**
-   * Form data field name for multipart uploads.
-   * @default 'file'
-   */
-  formDataName?: string;
-
-  /**
    * Prevent automatic upload on file addition.
    * @default false
    */
@@ -79,40 +73,9 @@ export interface UploadOrchestratorOptions {
    * @default 3
    */
   maxConcurrentUploads?: number;
-
-  /**
-   * Disable drag-and-drop.
-   * @default false
-   */
-  nodrop?: boolean;
-
-  /**
-   * Pass-through to input's capture attribute.
-   */
-  capture?: string;
-
-  /**
-   * External file list element.
-   */
-  fileList?: HTMLElement | null;
-
-  /**
-   * External add button element.
-   */
-  addButton?: HTMLElement | null;
-
-  /**
-   * External drop zone element.
-   */
-  dropZone?: HTMLElement | null;
-
-  /**
-   * Localization object.
-   */
-  i18n?: UploadI18n;
 }
 
-export interface UploadOrchestratorEventMap {
+export interface UploadManagerEventMap {
   'file-reject': CustomEvent<{ file: File; error: string }>;
   'file-remove': CustomEvent<{ file: UploadFile }>;
   'upload-before': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
@@ -135,36 +98,42 @@ export interface UploadOrchestratorEventMap {
 }
 
 /**
- * A pure JavaScript class that orchestrates file uploads without requiring
- * a DOM element. It can manage external UI components like file lists,
- * add buttons, and drop zones.
+ * A pure JavaScript class that manages file upload state and XHR requests.
+ * It has no knowledge of UI components - components should listen to events
+ * and call methods to interact with the manager.
  *
  * @example
  * ```javascript
- * import { UploadOrchestrator } from '@vaadin/upload';
+ * import { UploadManager } from '@vaadin/upload';
  *
- * const orchestrator = new UploadOrchestrator({
+ * const manager = new UploadManager({
  *   target: '/api/upload',
- *   maxFiles: 5,
- *   fileList: document.getElementById('file-list'),
- *   addButton: document.getElementById('add-button'),
- *   dropZone: document.getElementById('drop-zone')
+ *   maxFiles: 5
  * });
  *
- * // Listen to events
- * orchestrator.addEventListener('upload-success', (e) => {
+ * // Listen to state changes
+ * manager.addEventListener('files-changed', (e) => {
+ *   myFileList.items = e.detail.value;
+ * });
+ *
+ * manager.addEventListener('upload-success', (e) => {
  *   console.log('File uploaded:', e.detail.file.name);
  * });
  *
+ * // Add files (e.g., from a file input or drop event)
+ * fileInput.addEventListener('change', (e) => {
+ *   manager.addFiles(e.target.files);
+ * });
+ *
  * // Clean up when done
- * orchestrator.destroy();
+ * manager.destroy();
  * ```
  */
-export class UploadOrchestrator extends EventTarget {
+export class UploadManager extends EventTarget {
   /**
-   * Create an UploadOrchestrator instance.
+   * Create an UploadManager instance.
    */
-  constructor(options?: UploadOrchestratorOptions);
+  constructor(options?: UploadManagerOptions);
 
   /**
    * Server URL for uploads.
@@ -202,11 +171,6 @@ export class UploadOrchestrator extends EventTarget {
   accept: string;
 
   /**
-   * Form data field name for multipart uploads.
-   */
-  formDataName: string;
-
-  /**
    * Prevent automatic upload on file addition.
    */
   noAuto: boolean;
@@ -227,16 +191,6 @@ export class UploadOrchestrator extends EventTarget {
   maxConcurrentUploads: number;
 
   /**
-   * Disable drag-and-drop.
-   */
-  nodrop: boolean;
-
-  /**
-   * Pass-through to input's capture attribute.
-   */
-  capture: string | undefined;
-
-  /**
    * The array of files being processed or already uploaded.
    */
   files: UploadFile[];
@@ -247,28 +201,8 @@ export class UploadOrchestrator extends EventTarget {
   readonly maxFilesReached: boolean;
 
   /**
-   * The localization object.
-   */
-  i18n: UploadI18n;
-
-  /**
-   * The external file list element.
-   */
-  fileList: HTMLElement | null;
-
-  /**
-   * The external add button element.
-   */
-  addButton: HTMLElement | null;
-
-  /**
-   * The external drop zone element.
-   */
-  dropZone: HTMLElement | null;
-
-  /**
-   * Clean up resources and remove all event listeners.
-   * Call this when the orchestrator is no longer needed.
+   * Clean up resources and abort active uploads.
+   * Call this when the manager is no longer needed.
    */
   destroy(): void;
 
@@ -297,14 +231,9 @@ export class UploadOrchestrator extends EventTarget {
    */
   removeFile(file: UploadFile): void;
 
-  /**
-   * Open the file picker dialog.
-   */
-  openFilePicker(): void;
-
-  addEventListener<K extends keyof UploadOrchestratorEventMap>(
+  addEventListener<K extends keyof UploadManagerEventMap>(
     type: K,
-    listener: (this: UploadOrchestrator, ev: UploadOrchestratorEventMap[K]) => void,
+    listener: (this: UploadManager, ev: UploadManagerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions,
   ): void;
 
@@ -314,9 +243,9 @@ export class UploadOrchestrator extends EventTarget {
     options?: boolean | AddEventListenerOptions,
   ): void;
 
-  removeEventListener<K extends keyof UploadOrchestratorEventMap>(
+  removeEventListener<K extends keyof UploadManagerEventMap>(
     type: K,
-    listener: (this: UploadOrchestrator, ev: UploadOrchestratorEventMap[K]) => void,
+    listener: (this: UploadManager, ev: UploadManagerEventMap[K]) => void,
     options?: boolean | EventListenerOptions,
   ): void;
 

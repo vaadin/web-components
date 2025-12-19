@@ -5,39 +5,39 @@
  */
 
 /**
- * A pure JavaScript class that manages file upload state and orchestrates uploads.
+ * A pure JavaScript class that manages file upload state and XHR requests.
  * It has no knowledge of UI components - components should listen to events and
- * call methods to interact with the orchestrator.
+ * call methods to interact with the manager.
  *
  * @example
  * ```javascript
- * import { UploadOrchestrator } from '@vaadin/upload';
+ * import { UploadManager } from '@vaadin/upload';
  *
- * const orchestrator = new UploadOrchestrator({
+ * const manager = new UploadManager({
  *   target: '/api/upload',
  *   maxFiles: 5
  * });
  *
  * // Listen to state changes
- * orchestrator.addEventListener('files-changed', (e) => {
+ * manager.addEventListener('files-changed', (e) => {
  *   myFileList.items = e.detail.value;
  * });
  *
- * orchestrator.addEventListener('max-files-reached-changed', (e) => {
+ * manager.addEventListener('max-files-reached-changed', (e) => {
  *   myAddButton.disabled = e.detail.value;
  * });
  *
- * orchestrator.addEventListener('upload-success', (e) => {
+ * manager.addEventListener('upload-success', (e) => {
  *   console.log('File uploaded:', e.detail.file.name);
  * });
  *
  * // Add files (e.g., from a file input or drop event)
  * fileInput.addEventListener('change', (e) => {
- *   orchestrator.addFiles(e.target.files);
+ *   manager.addFiles(e.target.files);
  * });
  *
  * // Clean up when done
- * orchestrator.destroy();
+ * manager.destroy();
  * ```
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added due to constraints
@@ -54,9 +54,9 @@
  * @fires {CustomEvent} files-changed - Fired when the files array changes
  * @fires {CustomEvent} max-files-reached-changed - Fired when maxFilesReached changes
  */
-export class UploadOrchestrator extends EventTarget {
+export class UploadManager extends EventTarget {
   /**
-   * Create an UploadOrchestrator instance.
+   * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - Server URL for uploads
    * @param {string} [options.method='POST'] - HTTP method (POST or PUT)
@@ -124,7 +124,7 @@ export class UploadOrchestrator extends EventTarget {
 
   /**
    * Clean up resources and abort active uploads.
-   * Call this when the orchestrator is no longer needed.
+   * Call this when the manager is no longer needed.
    */
   destroy() {
     this._destroyed = true;
