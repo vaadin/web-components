@@ -80,6 +80,25 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  * You may also manually set `disabled` or `readonly` attribute on this component to make the label
  * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-label-color`               |
+ * | `--vaadin-input-field-label-font-size`           |
+ * | `--vaadin-input-field-label-font-weight`         |
+ * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ * | `--vaadin-input-field-required-indicator`        |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
