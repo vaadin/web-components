@@ -82,14 +82,19 @@
       const durationInput = document.querySelector('#duration');
 
       function showNotification(position) {
-        const duration = durationInput.value !== '' ? parseInt(durationInput.value) * 1000 : 1000 + Math.random() * 6000;
-        const notification = Notification.show(html`${generateRandomSentence()} <vaadin-button>Close</vaadin-button>`, {
-          position,
-          duration,
-        });
-        notification._card.querySelector('vaadin-button').addEventListener('click', () => {
+        let notification;
+
+        const close = () => {
           notification.close();
-        });
+        };
+
+        notification = Notification.show(
+          html`${generateRandomSentence()} <vaadin-button @click="${close}">Close</vaadin-button>`,
+          {
+            position,
+            duration: durationInput.value !== '' ? parseInt(durationInput.value) * 1000 : 1000 + Math.random() * 6000,
+          },
+        );
       }
 
       document.querySelector('#show-notification').addEventListener('click', () => {
@@ -113,14 +118,7 @@
       .section {
         padding-top: 30vh;
         gap: 1em;
-        /* TODO remove once baseline alignment works */
-        align-items: end;
         justify-content: center;
-      }
-
-      /* TODO should be a built-in variant */
-      #duration input {
-        text-align: end;
       }
 
       #duration {
@@ -148,7 +146,7 @@
     <section class="section">
       <vaadin-select label="Position" id="position"></vaadin-select>
 
-      <vaadin-text-field label="Duration" id="duration" placeholder="0–7">
+      <vaadin-text-field label="Duration" id="duration" placeholder="0–7" theme="align-end">
         <span slot="suffix">sec</span>
       </vaadin-text-field>
 
