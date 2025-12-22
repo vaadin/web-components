@@ -196,54 +196,60 @@ describe('position', () => {
       return { overlayRect, targetRect };
     }
 
-    ['bottom', 'bottom-start', 'bottom-end', 'top', 'top-start', 'top-end'].forEach((position) => {
-      ['left', 'right'].forEach((edge) => {
-        describe(`${position} position near ${edge} edge`, () => {
-          beforeEach(async () => {
-            // Place target very close to edge with small width
-            // This ensures centered popover would extend beyond edge
-            const edgeStyle = edge === 'left' ? 'left: 5px' : 'right: 5px';
-            constraintTarget = fixtureSync(
-              `<div style="width: 50px; height: 50px; position: absolute; ${edgeStyle}; top: 200px;"></div>`,
-            );
-            constraintPopover.position = position;
-            constraintPopover.target = constraintTarget;
-            await nextUpdate(constraintPopover);
-          });
-
-          it(`should constrain popover to stay within viewport on ${edge} edge`, async () => {
-            const { overlayRect } = await openAndMeasure();
-            const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-
-            // Popover should not extend beyond viewport edges
-            expect(overlayRect.left).to.be.at.least(0);
-            expect(overlayRect.right).to.be.at.most(viewportWidth);
-          });
-        });
+    ['ltr', 'rtl'].forEach((dir) => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
       });
-    });
 
-    ['bottom', 'bottom-start', 'bottom-end', 'top', 'top-start', 'top-end'].forEach((position) => {
-      ['left', 'right'].forEach((edge) => {
-        describe(`${position} position with target outside ${edge} edge`, () => {
-          beforeEach(async () => {
-            // Place target partially outside of viewport
-            const edgeStyle = edge === 'left' ? 'left: -25px' : 'right: -25px';
-            constraintTarget = fixtureSync(
-              `<div style="width: 50px; height: 50px; position: absolute; ${edgeStyle}; top: 200px;"></div>`,
-            );
-            constraintPopover.position = position;
-            constraintPopover.target = constraintTarget;
-            await nextUpdate(constraintPopover);
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      ['bottom', 'bottom-start', 'bottom-end', 'top', 'top-start', 'top-end'].forEach((position) => {
+        ['left', 'right'].forEach((edge) => {
+          describe(`${position} position near ${edge} edge in ${dir}`, () => {
+            beforeEach(async () => {
+              // Place target very close to edge with small width
+              // This ensures centered popover would extend beyond edge
+              const edgeStyle = edge === 'left' ? 'left: 5px' : 'right: 5px';
+              constraintTarget = fixtureSync(
+                `<div style="width: 50px; height: 50px; position: absolute; ${edgeStyle}; top: 200px;"></div>`,
+              );
+              constraintPopover.position = position;
+              constraintPopover.target = constraintTarget;
+              await nextUpdate(constraintPopover);
+            });
+
+            it(`should constrain popover to stay within viewport on ${edge} edge in ${dir}`, async () => {
+              const { overlayRect } = await openAndMeasure();
+              const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
+              // Popover should not extend beyond viewport edges
+              expect(overlayRect.left).to.be.at.least(0);
+              expect(overlayRect.right).to.be.at.most(viewportWidth);
+            });
           });
 
-          it(`should constrain popover to stay within viewport on ${edge} edge`, async () => {
-            const { overlayRect } = await openAndMeasure();
-            const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+          describe(`${position} position with target outside ${edge} edge`, () => {
+            beforeEach(async () => {
+              // Place target partially outside of viewport
+              const edgeStyle = edge === 'left' ? 'left: -25px' : 'right: -25px';
+              constraintTarget = fixtureSync(
+                `<div style="width: 50px; height: 50px; position: absolute; ${edgeStyle}; top: 200px;"></div>`,
+              );
+              constraintPopover.position = position;
+              constraintPopover.target = constraintTarget;
+              await nextUpdate(constraintPopover);
+            });
 
-            // Popover should not extend beyond viewport edges
-            expect(overlayRect.left).to.be.at.least(0);
-            expect(overlayRect.right).to.be.at.most(viewportWidth);
+            it(`should constrain popover to stay within viewport on ${edge} edge`, async () => {
+              const { overlayRect } = await openAndMeasure();
+              const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
+              // Popover should not extend beyond viewport edges
+              expect(overlayRect.left).to.be.at.least(0);
+              expect(overlayRect.right).to.be.at.most(viewportWidth);
+            });
           });
         });
       });
