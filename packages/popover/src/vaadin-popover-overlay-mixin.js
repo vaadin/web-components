@@ -41,17 +41,15 @@ export const PopoverOverlayMixin = (superClass) =>
       const overlayRect = this.$.overlay.getBoundingClientRect();
       const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
 
-      // If the target extends beyond viewport, align the overlay to the respective edge so it isn't cut off
+      // If the overlay extends beyond viewport, align the overlay to the respective edge so it isn't cut off
       // Can skip trying to center the overlay in this case
       let skipHorizontalCentering = false;
 
-      if (targetRect.left < 0) {
+      if (overlayRect.left < 0) {
         this.style.left = '0px';
         this.style.right = '';
         skipHorizontalCentering = true;
-      }
-
-      if (targetRect.right > viewportWidth) {
+      } else if (overlayRect.right > viewportWidth) {
         this.style.right = '0px';
         this.style.left = '';
         skipHorizontalCentering = true;
@@ -82,9 +80,6 @@ export const PopoverOverlayMixin = (superClass) =>
 
       // Center the overlay vertically
       if (this.position === 'start' || this.position === 'end') {
-        const targetRect = this.positionTarget.getBoundingClientRect();
-        const overlayRect = this.$.overlay.getBoundingClientRect();
-
         const offset = targetRect.height / 2 - overlayRect.height / 2;
         this.style.top = `${overlayRect.top + offset}px`;
       }
