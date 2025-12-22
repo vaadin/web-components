@@ -47,8 +47,6 @@ export * from './vaadin-radio-button-mixin.js';
  * | `--vaadin-radio-button-background`         |
  * | `--vaadin-radio-button-border-color`       |
  * | `--vaadin-radio-button-border-width`       |
- * | `--vaadin-radio-button-dot-color`          |
- * | `--vaadin-radio-button-dot-size`           |
  * | `--vaadin-radio-button-gap`                |
  * | `--vaadin-radio-button-label-color`        |
  * | `--vaadin-radio-button-label-font-size`    |

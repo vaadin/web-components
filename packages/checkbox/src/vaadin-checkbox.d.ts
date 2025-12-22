@@ -92,8 +92,6 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * | `--vaadin-checkbox-border-color`       |
  * | `--vaadin-checkbox-border-radius`      |
  * | `--vaadin-checkbox-border-width`       |
- * | `--vaadin-checkbox-checkmark-color`    |
- * | `--vaadin-checkbox-checkmark-size`     |
  * | `--vaadin-checkbox-gap`                |
  * | `--vaadin-checkbox-label-color`        |
  * | `--vaadin-checkbox-label-font-size`    |
