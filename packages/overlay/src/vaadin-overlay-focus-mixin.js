@@ -111,10 +111,7 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _trapFocus() {
-      if (this.focusTrap) {
-        if (isElementHidden(this._focusTrapRoot)) {
-          return;
-        }
+      if (this.focusTrap && !isElementHidden(this._focusTrapRoot)) {
         this.__focusTrapController.trapFocus(this._focusTrapRoot);
       }
     }
