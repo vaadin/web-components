@@ -34,4 +34,13 @@ describe('avatar', () => {
     element.style.setProperty('--vaadin-avatar-user-color', 'green');
     await visualDiff(div, 'color-index-filled');
   });
+
+  describe('accent', () => {
+    ['neutral', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'].forEach((color) => {
+      it(color, async () => {
+        element.classList.add(`aura-accent-${color}`);
+        await visualDiff(div, `accent-${color}`);
+      });
+    });
+  });
 });
