@@ -10,7 +10,7 @@
   "type": "module",
   "dependencies": {
     "@open-wc/semantic-dom-diff": "^0.20.1",
-    "chai": "^6.0.0",
+    "chai": "^6.2.1",
     "sinon": "^21.0.0",
     "sinon-chai": "^4.0.1"
   }
