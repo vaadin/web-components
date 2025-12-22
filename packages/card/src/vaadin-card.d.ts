@@ -32,12 +32,25 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `content` | The container for the card content (usually text content).
  * `footer`  | The container for footer elements. This part is always at the bottom of the card.
  *
- * The following custom properties are available for styling:
+ * The following custom CSS properties are available for styling:
  *
- * Custom property | Description | Default
- * ----------------|-------------|-------------
- * `--vaadin-card-padding` | The space between the card edge and its content. Needs to a unified value for all edges, i.e., a single length value. | `1em`
- * `--vaadin-card-gap`     | The space between content elements within the card. | `1em`
+ * Custom CSS property                    |
+ * :--------------------------------------|
+ * | `--vaadin-card-background`           |
+ * | `--vaadin-card-border-color`         |
+ * | `--vaadin-card-border-radius`        |
+ * | `--vaadin-card-border-width`         |
+ * | `--vaadin-card-gap`                  |
+ * | `--vaadin-card-media-aspect-ratio`   |
+ * | `--vaadin-card-padding`              |
+ * | `--vaadin-card-shadow`               |
+ * | `--vaadin-card-subtitle-color`       |
+ * | `--vaadin-card-subtitle-font-size`   |
+ * | `--vaadin-card-subtitle-line-height` |
+ * | `--vaadin-card-title-color`          |
+ * | `--vaadin-card-title-font-size`      |
+ * | `--vaadin-card-title-font-weight`    |
+ * | `--vaadin-card-title-line-height`    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
