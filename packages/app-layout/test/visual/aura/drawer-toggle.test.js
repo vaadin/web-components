@@ -31,4 +31,13 @@ describe('drawer-toggle', () => {
     element.setAttribute('theme', 'tertiary');
     await visualDiff(div, 'tertiary');
   });
+
+  describe('accent', () => {
+    ['neutral', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'].forEach((color) => {
+      it(color, async () => {
+        element.classList.add(`aura-accent-${color}`);
+        await visualDiff(div, `accent-${color}`);
+      });
+    });
+  });
 });
