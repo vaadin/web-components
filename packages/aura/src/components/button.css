@@ -46,8 +46,7 @@ vaadin-drawer-toggle:empty {
   padding-inline-start: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
 }
 
-/* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):has(> [slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
+:is(vaadin-button, vaadin-menu-bar-button):has(> [slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)),
 vaadin-drawer-toggle:empty,
 vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   padding-inline-end: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
@@ -62,8 +61,7 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-shadow: var(--aura-shadow-s);
 }
 
-/* prettier-ignore */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[disabled][theme~='primary']::part(label) {
+:is(vaadin-button, vaadin-menu-bar-button)[disabled][theme~='primary']::part(label) {
   color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
