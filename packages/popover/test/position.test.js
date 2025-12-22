@@ -7,10 +7,7 @@ describe('position', () => {
   let popover, target, overlay, defaultOffset;
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
-    popover.renderer = (root) => {
-      root.textContent = 'Content';
-    };
+    popover = fixtureSync('<vaadin-popover>Content</vaadin-popover>');
     target = fixtureSync('<div style="width: 100px; height: 100px; margin: 100px; outline: 1px solid red;"></div>');
     popover.target = target;
     await nextRender();
@@ -176,14 +173,11 @@ describe('position', () => {
     let constraintPopover, constraintTarget, constraintOverlay;
 
     beforeEach(async () => {
-      constraintPopover = fixtureSync('<vaadin-popover></vaadin-popover>');
-      constraintPopover.renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'This is a long popover content that will extend beyond edges';
-          root.appendChild(div);
-        }
-      };
+      constraintPopover = fixtureSync(`
+        <vaadin-popover>
+          <div>This is a long popover content that will extend beyond edges</div>
+        </vaadin-popover>
+      `);
       await nextRender();
       constraintOverlay = constraintPopover.shadowRoot.querySelector('vaadin-popover-overlay');
     });
