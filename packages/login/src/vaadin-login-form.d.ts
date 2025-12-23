@@ -59,6 +59,25 @@ export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomE
  * `error-message-description` | Container for error message description
  * `footer`  | Container additional information text from `i18n` object
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                        |
+ * :------------------------------------------|
+ * | `--vaadin-login-form-background`         |
+ * | `--vaadin-login-form-border-radius`      |
+ * | `--vaadin-login-form-error-color`        |
+ * | `--vaadin-login-form-error-font-size`    |
+ * | `--vaadin-login-form-error-font-weight`  |
+ * | `--vaadin-login-form-error-gap`          |
+ * | `--vaadin-login-form-error-line-height`  |
+ * | `--vaadin-login-form-gap`                |
+ * | `--vaadin-login-form-padding`            |
+ * | `--vaadin-login-form-title-color`        |
+ * | `--vaadin-login-form-title-font-size`    |
+ * | `--vaadin-login-form-title-font-weight`  |
+ * | `--vaadin-login-form-title-line-height`  |
+ * | `--vaadin-login-form-width`              |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
