@@ -7,7 +7,7 @@ yarn-error.log
 
 # Failed screenshots from Sauce Labs visual test runs
 packages/*/test/visual/screenshots/failed
-packages/*/test/visual/*/screenshots/*/failed
+packages/*/test/visual/*/screenshots/**/*/failed
 
 # Screenshots from local visual test runs
 packages/*/test/visual/screenshots/local-*
