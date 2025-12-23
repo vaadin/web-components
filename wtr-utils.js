@@ -228,7 +228,8 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     folder = 'field-base/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(base|lumo|aura)/u, `$1/screenshots/${argv.dark ? 'dark' : 'default'}`);
+    const themeFolder = testFile.includes('aura') ? `${argv.dark ? '/dark' : '/default'}` : '';
+    folder = match[1].replace(/(base|lumo|aura)/u, `$1/screenshots${themeFolder}`);
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
