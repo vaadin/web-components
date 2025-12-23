@@ -10,8 +10,8 @@
       import '@vaadin/button';
       import '@vaadin/checkbox-group';
       import '@vaadin/checkbox';
+      import '@vaadin/integer-field';
       import '@vaadin/select';
-      import '@vaadin/text-field';
       import { html } from 'lit';
       import { Notification } from '@vaadin/notification';
 
@@ -146,9 +146,9 @@
     <section class="section">
       <vaadin-select label="Position" id="position"></vaadin-select>
 
-      <vaadin-text-field label="Duration" id="duration" placeholder="0–7" theme="align-end">
+      <vaadin-integer-field label="Duration" id="duration" placeholder="0–7" theme="align-right">
         <span slot="suffix">sec</span>
-      </vaadin-text-field>
+      </vaadin-integer-field>
 
       <vaadin-button id="show-notification">Show</vaadin-button>
     </section>
