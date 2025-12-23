@@ -187,7 +187,7 @@ const getVisualTestGroups = (packages, theme) => {
   });
 };
 
-const getTestRunnerHtml = () => (testFramework) =>
+const getTestRunnerHtml = (theme) => (testFramework) =>
   `
   <!DOCTYPE html>
   <html>
@@ -202,6 +202,8 @@ const getTestRunnerHtml = () => (testFramework) =>
           margin: 0;
           padding: 0;
         }
+
+        ${theme === 'aura' && argv.dark ? 'html { color-scheme: dark }' : ''}
       </style>
       <script>
         /* Force development mode for element-mixin */
@@ -226,7 +228,8 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     folder = 'field-base/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(base|lumo|aura)/u, '$1/screenshots');
+    const themeFolder = testFile.includes('aura') ? `${argv.dark ? '/dark' : '/default'}` : '';
+    folder = match[1].replace(/(base|lumo|aura)/u, `$1/screenshots${themeFolder}`);
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
@@ -345,7 +348,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
     ].filter(Boolean),
     groups,
-    testRunnerHtml: getTestRunnerHtml(),
+    testRunnerHtml: getTestRunnerHtml(theme),
     filterBrowserLogs,
   };
 };
