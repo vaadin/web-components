@@ -40,6 +40,23 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * `focused`      | Set when the button is focused
  * `has-tooltip`  | Set when the button has a slotted tooltip
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                |
+ * :----------------------------------|
+ * | `--vaadin-button-background`     |
+ * | `--vaadin-button-border-color`   |
+ * | `--vaadin-button-border-radius`  |
+ * | `--vaadin-button-border-width`   |
+ * | `--vaadin-button-font-size`      |
+ * | `--vaadin-button-font-weight`    |
+ * | `--vaadin-button-gap`            |
+ * | `--vaadin-button-height`         |
+ * | `--vaadin-button-line-height`    |
+ * | `--vaadin-button-margin`         |
+ * | `--vaadin-button-padding`        |
+ * | `--vaadin-button-text-color`     |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
