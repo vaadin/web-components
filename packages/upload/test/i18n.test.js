@@ -1,101 +1,198 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-upload.js';
-import { createFile } from './helpers.js';
+import { DEFAULT_I18N } from '../src/vaadin-upload-mixin.js';
+import { createFile, xhrCreator } from './helpers.js';
+
+const CUSTOM_I18N = {
+  dropFiles: {
+    one: 'Dateien hier ablegen',
+    many: 'Dateien hier ablegen',
+  },
+  addFiles: {
+    one: 'Datei hochladen...',
+    many: 'Dateien hochladen...',
+  },
+  error: {
+    tooManyFiles: 'Zu viele Dateien.',
+    fileIsTooBig: 'Datei ist zu groß.',
+    incorrectFileType: 'Falscher Dateityp.',
+  },
+  uploading: {
+    status: {
+      connecting: 'Verbinden...',
+      stalled: 'Blockiert',
+      processing: 'Datei wird verarbeitet...',
+      held: 'In Warteschlange',
+    },
+    remainingTime: {
+      prefix: 'Verbleibende Zeit: ',
+      unknown: 'Unbekannte verbleibende Zeit',
+    },
+    error: {
+      serverUnavailable: 'Hochladen fehlgeschlagen, bitte später erneut versuchen',
+      unexpectedServerError: 'Hochladen aufgrund eines Serverfehlers fehlgeschlagen',
+      forbidden: 'Hochladen verboten',
+    },
+  },
+  file: {
+    retry: 'Wiederholen',
+    start: 'Starten',
+    remove: 'Entfernen',
+  },
+  units: {
+    size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+  },
+};
+
+const PARTIAL_I18N = {
+  dropFiles: {
+    one: 'PDF hier ablegen',
+    many: 'PDFs hier ablegen',
+  },
+  addFiles: {
+    one: 'PDF hochladen...',
+    many: 'PDFs hochladen...',
+  },
+};
+
+const i18nConfigs = [
+  { name: 'default i18n', i18n: DEFAULT_I18N },
+  { name: 'custom i18n', i18n: CUSTOM_I18N },
+  { name: 'partial i18n', i18n: PARTIAL_I18N },
+];
 
 describe('upload i18n', () => {
-  let upload, addButton, dropLabel, fileItems;
+  i18nConfigs.forEach(({ name, i18n }) => {
+    describe(name, () => {
+      let upload, clock, expectedI18n;
 
-  const pendingFile = createFile(100, 'image/jpeg');
-  pendingFile.held = true;
-  pendingFile.status = 'Queued';
-
-  const failedFile = createFile(100, 'image/jpeg');
-  failedFile.error = 'Upload failed';
-
-  const completedFile = createFile(100, 'image/jpeg');
-  completedFile.complete = true;
-
-  const files = [pendingFile, failedFile, completedFile];
-
-  beforeEach(async () => {
-    upload = fixtureSync('<vaadin-upload></vaadin-upload>');
-    upload.files = files;
-    await nextRender();
-    addButton = upload.querySelector('[slot="add-button"]');
-    dropLabel = upload.querySelector('[slot="drop-label"]');
-    const fileList = upload._fileList;
-    fileItems = fileList.querySelectorAll('vaadin-upload-file');
-  });
-
-  describe('default i18n', () => {
-    it('should use messages from default i18n', () => {
-      expect(addButton.textContent).to.equal('Upload Files...');
-      expect(dropLabel.textContent).to.equal('Drop files here');
-
-      const startButton = fileItems[0].shadowRoot.querySelector('[part="start-button"]');
-      expect(startButton.getAttribute('aria-label')).to.equal('Start');
-
-      const retryButton = fileItems[1].shadowRoot.querySelector('[part="retry-button"]');
-      expect(retryButton.getAttribute('aria-label')).to.equal('Retry');
-
-      fileItems.forEach((item) => {
-        const removeButton = item.shadowRoot.querySelector('[part="remove-button"]');
-        expect(removeButton.getAttribute('aria-label')).to.equal('Remove');
+      beforeEach(async () => {
+        upload = fixtureSync('<vaadin-upload></vaadin-upload>');
+        if (i18n !== DEFAULT_I18N) {
+          upload.i18n = i18n;
+          expectedI18n = { ...DEFAULT_I18N, ...i18n };
+        } else {
+          expectedI18n = DEFAULT_I18N;
+        }
+        await nextRender();
+        clock = sinon.useFakeTimers();
       });
-    });
-  });
 
-  describe('custom i18n', () => {
-    it('should use messages from custom i18n when provided', async () => {
-      upload.i18n = {
-        addFiles: {
-          one: 'Datei hochladen',
-          many: 'Dateien hochladen',
-        },
-        dropFiles: {
-          one: 'Datei hier ablegen',
-          many: 'Dateien hier ablegen',
-        },
-        file: {
-          start: 'Hochladen',
-          retry: 'Wiederholen',
-          remove: 'Entfernen',
-        },
-      };
-      await nextRender();
-
-      expect(addButton.textContent).to.equal('Dateien hochladen');
-      expect(dropLabel.textContent).to.equal('Dateien hier ablegen');
-
-      const startButton = fileItems[0].shadowRoot.querySelector('[part="start-button"]');
-      expect(startButton.getAttribute('aria-label')).to.equal('Hochladen');
-
-      const retryButton = fileItems[1].shadowRoot.querySelector('[part="retry-button"]');
-      expect(retryButton.getAttribute('aria-label')).to.equal('Wiederholen');
-
-      fileItems.forEach((item) => {
-        const removeButton = item.shadowRoot.querySelector('[part="remove-button"]');
-        expect(removeButton.getAttribute('aria-label')).to.equal('Entfernen');
+      afterEach(() => {
+        clock.restore();
       });
-    });
 
-    it('should fall back to default i18n if custom i18n does not define messages', async () => {
-      upload.i18n = {};
-      await nextRender();
+      async function setupFile(xhrOptions, delay) {
+        upload.files = [];
+        upload._activeUploads = 0;
+        upload._uploadQueue = [];
+        const file = createFile(100000, 'application/octet-stream');
+        if (xhrOptions) {
+          upload._createXhr = xhrCreator({
+            size: file.size,
+            ...xhrOptions,
+          });
+        }
+        upload._addFile(file);
+        await clock.tickAsync(delay);
+      }
 
-      expect(addButton.textContent).to.equal('Upload Files...');
-      expect(dropLabel.textContent).to.equal('Drop files here');
+      async function setupQueuedFile() {
+        upload.noAuto = true;
+        await setupFile(null, 1, { noAuto: true });
+        upload.noAuto = false;
+      }
 
-      const startButton = fileItems[0].shadowRoot.querySelector('[part="start-button"]');
-      expect(startButton.getAttribute('aria-label')).to.equal('Start');
+      async function setupConnectingFile() {
+        await setupFile({ connectTime: 100 }, 50);
+      }
 
-      const retryButton = fileItems[1].shadowRoot.querySelector('[part="retry-button"]');
-      expect(retryButton.getAttribute('aria-label')).to.equal('Retry');
+      async function setupUploadingFile() {
+        await setupFile({ connectTime: 100, uploadTime: 200 }, 200);
+      }
 
-      fileItems.forEach((item) => {
-        const removeButton = item.shadowRoot.querySelector('[part="remove-button"]');
-        expect(removeButton.getAttribute('aria-label')).to.equal('Remove');
+      async function setupProcessingFile() {
+        await setupFile({ connectTime: 100, uploadTime: 200, serverTime: 200 }, 400);
+      }
+
+      async function setupStalledFile() {
+        await setupFile({ uploadTime: 2500, stepTime: 2500 }, 2200);
+      }
+
+      async function setupUnexpectedServerErrorFile() {
+        await setupFile({ serverValidation: () => ({ status: 500 }) }, 50);
+      }
+
+      async function setupForbiddenFile() {
+        await setupFile({ serverValidation: () => ({ status: 403 }) }, 50);
+      }
+
+      async function setupServerUnavailableFile() {
+        await setupFile({ serverValidation: () => ({ status: 0 }) }, 50);
+      }
+
+      function getFileElement() {
+        return upload._fileList.querySelector('vaadin-upload-file');
+      }
+
+      function getFileStatus() {
+        return getFileElement().shadowRoot.querySelector('[part="status"]').textContent;
+      }
+
+      function getFileError() {
+        return getFileElement().shadowRoot.querySelector('[part="error"]').textContent;
+      }
+
+      it('should translate upload button and drop area', async () => {
+        expect(upload.querySelector('[slot="add-button"]').textContent).to.equal(expectedI18n.addFiles.many);
+        expect(upload.querySelector('[slot="drop-label"]').textContent).to.equal(expectedI18n.dropFiles.many);
+
+        upload.maxFiles = 1;
+        await clock.tickAsync(1);
+
+        expect(upload.querySelector('[slot="add-button"]').textContent).to.equal(expectedI18n.addFiles.one);
+        expect(upload.querySelector('[slot="drop-label"]').textContent).to.equal(expectedI18n.dropFiles.one);
+      });
+
+      it('should translate file button aria-labels', async () => {
+        await setupQueuedFile();
+        const startButton = getFileElement().shadowRoot.querySelector('[part="start-button"]');
+        expect(startButton.getAttribute('aria-label')).to.equal(expectedI18n.file.start);
+
+        const removeButton = getFileElement().shadowRoot.querySelector('[part="remove-button"]');
+        expect(removeButton.getAttribute('aria-label')).to.equal(expectedI18n.file.remove);
+
+        await setupForbiddenFile();
+        const retryButton = getFileElement().shadowRoot.querySelector('[part="retry-button"]');
+        expect(retryButton.getAttribute('aria-label')).to.equal(expectedI18n.file.retry);
+      });
+
+      it('should translate file status text', async () => {
+        await setupQueuedFile();
+        expect(getFileStatus()).to.equal(expectedI18n.uploading.status.held);
+
+        await setupConnectingFile();
+        expect(getFileStatus()).to.equal(expectedI18n.uploading.status.connecting);
+
+        await setupUploadingFile();
+        expect(getFileStatus()).to.contain(expectedI18n.uploading.remainingTime.prefix);
+
+        await setupProcessingFile();
+        expect(getFileStatus()).to.equal(expectedI18n.uploading.status.processing);
+
+        await setupStalledFile();
+        expect(getFileStatus()).to.equal(expectedI18n.uploading.status.stalled);
+
+        await setupUnexpectedServerErrorFile();
+        expect(getFileError()).to.equal(expectedI18n.uploading.error.unexpectedServerError);
+
+        await setupForbiddenFile();
+        expect(getFileError()).to.equal(expectedI18n.uploading.error.forbidden);
+
+        await setupServerUnavailableFile();
+        expect(getFileError()).to.equal(expectedI18n.uploading.error.serverUnavailable);
       });
     });
   });
