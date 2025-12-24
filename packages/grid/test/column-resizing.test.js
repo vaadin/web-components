@@ -233,7 +233,7 @@ describe('column group resizing', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid size="1" style="width: 300px; height: 400px">
+      <vaadin-grid size="1" style="width: 300px; height: 400px" column-reordering-allowed>
         <vaadin-grid-column-group resizable header="0">
           <vaadin-grid-column flex-grow="0" header="0"></vaadin-grid-column>
           <vaadin-grid-column flex-grow="0" header="1"></vaadin-grid-column>
@@ -310,6 +310,32 @@ describe('column group resizing', () => {
         expect(cell.clientWidth).to.equal(direction === 'rtl' ? 100 : 200);
       });
     });
+  });
+
+  it('should resize the visually last child column after column reordering', () => {
+    // Reorder child columns within the group: swap column 0 and column 1
+    // After reorder, visual order is [column1, column0], but _childColumns DOM order is still [column0, column1]
+    const headerRows = getRows(grid.$.header);
+    const headerContent0 = getRowCells(headerRows[1])[0]._content;
+    const headerContent1 = getRowCells(headerRows[1])[1]._content;
+    dragAndDropOver(headerContent0, headerContent1);
+    flushGrid(grid);
+
+    // Get the resize handle from the column group header
+    const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+
+    // The visually last column after reorder is column0 (originally first, now second visually)
+    // Get the cell that should be resized (the visually rightmost one)
+    const visuallyLastCell = getRowCells(headerRows[1])[1]; // After reorder, this should be column0
+    const originalWidth = visuallyLastCell.clientWidth;
+
+    const rect = visuallyLastCell.getBoundingClientRect();
+    const options = { node: handle };
+    fire('track', { state: 'start' }, options);
+    fire('track', { state: 'track', x: rect.right + 100, y: 0 }, options);
+
+    // The visually last column (column0, now at visual position 1) should be resized
+    expect(visuallyLastCell.clientWidth).to.equal(originalWidth + 100);
   });
 });
 
