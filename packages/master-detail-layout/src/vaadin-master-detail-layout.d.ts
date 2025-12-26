@@ -41,6 +41,16 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  * `drawer`       | Set when the layout is using the drawer mode.
  * `stack`        | Set when the layout is using the stack mode.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                  |
+ * :----------------------------------------------------|
+ * | `--vaadin-master-detail-layout-border-color`       |
+ * | `--vaadin-master-detail-layout-border-width`       |
+ * | `--vaadin-master-detail-layout-detail-background`  |
+ * | `--vaadin-master-detail-layout-detail-shadow`      |
+ * | `--vaadin-overlay-backdrop-background`             |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
