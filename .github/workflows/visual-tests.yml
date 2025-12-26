@@ -19,19 +19,18 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
-          cache: 'yarn'
 
-      - uses: samypr100/setup-dev-drive@v3
-        with:
-          workspace-copy: true
-          drive-size: '5GB'
+      # - uses: samypr100/setup-dev-drive@v3
+      #   with:
+      #     workspace-copy: true
+      #     drive-size: '5GB'
 
       - name: Install Dependencies
-        working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
+        # working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
         run: yarn install --immutable
 
       - name: Visual tests
-        working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
+        # working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
         run: yarn test:base --CI --group button
 
       - uses: actions/upload-artifact@v6
