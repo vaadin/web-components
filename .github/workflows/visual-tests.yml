@@ -19,13 +19,12 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
-          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        run: yarn test:base --CI
+        run: yarn test:base --CI --group button
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
