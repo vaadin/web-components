@@ -49,15 +49,5 @@
     "@vaadin/vaadin-themable-mixin": "25.1.0-alpha0"
   },
   "devDependencies": {
-    "cssnano": "^7.1.1",
-    "gulp": "^5.0.1",
-    "gulp-cli": "^3.1.0",
-    "gulp-iconfont": "^12.0.0",
-    "gulp-plugin-extras": "^1.0.0",
-    "imagemin": "^9.0.0",
-    "imagemin-svgo": "^10.0.1",
-    "postcss": "^8.1.0",
-    "postcss-cli": "^11.0.1",
-    "postcss-import": "^16.1.1"
   }
 }
