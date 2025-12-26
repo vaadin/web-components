@@ -8,7 +8,7 @@ permissions:
 jobs:
   base:
     name: Base
-    runs-on: windows-11-arm
+    runs-on: windows-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
@@ -16,38 +16,19 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
       - uses: samypr100/setup-dev-drive@v3
         with:
           workspace-copy: true
           drive-size: '5GB'
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-
-      - shell: pwsh
-        run: |
-          $cachePath = "${{ env.DEV_DRIVE_WORKSPACE }}\.yarn-cache"
-          New-Item -ItemType Directory -Force -Path $cachePath | Out-Null
-          $env:YARN_CACHE_FOLDER = $cachePath
-          Write-Output "YARN_CACHE_FOLDER=$cachePath" >> $env:GITHUB_ENV
-
-      - working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: yarn cache dir
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.DEV_DRIVE_WORKSPACE }}\.yarn-cache
-          key: ${{ runner.os }}-arm-yarn-cache-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-arm-yarn-cache-
-
-      - name: Install Dev Dependencies
-        working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: yarn add patch-package @ungap/structured-clone @vaadin/testing-helpers @web/dev-server @web/dev-server-esbuild @web/test-runner @web/test-runner-playwright @web/test-runner-visual-regression --dev --no-lockfile -W
-
       - name: Install Dependencies
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: yarn install --immutable --production
+        run: yarn install --immutable
 
       - name: Visual tests
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
