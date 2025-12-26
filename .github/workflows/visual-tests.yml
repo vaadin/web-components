@@ -42,9 +42,13 @@ jobs:
           key: ${{ runner.os }}-arm-yarn-cache-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-arm-yarn-cache-
 
+      - name: Install Dev Dependencies
+        working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
+        run: yarn add patch-package @ungap/structured-clone @vaadin/testing-helpers @web/dev-server @web/dev-server-esbuild @web/test-runner @web/test-runner-playwright @web/test-runner-visual-regression --dev --no-lockfile -W
+
       - name: Install Dependencies
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: yarn install --immutable
+        run: yarn install --immutable --production
 
       - name: Visual tests
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
