@@ -20,8 +20,31 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Prepare cache dir
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force "${{ github.workspace }}\.ci-cache" | Out-Null
+
+      - name: Restore dev drive VHDX
+        id: devdrive-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ github.workspace }}\.ci-cache\dev_drive.vhdx
+          key: devdrive-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/yarn.lock') }}
+
+
+      - name: Setup dev drive (mount inside workspace)
+        uses: samypr100/setup-dev-drive@v3
+        with:
+          drive-size: 20GB
+          drive-format: ReFS
+          drive-type: Dynamic
+          drive-path: ${{ github.workspace }}\.ci-cache\dev_drive.vhdx
+          mount-if-exists: true
+          mount-path: ${{ github.workspace }}\.devdrive
+
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile --no-progress --non-interactive
+        run: yarn install --immutable --non-interactive
 
       - name: Visual tests
         run: yarn test:base --CI --group button
@@ -32,3 +55,10 @@ jobs:
           name: base-screenshots
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
+
+      - name: Save dev drive VHDX
+        if: ${{ always() && steps.devdrive-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}\.ci-cache\dev_drive.vhdx
+          key: devdrive-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/yarn.lock') }}
