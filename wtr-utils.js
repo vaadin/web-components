@@ -220,17 +220,16 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
 `;
 
 const getScreenshotFileName = ({ name, testFile }, type, diff) => {
-  let folder;
-  if (testFile.includes('-styles')) {
-    const match = testFile.match(/\/packages\/(vaadin-lumo-styles\/test\/visual\/)(.+)/u);
-    folder = `${match[1]}screenshots`;
-  } else if (testFile.includes('field-base')) {
-    folder = 'field-base/test/visual/screenshots';
-  } else {
-    const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    const themeFolder = testFile.includes('aura') ? `${argv.dark ? '/dark' : '/default'}` : '';
-    folder = match[1].replace(/(base|lumo|aura)/u, `$1/screenshots${themeFolder}`);
+  let folder = path.join(path.dirname(testFile), 'screenshots');
+
+  if (path.matchesGlob(testFile, '**/visual/aura/*')) {
+    folder = path.join(folder, `${argv.dark ? 'dark' : 'default'}`);
   }
+
+  if (path.matchesGlob(testFile, '**/packages/!(vaadin-lumo-styles|field-base)/**')) {
+    folder = path.join(folder, path.basename(testFile).replace(/\.test\.(js|ts)$/u, ''));
+  }
+
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
 
