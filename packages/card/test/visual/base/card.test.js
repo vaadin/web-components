@@ -11,26 +11,7 @@ const title = '<div slot="title">Title</div>';
 const subTitle = '<div slot="subtitle">Subtitle</div>';
 const header = '<div slot="header">Header</div>';
 const avatar = '<vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar>';
-const button = '<vaadin-button slot="footer">Button</vaadin-button>';
 const image = '<img slot="media" width="200" src="/packages/card/test/visual/card-image.avif">';
-
-const complexCard = `<vaadin-card>
-  ${image}
-  ${title}
-  ${subTitle}
-  <div slot="header-suffix" theme="badge">Badge</div>
-  <div>Content lorem ipsum dolor sit amet.</div>
-  ${button}
-</vaadin-card>`;
-
-const complexCardWithIcon = `<vaadin-card>
-  <vaadin-icon slot="media" icon="vaadin:car" style="background: var(--lumo-primary-color-10pct); color: var(--lumo-primary-color); padding: 20px;"></vaadin-icon>
-  ${title}
-  ${subTitle}
-  <div slot="header-suffix" theme="badge">Badge</div>
-  <div>Content lorem ipsum dolor sit amet.</div>
-  ${button}
-</vaadin-card>`;
 
 describe('card', () => {
   let div, element;
@@ -42,6 +23,25 @@ describe('card', () => {
   });
 
   const cardFixture = (content) => fixtureSync(`<vaadin-card>${content}</vaadin-card>`, div);
+
+  const mediaFixture = (showImage, theme) => {
+    const media = showImage
+      ? image
+      : '<vaadin-icon slot="media" icon="vaadin:car" style="background: #fafafa; padding: 20px;"></vaadin-icon>';
+
+    return fixtureSync(
+      `
+        <vaadin-card ${theme ? `theme="${theme}"` : ''}>
+          ${media}
+          ${title}
+          ${subTitle}
+          <div>Content lorem ipsum dolor sit amet.</div>
+          <vaadin-button slot="footer">Button</vaadin-button>
+        </vaadin-card>
+      `,
+      div,
+    );
+  };
 
   describe('slot', () => {
     it('content', async () => {
@@ -106,7 +106,7 @@ describe('card', () => {
     });
 
     it('multiple', async () => {
-      element = fixtureSync(complexCard, div);
+      element = mediaFixture(true);
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
           await visualDiff(div, 'slot-multiple');
@@ -125,21 +125,18 @@ describe('card', () => {
 
     it('elevated', async () => {
       element = cardFixture(content);
-      div.style.setProperty('background-image', 'linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct))');
       element.setAttribute('theme', 'elevated');
       await visualDiff(div, 'theme-elevated');
     });
 
     it('outlined-elevated', async () => {
       element = cardFixture(content);
-      div.style.setProperty('background-image', 'linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct))');
       element.setAttribute('theme', 'outlined elevated');
       await visualDiff(div, 'theme-outlined-elevated');
     });
 
     it('stretch-media', async () => {
-      element = fixtureSync(complexCard, div);
-      element.setAttribute('theme', 'stretch-media');
+      element = mediaFixture(true, 'stretch-media');
       element.style.setProperty('width', '300px');
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
@@ -150,8 +147,7 @@ describe('card', () => {
     });
 
     it('cover-media-image', async () => {
-      element = fixtureSync(complexCard, div);
-      element.setAttribute('theme', 'cover-media');
+      element = mediaFixture(true, 'cover-media');
       element.style.setProperty('width', '300px');
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
@@ -162,15 +158,14 @@ describe('card', () => {
     });
 
     it('cover-media-icon', async () => {
-      element = fixtureSync(complexCardWithIcon, div);
+      element = mediaFixture(false, 'cover-media');
       element.setAttribute('theme', 'cover-media');
       element.style.setProperty('width', '300px');
       await visualDiff(div, 'theme-media-cover-icon');
     });
 
     it('horizontal', async () => {
-      element = fixtureSync(complexCard, div);
-      element.setAttribute('theme', 'horizontal');
+      element = mediaFixture(true, 'horizontal');
       element.style.setProperty('width', '400px');
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
@@ -181,8 +176,7 @@ describe('card', () => {
     });
 
     it('horizontal-cover-media', async () => {
-      element = fixtureSync(complexCard, div);
-      element.setAttribute('theme', 'horizontal cover-media');
+      element = mediaFixture(true, 'horizontal cover-media');
       element.style.setProperty('width', '400px');
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
@@ -193,8 +187,7 @@ describe('card', () => {
     });
 
     it('horizontal-stretch-media', async () => {
-      element = fixtureSync(complexCard, div);
-      element.setAttribute('theme', 'horizontal stretch-media');
+      element = mediaFixture(true, 'horizontal stretch-media');
       element.style.setProperty('width', '400px');
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
