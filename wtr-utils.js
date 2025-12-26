@@ -1,6 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
-import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
 import { globSync } from 'glob';
@@ -273,7 +272,7 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme, browserVersion) => {
+const createVisualTestsConfig = async (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
@@ -296,6 +295,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       },
     });
   } else {
+    const { createSauceLabsLauncher } = await import('@web/test-runner-saucelabs');
     const sauceLabsLauncher = createSauceLabsLauncher(
       {
         user: process.env.SAUCE_USERNAME,
