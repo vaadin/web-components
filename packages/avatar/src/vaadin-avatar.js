@@ -102,6 +102,8 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   ready() {
     super.ready();
 
+    // TRIGGER VISUAL TESTS
+
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
   }
