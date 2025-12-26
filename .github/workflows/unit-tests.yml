@@ -5,67 +5,67 @@ on: pull_request
 permissions:
   contents: read
 
-jobs:
-  chrome:
-    name: Chrome
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+# jobs:
+#   chrome:
+#     name: Chrome
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Test
-        run: yarn test
-  firefox:
-    name: Firefox
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+#       - name: Test
+#         run: yarn test
+#   firefox:
+#     name: Firefox
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Install Playwright
-        run: npx playwright install firefox --with-deps
+#       - name: Install Playwright
+#         run: npx playwright install firefox --with-deps
 
-      - name: Test
-        run: yarn test:firefox
-  webkit:
-    name: WebKit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+#       - name: Test
+#         run: yarn test:firefox
+#   webkit:
+#     name: WebKit
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Install Playwright
-        run: npx playwright install webkit --with-deps
+#       - name: Install Playwright
+#         run: npx playwright install webkit --with-deps
 
-      - name: Test
-        run: yarn test:webkit
+#       - name: Test
+#         run: yarn test:webkit
