@@ -44,7 +44,7 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
-const launcher = process.argv.includes('--launcher') ? process.argv[process.argv.indexOf('--launcher') + 1] : '';
+const hasCIParam = process.argv.includes('--CI');
 const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
@@ -286,18 +286,36 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  const sauceLabsLauncher = createSauceLabsLauncher(
-    {
-      user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
-    },
-    {
-      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
-      recordScreenshots: false,
-      recordVideo: false,
-    },
-  );
+  let browser;
+  if (hasLocalParam || hasCIParam) {
+    browser = playwrightLauncher({
+      product: 'chromium',
+      launchOptions: {
+        channel: 'chrome',
+        headless: true,
+      },
+    });
+  } else {
+    const sauceLabsLauncher = createSauceLabsLauncher(
+      {
+        user: process.env.SAUCE_USERNAME,
+        key: process.env.SAUCE_ACCESS_KEY,
+      },
+      {
+        name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
+        build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+        recordScreenshots: false,
+        recordVideo: false,
+      },
+    );
+
+    browser = sauceLabsLauncher({
+      browserName: 'chrome',
+      platformName: 'Windows 10',
+      browserVersion,
+      'wdio:enforceWebDriverClassic': true,
+    });
+  }
 
   return {
     concurrency: 1,
@@ -307,22 +325,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         timeout: '20000', // Default 2000
       },
     },
-    browsers: [
-      hasLocalParam || launcher === 'playwright'
-        ? playwrightLauncher({
-            product: 'chromium',
-            launchOptions: {
-              channel: 'chrome',
-              headless: true,
-            },
-          })
-        : sauceLabsLauncher({
-            browserName: 'chrome',
-            platformName: 'Windows 10',
-            browserVersion,
-            'wdio:enforceWebDriverClassic': true,
-          }),
-    ],
+    browsers: [browser],
     plugins: [
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
