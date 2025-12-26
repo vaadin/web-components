@@ -12,11 +12,11 @@ describe('horizontal-layout', () => {
     div.style.padding = '2px';
     element = fixtureSync(
       `
-        <vaadin-horizontal-layout style="border: solid 1px var(--vaadin-border-color)">
-          <div class="aura-surface" style="padding: 20px; --aura-surface-level: -1">
+        <vaadin-horizontal-layout style="border: solid 1px red">
+          <div style="padding: 20px; background: green; color: white">
             Item 1
           </div>
-          <div class="aura-surface-solid" style="padding: 20px; --aura-surface-level: -1">
+          <div style="padding: 20px; background: blue; color: white">
             Item 2
           </div>
         </vaadin-horizontal-layout>

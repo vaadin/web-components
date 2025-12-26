@@ -12,11 +12,11 @@ describe('vertical-layout', () => {
     div.style.padding = '2px';
     element = fixtureSync(
       `
-        <vaadin-vertical-layout style="border: solid 1px var(--vaadin-border-color)">
-          <div class="aura-surface" style="padding: 20px; --aura-surface-level: -1">
+        <vaadin-vertical-layout style="border: solid 1px red">
+          <div style="padding: 20px; background: green; color: white">
             Item
           </div>
-          <div class="aura-surface-solid" style="padding: 20px; --aura-surface-level: -1">
+          <div style="padding: 20px; background: blue; color: white">
             Item
           </div>
         </vaadin-vertical-layout>
