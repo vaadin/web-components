@@ -43,6 +43,22 @@ import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
  * `checked`    | Set when the radio button is checked.
  * `has-label`  | Set when the radio button has a label.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-radio-button-background`         |
+ * | `--vaadin-radio-button-border-color`       |
+ * | `--vaadin-radio-button-border-width`       |
+ * | `--vaadin-radio-button-gap`                |
+ * | `--vaadin-radio-button-label-color`        |
+ * | `--vaadin-radio-button-label-font-size`    |
+ * | `--vaadin-radio-button-label-font-weight`  |
+ * | `--vaadin-radio-button-label-line-height`  |
+ * | `--vaadin-radio-button-marker-color`       |
+ * | `--vaadin-radio-button-marker-size`        |
+ * | `--vaadin-radio-button-size`               |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.

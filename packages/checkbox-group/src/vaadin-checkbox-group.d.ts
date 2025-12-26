@@ -70,6 +70,25 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * `has-error-message` | Set when the element has an error message
  * `has-tooltip`       | Set when the element has a slotted tooltip
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-label-color`               |
+ * | `--vaadin-input-field-label-font-size`           |
+ * | `--vaadin-input-field-label-font-weight`         |
+ * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ * | `--vaadin-input-field-required-indicator`        |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
