@@ -159,7 +159,6 @@ describe('card', () => {
 
     it('cover-media-icon', async () => {
       element = mediaFixture(false, 'cover-media');
-      element.setAttribute('theme', 'cover-media');
       element.style.setProperty('width', '300px');
       await visualDiff(div, 'theme-media-cover-icon');
     });
