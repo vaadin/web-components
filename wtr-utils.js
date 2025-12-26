@@ -44,6 +44,7 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
+const launcher = process.argv.includes('--launcher') ? process.argv[process.argv.indexOf('--launcher') + 1] : '';
 const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
@@ -307,7 +308,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       },
     },
     browsers: [
-      hasLocalParam
+      hasLocalParam || launcher === 'playwright'
         ? playwrightLauncher({
             product: 'chromium',
             launchOptions: {
