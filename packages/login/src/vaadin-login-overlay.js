@@ -45,6 +45,25 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * `error-message-description`  | Container for error message description
  * `footer`                     | Container for the footer element
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-login-overlay-background`              |
+ * | `--vaadin-login-overlay-border-color`            |
+ * | `--vaadin-login-overlay-border-radius`           |
+ * | `--vaadin-login-overlay-border-width`            |
+ * | `--vaadin-login-overlay-brand-background`        |
+ * | `--vaadin-login-overlay-brand-padding`           |
+ * | `--vaadin-login-overlay-description-color`       |
+ * | `--vaadin-login-overlay-description-font-size`   |
+ * | `--vaadin-login-overlay-description-font-weight` |
+ * | `--vaadin-login-overlay-description-line-height` |
+ * | `--vaadin-login-overlay-title-color`             |
+ * | `--vaadin-login-overlay-title-font-size`         |
+ * | `--vaadin-login-overlay-title-font-weight`       |
+ * | `--vaadin-login-overlay-title-line-height`       |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} description-changed - Fired when the `description` property changes.
