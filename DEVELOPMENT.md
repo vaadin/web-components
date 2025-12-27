@@ -20,8 +20,6 @@ of steps to perform when creating a new major or minor version branch of the mon
 
 ## Getting started
 
-First of all, make sure you have [yarn](https://classic.yarnpkg.com/en/docs/install) installed.
-
 Setup the repo:
 
 ```sh
