@@ -9,7 +9,7 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
-const DEFAULT_I18N = {
+export const DEFAULT_I18N = {
   dropFiles: {
     one: 'Drop file here',
     many: 'Drop files here',
