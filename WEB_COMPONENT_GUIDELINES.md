@@ -126,6 +126,8 @@ packages/{component-name}/
             └── {name}.test.js                # Visual tests without theme
 ```
 
+**Note on CSS Files:** The structure above shows the **base styles** location within the component package. Additionally, you must create **Lumo theme CSS files** in `packages/vaadin-lumo-styles/` and **Aura theme CSS files** in `packages/aura/`. See the [Theming](#theming) section for complete details on all three CSS file locations.
+
 ### Development Pages
 
 Development pages (dev pages) are HTML files used for manual testing and demonstration during component development. They are stored in the **root-level `dev/` directory**, not within individual component packages.
@@ -794,6 +796,79 @@ Components must support both **Lumo** and **Aura** themes. The Vaadin component 
 
 - **Lumo**: The original Vaadin theme, optimized for business applications with a focus on clarity and efficiency
 - **Aura**: A modern theme with contemporary aesthetics, using advanced CSS features and design patterns
+
+### CSS File Locations Overview
+
+**IMPORTANT:** Components require CSS files in **three separate locations**:
+
+#### 1. Base Styles (Component Package)
+**Location:** `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
+
+These are the **unstyled, functional base styles** that every component needs regardless of theme. They define:
+- Basic layout and structure
+- CSS custom properties with fallbacks
+- Shadow part styling
+- State attributes (`:host([disabled])`, `:host([focused])`, etc.)
+- Forced colors mode support
+
+**Example:** For `vaadin-button`, create:
+```
+packages/button/src/styles/vaadin-button-base-styles.js
+```
+
+This file is **imported directly in the component's main class** via the `static get styles()` method.
+
+#### 2. Lumo Theme Styles (Lumo Package)
+**Location:**
+- **Public CSS:** `packages/vaadin-lumo-styles/components/{name}.css`
+- **Implementation CSS:** `packages/vaadin-lumo-styles/src/components/{name}.css`
+
+These styles provide the **Lumo theme appearance** for the component. They override and extend the base styles with Lumo-specific design tokens and styling.
+
+**Example:** For `vaadin-button`, create:
+```
+packages/vaadin-lumo-styles/components/button.css          (public, with injection markers)
+packages/vaadin-lumo-styles/src/components/button.css      (actual Lumo styles)
+```
+
+#### 3. Aura Theme Styles (Aura Package)
+**Location:** `packages/aura/src/components/{name}.css`
+
+These styles provide the **Aura theme appearance** for the component. They use modern CSS features and override base styles with Aura-specific design tokens.
+
+**Example:** For `vaadin-button`, create:
+```
+packages/aura/src/components/button.css
+```
+
+The Aura component file must also be **imported in `packages/aura/aura.css`** to be included in the theme bundle.
+
+---
+
+### CSS Architecture Summary
+
+```
+Component Package (packages/button/)
+└── src/styles/vaadin-button-base-styles.js  ← Base functional styles (CSS-in-JS)
+    ↓ Referenced in component class
+
+Lumo Theme Package (packages/vaadin-lumo-styles/)
+├── components/button.css                     ← Public entry with injection markers
+└── src/components/button.css                 ← Lumo theme styles (actual CSS)
+    ↓ Auto-injected via LumoInjectionMixin
+
+Aura Theme Package (packages/aura/)
+└── src/components/button.css                 ← Aura theme styles
+    ↓ Imported in aura.css
+```
+
+**Key Points:**
+- **Base styles** = In component package (CSS-in-JS using Lit's `css` template)
+- **Lumo styles** = In `vaadin-lumo-styles` package (CSS files)
+- **Aura styles** = In `aura` package (CSS files)
+- Each serves a different purpose and must all be created for a complete component
+
+---
 
 ### 1. Lumo Theme (`packages/vaadin-lumo-styles/`)
 
@@ -1994,22 +2069,26 @@ Use this checklist when creating a new component:
 - [ ] `defineCustomElement()` called at end
 
 ### Styling
-- [ ] Base styles use CSS custom properties
-- [ ] All custom properties have fallbacks
+- [ ] Base styles file created in `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
+- [ ] Base styles TypeScript definition created in `src/styles/vaadin-{name}-base-styles.d.ts`
+- [ ] Base styles use CSS custom properties with fallbacks
+- [ ] All custom properties have fallbacks to design tokens
 - [ ] Forced colors mode styles added
 - [ ] State selectors use attributes (`:host([disabled])`)
 - [ ] Shadow parts styled
-- [ ] Theme variants defined (primary, tertiary, etc.)
+- [ ] Base styles imported in component via `static get styles()`
 
 ### Theming
-- [ ] Lumo theme CSS created in `packages/vaadin-lumo-styles/`
-- [ ] Lumo public CSS file created in `components/{name}.css`
-- [ ] Lumo implementation file created in `src/components/{name}.css`
-- [ ] Lumo styles use `@media lumo_components_{name}`
-- [ ] Aura theme CSS created in `packages/aura/src/components/{name}.css`
+- [ ] **Base CSS:** Created in component package at `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
+- [ ] **Lumo CSS:** Public file created at `packages/vaadin-lumo-styles/components/{name}.css` with injection markers
+- [ ] **Lumo CSS:** Implementation file created at `packages/vaadin-lumo-styles/src/components/{name}.css`
+- [ ] Lumo styles wrapped in `@media lumo_components_{name}` query
+- [ ] Lumo injection markers match media query name
+- [ ] **Aura CSS:** Created at `packages/aura/src/components/{name}.css`
 - [ ] Aura styles use modern CSS syntax (`:is()`, `:where()`, `light-dark()`, `oklch()`)
-- [ ] Aura component imported in `packages/aura/aura.css`
+- [ ] Aura component CSS imported in `packages/aura/aura.css`
 - [ ] Theme variants implemented in both Lumo and Aura
+- [ ] All three CSS files created (base, Lumo, Aura)
 - [ ] Both themes tested for visual consistency
 
 ### TypeScript
