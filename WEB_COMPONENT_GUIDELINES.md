@@ -123,6 +123,63 @@ packages/{component-name}/
             └── {name}.test.js                # Visual tests without theme
 ```
 
+### Development Pages
+
+Development pages (dev pages) are HTML files used for manual testing and demonstration during component development. They are stored in the **root-level `dev/` directory**, not within individual component packages.
+
+**Location:**
+```
+dev/
+├── {name}.html           # Dev page for the component
+├── common.js             # Shared imports and utilities
+└── ...                   # Other component dev pages
+```
+
+**Dev Page Structure:**
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{Component Name}</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/{component-name}';
+      // Import other dependencies as needed
+    </script>
+  </head>
+
+  <body>
+    <!-- Component examples and test cases -->
+    <vaadin-{name}>Example</vaadin-{name}>
+
+    <h3>Theme Variants</h3>
+    <vaadin-{name} theme="primary">Primary</vaadin-{name}>
+    <vaadin-{name} theme="secondary">Secondary</vaadin-{name}>
+
+    <h3>States</h3>
+    <vaadin-{name} disabled>Disabled</vaadin-{name}>
+  </body>
+</html>
+```
+
+**Purpose:**
+- Manual testing during development
+- Visual verification of component appearance and behavior
+- Quick prototyping and experimentation
+- Theme testing (switching between Lumo/Aura)
+- Demonstration of component features and variants
+
+**Best Practices:**
+- Keep dev pages simple and focused on the component
+- Use `common.js` for shared theme switching and utilities
+- Include examples of all major variants and states
+- Add descriptive headings to organize examples
+- Dev pages are not part of the published package
+
 ---
 
 ## Component Implementation
@@ -747,7 +804,15 @@ packages/vaadin-lumo-styles/
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/components/{name}.css';
+
+:root::before,
+:host::before {
+  --_lumo-vaadin-{name}-inject: 1;
+  --_lumo-vaadin-{name}-inject-modules: lumo_components_{name};
+}
 ```
+
+**Note:** The injection markers (`--_lumo-vaadin-{name}-inject` and `--_lumo-vaadin-{name}-inject-modules`) are required for the Lumo theme injection system to work properly. The module name in `--_lumo-vaadin-{name}-inject-modules` must match the `@media` query name in the source CSS file.
 
 **Theme styles** (`src/components/{name}.css`):
 ```css
