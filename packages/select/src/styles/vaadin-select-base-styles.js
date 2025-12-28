@@ -39,4 +39,44 @@ export const selectStyles = css`
   :host([readonly]) [part~='toggle-button'] {
     display: none;
   }
+
+  :host([theme~='align-start']) {
+    --vaadin-item-text-align: start;
+  }
+
+  :host([theme~='align-center']) {
+    --vaadin-item-text-align: center;
+  }
+
+  :host([theme~='align-end']) {
+    --vaadin-item-text-align: end;
+  }
+
+  :host([theme~='align-left']) {
+    --vaadin-item-text-align: left;
+  }
+
+  :host([theme~='align-right']) {
+    --vaadin-item-text-align: right;
+  }
+
+  :host([theme~='align-start']) ::slotted([slot='value']) {
+    justify-content: start;
+  }
+
+  :host([theme~='align-center']) ::slotted([slot='value']) {
+    justify-content: center;
+  }
+
+  :host([theme~='align-end']) ::slotted([slot='value']) {
+    justify-content: end;
+  }
+
+  :host([theme~='align-left']) ::slotted([slot='value']) {
+    justify-content: left;
+  }
+
+  :host([theme~='align-right']) ::slotted([slot='value']) {
+    justify-content: right;
+  }
 `;

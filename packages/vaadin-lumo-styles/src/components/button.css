@@ -152,8 +152,7 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
 
   :host([theme~='tertiary']),
   :host([theme~='tertiary-inline']) {
-    --_background: transparent !important;
-    background: var(--vaadin-button-tertiary-background, var(--_background));
+    background: var(--vaadin-button-tertiary-background, transparent) !important;
     min-width: 0;
   }
 

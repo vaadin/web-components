@@ -39,9 +39,7 @@ export interface GridProCustomEventMap<TItem> {
 }
 
 export interface GridProEventMap<TItem>
-  extends HTMLElementEventMap,
-    GridProCustomEventMap<TItem>,
-    GridCustomEventMap<TItem> {}
+  extends HTMLElementEventMap, GridProCustomEventMap<TItem>, GridCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.

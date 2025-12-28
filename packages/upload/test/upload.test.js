@@ -9,7 +9,7 @@ describe('upload', () => {
 
   beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
-    upload.target = 'http://foo.com/bar';
+    upload.target = 'https://foo.com/bar';
     file = createFile(100000, 'application/unknown');
     await nextRender();
   });
@@ -56,13 +56,13 @@ describe('upload', () => {
           expect(e.detail.file.uploading).to.be.ok;
           done();
         });
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
 
       it('should fire the upload-progress event multiple times', async () => {
         const spy = sinon.spy();
         upload.addEventListener('upload-progress', spy);
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
 
         await clock.tickAsync(10);
         const e = spy.firstCall.args[0];
@@ -95,7 +95,7 @@ describe('upload', () => {
       it('should fire the upload-success', async () => {
         const spy = sinon.spy();
         upload.addEventListener('upload-success', spy);
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
 
         await clock.tickAsync(400);
         const e = spy.firstCall.args[0];
@@ -111,7 +111,7 @@ describe('upload', () => {
         const errorSpy = sinon.spy();
         upload.addEventListener('upload-error', errorSpy);
 
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
 
         await clock.tickAsync(100);
         const progressEvt = progressSpy.firstCall.args[0];
@@ -142,7 +142,7 @@ describe('upload', () => {
             done();
           };
         });
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
 
       it('should not override configurable request url if already set', (done) => {
@@ -153,7 +153,7 @@ describe('upload', () => {
           done();
         });
         file.uploadTarget = modifiedUrl;
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
 
       it('should fire the upload-before with configurable form data name in multipart mode', (done) => {
@@ -180,7 +180,7 @@ describe('upload', () => {
           };
         });
 
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
 
         window.FormData = OriginalFormData;
       });
@@ -194,14 +194,14 @@ describe('upload', () => {
         });
 
         upload.formDataName = 'attachment';
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
 
       it('should not open xhr if `upload-before` event is cancelled', () => {
         upload.addEventListener('upload-before', (e) => {
           e.preventDefault();
         });
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
         expect(file.xhr.readyState).to.equal(0);
       });
 
@@ -215,7 +215,7 @@ describe('upload', () => {
           expect(e.detail.formData).to.be.ok;
           done();
         });
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
 
       it('should not send xhr if `upload-request` listener prevents default', (done) => {
@@ -228,7 +228,7 @@ describe('upload', () => {
           });
         });
 
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
 
       it('should fail if a `upload-response` listener sets an error', async () => {
@@ -240,7 +240,7 @@ describe('upload', () => {
         const errorSpy = sinon.spy();
         upload.addEventListener('upload-error', errorSpy);
 
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
         await clock.tickAsync(250);
 
         const e = errorSpy.firstCall.args[0];
@@ -254,7 +254,7 @@ describe('upload', () => {
           e.preventDefault();
         });
 
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
         await clock.tickAsync(100);
 
         expect(file.uploading).to.be.ok;
@@ -278,7 +278,7 @@ describe('upload', () => {
           expect(e.detail.xhr.withCredentials).to.be.true;
           done();
         });
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
       });
     });
 
@@ -306,7 +306,7 @@ describe('upload', () => {
         const spy = sinon.spy();
         upload.addEventListener('upload-error', spy);
 
-        upload._uploadFile(file);
+        upload._queueFileUpload(file);
         await clock.tickAsync(50);
 
         const e = spy.firstCall.args[0];
@@ -348,7 +348,7 @@ describe('upload', () => {
     });
 
     it('should be indeterminate when connecting', async () => {
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
       await clock.tickAsync(200);
       expect(file.indeterminate).to.be.ok;
       expect(file.status).to.be.equal(upload.i18n.uploading.status.connecting);
@@ -357,7 +357,7 @@ describe('upload', () => {
     it('should not be indeterminate when progressing', async () => {
       const spy = sinon.spy();
       upload.addEventListener('upload-progress', spy);
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
       await clock.tickAsync(600);
       const e = spy.firstCall.args[0];
       expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
@@ -365,7 +365,7 @@ describe('upload', () => {
     });
 
     it('should be indeterminate when server is processing the file', async () => {
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
       await clock.tickAsync(800);
       expect(file.indeterminate).to.be.ok;
       expect(file.status).to.be.equal(upload.i18n.uploading.status.processing);
@@ -390,7 +390,7 @@ describe('upload', () => {
     });
 
     it('should be stalled when progress is not updated for more than 2 sec.', async () => {
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
       await clock.tickAsync(2200);
       expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
     });
@@ -443,16 +443,21 @@ describe('upload', () => {
       upload.files.forEach((file) => {
         expect(file.uploading).not.to.be.ok;
       });
+      let firstUploadStartFired = false;
       upload.addEventListener('upload-start', (e) => {
-        expect(e.detail.xhr).to.be.ok;
-        expect(e.detail.file).to.be.ok;
-        expect(e.detail.file.name).to.equal(tempFileName);
-        expect(e.detail.file.uploading).to.be.ok;
+        if (!firstUploadStartFired) {
+          firstUploadStartFired = true;
+          expect(e.detail.xhr).to.be.ok;
+          expect(e.detail.file).to.be.ok;
+          expect(e.detail.file.name).to.equal(tempFileName);
+          expect(e.detail.file.uploading).to.be.ok;
 
-        for (let i = 0; i < upload.files.length - 1; i++) {
-          expect(upload.files[i].uploading).not.to.be.ok;
+          for (let i = 0; i < upload.files.length - 1; i++) {
+            expect(upload.files[i].uploading).not.to.be.ok;
+          }
+          done();
         }
-        done();
+        // With queue behavior, other files will start after the first completes - ignore those events
       });
       upload.uploadFiles([upload.files[2]]);
     });
@@ -563,7 +568,7 @@ describe('upload', () => {
         expect(e.detail.formData).to.be.instanceOf(FormData);
         done();
       });
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
     });
 
     it('should send file directly for raw format', (done) => {
@@ -574,7 +579,7 @@ describe('upload', () => {
         expect(e.detail.formData).to.be.undefined;
         done();
       });
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
     });
 
     it('should set Content-Type header to file MIME type in raw format', (done) => {
@@ -585,7 +590,7 @@ describe('upload', () => {
         expect(contentType).to.equal('application/pdf');
         done();
       });
-      upload._uploadFile(pdfFile);
+      upload._queueFileUpload(pdfFile);
     });
 
     it('should set X-Filename header in raw format', (done) => {
@@ -596,7 +601,7 @@ describe('upload', () => {
         expect(filename).to.equal(encodeURIComponent(testFile.name));
         done();
       });
-      upload._uploadFile(testFile);
+      upload._queueFileUpload(testFile);
     });
 
     it('should encode special characters in X-Filename header in raw format', (done) => {
@@ -608,7 +613,7 @@ describe('upload', () => {
         expect(filename).to.equal('religion%20%C3%A5k4.pdf');
         done();
       });
-      upload._uploadFile(testFile);
+      upload._queueFileUpload(testFile);
     });
 
     it('should set Content-Type to application/octet-stream when file has no type in raw format', (done) => {
@@ -625,7 +630,7 @@ describe('upload', () => {
         expect(contentType).to.equal('application/octet-stream');
         done();
       });
-      upload._uploadFile(unknownFile);
+      upload._queueFileUpload(unknownFile);
     });
 
     it('should not set Content-Type header in multipart format', (done) => {
@@ -635,7 +640,7 @@ describe('upload', () => {
         expect(contentType).to.be.undefined;
         done();
       });
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
     });
 
     it('should not set X-Filename header in multipart format', (done) => {
@@ -645,7 +650,7 @@ describe('upload', () => {
         expect(filename).to.be.undefined;
         done();
       });
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
     });
 
     it('should ignore formDataName in raw format', (done) => {
@@ -657,7 +662,7 @@ describe('upload', () => {
         expect(e.detail.formData).to.be.undefined;
         done();
       });
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
     });
 
     it('should successfully complete upload in raw format', async () => {
@@ -665,7 +670,7 @@ describe('upload', () => {
       const successSpy = sinon.spy();
       upload.addEventListener('upload-success', successSpy);
 
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
       await clock.tickAsync(400);
 
       expect(successSpy.calledOnce).to.be.true;
@@ -682,7 +687,7 @@ describe('upload', () => {
         expect(e.detail.formData).to.be.undefined;
         done();
       });
-      upload._uploadFile(file);
+      upload._queueFileUpload(file);
     });
   });
 });

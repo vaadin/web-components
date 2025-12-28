@@ -59,9 +59,9 @@ export const tabStyles = css`
   }
 
   ::slotted(a) {
-    color: inherit;
-    cursor: inherit;
-    text-decoration: inherit;
+    color: inherit !important;
+    cursor: inherit !important;
+    text-decoration: inherit !important;
     display: flex;
     align-items: inherit;
     justify-content: inherit;

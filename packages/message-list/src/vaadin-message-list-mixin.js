@@ -6,6 +6,8 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
  * @polymerMixin
@@ -99,6 +101,9 @@ export const MessageListMixin = (superClass) =>
 
         this._renderMessages(items);
         this._setTabIndexesByIndex(focusedIndex);
+        if (oldItems.length) {
+          this.__enableScrollSnapping();
+        }
 
         requestAnimationFrame(() => {
           if (items.length > oldItems.length && closeToBottom) {
@@ -158,6 +163,16 @@ export const MessageListMixin = (superClass) =>
       if (this.items.length > 0) {
         this.scrollTop = this.scrollHeight - this.clientHeight;
       }
+    }
+
+    /** @private */
+    __enableScrollSnapping() {
+      this.$.list.style.setProperty('--_vaadin-message-list-scroll-snap-align', 'end');
+      // Disable scroll-snapping after a delay to allow the user to freely scroll
+      // without being snapped back to the bottom.
+      this.__debounceScrollSnapping = Debouncer.debounce(this.__debounceScrollSnapping, timeOut.after(500), () => {
+        this.$.list.style.removeProperty('--_vaadin-message-list-scroll-snap-align');
+      });
     }
 
     /** @private */

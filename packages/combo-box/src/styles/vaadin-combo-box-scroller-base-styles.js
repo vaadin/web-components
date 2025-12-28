@@ -17,7 +17,8 @@ export const comboBoxScrollerStyles = css`
   }
 
   #selector {
-    border: var(--vaadin-item-overlay-padding, 4px) solid transparent;
+    border: 0 solid transparent;
+    border-width: var(--vaadin-item-overlay-padding, 4px);
     position: relative;
     forced-color-adjust: none;
     min-height: var(--_items-min-height, auto);

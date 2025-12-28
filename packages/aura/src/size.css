@@ -39,10 +39,6 @@
   --vaadin-gap-m: var(--vaadin-padding-m);
   --vaadin-gap-l: var(--vaadin-padding-l);
   --vaadin-gap-xl: var(--vaadin-padding-xl);
-
-  --vaadin-field-baseline-input-height: calc(
-    1lh + round(var(--vaadin-padding-s) / 1.4, 1px) * 2 + var(--vaadin-input-field-border-width, 1px) * 2
-  );
 }
 
 @media (pointer: coarse) {

@@ -53,8 +53,11 @@ export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
  *
  * ### Styling
  *
- * See the [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
- * documentation for the available state attributes and stylable shadow parts.
+ * Accordion does not have own stylable shadow parts or state attributes. Instead, apply styles to
+ * the following components:
+ *
+ * - [`<vaadin-accordion-heading>`](#/elements/vaadin-accordion-heading)
+ * - [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

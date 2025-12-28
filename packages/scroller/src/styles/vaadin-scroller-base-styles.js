@@ -19,7 +19,7 @@ export const scrollerStyles = css`
     outline: none;
     flex: 1;
     box-sizing: border-box;
-    padding: 0 var(--vaadin-scroller-padding-inline);
+    padding: var(--vaadin-scroller-padding-block) var(--vaadin-scroller-padding-inline);
   }
 
   :host([focus-ring]) {
@@ -58,11 +58,15 @@ export const scrollerStyles = css`
   }
 
   :host::before {
-    margin-bottom: calc(var(--vaadin-scroller-padding-block) - var(--_indicator-height));
+    top: 0;
+    margin-bottom: calc(var(--_indicator-height) * -1);
+    translate: 0 calc(var(--vaadin-scroller-padding-block) * -1);
   }
 
   :host::after {
-    margin-top: calc(var(--vaadin-scroller-padding-block) - var(--_indicator-height));
+    bottom: 0;
+    margin-top: calc(var(--_indicator-height) * -1);
+    translate: 0 calc(var(--vaadin-scroller-padding-block) * 1);
   }
 
   :host([overflow~='top'])::before {

@@ -75,7 +75,7 @@ export const field = css`
         calc(
           var(
               --vaadin-field-baseline-input-height,
-              (1lh + var(--vaadin-padding-xs) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
+              (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
             ) *
             -1
         )
@@ -139,6 +139,7 @@ export const field = css`
   [part='error-message'] {
     width: min-content;
     min-width: 100%;
+    box-sizing: border-box;
   }
 
   [part='input-field'],

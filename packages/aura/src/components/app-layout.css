@@ -32,7 +32,7 @@ vaadin-app-layout[overlay]::part(drawer) {
 }
 
 vaadin-app-layout:is([overlay], :not([drawer-opened])),
-vaadin-app-layout:not(:has([slot='drawer'])) {
+vaadin-app-layout:not([has-drawer]) {
   padding-inline-start: var(--aura-app-layout-inset);
 }
 
@@ -52,18 +52,10 @@ vaadin-app-layout[has-navbar]::part(drawer) {
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {
-  --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
-  scrollbar-width: thin;
-}
-
-vaadin-app-layout > vaadin-scroller:nth-child(1 of [slot='drawer']) {
   /* TODO would need a dedicated padding-top property */
+  --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
   --vaadin-scroller-padding-block: var(--vaadin-padding-s);
-}
-
-vaadin-app-layout > vaadin-scroller:nth-last-child(1 of [slot='drawer']) {
-  /* TODO would need a dedicated padding-bottom property */
-  --vaadin-scroller-padding-block: var(--vaadin-padding-s);
+  scrollbar-width: thin;
 }
 
 vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {

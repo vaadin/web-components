@@ -12,6 +12,8 @@ export const valueButton = css`
     overflow: hidden;
     white-space: nowrap;
     width: 100%;
+    display: flex;
+    align-items: center;
   }
 
   ::slotted(*) {

@@ -62,5 +62,17 @@
       <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
       <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
     </vaadin-radio-group>
+    <hr style="margin-block: 24px" />
+    <h3>no-auto + max-concurrent-uploads=1</h3>
+    <p>Test: Add multiple files, click "Start" on the first file, then try clicking "Start" on another file. The start button should hide and show 0% progress while queued.</p>
+    <vaadin-upload id="no-auto-upload" target="/api/fileupload" no-auto max-concurrent-uploads="1"></vaadin-upload>
+    <script type="module">
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+
+      const noAutoUpload = document.querySelector('#no-auto-upload');
+      noAutoUpload._createXhr = () => {
+        return xhrCreator({ size: 512, uploadTime: 5000, stepTime: 1000 })();
+      };
+    </script>
   </body>
 </html>

@@ -477,8 +477,7 @@ describe('vaadin-icon', () => {
     });
   });
 
-  // TODO: Enable when unit tests are using the base theme
-  describe.skip('flex container', () => {
+  describe('flex container', () => {
     let container;
 
     beforeEach(async () => {

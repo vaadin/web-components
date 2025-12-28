@@ -1,7 +1,7 @@
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
 
-addGlobalThemeStyles(
+addGlobalStyles(
   'dev-common',
   css`
     :where(body) {

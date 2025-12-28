@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-dashboard-section host"] = 
-`<vaadin-dashboard-section role="section">
+`<vaadin-dashboard-section role="region">
 </vaadin-dashboard-section>
 `;
 /* end snapshot vaadin-dashboard-section host */

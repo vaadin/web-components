@@ -5,8 +5,10 @@
  */
 import type { ColumnBaseMixinClass } from './vaadin-grid-column.js';
 
-export interface GridColumnGroupMixin<TItem, Column extends ColumnBaseMixinClass<TItem, Column>>
-  extends ColumnBaseMixinClass<TItem, Column> {
+export interface GridColumnGroupMixin<
+  TItem,
+  Column extends ColumnBaseMixinClass<TItem, Column>,
+> extends ColumnBaseMixinClass<TItem, Column> {
   /**
    * Flex grow ratio for the column group as the sum of the ratios of its child columns.
    * @attr {number} flex-grow

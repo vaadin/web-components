@@ -34,13 +34,13 @@ describe('dashboard section', () => {
 
   describe('a11y', () => {
     it('should have role="section"', () => {
-      expect(section.getAttribute('role')).to.eql('section');
+      expect(section.getAttribute('role')).to.eql('region');
     });
 
     it('should not override custom role', async () => {
-      section = fixtureSync(`<vaadin-dashboard-section role="region"></vaadin-dashboard-section>`);
+      section = fixtureSync(`<vaadin-dashboard-section role="banner"></vaadin-dashboard-section>`);
       await nextFrame();
-      expect(section.getAttribute('role')).to.eql('region');
+      expect(section.getAttribute('role')).to.eql('banner');
     });
 
     it('should have text content for the title', async () => {

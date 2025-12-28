@@ -13,6 +13,7 @@
       import '@vaadin/icons/vaadin-iconset.js';
       import '@vaadin/tooltip';
       import { Iconset } from '@vaadin/icon/vaadin-iconset.js';
+      import { iconFontCss } from '../packages/icon/test/test-icon-font.js';
 
       const template = document.createElement('template');
       template.innerHTML = `
@@ -34,11 +35,30 @@
       `;
 
       Iconset.register('my-icons-iconset', 32, template);
+
+      const fontIconStyle = document.createElement('style');
+      fontIconStyle.textContent = iconFontCss;
+      document.head.append(fontIconStyle);
     </script>
 
     <style>
       h6 {
-        margin-top: var(--lumo-space-m);
+        margin-top: var(--vaadin-gap-m);
+        margin-bottom: var(--vaadin-gap-xs);
+      }
+
+      vaadin-icon {
+        outline: 1px dotted red;
+      }
+
+      .baseline {
+        --vaadin-icon-size: 100px;
+        font-size: 100px;
+      }
+
+      .baseline .my-icon-font {
+        line-height: inherit;
+        vertical-align: baseline;
       }
     </style>
   </head>
@@ -69,6 +89,15 @@
 
     <h6>SVG Data</h6>
     <vaadin-icon id="icon-data"></vaadin-icon>
+
+    <h6>Baseline</h6>
+    <div class="baseline">
+      <vaadin-icon icon="vaadin:phone"></vaadin-icon>
+      <vaadin-icon icon="my-icons-iconset:logo"></vaadin-icon>
+      <vaadin-icon font-family="lumo-icons" char="ea0e"></vaadin-icon>
+      <vaadin-icon icon-class="my-icon-font icon-before"></vaadin-icon>
+    </div>
+
     <script>
       const iconData = document.querySelector('#icon-data');
       iconData.src = `data:image/svg+xml,${encodeURIComponent(

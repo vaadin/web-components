@@ -14,6 +14,7 @@
   border-radius: var(--vaadin-radius-l);
   min-width: calc(1lh - 1em - 2px);
   --vaadin-icon-size: 0.75lh;
+  --aura-surface-level: 1;
 }
 
 .aura-badge.aura-badge-filled {
@@ -54,4 +55,12 @@ vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
   height: 0.5em;
   border-radius: 50%;
   background: currentColor;
+}
+
+.aura-badge:empty {
+  padding: 0;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  inset-inline-end: 5px;
 }

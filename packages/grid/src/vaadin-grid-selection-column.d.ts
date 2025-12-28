@@ -40,9 +40,7 @@ export * from './vaadin-grid-selection-column-mixin.js';
 declare class GridSelectionColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridSelectionColumn<TItem = GridDefaultItem>
-  extends GridSelectionColumnMixinClass<TItem>,
-    GridColumnMixin<TItem, GridColumn<TItem>>,
-    GridColumn<TItem> {
+  extends GridSelectionColumnMixinClass<TItem>, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {
   addEventListener<K extends keyof GridSelectionColumnEventMap>(
     type: K,
     listener: (this: GridSelectionColumn<TItem>, ev: GridSelectionColumnEventMap[K]) => void,

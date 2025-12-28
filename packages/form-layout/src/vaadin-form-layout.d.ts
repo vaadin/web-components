@@ -187,8 +187,7 @@ export * from './vaadin-form-layout-mixin.js';
  *
  * ### CSS Properties Reference
  *
- * The following custom CSS properties are available on the `<vaadin-form-layout>`
- * element:
+ * The following custom CSS properties are available for styling:
  *
  * Custom CSS property | Description | Default
  * ---|---|---

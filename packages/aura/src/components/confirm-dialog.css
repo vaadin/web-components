@@ -9,6 +9,6 @@ vaadin-confirm-dialog::part(confirm-button) {
   flex: 1;
 }
 
-vaadin-confirm-dialog :is([slot='cancel-button'], [slot='reject-button'], [slot='confirm-button']) {
+vaadin-confirm-dialog > :is([slot='cancel-button'], [slot='reject-button'], [slot='confirm-button']) {
   display: flex;
 }

@@ -527,6 +527,11 @@ export const TooltipMixin = (superClass) =>
         return;
       }
 
+      // Do not open if there is no content.
+      if (this._overlayElement.hasAttribute('hidden')) {
+        return;
+      }
+
       this.__focusInside = true;
 
       if (!this.__isTargetHidden && (!this.__hoverInside || !this.opened)) {
@@ -580,6 +585,11 @@ export const TooltipMixin = (superClass) =>
       }
 
       if (!this.__isShouldShow()) {
+        return;
+      }
+
+      // Do not open if there is no content.
+      if (this._overlayElement.hasAttribute('hidden')) {
         return;
       }
 

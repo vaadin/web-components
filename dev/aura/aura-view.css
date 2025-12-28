@@ -11,7 +11,7 @@
   flex: 1;
 }
 
-.aura-view > vaadin-scroller {
+.aura-view > * {
   --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
 }
 
@@ -28,13 +28,14 @@
   padding: var(--vaadin-padding-m);
   display: flex;
   align-items: center;
+  gap: var(--vaadin-gap-xs);
 }
 
 .aura-view > header,
 .aura-view-header,
 .aura-view[slot='navbar'] > footer,
 .aura-view-footer[slot='navbar'] {
-  padding-top: max(var(--vaadin-padding-s), var(--safe-area-inset-top));
+  padding-top: max(var(--vaadin-padding-m), var(--safe-area-inset-top));
 }
 
 .aura-view[slot='navbar'] > :is(header, footer),

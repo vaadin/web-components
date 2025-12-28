@@ -31,7 +31,7 @@ describe('timers', () => {
   });
 
   async function createTooltip(target) {
-    const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+    const tooltip = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
     tooltip.target = target;
 
     // We use fake timers in reset tests, so native timers won't work.

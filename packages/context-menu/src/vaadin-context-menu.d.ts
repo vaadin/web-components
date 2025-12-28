@@ -65,8 +65,7 @@ export interface ContextMenuCustomEventMap<TItem extends ContextMenuItem = Conte
 }
 
 export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenuItem>
-  extends HTMLElementEventMap,
-    ContextMenuCustomEventMap<TItem> {}
+  extends HTMLElementEventMap, ContextMenuCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.
@@ -290,9 +289,7 @@ declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> exten
 }
 
 interface ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>
-  extends ContextMenuMixinClass<TItem>,
-    ElementMixinClass,
-    ThemePropertyMixinClass {}
+  extends ContextMenuMixinClass<TItem>, ElementMixinClass, ThemePropertyMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

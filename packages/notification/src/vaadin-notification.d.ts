@@ -16,6 +16,7 @@ export * from './vaadin-notification-mixin.js';
 
 export interface ShowOptions {
   assertive?: boolean;
+  className?: string;
   duration?: number;
   position?: NotificationPosition;
   theme?: string;
@@ -105,8 +106,9 @@ declare class Notification extends NotificationMixin(ElementMixin(HTMLElement)) 
    * ```ts
    * {
    *   assertive?: boolean
-   *   position?: string
+   *   className?: string
    *   duration?: number
+   *   position?: string
    *   theme?: string
    * }
    * ```

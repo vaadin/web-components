@@ -98,6 +98,15 @@ describe('focus-trap', () => {
       focusableElements = getFocusableElements(overlayPart);
       expect(getFocusedElementIndex()).to.equal(-1);
     });
+
+    it('should not focus the overlay part when overlay is not visible', async () => {
+      overlay.parentElement.style.visibility = 'hidden';
+      overlay.focusTrap = true;
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      focusableElements = getFocusableElements(overlayPart);
+      expect(getFocusedElementIndex()).to.equal(-1);
+    });
   });
 
   describe('nested overlay', () => {

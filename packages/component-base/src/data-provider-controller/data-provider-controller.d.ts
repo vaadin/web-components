@@ -23,9 +23,10 @@ export type DataProvider<TItem, TDataProviderParams extends Record<string, unkno
 /**
  * A controller that stores and manages items loaded with a data provider.
  */
-export class DataProviderController<TItem, TDataProviderParams extends Record<string, unknown>>
-  implements ReactiveController
-{
+export class DataProviderController<
+  TItem,
+  TDataProviderParams extends Record<string, unknown>,
+> implements ReactiveController {
   /**
    * The controller host element.
    */

@@ -19,7 +19,7 @@ describe('adding files', () => {
 
   beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
-    upload.target = 'http://foo.com/bar';
+    upload.target = 'https://foo.com/bar';
     upload._createXhr = xhrCreator({ size: testFileSize, uploadTime: 200, stepTime: 50 });
     await nextRender();
     files = createFiles(2, testFileSize, 'application/x-octet-stream');
@@ -332,12 +332,21 @@ describe('adding files', () => {
 
   describe('start upload', () => {
     it('should automatically start upload', () => {
+      upload.maxConcurrentUploads = 1;
       const uploadStartSpy = sinon.spy();
       upload.addEventListener('upload-start', uploadStartSpy);
 
       files.forEach(upload._addFile.bind(upload));
-      expect(uploadStartSpy.calledTwice).to.be.true;
-      expect(upload.files[0].held).to.be.false;
+      // With queue behavior, only the first file starts uploading immediately
+      expect(uploadStartSpy.calledOnce).to.be.true;
+
+      // Files are prepended, so the first file added is at index 1
+      expect(upload.files[1].held).to.be.false;
+      expect(upload.files[1].uploading).to.be.true;
+
+      // Second file (at index 0) should be queued
+      expect(upload.files[0].held).to.be.true;
+      expect(upload.files[0].uploading).to.be.true;
     });
 
     it('should not automatically start upload when noAuto flag is set', () => {
@@ -348,6 +357,7 @@ describe('adding files', () => {
       files.forEach(upload._addFile.bind(upload));
       expect(uploadStartSpy.called).to.be.false;
       expect(upload.files[0].held).to.be.true;
+      expect(upload.files[0].uploading).to.not.be.true;
     });
   });
 

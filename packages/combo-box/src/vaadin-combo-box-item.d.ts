@@ -32,9 +32,7 @@ import type { ComboBoxDefaultItem, ComboBoxItemMixinClass } from './vaadin-combo
 declare class ComboBoxItem extends HTMLElement {}
 
 interface ComboBoxItem<TItem = ComboBoxDefaultItem>
-  extends ComboBoxItemMixinClass<TItem, ComboBox>,
-    DirMixinClass,
-    ThemableMixinClass {}
+  extends ComboBoxItemMixinClass<TItem, ComboBox>, DirMixinClass, ThemableMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

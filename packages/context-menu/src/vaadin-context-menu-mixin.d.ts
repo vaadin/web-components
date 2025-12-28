@@ -82,5 +82,6 @@ export declare class ContextMenuMixinClass {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export declare interface ContextMenuMixinClass<TItem extends ContextMenuItem = ContextMenuItem>
-  extends ItemsMixinClass<TItem> {}
+export declare interface ContextMenuMixinClass<
+  TItem extends ContextMenuItem = ContextMenuItem,
+> extends ItemsMixinClass<TItem> {}

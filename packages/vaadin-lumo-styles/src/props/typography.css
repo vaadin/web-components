@@ -7,6 +7,7 @@
 :where(:host) {
   /* prettier-ignore */
   --lumo-font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --vaadin-icon-baseline-font-family: var(--lumo-font-family);
 
   /* Font sizes */
   --lumo-font-size-xxs: 0.75rem;

@@ -55,7 +55,7 @@ vaadin-upload-file-list li {
   }
 }
 
-vaadin-upload:not([theme~='no-border']) vaadin-upload-file-list:has(li) {
+vaadin-upload:not([theme~='no-border']) > vaadin-upload-file-list:has(> ul > li) {
   border-top: 1px solid var(--vaadin-border-color-secondary);
   margin: calc(var(--vaadin-upload-padding) * -1);
   margin-top: var(--vaadin-upload-padding);
@@ -130,13 +130,13 @@ vaadin-upload[theme~='no-border'] {
   --_divider-offset-end: 0px;
   outline-offset: 2px;
 
-  vaadin-upload-file-list::part(list) {
+  > vaadin-upload-file-list::part(list) {
     display: flex;
     flex-direction: column;
     gap: var(--vaadin-gap-s);
   }
 
-  vaadin-upload-file-list li:first-child {
+  > vaadin-upload-file-list li:first-child {
     margin-top: var(--vaadin-gap-s);
   }
 

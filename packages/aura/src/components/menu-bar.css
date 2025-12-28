@@ -6,7 +6,7 @@
 
 @media (any-hover: hover) {
   /* Increase specificity to reset hover styles */
-  vaadin-menu-bar-button vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
+  vaadin-menu-bar-button > vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
     background: transparent;
   }
 }
@@ -18,4 +18,13 @@ vaadin-menu-bar-button[slot='overflow'] {
 
 vaadin-menu-bar-button[aria-haspopup='true']::part(suffix)::after {
   --vaadin-icon-visual-size: 90%;
+}
+
+vaadin-menu-bar-button > vaadin-menu-bar-item {
+  padding-inline: 0;
+}
+
+vaadin-menu-bar-button > vaadin-menu-bar-item::part(content) {
+  padding-inline: 0;
+  gap: var(--vaadin-button-gap, var(--vaadin-gap-s));
 }

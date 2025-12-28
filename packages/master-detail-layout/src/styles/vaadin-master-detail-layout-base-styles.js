@@ -31,6 +31,13 @@ export const masterDetailLayoutStyles = css`
   [part='_detail-internal'] {
     display: contents;
     justify-content: end;
+    /* Disable pointer events for the detail wrapper to allow clicks to pass through to the backdrop */
+    pointer-events: none;
+  }
+
+  [part='detail'] {
+    /* Re-enable pointer events for the actual detail content */
+    pointer-events: auto;
   }
 
   :host([orientation='vertical']) [part='_detail-internal'] {

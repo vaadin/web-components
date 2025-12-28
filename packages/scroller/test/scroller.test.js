@@ -147,4 +147,34 @@ describe('vaadin-scroller', () => {
       expect(scroller.getAttribute('overflow')).to.equal('top');
     });
   });
+
+  describe('full height content', () => {
+    let container;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="display: flex; flex-direction: column; height: 300px;">
+          <vaadin-scroller style="--vaadin-scroller-padding-block: 16px; --vaadin-scroller-padding-inline: 16px;">
+            <div style="height: 100%;">Content</div>
+          </vaadin-scroller>
+        </div>
+      `);
+      scroller = container.querySelector('vaadin-scroller');
+      await nextRender();
+    });
+
+    it('should not overflow when content has height 100%', () => {
+      const content = scroller.querySelector('div');
+      const scrollerRect = scroller.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
+
+      // Content bottom should not exceed scroller bottom
+      expect(contentRect.bottom).to.be.at.most(scrollerRect.bottom);
+    });
+
+    it('should not create scrollable area when content has height 100%', () => {
+      // If pseudo-elements don't affect layout, scrollHeight should equal clientHeight
+      expect(scroller.scrollHeight).to.equal(scroller.clientHeight);
+    });
+  });
 });

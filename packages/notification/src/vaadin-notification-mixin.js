@@ -229,6 +229,9 @@ export const NotificationMixin = (superClass) =>
       if (options && options.theme) {
         notification.setAttribute('theme', options.theme);
       }
+      if (options && options.className) {
+        notification.overlayClass = options.className;
+      }
       notification.renderer = renderer;
       document.body.appendChild(notification);
       notification.opened = true;

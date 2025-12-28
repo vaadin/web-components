@@ -52,6 +52,13 @@ describe('static helpers', () => {
     expect(notification.getAttribute('theme')).to.equal('error');
   });
 
+  it('show should set the overlayClass from className option', async () => {
+    const notification = Notification.show('Hello world', { className: 'my-custom-class' });
+    await nextFrame();
+    expect(notification.overlayClass).to.equal('my-custom-class');
+    expect(notification._card.classList.contains('my-custom-class')).to.be.true;
+  });
+
   it('show should work with a duration of zero', async () => {
     const notification = Notification.show('Hello world', { duration: 0 });
     await nextFrame();

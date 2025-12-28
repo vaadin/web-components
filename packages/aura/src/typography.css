@@ -6,6 +6,7 @@
   --aura-font-family-instrument-sans: 'Instrument Sans', var(--aura-font-family-system);
 
   --aura-font-family: var(--aura-font-family-instrument-sans);
+  --vaadin-icon-baseline-font-family: var(--aura-font-family);
 
   --aura-base-font-size: 14;
   --aura-base-line-height: 1.4;

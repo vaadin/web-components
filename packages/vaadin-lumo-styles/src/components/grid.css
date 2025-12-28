@@ -202,7 +202,6 @@
   [frozen],
   [frozen-to-end] {
     z-index: 2;
-    will-change: transform;
   }
 
   [no-scrollbars][safari] #table,

@@ -1,0 +1,4 @@
+:where(:root),
+:where(:host) {
+  --vaadin-charts-background: transparent;
+}

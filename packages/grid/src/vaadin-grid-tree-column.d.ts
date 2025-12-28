@@ -23,9 +23,7 @@ import type { GridTreeColumnMixinClass } from './vaadin-grid-tree-column-mixin.j
 declare class GridTreeColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridTreeColumn<TItem = GridDefaultItem>
-  extends GridTreeColumnMixinClass<TItem>,
-    GridColumnMixin<TItem, GridColumn<TItem>>,
-    GridColumn<TItem> {}
+  extends GridTreeColumnMixinClass<TItem>, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

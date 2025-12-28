@@ -5,13 +5,20 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
 
-addGlobalThemeStyles(
+CSS.registerProperty({
+  name: '--_min-width-labels-aside',
+  syntax: '<length>',
+  inherits: false,
+  initialValue: '0px',
+});
+
+addGlobalStyles(
   'vaadin-form-layout-base',
   css`
     @layer vaadin.base {
-      :where(html) {
+      html {
         --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
         --vaadin-form-layout-label-width: 8em;
         --vaadin-form-layout-column-spacing: var(--vaadin-gap-l);
@@ -130,10 +137,6 @@ export const formLayoutStyles = css`
       without a predefined width.
     */
     width: var(--_max-width);
-  }
-
-  :host([auto-responsive]) #layout::before {
-    background-position-y: var(--_min-width-labels-aside);
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {

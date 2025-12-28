@@ -17,9 +17,7 @@ export const menuBarStyles = css`
   [part='container'] {
     display: flex;
     flex-wrap: nowrap;
-    margin: calc((var(--vaadin-focus-ring-width) + 2px) * -1);
-    overflow: hidden;
-    padding: calc(var(--vaadin-focus-ring-width) + 2px);
+    contain: layout;
     position: relative;
     width: 100%;
     --_gap: var(--vaadin-menu-bar-gap, 0px);

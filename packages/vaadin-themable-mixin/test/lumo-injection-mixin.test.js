@@ -21,6 +21,7 @@ class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
 
       [part='content'] {
         transition: background-color 1ms linear;
+        color: black;
         background-color: yellow;
       }
     `;
@@ -97,6 +98,7 @@ const TEST_FOO_STYLES = `
 
   @media lumo_foo {
     [part='content'] {
+      color: red;
       background-color: green;
     }
   }
@@ -557,6 +559,35 @@ describe('Lumo injection', () => {
 
       await contentTransition();
       assertBaseStyle();
+    });
+  });
+
+  describe('forceUpdate', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-foo></test-foo>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should update component styles synchronously on forceUpdate', () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      document.head.appendChild(style);
+
+      document.__lumoInjector.forceUpdate();
+      expect(getComputedStyle(content).color).to.equal('rgb(255, 0, 0)'); // red
+
+      style.remove();
+
+      document.__lumoInjector.forceUpdate();
+      expect(getComputedStyle(content).color).to.equal('rgb(0, 0, 0)'); // black
     });
   });
 

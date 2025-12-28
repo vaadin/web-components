@@ -384,4 +384,83 @@ describe('keyboard navigation', () => {
       expect(getComputedStyle(container).opacity).to.equal('0');
     });
   });
+
+  describe('clearCache on item-property-changed', () => {
+    let grid;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid-pro>
+          <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name.last"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
+      `);
+
+      const users = [
+        { name: { first: 'Laura', last: 'Arnaud' } },
+        { name: { first: 'Fabien', last: 'Le Gall' } },
+        { name: { first: 'Ruben', last: 'Leclercq' } },
+      ];
+
+      grid.dataProvider = (params, callback) => {
+        const items = users.slice(params.page * params.pageSize, (params.page + 1) * params.pageSize);
+        queueMicrotask(() => callback(items, users.length));
+      };
+
+      grid.addEventListener('item-property-changed', () => {
+        grid.clearCache();
+      });
+
+      await nextResize(grid);
+      flushGrid(grid);
+    });
+
+    it('should not cause stack overflow when pressing Tab after editing a cell', async () => {
+      // Double-click the first cell to enter edit mode
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+      await nextFrame();
+
+      // Type a new value in the editor
+      const editor = getCellEditor(firstCell);
+      expect(editor).to.be.ok;
+      editor.value = 'New Value';
+
+      // Track _stopEdit calls to detect infinite recursion
+      const stopEditSpy = sinon.spy(grid, '_stopEdit');
+
+      // Press Tab to commit and move to the next cell
+      // This should not cause "Maximum call stack size exceeded" error
+      await sendKeys({ press: 'Tab' });
+      await nextFrame();
+
+      // If _stopEdit is called more than a few times, it indicates a recursion issue
+      // Normal behavior should call it once or twice at most
+      expect(stopEditSpy.callCount).to.be.lessThan(5);
+
+      // Verify the second cell is now in edit mode
+      const secondCell = getContainerCell(grid.$.items, 0, 1);
+      expect(getCellEditor(secondCell)).to.be.ok;
+    });
+
+    it('should update the cell value when pressing Tab after editing', async () => {
+      // Double-click the first cell to enter edit mode
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+      await nextFrame();
+
+      // Type a new value in the editor
+      const editor = getCellEditor(firstCell);
+      expect(editor).to.be.ok;
+      editor.value = 'New Value';
+
+      // Press Tab to commit and move to the next cell
+      await sendKeys({ press: 'Tab' });
+      await nextFrame();
+
+      // Verify the first cell value was updated
+      const cellContent = getContainerCellContent(grid.$.items, 0, 0);
+      expect(cellContent.textContent).to.equal('New Value');
+    });
+  });
 });

@@ -32,9 +32,7 @@ export * from './vaadin-grid-pro-edit-column-mixin.js';
 declare class GridProEditColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridProEditColumn<TItem = GridDefaultItem>
-  extends GridProEditColumnMixinClass<TItem>,
-    GridColumnMixin<TItem, GridColumn<TItem>>,
-    GridColumn<TItem> {}
+  extends GridProEditColumnMixinClass<TItem>, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
