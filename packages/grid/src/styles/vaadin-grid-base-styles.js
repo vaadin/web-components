@@ -384,7 +384,7 @@ export const gridStyles = css`
   .cell ::slotted(vaadin-grid-cell-content) {
     display: block;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: var(--vaadin-grid-cell-text-overflow, ellipsis);
     padding: var(--vaadin-grid-cell-padding, var(--_default-cell-padding));
     flex: 1;
     min-height: 1lh;
