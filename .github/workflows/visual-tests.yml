@@ -27,11 +27,6 @@ jobs:
           chrome-version: 135
           install-chromedriver: true
 
-      - name: Print Chrome version
-        shell: pwsh
-        run: |
-          & "${{ steps.setup-chrome.outputs.chrome-path }}" --no-sandbox --version
-
       - name: Install Dependencies
         run: yarn install --immutable
 

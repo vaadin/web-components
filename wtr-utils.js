@@ -285,8 +285,6 @@ const createVisualTestsConfig = async (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  console.log(process.env.CHROME_PATH);
-
   let browser;
   if (hasLocalParam || hasCIParam) {
     browser = playwrightLauncher({
@@ -294,6 +292,7 @@ const createVisualTestsConfig = async (theme, browserVersion) => {
       launchOptions: {
         ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }),
         headless: true,
+        args: ['--window-size=1024,768'],
       },
     });
   } else {
