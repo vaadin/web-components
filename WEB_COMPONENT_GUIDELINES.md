@@ -25,6 +25,7 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 ## Overview & Prerequisites
 
 ### Technology Stack
+
 - **Lit 3**: Base class and templating
 - **TypeScript 5**: Type definitions
 - **Lerna + Yarn Workspaces**: Monorepo management
@@ -32,6 +33,7 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 - **Mocha, Chai, Sinon**: Test framework
 
 ### Required Knowledge
+
 - Web Components fundamentals (Shadow DOM, Custom Elements)
 - Lit basics (templates, properties, lifecycle)
 - TypeScript basics (types, interfaces, generics)
@@ -43,6 +45,7 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 **These guidelines use the pure Lit pattern for new components**, which means:
 
 ✅ **Use:**
+
 - Lit's native `static properties` with `reflect`, `attribute` (use `attribute: false` for internal properties)
 - Lit lifecycle methods: `firstUpdated()`, `updated()`, `connectedCallback()`
 - Field initializers for default values
@@ -50,11 +53,13 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 - `LumoInjectionMixin` - **required** for Lumo theme auto-injection
 
 ❌ **Don't use (legacy Polymer patterns):**
+
 - `PolylitMixin` - provides Polymer-style properties (deprecated for new components)
 - Polymer-style property options: `value`, `observer`, `sync`, `notify`, `computed`
 - `ready()` lifecycle method
 
 **Important Notes:**
+
 - **LumoInjectionMixin is still required** for components to receive Lumo theme styles automatically. It enables the auto-injection mechanism that watches for Lumo CSS modules and injects them into component shadow DOMs.
 - **PolylitMixin is optional** - it only provides Polymer-style property behavior. Use pure Lit patterns instead.
 - Existing components use both mixins for backward compatibility. For new components, use LumoInjectionMixin but skip PolylitMixin.
@@ -64,23 +69,27 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 ## Naming Conventions
 
 ### Component Name
+
 - **Pattern**: `vaadin-{component-name}`
 - **Examples**: `vaadin-button`, `vaadin-text-field`, `vaadin-date-picker`
 - Use kebab-case (lowercase with hyphens)
 - Must start with `vaadin-` prefix
 
 ### Package Name
+
 - **Pattern**: `@vaadin/{component-name}`
 - **Example**: `@vaadin/button`
 - No `vaadin-` prefix in package name
 
 ### File Naming
+
 - **Main element**: `vaadin-{name}.js`
 - **Mixin**: `vaadin-{name}-mixin.js`
 - **Styles**: `vaadin-{name}-base-styles.js`
 - **Tests**: `{name}.test.ts` or `{name}.test.js`
 
 ### Class Naming
+
 - **Element class**: PascalCase of component name
   - `vaadin-button` → `Button`
   - `vaadin-date-picker` → `DatePicker`
@@ -133,6 +142,7 @@ packages/{component-name}/
 Development pages (dev pages) are HTML files used for manual testing and demonstration during component development. They are stored in the **root-level `dev/` directory**, not within individual component packages.
 
 **Location:**
+
 ```
 dev/
 ├── {name}.html           # Dev page for the component
@@ -141,6 +151,7 @@ dev/
 ```
 
 **Dev Page Structure:**
+
 ```html
 <!doctype html>
 <html lang="en">
@@ -172,6 +183,7 @@ dev/
 ```
 
 **Purpose:**
+
 - Manual testing during development
 - Visual verification of component appearance and behavior
 - Quick prototyping and experimentation
@@ -179,6 +191,7 @@ dev/
 - Demonstration of component features and variants
 
 **Best Practices:**
+
 - Keep dev pages simple and focused on the component
 - Use `common.js` for shared theme switching and utilities
 - Include examples of all major variants and states
@@ -200,6 +213,7 @@ export * from './src/vaadin-{name}.js';
 ```
 
 **Example** (`vaadin-button.js`):
+
 ```javascript
 import './src/vaadin-button.js';
 
@@ -343,6 +357,7 @@ export { {ComponentName} };
 ### 3. Component Mixin (`src/vaadin-{name}-mixin.js`)
 
 Use mixins to encapsulate component logic, especially when:
+
 - Logic is shared across multiple components
 - Component needs complex functionality
 - You want to separate concerns
@@ -450,6 +465,7 @@ class DatePicker extends
 ```
 
 **Important Notes:**
+
 - **LumoInjectionMixin is required** for Lumo theme support. It enables automatic injection of Lumo CSS modules into component shadow DOMs.
 - **Do NOT use PolylitMixin** - it provides legacy Polymer-style property handling (`observer`, `sync`, `notify`, `value`, `computed`). Use pure Lit property patterns instead.
 - All existing components use both `PolylitMixin` and `LumoInjectionMixin` for backward compatibility, but new components should only use `LumoInjectionMixin`.
@@ -485,6 +501,7 @@ static get properties() {
 ```
 
 **Property Configuration Options:**
+
 - `type`: Constructor (String, Number, Boolean, Array, Object)
 - `reflect`: Boolean - sync property value to attribute
 - `attribute`: String | false - custom attribute name, or false to disable attribute (use false for internal properties)
@@ -494,6 +511,7 @@ static get properties() {
 **Note:** While Lit supports `state: true` for internal reactive properties, the Vaadin codebase typically uses `attribute: false` instead to prevent properties from being registered in observedAttributes.
 
 **Setting Default Values:**
+
 ```javascript
 class MyComponent extends ... {
   // Use field initializers for defaults
@@ -536,6 +554,7 @@ _onMyPropertyChanged(newValue, oldValue) {
 ### 6. Event Firing
 
 **Standard Events:**
+
 ```javascript
 // Fire native event
 this.dispatchEvent(new Event('change', { bubbles: true }));
@@ -546,11 +565,12 @@ this.dispatchEvent(
     detail: { value: this.value },
     bubbles: true,
     composed: true,
-  })
+  }),
 );
 ```
 
 **Document events in JSDoc:**
+
 ```javascript
 /**
  * @fires {Event} input - Fired when the value is changed by the user.
@@ -616,6 +636,7 @@ class MyComponent extends ... {
 ```
 
 **Lifecycle Order:**
+
 1. `constructor()`
 2. `connectedCallback()` - first time connected
 3. `firstUpdated()` - after first render
@@ -657,6 +678,7 @@ class MyComponent extends ... {
 ```
 
 **Available Controllers:**
+
 - `TooltipController`: Manage slotted tooltips
 - `SlotController`: Observe and manage slots
 - `SlotChildObserveController`: Observe slot children
@@ -772,6 +794,7 @@ export const {componentName}Styles = css`
 ### 2. Styling Best Practices
 
 **CSS Custom Properties Naming:**
+
 - Use `--vaadin-{component}-{property}` pattern
 - Provide fallbacks to shared design tokens: `var(--vaadin-{component}-color, var(--vaadin-text-color))`
 - Common token categories:
@@ -781,10 +804,12 @@ export const {componentName}Styles = css`
   - Typography: `--vaadin-font-size-{size}`, `--vaadin-font-weight-{level}`
 
 **Shadow Parts:**
+
 - Use descriptive part names: `label`, `input-field`, `prefix`, `suffix`
 - Document all parts in JSDoc
 
 **State Attributes:**
+
 - Use attributes for state: `disabled`, `focused`, `focus-ring`, `has-value`, `invalid`
 - Always document state attributes
 
@@ -802,9 +827,11 @@ Components must support both **Lumo** and **Aura** themes. The Vaadin component 
 **IMPORTANT:** Components require CSS files in **three separate locations**:
 
 #### 1. Base Styles (Component Package)
+
 **Location:** `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
 
 These are the **unstyled, functional base styles** that every component needs regardless of theme. They define:
+
 - Basic layout and structure
 - CSS custom properties with fallbacks
 - Shadow part styling
@@ -812,6 +839,7 @@ These are the **unstyled, functional base styles** that every component needs re
 - Forced colors mode support
 
 **Example:** For `vaadin-button`, create:
+
 ```
 packages/button/src/styles/vaadin-button-base-styles.js
 ```
@@ -819,24 +847,29 @@ packages/button/src/styles/vaadin-button-base-styles.js
 This file is **imported directly in the component's main class** via the `static get styles()` method.
 
 #### 2. Lumo Theme Styles (Lumo Package)
+
 **Location:**
+
 - **Public CSS:** `packages/vaadin-lumo-styles/components/{name}.css`
 - **Implementation CSS:** `packages/vaadin-lumo-styles/src/components/{name}.css`
 
 These styles provide the **Lumo theme appearance** for the component. They override and extend the base styles with Lumo-specific design tokens and styling.
 
 **Example:** For `vaadin-button`, create:
+
 ```
 packages/vaadin-lumo-styles/components/button.css          (public, with injection markers)
 packages/vaadin-lumo-styles/src/components/button.css      (actual Lumo styles)
 ```
 
 #### 3. Aura Theme Styles (Aura Package)
+
 **Location:** `packages/aura/src/components/{name}.css`
 
 These styles provide the **Aura theme appearance** for the component. They use modern CSS features and override base styles with Aura-specific design tokens.
 
 **Example:** For `vaadin-button`, create:
+
 ```
 packages/aura/src/components/button.css
 ```
@@ -863,6 +896,7 @@ Aura Theme Package (packages/aura/)
 ```
 
 **Key Points:**
+
 - **Base styles** = In component package (CSS-in-JS using Lit's `css` template)
 - **Lumo styles** = In `vaadin-lumo-styles` package (CSS files)
 - **Aura styles** = In `aura` package (CSS files)
@@ -873,6 +907,7 @@ Aura Theme Package (packages/aura/)
 ### 1. Lumo Theme (`packages/vaadin-lumo-styles/`)
 
 **File Structure:**
+
 ```
 packages/vaadin-lumo-styles/
 ├── components/
@@ -883,6 +918,7 @@ packages/vaadin-lumo-styles/
 ```
 
 **Public CSS file** (`components/{name}.css`):
+
 ```css
 /**
  * @license
@@ -901,6 +937,7 @@ packages/vaadin-lumo-styles/
 **Note:** The injection markers (`--_lumo-vaadin-{name}-inject` and `--_lumo-vaadin-{name}-inject-modules`) are required for the Lumo theme injection system to work properly. The module name in `--_lumo-vaadin-{name}-inject-modules` must match the `@media` query name in the source CSS file.
 
 **Theme styles** (`src/components/{name}.css`):
+
 ```css
 /**
  * @license
@@ -980,6 +1017,7 @@ packages/vaadin-lumo-styles/
 ### 2. Aura Theme (`packages/aura/`)
 
 **File Structure:**
+
 ```
 packages/aura/
 ├── aura.css                           # Main theme entry point
@@ -998,6 +1036,7 @@ packages/aura/
 ```
 
 **Important Notes about Aura:**
+
 - Aura is a **modern theme** using cutting-edge CSS features
 - Requires browser support for: `:where`, `:is`, `light-dark()`, `oklch()`, `color-mix()`, relative color syntax
 - Uses PostCSS for build processing
@@ -1094,6 +1133,7 @@ packages/aura/
 Aura provides a comprehensive set of CSS custom properties:
 
 **Colors:**
+
 - `--aura-accent-color`: Primary accent color
 - `--aura-accent-text-color`: Text color for accent elements
 - `--aura-accent-contrast-color`: Contrast color for accent backgrounds
@@ -1103,6 +1143,7 @@ Aura provides a comprehensive set of CSS custom properties:
 - `--aura-background-color`: Background color (light-dark aware)
 
 **Typography:**
+
 - `--aura-font-family`: Default font family
 - `--aura-font-weight-normal`: 400
 - `--aura-font-weight-medium`: 500
@@ -1110,13 +1151,16 @@ Aura provides a comprehensive set of CSS custom properties:
 - `--aura-font-weight-bold`: 700
 
 **Surface System:**
+
 - `--aura-surface-level`: Surface elevation level (0-10)
 - `--aura-surface-opacity`: Surface opacity
 
 **Sizing:**
+
 - Uses the same `--vaadin-size-*` and `--vaadin-padding-*` tokens as Lumo
 
 **Best Practices for Aura:**
+
 1. Use `:is()` for component selectors to maintain consistent specificity
 2. Use `:where()` for variants to allow easier overriding
 3. Leverage `light-dark()` for automatic dark mode support
@@ -1625,6 +1669,7 @@ element.addEventListener('value-changed', (event) => {
 Ensure these aspects are tested:
 
 **Functionality:**
+
 - [ ] Custom element registration
 - [ ] Default property values
 - [ ] Property changes and observers
@@ -1634,6 +1679,7 @@ Ensure these aspects are tested:
 - [ ] State management
 
 **Accessibility:**
+
 - [ ] Default ARIA role
 - [ ] ARIA attributes (aria-disabled, aria-label, etc.)
 - [ ] Keyboard navigation
@@ -1641,12 +1687,14 @@ Ensure these aspects are tested:
 - [ ] Screen reader announcements
 
 **Interactions:**
+
 - [ ] Mouse events (click, hover, mousedown)
 - [ ] Keyboard events (Enter, Space, Arrow keys, Tab)
 - [ ] Touch events
 - [ ] Disabled state prevents interactions
 
 **Visual:**
+
 - [ ] Default appearance (Lumo)
 - [ ] Default appearance (Aura)
 - [ ] Theme variants (primary, tertiary, etc.) - both themes
@@ -1655,6 +1703,7 @@ Ensure these aspects are tested:
 - [ ] With slotted content (icons, etc.) - both themes
 
 **DOM Structure:**
+
 - [ ] Light DOM snapshots
 - [ ] Shadow DOM snapshots
 - [ ] State attribute changes
@@ -1709,6 +1758,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 ### 2. JSDoc Comments
 
 **Class-level documentation:**
+
 ```javascript
 /**
  * `<vaadin-{name}>` is a [detailed description of what the component does].
@@ -1754,6 +1804,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 ```
 
 **Property documentation:**
+
 ```javascript
 /**
  * The value of the component.
@@ -1764,6 +1815,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 ```
 
 **Method documentation:**
+
 ```javascript
 /**
  * Validates the component value.
@@ -1781,6 +1833,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 ### 1. ARIA Requirements
 
 **Role:**
+
 - Set appropriate default role in `ready()`:
   ```javascript
   if (!this.hasAttribute('role')) {
@@ -1789,6 +1842,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
   ```
 
 **Common ARIA attributes:**
+
 - `aria-disabled`: Set when disabled
 - `aria-label` / `aria-labelledby`: For accessible name
 - `aria-describedby`: For additional descriptions
@@ -1801,12 +1855,14 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 ### 2. Keyboard Support
 
 **Common patterns:**
+
 - `Enter` / `Space`: Activate
 - `Tab` / `Shift+Tab`: Navigate
 - `Escape`: Close/Cancel
 - Arrow keys: Navigate within component
 
 **Implementation:**
+
 ```javascript
 /**
  * @param {KeyboardEvent} event
@@ -1830,10 +1886,12 @@ _onKeyDown(event) {
 ### 3. Focus Management
 
 **Focusable:**
+
 - Set `tabindex="0"` by default (use TabindexMixin)
 - Make disabled elements non-focusable: `tabindex="-1"`
 
 **Focus indication:**
+
 - Support both `:focus` and `:focus-visible`
 - Add `focus-ring` attribute for keyboard focus
 - Use FocusMixin for consistent focus behavior
@@ -1841,6 +1899,7 @@ _onKeyDown(event) {
 ### 4. State Attributes
 
 Always sync state to attributes for styling:
+
 ```javascript
 static get properties() {
   return {
@@ -1865,7 +1924,7 @@ static get properties() {
 ```json
 {
   "name": "@vaadin/{name}",
-  "version": "25.0.0-beta7",
+  "version": "25.1.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -1899,17 +1958,17 @@ static get properties() {
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/a11y-base": "25.0.0-beta7",
-    "@vaadin/component-base": "25.0.0-beta7",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-beta7",
+    "@vaadin/a11y-base": "25.1.0-alpha0",
+    "@vaadin/component-base": "25.1.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "25.1.0-alpha0",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/aura": "25.0.0-beta7",
-    "@vaadin/chai-plugins": "25.0.0-beta7",
-    "@vaadin/test-runner-commands": "25.0.0-beta7",
+    "@vaadin/aura": "25.1.0-alpha0",
+    "@vaadin/chai-plugins": "25.1.0-alpha0",
+    "@vaadin/test-runner-commands": "25.1.0-alpha0",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-beta7",
+    "@vaadin/vaadin-lumo-styles": "25.1.0-alpha0",
     "sinon": "^21.0.0"
   },
   "web-types": [
@@ -1920,6 +1979,7 @@ static get properties() {
 ```
 
 **For Pro components**, change license:
+
 ```json
 {
   "license": "SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms"
@@ -1929,6 +1989,7 @@ static get properties() {
 ### 2. LICENSE File
 
 **Apache 2.0** (copy from existing component):
+
 ```
 Apache License
 Version 2.0, January 2004
@@ -1936,6 +1997,7 @@ Version 2.0, January 2004
 ```
 
 **Commercial** (for Pro components):
+
 ```
 Vaadin Commercial License and Service Terms
 
@@ -1945,6 +2007,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ### 3. License Headers
 
 **Apache 2.0:**
+
 ```javascript
 /**
  * @license
@@ -1954,6 +2017,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ```
 
 **Commercial:**
+
 ```javascript
 /**
  * @license
@@ -1974,11 +2038,13 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ### Pattern 1: Simple Interactive Component (Button-like)
 
 **Use when:**
+
 - Component is primarily interactive (clickable)
 - Has simple state (disabled, active, focused)
 - No complex data management
 
 **Mixins:**
+
 - ButtonMixin or ActiveMixin
 - FocusMixin
 - TabindexMixin
@@ -1988,17 +2054,20 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ### Pattern 2: Field Component (Input-like)
 
 **Use when:**
+
 - Component accepts user input
 - Needs validation
 - Part of a form
 
 **Mixins:**
+
 - InputControlMixin (used by combo-box, date-picker, time-picker, etc.)
 - ValidateMixin
 - InputConstraintsMixin
 - ClearButtonMixin (if clearable)
 
 **Additional requirements:**
+
 - Use InputContainer component
 - Implement label, helper text, error message slots
 - Follow field styling conventions
@@ -2008,14 +2077,17 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ### Pattern 3: Overlay Component (Popup/Dialog)
 
 **Use when:**
+
 - Component displays content in overlay
 - Needs positioning logic
 - Modal or non-modal behavior
 
 **Base class:**
+
 - Extend from `Overlay` component
 
 **Additional requirements:**
+
 - Use overlay positioning system
 - Implement focus trap
 - Handle Escape key
@@ -2026,11 +2098,13 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ### Pattern 4: List/Data Component
 
 **Use when:**
+
 - Component displays list of items
 - Supports data provider
 - Virtual scrolling needed
 
 **Controllers:**
+
 - DataProviderController
 - Virtualizer (for large lists)
 
@@ -2043,6 +2117,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 Use this checklist when creating a new component:
 
 ### File Structure
+
 - [ ] Created `packages/{name}/` directory
 - [ ] Created root export file: `vaadin-{name}.js`
 - [ ] Created root TypeScript definition: `vaadin-{name}.d.ts`
@@ -2056,6 +2131,7 @@ Use this checklist when creating a new component:
 - [ ] Copied LICENSE file
 
 ### Implementation
+
 - [ ] Element class extends correct mixin chain
 - [ ] `static get is()` returns correct tag name
 - [ ] `static get styles()` returns styles
@@ -2069,6 +2145,7 @@ Use this checklist when creating a new component:
 - [ ] `defineCustomElement()` called at end
 
 ### Styling
+
 - [ ] Base styles file created in `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
 - [ ] Base styles TypeScript definition created in `src/styles/vaadin-{name}-base-styles.d.ts`
 - [ ] Base styles use CSS custom properties with fallbacks
@@ -2079,6 +2156,7 @@ Use this checklist when creating a new component:
 - [ ] Base styles imported in component via `static get styles()`
 
 ### Theming
+
 - [ ] **Base CSS:** Created in component package at `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
 - [ ] **Lumo CSS:** Public file created at `packages/vaadin-lumo-styles/components/{name}.css` with injection markers
 - [ ] **Lumo CSS:** Implementation file created at `packages/vaadin-lumo-styles/src/components/{name}.css`
@@ -2092,6 +2170,7 @@ Use this checklist when creating a new component:
 - [ ] Both themes tested for visual consistency
 
 ### TypeScript
+
 - [ ] Mixin TypeScript definition created
 - [ ] Element TypeScript definition created
 - [ ] Event types defined
@@ -2101,6 +2180,7 @@ Use this checklist when creating a new component:
 - [ ] All exports properly typed
 
 ### Testing
+
 - [ ] Unit tests cover functionality
 - [ ] Unit tests cover properties
 - [ ] Unit tests cover events
@@ -2115,6 +2195,7 @@ Use this checklist when creating a new component:
 - [ ] Visual regression tests pass for both themes
 
 ### Documentation
+
 - [ ] README.md completed
 - [ ] Class JSDoc comment complete
 - [ ] Shadow parts documented
@@ -2125,6 +2206,7 @@ Use this checklist when creating a new component:
 - [ ] Methods documented
 
 ### Accessibility
+
 - [ ] Default ARIA role set
 - [ ] ARIA attributes added as needed
 - [ ] Keyboard navigation implemented
@@ -2133,6 +2215,7 @@ Use this checklist when creating a new component:
 - [ ] Screen reader tested (if possible)
 
 ### Package
+
 - [ ] package.json has all required fields
 - [ ] Dependencies correct (runtime vs dev)
 - [ ] License correct (Apache vs Commercial)
@@ -2140,6 +2223,7 @@ Use this checklist when creating a new component:
 - [ ] Version matches monorepo version
 
 ### Integration
+
 - [ ] Added to Lumo theme package
 - [ ] Added to Aura theme package
 - [ ] ESLint passes
@@ -2148,6 +2232,7 @@ Use this checklist when creating a new component:
 - [ ] Visual regression tests pass
 
 ### Final Validation
+
 - [ ] `yarn lint` passes
 - [ ] `yarn lint:types` passes
 - [ ] `yarn test --group {name}` passes
@@ -2165,15 +2250,18 @@ Use this checklist when creating a new component:
 ### Internal Dependencies
 
 **Core:**
+
 - `@vaadin/component-base`: Base mixins and utilities
 - `@vaadin/a11y-base`: Accessibility mixins
 - `@vaadin/vaadin-themable-mixin`: Theming system
 
 **Field Components:**
+
 - `@vaadin/field-base`: Field-specific mixins
 - `@vaadin/input-container`: Input container component
 
 **Other:**
+
 - `@vaadin/overlay`: Overlay positioning
 - `@vaadin/lit-renderer`: Renderer support
 
@@ -2194,6 +2282,7 @@ Use this checklist when creating a new component:
 ## Notes
 
 ### Pure Lit Pattern
+
 - **Always** use pure Lit patterns (no PolylitMixin) for new components
 - **Always** use LumoInjectionMixin for Lumo theme support
 - **Use** `firstUpdated()` and `updated()` instead of `ready()` and observers
@@ -2201,6 +2290,7 @@ Use this checklist when creating a new component:
 - **Use** `reflect: true` instead of `reflectToAttribute: true`
 
 ### General Best Practices
+
 - **Always** follow existing patterns from similar components
 - **Never** skip accessibility requirements
 - **Always** test in both themes (Lumo and Aura)
@@ -2213,7 +2303,9 @@ Use this checklist when creating a new component:
 - **Always** consider both light and dark modes (especially important for Aura)
 
 ### Migration from Legacy Patterns
+
 If you need to understand or maintain existing components that use PolylitMixin:
+
 - `value: defaultValue` → Use field initializer: `myProp = defaultValue;`
 - `observer: '_onPropChanged'` → Use `updated()` with `changedProperties.has('myProp')`
 - `reflectToAttribute: true` → Use `reflect: true`
@@ -2226,19 +2318,19 @@ If you need to understand or maintain existing components that use PolylitMixin:
 
 ## Theme Comparison: Lumo vs Aura
 
-| Aspect | Lumo | Aura |
-|--------|------|------|
-| **CSS Approach** | `@media` queries for encapsulation | Element selectors with `:is()` |
-| **Browser Support** | Broad (legacy browsers) | Modern browsers only |
-| **Color System** | HSL-based with custom properties | `oklch()` with relative colors |
-| **Dark Mode** | Separate theme variant | Built-in with `light-dark()` |
-| **Specificity** | Host-based (`:host`) | Element-based (`:is()`) |
-| **File Structure** | Separate public/src files | Direct component files |
-| **Build Process** | CSS import only | PostCSS processing |
-| **Design Philosophy** | Business applications | Modern, consumer-facing |
+| Aspect                | Lumo                               | Aura                           |
+| --------------------- | ---------------------------------- | ------------------------------ |
+| **CSS Approach**      | `@media` queries for encapsulation | Element selectors with `:is()` |
+| **Browser Support**   | Broad (legacy browsers)            | Modern browsers only           |
+| **Color System**      | HSL-based with custom properties   | `oklch()` with relative colors |
+| **Dark Mode**         | Separate theme variant             | Built-in with `light-dark()`   |
+| **Specificity**       | Host-based (`:host`)               | Element-based (`:is()`)        |
+| **File Structure**    | Separate public/src files          | Direct component files         |
+| **Build Process**     | CSS import only                    | PostCSS processing             |
+| **Design Philosophy** | Business applications              | Modern, consumer-facing        |
 
 ---
 
-*Last updated: 2025-12-28*
+_Last updated: 2025-12-28_
 
-*Note: This guide uses pure Lit patterns with LumoInjectionMixin. Existing components may use both PolylitMixin and LumoInjectionMixin for backward compatibility, but new components should only use LumoInjectionMixin (skip PolylitMixin).*
+_Note: This guide uses pure Lit patterns with LumoInjectionMixin. Existing components may use both PolylitMixin and LumoInjectionMixin for backward compatibility, but new components should only use LumoInjectionMixin (skip PolylitMixin)._
