@@ -190,7 +190,7 @@
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: var(--vaadin-grid-cell-text-overflow, ellipsis);
     cursor: inherit;
     padding: var(--_cell-padding);
   }
