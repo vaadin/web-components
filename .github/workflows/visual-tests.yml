@@ -21,6 +21,13 @@ jobs:
           node-version: '22'
           cache: 'yarn'
 
+      - uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: 135
+          install-chromedriver: true
+
+      - run: chrome --version
+
       - uses: samypr100/setup-dev-drive@v3
         with:
           workspace-copy: true
