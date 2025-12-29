@@ -215,6 +215,13 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
         window.structuredClone = (value) => structuredClone(value, { lossy: true });
       </script>
       <script type="module" src="${testFramework}"></script>
+      <script type="module">
+        import { setViewport } from '@vaadin/test-runner-commands';
+
+        before(async () => {
+          await setViewport({ width: 1024, height: 768 });
+        });
+      </script>
     </body>
   </html>
 `;
@@ -292,7 +299,6 @@ const createVisualTestsConfig = async (theme, browserVersion) => {
       launchOptions: {
         ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }),
         headless: true,
-        args: ['--window-size=1024,768'],
       },
     });
   } else {
