@@ -24,6 +24,10 @@ describe('theme', () => {
         vaadin-grid::part(highlight-row) {
           --vaadin-grid-row-highlight-background-color: #ede;
         }
+
+        vaadin-grid::part(custom-cell-padding) {
+          --vaadin-grid-cell-padding: 20px;
+        }
       </style>
     `);
     element.items = users;
@@ -60,5 +64,16 @@ describe('theme', () => {
     };
     await nextRender();
     await visualDiff(element, 'highlight-row-color');
+  });
+
+  it('custom cell padding', async () => {
+    element.style.setProperty('--vaadin-grid-cell-padding', '10px');
+    element.cellPartNameGenerator = (_, model) => {
+      if (model.item === users[2]) {
+        return 'custom-cell-padding';
+      }
+    };
+    await nextRender();
+    await visualDiff(element, 'custom-cell-padding');
   });
 });
