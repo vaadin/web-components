@@ -11,6 +11,8 @@ snapshots["vaadin-message default"] =
     <span part="time">
     </span>
   </div>
+  <slot name="attachments">
+  </slot>
   <div part="message">
     <slot>
     </slot>
@@ -30,6 +32,8 @@ snapshots["vaadin-message userName"] =
     <span part="time">
     </span>
   </div>
+  <slot name="attachments">
+  </slot>
   <div part="message">
     <slot>
     </slot>
@@ -49,6 +53,8 @@ snapshots["vaadin-message time"] =
       long ago
     </span>
   </div>
+  <slot name="attachments">
+  </slot>
   <div part="message">
     <slot>
     </slot>

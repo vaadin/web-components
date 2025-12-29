@@ -23,6 +23,12 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *     user-img = "/static/img/avatar.jpg">There is no real ending. It's just the place where you stop the story.</vaadin-message>
  * ```
  *
+ * ### Slots
+ *
+ * Slot name     | Description
+ * --------------|----------------
+ * `attachments` | Content to be displayed above the message text. Used for file and image attachments.
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
@@ -70,6 +76,7 @@ class Message extends MessageMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
           <span part="name">${this.userName}</span>
           <span part="time">${this.time}</span>
         </div>
+        <slot name="attachments"></slot>
         <div part="message"><slot></slot></div>
       </div>
     `;
