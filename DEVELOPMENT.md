@@ -34,6 +34,13 @@ Start the development server:
 yarn start
 ```
 
+Start the development server with a specific theme:
+
+```sh
+yarn start:lumo  # Start with Lumo theme
+yarn start:aura  # Start with Aura theme
+```
+
 ## Linting
 
 Run all the code style checks:
