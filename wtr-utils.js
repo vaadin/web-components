@@ -219,7 +219,7 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
         import { setViewport } from '@vaadin/test-runner-commands';
 
         before(async () => {
-          await setViewport({ width: 1024, height: 768 });
+          await setViewport({ width: 1024, height: 627 });
         });
       </script>
     </body>
