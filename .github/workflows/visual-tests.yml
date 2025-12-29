@@ -34,7 +34,7 @@ jobs:
 
       - name: Visual tests
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: yarn test:base --CI --group button
+        run: yarn test:base --CI
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
