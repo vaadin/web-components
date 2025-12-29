@@ -275,7 +275,11 @@ Add the new version branch to the `CheckoutBranch` parameter:
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):
 
 ```sh
-yarn icons
+npm -i @web-padawan/wc-icon-tool
+```
+
+```sh
+wc-icon-tool
 ```
 
 ### Using a local clone of the repo
