@@ -16,14 +16,13 @@ export declare class ThemePropertyMixinClass {
    *
    * Enables the component implementation to propagate the `theme`
    * attribute value to the sub-components in Shadow DOM by binding
-   * the sub-component's "theme" attribute to the `theme` property of
-   * the host.
+   * the sub-component's "theme" attribute using the Lit template:
    *
-   * **NOTE:** Extending the mixin only provides the property for binding,
-   * and does not make the propagation alone.
-   *
-   * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/styling/styling-components/#sub-components).
-   * page for more information.
+   * ```html
+   * <vaadin-notification-card
+   *   theme="${ifDefined(this._theme)}"
+   * ></vaadin-notification-card>
+   * ```
    *
    * @protected
    */
