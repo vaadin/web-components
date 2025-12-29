@@ -1905,11 +1905,7 @@ static get properties() {
   return {
     disabled: {
       type: Boolean,
-      reflectToAttribute: true,
-    },
-    focused: {
-      type: Boolean,
-      reflectToAttribute: true,
+      reflect: true,
     },
   };
 }
