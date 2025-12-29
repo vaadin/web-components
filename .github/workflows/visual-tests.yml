@@ -8,7 +8,7 @@ permissions:
 jobs:
   base:
     name: Base
-    runs-on: windows-latest
+    runs-on: windows-2022
     if: github.repository_owner == 'vaadin'
 
     steps:
@@ -40,4 +40,4 @@ jobs:
         with:
           name: base-screenshots
           path: |
-            /packages/*/test/visual/base/screenshots/*/failed/*.png
+            packages/*/test/visual/base/screenshots/*/failed/*.png
