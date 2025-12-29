@@ -285,12 +285,14 @@ const createVisualTestsConfig = async (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
+  console.log(process.env.CHROME_PATH);
+
   let browser;
   if (hasLocalParam || hasCIParam) {
     browser = playwrightLauncher({
       product: 'chromium',
       launchOptions: {
-        channel: 'chrome',
+        ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }),
         headless: true,
       },
     });

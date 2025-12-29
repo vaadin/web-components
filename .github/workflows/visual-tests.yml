@@ -27,22 +27,17 @@ jobs:
           chrome-version: 135
           install-chromedriver: true
 
-      - run: ${{ steps.setup-chrome.outputs.chrome-path }} --version
-
-      - uses: samypr100/setup-dev-drive@v3
-        with:
-          workspace-copy: true
-          drive-size: '5GB'
-
-      - working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: pwd
+      - name: Print Chrome version
+        shell: pwsh
+        run: |
+          & "${{ steps.setup-chrome.outputs.chrome-path }}" --no-sandbox --version
 
       - name: Install Dependencies
-        working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
         run: yarn install --immutable
 
       - name: Visual tests
-        working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: yarn test:base --CI
 
       - uses: actions/upload-artifact@v6
@@ -50,4 +45,4 @@ jobs:
         with:
           name: base-screenshots
           path: |
-            ${{ env.DEV_DRIVE_WORKSPACE }}/packages/*/test/visual/base/screenshots/*/failed/*.png
+            /packages/*/test/visual/base/screenshots/*/failed/*.png
