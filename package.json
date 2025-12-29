@@ -11,7 +11,6 @@
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dev:build": "yarn workspace dev build",
     "dev:start": "yarn workspace dev start",
-    "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
     "lint:js": "eslint",
