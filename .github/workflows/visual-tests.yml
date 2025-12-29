@@ -25,7 +25,7 @@ jobs:
         id: setup-chrome
         with:
           chrome-version: 135
-          install-chromedriver: true
+          chrome-channel: stable
 
       - name: Install Dependencies
         run: yarn install --immutable
