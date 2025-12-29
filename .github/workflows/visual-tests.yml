@@ -19,6 +19,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: 'yarn'
 
       - uses: samypr100/setup-dev-drive@v3
         with:
@@ -30,7 +31,7 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
-        run: yarn install --immutable --no-cache --verbose
+        run: yarn install --immutable
 
       - name: Visual tests
         working-directory: ${{ env.DEV_DRIVE_WORKSPACE }}
