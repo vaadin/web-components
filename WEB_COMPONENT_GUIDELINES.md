@@ -2232,6 +2232,7 @@ Use this checklist when creating a new component:
 - [ ] `yarn lint` passes
 - [ ] `yarn lint:types` passes
 - [ ] `yarn test --group {name}` passes
+- [ ] `yarn test:base --group {name}` passes
 - [ ] `yarn test:lumo --group {name}` passes
 - [ ] `yarn test:aura --group {name}` passes
 - [ ] Component works in demo/dev environment with both themes
