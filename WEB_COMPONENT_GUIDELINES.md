@@ -2150,6 +2150,7 @@ Use this checklist when creating a new component:
 - [ ] `yarn lint` passes
 - [ ] `yarn lint:types` passes
 - [ ] `yarn test --group {name}` passes
+- [ ] `yarn test:snapshots --group {name}` passes
 - [ ] `yarn test:base --group {name}` passes
 - [ ] `yarn test:lumo --group {name}` passes
 - [ ] `yarn test:aura --group {name}` passes
@@ -2241,11 +2242,10 @@ If you need to understand or maintain existing components that use PolylitMixin:
 | **Dark Mode**         | Separate theme variant             | Built-in with `light-dark()`   |
 | **Specificity**       | Host-based (`:host`)               | Element-based (`:is()`)        |
 | **File Structure**    | Separate public/src files          | Direct component files         |
-| **Build Process**     | CSS import only                    | PostCSS processing             |
 | **Design Philosophy** | Business applications              | Modern, consumer-facing        |
 
 ---
 
-_Last updated: 2025-12-28_
+_Last updated: 2025-12-30_
 
 _Note: This guide uses pure Lit patterns with LumoInjectionMixin. Existing components may use both PolylitMixin and LumoInjectionMixin for backward compatibility, but new components should only use LumoInjectionMixin (skip PolylitMixin)._
