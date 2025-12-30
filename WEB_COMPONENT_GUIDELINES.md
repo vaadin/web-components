@@ -589,7 +589,7 @@ Lit provides several lifecycle methods. Use these for initialization and updates
 ```javascript
 class MyComponent extends ... {
   /**
-   * Called once when the component is first connected to the DOM.
+   * Called whenever the component is connected to the DOM.
    * Use for setting up event listeners, etc.
    */
   connectedCallback() {
@@ -599,7 +599,7 @@ class MyComponent extends ... {
   }
 
   /**
-   * Called when the component is disconnected from the DOM.
+   * Called whenever the component is disconnected from the DOM.
    * Use for cleanup (removing event listeners, etc.)
    */
   disconnectedCallback() {
@@ -638,7 +638,7 @@ class MyComponent extends ... {
 **Lifecycle Order:**
 
 1. `constructor()`
-2. `connectedCallback()` - first time connected
+2. `connectedCallback()` - when added to the DOM
 3. `firstUpdated()` - after first render
 4. `updated()` - after every render
 5. `disconnectedCallback()` - when removed from DOM
