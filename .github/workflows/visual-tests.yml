@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   base:
-    name: Base
+    name: Lumo
     runs-on: windows-2022
     if: github.repository_owner == 'vaadin'
 
@@ -32,11 +32,11 @@ jobs:
       - name: Visual tests
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: yarn test:base --CI
+        run: yarn test:lumo --CI
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
-          name: base-screenshots
+          name: lumo-screenshots
           path: |
-            packages/*/test/visual/base/screenshots/*/failed/*.png
+            packages/*/test/visual/lumo/screenshots/*/failed/*.png
