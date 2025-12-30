@@ -1742,11 +1742,12 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 **Role:**
 
 - Set appropriate default role in `ready()`:
-  ```javascript
-  if (!this.hasAttribute('role')) {
-    this.setAttribute('role', 'button'); // or appropriate role
-  }
-  ```
+
+```javascript
+if (!this.hasAttribute('role')) {
+  this.setAttribute('role', 'button'); // or appropriate role
+}
+```
 
 **Common ARIA attributes:**
 
