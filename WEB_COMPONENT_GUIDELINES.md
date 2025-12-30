@@ -1751,7 +1751,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 
 **Role:**
 
-- Set appropriate default role in `ready()`:
+- Set appropriate default role in `firstUpdated()`:
 
 ```javascript
 if (!this.hasAttribute('role')) {
@@ -2055,7 +2055,7 @@ Use this checklist when creating a new component:
 - [ ] State attributes added and documented
 - [ ] Events fired correctly
 - [ ] Event types documented in JSDoc
-- [ ] Controllers initialized in `ready()`
+- [ ] Controllers initialized in `firstUpdated()`
 - [ ] `defineCustomElement()` called at end
 
 ### Styling
