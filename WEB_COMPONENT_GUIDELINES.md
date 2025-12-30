@@ -1345,7 +1345,7 @@ describe('vaadin-{name}', () => {
 ```javascript
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-{name}.js';
 
 describe('vaadin-{name}', () => {
@@ -1374,11 +1374,6 @@ describe('vaadin-{name}', () => {
       await sendKeys({ press: 'Tab' });
       await expect(element).dom.to.equalSnapshot();
     });
-
-    it('active', async () => {
-      mousedown(element);
-      await expect(element).dom.to.equalSnapshot();
-    });
   });
 
   describe('shadow', () => {
@@ -1389,11 +1384,58 @@ describe('vaadin-{name}', () => {
 });
 ```
 
-### 3. Visual Tests - Lumo (`test/visual/lumo/{name}.test.js`)
+### 3. Visual Tests - Base styles (`test/visual/base/{name}.test.js`)
 
 ```javascript
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
+import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../../src/vaadin-{name}.js';
+
+describe('{name}', () => {
+  let div, element;
+
+  beforeEach(() => {
+    div = document.createElement('div');
+    div.style.display = 'inline-block';
+    div.style.padding = '10px';
+    element = fixtureSync('<vaadin-{name}>Label</vaadin-{name}>', div);
+  });
+
+  afterEach(async () => {
+    await resetMouse();
+  });
+
+  describe('basic', () => {
+    it('basic', async () => {
+      await visualDiff(div, 'basic');
+    });
+
+    it('disabled', async () => {
+      element.disabled = true;
+      await visualDiff(div, 'disabled');
+    });
+
+    it('focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-ring');
+    });
+  });
+
+  describe('theme', () => {
+    it('primary', async () => {
+      element.setAttribute('theme', 'primary');
+      await visualDiff(div, 'theme-primary');
+    });
+  });
+});
+```
+
+### 4. Visual Tests - Lumo (`test/visual/lumo/{name}.test.js`)
+
+```javascript
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/{name}.css';
@@ -1427,11 +1469,6 @@ describe('{name}', () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'focus-ring');
     });
-
-    it('active', async () => {
-      mousedown(element);
-      await visualDiff(div, 'active');
-    });
   });
 
   describe('theme', () => {
@@ -1445,20 +1482,15 @@ describe('{name}', () => {
       await sendMouseToElement({ type: 'move', element });
       await visualDiff(div, 'theme-primary-hover');
     });
-
-    it('tertiary', async () => {
-      element.setAttribute('theme', 'tertiary');
-      await visualDiff(div, 'theme-tertiary');
-    });
   });
 });
 ```
 
-### 4. Visual Tests - Aura (`test/visual/aura/{name}.test.js`)
+### 5. Visual Tests - Aura (`test/visual/aura/{name}.test.js`)
 
 ```javascript
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-{name}.js';
@@ -1491,11 +1523,6 @@ describe('{name}', () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'focus-ring');
     });
-
-    it('active', async () => {
-      mousedown(element);
-      await visualDiff(div, 'active');
-    });
   });
 
   describe('theme', () => {
@@ -1509,16 +1536,11 @@ describe('{name}', () => {
       await sendMouseToElement({ type: 'move', element });
       await visualDiff(div, 'theme-primary-hover');
     });
-
-    it('tertiary', async () => {
-      element.setAttribute('theme', 'tertiary');
-      await visualDiff(div, 'theme-tertiary');
-    });
   });
 });
 ```
 
-### 5. TypeScript Type Tests (`test/typings/{name}.types.ts`)
+### 6. TypeScript Type Tests (`test/typings/{name}.types.ts`)
 
 ```typescript
 import '../../vaadin-{name}.js';
@@ -1549,7 +1571,7 @@ element.addEventListener('value-changed', (event) => {
 });
 ```
 
-### 6. Test Coverage Requirements
+### 7. Test Coverage Requirements
 
 Ensure these aspects are tested:
 
@@ -1580,11 +1602,11 @@ Ensure these aspects are tested:
 
 **Visual:**
 
+- [ ] Default appearance (Base styles)
 - [ ] Default appearance (Lumo)
 - [ ] Default appearance (Aura)
 - [ ] Theme variants (primary, tertiary, etc.) - both themes
 - [ ] State variations (disabled, focused, active, hover) - both themes
-- [ ] Size variants (small, large) - both themes
 - [ ] With slotted content (icons, etc.) - both themes
 
 **DOM Structure:**
