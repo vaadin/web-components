@@ -46,6 +46,18 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * `focused`    | Set when the item is focused.
  * `selected`   | Set when the item is selected
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                  |
+ * :------------------------------------|
+ * | `--vaadin-item-border-radius`      |
+ * | `--vaadin-item-checkmark-color`    |
+ * | `--vaadin-item-checkmark-display`  |
+ * | `--vaadin-item-gap`                |
+ * | `--vaadin-item-height`             |
+ * | `--vaadin-item-padding`            |
+ * | `--vaadin-item-text-align`         |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
