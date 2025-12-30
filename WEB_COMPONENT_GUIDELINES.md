@@ -2103,10 +2103,10 @@ Use this checklist when creating a new component:
 - [ ] DOM snapshot tests created
 - [ ] Visual tests for Lumo created in `test/visual/lumo/`
 - [ ] Visual tests for Aura created in `test/visual/aura/`
-- [ ] Visual tests for base theme created in `test/visual/base/`
+- [ ] Visual tests for base styles created in `test/visual/base/`
 - [ ] TypeScript type tests created
 - [ ] All tests pass
-- [ ] Visual regression tests pass for both themes
+- [ ] Visual regression tests pass for base styles and both themes
 
 ### Documentation
 
