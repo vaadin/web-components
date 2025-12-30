@@ -684,9 +684,6 @@ class MyComponent extends ... {
 - `SlotChildObserveController`: Observe slot children
 - `MediaQueryController`: React to media query changes
 - `OverflowController`: Detect overflow
-- `LabelController`: Manage label association
-- `ErrorController`: Manage error messages
-- `HelperController`: Manage helper text
 
 ---
 
