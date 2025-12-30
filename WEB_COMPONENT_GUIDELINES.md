@@ -169,15 +169,8 @@ dev/
   </head>
 
   <body>
-    <!-- Component examples and test cases -->
+    <!-- Component example -->
     <vaadin-{name}>Example</vaadin-{name}>
-
-    <h3>Theme Variants</h3>
-    <vaadin-{name} theme="primary">Primary</vaadin-{name}>
-    <vaadin-{name} theme="secondary">Secondary</vaadin-{name}>
-
-    <h3>States</h3>
-    <vaadin-{name} disabled>Disabled</vaadin-{name}>
   </body>
 </html>
 ```
@@ -709,11 +702,9 @@ export const {componentName}Styles = css`
     align-items: center;
     box-sizing: border-box;
 
-    /* Sizing with CSS custom properties */
-    width: var(--vaadin-{name}-width, auto);
-    height: var(--vaadin-{name}-height, auto);
-    padding: var(--vaadin-{name}-padding, var(--vaadin-padding-container));
-    margin: var(--vaadin-{name}-margin, 0);
+    /* Sizing */
+    padding: var(--vaadin-{name}-padding, var(--vaadin-padding-m));
+    gap: var(--vaadin-{name}-gap, var(--vaadin-gap-s));
 
     /* Typography */
     font-family: var(--vaadin-{name}-font-family, inherit);
@@ -759,31 +750,6 @@ export const {componentName}Styles = css`
     --vaadin-{name}-background: var(--vaadin-text-color);
     --vaadin-{name}-text-color: var(--vaadin-background-color);
     --vaadin-{name}-border-color: transparent;
-  }
-
-  /* Parts */
-  [part='label'] {
-    display: inline-flex;
-  }
-
-  [part='prefix'],
-  [part='suffix'] {
-    flex: none;
-  }
-
-  /* Forced colors mode (Windows High Contrast) */
-  @media (forced-colors: active) {
-    :host {
-      --vaadin-{name}-background: ButtonFace;
-      --vaadin-{name}-text-color: ButtonText;
-      --vaadin-{name}-border-color: ButtonText;
-    }
-
-    :host([disabled]) {
-      opacity: 1;
-      --vaadin-{name}-text-color: GrayText;
-      --vaadin-{name}-border-color: GrayText;
-    }
   }
 `;
 ```
@@ -832,7 +798,7 @@ These are the **unstyled, functional base styles** that every component needs re
 - Basic layout and structure
 - CSS custom properties with fallbacks
 - Shadow part styling
-- State attributes (`:host([disabled])`, `:host([focused])`, etc.)
+- State attributes (`:host([disabled])`, `:host([focus-ring])`, etc.)
 - Forced colors mode support
 
 **Example:** For `vaadin-button`, create:
@@ -944,46 +910,17 @@ packages/vaadin-lumo-styles/
 @media lumo_components_{name} {
   :host {
     /* Sizing */
-    --lumo-{name}-size: var(--lumo-size-m);
-    min-width: var(--vaadin-{name}-min-width, calc(var(--_size) * 2));
-    height: var(--_size);
-    padding: var(--vaadin-{name}-padding, 0 calc(var(--_size) / 3 + var(--lumo-border-radius-m) / 2));
-    margin: var(--vaadin-{name}-margin, var(--lumo-space-xs) 0);
+    padding: var(--vaadin-{name}-padding, var(--lumo-space-m));
+    gap: var(--vaadin-{name}-gap, var(--lumo-space-s));
 
     /* Style */
     font-family: var(--lumo-font-family);
     font-size: var(--vaadin-{name}-font-size, var(--lumo-font-size-m));
     font-weight: var(--vaadin-{name}-font-weight, 500);
-    color: var(--_lumo-{name}-text-color);
-    background: var(--_lumo-{name}-background);
+    color: var(--vaadin-{name}-text-color, var(--lumo-primary-text-color));
+    background: var(--vaadin--{name}-background, var(--lumo-contrast-5pct));
     border: var(--vaadin-{name}-border, none);
     border-radius: var(--vaadin-{name}-border-radius, var(--lumo-border-radius-m));
-
-    --_size: var(--vaadin-{name}-height, var(--lumo-{name}-size));
-    --_lumo-{name}-background: var(--vaadin-{name}-background, var(--lumo-contrast-5pct));
-    --_lumo-{name}-text-color: var(--vaadin-{name}-text-color, var(--lumo-primary-text-color));
-  }
-
-  :host([theme~='small']) {
-    font-size: var(--lumo-font-size-s);
-    --lumo-{name}-size: var(--lumo-size-s);
-  }
-
-  :host([theme~='large']) {
-    font-size: var(--lumo-font-size-l);
-    --lumo-{name}-size: var(--lumo-size-l);
-  }
-
-  /* Hover */
-  @media (any-hover: hover) {
-    :host(:not([disabled]):hover)::before {
-      opacity: 0.02;
-    }
-  }
-
-  /* Active */
-  :host([active])::before {
-    opacity: 0.05;
   }
 
   /* Keyboard focus */
@@ -1002,11 +939,6 @@ packages/vaadin-lumo-styles/
     background: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
     font-weight: 600;
-  }
-
-  :host([theme~='tertiary']) {
-    background: transparent;
-    box-shadow: none;
   }
 }
 ```
@@ -1046,15 +978,11 @@ packages/aura/
 /* Aura uses modern CSS features and advanced color manipulation */
 :where(:root),
 :where(:host) {
-  --vaadin-{name}-shadow: 0 1px 4px -1px hsla(0, 0%, 0%, 0.07);
+  --vaadin-{name}-shadow: var(--aura-shadow-xs);
 }
 
 /* Use :is() for better selector specificity control */
 :is(vaadin-{name}) {
-  transition: scale 180ms;
-  position: relative;
-  --aura-surface-level: 6;
-  --aura-surface-opacity: 0.3;
   box-shadow: var(--vaadin-{name}-shadow);
 }
 
@@ -1070,58 +998,18 @@ packages/aura/
   --vaadin-{name}-font-weight: var(--aura-font-weight-semibold);
   --vaadin-{name}-text-color: var(--aura-accent-contrast-color);
   --vaadin-{name}-background: var(--aura-accent-color);
-  --vaadin-{name}-shadow: 0 2px 3px -1px hsla(0, 0%, 0%, 0.24);
-}
-
-/* Interactive state overlay using ::before pseudo-element */
-:is(vaadin-{name}):not([disabled])::before {
-  content: '';
-  position: absolute;
-  inset: calc(var(--vaadin-{name}-border-width, 1px) * -1);
-  pointer-events: none;
-  border-radius: inherit;
-  background-color: currentColor;
-  opacity: 0;
-  transition:
-    opacity 100ms,
-    background-color 100ms;
-}
-
-/* Advanced color manipulation using oklch and relative colors */
-@supports (color: hsl(0 0 0)) {
-  :is(vaadin-{name}):not([disabled])::before {
-    background-color: oklch(from currentColor calc(l + 0.4 - c) c h / calc(1 - l / 2));
-  }
+  --vaadin-{name}-shadow: var(--aura-shadow-s);
 }
 
 /* Hover state */
 @media (any-hover: hover) {
-  :is(vaadin-{name}):hover:not([disabled], [active])::before {
+  :is(vaadin-{name}):hover:not([disabled])::before {
     opacity: 0.03;
   }
 
-  :is(vaadin-{name})[theme~='primary']:hover:not([disabled], [active])::before {
+  :is(vaadin-{name})[theme~='primary']:hover:not([disabled])::before {
     opacity: 0.12;
   }
-}
-
-/* Active state with scale transform on high-DPI displays */
-@media (min-resolution: 2x) {
-  :is(vaadin-{name})[active]:not([disabled]) {
-    scale: 0.98;
-    transition-duration: 50ms;
-  }
-}
-
-/* Active state overlay */
-:is(vaadin-{name})[active]:not([disabled])::before {
-  transition-duration: 0s;
-  opacity: 0.08;
-  background: oklch(from currentColor min(c, 1 - l + c) calc(c * 0.9) h);
-}
-
-:is(vaadin-{name})[theme~='primary'][active]:not([disabled])::before {
-  opacity: 0.16;
 }
 ```
 
