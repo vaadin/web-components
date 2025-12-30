@@ -303,6 +303,10 @@ export const ChartMixin = (superClass) =>
           reflectToAttribute: true,
           sync: true,
         },
+
+        __styledMode: {
+          type: Boolean,
+        },
       };
     }
 
@@ -322,6 +326,7 @@ export const ChartMixin = (superClass) =>
         '__updateTitle(title, configuration)',
         '__updateType(type, configuration)',
         '__updateAdditionalOptions(additionalOptions)',
+        '__updateStyledMode(__styledMode)',
       ];
     }
 
@@ -947,7 +952,7 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __initChart(options) {
       this.__initEventsListeners(options);
-      this.__updateStyledMode(options);
+      this.__styledMode = options.chart.styledMode;
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
       } else if (this.timeline) {
@@ -960,8 +965,7 @@ export const ChartMixin = (superClass) =>
     }
 
     /** @private */
-    __updateStyledMode(options) {
-      const styledMode = options.chart.styledMode;
+    __updateStyledMode(styledMode) {
       this.$.chart.toggleAttribute('styled-mode', !!styledMode);
     }
 
