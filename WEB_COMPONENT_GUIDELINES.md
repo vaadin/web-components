@@ -1130,7 +1130,11 @@ export interface {ComponentName}CustomEventMap {
 }
 
 /**
- * `<vaadin-{name}>` is a [brief description].
+ * `<vaadin-{name}>` is a [detailed description of what the component does].
+ *
+ * ```html
+ * <vaadin-{name}>Example</vaadin-{name}>
+ * ```
  *
  * ### Styling
  *
@@ -1142,10 +1146,17 @@ export interface {ComponentName}CustomEventMap {
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description
- * -----------|-------------
- * `disabled` | Set when the element is disabled
- * `focused`  | Set when the element is focused
+ * Attribute    | Description
+ * -------------|-------------
+ * `disabled`   | Set when the element is disabled
+ * `focused`    | Set when the element is focused
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property               |
+ * :---------------------------------|
+ * | `--vaadin-{name}-background`    |
+ * | `--vaadin-{name}-border-color`  |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
@@ -1681,7 +1692,6 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
  * Part name | Description
  * ----------|-------------
  * `label`   | The label element
- * `prefix`  | A slot for content before the label
  *
  * The following state attributes are available for styling:
  *
