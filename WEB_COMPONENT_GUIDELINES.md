@@ -1968,7 +1968,6 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 - InputControlMixin (used by combo-box, date-picker, time-picker, etc.)
 - ValidateMixin
 - InputConstraintsMixin
-- ClearButtonMixin (if clearable)
 
 **Additional requirements:**
 
@@ -1988,7 +1987,8 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 
 **Base class:**
 
-- Extend from `Overlay` component
+- Use `OverlayMixin` from `packages/overlay/`
+- Use `PositionMixin` from `packages/overlay/` if needed
 
 **Additional requirements:**
 
