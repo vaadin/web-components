@@ -1690,12 +1690,12 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
  * `disabled`   | Set when the element is disabled
  * `focused`    | Set when the element is focused
  *
- * The following custom properties are available:
+ * The following custom CSS properties are available for styling:
  *
- * Custom property              | Description                  | Default
- * -----------------------------|------------------------------|----------
- * `--vaadin-{name}-width`      | Width of the component       | `auto`
- * `--vaadin-{name}-font-size`  | Font size                    | `inherit`
+ * Custom CSS property               |
+ * :---------------------------------|
+ * | `--vaadin-{name}-background`    |
+ * | `--vaadin-{name}-border-color`  |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
