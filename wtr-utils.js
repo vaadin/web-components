@@ -299,6 +299,7 @@ const createVisualTestsConfig = async (theme, browserVersion) => {
       launchOptions: {
         ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }),
         headless: true,
+        ignoreDefaultArgs: ['--hide-scrollbars'],
       },
     });
   } else {

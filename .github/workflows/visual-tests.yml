@@ -8,7 +8,7 @@ permissions:
 jobs:
   base:
     name: Base
-    runs-on: windows-2022
+    runs-on: windows-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
@@ -25,7 +25,6 @@ jobs:
         id: setup-chrome
         with:
           chrome-version: 135
-          chrome-channel: stable
 
       - name: Install Dependencies
         run: yarn install --immutable
