@@ -11,7 +11,6 @@
  * - if cherry-pick cannot be done, the original PR will be labelled with need to pick manually
  *
  */
-import axios from 'axios';
 import https from 'https';
 import { exec as execCallback } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -36,16 +35,14 @@ if (!token) {
 async function getAllCommits() {
   const url = `https://api.github.com/repos/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`;
   try {
-    const options = {
+    const res = await fetch(url, {
       headers: {
         'User-Agent': 'Vaadin Cherry Pick',
         Authorization: `token ${token}`,
         'Content-Type': 'application/json',
       },
-    };
-
-    const res = await axios.get(url, options);
-    let data = res.data;
+    });
+    let data = await res.json();
     data = data.filter((da) => da.labels.length > 0 && da.merged_at !== null);
 
     if (data.length === 0) {
@@ -69,10 +66,7 @@ async function getCommit(commitURL) {
       },
     };
 
-    const res = await axios.get(commitURL, options);
-    const data = res.data;
-
-    return data;
+    return await fetch(commitURL, options).then((res) => res.json());
   } catch (error) {
     console.error(`Cannot get the commit. ${error}`);
     process.exit(1);
@@ -126,32 +120,30 @@ async function filterCommits(commits) {
 
 async function labelCommit(url, label) {
   const issueURL = `${url.replace('pulls', 'issues')}/labels`;
-  const options = {
+
+  await fetch(issueURL, {
+    method: 'POST',
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
       Authorization: `token ${token}`,
     },
-  };
-
-  await axios.post(issueURL, { labels: [label] }, options);
+    body: JSON.stringify({ labels: [label] }),
+  });
 }
 
 async function postComment(url, userName, mergedBy, branch, message) {
   const issueURL = `${url.replace('pulls', 'issues')}/comments`;
-  const options = {
+
+  await fetch(issueURL, {
+    method: 'POST',
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
       Authorization: `token ${token}`,
     },
-  };
-
-  await axios.post(
-    issueURL,
-    {
+    body: JSON.stringify({
       body: `Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`,
-    },
-    options,
-  );
+    }),
+  });
 }
 
 function createPR(title, head, base) {
