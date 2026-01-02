@@ -304,6 +304,7 @@ export const ChartMixin = (superClass) =>
           sync: true,
         },
 
+        /** @private */
         __styledMode: {
           type: Boolean,
           sync: true,
@@ -327,7 +328,6 @@ export const ChartMixin = (superClass) =>
         '__updateTitle(title, configuration)',
         '__updateType(type, configuration)',
         '__updateAdditionalOptions(additionalOptions)',
-        '__updateStyledMode(__styledMode)',
       ];
     }
 
@@ -963,11 +963,6 @@ export const ChartMixin = (superClass) =>
       }
 
       this.__forceResize();
-    }
-
-    /** @private */
-    __updateStyledMode(styledMode) {
-      this.$.chart.toggleAttribute('styled-mode', !!styledMode);
     }
 
     /** @protected */
