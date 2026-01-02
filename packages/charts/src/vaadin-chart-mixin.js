@@ -276,7 +276,6 @@ export const ChartMixin = (superClass) =>
         /** @private */
         __styledMode: {
           type: Boolean,
-          sync: true,
         },
       };
     }
