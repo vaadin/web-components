@@ -220,7 +220,7 @@ This is the core component file. Follow this exact structure:
 ```javascript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
@@ -358,7 +358,7 @@ Use mixins to encapsulate component logic, especially when:
 ```javascript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
@@ -689,7 +689,7 @@ Component base styles using Lit's `css` template:
 ```javascript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/component-base/src/styles/style-props.js';
@@ -885,7 +885,7 @@ packages/vaadin-lumo-styles/
 ```css
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/components/{name}.css';
@@ -904,7 +904,7 @@ packages/vaadin-lumo-styles/
 ```css
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_{name} {
@@ -1063,7 +1063,7 @@ Aura provides a comprehensive set of CSS custom properties:
 ```typescript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
@@ -1095,7 +1095,7 @@ export declare class {ComponentName}MixinClass {
 ```typescript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -1199,7 +1199,7 @@ export * from './src/vaadin-{name}.js';
 ```typescript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { CSSResult } from 'lit';
@@ -1925,7 +1925,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ```javascript
 /**
  * @license
- * Copyright (c) {year} - 2025 Vaadin Ltd.
+ * Copyright (c) {year} - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 ```
@@ -1935,7 +1935,7 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 ```javascript
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -2246,6 +2246,6 @@ If you need to understand or maintain existing components that use PolylitMixin:
 
 ---
 
-_Last updated: 2025-12-30_
+_Last updated: 2026-01-02_
 
 _Note: This guide uses pure Lit patterns with LumoInjectionMixin. Existing components may use both PolylitMixin and LumoInjectionMixin for backward compatibility, but new components should only use LumoInjectionMixin (skip PolylitMixin)._
