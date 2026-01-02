@@ -177,7 +177,11 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   render() {
     return html`
       <div id="wrapper" style="height: 100%; width: 100%; position: relative;">
-        <div id="chart" style="height: 100%; width: 100%; position: absolute;"></div>
+        <div
+          id="chart"
+          ?styled-mode="${this.__styledMode}"
+          style="height: 100%; width: 100%; position: absolute;"
+        ></div>
       </div>
       <slot id="slot"></slot>
     `;
