@@ -193,7 +193,7 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolymerElement))) {
           display: none !important;
         }
       </style>
-      <div id="chart"></div>
+      <div id="chart" styled-mode$="[[__styledMode]]"></div>
       <slot id="slot"></slot>
     `;
   }
