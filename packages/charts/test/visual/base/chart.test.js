@@ -9,9 +9,8 @@ describe('chart', () => {
   let element;
 
   describe('empty', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync('<vaadin-chart title="The chart title"></vaadin-chart>');
-      await nextFrame();
     });
 
     it('empty with title', async () => {
