@@ -709,6 +709,8 @@ export const GridMixin = (superClass) =>
      * @protected
      */
     _renderColumnTree(columnTree) {
+      performance.mark('vaadin:grid:renderColumnTree:start');
+
       iterateChildren(this.$.items, (row) => {
         this.__initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
         this.__updateRow(row);
@@ -755,6 +757,8 @@ export const GridMixin = (superClass) =>
       this.__a11yUpdateFooterRows();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
+
+      performance.measure('vaadin:grid:renderColumnTree', 'vaadin:grid:renderColumnTree:start');
     }
 
     /** @private */
@@ -796,6 +800,8 @@ export const GridMixin = (superClass) =>
      * @private
      */
     __updateRow(row) {
+      performance.mark('vaadin:grid:updateRow:start');
+
       this.__a11yUpdateRowRowindex(row);
       this.__updateRowOrderParts(row);
 
@@ -804,36 +810,39 @@ export const GridMixin = (superClass) =>
         this.__updateRowLoading(row, false);
       } else {
         this.__updateRowLoading(row, true);
-        return;
       }
 
-      row._item = item;
-      const model = this.__getRowModel(row);
+      if (item) {
+        row._item = item;
+        const model = this.__getRowModel(row);
 
-      this._toggleDetailsCell(row, model.detailsOpened);
+        this._toggleDetailsCell(row, model.detailsOpened);
 
-      this.__a11yUpdateRowLevel(row, model.level);
-      this.__a11yUpdateRowSelected(row, model.selected);
+        this.__a11yUpdateRowLevel(row, model.level);
+        this.__a11yUpdateRowSelected(row, model.selected);
 
-      this.__updateRowStateParts(row, model);
+        this.__updateRowStateParts(row, model);
 
-      this._generateCellPartNames(row, model);
-      this._filterDragAndDrop(row, model);
-      this.__updateDragSourceParts(row, model);
+        this._generateCellPartNames(row, model);
+        this._filterDragAndDrop(row, model);
+        this.__updateDragSourceParts(row, model);
 
-      iterateChildren(row, (cell) => {
-        if (cell._column && !cell._column.isConnected) {
-          return;
-        }
-        if (cell._renderer) {
-          const owner = cell._column || this;
-          cell._renderer.call(owner, cell._content, owner, model);
-        }
-      });
+        iterateChildren(row, (cell) => {
+          if (cell._column && !cell._column.isConnected) {
+            return;
+          }
+          if (cell._renderer) {
+            const owner = cell._column || this;
+            cell._renderer.call(owner, cell._content, owner, model);
+          }
+        });
 
-      this._updateDetailsCellHeight(row);
+        this._updateDetailsCellHeight(row);
 
-      this.__a11yUpdateRowExpanded(row, model.expanded);
+        this.__a11yUpdateRowExpanded(row, model.expanded);
+      }
+
+      performance.measure('vaadin:grid:updateRow', 'vaadin:grid:updateRow:start');
     }
 
     /** @private */
