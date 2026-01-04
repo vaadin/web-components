@@ -7,124 +7,36 @@ permissions:
 
 jobs:
   base:
-    name: Base
-    runs-on: ubuntu-22.04
-    if: github.repository_owner == 'vaadin'
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Visual tests
-        uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test:base
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: base-screenshots
-          path: |
-            packages/*/test/visual/base/screenshots/*/failed/*.png
-  lumo:
     name: Lumo
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
     if: github.repository_owner == 'vaadin'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'yarn'
 
+      - uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
+        with:
+          chrome-version: 135
+
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: yarn install --immutable
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
         env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test:lumo
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: yarn test:lumo --CI
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: lumo-screenshots
           path: |
             packages/*/test/visual/lumo/screenshots/*/failed/*.png
-            packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
-
-  aura:
-    name: Aura
-    runs-on: ubuntu-22.04
-    if: github.repository_owner == 'vaadin'
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Visual tests (default)
-        uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test:aura
-
-      - name: Visual tests (dark)
-        uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test:aura:dark
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: base-screenshots
-          path: |
-            packages/*/test/visual/aura/screenshots/dark/*/failed/*.png
-            packages/*/test/visual/aura/screenshots/default/*/failed/*.png

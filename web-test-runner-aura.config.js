@@ -1,3 +1,3 @@
 import { createVisualTestsConfig } from './wtr-utils.js';
 
-export default createVisualTestsConfig('aura', '143');
+export default await createVisualTestsConfig('aura', '143');

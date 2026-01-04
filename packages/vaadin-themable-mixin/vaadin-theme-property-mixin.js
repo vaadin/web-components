@@ -41,6 +41,8 @@ export const ThemePropertyMixin = (superClass) =>
     attributeChangedCallback(name, oldValue, newValue) {
       super.attributeChangedCallback(name, oldValue, newValue);
 
+      // TEST
+
       if (name === 'theme') {
         this._set_theme(newValue);
       }
