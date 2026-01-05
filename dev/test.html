@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <outer-tree-grid></outer-tree-grid>
+
+    <script type="module">
+      import '@vaadin/grid/all-imports.js';
+      import { css, html, LitElement } from 'lit';
+      import { columnBodyRenderer, gridRowDetailsRenderer } from '@vaadin/grid/lit.js';
+
+      customElements.define(
+        'inner-grid-component',
+        class InnerGridComponent extends LitElement {
+          static get properties() {
+            return {
+              items: {
+                type: Object,
+              },
+              detailsOpenedItems: {
+                type: Object,
+              },
+            };
+          }
+
+          static styles = css`
+            :host {
+              display: block;
+              padding: 16px;
+              background: #f5f5f5;
+            }
+          `;
+
+          constructor() {
+            super();
+            this.items = [];
+            this.detailsOpenedItems = [];
+          }
+
+          connectedCallback() {
+            super.connectedCallback();
+            this.items = Array.from({ length: 10 }, (_, i) => ({
+              id: i + 1,
+              name: `Item ${i + 1}`,
+              value: Math.floor(Math.random() * 1000),
+            }));
+          }
+
+          render() {
+            return html`
+              <h4>Inner Grid (click any row to trigger scroll jump)</h4>
+              <vaadin-grid
+                all-rows-visible
+                .items="${this.items}"
+                .detailsOpenedItems="${this.detailsOpenedItems}"
+                ${gridRowDetailsRenderer(this.innerRowDetailsRenderer)}
+                @active-item-changed="${this.onActiveItemChanged}"
+              >
+                <vaadin-grid-column path="id" header="ID" width="60px"></vaadin-grid-column>
+                <vaadin-grid-column path="name" header="Name"></vaadin-grid-column>
+                <vaadin-grid-column path="value" header="Value"></vaadin-grid-column>
+              </vaadin-grid>
+            `;
+          }
+
+          onActiveItemChanged(event) {
+            const item = event.detail.value;
+            // THIS IS WHERE THE SCROLL JUMP HAPPENS
+            // When detailsOpenedItems changes, grid internally calls scrollIntoView
+            this.detailsOpenedItems = item ? [item] : [];
+          }
+
+          innerRowDetailsRenderer = (item) => {
+            return html`
+              <div style="padding: 16px; background: #e0e0e0;">
+                <h5>Details for ${item.name}</h5>
+                <p>Value: ${item.value}</p>
+              </div>
+            `;
+          };
+        },
+      );
+
+      customElements.define(
+        'outer-tree-grid',
+        class OuterTreeGrid extends LitElement {
+          static get properties() {
+            return {
+              expandedItems: {
+                type: Object,
+              },
+              detailsOpenedItems: {
+                type: Object,
+              },
+            };
+          }
+
+          static styles = css`
+            :host {
+              display: block;
+            }
+            .spacer {
+              height: 500px;
+              background: linear-gradient(to bottom, #fff, #eee);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          `;
+
+          constructor() {
+            super();
+            this.expandedItems = [];
+            this.detailsOpenedItems = [];
+          }
+
+          render() {
+            return html`
+              <div class="spacer"><p>Scroll down to see tree grid</p></div>
+
+              <h2>Outer Tree Grid</h2>
+              <vaadin-grid
+                .dataProvider="${this.treeDataProvider}"
+                .detailsOpenedItems="${this.detailsOpenedItems}"
+                .expandedItems="${this.expandedItems}"
+                @expanded-items-changed="${this.onExpandedItemsChanged}"
+                ${gridRowDetailsRenderer(this.rowDetailsRenderer)}
+                .itemIdPath="${'id'}"
+                .itemHasChildrenPath="${'parent'}"
+              >
+                <vaadin-grid-column path="name" ${columnBodyRenderer(this.treeToggleRenderer)}></vaadin-grid-column>
+              </vaadin-grid>
+
+              <div class="spacer"><p>More content below</p></div>
+            `;
+          }
+
+          // CRITICAL: This handler syncs expandedItems with detailsOpenedItems
+          // This is exactly how our production code works
+          onExpandedItemsChanged(event) {
+            this.expandedItems = event.detail.value;
+            // detailsOpenedItems follows expandedItems
+            this.detailsOpenedItems = this.expandedItems;
+          }
+
+          treeDataProvider = (params, callback) => {
+            if (!params.parentItem) {
+              const weeks = [
+                { id: 'week-01', name: 'Week 01.2025', parent: true },
+                { id: 'week-02', name: 'Week 02.2025', parent: true },
+                { id: 'week-03', name: 'Week 03.2025', parent: true },
+                { id: 'week-04', name: 'Week 04.2025', parent: true },
+                { id: 'week-05', name: 'Week 05.2025', parent: true },
+              ];
+              callback(weeks, weeks.length);
+            } else {
+              callback([], 0);
+            }
+          };
+
+          treeToggleRenderer = (item, model) => {
+            return html`
+              <vaadin-grid-tree-toggle
+                .level="${model.level ?? 0}"
+                .expanded="${this.expandedItems.some((exp) => exp.id === item.id)}"
+                @expanded-changed="${(e) => {
+                  if (e.detail.value) {
+                    this.expandedItems = [...this.expandedItems, item];
+                    this.detailsOpenedItems = [...this.detailsOpenedItems, item];
+                  } else {
+                    this.expandedItems = this.expandedItems.filter((exp) => exp.id !== item.id);
+                    this.detailsOpenedItems = this.detailsOpenedItems.filter((exp) => exp.id !== item.id);
+                  }
+                }}"
+              ></vaadin-grid-tree-toggle>
+              <span>${item.name}</span>
+            `;
+          };
+
+          rowDetailsRenderer = (item) => {
+            if (this.expandedItems.some((exp) => exp.id === item.id)) {
+              return html`<inner-grid-component></inner-grid-component>`;
+            }
+            return html``;
+          };
+        },
+      );
+    </script>
+  </body>
+</html>
