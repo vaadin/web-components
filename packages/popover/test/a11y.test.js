@@ -19,16 +19,13 @@ describe('a11y', () => {
   beforeEach(async () => {
     [popover, target] = fixtureSync(`
       <div>
-        <vaadin-popover></vaadin-popover>
+        <vaadin-popover>
+          <input />
+        </vaadin-popover>
         <button>Target</button>
       </div>
     `).children;
     popover.target = target;
-    popover.renderer = (root) => {
-      if (!root.firstChild) {
-        root.appendChild(document.createElement('input'));
-      }
-    };
     await nextRender();
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });

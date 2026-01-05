@@ -25,18 +25,14 @@ describe('trigger', () => {
   });
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
+    popover = fixtureSync(`
+      <vaadin-popover>
+        <input />
+        <div>Some text content</div>
+      </vaadin-popover>
+    `);
     target = fixtureSync('<button>Target</button>');
     popover.target = target;
-    popover.renderer = (root) => {
-      if (!root.firstChild) {
-        root.appendChild(document.createElement('input'));
-
-        const div = document.createElement('div');
-        div.textContent = 'Some text content';
-        root.appendChild(div);
-      }
-    };
     await nextRender();
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
