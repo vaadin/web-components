@@ -159,7 +159,7 @@ function afterOverlayClosingFinished(overlay, callback) {
         expect(owner.hasAttribute('closing')).to.be.true;
       });
 
-      it('should clear closing attribute on the overlay after it has closed', async () => {
+      it.only('should clear closing attribute on the overlay after it has closed', async () => {
         overlay.opened = true;
 
         await new Promise((resolve) => {
@@ -170,6 +170,29 @@ function afterOverlayClosingFinished(overlay, callback) {
 
         await new Promise((resolve) => {
           afterOverlayClosingFinished(overlay, resolve);
+        });
+
+        expect(overlay.hasAttribute('closing')).to.be.false;
+        expect(owner.hasAttribute('closing')).to.be.false;
+      });
+
+      it.only('should clear closing attribute on the overlay if animation has been cancelled', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        debugger;
+
+        await new Promise((resolve) => {
+          overlay.addEventListener('animationcancel', (e) => {
+            console.warn('cancel', e);
+            resolve();
+          });
+
+          overlay.opened = false;
+          overlay.parentElement.style.display = 'none';
         });
 
         expect(overlay.hasAttribute('closing')).to.be.false;

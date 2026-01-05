@@ -8,21 +8,51 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <vaadin-select label="Size"></vaadin-select>
-
+    <div>
+      <vaadin-select label="Theme"></vaadin-select>
+    </div>
     <script type="module">
       import '@vaadin/select';
 
-      const select = document.querySelector('vaadin-select');
-      select.items = [
-        { label: 'Show all', value: 'all' },
-        { component: 'hr' },
-        { label: 'XS (out of stock)', value: 'xs', disabled: true },
-        { label: 'S', value: 's' },
-        { label: 'M', value: 'm' },
-        { label: 'L', value: 'l' },
-        { label: 'XL', value: 'xl' },
+      const THEMES = [
+        { label: 'Base', value: 'base', cssPath: null },
+        { label: 'Lumo', value: 'lumo', cssPath: '/packages/vaadin-lumo-styles/lumo.css' },
+        { label: 'Aura', value: 'aura', cssPath: '/packages/aura/aura.css' },
       ];
+
+      function applyTheme(themeName) {
+        const theme = THEMES.find((theme) => theme.value === themeName);
+
+        // Remove existing stylesheets
+        document.querySelectorAll('link[data-theme]').forEach((link) => link.remove());
+
+        // Add new stylesheet if needed
+        if (theme.cssPath) {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = theme.cssPath;
+          link.setAttribute('data-theme', themeName);
+          document.head.appendChild(link);
+        }
+      }
+
+      const select = document.querySelector('vaadin-select');
+      select.items = THEMES;
+      select.addEventListener('change', (e) => {
+        if (e.target.value === 'base') {
+          // TODO something else is needed
+          select.$.overlay.style.animationName = 'none';
+        }
+      });
+
+      const overlay = select.$.overlay;
+      overlay.addEventListener('animationcancel', () => {
+        console.warn('OOPS')
+        if (overlay.hasAttribute('closing')) {
+          overlay._flushAnimation('closing');
+        }
+      });
+
     </script>
   </body>
 </html>
