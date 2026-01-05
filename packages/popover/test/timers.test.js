@@ -34,10 +34,7 @@ describe('timers', () => {
   });
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
-    popover.renderer = (root) => {
-      root.textContent = 'Content';
-    };
+    popover = fixtureSync('<vaadin-popover>Content</vaadin-popover>');
     target = fixtureSync('<button>Target</button>');
     popover.target = target;
     await nextRender();
