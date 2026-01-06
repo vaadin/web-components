@@ -8,26 +8,38 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <vaadin-combo-box label="Country"></vaadin-combo-box>
+    <vaadin-combo-box label="Theme"></vaadin-combo-box>
 
     <script type="module">
       import '@vaadin/combo-box';
 
-      const comboBox = document.querySelector('vaadin-combo-box');
+      const THEMES = [
+        { label: 'Base', value: 'base', cssPath: null },
+        { label: 'Lumo', value: 'lumo', cssPath: '/packages/vaadin-lumo-styles/lumo.css' },
+        { label: 'Aura', value: 'aura', cssPath: '/packages/aura/aura.css' },
+      ];
 
-      comboBox.dataProvider = async (params, callback) => {
-        const index = params.page * params.pageSize;
-        const response = await fetch(
-          `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
-        );
-        if (response.ok) {
-          const { result, size } = await response.json();
-          // Emulate network latency for demo purpose
-          setTimeout(() => {
-            callback(result, size);
-          }, 100);
+      function applyTheme(themeName) {
+        const theme = THEMES.find((theme) => theme.value === themeName);
+
+        // Remove existing stylesheets
+        document.querySelectorAll('link[data-theme]').forEach((link) => link.remove());
+
+        // Add new stylesheet if needed
+        if (theme.cssPath) {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = theme.cssPath;
+          link.setAttribute('data-theme', themeName);
+          document.head.appendChild(link);
         }
-      };
+      }
+
+      const combo = document.querySelector('vaadin-combo-box');
+      combo.items = THEMES;
+      combo.addEventListener('change', (e) => {
+        applyTheme(e.target.value);
+      });
     </script>
   </body>
 </html>
