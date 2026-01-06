@@ -123,13 +123,6 @@ export const OverlayMixin = (superClass) =>
       if (isIOS) {
         this._boundIosResizeListener = () => this._detectIosNavbar();
       }
-
-      // Flush closing if the animation was cancelled
-      this.addEventListener('animationcancel', () => {
-        if (this.hasAttribute('closing')) {
-          this._flushAnimation('closing');
-        }
-      });
     }
 
     /** @protected */
@@ -153,6 +146,16 @@ export const OverlayMixin = (superClass) =>
         // See https://github.com/vaadin/flow-components/issues/5507
         if (document.activeElement === document.body && this.$.overlay.getAttribute('tabindex') === '0') {
           this.$.overlay.focus();
+        }
+      });
+
+      this.addEventListener('animationcancel', () => {
+        if (this.hasAttribute('opening')) {
+          this._flushAnimation('opening');
+        }
+
+        if (this.hasAttribute('closing')) {
+          this._flushAnimation('closing');
         }
       });
     }
