@@ -123,6 +123,13 @@ export const OverlayMixin = (superClass) =>
       if (isIOS) {
         this._boundIosResizeListener = () => this._detectIosNavbar();
       }
+
+      // Flush closing if the animation was cancelled
+      this.addEventListener('animationcancel', () => {
+        if (this.hasAttribute('closing')) {
+          this._flushAnimation('closing');
+        }
+      });
     }
 
     /** @protected */

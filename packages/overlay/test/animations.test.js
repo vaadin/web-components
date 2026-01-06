@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import './animated-styles.js';
 import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
@@ -167,6 +167,27 @@ function afterOverlayClosingFinished(overlay, callback) {
         });
 
         overlay.opened = false;
+
+        await new Promise((resolve) => {
+          afterOverlayClosingFinished(overlay, resolve);
+        });
+
+        expect(overlay.hasAttribute('closing')).to.be.false;
+        expect(owner.hasAttribute('closing')).to.be.false;
+      });
+
+      it('should clear closing attribute on the overlay if animation has been cancelled', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        overlay.opened = false;
+        await oneEvent(overlay, 'animationstart');
+
+        // Trigger animationcancel event
+        overlay.parentElement.style.display = 'none';
 
         await new Promise((resolve) => {
           afterOverlayClosingFinished(overlay, resolve);
