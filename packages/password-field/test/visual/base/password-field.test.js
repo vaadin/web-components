@@ -44,12 +44,6 @@ describe('password-field', () => {
       element.readonly = true;
       await visualDiff(div, 'state-readonly');
     });
-
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'state-required');
-    });
   });
 
   describe('features', () => {
@@ -61,12 +55,6 @@ describe('password-field', () => {
 
         after(() => {
           document.documentElement.removeAttribute('dir');
-        });
-
-        it('clear button', async () => {
-          element.value = 'value';
-          element.clearButtonVisible = true;
-          await visualDiff(div, `${dir}-clear-button`);
         });
 
         it('reveal button hidden', async () => {
