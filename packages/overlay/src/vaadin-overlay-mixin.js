@@ -148,6 +148,11 @@ export const OverlayMixin = (superClass) =>
           this.$.overlay.focus();
         }
       });
+
+      this.addEventListener('animationcancel', () => {
+        this._flushAnimation('opening');
+        this._flushAnimation('closing');
+      });
     }
 
     /** @protected */
