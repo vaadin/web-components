@@ -146,7 +146,7 @@ function afterOverlayClosingFinished(overlay, callback) {
         expect(owner.hasAttribute('opening')).to.be.false;
       });
 
-      it('should clear closing attribute on the overlay if animation has been cancelled', async () => {
+      it('should clear opening attribute on the overlay if animation has been cancelled', async () => {
         overlay.opened = true;
         await oneEvent(overlay, 'animationstart');
 
