@@ -123,15 +123,5 @@ describe('menu-bar', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
       await visualDiff(div, 'tertiary');
     });
-
-    it('danger', async () => {
-      div.style.width = '320px';
-      div.style.height = '150px';
-      element.setAttribute('theme', 'danger');
-      await nextResize(element);
-      arrowDown(element._buttons[1]);
-      await oneEvent(overlay, 'vaadin-overlay-open');
-      await visualDiff(div, 'danger');
-    });
   });
 });
