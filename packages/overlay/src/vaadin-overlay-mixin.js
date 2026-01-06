@@ -150,13 +150,8 @@ export const OverlayMixin = (superClass) =>
       });
 
       this.addEventListener('animationcancel', () => {
-        if (this.hasAttribute('opening')) {
-          this._flushAnimation('opening');
-        }
-
-        if (this.hasAttribute('closing')) {
-          this._flushAnimation('closing');
-        }
+        this._flushAnimation('opening');
+        this._flushAnimation('closing');
       });
     }
 
