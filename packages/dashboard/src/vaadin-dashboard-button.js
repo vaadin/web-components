@@ -18,6 +18,16 @@ import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dashboardButtonStyles } from './styles/vaadin-dashboard-button-base-styles.js';
 
+/**
+ * An element used internally by `<vaadin-dashboard>`. Not intended to be used separately.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ButtonMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ * @protected
+ */
 class DashboardButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-dashboard-button';
