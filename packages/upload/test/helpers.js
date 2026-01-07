@@ -144,7 +144,7 @@ export function xhrCreator(c) {
         const error = cfg.serverValidation(xhr);
         if (error) {
           xhr.setResponseHeader('Content-Type', cfg.serverType);
-          const status = error.status || 500;
+          const status = error.status !== undefined ? error.status : 500;
           const statusText = error.statusText || error;
           xhr.receive(status, { error: statusText });
         } else if (xhr.readyState === 0) {
