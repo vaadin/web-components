@@ -58,23 +58,20 @@ const PARTIAL_I18N = {
 };
 
 const i18nConfigs = [
-  { name: 'default i18n', i18n: DEFAULT_I18N },
-  { name: 'custom i18n', i18n: CUSTOM_I18N },
-  { name: 'partial i18n', i18n: PARTIAL_I18N },
+  { name: 'default i18n', i18n: DEFAULT_I18N, expectedI18n: DEFAULT_I18N },
+  { name: 'custom i18n', i18n: CUSTOM_I18N, expectedI18n: CUSTOM_I18N },
+  { name: 'partial i18n', i18n: PARTIAL_I18N, expectedI18n: { ...DEFAULT_I18N, ...PARTIAL_I18N } },
 ];
 
 describe('upload i18n', () => {
-  i18nConfigs.forEach(({ name, i18n }) => {
+  i18nConfigs.forEach(({ name, i18n, expectedI18n }) => {
     describe(name, () => {
-      let upload, clock, expectedI18n;
+      let upload, clock;
 
       beforeEach(async () => {
         upload = fixtureSync('<vaadin-upload></vaadin-upload>');
         if (i18n !== DEFAULT_I18N) {
           upload.i18n = i18n;
-          expectedI18n = { ...DEFAULT_I18N, ...i18n };
-        } else {
-          expectedI18n = DEFAULT_I18N;
         }
         await nextRender();
         clock = sinon.useFakeTimers();
@@ -101,7 +98,7 @@ describe('upload i18n', () => {
 
       async function setupQueuedFile() {
         upload.noAuto = true;
-        await setupFile(null, 1, { noAuto: true });
+        await setupFile(null, 1);
         upload.noAuto = false;
       }
 
