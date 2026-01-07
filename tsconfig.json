@@ -3,15 +3,17 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": [ "esnext", "es2018", "dom" ],
+    "lib": [ "esnext", "es2021", "DOM", "DOM.Iterable" ],
     "noEmit": true,
     "strict": true,
     // WARNING: Avoid enabling the `skipLibCheck` option as it disables type checking
     // for the components' type declarations (e.g packages/button/src/vaadin-button.d.ts).
     "skipLibCheck": false,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "allowSyntheticDefaultImports": true,
   },
   "include": [
+    "packages/**/test",
     "packages/**/test/typings",
     "test/typings"
   ]
