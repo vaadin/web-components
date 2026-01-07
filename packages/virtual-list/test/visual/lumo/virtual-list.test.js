@@ -27,4 +27,21 @@ describe('virtual-list', () => {
   it('basic', async () => {
     await visualDiff(div, 'basic');
   });
+
+  it('theme-overflow-indicator-bottom', async () => {
+    element.setAttribute('theme', 'overflow-indicator-bottom');
+    await visualDiff(div, 'theme-overflow-indicator-bottom');
+  });
+
+  it('theme-overflow-indicators', async () => {
+    element.setAttribute('theme', 'overflow-indicators');
+    element.scrollTop = 100;
+    await visualDiff(div, 'theme-overflow-indicators');
+  });
+
+  it('theme-overflow-indicator-top', async () => {
+    element.setAttribute('theme', 'overflow-indicator-top');
+    element.scrollTop = element.scrollHeight - element.clientHeight;
+    await visualDiff(div, 'theme-overflow-indicator-top');
+  });
 });
