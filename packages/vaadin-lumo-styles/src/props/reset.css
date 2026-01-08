@@ -4,9 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-/* Reset properties that are set by the base theme */
+/*
+  Reset base style custom properties using the `initial` keyword to ensure
+  constructions like var(--vaadin-focus-ring-color, red) correctly resolve
+  to the fallback value (red) by default rather than the base style value.
+*/
 :where(:root),
 :where(:host) {
-  --vaadin-focus-ring-color: inherit;
-  --vaadin-focus-ring-width: inherit;
+  --vaadin-focus-ring-color: initial;
+  --vaadin-focus-ring-width: initial;
 }
