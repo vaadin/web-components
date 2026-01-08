@@ -22,6 +22,15 @@ describe('input-container', () => {
           </vaadin-input-container>
         `;
       }
+
+      get disabled() {
+        return container.disabled;
+      }
+
+      set disabled(disabled) {
+        this.toggleAttribute('disabled', disabled);
+        container.disabled = disabled;
+      }
     },
   );
 
@@ -49,13 +58,13 @@ describe('input-container', () => {
   });
 
   it('disabled', async () => {
-    container.disabled = true;
+    element.disabled = true;
     await visualDiff(div, 'disabled');
   });
 
   it('disabled value', async () => {
     input.value = 'value';
-    container.disabled = true;
+    element.disabled = true;
     await visualDiff(div, 'disabled-value');
   });
 });
