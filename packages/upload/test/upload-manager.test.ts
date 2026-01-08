@@ -1,10 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
+import type { UploadFile } from '../src/vaadin-upload-manager.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles, xhrCreator } from './helpers.js';
 
 describe('UploadManager', () => {
-  let manager;
+  let manager: UploadManager | null;
 
   afterEach(() => {
     if (manager) {
@@ -67,88 +68,88 @@ describe('UploadManager', () => {
     });
 
     it('should start with empty files array', () => {
-      expect(manager.files).to.be.an('array').that.is.empty;
+      expect(manager!.files).to.be.an('array').that.is.empty;
     });
 
     it('should add files via addFiles', () => {
       const files = createFiles(2, 100, 'text/plain');
-      manager.addFiles(files);
-      expect(manager.files).to.have.lengthOf(2);
+      manager!.addFiles(files);
+      expect(manager!.files).to.have.lengthOf(2);
     });
 
     it('should prepend new files to the array', () => {
       const file1 = createFile(100, 'text/plain');
       const file2 = createFile(100, 'text/plain');
-      manager.addFiles([file1]);
-      manager.addFiles([file2]);
-      expect(manager.files[0]).to.equal(file2);
-      expect(manager.files[1]).to.equal(file1);
+      manager!.addFiles([file1]);
+      manager!.addFiles([file2]);
+      expect(manager!.files[0]).to.equal(file2);
+      expect(manager!.files[1]).to.equal(file1);
     });
 
     it('should set initial file properties when added', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      const file = manager.files[0];
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      const file = manager!.files[0];
       expect(file.held).to.be.true;
       expect(file.loaded).to.equal(0);
       expect(file.formDataName).to.equal('file');
     });
 
     it('should use custom formDataName for added files', () => {
-      manager.formDataName = 'attachment';
-      manager.addFiles([createFile(100, 'text/plain')]);
-      expect(manager.files[0].formDataName).to.equal('attachment');
+      manager!.formDataName = 'attachment';
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      expect(manager!.files[0].formDataName).to.equal('attachment');
     });
 
     it('should dispatch files-changed event when files are added', () => {
       const spy = sinon.spy();
-      manager.addEventListener('files-changed', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addEventListener('files-changed', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.value).to.have.lengthOf(1);
     });
 
     it('should dispatch files-changed event when files property is set', () => {
       const spy = sinon.spy();
-      manager.addEventListener('files-changed', spy);
-      manager.files = createFiles(2, 100, 'text/plain');
+      manager!.addEventListener('files-changed', spy);
+      manager!.files = createFiles(2, 100, 'text/plain') as UploadFile[];
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should dispatch files-changed event when file is removed', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addFiles([createFile(100, 'text/plain')]);
       const spy = sinon.spy();
-      manager.addEventListener('files-changed', spy);
-      manager.removeFile(manager.files[0]);
+      manager!.addEventListener('files-changed', spy);
+      manager!.removeFile(manager!.files[0]);
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.value).to.have.lengthOf(0);
     });
 
     it('should include oldValue in files-changed event', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      const oldFiles = manager.files;
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      const oldFiles = manager!.files;
 
-      let eventDetail;
-      manager.addEventListener('files-changed', (e) => {
+      let eventDetail: { value: UploadFile[]; oldValue: UploadFile[] } | undefined;
+      manager!.addEventListener('files-changed', (e) => {
         eventDetail = e.detail;
       });
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addFiles([createFile(100, 'text/plain')]);
 
-      expect(eventDetail.oldValue).to.equal(oldFiles);
-      expect(eventDetail.value).to.have.lengthOf(2);
+      expect(eventDetail!.oldValue).to.equal(oldFiles);
+      expect(eventDetail!.value).to.have.lengthOf(2);
     });
 
     it('should remove file via removeFile', () => {
       const files = createFiles(2, 100, 'text/plain');
-      manager.addFiles(files);
-      manager.removeFile(manager.files[0]);
-      expect(manager.files).to.have.lengthOf(1);
+      manager!.addFiles(files);
+      manager!.removeFile(manager!.files[0]);
+      expect(manager!.files).to.have.lengthOf(1);
     });
 
     it('should dispatch file-remove event when file is removed', () => {
       const spy = sinon.spy();
-      manager.addEventListener('file-remove', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.removeFile(manager.files[0]);
+      manager!.addEventListener('file-remove', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.removeFile(manager!.files[0]);
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.file).to.exist;
       expect(spy.firstCall.args[0].detail.fileIndex).to.equal(0);
@@ -161,25 +162,25 @@ describe('UploadManager', () => {
     });
 
     it('should start with maxFilesReached as false', () => {
-      expect(manager.maxFilesReached).to.be.false;
+      expect(manager!.maxFilesReached).to.be.false;
     });
 
     it('should set maxFilesReached when limit is reached', () => {
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
-      expect(manager.maxFilesReached).to.be.true;
+      manager!.addFiles(createFiles(2, 100, 'text/plain'));
+      expect(manager!.maxFilesReached).to.be.true;
     });
 
     it('should reset maxFilesReached when file is removed', () => {
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
-      expect(manager.maxFilesReached).to.be.true;
-      manager.removeFile(manager.files[0]);
-      expect(manager.maxFilesReached).to.be.false;
+      manager!.addFiles(createFiles(2, 100, 'text/plain'));
+      expect(manager!.maxFilesReached).to.be.true;
+      manager!.removeFile(manager!.files[0]);
+      expect(manager!.maxFilesReached).to.be.false;
     });
 
     it('should dispatch max-files-reached-changed event', () => {
       const spy = sinon.spy();
-      manager.addEventListener('max-files-reached-changed', spy);
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      manager!.addEventListener('max-files-reached-changed', spy);
+      manager!.addFiles(createFiles(2, 100, 'text/plain'));
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.value).to.be.true;
     });
@@ -191,53 +192,53 @@ describe('UploadManager', () => {
     });
 
     it('should reject file when maxFiles is reached', () => {
-      manager.maxFiles = 1;
+      manager!.maxFiles = 1;
       const spy = sinon.spy();
-      manager.addEventListener('file-reject', spy);
+      manager!.addEventListener('file-reject', spy);
 
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      manager!.addFiles(createFiles(2, 100, 'text/plain'));
 
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.error).to.equal('tooManyFiles');
-      expect(manager.files).to.have.lengthOf(1);
+      expect(manager!.files).to.have.lengthOf(1);
     });
 
     it('should reject file when size exceeds maxFileSize', () => {
-      manager.maxFileSize = 50;
+      manager!.maxFileSize = 50;
       const spy = sinon.spy();
-      manager.addEventListener('file-reject', spy);
+      manager!.addEventListener('file-reject', spy);
 
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addFiles([createFile(100, 'text/plain')]);
 
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.error).to.equal('fileIsTooBig');
-      expect(manager.files).to.have.lengthOf(0);
+      expect(manager!.files).to.have.lengthOf(0);
     });
 
     it('should reject file with incorrect type', () => {
-      manager.accept = 'image/*';
+      manager!.accept = 'image/*';
       const spy = sinon.spy();
-      manager.addEventListener('file-reject', spy);
+      manager!.addEventListener('file-reject', spy);
 
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addFiles([createFile(100, 'text/plain')]);
 
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.error).to.equal('incorrectFileType');
-      expect(manager.files).to.have.lengthOf(0);
+      expect(manager!.files).to.have.lengthOf(0);
     });
 
     it('should accept file matching MIME type', () => {
-      manager.accept = 'image/*';
-      manager.addFiles([createFile(100, 'image/png')]);
-      expect(manager.files).to.have.lengthOf(1);
+      manager!.accept = 'image/*';
+      manager!.addFiles([createFile(100, 'image/png')]);
+      expect(manager!.files).to.have.lengthOf(1);
     });
 
     it('should accept file matching extension', () => {
-      manager.accept = '.txt,.pdf';
+      manager!.accept = '.txt,.pdf';
       const file = createFile(100, 'text/plain');
       file.name = 'document.txt';
-      manager.addFiles([file]);
-      expect(manager.files).to.have.lengthOf(1);
+      manager!.addFiles([file]);
+      expect(manager!.files).to.have.lengthOf(1);
     });
   });
 
@@ -247,46 +248,46 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 50, stepTime: 10 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50, stepTime: 10 });
     });
 
     it('should not auto-upload when noAuto is true', () => {
       const spy = sinon.spy();
-      manager.addEventListener('upload-start', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addEventListener('upload-start', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
       expect(spy.called).to.be.false;
     });
 
     it('should auto-upload when noAuto is false', () => {
-      manager.noAuto = false;
+      manager!.noAuto = false;
       const spy = sinon.spy();
-      manager.addEventListener('upload-start', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
+      manager!.addEventListener('upload-start', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should upload file via uploadFiles', () => {
       const spy = sinon.spy();
-      manager.addEventListener('upload-start', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addEventListener('upload-start', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should upload specific file via uploadFiles', () => {
       const spy = sinon.spy();
-      manager.addEventListener('upload-start', spy);
+      manager!.addEventListener('upload-start', spy);
       const files = createFiles(2, 100, 'text/plain');
-      manager.addFiles(files);
-      manager.uploadFiles(manager.files[0]);
+      manager!.addFiles(files);
+      manager!.uploadFiles(manager!.files[0]);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should dispatch upload-before event', () => {
       const spy = sinon.spy();
-      manager.addEventListener('upload-before', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addEventListener('upload-before', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.file).to.exist;
       expect(spy.firstCall.args[0].detail.xhr).to.exist;
@@ -294,36 +295,36 @@ describe('UploadManager', () => {
 
     it('should dispatch upload-request event', () => {
       const spy = sinon.spy();
-      manager.addEventListener('upload-request', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addEventListener('upload-request', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should dispatch upload-progress event', (done) => {
-      const handler = (e) => {
-        manager.removeEventListener('upload-progress', handler);
+      const handler = (e: CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>) => {
+        manager!.removeEventListener('upload-progress', handler);
         expect(e.detail.file).to.exist;
         expect(e.detail.xhr).to.exist;
         done();
       };
-      manager.addEventListener('upload-progress', handler);
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addEventListener('upload-progress', handler);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
     });
 
     it('should track progress properties on file during upload', (done) => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      const file = manager.files[0];
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      const file = manager!.files[0];
 
-      manager.addEventListener('upload-start', () => {
+      manager!.addEventListener('upload-start', () => {
         // When upload starts, loaded and progress should be initialized
         expect(file.loaded).to.equal(0);
         expect(file.progress).to.equal(0);
         expect(file.indeterminate).to.be.true;
       });
 
-      manager.addEventListener('upload-progress', () => {
+      manager!.addEventListener('upload-progress', () => {
         // During upload, loaded and progress should be updated
         expect(file.loaded).to.be.a('number');
         expect(file.progress).to.be.a('number');
@@ -331,90 +332,90 @@ describe('UploadManager', () => {
         expect(file.progress).to.be.at.most(100);
       });
 
-      manager.addEventListener('upload-success', () => {
+      manager!.addEventListener('upload-success', () => {
         // After completion, indeterminate should be false
         expect(file.indeterminate).to.be.false;
         expect(file.uploading).to.be.false;
         done();
       });
 
-      manager.uploadFiles();
+      manager!.uploadFiles();
     });
 
     it('should dispatch upload-response event before upload-success', (done) => {
-      const events = [];
-      manager.addEventListener('upload-response', (e) => {
+      const events: string[] = [];
+      manager!.addEventListener('upload-response', (e) => {
         events.push('response');
         expect(e.detail.file).to.exist;
         expect(e.detail.xhr).to.exist;
       });
-      manager.addEventListener('upload-success', () => {
+      manager!.addEventListener('upload-success', () => {
         events.push('success');
         expect(events).to.deep.equal(['response', 'success']);
         done();
       });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
     });
 
     it('should dispatch upload-success event on completion', (done) => {
-      manager.addEventListener('upload-success', (e) => {
+      manager!.addEventListener('upload-success', (e) => {
         expect(e.detail.file).to.exist;
         expect(e.detail.file.complete).to.be.true;
         done();
       });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
     });
 
     it('should set file.complete to true on success', (done) => {
-      manager.addEventListener('upload-success', () => {
-        expect(manager.files[0].complete).to.be.true;
+      manager!.addEventListener('upload-success', () => {
+        expect(manager!.files[0].complete).to.be.true;
         done();
       });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
     });
 
     it('should set file.error to unexpectedServerError on 500 status', (done) => {
-      manager._createXhr = xhrCreator({
+      (manager as any)._createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         stepTime: 5,
         serverValidation: () => ({ status: 500 }),
       });
 
-      manager.addEventListener('upload-error', (e) => {
+      manager!.addEventListener('upload-error', (e) => {
         expect(e.detail.file.error).to.equal('unexpectedServerError');
         expect(e.detail.file.complete).to.be.false;
         done();
       });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
     });
 
     it('should set file.error to forbidden on 403 status', (done) => {
-      manager._createXhr = xhrCreator({
+      (manager as any)._createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         stepTime: 5,
         serverValidation: () => ({ status: 403 }),
       });
 
-      manager.addEventListener('upload-error', (e) => {
+      manager!.addEventListener('upload-error', (e) => {
         expect(e.detail.file.error).to.equal('forbidden');
         done();
       });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
     });
 
     it('should set file.total during progress', (done) => {
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
 
       let called = false;
-      manager.addEventListener('upload-progress', (e) => {
+      manager!.addEventListener('upload-progress', (e) => {
         if (!called) {
           called = true;
           expect(e.detail.file.total).to.be.a('number');
@@ -422,19 +423,19 @@ describe('UploadManager', () => {
           done();
         }
       });
-      manager.uploadFiles();
+      manager!.uploadFiles();
     });
 
     it('should set file.elapsed and file.remaining during progress', (done) => {
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
 
       let progressCount = 0;
       let called = false;
-      manager.addEventListener('upload-progress', (e) => {
+      manager!.addEventListener('upload-progress', (e) => {
         progressCount += 1;
         // On second progress event, elapsed and remaining should be set
-        if (!called && progressCount >= 2 && e.detail.file.progress > 0 && e.detail.file.progress < 100) {
+        if (!called && progressCount >= 2 && e.detail.file.progress! > 0 && e.detail.file.progress! < 100) {
           called = true;
           expect(e.detail.file.elapsed).to.be.a('number');
           expect(e.detail.file.remaining).to.be.a('number');
@@ -442,53 +443,53 @@ describe('UploadManager', () => {
           done();
         }
       });
-      manager.uploadFiles();
+      manager!.uploadFiles();
     });
 
     it('should dispatch files-changed event when upload starts', () => {
       const filesChangedSpy = sinon.spy();
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.addEventListener('files-changed', filesChangedSpy);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.addEventListener('files-changed', filesChangedSpy);
+      manager!.uploadFiles();
       // Should fire at least once for queue state update and once for upload start
       expect(filesChangedSpy.called).to.be.true;
     });
 
     it('should dispatch files-changed event when upload completes', (done) => {
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
 
       const filesChangedSpy = sinon.spy();
-      manager.addEventListener('files-changed', filesChangedSpy);
-      manager.uploadFiles();
+      manager!.addEventListener('files-changed', filesChangedSpy);
+      manager!.uploadFiles();
 
-      manager.addEventListener('upload-success', () => {
+      manager!.addEventListener('upload-success', () => {
         expect(filesChangedSpy.called).to.be.true;
         done();
       });
     });
 
     it('should clear file.status after upload completes', (done) => {
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      const file = manager.files[0];
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      const file = manager!.files[0];
 
-      manager.addEventListener('upload-success', () => {
+      manager!.addEventListener('upload-success', () => {
         expect(file.status).to.equal('');
         done();
       });
-      manager.uploadFiles();
+      manager!.uploadFiles();
     });
 
     it('should initialize file.stalled to false when queuing', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
-      expect(manager.files[0].stalled).to.be.false;
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
+      expect(manager!.files[0].stalled).to.be.false;
     });
   });
 
   describe('stalled detection', () => {
-    let clock;
+    let clock: sinon.SinonFakeTimers;
 
     beforeEach(() => {
       manager = new UploadManager({
@@ -504,21 +505,22 @@ describe('UploadManager', () => {
 
     it('should set file.stalled to true after 2 seconds without progress', async () => {
       // Create a mock XHR that doesn't send progress updates
-      manager._createXhr = () => {
+      (manager as any)._createXhr = () => {
         const xhr = {
           readyState: 0,
           status: 0,
           upload: {
-            onprogress: null,
-            onloadstart: null,
+            onprogress: null as ((e: { loaded: number; total: number }) => void) | null,
+            onloadstart: null as (() => void) | null,
           },
-          onreadystatechange: null,
-          onabort: null,
-          requestHeaders: {},
+          onreadystatechange: null as (() => void) | null,
+          onabort: null as (() => void) | null,
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          requestHeaders: {} as Record<string, string>,
           open() {
             this.readyState = 1;
           },
-          setRequestHeader(name, value) {
+          setRequestHeader(name: string, value: string) {
             this.requestHeaders[name] = value;
           },
           send() {
@@ -541,10 +543,10 @@ describe('UploadManager', () => {
         return xhr;
       };
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      const file = manager.files[0];
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      const file = manager!.files[0];
 
-      manager.uploadFiles();
+      manager!.uploadFiles();
 
       // Initially not stalled
       expect(file.stalled).to.be.false;
@@ -564,16 +566,16 @@ describe('UploadManager', () => {
         noAuto: false,
         maxConcurrentUploads: 2,
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 100, stepTime: 20 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 100, stepTime: 20 });
     });
 
     it('should respect maxConcurrentUploads', () => {
       const files = createFiles(4, 100, 'text/plain');
-      manager.addFiles(files);
+      manager!.addFiles(files);
 
       // Count files that are uploading but not held (queued)
-      const activeUploads = manager.files.filter((f) => f.uploading && !f.held).length;
-      const queuedUploads = manager.files.filter((f) => f.uploading && f.held).length;
+      const activeUploads = manager!.files.filter((f) => f.uploading && !f.held).length;
+      const queuedUploads = manager!.files.filter((f) => f.uploading && f.held).length;
 
       expect(activeUploads).to.equal(2);
       expect(queuedUploads).to.equal(2);
@@ -581,21 +583,21 @@ describe('UploadManager', () => {
 
     it('should start next queued upload when one completes', (done) => {
       // Use fast upload time
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
 
       const files = createFiles(3, 100, 'text/plain');
-      manager.addFiles(files);
+      manager!.addFiles(files);
 
       // Initially: 2 active, 1 queued
-      const initialActive = manager.files.filter((f) => f.uploading && !f.held).length;
+      const initialActive = manager!.files.filter((f) => f.uploading && !f.held).length;
       expect(initialActive).to.equal(2);
 
       let completedCount = 0;
-      manager.addEventListener('upload-success', () => {
+      manager!.addEventListener('upload-success', () => {
         completedCount += 1;
         if (completedCount === 3) {
           // All files should be complete
-          expect(manager.files.filter((f) => f.complete).length).to.equal(3);
+          expect(manager!.files.filter((f) => f.complete).length).to.equal(3);
           done();
         }
       });
@@ -603,47 +605,47 @@ describe('UploadManager', () => {
 
     it('should start next queued upload when one is aborted', (done) => {
       // Use long upload time so files don't complete immediately
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
       const files = createFiles(3, 100, 'text/plain');
-      manager.addFiles(files);
+      manager!.addFiles(files);
 
       // Initially: 2 active, 1 queued
-      const initialActive = manager.files.filter((f) => f.uploading && !f.held).length;
-      const initialQueued = manager.files.filter((f) => f.held).length;
+      const initialActive = manager!.files.filter((f) => f.uploading && !f.held).length;
+      const initialQueued = manager!.files.filter((f) => f.held).length;
       expect(initialActive).to.equal(2);
       expect(initialQueued).to.equal(1);
 
       // Abort one of the active uploads
-      const fileToAbort = manager.files.find((f) => f.uploading && !f.held);
-      manager.abortUpload(fileToAbort);
+      const fileToAbort = manager!.files.find((f) => f.uploading && !f.held);
+      manager!.abortUpload(fileToAbort!);
 
       // Use fast xhr for next file
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
 
       // The previously queued file should now be active
       setTimeout(() => {
-        const activeNow = manager.files.filter((f) => f.uploading && !f.held).length;
+        const activeNow = manager!.files.filter((f) => f.uploading && !f.held).length;
         expect(activeNow).to.equal(2);
         done();
       }, 50);
     });
 
     it('should not re-queue a file that is already uploading', () => {
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
       const files = createFiles(1, 100, 'text/plain');
-      manager.addFiles(files);
-      const file = manager.files[0];
+      manager!.addFiles(files);
+      const file = manager!.files[0];
 
       // File is now uploading
       expect(file.uploading).to.be.true;
 
       const startSpy = sinon.spy();
-      manager.addEventListener('upload-start', startSpy);
+      manager!.addEventListener('upload-start', startSpy);
 
       // Try to upload the same file again
-      manager.uploadFiles(file);
+      manager!.uploadFiles(file);
 
       // Should not start a new upload
       expect(startSpy.called).to.be.false;
@@ -651,24 +653,24 @@ describe('UploadManager', () => {
 
     it('should remove file from queue when removed before upload starts', () => {
       // Use long upload time so files stay queued
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
       const files = createFiles(4, 100, 'text/plain');
-      manager.addFiles(files);
+      manager!.addFiles(files);
 
       // 2 active, 2 queued
-      const queuedFiles = manager.files.filter((f) => f.held);
+      const queuedFiles = manager!.files.filter((f) => f.held);
       expect(queuedFiles.length).to.equal(2);
 
       // Remove a queued file
       const queuedFile = queuedFiles[0];
-      manager.removeFile(queuedFile);
+      manager!.removeFile(queuedFile);
 
       // Should only have 3 files now
-      expect(manager.files).to.have.lengthOf(3);
+      expect(manager!.files).to.have.lengthOf(3);
 
       // Only 1 should be queued
-      expect(manager.files.filter((f) => f.held).length).to.equal(1);
+      expect(manager!.files.filter((f) => f.held).length).to.equal(1);
     });
   });
 
@@ -678,67 +680,67 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
     });
 
     it('should abort upload via abortUpload', () => {
       const spy = sinon.spy();
-      manager.addEventListener('upload-abort', spy);
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
-      manager.abortUpload(manager.files[0]);
+      manager!.addEventListener('upload-abort', spy);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
+      manager!.abortUpload(manager!.files[0]);
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should remove file when aborted', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
-      manager.abortUpload(manager.files[0]);
-      expect(manager.files).to.have.lengthOf(0);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
+      manager!.abortUpload(manager!.files[0]);
+      expect(manager!.files).to.have.lengthOf(0);
     });
 
     it('should actually abort the XHR request when aborting', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
-      const file = manager.files[0];
-      const abortSpy = sinon.spy(file.xhr, 'abort');
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
+      const file = manager!.files[0];
+      const abortSpy = sinon.spy(file.xhr!, 'abort');
 
-      manager.abortUpload(file);
+      manager!.abortUpload(file);
 
       expect(abortSpy.calledOnce).to.be.true;
     });
 
     it('should set file.abort flag when aborting', () => {
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
-      const file = manager.files[0];
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
+      const file = manager!.files[0];
       expect(file.abort).to.not.be.true;
 
-      manager.abortUpload(file);
+      manager!.abortUpload(file);
 
       expect(file.abort).to.be.true;
     });
 
     it('should retry upload via retryUpload', (done) => {
       const retrySpy = sinon.spy();
-      manager.addEventListener('upload-retry', retrySpy);
+      manager!.addEventListener('upload-retry', retrySpy);
 
-      manager._createXhr = xhrCreator({
+      (manager as any)._createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         stepTime: 5,
         serverValidation: () => ({ status: 500, statusText: 'Server Error' }),
       });
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       // Wait for upload to fail
-      manager.addEventListener('upload-error', () => {
+      manager!.addEventListener('upload-error', () => {
         const successSpy = sinon.spy();
-        manager.addEventListener('upload-success', successSpy);
-        manager._createXhr = xhrCreator({ size: 100, uploadTime: 10, stepTime: 5 });
-        manager.retryUpload(manager.files[0]);
+        manager!.addEventListener('upload-success', successSpy);
+        (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10, stepTime: 5 });
+        manager!.retryUpload(manager!.files[0]);
 
         // Wait for retry to succeed
         setTimeout(() => {
@@ -756,7 +758,7 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: false,
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       expect(manager.files[0].uploading).to.be.true;
@@ -783,39 +785,39 @@ describe('UploadManager', () => {
     });
 
     it('should use raw format by default', () => {
-      let requestBody;
-      manager.addEventListener('upload-request', (e) => {
+      let requestBody: File | FormData | undefined;
+      manager!.addEventListener('upload-request', (e) => {
         requestBody = e.detail.requestBody;
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(requestBody).to.be.instanceOf(Blob);
     });
 
     it('should use multipart format when configured', () => {
-      manager.uploadFormat = 'multipart';
-      let requestBody;
-      manager.addEventListener('upload-request', (e) => {
+      manager!.uploadFormat = 'multipart';
+      let requestBody: File | FormData | undefined;
+      manager!.addEventListener('upload-request', (e) => {
         requestBody = e.detail.requestBody;
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(requestBody).to.be.instanceOf(FormData);
     });
 
     it('should include formData in event for multipart uploads', () => {
-      manager.uploadFormat = 'multipart';
-      let formData;
-      manager.addEventListener('upload-request', (e) => {
+      manager!.uploadFormat = 'multipart';
+      let formData: FormData | undefined;
+      manager!.addEventListener('upload-request', (e) => {
         formData = e.detail.formData;
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(formData).to.be.instanceOf(FormData);
     });
@@ -827,81 +829,81 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
     });
 
     it('should not upload when upload-before is prevented', () => {
-      manager.addEventListener('upload-before', (e) => {
+      manager!.addEventListener('upload-before', (e) => {
         e.preventDefault();
       });
       const startSpy = sinon.spy();
-      manager.addEventListener('upload-start', startSpy);
+      manager!.addEventListener('upload-start', startSpy);
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(startSpy.called).to.be.false;
     });
 
     it('should not send when upload-request is prevented', () => {
-      manager.addEventListener('upload-request', (e) => {
+      manager!.addEventListener('upload-request', (e) => {
         e.preventDefault();
       });
       const progressSpy = sinon.spy();
-      manager.addEventListener('upload-progress', progressSpy);
+      manager!.addEventListener('upload-progress', progressSpy);
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(progressSpy.called).to.be.false;
     });
 
     it('should not retry when upload-retry is prevented', () => {
-      manager._createXhr = xhrCreator({
+      (manager as any)._createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         serverValidation: () => ({ status: 500 }),
       });
 
-      manager.addEventListener('upload-retry', (e) => {
+      manager!.addEventListener('upload-retry', (e) => {
         e.preventDefault();
       });
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       setTimeout(() => {
         const startSpy = sinon.spy();
-        manager.addEventListener('upload-start', startSpy);
-        manager.retryUpload(manager.files[0]);
+        manager!.addEventListener('upload-start', startSpy);
+        manager!.retryUpload(manager!.files[0]);
         expect(startSpy.called).to.be.false;
       }, 50);
     });
 
     it('should not abort when upload-abort is prevented', () => {
-      manager.addEventListener('upload-abort', (e) => {
+      manager!.addEventListener('upload-abort', (e) => {
         e.preventDefault();
       });
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
-      manager.abortUpload(manager.files[0]);
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
+      manager!.abortUpload(manager!.files[0]);
 
       // File should still be in the list
-      expect(manager.files).to.have.lengthOf(1);
+      expect(manager!.files).to.have.lengthOf(1);
     });
 
     it('should not dispatch upload-success when upload-response is prevented', (done) => {
-      manager.addEventListener('upload-response', (e) => {
+      manager!.addEventListener('upload-response', (e) => {
         e.preventDefault();
       });
 
       const successSpy = sinon.spy();
-      manager.addEventListener('upload-success', successSpy);
-      manager.addEventListener('upload-error', successSpy);
+      manager!.addEventListener('upload-success', successSpy);
+      manager!.addEventListener('upload-error', successSpy);
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       // Wait for upload to complete
       setTimeout(() => {
@@ -917,75 +919,75 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
     });
 
     it('should set custom headers on XHR', () => {
-      manager.headers = { Authorization: 'Bearer token123', 'X-Custom': 'value' };
+      manager!.headers = { Authorization: 'Bearer token123', 'X-Custom': 'value' };
 
-      let capturedXhr;
-      manager.addEventListener('upload-request', (e) => {
+      let capturedXhr: any;
+      manager!.addEventListener('upload-request', (e) => {
         capturedXhr = e.detail.xhr;
       });
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(capturedXhr.getRequestHeader('Authorization')).to.equal('Bearer token123');
       expect(capturedXhr.getRequestHeader('X-Custom')).to.equal('value');
     });
 
     it('should set Content-Type header for raw uploads', () => {
-      let capturedXhr;
-      manager.addEventListener('upload-request', (e) => {
+      let capturedXhr: any;
+      manager!.addEventListener('upload-request', (e) => {
         capturedXhr = e.detail.xhr;
       });
 
       const file = createFile(100, 'application/pdf');
-      manager.addFiles([file]);
-      manager.uploadFiles();
+      manager!.addFiles([file]);
+      manager!.uploadFiles();
 
       expect(capturedXhr.getRequestHeader('Content-Type')).to.equal('application/pdf');
     });
 
     it('should set X-Filename header for raw uploads', () => {
-      let capturedXhr;
-      manager.addEventListener('upload-request', (e) => {
+      let capturedXhr: any;
+      manager!.addEventListener('upload-request', (e) => {
         capturedXhr = e.detail.xhr;
       });
 
       const file = createFile(100, 'text/plain');
       file.name = 'test file.txt';
-      manager.addFiles([file]);
-      manager.uploadFiles();
+      manager!.addFiles([file]);
+      manager!.uploadFiles();
 
       expect(capturedXhr.getRequestHeader('X-Filename')).to.equal('test%20file.txt');
     });
 
     it('should set timeout on XHR', () => {
-      manager.timeout = 5000;
+      manager!.timeout = 5000;
 
-      let capturedXhr;
-      manager.addEventListener('upload-request', (e) => {
+      let capturedXhr: any;
+      manager!.addEventListener('upload-request', (e) => {
         capturedXhr = e.detail.xhr;
       });
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(capturedXhr.timeout).to.equal(5000);
     });
 
     it('should set withCredentials on XHR', () => {
-      manager.withCredentials = true;
+      manager!.withCredentials = true;
 
-      let capturedXhr;
-      manager.addEventListener('upload-request', (e) => {
+      let capturedXhr: any;
+      manager!.addEventListener('upload-request', (e) => {
         capturedXhr = e.detail.xhr;
       });
 
-      manager.addFiles([createFile(100, 'text/plain')]);
-      manager.uploadFiles();
+      manager!.addFiles([createFile(100, 'text/plain')]);
+      manager!.uploadFiles();
 
       expect(capturedXhr.withCredentials).to.be.true;
     });
