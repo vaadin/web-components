@@ -373,7 +373,8 @@ export const OverlayMixin = (superClass) =>
           });
         });
 
-        document.addEventListener('keydown', this._boundKeydownListener);
+        const keydownTarget = this.owner || this;
+        keydownTarget.addEventListener('keydown', this._boundKeydownListener);
 
         if (this._shouldAddGlobalListeners()) {
           this._addGlobalListeners();
@@ -388,7 +389,8 @@ export const OverlayMixin = (superClass) =>
 
         this._animatedClosing();
 
-        document.removeEventListener('keydown', this._boundKeydownListener);
+        const keydownTarget = this.owner || this;
+        keydownTarget.removeEventListener('keydown', this._boundKeydownListener);
 
         if (this._shouldAddGlobalListeners()) {
           this._removeGlobalListeners();
@@ -562,7 +564,7 @@ export const OverlayMixin = (superClass) =>
     }
 
     /**
-     * Listener used to close whe overlay on Escape press, if it is the last one.
+     * Listener used to close the overlay on Escape press, if it is the last one.
      * @private
      */
     _keydownListener(event) {
@@ -570,12 +572,8 @@ export const OverlayMixin = (superClass) =>
         return;
       }
 
-      // Only close modeless overlay on Esc press when it contains focus
-      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusTrapRoot)) {
-        return;
-      }
-
       if (event.key === 'Escape') {
+        event.stopPropagation();
         const evt = new CustomEvent('vaadin-overlay-escape-press', {
           cancelable: true,
           detail: { sourceEvent: event },

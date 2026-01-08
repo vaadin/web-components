@@ -573,13 +573,13 @@ export const ComboBoxBaseMixin = (superClass) =>
         // Auto-open is disabled
         // The overlay is open or
         // The input value has changed but the change hasn't been committed, so cancel it.
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         this._focusedIndex = -1;
         this._onEscapeCancel();
       } else if (this.opened) {
         // Auto-open is enabled
         // The overlay is open
-        e.stopPropagation();
+        e.stopImmediatePropagation();
 
         if (this._focusedIndex > -1) {
           // An item is focused, revert the input to the filtered value
@@ -590,7 +590,7 @@ export const ComboBoxBaseMixin = (superClass) =>
           this._onEscapeCancel();
         }
       } else if (this.clearButtonVisible && !!this.value && !this.readonly) {
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         // The clear button is visible and the overlay is closed, so clear the value.
         this._onClearAction();
       }

@@ -360,64 +360,70 @@ describe('popover', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    describe('Escape press', () => {
-      beforeEach(async () => {
-        target.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-      });
+    ['popover', 'target'].forEach((suite) => {
+      describe(`${suite} Escape press`, () => {
+        let escapeTarget;
 
-      it('should close overlay on global Escape press by default', async () => {
-        esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.false;
-      });
+        beforeEach(async () => {
+          target.click();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
-      it('should not close on global Escape press if noCloseOnEsc is true', async () => {
-        popover.noCloseOnEsc = true;
-        await nextUpdate(popover);
+          escapeTarget = suite === 'popover' ? popover : target;
+        });
 
-        esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.true;
-      });
+        it('should close overlay on Escape press by default', async () => {
+          esc(escapeTarget);
+          await nextRender();
+          expect(overlay.opened).to.be.false;
+        });
 
-      it('should close overlay on global Escape press when modal is true', async () => {
-        popover.modal = true;
-        await nextUpdate(popover);
+        it('should not close on Escape press if noCloseOnEsc is true', async () => {
+          popover.noCloseOnEsc = true;
+          await nextUpdate(popover);
 
-        esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.false;
-        expect(popover.opened).to.be.false;
-      });
+          esc(escapeTarget);
+          await nextRender();
+          expect(overlay.opened).to.be.true;
+        });
 
-      it('should not close on global Escape press if noCloseOnEsc is true when modal', async () => {
-        popover.modal = true;
-        popover.noCloseOnEsc = true;
-        await nextUpdate(popover);
+        it('should close overlay on Escape press when modal is true', async () => {
+          popover.modal = true;
+          await nextUpdate(popover);
 
-        esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.true;
-      });
+          esc(escapeTarget);
+          await nextRender();
+          expect(overlay.opened).to.be.false;
+          expect(popover.opened).to.be.false;
+        });
 
-      it('should not close on global Escape press if overlay close event was prevented', async () => {
-        document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+        it('should not close on Escape press if noCloseOnEsc is true when modal', async () => {
+          popover.modal = true;
+          popover.noCloseOnEsc = true;
+          await nextUpdate(popover);
 
-        esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.true;
-      });
+          esc(escapeTarget);
+          await nextRender();
+          expect(overlay.opened).to.be.true;
+        });
 
-      it('should not close on global Escape press if overlay close event was prevented when modal', async () => {
-        popover.modal = true;
-        await nextUpdate(popover);
+        it('should not close on Escape press if overlay close event was prevented', async () => {
+          document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
 
-        document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+          esc(escapeTarget);
+          await nextRender();
+          expect(overlay.opened).to.be.true;
+        });
 
-        esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.true;
+        it('should not close on Escape press if overlay close event was prevented when modal', async () => {
+          popover.modal = true;
+          await nextUpdate(popover);
+
+          document.addEventListener('vaadin-overlay-close', (e) => e.preventDefault(), { once: true });
+
+          esc(escapeTarget);
+          await nextRender();
+          expect(overlay.opened).to.be.true;
+        });
       });
     });
 
@@ -448,15 +454,15 @@ describe('popover', () => {
         expect(secondPopover.opened).to.be.true;
       });
 
-      it('should close the topmost overlay on global Escape press', async () => {
-        esc(document.body);
+      it('should close the topmost overlay on Escape press', async () => {
+        esc(secondPopover);
         await nextRender();
 
         // Expect only the second popover to be closed
         expect(popover.opened).to.be.true;
         expect(secondPopover.opened).to.be.false;
 
-        esc(document.body);
+        esc(popover);
         await nextRender();
 
         // Expect both popovers to be closed

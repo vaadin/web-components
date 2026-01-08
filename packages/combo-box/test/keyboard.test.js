@@ -58,7 +58,7 @@ describe('keyboard', () => {
 
     it('should propagate escape key event if dropdown is closed', () => {
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      const keyDownSpy = sinon.spy(event, 'stopImmediatePropagation');
       input.dispatchEvent(event);
       expect(keyDownSpy.called).to.be.false;
     });
@@ -68,7 +68,7 @@ describe('keyboard', () => {
       comboBox.clearButtonVisible = true;
 
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      const keyDownSpy = sinon.spy(event, 'stopImmediatePropagation');
       input.dispatchEvent(event);
       expect(keyDownSpy.called).to.be.true;
     });
@@ -638,7 +638,7 @@ describe('keyboard', () => {
       await sendKeys({ type: 'foo' });
 
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      const keyDownSpy = sinon.spy(event, 'stopImmediatePropagation');
       input.dispatchEvent(event);
       expect(keyDownSpy.called).to.be.true;
     });

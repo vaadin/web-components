@@ -59,7 +59,7 @@ describe('multiple overlays', () => {
 
       it('should fire the vaadin-overlay-escape-press if it is the only overlay opened', () => {
         overlay1.opened = true;
-        escKeyDown(document.body);
+        escKeyDown(overlay1);
         expect(spy.called).to.be.true;
       });
 
@@ -68,7 +68,7 @@ describe('multiple overlays', () => {
 
         overlay2.opened = true;
 
-        escKeyDown(document.body);
+        escKeyDown(overlay2);
         expect(spy.called).to.be.false;
       });
     });
@@ -271,7 +271,7 @@ describe('multiple overlays', () => {
       expect(modeless2._last).to.be.true;
     });
 
-    it('should not fire the vaadin-overlay-escape-press if the overlay does not contain focus', () => {
+    it('should not fire the vaadin-overlay-escape-press if escape is dispatched outside the overlay', () => {
       const spy = sinon.spy();
       modeless1.addEventListener('vaadin-overlay-escape-press', spy);
 
@@ -281,7 +281,7 @@ describe('multiple overlays', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire the vaadin-overlay-escape-press if the overlay contains focus', () => {
+    it('should fire the vaadin-overlay-escape-press if the overlay contains focus', () => {
       const spy = sinon.spy();
       modeless1.addEventListener('vaadin-overlay-escape-press', spy);
 

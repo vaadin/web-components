@@ -151,7 +151,7 @@ describe('restore focus', () => {
           overlay.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
           const spy = sinon.spy(focusable, 'focus');
-          escKeyDown(document.body);
+          escKeyDown(overlay);
           overlay.opened = false;
           expect(spy).to.be.calledOnce;
           expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: false });
@@ -175,7 +175,7 @@ describe('restore focus', () => {
           overlay.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
           const spy = sinon.spy(focusable, 'focus');
-          escKeyDown(document.body);
+          escKeyDown(overlay);
           overlay.opened = false;
           expect(spy).to.be.calledOnce;
           expect(spy.firstCall.args[0]).to.deep.include({ focusVisible: true });

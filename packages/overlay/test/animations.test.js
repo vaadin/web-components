@@ -116,6 +116,7 @@ function afterOverlayClosingFinished(overlay, callback) {
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
       owner = fixtureSync('<div></div>');
+      owner.append(overlay);
       overlay.owner = owner;
       if (withAnimation) {
         overlay.setAttribute('animate', '');
@@ -268,7 +269,7 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     it('should close the overlay when ESC pressed while opening', () => {
       overlay.opened = true;
-      escKeyDown(document.body);
+      escKeyDown(overlay);
       expect(overlay.opened).to.equal(false);
     });
   });

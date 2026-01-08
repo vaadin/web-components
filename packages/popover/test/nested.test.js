@@ -41,15 +41,15 @@ describe('nested popover', () => {
       expect(nestedPopover.opened).to.be.true;
     });
 
-    it('should close the topmost overlay on global Escape press', async () => {
-      esc(document.body);
+    it('should close the topmost overlay on Escape press', async () => {
+      esc(nestedPopover);
       await nextRender();
 
       // Expect only the nested popover to be closed
       expect(popover.opened).to.be.true;
       expect(nestedPopover.opened).to.be.false;
 
-      esc(document.body);
+      esc(popover);
       await nextRender();
 
       // Expect both popovers to be closed

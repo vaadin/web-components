@@ -30,7 +30,7 @@ describe('interactions', () => {
     });
 
     it('should close on Esc', () => {
-      escKeyDown(document.body);
+      escKeyDown(overlay);
 
       expect(overlay.opened).to.be.false;
     });
@@ -39,7 +39,7 @@ describe('interactions', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
-      escKeyDown(document.body);
+      escKeyDown(overlay);
 
       expect(spy.calledOnce).to.be.true;
     });
@@ -48,7 +48,7 @@ describe('interactions', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
-      enterKeyDown(document.body);
+      enterKeyDown(overlay);
 
       expect(spy.called).to.be.false;
     });
@@ -56,15 +56,15 @@ describe('interactions', () => {
     it('should not close on Esc if the event was prevented', () => {
       overlay.addEventListener('vaadin-overlay-escape-press', (e) => e.preventDefault());
 
-      escKeyDown(document.body);
+      escKeyDown(overlay);
 
       expect(overlay.opened).to.be.true;
     });
 
     it('should not close on Esc if the keydown event was prevented', () => {
-      overlay.addEventListener('keydown', (e) => e.preventDefault());
+      overlay.$.content.addEventListener('keydown', (e) => e.preventDefault());
 
-      escKeyDown(overlay);
+      escKeyDown(overlay.$.content);
 
       expect(overlay.opened).to.be.true;
     });

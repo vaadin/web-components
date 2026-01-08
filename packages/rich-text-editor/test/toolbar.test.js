@@ -280,7 +280,7 @@ describe('toolbar controls', () => {
             await oneEvent(overlay, 'vaadin-overlay-open');
 
             const spy = sinon.spy(btn, 'focus');
-            esc(document.body);
+            esc(document.activeElement);
             expect(spy).to.be.calledOnce;
           });
 

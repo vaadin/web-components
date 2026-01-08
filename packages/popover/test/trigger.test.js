@@ -482,11 +482,21 @@ describe('trigger', () => {
           expect(overlay.opened).to.be.true;
         });
 
-        it(`should close on global Escape press with trigger set to ${trigger}`, async () => {
+        it(`should close on Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
 
-          esc(document.body);
+          esc(popover);
+          await nextUpdate(popover);
+          expect(overlay.opened).to.be.false;
+        });
+
+        it(`should close on Escape press when modal with trigger set to ${trigger}`, async () => {
+          popover.modal = true;
+          popover.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+
+          esc(popover);
           await nextUpdate(popover);
           expect(overlay.opened).to.be.false;
         });
@@ -500,12 +510,12 @@ describe('trigger', () => {
           expect(overlay.opened).to.be.false;
         });
 
-        it(`should close on global Escape press when modal with trigger set to ${trigger}`, async () => {
+        it(`should close on target Escape press when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
 
-          esc(document.body);
+          esc(target);
           await nextUpdate(popover);
           expect(overlay.opened).to.be.false;
         });
