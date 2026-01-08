@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
@@ -75,18 +75,18 @@ export class UploadManager extends EventTarget {
     super();
 
     // Configuration properties
-    this.target = options.target ?? '';
-    this.method = options.method ?? 'POST';
-    this.headers = options.headers ?? {};
-    this.timeout = options.timeout ?? 0;
-    this.maxFiles = options.maxFiles ?? Infinity;
-    this.maxFileSize = options.maxFileSize ?? Infinity;
-    this.accept = options.accept ?? '';
-    this.noAuto = options.noAuto ?? false;
-    this.withCredentials = options.withCredentials ?? false;
-    this.uploadFormat = options.uploadFormat ?? 'raw';
-    this.maxConcurrentUploads = options.maxConcurrentUploads ?? 3;
-    this.formDataName = options.formDataName ?? 'file';
+    this.target = options.target || '';
+    this.method = options.method || 'POST';
+    this.headers = options.headers || {};
+    this.timeout = options.timeout || 0;
+    this.maxFiles = options.maxFiles || Infinity;
+    this.maxFileSize = options.maxFileSize || Infinity;
+    this.accept = options.accept || '';
+    this.noAuto = options.noAuto || false;
+    this.withCredentials = options.withCredentials || false;
+    this.uploadFormat = options.uploadFormat || 'raw';
+    this.maxConcurrentUploads = options.maxConcurrentUploads || 3;
+    this.formDataName = options.formDataName || 'file';
 
     // State
     this._files = [];
@@ -264,7 +264,6 @@ export class UploadManager extends EventTarget {
   /** @private */
   _removeFile(file) {
     this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
-    this._processUploadQueue();
 
     const fileIndex = this._files.indexOf(file);
     if (fileIndex >= 0) {
@@ -452,13 +451,6 @@ export class UploadManager extends EventTarget {
 
   /** @private */
   _configureXhr(xhr, file = null, isRawUpload = false) {
-    if (typeof this.headers === 'string') {
-      try {
-        this.headers = JSON.parse(this.headers);
-      } catch (_) {
-        this.headers = {};
-      }
-    }
     Object.entries(this.headers).forEach(([key, value]) => {
       xhr.setRequestHeader(key, value);
     });
