@@ -35,22 +35,30 @@ export function cssImportPlugin() {
 }
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
-export function enforceThemePlugin(theme) {
+export function enforceThemePlugin(defaultTheme) {
   return {
     name: 'enforce-theme',
     transform(context) {
+      if (!context.response.is('html')) {
+        return context.body;
+      }
+
       let { body } = context;
 
-      if (theme === 'lumo' && context.response.is('html')) {
-        // For dev pages: add Lumo stylesheet
+      // Inject theme into HTML responses
+      // Use query parameter if present, otherwise fall back to process arg
+      const theme = context.query.theme || defaultTheme;
+
+      body = body.replace('<html', `<html data-theme="${theme}"`);
+
+      if (theme === 'lumo') {
         body = body.replace(
           '</title>',
           '</title><link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
         );
       }
 
-      if (theme === 'aura' && context.response.is('html')) {
-        // For dev pages: add Aura Stylesheet
+      if (theme === 'aura') {
         body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
       }
 
@@ -86,10 +94,7 @@ export default {
     },
     esbuildPlugin({ ts: true }),
 
-    // Used by all themes
     enforceThemePlugin(theme),
-
-    // Lumo / Aura CSS
-    ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
+    cssImportPlugin(),
   ].filter(Boolean),
 };
