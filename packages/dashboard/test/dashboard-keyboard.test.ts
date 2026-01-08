@@ -29,7 +29,7 @@ type TestDashboardItem = DashboardItem & { id: number };
 
 describe('dashboard - keyboard interaction', () => {
   let dashboard: Dashboard<TestDashboardItem>;
-  let keydownSpy;
+  let keydownSpy: sinon.SinonSpy;
   let firstGlobalFocusable: HTMLElement;
   const columnWidth = 200;
 
@@ -330,8 +330,8 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     describeBidirectional('horizontal', () => {
-      let arrowForwards;
-      let arrowBackwards;
+      let arrowForwards: string;
+      let arrowBackwards: string;
 
       beforeEach(() => {
         arrowForwards = document.dir === 'rtl' ? 'ArrowLeft' : 'ArrowRight';
