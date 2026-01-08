@@ -1,5 +1,4 @@
-export * from '@open-wc/semantic-dom-diff';
-
-export * from 'sinon-chai';
+import '@open-wc/semantic-dom-diff';
+import 'sinon-chai';
 
 export { expect } from 'chai';
