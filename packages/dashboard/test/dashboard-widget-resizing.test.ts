@@ -493,7 +493,7 @@ describe('dashboard - widget resizing', () => {
     });
 
     it('should prevent selection while resizing', async () => {
-      const propertyName = isSafari ? 'WebkitUserSelect' : 'userSelect';
+      const propertyName = isSafari ? 'webkitUserSelect' : 'userSelect';
 
       expect(getComputedStyle((dashboard as any).$.grid)[propertyName]).not.to.equal('none');
       fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
