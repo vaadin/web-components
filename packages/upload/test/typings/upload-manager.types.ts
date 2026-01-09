@@ -129,7 +129,6 @@ manager2.addEventListener('upload-abort', (event) => {
 manager2.addEventListener('files-changed', (event) => {
   assertType<UploadManagerEventMap['files-changed']>(event);
   assertType<UploadFile[]>(event.detail.value);
-  assertType<UploadFile[]>(event.detail.oldValue);
 });
 
 manager2.addEventListener('max-files-reached-changed', (event) => {
@@ -148,15 +147,11 @@ manager2.removeEventListener('upload-success', handler);
 const file: UploadFile = manager2.files[0];
 assertType<string>(file.uploadTarget);
 assertType<number>(file.elapsed);
-assertType<string>(file.elapsedStr);
 assertType<number>(file.remaining);
-assertType<string>(file.remainingStr);
 assertType<number>(file.progress);
 assertType<number>(file.speed);
 assertType<number>(file.total);
-assertType<string>(file.totalStr);
 assertType<number>(file.loaded);
-assertType<string>(file.loadedStr);
 assertType<string>(file.status);
 assertType<string>(file.error);
 assertType<boolean | undefined>(file.abort);

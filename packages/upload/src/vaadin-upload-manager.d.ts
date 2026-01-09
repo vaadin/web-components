@@ -3,9 +3,29 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { UploadFile, UploadFormat, UploadMethod } from './vaadin-upload-mixin.js';
+export type UploadMethod = 'POST' | 'PUT';
 
-export { UploadFile, UploadFormat, UploadMethod };
+export type UploadFormat = 'raw' | 'multipart';
+
+export interface UploadFile extends File {
+  uploadTarget: string;
+  elapsed: number;
+  remaining: number;
+  progress: number;
+  speed: number;
+  total: number;
+  loaded: number;
+  status: string;
+  error: string;
+  abort?: boolean;
+  complete?: boolean;
+  held?: boolean;
+  uploading?: boolean;
+  indeterminate?: boolean;
+  stalled?: boolean;
+  formDataName?: string;
+  xhr?: XMLHttpRequest;
+}
 
 export interface UploadManagerOptions {
   /**
@@ -249,15 +269,12 @@ export class UploadManager extends EventTarget {
    * object with a number of extra properties to track the upload process:
    * - `uploadTarget`: The target URL used to upload this file.
    * - `elapsed`: Elapsed time since the upload started.
-   * - `elapsedStr`: Human-readable elapsed time.
    * - `remaining`: Number of seconds remaining for the upload to finish.
-   * - `remainingStr`: Human-readable remaining time for the upload to finish.
    * - `progress`: Percentage of the file already uploaded.
    * - `speed`: Upload speed in kB/s.
    * - `size`: File size in bytes.
-   * - `totalStr`: Human-readable total size of the file.
+   * - `total`: The total size of the data being transmitted or processed
    * - `loaded`: Bytes transferred so far.
-   * - `loadedStr`: Human-readable uploaded size at the moment.
    * - `status`: Status of the upload process.
    * - `error`: Error message in case the upload failed.
    * - `abort`: True if the file was canceled by the user.

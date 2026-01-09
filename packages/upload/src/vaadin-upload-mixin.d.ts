@@ -14,7 +14,6 @@ export interface UploadFile extends File {
   remainingStr: string;
   progress: number;
   speed: number;
-  total: number;
   totalStr: string;
   loaded: number;
   loadedStr: string;
@@ -24,10 +23,6 @@ export interface UploadFile extends File {
   complete?: boolean;
   held?: boolean;
   uploading?: boolean;
-  indeterminate?: boolean;
-  stalled?: boolean;
-  formDataName?: string;
-  xhr?: XMLHttpRequest;
 }
 
 export interface UploadI18n {
