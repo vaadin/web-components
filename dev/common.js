@@ -55,6 +55,7 @@ class ThemeSwitcher extends LitElement {
       background: #f5f5f5;
       cursor: pointer;
       font-size: 0.75rem;
+      color: #000;
     }
 
     button:hover {
