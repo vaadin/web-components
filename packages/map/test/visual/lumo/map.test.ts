@@ -1,15 +1,19 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../src/vaadin-map.js';
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
+import '@vaadin/vaadin-lumo-styles/components/map.css';
+import '../../../vaadin-map.js';
 import FullScreen from 'ol/control/FullScreen';
 import OverviewMap from 'ol/control/OverviewMap';
 import Rotate from 'ol/control/Rotate';
 import ScaleLine from 'ol/control/ScaleLine';
 import View from 'ol/View';
+import type { Map } from '../../../vaadin-map.js';
 
 describe('map', () => {
-  let div, element;
+  let div: HTMLElement;
+  let element: Map;
 
   beforeEach(() => {
     div = document.createElement('div');
