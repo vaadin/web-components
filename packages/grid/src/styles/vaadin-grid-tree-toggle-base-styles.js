@@ -14,7 +14,8 @@ export const gridTreeToggleStyles = css`
   }
 
   /* Don't expand/collapse when clicking #level-spacer */
-  [part] {
+  [part],
+  slot {
     pointer-events: auto;
   }
 
