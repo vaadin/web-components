@@ -117,22 +117,17 @@ describe('UploadManager', () => {
       expect(spy.firstCall.args[0].detail.value).to.have.lengthOf(0);
     });
 
-    it('should include oldValue in files-changed event', () => {
+    it('should include current files in files-changed event', () => {
       manager.addFiles([createFile(100, 'text/plain')]);
-      const oldFilesLength = manager.files.length;
 
-      let eventDetail: { value: UploadFile[]; oldValue?: UploadFile[] } | undefined;
+      let eventDetail: { value: UploadFile[] } | undefined;
       manager.addEventListener('files-changed', (e) => {
         eventDetail = e.detail;
       });
       manager.addFiles([createFile(100, 'text/plain')]);
 
-      // oldValue should have the previous length (1 file)
-      expect(eventDetail!.oldValue).to.have.lengthOf(oldFilesLength);
       // value should have the new length (2 files)
       expect(eventDetail!.value).to.have.lengthOf(2);
-      // oldValue and value should be different references
-      expect(eventDetail!.value).to.not.equal(eventDetail!.oldValue);
     });
 
     it('should remove file via removeFile', () => {
@@ -1113,27 +1108,6 @@ describe('UploadManager', () => {
     });
   });
 
-  describe('files-changed event oldValue', () => {
-    beforeEach(() => {
-      manager = new UploadManager({ noAuto: true });
-    });
-
-    it('should provide different references for value and oldValue in files-changed during progress', () => {
-      (manager as any)._createXhr = xhrCreator({ sync: true });
-      manager.addFiles([createFile(100, 'text/plain')]);
-
-      const filesChangedSpy = sinon.spy();
-      manager.addEventListener('files-changed', filesChangedSpy);
-
-      manager.uploadFiles();
-
-      expect(filesChangedSpy.called).to.be.true;
-      expect(filesChangedSpy.firstCall.args[0].detail.value).to.not.equal(
-        filesChangedSpy.firstCall.args[0].detail.oldValue,
-      );
-    });
-  });
-
   describe('retrying queued files', () => {
     beforeEach(() => {
       manager = new UploadManager({
@@ -2097,32 +2071,6 @@ describe('UploadManager', () => {
 
       // Should have been called a limited number of times, not infinitely
       expect(callCount).to.be.lessThan(100);
-    });
-  });
-
-  describe('oldValue in files-changed', () => {
-    it('should provide the actual previous value in oldValue', () => {
-      manager = new UploadManager({ noAuto: true });
-
-      let capturedOldValue: any[] = [];
-      let capturedNewValue: any[] = [];
-
-      manager.addEventListener('files-changed', (e: any) => {
-        capturedOldValue = e.detail.oldValue;
-        capturedNewValue = e.detail.value;
-      });
-
-      // Add first file
-      manager.addFiles([createFile(100, 'text/plain')]);
-      const firstFile = manager.files[0];
-
-      // Add second file
-      manager.addFiles([createFile(100, 'text/plain')]);
-
-      // oldValue should be [firstFile], not a copy of current [secondFile, firstFile]
-      expect(capturedOldValue).to.have.lengthOf(1);
-      expect(capturedOldValue[0]).to.equal(firstFile);
-      expect(capturedNewValue).to.have.lengthOf(2);
     });
   });
 

@@ -121,7 +121,7 @@ export interface UploadManagerEventMap {
   'upload-error': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'upload-retry': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'upload-abort': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'files-changed': CustomEvent<{ value: UploadFile[]; oldValue?: UploadFile[] }>;
+  'files-changed': CustomEvent<{ value: UploadFile[] }>;
   'max-files-reached-changed': CustomEvent<{ value: boolean }>;
 }
 

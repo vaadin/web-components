@@ -203,7 +203,6 @@ export class UploadManager extends EventTarget {
   }
 
   set files(value) {
-    const oldValue = this.#files;
     const validFiles = [];
 
     for (const file of value) {
@@ -245,18 +244,18 @@ export class UploadManager extends EventTarget {
     this.#updateMaxFilesReached();
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value: validFiles, oldValue },
+        detail: { value: validFiles },
       }),
     );
   }
 
   // Internal setter - bypasses validation for internal use only
-  #setFiles(value, oldValue) {
+  #setFiles(value) {
     this.#files = value;
     this.#updateMaxFilesReached();
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value, oldValue },
+        detail: { value },
       }),
     );
   }
@@ -374,7 +373,7 @@ export class UploadManager extends EventTarget {
     file.loaded = 0;
     file.held = true;
     file.formDataName = this.formDataName;
-    this.#setFiles([file, ...this.#files], this.#files);
+    this.#setFiles([file, ...this.#files]);
 
     if (!this.noAuto) {
       this.#queueFileUpload(file);
@@ -392,10 +391,7 @@ export class UploadManager extends EventTarget {
 
     const fileIndex = this.#files.indexOf(file);
     if (fileIndex >= 0) {
-      this.#setFiles(
-        this.#files.filter((f) => f !== file),
-        this.#files,
-      );
+      this.#setFiles(this.#files.filter((f) => f !== file));
 
       this.dispatchEvent(
         new CustomEvent('file-remove', {
@@ -549,7 +545,7 @@ export class UploadManager extends EventTarget {
     const isRawUpload = this.uploadFormat === 'raw';
 
     if (!file.uploadTarget) {
-      file.uploadTarget = this.target || '';
+      file.uploadTarget = this.target;
     }
 
     const evt = this.dispatchEvent(
@@ -676,12 +672,12 @@ export class UploadManager extends EventTarget {
     }
   }
 
-  #configureXhr(xhr, file = null, isRawUpload = false) {
+  #configureXhr(xhr, file, isRawUpload) {
     Object.entries(this.headers).forEach(([key, value]) => {
       xhr.setRequestHeader(key, value);
     });
 
-    if (isRawUpload && file) {
+    if (isRawUpload) {
       xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
       xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
     }
