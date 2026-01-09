@@ -192,11 +192,11 @@ export class UploadManager extends EventTarget {
     }
     const processedTokens = this.accept.split(',').map((token) => {
       let processedToken = token.trim();
-      processedToken = processedToken.replace(/[+.]/gu, '\\$&');
-      if (processedToken.startsWith('\\.')) {
+      processedToken = processedToken.replaceAll(/[+.]/gu, String.raw`\$&`);
+      if (processedToken.startsWith(String.raw`\.`)) {
         processedToken = `.*${processedToken}$`;
       }
-      return processedToken.replace(/\/\*/gu, '/.*');
+      return processedToken.replaceAll('/*', '/.*');
     });
     return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
   }
@@ -318,7 +318,7 @@ export class UploadManager extends EventTarget {
       const loaded = e.loaded;
       const total = e.total;
       // Handle zero-byte files to avoid NaN
-      const progress = total > 0 ? ~~((loaded / total) * 100) : 100;
+      const progress = total > 0 ? Math.trunc((loaded / total) * 100) : 100;
       file.loaded = loaded;
       file.progress = progress;
       file.indeterminate = total > 0 ? loaded <= 0 || loaded >= total : false;
@@ -512,7 +512,7 @@ export class UploadManager extends EventTarget {
     file.elapsed = elapsed;
     file.remaining = Math.ceil(elapsed * (total / loaded - 1));
     // Speed should be based on bytes actually transferred, not total file size
-    file.speed = ~~(loaded / elapsed / 1024);
+    file.speed = Math.trunc(loaded / elapsed / 1024);
     file.total = total;
   }
 
