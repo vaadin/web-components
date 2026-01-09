@@ -35,9 +35,6 @@
  * fileInput.addEventListener('change', (e) => {
  *   manager.addFiles(e.target.files);
  * });
- *
- * // Clean up when done
- * manager.destroy();
  * ```
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added due to constraints
@@ -93,7 +90,6 @@ export class UploadManager extends EventTarget {
     this._maxFilesReached = false;
     this._uploadQueue = [];
     this._activeUploads = 0;
-    this._destroyed = false;
   }
 
   /**
@@ -125,31 +121,10 @@ export class UploadManager extends EventTarget {
   }
 
   /**
-   * Clean up resources and abort active uploads.
-   * Call this when the manager is no longer needed.
-   */
-  destroy() {
-    this._destroyed = true;
-
-    // Abort all active uploads
-    this._files.forEach((file) => {
-      if (file.xhr && file.uploading) {
-        file.xhr.abort();
-      }
-    });
-
-    // Clear state
-    this._files = [];
-    this._uploadQueue = [];
-    this._activeUploads = 0;
-  }
-
-  /**
    * Add files to the upload list.
    * @param {FileList|File[]} files - Files to add
    */
   addFiles(files) {
-    if (this._destroyed) return;
     Array.from(files).forEach((file) => this._addFile(file));
   }
 
@@ -158,7 +133,6 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile|UploadFile[]} [files] - Files to upload. Defaults to all outstanding files.
    */
   uploadFiles(files = this._files) {
-    if (this._destroyed) return;
     if (files && !Array.isArray(files)) {
       files = [files];
     }
@@ -170,7 +144,6 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to retry
    */
   retryUpload(file) {
-    if (this._destroyed) return;
     this._retryFileUpload(file);
   }
 
@@ -179,7 +152,6 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to abort
    */
   abortUpload(file) {
-    if (this._destroyed) return;
     this._abortFileUpload(file);
   }
 
@@ -188,7 +160,6 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to remove
    */
   removeFile(file) {
-    if (this._destroyed) return;
     this._removeFile(file);
   }
 

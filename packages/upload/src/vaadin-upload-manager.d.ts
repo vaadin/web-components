@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { UploadFile, UploadFormat, UploadMethod } from './vaadin-upload-mixin.js';
@@ -130,9 +130,6 @@ export interface UploadManagerEventMap {
  * fileInput.addEventListener('change', (e) => {
  *   manager.addFiles(e.target.files);
  * });
- *
- * // Clean up when done
- * manager.destroy();
  * ```
  */
 export class UploadManager extends EventTarget {
@@ -210,12 +207,6 @@ export class UploadManager extends EventTarget {
    * Whether the maximum number of files has been reached.
    */
   readonly maxFilesReached: boolean;
-
-  /**
-   * Clean up resources and abort active uploads.
-   * Call this when the manager is no longer needed.
-   */
-  destroy(): void;
 
   /**
    * Add files to the upload list.

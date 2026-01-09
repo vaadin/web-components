@@ -56,7 +56,6 @@ manager2.uploadFiles(manager2.files);
 manager2.retryUpload(manager2.files[0]);
 manager2.abortUpload(manager2.files[0]);
 manager2.removeFile(manager2.files[0]);
-manager2.destroy();
 
 // Events
 manager2.addEventListener('file-reject', (event) => {
