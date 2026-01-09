@@ -82,11 +82,7 @@ class ThemeSwitcher extends LitElement {
 
   switchTheme(theme) {
     const url = new URL(window.location);
-    if (theme === 'base') {
-      url.searchParams.delete('theme');
-    } else {
-      url.searchParams.set('theme', theme);
-    }
+    url.searchParams.set('theme', theme);
     history.replaceState(null, '', url);
     location.reload();
   }
