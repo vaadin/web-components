@@ -40,6 +40,7 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
+    "@vaadin/aura": "~25.0.2",
     "@vaadin/chai-plugins": "~25.0.2",
     "@vaadin/icon": "~25.0.2",
     "@vaadin/icons": "~25.0.2",
