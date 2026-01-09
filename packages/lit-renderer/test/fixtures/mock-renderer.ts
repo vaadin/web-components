@@ -1,7 +1,8 @@
 import { directive } from 'lit/directive.js';
-import { LitRendererDirective } from '../../src/lit-renderer.js';
+import { type LitRenderer, LitRendererDirective } from '../../src/lit-renderer.js';
+import type { MockComponent } from './mock-component.js';
 
-class MockRendererDirective extends LitRendererDirective {
+class MockRendererDirective extends LitRendererDirective<MockComponent, LitRenderer> {
   addRenderer() {
     this.element.renderer = (root) => {
       this.renderRenderer(root);
