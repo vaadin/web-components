@@ -62,6 +62,9 @@ export function enforceThemePlugin(defaultTheme) {
         body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
       }
 
+      // Inject theme switcher
+      body = body.replace('</body>', '<theme-switcher></theme-switcher></body>');
+
       return body;
     },
   };

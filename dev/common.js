@@ -90,5 +90,3 @@ class ThemeSwitcher extends LitElement {
 }
 
 customElements.define('theme-switcher', ThemeSwitcher);
-
-document.body.appendChild(document.createElement('theme-switcher'));
