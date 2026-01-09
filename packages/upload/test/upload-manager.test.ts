@@ -121,7 +121,7 @@ describe('UploadManager', () => {
       manager.addFiles([createFile(100, 'text/plain')]);
       const oldFilesLength = manager.files.length;
 
-      let eventDetail: { value: UploadFile[]; oldValue: UploadFile[] } | undefined;
+      let eventDetail: { value: UploadFile[]; oldValue?: UploadFile[] } | undefined;
       manager.addEventListener('files-changed', (e) => {
         eventDetail = e.detail;
       });
@@ -2927,6 +2927,475 @@ describe('UploadManager', () => {
       manager.uploadFiles();
 
       expect(filesChangedSpy.called).to.be.true;
+    });
+  });
+
+  describe('edge cases', () => {
+    describe('maxConcurrentUploads changed mid-upload', () => {
+      it('should respect new limit when decreased during uploads', async () => {
+        const clock = sinon.useFakeTimers();
+
+        try {
+          manager = new UploadManager({
+            target: '/api/upload',
+            noAuto: true,
+            maxConcurrentUploads: 3,
+          });
+
+          let activeUploads = 0;
+
+          (manager as any)._createXhr = () => {
+            const xhr = {
+              readyState: 0,
+              status: 200,
+              upload: {
+                onprogress: null as any,
+                onloadstart: null as any,
+              },
+              onreadystatechange: null as any,
+              ontimeout: null as any,
+              onabort: null as any,
+              open() {
+                this.readyState = 1;
+              },
+              setRequestHeader() {},
+              send() {
+                activeUploads++;
+                if (xhr.upload.onloadstart) {
+                  xhr.upload.onloadstart();
+                }
+                // Complete after 100ms
+                setTimeout(() => {
+                  activeUploads--;
+                  xhr.readyState = 4;
+                  if (xhr.onreadystatechange) {
+                    xhr.onreadystatechange();
+                  }
+                }, 100);
+              },
+              abort() {},
+            };
+            return xhr;
+          };
+
+          // Add 5 files
+          manager.addFiles(createFiles(5, 100, 'text/plain'));
+          manager.uploadFiles();
+
+          // Let first batch start (3 concurrent)
+          await clock.tickAsync(10);
+          expect(activeUploads).to.equal(3);
+
+          // Decrease limit mid-upload
+          manager.maxConcurrentUploads = 1;
+
+          // Complete first batch
+          await clock.tickAsync(100);
+
+          // Next uploads should respect new limit
+          await clock.tickAsync(10);
+          // Should only start 1 more, not 3
+          expect(activeUploads).to.be.at.most(1);
+
+          // Complete remaining
+          await clock.tickAsync(200);
+        } finally {
+          clock.restore();
+        }
+      });
+
+      it('should use new limit when uploads complete after limit is increased', async () => {
+        const clock = sinon.useFakeTimers();
+
+        try {
+          manager = new UploadManager({
+            target: '/api/upload',
+            noAuto: true,
+            maxConcurrentUploads: 1,
+          });
+
+          let activeUploads = 0;
+          let maxConcurrentSeen = 0;
+
+          (manager as any)._createXhr = () => {
+            const xhr = {
+              readyState: 0,
+              status: 200,
+              upload: {
+                onprogress: null as any,
+                onloadstart: null as any,
+              },
+              onreadystatechange: null as any,
+              ontimeout: null as any,
+              onabort: null as any,
+              open() {
+                this.readyState = 1;
+              },
+              setRequestHeader() {},
+              send() {
+                activeUploads++;
+                maxConcurrentSeen = Math.max(maxConcurrentSeen, activeUploads);
+                if (xhr.upload.onloadstart) {
+                  xhr.upload.onloadstart();
+                }
+                setTimeout(() => {
+                  activeUploads--;
+                  xhr.readyState = 4;
+                  if (xhr.onreadystatechange) {
+                    xhr.onreadystatechange();
+                  }
+                }, 100);
+              },
+              abort() {},
+            };
+            return xhr;
+          };
+
+          manager.addFiles(createFiles(4, 100, 'text/plain'));
+          manager.uploadFiles();
+
+          await clock.tickAsync(10);
+          expect(activeUploads).to.equal(1);
+
+          // Increase limit before first upload completes
+          manager.maxConcurrentUploads = 3;
+
+          // When first upload completes, queue processing should use new limit
+          await clock.tickAsync(100);
+
+          // After first completes, should start up to 3 more (but only 3 files left)
+          await clock.tickAsync(10);
+          expect(maxConcurrentSeen).to.be.at.most(3);
+
+          await clock.tickAsync(500);
+        } finally {
+          clock.restore();
+        }
+      });
+    });
+
+    describe('file removed while in queue', () => {
+      it('should not upload file that was removed from queue before upload started', async () => {
+        const clock = sinon.useFakeTimers();
+
+        try {
+          manager = new UploadManager({
+            target: '/api/upload',
+            noAuto: true,
+            maxConcurrentUploads: 1,
+          });
+
+          const uploadedFiles: string[] = [];
+
+          (manager as any)._createXhr = () => {
+            const xhr = {
+              readyState: 0,
+              status: 200,
+              upload: {
+                onprogress: null as any,
+                onloadstart: null as any,
+              },
+              onreadystatechange: null as any,
+              ontimeout: null as any,
+              onabort: null as any,
+              open() {
+                this.readyState = 1;
+              },
+              setRequestHeader() {},
+              send() {
+                if (xhr.upload.onloadstart) {
+                  xhr.upload.onloadstart();
+                }
+                setTimeout(() => {
+                  xhr.readyState = 4;
+                  if (xhr.onreadystatechange) {
+                    xhr.onreadystatechange();
+                  }
+                }, 100);
+              },
+              abort() {},
+            };
+            return xhr;
+          };
+
+          manager.addEventListener('upload-start', (e) => {
+            uploadedFiles.push((e as CustomEvent).detail.file.name);
+          });
+
+          // Add 3 files
+          const files = createFiles(3, 100, 'text/plain');
+          manager.addFiles(files);
+
+          // Start uploads - only first should start due to maxConcurrentUploads=1
+          manager.uploadFiles();
+          await clock.tickAsync(10);
+
+          // Remove second file while it's still in queue
+          const secondFile = manager.files[1];
+          manager.removeFile(secondFile);
+
+          // Complete all uploads
+          await clock.tickAsync(500);
+
+          // Should only have uploaded 2 files (first and third)
+          expect(uploadedFiles).to.have.lengthOf(2);
+          expect(uploadedFiles).to.not.include(secondFile.name);
+        } finally {
+          clock.restore();
+        }
+      });
+    });
+
+    describe('upload-before prevention and retry', () => {
+      it('should allow upload on retry after upload-before was prevented', () => {
+        manager = new UploadManager({
+          target: '/api/upload',
+          noAuto: true,
+        });
+
+        let preventCount = 0;
+        let uploadStarted = false;
+
+        manager.addEventListener('upload-before', (e) => {
+          preventCount++;
+          if (preventCount === 1) {
+            // Prevent first attempt
+            e.preventDefault();
+          }
+          // Allow second attempt (retry)
+        });
+
+        manager.addEventListener('upload-start', () => {
+          uploadStarted = true;
+        });
+
+        (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10, sync: true });
+
+        manager.addFiles([createFile(100, 'text/plain')]);
+        const file = manager.files[0];
+
+        // First attempt - should be prevented
+        manager.uploadFiles();
+        expect(preventCount).to.equal(1);
+        expect(uploadStarted).to.be.false;
+        expect(file.held).to.be.true;
+
+        // Retry - should succeed
+        manager.retryUpload(file);
+        expect(preventCount).to.equal(2);
+        expect(uploadStarted).to.be.true;
+      });
+
+      it('should maintain file state correctly after prevention', () => {
+        manager = new UploadManager({
+          target: '/api/upload',
+          noAuto: true,
+        });
+
+        manager.addEventListener('upload-before', (e) => {
+          e.preventDefault();
+        });
+
+        (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+
+        manager.addFiles([createFile(100, 'text/plain')]);
+        const file = manager.files[0];
+
+        manager.uploadFiles();
+
+        // File should be held after prevention
+        expect(file.held).to.be.true;
+        expect(file.uploading).to.be.false;
+        expect(file.indeterminate).to.be.false;
+        // File should still be in the list
+        expect(manager.files).to.include(file);
+      });
+    });
+
+    describe('timer throttling simulation', () => {
+      it('should clear previous stalled timeout when new progress arrives', async () => {
+        const clock = sinon.useFakeTimers();
+
+        try {
+          manager = new UploadManager({
+            target: '/api/upload',
+            noAuto: true,
+          });
+
+          let progressCallback: any;
+          const xhr = {
+            readyState: 0,
+            status: 0,
+            upload: {
+              onprogress: null as any,
+              onloadstart: null as any,
+            },
+            onreadystatechange: null as any,
+            ontimeout: null as any,
+            onabort: null as any,
+            open() {
+              this.readyState = 1;
+            },
+            setRequestHeader() {},
+            send() {
+              progressCallback = this.upload.onprogress;
+              if (this.upload.onloadstart) {
+                this.upload.onloadstart();
+              }
+            },
+            abort() {},
+          };
+
+          (manager as any)._createXhr = () => xhr;
+
+          manager.addFiles([createFile(100, 'text/plain')]);
+          const file = manager.files[0];
+          manager.uploadFiles();
+
+          // Initial progress at t=0
+          progressCallback({ loaded: 10, total: 100 });
+
+          // Wait 1900ms (just before stalled timeout at 2000ms)
+          await clock.tickAsync(1900);
+          expect(file.stalled).to.be.false;
+
+          // More progress at t=1900 - this should clear the previous stalled timeout
+          progressCallback({ loaded: 50, total: 100 });
+
+          // Wait another 1900ms (t=3800) - original timeout would have fired at t=2000
+          // but new timeout won't fire until t=3900
+          await clock.tickAsync(1900);
+          expect(file.stalled).to.be.false;
+
+          // Complete the upload before stalled fires
+          xhr.readyState = 4;
+          xhr.status = 200;
+          xhr.onreadystatechange();
+
+          expect(file.stalled).to.be.false;
+        } finally {
+          clock.restore();
+        }
+      });
+
+      it('should correctly mark as stalled when no progress for extended time', async () => {
+        const clock = sinon.useFakeTimers();
+
+        try {
+          manager = new UploadManager({
+            target: '/api/upload',
+            noAuto: true,
+          });
+
+          let progressCallback: any;
+
+          (manager as any)._createXhr = () => ({
+            readyState: 0,
+            status: 0,
+            upload: {
+              onprogress: null as any,
+              onloadstart: null as any,
+            },
+            onreadystatechange: null as any,
+            ontimeout: null as any,
+            onabort: null as any,
+            open() {
+              this.readyState = 1;
+            },
+            setRequestHeader() {},
+            send() {
+              progressCallback = this.upload.onprogress;
+              if (this.upload.onloadstart) {
+                this.upload.onloadstart();
+              }
+            },
+            abort() {},
+          });
+
+          manager.addFiles([createFile(100, 'text/plain')]);
+          const file = manager.files[0];
+          manager.uploadFiles();
+
+          // Initial progress
+          progressCallback({ loaded: 10, total: 100 });
+          expect(file.stalled).to.be.false;
+
+          // Wait for stalled timeout (2000ms)
+          await clock.tickAsync(2100);
+
+          expect(file.stalled).to.be.true;
+        } finally {
+          clock.restore();
+        }
+      });
+    });
+
+    describe('rapid queue manipulation', () => {
+      it('should handle adding files while uploads are completing', async () => {
+        const clock = sinon.useFakeTimers();
+
+        try {
+          manager = new UploadManager({
+            target: '/api/upload',
+            noAuto: true,
+            maxConcurrentUploads: 2,
+          });
+
+          const completedFiles: string[] = [];
+
+          (manager as any)._createXhr = () => {
+            const xhr = {
+              readyState: 0,
+              status: 200,
+              upload: {
+                onprogress: null as any,
+                onloadstart: null as any,
+              },
+              onreadystatechange: null as any,
+              ontimeout: null as any,
+              onabort: null as any,
+              open() {
+                this.readyState = 1;
+              },
+              setRequestHeader() {},
+              send() {
+                if (xhr.upload.onloadstart) {
+                  xhr.upload.onloadstart();
+                }
+                setTimeout(() => {
+                  xhr.readyState = 4;
+                  if (xhr.onreadystatechange) {
+                    xhr.onreadystatechange();
+                  }
+                }, 50);
+              },
+              abort() {},
+            };
+            return xhr;
+          };
+
+          manager.addEventListener('upload-success', (e) => {
+            completedFiles.push((e as CustomEvent).detail.file.name);
+          });
+
+          // Add initial files
+          manager.addFiles(createFiles(2, 100, 'text/plain'));
+          manager.uploadFiles();
+
+          // Add more files while first batch is uploading
+          await clock.tickAsync(25);
+          manager.addFiles(createFiles(2, 100, 'text/plain'));
+          manager.uploadFiles();
+
+          // Complete all
+          await clock.tickAsync(200);
+
+          expect(completedFiles).to.have.lengthOf(4);
+          expect(manager.files.filter((f) => f.complete)).to.have.lengthOf(4);
+        } finally {
+          clock.restore();
+        }
+      });
     });
   });
 });

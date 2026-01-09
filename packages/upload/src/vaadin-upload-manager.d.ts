@@ -111,7 +111,7 @@ export interface UploadManagerEventMap {
     file: UploadFile;
     xhr: XMLHttpRequest;
     uploadFormat: UploadFormat;
-    requestBody: File | FormData;
+    requestBody: UploadFile | FormData;
     formData?: FormData;
   }>;
   'upload-start': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
