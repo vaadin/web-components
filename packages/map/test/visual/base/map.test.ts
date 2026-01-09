@@ -1,15 +1,17 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/aura/aura.css';
-import '../../../vaadin-map.js';
+import '../../../src/vaadin-map.js';
 import FullScreen from 'ol/control/FullScreen';
 import OverviewMap from 'ol/control/OverviewMap';
 import Rotate from 'ol/control/Rotate';
 import ScaleLine from 'ol/control/ScaleLine';
 import View from 'ol/View';
+import type { Map } from '../../../src/vaadin-map.js';
 
 describe('map', () => {
-  let div, element;
+  let div: HTMLElement;
+  let element: Map;
 
   beforeEach(() => {
     div = document.createElement('div');
@@ -40,7 +42,27 @@ describe('map', () => {
       element.configuration.getControls().push(new Rotate({ label: '' }));
       element.configuration.getControls().push(new ScaleLine());
       element.configuration.getControls().push(new OverviewMap({ label: '', collapseLabel: '' }));
-      await visualDiff(div, 'all-controls');
+      await visualDiff(div, 'controls-all-controls');
+    });
+
+    it('scale bar', async () => {
+      // Add scale line using bar mode
+      element.configuration.getControls().push(new ScaleLine({ bar: true, text: true }));
+      await visualDiff(div, 'controls-scale-bar');
+    });
+  });
+
+  describe('theme', () => {
+    it('no-border', async () => {
+      element.setAttribute('theme', 'no-border');
+      await visualDiff(div, 'theme-no-border');
+    });
+  });
+
+  describe('accessibility', () => {
+    it('focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'accessibility-focus-ring');
     });
   });
 });
