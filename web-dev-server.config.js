@@ -98,6 +98,5 @@ export default {
     esbuildPlugin({ ts: true }),
 
     enforceThemePlugin(theme),
-    cssImportPlugin(),
   ].filter(Boolean),
 };
