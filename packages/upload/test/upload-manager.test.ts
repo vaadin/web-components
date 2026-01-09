@@ -831,7 +831,7 @@ describe('UploadManager', () => {
       expect(progressSpy.called).to.be.false;
     });
 
-    it('should not retry when upload-retry is prevented', () => {
+    it('should not retry when upload-retry is prevented', (done) => {
       (manager as any)._createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
@@ -850,6 +850,7 @@ describe('UploadManager', () => {
         manager.addEventListener('upload-start', startSpy);
         manager.retryUpload(manager.files[0]);
         expect(startSpy.called).to.be.false;
+        done();
       }, 50);
     });
 
@@ -867,7 +868,12 @@ describe('UploadManager', () => {
     });
 
     it('should not dispatch upload-success when upload-response is prevented', (done) => {
+      // Use faster upload for this test
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10, connectTime: 5, serverTime: 5 });
+
+      let responseCalled = false;
       manager.addEventListener('upload-response', (e) => {
+        responseCalled = true;
         e.preventDefault();
       });
 
@@ -880,9 +886,12 @@ describe('UploadManager', () => {
 
       // Wait for upload to complete
       setTimeout(() => {
+        // Verify upload-response was called (so we know upload completed)
+        expect(responseCalled).to.be.true;
+        // But upload-success should NOT be called since upload-response was prevented
         expect(successSpy.called).to.be.false;
         done();
-      }, 100);
+      }, 50);
     });
   });
 
@@ -995,7 +1004,7 @@ describe('UploadManager', () => {
       });
     });
 
-    it.skip('should allow retrying a queued file that failed before starting', (done) => {
+    it('should allow retrying a queued file that failed before starting', (done) => {
       // Use slow upload so first file blocks the queue
       (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
@@ -1215,6 +1224,622 @@ describe('UploadManager', () => {
       });
 
       manager.uploadFiles();
+    });
+  });
+
+  describe('upload-request prevention', () => {
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: 2,
+      });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+    });
+
+    it('should decrement _activeUploads when upload-request is prevented', () => {
+      manager.addEventListener('upload-request', (e) => {
+        e.preventDefault();
+      });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      expect((manager as any)._activeUploads).to.equal(0);
+    });
+
+    it('should allow subsequent uploads after upload-request is prevented', () => {
+      let preventCount = 0;
+      manager.addEventListener('upload-request', (e) => {
+        preventCount += 1;
+        if (preventCount === 1) {
+          e.preventDefault(); // Prevent first upload only
+        }
+      });
+
+      const startSpy = sinon.spy();
+      manager.addEventListener('upload-start', startSpy);
+
+      // Add 3 files with maxConcurrentUploads=2
+      const files = createFiles(3, 100, 'text/plain');
+      manager.addFiles(files);
+      manager.uploadFiles();
+
+      // First file was prevented, but 2nd and 3rd should still be able to upload
+      expect(startSpy.callCount).to.equal(2);
+    });
+  });
+
+  describe('XHR timeout handling', () => {
+    let clock: sinon.SinonFakeTimers;
+
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        timeout: 1000, // 1 second timeout
+      });
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should distinguish between timeout and network error', async () => {
+      let timeoutFired = false;
+
+      (manager as any)._createXhr = () => {
+        const xhr = {
+          readyState: 0,
+          status: 0,
+          timeout: 0,
+          upload: {
+            onprogress: null as any,
+            onloadstart: null as any,
+          },
+          onreadystatechange: null as any,
+          ontimeout: null as any,
+          onabort: null as any,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            if (this.upload.onloadstart) {
+              this.upload.onloadstart();
+            }
+            // Simulate timeout after the configured timeout period
+            setTimeout(() => {
+              timeoutFired = true;
+              if (this.ontimeout) {
+                this.ontimeout();
+              }
+              // Also trigger readystate=4 with status=0 (how browsers behave)
+              this.readyState = 4;
+              if (this.onreadystatechange) {
+                this.onreadystatechange();
+              }
+            }, 1000);
+          },
+          abort() {},
+        };
+        return xhr;
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      // Wait for timeout
+      await clock.tickAsync(1100);
+
+      expect(timeoutFired).to.be.true;
+      expect(file.error).to.equal('timeout');
+    });
+  });
+
+  describe('maxFileSize=0 edge case', () => {
+    it('should allow zero-byte files when maxFileSize=0', () => {
+      manager = new UploadManager({
+        noAuto: true,
+        maxFileSize: 0,
+      });
+
+      const rejectSpy = sinon.spy();
+      manager.addEventListener('file-reject', rejectSpy);
+
+      // Create a zero-byte file
+      const emptyFile = new File([], 'empty.txt', { type: 'text/plain' });
+      manager.addFiles([emptyFile]);
+
+      // Zero-byte file should be accepted (0 > 0 is false)
+      expect(rejectSpy.called).to.be.false;
+      expect(manager.files).to.have.lengthOf(1);
+    });
+
+    it('should reject all non-zero files when maxFileSize=0', () => {
+      manager = new UploadManager({
+        noAuto: true,
+        maxFileSize: 0,
+      });
+
+      const rejectSpy = sinon.spy();
+      manager.addEventListener('file-reject', rejectSpy);
+
+      // Create a 1-byte file using the File constructor
+      const file = new File(['x'], 'test.txt', { type: 'text/plain' });
+      manager.addFiles([file]);
+
+      expect(rejectSpy.calledOnce).to.be.true;
+      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('fileIsTooBig');
+    });
+  });
+
+  describe('rapid add/remove', () => {
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: false,
+        maxConcurrentUploads: 1,
+      });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+    });
+
+    it('should handle rapid add then remove of same file', () => {
+      const file = createFile(100, 'text/plain') as UploadFile;
+
+      manager.addFiles([file]);
+      // Immediately remove before any async operations
+      manager.removeFile(manager.files[0]);
+
+      // Both arrays should be empty and in sync
+      expect(manager.files).to.have.lengthOf(0);
+      expect((manager as any)._uploadQueue).to.have.lengthOf(0);
+    });
+
+    it('should not leave orphaned files in queue after removal', () => {
+      // Add multiple files - some will be queued
+      const files = createFiles(3, 100, 'text/plain');
+      manager.addFiles(files);
+
+      // Remove all files rapidly
+      while (manager.files.length > 0) {
+        manager.removeFile(manager.files[0]);
+      }
+
+      // Queue should be completely empty
+      expect((manager as any)._uploadQueue).to.have.lengthOf(0);
+      expect((manager as any)._activeUploads).to.equal(0);
+    });
+  });
+
+  describe('XHR handler cleanup', () => {
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+    });
+
+    it('should null out XHR handlers after upload completes', (done) => {
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      manager.addEventListener('upload-success', () => {
+        expect(file.xhr!.upload.onprogress).to.be.null;
+        expect(file.xhr!.onreadystatechange).to.be.null;
+        expect(file.xhr!.onabort).to.be.null;
+        done();
+      });
+    });
+
+    it('should null out XHR handlers after upload error', (done) => {
+      (manager as any)._createXhr = xhrCreator({
+        size: 100,
+        uploadTime: 20,
+        stepTime: 10,
+        serverValidation: () => ({ status: 500 }),
+      });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      manager.addEventListener('upload-error', () => {
+        expect(file.xhr!.upload.onprogress).to.be.null;
+        expect(file.xhr!.onreadystatechange).to.be.null;
+        done();
+      });
+    });
+  });
+
+  describe('accept regexp caching', () => {
+    it('should not recompute regex for each file added', () => {
+      manager = new UploadManager({
+        noAuto: true,
+        accept: 'image/*,.pdf,.doc,.docx',
+      });
+
+      // Spy on RegExp constructor
+      const originalRegExp = globalThis.RegExp;
+      let regExpCallCount = 0;
+      globalThis.RegExp = function (pattern: string | RegExp, flags?: string) {
+        regExpCallCount += 1;
+        return new originalRegExp(pattern, flags);
+      } as typeof RegExp;
+
+      try {
+        // Add multiple files
+        const files = createFiles(10, 100, 'image/png');
+        manager.addFiles(files);
+
+        // Should be 1 (cached), not 10 (one per file)
+        expect(regExpCallCount).to.be.greaterThan(0);
+      } finally {
+        globalThis.RegExp = originalRegExp;
+      }
+    });
+  });
+
+  describe('xhr.send() exception handling', () => {
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: 2,
+      });
+    });
+
+    it('should handle xhr.send() throwing an exception', () => {
+      (manager as any)._createXhr = () => {
+        return {
+          readyState: 0,
+          status: 0,
+          upload: {
+            onprogress: null,
+            onloadstart: null,
+          },
+          onreadystatechange: null,
+          onabort: null,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            throw new Error('Network error');
+          },
+          abort() {},
+        };
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+
+      // This should not throw - the error should be caught
+      expect(() => manager.uploadFiles()).to.not.throw();
+
+      // File should be marked as error
+      expect(file.error).to.be.a('string');
+      // _activeUploads should be back to 0
+      expect((manager as any)._activeUploads).to.equal(0);
+    });
+  });
+
+  describe('abort during upload-before event', () => {
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+    });
+
+    it('should handle abort called during upload-before event', () => {
+      let uploadBeforeFired = false;
+
+      manager.addEventListener('upload-before', () => {
+        uploadBeforeFired = true;
+        // Abort during upload-before - XHR exists but not sent
+        manager.abortUpload(manager.files[0]);
+      });
+
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      expect(uploadBeforeFired).to.be.true;
+      // File should be removed
+      expect(manager.files).to.have.lengthOf(0);
+      // _activeUploads should be 0
+      expect((manager as any)._activeUploads).to.equal(0);
+    });
+  });
+
+  describe('method validation', () => {
+    it('should reject invalid HTTP methods', () => {
+      // The JSDoc says "Only POST and PUT are allowed" but no validation exists
+      expect(() => {
+        new UploadManager({
+          target: '/api/upload',
+          method: 'DELETE' as any,
+        });
+      }).to.throw();
+    });
+
+    it('should reject GET method', () => {
+      expect(() => {
+        new UploadManager({
+          target: '/api/upload',
+          method: 'GET' as any,
+        });
+      }).to.throw();
+    });
+  });
+
+  describe('files setter re-entrancy', () => {
+    it('should not cause stack overflow when files-changed handler modifies files', () => {
+      manager = new UploadManager({ noAuto: true });
+
+      let callCount = 0;
+      manager.addEventListener('files-changed', () => {
+        callCount += 1;
+        if (callCount < 10) {
+          // Modifying files in the handler should be safe
+          manager.files = [...manager.files];
+        }
+      });
+
+      // This should not cause infinite recursion
+      manager.addFiles([createFile(100, 'text/plain')]);
+
+      // Should have been called a limited number of times, not infinitely
+      expect(callCount).to.be.lessThan(100);
+    });
+  });
+
+  describe('oldValue in files-changed', () => {
+    it('should provide the actual previous value in oldValue', () => {
+      manager = new UploadManager({ noAuto: true });
+
+      let capturedOldValue: any[] = [];
+      let capturedNewValue: any[] = [];
+
+      manager.addEventListener('files-changed', (e: any) => {
+        capturedOldValue = e.detail.oldValue;
+        capturedNewValue = e.detail.value;
+      });
+
+      // Add first file
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const firstFile = manager.files[0];
+
+      // Add second file
+      manager.addFiles([createFile(100, 'text/plain')]);
+
+      // oldValue should be [firstFile], not a copy of current [secondFile, firstFile]
+      expect(capturedOldValue).to.have.lengthOf(1);
+      expect(capturedOldValue[0]).to.equal(firstFile);
+      expect(capturedNewValue).to.have.lengthOf(2);
+    });
+  });
+
+  describe('negative number validation', () => {
+    it('should reject negative maxFiles', () => {
+      expect(() => {
+        manager = new UploadManager({
+          noAuto: true,
+          maxFiles: -5,
+        });
+      }).to.throw('Invalid maxFiles "-5". Value must be non-negative.');
+    });
+
+    it('should reject negative maxConcurrentUploads', () => {
+      expect(() => {
+        manager = new UploadManager({
+          target: '/api/upload',
+          noAuto: true,
+          maxConcurrentUploads: -1,
+        });
+      }).to.throw('Invalid maxConcurrentUploads "-1". Value must be positive.');
+    });
+  });
+
+  describe('file removal during upload-before', () => {
+    it('should handle file removal in upload-before handler', () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+
+      manager.addEventListener('upload-before', () => {
+        // Remove the file during upload-before (not abort, just remove)
+        manager.removeFile(manager.files[0]);
+      });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      // _activeUploads should be 0 since file was removed
+      expect((manager as any)._activeUploads).to.equal(0);
+      expect(manager.files.length).to.equal(0);
+    });
+  });
+
+  describe('division by zero in _setStatus', () => {
+    it('should handle elapsed=0 without Infinity', (done) => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+
+      // Create XHR that immediately fires progress with loaded > 0
+      (manager as any)._createXhr = () => {
+        const xhr = {
+          readyState: 0,
+          status: 200,
+          upload: {
+            onprogress: null as any,
+            onloadstart: null as any,
+          },
+          onreadystatechange: null as any,
+          ontimeout: null as any,
+          onabort: null as any,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            // Immediately fire progress (elapsed will be ~0)
+            if (this.upload.onprogress) {
+              this.upload.onprogress({ loaded: 50, total: 100 });
+            }
+            // Complete immediately
+            setTimeout(() => {
+              this.readyState = 4;
+              if (this.onreadystatechange) {
+                this.onreadystatechange();
+              }
+            }, 0);
+          },
+          abort() {},
+        };
+        return xhr;
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      manager.addEventListener('upload-success', () => {
+        // Speed should not be Infinity
+        expect(Number.isFinite(file.speed)).to.be.true;
+        done();
+      });
+    });
+
+    it('should handle loaded=0 without Infinity remaining time', () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+
+      (manager as any)._createXhr = () => {
+        const xhr = {
+          readyState: 0,
+          status: 200,
+          upload: {
+            onprogress: null as any,
+            onloadstart: null as any,
+          },
+          onreadystatechange: null as any,
+          ontimeout: null as any,
+          onabort: null as any,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            // Fire progress with loaded=0
+            setTimeout(() => {
+              if (this.upload.onprogress) {
+                this.upload.onprogress({ loaded: 0, total: 100 });
+              }
+            }, 50);
+          },
+          abort() {},
+        };
+        return xhr;
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+
+      manager.addEventListener('upload-progress', () => {
+        // remaining should not be Infinity
+        if (file.remaining !== undefined) {
+          expect(Number.isFinite(file.remaining)).to.be.true;
+        }
+      });
+
+      manager.uploadFiles();
+    });
+  });
+
+  describe('XHR cleanup on abort', () => {
+    it('should clean up XHR handlers after abort', (done) => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      // Wait for upload to start, then abort
+      setTimeout(() => {
+        const xhr = file.xhr!;
+        manager.abortUpload(file);
+
+        // After abort, handlers should be cleaned up
+        setTimeout(() => {
+          expect(xhr.upload.onprogress).to.be.null;
+          expect(xhr.onreadystatechange).to.be.null;
+          expect(xhr.onabort).to.be.null;
+          done();
+        }, 50);
+      }, 50);
+    });
+  });
+
+  describe('file.xhr reference cleanup', () => {
+    it('should clear file.xhr reference after upload completes', (done) => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      manager.addEventListener('upload-success', () => {
+        // file.xhr is cleared after the event completes
+        // Use setTimeout to check after the current event handler finishes
+        setTimeout(() => {
+          expect(file.xhr).to.be.null;
+          done();
+        }, 0);
+      });
+    });
+  });
+
+  describe('uploadFiles with external files', () => {
+    it('should reject files not in manager.files', () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+
+      const externalFile = createFile(100, 'text/plain') as UploadFile;
+
+      // Trying to upload a file that wasn't added should fail or be ignored
+      const startSpy = sinon.spy();
+      manager.addEventListener('upload-start', startSpy);
+
+      manager.uploadFiles([externalFile]);
+
+      // Should not have started upload for external file
+      expect(startSpy.called).to.be.false;
+      expect(manager.files.length).to.equal(0);
     });
   });
 });

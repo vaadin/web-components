@@ -161,7 +161,10 @@ export function xhrCreator(c) {
       }
 
       function progress() {
-        xhr.upload.onprogress({ total, loaded: done });
+        // Check if handler still exists (may be null after abort cleanup)
+        if (xhr.upload.onprogress) {
+          xhr.upload.onprogress({ total, loaded: done });
+        }
         if (done < total) {
           setTimeout(progress, cfg.stepTime);
           done = Math.min(total, done + step);
