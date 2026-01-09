@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@vaadin/aura": "~25.0.3",
+    "@vaadin/testing-helpers": "^2.0.0",
     "@vaadin/vaadin-lumo-styles": "~25.0.3"
   }
 }

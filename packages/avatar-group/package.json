@@ -39,7 +39,6 @@
     "@vaadin/avatar": "~25.0.3",
     "@vaadin/component-base": "~25.0.3",
     "@vaadin/item": "~25.0.3",
-    "@vaadin/list-box": "~25.0.3",
     "@vaadin/overlay": "~25.0.3",
     "@vaadin/tooltip": "~25.0.3",
     "@vaadin/vaadin-themable-mixin": "~25.0.3",
