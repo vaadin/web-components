@@ -511,7 +511,8 @@ export class UploadManager extends EventTarget {
         this.#processUploadQueue();
         this.#cleanupXhr(xhr);
 
-        if (file.abort) {
+        // Return early if already handled (abort or timeout)
+        if (file.abort || file.error) {
           return;
         }
         file.status = '';
@@ -630,6 +631,17 @@ export class UploadManager extends EventTarget {
       return;
     }
 
+    // Check if file was removed during upload-request handler
+    // If file.abort is true, onabort already decremented #activeUploads
+    if (!this.#files.includes(file)) {
+      if (!file.abort) {
+        this.#activeUploads -= 1;
+      }
+      this.#cleanupXhr(xhr);
+      this.#processUploadQueue();
+      return;
+    }
+
     try {
       xhr.send(requestBody);
     } catch (e) {
@@ -637,6 +649,7 @@ export class UploadManager extends EventTarget {
       file.uploading = false;
       file.indeterminate = false;
       file.error = e.message || 'sendFailed';
+      this.#cleanupXhr(xhr);
       this.#notifyFilesChanged();
       this.#processUploadQueue();
     }

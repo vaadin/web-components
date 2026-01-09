@@ -1818,6 +1818,40 @@ describe('UploadManager', () => {
       // File should be marked as error
       expect(file.error).to.be.a('string');
     });
+
+    it('should cleanup XHR handlers when xhr.send() throws', () => {
+      const mockXhr = {
+        readyState: 0,
+        status: 0,
+        upload: {
+          onprogress: null as any,
+          onloadstart: null as any,
+        },
+        onreadystatechange: null as any,
+        onabort: null as any,
+        ontimeout: null as any,
+        open() {
+          this.readyState = 1;
+        },
+        setRequestHeader() {},
+        send() {
+          throw new Error('Network error');
+        },
+        abort() {},
+      };
+
+      (manager as any)._createXhr = () => mockXhr;
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      // XHR handlers should be cleaned up to prevent memory leaks
+      expect(mockXhr.upload.onprogress).to.be.null;
+      expect(mockXhr.upload.onloadstart).to.be.null;
+      expect(mockXhr.onreadystatechange).to.be.null;
+      expect(mockXhr.onabort).to.be.null;
+      expect(mockXhr.ontimeout).to.be.null;
+    });
   });
 
   describe('abort during upload-before event', () => {
@@ -1845,6 +1879,129 @@ describe('UploadManager', () => {
       expect(uploadBeforeFired).to.be.true;
       // File should be removed
       expect(manager.files).to.have.lengthOf(0);
+    });
+
+    it('should not call xhr.open() when file is removed during upload-before event', () => {
+      let openCalled = false;
+
+      manager.addEventListener('upload-before', () => {
+        // Remove file during upload-before - before open() is called
+        manager.removeFile(manager.files[0]);
+      });
+
+      (manager as any)._createXhr = () => {
+        return {
+          readyState: 0,
+          status: 0,
+          upload: {
+            onprogress: null,
+            onloadstart: null,
+          },
+          onreadystatechange: null,
+          onabort: null,
+          ontimeout: null,
+          open() {
+            openCalled = true;
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {},
+          abort() {},
+        };
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      // xhr.open() should NOT have been called because file was removed
+      expect(openCalled).to.be.false;
+    });
+  });
+
+  describe('abort during upload-request event', () => {
+    beforeEach(() => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+    });
+
+    it('should handle abort called during upload-request event', () => {
+      let uploadRequestFired = false;
+
+      manager.addEventListener('upload-request', () => {
+        uploadRequestFired = true;
+        // Abort during upload-request - XHR is open but not sent yet
+        manager.abortUpload(manager.files[0]);
+      });
+
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      expect(uploadRequestFired).to.be.true;
+      // File should be removed
+      expect(manager.files).to.have.lengthOf(0);
+    });
+
+    it('should handle removeFile called during upload-request event', () => {
+      let uploadRequestFired = false;
+
+      manager.addEventListener('upload-request', () => {
+        uploadRequestFired = true;
+        // Remove file during upload-request
+        manager.removeFile(manager.files[0]);
+      });
+
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      expect(uploadRequestFired).to.be.true;
+      // File should be removed
+      expect(manager.files).to.have.lengthOf(0);
+    });
+
+    it('should not call xhr.send() when file is removed during upload-request event', () => {
+      let sendCalled = false;
+
+      manager.addEventListener('upload-request', () => {
+        // Remove file during upload-request - before send() is called
+        manager.removeFile(manager.files[0]);
+      });
+
+      (manager as any)._createXhr = () => {
+        return {
+          readyState: 0,
+          status: 0,
+          upload: {
+            onprogress: null,
+            onloadstart: null,
+          },
+          onreadystatechange: null,
+          onabort: null,
+          ontimeout: null,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            sendCalled = true;
+          },
+          abort() {
+            // Simulate real XHR: onabort only fires if request was actually sent
+            // Since send() wasn't called, onabort should NOT be triggered
+          },
+        };
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      // xhr.send() should NOT have been called because file was removed
+      expect(sendCalled).to.be.false;
     });
   });
 
@@ -2645,6 +2802,65 @@ describe('UploadManager', () => {
       } finally {
         clock.restore();
       }
+    });
+
+    it('should not dispatch double upload-error when timeout followed by readystatechange', () => {
+      const errorSpy = sinon.spy();
+      manager.addEventListener('upload-error', errorSpy);
+
+      let capturedXhr: any;
+      let savedOnReadyStateChange: any;
+
+      (manager as any)._createXhr = () => {
+        capturedXhr = {
+          readyState: 0,
+          status: 0,
+          timeout: 0,
+          upload: {
+            onprogress: null as any,
+            onloadstart: null as any,
+          },
+          _onreadystatechange: null as any,
+          get onreadystatechange() {
+            return this._onreadystatechange;
+          },
+          set onreadystatechange(fn: any) {
+            this._onreadystatechange = fn;
+            // Save reference before cleanup nullifies it
+            if (fn) {
+              savedOnReadyStateChange = fn;
+            }
+          },
+          ontimeout: null as any,
+          onabort: null as any,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            if (this.upload.onloadstart) {
+              this.upload.onloadstart();
+            }
+          },
+          abort() {},
+        };
+        return capturedXhr;
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      // Simulate timeout firing first
+      capturedXhr.ontimeout();
+
+      // Simulate readystatechange firing after (which can happen in some browsers)
+      // Use saved reference since cleanup nullified the property
+      capturedXhr.readyState = 4;
+      capturedXhr.status = 0;
+      savedOnReadyStateChange();
+
+      // Should only have one upload-error event, not two
+      expect(errorSpy.callCount).to.equal(1);
     });
 
     it('should dispatch files-changed when upload-before is prevented', () => {
