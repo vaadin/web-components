@@ -59,6 +59,8 @@ export interface XhrCreatorConfig {
   message?: string;
   serverType?: string;
   serverValidation?: (xhr: any) => { status?: number; statusText?: string } | string | undefined;
+  /** When true, executes all upload steps synchronously without setTimeout delays */
+  sync?: boolean;
 }
 
 /**

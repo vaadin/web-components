@@ -109,9 +109,6 @@ export class UploadManager extends EventTarget {
     this._maxFilesReached = false;
     this._uploadQueue = [];
     this._activeUploads = 0;
-
-    this._cachedAccept = null;
-    this._cachedAcceptRegexp = null;
   }
 
   /**
@@ -216,10 +213,6 @@ export class UploadManager extends EventTarget {
     if (!this.accept) {
       return null;
     }
-    // Return cached regex if accept string hasn't changed
-    if (this._cachedAccept === this.accept && this._cachedAcceptRegexp) {
-      return this._cachedAcceptRegexp;
-    }
     const processedTokens = this.accept.split(',').map((token) => {
       let processedToken = token.trim();
       processedToken = processedToken.replaceAll(/[+.]/gu, String.raw`\$&`);
@@ -228,9 +221,7 @@ export class UploadManager extends EventTarget {
       }
       return processedToken.replaceAll('/*', '/.*');
     });
-    this._cachedAccept = this.accept;
-    this._cachedAcceptRegexp = new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
-    return this._cachedAcceptRegexp;
+    return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
   }
 
   /** @private */
