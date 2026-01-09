@@ -12,13 +12,22 @@ import { uploadFileListStyles } from './styles/vaadin-upload-file-list-base-styl
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 
 /**
- * An element used internally by `<vaadin-upload>`. Not intended to be used separately.
+ * `<vaadin-upload-file-list>` is a Web Component that displays a list of uploaded files.
+ * It can be linked to an UploadManager to automatically sync files and forward events.
+ *
+ * ```javascript
+ * const fileList = document.querySelector('vaadin-upload-file-list');
+ * fileList.target = manager;
+ *
+ * // The file list automatically:
+ * // - Syncs files from the manager
+ * // - Forwards retry/abort/start/remove events back to the manager
+ * ```
  *
  * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes UploadFileListMixin
- * @private
  */
 class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

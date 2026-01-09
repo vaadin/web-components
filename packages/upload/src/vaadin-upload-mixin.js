@@ -507,8 +507,21 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    // eslint-disable-next-line max-params
-    __syncManagerConfig(_target, _method, _headers, _timeout, _maxFiles, _maxFileSize, _accept, _noAuto, _withCredentials, _uploadFormat, _maxConcurrentUploads, _formDataName) {
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __syncManagerConfig(
+      _target,
+      _method,
+      _headers,
+      _timeout,
+      _maxFiles,
+      _maxFileSize,
+      _accept,
+      _noAuto,
+      _withCredentials,
+      _uploadFormat,
+      _maxConcurrentUploads,
+      _formDataName,
+    ) {
       if (!this._manager) {
         return;
       }
@@ -527,7 +540,7 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __filesChanged(files, oldFiles) {
+    __filesChanged(files) {
       // Sync files to manager when set directly (e.g., from tests or user code)
       // Skip if this change was triggered by the manager's files-changed event
       if (this._manager && !this.__updatingFromManager) {
