@@ -7,7 +7,7 @@ export class MockComponent extends HTMLElement {
     this.shadowRoot!.innerHTML = `<div id="content"></div>`;
   }
 
-  private __renderer?: Renderer | null;
+  #renderer?: Renderer | null;
 
   get $(): { content?: Element | null } {
     return {
@@ -16,17 +16,17 @@ export class MockComponent extends HTMLElement {
   }
 
   get renderer(): Renderer | null | undefined {
-    return this.__renderer;
+    return this.#renderer;
   }
 
   set renderer(renderer: Renderer | null) {
-    this.__renderer = renderer;
+    this.#renderer = renderer;
     this.requestContentUpdate();
   }
 
   requestContentUpdate(): void {
     if (this.$.content) {
-      this.__renderer?.(this.$.content);
+      this.#renderer?.(this.$.content);
     }
   }
 }
