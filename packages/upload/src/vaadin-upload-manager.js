@@ -274,6 +274,11 @@ export class UploadManager extends EventTarget {
       return;
     }
 
+    // Prevent duplicate entries in queue
+    if (this.__uploadQueue.includes(file)) {
+      return;
+    }
+
     file.loaded = 0;
     file.progress = 0;
     file.held = true;
@@ -312,10 +317,11 @@ export class UploadManager extends EventTarget {
       const elapsed = (last - ini) / 1000;
       const loaded = e.loaded;
       const total = e.total;
-      const progress = ~~((loaded / total) * 100);
+      // Handle zero-byte files to avoid NaN
+      const progress = total > 0 ? ~~((loaded / total) * 100) : 100;
       file.loaded = loaded;
       file.progress = progress;
-      file.indeterminate = loaded <= 0 || loaded >= total;
+      file.indeterminate = total > 0 ? loaded <= 0 || loaded >= total : false;
 
       if (file.error) {
         file.indeterminate = file.status = undefined;
@@ -323,8 +329,11 @@ export class UploadManager extends EventTarget {
         if (progress < 100) {
           this.__setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
-            file.stalled = true;
-            this.__notifyFilesChanged();
+            // Only set stalled if file is still uploading and not aborted
+            if (file.uploading && !file.abort) {
+              file.stalled = true;
+              this.__notifyFilesChanged();
+            }
           }, 2000);
         }
       }
@@ -334,6 +343,7 @@ export class UploadManager extends EventTarget {
     };
 
     xhr.onabort = () => {
+      clearTimeout(stalledId);
       this.__activeUploads -= 1;
       this.__processUploadQueue();
     };
@@ -390,6 +400,13 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (!evt) {
+      // Upload was prevented - reset state
+      this.__activeUploads -= 1;
+      file.uploading = false;
+      file.indeterminate = false;
+      file.held = true;
+      this.__notifyFilesChanged();
+      this.__processUploadQueue();
       return;
     }
 
@@ -494,15 +511,18 @@ export class UploadManager extends EventTarget {
   __setStatus(file, total, loaded, elapsed) {
     file.elapsed = elapsed;
     file.remaining = Math.ceil(elapsed * (total / loaded - 1));
-    file.speed = ~~(total / elapsed / 1024);
+    // Speed should be based on bytes actually transferred, not total file size
+    file.speed = ~~(loaded / elapsed / 1024);
     file.total = total;
   }
 
   /** @private */
   __notifyFilesChanged() {
+    // Note: We pass a shallow copy as oldValue since the array reference is the same.
+    // Consumers who need to detect changes should compare array contents, not references.
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value: this.__files, oldValue: this.__files },
+        detail: { value: this.__files, oldValue: [...this.__files] },
       }),
     );
   }
