@@ -3,18 +3,19 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-map.js';
 import TileLayer from 'ol/layer/Tile';
-import Map from 'ol/Map';
+import OlMap from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import View from 'ol/View';
+import type { Map } from '../src/vaadin-map.js';
 
-function nextMapRender(map) {
+function nextMapRender(map: Map) {
   return new Promise((resolve) => {
     map.configuration.on('rendercomplete', resolve);
   });
 }
 
 describe('focus', () => {
-  let map;
+  let map: Map;
 
   beforeEach(() => {
     map = fixtureSync(`<vaadin-map></vaadin-map>`);
@@ -26,7 +27,7 @@ describe('focus', () => {
   });
 
   it('should not add focus-ring to the host on focus() with focusVisible: false', () => {
-    map.focus({ focusVisible: false });
+    map.focus({ focusVisible: false } as FocusOptions);
     expect(map.hasAttribute('focus-ring')).to.be.false;
   });
 
@@ -44,7 +45,7 @@ describe('focus', () => {
 });
 
 describe('configuration in detached state', () => {
-  let map;
+  let map: Map;
 
   beforeEach(() => {
     map = document.createElement('vaadin-map');
@@ -56,7 +57,7 @@ describe('configuration in detached state', () => {
 
   it('should be configurable when detached', async () => {
     // OL instance should be initialized
-    expect(map.configuration).to.be.instanceOf(Map);
+    expect(map.configuration).to.be.instanceOf(OlMap);
     // Configure map
     map.configuration.addLayer(new TileLayer({ source: new OSM() }));
     map.configuration.setView(new View({ center: [0, 0], zoom: 3 }));
@@ -64,13 +65,13 @@ describe('configuration in detached state', () => {
     document.body.appendChild(map);
     await nextMapRender(map);
     // Verify layer is set up
-    const layers = map.shadowRoot.querySelectorAll('.ol-layer');
-    expect(layers.length).to.equal(1);
+    const layers = map.shadowRoot?.querySelectorAll('.ol-layer');
+    expect(layers?.length).to.equal(1);
   });
 });
 
 describe('resize', () => {
-  let map;
+  let map: Map;
 
   beforeEach(async () => {
     map = fixtureSync('<vaadin-map></vaadin-map>');
@@ -84,9 +85,9 @@ describe('resize', () => {
 
   it('should update size of internal OL instance on resize', async () => {
     // Verify initial size of canvas for the configured layer
-    const layerCanvas = map.shadowRoot.querySelector('.ol-layer canvas');
+    const layerCanvas = map.shadowRoot?.querySelector('.ol-layer canvas');
     expect(layerCanvas).not.to.be.undefined;
-    const initialRect = layerCanvas.getBoundingClientRect();
+    const initialRect = layerCanvas!.getBoundingClientRect();
     expect(initialRect.width).to.equal(100);
     expect(initialRect.width).to.equal(100);
     // Update size of host element
@@ -94,8 +95,31 @@ describe('resize', () => {
     map.style.height = '200px';
     await nextMapRender(map);
     // Verify updated size
-    const updatedRect = layerCanvas.getBoundingClientRect();
+    const updatedRect = layerCanvas!.getBoundingClientRect();
     expect(updatedRect.width).to.equal(200);
     expect(updatedRect.width).to.equal(200);
+  });
+});
+
+describe('styles', () => {
+  let map: Map;
+
+  beforeEach(() => {
+    map = fixtureSync(`<vaadin-map></vaadin-map>`);
+  });
+
+  it('should hide the map when applying the hidden attribute', () => {
+    let displayValue = getComputedStyle(map).display;
+    expect(displayValue).to.equal('block');
+
+    map.hidden = true;
+    displayValue = getComputedStyle(map).display;
+    expect(displayValue).to.equal('none');
+  });
+
+  it('should have a default size', () => {
+    const computedStyles = getComputedStyle(map);
+    expect(parseInt(computedStyles.width)).to.be.gt(0);
+    expect(parseInt(computedStyles.height)).to.equal(400);
   });
 });
