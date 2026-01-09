@@ -64,6 +64,18 @@ export class UploadManager extends EventTarget {
   /** @type {number} */
   #activeUploads = 0;
 
+  /** @type {string} */
+  #method = 'POST';
+
+  /** @type {number} */
+  #maxFiles = Infinity;
+
+  /** @type {number} */
+  #maxConcurrentUploads = 3;
+
+  /** @type {Record<string, string>} */
+  #headers = {};
+
   /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
@@ -83,38 +95,78 @@ export class UploadManager extends EventTarget {
   constructor(options = {}) {
     super();
 
-    // Configuration properties
+    // Configuration properties - use setters for validation
     this.target = options.target || '';
-
-    // Validate method - only POST and PUT are allowed
-    const method = options.method || 'POST';
-    if (method !== 'POST' && method !== 'PUT') {
-      throw new Error(`Invalid method "${method}". Only POST and PUT are allowed.`);
-    }
-    this.method = method;
+    this.method = options.method || 'POST';
     this.headers = options.headers || {};
     this.timeout = options.timeout || 0;
-
-    // Validate maxFiles - must be non-negative
-    const maxFiles = options.maxFiles === undefined ? Infinity : options.maxFiles;
-    if (maxFiles < 0) {
-      throw new Error(`Invalid maxFiles "${maxFiles}". Value must be non-negative.`);
-    }
-    this.maxFiles = maxFiles;
-
+    this.maxFiles = options.maxFiles === undefined ? Infinity : options.maxFiles;
     this.maxFileSize = options.maxFileSize === undefined ? Infinity : options.maxFileSize;
     this.accept = options.accept || '';
     this.noAuto = options.noAuto === undefined ? false : options.noAuto;
     this.withCredentials = options.withCredentials === undefined ? false : options.withCredentials;
     this.uploadFormat = options.uploadFormat || 'raw';
-
-    // Validate maxConcurrentUploads - must be positive
-    const maxConcurrentUploads = options.maxConcurrentUploads === undefined ? 3 : options.maxConcurrentUploads;
-    if (maxConcurrentUploads <= 0) {
-      throw new Error(`Invalid maxConcurrentUploads "${maxConcurrentUploads}". Value must be positive.`);
-    }
-    this.maxConcurrentUploads = maxConcurrentUploads;
+    this.maxConcurrentUploads = options.maxConcurrentUploads === undefined ? 3 : options.maxConcurrentUploads;
     this.formDataName = options.formDataName || 'file';
+  }
+
+  /**
+   * HTTP Method used to send the files. Only POST and PUT are allowed.
+   * @type {string}
+   */
+  get method() {
+    return this.#method;
+  }
+
+  set method(value) {
+    if (value !== 'POST' && value !== 'PUT') {
+      throw new Error(`Invalid method "${value}". Only POST and PUT are allowed.`);
+    }
+    this.#method = value;
+  }
+
+  /**
+   * Limit of files to upload, by default it is unlimited.
+   * @type {number}
+   */
+  get maxFiles() {
+    return this.#maxFiles;
+  }
+
+  set maxFiles(value) {
+    if (value < 0) {
+      throw new Error(`Invalid maxFiles "${value}". Value must be non-negative.`);
+    }
+    this.#maxFiles = value;
+    this.#updateMaxFilesReached();
+  }
+
+  /**
+   * Maximum number of files that can be uploaded simultaneously.
+   * @type {number}
+   */
+  get maxConcurrentUploads() {
+    return this.#maxConcurrentUploads;
+  }
+
+  set maxConcurrentUploads(value) {
+    if (value <= 0) {
+      throw new Error(`Invalid maxConcurrentUploads "${value}". Value must be positive.`);
+    }
+    this.#maxConcurrentUploads = value;
+  }
+
+  /**
+   * Key-Value map to send to the server.
+   * @type {Record<string, string>}
+   */
+  get headers() {
+    return this.#headers;
+  }
+
+  set headers(value) {
+    // Create a shallow copy to prevent external mutation
+    this.#headers = { ...value };
   }
 
   /**
@@ -139,16 +191,67 @@ export class UploadManager extends EventTarget {
    * - `complete`: True when the file was transferred to the server.
    * - `uploading`: True while transferring data to the server.
    *
-   * **Note:** Direct assignment bypasses validation (maxFiles, maxFileSize, accept).
-   * Use {@link addFiles} and {@link removeFile} for validated mutations.
+   * **Note:** The getter returns a shallow copy of the internal array to prevent
+   * external mutation. Modifying the returned array will not affect the manager's state.
+   *
+   * **Note:** The setter validates files against maxFiles, maxFileSize, and accept constraints.
+   * Files that fail validation will be rejected with a 'file-reject' event.
    * @type {Array<UploadFile>}
    */
   get files() {
-    return this.#files;
+    return [...this.#files];
   }
 
   set files(value) {
     const oldValue = this.#files;
+    const validFiles = [];
+
+    for (const file of value) {
+      // Check maxFiles - but allow if file is already in the list
+      if (validFiles.length >= this.maxFiles && !this.#files.includes(file)) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error: 'tooManyFiles' },
+          }),
+        );
+        continue;
+      }
+
+      // Check maxFileSize
+      if (this.maxFileSize >= 0 && file.size > this.maxFileSize && !this.#files.includes(file)) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error: 'fileIsTooBig' },
+          }),
+        );
+        continue;
+      }
+
+      // Check accept
+      const re = this.#acceptRegexp;
+      if (re && !(re.test(file.type) || re.test(file.name)) && !this.#files.includes(file)) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error: 'incorrectFileType' },
+          }),
+        );
+        continue;
+      }
+
+      validFiles.push(file);
+    }
+
+    this.#files = validFiles;
+    this.#updateMaxFilesReached();
+    this.dispatchEvent(
+      new CustomEvent('files-changed', {
+        detail: { value: validFiles, oldValue },
+      }),
+    );
+  }
+
+  // Internal setter - bypasses validation for internal use only
+  #setFiles(value, oldValue) {
     this.#files = value;
     this.#updateMaxFilesReached();
     this.dispatchEvent(
@@ -271,7 +374,7 @@ export class UploadManager extends EventTarget {
     file.loaded = 0;
     file.held = true;
     file.formDataName = this.formDataName;
-    this.files = [file, ...this.#files];
+    this.#setFiles([file, ...this.#files], this.#files);
 
     if (!this.noAuto) {
       this.#queueFileUpload(file);
@@ -289,7 +392,10 @@ export class UploadManager extends EventTarget {
 
     const fileIndex = this.#files.indexOf(file);
     if (fileIndex >= 0) {
-      this.files = this.#files.filter((f) => f !== file);
+      this.#setFiles(
+        this.#files.filter((f) => f !== file),
+        this.#files,
+      );
 
       this.dispatchEvent(
         new CustomEvent('file-remove', {
@@ -344,11 +450,17 @@ export class UploadManager extends EventTarget {
       const elapsed = (Date.now() - ini) / 1000;
       const loaded = e.loaded;
       const total = e.total;
-      // Handle zero-byte files to avoid NaN
-      const progress = total > 0 ? Math.trunc((loaded / total) * 100) : 100;
+      // Clamp to [0, 100] range
+      const rawProgress = total > 0 ? Math.trunc((loaded / total) * 100) : 100;
+      const progress = Math.max(0, Math.min(100, rawProgress));
       file.loaded = loaded;
       file.progress = progress;
       file.indeterminate = total > 0 ? loaded <= 0 || loaded >= total : false;
+
+      // Reset stalled flag when progress resumes
+      if (file.stalled) {
+        file.stalled = false;
+      }
 
       if (file.error) {
         file.indeterminate = file.status = undefined;
@@ -532,7 +644,7 @@ export class UploadManager extends EventTarget {
 
   /**
    * Creates an XMLHttpRequest instance. Override in tests to mock XHR behavior.
-   * @protected
+   * @private
    */
   _createXhr() {
     return new XMLHttpRequest();
@@ -611,11 +723,12 @@ export class UploadManager extends EventTarget {
   }
 
   #notifyFilesChanged() {
-    // Note: We pass a shallow copy as oldValue since the array reference is the same.
-    // Consumers who need to detect changes should compare array contents, not references.
+    // This method is called when file properties change (progress, status, etc.)
+    // but not when the array structure changes. We don't track the previous state,
+    // so we only provide the current value.
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value: this.#files, oldValue: [...this.#files] },
+        detail: { value: this.#files },
       }),
     );
   }

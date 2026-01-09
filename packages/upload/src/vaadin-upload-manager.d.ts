@@ -105,7 +105,7 @@ export interface UploadManagerOptions {
 
 export interface UploadManagerEventMap {
   'file-reject': CustomEvent<{ file: File; error: string }>;
-  'file-remove': CustomEvent<{ file: UploadFile }>;
+  'file-remove': CustomEvent<{ file: UploadFile; fileIndex: number }>;
   'upload-before': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'upload-request': CustomEvent<{
     file: UploadFile;
@@ -121,7 +121,7 @@ export interface UploadManagerEventMap {
   'upload-error': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'upload-retry': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'upload-abort': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
-  'files-changed': CustomEvent<{ value: UploadFile[]; oldValue: UploadFile[] }>;
+  'files-changed': CustomEvent<{ value: UploadFile[]; oldValue?: UploadFile[] }>;
   'max-files-reached-changed': CustomEvent<{ value: boolean }>;
 }
 

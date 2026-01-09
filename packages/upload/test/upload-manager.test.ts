@@ -480,6 +480,47 @@ describe('UploadManager', () => {
       expect(lastCall.speed).to.be.a('number');
     });
 
+    it('should clamp progress to 0-100 range when loaded exceeds total', () => {
+      // This can happen with compression where uploaded bytes exceed original file size
+      let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
+
+      (manager as any)._createXhr = () => {
+        const xhr = {
+          readyState: 0,
+          status: 0,
+          upload: {
+            onprogress: null as any,
+            onloadstart: null as any,
+          },
+          onreadystatechange: null as any,
+          onabort: null as any,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            progressCallback = xhr.upload.onprogress;
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
+            }
+          },
+          abort() {},
+        };
+        return xhr;
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      // Simulate loaded > total (can happen with compression)
+      progressCallback!({ loaded: 150, total: 100 });
+      expect(manager.files[0].progress).to.equal(100);
+
+      // Simulate negative loaded (edge case)
+      progressCallback!({ loaded: -10, total: 100 });
+      expect(manager.files[0].progress).to.equal(0);
+    });
+
     it('should dispatch files-changed event when upload starts', () => {
       const filesChangedSpy = sinon.spy();
       manager.addFiles([createFile(100, 'text/plain')]);
@@ -594,6 +635,55 @@ describe('UploadManager', () => {
 
       // Now should be stalled
       expect(file.stalled).to.be.true;
+    });
+
+    it('should reset file.stalled to false when progress resumes', async () => {
+      let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
+
+      (manager as any)._createXhr = () => {
+        const xhr = {
+          readyState: 0,
+          status: 0,
+          upload: {
+            onprogress: null as ((e: { loaded: number; total: number }) => void) | null,
+            onloadstart: null as (() => void) | null,
+          },
+          onreadystatechange: null as (() => void) | null,
+          onabort: null as (() => void) | null,
+          open() {
+            this.readyState = 1;
+          },
+          setRequestHeader() {},
+          send() {
+            progressCallback = this.upload.onprogress;
+            if (this.upload.onloadstart) {
+              this.upload.onloadstart();
+            }
+            // Send initial progress
+            if (this.upload.onprogress) {
+              this.upload.onprogress({ loaded: 10, total: 100 });
+            }
+          },
+          abort() {},
+        };
+        return xhr;
+      };
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+
+      manager.uploadFiles();
+
+      // Initially not stalled
+      expect(file.stalled).to.be.false;
+
+      // Advance time to trigger stalled
+      await clock.tickAsync(2100);
+      expect(file.stalled).to.be.true;
+
+      // Send more progress - should reset stalled
+      progressCallback!({ loaded: 50, total: 100 });
+      expect(file.stalled).to.be.false;
     });
   });
 
@@ -1770,6 +1860,68 @@ describe('UploadManager', () => {
     });
   });
 
+  describe('files setter validation', () => {
+    it('should reject files exceeding maxFiles when set via setter', () => {
+      manager = new UploadManager({ noAuto: true, maxFiles: 2 });
+
+      const rejectSpy = sinon.spy();
+      manager.addEventListener('file-reject', rejectSpy);
+
+      // Try to set 3 files when maxFiles is 2
+      manager.files = createFiles(3, 100, 'text/plain') as UploadFile[];
+
+      expect(manager.files).to.have.lengthOf(2);
+      expect(rejectSpy.calledOnce).to.be.true;
+      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('tooManyFiles');
+    });
+
+    it('should reject oversized files when set via setter', () => {
+      manager = new UploadManager({ noAuto: true, maxFileSize: 50 });
+
+      const rejectSpy = sinon.spy();
+      manager.addEventListener('file-reject', rejectSpy);
+
+      // Try to set a file larger than maxFileSize
+      manager.files = [createFile(100, 'text/plain')] as UploadFile[];
+
+      expect(manager.files).to.have.lengthOf(0);
+      expect(rejectSpy.calledOnce).to.be.true;
+      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('fileIsTooBig');
+    });
+
+    it('should reject files with wrong type when set via setter', () => {
+      manager = new UploadManager({ noAuto: true, accept: 'image/*' });
+
+      const rejectSpy = sinon.spy();
+      manager.addEventListener('file-reject', rejectSpy);
+
+      // Try to set a text file when only images are accepted
+      manager.files = [createFile(100, 'text/plain')] as UploadFile[];
+
+      expect(manager.files).to.have.lengthOf(0);
+      expect(rejectSpy.calledOnce).to.be.true;
+      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('incorrectFileType');
+    });
+
+    it('should allow existing files to remain when re-setting', () => {
+      manager = new UploadManager({ noAuto: true, maxFiles: 2 });
+
+      // Add 2 files normally
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      expect(manager.files).to.have.lengthOf(2);
+
+      const existingFiles = manager.files;
+
+      // Re-set with the same files - should not reject
+      const rejectSpy = sinon.spy();
+      manager.addEventListener('file-reject', rejectSpy);
+      manager.files = existingFiles;
+
+      expect(manager.files).to.have.lengthOf(2);
+      expect(rejectSpy.called).to.be.false;
+    });
+  });
+
   describe('files setter re-entrancy', () => {
     it('should not cause stack overflow when files-changed handler modifies files', () => {
       manager = new UploadManager({ noAuto: true });
@@ -1835,6 +1987,89 @@ describe('UploadManager', () => {
           maxConcurrentUploads: -1,
         });
       }).to.throw('Invalid maxConcurrentUploads "-1". Value must be positive.');
+    });
+  });
+
+  describe('property setter validation', () => {
+    beforeEach(() => {
+      manager = new UploadManager({ noAuto: true });
+    });
+
+    it('should reject invalid method via setter', () => {
+      expect(() => {
+        (manager as any).method = 'DELETE';
+      }).to.throw('Invalid method "DELETE". Only POST and PUT are allowed.');
+    });
+
+    it('should accept valid method via setter', () => {
+      manager.method = 'PUT';
+      expect(manager.method).to.equal('PUT');
+      manager.method = 'POST';
+      expect(manager.method).to.equal('POST');
+    });
+
+    it('should reject negative maxFiles via setter', () => {
+      expect(() => {
+        manager.maxFiles = -1;
+      }).to.throw('Invalid maxFiles "-1". Value must be non-negative.');
+    });
+
+    it('should accept valid maxFiles via setter', () => {
+      manager.maxFiles = 10;
+      expect(manager.maxFiles).to.equal(10);
+      manager.maxFiles = 0;
+      expect(manager.maxFiles).to.equal(0);
+    });
+
+    it('should reject non-positive maxConcurrentUploads via setter', () => {
+      expect(() => {
+        manager.maxConcurrentUploads = 0;
+      }).to.throw('Invalid maxConcurrentUploads "0". Value must be positive.');
+      expect(() => {
+        manager.maxConcurrentUploads = -1;
+      }).to.throw('Invalid maxConcurrentUploads "-1". Value must be positive.');
+    });
+
+    it('should accept valid maxConcurrentUploads via setter', () => {
+      manager.maxConcurrentUploads = 5;
+      expect(manager.maxConcurrentUploads).to.equal(5);
+    });
+
+    it('should not allow external mutation of headers object', () => {
+      const headers: Record<string, string> = { 'X-Token': 'secret' };
+      manager.headers = headers;
+
+      // Mutate the original object
+      headers['X-Malicious'] = 'pwned';
+
+      // Manager's headers should not be affected
+      expect((manager.headers as Record<string, string>)['X-Malicious']).to.be.undefined;
+      expect(manager.headers['X-Token']).to.equal('secret');
+    });
+
+    it('should not allow external mutation of files array', () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      expect(manager.files).to.have.lengthOf(1);
+
+      // Get the files array and try to mutate it
+      const files = manager.files;
+      files.push(createFile(100, 'text/plain') as any);
+
+      // Manager's internal files should not be affected
+      expect(manager.files).to.have.lengthOf(1);
+    });
+
+    it('should update maxFilesReached when maxFiles is changed via setter', () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.addFiles([createFile(100, 'text/plain')]);
+
+      expect(manager.maxFilesReached).to.be.false;
+
+      manager.maxFiles = 2;
+      expect(manager.maxFilesReached).to.be.true;
+
+      manager.maxFiles = 10;
+      expect(manager.maxFilesReached).to.be.false;
     });
   });
 
