@@ -35,9 +35,6 @@
  * fileInput.addEventListener('change', (e) => {
  *   manager.addFiles(e.target.files);
  * });
- *
- * // Clean up when done
- * manager.destroy();
  * ```
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added due to constraints
@@ -55,93 +52,221 @@
  * @fires {CustomEvent} max-files-reached-changed - Fired when maxFilesReached changes
  */
 export class UploadManager extends EventTarget {
+  /** @type {Array<UploadFile>} */
+  #files = [];
+
+  /** @type {boolean} */
+  #maxFilesReached = false;
+
+  /** @type {Array<UploadFile>} */
+  #uploadQueue = [];
+
+  /** @type {number} */
+  #activeUploads = 0;
+
+  /** @type {string} */
+  #method = 'POST';
+
+  /** @type {number} */
+  #maxFiles = Infinity;
+
+  /** @type {number} */
+  #maxConcurrentUploads = 3;
+
+  /** @type {Record<string, string>} */
+  #headers = {};
+
   /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
-   * @param {string} [options.target=''] - Server URL for uploads
-   * @param {string} [options.method='POST'] - HTTP method (POST or PUT)
-   * @param {Object} [options.headers={}] - Custom HTTP headers
-   * @param {number} [options.timeout=0] - Upload timeout in milliseconds (0 = no timeout)
-   * @param {number} [options.maxFiles=Infinity] - Maximum number of files allowed
-   * @param {number} [options.maxFileSize=Infinity] - Maximum file size in bytes
-   * @param {string} [options.accept=''] - Accepted file types (MIME types or extensions)
-   * @param {boolean} [options.noAuto=false] - Prevent automatic upload on file addition
-   * @param {boolean} [options.withCredentials=false] - Include credentials in XHR
-   * @param {string} [options.uploadFormat='raw'] - Upload format: 'raw' or 'multipart'
-   * @param {number} [options.maxConcurrentUploads=3] - Maximum concurrent uploads
-   * @param {string} [options.formDataName='file'] - Form field name for multipart uploads
+   * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
+   * @param {string} [options.method='POST'] - HTTP Method used to send the files. Only POST and PUT are allowed.
+   * @param {Object} [options.headers={}] - Key-Value map to send to the server.
+   * @param {number} [options.timeout=0] - Max time in milliseconds for the entire upload process, if exceeded the request will be aborted. Zero means that there is no timeout.
+   * @param {number} [options.maxFiles=Infinity] - Limit of files to upload, by default it is unlimited. If the value is set to one, native file browser will prevent selecting multiple files.
+   * @param {number} [options.maxFileSize=Infinity] - Specifies the maximum file size in bytes allowed to upload. Notice that it is a client-side constraint, which will be checked before sending the request. Obviously you need to do the same validation in the server-side and be sure that they are aligned.
+   * @param {string} [options.accept=''] - Specifies the types of files that the server accepts. Syntax: a comma-separated list of MIME type patterns (wildcards are allowed) or file extensions. Notice that MIME types are widely supported, while file extensions are only implemented in certain browsers, so avoid using it. Example: accept="video/*,image/tiff" or accept=".pdf,audio/mp3"
+   * @param {boolean} [options.noAuto=false] - Prevents upload(s) from immediately uploading upon adding file(s). When set, you must manually trigger uploads using the `uploadFiles` method.
+   * @param {boolean} [options.withCredentials=false] - Set the withCredentials flag on the request.
+   * @param {string} [options.uploadFormat='raw'] - Specifies the upload format to use when sending files to the server. 'raw': Send file as raw binary data with the file's MIME type as Content-Type (default). 'multipart': Send file using multipart/form-data encoding.
+   * @param {number} [options.maxConcurrentUploads=3] - Specifies the maximum number of files that can be uploaded simultaneously. This helps prevent browser performance degradation and XHR limitations when uploading large numbers of files. Files exceeding this limit will be queued and uploaded as active uploads complete.
+   * @param {string} [options.formDataName='file'] - Specifies the 'name' property at Content-Disposition for multipart uploads. This property is ignored when uploadFormat is 'raw'.
    */
   constructor(options = {}) {
     super();
 
-    // Configuration properties
+    // Configuration properties - use setters for validation
     this.target = options.target || '';
     this.method = options.method || 'POST';
     this.headers = options.headers || {};
     this.timeout = options.timeout || 0;
-    this.maxFiles = options.maxFiles || Infinity;
-    this.maxFileSize = options.maxFileSize || Infinity;
+    this.maxFiles = options.maxFiles === undefined ? Infinity : options.maxFiles;
+    this.maxFileSize = options.maxFileSize === undefined ? Infinity : options.maxFileSize;
     this.accept = options.accept || '';
-    this.noAuto = options.noAuto || false;
-    this.withCredentials = options.withCredentials || false;
+    this.noAuto = options.noAuto === undefined ? false : options.noAuto;
+    this.withCredentials = options.withCredentials === undefined ? false : options.withCredentials;
     this.uploadFormat = options.uploadFormat || 'raw';
-    this.maxConcurrentUploads = options.maxConcurrentUploads || 3;
+    this.maxConcurrentUploads = options.maxConcurrentUploads === undefined ? 3 : options.maxConcurrentUploads;
     this.formDataName = options.formDataName || 'file';
-
-    // State
-    this._files = [];
-    this._maxFilesReached = false;
-    this._uploadQueue = [];
-    this._activeUploads = 0;
-    this._destroyed = false;
   }
 
   /**
-   * The array of files being processed or already uploaded.
+   * HTTP Method used to send the files. Only POST and PUT are allowed.
+   * @type {string}
+   */
+  get method() {
+    return this.#method;
+  }
+
+  set method(value) {
+    if (value !== 'POST' && value !== 'PUT') {
+      throw new Error(`Invalid method "${value}". Only POST and PUT are allowed.`);
+    }
+    this.#method = value;
+  }
+
+  /**
+   * Limit of files to upload, by default it is unlimited.
+   * @type {number}
+   */
+  get maxFiles() {
+    return this.#maxFiles;
+  }
+
+  set maxFiles(value) {
+    if (value < 0) {
+      throw new Error(`Invalid maxFiles "${value}". Value must be non-negative.`);
+    }
+    this.#maxFiles = value;
+    this.#updateMaxFilesReached();
+  }
+
+  /**
+   * Maximum number of files that can be uploaded simultaneously.
+   * @type {number}
+   */
+  get maxConcurrentUploads() {
+    return this.#maxConcurrentUploads;
+  }
+
+  set maxConcurrentUploads(value) {
+    if (value <= 0) {
+      throw new Error(`Invalid maxConcurrentUploads "${value}". Value must be positive.`);
+    }
+    this.#maxConcurrentUploads = value;
+  }
+
+  /**
+   * Key-Value map to send to the server.
+   * @type {Record<string, string>}
+   */
+  get headers() {
+    return this.#headers;
+  }
+
+  set headers(value) {
+    // Create a shallow copy to prevent external mutation
+    this.#headers = { ...value };
+  }
+
+  /**
+   * The array of files being processed, or already uploaded.
+   *
+   * Each element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)
+   * object with a number of extra properties to track the upload process:
+   * - `uploadTarget`: The target URL used to upload this file.
+   * - `elapsed`: Elapsed time since the upload started.
+   * - `elapsedStr`: Human-readable elapsed time.
+   * - `remaining`: Number of seconds remaining for the upload to finish.
+   * - `remainingStr`: Human-readable remaining time for the upload to finish.
+   * - `progress`: Percentage of the file already uploaded.
+   * - `speed`: Upload speed in kB/s.
+   * - `size`: File size in bytes.
+   * - `totalStr`: Human-readable total size of the file.
+   * - `loaded`: Bytes transferred so far.
+   * - `loadedStr`: Human-readable uploaded size at the moment.
+   * - `status`: Status of the upload process.
+   * - `error`: Error message in case the upload failed.
+   * - `abort`: True if the file was canceled by the user.
+   * - `complete`: True when the file was transferred to the server.
+   * - `uploading`: True while transferring data to the server.
+   *
+   * **Note:** The getter returns a shallow copy of the internal array to prevent
+   * external mutation. Modifying the returned array will not affect the manager's state.
+   *
+   * **Note:** The setter validates files against maxFiles, maxFileSize, and accept constraints.
+   * Files that fail validation will be rejected with a 'file-reject' event.
    * @type {Array<UploadFile>}
    */
   get files() {
-    return this._files;
+    return [...this.#files];
   }
 
   set files(value) {
-    const oldValue = this._files;
-    this._files = value;
-    this._updateMaxFilesReached();
+    const validFiles = [];
+
+    for (const file of value) {
+      // Check maxFiles - but allow if file is already in the list
+      if (validFiles.length >= this.maxFiles && !this.#files.includes(file)) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error: 'tooManyFiles' },
+          }),
+        );
+        continue;
+      }
+
+      // Check maxFileSize
+      if (this.maxFileSize >= 0 && file.size > this.maxFileSize && !this.#files.includes(file)) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error: 'fileIsTooBig' },
+          }),
+        );
+        continue;
+      }
+
+      // Check accept
+      const re = this.#acceptRegexp;
+      if (re && !(re.test(file.type) || re.test(file.name)) && !this.#files.includes(file)) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error: 'incorrectFileType' },
+          }),
+        );
+        continue;
+      }
+
+      validFiles.push(file);
+    }
+
+    this.#files = validFiles;
+    this.#updateMaxFilesReached();
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value, oldValue },
+        detail: { value: validFiles },
+      }),
+    );
+  }
+
+  // Internal setter - bypasses validation for internal use only
+  #setFiles(value) {
+    this.#files = value;
+    this.#updateMaxFilesReached();
+    this.dispatchEvent(
+      new CustomEvent('files-changed', {
+        detail: { value },
       }),
     );
   }
 
   /**
-   * Whether the maximum number of files has been reached.
+   * Specifies if the maximum number of files have been uploaded.
    * @type {boolean}
    * @readonly
    */
   get maxFilesReached() {
-    return this._maxFilesReached;
-  }
-
-  /**
-   * Clean up resources and abort active uploads.
-   * Call this when the manager is no longer needed.
-   */
-  destroy() {
-    this._destroyed = true;
-
-    // Abort all active uploads
-    this._files.forEach((file) => {
-      if (file.xhr && file.uploading) {
-        file.xhr.abort();
-      }
-    });
-
-    // Clear state
-    this._files = [];
-    this._uploadQueue = [];
-    this._activeUploads = 0;
+    return this.#maxFilesReached;
   }
 
   /**
@@ -149,20 +274,20 @@ export class UploadManager extends EventTarget {
    * @param {FileList|File[]} files - Files to add
    */
   addFiles(files) {
-    if (this._destroyed) return;
-    Array.from(files).forEach((file) => this._addFile(file));
+    Array.from(files).forEach((file) => this.#addFile(file));
   }
 
   /**
    * Triggers the upload of any files that are not completed.
-   * @param {UploadFile|UploadFile[]} [files] - Files to upload. Defaults to all outstanding files.
+   *
+   * @param {UploadFile|UploadFile[]} [files] - Files being uploaded. Defaults to all outstanding files.
    */
-  uploadFiles(files = this._files) {
-    if (this._destroyed) return;
+  uploadFiles(files = this.#files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files.filter((file) => !file.complete).forEach((file) => this._queueFileUpload(file));
+    // Only upload files that are managed by this instance and not already complete
+    files.filter((file) => this.#files.includes(file) && !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 
   /**
@@ -170,8 +295,7 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to retry
    */
   retryUpload(file) {
-    if (this._destroyed) return;
-    this._retryFileUpload(file);
+    this.#retryFileUpload(file);
   }
 
   /**
@@ -179,8 +303,7 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to abort
    */
   abortUpload(file) {
-    if (this._destroyed) return;
-    this._abortFileUpload(file);
+    this.#abortFileUpload(file);
   }
 
   /**
@@ -188,33 +311,30 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to remove
    */
   removeFile(file) {
-    if (this._destroyed) return;
-    this._removeFile(file);
+    this.#removeFile(file);
   }
 
   // ============ Private methods ============
 
-  /** @private */
-  get _acceptRegexp() {
+  get #acceptRegexp() {
     if (!this.accept) {
       return null;
     }
     const processedTokens = this.accept.split(',').map((token) => {
       let processedToken = token.trim();
-      processedToken = processedToken.replace(/[+.]/gu, '\\$&');
-      if (processedToken.startsWith('\\.')) {
+      processedToken = processedToken.replaceAll(/[+.]/gu, String.raw`\$&`);
+      if (processedToken.startsWith(String.raw`\.`)) {
         processedToken = `.*${processedToken}$`;
       }
-      return processedToken.replace(/\/\*/gu, '/.*');
+      return processedToken.replaceAll('/*', '/.*');
     });
     return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
   }
 
-  /** @private */
-  _updateMaxFilesReached() {
-    const reached = this.maxFiles >= 0 && this._files.length >= this.maxFiles;
-    if (reached !== this._maxFilesReached) {
-      this._maxFilesReached = reached;
+  #updateMaxFilesReached() {
+    const reached = this.maxFiles >= 0 && this.#files.length >= this.maxFiles;
+    if (reached !== this.#maxFilesReached) {
+      this.#maxFilesReached = reached;
       this.dispatchEvent(
         new CustomEvent('max-files-reached-changed', {
           detail: { value: reached },
@@ -223,9 +343,8 @@ export class UploadManager extends EventTarget {
     }
   }
 
-  /** @private */
-  _addFile(file) {
-    if (this._maxFilesReached) {
+  #addFile(file) {
+    if (this.#maxFilesReached) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
           detail: { file, error: 'tooManyFiles' },
@@ -241,7 +360,7 @@ export class UploadManager extends EventTarget {
       );
       return;
     }
-    const re = this._acceptRegexp;
+    const re = this.#acceptRegexp;
     if (re && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
@@ -254,20 +373,25 @@ export class UploadManager extends EventTarget {
     file.loaded = 0;
     file.held = true;
     file.formDataName = this.formDataName;
-    this.files = [file, ...this._files];
+    this.#setFiles([file, ...this.#files]);
 
     if (!this.noAuto) {
-      this._queueFileUpload(file);
+      this.#queueFileUpload(file);
     }
   }
 
-  /** @private */
-  _removeFile(file) {
-    this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
+  #removeFile(file) {
+    this.#uploadQueue = this.#uploadQueue.filter((f) => f !== file);
 
-    const fileIndex = this._files.indexOf(file);
+    // If the file is actively uploading (not held) and not already aborted, abort the XHR
+    if (file.uploading && !file.held && !file.abort && file.xhr) {
+      file.abort = true;
+      file.xhr.abort();
+    }
+
+    const fileIndex = this.#files.indexOf(file);
     if (fileIndex >= 0) {
-      this.files = this._files.filter((f) => f !== file);
+      this.#setFiles(this.#files.filter((f) => f !== file));
 
       this.dispatchEvent(
         new CustomEvent('file-remove', {
@@ -277,71 +401,101 @@ export class UploadManager extends EventTarget {
     }
   }
 
-  /** @private */
-  _queueFileUpload(file) {
+  #queueFileUpload(file) {
     if (file.uploading) {
       return;
     }
 
+    // Prevent duplicate entries in queue
+    if (this.#uploadQueue.includes(file)) {
+      return;
+    }
+
+    file.loaded = 0;
+    file.progress = 0;
     file.held = true;
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.error = false;
-    this._notifyFilesChanged();
+    file.stalled = false;
+    this.#notifyFilesChanged();
 
-    this._uploadQueue.push(file);
-    this._processUploadQueue();
+    this.#uploadQueue.push(file);
+    this.#processUploadQueue();
   }
 
-  /** @private */
-  _processUploadQueue() {
-    while (this._uploadQueue.length > 0 && this._activeUploads < this.maxConcurrentUploads) {
-      const nextFile = this._uploadQueue.shift();
+  #processUploadQueue() {
+    while (this.#uploadQueue.length > 0 && this.#activeUploads < this.maxConcurrentUploads) {
+      const nextFile = this.#uploadQueue.shift();
       if (nextFile) {
-        this._uploadFile(nextFile);
+        this.#uploadFile(nextFile);
       }
     }
   }
 
-  /** @private */
-  _uploadFile(file) {
-    this._activeUploads += 1;
+  #uploadFile(file) {
+    this.#activeUploads += 1;
 
     const ini = Date.now();
     const xhr = (file.xhr = this._createXhr());
 
-    let stalledId, last;
+    let stalledId;
 
     xhr.upload.onprogress = (e) => {
       clearTimeout(stalledId);
 
-      last = Date.now();
-      const elapsed = (last - ini) / 1000;
+      const elapsed = (Date.now() - ini) / 1000;
       const loaded = e.loaded;
       const total = e.total;
-      const progress = ~~((loaded / total) * 100);
+      // Clamp to [0, 100] range
+      const rawProgress = total > 0 ? Math.trunc((loaded / total) * 100) : 100;
+      const progress = Math.max(0, Math.min(100, rawProgress));
       file.loaded = loaded;
       file.progress = progress;
-      file.indeterminate = loaded <= 0 || loaded >= total;
+      file.indeterminate = total > 0 ? loaded <= 0 || loaded >= total : false;
+
+      // Reset stalled flag when progress resumes
+      if (file.stalled) {
+        file.stalled = false;
+      }
 
       if (file.error) {
         file.indeterminate = file.status = undefined;
       } else if (!file.abort) {
         if (progress < 100) {
-          this._setStatus(file, total, loaded, elapsed);
+          this.#setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
-            file.stalled = true;
-            this._notifyFilesChanged();
+            // Only set stalled if file is still uploading and not aborted
+            if (file.uploading && !file.abort) {
+              file.stalled = true;
+              this.#notifyFilesChanged();
+            }
           }, 2000);
         }
       }
 
-      this._notifyFilesChanged();
+      this.#notifyFilesChanged();
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
     xhr.onabort = () => {
-      this._activeUploads -= 1;
-      this._processUploadQueue();
+      clearTimeout(stalledId);
+      this.#activeUploads -= 1;
+      this.#cleanupXhr(xhr);
+      this.#processUploadQueue();
+    };
+
+    xhr.ontimeout = () => {
+      clearTimeout(stalledId);
+      file.indeterminate = file.uploading = false;
+      file.error = 'timeout';
+      file.status = '';
+
+      this.#activeUploads -= 1;
+      this.#processUploadQueue();
+      this.#cleanupXhr(xhr);
+
+      this.dispatchEvent(new CustomEvent('upload-error', { detail: { file, xhr } }));
+      this.#notifyFilesChanged();
     };
 
     xhr.onreadystatechange = () => {
@@ -349,10 +503,12 @@ export class UploadManager extends EventTarget {
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
 
-        this._activeUploads -= 1;
-        this._processUploadQueue();
+        this.#activeUploads -= 1;
+        this.#processUploadQueue();
+        this.#cleanupXhr(xhr);
 
-        if (file.abort) {
+        // Return early if already handled (abort or timeout)
+        if (file.abort || file.error) {
           return;
         }
         file.status = '';
@@ -379,14 +535,17 @@ export class UploadManager extends EventTarget {
         const eventName = file.error ? 'upload-error' : 'upload-success';
         this.dispatchEvent(new CustomEvent(eventName, { detail: { file, xhr } }));
 
-        this._notifyFilesChanged();
+        // Clear file.xhr reference to allow garbage collection
+        file.xhr = null;
+
+        this.#notifyFilesChanged();
       }
     };
 
     const isRawUpload = this.uploadFormat === 'raw';
 
     if (!file.uploadTarget) {
-      file.uploadTarget = this.target || '';
+      file.uploadTarget = this.target;
     }
 
     const evt = this.dispatchEvent(
@@ -396,6 +555,24 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (!evt) {
+      // Upload was prevented - reset state
+      this.#activeUploads -= 1;
+      file.uploading = false;
+      file.indeterminate = false;
+      file.held = true;
+      this.#notifyFilesChanged();
+      this.#processUploadQueue();
+      return;
+    }
+
+    // Check if file was removed during upload-before handler
+    // If file.abort is true, onabort already decremented #activeUploads
+    if (!this.#files.includes(file)) {
+      if (!file.abort) {
+        this.#activeUploads -= 1;
+      }
+      this.#cleanupXhr(xhr);
+      this.#processUploadQueue();
       return;
     }
 
@@ -409,7 +586,7 @@ export class UploadManager extends EventTarget {
     }
 
     xhr.open(this.method, file.uploadTarget, true);
-    this._configureXhr(xhr, file, isRawUpload);
+    this.#configureXhr(xhr, file, isRawUpload);
 
     file.held = false;
 
@@ -419,7 +596,7 @@ export class UploadManager extends EventTarget {
           detail: { file, xhr },
         }),
       );
-      this._notifyFilesChanged();
+      this.#notifyFilesChanged();
     };
 
     const eventDetail = {
@@ -439,23 +616,68 @@ export class UploadManager extends EventTarget {
         cancelable: true,
       }),
     );
-    if (uploadEvt) {
+    if (!uploadEvt) {
+      // upload-request was prevented - reset state
+      this.#activeUploads -= 1;
+      file.uploading = false;
+      file.indeterminate = false;
+      file.held = true;
+      this.#notifyFilesChanged();
+      this.#processUploadQueue();
+      return;
+    }
+
+    // Check if file was removed during upload-request handler
+    // If file.abort is true, onabort already decremented #activeUploads
+    if (!this.#files.includes(file)) {
+      if (!file.abort) {
+        this.#activeUploads -= 1;
+      }
+      this.#cleanupXhr(xhr);
+      this.#processUploadQueue();
+      return;
+    }
+
+    try {
       xhr.send(requestBody);
+    } catch (e) {
+      this.#activeUploads -= 1;
+      file.uploading = false;
+      file.indeterminate = false;
+      file.error = e.message || 'sendFailed';
+      this.#cleanupXhr(xhr);
+      this.#notifyFilesChanged();
+      this.#processUploadQueue();
     }
   }
 
-  /** @private */
+  /**
+   * Creates an XMLHttpRequest instance. Override in tests to mock XHR behavior.
+   * @private
+   */
   _createXhr() {
     return new XMLHttpRequest();
   }
 
-  /** @private */
-  _configureXhr(xhr, file = null, isRawUpload = false) {
+  /**
+   * Clean up XHR handlers to prevent memory leaks
+   */
+  #cleanupXhr(xhr) {
+    if (xhr) {
+      xhr.upload.onprogress = null;
+      xhr.upload.onloadstart = null;
+      xhr.onreadystatechange = null;
+      xhr.onabort = null;
+      xhr.ontimeout = null;
+    }
+  }
+
+  #configureXhr(xhr, file, isRawUpload) {
     Object.entries(this.headers).forEach(([key, value]) => {
       xhr.setRequestHeader(key, value);
     });
 
-    if (isRawUpload && file) {
+    if (isRawUpload) {
       xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
       xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
     }
@@ -466,8 +688,7 @@ export class UploadManager extends EventTarget {
     xhr.withCredentials = this.withCredentials;
   }
 
-  /** @private */
-  _retryFileUpload(file) {
+  #retryFileUpload(file) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-retry', {
         detail: { file, xhr: file.xhr },
@@ -475,12 +696,16 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (evt) {
-      this._queueFileUpload(file);
+      // Reset uploading flag so #queueFileUpload doesn't early-return
+      // This allows retrying queued files that haven't started yet
+      file.uploading = false;
+      // Remove from queue if present (for queued files being retried)
+      this.#uploadQueue = this.#uploadQueue.filter((f) => f !== file);
+      this.#queueFileUpload(file);
     }
   }
 
-  /** @private */
-  _abortFileUpload(file) {
+  #abortFileUpload(file) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-abort', {
         detail: { file, xhr: file.xhr },
@@ -492,23 +717,27 @@ export class UploadManager extends EventTarget {
       if (file.xhr) {
         file.xhr.abort();
       }
-      this._removeFile(file);
+      this.#removeFile(file);
     }
   }
 
-  /** @private */
-  _setStatus(file, total, loaded, elapsed) {
+  #setStatus(file, total, loaded, elapsed) {
     file.elapsed = elapsed;
-    file.remaining = Math.ceil(elapsed * (total / loaded - 1));
-    file.speed = ~~(total / elapsed / 1024);
+    // Avoid division by zero - if loaded is 0, remaining is unknown
+    file.remaining = loaded > 0 ? Math.ceil(elapsed * (total / loaded - 1)) : 0;
+    // Speed should be based on bytes actually transferred, not total file size
+    // Avoid division by zero - if elapsed is 0, speed is 0
+    file.speed = elapsed > 0 ? Math.trunc(loaded / elapsed / 1024) : 0;
     file.total = total;
   }
 
-  /** @private */
-  _notifyFilesChanged() {
+  #notifyFilesChanged() {
+    // This method is called when file properties change (progress, status, etc.)
+    // but not when the array structure changes. We don't track the previous state,
+    // so we only provide the current value.
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value: this._files, oldValue: this._files },
+        detail: { value: this.#files },
       }),
     );
   }

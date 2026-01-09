@@ -195,10 +195,6 @@ describe('vaadin-upload-button', () => {
       });
     });
 
-    afterEach(() => {
-      manager.destroy();
-    });
-
     it('should call addFiles on target when files are selected', () => {
       button.target = manager;
       const addFilesSpy = sinon.spy(manager, 'addFiles');
@@ -275,8 +271,6 @@ describe('vaadin-upload-button', () => {
       manager2.addFiles([createFile(100, 'text/plain')]);
       await nextFrame();
       expect(button.disabled).to.be.true;
-
-      manager2.destroy();
     });
 
     it('should remove listener when target is set to null', async () => {

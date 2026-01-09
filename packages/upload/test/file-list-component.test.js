@@ -37,10 +37,6 @@ describe('vaadin-upload-file-list', () => {
       });
     });
 
-    afterEach(() => {
-      manager.destroy();
-    });
-
     it('should sync files from manager when target is set', async () => {
       const files = createFiles(2, 100, 'text/plain');
       manager.addFiles(files);
@@ -100,8 +96,6 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       expect(fileList.items).to.have.lengthOf(1);
-
-      manager2.destroy();
     });
 
     it('should sync i18n to file list', async () => {
@@ -132,10 +126,6 @@ describe('vaadin-upload-file-list', () => {
       manager._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
       fileList.target = manager;
       await nextFrame();
-    });
-
-    afterEach(() => {
-      manager.destroy();
     });
 
     it('should forward file-retry event to manager', async () => {

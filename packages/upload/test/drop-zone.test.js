@@ -250,10 +250,6 @@ describe('vaadin-upload-drop-zone', () => {
       });
     });
 
-    afterEach(() => {
-      manager.destroy();
-    });
-
     it('should call addFiles on target when files are dropped', async () => {
       dropZone.target = manager;
       const addFilesSpy = sinon.spy(manager, 'addFiles');

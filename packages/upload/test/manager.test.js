@@ -1,18 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles, xhrCreator } from './helpers.js';
 
 describe('UploadManager', () => {
   let manager;
-
-  afterEach(() => {
-    if (manager) {
-      manager.destroy();
-      manager = null;
-    }
-  });
 
   describe('constructor', () => {
     it('should create manager with default options', () => {
@@ -364,30 +356,6 @@ describe('UploadManager', () => {
         manager.retryUpload(manager.files[0]);
         expect(spy.calledOnce).to.be.true;
       }, 50);
-    });
-  });
-
-  describe('destroy', () => {
-    it('should abort active uploads on destroy', () => {
-      manager = new UploadManager({
-        target: '/api/upload',
-        noAuto: false,
-      });
-      manager._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
-
-      manager.addFiles([createFile(100, 'text/plain')]);
-      expect(manager.files[0].uploading).to.be.true;
-
-      manager.destroy();
-      // After destroy, files array is cleared
-      expect(manager.files).to.have.lengthOf(0);
-    });
-
-    it('should not add files after destroy', () => {
-      manager = new UploadManager({ noAuto: true });
-      manager.destroy();
-      manager.addFiles([createFile(100, 'text/plain')]);
-      expect(manager.files).to.have.lengthOf(0);
     });
   });
 
