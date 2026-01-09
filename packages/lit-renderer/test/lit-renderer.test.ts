@@ -80,7 +80,6 @@ describe('lit-renderer', () => {
 
     it('should re-render the content when the dependency has changed', () => {
       doRender('new content', 'new dep');
-      debugger;
       expect(component.$.content?.textContent).to.equal('new content');
     });
 
