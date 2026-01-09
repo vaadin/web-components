@@ -241,7 +241,7 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50, stepTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 50, stepTime: 10 });
     });
 
     it('should not auto-upload when noAuto is true', () => {
@@ -371,7 +371,7 @@ describe('UploadManager', () => {
     });
 
     it('should set file.error to unexpectedServerError on 500 status', (done) => {
-      (manager as any)._createXhr = xhrCreator({
+      (manager as any).__createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         stepTime: 5,
@@ -388,7 +388,7 @@ describe('UploadManager', () => {
     });
 
     it('should set file.error to forbidden on 403 status', (done) => {
-      (manager as any)._createXhr = xhrCreator({
+      (manager as any).__createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         stepTime: 5,
@@ -404,7 +404,7 @@ describe('UploadManager', () => {
     });
 
     it('should set file.total during progress', (done) => {
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
 
       let called = false;
@@ -420,7 +420,7 @@ describe('UploadManager', () => {
     });
 
     it('should set file.elapsed and file.remaining during progress', (done) => {
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 30, stepTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
 
       let progressCount = 0;
@@ -449,7 +449,7 @@ describe('UploadManager', () => {
     });
 
     it('should dispatch files-changed event when upload completes', (done) => {
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
 
       const filesChangedSpy = sinon.spy();
@@ -463,7 +463,7 @@ describe('UploadManager', () => {
     });
 
     it('should clear file.status after upload completes', (done) => {
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
 
@@ -498,7 +498,7 @@ describe('UploadManager', () => {
 
     it('should set file.stalled to true after 2 seconds without progress', async () => {
       // Create a mock XHR that doesn't send progress updates
-      (manager as any)._createXhr = () => {
+      (manager as any).__createXhr = () => {
         const xhr = {
           readyState: 0,
           status: 0,
@@ -559,7 +559,7 @@ describe('UploadManager', () => {
         noAuto: false,
         maxConcurrentUploads: 2,
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 100, stepTime: 20 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 100, stepTime: 20 });
     });
 
     it('should respect maxConcurrentUploads', () => {
@@ -576,7 +576,7 @@ describe('UploadManager', () => {
 
     it('should start next queued upload when one completes', (done) => {
       // Use fast upload time
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
 
       const files = createFiles(3, 100, 'text/plain');
       manager.addFiles(files);
@@ -598,7 +598,7 @@ describe('UploadManager', () => {
 
     it('should start next queued upload when one is aborted', (done) => {
       // Use long upload time so files don't complete immediately
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
       const files = createFiles(3, 100, 'text/plain');
       manager.addFiles(files);
@@ -614,7 +614,7 @@ describe('UploadManager', () => {
       manager.abortUpload(fileToAbort!);
 
       // Use fast xhr for next file
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 20, stepTime: 5 });
 
       // The previously queued file should now be active
       setTimeout(() => {
@@ -625,7 +625,7 @@ describe('UploadManager', () => {
     });
 
     it('should not re-queue a file that is already uploading', () => {
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
       const files = createFiles(1, 100, 'text/plain');
       manager.addFiles(files);
@@ -646,7 +646,7 @@ describe('UploadManager', () => {
 
     it('should remove file from queue when removed before upload starts', () => {
       // Use long upload time so files stay queued
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 500, stepTime: 50 });
 
       const files = createFiles(4, 100, 'text/plain');
       manager.addFiles(files);
@@ -673,7 +673,7 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
     });
 
     it('should abort upload via abortUpload', () => {
@@ -718,7 +718,7 @@ describe('UploadManager', () => {
       const retrySpy = sinon.spy();
       manager.addEventListener('upload-retry', retrySpy);
 
-      (manager as any)._createXhr = xhrCreator({
+      (manager as any).__createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         stepTime: 5,
@@ -732,7 +732,7 @@ describe('UploadManager', () => {
       manager.addEventListener('upload-error', () => {
         const successSpy = sinon.spy();
         manager.addEventListener('upload-success', successSpy);
-        (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10, stepTime: 5 });
+        (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 10, stepTime: 5 });
         manager.retryUpload(manager.files[0]);
 
         // Wait for retry to succeed
@@ -758,7 +758,7 @@ describe('UploadManager', () => {
       manager.addEventListener('upload-request', (e) => {
         requestBody = e.detail.requestBody;
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
@@ -771,7 +771,7 @@ describe('UploadManager', () => {
       manager.addEventListener('upload-request', (e) => {
         requestBody = e.detail.requestBody;
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
@@ -784,7 +784,7 @@ describe('UploadManager', () => {
       manager.addEventListener('upload-request', (e) => {
         formData = e.detail.formData;
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 10 });
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
@@ -798,7 +798,7 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 50 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 50 });
     });
 
     it('should not upload when upload-before is prevented', () => {
@@ -828,7 +828,7 @@ describe('UploadManager', () => {
     });
 
     it('should not retry when upload-retry is prevented', () => {
-      (manager as any)._createXhr = xhrCreator({
+      (manager as any).__createXhr = xhrCreator({
         size: 100,
         uploadTime: 10,
         serverValidation: () => ({ status: 500 }),
@@ -888,7 +888,7 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
-      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
+      (manager as any).__createXhr = xhrCreator({ size: 100, uploadTime: 10 });
     });
 
     it('should set custom headers on XHR', () => {

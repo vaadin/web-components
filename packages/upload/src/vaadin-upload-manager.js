@@ -86,10 +86,10 @@ export class UploadManager extends EventTarget {
     this.formDataName = options.formDataName || 'file';
 
     // State
-    this._files = [];
-    this._maxFilesReached = false;
-    this._uploadQueue = [];
-    this._activeUploads = 0;
+    this.__files = [];
+    this.__maxFilesReached = false;
+    this.__uploadQueue = [];
+    this.__activeUploads = 0;
   }
 
   /**
@@ -116,13 +116,13 @@ export class UploadManager extends EventTarget {
    * @type {Array<UploadFile>}
    */
   get files() {
-    return this._files;
+    return this.__files;
   }
 
   set files(value) {
-    const oldValue = this._files;
-    this._files = value;
-    this._updateMaxFilesReached();
+    const oldValue = this.__files;
+    this.__files = value;
+    this.__updateMaxFilesReached();
     this.dispatchEvent(
       new CustomEvent('files-changed', {
         detail: { value, oldValue },
@@ -136,7 +136,7 @@ export class UploadManager extends EventTarget {
    * @readonly
    */
   get maxFilesReached() {
-    return this._maxFilesReached;
+    return this.__maxFilesReached;
   }
 
   /**
@@ -144,7 +144,7 @@ export class UploadManager extends EventTarget {
    * @param {FileList|File[]} files - Files to add
    */
   addFiles(files) {
-    Array.from(files).forEach((file) => this._addFile(file));
+    Array.from(files).forEach((file) => this.__addFile(file));
   }
 
   /**
@@ -152,11 +152,11 @@ export class UploadManager extends EventTarget {
    *
    * @param {UploadFile|UploadFile[]} [files] - Files being uploaded. Defaults to all outstanding files.
    */
-  uploadFiles(files = this._files) {
+  uploadFiles(files = this.__files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files.filter((file) => !file.complete).forEach((file) => this._queueFileUpload(file));
+    files.filter((file) => !file.complete).forEach((file) => this.__queueFileUpload(file));
   }
 
   /**
@@ -164,7 +164,7 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to retry
    */
   retryUpload(file) {
-    this._retryFileUpload(file);
+    this.__retryFileUpload(file);
   }
 
   /**
@@ -172,7 +172,7 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to abort
    */
   abortUpload(file) {
-    this._abortFileUpload(file);
+    this.__abortFileUpload(file);
   }
 
   /**
@@ -180,13 +180,13 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to remove
    */
   removeFile(file) {
-    this._removeFile(file);
+    this.__removeFile(file);
   }
 
   // ============ Private methods ============
 
   /** @private */
-  get _acceptRegexp() {
+  get __acceptRegexp() {
     if (!this.accept) {
       return null;
     }
@@ -202,10 +202,10 @@ export class UploadManager extends EventTarget {
   }
 
   /** @private */
-  _updateMaxFilesReached() {
-    const reached = this.maxFiles >= 0 && this._files.length >= this.maxFiles;
-    if (reached !== this._maxFilesReached) {
-      this._maxFilesReached = reached;
+  __updateMaxFilesReached() {
+    const reached = this.maxFiles >= 0 && this.__files.length >= this.maxFiles;
+    if (reached !== this.__maxFilesReached) {
+      this.__maxFilesReached = reached;
       this.dispatchEvent(
         new CustomEvent('max-files-reached-changed', {
           detail: { value: reached },
@@ -215,8 +215,8 @@ export class UploadManager extends EventTarget {
   }
 
   /** @private */
-  _addFile(file) {
-    if (this._maxFilesReached) {
+  __addFile(file) {
+    if (this.__maxFilesReached) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
           detail: { file, error: 'tooManyFiles' },
@@ -232,7 +232,7 @@ export class UploadManager extends EventTarget {
       );
       return;
     }
-    const re = this._acceptRegexp;
+    const re = this.__acceptRegexp;
     if (re && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
@@ -245,20 +245,20 @@ export class UploadManager extends EventTarget {
     file.loaded = 0;
     file.held = true;
     file.formDataName = this.formDataName;
-    this.files = [file, ...this._files];
+    this.files = [file, ...this.__files];
 
     if (!this.noAuto) {
-      this._queueFileUpload(file);
+      this.__queueFileUpload(file);
     }
   }
 
   /** @private */
-  _removeFile(file) {
-    this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
+  __removeFile(file) {
+    this.__uploadQueue = this.__uploadQueue.filter((f) => f !== file);
 
-    const fileIndex = this._files.indexOf(file);
+    const fileIndex = this.__files.indexOf(file);
     if (fileIndex >= 0) {
-      this.files = this._files.filter((f) => f !== file);
+      this.files = this.__files.filter((f) => f !== file);
 
       this.dispatchEvent(
         new CustomEvent('file-remove', {
@@ -269,7 +269,7 @@ export class UploadManager extends EventTarget {
   }
 
   /** @private */
-  _queueFileUpload(file) {
+  __queueFileUpload(file) {
     if (file.uploading) {
       return;
     }
@@ -280,28 +280,28 @@ export class UploadManager extends EventTarget {
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.error = false;
     file.stalled = false;
-    this._notifyFilesChanged();
+    this.__notifyFilesChanged();
 
-    this._uploadQueue.push(file);
-    this._processUploadQueue();
+    this.__uploadQueue.push(file);
+    this.__processUploadQueue();
   }
 
   /** @private */
-  _processUploadQueue() {
-    while (this._uploadQueue.length > 0 && this._activeUploads < this.maxConcurrentUploads) {
-      const nextFile = this._uploadQueue.shift();
+  __processUploadQueue() {
+    while (this.__uploadQueue.length > 0 && this.__activeUploads < this.maxConcurrentUploads) {
+      const nextFile = this.__uploadQueue.shift();
       if (nextFile) {
-        this._uploadFile(nextFile);
+        this.__uploadFile(nextFile);
       }
     }
   }
 
   /** @private */
-  _uploadFile(file) {
-    this._activeUploads += 1;
+  __uploadFile(file) {
+    this.__activeUploads += 1;
 
     const ini = Date.now();
-    const xhr = (file.xhr = this._createXhr());
+    const xhr = (file.xhr = this.__createXhr());
 
     let stalledId, last;
 
@@ -321,21 +321,21 @@ export class UploadManager extends EventTarget {
         file.indeterminate = file.status = undefined;
       } else if (!file.abort) {
         if (progress < 100) {
-          this._setStatus(file, total, loaded, elapsed);
+          this.__setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
             file.stalled = true;
-            this._notifyFilesChanged();
+            this.__notifyFilesChanged();
           }, 2000);
         }
       }
 
-      this._notifyFilesChanged();
+      this.__notifyFilesChanged();
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
     xhr.onabort = () => {
-      this._activeUploads -= 1;
-      this._processUploadQueue();
+      this.__activeUploads -= 1;
+      this.__processUploadQueue();
     };
 
     xhr.onreadystatechange = () => {
@@ -343,8 +343,8 @@ export class UploadManager extends EventTarget {
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
 
-        this._activeUploads -= 1;
-        this._processUploadQueue();
+        this.__activeUploads -= 1;
+        this.__processUploadQueue();
 
         if (file.abort) {
           return;
@@ -373,7 +373,7 @@ export class UploadManager extends EventTarget {
         const eventName = file.error ? 'upload-error' : 'upload-success';
         this.dispatchEvent(new CustomEvent(eventName, { detail: { file, xhr } }));
 
-        this._notifyFilesChanged();
+        this.__notifyFilesChanged();
       }
     };
 
@@ -403,7 +403,7 @@ export class UploadManager extends EventTarget {
     }
 
     xhr.open(this.method, file.uploadTarget, true);
-    this._configureXhr(xhr, file, isRawUpload);
+    this.__configureXhr(xhr, file, isRawUpload);
 
     file.held = false;
 
@@ -413,7 +413,7 @@ export class UploadManager extends EventTarget {
           detail: { file, xhr },
         }),
       );
-      this._notifyFilesChanged();
+      this.__notifyFilesChanged();
     };
 
     const eventDetail = {
@@ -439,12 +439,12 @@ export class UploadManager extends EventTarget {
   }
 
   /** @private */
-  _createXhr() {
+  __createXhr() {
     return new XMLHttpRequest();
   }
 
   /** @private */
-  _configureXhr(xhr, file = null, isRawUpload = false) {
+  __configureXhr(xhr, file = null, isRawUpload = false) {
     Object.entries(this.headers).forEach(([key, value]) => {
       xhr.setRequestHeader(key, value);
     });
@@ -461,7 +461,7 @@ export class UploadManager extends EventTarget {
   }
 
   /** @private */
-  _retryFileUpload(file) {
+  __retryFileUpload(file) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-retry', {
         detail: { file, xhr: file.xhr },
@@ -469,12 +469,12 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (evt) {
-      this._queueFileUpload(file);
+      this.__queueFileUpload(file);
     }
   }
 
   /** @private */
-  _abortFileUpload(file) {
+  __abortFileUpload(file) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-abort', {
         detail: { file, xhr: file.xhr },
@@ -486,12 +486,12 @@ export class UploadManager extends EventTarget {
       if (file.xhr) {
         file.xhr.abort();
       }
-      this._removeFile(file);
+      this.__removeFile(file);
     }
   }
 
   /** @private */
-  _setStatus(file, total, loaded, elapsed) {
+  __setStatus(file, total, loaded, elapsed) {
     file.elapsed = elapsed;
     file.remaining = Math.ceil(elapsed * (total / loaded - 1));
     file.speed = ~~(total / elapsed / 1024);
@@ -499,10 +499,10 @@ export class UploadManager extends EventTarget {
   }
 
   /** @private */
-  _notifyFilesChanged() {
+  __notifyFilesChanged() {
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value: this._files, oldValue: this._files },
+        detail: { value: this.__files, oldValue: this.__files },
       }),
     );
   }
