@@ -40,7 +40,10 @@
   "devDependencies": {
     "@vaadin/aura": "25.1.0-alpha1",
     "@vaadin/avatar": "25.1.0-alpha1",
+    "@vaadin/button": "25.1.0-alpha1",
     "@vaadin/chai-plugins": "25.1.0-alpha1",
+    "@vaadin/icon": "25.1.0-alpha1",
+    "@vaadin/icons": "25.1.0-alpha1",
     "@vaadin/test-runner-commands": "25.1.0-alpha1",
     "@vaadin/testing-helpers": "^2.0.0",
     "@vaadin/vaadin-lumo-styles": "25.1.0-alpha1",
