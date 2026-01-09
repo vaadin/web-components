@@ -52,6 +52,18 @@
  * @fires {CustomEvent} max-files-reached-changed - Fired when maxFilesReached changes
  */
 export class UploadManager extends EventTarget {
+  /** @type {Array<UploadFile>} */
+  #files = [];
+
+  /** @type {boolean} */
+  #maxFilesReached = false;
+
+  /** @type {Array<UploadFile>} */
+  #uploadQueue = [];
+
+  /** @type {number} */
+  #activeUploads = 0;
+
   /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
@@ -103,12 +115,6 @@ export class UploadManager extends EventTarget {
     }
     this.maxConcurrentUploads = maxConcurrentUploads;
     this.formDataName = options.formDataName || 'file';
-
-    // State
-    this._files = [];
-    this._maxFilesReached = false;
-    this._uploadQueue = [];
-    this._activeUploads = 0;
   }
 
   /**
@@ -138,13 +144,13 @@ export class UploadManager extends EventTarget {
    * @type {Array<UploadFile>}
    */
   get files() {
-    return this._files;
+    return this.#files;
   }
 
   set files(value) {
-    const oldValue = this._files;
-    this._files = value;
-    this._updateMaxFilesReached();
+    const oldValue = this.#files;
+    this.#files = value;
+    this.#updateMaxFilesReached();
     this.dispatchEvent(
       new CustomEvent('files-changed', {
         detail: { value, oldValue },
@@ -158,7 +164,7 @@ export class UploadManager extends EventTarget {
    * @readonly
    */
   get maxFilesReached() {
-    return this._maxFilesReached;
+    return this.#maxFilesReached;
   }
 
   /**
@@ -166,7 +172,7 @@ export class UploadManager extends EventTarget {
    * @param {FileList|File[]} files - Files to add
    */
   addFiles(files) {
-    Array.from(files).forEach((file) => this._addFile(file));
+    Array.from(files).forEach((file) => this.#addFile(file));
   }
 
   /**
@@ -174,12 +180,12 @@ export class UploadManager extends EventTarget {
    *
    * @param {UploadFile|UploadFile[]} [files] - Files being uploaded. Defaults to all outstanding files.
    */
-  uploadFiles(files = this._files) {
+  uploadFiles(files = this.#files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
     // Only upload files that are managed by this instance and not already complete
-    files.filter((file) => this._files.includes(file) && !file.complete).forEach((file) => this._queueFileUpload(file));
+    files.filter((file) => this.#files.includes(file) && !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 
   /**
@@ -187,7 +193,7 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to retry
    */
   retryUpload(file) {
-    this._retryFileUpload(file);
+    this.#retryFileUpload(file);
   }
 
   /**
@@ -195,7 +201,7 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to abort
    */
   abortUpload(file) {
-    this._abortFileUpload(file);
+    this.#abortFileUpload(file);
   }
 
   /**
@@ -203,13 +209,12 @@ export class UploadManager extends EventTarget {
    * @param {UploadFile} file - The file to remove
    */
   removeFile(file) {
-    this._removeFile(file);
+    this.#removeFile(file);
   }
 
   // ============ Private methods ============
 
-  /** @private */
-  get _acceptRegexp() {
+  get #acceptRegexp() {
     if (!this.accept) {
       return null;
     }
@@ -224,11 +229,10 @@ export class UploadManager extends EventTarget {
     return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
   }
 
-  /** @private */
-  _updateMaxFilesReached() {
-    const reached = this.maxFiles >= 0 && this._files.length >= this.maxFiles;
-    if (reached !== this._maxFilesReached) {
-      this._maxFilesReached = reached;
+  #updateMaxFilesReached() {
+    const reached = this.maxFiles >= 0 && this.#files.length >= this.maxFiles;
+    if (reached !== this.#maxFilesReached) {
+      this.#maxFilesReached = reached;
       this.dispatchEvent(
         new CustomEvent('max-files-reached-changed', {
           detail: { value: reached },
@@ -237,9 +241,8 @@ export class UploadManager extends EventTarget {
     }
   }
 
-  /** @private */
-  _addFile(file) {
-    if (this._maxFilesReached) {
+  #addFile(file) {
+    if (this.#maxFilesReached) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
           detail: { file, error: 'tooManyFiles' },
@@ -255,7 +258,7 @@ export class UploadManager extends EventTarget {
       );
       return;
     }
-    const re = this._acceptRegexp;
+    const re = this.#acceptRegexp;
     if (re && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
@@ -268,16 +271,15 @@ export class UploadManager extends EventTarget {
     file.loaded = 0;
     file.held = true;
     file.formDataName = this.formDataName;
-    this.files = [file, ...this._files];
+    this.files = [file, ...this.#files];
 
     if (!this.noAuto) {
-      this._queueFileUpload(file);
+      this.#queueFileUpload(file);
     }
   }
 
-  /** @private */
-  _removeFile(file) {
-    this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
+  #removeFile(file) {
+    this.#uploadQueue = this.#uploadQueue.filter((f) => f !== file);
 
     // If the file is actively uploading (not held) and not already aborted, abort the XHR
     if (file.uploading && !file.held && !file.abort && file.xhr) {
@@ -285,9 +287,9 @@ export class UploadManager extends EventTarget {
       file.xhr.abort();
     }
 
-    const fileIndex = this._files.indexOf(file);
+    const fileIndex = this.#files.indexOf(file);
     if (fileIndex >= 0) {
-      this.files = this._files.filter((f) => f !== file);
+      this.files = this.#files.filter((f) => f !== file);
 
       this.dispatchEvent(
         new CustomEvent('file-remove', {
@@ -297,14 +299,13 @@ export class UploadManager extends EventTarget {
     }
   }
 
-  /** @private */
-  _queueFileUpload(file) {
+  #queueFileUpload(file) {
     if (file.uploading) {
       return;
     }
 
     // Prevent duplicate entries in queue
-    if (this._uploadQueue.includes(file)) {
+    if (this.#uploadQueue.includes(file)) {
       return;
     }
 
@@ -314,25 +315,23 @@ export class UploadManager extends EventTarget {
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.error = false;
     file.stalled = false;
-    this._notifyFilesChanged();
+    this.#notifyFilesChanged();
 
-    this._uploadQueue.push(file);
-    this._processUploadQueue();
+    this.#uploadQueue.push(file);
+    this.#processUploadQueue();
   }
 
-  /** @private */
-  _processUploadQueue() {
-    while (this._uploadQueue.length > 0 && this._activeUploads < this.maxConcurrentUploads) {
-      const nextFile = this._uploadQueue.shift();
+  #processUploadQueue() {
+    while (this.#uploadQueue.length > 0 && this.#activeUploads < this.maxConcurrentUploads) {
+      const nextFile = this.#uploadQueue.shift();
       if (nextFile) {
-        this._uploadFile(nextFile);
+        this.#uploadFile(nextFile);
       }
     }
   }
 
-  /** @private */
-  _uploadFile(file) {
-    this._activeUploads += 1;
+  #uploadFile(file) {
+    this.#activeUploads += 1;
 
     const ini = Date.now();
     const xhr = (file.xhr = this._createXhr());
@@ -355,26 +354,26 @@ export class UploadManager extends EventTarget {
         file.indeterminate = file.status = undefined;
       } else if (!file.abort) {
         if (progress < 100) {
-          this._setStatus(file, total, loaded, elapsed);
+          this.#setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
             // Only set stalled if file is still uploading and not aborted
             if (file.uploading && !file.abort) {
               file.stalled = true;
-              this._notifyFilesChanged();
+              this.#notifyFilesChanged();
             }
           }, 2000);
         }
       }
 
-      this._notifyFilesChanged();
+      this.#notifyFilesChanged();
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
     xhr.onabort = () => {
       clearTimeout(stalledId);
-      this._activeUploads -= 1;
-      this._cleanupXhr(xhr);
-      this._processUploadQueue();
+      this.#activeUploads -= 1;
+      this.#cleanupXhr(xhr);
+      this.#processUploadQueue();
     };
 
     xhr.ontimeout = () => {
@@ -383,12 +382,12 @@ export class UploadManager extends EventTarget {
       file.error = 'timeout';
       file.status = '';
 
-      this._activeUploads -= 1;
-      this._processUploadQueue();
-      this._cleanupXhr(xhr);
+      this.#activeUploads -= 1;
+      this.#processUploadQueue();
+      this.#cleanupXhr(xhr);
 
       this.dispatchEvent(new CustomEvent('upload-error', { detail: { file, xhr } }));
-      this._notifyFilesChanged();
+      this.#notifyFilesChanged();
     };
 
     xhr.onreadystatechange = () => {
@@ -396,9 +395,9 @@ export class UploadManager extends EventTarget {
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
 
-        this._activeUploads -= 1;
-        this._processUploadQueue();
-        this._cleanupXhr(xhr);
+        this.#activeUploads -= 1;
+        this.#processUploadQueue();
+        this.#cleanupXhr(xhr);
 
         if (file.abort) {
           return;
@@ -430,7 +429,7 @@ export class UploadManager extends EventTarget {
         // Clear file.xhr reference to allow garbage collection
         file.xhr = null;
 
-        this._notifyFilesChanged();
+        this.#notifyFilesChanged();
       }
     };
 
@@ -448,23 +447,23 @@ export class UploadManager extends EventTarget {
     );
     if (!evt) {
       // Upload was prevented - reset state
-      this._activeUploads -= 1;
+      this.#activeUploads -= 1;
       file.uploading = false;
       file.indeterminate = false;
       file.held = true;
-      this._notifyFilesChanged();
-      this._processUploadQueue();
+      this.#notifyFilesChanged();
+      this.#processUploadQueue();
       return;
     }
 
     // Check if file was removed during upload-before handler
-    // If file.abort is true, onabort already decremented _activeUploads
-    if (!this._files.includes(file)) {
+    // If file.abort is true, onabort already decremented #activeUploads
+    if (!this.#files.includes(file)) {
       if (!file.abort) {
-        this._activeUploads -= 1;
+        this.#activeUploads -= 1;
       }
-      this._cleanupXhr(xhr);
-      this._processUploadQueue();
+      this.#cleanupXhr(xhr);
+      this.#processUploadQueue();
       return;
     }
 
@@ -478,7 +477,7 @@ export class UploadManager extends EventTarget {
     }
 
     xhr.open(this.method, file.uploadTarget, true);
-    this._configureXhr(xhr, file, isRawUpload);
+    this.#configureXhr(xhr, file, isRawUpload);
 
     file.held = false;
 
@@ -488,7 +487,7 @@ export class UploadManager extends EventTarget {
           detail: { file, xhr },
         }),
       );
-      this._notifyFilesChanged();
+      this.#notifyFilesChanged();
     };
 
     const eventDetail = {
@@ -510,37 +509,39 @@ export class UploadManager extends EventTarget {
     );
     if (!uploadEvt) {
       // upload-request was prevented - reset state
-      this._activeUploads -= 1;
+      this.#activeUploads -= 1;
       file.uploading = false;
       file.indeterminate = false;
       file.held = true;
-      this._notifyFilesChanged();
-      this._processUploadQueue();
+      this.#notifyFilesChanged();
+      this.#processUploadQueue();
       return;
     }
 
     try {
       xhr.send(requestBody);
     } catch (e) {
-      this._activeUploads -= 1;
+      this.#activeUploads -= 1;
       file.uploading = false;
       file.indeterminate = false;
       file.error = e.message || 'sendFailed';
-      this._notifyFilesChanged();
-      this._processUploadQueue();
+      this.#notifyFilesChanged();
+      this.#processUploadQueue();
     }
   }
 
-  /** @private */
+  /**
+   * Creates an XMLHttpRequest instance. Override in tests to mock XHR behavior.
+   * @protected
+   */
   _createXhr() {
     return new XMLHttpRequest();
   }
 
   /**
    * Clean up XHR handlers to prevent memory leaks
-   * @private
    */
-  _cleanupXhr(xhr) {
+  #cleanupXhr(xhr) {
     if (xhr) {
       xhr.upload.onprogress = null;
       xhr.upload.onloadstart = null;
@@ -550,8 +551,7 @@ export class UploadManager extends EventTarget {
     }
   }
 
-  /** @private */
-  _configureXhr(xhr, file = null, isRawUpload = false) {
+  #configureXhr(xhr, file = null, isRawUpload = false) {
     Object.entries(this.headers).forEach(([key, value]) => {
       xhr.setRequestHeader(key, value);
     });
@@ -567,8 +567,7 @@ export class UploadManager extends EventTarget {
     xhr.withCredentials = this.withCredentials;
   }
 
-  /** @private */
-  _retryFileUpload(file) {
+  #retryFileUpload(file) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-retry', {
         detail: { file, xhr: file.xhr },
@@ -576,17 +575,16 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (evt) {
-      // Reset uploading flag so _queueFileUpload doesn't early-return
+      // Reset uploading flag so #queueFileUpload doesn't early-return
       // This allows retrying queued files that haven't started yet
       file.uploading = false;
       // Remove from queue if present (for queued files being retried)
-      this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
-      this._queueFileUpload(file);
+      this.#uploadQueue = this.#uploadQueue.filter((f) => f !== file);
+      this.#queueFileUpload(file);
     }
   }
 
-  /** @private */
-  _abortFileUpload(file) {
+  #abortFileUpload(file) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-abort', {
         detail: { file, xhr: file.xhr },
@@ -598,12 +596,11 @@ export class UploadManager extends EventTarget {
       if (file.xhr) {
         file.xhr.abort();
       }
-      this._removeFile(file);
+      this.#removeFile(file);
     }
   }
 
-  /** @private */
-  _setStatus(file, total, loaded, elapsed) {
+  #setStatus(file, total, loaded, elapsed) {
     file.elapsed = elapsed;
     // Avoid division by zero - if loaded is 0, remaining is unknown
     file.remaining = loaded > 0 ? Math.ceil(elapsed * (total / loaded - 1)) : 0;
@@ -613,13 +610,12 @@ export class UploadManager extends EventTarget {
     file.total = total;
   }
 
-  /** @private */
-  _notifyFilesChanged() {
+  #notifyFilesChanged() {
     // Note: We pass a shallow copy as oldValue since the array reference is the same.
     // Consumers who need to detect changes should compare array contents, not references.
     this.dispatchEvent(
       new CustomEvent('files-changed', {
-        detail: { value: this._files, oldValue: [...this._files] },
+        detail: { value: this.#files, oldValue: [...this.#files] },
       }),
     );
   }
