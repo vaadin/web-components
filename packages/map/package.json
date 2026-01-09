@@ -41,6 +41,7 @@
     "ol": "10.6.0"
   },
   "devDependencies": {
+    "@vaadin/aura": "25.1.0-alpha1",
     "@vaadin/chai-plugins": "25.1.0-alpha1",
     "@vaadin/test-runner-commands": "25.1.0-alpha1",
     "@vaadin/testing-helpers": "^2.0.0",
