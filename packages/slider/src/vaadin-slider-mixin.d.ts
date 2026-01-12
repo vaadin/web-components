@@ -19,6 +19,11 @@ export declare class SliderMixinClass {
   max: number;
 
   /**
+   * The stepping interval of the slider.
+   */
+  step: number;
+
+  /**
    * The value of the slider.
    */
   value: string | null | undefined;

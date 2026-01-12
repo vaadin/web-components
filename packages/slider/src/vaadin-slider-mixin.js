@@ -28,6 +28,13 @@ export const SliderMixin = (superClass) =>
         },
 
         /**
+         * The stepping interval of the slider.
+         */
+        step: {
+          type: Number,
+        },
+
+        /**
          * The value of the slider.
          */
         value: {
