@@ -39,19 +39,17 @@ export const SliderMixin = (superClass) =>
           type: String,
           notify: true,
         },
-      };
-    }
 
-    /** @private */
-    get __thumbs() {
-      return [...this.shadowRoot.querySelectorAll('[part="thumb"]')];
+        /** @private */
+        __values: {
+          type: Array,
+          value: () => [0],
+        },
+      };
     }
 
     constructor() {
       super();
-
-      /** @type {string[]} */
-      this.__values = [];
 
       this.__onPointerMove = this.__onPointerMove.bind(this);
       this.__onPointerUp = this.__onPointerUp.bind(this);
@@ -65,66 +63,33 @@ export const SliderMixin = (superClass) =>
 
       if (props.has('value') || props.has('min') || props.has('max')) {
         const value = this.value || '0';
-        this.__updateValue(0, value);
+        this.__updateValue(value);
       }
     }
 
     /**
-     * @param {number} index
      * @param {number} value
-     * @param {boolean} commit
      * @private
      */
-    __updateValue(index, value, commitValue) {
+    __updateValue(value) {
       const min = this.min || 0;
       const max = this.max || 100;
       const step = this.step || 1;
 
-      const thumbMinValue = min;
-      const thumbMaxValue = max;
-
-      const safeValue = Math.min(Math.max(value, thumbMinValue), thumbMaxValue);
+      const safeValue = Math.min(Math.max(value, min), max);
 
       const offset = safeValue - min;
       const nearestOffset = Math.round(offset / step) * step;
       const nearestValue = min + nearestOffset;
 
       const newValue = Math.round(nearestValue);
-
-      this.__values[index] = newValue;
-      this.__updateThumb(index, newValue);
-      this.__updateTrackFill();
-
-      if (commitValue) {
-        this.value = this.__values.join(',');
-      }
-    }
-
-    /**
-     * @param {number} index
-     * @param {number} value
-     * @private
-     */
-    __updateThumb(index, value) {
-      if (!this.__thumbs[index]) {
-        return;
-      }
-      this.__thumbs[index].style.setProperty('inset-inline-start', `${this.__getPercentFromValue(value)}%`);
-    }
-
-    /** @private */
-    __updateTrackFill() {
-      const trackFillStart = 0;
-      const trackFillEnd = `${100 - this.__getPercentFromValue(this.__values[0])}%`;
-      // Ensure thumb always covers the fill
-      const trackFillEndClamp = `clamp(var(--_thumb-size) / 2, ${trackFillEnd}, 100% - var(--_thumb-size) / 2)`;
-      this.$.fill.style.setProperty('inset-inline', `${trackFillStart} ${trackFillEndClamp}`);
+      this.__values = [newValue];
     }
 
     /**
      * @param {number} value
      * @return {number}
-     * @private
+     * @protected
      */
     __getPercentFromValue(value) {
       const min = this.min || 0;
@@ -135,7 +100,7 @@ export const SliderMixin = (superClass) =>
     /**
      * @param {number} percent
      * @return {number}
-     * @private
+     * @protected
      */
     __getValueFromPercent(percent) {
       const min = this.min || 0;
@@ -149,7 +114,8 @@ export const SliderMixin = (superClass) =>
       const safeOffset = Math.min(Math.max(offset, 0), size);
       const percent = safeOffset / size;
       const newValue = this.__getValueFromPercent(percent);
-      this.__updateValue(0, newValue, true);
+      this.__updateValue(newValue);
+      this.value = this.__values.join(',');
     }
 
     /**

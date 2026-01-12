@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -37,11 +38,23 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
   /** @protected */
   render() {
+    const percent = this.__getPercentFromValue(this.__values[0]);
+
+    const trackFillStart = 0;
+    const trackFillEnd = `${100 - percent}%`;
+    const trackFillEndClamp = `clamp(var(--_thumb-size) / 2, ${trackFillEnd}, 100% - var(--_thumb-size) / 2)`;
+
     return html`
       <div part="track"></div>
-      <div id="fill" part="track-fill"></div>
+      <div
+        part="track-fill"
+        style="${styleMap({
+          insetInlineStart: trackFillStart,
+          insetInlineEnd: trackFillEndClamp,
+        })}"
+      ></div>
       <div id="track">
-        <div part="thumb"></div>
+        <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
       </div>
     `;
   }

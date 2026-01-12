@@ -11,15 +11,14 @@ snapshots["vaadin-slider shadow"] =
 `<div part="track">
 </div>
 <div
-  id="fill"
   part="track-fill"
-  style="inset-inline: 0px 100%;"
+  style="inset-inline-start:0;inset-inline-end:clamp(var(--_thumb-size) / 2, 100%, 100% - var(--_thumb-size) / 2);"
 >
 </div>
 <div id="track">
   <div
     part="thumb"
-    style="inset-inline-start: 0%;"
+    style="inset-inline-start:0%;"
   >
   </div>
 </div>
