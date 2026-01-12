@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
@@ -7,8 +7,9 @@ import type { Slider } from '../vaadin-slider.js';
 describe('vaadin-slider', () => {
   let slider: Slider;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     slider = fixtureSync('<vaadin-slider></vaadin-slider>');
+    await nextRender();
   });
 
   describe('custom element definition', () => {
@@ -24,6 +25,38 @@ describe('vaadin-slider', () => {
 
     it('should have a valid static "is" getter', () => {
       expect((customElements.get(tagName) as any).is).to.equal(tagName);
+    });
+  });
+
+  describe('fill width', () => {
+    let fill: HTMLElement;
+    let thumb: HTMLElement;
+
+    beforeEach(async () => {
+      fill = slider.shadowRoot!.querySelector('[part="track-fill"]')!;
+      thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
+      slider.style.width = '200px';
+      await nextResize(slider);
+    });
+
+    it('should set track fill width based on the value', () => {
+      slider.value = '10';
+      expect(getComputedStyle(fill).width).to.equal('20px');
+
+      slider.value = '50';
+      expect(getComputedStyle(fill).width).to.equal('100px');
+    });
+
+    it('should clamp track fill width when using low value', () => {
+      const thumbSize = parseFloat(getComputedStyle(thumb).width);
+      slider.value = '0';
+      expect(getComputedStyle(fill).width).to.equal(`${thumbSize / 2}px`);
+    });
+
+    it('should clamp track fill width when using hight value', () => {
+      const thumbSize = parseFloat(getComputedStyle(thumb).width);
+      slider.value = '100';
+      expect(getComputedStyle(fill).width).to.equal(`${200 - thumbSize / 2}px`);
     });
   });
 
