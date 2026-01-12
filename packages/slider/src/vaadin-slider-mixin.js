@@ -16,7 +16,6 @@ export const SliderMixin = (superClass) =>
          */
         min: {
           type: Number,
-          value: 0,
         },
 
         /**
@@ -24,7 +23,6 @@ export const SliderMixin = (superClass) =>
          */
         max: {
           type: Number,
-          value: 100,
         },
 
         /**
