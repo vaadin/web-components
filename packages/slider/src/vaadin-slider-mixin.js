@@ -38,12 +38,14 @@ export const SliderMixin = (superClass) =>
         value: {
           type: String,
           notify: true,
+          sync: true,
         },
 
         /** @private */
         __value: {
           type: Number,
           value: 0,
+          sync: true,
         },
       };
     }
