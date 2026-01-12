@@ -68,6 +68,36 @@ function createMockXhr(options: MockXhrOptions = {}): MockXhr {
   return xhr;
 }
 
+function setMockXhr(manager: UploadManager, options: MockXhrOptions = {}): MockXhr {
+  const mockXhr = createMockXhr(options);
+  (manager as any)._createXhr = () => mockXhr;
+  return mockXhr;
+}
+
+function setMockXhrFactory(manager: UploadManager, options: MockXhrOptions = {}): void {
+  (manager as any)._createXhr = () => createMockXhr(options);
+}
+
+function scheduleXhrTimeout(xhr: MockXhr, delay: number) {
+  setTimeout(() => {
+    if (xhr.ontimeout) {
+      xhr.ontimeout();
+    }
+  }, delay);
+}
+
+function scheduleXhrComplete(xhr: MockXhr, delay: number, onComplete?: () => void) {
+  setTimeout(() => {
+    if (onComplete) {
+      onComplete();
+    }
+    xhr.readyState = 4;
+    if (xhr.onreadystatechange) {
+      xhr.onreadystatechange();
+    }
+  }, delay);
+}
+
 describe('UploadManager', () => {
   let manager: UploadManager;
 
@@ -539,15 +569,14 @@ describe('UploadManager', () => {
       // This can happen with compression where uploaded bytes exceed original file size
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            progressCallback = xhr.upload.onprogress;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          progressCallback = xhr.upload.onprogress;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -624,20 +653,19 @@ describe('UploadManager', () => {
 
     it('should set file.stalled to true after 2 seconds without progress', async () => {
       // Create a mock XHR that doesn't send progress updates
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            // Trigger loadstart
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            // Send one progress event to start the stalled timer
-            if (xhr.upload.onprogress) {
-              xhr.upload.onprogress({ loaded: 10, total: 100 });
-            }
-            // Don't send any more progress events
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          // Trigger loadstart
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          // Send one progress event to start the stalled timer
+          if (xhr.upload.onprogress) {
+            xhr.upload.onprogress({ loaded: 10, total: 100 });
+          }
+          // Don't send any more progress events
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -657,19 +685,18 @@ describe('UploadManager', () => {
     it('should reset file.stalled to false when progress resumes', async () => {
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            progressCallback = xhr.upload.onprogress;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            // Send initial progress
-            if (xhr.upload.onprogress) {
-              xhr.upload.onprogress({ loaded: 10, total: 100 });
-            }
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          progressCallback = xhr.upload.onprogress;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          // Send initial progress
+          if (xhr.upload.onprogress) {
+            xhr.upload.onprogress({ loaded: 10, total: 100 });
+          }
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1129,18 +1156,17 @@ describe('UploadManager', () => {
     });
 
     it('should not set stalled=true after file is aborted', async () => {
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            // Send progress to start stalled timer
-            if (xhr.upload.onprogress) {
-              xhr.upload.onprogress({ loaded: 10, total: 100 });
-            }
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          // Send progress to start stalled timer
+          if (xhr.upload.onprogress) {
+            xhr.upload.onprogress({ loaded: 10, total: 100 });
+          }
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1159,19 +1185,18 @@ describe('UploadManager', () => {
     it('should dispatch files-changed event when file becomes stalled', async () => {
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            progressCallback = xhr.upload.onprogress;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            // Send progress to start stalled timer (progress < 100)
-            if (progressCallback) {
-              progressCallback({ loaded: 10, total: 100 });
-            }
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          progressCallback = xhr.upload.onprogress;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          // Send progress to start stalled timer (progress < 100)
+          if (progressCallback) {
+            progressCallback({ loaded: 10, total: 100 });
+          }
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1386,27 +1411,23 @@ describe('UploadManager', () => {
 
     it('should distinguish between timeout and network error', async () => {
       let timeoutFired = false;
+      let capturedXhr: MockXhr | null = null;
+      const onTimeoutComplete = () => {
+        timeoutFired = true;
+        if (capturedXhr?.ontimeout) {
+          capturedXhr.ontimeout();
+        }
+      };
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            // Simulate timeout after the configured timeout period
-            setTimeout(() => {
-              timeoutFired = true;
-              if (xhr.ontimeout) {
-                xhr.ontimeout();
-              }
-              // Also trigger readystate=4 with status=0 (how browsers behave)
-              xhr.readyState = 4;
-              if (xhr.onreadystatechange) {
-                xhr.onreadystatechange();
-              }
-            }, 1000);
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          capturedXhr = xhr;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          scheduleXhrComplete(xhr, 1000, onTimeoutComplete);
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1423,19 +1444,14 @@ describe('UploadManager', () => {
       const errorSpy = sinon.spy();
       manager.addEventListener('upload-error', errorSpy);
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            setTimeout(() => {
-              if (xhr.ontimeout) {
-                xhr.ontimeout();
-              }
-            }, 1000);
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          scheduleXhrTimeout(xhr, 1000);
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -1447,19 +1463,14 @@ describe('UploadManager', () => {
     });
 
     it('should set file.uploading to false on timeout', async () => {
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-            setTimeout(() => {
-              if (xhr.ontimeout) {
-                xhr.ontimeout();
-              }
-            }, 1000);
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          scheduleXhrTimeout(xhr, 1000);
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1639,13 +1650,11 @@ describe('UploadManager', () => {
     });
 
     it('should handle xhr.send() throwing an exception', () => {
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend() {
-            throw new Error('Network error');
-          },
-        });
-
+      setMockXhr(manager, {
+        onSend() {
+          throw new Error('Network error');
+        },
+      });
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
 
@@ -1657,13 +1666,11 @@ describe('UploadManager', () => {
     });
 
     it('should cleanup XHR handlers when xhr.send() throws', () => {
-      const mockXhr = createMockXhr({
+      const mockXhr = setMockXhr(manager, {
         onSend() {
           throw new Error('Network error');
         },
       });
-
-      (manager as any)._createXhr = () => mockXhr;
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -1712,13 +1719,11 @@ describe('UploadManager', () => {
         manager.removeFile(manager.files[0]);
       });
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onOpen() {
-            openCalled = true;
-          },
-        });
-
+      setMockXhr(manager, {
+        onOpen() {
+          openCalled = true;
+        },
+      });
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
@@ -1781,16 +1786,13 @@ describe('UploadManager', () => {
         manager.removeFile(manager.files[0]);
       });
 
-      (manager as any)._createXhr = () => {
-        const mockXhr = createMockXhr({
-          onSend() {
-            sendCalled = true;
-          },
-        });
-        // Override abort to simulate real XHR: onabort only fires if request was actually sent
-        mockXhr.abort = () => {};
-        return mockXhr;
-      };
+      const mockXhr = setMockXhr(manager, {
+        onSend() {
+          sendCalled = true;
+        },
+      });
+      // Override abort to simulate real XHR: onabort only fires if request was actually sent
+      mockXhr.abort = () => {};
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -1936,7 +1938,7 @@ describe('UploadManager', () => {
       headers['X-Malicious'] = 'pwned';
 
       // Manager's headers should not be affected
-      expect((manager.headers as Record<string, string>)['X-Malicious']).to.be.undefined;
+      expect(manager.headers['X-Malicious']).to.be.undefined;
       expect(manager.headers['X-Token']).to.equal('secret');
     });
 
@@ -1995,21 +1997,20 @@ describe('UploadManager', () => {
       });
 
       // Create XHR that immediately fires progress with loaded > 0
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          status: 200,
-          onSend(xhr) {
-            // Immediately fire progress (elapsed will be ~0)
-            if (xhr.upload.onprogress) {
-              xhr.upload.onprogress({ loaded: 50, total: 100 });
-            }
-            // Complete immediately (synchronous)
-            xhr.readyState = 4;
-            if (xhr.onreadystatechange) {
-              xhr.onreadystatechange();
-            }
-          },
-        });
+      setMockXhr(manager, {
+        status: 200,
+        onSend(xhr) {
+          // Immediately fire progress (elapsed will be ~0)
+          if (xhr.upload.onprogress) {
+            xhr.upload.onprogress({ loaded: 50, total: 100 });
+          }
+          // Complete immediately (synchronous)
+          xhr.readyState = 4;
+          if (xhr.onreadystatechange) {
+            xhr.onreadystatechange();
+          }
+        },
+      });
 
       const successSpy = sinon.spy();
       manager.addEventListener('upload-success', successSpy);
@@ -2029,16 +2030,15 @@ describe('UploadManager', () => {
         noAuto: true,
       });
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          status: 200,
-          onSend(xhr) {
-            // Fire progress with loaded=0 (synchronous)
-            if (xhr.upload.onprogress) {
-              xhr.upload.onprogress({ loaded: 0, total: 100 });
-            }
-          },
-        });
+      setMockXhr(manager, {
+        status: 200,
+        onSend(xhr) {
+          // Fire progress with loaded=0 (synchronous)
+          if (xhr.upload.onprogress) {
+            xhr.upload.onprogress({ loaded: 0, total: 100 });
+          }
+        },
+      });
 
       const progressSpy = sinon.spy();
       manager.addEventListener('upload-progress', progressSpy);
@@ -2133,7 +2133,7 @@ describe('UploadManager', () => {
 
     it('should abort XHR when removing an actively uploading file', () => {
       let abortCalled = false;
-      const mockXhr = createMockXhr({
+      const mockXhr = setMockXhr(manager, {
         onSend(xhr) {
           if (xhr.upload.onloadstart) {
             xhr.upload.onloadstart();
@@ -2221,14 +2221,13 @@ describe('UploadManager', () => {
       });
 
       // XHR that never completes
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
 
       // Add first file - it will start uploading
       manager.addFiles([createFile(100, 'text/plain')]);
@@ -2290,15 +2289,14 @@ describe('UploadManager', () => {
       // This test verifies that onprogress dispatches files-changed
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend(xhr) {
-            progressCallback = xhr.upload.onprogress;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-          },
-        });
+      setMockXhr(manager, {
+        onSend(xhr) {
+          progressCallback = xhr.upload.onprogress;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -2316,17 +2314,15 @@ describe('UploadManager', () => {
       // This test verifies that onreadystatechange dispatches files-changed after completion
       let readystateCallback: (() => void) | null = null;
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          status: 200,
-          onSend(xhr) {
-            readystateCallback = xhr.onreadystatechange;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-          },
-        });
-
+      setMockXhr(manager, {
+        status: 200,
+        onSend(xhr) {
+          readystateCallback = xhr.onreadystatechange;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
@@ -2344,17 +2340,15 @@ describe('UploadManager', () => {
     it('should dispatch files-changed on upload error via onreadystatechange', () => {
       let readystateCallback: (() => void) | null = null;
 
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          status: 500,
-          onSend(xhr) {
-            readystateCallback = xhr.onreadystatechange;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-          },
-        });
-
+      setMockXhr(manager, {
+        status: 500,
+        onSend(xhr) {
+          readystateCallback = xhr.onreadystatechange;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
@@ -2373,20 +2367,14 @@ describe('UploadManager', () => {
       const clock = sinon.useFakeTimers();
 
       try {
-        (manager as any)._createXhr = () =>
-          createMockXhr({
-            onSend(xhr) {
-              if (xhr.upload.onloadstart) {
-                xhr.upload.onloadstart();
-              }
-              // Simulate timeout after 1 second
-              setTimeout(() => {
-                if (xhr.ontimeout) {
-                  xhr.ontimeout();
-                }
-              }, 1000);
-            },
-          });
+        setMockXhr(manager, {
+          onSend(xhr) {
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
+            }
+            scheduleXhrTimeout(xhr, 1000);
+          },
+        });
 
         manager.addFiles([createFile(100, 'text/plain')]);
         manager.uploadFiles();
@@ -2407,55 +2395,39 @@ describe('UploadManager', () => {
       const errorSpy = sinon.spy();
       manager.addEventListener('upload-error', errorSpy);
 
-      let capturedXhr: any;
       let savedOnReadyStateChange: any;
+      const mockXhr = setMockXhr(manager, {
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
 
-      (manager as any)._createXhr = () => {
-        capturedXhr = {
-          readyState: 0,
-          status: 0,
-          timeout: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          _onreadystatechange: null as any,
-          get onreadystatechange() {
-            return this._onreadystatechange;
-          },
-          set onreadystatechange(fn: any) {
-            this._onreadystatechange = fn;
-            // Save reference before cleanup nullifies it
-            if (fn) {
-              savedOnReadyStateChange = fn;
-            }
-          },
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
-            }
-          },
-          abort() {},
-        };
-        return capturedXhr;
-      };
+      // Add custom getter/setter to capture onreadystatechange before cleanup nullifies it
+      let _onreadystatechange: any = null;
+      Object.defineProperty(mockXhr, 'onreadystatechange', {
+        get() {
+          return _onreadystatechange;
+        },
+        set(fn: any) {
+          _onreadystatechange = fn;
+          if (fn) {
+            savedOnReadyStateChange = fn;
+          }
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
 
       // Simulate timeout firing first
-      capturedXhr.ontimeout();
+      mockXhr.ontimeout!();
 
       // Simulate readystatechange firing after (which can happen in some browsers)
       // Use saved reference since cleanup nullified the property
-      capturedXhr.readyState = 4;
-      capturedXhr.status = 0;
+      mockXhr.readyState = 4;
+      mockXhr.status = 0;
       savedOnReadyStateChange();
 
       // Should only have one upload-error event, not two
@@ -2497,12 +2469,11 @@ describe('UploadManager', () => {
     });
 
     it('should dispatch files-changed when xhr.send throws', () => {
-      (manager as any)._createXhr = () =>
-        createMockXhr({
-          onSend() {
-            throw new Error('Network error');
-          },
-        });
+      setMockXhr(manager, {
+        onSend() {
+          throw new Error('Network error');
+        },
+      });
 
       manager.addFiles([createFile(100, 'text/plain')]);
 
@@ -2515,389 +2486,362 @@ describe('UploadManager', () => {
     });
   });
 
-  describe('edge cases', () => {
-    describe('maxConcurrentUploads changed mid-upload', () => {
-      let clock: sinon.SinonFakeTimers;
+  describe('maxConcurrentUploads changed mid-upload', () => {
+    let clock: sinon.SinonFakeTimers;
 
-      beforeEach(() => {
-        clock = sinon.useFakeTimers();
-      });
-
-      afterEach(() => {
-        clock.restore();
-      });
-
-      it('should respect new limit when decreased during uploads', async () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-          maxConcurrentUploads: 3,
-        });
-
-        let activeUploads = 0;
-
-        (manager as any)._createXhr = () =>
-          createMockXhr({
-            status: 200,
-            onSend(xhr) {
-              activeUploads++;
-              if (xhr.upload.onloadstart) {
-                xhr.upload.onloadstart();
-              }
-              // Complete after 100ms
-              setTimeout(() => {
-                activeUploads--;
-                xhr.readyState = 4;
-                if (xhr.onreadystatechange) {
-                  xhr.onreadystatechange();
-                }
-              }, 100);
-            },
-          });
-
-        // Add 5 files
-        manager.addFiles(createFiles(5, 100, 'text/plain'));
-        manager.uploadFiles();
-
-        // Let first batch start (3 concurrent)
-        await clock.tickAsync(10);
-        expect(activeUploads).to.equal(3);
-
-        // Decrease limit mid-upload
-        manager.maxConcurrentUploads = 1;
-
-        // Complete first batch
-        await clock.tickAsync(100);
-
-        // Next uploads should respect new limit
-        await clock.tickAsync(10);
-        // Should only start 1 more, not 3
-        expect(activeUploads).to.be.at.most(1);
-
-        // Complete remaining
-        await clock.tickAsync(200);
-      });
-
-      it('should use new limit when uploads complete after limit is increased', async () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-          maxConcurrentUploads: 1,
-        });
-
-        let activeUploads = 0;
-        let maxConcurrentSeen = 0;
-
-        (manager as any)._createXhr = () =>
-          createMockXhr({
-            status: 200,
-            onSend(xhr) {
-              activeUploads++;
-              maxConcurrentSeen = Math.max(maxConcurrentSeen, activeUploads);
-              if (xhr.upload.onloadstart) {
-                xhr.upload.onloadstart();
-              }
-              setTimeout(() => {
-                activeUploads--;
-                xhr.readyState = 4;
-                if (xhr.onreadystatechange) {
-                  xhr.onreadystatechange();
-                }
-              }, 100);
-            },
-          });
-
-        manager.addFiles(createFiles(4, 100, 'text/plain'));
-        manager.uploadFiles();
-
-        await clock.tickAsync(10);
-        expect(activeUploads).to.equal(1);
-
-        // Increase limit before first upload completes
-        manager.maxConcurrentUploads = 3;
-
-        // When first upload completes, queue processing should use new limit
-        await clock.tickAsync(100);
-
-        // After first completes, should start up to 3 more (but only 3 files left)
-        await clock.tickAsync(10);
-        expect(maxConcurrentSeen).to.be.at.most(3);
-
-        await clock.tickAsync(500);
-      });
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
     });
 
-    describe('file removed while in queue', () => {
-      let clock: sinon.SinonFakeTimers;
-
-      beforeEach(() => {
-        clock = sinon.useFakeTimers();
-      });
-
-      afterEach(() => {
-        clock.restore();
-      });
-
-      it('should not upload file that was removed from queue before upload started', async () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-          maxConcurrentUploads: 1,
-        });
-
-        const uploadedFiles: string[] = [];
-
-        (manager as any)._createXhr = () =>
-          createMockXhr({
-            status: 200,
-            onSend(xhr) {
-              if (xhr.upload.onloadstart) {
-                xhr.upload.onloadstart();
-              }
-              setTimeout(() => {
-                xhr.readyState = 4;
-                if (xhr.onreadystatechange) {
-                  xhr.onreadystatechange();
-                }
-              }, 100);
-            },
-          });
-
-        manager.addEventListener('upload-start', (e) => {
-          uploadedFiles.push((e as CustomEvent).detail.file.name);
-        });
-
-        // Add 3 files
-        const files = createFiles(3, 100, 'text/plain');
-        manager.addFiles(files);
-
-        // Start uploads - only first should start due to maxConcurrentUploads=1
-        manager.uploadFiles();
-        await clock.tickAsync(10);
-
-        // Remove second file while it's still in queue
-        const secondFile = manager.files[1];
-        manager.removeFile(secondFile);
-
-        // Complete all uploads
-        await clock.tickAsync(500);
-
-        // Should only have uploaded 2 files (first and third)
-        expect(uploadedFiles).to.have.lengthOf(2);
-        expect(uploadedFiles).to.not.include(secondFile.name);
-      });
+    afterEach(() => {
+      clock.restore();
     });
 
-    describe('upload-before prevention and retry', () => {
-      it('should allow upload on retry after upload-before was prevented', () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-        });
+    it('should respect new limit when decreased during uploads', async () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: 3,
+      });
 
-        let preventCount = 0;
-        let uploadStarted = false;
+      let activeUploads = 0;
+      const onUploadComplete = () => {
+        activeUploads--;
+      };
 
-        manager.addEventListener('upload-before', (e) => {
-          preventCount++;
-          if (preventCount === 1) {
-            // Prevent first attempt
-            e.preventDefault();
+      setMockXhr(manager, {
+        status: 200,
+        onSend(xhr) {
+          activeUploads++;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
           }
-          // Allow second attempt (retry)
-        });
-
-        manager.addEventListener('upload-start', () => {
-          uploadStarted = true;
-        });
-
-        (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10, sync: true });
-
-        manager.addFiles([createFile(100, 'text/plain')]);
-        const file = manager.files[0];
-
-        // First attempt - should be prevented
-        manager.uploadFiles();
-        expect(preventCount).to.equal(1);
-        expect(uploadStarted).to.be.false;
-        expect(file.held).to.be.true;
-
-        // Retry - should succeed
-        manager.retryUpload(file);
-        expect(preventCount).to.equal(2);
-        expect(uploadStarted).to.be.true;
+          scheduleXhrComplete(xhr, 100, onUploadComplete);
+        },
       });
 
-      it('should maintain file state correctly after prevention', () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-        });
+      // Add 5 files
+      manager.addFiles(createFiles(5, 100, 'text/plain'));
+      manager.uploadFiles();
 
-        manager.addEventListener('upload-before', (e) => {
+      // Let first batch start (3 concurrent)
+      await clock.tickAsync(10);
+      expect(activeUploads).to.equal(3);
+
+      // Decrease limit mid-upload
+      manager.maxConcurrentUploads = 1;
+
+      // Complete first batch
+      await clock.tickAsync(100);
+
+      // Next uploads should respect new limit
+      await clock.tickAsync(10);
+      // Should only start 1 more, not 3
+      expect(activeUploads).to.be.at.most(1);
+
+      // Complete remaining
+      await clock.tickAsync(200);
+    });
+
+    it('should use new limit when uploads complete after limit is increased', async () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: 1,
+      });
+
+      const state = { activeUploads: 0, maxConcurrentSeen: 0 };
+      const onUploadComplete = () => {
+        state.activeUploads--;
+      };
+
+      setMockXhr(manager, {
+        status: 200,
+        onSend(xhr) {
+          state.activeUploads++;
+          state.maxConcurrentSeen = Math.max(state.maxConcurrentSeen, state.activeUploads);
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          scheduleXhrComplete(xhr, 100, onUploadComplete);
+        },
+      });
+
+      manager.addFiles(createFiles(4, 100, 'text/plain'));
+      manager.uploadFiles();
+
+      await clock.tickAsync(10);
+      expect(state.activeUploads).to.equal(1);
+
+      // Increase limit before first upload completes
+      manager.maxConcurrentUploads = 3;
+
+      // When first upload completes, queue processing should use new limit
+      await clock.tickAsync(100);
+
+      // After first completes, should start up to 3 more (but only 3 files left)
+      await clock.tickAsync(10);
+      expect(state.maxConcurrentSeen).to.be.at.most(3);
+
+      await clock.tickAsync(500);
+    });
+  });
+
+  describe('file removed while in queue', () => {
+    let clock: sinon.SinonFakeTimers;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should not upload file that was removed from queue before upload started', async () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: 1,
+      });
+
+      const uploadedFiles: string[] = [];
+
+      setMockXhr(manager, {
+        status: 200,
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          scheduleXhrComplete(xhr, 100);
+        },
+      });
+
+      manager.addEventListener('upload-start', (e) => {
+        uploadedFiles.push((e as CustomEvent).detail.file.name);
+      });
+
+      // Add 3 files
+      const files = createFiles(3, 100, 'text/plain');
+      manager.addFiles(files);
+
+      // Start uploads - only first should start due to maxConcurrentUploads=1
+      manager.uploadFiles();
+      await clock.tickAsync(10);
+
+      // Remove second file while it's still in queue
+      const secondFile = manager.files[1];
+      manager.removeFile(secondFile);
+
+      // Complete all uploads
+      await clock.tickAsync(500);
+
+      // Should only have uploaded 2 files (first and third)
+      expect(uploadedFiles).to.have.lengthOf(2);
+      expect(uploadedFiles).to.not.include(secondFile.name);
+    });
+  });
+
+  describe('upload-before prevention and retry', () => {
+    it('should allow upload on retry after upload-before was prevented', () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+      });
+
+      let preventCount = 0;
+      let uploadStarted = false;
+
+      manager.addEventListener('upload-before', (e) => {
+        preventCount++;
+        if (preventCount === 1) {
+          // Prevent first attempt
           e.preventDefault();
-        });
-
-        (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
-
-        manager.addFiles([createFile(100, 'text/plain')]);
-        const file = manager.files[0];
-
-        manager.uploadFiles();
-
-        // File should be held after prevention
-        expect(file.held).to.be.true;
-        expect(file.uploading).to.be.false;
-        expect(file.indeterminate).to.be.false;
-        // File should still be in the list
-        expect(manager.files).to.include(file);
+        }
+        // Allow second attempt (retry)
       });
+
+      manager.addEventListener('upload-start', () => {
+        uploadStarted = true;
+      });
+
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10, sync: true });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+
+      // First attempt - should be prevented
+      manager.uploadFiles();
+      expect(preventCount).to.equal(1);
+      expect(uploadStarted).to.be.false;
+      expect(file.held).to.be.true;
+
+      // Retry - should succeed
+      manager.retryUpload(file);
+      expect(preventCount).to.equal(2);
+      expect(uploadStarted).to.be.true;
     });
 
-    describe('timer throttling simulation', () => {
-      let clock: sinon.SinonFakeTimers;
-
-      beforeEach(() => {
-        clock = sinon.useFakeTimers();
+    it('should maintain file state correctly after prevention', () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
       });
 
-      afterEach(() => {
-        clock.restore();
+      manager.addEventListener('upload-before', (e) => {
+        e.preventDefault();
       });
 
-      it('should clear previous stalled timeout when new progress arrives', async () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-        });
+      (manager as any)._createXhr = xhrCreator({ size: 100, uploadTime: 10 });
 
-        let progressCallback: any;
-        const mockXhr = createMockXhr({
-          onSend(xhr) {
-            progressCallback = xhr.upload.onprogress;
-            if (xhr.upload.onloadstart) {
-              xhr.upload.onloadstart();
-            }
-          },
-        });
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
 
-        (manager as any)._createXhr = () => mockXhr;
+      manager.uploadFiles();
 
-        manager.addFiles([createFile(100, 'text/plain')]);
-        const file = manager.files[0];
-        manager.uploadFiles();
+      // File should be held after prevention
+      expect(file.held).to.be.true;
+      expect(file.uploading).to.be.false;
+      expect(file.indeterminate).to.be.false;
+      // File should still be in the list
+      expect(manager.files).to.include(file);
+    });
+  });
 
-        // Initial progress at t=0
-        progressCallback({ loaded: 10, total: 100 });
+  describe('timer throttling simulation', () => {
+    let clock: sinon.SinonFakeTimers;
 
-        // Wait 1900ms (just before stalled timeout at 2000ms)
-        await clock.tickAsync(1900);
-        expect(file.stalled).to.be.false;
-
-        // More progress at t=1900 - this should clear the previous stalled timeout
-        progressCallback({ loaded: 50, total: 100 });
-
-        // Wait another 1900ms (t=3800) - original timeout would have fired at t=2000
-        // but new timeout won't fire until t=3900
-        await clock.tickAsync(1900);
-        expect(file.stalled).to.be.false;
-
-        // Complete the upload before stalled fires
-        mockXhr.readyState = 4;
-        mockXhr.status = 200;
-        mockXhr.onreadystatechange!();
-
-        expect(file.stalled).to.be.false;
-      });
-
-      it('should correctly mark as stalled when no progress for extended time', async () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-        });
-
-        let progressCallback: any;
-
-        (manager as any)._createXhr = () =>
-          createMockXhr({
-            onSend(xhr) {
-              progressCallback = xhr.upload.onprogress;
-              if (xhr.upload.onloadstart) {
-                xhr.upload.onloadstart();
-              }
-            },
-          });
-
-        manager.addFiles([createFile(100, 'text/plain')]);
-        const file = manager.files[0];
-        manager.uploadFiles();
-
-        // Initial progress
-        progressCallback({ loaded: 10, total: 100 });
-        expect(file.stalled).to.be.false;
-
-        // Wait for stalled timeout (2000ms)
-        await clock.tickAsync(2100);
-
-        expect(file.stalled).to.be.true;
-      });
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
     });
 
-    describe('rapid queue manipulation', () => {
-      let clock: sinon.SinonFakeTimers;
+    afterEach(() => {
+      clock.restore();
+    });
 
-      beforeEach(() => {
-        clock = sinon.useFakeTimers();
+    it('should clear previous stalled timeout when new progress arrives', async () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
       });
 
-      afterEach(() => {
-        clock.restore();
+      let progressCallback: any;
+      const mockXhr = setMockXhr(manager, {
+        onSend(xhr) {
+          progressCallback = xhr.upload.onprogress;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
       });
 
-      it('should handle adding files while uploads are completing', async () => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-          maxConcurrentUploads: 2,
-        });
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
 
-        const completedFiles: string[] = [];
+      // Initial progress at t=0
+      progressCallback({ loaded: 10, total: 100 });
 
-        (manager as any)._createXhr = () =>
-          createMockXhr({
-            status: 200,
-            onSend(xhr) {
-              if (xhr.upload.onloadstart) {
-                xhr.upload.onloadstart();
-              }
-              setTimeout(() => {
-                xhr.readyState = 4;
-                if (xhr.onreadystatechange) {
-                  xhr.onreadystatechange();
-                }
-              }, 50);
-            },
-          });
+      // Wait 1900ms (just before stalled timeout at 2000ms)
+      await clock.tickAsync(1900);
+      expect(file.stalled).to.be.false;
 
-        manager.addEventListener('upload-success', (e) => {
-          completedFiles.push((e as CustomEvent).detail.file.name);
-        });
+      // More progress at t=1900 - this should clear the previous stalled timeout
+      progressCallback({ loaded: 50, total: 100 });
 
-        // Add initial files
-        manager.addFiles(createFiles(2, 100, 'text/plain'));
-        manager.uploadFiles();
+      // Wait another 1900ms (t=3800) - original timeout would have fired at t=2000
+      // but new timeout won't fire until t=3900
+      await clock.tickAsync(1900);
+      expect(file.stalled).to.be.false;
 
-        // Add more files while first batch is uploading
-        await clock.tickAsync(25);
-        manager.addFiles(createFiles(2, 100, 'text/plain'));
-        manager.uploadFiles();
+      // Complete the upload before stalled fires
+      mockXhr.readyState = 4;
+      mockXhr.status = 200;
+      mockXhr.onreadystatechange!();
 
-        // Complete all
-        await clock.tickAsync(200);
+      expect(file.stalled).to.be.false;
+    });
 
-        expect(completedFiles).to.have.lengthOf(4);
-        expect(manager.files.filter((f) => f.complete)).to.have.lengthOf(4);
+    it('should correctly mark as stalled when no progress for extended time', async () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
       });
+
+      let progressCallback: any;
+
+      setMockXhr(manager, {
+        onSend(xhr) {
+          progressCallback = xhr.upload.onprogress;
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      const file = manager.files[0];
+      manager.uploadFiles();
+
+      // Initial progress
+      progressCallback({ loaded: 10, total: 100 });
+      expect(file.stalled).to.be.false;
+
+      // Wait for stalled timeout (2000ms)
+      await clock.tickAsync(2100);
+
+      expect(file.stalled).to.be.true;
+    });
+  });
+
+  describe('rapid queue manipulation', () => {
+    let clock: sinon.SinonFakeTimers;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should handle adding files while uploads are completing', async () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: 2,
+      });
+
+      const completedFiles: string[] = [];
+
+      setMockXhrFactory(manager, {
+        status: 200,
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          scheduleXhrComplete(xhr, 50);
+        },
+      });
+
+      manager.addEventListener('upload-success', (e) => {
+        completedFiles.push((e as CustomEvent).detail.file.name);
+      });
+
+      // Add initial files
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      manager.uploadFiles();
+
+      // Add more files while first batch is uploading
+      await clock.tickAsync(25);
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      manager.uploadFiles();
+
+      // Complete all
+      await clock.tickAsync(200);
+
+      expect(completedFiles).to.have.lengthOf(4);
+      expect(manager.files.filter((f) => f.complete)).to.have.lengthOf(4);
     });
   });
 });
