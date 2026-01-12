@@ -27,4 +27,14 @@ export declare class SliderMixinClass {
    * The value of the slider.
    */
   value: string | null | undefined;
+
+  /**
+   * Increments the value.
+   */
+  stepUp(amount?: number): void;
+
+  /**
+   * Decrements the value.
+   */
+  stepDown(amount?: number): void;
 }

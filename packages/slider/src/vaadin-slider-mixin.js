@@ -57,6 +57,30 @@ export const SliderMixin = (superClass) =>
       this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
     }
 
+    /**
+     * Increments the value
+     * @param {number} amount - The amount to increment by.
+     */
+    stepUp(amount) {
+      this.__lastCommittedValue = this.value;
+      const increment = amount || this.step || 1;
+      const newValue = this.__values[0] + increment;
+      this.__updateValue(newValue, true);
+      this.__detectAndDispatchChange();
+    }
+
+    /**
+     * Decrements the value
+     * @param {number} amount - The amount to decrement by.
+     */
+    stepDown(amount) {
+      this.__lastCommittedValue = this.value;
+      const decrement = amount || this.step || 1;
+      const newValue = this.__values[0] - decrement;
+      this.__updateValue(newValue, true);
+      this.__detectAndDispatchChange();
+    }
+
     /** @protected */
     updated(props) {
       super.updated(props);
@@ -69,9 +93,10 @@ export const SliderMixin = (superClass) =>
 
     /**
      * @param {number} value
+     * @param {boolean} commit
      * @private
      */
-    __updateValue(value) {
+    __updateValue(value, commit) {
       const min = this.min || 0;
       const max = this.max || 100;
       const step = this.step || 1;
@@ -84,6 +109,10 @@ export const SliderMixin = (superClass) =>
 
       const newValue = Math.round(nearestValue);
       this.__values = [newValue];
+
+      if (commit) {
+        this.value = this.__values.join(',');
+      }
     }
 
     /**
@@ -114,8 +143,7 @@ export const SliderMixin = (superClass) =>
       const safeOffset = Math.min(Math.max(offset, 0), size);
       const percent = safeOffset / size;
       const newValue = this.__getValueFromPercent(percent);
-      this.__updateValue(newValue);
-      this.value = this.__values.join(',');
+      this.__updateValue(newValue, true);
     }
 
     /**
@@ -163,6 +191,11 @@ export const SliderMixin = (superClass) =>
       window.removeEventListener('pointerup', this.__onPointerUp);
       window.removeEventListener('pointercancel', this.__onPointerUp);
 
+      this.__detectAndDispatchChange();
+    }
+
+    /** @private */
+    __detectAndDispatchChange() {
       if (this.__lastCommittedValue !== this.value) {
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }
