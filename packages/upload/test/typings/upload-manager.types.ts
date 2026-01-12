@@ -1,4 +1,6 @@
 import type {
+  FileRejectError,
+  UploadErrorKey,
   UploadFile,
   UploadFormat,
   UploadManager,
@@ -61,7 +63,7 @@ manager2.removeFile(manager2.files[0]);
 manager2.addEventListener('file-reject', (event) => {
   assertType<UploadManagerEventMap['file-reject']>(event);
   assertType<File>(event.detail.file);
-  assertType<string>(event.detail.error);
+  assertType<FileRejectError>(event.detail.error);
 });
 
 manager2.addEventListener('file-remove', (event) => {
@@ -153,7 +155,7 @@ assertType<number>(file.speed);
 assertType<number>(file.total);
 assertType<number>(file.loaded);
 assertType<string>(file.status);
-assertType<string>(file.error);
+assertType<UploadErrorKey>(file.errorKey);
 assertType<boolean | undefined>(file.abort);
 assertType<boolean | undefined>(file.complete);
 assertType<boolean | undefined>(file.held);

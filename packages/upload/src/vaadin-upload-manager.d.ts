@@ -7,6 +7,10 @@ export type UploadMethod = 'POST' | 'PUT';
 
 export type UploadFormat = 'raw' | 'multipart';
 
+export type FileRejectError = 'tooManyFiles' | 'fileIsTooBig' | 'incorrectFileType';
+
+export type UploadErrorKey = 'timeout' | 'serverUnavailable' | 'unexpectedServerError' | 'forbidden' | 'sendFailed';
+
 export interface UploadFile extends File {
   uploadTarget: string;
   elapsed: number;
@@ -16,7 +20,7 @@ export interface UploadFile extends File {
   total: number;
   loaded: number;
   status: string;
-  error: string;
+  errorKey: UploadErrorKey;
   abort?: boolean;
   complete?: boolean;
   held?: boolean;
@@ -124,7 +128,7 @@ export interface UploadManagerOptions {
 }
 
 export interface UploadManagerEventMap {
-  'file-reject': CustomEvent<{ file: File; error: string }>;
+  'file-reject': CustomEvent<{ file: File; error: FileRejectError }>;
   'file-remove': CustomEvent<{ file: UploadFile; fileIndex: number }>;
   'upload-before': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'upload-request': CustomEvent<{
@@ -276,7 +280,7 @@ export class UploadManager extends EventTarget {
    * - `total`: The total size of the data being transmitted or processed
    * - `loaded`: Bytes transferred so far.
    * - `status`: Status of the upload process.
-   * - `error`: Error message in case the upload failed.
+   * - `errorKey`: Error key in case the upload failed.
    * - `abort`: True if the file was canceled by the user.
    * - `complete`: True when the file was transferred to the server.
    * - `uploading`: True while transferring data to the server.

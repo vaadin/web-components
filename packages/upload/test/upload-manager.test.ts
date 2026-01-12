@@ -471,7 +471,7 @@ describe('UploadManager', () => {
       expect(manager.files[0].complete).to.be.true;
     });
 
-    it('should set file.error to unexpectedServerError on 500 status', () => {
+    it('should set file.errorKey to unexpectedServerError on 500 status', () => {
       (manager as any)._createXhr = xhrCreator({
         sync: true,
         serverValidation: () => ({ status: 500 }),
@@ -484,11 +484,11 @@ describe('UploadManager', () => {
       manager.uploadFiles();
 
       expect(errorSpy.calledOnce).to.be.true;
-      expect(errorSpy.firstCall.args[0].detail.file.error).to.equal('unexpectedServerError');
+      expect(errorSpy.firstCall.args[0].detail.file.errorKey).to.equal('unexpectedServerError');
       expect(errorSpy.firstCall.args[0].detail.file.complete).to.be.false;
     });
 
-    it('should set file.error to forbidden on 403 status', () => {
+    it('should set file.errorKey to forbidden on 403 status', () => {
       (manager as any)._createXhr = xhrCreator({
         sync: true,
         serverValidation: () => ({ status: 403 }),
@@ -501,7 +501,7 @@ describe('UploadManager', () => {
       manager.uploadFiles();
 
       expect(errorSpy.calledOnce).to.be.true;
-      expect(errorSpy.firstCall.args[0].detail.file.error).to.equal('forbidden');
+      expect(errorSpy.firstCall.args[0].detail.file.errorKey).to.equal('forbidden');
     });
 
     it('should set file.total during progress', () => {
@@ -1131,12 +1131,12 @@ describe('UploadManager', () => {
       expect(queuedFile!.uploading).to.be.true;
 
       // Simulate the queued file having an error state somehow
-      queuedFile!.error = 'previousError';
+      queuedFile!.errorKey = 'forbidden';
 
       manager.retryUpload(queuedFile!);
 
       // After retry, the error should be cleared (reset to false in __queueFileUpload)
-      expect(queuedFile!.error).to.be.false;
+      expect(queuedFile!.errorKey).to.be.false;
     });
   });
 
@@ -1437,7 +1437,7 @@ describe('UploadManager', () => {
       await clock.tickAsync(1100);
 
       expect(timeoutFired).to.be.true;
-      expect(file.error).to.equal('timeout');
+      expect(file.errorKey).to.equal('timeout');
     });
 
     it('should dispatch upload-error event on timeout', async () => {
@@ -1459,7 +1459,7 @@ describe('UploadManager', () => {
       await clock.tickAsync(1100);
 
       expect(errorSpy.calledOnce).to.be.true;
-      expect(errorSpy.firstCall.args[0].detail.file.error).to.equal('timeout');
+      expect(errorSpy.firstCall.args[0].detail.file.errorKey).to.equal('timeout');
     });
 
     it('should set file.uploading to false on timeout', async () => {
@@ -1491,7 +1491,7 @@ describe('UploadManager', () => {
       });
     });
 
-    it('should set file.error to serverUnavailable on status 0', () => {
+    it('should set file.errorKey to serverUnavailable on status 0', () => {
       (manager as any)._createXhr = xhrCreator({
         sync: true,
         serverValidation: () => ({ status: 0 }),
@@ -1504,7 +1504,7 @@ describe('UploadManager', () => {
       manager.uploadFiles();
 
       expect(errorSpy.calledOnce).to.be.true;
-      expect(errorSpy.firstCall.args[0].detail.file.error).to.equal('serverUnavailable');
+      expect(errorSpy.firstCall.args[0].detail.file.errorKey).to.equal('serverUnavailable');
     });
   });
 
@@ -1662,7 +1662,7 @@ describe('UploadManager', () => {
       expect(() => manager.uploadFiles()).to.not.throw();
 
       // File should be marked as error
-      expect(file.error).to.be.a('string');
+      expect(file.errorKey).to.be.a('string');
     });
 
     it('should cleanup XHR handlers when xhr.send() throws', () => {

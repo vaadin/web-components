@@ -183,7 +183,7 @@ export class UploadManager extends EventTarget {
    * - `total`: The total size of the data being transmitted or processed
    * - `loaded`: Bytes transferred so far.
    * - `status`: Status of the upload process.
-   * - `error`: Error message in case the upload failed.
+   * - `errorKey`: Error key in case the upload failed.
    * - `abort`: True if the file was canceled by the user.
    * - `complete`: True when the file was transferred to the server.
    * - `uploading`: True while transferring data to the server.
@@ -391,7 +391,7 @@ export class UploadManager extends EventTarget {
     file.progress = 0;
     file.held = true;
     file.uploading = file.indeterminate = true;
-    file.complete = file.abort = file.error = false;
+    file.complete = file.abort = file.errorKey = false;
     file.stalled = false;
     this.#notifyFilesChanged();
 
@@ -434,7 +434,7 @@ export class UploadManager extends EventTarget {
         file.stalled = false;
       }
 
-      if (file.error) {
+      if (file.errorKey) {
         file.indeterminate = file.status = undefined;
       } else if (!file.abort) {
         if (progress < 100) {
@@ -463,7 +463,7 @@ export class UploadManager extends EventTarget {
     xhr.ontimeout = () => {
       clearTimeout(stalledId);
       file.indeterminate = file.uploading = false;
-      file.error = 'timeout';
+      file.errorKey = 'timeout';
       file.status = '';
 
       this.#activeUploads -= 1;
@@ -484,7 +484,7 @@ export class UploadManager extends EventTarget {
         this.#cleanupXhr(xhr);
 
         // Return early if already handled (abort or timeout)
-        if (file.abort || file.error) {
+        if (file.abort || file.errorKey) {
           return;
         }
         file.status = '';
@@ -500,15 +500,15 @@ export class UploadManager extends EventTarget {
           return;
         }
         if (xhr.status === 0) {
-          file.error = 'serverUnavailable';
+          file.errorKey = 'serverUnavailable';
         } else if (xhr.status >= 500) {
-          file.error = 'unexpectedServerError';
+          file.errorKey = 'unexpectedServerError';
         } else if (xhr.status >= 400) {
-          file.error = 'forbidden';
+          file.errorKey = 'forbidden';
         }
 
-        file.complete = !file.error;
-        const eventName = file.error ? 'upload-error' : 'upload-success';
+        file.complete = !file.errorKey;
+        const eventName = file.errorKey ? 'upload-error' : 'upload-success';
         this.dispatchEvent(new CustomEvent(eventName, { detail: { file, xhr } }));
 
         // Clear file.xhr reference to allow garbage collection
@@ -608,7 +608,7 @@ export class UploadManager extends EventTarget {
       this.#activeUploads -= 1;
       file.uploading = false;
       file.indeterminate = false;
-      file.error = e.message || 'sendFailed';
+      file.errorKey = e.message || 'sendFailed';
       this.#cleanupXhr(xhr);
       this.#notifyFilesChanged();
       this.#processUploadQueue();
