@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -12,7 +12,7 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * for selecting numerical values within a defined range.
  *
  * ```html
- * <vaadin-slider min="0" max="100" ste="1"></vaadin-slider>
+ * <vaadin-slider min="0" max="100" step="1"></vaadin-slider>
  * ```
  */
 declare class Slider extends SliderMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
