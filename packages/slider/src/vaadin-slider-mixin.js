@@ -37,6 +37,7 @@ export const SliderMixin = (superClass) =>
          */
         value: {
           type: String,
+          notify: true,
         },
       };
     }
@@ -51,6 +52,11 @@ export const SliderMixin = (superClass) =>
 
       /** @type {string[]} */
       this.__values = [];
+
+      this.__onPointerMove = this.__onPointerMove.bind(this);
+      this.__onPointerUp = this.__onPointerUp.bind(this);
+
+      this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
     }
 
     /** @protected */
@@ -66,9 +72,10 @@ export const SliderMixin = (superClass) =>
     /**
      * @param {number} index
      * @param {number} value
+     * @param {boolean} commit
      * @private
      */
-    __updateValue(index, value) {
+    __updateValue(index, value, commitValue) {
       const min = this.min || 0;
       const max = this.max || 100;
       const step = this.step || 1;
@@ -87,6 +94,10 @@ export const SliderMixin = (superClass) =>
       this.__values[index] = newValue;
       this.__updateThumb(index, newValue);
       this.__updateTrackFill();
+
+      if (commitValue) {
+        this.value = this.__values.join(',');
+      }
     }
 
     /**
@@ -119,5 +130,75 @@ export const SliderMixin = (superClass) =>
       const min = this.min || 0;
       const max = this.max || 100;
       return (100 * (value - min)) / (max - min);
+    }
+
+    /**
+     * @param {number} percent
+     * @return {number}
+     * @private
+     */
+    __getValueFromPercent(percent) {
+      const min = this.min || 0;
+      const max = this.max || 100;
+      return min + percent * (max - min);
+    }
+
+    /** @private */
+    __applyValue(offset) {
+      const size = this.offsetWidth;
+      const safeOffset = Math.min(Math.max(offset, 0), size);
+      const percent = safeOffset / size;
+      const newValue = this.__getValueFromPercent(percent);
+      this.__updateValue(0, newValue, true);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerDown(event) {
+      this.setPointerCapture(event.pointerId);
+      this.addEventListener('pointermove', this.__onPointerMove);
+      window.addEventListener('pointerup', this.__onPointerUp);
+      window.addEventListener('pointercancel', this.__onPointerUp);
+
+      this.__lastCommittedValue = this.value;
+
+      const thumb = event
+        .composedPath()
+        .find((node) => node.nodeType === Node.ELEMENT_NODE && node.getAttribute('part') === 'thumb');
+
+      // Update value on track click
+      if (!thumb) {
+        const { offsetX } = event;
+        this.__applyValue(offsetX);
+      }
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerMove(event) {
+      if (event.target !== this) {
+        return;
+      }
+      event.preventDefault(); // Prevent text selection
+      this.__applyValue(event.offsetX);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerUp(event) {
+      this.releasePointerCapture(event.pointerId);
+      this.removeEventListener('pointermove', this.__onPointerMove);
+      window.removeEventListener('pointerup', this.__onPointerUp);
+      window.removeEventListener('pointercancel', this.__onPointerUp);
+
+      if (this.__lastCommittedValue !== this.value) {
+        this.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     }
   };
