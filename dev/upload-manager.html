@@ -22,13 +22,16 @@
         cursor: pointer;
         transition: background 0.2s;
       }
+
       .temp-upload-button:hover {
         background: #1565c0;
       }
+
       .temp-upload-button:disabled {
         background: #ccc;
         cursor: not-allowed;
       }
+
       .temp-upload-button input[type='file'] {
         display: none;
       }
@@ -43,11 +46,13 @@
         transition: all 0.2s;
         margin: 16px 0;
       }
+
       .temp-drop-zone.dragover {
         border-color: #1976d2;
         background: #e3f2fd;
-        color: #1976d2;
+        color: #0d47a1;
       }
+
       .temp-drop-zone p {
         margin: 0;
       }
@@ -58,6 +63,7 @@
         padding: 0;
         margin: 16px 0;
       }
+
       .temp-file-item {
         display: flex;
         align-items: center;
@@ -68,36 +74,44 @@
         margin-bottom: 8px;
         background: #fafafa;
       }
+
       .temp-file-item.complete {
         background: #e8f5e9;
         border-color: #c8e6c9;
       }
+
       .temp-file-item.error {
         background: #ffebee;
         border-color: #ffcdd2;
       }
+
       .temp-file-item.uploading {
         background: #e3f2fd;
         border-color: #bbdefb;
       }
+
       .temp-file-info {
         flex: 1;
         min-width: 0;
       }
+
       .temp-file-name {
         font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
+
       .temp-file-status {
         font-size: 12px;
         color: #666;
         margin-top: 4px;
       }
+
       .temp-file-status.error {
         color: #d32f2f;
       }
+
       .temp-file-progress {
         width: 100%;
         height: 4px;
@@ -106,11 +120,13 @@
         margin-top: 8px;
         overflow: hidden;
       }
+
       .temp-file-progress-bar {
         height: 100%;
         background: #1976d2;
         transition: width 0.2s;
       }
+
       .temp-file-progress-bar.indeterminate {
         width: 30% !important;
         animation: indeterminate 1.5s infinite linear;
@@ -119,14 +135,17 @@
         0% {
           transform: translateX(-100%);
         }
+
         100% {
           transform: translateX(400%);
         }
       }
+
       .temp-file-actions {
         display: flex;
         gap: 8px;
       }
+
       .temp-file-actions button {
         padding: 4px 8px;
         font-size: 12px;
@@ -135,13 +154,16 @@
         background: white;
         cursor: pointer;
       }
+
       .temp-file-actions button:hover {
         background: #f5f5f5;
       }
+
       .temp-file-actions button.remove {
         color: #d32f2f;
         border-color: #ffcdd2;
       }
+
       .temp-file-actions button.remove:hover {
         background: #ffebee;
       }
@@ -166,8 +188,8 @@
     <ul class="temp-file-list" id="file-list"></ul>
 
     <script type="module">
-      import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
 
       // Helper to format file size
       function formatSize(bytes) {
