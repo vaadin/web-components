@@ -8,34 +8,6 @@
     <script type="module" src="./common.js"></script>
 
     <style>
-      /* Temporary Upload Button */
-      .temp-upload-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: #1976d2;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .temp-upload-button:hover {
-        background: #1565c0;
-      }
-
-      .temp-upload-button:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-      }
-
-      .temp-upload-button input[type='file'] {
-        display: none;
-      }
-
       /* Temporary Drop Zone */
       .temp-drop-zone {
         border: 2px dashed #ccc;
@@ -175,10 +147,7 @@
     <p>This page demonstrates the headless <code>UploadManager</code> class.</p>
 
     <div class="demo-controls">
-      <label class="temp-upload-button" id="upload-button">
-        Upload Files...
-        <input type="file" multiple />
-      </label>
+      <vaadin-upload-button id="upload-button">Upload Files...</vaadin-upload-button>
     </div>
 
     <div class="temp-drop-zone" id="dropzone">
@@ -188,6 +157,7 @@
     <ul class="temp-file-list" id="file-list"></ul>
 
     <script type="module">
+      import '@vaadin/upload/vaadin-upload-button.js';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
       import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
 
@@ -213,13 +183,9 @@
       // Use mock XHR
       manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
 
-      // Setup file input
+      // Link upload button to manager
       const button = document.querySelector('#upload-button');
-      const input = button.querySelector('input');
-      input.addEventListener('change', () => {
-        manager.addFiles(input.files);
-        input.value = '';
-      });
+      button.target = manager;
 
       // Setup drop zone
       const dropzone = document.querySelector('#dropzone');
