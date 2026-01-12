@@ -9,7 +9,18 @@ snapshots["vaadin-slider host"] =
 
 snapshots["vaadin-slider shadow"] = 
 `<div part="track">
-  <div part="thumb">
+</div>
+<div
+  id="fill"
+  part="track-fill"
+  style="inset-inline: 0px 100%;"
+>
+</div>
+<div id="track">
+  <div
+    part="thumb"
+    style="inset-inline-start: 0%;"
+  >
   </div>
 </div>
 `;

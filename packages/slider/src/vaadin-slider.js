@@ -38,7 +38,9 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   /** @protected */
   render() {
     return html`
-      <div part="track">
+      <div part="track"></div>
+      <div id="fill" part="track-fill"></div>
+      <div id="track">
         <div part="thumb"></div>
       </div>
     `;
