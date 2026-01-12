@@ -138,7 +138,8 @@ export const SliderMixin = (superClass) =>
     }
 
     /** @private */
-    __applyValue(offset) {
+    __applyValue(event) {
+      const offset = event.offsetX;
       const size = this.offsetWidth;
       const safeOffset = Math.min(Math.max(offset, 0), size);
       const percent = safeOffset / size;
@@ -158,14 +159,10 @@ export const SliderMixin = (superClass) =>
 
       this.__lastCommittedValue = this.value;
 
-      const thumb = event
-        .composedPath()
-        .find((node) => node.nodeType === Node.ELEMENT_NODE && node.getAttribute('part') === 'thumb');
-
+      const target = event.composedPath()[0];
       // Update value on track click
-      if (!thumb) {
-        const { offsetX } = event;
-        this.__applyValue(offsetX);
+      if (target.getAttribute('part') !== 'thumb') {
+        this.__applyValue(event);
       }
     }
 
@@ -178,7 +175,7 @@ export const SliderMixin = (superClass) =>
         return;
       }
       event.preventDefault(); // Prevent text selection
-      this.__applyValue(event.offsetX);
+      this.__applyValue(event);
     }
 
     /**
