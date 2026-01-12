@@ -41,9 +41,9 @@ export const SliderMixin = (superClass) =>
         },
 
         /** @private */
-        __values: {
-          type: Array,
-          value: () => [0],
+        __value: {
+          type: Number,
+          value: 0,
         },
       };
     }
@@ -64,7 +64,7 @@ export const SliderMixin = (superClass) =>
     stepUp(amount) {
       this.__lastCommittedValue = this.value;
       const increment = amount || this.step || 1;
-      const newValue = this.__values[0] + increment;
+      const newValue = this.__value + increment;
       this.__updateValue(newValue, true);
       this.__detectAndDispatchChange();
     }
@@ -76,7 +76,7 @@ export const SliderMixin = (superClass) =>
     stepDown(amount) {
       this.__lastCommittedValue = this.value;
       const decrement = amount || this.step || 1;
-      const newValue = this.__values[0] - decrement;
+      const newValue = this.__value - decrement;
       this.__updateValue(newValue, true);
       this.__detectAndDispatchChange();
     }
@@ -108,10 +108,10 @@ export const SliderMixin = (superClass) =>
       const nearestValue = min + nearestOffset;
 
       const newValue = Math.round(nearestValue);
-      this.__values = [newValue];
+      this.__value = newValue;
 
       if (commit) {
-        this.value = this.__values.join(',');
+        this.value = `${this.__value}`;
       }
     }
 

@@ -38,7 +38,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
   /** @protected */
   render() {
-    const percent = this.__getPercentFromValue(this.__values[0]);
+    const percent = this.__getPercentFromValue(this.__value);
 
     const trackFillStart = 0;
     const trackFillEnd = `${100 - percent}%`;
