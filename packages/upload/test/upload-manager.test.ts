@@ -4,6 +4,70 @@ import type { UploadFile } from '../src/vaadin-upload-manager.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles, xhrCreator } from './helpers.js';
 
+type MockXhr = {
+  readyState: number;
+  status: number;
+  timeout: number;
+  upload: {
+    onprogress: ((e: { loaded: number; total: number }) => void) | null;
+    onloadstart: (() => void) | null;
+  };
+  onreadystatechange: (() => void) | null;
+  onabort: (() => void) | null;
+  ontimeout: (() => void) | null;
+  requestHeaders: Record<string, string>;
+  open(): void;
+  setRequestHeader(name: string, value: string): void;
+  send(): void;
+  abort(): void;
+};
+
+type MockXhrOptions = {
+  status?: number;
+  onOpen?(xhr: MockXhr): void;
+  onSend?(xhr: MockXhr): void;
+  onAbort?(xhr: MockXhr): void;
+};
+
+function createMockXhr(options: MockXhrOptions = {}): MockXhr {
+  const xhr: MockXhr = {
+    readyState: 0,
+    status: options.status ?? 0,
+    timeout: 0,
+    upload: {
+      onprogress: null,
+      onloadstart: null,
+    },
+    onreadystatechange: null,
+    onabort: null,
+    ontimeout: null,
+    requestHeaders: {},
+    open() {
+      this.readyState = 1;
+      if (options.onOpen) {
+        options.onOpen(this);
+      }
+    },
+    setRequestHeader(name: string, value: string) {
+      this.requestHeaders[name] = value;
+    },
+    send() {
+      if (options.onSend) {
+        options.onSend(this);
+      }
+    },
+    abort() {
+      if (options.onAbort) {
+        options.onAbort(this);
+      }
+      if (this.onabort) {
+        this.onabort();
+      }
+    },
+  };
+  return xhr;
+}
+
 describe('UploadManager', () => {
   let manager: UploadManager;
 
@@ -475,30 +539,15 @@ describe('UploadManager', () => {
       // This can happen with compression where uploaded bytes exceed original file size
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
             progressCallback = xhr.upload.onprogress;
             if (xhr.upload.onloadstart) {
               xhr.upload.onloadstart();
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -575,43 +624,20 @@ describe('UploadManager', () => {
 
     it('should set file.stalled to true after 2 seconds without progress', async () => {
       // Create a mock XHR that doesn't send progress updates
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as ((e: { loaded: number; total: number }) => void) | null,
-            onloadstart: null as (() => void) | null,
-          },
-          onreadystatechange: null as (() => void) | null,
-          onabort: null as (() => void) | null,
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          requestHeaders: {} as Record<string, string>,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader(name: string, value: string) {
-            this.requestHeaders[name] = value;
-          },
-          send() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
             // Trigger loadstart
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             // Send one progress event to start the stalled timer
-            if (this.upload.onprogress) {
-              this.upload.onprogress({ loaded: 10, total: 100 });
+            if (xhr.upload.onprogress) {
+              xhr.upload.onprogress({ loaded: 10, total: 100 });
             }
             // Don't send any more progress events
           },
-          abort() {
-            if (this.onabort) {
-              this.onabort();
-            }
-          },
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -631,34 +657,19 @@ describe('UploadManager', () => {
     it('should reset file.stalled to false when progress resumes', async () => {
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as ((e: { loaded: number; total: number }) => void) | null,
-            onloadstart: null as (() => void) | null,
-          },
-          onreadystatechange: null as (() => void) | null,
-          onabort: null as (() => void) | null,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            progressCallback = this.upload.onprogress;
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
+            progressCallback = xhr.upload.onprogress;
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             // Send initial progress
-            if (this.upload.onprogress) {
-              this.upload.onprogress({ loaded: 10, total: 100 });
+            if (xhr.upload.onprogress) {
+              xhr.upload.onprogress({ loaded: 10, total: 100 });
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1118,46 +1129,18 @@ describe('UploadManager', () => {
     });
 
     it('should not set stalled=true after file is aborted', async () => {
-      let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
-      let abortCallback: (() => void) | null = null;
-
-      (manager as any)._createXhr = () => {
-        const requestHeaders: Record<string, string> = {};
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          requestHeaders,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader(name: string, value: string) {
-            this.requestHeaders[name] = value;
-          },
-          send() {
-            progressCallback = this.upload.onprogress;
-            abortCallback = this.onabort;
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             // Send progress to start stalled timer
-            if (progressCallback) {
-              progressCallback({ loaded: 10, total: 100 });
+            if (xhr.upload.onprogress) {
+              xhr.upload.onprogress({ loaded: 10, total: 100 });
             }
           },
-          abort() {
-            if (abortCallback) {
-              abortCallback();
-            }
-          },
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1176,34 +1159,19 @@ describe('UploadManager', () => {
     it('should dispatch files-changed event when file becomes stalled', async () => {
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            progressCallback = this.upload.onprogress;
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
+            progressCallback = xhr.upload.onprogress;
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             // Send progress to start stalled timer (progress < 100)
             if (progressCallback) {
               progressCallback({ loaded: 10, total: 100 });
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1419,43 +1387,26 @@ describe('UploadManager', () => {
     it('should distinguish between timeout and network error', async () => {
       let timeoutFired = false;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          timeout: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             // Simulate timeout after the configured timeout period
             setTimeout(() => {
               timeoutFired = true;
-              if (this.ontimeout) {
-                this.ontimeout();
+              if (xhr.ontimeout) {
+                xhr.ontimeout();
               }
               // Also trigger readystate=4 with status=0 (how browsers behave)
-              this.readyState = 4;
-              if (this.onreadystatechange) {
-                this.onreadystatechange();
+              xhr.readyState = 4;
+              if (xhr.onreadystatechange) {
+                xhr.onreadystatechange();
               }
             }, 1000);
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1472,36 +1423,19 @@ describe('UploadManager', () => {
       const errorSpy = sinon.spy();
       manager.addEventListener('upload-error', errorSpy);
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          timeout: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             setTimeout(() => {
-              if (this.ontimeout) {
-                this.ontimeout();
+              if (xhr.ontimeout) {
+                xhr.ontimeout();
               }
             }, 1000);
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -1513,36 +1447,19 @@ describe('UploadManager', () => {
     });
 
     it('should set file.uploading to false on timeout', async () => {
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          timeout: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
             setTimeout(() => {
-              if (this.ontimeout) {
-                this.ontimeout();
+              if (xhr.ontimeout) {
+                xhr.ontimeout();
               }
             }, 1000);
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1722,26 +1639,12 @@ describe('UploadManager', () => {
     });
 
     it('should handle xhr.send() throwing an exception', () => {
-      (manager as any)._createXhr = () => {
-        return {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null,
-            onloadstart: null,
-          },
-          onreadystatechange: null,
-          onabort: null,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend() {
             throw new Error('Network error');
           },
-          abort() {},
-        };
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -1754,25 +1657,11 @@ describe('UploadManager', () => {
     });
 
     it('should cleanup XHR handlers when xhr.send() throws', () => {
-      const mockXhr = {
-        readyState: 0,
-        status: 0,
-        upload: {
-          onprogress: null as any,
-          onloadstart: null as any,
-        },
-        onreadystatechange: null as any,
-        onabort: null as any,
-        ontimeout: null as any,
-        open() {
-          this.readyState = 1;
-        },
-        setRequestHeader() {},
-        send() {
+      const mockXhr = createMockXhr({
+        onSend() {
           throw new Error('Network error');
         },
-        abort() {},
-      };
+      });
 
       (manager as any)._createXhr = () => mockXhr;
 
@@ -1823,26 +1712,12 @@ describe('UploadManager', () => {
         manager.removeFile(manager.files[0]);
       });
 
-      (manager as any)._createXhr = () => {
-        return {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null,
-            onloadstart: null,
-          },
-          onreadystatechange: null,
-          onabort: null,
-          ontimeout: null,
-          open() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onOpen() {
             openCalled = true;
-            this.readyState = 1;
           },
-          setRequestHeader() {},
-          send() {},
-          abort() {},
-        };
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -1907,28 +1782,14 @@ describe('UploadManager', () => {
       });
 
       (manager as any)._createXhr = () => {
-        return {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null,
-            onloadstart: null,
-          },
-          onreadystatechange: null,
-          onabort: null,
-          ontimeout: null,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+        const mockXhr = createMockXhr({
+          onSend() {
             sendCalled = true;
           },
-          abort() {
-            // Simulate real XHR: onabort only fires if request was actually sent
-            // Since send() wasn't called, onabort should NOT be triggered
-          },
-        };
+        });
+        // Override abort to simulate real XHR: onabort only fires if request was actually sent
+        mockXhr.abort = () => {};
+        return mockXhr;
       };
 
       manager.addFiles([createFile(100, 'text/plain')]);
@@ -2134,36 +1995,21 @@ describe('UploadManager', () => {
       });
 
       // Create XHR that immediately fires progress with loaded > 0
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
+      (manager as any)._createXhr = () =>
+        createMockXhr({
           status: 200,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+          onSend(xhr) {
             // Immediately fire progress (elapsed will be ~0)
-            if (this.upload.onprogress) {
-              this.upload.onprogress({ loaded: 50, total: 100 });
+            if (xhr.upload.onprogress) {
+              xhr.upload.onprogress({ loaded: 50, total: 100 });
             }
             // Complete immediately (synchronous)
-            this.readyState = 4;
-            if (this.onreadystatechange) {
-              this.onreadystatechange();
+            xhr.readyState = 4;
+            if (xhr.onreadystatechange) {
+              xhr.onreadystatechange();
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       const successSpy = sinon.spy();
       manager.addEventListener('upload-success', successSpy);
@@ -2183,31 +2029,16 @@ describe('UploadManager', () => {
         noAuto: true,
       });
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
+      (manager as any)._createXhr = () =>
+        createMockXhr({
           status: 200,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+          onSend(xhr) {
             // Fire progress with loaded=0 (synchronous)
-            if (this.upload.onprogress) {
-              this.upload.onprogress({ loaded: 0, total: 100 });
+            if (xhr.upload.onprogress) {
+              xhr.upload.onprogress({ loaded: 0, total: 100 });
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       const progressSpy = sinon.spy();
       manager.addEventListener('upload-progress', progressSpy);
@@ -2302,34 +2133,19 @@ describe('UploadManager', () => {
 
     it('should abort XHR when removing an actively uploading file', () => {
       let abortCalled = false;
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
-            }
-          },
-          abort() {
-            abortCalled = true;
-            if (this.onabort) {
-              this.onabort();
-            }
-          },
-        };
-        return xhr;
+      const mockXhr = createMockXhr({
+        onSend(xhr) {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+        },
+      });
+      const originalAbort = mockXhr.abort.bind(mockXhr);
+      mockXhr.abort = () => {
+        abortCalled = true;
+        originalAbort();
       };
+      (manager as any)._createXhr = () => mockXhr;
 
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
@@ -2405,29 +2221,14 @@ describe('UploadManager', () => {
       });
 
       // XHR that never completes
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
             if (xhr.upload.onloadstart) {
               xhr.upload.onloadstart();
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       // Add first file - it will start uploading
       manager.addFiles([createFile(100, 'text/plain')]);
@@ -2469,27 +2270,10 @@ describe('UploadManager', () => {
       });
 
       // XHR that never completes - ensures no other files-changed events fire
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            // Don't call onloadstart - that would trigger files-changed
-          },
-          abort() {},
-        };
-        return xhr;
-      };
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          // Don't call onloadstart - that would trigger files-changed
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
 
@@ -2506,30 +2290,15 @@ describe('UploadManager', () => {
       // This test verifies that onprogress dispatches files-changed
       let progressCallback: ((e: { loaded: number; total: number }) => void) | null = null;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend(xhr) {
             progressCallback = xhr.upload.onprogress;
             if (xhr.upload.onloadstart) {
               xhr.upload.onloadstart();
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -2547,30 +2316,16 @@ describe('UploadManager', () => {
       // This test verifies that onreadystatechange dispatches files-changed after completion
       let readystateCallback: (() => void) | null = null;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
+      (manager as any)._createXhr = () =>
+        createMockXhr({
           status: 200,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+          onSend(xhr) {
             readystateCallback = xhr.onreadystatechange;
             if (xhr.upload.onloadstart) {
               xhr.upload.onloadstart();
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -2589,30 +2344,16 @@ describe('UploadManager', () => {
     it('should dispatch files-changed on upload error via onreadystatechange', () => {
       let readystateCallback: (() => void) | null = null;
 
-      (manager as any)._createXhr = () => {
-        const xhr = {
-          readyState: 0,
+      (manager as any)._createXhr = () =>
+        createMockXhr({
           status: 500,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+          onSend(xhr) {
             readystateCallback = xhr.onreadystatechange;
             if (xhr.upload.onloadstart) {
               xhr.upload.onloadstart();
             }
           },
-          abort() {},
-        };
-        return xhr;
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
@@ -2632,23 +2373,9 @@ describe('UploadManager', () => {
       const clock = sinon.useFakeTimers();
 
       try {
-        (manager as any)._createXhr = () => {
-          const xhr = {
-            readyState: 0,
-            status: 0,
-            timeout: 0,
-            upload: {
-              onprogress: null as any,
-              onloadstart: null as any,
-            },
-            onreadystatechange: null as any,
-            ontimeout: null as any,
-            onabort: null as any,
-            open() {
-              this.readyState = 1;
-            },
-            setRequestHeader() {},
-            send() {
+        (manager as any)._createXhr = () =>
+          createMockXhr({
+            onSend(xhr) {
               if (xhr.upload.onloadstart) {
                 xhr.upload.onloadstart();
               }
@@ -2659,10 +2386,7 @@ describe('UploadManager', () => {
                 }
               }, 1000);
             },
-            abort() {},
-          };
-          return xhr;
-        };
+          });
 
         manager.addFiles([createFile(100, 'text/plain')]);
         manager.uploadFiles();
@@ -2773,26 +2497,12 @@ describe('UploadManager', () => {
     });
 
     it('should dispatch files-changed when xhr.send throws', () => {
-      (manager as any)._createXhr = () => {
-        return {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null,
-            onloadstart: null,
-          },
-          onreadystatechange: null,
-          onabort: null,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
+      (manager as any)._createXhr = () =>
+        createMockXhr({
+          onSend() {
             throw new Error('Network error');
           },
-          abort() {},
-        };
-      };
+        });
 
       manager.addFiles([createFile(100, 'text/plain')]);
 
@@ -2826,22 +2536,10 @@ describe('UploadManager', () => {
 
         let activeUploads = 0;
 
-        (manager as any)._createXhr = () => {
-          const xhr = {
-            readyState: 0,
+        (manager as any)._createXhr = () =>
+          createMockXhr({
             status: 200,
-            upload: {
-              onprogress: null as any,
-              onloadstart: null as any,
-            },
-            onreadystatechange: null as any,
-            ontimeout: null as any,
-            onabort: null as any,
-            open() {
-              this.readyState = 1;
-            },
-            setRequestHeader() {},
-            send() {
+            onSend(xhr) {
               activeUploads++;
               if (xhr.upload.onloadstart) {
                 xhr.upload.onloadstart();
@@ -2855,10 +2553,7 @@ describe('UploadManager', () => {
                 }
               }, 100);
             },
-            abort() {},
-          };
-          return xhr;
-        };
+          });
 
         // Add 5 files
         manager.addFiles(createFiles(5, 100, 'text/plain'));
@@ -2893,22 +2588,10 @@ describe('UploadManager', () => {
         let activeUploads = 0;
         let maxConcurrentSeen = 0;
 
-        (manager as any)._createXhr = () => {
-          const xhr = {
-            readyState: 0,
+        (manager as any)._createXhr = () =>
+          createMockXhr({
             status: 200,
-            upload: {
-              onprogress: null as any,
-              onloadstart: null as any,
-            },
-            onreadystatechange: null as any,
-            ontimeout: null as any,
-            onabort: null as any,
-            open() {
-              this.readyState = 1;
-            },
-            setRequestHeader() {},
-            send() {
+            onSend(xhr) {
               activeUploads++;
               maxConcurrentSeen = Math.max(maxConcurrentSeen, activeUploads);
               if (xhr.upload.onloadstart) {
@@ -2922,10 +2605,7 @@ describe('UploadManager', () => {
                 }
               }, 100);
             },
-            abort() {},
-          };
-          return xhr;
-        };
+          });
 
         manager.addFiles(createFiles(4, 100, 'text/plain'));
         manager.uploadFiles();
@@ -2967,22 +2647,10 @@ describe('UploadManager', () => {
 
         const uploadedFiles: string[] = [];
 
-        (manager as any)._createXhr = () => {
-          const xhr = {
-            readyState: 0,
+        (manager as any)._createXhr = () =>
+          createMockXhr({
             status: 200,
-            upload: {
-              onprogress: null as any,
-              onloadstart: null as any,
-            },
-            onreadystatechange: null as any,
-            ontimeout: null as any,
-            onabort: null as any,
-            open() {
-              this.readyState = 1;
-            },
-            setRequestHeader() {},
-            send() {
+            onSend(xhr) {
               if (xhr.upload.onloadstart) {
                 xhr.upload.onloadstart();
               }
@@ -2993,10 +2661,7 @@ describe('UploadManager', () => {
                 }
               }, 100);
             },
-            abort() {},
-          };
-          return xhr;
-        };
+          });
 
         manager.addEventListener('upload-start', (e) => {
           uploadedFiles.push((e as CustomEvent).detail.file.name);
@@ -3107,30 +2772,16 @@ describe('UploadManager', () => {
         });
 
         let progressCallback: any;
-        const xhr = {
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            progressCallback = this.upload.onprogress;
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
+        const mockXhr = createMockXhr({
+          onSend(xhr) {
+            progressCallback = xhr.upload.onprogress;
+            if (xhr.upload.onloadstart) {
+              xhr.upload.onloadstart();
             }
           },
-          abort() {},
-        };
+        });
 
-        (manager as any)._createXhr = () => xhr;
+        (manager as any)._createXhr = () => mockXhr;
 
         manager.addFiles([createFile(100, 'text/plain')]);
         const file = manager.files[0];
@@ -3152,9 +2803,9 @@ describe('UploadManager', () => {
         expect(file.stalled).to.be.false;
 
         // Complete the upload before stalled fires
-        xhr.readyState = 4;
-        xhr.status = 200;
-        xhr.onreadystatechange();
+        mockXhr.readyState = 4;
+        mockXhr.status = 200;
+        mockXhr.onreadystatechange!();
 
         expect(file.stalled).to.be.false;
       });
@@ -3167,28 +2818,15 @@ describe('UploadManager', () => {
 
         let progressCallback: any;
 
-        (manager as any)._createXhr = () => ({
-          readyState: 0,
-          status: 0,
-          upload: {
-            onprogress: null as any,
-            onloadstart: null as any,
-          },
-          onreadystatechange: null as any,
-          ontimeout: null as any,
-          onabort: null as any,
-          open() {
-            this.readyState = 1;
-          },
-          setRequestHeader() {},
-          send() {
-            progressCallback = this.upload.onprogress;
-            if (this.upload.onloadstart) {
-              this.upload.onloadstart();
-            }
-          },
-          abort() {},
-        });
+        (manager as any)._createXhr = () =>
+          createMockXhr({
+            onSend(xhr) {
+              progressCallback = xhr.upload.onprogress;
+              if (xhr.upload.onloadstart) {
+                xhr.upload.onloadstart();
+              }
+            },
+          });
 
         manager.addFiles([createFile(100, 'text/plain')]);
         const file = manager.files[0];
@@ -3225,22 +2863,10 @@ describe('UploadManager', () => {
 
         const completedFiles: string[] = [];
 
-        (manager as any)._createXhr = () => {
-          const xhr = {
-            readyState: 0,
+        (manager as any)._createXhr = () =>
+          createMockXhr({
             status: 200,
-            upload: {
-              onprogress: null as any,
-              onloadstart: null as any,
-            },
-            onreadystatechange: null as any,
-            ontimeout: null as any,
-            onabort: null as any,
-            open() {
-              this.readyState = 1;
-            },
-            setRequestHeader() {},
-            send() {
+            onSend(xhr) {
               if (xhr.upload.onloadstart) {
                 xhr.upload.onloadstart();
               }
@@ -3251,10 +2877,7 @@ describe('UploadManager', () => {
                 }
               }, 50);
             },
-            abort() {},
-          };
-          return xhr;
-        };
+          });
 
         manager.addEventListener('upload-success', (e) => {
           completedFiles.push((e as CustomEvent).detail.file.name);
