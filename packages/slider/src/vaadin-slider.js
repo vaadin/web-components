@@ -40,22 +40,17 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   render() {
     const percent = this.__getPercentFromValue(this.__value);
 
-    const trackFillStart = 0;
-    const trackFillEnd = `${100 - percent}%`;
-    const trackFillEndClamp = `clamp(var(--_thumb-size) / 2, ${trackFillEnd}, 100% - var(--_thumb-size) / 2)`;
-
     return html`
-      <div part="track"></div>
-      <div
-        part="track-fill"
-        style="${styleMap({
-          insetInlineStart: trackFillStart,
-          insetInlineEnd: trackFillEndClamp,
-        })}"
-      ></div>
-      <div id="track">
-        <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
+      <div part="track">
+        <div
+          part="track-fill"
+          style="${styleMap({
+            insetInlineStart: 0,
+            insetInlineEnd: `${100 - percent}%`,
+          })}"
+        ></div>
       </div>
+      <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
     `;
   }
 }

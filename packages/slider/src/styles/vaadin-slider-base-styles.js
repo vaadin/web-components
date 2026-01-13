@@ -27,8 +27,9 @@ export const sliderStyles = css`
 
   [part='track'] {
     box-sizing: border-box;
+    position: absolute;
     height: var(--_track-size);
-    flex: 1;
+    width: 100%;
     background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
     border-radius: inherit;
     pointer-events: none;
@@ -49,17 +50,10 @@ export const sliderStyles = css`
     box-sizing: border-box;
     width: var(--_thumb-size);
     height: var(--_thumb-size);
-    margin-inline-start: calc(var(--_thumb-size) / 2 * -1);
+    transform: translateX(-50%);
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
     pointer-events: auto;
     touch-action: none;
-  }
-
-  #track {
-    box-sizing: border-box;
-    position: absolute;
-    inset: 0 calc(var(--_thumb-size) / 2);
-    pointer-events: none;
   }
 `;
