@@ -10,6 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styles.js';
+import { getFilesFromDropEvent } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
 /**
@@ -23,17 +24,12 @@ import { UploadManager } from './vaadin-upload-manager.js';
  * </vaadin-upload-drop-zone>
  * ```
  *
- * The drop zone can be linked to an UploadManager by setting the
+ * The drop zone must be linked to an UploadManager by setting the
  * `manager` property:
  *
  * ```javascript
  * const dropZone = document.querySelector('vaadin-upload-drop-zone');
  * dropZone.manager = uploadManager;
- *
- * // Or listen to the files-dropped event
- * dropZone.addEventListener('files-dropped', (e) => {
- *   uploadManager.addFiles(e.detail.files);
- * });
  * ```
  *
  * ### Styling
@@ -61,7 +57,6 @@ import { UploadManager } from './vaadin-upload-manager.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @fires {CustomEvent} files-dropped - Fired when files are dropped on the drop zone
  */
 class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
@@ -92,7 +87,8 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       _dragover: {
         type: Boolean,
         value: false,
-        observer: '__dragoverChanged',
+        reflect: true,
+        attribute: 'dragover',
       },
     };
   }
@@ -133,69 +129,11 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     event.preventDefault();
     this._dragover = false;
 
-    const files = await this.__getFilesFromDropEvent(event);
-
-    // Dispatch event for listeners
-    this.dispatchEvent(
-      new CustomEvent('files-dropped', {
-        detail: { files },
-        bubbles: true,
-        composed: true,
-      }),
-    );
-
     // If we have a manager, add the files
     if (this.manager instanceof UploadManager) {
+      const files = await getFilesFromDropEvent(event);
       this.manager.addFiles(files);
     }
-  }
-
-  /**
-   * Get the files from the drop event. The dropped items may contain a
-   * combination of files and directories. If a dropped item is a directory,
-   * it will be recursively traversed to get all files.
-   *
-   * @param {DragEvent} dropEvent - The drop event
-   * @returns {Promise<File[]>} - The files from the drop event
-   * @private
-   */
-  __getFilesFromDropEvent(dropEvent) {
-    async function getFilesFromEntry(entry) {
-      if (entry.isFile) {
-        return new Promise((resolve) => {
-          entry.file(resolve, () => resolve([]));
-        });
-      } else if (entry.isDirectory) {
-        const reader = entry.createReader();
-        const entries = await new Promise((resolve) => {
-          reader.readEntries(resolve, () => resolve([]));
-        });
-        const files = await Promise.all(entries.map(getFilesFromEntry));
-        return files.flat();
-      }
-    }
-
-    const containsFolders = Array.from(dropEvent.dataTransfer.items)
-      .filter((item) => !!item)
-      .filter((item) => typeof item.webkitGetAsEntry === 'function')
-      .map((item) => item.webkitGetAsEntry())
-      .some((entry) => !!entry && entry.isDirectory);
-
-    if (!containsFolders) {
-      return Promise.resolve(dropEvent.dataTransfer.files ? Array.from(dropEvent.dataTransfer.files) : []);
-    }
-
-    const filePromises = Array.from(dropEvent.dataTransfer.items)
-      .map((item) => item.webkitGetAsEntry())
-      .filter((entry) => !!entry)
-      .map(getFilesFromEntry);
-
-    return Promise.all(filePromises).then((files) => files.flat());
-  }
-
-  /** @private */
-  __dragoverChanged(dragover) {
-    this.toggleAttribute('dragover', dragover);
   }
 }
 

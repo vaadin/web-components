@@ -134,33 +134,6 @@ describe('vaadin-upload-drop-zone', () => {
     });
   });
 
-  describe('files-dropped event', () => {
-    it('should dispatch files-dropped event when files are dropped', async () => {
-      const files = createFiles(2, 100, 'text/plain');
-      const eventSpy = sinon.spy();
-      dropZone.addEventListener('files-dropped', eventSpy);
-
-      dropZone.dispatchEvent(createDropEvent(files));
-      await nextFrame();
-
-      expect(eventSpy.calledOnce).to.be.true;
-      expect(eventSpy.firstCall.args[0].detail.files).to.have.lengthOf(2);
-    });
-
-    it('should bubble and be composed', async () => {
-      const files = createFiles(1, 100, 'text/plain');
-      const eventSpy = sinon.spy();
-      dropZone.addEventListener('files-dropped', eventSpy);
-
-      dropZone.dispatchEvent(createDropEvent(files));
-      await nextFrame();
-
-      const event = eventSpy.firstCall.args[0];
-      expect(event.bubbles).to.be.true;
-      expect(event.composed).to.be.true;
-    });
-  });
-
   describe('manager integration', () => {
     let uploadManager: UploadManager;
 
@@ -192,18 +165,6 @@ describe('vaadin-upload-drop-zone', () => {
 
       // Should not throw
       expect(uploadManager.files).to.have.lengthOf(0);
-    });
-
-    it('should still dispatch event even when manager is set', async () => {
-      dropZone.manager = uploadManager;
-      const eventSpy = sinon.spy();
-      dropZone.addEventListener('files-dropped', eventSpy);
-
-      const files = createFiles(1, 100, 'text/plain');
-      dropZone.dispatchEvent(createDropEvent(files));
-      await nextFrame();
-
-      expect(eventSpy.calledOnce).to.be.true;
     });
   });
 });

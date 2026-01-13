@@ -8,20 +8,9 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-th
 import type { UploadManager } from './vaadin-upload-manager.js';
 
 /**
- * Fired when files are dropped on the drop zone.
- */
-export type UploadDropZoneFilesDroppedEvent = CustomEvent<{ files: File[] }>;
-
-export interface UploadDropZoneCustomEventMap {
-  'files-dropped': UploadDropZoneFilesDroppedEvent;
-}
-
-export interface UploadDropZoneEventMap extends HTMLElementEventMap, UploadDropZoneCustomEventMap {}
-
-/**
  * `<vaadin-upload-drop-zone>` is a Web Component that can be used as a drop zone
- * for file uploads. When files are dropped on the drop zone, they are dispatched
- * via an event or added to a linked manager.
+ * for file uploads. When files are dropped on the drop zone, they are added to
+ * a linked UploadManager.
  *
  * ```html
  * <vaadin-upload-drop-zone>
@@ -29,17 +18,12 @@ export interface UploadDropZoneEventMap extends HTMLElementEventMap, UploadDropZ
  * </vaadin-upload-drop-zone>
  * ```
  *
- * The drop zone can be linked to an UploadManager by setting the
+ * The drop zone must be linked to an UploadManager by setting the
  * `manager` property:
  *
  * ```javascript
  * const dropZone = document.querySelector('vaadin-upload-drop-zone');
  * dropZone.manager = uploadManager;
- *
- * // Or listen to the files-dropped event
- * dropZone.addEventListener('files-dropped', (e) => {
- *   uploadManager.addFiles(e.detail.files);
- * });
  * ```
  *
  * ### Styling
@@ -69,18 +53,6 @@ declare class UploadDropZone extends HTMLElement {
    * When set, dropped files will be automatically added to the manager.
    */
   manager: UploadManager | null;
-
-  addEventListener<K extends keyof UploadDropZoneEventMap>(
-    type: K,
-    listener: (this: UploadDropZone, ev: UploadDropZoneEventMap[K]) => void,
-    options?: AddEventListenerOptions | boolean,
-  ): void;
-
-  removeEventListener<K extends keyof UploadDropZoneEventMap>(
-    type: K,
-    listener: (this: UploadDropZone, ev: UploadDropZoneEventMap[K]) => void,
-    options?: EventListenerOptions | boolean,
-  ): void;
 }
 
 interface UploadDropZone extends ElementMixinClass, ThemableMixinClass {}
