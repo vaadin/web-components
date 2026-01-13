@@ -22,22 +22,22 @@ export interface UploadButtonEventMap extends HTMLElementEventMap, UploadButtonC
 /**
  * `<vaadin-upload-button>` is a button component for file uploads.
  * When clicked, it opens a file picker dialog and dispatches selected
- * files via an event or calls addFiles on a target UploadManager.
+ * files via an event or calls addFiles on a linked UploadManager.
  *
  * ```html
  * <vaadin-upload-button>Upload Files</vaadin-upload-button>
  * ```
  *
  * The button can be linked to an UploadManager by setting the
- * `target` property directly:
+ * `manager` property directly:
  *
  * ```javascript
  * const button = document.querySelector('vaadin-upload-button');
- * button.target = manager;
+ * button.manager = uploadManager;
  *
  * // Or listen to the files-selected event
  * button.addEventListener('files-selected', (e) => {
- *   manager.addFiles(e.detail.files);
+ *   uploadManager.addFiles(e.detail.files);
  * });
  * ```
  *
@@ -66,9 +66,9 @@ declare class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(HTMLEl
   /**
    * Reference to an UploadManager.
    * When set, the button will automatically disable when maxFilesReached
-   * becomes true on the target.
+   * becomes true on the manager.
    */
-  target: UploadManager | null;
+  manager: UploadManager | null;
 
   /**
    * Accepted file types (MIME types or extensions).

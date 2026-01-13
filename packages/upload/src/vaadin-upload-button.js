@@ -16,22 +16,22 @@ import { uploadButtonStyles } from './styles/vaadin-upload-button-base-styles.js
 /**
  * `<vaadin-upload-button>` is a button component for file uploads.
  * When clicked, it opens a file picker dialog and dispatches selected
- * files via an event or calls addFiles on a target UploadManager.
+ * files via an event or calls addFiles on a linked UploadManager.
  *
  * ```html
  * <vaadin-upload-button>Upload Files</vaadin-upload-button>
  * ```
  *
  * The button can be linked to an UploadManager by setting the
- * `target` property directly:
+ * `manager` property directly:
  *
  * ```javascript
  * const button = document.querySelector('vaadin-upload-button');
- * button.target = manager;
+ * button.manager = uploadManager;
  *
  * // Or listen to the files-selected event
  * button.addEventListener('files-selected', (e) => {
- *   manager.addFiles(e.detail.files);
+ *   uploadManager.addFiles(e.detail.files);
  * });
  * ```
  *
@@ -77,13 +77,13 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       /**
        * Reference to an UploadManager.
        * When set, the button will automatically disable when maxFilesReached
-       * becomes true on the target.
+       * becomes true on the manager.
        * @type {Object | null}
        */
-      target: {
+      manager: {
         type: Object,
         value: null,
-        observer: '__targetChanged',
+        observer: '__managerChanged',
       },
 
       /**
@@ -209,26 +209,26 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       }),
     );
 
-    // If we have a target with addFiles, call it
-    if (this.target && typeof this.target.addFiles === 'function') {
-      this.target.addFiles(files);
+    // If we have a manager with addFiles, call it
+    if (this.manager && typeof this.manager.addFiles === 'function') {
+      this.manager.addFiles(files);
     }
   }
 
   /** @private */
-  __targetChanged(target, oldTarget) {
-    // Remove listener from old target
-    if (oldTarget && typeof oldTarget.removeEventListener === 'function') {
-      oldTarget.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+  __managerChanged(manager, oldManager) {
+    // Remove listener from old manager
+    if (oldManager && typeof oldManager.removeEventListener === 'function') {
+      oldManager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
     }
 
-    // Add listener to new target
-    if (target && typeof target.addEventListener === 'function') {
-      target.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+    // Add listener to new manager
+    if (manager && typeof manager.addEventListener === 'function') {
+      manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
-      // Sync initial state if target has maxFilesReached property
-      if (target.maxFilesReached !== undefined) {
-        this.disabled = target.maxFilesReached;
+      // Sync initial state if manager has maxFilesReached property
+      if (manager.maxFilesReached !== undefined) {
+        this.disabled = manager.maxFilesReached;
       }
     }
   }

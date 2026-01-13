@@ -45,8 +45,8 @@ describe('vaadin-upload-button', () => {
       expect(button.maxFiles).to.equal(Infinity);
     });
 
-    it('should have target property defaulting to null', () => {
-      expect(button.target).to.be.null;
+    it('should have manager property defaulting to null', () => {
+      expect(button.manager).to.be.null;
     });
   });
 
@@ -185,20 +185,20 @@ describe('vaadin-upload-button', () => {
     });
   });
 
-  describe('target integration', () => {
-    let manager: UploadManager;
+  describe('manager integration', () => {
+    let uploadManager: UploadManager;
 
     beforeEach(() => {
-      manager = new UploadManager({
+      uploadManager = new UploadManager({
         target: '/api/upload',
         maxFiles: 3,
         noAuto: true,
       });
     });
 
-    it('should call addFiles on target when files are selected', () => {
-      button.target = manager;
-      const addFilesSpy = sinon.spy(manager, 'addFiles');
+    it('should call addFiles on manager when files are selected', () => {
+      button.manager = uploadManager;
+      const addFilesSpy = sinon.spy(uploadManager, 'addFiles');
 
       const fileInput = button.shadowRoot!.querySelector('input[type="file"]') as HTMLInputElement;
       const files = createFiles(2, 100, 'text/plain');
@@ -211,78 +211,78 @@ describe('vaadin-upload-button', () => {
       expect(addFilesSpy.firstCall.args[0]).to.equal(files);
     });
 
-    it('should sync initial maxFilesReached state from target', async () => {
+    it('should sync initial maxFilesReached state from manager', async () => {
       // Add files to reach max
-      manager.maxFiles = 1;
-      manager.addFiles([createFile(100, 'text/plain')]);
+      uploadManager.maxFiles = 1;
+      uploadManager.addFiles([createFile(100, 'text/plain')]);
 
-      expect(manager.maxFilesReached).to.be.true;
+      expect(uploadManager.maxFilesReached).to.be.true;
 
-      // Set target - button should sync disabled state
-      button.target = manager;
+      // Set manager - button should sync disabled state
+      button.manager = uploadManager;
       await nextFrame();
       expect(button.disabled).to.be.true;
     });
 
-    it('should disable when max files reached on target', async () => {
-      manager.maxFiles = 2;
-      button.target = manager;
+    it('should disable when max files reached on manager', async () => {
+      uploadManager.maxFiles = 2;
+      button.manager = uploadManager;
       expect(button.disabled).to.be.false;
 
       // Add files to reach max
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
 
       expect(button.disabled).to.be.true;
     });
 
-    it('should re-enable when files are removed from target', async () => {
-      manager.maxFiles = 1;
-      button.target = manager;
+    it('should re-enable when files are removed from manager', async () => {
+      uploadManager.maxFiles = 1;
+      button.manager = uploadManager;
 
       const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
+      uploadManager.addFiles([file]);
       await nextFrame();
       expect(button.disabled).to.be.true;
 
-      manager.removeFile(manager.files[0]);
+      uploadManager.removeFile(uploadManager.files[0]);
       await nextFrame();
       expect(button.disabled).to.be.false;
     });
 
-    it('should remove listener when target changes', async () => {
-      manager.maxFiles = 2;
-      button.target = manager;
+    it('should remove listener when manager changes', async () => {
+      uploadManager.maxFiles = 2;
+      button.manager = uploadManager;
 
-      const manager2 = new UploadManager({
+      const uploadManager2 = new UploadManager({
         target: '/api/upload',
         maxFiles: 1,
         noAuto: true,
       });
 
-      // Change target
-      button.target = manager2;
+      // Change manager
+      button.manager = uploadManager2;
 
       // Add files to first manager - should not affect button
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
       expect(button.disabled).to.be.false;
 
       // Add file to second manager - should disable button
-      manager2.addFiles([createFile(100, 'text/plain')]);
+      uploadManager2.addFiles([createFile(100, 'text/plain')]);
       await nextFrame();
       expect(button.disabled).to.be.true;
     });
 
-    it('should remove listener when target is set to null', async () => {
-      manager.maxFiles = 1;
-      button.target = manager;
+    it('should remove listener when manager is set to null', async () => {
+      uploadManager.maxFiles = 1;
+      button.manager = uploadManager;
 
-      // Set target to null
-      button.target = null;
+      // Set manager to null
+      button.manager = null;
 
       // Add files - should not affect button
-      manager.addFiles([createFile(100, 'text/plain')]);
+      uploadManager.addFiles([createFile(100, 'text/plain')]);
       await nextFrame();
       expect(button.disabled).to.be.false;
     });
