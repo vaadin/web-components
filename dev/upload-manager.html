@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Manager</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      /* Temporary Upload Button */
+      .temp-upload-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .temp-upload-button:hover {
+        background: #1565c0;
+      }
+
+      .temp-upload-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .temp-upload-button input[type='file'] {
+        display: none;
+      }
+
+      /* Temporary Drop Zone */
+      .temp-drop-zone {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 32px;
+        text-align: center;
+        color: #666;
+        transition: all 0.2s;
+        margin: 16px 0;
+      }
+
+      .temp-drop-zone.dragover {
+        border-color: #1976d2;
+        background: #e3f2fd;
+        color: #0d47a1;
+      }
+
+      .temp-drop-zone p {
+        margin: 0;
+      }
+
+      /* Temporary File List */
+      .temp-file-list {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0;
+      }
+
+      .temp-file-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 8px;
+        background: #fafafa;
+      }
+
+      .temp-file-item.complete {
+        background: #e8f5e9;
+        border-color: #c8e6c9;
+      }
+
+      .temp-file-item.error {
+        background: #ffebee;
+        border-color: #ffcdd2;
+      }
+
+      .temp-file-item.uploading {
+        background: #e3f2fd;
+        border-color: #bbdefb;
+      }
+
+      .temp-file-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .temp-file-name {
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .temp-file-status {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+      }
+
+      .temp-file-status.error {
+        color: #d32f2f;
+      }
+
+      .temp-file-progress {
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+
+      .temp-file-progress-bar {
+        height: 100%;
+        background: #1976d2;
+        transition: width 0.2s;
+      }
+
+      .temp-file-progress-bar.indeterminate {
+        width: 30% !important;
+        animation: indeterminate 1.5s infinite linear;
+      }
+      @keyframes indeterminate {
+        0% {
+          transform: translateX(-100%);
+        }
+
+        100% {
+          transform: translateX(400%);
+        }
+      }
+
+      .temp-file-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .temp-file-actions button {
+        padding: 4px 8px;
+        font-size: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+      }
+
+      .temp-file-actions button:hover {
+        background: #f5f5f5;
+      }
+
+      .temp-file-actions button.remove {
+        color: #d32f2f;
+        border-color: #ffcdd2;
+      }
+
+      .temp-file-actions button.remove:hover {
+        background: #ffebee;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Upload Manager Demo</h1>
+    <p>This page demonstrates the headless <code>UploadManager</code> class.</p>
+
+    <div class="demo-controls">
+      <label class="temp-upload-button" id="upload-button">
+        Upload Files...
+        <input type="file" multiple />
+      </label>
+    </div>
+
+    <div class="temp-drop-zone" id="dropzone">
+      <p>Drop files here</p>
+    </div>
+
+    <ul class="temp-file-list" id="file-list"></ul>
+
+    <script type="module">
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
+
+      // Helper to format file size
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      }
+
+      // Helper to format time
+      function formatTime(seconds) {
+        if (seconds < 60) return seconds + 's';
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}m ${secs}s`;
+      }
+
+      // Create the manager
+      const manager = new UploadManager({
+        target: '/api/upload',
+      });
+      // Use mock XHR
+      manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
+
+      // Setup file input
+      const button = document.querySelector('#upload-button');
+      const input = button.querySelector('input');
+      input.addEventListener('change', () => {
+        manager.addFiles(input.files);
+        input.value = '';
+      });
+
+      // Setup drop zone
+      const dropzone = document.querySelector('#dropzone');
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('dragover');
+      });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+          manager.addFiles(e.dataTransfer.files);
+        }
+      });
+
+      // Render file list
+      const fileList = document.querySelector('#file-list');
+
+      function render() {
+        fileList.innerHTML = '';
+        manager.files.forEach((file) => {
+          const li = document.createElement('li');
+          li.className = 'temp-file-item';
+          if (file.complete) li.classList.add('complete');
+          if (file.error) li.classList.add('error');
+          if (file.uploading && !file.complete) li.classList.add('uploading');
+
+          const info = document.createElement('div');
+          info.className = 'temp-file-info';
+
+          const name = document.createElement('div');
+          name.className = 'temp-file-name';
+          name.textContent = file.name;
+          info.appendChild(name);
+
+          const status = document.createElement('div');
+          status.className = 'temp-file-status';
+          if (file.error) {
+            status.classList.add('error');
+            status.textContent = file.error;
+          } else if (file.complete) {
+            status.textContent = `Complete - ${formatSize(file.size)}`;
+          } else if (file.uploading) {
+            if (file.held) {
+              status.textContent = 'Queued...';
+            } else if (file.stalled) {
+              status.textContent = 'Stalled...';
+            } else if (file.indeterminate) {
+              status.textContent = 'Connecting...';
+            } else {
+              const parts = [`${file.progress}%`];
+              if (file.speed) parts.push(`${file.speed} KB/s`);
+              if (file.remaining) parts.push(`${formatTime(file.remaining)} remaining`);
+              status.textContent = parts.join(' - ');
+            }
+          } else {
+            status.textContent = formatSize(file.size);
+          }
+          info.appendChild(status);
+
+          if (file.uploading && !file.complete && !file.held) {
+            const progress = document.createElement('div');
+            progress.className = 'temp-file-progress';
+            const bar = document.createElement('div');
+            bar.className = 'temp-file-progress-bar';
+            if (file.indeterminate) {
+              bar.classList.add('indeterminate');
+            } else {
+              bar.style.width = file.progress + '%';
+            }
+            progress.appendChild(bar);
+            info.appendChild(progress);
+          }
+
+          li.appendChild(info);
+
+          const actions = document.createElement('div');
+          actions.className = 'temp-file-actions';
+
+          if (file.error) {
+            const retryBtn = document.createElement('button');
+            retryBtn.textContent = 'Retry';
+            retryBtn.onclick = () => manager.retryUpload(file);
+            actions.appendChild(retryBtn);
+          }
+
+          if (file.uploading && !file.complete) {
+            const abortBtn = document.createElement('button');
+            abortBtn.textContent = 'Abort';
+            abortBtn.className = 'remove';
+            abortBtn.onclick = () => manager.abortUpload(file);
+            actions.appendChild(abortBtn);
+          } else {
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'Remove';
+            removeBtn.className = 'remove';
+            removeBtn.onclick = () => manager.removeFile(file);
+            actions.appendChild(removeBtn);
+          }
+
+          li.appendChild(actions);
+          fileList.appendChild(li);
+        });
+      }
+
+      manager.addEventListener('files-changed', render);
+    </script>
+  </body>
+</html>
