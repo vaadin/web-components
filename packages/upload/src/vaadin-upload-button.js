@@ -87,24 +87,6 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       },
 
       /**
-       * Accepted file types (MIME types or extensions).
-       * @type {string}
-       */
-      accept: {
-        type: String,
-        value: '',
-      },
-
-      /**
-       * Maximum number of files (1 = single file mode).
-       * @type {number}
-       */
-      maxFiles: {
-        type: Number,
-        value: Infinity,
-      },
-
-      /**
        * Capture attribute for mobile file input.
        * @type {string}
        */
@@ -177,15 +159,17 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @private */
   __updateFileInputAttributes() {
     if (this.__fileInput) {
-      // Set accept attribute
-      if (this.accept) {
-        this.__fileInput.accept = this.accept;
+      // Set accept attribute from manager
+      const accept = this.manager && this.manager.accept;
+      if (accept) {
+        this.__fileInput.accept = accept;
       } else {
         this.__fileInput.removeAttribute('accept');
       }
 
-      // Set multiple attribute based on maxFiles
-      this.__fileInput.multiple = this.maxFiles !== 1;
+      // Set multiple attribute based on manager's maxFiles
+      const maxFiles = this.manager && this.manager.maxFiles != null ? this.manager.maxFiles : Infinity;
+      this.__fileInput.multiple = maxFiles !== 1;
 
       // Set capture attribute
       if (this.capture) {

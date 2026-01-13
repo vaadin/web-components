@@ -37,14 +37,6 @@ describe('vaadin-upload-button', () => {
       expect(button.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should have accept property defaulting to empty string', () => {
-      expect(button.accept).to.equal('');
-    });
-
-    it('should have maxFiles property defaulting to Infinity', () => {
-      expect(button.maxFiles).to.equal(Infinity);
-    });
-
     it('should have manager property defaulting to null', () => {
       expect(button.manager).to.be.null;
     });
@@ -62,18 +54,25 @@ describe('vaadin-upload-button', () => {
       expect(fileInput.style.display).to.equal('none');
     });
 
-    it('should set multiple attribute based on maxFiles', () => {
-      button.maxFiles = 1;
+    it('should set multiple attribute based on manager maxFiles', () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      button.manager = manager;
       button.openFilePicker();
       expect(fileInput.multiple).to.be.false;
 
-      button.maxFiles = Infinity;
+      manager.maxFiles = Infinity;
       button.openFilePicker();
       expect(fileInput.multiple).to.be.true;
     });
 
-    it('should set accept attribute on file input', () => {
-      button.accept = 'image/*,.pdf';
+    it('should default to multiple when no manager', () => {
+      button.openFilePicker();
+      expect(fileInput.multiple).to.be.true;
+    });
+
+    it('should set accept attribute from manager', () => {
+      const manager = new UploadManager({ target: '/api/upload', accept: 'image/*,.pdf', noAuto: true });
+      button.manager = manager;
       button.openFilePicker();
       expect(fileInput.accept).to.equal('image/*,.pdf');
     });

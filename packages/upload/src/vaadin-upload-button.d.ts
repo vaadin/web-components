@@ -66,19 +66,10 @@ declare class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(HTMLEl
   /**
    * Reference to an UploadManager.
    * When set, the button will automatically disable when maxFilesReached
-   * becomes true on the manager.
+   * becomes true on the manager. The file picker will also use the manager's
+   * `accept` and `maxFiles` settings.
    */
   manager: UploadManager | null;
-
-  /**
-   * Accepted file types (MIME types or extensions).
-   */
-  accept: string;
-
-  /**
-   * Maximum number of files (1 = single file mode).
-   */
-  maxFiles: number;
 
   /**
    * Capture attribute for mobile file input.
