@@ -134,79 +134,60 @@ describe('vaadin-upload-button', () => {
 
     it('should click file input when opening picker', () => {
       const input = getFileInput(button);
-      let clickCalled = false;
-      const originalClick = input.click.bind(input);
-      input.click = () => {
-        clickCalled = true;
-        originalClick();
-      };
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       button.openFilePicker();
-      expect(clickCalled).to.be.true;
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should not open file picker when disabled', () => {
       const input = getFileInput(button);
-      const clickSpy = sinon.spy(input, 'click');
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       button.disabled = true;
       button.openFilePicker();
-      expect(clickSpy.called).to.be.false;
-      clickSpy.restore();
+      expect(spy.called).to.be.false;
     });
 
-    it('should call openFilePicker on click', () => {
-      let openCalled = false;
-      const original = button.openFilePicker;
-      button.openFilePicker = () => {
-        openCalled = true;
-      };
+    it('should click file input when clicking the button', () => {
+      const input = getFileInput(button);
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       button.click();
-      expect(openCalled).to.be.true;
-      button.openFilePicker = original;
+      expect(spy.called).to.be.true;
     });
 
-    it('should call openFilePicker on Enter key', () => {
-      let openCalled = false;
-      const original = button.openFilePicker;
-      button.openFilePicker = () => {
-        openCalled = true;
-      };
+    it('should click the file input on Enter key', () => {
+      const input = getFileInput(button);
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       enterKeyDown(button);
-      expect(openCalled).to.be.true;
-      button.openFilePicker = original;
+      expect(spy.called).to.be.true;
     });
 
-    it('should call openFilePicker on Space key', () => {
-      let openCalled = false;
-      const original = button.openFilePicker;
-      button.openFilePicker = () => {
-        openCalled = true;
-      };
+    it('should click the file input on Space key', () => {
+      const input = getFileInput(button);
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       spaceKeyDown(button);
-      expect(openCalled).to.be.true;
-      button.openFilePicker = original;
+      expect(spy.called).to.be.true;
     });
 
     it('should not open file picker on other keys', () => {
-      let openCalled = false;
-      const original = button.openFilePicker;
-      button.openFilePicker = () => {
-        openCalled = true;
-      };
+      const input = getFileInput(button);
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       button.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
-      expect(openCalled).to.be.false;
-      button.openFilePicker = original;
+      expect(spy.called).to.be.false;
     });
 
     it('should not open file picker when disabled and clicking', () => {
-      let openCalled = false;
-      const original = button.openFilePicker;
-      button.openFilePicker = () => {
-        openCalled = true;
-      };
+      const input = getFileInput(button);
+      const spy = sinon.spy();
+      input.addEventListener('click', spy);
       button.disabled = true;
       button.click();
-      expect(openCalled).to.be.false;
-      button.openFilePicker = original;
+      expect(spy.called).to.be.false;
     });
   });
 
@@ -225,7 +206,7 @@ describe('vaadin-upload-button', () => {
       button.manager = uploadManager;
       const addFilesSpy = sinon.spy(uploadManager, 'addFiles');
 
-      const fileInput = button.shadowRoot!.querySelector('input[type="file"]') as HTMLInputElement;
+      const fileInput = getFileInput(button);
       const files = createFiles(2, 100, 'text/plain');
 
       Object.setPrototypeOf(fileInput, HTMLElement.prototype);
