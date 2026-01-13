@@ -56,4 +56,19 @@ export const sliderStyles = css`
     pointer-events: auto;
     touch-action: none;
   }
+
+  :host([focus-ring]) [part='thumb'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+  }
+
+  /* visually hidden */
+  ::slotted(input) {
+    flex: 1;
+    font: inherit;
+    height: var(--_thumb-size);
+    opacity: 0 !important;
+    margin: 0 !important;
+    pointer-events: none;
+  }
 `;

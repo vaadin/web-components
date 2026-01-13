@@ -6,11 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Range Slider</title>
     <script type="module" src="./common.js"></script>
-    <script type="module">
-      import '@vaadin/slider/src/vaadin-range-slider.js';
-    </script>
   </head>
   <body>
     <vaadin-range-slider></vaadin-range-slider>
+
+    <output id="output"></output>
+
+    <script type="module">
+      import '@vaadin/slider/vaadin-range-slider.js';
+
+      const slider = document.querySelector('vaadin-range-slider');
+      slider.addEventListener('change', (e) => {
+        document.querySelector('#output').textContent = e.target.value.join('-');
+      });
+    </script>
   </body>
 </html>

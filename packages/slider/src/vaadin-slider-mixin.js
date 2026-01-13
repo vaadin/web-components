@@ -61,7 +61,7 @@ export const SliderMixin = (superClass) =>
       const newValue = this.__value[this.__thumbIndex] + increment;
       this._updateValue(newValue);
       this._commitValue();
-      this.__detectAndDispatchChange();
+      this._detectAndDispatchChange();
     }
 
     /**
@@ -74,7 +74,7 @@ export const SliderMixin = (superClass) =>
       const newValue = this.__value[this.__thumbIndex] - decrement;
       this._updateValue(newValue);
       this._commitValue();
-      this.__detectAndDispatchChange();
+      this._detectAndDispatchChange();
     }
 
     /**
@@ -207,11 +207,11 @@ export const SliderMixin = (superClass) =>
       window.removeEventListener('pointerup', this.__onPointerUp);
       window.removeEventListener('pointercancel', this.__onPointerUp);
 
-      this.__detectAndDispatchChange();
+      this._detectAndDispatchChange();
     }
 
-    /** @private */
-    __detectAndDispatchChange() {
+    /** @protected */
+    _detectAndDispatchChange() {
       if (this.__lastCommittedValue !== this.value) {
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }

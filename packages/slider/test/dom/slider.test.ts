@@ -10,8 +10,15 @@ describe('vaadin-slider', () => {
     slider = fixtureSync('<vaadin-slider></vaadin-slider>');
   });
 
-  it('host', async () => {
-    await expect(slider).dom.to.equalSnapshot();
+  describe('host', async () => {
+    it('default', async () => {
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('value', async () => {
+      slider.value = 50;
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', async () => {

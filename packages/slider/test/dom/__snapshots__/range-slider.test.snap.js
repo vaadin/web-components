@@ -1,11 +1,50 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-range-slider host"] = 
+snapshots["vaadin-range-slider host default"] = 
 `<vaadin-range-slider>
+  <input
+    id="slider-0"
+    max="100"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    id="slider-1"
+    max="100"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
 </vaadin-range-slider>
 `;
-/* end snapshot vaadin-range-slider host */
+/* end snapshot vaadin-range-slider host default */
+
+snapshots["vaadin-range-slider host value"] = 
+`<div part="track">
+  <div
+    part="track-fill"
+    style="inset-inline: 10% 80%;"
+  >
+  </div>
+</div>
+<div
+  part="thumb"
+  style="inset-inline-start: 10%;"
+>
+</div>
+<div
+  part="thumb"
+  style="inset-inline-start: 20%;"
+>
+</div>
+<slot name="input">
+</slot>
+`;
+/* end snapshot vaadin-range-slider host value */
 
 snapshots["vaadin-range-slider shadow default"] = 
 `<div part="track">
@@ -16,25 +55,17 @@ snapshots["vaadin-range-slider shadow default"] =
   </div>
 </div>
 <div
-  aria-valuemax="100"
-  aria-valuemin="0"
-  aria-valuenow="0"
   part="thumb"
-  role="slider"
   style="inset-inline-start:0%;"
-  tabindex="0"
 >
 </div>
 <div
-  aria-valuemax="100"
-  aria-valuemin="0"
-  aria-valuenow="0"
   part="thumb"
-  role="slider"
   style="inset-inline-start:0%;"
-  tabindex="0"
 >
 </div>
+<slot name="input">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow default */
 
@@ -47,25 +78,17 @@ snapshots["vaadin-range-slider shadow value"] =
   </div>
 </div>
 <div
-  aria-valuemax="100"
-  aria-valuemin="0"
-  aria-valuenow="10"
   part="thumb"
-  role="slider"
   style="inset-inline-start: 10%;"
-  tabindex="0"
 >
 </div>
 <div
-  aria-valuemax="100"
-  aria-valuemin="0"
-  aria-valuenow="20"
   part="thumb"
-  role="slider"
   style="inset-inline-start: 20%;"
-  tabindex="0"
 >
 </div>
+<slot name="input">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow value */
 
