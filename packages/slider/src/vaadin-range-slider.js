@@ -3,9 +3,10 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, LitElement, render } from 'lit';
+import { css, html, LitElement, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -38,7 +39,16 @@ class RangeSlider extends SliderMixin(
   }
 
   static get styles() {
-    return sliderStyles;
+    return [
+      sliderStyles,
+      css`
+        :host([focus-ring][start-focused]) [part~='thumb-start'],
+        :host([focus-ring][end-focused]) [part~='thumb-end'] {
+          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline-offset: 1px;
+        }
+      `,
+    ];
   }
 
   static get properties() {
@@ -72,8 +82,8 @@ class RangeSlider extends SliderMixin(
           })}"
         ></div>
       </div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${startPercent}%` })}"></div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${endPercent}%` })}"></div>
+      <div part="thumb thumb-start" style="${styleMap({ insetInlineStart: `${startPercent}%` })}"></div>
+      <div part="thumb thumb-end" style="${styleMap({ insetInlineStart: `${endPercent}%` })}"></div>
       <slot name="input"></slot>
     `;
   }
@@ -160,6 +170,26 @@ class RangeSlider extends SliderMixin(
     }
 
     super.focus(options);
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (focused) {
+      const thumbIndex = this._inputElements.findIndex((input) => isElementFocused(input));
+      if (thumbIndex === 0) {
+        this.setAttribute('start-focused', '');
+      } else {
+        this.setAttribute('end-focused', '');
+      }
+    } else {
+      this.removeAttribute('start-focused');
+      this.removeAttribute('end-focused');
+    }
   }
 
   /**

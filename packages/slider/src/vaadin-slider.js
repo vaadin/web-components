@@ -3,7 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, LitElement, render } from 'lit';
+import { css, html, LitElement, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -38,7 +38,15 @@ class Slider extends SliderMixin(
   }
 
   static get styles() {
-    return sliderStyles;
+    return [
+      sliderStyles,
+      css`
+        :host([focus-ring]) [part='thumb'] {
+          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline-offset: 1px;
+        }
+      `,
+    ];
   }
 
   static get properties() {

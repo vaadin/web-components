@@ -45,7 +45,7 @@ export const sliderStyles = css`
     border-end-start-radius: inherit;
   }
 
-  [part='thumb'] {
+  [part~='thumb'] {
     position: absolute;
     box-sizing: border-box;
     width: var(--_thumb-size);
@@ -55,11 +55,6 @@ export const sliderStyles = css`
     border-radius: 50%;
     pointer-events: auto;
     touch-action: none;
-  }
-
-  :host([focus-ring]) [part='thumb'] {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 1px;
   }
 
   /* visually hidden */

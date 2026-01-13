@@ -32,12 +32,12 @@ snapshots["vaadin-range-slider host value"] =
   </div>
 </div>
 <div
-  part="thumb"
+  part="thumb thumb-start"
   style="inset-inline-start: 10%;"
 >
 </div>
 <div
-  part="thumb"
+  part="thumb thumb-end"
   style="inset-inline-start: 20%;"
 >
 </div>
@@ -55,12 +55,12 @@ snapshots["vaadin-range-slider shadow default"] =
   </div>
 </div>
 <div
-  part="thumb"
+  part="thumb thumb-start"
   style="inset-inline-start:0%;"
 >
 </div>
 <div
-  part="thumb"
+  part="thumb thumb-end"
   style="inset-inline-start:0%;"
 >
 </div>
@@ -78,12 +78,12 @@ snapshots["vaadin-range-slider shadow value"] =
   </div>
 </div>
 <div
-  part="thumb"
+  part="thumb thumb-start"
   style="inset-inline-start: 10%;"
 >
 </div>
 <div
-  part="thumb"
+  part="thumb thumb-end"
   style="inset-inline-start: 20%;"
 >
 </div>
