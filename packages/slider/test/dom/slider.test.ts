@@ -14,7 +14,14 @@ describe('vaadin-slider', () => {
     await expect(slider).dom.to.equalSnapshot();
   });
 
-  it('shadow', async () => {
-    await expect(slider).shadowDom.to.equalSnapshot();
+  describe('shadow', async () => {
+    it('default', async () => {
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
+    it('value', async () => {
+      slider.value = '50';
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
   });
 });
