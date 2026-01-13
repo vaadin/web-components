@@ -117,19 +117,13 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         </span>
       </div>
       <slot name="tooltip"></slot>
+      <input id="fileInput" type="file" hidden @change=${this.__onFileInputChange} />
     `;
   }
 
   /** @protected */
   ready() {
     super.ready();
-
-    // Create a hidden file input
-    this.__fileInput = document.createElement('input');
-    this.__fileInput.type = 'file';
-    this.__fileInput.style.display = 'none';
-    this.__fileInput.addEventListener('change', this.__onFileInputChange);
-    this.shadowRoot.appendChild(this.__fileInput);
 
     // Add tooltip support
     this._tooltipController = new TooltipController(this);
@@ -152,30 +146,30 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     // Update file input attributes before opening
     this.__updateFileInputAttributes();
 
-    this.__fileInput.value = '';
-    this.__fileInput.click();
+    this.$.fileInput.value = '';
+    this.$.fileInput.click();
   }
 
   /** @private */
   __updateFileInputAttributes() {
-    if (this.__fileInput) {
+    if (this.$.fileInput) {
       // Set accept attribute from manager
       const accept = this.manager && this.manager.accept;
       if (accept) {
-        this.__fileInput.accept = accept;
+        this.$.fileInput.accept = accept;
       } else {
-        this.__fileInput.removeAttribute('accept');
+        this.$.fileInput.removeAttribute('accept');
       }
 
       // Set multiple attribute based on manager's maxFiles
       const maxFiles = this.manager && this.manager.maxFiles != null ? this.manager.maxFiles : Infinity;
-      this.__fileInput.multiple = maxFiles !== 1;
+      this.$.fileInput.multiple = maxFiles !== 1;
 
       // Set capture attribute
       if (this.capture) {
-        this.__fileInput.capture = this.capture;
+        this.$.fileInput.capture = this.capture;
       } else {
-        this.__fileInput.removeAttribute('capture');
+        this.$.fileInput.removeAttribute('capture');
       }
     }
   }

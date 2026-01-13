@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enterKeyDown, fixtureSync, nextFrame, nextRender, spaceKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import type { UploadButton } from '../src/vaadin-upload-button.js';
 import '../src/vaadin-upload-button.js';
+import type { UploadButton } from '../src/vaadin-upload-button.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles } from './helpers.js';
 
@@ -46,12 +46,12 @@ describe('vaadin-upload-button', () => {
     let fileInput: HTMLInputElement;
 
     beforeEach(() => {
-      fileInput = (button as any).__fileInput;
+      fileInput = (button as any).$.fileInput;
     });
 
     it('should have a hidden file input in shadow DOM', () => {
       expect(fileInput).to.exist;
-      expect(fileInput.style.display).to.equal('none');
+      expect(getComputedStyle(fileInput).display).to.equal('none');
     });
 
     it('should set multiple attribute based on manager maxFiles', () => {
@@ -84,7 +84,7 @@ describe('vaadin-upload-button', () => {
     });
 
     it('should not open file picker when disabled', () => {
-      const clickSpy = sinon.spy((button as any).__fileInput, 'click');
+      const clickSpy = sinon.spy((button as any).$.fileInput, 'click');
       button.disabled = true;
       button.openFilePicker();
       expect(clickSpy.called).to.be.false;
