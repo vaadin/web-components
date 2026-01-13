@@ -15,24 +15,19 @@ import { uploadButtonStyles } from './styles/vaadin-upload-button-base-styles.js
 
 /**
  * `<vaadin-upload-button>` is a button component for file uploads.
- * When clicked, it opens a file picker dialog and dispatches selected
- * files via an event or calls addFiles on a linked UploadManager.
+ * When clicked, it opens a file picker dialog and calls addFiles
+ * on a linked UploadManager.
  *
  * ```html
  * <vaadin-upload-button>Upload Files</vaadin-upload-button>
  * ```
  *
- * The button can be linked to an UploadManager by setting the
- * `manager` property directly:
+ * The button must be linked to an UploadManager by setting the
+ * `manager` property:
  *
  * ```javascript
  * const button = document.querySelector('vaadin-upload-button');
  * button.manager = uploadManager;
- *
- * // Or listen to the files-selected event
- * button.addEventListener('files-selected', (e) => {
- *   uploadManager.addFiles(e.detail.files);
- * });
  * ```
  *
  * ### Styling
@@ -133,6 +128,29 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     });
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    // Clean up manager listener to prevent memory leaks
+    if (this.manager && typeof this.manager.removeEventListener === 'function') {
+      this.manager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+    }
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    // Re-attach manager listener when reconnected to DOM
+    if (this.manager && typeof this.manager.addEventListener === 'function') {
+      this.manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+
+      // Sync disabled state with current manager state
+      this.disabled = !!this.manager.maxFilesReached;
+    }
+  }
+
   /**
    * Opens the file picker dialog.
    */
@@ -150,15 +168,26 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
   /** @private */
   __updateFileInputAttributes() {
+    const { fileInput } = this.$;
+
     // Set accept attribute from manager
-    this.$.fileInput.accept = this.manager && this.manager.accept;
+    const accept = this.manager && this.manager.accept;
+    if (accept) {
+      fileInput.setAttribute('accept', accept);
+    } else {
+      fileInput.removeAttribute('accept');
+    }
 
     // Set multiple attribute based on manager's maxFiles
     const maxFiles = this.manager && this.manager.maxFiles != null ? this.manager.maxFiles : Infinity;
-    this.$.fileInput.multiple = maxFiles !== 1;
+    fileInput.multiple = maxFiles !== 1;
 
     // Set capture attribute
-    this.$.fileInput.capture = this.capture;
+    if (this.capture) {
+      fileInput.setAttribute('capture', this.capture);
+    } else {
+      fileInput.removeAttribute('capture');
+    }
   }
 
   /** @private */
@@ -179,7 +208,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     }
 
     // Add listener to new manager
-    if (manager && typeof manager.addEventListener === 'function') {
+    if (this.isConnected && manager && typeof manager.addEventListener === 'function') {
       manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
       // Sync initial state if manager has maxFilesReached property

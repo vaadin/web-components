@@ -78,7 +78,7 @@ describe('vaadin-upload-button', () => {
       const manager = new UploadManager({ target: '/api/upload', accept: 'image/*,.pdf', noAuto: true });
       button.manager = manager;
       button.openFilePicker();
-      expect(fileInput.accept).to.equal('image/*,.pdf');
+      expect(fileInput.getAttribute('accept')).to.equal('image/*,.pdf');
     });
 
     it('should clear accept attribute when manager has no accept', () => {
@@ -86,28 +86,39 @@ describe('vaadin-upload-button', () => {
       const manager = new UploadManager({ target: '/api/upload', accept: 'image/*', noAuto: true });
       button.manager = manager;
       button.openFilePicker();
-      expect(fileInput.accept).to.equal('image/*');
+      expect(fileInput.getAttribute('accept')).to.equal('image/*');
 
       // Change to manager without accept
       const manager2 = new UploadManager({ target: '/api/upload', noAuto: true });
       button.manager = manager2;
       button.openFilePicker();
-      expect(fileInput.accept).to.equal('');
+      expect(fileInput.hasAttribute('accept')).to.be.false;
     });
 
     it('should set capture attribute on file input', () => {
       button.capture = 'environment';
       button.openFilePicker();
-      expect(fileInput.capture).to.equal('environment');
+      expect(fileInput.getAttribute('capture')).to.equal('environment');
     });
 
-    it('should clear capture attribute when unset', () => {
+    it('should clear capture attribute when set to empty string', () => {
       button.capture = 'environment';
       button.openFilePicker();
-      expect(fileInput.capture).to.equal('environment');
+      expect(fileInput.getAttribute('capture')).to.equal('environment');
 
       button.capture = '';
       button.openFilePicker();
+      expect(fileInput.hasAttribute('capture')).to.be.false;
+    });
+
+    it('should clear capture attribute when set to undefined', () => {
+      button.capture = 'environment';
+      button.openFilePicker();
+      expect(fileInput.getAttribute('capture')).to.equal('environment');
+
+      button.capture = undefined;
+      button.openFilePicker();
+      // When capture is undefined, the capture attribute should be removed
       expect(fileInput.hasAttribute('capture')).to.be.false;
     });
 
@@ -298,6 +309,105 @@ describe('vaadin-upload-button', () => {
       // Add files - should not affect button
       uploadManager.addFiles([createFile(100, 'text/plain')]);
       await nextFrame();
+      expect(button.disabled).to.be.false;
+    });
+
+    it('should remove listener when disconnected from DOM', async () => {
+      uploadManager.maxFiles = 2;
+
+      // Spy on manager to verify event fires
+      const spy = sinon.spy();
+      uploadManager.addEventListener('max-files-reached-changed', spy);
+
+      button.manager = uploadManager;
+      await nextFrame(); // Wait for property observer to run
+      expect(button.disabled).to.be.false;
+
+      // Verify button is in DOM
+      expect(button.isConnected).to.be.true;
+
+      // Remove button from DOM
+      button.remove();
+
+      // Verify button is disconnected
+      expect(button.isConnected).to.be.false;
+
+      // Reset spy call count after setup
+      spy.resetHistory();
+
+      // Add files to reach max
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
+
+      // Verify event was dispatched
+      expect(spy.called).to.be.true;
+      expect((spy.getCall(0).args[0] as CustomEvent).detail.value).to.be.true;
+
+      // Verify maxFilesReached is true on manager
+      expect(uploadManager.maxFilesReached).to.be.true;
+
+      // Button should remain not disabled since listener was removed on disconnect
+      expect(button.disabled).to.be.false;
+    });
+
+    it('should re-attach listener when reconnected to DOM', async () => {
+      uploadManager.maxFiles = 2;
+      button.manager = uploadManager;
+      await nextFrame();
+
+      // Remove and re-add button
+      const parent = button.parentElement!;
+      button.remove();
+      parent.appendChild(button);
+      await nextFrame();
+
+      // Add files to reach max - should disable button since it's reconnected
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
+      await nextFrame();
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should sync disabled state when reconnected after max files reached', async () => {
+      uploadManager.maxFiles = 2;
+      button.manager = uploadManager;
+      await nextFrame();
+      expect(button.disabled).to.be.false;
+
+      // Remove button from DOM
+      const parent = button.parentElement!;
+      button.remove();
+
+      // Add files to reach max WHILE button is disconnected
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
+      expect(uploadManager.maxFilesReached).to.be.true;
+
+      // Button should still not be disabled (listener was removed)
+      expect(button.disabled).to.be.false;
+
+      // Reconnect button
+      parent.appendChild(button);
+      await nextFrame();
+
+      // Button should now be disabled (synced with manager state on reconnect)
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should not async disabled state when manager changed while disconnected', async () => {
+      uploadManager.maxFiles = 2;
+
+      await nextFrame();
+      expect(button.disabled).to.be.false;
+
+      // Remove button from DOM
+      button.remove();
+
+      button.manager = uploadManager;
+
+      // Add files to reach max WHILE button is disconnected
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
+      expect(uploadManager.maxFilesReached).to.be.true;
+
+      await nextFrame();
+      // Button should still not be disabled (listener was removed)
       expect(button.disabled).to.be.false;
     });
   });
