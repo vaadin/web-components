@@ -35,7 +35,6 @@ export const SliderMixin = (superClass) =>
         /** @private */
         __value: {
           type: Number,
-          value: () => [],
           sync: true,
         },
       };

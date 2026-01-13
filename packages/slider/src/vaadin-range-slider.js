@@ -53,8 +53,7 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
   /** @protected */
   render() {
     const { min, max } = this._getConstraints();
-    const startValue = this.__value[0] || 0;
-    const endValue = this.__value[1] || 0;
+    const [startValue, endValue] = this.__value;
 
     const startPercent = this.__getPercentFromValue(startValue);
     const endPercent = this.__getPercentFromValue(endValue);
@@ -88,6 +87,12 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
         style="${styleMap({ insetInlineStart: `${endPercent}%` })}"
       ></div>
     `;
+  }
+
+  constructor() {
+    super();
+
+    this.__value = [0, 0];
   }
 
   /** @protected */
