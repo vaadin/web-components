@@ -46,7 +46,8 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/a11y-base": "25.0.0-alpha17",
+    "@vaadin/a11y-base": "~25.0.2",
+    "@vaadin/aura": "~25.0.2",
     "@vaadin/chai-plugins": "~25.0.2",
     "@vaadin/test-runner-commands": "~25.0.2",
     "@vaadin/testing-helpers": "^2.0.0",
