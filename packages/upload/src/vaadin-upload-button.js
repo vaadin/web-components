@@ -12,6 +12,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { uploadButtonStyles } from './styles/vaadin-upload-button-base-styles.js';
+import { UploadManager } from './vaadin-upload-manager.js';
 
 /**
  * `<vaadin-upload-button>` is a button component for file uploads.
@@ -133,7 +134,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     super.disconnectedCallback();
 
     // Clean up manager listener to prevent memory leaks
-    if (this.manager && typeof this.manager.removeEventListener === 'function') {
+    if (this.manager instanceof UploadManager) {
       this.manager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
     }
   }
@@ -143,7 +144,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     super.connectedCallback();
 
     // Re-attach manager listener when reconnected to DOM
-    if (this.manager && typeof this.manager.addEventListener === 'function') {
+    if (this.manager instanceof UploadManager) {
       this.manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
       // Sync disabled state with current manager state
@@ -194,8 +195,8 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   __onFileInputChange(event) {
     const files = event.target.files;
 
-    // If we have a manager with addFiles, call it
-    if (this.manager && typeof this.manager.addFiles === 'function') {
+    // If we have a manager, call addFiles
+    if (this.manager instanceof UploadManager) {
       this.manager.addFiles(files);
     }
   }
@@ -203,12 +204,12 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @private */
   __managerChanged(manager, oldManager) {
     // Remove listener from old manager
-    if (oldManager && typeof oldManager.removeEventListener === 'function') {
+    if (oldManager instanceof UploadManager) {
       oldManager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
     }
 
     // Add listener to new manager
-    if (this.isConnected && manager && typeof manager.addEventListener === 'function') {
+    if (this.isConnected && manager instanceof UploadManager) {
       manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
       // Sync initial state if manager has maxFilesReached property
