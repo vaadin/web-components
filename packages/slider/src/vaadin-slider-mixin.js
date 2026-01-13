@@ -44,7 +44,7 @@ export const SliderMixin = (superClass) =>
         /** @private */
         __value: {
           type: Number,
-          value: 0,
+          value: () => [],
           sync: true,
         },
       };
@@ -52,6 +52,8 @@ export const SliderMixin = (superClass) =>
 
     constructor() {
       super();
+
+      this.__thumbIndex = 0;
 
       this.__onPointerMove = this.__onPointerMove.bind(this);
       this.__onPointerUp = this.__onPointerUp.bind(this);
@@ -66,8 +68,9 @@ export const SliderMixin = (superClass) =>
     stepUp(amount) {
       this.__lastCommittedValue = this.value;
       const increment = amount || this.step || 1;
-      const newValue = this.__value + increment;
-      this.__updateValue(newValue, true);
+      const newValue = this.__value[this.__thumbIndex] + increment;
+      this.__updateValue(newValue);
+      this.__commitValue();
       this.__detectAndDispatchChange();
     }
 
@@ -78,8 +81,9 @@ export const SliderMixin = (superClass) =>
     stepDown(amount) {
       this.__lastCommittedValue = this.value;
       const decrement = amount || this.step || 1;
-      const newValue = this.__value - decrement;
-      this.__updateValue(newValue, true);
+      const newValue = this.__value[this.__thumbIndex] - decrement;
+      this.__updateValue(newValue);
+      this.__commitValue();
       this.__detectAndDispatchChange();
     }
 
@@ -88,33 +92,42 @@ export const SliderMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('value') || props.has('min') || props.has('max')) {
-        const value = this.value || '0';
-        this.__updateValue(value);
+        const values = (this.value || '').split(',');
+        values.forEach((value, idx) => {
+          this.__updateValue(value, idx);
+        });
       }
     }
 
     /**
      * @param {number} value
-     * @param {boolean} commit
+     * @param {number} index
      * @private
      */
-    __updateValue(value, commit) {
+    __updateValue(value, index = this.__thumbIndex) {
       const min = this.min || 0;
       const max = this.max || 100;
       const step = this.step || 1;
 
-      const safeValue = Math.min(Math.max(value, min), max);
+      const minValue = this.__value[index - 1] || min;
+      const maxValue = this.__value[index + 1] || max;
+
+      const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
       const offset = safeValue - min;
       const nearestOffset = Math.round(offset / step) * step;
       const nearestValue = min + nearestOffset;
 
       const newValue = Math.round(nearestValue);
-      this.__value = newValue;
 
-      if (commit) {
-        this.value = `${this.__value}`;
-      }
+      const valueCopy = [...this.__value];
+      valueCopy[index] = newValue;
+      this.__value = valueCopy;
+    }
+
+    /** @private */
+    __commitValue() {
+      this.value = this.__value.join(',');
     }
 
     /**
@@ -139,14 +152,24 @@ export const SliderMixin = (superClass) =>
       return min + percent * (max - min);
     }
 
-    /** @private */
-    __applyValue(event) {
+    /**
+     * @param {PointerEvent} event
+     * @return {number}
+     * @protected
+     */
+    _getEventPercent(event) {
       const offset = event.offsetX;
       const size = this.offsetWidth;
       const safeOffset = Math.min(Math.max(offset, 0), size);
-      const percent = safeOffset / size;
+      return safeOffset / size;
+    }
+
+    /** @private */
+    __applyValue(event) {
+      const percent = this._getEventPercent(event);
       const newValue = this.__getValueFromPercent(percent);
-      this.__updateValue(newValue, true);
+      this.__updateValue(newValue);
+      this.__commitValue();
     }
 
     /**
@@ -161,6 +184,14 @@ export const SliderMixin = (superClass) =>
 
       this.__lastCommittedValue = this.value;
 
+      this._handlePointerDown(event);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @protected
+     */
+    _handlePointerDown(event) {
       const target = event.composedPath()[0];
       // Update value on track click
       if (target.getAttribute('part') !== 'thumb') {
