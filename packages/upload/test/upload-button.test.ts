@@ -199,42 +199,6 @@ describe('vaadin-upload-button', () => {
     });
   });
 
-  describe('files-selected event', () => {
-    it('should dispatch files-selected event when files are selected', () => {
-      const fileInput = button.shadowRoot!.querySelector('input[type="file"]') as HTMLInputElement;
-      const files = createFiles(2, 100, 'text/plain');
-
-      // Mock the file input's files property
-      Object.setPrototypeOf(fileInput, HTMLElement.prototype);
-      (fileInput as any).files = files;
-
-      const eventSpy = sinon.spy();
-      button.addEventListener('files-selected', eventSpy);
-
-      fileInput.dispatchEvent(new Event('change'));
-
-      expect(eventSpy.calledOnce).to.be.true;
-      expect(eventSpy.firstCall.args[0].detail.files).to.have.lengthOf(2);
-    });
-
-    it('should bubble and be composed', () => {
-      const fileInput = button.shadowRoot!.querySelector('input[type="file"]') as HTMLInputElement;
-      const files = createFiles(1, 100, 'text/plain');
-
-      Object.setPrototypeOf(fileInput, HTMLElement.prototype);
-      (fileInput as any).files = files;
-
-      const eventSpy = sinon.spy();
-      button.addEventListener('files-selected', eventSpy);
-
-      fileInput.dispatchEvent(new Event('change'));
-
-      const event = eventSpy.firstCall.args[0];
-      expect(event.bubbles).to.be.true;
-      expect(event.composed).to.be.true;
-    });
-  });
-
   describe('manager integration', () => {
     let uploadManager: UploadManager;
 

@@ -61,7 +61,6 @@ import { uploadButtonStyles } from './styles/vaadin-upload-button-base-styles.js
  * @mixes ButtonMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @fires {CustomEvent} files-selected - Fired when files are selected from the picker
  */
 class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -168,15 +167,6 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @private */
   __onFileInputChange(event) {
     const files = event.target.files;
-
-    // Dispatch event for listeners
-    this.dispatchEvent(
-      new CustomEvent('files-selected', {
-        detail: { files: Array.from(files) },
-        bubbles: true,
-        composed: true,
-      }),
-    );
 
     // If we have a manager with addFiles, call it
     if (this.manager && typeof this.manager.addFiles === 'function') {

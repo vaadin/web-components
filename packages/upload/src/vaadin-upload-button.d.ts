@@ -9,36 +9,20 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import type { UploadManager } from './vaadin-upload-manager.js';
 
 /**
- * Fired when files are selected from the picker.
- */
-export type UploadButtonFilesSelectedEvent = CustomEvent<{ files: File[] }>;
-
-export interface UploadButtonCustomEventMap {
-  'files-selected': UploadButtonFilesSelectedEvent;
-}
-
-export interface UploadButtonEventMap extends HTMLElementEventMap, UploadButtonCustomEventMap {}
-
-/**
  * `<vaadin-upload-button>` is a button component for file uploads.
- * When clicked, it opens a file picker dialog and dispatches selected
- * files via an event or calls addFiles on a linked UploadManager.
+ * When clicked, it opens a file picker dialog and calls addFiles
+ * on a linked UploadManager.
  *
  * ```html
  * <vaadin-upload-button>Upload Files</vaadin-upload-button>
  * ```
  *
- * The button can be linked to an UploadManager by setting the
- * `manager` property directly:
+ * The button must be linked to an UploadManager by setting the
+ * `manager` property:
  *
  * ```javascript
  * const button = document.querySelector('vaadin-upload-button');
  * button.manager = uploadManager;
- *
- * // Or listen to the files-selected event
- * button.addEventListener('files-selected', (e) => {
- *   uploadManager.addFiles(e.detail.files);
- * });
  * ```
  *
  * ### Styling
@@ -80,18 +64,6 @@ declare class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(HTMLEl
    * Opens the file picker dialog.
    */
   openFilePicker(): void;
-
-  addEventListener<K extends keyof UploadButtonEventMap>(
-    type: K,
-    listener: (this: UploadButton, ev: UploadButtonEventMap[K]) => void,
-    options?: AddEventListenerOptions | boolean,
-  ): void;
-
-  removeEventListener<K extends keyof UploadButtonEventMap>(
-    type: K,
-    listener: (this: UploadButton, ev: UploadButtonEventMap[K]) => void,
-    options?: EventListenerOptions | boolean,
-  ): void;
 }
 
 declare global {
