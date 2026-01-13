@@ -32,15 +32,6 @@ export const SliderMixin = (superClass) =>
           type: Number,
         },
 
-        /**
-         * The value of the slider.
-         */
-        value: {
-          type: String,
-          notify: true,
-          sync: true,
-        },
-
         /** @private */
         __value: {
           type: Number,
@@ -69,8 +60,8 @@ export const SliderMixin = (superClass) =>
       this.__lastCommittedValue = this.value;
       const increment = amount || this.step || 1;
       const newValue = this.__value[this.__thumbIndex] + increment;
-      this.__updateValue(newValue);
-      this.__commitValue();
+      this._updateValue(newValue);
+      this._commitValue();
       this.__detectAndDispatchChange();
     }
 
@@ -82,29 +73,17 @@ export const SliderMixin = (superClass) =>
       this.__lastCommittedValue = this.value;
       const decrement = amount || this.step || 1;
       const newValue = this.__value[this.__thumbIndex] - decrement;
-      this.__updateValue(newValue);
-      this.__commitValue();
+      this._updateValue(newValue);
+      this._commitValue();
       this.__detectAndDispatchChange();
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('value') || props.has('min') || props.has('max')) {
-        const values = (this.value || '').split(',');
-        values.forEach((value, idx) => {
-          this.__updateValue(value, idx);
-        });
-      }
     }
 
     /**
      * @param {number} value
      * @param {number} index
-     * @private
+     * @protected
      */
-    __updateValue(value, index = this.__thumbIndex) {
+    _updateValue(value, index = this.__thumbIndex) {
       const { min, max } = this._getConstraints();
       const step = this.step || 1;
 
@@ -124,9 +103,9 @@ export const SliderMixin = (superClass) =>
       this.__value = valueCopy;
     }
 
-    /** @private */
-    __commitValue() {
-      this.value = this.__value.join(',');
+    /** @protected */
+    _commitValue() {
+      // To be implemented
     }
 
     /**
@@ -176,8 +155,8 @@ export const SliderMixin = (superClass) =>
     __applyValue(event) {
       const percent = this._getEventPercent(event);
       const newValue = this.__getValueFromPercent(percent);
-      this.__updateValue(newValue);
-      this.__commitValue();
+      this._updateValue(newValue);
+      this._commitValue();
     }
 
     /**

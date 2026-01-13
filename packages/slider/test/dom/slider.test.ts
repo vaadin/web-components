@@ -20,7 +20,7 @@ describe('vaadin-slider', () => {
     });
 
     it('value', async () => {
-      slider.value = '50';
+      slider.value = 50;
       await expect(slider).shadowDom.to.equalSnapshot();
     });
   });

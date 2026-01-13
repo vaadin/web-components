@@ -20,7 +20,7 @@ describe('vaadin-range-slider', () => {
     });
 
     it('value', async () => {
-      slider.value = '10,20';
+      slider.value = [10, 20];
       await expect(slider).shadowDom.to.equalSnapshot();
     });
   });

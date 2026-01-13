@@ -15,7 +15,12 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * <vaadin-range-slider min="0" max="100" step="1"></vaadin-range-slider>
  * ```
  */
-declare class RangeSlider extends SliderMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
+declare class RangeSlider extends SliderMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+  /**
+   * The value of the slider.
+   */
+  value: number[];
+}
 
 declare global {
   interface HTMLElementTagNameMap {

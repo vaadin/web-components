@@ -36,6 +36,20 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
     return sliderStyles;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The value of the slider.
+       */
+      value: {
+        type: Array,
+        value: () => [],
+        notify: true,
+        sync: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     const { min, max } = this._getConstraints();
@@ -76,6 +90,18 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
     `;
   }
 
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('value') || props.has('min') || props.has('max')) {
+      const value = Array.isArray(this.value) ? this.value : [];
+      value.forEach((value, idx) => {
+        this._updateValue(value, idx);
+      });
+    }
+  }
+
   /**
    * @param {PointerEvent} event
    * @protected
@@ -92,6 +118,14 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
       const thumbs = this.shadowRoot.querySelectorAll('[part="thumb"]');
       this.__thumbIndex = [...thumbs].indexOf(target);
     }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _commitValue() {
+    this.value = [...this.__value];
   }
 
   /**

@@ -36,6 +36,19 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
     return sliderStyles;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The value of the slider.
+       */
+      value: {
+        type: Number,
+        notify: true,
+        sync: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     const { min, max } = this._getConstraints();
@@ -62,6 +75,23 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
         style="${styleMap({ insetInlineStart: `${percent}%` })}"
       ></div>
     `;
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('value') || props.has('min') || props.has('max')) {
+      this._updateValue(this.value);
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _commitValue() {
+    this.value = this.__value[0];
   }
 }
 
