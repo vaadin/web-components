@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const uploadFileStyles = css`
   :host {
-    align-items: center;
+    align-items: baseline;
     display: grid;
     gap: var(--vaadin-upload-file-gap, var(--vaadin-gap-s));
     grid-template-columns: var(--vaadin-icon-size, 1lh) minmax(0, 1fr) auto;
@@ -32,8 +32,9 @@ export const uploadFileStyles = css`
 
   [part='done-icon']::before,
   [part='warning-icon']::before {
-    content: '';
-    display: inline-block;
+    content: '\\2003' / '';
+    display: inline-flex;
+    align-items: center;
     flex: none;
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
@@ -82,19 +83,25 @@ export const uploadFileStyles = css`
     line-height: var(--vaadin-upload-file-error-line-height, inherit);
   }
 
+  [part='commands'] {
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-xs);
+    height: var(--vaadin-icon-size, 1lh);
+    align-self: center;
+  }
+
   button {
     background: var(--vaadin-upload-file-button-background, transparent);
-    border: var(--vaadin-upload-file-button-border-width, 1px) solid
-      var(--vaadin-upload-file-button-border-color, transparent);
+    border: var(--vaadin-upload-file-button-border-width, 0) solid
+      var(--vaadin-upload-file-button-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-upload-file-button-border-radius, var(--vaadin-radius-m));
     color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
     font: inherit;
-    padding: var(
-      --vaadin-upload-file-button-padding,
-      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
-    );
+    /* Ensure minimum click target (WCAG) */
+    padding: var(--vaadin-upload-file-button-padding, max(0px, (24px - var(--vaadin-icon-size, 1lh)) / 2));
   }
 
   button:focus-visible {
@@ -105,8 +112,9 @@ export const uploadFileStyles = css`
   [part='retry-button']::before,
   [part='remove-button']::before {
     background: currentColor;
-    content: '';
-    display: block;
+    content: '\\2003' / '';
+    display: flex;
+    align-items: center;
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
   }
