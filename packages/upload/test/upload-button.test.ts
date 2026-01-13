@@ -6,6 +6,10 @@ import type { UploadButton } from '../src/vaadin-upload-button.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles } from './helpers.js';
 
+function getFileInput(button: UploadButton): HTMLInputElement {
+  return button.shadowRoot!.querySelector('input[type="file"]')!;
+}
+
 describe('vaadin-upload-button', () => {
   let button: UploadButton;
 
@@ -46,7 +50,7 @@ describe('vaadin-upload-button', () => {
     let fileInput: HTMLInputElement;
 
     beforeEach(() => {
-      fileInput = (button as any).$.fileInput;
+      fileInput = getFileInput(button);
     });
 
     it('should have a hidden file input in shadow DOM', () => {
@@ -77,14 +81,61 @@ describe('vaadin-upload-button', () => {
       expect(fileInput.accept).to.equal('image/*,.pdf');
     });
 
+    it('should clear accept attribute when manager has no accept', () => {
+      // First set a manager with accept
+      const manager = new UploadManager({ target: '/api/upload', accept: 'image/*', noAuto: true });
+      button.manager = manager;
+      button.openFilePicker();
+      expect(fileInput.accept).to.equal('image/*');
+
+      // Change to manager without accept
+      const manager2 = new UploadManager({ target: '/api/upload', noAuto: true });
+      button.manager = manager2;
+      button.openFilePicker();
+      expect(fileInput.accept).to.equal('');
+    });
+
     it('should set capture attribute on file input', () => {
       button.capture = 'environment';
       button.openFilePicker();
       expect(fileInput.capture).to.equal('environment');
     });
 
+    it('should clear capture attribute when unset', () => {
+      button.capture = 'environment';
+      button.openFilePicker();
+      expect(fileInput.capture).to.equal('environment');
+
+      button.capture = '';
+      button.openFilePicker();
+      expect(fileInput.hasAttribute('capture')).to.be.false;
+    });
+
+    it('should reset file input value before opening', () => {
+      const input = getFileInput(button);
+      // Set a value on the file input
+      Object.defineProperty(input, 'value', { writable: true, value: 'some-file.txt' });
+      expect(input.value).to.equal('some-file.txt');
+
+      button.openFilePicker();
+      expect(input.value).to.equal('');
+    });
+
+    it('should click file input when opening picker', () => {
+      const input = getFileInput(button);
+      let clickCalled = false;
+      const originalClick = input.click.bind(input);
+      input.click = () => {
+        clickCalled = true;
+        originalClick();
+      };
+      button.openFilePicker();
+      expect(clickCalled).to.be.true;
+    });
+
     it('should not open file picker when disabled', () => {
-      const clickSpy = sinon.spy((button as any).$.fileInput, 'click');
+      const input = getFileInput(button);
+      const clickSpy = sinon.spy(input, 'click');
       button.disabled = true;
       button.openFilePicker();
       expect(clickSpy.called).to.be.false;

@@ -154,23 +154,14 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   __updateFileInputAttributes() {
     if (this.$.fileInput) {
       // Set accept attribute from manager
-      const accept = this.manager && this.manager.accept;
-      if (accept) {
-        this.$.fileInput.accept = accept;
-      } else {
-        this.$.fileInput.removeAttribute('accept');
-      }
+      this.$.fileInput.accept = this.manager && this.manager.accept;
 
       // Set multiple attribute based on manager's maxFiles
       const maxFiles = this.manager && this.manager.maxFiles != null ? this.manager.maxFiles : Infinity;
       this.$.fileInput.multiple = maxFiles !== 1;
 
       // Set capture attribute
-      if (this.capture) {
-        this.$.fileInput.capture = this.capture;
-      } else {
-        this.$.fileInput.removeAttribute('capture');
-      }
+      this.$.fileInput.capture = this.capture;
     }
   }
 
@@ -205,9 +196,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
       // Sync initial state if manager has maxFilesReached property
-      if (manager.maxFilesReached !== undefined) {
-        this.disabled = manager.maxFilesReached;
-      }
+      this.disabled = !!manager.maxFilesReached;
     }
   }
 
