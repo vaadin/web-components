@@ -16,13 +16,23 @@ snapshots["vaadin-range-slider shadow default"] =
   </div>
 </div>
 <div
+  aria-valuemax="100"
+  aria-valuemin="0"
+  aria-valuenow="0"
   part="thumb"
+  role="slider"
   style="inset-inline-start:0%;"
+  tabindex="0"
 >
 </div>
 <div
+  aria-valuemax="100"
+  aria-valuemin="0"
+  aria-valuenow="0"
   part="thumb"
+  role="slider"
   style="inset-inline-start:0%;"
+  tabindex="0"
 >
 </div>
 `;
@@ -37,13 +47,23 @@ snapshots["vaadin-range-slider shadow value"] =
   </div>
 </div>
 <div
+  aria-valuemax="100"
+  aria-valuemin="0"
+  aria-valuenow="10"
   part="thumb"
+  role="slider"
   style="inset-inline-start: 10%;"
+  tabindex="0"
 >
 </div>
 <div
+  aria-valuemax="100"
+  aria-valuemin="0"
+  aria-valuenow="20"
   part="thumb"
+  role="slider"
   style="inset-inline-start: 20%;"
+  tabindex="0"
 >
 </div>
 `;

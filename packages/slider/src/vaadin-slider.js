@@ -38,7 +38,9 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
   /** @protected */
   render() {
-    const percent = this.__getPercentFromValue(this.__value[0] || 0);
+    const { min, max } = this._getConstraints();
+    const value = this.__value[0] || 0;
+    const percent = this.__getPercentFromValue(value);
 
     return html`
       <div part="track">
@@ -50,7 +52,15 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
           })}"
         ></div>
       </div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
+      <div
+        role="slider"
+        tabindex="0"
+        aria-valuemin="${min}"
+        aria-valuemax="${max}"
+        aria-valuenow="${value}"
+        part="thumb"
+        style="${styleMap({ insetInlineStart: `${percent}%` })}"
+      ></div>
     `;
   }
 }

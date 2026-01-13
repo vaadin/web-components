@@ -38,8 +38,12 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
 
   /** @protected */
   render() {
-    const startPercent = this.__getPercentFromValue(this.__value[0] || 0);
-    const endPercent = this.__getPercentFromValue(this.__value[1] || 0);
+    const { min, max } = this._getConstraints();
+    const startValue = this.__value[0] || 0;
+    const endValue = this.__value[1] || 0;
+
+    const startPercent = this.__getPercentFromValue(startValue);
+    const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
       <div part="track">
@@ -51,8 +55,24 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
           })}"
         ></div>
       </div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${startPercent}%` })}"></div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${endPercent}%` })}"></div>
+      <div
+        role="slider"
+        tabindex="0"
+        aria-valuemin="${min}"
+        aria-valuemax="${max}"
+        aria-valuenow="${startValue}"
+        part="thumb"
+        style="${styleMap({ insetInlineStart: `${startPercent}%` })}"
+      ></div>
+      <div
+        role="slider"
+        tabindex="0"
+        aria-valuemin="${min}"
+        aria-valuemax="${max}"
+        aria-valuenow="${endValue}"
+        part="thumb"
+        style="${styleMap({ insetInlineStart: `${endPercent}%` })}"
+      ></div>
     `;
   }
 
