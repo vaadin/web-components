@@ -10,11 +10,12 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styles.js';
+import { UploadManager } from './vaadin-upload-manager.js';
 
 /**
  * `<vaadin-upload-drop-zone>` is a Web Component that can be used as a drop zone
  * for file uploads. When files are dropped on the drop zone, they are dispatched
- * via an event or added to a linked target.
+ * via an event or added to a linked manager.
  *
  * ```html
  * <vaadin-upload-drop-zone>
@@ -23,15 +24,15 @@ import { uploadDropZoneStyles } from './styles/vaadin-upload-drop-zone-base-styl
  * ```
  *
  * The drop zone can be linked to an UploadManager by setting the
- * `target` property directly:
+ * `manager` property:
  *
  * ```javascript
  * const dropZone = document.querySelector('vaadin-upload-drop-zone');
- * dropZone.target = manager;
+ * dropZone.manager = uploadManager;
  *
  * // Or listen to the files-dropped event
  * dropZone.addEventListener('files-dropped', (e) => {
- *   manager.addFiles(e.detail.files);
+ *   uploadManager.addFiles(e.detail.files);
  * });
  * ```
  *
@@ -82,7 +83,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
        * When set, dropped files will be automatically added to the manager.
        * @type {Object | null}
        */
-      target: {
+      manager: {
         type: Object,
         value: null,
       },
@@ -143,9 +144,9 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       }),
     );
 
-    // If we have a target with addFiles, call it
-    if (this.target && typeof this.target.addFiles === 'function') {
-      this.target.addFiles(files);
+    // If we have a manager, add the files
+    if (this.manager instanceof UploadManager) {
+      this.manager.addFiles(files);
     }
   }
 

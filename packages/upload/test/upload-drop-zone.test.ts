@@ -61,8 +61,8 @@ describe('vaadin-upload-drop-zone', () => {
       expect(dropZone.textContent).to.equal('Drop files here');
     });
 
-    it('should have target property defaulting to null', () => {
-      expect(dropZone.target).to.be.null;
+    it('should have manager property defaulting to null', () => {
+      expect(dropZone.manager).to.be.null;
     });
 
     it('should not have dragover attribute by default', () => {
@@ -161,19 +161,19 @@ describe('vaadin-upload-drop-zone', () => {
     });
   });
 
-  describe('target integration', () => {
-    let manager: UploadManager;
+  describe('manager integration', () => {
+    let uploadManager: UploadManager;
 
     beforeEach(() => {
-      manager = new UploadManager({
+      uploadManager = new UploadManager({
         target: '/api/upload',
         noAuto: true,
       });
     });
 
-    it('should call addFiles on target when files are dropped', async () => {
-      dropZone.target = manager;
-      const addFilesSpy = sinon.spy(manager, 'addFiles');
+    it('should call addFiles on manager when files are dropped', async () => {
+      dropZone.manager = uploadManager;
+      const addFilesSpy = sinon.spy(uploadManager, 'addFiles');
 
       const files = createFiles(2, 100, 'text/plain');
       dropZone.dispatchEvent(createDropEvent(files));
@@ -183,19 +183,19 @@ describe('vaadin-upload-drop-zone', () => {
       expect(addFilesSpy.firstCall.args[0]).to.have.lengthOf(2);
     });
 
-    it('should not call addFiles when target is null', async () => {
-      dropZone.target = null;
+    it('should not call addFiles when manager is null', async () => {
+      dropZone.manager = null;
 
       const files = createFiles(2, 100, 'text/plain');
       dropZone.dispatchEvent(createDropEvent(files));
       await nextFrame();
 
       // Should not throw
-      expect(manager.files).to.have.lengthOf(0);
+      expect(uploadManager.files).to.have.lengthOf(0);
     });
 
-    it('should still dispatch event even when target is set', async () => {
-      dropZone.target = manager;
+    it('should still dispatch event even when manager is set', async () => {
+      dropZone.manager = uploadManager;
       const eventSpy = sinon.spy();
       dropZone.addEventListener('files-dropped', eventSpy);
 

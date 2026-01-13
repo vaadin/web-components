@@ -21,7 +21,7 @@ export interface UploadDropZoneEventMap extends HTMLElementEventMap, UploadDropZ
 /**
  * `<vaadin-upload-drop-zone>` is a Web Component that can be used as a drop zone
  * for file uploads. When files are dropped on the drop zone, they are dispatched
- * via an event or added to a linked target.
+ * via an event or added to a linked manager.
  *
  * ```html
  * <vaadin-upload-drop-zone>
@@ -30,15 +30,15 @@ export interface UploadDropZoneEventMap extends HTMLElementEventMap, UploadDropZ
  * ```
  *
  * The drop zone can be linked to an UploadManager by setting the
- * `target` property directly:
+ * `manager` property:
  *
  * ```javascript
  * const dropZone = document.querySelector('vaadin-upload-drop-zone');
- * dropZone.target = manager;
+ * dropZone.manager = uploadManager;
  *
  * // Or listen to the files-dropped event
  * dropZone.addEventListener('files-dropped', (e) => {
- *   manager.addFiles(e.detail.files);
+ *   uploadManager.addFiles(e.detail.files);
  * });
  * ```
  *
@@ -68,7 +68,7 @@ declare class UploadDropZone extends HTMLElement {
    * Reference to an UploadManager.
    * When set, dropped files will be automatically added to the manager.
    */
-  target: UploadManager | null;
+  manager: UploadManager | null;
 
   addEventListener<K extends keyof UploadDropZoneEventMap>(
     type: K,
