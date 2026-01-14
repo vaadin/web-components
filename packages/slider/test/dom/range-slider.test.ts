@@ -10,11 +10,25 @@ describe('vaadin-range-slider', () => {
     slider = fixtureSync('<vaadin-range-slider></vaadin-range-slider>');
   });
 
-  it('host', async () => {
-    await expect(slider).dom.to.equalSnapshot();
+  describe('host', async () => {
+    it('default', async () => {
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('value', async () => {
+      slider.value = [10, 20];
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
   });
 
-  it('shadow', async () => {
-    await expect(slider).shadowDom.to.equalSnapshot();
+  describe('shadow', async () => {
+    it('default', async () => {
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
+    it('value', async () => {
+      slider.value = [10, 20];
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
   });
 });
