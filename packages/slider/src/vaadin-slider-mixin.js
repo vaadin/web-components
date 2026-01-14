@@ -99,4 +99,16 @@ export const SliderMixin = (superClass) =>
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
+
+    /** @private */
+    __onInput(event) {
+      this.__updateValue(event.target.value);
+      this.__commitValue();
+      this.__detectAndDispatchChange();
+    }
+
+    /** @private */
+    __onChange(event) {
+      event.stopPropagation();
+    }
   };
