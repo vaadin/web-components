@@ -37,13 +37,14 @@ import type { UploadManager } from './vaadin-upload-manager.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------|-------------
- * `active`       | Set when the button is pressed down, either with mouse, touch or the keyboard
- * `disabled`     | Set when the button is disabled
- * `focus-ring`   | Set when the button is focused using the keyboard
- * `focused`      | Set when the button is focused
- * `has-tooltip`  | Set when the button has a slotted tooltip
+ * Attribute          | Description
+ * -------------------|-------------
+ * `active`           | Set when the button is pressed down, either with mouse, touch or the keyboard
+ * `disabled`         | Set when the button is disabled
+ * `focus-ring`       | Set when the button is focused using the keyboard
+ * `focused`          | Set when the button is focused
+ * `has-tooltip`      | Set when the button has a slotted tooltip
+ * `max-files-reached`| Set when the manager has reached maxFiles
  *
  * The following custom CSS properties are available for styling:
  *
@@ -77,6 +78,12 @@ declare class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(HTMLEl
    * Capture attribute for mobile file input.
    */
   capture: string | undefined;
+
+  /**
+   * True when max files has been reached on the manager.
+   * The button will not open the file picker when this is true.
+   */
+  maxFilesReached: boolean;
 
   /**
    * Opens the file picker dialog.

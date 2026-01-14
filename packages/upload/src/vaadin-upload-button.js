@@ -106,12 +106,49 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       capture: {
         type: String,
       },
+
+      /**
+       * True when max files has been reached on the manager.
+       * @type {boolean}
+       */
+      maxFilesReached: {
+        type: Boolean,
+        value: false,
+        reflect: true,
+        attribute: 'max-files-reached',
+        observer: '__maxFilesReachedChanged',
+      },
     };
   }
 
   constructor() {
     super();
     this.__onMaxFilesReachedChanged = this.__onMaxFilesReachedChanged.bind(this);
+    this.__explicitDisabled = false;
+  }
+
+  /**
+   * Whether the button is disabled.
+   * Returns true if either explicitly disabled or maxFilesReached is true.
+   * @type {boolean}
+   * @override
+   */
+  get disabled() {
+    return super.disabled;
+  }
+
+  set disabled(value) {
+    this.__explicitDisabled = Boolean(value);
+    // Set super.disabled to effective value - this triggers Lit's property system correctly
+    super.disabled = this.__explicitDisabled || this.maxFilesReached;
+  }
+
+  /** @private */
+  __syncEffectiveDisabled() {
+    const effectiveDisabled = this.__explicitDisabled || this.maxFilesReached;
+    if (super.disabled !== effectiveDisabled) {
+      super.disabled = effectiveDisabled;
+    }
   }
 
   /** @protected */
@@ -165,8 +202,8 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     if (this.manager instanceof UploadManager) {
       this.manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
-      // Sync disabled state with current manager state
-      this.disabled = !!this.manager.maxFilesReached;
+      // Sync maxFilesReached state with current manager state
+      this.maxFilesReached = !!this.manager.maxFilesReached;
     }
   }
 
@@ -231,13 +268,21 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
 
       // Sync initial state if manager has maxFilesReached property
-      this.disabled = !!manager.maxFilesReached;
+      this.maxFilesReached = !!manager.maxFilesReached;
+    } else {
+      this.maxFilesReached = false;
     }
   }
 
   /** @private */
   __onMaxFilesReachedChanged(event) {
-    this.disabled = event.detail.value;
+    this.maxFilesReached = event.detail.value;
+  }
+
+  /** @private */
+  __maxFilesReachedChanged() {
+    // Sync the effective disabled state when maxFilesReached changes
+    this.__syncEffectiveDisabled();
   }
 
   /** @override */

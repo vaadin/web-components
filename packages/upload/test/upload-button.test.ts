@@ -224,36 +224,36 @@ describe('vaadin-upload-button', () => {
 
       expect(uploadManager.maxFilesReached).to.be.true;
 
-      // Set manager - button should sync disabled state
+      // Set manager - button should sync maxFilesReached state
       button.manager = uploadManager;
       await nextFrame();
-      expect(button.disabled).to.be.true;
+      expect(button.maxFilesReached).to.be.true;
     });
 
-    it('should disable when max files reached on manager', async () => {
+    it('should set maxFilesReached when max files reached on manager', async () => {
       uploadManager.maxFiles = 2;
       button.manager = uploadManager;
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
 
       // Add files to reach max
       uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
 
-      expect(button.disabled).to.be.true;
+      expect(button.maxFilesReached).to.be.true;
     });
 
-    it('should re-enable when files are removed from manager', async () => {
+    it('should clear maxFilesReached when files are removed from manager', async () => {
       uploadManager.maxFiles = 1;
       button.manager = uploadManager;
 
       const file = createFile(100, 'text/plain');
       uploadManager.addFiles([file]);
       await nextFrame();
-      expect(button.disabled).to.be.true;
+      expect(button.maxFilesReached).to.be.true;
 
       uploadManager.removeFile(uploadManager.files[0]);
       await nextFrame();
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
     });
 
     it('should remove listener when manager changes', async () => {
@@ -272,12 +272,12 @@ describe('vaadin-upload-button', () => {
       // Add files to first manager - should not affect button
       uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
 
-      // Add file to second manager - should disable button
+      // Add file to second manager - should set maxFilesReached on button
       uploadManager2.addFiles([createFile(100, 'text/plain')]);
       await nextFrame();
-      expect(button.disabled).to.be.true;
+      expect(button.maxFilesReached).to.be.true;
     });
 
     it('should remove listener when manager is set to null', async () => {
@@ -290,7 +290,7 @@ describe('vaadin-upload-button', () => {
       // Add files - should not affect button
       uploadManager.addFiles([createFile(100, 'text/plain')]);
       await nextFrame();
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
     });
 
     it('should remove listener when disconnected from DOM', async () => {
@@ -302,7 +302,7 @@ describe('vaadin-upload-button', () => {
 
       button.manager = uploadManager;
       await nextFrame(); // Wait for property observer to run
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
 
       // Verify button is in DOM
       expect(button.isConnected).to.be.true;
@@ -326,8 +326,8 @@ describe('vaadin-upload-button', () => {
       // Verify maxFilesReached is true on manager
       expect(uploadManager.maxFilesReached).to.be.true;
 
-      // Button should remain not disabled since listener was removed on disconnect
-      expect(button.disabled).to.be.false;
+      // Button should remain not maxFilesReached since listener was removed on disconnect
+      expect(button.maxFilesReached).to.be.false;
     });
 
     it('should re-attach listener when reconnected to DOM', async () => {
@@ -341,17 +341,138 @@ describe('vaadin-upload-button', () => {
       parent.appendChild(button);
       await nextFrame();
 
-      // Add files to reach max - should disable button since it's reconnected
+      // Add files to reach max - should set maxFilesReached on button since it's reconnected
       uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
-      expect(button.disabled).to.be.true;
+      expect(button.maxFilesReached).to.be.true;
     });
 
-    it('should sync disabled state when reconnected after max files reached', async () => {
+    describe('disabled state when maxFilesReached', () => {
+      it('should return disabled=true when maxFilesReached is true', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+        expect(button.disabled).to.be.false;
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.maxFilesReached).to.be.true;
+        expect(button.disabled).to.be.true;
+      });
+
+      it('should have disabled attribute when maxFilesReached is true', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+        expect(button.hasAttribute('disabled')).to.be.false;
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.hasAttribute('disabled')).to.be.true;
+      });
+
+      it('should return disabled=false when maxFilesReached becomes false', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        uploadManager.removeFile(uploadManager.files[0]);
+        await nextFrame();
+        expect(button.maxFilesReached).to.be.false;
+        expect(button.disabled).to.be.false;
+      });
+
+      it('should preserve explicit disabled=true when maxFilesReached becomes false', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+        button.disabled = true;
+        await nextFrame();
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Remove file - maxFilesReached becomes false, but disabled should stay true
+        uploadManager.removeFile(uploadManager.files[0]);
+        await nextFrame();
+        expect(button.maxFilesReached).to.be.false;
+        expect(button.disabled).to.be.true;
+      });
+
+      it('should allow setting disabled=false while maxFilesReached is true', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+        button.disabled = true;
+        await nextFrame();
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Setting disabled=false should still return true due to maxFilesReached
+        button.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // But once maxFilesReached becomes false, disabled should be false
+        uploadManager.removeFile(uploadManager.files[0]);
+        await nextFrame();
+        expect(button.disabled).to.be.false;
+      });
+
+      it('should have aria-disabled attribute when maxFilesReached is true', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.getAttribute('aria-disabled')).to.equal('true');
+      });
+
+      it('should not open file picker when disabled due to maxFilesReached', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+
+        const input = getFileInput(button);
+        const spy = sinon.spy();
+        input.addEventListener('click', spy);
+        button.click();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not be focusable when disabled due to maxFilesReached', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+        expect(button.getAttribute('tabindex')).to.equal('0');
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should restore tabindex when maxFilesReached becomes false', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('-1');
+
+        uploadManager.removeFile(uploadManager.files[0]);
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('0');
+      });
+    });
+
+    it('should sync maxFilesReached state when reconnected after max files reached', async () => {
       uploadManager.maxFiles = 2;
       button.manager = uploadManager;
       await nextFrame();
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
 
       // Remove button from DOM
       const parent = button.parentElement!;
@@ -361,22 +482,22 @@ describe('vaadin-upload-button', () => {
       uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       expect(uploadManager.maxFilesReached).to.be.true;
 
-      // Button should still not be disabled (listener was removed)
-      expect(button.disabled).to.be.false;
+      // Button should still not have maxFilesReached (listener was removed)
+      expect(button.maxFilesReached).to.be.false;
 
       // Reconnect button
       parent.appendChild(button);
       await nextFrame();
 
-      // Button should now be disabled (synced with manager state on reconnect)
-      expect(button.disabled).to.be.true;
+      // Button should now have maxFilesReached (synced with manager state on reconnect)
+      expect(button.maxFilesReached).to.be.true;
     });
 
-    it('should not async disabled state when manager changed while disconnected', async () => {
+    it('should not sync maxFilesReached state when manager changed while disconnected', async () => {
       uploadManager.maxFiles = 2;
 
       await nextFrame();
-      expect(button.disabled).to.be.false;
+      expect(button.maxFilesReached).to.be.false;
 
       // Remove button from DOM
       button.remove();
@@ -388,8 +509,8 @@ describe('vaadin-upload-button', () => {
       expect(uploadManager.maxFilesReached).to.be.true;
 
       await nextFrame();
-      // Button should still not be disabled (listener was removed)
-      expect(button.disabled).to.be.false;
+      // Button should still not have maxFilesReached (listener was removed)
+      expect(button.maxFilesReached).to.be.false;
     });
   });
 });
