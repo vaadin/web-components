@@ -170,7 +170,7 @@ class RangeSlider extends SliderMixin(
    */
   focus(options) {
     if (this._inputElements) {
-      this._inputElements[this.__thumbIndex].focus();
+      this._inputElements[0].focus();
     }
 
     super.focus(options);
