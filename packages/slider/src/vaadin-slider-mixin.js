@@ -31,13 +31,6 @@ export const SliderMixin = (superClass) =>
         step: {
           type: Number,
         },
-
-        /**
-         * The value of the slider.
-         */
-        value: {
-          type: String,
-        },
       };
     }
   };

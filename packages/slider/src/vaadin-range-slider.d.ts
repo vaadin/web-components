@@ -8,24 +8,24 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { SliderMixin } from './vaadin-slider-mixin.js';
 
 /**
- * `<vaadin-slider>` is a web component that represents a range slider
- * for selecting numerical values within a defined range.
+ * `<vaadin-range-slider>` is a web component that represents a range slider
+ * for selecting a subset of the given range.
  *
  * ```html
- * <vaadin-slider min="0" max="100" step="1"></vaadin-slider>
+ * <vaadin-range-slider min="0" max="100" step="1"></vaadin-range-slider>
  * ```
  */
-declare class Slider extends SliderMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class RangeSlider extends SliderMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
    * The value of the slider.
    */
-  value: number;
+  value: number[];
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-slider': Slider;
+    'vaadin-range-slider': RangeSlider;
   }
 }
 
-export { Slider };
+export { RangeSlider };

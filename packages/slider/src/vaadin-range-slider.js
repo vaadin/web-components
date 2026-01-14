@@ -13,11 +13,11 @@ import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
 import { SliderMixin } from './vaadin-slider-mixin.js';
 
 /**
- * `<vaadin-slider>` is a web component that represents a range slider
- * for selecting numerical values within a defined range.
+ * `<vaadin-range-slider>` is a web component that represents a range slider
+ * for selecting a subset of the given range.
  *
  * ```html
- * <vaadin-slider min="0" max="100" step="1"></vaadin-slider>
+ * <vaadin-range-slider min="0" max="100" step="1"></vaadin-range-slider>
  * ```
  *
  * @customElement
@@ -26,9 +26,9 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * @mixes SliderMixin
  * @mixes ThemableMixin
  */
-class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
-    return 'vaadin-slider';
+    return 'vaadin-range-slider';
   }
 
   static get styles() {
@@ -41,7 +41,8 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
        * The value of the slider.
        */
       value: {
-        type: Number,
+        type: Array,
+        value: () => [],
         notify: true,
         sync: true,
       },
@@ -54,11 +55,12 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
       <div part="track">
         <div part="track-fill"></div>
       </div>
-      <div part="thumb"></div>
+      <div part="thumb thumb-start"></div>
+      <div part="thumb thumb-end"></div>
     `;
   }
 }
 
-defineCustomElement(Slider);
+defineCustomElement(RangeSlider);
 
-export { Slider };
+export { RangeSlider };

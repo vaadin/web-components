@@ -9,8 +9,10 @@ snapshots["vaadin-slider host"] =
 
 snapshots["vaadin-slider shadow"] = 
 `<div part="track">
-  <div part="thumb">
+  <div part="track-fill">
   </div>
+</div>
+<div part="thumb">
 </div>
 `;
 /* end snapshot vaadin-slider shadow */
