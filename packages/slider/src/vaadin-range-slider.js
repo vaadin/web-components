@@ -187,14 +187,8 @@ class RangeSlider extends SliderMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    if (focused) {
-      const thumbIndex = this._inputElements.findIndex(isElementFocused);
-      this.toggleAttribute('start-focused', thumbIndex === 0);
-      this.toggleAttribute('end-focused', thumbIndex === 1);
-    } else {
-      this.removeAttribute('start-focused');
-      this.removeAttribute('end-focused');
-    }
+    this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
+    this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
   }
 
   /**
