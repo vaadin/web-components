@@ -9,15 +9,15 @@ import { css } from 'lit';
 export const uploadDropZoneStyles = css`
   :host {
     display: block;
+    position: relative;
   }
 
-  :host([dragover]) {
-    --vaadin-upload-background: var(--vaadin-background-container);
-    --vaadin-upload-border-color: var(--vaadin-text-color);
-    background: var(--vaadin-upload-background, transparent);
-    border: var(--vaadin-upload-border-width, 1px) dashed
-      var(--vaadin-upload-border-color, var(--vaadin-border-color-secondary));
-    border-radius: var(--vaadin-upload-border-radius, var(--vaadin-radius-m));
+  :host([dragover])::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--vaadin-background-container);
+    opacity: 0.7;
   }
 
   :host([hidden]) {
