@@ -104,6 +104,7 @@ export const TabSheetMixin = (superClass) =>
          */
         __tabs: {
           type: Object,
+          value: () => [],
         },
 
         /**
@@ -111,6 +112,7 @@ export const TabSheetMixin = (superClass) =>
          */
         __panels: {
           type: Array,
+          value: () => [],
         },
       };
     }
@@ -189,7 +191,7 @@ export const TabSheetMixin = (superClass) =>
      * @private
      */
     __itemsOrPanelsChanged(items, panels) {
-      if (!items || !panels) {
+      if (!items) {
         return;
       }
       items.forEach((tabItem) => {
@@ -202,7 +204,7 @@ export const TabSheetMixin = (superClass) =>
      * @private
      */
     __selectedTabItemChanged(selected, items, panels) {
-      if (!items || !panels || selected === undefined) {
+      if (!items || selected === undefined) {
         return;
       }
       this.__togglePanels(items[selected], panels);
