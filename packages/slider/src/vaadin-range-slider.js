@@ -43,7 +43,7 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
        */
       value: {
         type: Array,
-        value: () => [],
+        value: () => [0, 100],
         notify: true,
         sync: true,
       },
@@ -75,7 +75,7 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
   constructor() {
     super();
 
-    this.__value = [0, 0];
+    this.__value = [...this.value];
   }
 
   /** @protected */

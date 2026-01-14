@@ -43,6 +43,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
        */
       value: {
         type: Number,
+        value: 0,
         notify: true,
         sync: true,
       },
@@ -71,7 +72,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   constructor() {
     super();
 
-    this.__value = [0];
+    this.__value = [this.value];
   }
 
   /** @protected */

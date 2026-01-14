@@ -29,7 +29,7 @@ snapshots["vaadin-range-slider shadow default"] =
 `<div part="track">
   <div
     part="track-fill"
-    style="inset-inline-start:0%;inset-inline-end:100%;"
+    style="inset-inline-start:0%;inset-inline-end:0%;"
   >
   </div>
 </div>
@@ -40,7 +40,7 @@ snapshots["vaadin-range-slider shadow default"] =
 </div>
 <div
   part="thumb thumb-end"
-  style="inset-inline-start:0%;"
+  style="inset-inline-start:100%;"
 >
 </div>
 `;
