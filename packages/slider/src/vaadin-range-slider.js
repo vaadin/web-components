@@ -54,8 +54,8 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
   render() {
     const [startValue, endValue] = this.__value;
 
-    const startPercent = this._getPercentFromValue(startValue);
-    const endPercent = this._getPercentFromValue(endValue);
+    const startPercent = this.__getPercentFromValue(startValue);
+    const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
       <div part="track">
@@ -85,7 +85,7 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
     if (props.has('value') || props.has('min') || props.has('max')) {
       const value = Array.isArray(this.value) ? this.value : [];
       value.forEach((value, idx) => {
-        this._updateValue(value, idx);
+        this.__updateValue(value, idx);
       });
     }
   }

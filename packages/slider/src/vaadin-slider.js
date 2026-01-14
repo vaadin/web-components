@@ -53,7 +53,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   /** @protected */
   render() {
     const [value] = this.__value;
-    const percent = this._getPercentFromValue(value);
+    const percent = this.__getPercentFromValue(value);
 
     return html`
       <div part="track">
@@ -80,7 +80,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
     super.updated(props);
 
     if (props.has('value') || props.has('min') || props.has('max')) {
-      this._updateValue(this.value);
+      this.__updateValue(this.value);
     }
   }
 }

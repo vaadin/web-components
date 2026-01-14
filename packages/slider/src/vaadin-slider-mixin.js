@@ -51,10 +51,10 @@ export const SliderMixin = (superClass) =>
     /**
      * @param {number} value
      * @param {number} index
-     * @protected
+     * @private
      */
-    _updateValue(value, index = this.__thumbIndex) {
-      const { min, max } = this._getConstraints();
+    __updateValue(value, index = this.__thumbIndex) {
+      const { min, max } = this.__getConstraints();
       const step = this.step || 1;
 
       const minValue = this.__value[index - 1] || min;
@@ -75,9 +75,9 @@ export const SliderMixin = (superClass) =>
 
     /**
      * @return {{ min: number, max: number}}
-     * @protected
+     * @private
      */
-    _getConstraints() {
+    __getConstraints() {
       return {
         min: this.min || 0,
         max: this.max || 100,
@@ -89,8 +89,8 @@ export const SliderMixin = (superClass) =>
      * @return {number}
      * @protected
      */
-    _getPercentFromValue(value) {
-      const { min, max } = this._getConstraints();
+    __getPercentFromValue(value) {
+      const { min, max } = this.__getConstraints();
       return (100 * (value - min)) / (max - min);
     }
   };
