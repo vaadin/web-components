@@ -35,6 +35,7 @@ import type { UploadManager } from './vaadin-upload-manager.js';
  * Attribute   | Description
  * ------------|--------------------------------------------
  * `dragover`  | Set when files are being dragged over the element
+ * `disabled`  | Set when the manager has reached maxFiles
  *
  * The following CSS custom properties are used for the dragover state:
  *
@@ -53,6 +54,11 @@ declare class UploadDropZone extends HTMLElement {
    * When set, dropped files will be automatically added to the manager.
    */
   manager: UploadManager | null;
+
+  /**
+   * Whether the drop zone is disabled (e.g., when maxFiles is reached).
+   */
+  disabled: boolean;
 }
 
 interface UploadDropZone extends ElementMixinClass, ThemableMixinClass {}
