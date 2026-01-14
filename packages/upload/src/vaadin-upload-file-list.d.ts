@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { UploadFile } from './vaadin-upload-mixin.js';
+import type { UploadFile } from './vaadin-upload-manager.js';
 
 export interface UploadFileListI18n {
   file?: {
@@ -36,7 +36,10 @@ export interface UploadFileListI18n {
   };
   units?: {
     size?: string[];
+    sizeBase?: number;
   };
+  formatSize?(bytes: number): string;
+  formatTime?(seconds: number, split: number[]): string;
 }
 
 export interface UploadFileListManager {

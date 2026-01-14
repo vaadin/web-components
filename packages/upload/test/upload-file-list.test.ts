@@ -3,12 +3,36 @@ import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload-file-list.js';
 import type { UploadFileList } from '../src/vaadin-upload-file-list.js';
+import type { UploadFile } from '../src/vaadin-upload-manager.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
-import type { UploadFile } from '../src/vaadin-upload-mixin.js';
 import { createFile, createFiles } from './helpers.js';
 
 describe('vaadin-upload-file-list', () => {
   let fileList: UploadFileList;
+
+  function getUploadFile() {
+    return fileList.querySelector('vaadin-upload-file')!;
+  }
+
+  function getStatusText() {
+    return getUploadFile().shadowRoot!.querySelector('[part="status"]')!.textContent;
+  }
+
+  function getErrorText() {
+    return getUploadFile().shadowRoot!.querySelector('[part="error"]')!.textContent;
+  }
+
+  function getRetryButtonLabel() {
+    return getUploadFile().shadowRoot!.querySelector('[part="retry-button"]')!.getAttribute('aria-label');
+  }
+
+  function getStartButtonLabel() {
+    return getUploadFile().shadowRoot!.querySelector('[part="start-button"]')!.getAttribute('aria-label');
+  }
+
+  function getRemoveButtonLabel() {
+    return getUploadFile().shadowRoot!.querySelector('[part="remove-button"]')!.getAttribute('aria-label');
+  }
 
   beforeEach(async () => {
     fileList = fixtureSync(`<vaadin-upload-file-list></vaadin-upload-file-list>`);
@@ -79,46 +103,26 @@ describe('vaadin-upload-file-list', () => {
     });
   });
 
-  describe('i18n formatting', () => {
-    it('should format file size', async () => {
-      const file = createFile(2000, 'text/plain') as UploadFile;
-      file.total = 2000;
-      fileList.items = [file];
-      await nextFrame();
-
-      // 2000 bytes = 2 kB (base 1000, no decimal places for kB)
-      expect(file.totalStr).to.equal('2 kB');
-    });
-
-    it('should format loaded size', async () => {
-      const file = createFile(2000, 'text/plain') as UploadFile;
-      file.total = 2000;
-      file.loaded = 1000;
-      fileList.items = [file];
-      await nextFrame();
-
-      expect(file.loadedStr).to.equal('1 kB');
-    });
-
-    it('should set status to "Queued" when held', async () => {
+  describe('i18n rendering', () => {
+    it('should render "Queued" status when file is held', async () => {
       const file = createFile(100, 'text/plain') as UploadFile;
       file.held = true;
       fileList.items = [file];
       await nextFrame();
 
-      expect(file.status).to.equal('Queued');
+      expect(getStatusText()).to.equal('Queued');
     });
 
-    it('should set status to "Stalled" when stalled', async () => {
+    it('should render "Stalled" status when file is stalled', async () => {
       const file = createFile(100, 'text/plain') as UploadFile;
       file.stalled = true;
       fileList.items = [file];
       await nextFrame();
 
-      expect(file.status).to.equal('Stalled');
+      expect(getStatusText()).to.equal('Stalled');
     });
 
-    it('should set status to "Connecting..." when indeterminate and uploading', async () => {
+    it('should render "Connecting..." status when indeterminate and uploading', async () => {
       const file = createFile(100, 'text/plain') as UploadFile;
       file.uploading = true;
       file.indeterminate = true;
@@ -126,10 +130,10 @@ describe('vaadin-upload-file-list', () => {
       fileList.items = [file];
       await nextFrame();
 
-      expect(file.status).to.equal('Connecting...');
+      expect(getStatusText()).to.equal('Connecting...');
     });
 
-    it('should set status to "Processing File..." when progress is 100 and indeterminate', async () => {
+    it('should render "Processing File..." status when progress is 100 and indeterminate', async () => {
       const file = createFile(100, 'text/plain') as UploadFile;
       file.uploading = true;
       file.indeterminate = true;
@@ -137,30 +141,129 @@ describe('vaadin-upload-file-list', () => {
       fileList.items = [file];
       await nextFrame();
 
-      expect(file.status).to.equal('Processing File...');
+      expect(getStatusText()).to.equal('Processing File...');
     });
 
-    it('should translate error codes using i18n', async () => {
+    it('should render translated error message for error codes', async () => {
       const file = createFile(100, 'text/plain') as UploadFile;
       file.errorKey = 'serverUnavailable';
       fileList.items = [file];
       await nextFrame();
 
-      expect(file.error).to.equal('Upload failed, please try again later');
+      expect(getErrorText()).to.equal('Upload failed, please try again later');
     });
 
-    it('should support custom i18n formatSize function', async () => {
-      fileList.i18n = {
-        ...fileList.i18n,
-        formatSize: (bytes: number) => `${bytes} bytes`,
-      };
-
-      const file = createFile(1536, 'text/plain') as UploadFile;
-      file.total = 1536;
+    it('should render progress status with formatted file size', async () => {
+      const file = createFile(2000000, 'text/plain') as UploadFile;
+      file.total = 2000000;
+      file.loaded = 500000;
+      file.progress = 25;
+      file.uploading = true;
+      file.remaining = 30;
       fileList.items = [file];
       await nextFrame();
 
-      expect(file.totalStr).to.equal('1536 bytes');
+      // Status should include formatted size (2 MB) and progress
+      expect(getStatusText()).to.equal('2 MB: 25% (remaining time: 00:00:30)');
+    });
+
+    it('should render "unknown remaining time" when loaded is 0', async () => {
+      const file = createFile(2000000, 'text/plain') as UploadFile;
+      file.total = 2000000;
+      file.loaded = 0;
+      file.progress = 0;
+      file.uploading = true;
+      fileList.items = [file];
+      await nextFrame();
+
+      expect(getStatusText()).to.include('unknown remaining time');
+    });
+
+    it('should render i18n button labels', async () => {
+      const file = createFile(100, 'text/plain') as UploadFile;
+      fileList.items = [file];
+      await nextFrame();
+
+      expect(getRetryButtonLabel()).to.equal('Retry');
+      expect(getStartButtonLabel()).to.equal('Start');
+      expect(getRemoveButtonLabel()).to.equal('Remove');
+    });
+
+    it('should render custom i18n button labels', async () => {
+      fileList.i18n = {
+        ...fileList.i18n,
+        file: {
+          retry: 'Try again',
+          start: 'Begin',
+          remove: 'Delete',
+        },
+      };
+      const file = createFile(100, 'text/plain') as UploadFile;
+      fileList.items = [file];
+      await nextFrame();
+
+      expect(getRetryButtonLabel()).to.equal('Try again');
+      expect(getStartButtonLabel()).to.equal('Begin');
+      expect(getRemoveButtonLabel()).to.equal('Delete');
+    });
+
+    it('should render custom i18n status messages', async () => {
+      fileList.i18n = {
+        ...fileList.i18n,
+        uploading: {
+          ...fileList.i18n.uploading,
+          status: {
+            connecting: 'Verbinding maken...',
+            stalled: 'Vastgelopen',
+            processing: 'Bestand verwerken...',
+            held: 'In wachtrij',
+          },
+        },
+      };
+      const file = createFile(100, 'text/plain') as UploadFile;
+      file.held = true;
+      fileList.items = [file];
+      await nextFrame();
+
+      expect(getStatusText()).to.equal('In wachtrij');
+    });
+
+    it('should render custom i18n error messages', async () => {
+      fileList.i18n = {
+        ...fileList.i18n,
+        uploading: {
+          ...fileList.i18n.uploading,
+          error: {
+            serverUnavailable: 'Server niet beschikbaar',
+            unexpectedServerError: 'Onverwachte serverfout',
+            forbidden: 'Uploaden verboden',
+          },
+        },
+      };
+      const file = createFile(100, 'text/plain') as UploadFile;
+      file.errorKey = 'serverUnavailable';
+      fileList.items = [file];
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('Server niet beschikbaar');
+    });
+
+    it('should render file size with custom formatSize function', async () => {
+      fileList.i18n = {
+        ...fileList.i18n,
+        formatSize: (bytes: number) => `${bytes} octets`,
+      };
+      const file = createFile(1536, 'text/plain') as UploadFile;
+      file.total = 1536;
+      file.loaded = 500;
+      file.progress = 33;
+      file.uploading = true;
+      file.remaining = 10;
+      fileList.items = [file];
+      await nextFrame();
+
+      // Status should use the custom formatSize
+      expect(getStatusText()).to.include('1536 octets');
     });
   });
 
@@ -295,7 +398,7 @@ describe('vaadin-upload-file-list', () => {
 
       expect(parentSpy.called).to.be.false;
 
-      parent.removeChild(fileList);
+      fileList.remove();
     });
 
     it('should not stop propagation when no manager is set', async () => {
@@ -316,7 +419,7 @@ describe('vaadin-upload-file-list', () => {
 
       expect(parentSpy.calledOnce).to.be.true;
 
-      parent.removeChild(fileList);
+      fileList.remove();
     });
 
     it('should remove listener from old manager when manager changes', async () => {
