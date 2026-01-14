@@ -88,7 +88,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       },
 
       /** @private */
-      _dragover: {
+      __dragover: {
         type: Boolean,
         value: false,
         reflect: true,
@@ -143,7 +143,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   __onDragover(event) {
     event.preventDefault();
     if (!this.disabled) {
-      this._dragover = true;
+      this.__dragover = true;
     }
     event.dataTransfer.dropEffect = this.disabled ? 'none' : 'copy';
   }
@@ -156,13 +156,13 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     if (event.relatedTarget && this.contains(event.relatedTarget)) {
       return;
     }
-    this._dragover = false;
+    this.__dragover = false;
   }
 
   /** @private */
   async __onDrop(event) {
     event.preventDefault();
-    this._dragover = false;
+    this.__dragover = false;
 
     // If we have a manager and not disabled, add the files
     if (!this.disabled && this.manager instanceof UploadManager) {
