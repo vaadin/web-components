@@ -6,15 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Slider</title>
     <script type="module" src="./common.js"></script>
+    <script>
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.sliderComponent = true;
+    </script>
   </head>
   <body>
     <vaadin-slider></vaadin-slider>
 
     <script type="module">
-      window.Vaadin ??= {};
-      window.Vaadin.featureFlags ??= {};
-      window.Vaadin.featureFlags.sliderComponent = true;
-
       import '@vaadin/slider';
     </script>
   </body>
