@@ -37,7 +37,7 @@ class RangeSlider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(Lu
   }
 
   static get experimental() {
-    return true;
+    return 'sliderComponent';
   }
 
   static get properties() {

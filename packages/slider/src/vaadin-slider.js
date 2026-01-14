@@ -37,7 +37,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   }
 
   static get experimental() {
-    return true;
+    return 'sliderComponent';
   }
 
   static get properties() {
