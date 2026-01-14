@@ -151,6 +151,28 @@ describe('vaadin-range-slider', () => {
         expect(slider.value).to.deep.equal([10, 10]);
       });
 
+      it('should suppress input when trying to increase value past upper boundary on Arrow Right', async () => {
+        const spy = sinon.spy();
+        inputs[0].addEventListener('input', spy);
+
+        slider.value = [10, 10];
+
+        await sendKeys({ press: 'ArrowRight' });
+        expect(spy).to.be.not.called;
+        expect(inputs[0].value).to.equal('10');
+      });
+
+      it('should suppress input when trying to increase value past upper boundary on Arrow Up', async () => {
+        const spy = sinon.spy();
+        inputs[0].addEventListener('input', spy);
+
+        slider.value = [10, 10];
+
+        await sendKeys({ press: 'ArrowUp' });
+        expect(spy).to.be.not.called;
+        expect(inputs[0].value).to.equal('10');
+      });
+
       it('should fire single change event on first input value change', async () => {
         const spy = sinon.spy();
         slider.addEventListener('change', spy);
@@ -195,6 +217,28 @@ describe('vaadin-range-slider', () => {
         slider.value = [10, 10];
         await sendKeys({ press: 'ArrowLeft' });
         expect(slider.value).to.deep.equal([10, 10]);
+      });
+
+      it('should suppress input when trying to decrease value past lower boundary on Arrow Left', async () => {
+        const spy = sinon.spy();
+        inputs[1].addEventListener('input', spy);
+
+        slider.value = [10, 10];
+
+        await sendKeys({ press: 'ArrowLeft' });
+        expect(spy).to.be.not.called;
+        expect(inputs[1].value).to.equal('10');
+      });
+
+      it('should suppress input when trying to decrease value past lower boundary on Arrow Down', async () => {
+        const spy = sinon.spy();
+        inputs[1].addEventListener('input', spy);
+
+        slider.value = [10, 10];
+
+        await sendKeys({ press: 'ArrowDown' });
+        expect(spy).to.be.not.called;
+        expect(inputs[1].value).to.equal('10');
       });
 
       it('should fire single change event on second input value change', async () => {

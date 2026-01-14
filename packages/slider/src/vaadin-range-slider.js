@@ -131,6 +131,7 @@ class RangeSlider extends SliderMixin(
           .max="${max}"
           .value="${startValue}"
           tabindex="0"
+          @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
@@ -142,6 +143,7 @@ class RangeSlider extends SliderMixin(
           .max="${max}"
           .value="${endValue}"
           tabindex="0"
+          @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
@@ -209,8 +211,25 @@ class RangeSlider extends SliderMixin(
   }
 
   /** @private */
-  __onInput(event) {
+  __onKeyDown(event) {
     this.__thumbIndex = this._inputElements.indexOf(event.target);
+
+    const prevKeys = ['ArrowLeft', 'ArrowDown'];
+    const nextKeys = ['ArrowRight', 'ArrowUp'];
+
+    // Suppress native `input` event if start and end thumbs point to the same value,
+    // to prevent the case where slotted range inputs would end up in broken state.
+    if (
+      this.__value[0] === this.__value[1] &&
+      ((this.__thumbIndex === 0 && nextKeys.includes(event.key)) ||
+        (this.__thumbIndex === 1 && prevKeys.includes(event.key)))
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  /** @private */
+  __onInput(event) {
     this.__updateValue(event.target.value);
     this.__commitValue();
     this.__detectAndDispatchChange();
