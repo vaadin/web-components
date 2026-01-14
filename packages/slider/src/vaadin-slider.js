@@ -175,18 +175,6 @@ class Slider extends SliderMixin(
     // Focus the input to allow modifying value using keyboard
     this.focus({ focusVisible: false });
   }
-
-  /** @private */
-  __onInput(event) {
-    this.__updateValue(event.target.value);
-    this.__commitValue();
-    this.__detectAndDispatchChange();
-  }
-
-  /** @private */
-  __onChange(event) {
-    event.stopPropagation();
-  }
 }
 
 defineCustomElement(Slider);

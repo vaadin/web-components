@@ -227,18 +227,6 @@ class RangeSlider extends SliderMixin(
       event.preventDefault();
     }
   }
-
-  /** @private */
-  __onInput(event) {
-    this.__updateValue(event.target.value);
-    this.__commitValue();
-    this.__detectAndDispatchChange();
-  }
-
-  /** @private */
-  __onChange(event) {
-    event.stopPropagation();
-  }
 }
 
 defineCustomElement(RangeSlider);
