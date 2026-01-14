@@ -53,4 +53,14 @@ export const sliderStyles = css`
     border-radius: 50%;
     touch-action: none;
   }
+
+  /* visually hidden */
+  ::slotted(input) {
+    flex: 1;
+    font: inherit;
+    height: var(--_thumb-size);
+    opacity: 0 !important;
+    margin: 0 !important;
+    pointer-events: none;
+  }
 `;

@@ -1,31 +1,95 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-range-slider host default"] = 
+snapshots["vaadin-range-slider host default"] =
 `<vaadin-range-slider>
+  <input
+    id="slider-0"
+    max="100"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    id="slider-1"
+    max="100"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
 </vaadin-range-slider>
 `;
 /* end snapshot vaadin-range-slider host default */
 
 snapshots["vaadin-range-slider host value"] = 
 `<vaadin-range-slider>
+  <input
+    id="slider-2"
+    max="100"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
 </vaadin-range-slider>
 `;
 /* end snapshot vaadin-range-slider host value */
 
 snapshots["vaadin-range-slider host min"] = 
 `<vaadin-range-slider>
+  <input
+    id="slider-4"
+    max="100"
+    min="20"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    id="slider-5"
+    max="100"
+    min="20"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
 </vaadin-range-slider>
 `;
 /* end snapshot vaadin-range-slider host min */
 
 snapshots["vaadin-range-slider host max"] = 
 `<vaadin-range-slider>
+  <input
+    id="slider-6"
+    max="80"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    id="slider-7"
+    max="80"
+    min="0"
+    slot="input"
+    tabindex="0"
+    type="range"
+  >
 </vaadin-range-slider>
 `;
 /* end snapshot vaadin-range-slider host max */
 
-snapshots["vaadin-range-slider shadow default"] = 
+snapshots["vaadin-range-slider shadow default"] =
 `<div part="track">
   <div
     part="track-fill"
@@ -43,6 +107,8 @@ snapshots["vaadin-range-slider shadow default"] =
   style="inset-inline-start:100%;"
 >
 </div>
+<slot name="input">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow default */
 
@@ -64,6 +130,8 @@ snapshots["vaadin-range-slider shadow value"] =
   style="inset-inline-start: 20%;"
 >
 </div>
+<slot name="input">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow value */
 
@@ -85,6 +153,8 @@ snapshots["vaadin-range-slider shadow min"] =
   style="inset-inline-start: 75%;"
 >
 </div>
+<slot name="input">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow min */
 
@@ -106,6 +176,8 @@ snapshots["vaadin-range-slider shadow max"] =
   style="inset-inline-start: 75%;"
 >
 </div>
+<slot name="input">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow max */
 

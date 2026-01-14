@@ -85,10 +85,18 @@ export const SliderMixin = (superClass) =>
     /**
      * @param {number} value
      * @return {number}
-     * @protected
+     * @private
      */
     __getPercentFromValue(value) {
       const { min, max } = this.__getConstraints();
       return (100 * (value - min)) / (max - min);
+    }
+
+    /** @private */
+    __detectAndDispatchChange() {
+      if (this.__lastCommittedValue !== this.value) {
+        this.__lastCommittedValue = this.value;
+        this.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     }
   };

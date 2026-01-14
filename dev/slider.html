@@ -15,8 +15,16 @@
   <body>
     <vaadin-slider></vaadin-slider>
 
+    <output id="output"></output>
+
     <script type="module">
       import '@vaadin/slider';
+
+      const slider = document.querySelector('vaadin-slider');
+
+      slider.addEventListener('change', (e) => {
+        document.querySelector('#output').textContent = e.target.value;
+      });
     </script>
   </body>
 </html>
