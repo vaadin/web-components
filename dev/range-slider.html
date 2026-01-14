@@ -15,8 +15,16 @@
   <body>
     <vaadin-range-slider></vaadin-range-slider>
 
+    <output id="output"></output>
+
     <script type="module">
       import '@vaadin/slider/vaadin-range-slider.js';
+
+      const slider = document.querySelector('vaadin-range-slider');
+
+      slider.addEventListener('change', (e) => {
+        document.querySelector('#output').textContent = e.target.value;
+      });
     </script>
   </body>
 </html>
