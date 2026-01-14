@@ -3,6 +3,10 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-range-slider.js';
 import type { RangeSlider } from '../../src/vaadin-range-slider.js';
 
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.sliderComponent = true;
+
 describe('vaadin-range-slider', () => {
   let slider: RangeSlider;
 
