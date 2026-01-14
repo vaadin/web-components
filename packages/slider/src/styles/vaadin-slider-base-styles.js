@@ -32,7 +32,6 @@ export const sliderStyles = css`
     width: 100%;
     background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
     border-radius: inherit;
-    pointer-events: none;
   }
 
   [part='track-fill'] {
@@ -40,7 +39,6 @@ export const sliderStyles = css`
     position: absolute;
     height: var(--_track-size);
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
-    pointer-events: none;
     border-start-start-radius: inherit;
     border-end-start-radius: inherit;
   }
@@ -53,7 +51,6 @@ export const sliderStyles = css`
     transform: translateX(-50%);
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
-    pointer-events: auto;
     touch-action: none;
   }
 `;
