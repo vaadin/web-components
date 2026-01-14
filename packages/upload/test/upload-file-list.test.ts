@@ -298,6 +298,28 @@ describe('vaadin-upload-file-list', () => {
       expect(fileList.items).to.have.lengthOf(2);
     });
 
+    it('should clear error when errorKey is reset on retry', async () => {
+      const file = createFile(100, 'text/plain');
+      manager.addFiles([file]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      // Simulate error state
+      const uploadFile = manager.files[0];
+      uploadFile.errorKey = 'forbidden';
+      fileList.items = [...fileList.items];
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('Upload forbidden');
+
+      // Simulate retry: errorKey is cleared
+      (uploadFile as any).errorKey = false;
+      fileList.items = [...fileList.items];
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('');
+    });
+
     it('should clear items when manager is removed', async () => {
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       fileList.manager = manager;

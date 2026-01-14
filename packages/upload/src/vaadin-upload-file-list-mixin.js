@@ -223,6 +223,9 @@ export const UploadFileListMixin = (superClass) =>
       // Translate error codes to i18n messages
       if (file.errorKey && i18n.uploading.error[file.errorKey]) {
         file.error = i18n.uploading.error[file.errorKey];
+      } else if (!file.errorKey && this.manager) {
+        // Clear error when errorKey is reset (e.g., on retry) only when using manager
+        file.error = '';
       }
     }
 
