@@ -200,19 +200,70 @@ class RangeSlider extends SliderMixin(
 
   /**
    * @param {PointerEvent} event
-   * @protected
+   * @private
+   */
+  __handlePointerDown(event) {
+    const target = event.composedPath()[0];
+    // Update value on track click
+    if (target.getAttribute('part') !== 'thumb') {
+      this.__thumbIndex = this.__getClosestThumb(event);
+      this.__applyValue(event);
+    } else {
+      // Store index of the active thumb
+      const thumbs = this.shadowRoot.querySelectorAll('[part="thumb"]');
+      this.__thumbIndex = [...thumbs].indexOf(target);
+    }
+  }
+
+  /**
+   * @param {PointerEvent} event
+   * @private
    */
   _onMouseDown(event) {
     // Prevent blur if already focused
     event.preventDefault();
 
-    // Focus the input to allow modifying value using keyboard
-    this.focus({ focusVisible: false });
+    this._inputElements[this.__thumbIndex].focus();
   }
 
   /** @private */
   __commitValue() {
     this.value = [...this.__value];
+  }
+
+  /**
+   * @param {PointerEvent} event
+   * @return {number}
+   * @private
+   */
+  __getClosestThumb(event) {
+    let closestThumb;
+
+    const percent = this.__getEventPercent(event);
+    const value = this.__getValueFromPercent(percent);
+
+    // First thumb position from the "end"
+    const index = this.__value.findIndex((v) => value - v < 0);
+
+    // Pick the first one
+    if (index === 0) {
+      closestThumb = index;
+    } else if (index === -1) {
+      // Pick the last one (position is past all the thumbs)
+      closestThumb = this.__value.length - 1;
+    } else {
+      const lastStart = this.__value[index - 1];
+      const firstEnd = this.__value[index];
+      // Pick the first one from the "start" unless thumbs are stacked on top of each other
+      if (Math.abs(lastStart - value) < Math.abs(firstEnd - value)) {
+        closestThumb = index - 1;
+      } else {
+        // Pick the last one from the "end"
+        closestThumb = index;
+      }
+    }
+
+    return closestThumb;
   }
 
   /** @private */

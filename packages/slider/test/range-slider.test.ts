@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, isFirefox, middleOfNode, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-range-slider.js';
 import type { RangeSlider } from '../vaadin-range-slider.js';
@@ -246,6 +246,213 @@ describe('vaadin-range-slider', () => {
         slider.addEventListener('change', spy);
         await sendKeys({ press: 'ArrowLeft' });
         expect(spy).to.be.calledOnce;
+      });
+    });
+  });
+
+  // Pointe tests randomly fail in Firefox
+  (isFirefox ? describe.skip : describe)('pointer', () => {
+    let thumbs: Element[];
+    let inputs: HTMLInputElement[];
+
+    function middleOfThumb(idx: number) {
+      const { x, y } = middleOfNode(thumbs[idx]);
+      return {
+        x: Math.round(x),
+        y: Math.round(y),
+      };
+    }
+
+    beforeEach(async () => {
+      slider = fixtureSync('<vaadin-range-slider style="width: 200px"></vaadin-range-slider>');
+      await nextRender();
+      thumbs = [...slider.shadowRoot!.querySelectorAll('[part~="thumb"]')];
+      inputs = [...slider.querySelectorAll('input')];
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    describe('individual thumbs', () => {
+      it('should update slider value property on first thumb pointermove', async () => {
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(slider.value).to.deep.equal([10, 100]);
+      });
+
+      it('should update slider value property on second thumb pointermove', async () => {
+        const { x, y } = middleOfThumb(1);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[1] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+
+        expect(slider.value).to.deep.equal([0, 90]);
+      });
+
+      it('should not fire change event on thumb pointermove', async () => {
+        const { x, y } = middleOfThumb(0);
+
+        const spy = sinon.spy();
+        slider.addEventListener('change', spy);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(spy).to.be.not.called;
+      });
+
+      it('should fire change event on thumb pointerup', async () => {
+        const { x, y } = middleOfThumb(0);
+
+        const spy = sinon.spy();
+        slider.addEventListener('change', spy);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+        await sendMouse({ type: 'up' });
+
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should not fire change event on pointerup if value remains the same', async () => {
+        const { x, y } = middleOfThumb(0);
+
+        const spy = sinon.spy();
+        slider.addEventListener('change', spy);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        await sendMouse({ type: 'move', position: [x, y] });
+        await sendMouse({ type: 'up' });
+
+        expect(spy).to.be.not.called;
+      });
+    });
+
+    describe('track', () => {
+      it('should focus first input on track pointerdown before the first thumb', async () => {
+        slider.value = [20, 80];
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.deep.equal([10, 80]);
+        expect(document.activeElement).to.equal(inputs[0]);
+      });
+
+      it('should focus second input on track pointerdown after the second thumb', async () => {
+        slider.value = [20, 80];
+        const { x, y } = middleOfThumb(1);
+
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.deep.equal([20, 90]);
+        expect(document.activeElement).to.equal(inputs[1]);
+      });
+
+      it('should focus first input on track pointerdown between thumbs closer to the first one', async () => {
+        slider.value = [20, 80];
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouse({ type: 'move', position: [x + 40, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.deep.equal([40, 80]);
+        expect(document.activeElement).to.equal(inputs[0]);
+      });
+
+      it('should focus second input on track pointerdown between thumbs closer to the second one', async () => {
+        slider.value = [20, 80];
+        const { x, y } = middleOfThumb(1);
+
+        await sendMouse({ type: 'move', position: [x - 40, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.deep.equal([20, 60]);
+        expect(document.activeElement).to.equal(inputs[1]);
+      });
+    });
+
+    describe('thumbs limits', () => {
+      beforeEach(() => {
+        slider.value = [40, 60];
+      });
+
+      it('should use the first thumb position as a min limit on second thumb pointermove', async () => {
+        const { x, y } = middleOfThumb(1);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+        await sendMouse({ type: 'up' });
+
+        expect(slider.value).to.deep.equal([60, 60]);
+      });
+
+      it('should use the second thumb position as a max limit on first thumb pointermove', async () => {
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[1] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+        await sendMouse({ type: 'up' });
+
+        expect(slider.value).to.deep.equal([40, 40]);
+      });
+    });
+
+    describe('thumbs on top of each other', () => {
+      let x: number, y: number;
+
+      beforeEach(() => {
+        slider.value = [50, 50];
+        ({ x, y } = middleOfThumb(0));
+      });
+
+      it('should focus first input and move first thumb on pointerdown closer to the left', async () => {
+        await sendMouse({ type: 'move', position: [x - 5, y] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+
+        expect(document.activeElement).to.equal(inputs[0]);
+        expect(slider.value).to.deep.equal([40, 50]);
+      });
+
+      it('should not move first thumb to the right on pointerdown closer to the left', async () => {
+        await sendMouse({ type: 'move', position: [x - 5, y] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(slider.value).to.deep.equal([50, 50]);
+      });
+
+      it('should focus second input and move second thumb on pointerdown closer to the right', async () => {
+        await sendMouse({ type: 'move', position: [x + 5, y] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(slider.value).to.deep.equal([50, 60]);
+        expect(document.activeElement).to.equal(inputs[1]);
+      });
+
+      it('should not move second thumb to the left on pointerdown closer to the right', async () => {
+        await sendMouse({ type: 'move', position: [x + 5, y] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+
+        expect(slider.value).to.deep.equal([50, 50]);
       });
     });
   });

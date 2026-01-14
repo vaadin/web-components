@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
@@ -117,6 +117,100 @@ describe('vaadin-slider', () => {
       slider.addEventListener('change', spy);
       await sendKeys({ press: 'ArrowRight' });
       expect(spy).to.be.calledOnce;
+    });
+  });
+
+  describe('pointer', () => {
+    let thumb: Element;
+    let y: number;
+
+    beforeEach(async () => {
+      slider = fixtureSync('<vaadin-slider style="width: 200px"></vaadin-slider>');
+      await nextRender();
+      thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
+      y = Math.round(middleOfNode(thumb).y);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should update slider value property on thumb pointermove', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      expect(slider.value).to.equal(10);
+    });
+
+    it('should not fire change event on thumb pointermove', async () => {
+      const spy = sinon.spy();
+      slider.addEventListener('change', spy);
+
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      expect(spy).to.be.not.called;
+    });
+
+    it('should fire change event on thumb pointerup', async () => {
+      const spy = sinon.spy();
+      slider.addEventListener('change', spy);
+
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+      await sendMouse({ type: 'up' });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not fire change event on pointerup if value remains the same', async () => {
+      const spy = sinon.spy();
+      slider.addEventListener('change', spy);
+
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      await sendMouse({ type: 'move', position: [0, y] });
+      await sendMouse({ type: 'up' });
+
+      expect(spy).to.be.not.called;
+    });
+
+    it('should update slider value property on track pointerdown', async () => {
+      const track = slider.shadowRoot!.querySelector('[part="track"]')!;
+
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.value).to.equal(50);
+    });
+
+    it('should fire change event on track pointerdown', async () => {
+      const track = slider.shadowRoot!.querySelector('[part="track"]')!;
+
+      const spy = sinon.spy();
+      slider.addEventListener('change', spy);
+
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should focus slotted range input on thumb pointerdown', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      expect(document.activeElement).to.equal(slider.querySelector('input'));
+    });
+
+    it('should focus slotted range input on track pointerdown', async () => {
+      await sendMouse({ type: 'move', position: [50, y] });
+      await sendMouse({ type: 'down' });
+      expect(document.activeElement).to.equal(slider.querySelector('input'));
     });
   });
 });

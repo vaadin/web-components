@@ -47,6 +47,18 @@ export const SliderMixin = (superClass) =>
       super();
 
       this.__thumbIndex = 0;
+
+      this.__onPointerMove = this.__onPointerMove.bind(this);
+      this.__onPointerUp = this.__onPointerUp.bind(this);
+
+      this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
+    }
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.__lastCommittedValue = this.value;
     }
 
     /**
@@ -93,9 +105,89 @@ export const SliderMixin = (superClass) =>
       return (100 * (value - min)) / (max - min);
     }
 
+    /**
+     * @param {number} percent
+     * @return {number}
+     * @private
+     */
+    __getValueFromPercent(percent) {
+      const { min, max } = this.__getConstraints();
+      return min + percent * (max - min);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @return {number}
+     * @private
+     */
+    __getEventPercent(event) {
+      const offset = event.offsetX;
+      const size = this.offsetWidth;
+      const safeOffset = Math.min(Math.max(offset, 0), size);
+      return safeOffset / size;
+    }
+
     /** @private */
+    __applyValue(event) {
+      const percent = this.__getEventPercent(event);
+      const newValue = this.__getValueFromPercent(percent);
+      this.__updateValue(newValue);
+      this.__commitValue();
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerDown(event) {
+      this.setPointerCapture(event.pointerId);
+      this.addEventListener('pointermove', this.__onPointerMove);
+      window.addEventListener('pointerup', this.__onPointerUp);
+      window.addEventListener('pointercancel', this.__onPointerUp);
+      this.__handlePointerDown(event);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __handlePointerDown(event) {
+      const target = event.composedPath()[0];
+      // Update value on track click
+      if (target.getAttribute('part') !== 'thumb') {
+        this.__applyValue(event);
+        this.__detectAndDispatchChange();
+      }
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerMove(event) {
+      if (event.target !== this) {
+        return;
+      }
+      event.preventDefault(); // Prevent text selection
+      this.__applyValue(event);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerUp(event) {
+      this.releasePointerCapture(event.pointerId);
+      this.removeEventListener('pointermove', this.__onPointerMove);
+      window.removeEventListener('pointerup', this.__onPointerUp);
+      window.removeEventListener('pointercancel', this.__onPointerUp);
+
+      this.__detectAndDispatchChange();
+    }
+
+    /** @protected */
     __detectAndDispatchChange() {
-      if (this.__lastCommittedValue !== this.value) {
+      if (JSON.stringify(this.__lastCommittedValue) !== JSON.stringify(this.value)) {
         this.__lastCommittedValue = this.value;
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }
