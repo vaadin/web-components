@@ -249,17 +249,17 @@ describe('vaadin-upload-drop-zone', () => {
       dropZone.manager = manager;
       await nextFrame();
 
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      expect(dropZone.maxFilesReached).to.be.false;
 
       // Add one file to reach maxFiles
       const files = createFiles(1, 100, 'text/plain');
       manager.addFiles(files);
       await nextFrame();
 
-      expect(dropZone.hasAttribute('disabled')).to.be.true;
+      expect(dropZone.maxFilesReached).to.be.true;
     });
 
-    it('should not show dragover state when disabled', async () => {
+    it('should not show dragover state when maxFilesReached', async () => {
       const manager = new UploadManager({
         target: '/api/upload',
         maxFiles: 1,
@@ -272,11 +272,11 @@ describe('vaadin-upload-drop-zone', () => {
       manager.addFiles(files);
       await nextFrame();
 
-      // Try to trigger dragover on disabled drop zone
+      // Try to trigger dragover on maxFilesReached drop zone
       dropZone.dispatchEvent(createDragEvent('dragover'));
       await nextFrame();
 
-      // Should not set dragover attribute when disabled
+      // Should not set dragover attribute when maxFilesReached
       expect(dropZone.hasAttribute('dragover')).to.be.false;
     });
 
@@ -291,11 +291,11 @@ describe('vaadin-upload-drop-zone', () => {
       const files = createFiles(1, 100, 'text/plain');
       manager.addFiles(files);
       await nextFrame();
-      expect(dropZone.hasAttribute('disabled')).to.be.true;
+      expect(dropZone.maxFilesReached).to.be.true;
 
       manager.removeFile(manager.files[0]);
       await nextFrame();
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      expect(dropZone.maxFilesReached).to.be.false;
     });
 
     it('should remove listener when manager is set to null', async () => {
@@ -312,7 +312,7 @@ describe('vaadin-upload-drop-zone', () => {
       // Add files - should not affect drop zone
       manager.addFiles(createFiles(1, 100, 'text/plain'));
       await nextFrame();
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      expect(dropZone.maxFilesReached).to.be.false;
     });
 
     it('should remove listener when disconnected from DOM', async () => {
@@ -328,7 +328,7 @@ describe('vaadin-upload-drop-zone', () => {
 
       dropZone.manager = manager;
       await nextFrame();
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      expect(dropZone.maxFilesReached).to.be.false;
 
       // Verify drop zone is in DOM
       expect(dropZone.isConnected).to.be.true;
@@ -352,8 +352,8 @@ describe('vaadin-upload-drop-zone', () => {
       // Verify maxFilesReached is true on manager
       expect(manager.maxFilesReached).to.be.true;
 
-      // Drop zone should remain not disabled since listener was removed on disconnect
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      // Drop zone should remain not maxFilesReached since listener was removed on disconnect
+      expect(dropZone.maxFilesReached).to.be.false;
     });
 
     it('should re-attach listener when reconnected to DOM', async () => {
@@ -371,13 +371,13 @@ describe('vaadin-upload-drop-zone', () => {
       parent.appendChild(dropZone);
       await nextFrame();
 
-      // Add files to reach max - should disable drop zone since it's reconnected
+      // Add files to reach max - should set maxFilesReached on drop zone since it's reconnected
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
-      expect(dropZone.hasAttribute('disabled')).to.be.true;
+      expect(dropZone.maxFilesReached).to.be.true;
     });
 
-    it('should sync disabled state when reconnected after max files reached', async () => {
+    it('should sync maxFilesReached state when reconnected after max files reached', async () => {
       const manager = new UploadManager({
         target: '/api/upload',
         maxFiles: 2,
@@ -385,7 +385,7 @@ describe('vaadin-upload-drop-zone', () => {
       });
       dropZone.manager = manager;
       await nextFrame();
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      expect(dropZone.maxFilesReached).to.be.false;
 
       // Remove drop zone from DOM
       const parent = dropZone.parentElement!;
@@ -395,15 +395,15 @@ describe('vaadin-upload-drop-zone', () => {
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       expect(manager.maxFilesReached).to.be.true;
 
-      // Drop zone should still not be disabled (listener was removed)
-      expect(dropZone.hasAttribute('disabled')).to.be.false;
+      // Drop zone should still not have maxFilesReached (listener was removed)
+      expect(dropZone.maxFilesReached).to.be.false;
 
       // Reconnect drop zone
       parent.appendChild(dropZone);
       await nextFrame();
 
-      // Drop zone should now be disabled (synced with manager state on reconnect)
-      expect(dropZone.hasAttribute('disabled')).to.be.true;
+      // Drop zone should now have maxFilesReached (synced with manager state on reconnect)
+      expect(dropZone.maxFilesReached).to.be.true;
     });
   });
 });
