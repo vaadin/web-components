@@ -35,22 +35,14 @@ import { UploadManager } from './vaadin-upload-manager.js';
  * ### Styling
  *
  * The component has no styling by default. When files are dragged over,
- * the `dragover` attribute is set and the component uses the same hover
- * effect as `<vaadin-upload>`:
+ * the `dragover` attribute is set and the component uses a hover effect.
+ * To override the hover effect, use `vaadin-upload-drop-zone[dragover]::after`
+ * selector to style the pseudo-element covering the drop zone during dragover.
  *
  * Attribute   | Description
  * ------------|--------------------------------------------
  * `dragover`  | Set when files are being dragged over the element
  * `disabled`  | Set when the manager has reached maxFiles
- *
- * The following CSS custom properties are used for the dragover state:
- *
- * Custom property                   | Description
- * ----------------------------------|--------------------------------------------
- * `--vaadin-upload-background`      | Background color during dragover
- * `--vaadin-upload-border-color`    | Border color during dragover
- * `--vaadin-upload-border-width`    | Border width during dragover
- * `--vaadin-upload-border-radius`   | Border radius during dragover
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
