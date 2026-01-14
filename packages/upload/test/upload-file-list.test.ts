@@ -8,7 +8,8 @@ import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles } from './helpers.js';
 
 describe('vaadin-upload-file-list', () => {
-  let fileList: UploadFileList;
+  // Use 'any' for internal APIs not exposed in public types
+  let fileList: UploadFileList & { items: UploadFile[]; requestContentUpdate(): void };
 
   function getUploadFile() {
     return fileList.querySelector('vaadin-upload-file')!;

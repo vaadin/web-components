@@ -65,11 +65,6 @@ export interface UploadFileListManager {
  */
 declare class UploadFileList extends ThemableMixin(HTMLElement) {
   /**
-   * The array of files being processed, or already uploaded.
-   */
-  items: UploadFile[];
-
-  /**
    * The object used to localize upload files.
    */
   i18n: UploadFileListI18n;
@@ -86,13 +81,6 @@ declare class UploadFileList extends ThemableMixin(HTMLElement) {
    * - Forwards retry/abort/start/remove events back to the manager
    */
   manager: UploadFileListManager | null;
-
-  /**
-   * Requests an update for the `vaadin-upload-file` elements.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
 }
 
 declare global {
