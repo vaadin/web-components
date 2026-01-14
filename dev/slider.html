@@ -11,6 +11,10 @@
     <vaadin-slider></vaadin-slider>
 
     <script type="module">
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.sliderComponent = true;
+
       import '@vaadin/slider';
     </script>
   </body>

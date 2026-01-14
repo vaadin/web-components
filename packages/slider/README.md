@@ -6,6 +6,8 @@ A web component that represents a range slider for selecting numerical values wi
 
 [![npm version](https://badgen.net/npm/v/@vaadin/slider)](https://www.npmjs.com/package/@vaadin/slider)
 
+> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.sliderComponent = true`.
+
 ```html
 <vaadin-slider min="0" max="100" step="1"></vaadin-slider>
 ```
