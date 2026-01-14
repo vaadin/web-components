@@ -224,6 +224,10 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.checked).to.be.false;
   });
 
+  it('should set aria-label on the checkbox input element', () => {
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
+  });
+
   it('should select item when checkbox is checked', async () => {
     firstBodyCheckbox.click();
     await nextFrame();
@@ -342,6 +346,10 @@ describe('multi selection column', () => {
 
   it('should have class name for the select all checkbox', () => {
     expect(selectAllCheckbox.classList.contains('vaadin-grid-select-all-checkbox')).to.be.true;
+  });
+
+  it('should set aria-label on the select all checkbox input element', () => {
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
   });
 
   it('should set selectAll when header checkbox is clicked', async () => {
