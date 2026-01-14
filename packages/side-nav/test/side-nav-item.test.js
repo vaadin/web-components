@@ -389,4 +389,20 @@ describe('side-nav-item', () => {
       });
     });
   });
+
+  describe('sr-only element', () => {
+    let scroller;
+
+    beforeEach(async () => {
+      scroller = fixtureSync(`<div style="overflow: auto; height: 5em;"></div>`);
+      for (let i = 0; i < 100; i++) {
+        scroller.innerHTML += '<vaadin-side-nav-item>test</vaadin-side-nav-item>';
+      }
+      await nextRender();
+    });
+
+    it('should not overflow outside side-nav-item', () => {
+      expect(document.documentElement.scrollHeight).to.equal(document.documentElement.clientHeight);
+    });
+  });
 });
