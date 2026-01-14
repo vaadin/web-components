@@ -68,9 +68,7 @@ export const SliderMixin = (superClass) =>
 
       const newValue = Math.round(nearestValue);
 
-      const valueCopy = [...this.__value];
-      valueCopy[index] = newValue;
-      this.__value = valueCopy;
+      this.__value = this.__value.with(index, newValue);
     }
 
     /**
