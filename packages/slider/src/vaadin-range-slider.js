@@ -96,8 +96,8 @@ class RangeSlider extends SliderMixin(
     super();
 
     this.__value = [...this.value];
+    this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
-    this.__inputId2 = `slider-${generateUniqueId()}`;
 
     this.addEventListener('mousedown', (e) => this._onMouseDown(e));
   }
@@ -125,7 +125,7 @@ class RangeSlider extends SliderMixin(
       html`
         <input
           type="range"
-          id="${this.__inputId1}"
+          id="${this.__inputId0}"
           slot="input"
           .min="${min}"
           .max="${max}"
@@ -136,7 +136,7 @@ class RangeSlider extends SliderMixin(
         />
         <input
           type="range"
-          id="${this.__inputId2}"
+          id="${this.__inputId1}"
           slot="input"
           .min="${min}"
           .max="${max}"
