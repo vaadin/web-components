@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -42,6 +43,7 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
        */
       value: {
         type: Number,
+        value: 0,
         notify: true,
         sync: true,
       },
@@ -50,12 +52,36 @@ class Slider extends SliderMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
   /** @protected */
   render() {
+    const [value] = this.__value;
+    const percent = this.__getPercentFromValue(value);
+
     return html`
       <div part="track">
-        <div part="track-fill"></div>
+        <div
+          part="track-fill"
+          style="${styleMap({
+            insetInlineStart: 0,
+            insetInlineEnd: `${100 - percent}%`,
+          })}"
+        ></div>
       </div>
-      <div part="thumb"></div>
+      <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
     `;
+  }
+
+  constructor() {
+    super();
+
+    this.__value = [this.value];
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('value') || props.has('min') || props.has('max')) {
+      this.__updateValue(this.value);
+    }
   }
 }
 
