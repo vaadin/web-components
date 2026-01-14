@@ -17,7 +17,7 @@ import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
  *
  * ```javascript
  * const fileList = document.querySelector('vaadin-upload-file-list');
- * fileList.target = manager;
+ * fileList.manager = uploadManager;
  *
  * // The file list automatically:
  * // - Syncs files from the manager

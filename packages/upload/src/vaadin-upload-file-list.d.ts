@@ -39,7 +39,7 @@ export interface UploadFileListI18n {
   };
 }
 
-export interface UploadFileListTarget {
+export interface UploadFileListManager {
   files: UploadFile[];
   retryUpload?(file: UploadFile): void;
   abortUpload?(file: UploadFile): void;
@@ -53,7 +53,7 @@ export interface UploadFileListTarget {
  *
  * ```javascript
  * const fileList = document.querySelector('vaadin-upload-file-list');
- * fileList.target = manager;
+ * fileList.manager = uploadManager;
  *
  * // The file list automatically:
  * // - Syncs files from the manager
@@ -77,12 +77,12 @@ declare class UploadFileList extends ThemableMixin(HTMLElement) {
   disabled: boolean;
 
   /**
-   * Reference to an UploadManager (or compatible target) to link this file list to.
+   * Reference to an UploadManager to link this file list to.
    * When set, the file list automatically:
-   * - Syncs files from the target
-   * - Forwards retry/abort/start/remove events back to the target
+   * - Syncs files from the manager
+   * - Forwards retry/abort/start/remove events back to the manager
    */
-  target: UploadFileListTarget | null;
+  manager: UploadFileListManager | null;
 
   /**
    * Requests an update for the `vaadin-upload-file` elements.

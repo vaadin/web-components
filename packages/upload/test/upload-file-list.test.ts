@@ -38,8 +38,8 @@ describe('vaadin-upload-file-list', () => {
       expect(fileList.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should have target property defaulting to null', () => {
-      expect(fileList.target).to.be.null;
+    it('should have manager property defaulting to null', () => {
+      expect(fileList.manager).to.be.null;
     });
   });
 
@@ -164,7 +164,7 @@ describe('vaadin-upload-file-list', () => {
     });
   });
 
-  describe('target integration', () => {
+  describe('manager integration', () => {
     let manager: UploadManager;
 
     beforeEach(() => {
@@ -174,18 +174,18 @@ describe('vaadin-upload-file-list', () => {
       });
     });
 
-    it('should sync files from target when target is set', async () => {
+    it('should sync files from manager when manager is set', async () => {
       const files = createFiles(2, 100, 'text/plain');
       manager.addFiles(files);
 
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
 
       expect(fileList.items).to.have.lengthOf(2);
     });
 
-    it('should update when target files change', async () => {
-      fileList.target = manager;
+    it('should update when manager files change', async () => {
+      fileList.manager = manager;
       await nextFrame();
       expect(fileList.items).to.have.lengthOf(0);
 
@@ -194,21 +194,21 @@ describe('vaadin-upload-file-list', () => {
       expect(fileList.items).to.have.lengthOf(2);
     });
 
-    it('should clear items when target is removed', async () => {
+    it('should clear items when manager is removed', async () => {
       manager.addFiles(createFiles(2, 100, 'text/plain'));
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
       expect(fileList.items).to.have.lengthOf(2);
 
-      fileList.target = null;
+      fileList.manager = null;
       await nextFrame();
       expect(fileList.items).to.have.lengthOf(0);
     });
 
-    it('should forward file-retry event to target', async () => {
+    it('should forward file-retry event to manager', async () => {
       const file = createFile(100, 'text/plain');
       manager.addFiles([file]);
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
 
       const retrySpy = sinon.spy(manager, 'retryUpload');
@@ -222,10 +222,10 @@ describe('vaadin-upload-file-list', () => {
       expect(retrySpy.firstCall.args[0]).to.equal(manager.files[0]);
     });
 
-    it('should forward file-abort event to target', async () => {
+    it('should forward file-abort event to manager', async () => {
       const file = createFile(100, 'text/plain');
       manager.addFiles([file]);
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
 
       // Capture file reference before aborting (abort removes it from the list)
@@ -241,10 +241,10 @@ describe('vaadin-upload-file-list', () => {
       expect(abortSpy.firstCall.args[0]).to.equal(targetFile);
     });
 
-    it('should forward file-start event to target', async () => {
+    it('should forward file-start event to manager', async () => {
       const file = createFile(100, 'text/plain');
       manager.addFiles([file]);
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
 
       const uploadSpy = sinon.spy(manager, 'uploadFiles');
@@ -258,10 +258,10 @@ describe('vaadin-upload-file-list', () => {
       expect(uploadSpy.firstCall.args[0]).to.equal(manager.files[0]);
     });
 
-    it('should forward file-remove event to target', async () => {
+    it('should forward file-remove event to manager', async () => {
       const file = createFile(100, 'text/plain');
       manager.addFiles([file]);
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
 
       const removeSpy = sinon.spy(manager, 'removeFile');
@@ -279,7 +279,7 @@ describe('vaadin-upload-file-list', () => {
     it('should stop propagation when forwarding events', async () => {
       const file = createFile(100, 'text/plain');
       manager.addFiles([file]);
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
 
       const parentSpy = sinon.spy();
@@ -298,7 +298,7 @@ describe('vaadin-upload-file-list', () => {
       parent.removeChild(fileList);
     });
 
-    it('should not stop propagation when no target is set', async () => {
+    it('should not stop propagation when no manager is set', async () => {
       const file = createFile(100, 'text/plain') as UploadFile;
       fileList.items = [file];
       await nextFrame();
@@ -319,9 +319,9 @@ describe('vaadin-upload-file-list', () => {
       parent.removeChild(fileList);
     });
 
-    it('should remove listener from old target when target changes', async () => {
+    it('should remove listener from old manager when manager changes', async () => {
       manager.addFiles(createFiles(1, 100, 'text/plain'));
-      fileList.target = manager;
+      fileList.manager = manager;
       await nextFrame();
       expect(fileList.items).to.have.lengthOf(1);
 
@@ -331,7 +331,7 @@ describe('vaadin-upload-file-list', () => {
       });
       manager2.addFiles(createFiles(3, 100, 'text/plain'));
 
-      fileList.target = manager2;
+      fileList.manager = manager2;
       await nextFrame();
       expect(fileList.items).to.have.lengthOf(3);
 

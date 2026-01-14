@@ -70,16 +70,16 @@ export const UploadFileListMixin = (superClass) =>
         },
 
         /**
-         * Reference to an UploadManager (or compatible target) to link this file list to.
+         * Reference to an UploadManager to link this file list to.
          * When set, the file list automatically:
-         * - Syncs files from the target
-         * - Forwards retry/abort/start/remove events back to the target
+         * - Syncs files from the manager
+         * - Forwards retry/abort/start/remove events back to the manager
          * @type {Object | null}
          */
-        target: {
+        manager: {
           type: Object,
           value: null,
-          observer: '__targetChanged',
+          observer: '__managerChanged',
         },
       };
     }
@@ -90,7 +90,7 @@ export const UploadFileListMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__onTargetFilesChanged = this.__onTargetFilesChanged.bind(this);
+      this.__onManagerFilesChanged = this.__onManagerFilesChanged.bind(this);
       this.__onFileRetry = this.__onFileRetry.bind(this);
       this.__onFileAbort = this.__onFileAbort.bind(this);
       this.__onFileStart = this.__onFileStart.bind(this);
@@ -101,7 +101,7 @@ export const UploadFileListMixin = (superClass) =>
     ready() {
       super.ready();
 
-      // Listen for file events to forward to the target
+      // Listen for file events to forward to the manager
       this.addEventListener('file-retry', this.__onFileRetry);
       this.addEventListener('file-abort', this.__onFileAbort);
       this.addEventListener('file-start', this.__onFileStart);
@@ -109,33 +109,33 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __targetChanged(target, oldTarget) {
-      // Remove listeners from old target
-      if (oldTarget) {
-        oldTarget.removeEventListener('files-changed', this.__onTargetFilesChanged);
+    __managerChanged(manager, oldManager) {
+      // Remove listeners from old manager
+      if (oldManager) {
+        oldManager.removeEventListener('files-changed', this.__onManagerFilesChanged);
       }
 
-      // Add listeners to new target
-      if (target) {
-        target.addEventListener('files-changed', this.__onTargetFilesChanged);
+      // Add listeners to new manager
+      if (manager) {
+        manager.addEventListener('files-changed', this.__onManagerFilesChanged);
 
         // Sync initial state
-        this.__syncFromTarget();
+        this.__syncFromManager();
       } else {
-        // Clear the list when target is removed
+        // Clear the list when manager is removed
         this.items = [];
       }
     }
 
     /** @private */
-    __onTargetFilesChanged() {
-      this.__syncFromTarget();
+    __onManagerFilesChanged() {
+      this.__syncFromManager();
     }
 
     /** @private */
-    __syncFromTarget() {
-      if (this.target) {
-        const files = [...this.target.files];
+    __syncFromManager() {
+      if (this.manager) {
+        const files = [...this.manager.files];
         // Apply i18n formatting to each file
         files.forEach((file) => this.__applyI18nToFile(file));
         this.items = files;
@@ -144,33 +144,33 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __onFileRetry(event) {
-      if (this.target && typeof this.target.retryUpload === 'function') {
+      if (this.manager && typeof this.manager.retryUpload === 'function') {
         event.stopPropagation();
-        this.target.retryUpload(event.detail.file);
+        this.manager.retryUpload(event.detail.file);
       }
     }
 
     /** @private */
     __onFileAbort(event) {
-      if (this.target && typeof this.target.abortUpload === 'function') {
+      if (this.manager && typeof this.manager.abortUpload === 'function') {
         event.stopPropagation();
-        this.target.abortUpload(event.detail.file);
+        this.manager.abortUpload(event.detail.file);
       }
     }
 
     /** @private */
     __onFileStart(event) {
-      if (this.target && typeof this.target.uploadFiles === 'function') {
+      if (this.manager && typeof this.manager.uploadFiles === 'function') {
         event.stopPropagation();
-        this.target.uploadFiles(event.detail.file);
+        this.manager.uploadFiles(event.detail.file);
       }
     }
 
     /** @private */
     __onFileRemove(event) {
-      if (this.target && typeof this.target.removeFile === 'function') {
+      if (this.manager && typeof this.manager.removeFile === 'function') {
         event.stopPropagation();
-        this.target.removeFile(event.detail.file);
+        this.manager.removeFile(event.detail.file);
       }
     }
 
