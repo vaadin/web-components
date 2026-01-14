@@ -952,7 +952,7 @@ describe('multi selection column', () => {
       await nextRender();
 
       rows = getRows(grid.$.items);
-      checkboxes = [...grid.querySelectorAll('vaadin-checkbox[aria-label="Select Row"]')];
+      checkboxes = [...grid.querySelectorAll('vaadin-checkbox:not(.vaadin-grid-select-all-checkbox)')];
 
       itemSelectionSpy = sinon.spy();
       grid.addEventListener('item-toggle', itemSelectionSpy);
