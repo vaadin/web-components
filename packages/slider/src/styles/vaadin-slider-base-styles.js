@@ -8,10 +8,52 @@ import { css } from 'lit';
 
 export const sliderStyles = css`
   :host {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    height: var(--_thumb-size);
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
+    --_thumb-size: var(--vaadin-slider-thumb-size, 1lh);
+    --_track-size: var(--vaadin-slider-track-size, 0.25lh);
   }
 
   :host([hidden]) {
     display: none !important;
+  }
+
+  [part='track'] {
+    box-sizing: border-box;
+    position: absolute;
+    height: var(--_track-size);
+    width: 100%;
+    background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  [part='track-fill'] {
+    box-sizing: border-box;
+    position: absolute;
+    height: var(--_track-size);
+    background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
+    pointer-events: none;
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
+  }
+
+  [part~='thumb'] {
+    position: absolute;
+    box-sizing: border-box;
+    width: var(--_thumb-size);
+    height: var(--_thumb-size);
+    transform: translateX(-50%);
+    background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
+    border-radius: 50%;
+    pointer-events: auto;
+    touch-action: none;
   }
 `;
