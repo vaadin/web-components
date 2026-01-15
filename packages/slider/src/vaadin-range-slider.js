@@ -197,6 +197,7 @@ class RangeSlider extends SliderMixin(
     this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
     this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
   }
+
   /**
    * @param {PointerEvent} event
    * @private
