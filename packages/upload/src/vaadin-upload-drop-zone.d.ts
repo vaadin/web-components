@@ -56,8 +56,9 @@ declare class UploadDropZone extends HTMLElement {
   /**
    * True when max files has been reached on the manager.
    * The drop zone will not accept files when this is true.
+   * @readonly
    */
-  maxFilesReached: boolean;
+  readonly maxFilesReached: boolean;
 }
 
 interface UploadDropZone extends ElementMixinClass, ThemableMixinClass {}

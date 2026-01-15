@@ -39,10 +39,11 @@ import { UploadManager } from './vaadin-upload-manager.js';
  * To override the hover effect, use `vaadin-upload-drop-zone[dragover]::after`
  * selector to style the pseudo-element covering the drop zone during dragover.
  *
- * Attribute   | Description
- * ------------|--------------------------------------------
- * `dragover`  | Set when files are being dragged over the element
- * `disabled`  | Set when the manager has reached maxFiles
+ * Attribute          | Description
+ * -------------------|--------------------------------------------
+ * `dragover`         | Set when files are being dragged over the element
+ * `disabled`         | Set when the drop zone is explicitly disabled
+ * `max-files-reached`| Set when the manager has reached maxFiles
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -90,6 +91,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       /**
        * True when max files has been reached on the manager.
        * @type {boolean}
+       * @readonly
        */
       maxFilesReached: {
         type: Boolean,
