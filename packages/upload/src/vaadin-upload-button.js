@@ -142,21 +142,6 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     super.disabled = this.__explicitDisabled || this.maxFilesReached;
   }
 
-  /** @private */
-  __syncFromManager() {
-    if (this.manager instanceof UploadManager) {
-      this.maxFilesReached = this.manager.maxFilesReached;
-    } else {
-      this.maxFilesReached = false;
-    }
-
-    // Sync effective disabled state
-    const effectiveDisabled = this.__explicitDisabled || this.maxFilesReached;
-    if (super.disabled !== effectiveDisabled) {
-      super.disabled = effectiveDisabled;
-    }
-  }
-
   /** @protected */
   render() {
     return html`
@@ -274,6 +259,21 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     } else if (this.isConnected) {
       // No manager - reset state
       this.__syncFromManager();
+    }
+  }
+
+  /** @private */
+  __syncFromManager() {
+    if (this.manager instanceof UploadManager) {
+      this.maxFilesReached = this.manager.maxFilesReached;
+    } else {
+      this.maxFilesReached = false;
+    }
+
+    // Sync effective disabled state
+    const effectiveDisabled = this.__explicitDisabled || this.maxFilesReached;
+    if (super.disabled !== effectiveDisabled) {
+      super.disabled = effectiveDisabled;
     }
   }
 
