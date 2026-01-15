@@ -766,19 +766,31 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       e.preventDefault();
 
+      // Fire click event on the first element in the cell, or the cell itself.
+      // This serves two purposes:
+      // - Activate any buttons or other clickable elements in the cell
+      // - Fire a general click event for the cell, which can be used on the
+      //   application level to detect clicks on cells / items in the grid.
+      //   Used by the Flow component to implement the `item-click` event.
+      //
+      // When clicking an element in the cell, allow activating the cell since
+      // that is excluded from the keydown handler above. Active item mixin
+      // takes care of only activating the item under correct conditions.
+      //
+      // When clicking a cell with only text nodes, skip activating the cell
+      // on click, since that is already handled on keydown.
       const cell = e.composedPath()[0];
-      if (cell._content && cell._content.firstElementChild) {
-        const wasNavigating = this.hasAttribute('navigating');
-        cell._content.firstElementChild.dispatchEvent(
-          new MouseEvent('click', {
-            shiftKey: e.shiftKey,
-            bubbles: true,
-            composed: true,
-            cancelable: true,
-          }),
-        );
-        this.toggleAttribute('navigating', wasNavigating);
-      }
+      const target = (cell._content && cell._content.firstElementChild) || cell;
+      const wasNavigating = this.hasAttribute('navigating');
+      const clickEvent = new MouseEvent('click', {
+        shiftKey: e.shiftKey,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      });
+      clickEvent.skipCellActivate = target === cell;
+      target.dispatchEvent(clickEvent);
+      this.toggleAttribute('navigating', wasNavigating);
     }
 
     /**
