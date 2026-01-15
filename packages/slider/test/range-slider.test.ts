@@ -394,6 +394,21 @@ describe('vaadin-range-slider', () => {
           expect(document.activeElement).to.not.equal(input);
         });
       });
+
+      it('should only fire change event on track pointerup', async () => {
+        const { x, y } = middleOfThumb(0);
+
+        const spy = sinon.spy();
+        slider.addEventListener('change', spy);
+
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(spy).to.be.not.called;
+        await sendMouse({ type: 'up' });
+
+        expect(spy).to.be.calledOnce;
+      });
     });
 
     describe('thumbs limits', () => {

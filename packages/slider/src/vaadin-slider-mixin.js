@@ -166,7 +166,6 @@ export const SliderMixin = (superClass) =>
         const newValue = this.__getEventValue(event);
         this.__updateValue(newValue, this.__thumbIndex);
         this.__commitValue();
-        this.__detectAndDispatchChange();
       }
     }
 

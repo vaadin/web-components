@@ -192,7 +192,7 @@ describe('vaadin-slider', () => {
       expect(slider.value).to.equal(50);
     });
 
-    it('should fire change event on track pointerdown', async () => {
+    it('should only fire change event on track pointerup', async () => {
       const track = slider.shadowRoot!.querySelector('[part="track"]')!;
 
       const spy = sinon.spy();
@@ -200,7 +200,9 @@ describe('vaadin-slider', () => {
 
       await sendMouseToElement({ type: 'move', element: track });
       await sendMouse({ type: 'down' });
+      expect(spy).to.be.not.called;
 
+      await sendMouse({ type: 'up' });
       expect(spy).to.be.calledOnce;
     });
 
