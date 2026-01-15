@@ -48,17 +48,10 @@
       // Use mock XHR
       manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
 
-      // Link upload button to manager
-      const button = document.querySelector('#upload-button');
-      button.manager = manager;
-
-      // Link drop zone to manager
-      const dropzone = document.querySelector('#dropzone');
-      dropzone.manager = manager;
-
-      // Link file list to manager
-      const fileList = document.querySelector('#file-list');
-      fileList.manager = manager;
+      // Link components to manager
+      document.querySelector('#upload-button').manager = manager;
+      document.querySelector('#dropzone').manager = manager;
+      document.querySelector('#file-list').manager = manager;
     </script>
   </body>
 </html>

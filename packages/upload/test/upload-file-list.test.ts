@@ -466,6 +466,76 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
       expect(fileList.items).to.have.lengthOf(3);
     });
+
+    it('should remove listener when disconnected from DOM', async () => {
+      // Spy on manager to verify event fires
+      const spy = sinon.spy();
+      manager.addEventListener('files-changed', spy);
+
+      fileList.manager = manager;
+      await nextFrame();
+
+      // Verify file list is in DOM
+      expect(fileList.isConnected).to.be.true;
+
+      // Remove file list from DOM
+      fileList.remove();
+
+      // Verify file list is disconnected
+      expect(fileList.isConnected).to.be.false;
+
+      // Reset spy call count after setup
+      spy.resetHistory();
+
+      // Add files to manager
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+
+      // Verify event was dispatched
+      expect(spy.called).to.be.true;
+
+      // File list should not have updated since listener was removed on disconnect
+      expect(fileList.items).to.have.lengthOf(0);
+    });
+
+    it('should re-attach listener when reconnected to DOM', async () => {
+      fileList.manager = manager;
+      await nextFrame();
+
+      // Remove and re-add file list
+      const parent = fileList.parentElement!;
+      fileList.remove();
+      parent.appendChild(fileList);
+      await nextFrame();
+
+      // Add files - should update file list since it's reconnected
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      await nextFrame();
+      expect(fileList.items).to.have.lengthOf(2);
+    });
+
+    it('should sync files when reconnected after files were added while disconnected', async () => {
+      fileList.manager = manager;
+      await nextFrame();
+      expect(fileList.items).to.have.lengthOf(0);
+
+      // Remove file list from DOM
+      const parent = fileList.parentElement!;
+      fileList.remove();
+
+      // Add files WHILE file list is disconnected
+      manager.addFiles(createFiles(3, 100, 'text/plain'));
+      expect(manager.files).to.have.lengthOf(3);
+
+      // File list should not have updated
+      expect(fileList.items).to.have.lengthOf(0);
+
+      // Reconnect file list
+      parent.appendChild(fileList);
+      await nextFrame();
+
+      // File list should now be synced with manager files
+      expect(fileList.items).to.have.lengthOf(3);
+    });
   });
 
   describe('requestContentUpdate', () => {

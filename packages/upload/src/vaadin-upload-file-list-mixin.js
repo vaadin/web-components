@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, render } from 'lit';
+import { UploadManager } from './vaadin-upload-manager.js';
 
 const DEFAULT_I18N = {
   file: {
@@ -108,15 +109,38 @@ export const UploadFileListMixin = (superClass) =>
       this.addEventListener('file-remove', this.__onFileRemove);
     }
 
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      // Clean up manager listener to prevent memory leaks
+      if (this.manager instanceof UploadManager) {
+        this.manager.removeEventListener('files-changed', this.__onManagerFilesChanged);
+      }
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      // Re-attach manager listener when reconnected to DOM
+      if (this.manager instanceof UploadManager) {
+        this.manager.addEventListener('files-changed', this.__onManagerFilesChanged);
+
+        // Sync state with current manager files
+        this.__syncFromManager();
+      }
+    }
+
     /** @private */
     __managerChanged(manager, oldManager) {
       // Remove listeners from old manager
-      if (oldManager) {
+      if (oldManager instanceof UploadManager) {
         oldManager.removeEventListener('files-changed', this.__onManagerFilesChanged);
       }
 
-      // Add listeners to new manager
-      if (manager) {
+      // Add listeners to new manager only when connected
+      if (this.isConnected && manager instanceof UploadManager) {
         manager.addEventListener('files-changed', this.__onManagerFilesChanged);
 
         // Sync initial state
@@ -134,7 +158,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __syncFromManager() {
-      if (this.manager) {
+      if (this.manager instanceof UploadManager) {
         const files = [...this.manager.files];
         // Apply i18n formatting to each file
         files.forEach((file) => this.__applyI18nToFile(file));
@@ -144,7 +168,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __onFileRetry(event) {
-      if (this.manager && typeof this.manager.retryUpload === 'function') {
+      if (this.manager instanceof UploadManager) {
         event.stopPropagation();
         this.manager.retryUpload(event.detail.file);
       }
@@ -152,7 +176,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __onFileAbort(event) {
-      if (this.manager && typeof this.manager.abortUpload === 'function') {
+      if (this.manager instanceof UploadManager) {
         event.stopPropagation();
         this.manager.abortUpload(event.detail.file);
       }
@@ -160,7 +184,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __onFileStart(event) {
-      if (this.manager && typeof this.manager.uploadFiles === 'function') {
+      if (this.manager instanceof UploadManager) {
         event.stopPropagation();
         this.manager.uploadFiles(event.detail.file);
       }
@@ -168,7 +192,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __onFileRemove(event) {
-      if (this.manager && typeof this.manager.removeFile === 'function') {
+      if (this.manager instanceof UploadManager) {
         event.stopPropagation();
         this.manager.removeFile(event.detail.file);
       }
@@ -223,7 +247,7 @@ export const UploadFileListMixin = (superClass) =>
       // Translate error codes to i18n messages
       if (file.errorKey && i18n.uploading.error[file.errorKey]) {
         file.error = i18n.uploading.error[file.errorKey];
-      } else if (!file.errorKey && this.manager) {
+      } else if (!file.errorKey && this.manager instanceof UploadManager) {
         // Clear error when errorKey is reset (e.g., on retry) only when using manager
         file.error = '';
       }
