@@ -384,6 +384,16 @@ describe('vaadin-range-slider', () => {
         expect(slider.value).to.deep.equal([20, 60]);
         expect(document.activeElement).to.equal(inputs[1]);
       });
+
+      it('should not focus any of inputs on pointerdown below the track', async () => {
+        const { y } = middleOfThumb(0);
+
+        await sendMouse({ type: 'move', position: [50, y + 5] });
+        await sendMouse({ type: 'down' });
+        inputs.forEach((input) => {
+          expect(document.activeElement).to.not.equal(input);
+        });
+      });
     });
 
     describe('thumbs limits', () => {

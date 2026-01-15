@@ -176,6 +176,12 @@ class Slider extends SliderMixin(
     // Prevent blur if already focused
     event.preventDefault();
 
+    // Only handle mousedown on the thumb, track or track-fill
+    const part = event.composedPath()[0].getAttribute('part');
+    if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
+      return;
+    }
+
     // Focus the input to allow modifying value using keyboard
     this.focus({ focusVisible: false });
   }

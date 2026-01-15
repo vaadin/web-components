@@ -215,5 +215,11 @@ describe('vaadin-slider', () => {
       await sendMouse({ type: 'down' });
       expect(document.activeElement).to.equal(slider.querySelector('input'));
     });
+
+    it('should focus slotted range input on pointerdown below the track', async () => {
+      await sendMouse({ type: 'move', position: [50, y + 5] });
+      await sendMouse({ type: 'down' });
+      expect(document.activeElement).to.not.equal(slider.querySelector('input'));
+    });
   });
 });
