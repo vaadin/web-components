@@ -46,8 +46,6 @@ export const SliderMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__thumbIndex = 0;
-
       this.__onPointerMove = this.__onPointerMove.bind(this);
       this.__onPointerUp = this.__onPointerUp.bind(this);
 
@@ -59,6 +57,14 @@ export const SliderMixin = (superClass) =>
       super.firstUpdated();
 
       this.__lastCommittedValue = this.value;
+    }
+
+    /**
+     * @param {Event} event
+     * @return {number}
+     */
+    __getThumbIndex(_event) {
+      return 0;
     }
 
     /**
@@ -150,15 +156,9 @@ export const SliderMixin = (superClass) =>
       this.addEventListener('pointermove', this.__onPointerMove);
       this.addEventListener('pointerup', this.__onPointerUp);
       this.addEventListener('pointercancel', this.__onPointerUp);
-      this.__handlePointerDown(event, part);
-    }
 
-    /**
-     * @param {PointerEvent} event
-     * @param {string} part
-     * @private
-     */
-    __handlePointerDown(event, part) {
+      this.__thumbIndex = this.__getThumbIndex(event);
+
       // Update value on track click
       if (part.startsWith('track')) {
         this.__applyValue(event);
@@ -197,7 +197,8 @@ export const SliderMixin = (superClass) =>
 
     /** @private */
     __onInput(event) {
-      this.__updateValue(event.target.value);
+      const index = this.__getThumbIndex(event);
+      this.__updateValue(event.target.value, index);
       this.__commitValue();
       this.__detectAndDispatchChange();
     }

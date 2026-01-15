@@ -197,17 +197,6 @@ class RangeSlider extends SliderMixin(
     this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
     this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
   }
-
-  /**
-   * @param {PointerEvent} event
-   * @param {string} part
-   * @private
-   */
-  __handlePointerDown(event, part) {
-    this.__thumbIndex = this.__getClosestThumb(event);
-    super.__handlePointerDown(event, part);
-  }
-
   /**
    * @param {PointerEvent} event
    * @private
@@ -222,6 +211,18 @@ class RangeSlider extends SliderMixin(
   /** @private */
   __commitValue() {
     this.value = [...this.__value];
+  }
+
+  /**
+   * @param {Event} event
+   * @return {number}
+   */
+  __getThumbIndex(event) {
+    if (event.type === 'input') {
+      return this._inputElements.indexOf(event.target);
+    }
+
+    return this.__getClosestThumb(event);
   }
 
   /**
@@ -261,7 +262,7 @@ class RangeSlider extends SliderMixin(
 
   /** @private */
   __onKeyDown(event) {
-    this.__thumbIndex = this._inputElements.indexOf(event.target);
+    const index = this._inputElements.indexOf(event.target);
 
     const prevKeys = ['ArrowLeft', 'ArrowDown'];
     const nextKeys = ['ArrowRight', 'ArrowUp'];
@@ -270,8 +271,7 @@ class RangeSlider extends SliderMixin(
     // to prevent the case where slotted range inputs would end up in broken state.
     if (
       this.__value[0] === this.__value[1] &&
-      ((this.__thumbIndex === 0 && nextKeys.includes(event.key)) ||
-        (this.__thumbIndex === 1 && prevKeys.includes(event.key)))
+      ((index === 0 && nextKeys.includes(event.key)) || (index === 1 && prevKeys.includes(event.key)))
     ) {
       event.preventDefault();
     }
