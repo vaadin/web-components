@@ -30,6 +30,7 @@ const sideNavItem = css`
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
     cursor: var(--vaadin-clickable-cursor);
     touch-action: manipulation;
+    contain: layout;
   }
 
   :host([current]) [part='content'] {
