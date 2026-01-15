@@ -74,13 +74,14 @@ export const SliderMixin = (superClass) =>
     /**
      * @param {number} value
      * @param {number} index
+     * @param {number[]} fullValue
      * @private
      */
-    __updateValue(value, index) {
+    __updateValue(value, index, fullValue = this.__value) {
       const { min, max, step } = this.__getConstraints();
 
-      const minValue = this.__value[index - 1] || min;
-      const maxValue = this.__value[index + 1] || max;
+      const minValue = fullValue[index - 1] || min;
+      const maxValue = fullValue[index + 1] || max;
 
       const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
@@ -90,7 +91,7 @@ export const SliderMixin = (superClass) =>
 
       const newValue = Math.round(nearestValue);
 
-      this.__value = this.__value.with(index, newValue);
+      this.__value = fullValue.with(index, newValue);
     }
 
     /**

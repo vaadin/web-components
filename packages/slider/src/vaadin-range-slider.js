@@ -160,8 +160,11 @@ class RangeSlider extends SliderMixin(
   updated(props) {
     super.updated(props);
 
-    if (props.has('value')) {
-      this.__value = [...this.value];
+    if (props.has('value') || props.has('min') || props.has('max')) {
+      const value = [...this.value];
+      value.forEach((v, idx) => {
+        this.__updateValue(v, idx, value);
+      });
     }
   }
 
