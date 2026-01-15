@@ -143,7 +143,7 @@ describe('vaadin-slider', () => {
       expect(slider.value).to.equal(10);
     });
 
-    it('should not fire change event on thumb pointermove', async () => {
+    it('should only fire change event on thumb pointerup but not pointermove', async () => {
       const spy = sinon.spy();
       slider.addEventListener('change', spy);
 
@@ -152,17 +152,8 @@ describe('vaadin-slider', () => {
       await sendMouse({ type: 'move', position: [20, y] });
 
       expect(spy).to.be.not.called;
-    });
 
-    it('should fire change event on thumb pointerup', async () => {
-      const spy = sinon.spy();
-      slider.addEventListener('change', spy);
-
-      await sendMouseToElement({ type: 'move', element: thumb });
-      await sendMouse({ type: 'down' });
-      await sendMouse({ type: 'move', position: [20, y] });
       await sendMouse({ type: 'up' });
-
       expect(spy).to.be.calledOnce;
     });
 
