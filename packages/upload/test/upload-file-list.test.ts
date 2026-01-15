@@ -63,6 +63,18 @@ describe('vaadin-upload-file-list', () => {
       expect(fileList.hasAttribute('disabled')).to.be.true;
     });
 
+    it('should propagate disabled state to upload-file elements', async () => {
+      fileList.items = [createFile(100, 'text/plain') as UploadFile];
+      await nextFrame();
+
+      const uploadFile = fileList.querySelector('vaadin-upload-file')!;
+      expect(uploadFile.disabled).to.be.false;
+
+      fileList.disabled = true;
+      await nextFrame();
+      expect(uploadFile.disabled).to.be.true;
+    });
+
     it('should have manager property defaulting to null', () => {
       expect(fileList.manager).to.be.null;
     });
@@ -282,6 +294,17 @@ describe('vaadin-upload-file-list', () => {
       // Status should use the custom formatSize
       expect(getStatusText()).to.include('1536 octets');
     });
+
+    it('should format elapsedStr when elapsed time is available', async () => {
+      const file = createFile(1536, 'text/plain') as UploadFile;
+      file.total = 1536;
+      file.elapsed = 65; // 1 minute 5 seconds
+      fileList.items = [file];
+      await nextFrame();
+
+      // elapsedStr should be formatted as HH:MM:SS
+      expect(file.elapsedStr).to.equal('00:01:05');
+    });
   });
 
   describe('manager integration', () => {
@@ -419,23 +442,40 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should stop propagation when forwarding events', async () => {
-      const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
-      fileList.manager = manager;
-      await nextFrame();
-
-      const parentSpy = sinon.spy();
       const parent = document.createElement('div');
       parent.appendChild(fileList);
-      parent.addEventListener('file-retry', parentSpy);
 
-      const event = new CustomEvent('file-retry', {
-        detail: { file: manager.files[0] },
-        bubbles: true,
-      });
-      fileList.dispatchEvent(event);
+      // Test all event types that should stop propagation
+      // Each iteration uses a fresh manager since some events (like remove) modify the file list
+      const eventTypes = ['file-retry', 'file-abort', 'file-start', 'file-remove'];
+      for (const eventType of eventTypes) {
+        // Use fresh manager for each test to avoid side effects
+        const testManager = new UploadManager({
+          target: '/api/upload',
+          noAuto: true,
+        });
+        const file = createFile(100, 'text/plain');
+        testManager.addFiles([file]);
+        fileList.manager = testManager;
+        await nextFrame();
 
-      expect(parentSpy.called).to.be.false;
+        const parentSpy = sinon.spy();
+        parent.addEventListener(eventType, parentSpy);
+
+        const event = new CustomEvent(eventType, {
+          detail: { file: testManager.files[0] },
+          bubbles: true,
+        });
+        fileList.dispatchEvent(event);
+
+        expect(parentSpy.called, `${eventType} should not bubble when manager is set`).to.be.false;
+
+        parent.removeEventListener(eventType, parentSpy);
+
+        // Clean up for next iteration
+        fileList.manager = null;
+        await nextFrame();
+      }
 
       fileList.remove();
     });
@@ -462,24 +502,39 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should remove listener from old manager when manager changes', async () => {
-      manager.addFiles(createFiles(1, 100, 'text/plain'));
       fileList.manager = manager;
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(1);
+      expect(fileList.items).to.have.lengthOf(0);
+
+      // Spy to track event listener calls - set up AFTER initial manager is set
+      const syncSpy = sinon.spy();
+      const originalSync = (fileList as any).__syncFromManager;
+      (fileList as any).__syncFromManager = function () {
+        syncSpy();
+        return originalSync.call(this);
+      };
 
       const manager2 = new UploadManager({
         target: '/api/upload',
         noAuto: true,
       });
-      manager2.addFiles(createFiles(3, 100, 'text/plain'));
 
       fileList.manager = manager2;
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(3);
 
-      // Changes to old manager should not affect file list
-      manager.addFiles(createFiles(5, 100, 'text/plain'));
+      // Spy should have been called once for initial sync with new manager
+      expect(syncSpy.callCount).to.equal(1);
+      syncSpy.resetHistory();
+
+      // Add files to old manager - should NOT trigger sync since listener was removed
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
+      expect(syncSpy.callCount).to.equal(0);
+
+      // Add files to new manager - should trigger sync (once per file added)
+      manager2.addFiles(createFiles(3, 100, 'text/plain'));
+      await nextFrame();
+      expect(syncSpy.callCount).to.equal(3);
       expect(fileList.items).to.have.lengthOf(3);
     });
 

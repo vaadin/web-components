@@ -153,10 +153,7 @@ export const UploadFileListMixin = (superClass) =>
     /** @private */
     __syncFromManager() {
       if (this.manager instanceof UploadManager) {
-        const files = [...this.manager.files];
-        // Apply i18n formatting to each file
-        files.forEach((file) => this.__applyI18nToFile(file));
-        this.items = files;
+        this.items = [...this.manager.files];
       }
     }
 
@@ -211,6 +208,7 @@ export const UploadFileListMixin = (superClass) =>
       if (file.total) {
         file.totalStr = this.__formatSize(file.total);
         file.loadedStr = this.__formatSize(file.loaded || 0);
+        // TODO: Remove elapsedStr in next major version - it's not used by vaadin-upload-file
         if (file.elapsed != null) {
           file.elapsedStr = this.__formatTime(file.elapsed, this.__splitTimeByUnits(file.elapsed));
         }
