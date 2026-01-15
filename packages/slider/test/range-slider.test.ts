@@ -250,7 +250,7 @@ describe('vaadin-range-slider', () => {
     });
   });
 
-  // Pointe tests randomly fail in Firefox
+  // Pointer tests randomly fail in Firefox
   (isFirefox ? describe.skip : describe)('pointer', () => {
     let thumbs: Element[];
     let inputs: HTMLInputElement[];
@@ -340,8 +340,11 @@ describe('vaadin-range-slider', () => {
     });
 
     describe('track', () => {
-      it('should focus first input on track pointerdown before the first thumb', async () => {
+      beforeEach(() => {
         slider.value = [20, 80];
+      });
+
+      it('should focus first input on track pointerdown before the first thumb', async () => {
         const { x, y } = middleOfThumb(0);
 
         await sendMouse({ type: 'move', position: [x - 20, y] });
@@ -352,7 +355,6 @@ describe('vaadin-range-slider', () => {
       });
 
       it('should focus second input on track pointerdown after the second thumb', async () => {
-        slider.value = [20, 80];
         const { x, y } = middleOfThumb(1);
 
         await sendMouse({ type: 'move', position: [x + 20, y] });
@@ -363,7 +365,6 @@ describe('vaadin-range-slider', () => {
       });
 
       it('should focus first input on track pointerdown between thumbs closer to the first one', async () => {
-        slider.value = [20, 80];
         const { x, y } = middleOfThumb(0);
 
         await sendMouse({ type: 'move', position: [x + 40, y] });
@@ -374,7 +375,6 @@ describe('vaadin-range-slider', () => {
       });
 
       it('should focus second input on track pointerdown between thumbs closer to the second one', async () => {
-        slider.value = [20, 80];
         const { x, y } = middleOfThumb(1);
 
         await sendMouse({ type: 'move', position: [x - 40, y] });

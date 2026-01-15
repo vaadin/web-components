@@ -204,16 +204,8 @@ class RangeSlider extends SliderMixin(
    * @private
    */
   __handlePointerDown(event, part) {
-    const target = event.composedPath()[0];
-    // Update value on track click
-    if (part === 'track') {
-      this.__thumbIndex = this.__getClosestThumb(event);
-      this.__applyValue(event);
-    } else {
-      // Store index of the active thumb
-      const thumbs = this.shadowRoot.querySelectorAll('[part="thumb"]');
-      this.__thumbIndex = [...thumbs].indexOf(target);
-    }
+    this.__thumbIndex = this.__getClosestThumb(event);
+    super.__handlePointerDown(event, part);
   }
 
   /**

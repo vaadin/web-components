@@ -140,9 +140,9 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerDown(event) {
-      // Only handle pointerdown on the thumb or track
+      // Only handle pointerdown on the thumb, track or track-fill
       const part = event.composedPath()[0].getAttribute('part');
-      if (!part.includes('thumb') && part !== 'track') {
+      if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
         return;
       }
 
@@ -160,7 +160,7 @@ export const SliderMixin = (superClass) =>
      */
     __handlePointerDown(event, part) {
       // Update value on track click
-      if (part === 'track') {
+      if (part.startsWith('track')) {
         this.__applyValue(event);
         this.__detectAndDispatchChange();
       }
