@@ -116,14 +116,13 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         value: false,
         reflect: true,
         attribute: 'max-files-reached',
-        observer: '__maxFilesReachedChanged',
       },
     };
   }
 
   constructor() {
     super();
-    this.__onMaxFilesReachedChanged = this.__onMaxFilesReachedChanged.bind(this);
+    this.__syncFromManager = this.__syncFromManager.bind(this);
     this.__explicitDisabled = false;
   }
 
@@ -144,7 +143,14 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   }
 
   /** @private */
-  __syncEffectiveDisabled() {
+  __syncFromManager() {
+    if (this.manager instanceof UploadManager) {
+      this.maxFilesReached = this.manager.maxFilesReached;
+    } else {
+      this.maxFilesReached = false;
+    }
+
+    // Sync effective disabled state
     const effectiveDisabled = this.__explicitDisabled || this.maxFilesReached;
     if (super.disabled !== effectiveDisabled) {
       super.disabled = effectiveDisabled;
@@ -190,7 +196,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
     // Clean up manager listener to prevent memory leaks
     if (this.manager instanceof UploadManager) {
-      this.manager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+      this.manager.removeEventListener('max-files-reached-changed', this.__syncFromManager);
     }
   }
 
@@ -200,10 +206,8 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
     // Re-attach manager listener when reconnected to DOM
     if (this.manager instanceof UploadManager) {
-      this.manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
-
-      // Sync maxFilesReached state with current manager state
-      this.maxFilesReached = !!this.manager.maxFilesReached;
+      this.manager.addEventListener('max-files-reached-changed', this.__syncFromManager);
+      this.__syncFromManager();
     }
   }
 
@@ -260,29 +264,17 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   __managerChanged(manager, oldManager) {
     // Remove listener from old manager
     if (oldManager instanceof UploadManager) {
-      oldManager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+      oldManager.removeEventListener('max-files-reached-changed', this.__syncFromManager);
     }
 
-    // Add listener to new manager
+    // Add listener to new manager and sync state only when connected
     if (this.isConnected && manager instanceof UploadManager) {
-      manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
-
-      // Sync initial state if manager has maxFilesReached property
-      this.maxFilesReached = !!manager.maxFilesReached;
-    } else {
-      this.maxFilesReached = false;
+      manager.addEventListener('max-files-reached-changed', this.__syncFromManager);
+      this.__syncFromManager();
+    } else if (this.isConnected) {
+      // No manager - reset state
+      this.__syncFromManager();
     }
-  }
-
-  /** @private */
-  __onMaxFilesReachedChanged(event) {
-    this.maxFilesReached = event.detail.value;
-  }
-
-  /** @private */
-  __maxFilesReachedChanged() {
-    // Sync the effective disabled state when maxFilesReached changes
-    this.__syncEffectiveDisabled();
   }
 
   /** @override */
