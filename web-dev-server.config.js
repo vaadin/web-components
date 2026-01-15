@@ -1,7 +1,7 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { appendStyles, generateListing, isIndexPage } from './wds-utils.js';
 
-const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base';
+const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'base:light';
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 export function cssImportPlugin() {
@@ -49,16 +49,20 @@ export function enforceThemePlugin(defaultTheme) {
       // Use query parameter if present, otherwise fall back to process arg
       const theme = context.query.theme || defaultTheme;
 
-      body = body.replace('<html', `<html data-theme="${theme}"`);
+      if (theme.endsWith('dark')) {
+        body = body.replace('<html', `<html data-theme="${theme}" theme="dark"`);
+      } else {
+        body = body.replace('<html', `<html data-theme="${theme}"`);
+      }
 
-      if (theme === 'lumo') {
+      if (theme.startsWith('lumo')) {
         body = body.replace(
           '</title>',
           '</title><link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
         );
       }
 
-      if (theme === 'aura') {
+      if (theme.startsWith('aura')) {
         body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/aura/aura.css" />');
       }
 

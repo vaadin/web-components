@@ -4,6 +4,10 @@ import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-st
 addGlobalStyles(
   'dev-common',
   css`
+    [data-theme$='dark'] {
+      color-scheme: dark;
+    }
+
     :where(body) {
       font-family: system-ui, sans-serif;
       line-height: 1.25;
@@ -70,20 +74,36 @@ class ThemeSwitcher extends LitElement {
   `;
 
   get currentTheme() {
-    return document.documentElement.dataset.theme || 'base';
+    return document.documentElement.dataset.theme?.split(':')[0] || 'base';
+  }
+
+  get currentColorScheme() {
+    return document.documentElement.dataset.theme?.split(':')[1] || 'light';
   }
 
   render() {
     return html`
-      <button ?active=${this.currentTheme === 'base'} @click=${() => this.switchTheme('base')}>Base</button>
-      <button ?active=${this.currentTheme === 'lumo'} @click=${() => this.switchTheme('lumo')}>Lumo</button>
-      <button ?active=${this.currentTheme === 'aura'} @click=${() => this.switchTheme('aura')}>Aura</button>
+      <button ?active=${this.currentTheme.startsWith('base')} @click=${() => this.switchTheme('base')}>Base</button>
+      <button ?active=${this.currentTheme.startsWith('lumo')} @click=${() => this.switchTheme('lumo')}>Lumo</button>
+      <button ?active=${this.currentTheme.startsWith('aura')} @click=${() => this.switchTheme('aura')}>Aura</button>
+      <hr />
+      <button ?active=${this.currentColorScheme === 'light'} @click=${() => this.switchColorScheme('light')}
+        >Light</button
+      >
+      <button ?active=${this.currentColorScheme === 'dark'} @click=${() => this.switchColorScheme('dark')}>Dark</button>
     `;
   }
 
   switchTheme(theme) {
     const url = new URL(window.location);
-    url.searchParams.set('theme', theme);
+    url.searchParams.set('theme', `${theme}:${this.currentColorScheme}`);
+    history.replaceState(null, '', url);
+    location.reload();
+  }
+
+  switchColorScheme(scheme) {
+    const url = new URL(window.location);
+    url.searchParams.set('theme', `${this.currentTheme}:${scheme}`);
     history.replaceState(null, '', url);
     location.reload();
   }
