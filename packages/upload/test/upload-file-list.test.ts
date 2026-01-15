@@ -208,6 +208,22 @@ describe('vaadin-upload-file-list', () => {
       expect(getRemoveButtonLabel()).to.equal('Delete');
     });
 
+    it('should support partial i18n updates', async () => {
+      // Set only the retry label - other labels should remain default
+      fileList.i18n = {
+        file: {
+          retry: 'Try again',
+        },
+      };
+      const file = createFile(100, 'text/plain') as UploadFile;
+      fileList.items = [file];
+      await nextFrame();
+
+      expect(getRetryButtonLabel()).to.equal('Try again');
+      expect(getStartButtonLabel()).to.equal('Start'); // Default
+      expect(getRemoveButtonLabel()).to.equal('Remove'); // Default
+    });
+
     it('should render custom i18n status messages', async () => {
       fileList.i18n = {
         ...fileList.i18n,

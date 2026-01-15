@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, render } from 'lit';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
 const DEFAULT_I18N = {
@@ -41,9 +42,10 @@ const DEFAULT_I18N = {
 
 /**
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const UploadFileListMixin = (superClass) =>
-  class UploadFileListMixin extends superClass {
+  class UploadFileListMixin extends I18nMixin(DEFAULT_I18N, superClass) {
     static get properties() {
       return {
         /**
@@ -51,14 +53,6 @@ export const UploadFileListMixin = (superClass) =>
          */
         items: {
           type: Array,
-        },
-
-        /**
-         * The object used to localize upload files.
-         */
-        i18n: {
-          type: Object,
-          value: () => DEFAULT_I18N,
         },
 
         /**
@@ -86,7 +80,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateItems(items, i18n, disabled)'];
+      return ['__updateItems(items, __effectiveI18n, disabled)'];
     }
 
     constructor() {
@@ -211,7 +205,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __applyI18nToFile(file) {
-      const i18n = this.i18n;
+      const i18n = this.__effectiveI18n;
 
       // Always set size-related strings when total is available
       if (file.total) {
@@ -255,7 +249,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __formatSize(bytes) {
-      const i18n = this.i18n;
+      const i18n = this.__effectiveI18n;
       if (typeof i18n.formatSize === 'function') {
         return i18n.formatSize(bytes);
       }
@@ -283,7 +277,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __formatTime(seconds, split) {
-      const i18n = this.i18n;
+      const i18n = this.__effectiveI18n;
       if (typeof i18n.formatTime === 'function') {
         return i18n.formatTime(seconds, split);
       }
@@ -303,7 +297,7 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __formatFileProgress(file) {
-      const i18n = this.i18n;
+      const i18n = this.__effectiveI18n;
       const remainingTime =
         file.loaded > 0
           ? i18n.uploading.remainingTime.prefix + file.remainingStr
@@ -318,7 +312,7 @@ export const UploadFileListMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      const { items, i18n, disabled } = this;
+      const { items, __effectiveI18n: i18n, disabled } = this;
 
       render(
         html`
