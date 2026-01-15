@@ -206,7 +206,8 @@ class RangeSlider extends SliderMixin(
     // Prevent blur if already focused
     event.preventDefault();
 
-    this._inputElements[this.__thumbIndex].focus();
+    const index = this.__getThumbIndex(event);
+    this._inputElements[index].focus();
   }
 
   /** @private */
