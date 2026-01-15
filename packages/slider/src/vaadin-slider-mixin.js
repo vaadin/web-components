@@ -171,10 +171,6 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerMove(event) {
-      if (event.target !== this) {
-        return;
-      }
-      event.preventDefault(); // Prevent text selection
       this.__applyValue(event);
     }
 
