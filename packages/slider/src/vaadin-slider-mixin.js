@@ -72,7 +72,7 @@ export const SliderMixin = (superClass) =>
      * @param {number} index
      * @private
      */
-    __updateValue(value, index = this.__thumbIndex) {
+    __updateValue(value, index) {
       const { min, max, step } = this.__getConstraints();
 
       const minValue = this.__value[index - 1] || min;
@@ -133,12 +133,14 @@ export const SliderMixin = (superClass) =>
       return safeOffset / size;
     }
 
-    /** @private */
-    __applyValue(event) {
+    /**
+     * @param {PointerEvent} event
+     * @return {number}
+     * @private
+     */
+    __getEventValue(event) {
       const percent = this.__getEventPercent(event);
-      const newValue = this.__getValueFromPercent(percent);
-      this.__updateValue(newValue);
-      this.__commitValue();
+      return this.__getValueFromPercent(percent);
     }
 
     /**
@@ -161,7 +163,9 @@ export const SliderMixin = (superClass) =>
 
       // Update value on track click
       if (part.startsWith('track')) {
-        this.__applyValue(event);
+        const newValue = this.__getEventValue(event);
+        this.__updateValue(newValue, this.__thumbIndex);
+        this.__commitValue();
         this.__detectAndDispatchChange();
       }
     }
@@ -171,7 +175,9 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerMove(event) {
-      this.__applyValue(event);
+      const newValue = this.__getEventValue(event);
+      this.__updateValue(newValue, this.__thumbIndex);
+      this.__commitValue();
     }
 
     /**
@@ -179,6 +185,8 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerUp(event) {
+      this.__thumbIndex = null;
+
       this.releasePointerCapture(event.pointerId);
       this.removeEventListener('pointermove', this.__onPointerMove);
       this.removeEventListener('pointerup', this.__onPointerUp);
@@ -200,12 +208,12 @@ export const SliderMixin = (superClass) =>
       const index = this.__getThumbIndex(event);
       this.__updateValue(event.target.value, index);
       this.__commitValue();
-      this.__detectAndDispatchChange();
     }
 
     /** @private */
     __onChange(event) {
       event.stopPropagation();
+      this.__detectAndDispatchChange();
     }
 
     /**
