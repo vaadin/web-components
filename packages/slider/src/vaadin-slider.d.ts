@@ -9,18 +9,53 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { SliderMixin } from './vaadin-slider-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type SliderChangeEvent = Event & {
+  target: Slider;
+};
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type SliderValueChangedEvent = CustomEvent<{ value: number }>;
+
+export interface SliderCustomEventMap {
+  'value-changed': SliderValueChangedEvent;
+}
+
+export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMap {
+  change: SliderChangeEvent;
+}
+
+/**
  * `<vaadin-slider>` is a web component that represents a range slider
  * for selecting numerical values within a defined range.
  *
  * ```html
  * <vaadin-slider min="0" max="100" step="1"></vaadin-slider>
  * ```
+ *
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class Slider extends SliderMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * The value of the slider.
    */
   value: number;
+
+  addEventListener<K extends keyof SliderEventMap>(
+    type: K,
+    listener: (this: Slider, ev: SliderEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof SliderEventMap>(
+    type: K,
+    listener: (this: Slider, ev: SliderEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {
