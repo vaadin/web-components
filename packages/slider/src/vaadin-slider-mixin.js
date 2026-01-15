@@ -49,6 +49,10 @@ export const SliderMixin = (superClass) =>
       this.__onPointerMove = this.__onPointerMove.bind(this);
       this.__onPointerUp = this.__onPointerUp.bind(this);
 
+      // Use separate mousedown listener for focusing the input, as
+      // pointerdown fires too early and the global `keyboardActive`
+      // flag isn't updated yet, which incorrectly shows focus-ring
+      this.addEventListener('mousedown', (e) => this.__onMouseDown(e));
       this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
     }
 
@@ -147,8 +151,23 @@ export const SliderMixin = (superClass) =>
      * @param {PointerEvent} event
      * @private
      */
+    __onMouseDown(event) {
+      const part = event.composedPath()[0].getAttribute('part');
+      if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
+        return;
+      }
+
+      // Prevent losing focus
+      event.preventDefault();
+
+      this.__focusInput(event);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
     __onPointerDown(event) {
-      // Only handle pointerdown on the thumb, track or track-fill
       const part = event.composedPath()[0].getAttribute('part');
       if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
         return;
@@ -192,6 +211,14 @@ export const SliderMixin = (superClass) =>
       this.removeEventListener('pointercancel', this.__onPointerUp);
 
       this.__detectAndDispatchChange();
+    }
+
+    /**
+     * @param {Event} event
+     * @private
+     */
+    __focusInput(_event) {
+      this.focus({ focusVisible: false });
     }
 
     /** @protected */

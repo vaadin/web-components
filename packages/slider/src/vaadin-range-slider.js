@@ -101,8 +101,6 @@ class RangeSlider extends SliderMixin(
     this.__value = [...this.value];
     this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
-
-    this.addEventListener('mousedown', (e) => this._onMouseDown(e));
   }
 
   /** @protected */
@@ -202,16 +200,7 @@ class RangeSlider extends SliderMixin(
    * @param {PointerEvent} event
    * @private
    */
-  _onMouseDown(event) {
-    // Prevent blur if already focused
-    event.preventDefault();
-
-    // Only handle mousedown on the thumb, track or track-fill
-    const part = event.composedPath()[0].getAttribute('part');
-    if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
-      return;
-    }
-
+  __focusInput(event) {
     const index = this.__getThumbIndex(event);
     this._inputElements[index].focus();
   }
