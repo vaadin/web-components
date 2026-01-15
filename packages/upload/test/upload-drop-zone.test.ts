@@ -240,7 +240,7 @@ describe('vaadin-upload-drop-zone', () => {
       expect(addFilesSpy.called).to.be.false;
     });
 
-    it('should be disabled when manager maxFilesReached', async () => {
+    it('should reflect maxFilesReached from manager', async () => {
       const manager = new UploadManager({
         target: '/api/upload',
         maxFiles: 1,
@@ -250,6 +250,7 @@ describe('vaadin-upload-drop-zone', () => {
       await nextFrame();
 
       expect(dropZone.maxFilesReached).to.be.false;
+      expect(dropZone.hasAttribute('max-files-reached')).to.be.false;
 
       // Add one file to reach maxFiles
       const files = createFiles(1, 100, 'text/plain');
@@ -257,6 +258,7 @@ describe('vaadin-upload-drop-zone', () => {
       await nextFrame();
 
       expect(dropZone.maxFilesReached).to.be.true;
+      expect(dropZone.hasAttribute('max-files-reached')).to.be.true;
     });
 
     it('should not show dragover state when maxFilesReached', async () => {
@@ -311,6 +313,54 @@ describe('vaadin-upload-drop-zone', () => {
 
       // Add files - should not affect drop zone
       manager.addFiles(createFiles(1, 100, 'text/plain'));
+      await nextFrame();
+      expect(dropZone.maxFilesReached).to.be.false;
+    });
+
+    it('should remove listener from old manager when manager is changed', async () => {
+      const oldManager = new UploadManager({
+        target: '/api/upload',
+        maxFiles: 1,
+        noAuto: true,
+      });
+      const newManager = new UploadManager({
+        target: '/api/upload',
+        maxFiles: 1,
+        noAuto: true,
+      });
+      dropZone.manager = oldManager;
+      await nextFrame();
+
+      // Change to new manager
+      dropZone.manager = newManager;
+      await nextFrame();
+
+      // Add files to old manager - should not affect drop zone
+      oldManager.addFiles(createFiles(1, 100, 'text/plain'));
+      await nextFrame();
+      expect(dropZone.maxFilesReached).to.be.false;
+
+      // Add files to new manager - should affect drop zone
+      newManager.addFiles(createFiles(1, 100, 'text/plain'));
+      await nextFrame();
+      expect(dropZone.maxFilesReached).to.be.true;
+    });
+
+    it('should reset maxFilesReached when manager is set to null', async () => {
+      const manager = new UploadManager({
+        target: '/api/upload',
+        maxFiles: 1,
+        noAuto: true,
+      });
+      dropZone.manager = manager;
+
+      // Reach max files
+      manager.addFiles(createFiles(1, 100, 'text/plain'));
+      await nextFrame();
+      expect(dropZone.maxFilesReached).to.be.true;
+
+      // Set manager to null - should reset maxFilesReached
+      dropZone.manager = null;
       await nextFrame();
       expect(dropZone.maxFilesReached).to.be.false;
     });
