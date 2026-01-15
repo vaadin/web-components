@@ -37,7 +37,7 @@ class ThemeSwitcher extends LitElement {
   static styles = css`
     :host {
       position: fixed;
-      top: 1rem;
+      bottom: 1rem;
       right: 1rem;
       display: flex;
       gap: 0.25rem;
