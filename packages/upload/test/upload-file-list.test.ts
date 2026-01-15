@@ -303,7 +303,7 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       // elapsedStr should be formatted as HH:MM:SS
-      expect(file.elapsedStr).to.equal('00:01:05');
+      expect((file as any).elapsedStr).to.equal('00:01:05');
     });
   });
 

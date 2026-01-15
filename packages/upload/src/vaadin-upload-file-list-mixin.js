@@ -206,37 +206,52 @@ export const UploadFileListMixin = (superClass) =>
 
       // Always set size-related strings when total is available
       if (file.total) {
-        file.totalStr = this.__formatSize(file.total);
-        file.loadedStr = this.__formatSize(file.loaded || 0);
-        // TODO: Remove elapsedStr in next major version - it's not used by vaadin-upload-file
-        if (file.elapsed != null) {
-          file.elapsedStr = this.__formatTime(file.elapsed, this.__splitTimeByUnits(file.elapsed));
-        }
-        if (file.remaining != null) {
-          file.remainingStr = this.__formatTime(file.remaining, this.__splitTimeByUnits(file.remaining));
-        }
+        this.__applyFileSizeStrings(file);
       }
 
       // Apply status messages based on file state
-      if (file.held && !file.error) {
-        // File is queued and waiting
-        file.status = i18n.uploading.status.held;
-      } else if (file.stalled) {
-        // File upload is stalled
-        file.status = i18n.uploading.status.stalled;
-      } else if (file.uploading && file.indeterminate && !file.held) {
-        // File is uploading but progress is indeterminate (connecting or processing)
-        if (file.progress === 100) {
-          file.status = i18n.uploading.status.processing;
-        } else {
-          file.status = i18n.uploading.status.connecting;
-        }
-      } else if (file.uploading && file.progress < 100 && file.total) {
-        // File is uploading with known progress
-        file.status = this.__formatFileProgress(file);
-      }
+      file.status = this.__getFileStatus(file, i18n);
 
       // Translate error codes to i18n messages
+      this.__applyFileError(file, i18n);
+    }
+
+    /** @private */
+    __applyFileSizeStrings(file) {
+      file.totalStr = this.__formatSize(file.total);
+      file.loadedStr = this.__formatSize(file.loaded || 0);
+      // TODO: Remove elapsedStr in next major version - it's not used by vaadin-upload-file
+      if (file.elapsed != null) {
+        file.elapsedStr = this.__formatTime(file.elapsed, this.__splitTimeByUnits(file.elapsed));
+      }
+      if (file.remaining != null) {
+        file.remainingStr = this.__formatTime(file.remaining, this.__splitTimeByUnits(file.remaining));
+      }
+    }
+
+    /** @private */
+    __getFileStatus(file, i18n) {
+      if (file.held && !file.error) {
+        // File is queued and waiting
+        return i18n.uploading.status.held;
+      }
+      if (file.stalled) {
+        // File upload is stalled
+        return i18n.uploading.status.stalled;
+      }
+      if (file.uploading && file.indeterminate && !file.held) {
+        // File is uploading but progress is indeterminate (connecting or processing)
+        return file.progress === 100 ? i18n.uploading.status.processing : i18n.uploading.status.connecting;
+      }
+      if (file.uploading && file.progress < 100 && file.total) {
+        // File is uploading with known progress
+        return this.__formatFileProgress(file);
+      }
+      return file.status;
+    }
+
+    /** @private */
+    __applyFileError(file, i18n) {
       if (file.errorKey && i18n.uploading.error[file.errorKey]) {
         file.error = i18n.uploading.error[file.errorKey];
       } else if (!file.errorKey && this.manager instanceof UploadManager) {
@@ -254,9 +269,9 @@ export const UploadFileListMixin = (superClass) =>
 
       // https://wiki.ubuntu.com/UnitsPolicy
       const base = i18n.units.sizeBase || 1000;
-      const unit = ~~(Math.log(bytes) / Math.log(base));
+      const unit = Math.trunc(Math.log(bytes) / Math.log(base));
       const dec = Math.max(0, Math.min(3, unit - 1));
-      const size = parseFloat((bytes / base ** unit).toFixed(dec));
+      const size = Number.parseFloat((bytes / base ** unit).toFixed(dec));
       return `${size} ${i18n.units.size[unit]}`;
     }
 
