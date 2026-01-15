@@ -148,8 +148,8 @@ export const SliderMixin = (superClass) =>
 
       this.setPointerCapture(event.pointerId);
       this.addEventListener('pointermove', this.__onPointerMove);
-      window.addEventListener('pointerup', this.__onPointerUp);
-      window.addEventListener('pointercancel', this.__onPointerUp);
+      this.addEventListener('pointerup', this.__onPointerUp);
+      this.addEventListener('pointercancel', this.__onPointerUp);
       this.__handlePointerDown(event, part);
     }
 
@@ -181,8 +181,8 @@ export const SliderMixin = (superClass) =>
     __onPointerUp(event) {
       this.releasePointerCapture(event.pointerId);
       this.removeEventListener('pointermove', this.__onPointerMove);
-      window.removeEventListener('pointerup', this.__onPointerUp);
-      window.removeEventListener('pointercancel', this.__onPointerUp);
+      this.removeEventListener('pointerup', this.__onPointerUp);
+      this.removeEventListener('pointercancel', this.__onPointerUp);
 
       this.__detectAndDispatchChange();
     }

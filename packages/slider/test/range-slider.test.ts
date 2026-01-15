@@ -311,6 +311,18 @@ describe('vaadin-range-slider', () => {
         expect(spy).to.be.calledOnce;
       });
 
+      it('should fire change event on pointerup outside of the element', async () => {
+        const spy = sinon.spy();
+        slider.addEventListener('change', spy);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [20, 100] });
+        await sendMouse({ type: 'up' });
+
+        expect(spy).to.be.calledOnce;
+      });
+
       it('should not fire change event on pointerup if value remains the same', async () => {
         const { x, y } = middleOfThumb(0);
 
