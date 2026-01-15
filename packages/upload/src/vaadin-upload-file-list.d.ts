@@ -4,51 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { UploadFile } from './vaadin-upload-manager.js';
+import { UploadFileListI18n, UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 
-export interface UploadFileListI18n {
-  file?: {
-    retry?: string;
-    start?: string;
-    remove?: string;
-  };
-  error?: {
-    tooManyFiles?: string;
-    fileIsTooBig?: string;
-    incorrectFileType?: string;
-  };
-  uploading?: {
-    status?: {
-      connecting?: string;
-      stalled?: string;
-      processing?: string;
-      held?: string;
-    };
-    remainingTime?: {
-      prefix?: string;
-      unknown?: string;
-    };
-    error?: {
-      serverUnavailable?: string;
-      unexpectedServerError?: string;
-      forbidden?: string;
-    };
-  };
-  units?: {
-    size?: string[];
-    sizeBase?: number;
-  };
-  formatSize?(bytes: number): string;
-  formatTime?(seconds: number, split: number[]): string;
-}
-
-export interface UploadFileListManager {
-  files: UploadFile[];
-  retryUpload?(file: UploadFile): void;
-  abortUpload?(file: UploadFile): void;
-  uploadFiles?(files?: UploadFile | UploadFile[]): void;
-  removeFile?(file: UploadFile): void;
-}
+export { UploadFileListI18n };
 
 /**
  * `<vaadin-upload-file-list>` is a Web Component that displays a list of uploaded files.
@@ -63,25 +21,7 @@ export interface UploadFileListManager {
  * // - Forwards retry/abort/start/remove events back to the manager
  * ```
  */
-declare class UploadFileList extends ThemableMixin(HTMLElement) {
-  /**
-   * The object used to localize upload files.
-   */
-  i18n: UploadFileListI18n;
-
-  /**
-   * If true, the user cannot interact with this element.
-   */
-  disabled: boolean;
-
-  /**
-   * Reference to an UploadManager to link this file list to.
-   * When set, the file list automatically:
-   * - Syncs files from the manager
-   * - Forwards retry/abort/start/remove events back to the manager
-   */
-  manager: UploadFileListManager | null;
-}
+declare class UploadFileList extends UploadFileListMixin(ThemableMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
