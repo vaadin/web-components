@@ -160,11 +160,8 @@ class RangeSlider extends SliderMixin(
   updated(props) {
     super.updated(props);
 
-    if (props.has('value') || props.has('min') || props.has('max')) {
-      const value = Array.isArray(this.value) ? this.value : [];
-      value.forEach((value, idx) => {
-        this.__updateValue(value, idx);
-      });
+    if (props.has('value')) {
+      this.__value = [...this.value];
     }
   }
 
@@ -229,6 +226,19 @@ class RangeSlider extends SliderMixin(
    */
   __getClosestThumb(event) {
     let closestThumb;
+
+    // If both thumbs are at the start, use the second thumb,
+    // and if both are at tne end, use the first one instead.
+    if (this.__value[0] === this.__value[1]) {
+      const { min, max } = this.__getConstraints();
+      if (this.__value[0] === min) {
+        return 1;
+      }
+
+      if (this.__value[0] === max) {
+        return 0;
+      }
+    }
 
     const percent = this.__getEventPercent(event);
     const value = this.__getValueFromPercent(percent);

@@ -264,7 +264,7 @@ describe('vaadin-range-slider', () => {
     }
 
     beforeEach(async () => {
-      slider = fixtureSync('<vaadin-range-slider style="width: 200px"></vaadin-range-slider>');
+      slider = fixtureSync('<vaadin-range-slider style="width: 200px; margin: 10px"></vaadin-range-slider>');
       await nextRender();
       thumbs = [...slider.shadowRoot!.querySelectorAll('[part~="thumb"]')];
       inputs = [...slider.querySelectorAll('input')];
@@ -388,7 +388,7 @@ describe('vaadin-range-slider', () => {
       it('should not focus any of inputs on pointerdown below the track', async () => {
         const { y } = middleOfThumb(0);
 
-        await sendMouse({ type: 'move', position: [50, y + 5] });
+        await sendMouse({ type: 'move', position: [50, y + 10] });
         await sendMouse({ type: 'down' });
         inputs.forEach((input) => {
           expect(document.activeElement).to.not.equal(input);
@@ -479,6 +479,29 @@ describe('vaadin-range-slider', () => {
         await sendMouse({ type: 'move', position: [x - 20, y] });
 
         expect(slider.value).to.deep.equal([50, 50]);
+      });
+
+      it('should always move second thumb when both thumbs are at the start', async () => {
+        slider.value = [0, 0];
+        x = middleOfThumb(0).x;
+
+        await sendMouse({ type: 'move', position: [x - 5, y] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(slider.value).to.deep.equal([0, 10]);
+      });
+
+      it('should always move first thumb when both thumbs are at the end', async () => {
+        slider.value = [100, 100];
+        x = middleOfThumb(1).x;
+        debugger;
+
+        await sendMouse({ type: 'move', position: [x + 5, y] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+
+        expect(slider.value).to.deep.equal([90, 100]);
       });
     });
   });
