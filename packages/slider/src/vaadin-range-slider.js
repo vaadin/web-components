@@ -200,12 +200,13 @@ class RangeSlider extends SliderMixin(
 
   /**
    * @param {PointerEvent} event
+   * @param {string} part
    * @private
    */
-  __handlePointerDown(event) {
+  __handlePointerDown(event, part) {
     const target = event.composedPath()[0];
     // Update value on track click
-    if (target.getAttribute('part') !== 'thumb') {
+    if (part === 'track') {
       this.__thumbIndex = this.__getClosestThumb(event);
       this.__applyValue(event);
     } else {

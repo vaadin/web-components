@@ -140,21 +140,27 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerDown(event) {
+      // Only handle pointerdown on the thumb or track
+      const part = event.composedPath()[0].getAttribute('part');
+      if (!part.includes('thumb') && part !== 'track') {
+        return;
+      }
+
       this.setPointerCapture(event.pointerId);
       this.addEventListener('pointermove', this.__onPointerMove);
       window.addEventListener('pointerup', this.__onPointerUp);
       window.addEventListener('pointercancel', this.__onPointerUp);
-      this.__handlePointerDown(event);
+      this.__handlePointerDown(event, part);
     }
 
     /**
      * @param {PointerEvent} event
+     * @param {string} part
      * @private
      */
-    __handlePointerDown(event) {
-      const target = event.composedPath()[0];
+    __handlePointerDown(event, part) {
       // Update value on track click
-      if (target.getAttribute('part') !== 'thumb') {
+      if (part === 'track') {
         this.__applyValue(event);
         this.__detectAndDispatchChange();
       }
