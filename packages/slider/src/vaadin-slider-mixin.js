@@ -80,14 +80,14 @@ export const SliderMixin = (superClass) =>
     __updateValue(value, index, fullValue = this.__value) {
       const { min, max, step } = this.__getConstraints();
 
-      const minValue = fullValue[index - 1] || min;
-      const maxValue = fullValue[index + 1] || max;
+      const minValue = fullValue[index - 1] !== undefined ? fullValue[index - 1] : min;
+      const maxValue = fullValue[index + 1] !== undefined ? fullValue[index + 1] : max;
 
       const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
-      const offset = safeValue - min;
+      const offset = safeValue - minValue;
       const nearestOffset = Math.round(offset / step) * step;
-      const nearestValue = min + nearestOffset;
+      const nearestValue = minValue + nearestOffset;
 
       const newValue = Math.round(nearestValue);
 

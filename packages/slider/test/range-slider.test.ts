@@ -437,6 +437,21 @@ describe('vaadin-range-slider', () => {
 
         expect(slider.value).to.deep.equal([40, 40]);
       });
+
+      it('should use the first thumb position as a min limit on when min is a negative value', async () => {
+        slider.min = -10;
+        slider.max = 10;
+        slider.value = [0, 1];
+
+        const { x, y } = middleOfThumb(1);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[1] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + -40, y] });
+        await sendMouse({ type: 'up' });
+
+        expect(slider.value).to.deep.equal([0, 0]);
+      });
     });
 
     describe('thumbs on top of each other', () => {
