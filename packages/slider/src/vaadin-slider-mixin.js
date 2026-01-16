@@ -95,7 +95,7 @@ export const SliderMixin = (superClass) =>
     }
 
     /**
-     * @return {{ min: number, max: number}}
+     * @return {{ min: number, max: number, step: number}}
      * @private
      */
     __getConstraints() {
@@ -226,7 +226,7 @@ export const SliderMixin = (superClass) =>
       this.focus({ focusVisible: false });
     }
 
-    /** @protected */
+    /** @private */
     __detectAndDispatchChange() {
       if (JSON.stringify(this.__lastCommittedValue) !== JSON.stringify(this.value)) {
         this.__lastCommittedValue = this.value;
@@ -234,14 +234,20 @@ export const SliderMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * @param {Event} event
+     * @private
+     */
     __onInput(event) {
       const index = this.__getThumbIndex(event);
       this.__updateValue(event.target.value, index);
       this.__commitValue();
     }
 
-    /** @private */
+    /**
+     * @param {Event} event
+     * @private
+     */
     __onChange(event) {
       event.stopPropagation();
       this.__detectAndDispatchChange();
