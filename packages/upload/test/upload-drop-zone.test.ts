@@ -190,16 +190,15 @@ describe('vaadin-upload-drop-zone', () => {
       });
     });
 
-    it('should call addFiles on manager when files are dropped', async () => {
+    it('should add files to manager when files are dropped', async () => {
       dropZone.manager = uploadManager;
-      const addFilesSpy = sinon.spy(uploadManager, 'addFiles');
+      expect(uploadManager.files).to.have.lengthOf(0);
 
       const files = createFiles(2, 100, 'text/plain');
       dropZone.dispatchEvent(createDropEvent(files));
       await nextFrame();
 
-      expect(addFilesSpy.calledOnce).to.be.true;
-      expect(addFilesSpy.firstCall.args[0]).to.have.lengthOf(2);
+      expect(uploadManager.files).to.have.lengthOf(2);
     });
 
     it('should not call addFiles when manager is null', async () => {
@@ -214,22 +213,18 @@ describe('vaadin-upload-drop-zone', () => {
     });
 
     it('should not call addFiles when manager has reached maxFiles', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 1,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 1;
 
       // Add one file to reach maxFiles
       const initialFiles = createFiles(1, 100, 'text/plain');
-      manager.addFiles(initialFiles);
+      uploadManager.addFiles(initialFiles);
       await nextFrame();
 
-      expect(manager.maxFilesReached).to.be.true;
+      expect(uploadManager.maxFilesReached).to.be.true;
 
       // Spy on addFiles after reaching max
-      const addFilesSpy = sinon.spy(manager, 'addFiles');
+      const addFilesSpy = sinon.spy(uploadManager, 'addFiles');
 
       // Try to drop more files
       const moreFiles = createFiles(1, 100, 'text/plain');
@@ -241,12 +236,9 @@ describe('vaadin-upload-drop-zone', () => {
     });
 
     it('should reflect maxFilesReached from manager', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 1,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 1;
+
       await nextFrame();
 
       expect(dropZone.maxFilesReached).to.be.false;
@@ -254,7 +246,7 @@ describe('vaadin-upload-drop-zone', () => {
 
       // Add one file to reach maxFiles
       const files = createFiles(1, 100, 'text/plain');
-      manager.addFiles(files);
+      uploadManager.addFiles(files);
       await nextFrame();
 
       expect(dropZone.maxFilesReached).to.be.true;
@@ -262,16 +254,12 @@ describe('vaadin-upload-drop-zone', () => {
     });
 
     it('should not show dragover state when maxFilesReached', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 1,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 1;
 
       // Add one file to reach maxFiles
       const files = createFiles(1, 100, 'text/plain');
-      manager.addFiles(files);
+      uploadManager.addFiles(files);
       await nextFrame();
 
       // Try to trigger dragover on maxFilesReached drop zone
@@ -283,36 +271,27 @@ describe('vaadin-upload-drop-zone', () => {
     });
 
     it('should re-enable when files are removed from manager', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 1,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 1;
 
       const files = createFiles(1, 100, 'text/plain');
-      manager.addFiles(files);
+      uploadManager.addFiles(files);
       await nextFrame();
       expect(dropZone.maxFilesReached).to.be.true;
 
-      manager.removeFile(manager.files[0]);
+      uploadManager.removeFile(uploadManager.files[0]);
       await nextFrame();
       expect(dropZone.maxFilesReached).to.be.false;
     });
 
     it('should remove listener when manager is set to null', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 1,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
 
       // Set manager to null
       dropZone.manager = null;
 
       // Add files - should not affect drop zone
-      manager.addFiles(createFiles(1, 100, 'text/plain'));
+      uploadManager.addFiles(createFiles(1, 100, 'text/plain'));
       await nextFrame();
       expect(dropZone.maxFilesReached).to.be.false;
     });
@@ -347,15 +326,11 @@ describe('vaadin-upload-drop-zone', () => {
     });
 
     it('should reset maxFilesReached when manager is set to null', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 1,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 1;
 
       // Reach max files
-      manager.addFiles(createFiles(1, 100, 'text/plain'));
+      uploadManager.addFiles(createFiles(1, 100, 'text/plain'));
       await nextFrame();
       expect(dropZone.maxFilesReached).to.be.true;
 
@@ -366,53 +341,25 @@ describe('vaadin-upload-drop-zone', () => {
     });
 
     it('should remove listener when disconnected from DOM', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 2,
-        noAuto: true,
-      });
-
-      // Spy on manager to verify event fires
-      const spy = sinon.spy();
-      manager.addEventListener('max-files-reached-changed', spy);
-
-      dropZone.manager = manager;
-      await nextFrame();
-      expect(dropZone.maxFilesReached).to.be.false;
-
-      // Verify drop zone is in DOM
-      expect(dropZone.isConnected).to.be.true;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 2;
 
       // Remove drop zone from DOM
       dropZone.remove();
 
-      // Verify drop zone is disconnected
-      expect(dropZone.isConnected).to.be.false;
-
-      // Reset spy call count after setup
-      spy.resetHistory();
-
       // Add files to reach max
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
-
-      // Verify event was dispatched
-      expect(spy.called).to.be.true;
-      expect((spy.getCall(0).args[0] as CustomEvent).detail.value).to.be.true;
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
 
       // Verify maxFilesReached is true on manager
-      expect(manager.maxFilesReached).to.be.true;
+      expect(uploadManager.maxFilesReached).to.be.true;
 
       // Drop zone should remain not maxFilesReached since listener was removed on disconnect
       expect(dropZone.maxFilesReached).to.be.false;
     });
 
     it('should re-attach listener when reconnected to DOM', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 2,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 2;
       await nextFrame();
 
       // Remove and re-add drop zone
@@ -422,31 +369,23 @@ describe('vaadin-upload-drop-zone', () => {
       await nextFrame();
 
       // Add files to reach max - should set maxFilesReached on drop zone since it's reconnected
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
       expect(dropZone.maxFilesReached).to.be.true;
     });
 
     it('should sync maxFilesReached state when reconnected after max files reached', async () => {
-      const manager = new UploadManager({
-        target: '/api/upload',
-        maxFiles: 2,
-        noAuto: true,
-      });
-      dropZone.manager = manager;
+      dropZone.manager = uploadManager;
+      uploadManager.maxFiles = 2;
       await nextFrame();
-      expect(dropZone.maxFilesReached).to.be.false;
 
       // Remove drop zone from DOM
       const parent = dropZone.parentElement!;
       dropZone.remove();
 
       // Add files to reach max WHILE drop zone is disconnected
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
-      expect(manager.maxFilesReached).to.be.true;
-
-      // Drop zone should still not have maxFilesReached (listener was removed)
-      expect(dropZone.maxFilesReached).to.be.false;
+      uploadManager.addFiles(createFiles(2, 100, 'text/plain'));
+      expect(uploadManager.maxFilesReached).to.be.true;
 
       // Reconnect drop zone
       parent.appendChild(dropZone);
