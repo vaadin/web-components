@@ -169,6 +169,10 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerDown(event) {
+      if (event.button !== 0) {
+        return;
+      }
+
       const part = event.composedPath()[0].getAttribute('part');
       if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
         return;
