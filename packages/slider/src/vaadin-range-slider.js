@@ -122,7 +122,7 @@ class RangeSlider extends SliderMixin(
     super.update(props);
 
     const [startValue, endValue] = this.__value;
-    const { min, max } = this.__getConstraints();
+    const { min, max, step } = this.__getConstraints();
 
     render(
       html`
@@ -132,6 +132,7 @@ class RangeSlider extends SliderMixin(
           slot="input"
           .min="${min}"
           .max="${max}"
+          .step="${step}"
           .value="${startValue}"
           tabindex="0"
           @keydown="${this.__onKeyDown}"
@@ -144,6 +145,7 @@ class RangeSlider extends SliderMixin(
           slot="input"
           .min="${min}"
           .max="${max}"
+          .step="${step}"
           .value="${endValue}"
           tabindex="0"
           @keydown="${this.__onKeyDown}"

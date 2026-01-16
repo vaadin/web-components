@@ -1,13 +1,14 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-slider host default"] =
+snapshots["vaadin-slider host default"] = 
 `<vaadin-slider>
   <input
     id="slider-0"
     max="100"
     min="0"
     slot="input"
+    step="1"
     tabindex="0"
     type="range"
   >
@@ -22,6 +23,7 @@ snapshots["vaadin-slider host value"] =
     max="100"
     min="0"
     slot="input"
+    step="1"
     tabindex="0"
     type="range"
   >
@@ -36,6 +38,7 @@ snapshots["vaadin-slider host min"] =
     max="100"
     min="20"
     slot="input"
+    step="1"
     tabindex="0"
     type="range"
   >
@@ -50,6 +53,7 @@ snapshots["vaadin-slider host max"] =
     max="80"
     min="0"
     slot="input"
+    step="1"
     tabindex="0"
     type="range"
   >
@@ -57,7 +61,22 @@ snapshots["vaadin-slider host max"] =
 `;
 /* end snapshot vaadin-slider host max */
 
-snapshots["vaadin-slider shadow default"] =
+snapshots["vaadin-slider host step"] = 
+`<vaadin-slider>
+  <input
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="10"
+    tabindex="0"
+    type="range"
+  >
+</vaadin-slider>
+`;
+/* end snapshot vaadin-slider host step */
+
+snapshots["vaadin-slider shadow default"] = 
 `<div part="track">
   <div
     part="track-fill"
@@ -128,4 +147,22 @@ snapshots["vaadin-slider shadow max"] =
 </slot>
 `;
 /* end snapshot vaadin-slider shadow max */
+
+snapshots["vaadin-slider shadow step"] = 
+`<div part="track">
+  <div
+    part="track-fill"
+    style="inset-inline: 0px 50%;"
+  >
+  </div>
+</div>
+<div
+  part="thumb"
+  style="inset-inline-start: 50%;"
+>
+</div>
+<slot name="input">
+</slot>
+`;
+/* end snapshot vaadin-slider shadow step */
 

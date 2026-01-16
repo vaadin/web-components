@@ -32,6 +32,7 @@ export const SliderMixin = (superClass) =>
          */
         step: {
           type: Number,
+          sync: true,
         },
 
         /** @private */
@@ -54,8 +55,7 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __updateValue(value, index = this.__thumbIndex) {
-      const { min, max } = this.__getConstraints();
-      const step = this.step || 1;
+      const { min, max, step } = this.__getConstraints();
 
       const minValue = this.__value[index - 1] || min;
       const maxValue = this.__value[index + 1] || max;
@@ -79,6 +79,7 @@ export const SliderMixin = (superClass) =>
       return {
         min: this.min || 0,
         max: this.max || 100,
+        step: this.step || 1,
       };
     }
 
