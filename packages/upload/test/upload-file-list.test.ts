@@ -26,16 +26,16 @@ describe('vaadin-upload-file-list', () => {
     return getUploadFile().shadowRoot!.querySelector('[part="error"]')!.textContent;
   }
 
-  function getRetryButtonLabel() {
-    return getUploadFile().shadowRoot!.querySelector('[part="retry-button"]')!.getAttribute('aria-label');
+  function getRetryButton() {
+    return getUploadFile().shadowRoot!.querySelector('[part="retry-button"]') as HTMLButtonElement;
   }
 
-  function getStartButtonLabel() {
-    return getUploadFile().shadowRoot!.querySelector('[part="start-button"]')!.getAttribute('aria-label');
+  function getStartButton() {
+    return getUploadFile().shadowRoot!.querySelector('[part="start-button"]') as HTMLButtonElement;
   }
 
-  function getRemoveButtonLabel() {
-    return getUploadFile().shadowRoot!.querySelector('[part="remove-button"]')!.getAttribute('aria-label');
+  function getRemoveButton() {
+    return getUploadFile().shadowRoot!.querySelector('[part="remove-button"]') as HTMLButtonElement;
   }
 
   beforeEach(async () => {
@@ -129,7 +129,7 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       manager.files[0].held = true;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getStatusText()).to.equal('Queued');
@@ -142,7 +142,7 @@ describe('vaadin-upload-file-list', () => {
 
       manager.files[0].held = false;
       manager.files[0].stalled = true;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getStatusText()).to.equal('Stalled');
@@ -158,7 +158,7 @@ describe('vaadin-upload-file-list', () => {
       file.uploading = true;
       file.indeterminate = true;
       file.progress = 0;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getStatusText()).to.equal('Connecting...');
@@ -174,7 +174,7 @@ describe('vaadin-upload-file-list', () => {
       file.uploading = true;
       file.indeterminate = true;
       file.progress = 100;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getStatusText()).to.equal('Processing File...');
@@ -186,7 +186,7 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       manager.files[0].errorKey = 'serverUnavailable';
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getErrorText()).to.equal('Upload failed, please try again later');
@@ -204,7 +204,7 @@ describe('vaadin-upload-file-list', () => {
       file.progress = 25;
       file.uploading = true;
       file.remaining = 30;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       // Status should include formatted size (2 MB) and progress
@@ -222,7 +222,7 @@ describe('vaadin-upload-file-list', () => {
       file.loaded = 0;
       file.progress = 0;
       file.uploading = true;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getStatusText()).to.include('unknown remaining time');
@@ -233,9 +233,9 @@ describe('vaadin-upload-file-list', () => {
       fileList.manager = manager;
       await nextFrame();
 
-      expect(getRetryButtonLabel()).to.equal('Retry');
-      expect(getStartButtonLabel()).to.equal('Start');
-      expect(getRemoveButtonLabel()).to.equal('Remove');
+      expect(getRetryButton().getAttribute('aria-label')).to.equal('Retry');
+      expect(getStartButton().getAttribute('aria-label')).to.equal('Start');
+      expect(getRemoveButton().getAttribute('aria-label')).to.equal('Remove');
     });
 
     it('should render custom i18n button labels', async () => {
@@ -251,9 +251,9 @@ describe('vaadin-upload-file-list', () => {
       fileList.manager = manager;
       await nextFrame();
 
-      expect(getRetryButtonLabel()).to.equal('Yritä uudelleen');
-      expect(getStartButtonLabel()).to.equal('Aloita');
-      expect(getRemoveButtonLabel()).to.equal('Poista');
+      expect(getRetryButton().getAttribute('aria-label')).to.equal('Yritä uudelleen');
+      expect(getStartButton().getAttribute('aria-label')).to.equal('Aloita');
+      expect(getRemoveButton().getAttribute('aria-label')).to.equal('Poista');
     });
 
     it('should support partial i18n updates', async () => {
@@ -267,9 +267,9 @@ describe('vaadin-upload-file-list', () => {
       fileList.manager = manager;
       await nextFrame();
 
-      expect(getRetryButtonLabel()).to.equal('Yritä uudelleen');
-      expect(getStartButtonLabel()).to.equal('Start'); // Default
-      expect(getRemoveButtonLabel()).to.equal('Remove'); // Default
+      expect(getRetryButton().getAttribute('aria-label')).to.equal('Yritä uudelleen');
+      expect(getStartButton().getAttribute('aria-label')).to.equal('Start'); // Default
+      expect(getRemoveButton().getAttribute('aria-label')).to.equal('Remove'); // Default
     });
 
     it('should render custom i18n status messages', async () => {
@@ -285,7 +285,7 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       manager.files[0].held = true;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getStatusText()).to.equal('Jonossa');
@@ -304,7 +304,7 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       manager.files[0].errorKey = 'serverUnavailable';
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getErrorText()).to.equal('Palvelin ei ole käytettävissä');
@@ -325,7 +325,7 @@ describe('vaadin-upload-file-list', () => {
       file.progress = 33;
       file.uploading = true;
       file.remaining = 10;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       // Status should use the custom formatSize
@@ -340,7 +340,7 @@ describe('vaadin-upload-file-list', () => {
       const file = manager.files[0];
       file.total = 1536;
       file.elapsed = 65; // 1 minute 5 seconds
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       // elapsedStr should be formatted as HH:MM:SS
@@ -354,124 +354,89 @@ describe('vaadin-upload-file-list', () => {
 
       // Simulate error state
       manager.files[0].errorKey = 'forbidden';
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getErrorText()).to.equal('Upload forbidden');
 
       // Simulate retry: errorKey is cleared
       (manager.files[0] as any).errorKey = false;
-      manager.dispatchEvent(new CustomEvent('files-changed'));
+      manager.files = [...manager.files];
       await nextFrame();
 
       expect(getErrorText()).to.equal('');
     });
   });
 
-  describe('event forwarding', () => {
-    it('should forward file-retry event to manager', async () => {
+  describe('button actions', () => {
+    it('should clear error and restart upload when retry button is clicked', async () => {
       manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
-      const retrySpy = sinon.spy(manager, 'retryUpload');
-      const event = new CustomEvent('file-retry', {
-        detail: { file: manager.files[0] },
-        bubbles: true,
-      });
-      fileList.dispatchEvent(event);
+      // Set error state to make retry button visible
+      manager.files[0].errorKey = 'serverUnavailable';
+      manager.files = [...manager.files];
+      await nextFrame();
 
-      expect(retrySpy.calledOnce).to.be.true;
-      expect(retrySpy.firstCall.args[0]).to.equal(manager.files[0]);
+      expect(manager.files[0].errorKey).to.equal('serverUnavailable');
+
+      getRetryButton().click();
+
+      // After retry, errorKey should be cleared (set to false) and file should be uploading
+      expect(manager.files[0].errorKey).to.be.false;
+      expect(manager.files[0].uploading).to.be.true;
     });
 
-    it('should forward file-abort event to manager', async () => {
+    it('should start upload when start button is clicked', async () => {
       manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
-      // Capture file reference before aborting (abort removes it from the list)
-      const targetFile = manager.files[0];
-      const abortSpy = sinon.spy(manager, 'abortUpload');
-      const event = new CustomEvent('file-abort', {
-        detail: { file: targetFile },
-        bubbles: true,
-      });
-      fileList.dispatchEvent(event);
+      // File should be held (queued) by default with noAuto, making start button visible
+      expect(manager.files[0].held).to.be.true;
+      expect(manager.files[0].uploading).to.not.be.ok;
 
-      expect(abortSpy.calledOnce).to.be.true;
-      expect(abortSpy.firstCall.args[0]).to.equal(targetFile);
+      getStartButton().click();
+
+      // After clicking start, file should no longer be held and should be uploading
+      expect(manager.files[0].held).to.be.false;
+      expect(manager.files[0].uploading).to.be.true;
     });
 
-    it('should forward file-start event to manager', async () => {
+    it('should remove file from manager when remove button is clicked', async () => {
       manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
-      const uploadSpy = sinon.spy(manager, 'uploadFiles');
-      const event = new CustomEvent('file-start', {
-        detail: { file: manager.files[0] },
-        bubbles: true,
-      });
-      fileList.dispatchEvent(event);
+      expect(manager.files).to.have.lengthOf(1);
 
-      expect(uploadSpy.calledOnce).to.be.true;
-      expect(uploadSpy.firstCall.args[0]).to.equal(manager.files[0]);
+      getRemoveButton().click();
+
+      // File should be removed from manager
+      expect(manager.files).to.have.lengthOf(0);
     });
 
-    it('should forward file-remove event to manager', async () => {
+    it('should not bubble file events to parent when manager handles them', async () => {
       manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
-      const removeSpy = sinon.spy(manager, 'removeFile');
-      const targetFile = manager.files[0];
-      const event = new CustomEvent('file-remove', {
-        detail: { file: targetFile },
-        bubbles: true,
-      });
-      fileList.dispatchEvent(event);
-
-      expect(removeSpy.calledOnce).to.be.true;
-      expect(removeSpy.firstCall.args[0]).to.equal(targetFile);
-    });
-
-    it('should stop propagation when forwarding events', async () => {
+      // Create parent wrapper and move fileList into it
       const parent = document.createElement('div');
+      fileList.parentElement!.appendChild(parent);
       parent.appendChild(fileList);
+      await nextFrame();
 
-      // Test all event types that should stop propagation
-      // Each iteration uses a fresh manager since some events (like remove) modify the file list
-      const eventTypes = ['file-retry', 'file-abort', 'file-start', 'file-remove'];
-      for (const eventType of eventTypes) {
-        // Use fresh manager for each test to avoid side effects
-        const testManager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-        });
-        testManager.addFiles([createFile(100, 'text/plain')]);
-        fileList.manager = testManager;
-        await nextFrame();
+      const parentSpy = sinon.spy();
+      parent.addEventListener('file-abort', parentSpy);
 
-        const parentSpy = sinon.spy();
-        parent.addEventListener(eventType, parentSpy);
+      // Click remove button - event should be handled by manager and not bubble
+      getRemoveButton().click();
 
-        const event = new CustomEvent(eventType, {
-          detail: { file: testManager.files[0] },
-          bubbles: true,
-        });
-        fileList.dispatchEvent(event);
+      expect(parentSpy.called).to.be.false;
 
-        expect(parentSpy.called, `${eventType} should not bubble when manager is set`).to.be.false;
-
-        parent.removeEventListener(eventType, parentSpy);
-
-        // Clean up for next iteration
-        fileList.manager = null;
-        await nextFrame();
-      }
-
-      fileList.remove();
+      parent.removeEventListener('file-abort', parentSpy);
     });
   });
 
