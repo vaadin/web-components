@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-upload.js';
 import { html, LitElement } from 'lit';
-import { createFiles, removeFile, xhrCreator } from './helpers.js';
+import { addFilesViaInput, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('file list', () => {
   let upload;
@@ -22,7 +22,7 @@ describe('file list', () => {
       expect(getFileListItems(upload)).to.be.empty;
 
       const files = createFiles(2);
-      files.forEach((file) => upload._addFile(file));
+      addFilesViaInput(upload, files);
       await nextFrame();
 
       const fileListItems = getFileListItems(upload);
@@ -35,7 +35,7 @@ describe('file list', () => {
 
     it('should remove files', async () => {
       const files = createFiles(2);
-      files.forEach((file) => upload._addFile(file));
+      upload.files = [...upload.files, ...files];
       await nextFrame();
 
       removeFile(upload, 1);
@@ -49,7 +49,7 @@ describe('file list', () => {
 
     it('should not overflow content', async () => {
       upload.style.width = '180px';
-      upload._addFile(createFiles(1)[0]);
+      upload.files = createFiles(1);
       await nextRender();
       const fileListItem = getFileListItems(upload)[0];
       expect(fileListItem.scrollWidth - fileListItem.offsetWidth).to.equal(0);
@@ -98,7 +98,7 @@ describe('file list', () => {
       expect(getFileListItems(upload)).to.be.empty;
 
       const files = createFiles(2);
-      files.forEach((file) => upload._addFile(file));
+      addFilesViaInput(upload, files);
       await nextFrame();
 
       const fileListItems = getFileListItems(upload);

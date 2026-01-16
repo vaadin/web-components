@@ -54,7 +54,7 @@ describe('slots', () => {
         upload.maxFiles = 1;
         expect(addButton.disabled).to.be.false;
 
-        upload._addFile(createFile(100, 'image/jpeg'));
+        upload.files = [createFile(100, 'image/jpeg')];
         await nextUpdate(upload);
         expect(addButton.disabled).to.be.true;
       });

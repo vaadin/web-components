@@ -129,7 +129,7 @@ describe('keyboard navigation', () => {
       // Programmatic upload does not actually set focus, so we first navigate to the button.
       await repeatTab(1);
 
-      uploadElement._uploadFile(FAKE_FILE);
+      uploadElement.uploadFiles(FAKE_FILE);
 
       expect(document.activeElement).to.equal(uploadButton);
     });

@@ -3,7 +3,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import { DEFAULT_I18N } from '../src/vaadin-upload-mixin.js';
-import { createFile, xhrCreator } from './helpers.js';
+import { addFilesViaInput, createFile, xhrCreator } from './helpers.js';
 
 const CUSTOM_I18N = {
   dropFiles: {
@@ -92,7 +92,7 @@ describe('upload i18n', () => {
             ...xhrOptions,
           });
         }
-        upload._addFile(file);
+        addFilesViaInput(upload, [file]);
         await clock.tickAsync(delay);
       }
 

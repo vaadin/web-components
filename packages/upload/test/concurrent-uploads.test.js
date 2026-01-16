@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
-import { createFiles, xhrCreator } from './helpers.js';
+import { addFilesViaInput, createFiles, xhrCreator } from './helpers.js';
 
 function assertFileUploading(file) {
   expect(file.uploading).to.be.true;
@@ -122,7 +122,7 @@ describe('concurrent uploads', () => {
       upload.noAuto = true;
       upload.maxConcurrentUploads = 2;
 
-      upload._addFiles(files);
+      addFilesViaInput(upload, files);
       await clock.tickAsync(10);
 
       files.forEach(assertFileNotStarted);
@@ -151,7 +151,7 @@ describe('concurrent uploads', () => {
       upload._createXhr.resetHistory();
 
       // Abort a queued file
-      upload._abortFileUpload(files[1]);
+      upload.dispatchEvent(new CustomEvent('file-abort', { detail: { file: files[1] } }));
       expect(upload._createXhr).to.be.not.called;
     });
 
@@ -314,7 +314,7 @@ describe('concurrent uploads', () => {
       upload._createXhr = xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 });
 
       // Retry first file
-      upload._retryFileUpload(files[0]);
+      upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file: files[0] } }));
       await clock.tickAsync(10);
 
       assertFileUploading(files[0]);
