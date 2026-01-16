@@ -126,7 +126,8 @@ class Slider extends SliderMixin(
           .max="${max}"
           .value="${value}"
           .step="${step}"
-          tabindex="0"
+          .disabled="${this.disabled}"
+          tabindex="${this.disabled ? -1 : 0}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
@@ -151,6 +152,10 @@ class Slider extends SliderMixin(
    * @override
    */
   focus(options) {
+    if (this.disabled) {
+      return;
+    }
+
     if (this._inputElement) {
       this._inputElement.focus();
     }

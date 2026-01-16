@@ -3,12 +3,14 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes DisabledMixin
  */
 export const SliderMixin = (superClass) =>
-  class SliderMixinClass extends superClass {
+  class SliderMixinClass extends DisabledMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -169,10 +171,11 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerDown(event) {
-      if (event.button !== 0) {
+      if (this.disabled || event.button !== 0) {
         return;
       }
 
+      // Only handle pointerdown on the thumb, track or track-fill
       const part = event.composedPath()[0].getAttribute('part');
       if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
         return;

@@ -25,6 +25,15 @@ export const sliderStyles = css`
     display: none !important;
   }
 
+  :host([disabled]) {
+    cursor: var(--vaadin-disabled-cursor);
+    /* TODO which color should we use as a fallback? */
+    --vaadin-slider-fill-background: var(
+      --vaadin-slider-disabled-background,
+      color-mix(in oklab, var(--vaadin-text-color) 50%, var(--vaadin-background-color))
+    );
+  }
+
   [part='track'] {
     box-sizing: border-box;
     position: absolute;

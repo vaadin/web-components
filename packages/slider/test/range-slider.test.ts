@@ -99,6 +99,13 @@ describe('vaadin-range-slider', () => {
       expect(slider.hasAttribute('end-focused')).to.be.false;
     });
 
+    it('should not focus any of the inputs on focus() when disabled', () => {
+      slider.disabled = true;
+      slider.focus();
+      expect(document.activeElement).to.not.equal(inputs[0]);
+      expect(document.activeElement).to.not.equal(inputs[1]);
+    });
+
     it('should not throw when calling focus() before adding to the DOM', () => {
       expect(() => document.createElement('vaadin-range-slider').focus()).to.not.throw(Error);
     });
@@ -338,6 +345,18 @@ describe('vaadin-range-slider', () => {
 
         expect(spy).to.be.not.called;
       });
+
+      it('should not update value property on thumb pointermove when disabled', async () => {
+        slider.disabled = true;
+
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(slider.value).to.deep.equal([0, 100]);
+      });
     });
 
     describe('track', () => {
@@ -408,6 +427,17 @@ describe('vaadin-range-slider', () => {
         await sendMouse({ type: 'up' });
 
         expect(spy).to.be.calledOnce;
+      });
+
+      it('should not update value property on track pointerdown when disabled', async () => {
+        slider.disabled = true;
+
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.deep.equal([20, 80]);
       });
     });
 

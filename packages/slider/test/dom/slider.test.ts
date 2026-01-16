@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-slider.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { Slider } from '../../src/vaadin-slider.js';
 
 window.Vaadin ??= {};
@@ -11,6 +12,7 @@ describe('vaadin-slider', () => {
   let slider: Slider;
 
   beforeEach(async () => {
+    resetUniqueId();
     slider = fixtureSync('<vaadin-slider></vaadin-slider>');
   });
 
@@ -39,6 +41,11 @@ describe('vaadin-slider', () => {
     it('step', async () => {
       slider.step = 10;
       slider.value = 50;
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      slider.disabled = true;
       await expect(slider).dom.to.equalSnapshot();
     });
   });

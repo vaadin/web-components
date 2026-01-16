@@ -64,6 +64,12 @@ describe('vaadin-slider', () => {
       expect(document.activeElement).to.equal(input);
     });
 
+    it('should not the input on focus() when disabled', () => {
+      slider.disabled = true;
+      slider.focus();
+      expect(document.activeElement).to.not.equal(input);
+    });
+
     it('should not throw when calling focus() before adding to the DOM', () => {
       expect(() => document.createElement('vaadin-slider').focus()).to.not.throw(Error);
     });
@@ -122,12 +128,14 @@ describe('vaadin-slider', () => {
 
   describe('pointer', () => {
     let thumb: Element;
+    let track: Element;
     let y: number;
 
     beforeEach(async () => {
       slider = fixtureSync('<vaadin-slider style="width: 200px"></vaadin-slider>');
       await nextRender();
       thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
+      track = slider.shadowRoot!.querySelector('[part="track"]')!;
       y = Math.round(middleOfNode(thumb).y);
     });
 
@@ -184,8 +192,6 @@ describe('vaadin-slider', () => {
     });
 
     it('should update slider value property on track pointerdown', async () => {
-      const track = slider.shadowRoot!.querySelector('[part="track"]')!;
-
       await sendMouseToElement({ type: 'move', element: track });
       await sendMouse({ type: 'down' });
 
@@ -193,8 +199,6 @@ describe('vaadin-slider', () => {
     });
 
     it('should only fire change event on track pointerup', async () => {
-      const track = slider.shadowRoot!.querySelector('[part="track"]')!;
-
       const spy = sinon.spy();
       slider.addEventListener('change', spy);
 
@@ -222,6 +226,25 @@ describe('vaadin-slider', () => {
       await sendMouse({ type: 'move', position: [50, y + 5] });
       await sendMouse({ type: 'down' });
       expect(document.activeElement).to.not.equal(slider.querySelector('input'));
+    });
+
+    it('should not update slider value property on thumb pointermove when disabled', async () => {
+      slider.disabled = true;
+
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      expect(slider.value).to.equal(0);
+    });
+
+    it('should not update slider value property on track pointerdown when disabled', async () => {
+      slider.disabled = true;
+
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.value).to.equal(0);
     });
   });
 });
