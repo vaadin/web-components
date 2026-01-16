@@ -156,7 +156,8 @@ export const UploadMixin = (superClass) =>
         _dragover: {
           type: Boolean,
           value: false,
-          observer: '_dragoverChanged',
+          reflectToAttribute: true,
+          attribute: 'dragover',
         },
 
         /**
@@ -250,7 +251,8 @@ export const UploadMixin = (superClass) =>
         _dragoverValid: {
           type: Boolean,
           value: false,
-          observer: '_dragoverValidChanged',
+          reflectToAttribute: true,
+          attribute: 'dragover-valid',
         },
 
         /**
@@ -339,7 +341,6 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
-        '__updateMaxFilesReached(maxFiles, files)',
         '__syncManagerConfig(target, method, headers, timeout, maxFiles, maxFileSize, accept, noAuto, withCredentials, uploadFormat, maxConcurrentUploads, formDataName)',
       ];
     }
@@ -603,11 +604,6 @@ export const UploadMixin = (superClass) =>
     // ============ UI updates ============
 
     /** @private */
-    __updateMaxFilesReached(maxFiles, files) {
-      this._setMaxFilesReached(maxFiles >= 0 && files.length >= maxFiles);
-    }
-
-    /** @private */
     __updateAddButton(addButton, maxFiles, effectiveI18n, maxFilesReached, disabled) {
       if (addButton) {
         addButton.disabled = disabled || maxFilesReached;
@@ -664,24 +660,6 @@ export const UploadMixin = (superClass) =>
 
         const files = await getFilesFromDropEvent(event);
         this._manager.addFiles(files);
-      }
-    }
-
-    /** @private */
-    _dragoverChanged(dragover) {
-      if (dragover) {
-        this.setAttribute('dragover', dragover);
-      } else {
-        this.removeAttribute('dragover');
-      }
-    }
-
-    /** @private */
-    _dragoverValidChanged(dragoverValid) {
-      if (dragoverValid) {
-        this.setAttribute('dragover-valid', dragoverValid);
-      } else {
-        this.removeAttribute('dragover-valid');
       }
     }
 
