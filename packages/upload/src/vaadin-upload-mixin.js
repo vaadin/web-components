@@ -707,6 +707,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileInputChange(event) {
+      this.__syncManagerConfig();
       this._manager.addFiles(event.target.files);
     }
 
@@ -767,64 +768,6 @@ export const UploadMixin = (superClass) =>
           this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
         }
       });
-    }
-
-    // TODO: The following functions only seem to be accessed from tests. Consider removing them.
-    /**
-     * Add files to the upload list.
-     * @param {FileList|File[]} files - Files to add
-     */
-    _addFiles(files) {
-      // Ensure manager config is synced before adding files
-      this.__syncManagerConfig();
-      this._manager.addFiles(files);
-    }
-
-    /**
-     * Add a single file to the upload list.
-     * @param {File} file - File to add
-     * @private
-     */
-    _addFile(file) {
-      // Ensure manager config is synced before adding files
-      this.__syncManagerConfig();
-      this._manager.addFiles([file]);
-    }
-
-    /**
-     * Queue a file for upload.
-     * @param {UploadFile} file - File to queue
-     * @private
-     */
-    _queueFileUpload(file) {
-      this.uploadFiles(file);
-    }
-
-    /**
-     * Start uploading a file immediately.
-     * @param {UploadFile} file - File to upload
-     * @private
-     */
-    _uploadFile(file) {
-      this.uploadFiles(file);
-    }
-
-    /**
-     * Retry uploading a failed file.
-     * @param {UploadFile} file - File to retry
-     * @private
-     */
-    _retryFileUpload(file) {
-      this._manager.retryUpload(file);
-    }
-
-    /**
-     * Abort uploading a file.
-     * @param {UploadFile} file - File to abort
-     * @private
-     */
-    _abortFileUpload(file) {
-      this._manager.abortUpload(file);
     }
 
     /**
