@@ -169,6 +169,56 @@ export const ScrollMixin = (superClass) =>
     }
 
     /**
+     * Scrolls horizontally so that the column becomes visible in the viewport.
+     *
+     * The column can be specified either by its index (among visible columns
+     * in visual order) or by the column element itself.
+     *
+     * @param {GridColumn | number} indexOrColumn - Column element or column index
+     */
+    scrollToColumn(indexOrColumn) {
+      // Defer if grid not ready
+      if (!this._columnTree) {
+        this.__pendingScrollToColumn = indexOrColumn;
+        return;
+      }
+
+      // Get visible leaf columns in visual order (respects reordering, excludes hidden)
+      const visibleColumns = this._getColumnsInOrder();
+
+      let column;
+      if (typeof indexOrColumn === 'number') {
+        column = visibleColumns[indexOrColumn];
+        if (!column) {
+          console.warn(`Column index ${indexOrColumn} is out of bounds`);
+          return;
+        }
+      } else {
+        column = indexOrColumn;
+        if (!visibleColumns.includes(column)) {
+          console.warn('Column is not a visible column of this grid');
+          return;
+        }
+      }
+
+      // Frozen columns are always visible, no scroll needed
+      if (column.frozen || column.frozenToEnd) {
+        return;
+      }
+
+      this._scrollHorizontallyToCell(column._headerCell);
+    }
+
+    /** @private */
+    __scrollToPendingColumn() {
+      if (this.__pendingScrollToColumn !== undefined) {
+        const indexOrColumn = this.__pendingScrollToColumn;
+        delete this.__pendingScrollToColumn;
+        this.scrollToColumn(indexOrColumn);
+      }
+    }
+
+    /**
      * Makes sure the given element is fully inside the visible viewport,
      * taking header/footer into account.
      * @private
@@ -235,6 +285,8 @@ export const ScrollMixin = (superClass) =>
       if (!this._columnTree || !this._areSizerCellsAssigned()) {
         return;
       }
+
+      this.__scrollToPendingColumn();
 
       const columnsInOrder = this._getColumnsInOrder();
       let bodyContentHiddenChanged = false;
