@@ -478,20 +478,17 @@ describe('upload', () => {
       upload.uploadFiles(upload.files[0]);
     });
 
-    it('should start a file upload from the file-start event', (done) => {
+    it('should start a file upload from the file-start event', async () => {
       upload._addFile(file);
+
+      await nextRender();
 
       expect(file.uploaded).not.to.be.ok;
       expect(file.held).to.be.true;
       expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
 
-      upload.addEventListener('upload-start', (e) => {
-        expect(e.detail.xhr).to.be.ok;
-        expect(e.detail.file).to.be.ok;
-        expect(e.detail.file.uploading).to.be.ok;
-
-        done();
-      });
+      const startSpy = sinon.spy();
+      upload.addEventListener('upload-start', startSpy);
 
       upload.dispatchEvent(
         new CustomEvent('file-start', {
@@ -499,6 +496,14 @@ describe('upload', () => {
           cancelable: true,
         }),
       );
+
+      await nextRender();
+      expect(startSpy.calledOnce).to.be.true;
+      const e = startSpy.firstCall.args[0];
+
+      expect(e.detail.xhr).to.be.ok;
+      expect(e.detail.file).to.be.ok;
+      expect(e.detail.file.uploading).to.be.ok;
     });
   });
 

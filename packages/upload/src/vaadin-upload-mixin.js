@@ -8,10 +8,12 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-list-mixin.js';
 import { getFilesFromDropEvent } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
 export const DEFAULT_I18N = {
+  ...FILE_LIST_DEFAULT_I18N,
   dropFiles: {
     one: 'Drop file here',
     many: 'Drop files here',
@@ -19,36 +21,6 @@ export const DEFAULT_I18N = {
   addFiles: {
     one: 'Upload File...',
     many: 'Upload Files...',
-  },
-  error: {
-    tooManyFiles: 'Too Many Files.',
-    fileIsTooBig: 'File is Too Big.',
-    incorrectFileType: 'Incorrect File Type.',
-  },
-  uploading: {
-    status: {
-      connecting: 'Connecting...',
-      stalled: 'Stalled',
-      processing: 'Processing File...',
-      held: 'Queued',
-    },
-    remainingTime: {
-      prefix: 'remaining time: ',
-      unknown: 'unknown remaining time',
-    },
-    error: {
-      serverUnavailable: 'Upload failed, please try again later',
-      unexpectedServerError: 'Upload failed due to server error',
-      forbidden: 'Upload forbidden',
-    },
-  },
-  file: {
-    retry: 'Retry',
-    start: 'Start',
-    remove: 'Remove',
-  },
-  units: {
-    size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
   },
 };
 
@@ -560,14 +532,12 @@ export const UploadMixin = (superClass) =>
       if (this.__syncingToManager) {
         return;
       }
-      // Update files and apply i18n formatting
+      // Update files from manager
       const files = event.detail.value;
-      files.forEach((file) => this.__applyI18nToFile(file));
       // Use flag to prevent recursive sync back to manager
       this.__updatingFromManager = true;
       this.files = [...files];
       this.__updatingFromManager = false;
-      this._renderFileList();
     }
 
     /** @private */
@@ -629,6 +599,8 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __onManagerUploadStart(event) {
+      // TODO: Instead of duplicating the events, enable setting manager.eventTarget = this. It's also useful for the connector
+      // EDIT: That's probably not an option since the components rely on the events to fire on the manager
       this.dispatchEvent(
         new CustomEvent('upload-start', {
           detail: event.detail,
@@ -638,9 +610,6 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __onManagerUploadProgress(event) {
-      const { file } = event.detail;
-      this.__applyI18nToFile(file);
-      this._renderFileList();
       this.dispatchEvent(
         new CustomEvent('upload-progress', {
           detail: event.detail,
@@ -715,98 +684,6 @@ export const UploadMixin = (superClass) =>
       );
     }
 
-    // ============ I18n formatting ============
-
-    /** @private */
-    __applyI18nToFile(file) {
-      // Always set size-related strings when total is available
-      if (file.total) {
-        file.totalStr = this._formatSize(file.total);
-        file.loadedStr = this._formatSize(file.loaded || 0);
-        if (file.elapsed != null) {
-          file.elapsedStr = this._formatTime(file.elapsed, this._splitTimeByUnits(file.elapsed));
-        }
-        if (file.remaining != null) {
-          file.remainingStr = this._formatTime(file.remaining, this._splitTimeByUnits(file.remaining));
-        }
-      }
-
-      // Apply status messages based on file state
-      if (file.held && !file.error) {
-        // File is queued and waiting
-        file.status = this.__effectiveI18n.uploading.status.held;
-      } else if (file.stalled) {
-        // File upload is stalled
-        file.status = this.__effectiveI18n.uploading.status.stalled;
-      } else if (file.uploading && file.indeterminate && !file.held) {
-        // File is uploading but progress is indeterminate (connecting or processing)
-        if (file.progress === 100) {
-          file.status = this.__effectiveI18n.uploading.status.processing;
-        } else {
-          file.status = this.__effectiveI18n.uploading.status.connecting;
-        }
-      } else if (file.uploading && file.progress < 100 && file.total) {
-        // File is uploading with known progress
-        file.status = this._formatFileProgress(file);
-      }
-    }
-
-    /** @private */
-    _formatSize(bytes) {
-      if (typeof this.__effectiveI18n.formatSize === 'function') {
-        return this.__effectiveI18n.formatSize(bytes);
-      }
-
-      // https://wiki.ubuntu.com/UnitsPolicy
-      const base = this.__effectiveI18n.units.sizeBase || 1000;
-      const unit = ~~(Math.log(bytes) / Math.log(base));
-      const dec = Math.max(0, Math.min(3, unit - 1));
-      const size = parseFloat((bytes / base ** unit).toFixed(dec));
-      return `${size} ${this.__effectiveI18n.units.size[unit]}`;
-    }
-
-    /** @private */
-    _splitTimeByUnits(time) {
-      const unitSizes = [60, 60, 24, Infinity];
-      const timeValues = [0];
-
-      for (let i = 0; i < unitSizes.length && time > 0; i++) {
-        timeValues[i] = time % unitSizes[i];
-        time = Math.floor(time / unitSizes[i]);
-      }
-
-      return timeValues;
-    }
-
-    /** @private */
-    _formatTime(seconds, split) {
-      if (typeof this.__effectiveI18n.formatTime === 'function') {
-        return this.__effectiveI18n.formatTime(seconds, split);
-      }
-
-      // Fill HH:MM:SS with leading zeros
-      while (split.length < 3) {
-        split.push(0);
-      }
-
-      return split
-        .reverse()
-        .map((number) => {
-          return (number < 10 ? '0' : '') + number;
-        })
-        .join(':');
-    }
-
-    /** @private */
-    _formatFileProgress(file) {
-      const remainingTime =
-        file.loaded > 0
-          ? this.__effectiveI18n.uploading.remainingTime.prefix + file.remainingStr
-          : this.__effectiveI18n.uploading.remainingTime.unknown;
-
-      return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
-    }
-
     // ============ UI updates ============
 
     /** @private */
@@ -840,13 +717,6 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
-      }
-    }
-
-    /** @private */
-    _renderFileList() {
-      if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
-        this._fileList.requestContentUpdate();
       }
     }
 
@@ -983,8 +853,7 @@ export const UploadMixin = (superClass) =>
       });
     }
 
-    // ============ Public API ============
-
+    // TODO: The following functions only seem to be accessed from tests. Consider removing them.
     /**
      * Add files to the upload list.
      * @param {FileList|File[]} files - Files to add

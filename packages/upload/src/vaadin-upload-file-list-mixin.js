@@ -7,7 +7,7 @@ import { html, render } from 'lit';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
-const DEFAULT_I18N = {
+export const DEFAULT_I18N = {
   file: {
     retry: 'Retry',
     start: 'Start',
