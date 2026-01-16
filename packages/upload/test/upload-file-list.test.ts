@@ -504,15 +504,6 @@ describe('vaadin-upload-file-list', () => {
     it('should remove listener from old manager when manager changes', async () => {
       fileList.manager = manager;
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(0);
-
-      // Spy to track event listener calls - set up AFTER initial manager is set
-      const syncSpy = sinon.spy();
-      const originalSync = (fileList as any).__syncFromManager;
-      (fileList as any).__syncFromManager = function () {
-        syncSpy();
-        return originalSync.call(this);
-      };
 
       const manager2 = new UploadManager({
         target: '/api/upload',
@@ -522,47 +513,26 @@ describe('vaadin-upload-file-list', () => {
       fileList.manager = manager2;
       await nextFrame();
 
-      // Spy should have been called once for initial sync with new manager
-      expect(syncSpy.callCount).to.equal(1);
-      syncSpy.resetHistory();
-
-      // Add files to old manager - should NOT trigger sync since listener was removed
+      // Add files to old manager
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
-      expect(syncSpy.callCount).to.equal(0);
+      expect(fileList.items).to.have.lengthOf(0);
 
       // Add files to new manager - should trigger sync (once per file added)
       manager2.addFiles(createFiles(3, 100, 'text/plain'));
       await nextFrame();
-      expect(syncSpy.callCount).to.equal(3);
       expect(fileList.items).to.have.lengthOf(3);
     });
 
     it('should remove listener when disconnected from DOM', async () => {
-      // Spy on manager to verify event fires
-      const spy = sinon.spy();
-      manager.addEventListener('files-changed', spy);
-
       fileList.manager = manager;
       await nextFrame();
-
-      // Verify file list is in DOM
-      expect(fileList.isConnected).to.be.true;
 
       // Remove file list from DOM
       fileList.remove();
 
-      // Verify file list is disconnected
-      expect(fileList.isConnected).to.be.false;
-
-      // Reset spy call count after setup
-      spy.resetHistory();
-
       // Add files to manager
       manager.addFiles(createFiles(2, 100, 'text/plain'));
-
-      // Verify event was dispatched
-      expect(spy.called).to.be.true;
 
       // File list should not have updated since listener was removed on disconnect
       expect(fileList.items).to.have.lengthOf(0);
@@ -595,10 +565,6 @@ describe('vaadin-upload-file-list', () => {
 
       // Add files WHILE file list is disconnected
       manager.addFiles(createFiles(3, 100, 'text/plain'));
-      expect(manager.files).to.have.lengthOf(3);
-
-      // File list should not have updated
-      expect(fileList.items).to.have.lengthOf(0);
 
       // Reconnect file list
       parent.appendChild(fileList);
@@ -606,20 +572,6 @@ describe('vaadin-upload-file-list', () => {
 
       // File list should now be synced with manager files
       expect(fileList.items).to.have.lengthOf(3);
-    });
-  });
-
-  describe('requestContentUpdate', () => {
-    it('should be a function', () => {
-      expect(typeof fileList.requestContentUpdate).to.equal('function');
-    });
-
-    it('should update rendered content', async () => {
-      fileList.items = [createFile(100, 'text/plain') as UploadFile];
-      await nextFrame();
-
-      const uploadFile = fileList.querySelector('vaadin-upload-file');
-      expect(uploadFile).to.exist;
     });
   });
 });

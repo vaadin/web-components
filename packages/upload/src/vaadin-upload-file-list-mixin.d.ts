@@ -53,8 +53,9 @@ export declare function UploadFileListMixin<T extends Constructor<HTMLElement>>(
 export declare class UploadFileListMixinClass {
   /**
    * The array of files being processed, or already uploaded.
+   * @readonly
    */
-  items: UploadFile[];
+  readonly items: UploadFile[];
 
   /**
    * If true, the user cannot interact with this element.
@@ -76,11 +77,4 @@ export declare class UploadFileListMixinClass {
    * you want to change.
    */
   i18n: UploadFileListI18n;
-
-  /**
-   * Requests an update for the `vaadin-upload-file` elements.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
 }

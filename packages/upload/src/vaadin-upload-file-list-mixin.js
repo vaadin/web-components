@@ -50,6 +50,7 @@ export const UploadFileListMixin = (superClass) =>
       return {
         /**
          * The array of files being processed, or already uploaded.
+         * @readonly
          */
         items: {
           type: Array,
@@ -198,8 +199,6 @@ export const UploadFileListMixin = (superClass) =>
       }
     }
 
-    // ============ I18n formatting ============
-
     /** @private */
     __applyI18nToFile(file) {
       const i18n = this.__effectiveI18n;
@@ -319,11 +318,7 @@ export const UploadFileListMixin = (superClass) =>
       return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
     }
 
-    /**
-     * Requests an update for the `vaadin-upload-file` elements.
-     *
-     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-     */
+    /** @private */
     requestContentUpdate() {
       const { items, __effectiveI18n: i18n, disabled } = this;
 
