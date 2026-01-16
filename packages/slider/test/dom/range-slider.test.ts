@@ -35,6 +35,12 @@ describe('vaadin-range-slider', () => {
       slider.value = [20, 60];
       await expect(slider).dom.to.equalSnapshot();
     });
+
+    it('step', async () => {
+      slider.step = 10;
+      slider.value = [20, 60];
+      await expect(slider).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', async () => {
@@ -55,6 +61,12 @@ describe('vaadin-range-slider', () => {
 
     it('max', async () => {
       slider.max = 80;
+      slider.value = [20, 60];
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
+    it('step', async () => {
+      slider.step = 10;
       slider.value = [20, 60];
       await expect(slider).shadowDom.to.equalSnapshot();
     });

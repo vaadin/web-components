@@ -113,7 +113,7 @@ class Slider extends SliderMixin(
     super.update(props);
 
     const [value] = this.__value;
-    const { min, max } = this.__getConstraints();
+    const { min, max, step } = this.__getConstraints();
 
     render(
       html`
@@ -124,6 +124,7 @@ class Slider extends SliderMixin(
           .min="${min}"
           .max="${max}"
           .value="${value}"
+          .step="${step}"
           tabindex="0"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
