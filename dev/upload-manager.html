@@ -8,25 +8,14 @@
     <script type="module" src="./common.js"></script>
 
     <style>
-      /* Temporary Drop Zone */
-      .temp-drop-zone {
-        border: 2px dashed #ccc;
-        border-radius: 8px;
-        padding: 32px;
+      /* Drop Zone */
+      vaadin-upload-drop-zone {
+        padding: 16px;
         text-align: center;
         color: #666;
-        transition: all 0.2s;
         margin: 16px 0;
-      }
-
-      .temp-drop-zone.dragover {
-        border-color: #1976d2;
-        background: #e3f2fd;
-        color: #0d47a1;
-      }
-
-      .temp-drop-zone p {
-        margin: 0;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
       }
 
       /* Temporary File List */
@@ -150,14 +139,15 @@
       <vaadin-upload-button id="upload-button">Upload Files...</vaadin-upload-button>
     </div>
 
-    <div class="temp-drop-zone" id="dropzone">
+    <vaadin-upload-drop-zone id="dropzone">
       <p>Drop files here</p>
-    </div>
+    </vaadin-upload-drop-zone>
 
     <ul class="temp-file-list" id="file-list"></ul>
 
     <script type="module">
       import '@vaadin/upload/vaadin-upload-button.js';
+      import '@vaadin/upload/vaadin-upload-drop-zone.js';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
       import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
 
@@ -187,22 +177,9 @@
       const button = document.querySelector('#upload-button');
       button.manager = manager;
 
-      // Setup drop zone
+      // Link drop zone to manager
       const dropzone = document.querySelector('#dropzone');
-      dropzone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropzone.classList.add('dragover');
-      });
-      dropzone.addEventListener('dragleave', () => {
-        dropzone.classList.remove('dragover');
-      });
-      dropzone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropzone.classList.remove('dragover');
-        if (e.dataTransfer.files.length) {
-          manager.addFiles(e.dataTransfer.files);
-        }
-      });
+      dropzone.manager = manager;
 
       // Render file list
       const fileList = document.querySelector('#file-list');
