@@ -5,7 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
-import type { UploadFile, UploadManager } from './vaadin-upload-manager.js';
+import type { UploadManager } from './vaadin-upload-manager.js';
 
 export interface UploadFileListI18n {
   file?: {
@@ -51,12 +51,6 @@ export declare function UploadFileListMixin<T extends Constructor<HTMLElement>>(
 ): Constructor<UploadFileListMixinClass> & Constructor<I18nMixinClass<UploadFileListI18n>> & T;
 
 export declare class UploadFileListMixinClass {
-  /**
-   * The array of files being processed, or already uploaded.
-   * @readonly
-   */
-  readonly items: UploadFile[];
-
   /**
    * If true, the user cannot interact with this element.
    */

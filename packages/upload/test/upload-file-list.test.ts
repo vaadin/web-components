@@ -3,16 +3,19 @@ import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload-file-list.js';
 import type { UploadFileList } from '../src/vaadin-upload-file-list.js';
-import type { UploadFile } from '../src/vaadin-upload-manager.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles } from './helpers.js';
 
 describe('vaadin-upload-file-list', () => {
-  // Use 'any' for internal APIs not exposed in public types
-  let fileList: UploadFileList & { items: UploadFile[]; requestContentUpdate(): void };
+  let fileList: UploadFileList;
+  let manager: UploadManager;
 
   function getUploadFile() {
     return fileList.querySelector('vaadin-upload-file')!;
+  }
+
+  function getUploadFiles() {
+    return fileList.querySelectorAll('vaadin-upload-file');
   }
 
   function getStatusText() {
@@ -37,15 +40,14 @@ describe('vaadin-upload-file-list', () => {
 
   beforeEach(async () => {
     fileList = fixtureSync(`<vaadin-upload-file-list></vaadin-upload-file-list>`);
+    manager = new UploadManager({
+      target: '/api/upload',
+      noAuto: true,
+    });
     await nextRender();
   });
 
   describe('basic', () => {
-    it('should have items property defaulting to empty array when no target', () => {
-      // When target is null (default), items is set to empty array
-      expect(fileList.items).to.be.an('array').that.is.empty;
-    });
-
     it('should have i18n property with defaults', () => {
       expect(fileList.i18n).to.exist;
       expect(fileList.i18n.file?.retry).to.equal('Retry');
@@ -64,10 +66,11 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should propagate disabled state to upload-file elements', async () => {
-      fileList.items = [createFile(100, 'text/plain') as UploadFile];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
       await nextFrame();
 
-      const uploadFile = fileList.querySelector('vaadin-upload-file')!;
+      const uploadFile = getUploadFile();
       expect(uploadFile.disabled).to.be.false;
 
       fileList.disabled = true;
@@ -78,102 +81,130 @@ describe('vaadin-upload-file-list', () => {
     it('should have manager property defaulting to null', () => {
       expect(fileList.manager).to.be.null;
     });
-  });
 
-  describe('rendering items', () => {
-    it('should render upload-file elements for each item', async () => {
-      const file1 = createFile(100, 'text/plain');
-      const file2 = createFile(200, 'image/png');
-      fileList.items = [file1 as UploadFile, file2 as UploadFile];
-      await nextFrame();
-
-      const uploadFiles = fileList.querySelectorAll('vaadin-upload-file');
-      expect(uploadFiles.length).to.equal(2);
-    });
-
-    it('should update when items change', async () => {
-      fileList.items = [createFile(100, 'text/plain') as UploadFile];
-      await nextFrame();
-      expect(fileList.querySelectorAll('vaadin-upload-file').length).to.equal(1);
-
-      fileList.items = [
-        createFile(100, 'text/plain') as UploadFile,
-        createFile(200, 'image/png') as UploadFile,
-        createFile(300, 'application/pdf') as UploadFile,
-      ];
-      await nextFrame();
-      expect(fileList.querySelectorAll('vaadin-upload-file').length).to.equal(3);
-    });
-
-    it('should clear when items is empty', async () => {
-      fileList.items = [createFile(100, 'text/plain') as UploadFile];
-      await nextFrame();
-      expect(fileList.querySelectorAll('vaadin-upload-file').length).to.equal(1);
-
-      fileList.items = [];
-      await nextFrame();
-      expect(fileList.querySelectorAll('vaadin-upload-file').length).to.equal(0);
+    it('should render empty when no manager is set', () => {
+      expect(getUploadFiles().length).to.equal(0);
     });
   });
 
-  describe('i18n rendering', () => {
+  describe('rendering', () => {
+    it('should render upload-file elements for each file in manager', async () => {
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      fileList.manager = manager;
+      await nextFrame();
+
+      expect(getUploadFiles().length).to.equal(2);
+    });
+
+    it('should update when manager files change', async () => {
+      fileList.manager = manager;
+      await nextFrame();
+      expect(getUploadFiles().length).to.equal(0);
+
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      await nextFrame();
+      expect(getUploadFiles().length).to.equal(2);
+
+      manager.addFiles(createFiles(1, 100, 'text/plain'));
+      await nextFrame();
+      expect(getUploadFiles().length).to.equal(3);
+    });
+
+    it('should clear when manager is removed', async () => {
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+      fileList.manager = manager;
+      await nextFrame();
+      expect(getUploadFiles().length).to.equal(2);
+
+      fileList.manager = null;
+      await nextFrame();
+      expect(getUploadFiles().length).to.equal(0);
+    });
+  });
+
+  describe('i18n', () => {
     it('should render "Queued" status when file is held', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
-      file.held = true;
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      manager.files[0].held = true;
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getStatusText()).to.equal('Queued');
     });
 
     it('should render "Stalled" status when file is stalled', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
-      file.stalled = true;
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      manager.files[0].held = false;
+      manager.files[0].stalled = true;
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getStatusText()).to.equal('Stalled');
     });
 
     it('should render "Connecting..." status when indeterminate and uploading', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const file = manager.files[0];
+      file.held = false;
       file.uploading = true;
       file.indeterminate = true;
       file.progress = 0;
-      fileList.items = [file];
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getStatusText()).to.equal('Connecting...');
     });
 
     it('should render "Processing File..." status when progress is 100 and indeterminate', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const file = manager.files[0];
+      file.held = false;
       file.uploading = true;
       file.indeterminate = true;
       file.progress = 100;
-      fileList.items = [file];
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getStatusText()).to.equal('Processing File...');
     });
 
     it('should render translated error message for error codes', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
-      file.errorKey = 'serverUnavailable';
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      manager.files[0].errorKey = 'serverUnavailable';
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getErrorText()).to.equal('Upload failed, please try again later');
     });
 
     it('should render progress status with formatted file size', async () => {
-      const file = createFile(2000000, 'text/plain') as UploadFile;
+      manager.addFiles([createFile(2000000, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const file = manager.files[0];
+      file.held = false;
       file.total = 2000000;
       file.loaded = 500000;
       file.progress = 25;
       file.uploading = true;
       file.remaining = 30;
-      fileList.items = [file];
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       // Status should include formatted size (2 MB) and progress
@@ -181,20 +212,25 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should render "unknown remaining time" when loaded is 0', async () => {
-      const file = createFile(2000000, 'text/plain') as UploadFile;
+      manager.addFiles([createFile(2000000, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const file = manager.files[0];
+      file.held = false;
       file.total = 2000000;
       file.loaded = 0;
       file.progress = 0;
       file.uploading = true;
-      fileList.items = [file];
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getStatusText()).to.include('unknown remaining time');
     });
 
     it('should render i18n button labels', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
       await nextFrame();
 
       expect(getRetryButtonLabel()).to.equal('Retry');
@@ -206,173 +242,135 @@ describe('vaadin-upload-file-list', () => {
       fileList.i18n = {
         ...fileList.i18n,
         file: {
-          retry: 'Try again',
-          start: 'Begin',
-          remove: 'Delete',
+          retry: 'Yritä uudelleen',
+          start: 'Aloita',
+          remove: 'Poista',
         },
       };
-      const file = createFile(100, 'text/plain') as UploadFile;
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
       await nextFrame();
 
-      expect(getRetryButtonLabel()).to.equal('Try again');
-      expect(getStartButtonLabel()).to.equal('Begin');
-      expect(getRemoveButtonLabel()).to.equal('Delete');
+      expect(getRetryButtonLabel()).to.equal('Yritä uudelleen');
+      expect(getStartButtonLabel()).to.equal('Aloita');
+      expect(getRemoveButtonLabel()).to.equal('Poista');
     });
 
     it('should support partial i18n updates', async () => {
       // Set only the retry label - other labels should remain default
       fileList.i18n = {
         file: {
-          retry: 'Try again',
+          retry: 'Yritä uudelleen',
         },
       };
-      const file = createFile(100, 'text/plain') as UploadFile;
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
       await nextFrame();
 
-      expect(getRetryButtonLabel()).to.equal('Try again');
+      expect(getRetryButtonLabel()).to.equal('Yritä uudelleen');
       expect(getStartButtonLabel()).to.equal('Start'); // Default
       expect(getRemoveButtonLabel()).to.equal('Remove'); // Default
     });
 
     it('should render custom i18n status messages', async () => {
       fileList.i18n = {
-        ...fileList.i18n,
         uploading: {
-          ...fileList.i18n.uploading,
           status: {
-            connecting: 'Verbinding maken...',
-            stalled: 'Vastgelopen',
-            processing: 'Bestand verwerken...',
-            held: 'In wachtrij',
+            held: 'Jonossa',
           },
         },
       };
-      const file = createFile(100, 'text/plain') as UploadFile;
-      file.held = true;
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
       await nextFrame();
 
-      expect(getStatusText()).to.equal('In wachtrij');
+      manager.files[0].held = true;
+      manager.dispatchEvent(new CustomEvent('files-changed'));
+      await nextFrame();
+
+      expect(getStatusText()).to.equal('Jonossa');
     });
 
     it('should render custom i18n error messages', async () => {
       fileList.i18n = {
-        ...fileList.i18n,
         uploading: {
-          ...fileList.i18n.uploading,
           error: {
-            serverUnavailable: 'Server niet beschikbaar',
-            unexpectedServerError: 'Onverwachte serverfout',
-            forbidden: 'Uploaden verboden',
+            serverUnavailable: 'Palvelin ei ole käytettävissä',
           },
         },
       };
-      const file = createFile(100, 'text/plain') as UploadFile;
-      file.errorKey = 'serverUnavailable';
-      fileList.items = [file];
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
       await nextFrame();
 
-      expect(getErrorText()).to.equal('Server niet beschikbaar');
+      manager.files[0].errorKey = 'serverUnavailable';
+      manager.dispatchEvent(new CustomEvent('files-changed'));
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('Palvelin ei ole käytettävissä');
     });
 
     it('should render file size with custom formatSize function', async () => {
       fileList.i18n = {
-        ...fileList.i18n,
-        formatSize: (bytes: number) => `${bytes} octets`,
+        formatSize: (bytes: number) => `${bytes} tavua`,
       };
-      const file = createFile(1536, 'text/plain') as UploadFile;
+      manager.addFiles([createFile(1536, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const file = manager.files[0];
+      file.held = false;
       file.total = 1536;
       file.loaded = 500;
       file.progress = 33;
       file.uploading = true;
       file.remaining = 10;
-      fileList.items = [file];
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       // Status should use the custom formatSize
-      expect(getStatusText()).to.include('1536 octets');
+      expect(getStatusText()).to.include('1536 tavua');
     });
 
     it('should format elapsedStr when elapsed time is available', async () => {
-      const file = createFile(1536, 'text/plain') as UploadFile;
+      manager.addFiles([createFile(1536, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const file = manager.files[0];
       file.total = 1536;
       file.elapsed = 65; // 1 minute 5 seconds
-      fileList.items = [file];
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       // elapsedStr should be formatted as HH:MM:SS
       expect((file as any).elapsedStr).to.equal('00:01:05');
     });
-  });
-
-  describe('manager integration', () => {
-    let manager: UploadManager;
-
-    beforeEach(() => {
-      manager = new UploadManager({
-        target: '/api/upload',
-        noAuto: true,
-      });
-    });
-
-    it('should sync files from manager when manager is set', async () => {
-      const files = createFiles(2, 100, 'text/plain');
-      manager.addFiles(files);
-
-      fileList.manager = manager;
-      await nextFrame();
-
-      expect(fileList.items).to.have.lengthOf(2);
-    });
-
-    it('should update when manager files change', async () => {
-      fileList.manager = manager;
-      await nextFrame();
-      expect(fileList.items).to.have.lengthOf(0);
-
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
-      await nextFrame();
-      expect(fileList.items).to.have.lengthOf(2);
-    });
 
     it('should clear error when errorKey is reset on retry', async () => {
-      const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
+      manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
       // Simulate error state
-      const uploadFile = manager.files[0];
-      uploadFile.errorKey = 'forbidden';
-      fileList.items = [...fileList.items];
+      manager.files[0].errorKey = 'forbidden';
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getErrorText()).to.equal('Upload forbidden');
 
       // Simulate retry: errorKey is cleared
-      (uploadFile as any).errorKey = false;
-      fileList.items = [...fileList.items];
+      (manager.files[0] as any).errorKey = false;
+      manager.dispatchEvent(new CustomEvent('files-changed'));
       await nextFrame();
 
       expect(getErrorText()).to.equal('');
     });
+  });
 
-    it('should clear items when manager is removed', async () => {
-      manager.addFiles(createFiles(2, 100, 'text/plain'));
-      fileList.manager = manager;
-      await nextFrame();
-      expect(fileList.items).to.have.lengthOf(2);
-
-      fileList.manager = null;
-      await nextFrame();
-      expect(fileList.items).to.have.lengthOf(0);
-    });
-
+  describe('event forwarding', () => {
     it('should forward file-retry event to manager', async () => {
-      const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
+      manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
@@ -388,8 +386,7 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should forward file-abort event to manager', async () => {
-      const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
+      manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
@@ -407,8 +404,7 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should forward file-start event to manager', async () => {
-      const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
+      manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
@@ -424,8 +420,7 @@ describe('vaadin-upload-file-list', () => {
     });
 
     it('should forward file-remove event to manager', async () => {
-      const file = createFile(100, 'text/plain');
-      manager.addFiles([file]);
+      manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
 
@@ -454,8 +449,7 @@ describe('vaadin-upload-file-list', () => {
           target: '/api/upload',
           noAuto: true,
         });
-        const file = createFile(100, 'text/plain');
-        testManager.addFiles([file]);
+        testManager.addFiles([createFile(100, 'text/plain')]);
         fileList.manager = testManager;
         await nextFrame();
 
@@ -479,26 +473,16 @@ describe('vaadin-upload-file-list', () => {
 
       fileList.remove();
     });
+  });
 
-    it('should not stop propagation when no manager is set', async () => {
-      const file = createFile(100, 'text/plain') as UploadFile;
-      fileList.items = [file];
+  describe('manager lifecycle', () => {
+    it('should sync files from manager when manager is set', async () => {
+      manager.addFiles(createFiles(2, 100, 'text/plain'));
+
+      fileList.manager = manager;
       await nextFrame();
 
-      const parentSpy = sinon.spy();
-      const parent = document.createElement('div');
-      parent.appendChild(fileList);
-      parent.addEventListener('file-retry', parentSpy);
-
-      const event = new CustomEvent('file-retry', {
-        detail: { file },
-        bubbles: true,
-      });
-      fileList.dispatchEvent(event);
-
-      expect(parentSpy.calledOnce).to.be.true;
-
-      fileList.remove();
+      expect(getUploadFiles().length).to.equal(2);
     });
 
     it('should remove listener from old manager when manager changes', async () => {
@@ -513,29 +497,29 @@ describe('vaadin-upload-file-list', () => {
       fileList.manager = manager2;
       await nextFrame();
 
-      // Add files to old manager
+      // Add files to old manager - should not affect file list
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(0);
+      expect(getUploadFiles().length).to.equal(0);
 
-      // Add files to new manager - should trigger sync (once per file added)
+      // Add files to new manager - should trigger sync
       manager2.addFiles(createFiles(3, 100, 'text/plain'));
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(3);
+      expect(getUploadFiles().length).to.equal(3);
     });
 
     it('should remove listener when disconnected from DOM', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
       fileList.manager = manager;
       await nextFrame();
+      expect(getUploadFiles().length).to.equal(1);
 
       // Remove file list from DOM
       fileList.remove();
 
-      // Add files to manager
+      // Add files to manager - file list should not update since listener was removed
       manager.addFiles(createFiles(2, 100, 'text/plain'));
-
-      // File list should not have updated since listener was removed on disconnect
-      expect(fileList.items).to.have.lengthOf(0);
+      expect(getUploadFiles().length).to.equal(1); // Still shows old count
     });
 
     it('should re-attach listener when reconnected to DOM', async () => {
@@ -551,13 +535,13 @@ describe('vaadin-upload-file-list', () => {
       // Add files - should update file list since it's reconnected
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(2);
+      expect(getUploadFiles().length).to.equal(2);
     });
 
     it('should sync files when reconnected after files were added while disconnected', async () => {
       fileList.manager = manager;
       await nextFrame();
-      expect(fileList.items).to.have.lengthOf(0);
+      expect(getUploadFiles().length).to.equal(0);
 
       // Remove file list from DOM
       const parent = fileList.parentElement!;
@@ -571,7 +555,7 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       // File list should now be synced with manager files
-      expect(fileList.items).to.have.lengthOf(3);
+      expect(getUploadFiles().length).to.equal(3);
     });
   });
 });
