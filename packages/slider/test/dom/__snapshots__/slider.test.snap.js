@@ -61,7 +61,22 @@ snapshots["vaadin-slider host max"] =
 `;
 /* end snapshot vaadin-slider host max */
 
-snapshots["vaadin-slider shadow default"] =
+snapshots["vaadin-slider host step"] = 
+`<vaadin-slider>
+  <input
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="10"
+    tabindex="0"
+    type="range"
+  >
+</vaadin-slider>
+`;
+/* end snapshot vaadin-slider host step */
+
+snapshots["vaadin-slider shadow default"] = 
 `<div part="track">
   <div
     part="track-fill"
@@ -132,21 +147,6 @@ snapshots["vaadin-slider shadow max"] =
 </slot>
 `;
 /* end snapshot vaadin-slider shadow max */
-
-snapshots["vaadin-slider host step"] = 
-`<vaadin-slider>
-  <input
-    id="slider-4"
-    max="100"
-    min="0"
-    slot="input"
-    step="10"
-    tabindex="0"
-    type="range"
-  >
-</vaadin-slider>
-`;
-/* end snapshot vaadin-slider host step */
 
 snapshots["vaadin-slider shadow step"] = 
 `<div part="track">
