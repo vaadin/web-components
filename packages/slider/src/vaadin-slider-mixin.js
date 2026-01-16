@@ -46,33 +46,56 @@ export const SliderMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__thumbIndex = 0;
+      this.__onPointerMove = this.__onPointerMove.bind(this);
+      this.__onPointerUp = this.__onPointerUp.bind(this);
+
+      // Use separate mousedown listener for focusing the input, as
+      // pointerdown fires too early and the global `keyboardActive`
+      // flag isn't updated yet, which incorrectly shows focus-ring
+      this.addEventListener('mousedown', (e) => this.__onMouseDown(e));
+      this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
+    }
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.__lastCommittedValue = this.value;
+    }
+
+    /**
+     * @param {Event} event
+     * @return {number}
+     */
+    __getThumbIndex(_event) {
+      return 0;
     }
 
     /**
      * @param {number} value
      * @param {number} index
+     * @param {number[]} fullValue
      * @private
      */
-    __updateValue(value, index = this.__thumbIndex) {
+    __updateValue(value, index, fullValue = this.__value) {
       const { min, max, step } = this.__getConstraints();
 
-      const minValue = this.__value[index - 1] || min;
-      const maxValue = this.__value[index + 1] || max;
+      const minValue = fullValue[index - 1] !== undefined ? fullValue[index - 1] : min;
+      const maxValue = fullValue[index + 1] !== undefined ? fullValue[index + 1] : max;
 
       const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
-      const offset = safeValue - min;
+      const offset = safeValue - minValue;
       const nearestOffset = Math.round(offset / step) * step;
-      const nearestValue = min + nearestOffset;
+      const nearestValue = minValue + nearestOffset;
 
       const newValue = Math.round(nearestValue);
 
-      this.__value = this.__value.with(index, newValue);
+      this.__value = fullValue.with(index, newValue);
     }
 
     /**
-     * @return {{ min: number, max: number}}
+     * @return {{ min: number, max: number, step: number}}
      * @private
      */
     __getConstraints() {
@@ -93,24 +116,141 @@ export const SliderMixin = (superClass) =>
       return (100 * (value - min)) / (max - min);
     }
 
+    /**
+     * @param {number} percent
+     * @return {number}
+     * @private
+     */
+    __getValueFromPercent(percent) {
+      const { min, max } = this.__getConstraints();
+      return min + percent * (max - min);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @return {number}
+     * @private
+     */
+    __getEventPercent(event) {
+      const offset = event.offsetX;
+      const size = this.offsetWidth;
+      const safeOffset = Math.min(Math.max(offset, 0), size);
+      return safeOffset / size;
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @return {number}
+     * @private
+     */
+    __getEventValue(event) {
+      const percent = this.__getEventPercent(event);
+      return this.__getValueFromPercent(percent);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onMouseDown(event) {
+      const part = event.composedPath()[0].getAttribute('part');
+      if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
+        return;
+      }
+
+      // Prevent losing focus
+      event.preventDefault();
+
+      this.__focusInput(event);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerDown(event) {
+      if (event.button !== 0) {
+        return;
+      }
+
+      const part = event.composedPath()[0].getAttribute('part');
+      if (!part || (!part.startsWith('track') && !part.startsWith('thumb'))) {
+        return;
+      }
+
+      this.setPointerCapture(event.pointerId);
+      this.addEventListener('pointermove', this.__onPointerMove);
+      this.addEventListener('pointerup', this.__onPointerUp);
+      this.addEventListener('pointercancel', this.__onPointerUp);
+
+      this.__thumbIndex = this.__getThumbIndex(event);
+
+      // Update value on track click
+      if (part.startsWith('track')) {
+        const newValue = this.__getEventValue(event);
+        this.__updateValue(newValue, this.__thumbIndex);
+        this.__commitValue();
+      }
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerMove(event) {
+      const newValue = this.__getEventValue(event);
+      this.__updateValue(newValue, this.__thumbIndex);
+      this.__commitValue();
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onPointerUp(event) {
+      this.__thumbIndex = null;
+
+      this.releasePointerCapture(event.pointerId);
+      this.removeEventListener('pointermove', this.__onPointerMove);
+      this.removeEventListener('pointerup', this.__onPointerUp);
+      this.removeEventListener('pointercancel', this.__onPointerUp);
+
+      this.__detectAndDispatchChange();
+    }
+
+    /**
+     * @param {Event} event
+     * @private
+     */
+    __focusInput(_event) {
+      this.focus({ focusVisible: false });
+    }
+
     /** @private */
     __detectAndDispatchChange() {
-      if (this.__lastCommittedValue !== this.value) {
+      if (JSON.stringify(this.__lastCommittedValue) !== JSON.stringify(this.value)) {
         this.__lastCommittedValue = this.value;
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
 
-    /** @private */
+    /**
+     * @param {Event} event
+     * @private
+     */
     __onInput(event) {
-      this.__updateValue(event.target.value);
+      const index = this.__getThumbIndex(event);
+      this.__updateValue(event.target.value, index);
       this.__commitValue();
-      this.__detectAndDispatchChange();
     }
 
-    /** @private */
+    /**
+     * @param {Event} event
+     * @private
+     */
     __onChange(event) {
       event.stopPropagation();
+      this.__detectAndDispatchChange();
     }
 
     /**

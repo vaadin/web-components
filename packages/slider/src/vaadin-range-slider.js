@@ -101,8 +101,6 @@ class RangeSlider extends SliderMixin(
     this.__value = [...this.value];
     this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
-
-    this.addEventListener('mousedown', (e) => this._onMouseDown(e));
   }
 
   /** @protected */
@@ -163,9 +161,9 @@ class RangeSlider extends SliderMixin(
     super.updated(props);
 
     if (props.has('value') || props.has('min') || props.has('max')) {
-      const value = Array.isArray(this.value) ? this.value : [];
-      value.forEach((value, idx) => {
-        this.__updateValue(value, idx);
+      const value = [...this.value];
+      value.forEach((v, idx) => {
+        this.__updateValue(v, idx, value);
       });
     }
   }
@@ -200,14 +198,11 @@ class RangeSlider extends SliderMixin(
 
   /**
    * @param {PointerEvent} event
-   * @protected
+   * @private
    */
-  _onMouseDown(event) {
-    // Prevent blur if already focused
-    event.preventDefault();
-
-    // Focus the input to allow modifying value using keyboard
-    this.focus({ focusVisible: false });
+  __focusInput(event) {
+    const index = this.__getThumbIndex(event);
+    this._inputElements[index].focus();
   }
 
   /** @private */
@@ -215,9 +210,69 @@ class RangeSlider extends SliderMixin(
     this.value = [...this.__value];
   }
 
+  /**
+   * @param {Event} event
+   * @return {number}
+   */
+  __getThumbIndex(event) {
+    if (event.type === 'input') {
+      return this._inputElements.indexOf(event.target);
+    }
+
+    return this.__getClosestThumb(event);
+  }
+
+  /**
+   * @param {PointerEvent} event
+   * @return {number}
+   * @private
+   */
+  __getClosestThumb(event) {
+    let closestThumb;
+
+    // If both thumbs are at the start, use the second thumb,
+    // and if both are at tne end, use the first one instead.
+    if (this.__value[0] === this.__value[1]) {
+      const { min, max } = this.__getConstraints();
+      if (this.__value[0] === min) {
+        return 1;
+      }
+
+      if (this.__value[0] === max) {
+        return 0;
+      }
+    }
+
+    const percent = this.__getEventPercent(event);
+    const value = this.__getValueFromPercent(percent);
+
+    // First thumb position from the "end"
+    const index = this.__value.findIndex((v) => value - v < 0);
+
+    // Pick the first one
+    if (index === 0) {
+      closestThumb = index;
+    } else if (index === -1) {
+      // Pick the last one (position is past all the thumbs)
+      closestThumb = this.__value.length - 1;
+    } else {
+      const lastStart = this.__value[index - 1];
+      const firstEnd = this.__value[index];
+      // Pick the first one from the "start" unless thumbs are stacked on top of each other
+      if (Math.abs(lastStart - value) < Math.abs(firstEnd - value)) {
+        closestThumb = index - 1;
+      } else {
+        // Pick the last one from the "end"
+        closestThumb = index;
+      }
+    }
+
+    return closestThumb;
+  }
+
   /** @private */
   __onKeyDown(event) {
-    this.__thumbIndex = this._inputElements.indexOf(event.target);
+    const index = this._inputElements.indexOf(event.target);
 
     const prevKeys = ['ArrowLeft', 'ArrowDown'];
     const nextKeys = ['ArrowRight', 'ArrowUp'];
@@ -226,8 +281,7 @@ class RangeSlider extends SliderMixin(
     // to prevent the case where slotted range inputs would end up in broken state.
     if (
       this.__value[0] === this.__value[1] &&
-      ((this.__thumbIndex === 0 && nextKeys.includes(event.key)) ||
-        (this.__thumbIndex === 1 && prevKeys.includes(event.key)))
+      ((index === 0 && nextKeys.includes(event.key)) || (index === 1 && prevKeys.includes(event.key)))
     ) {
       event.preventDefault();
     }
