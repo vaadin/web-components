@@ -421,15 +421,9 @@ export const UploadMixin = (superClass) =>
       this.__onManagerMaxFilesReachedChanged = this.__onManagerMaxFilesReachedChanged.bind(this);
       this.__onManagerFileReject = this.__onManagerFileReject.bind(this);
       this.__onManagerFileRemove = this.__onManagerFileRemove.bind(this);
-      this.__onManagerUploadBefore = this.__onManagerUploadBefore.bind(this);
-      this.__onManagerUploadRequest = this.__onManagerUploadRequest.bind(this);
-      this.__onManagerUploadStart = this.__onManagerUploadStart.bind(this);
-      this.__onManagerUploadProgress = this.__onManagerUploadProgress.bind(this);
-      this.__onManagerUploadResponse = this.__onManagerUploadResponse.bind(this);
       this.__onManagerUploadSuccess = this.__onManagerUploadSuccess.bind(this);
       this.__onManagerUploadError = this.__onManagerUploadError.bind(this);
-      this.__onManagerUploadRetry = this.__onManagerUploadRetry.bind(this);
-      this.__onManagerUploadAbort = this.__onManagerUploadAbort.bind(this);
+      this.__redispatchEvent = this.__redispatchEvent.bind(this);
     }
 
     /** @protected */
@@ -441,15 +435,15 @@ export const UploadMixin = (superClass) =>
       this._manager.addEventListener('max-files-reached-changed', this.__onManagerMaxFilesReachedChanged);
       this._manager.addEventListener('file-reject', this.__onManagerFileReject);
       this._manager.addEventListener('file-remove', this.__onManagerFileRemove);
-      this._manager.addEventListener('upload-before', this.__onManagerUploadBefore);
-      this._manager.addEventListener('upload-request', this.__onManagerUploadRequest);
-      this._manager.addEventListener('upload-start', this.__onManagerUploadStart);
-      this._manager.addEventListener('upload-progress', this.__onManagerUploadProgress);
-      this._manager.addEventListener('upload-response', this.__onManagerUploadResponse);
+      this._manager.addEventListener('upload-before', this.__redispatchEvent);
+      this._manager.addEventListener('upload-request', this.__redispatchEvent);
+      this._manager.addEventListener('upload-start', this.__redispatchEvent);
+      this._manager.addEventListener('upload-progress', this.__redispatchEvent);
+      this._manager.addEventListener('upload-response', this.__redispatchEvent);
       this._manager.addEventListener('upload-success', this.__onManagerUploadSuccess);
       this._manager.addEventListener('upload-error', this.__onManagerUploadError);
-      this._manager.addEventListener('upload-retry', this.__onManagerUploadRetry);
-      this._manager.addEventListener('upload-abort', this.__onManagerUploadAbort);
+      this._manager.addEventListener('upload-retry', this.__redispatchEvent);
+      this._manager.addEventListener('upload-abort', this.__redispatchEvent);
 
       this.addEventListener('dragover', this._onDragover.bind(this));
       this.addEventListener('dragleave', this._onDragleave.bind(this));
@@ -572,60 +566,14 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __onManagerUploadBefore(event) {
-      const evt = this.dispatchEvent(
-        new CustomEvent('upload-before', {
+    __redispatchEvent(event) {
+      const dispatched = this.dispatchEvent(
+        new CustomEvent(event.type, {
           detail: event.detail,
-          cancelable: true,
+          cancelable: event.cancelable,
         }),
       );
-      if (!evt) {
-        event.preventDefault();
-      }
-    }
-
-    /** @private */
-    __onManagerUploadRequest(event) {
-      const evt = this.dispatchEvent(
-        new CustomEvent('upload-request', {
-          detail: event.detail,
-          cancelable: true,
-        }),
-      );
-      if (!evt) {
-        event.preventDefault();
-      }
-    }
-
-    /** @private */
-    __onManagerUploadStart(event) {
-      // TODO: Instead of duplicating the events, enable setting manager.eventTarget = this. It's also useful for the connector
-      // EDIT: That's probably not an option since the components rely on the events to fire on the manager
-      this.dispatchEvent(
-        new CustomEvent('upload-start', {
-          detail: event.detail,
-        }),
-      );
-    }
-
-    /** @private */
-    __onManagerUploadProgress(event) {
-      this.dispatchEvent(
-        new CustomEvent('upload-progress', {
-          detail: event.detail,
-        }),
-      );
-    }
-
-    /** @private */
-    __onManagerUploadResponse(event) {
-      const evt = this.dispatchEvent(
-        new CustomEvent('upload-response', {
-          detail: event.detail,
-          cancelable: true,
-        }),
-      );
-      if (!evt) {
+      if (event.cancelable && !dispatched) {
         event.preventDefault();
       }
     }
@@ -636,18 +584,10 @@ export const UploadMixin = (superClass) =>
       // Check if error was set by upload-response listener (for backwards compatibility)
       if (file.error) {
         file.complete = false;
-        this.dispatchEvent(
-          new CustomEvent('upload-error', {
-            detail: event.detail,
-          }),
-        );
+        this.dispatchEvent(new CustomEvent('upload-error', { detail: event.detail }));
         return;
       }
-      this.dispatchEvent(
-        new CustomEvent('upload-success', {
-          detail: event.detail,
-        }),
-      );
+      this.__redispatchEvent(event);
     }
 
     /** @private */
@@ -657,31 +597,7 @@ export const UploadMixin = (superClass) =>
       if (file.errorKey && !file.error) {
         file.error = this.__effectiveI18n.uploading.error[file.errorKey] || file.errorKey;
       }
-      this.dispatchEvent(
-        new CustomEvent('upload-error', {
-          detail: event.detail,
-        }),
-      );
-    }
-
-    /** @private */
-    __onManagerUploadRetry(event) {
-      this.dispatchEvent(
-        new CustomEvent('upload-retry', {
-          detail: event.detail,
-          cancelable: true,
-        }),
-      );
-    }
-
-    /** @private */
-    __onManagerUploadAbort(event) {
-      this.dispatchEvent(
-        new CustomEvent('upload-abort', {
-          detail: event.detail,
-          cancelable: true,
-        }),
-      );
+      this.__redispatchEvent(event);
     }
 
     // ============ UI updates ============
