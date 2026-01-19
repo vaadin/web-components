@@ -29,6 +29,29 @@ describe('vaadin-range-slider', () => {
     });
   });
 
+  describe('value property', () => {
+    beforeEach(async () => {
+      slider = fixtureSync('<vaadin-range-slider></vaadin-range-slider>');
+      slider.value = [1, 3];
+      await nextRender();
+    });
+
+    it('should not update the value when changing min', () => {
+      slider.min = 2;
+      expect(slider.value).to.deep.equal([1, 3]);
+    });
+
+    it('should not update the value when changing max', () => {
+      slider.max = 2;
+      expect(slider.value).to.deep.equal([1, 3]);
+    });
+
+    it('should not update the value when changing step', () => {
+      slider.step = 1.5;
+      expect(slider.value).to.deep.equal([1, 3]);
+    });
+  });
+
   describe('focus', () => {
     let firstGlobalFocusable: HTMLElement;
     let lastGlobalFocusable: HTMLElement;
@@ -253,6 +276,20 @@ describe('vaadin-range-slider', () => {
         slider.addEventListener('change', spy);
         await sendKeys({ press: 'ArrowLeft' });
         expect(spy).to.be.calledOnce;
+      });
+
+      it('should preserve decimals when changing value using fractional step', async () => {
+        slider.value = [0, 3];
+        slider.step = 1.5;
+        await sendKeys({ press: 'ArrowLeft' });
+        expect(slider.value).to.deep.equal([0, 1.5]);
+      });
+
+      it('should not increase value past max allowed value with fractional step', async () => {
+        slider.value = [0, 99];
+        slider.step = 1.5;
+        await sendKeys({ press: 'ArrowRight' });
+        expect(slider.value).to.deep.equal([0, 99]);
       });
     });
   });
