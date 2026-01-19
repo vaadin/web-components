@@ -1,4 +1,5 @@
 import '../../vaadin-range-slider.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -28,6 +29,7 @@ assertType<number>(slider.step);
 assertType<number[]>(slider.value);
 
 // Mixins
+assertType<DisabledMixinClass>(slider);
 assertType<ElementMixinClass>(slider);
 assertType<FocusMixinClass>(slider);
 assertType<ThemableMixinClass>(slider);

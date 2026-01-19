@@ -19,7 +19,7 @@ snapshots["vaadin-slider host default"] =
 snapshots["vaadin-slider host value"] = 
 `<vaadin-slider>
   <input
-    id="slider-1"
+    id="slider-0"
     max="100"
     min="0"
     slot="input"
@@ -34,7 +34,7 @@ snapshots["vaadin-slider host value"] =
 snapshots["vaadin-slider host min"] = 
 `<vaadin-slider>
   <input
-    id="slider-2"
+    id="slider-0"
     max="100"
     min="20"
     slot="input"
@@ -49,7 +49,7 @@ snapshots["vaadin-slider host min"] =
 snapshots["vaadin-slider host max"] = 
 `<vaadin-slider>
   <input
-    id="slider-3"
+    id="slider-0"
     max="80"
     min="0"
     slot="input"
@@ -64,7 +64,7 @@ snapshots["vaadin-slider host max"] =
 snapshots["vaadin-slider host step"] = 
 `<vaadin-slider>
   <input
-    id="slider-4"
+    id="slider-0"
     max="100"
     min="0"
     slot="input"
@@ -75,6 +75,25 @@ snapshots["vaadin-slider host step"] =
 </vaadin-slider>
 `;
 /* end snapshot vaadin-slider host step */
+
+snapshots["vaadin-slider host disabled"] = 
+`<vaadin-slider
+  aria-disabled="true"
+  disabled=""
+>
+  <input
+    disabled=""
+    id="slider-0"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="-1"
+    type="range"
+  >
+</vaadin-slider>
+`;
+/* end snapshot vaadin-slider host disabled */
 
 snapshots["vaadin-slider shadow default"] = 
 `<div part="track">

@@ -132,7 +132,8 @@ class RangeSlider extends SliderMixin(
           .max="${max}"
           .step="${step}"
           .value="${startValue}"
-          tabindex="0"
+          .disabled="${this.disabled}"
+          tabindex="${this.disabled ? -1 : 0}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
@@ -145,7 +146,8 @@ class RangeSlider extends SliderMixin(
           .max="${max}"
           .step="${step}"
           .value="${endValue}"
-          tabindex="0"
+          .disabled="${this.disabled}"
+          tabindex="${this.disabled ? -1 : 0}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
@@ -174,6 +176,10 @@ class RangeSlider extends SliderMixin(
    * @override
    */
   focus(options) {
+    if (this.disabled) {
+      return;
+    }
+
     if (this._inputElements) {
       this._inputElements[0].focus();
     }

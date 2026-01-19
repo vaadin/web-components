@@ -28,7 +28,7 @@ snapshots["vaadin-range-slider host default"] =
 snapshots["vaadin-range-slider host value"] = 
 `<vaadin-range-slider>
   <input
-    id="slider-2"
+    id="slider-0"
     max="100"
     min="0"
     slot="input"
@@ -37,7 +37,7 @@ snapshots["vaadin-range-slider host value"] =
     type="range"
   >
   <input
-    id="slider-3"
+    id="slider-1"
     max="100"
     min="0"
     slot="input"
@@ -52,7 +52,7 @@ snapshots["vaadin-range-slider host value"] =
 snapshots["vaadin-range-slider host min"] = 
 `<vaadin-range-slider>
   <input
-    id="slider-4"
+    id="slider-0"
     max="100"
     min="20"
     slot="input"
@@ -61,7 +61,7 @@ snapshots["vaadin-range-slider host min"] =
     type="range"
   >
   <input
-    id="slider-5"
+    id="slider-1"
     max="100"
     min="20"
     slot="input"
@@ -76,7 +76,7 @@ snapshots["vaadin-range-slider host min"] =
 snapshots["vaadin-range-slider host max"] = 
 `<vaadin-range-slider>
   <input
-    id="slider-6"
+    id="slider-0"
     max="80"
     min="0"
     slot="input"
@@ -85,7 +85,7 @@ snapshots["vaadin-range-slider host max"] =
     type="range"
   >
   <input
-    id="slider-7"
+    id="slider-1"
     max="80"
     min="0"
     slot="input"
@@ -100,7 +100,7 @@ snapshots["vaadin-range-slider host max"] =
 snapshots["vaadin-range-slider host step"] = 
 `<vaadin-range-slider>
   <input
-    id="slider-8"
+    id="slider-0"
     max="100"
     min="0"
     slot="input"
@@ -109,7 +109,7 @@ snapshots["vaadin-range-slider host step"] =
     type="range"
   >
   <input
-    id="slider-9"
+    id="slider-1"
     max="100"
     min="0"
     slot="input"
@@ -120,6 +120,35 @@ snapshots["vaadin-range-slider host step"] =
 </vaadin-range-slider>
 `;
 /* end snapshot vaadin-range-slider host step */
+
+snapshots["vaadin-range-slider host disabled"] = 
+`<vaadin-range-slider
+  aria-disabled="true"
+  disabled=""
+>
+  <input
+    disabled=""
+    id="slider-0"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="-1"
+    type="range"
+  >
+  <input
+    disabled=""
+    id="slider-1"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="-1"
+    type="range"
+  >
+</vaadin-range-slider>
+`;
+/* end snapshot vaadin-range-slider host disabled */
 
 snapshots["vaadin-range-slider shadow default"] = 
 `<div part="track">
