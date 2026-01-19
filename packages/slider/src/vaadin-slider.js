@@ -48,6 +48,10 @@ class Slider extends SliderMixin(
           outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
           outline-offset: 1px;
         }
+
+        :host([readonly][focus-ring]) [part~='thumb'] {
+          outline-style: dashed;
+        }
       `,
     ];
   }
@@ -128,6 +132,7 @@ class Slider extends SliderMixin(
           .step="${step}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
@@ -169,6 +174,14 @@ class Slider extends SliderMixin(
    */
   __commitValue() {
     this.value = this.__value[0];
+  }
+
+  /** @private */
+  __onKeyDown(event) {
+    const arrowKeys = ['ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp'];
+    if (this.readonly && arrowKeys.includes(event.key)) {
+      event.preventDefault();
+    }
   }
 }
 

@@ -124,6 +124,12 @@ describe('vaadin-slider', () => {
       await sendKeys({ press: 'ArrowRight' });
       expect(spy).to.be.calledOnce;
     });
+
+    it('should not change value on arrow key when readonly', async () => {
+      slider.readonly = true;
+      await sendKeys({ press: 'ArrowRight' });
+      expect(slider.value).to.equal(0);
+    });
   });
 
   describe('pointer', () => {
@@ -240,6 +246,25 @@ describe('vaadin-slider', () => {
 
     it('should not update slider value property on track pointerdown when disabled', async () => {
       slider.disabled = true;
+
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.value).to.equal(0);
+    });
+
+    it('should not update slider value property on thumb pointermove when readonly', async () => {
+      slider.readonly = true;
+
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      expect(slider.value).to.equal(0);
+    });
+
+    it('should not update slider value property on track pointerdown when readonly', async () => {
+      slider.readonly = true;
 
       await sendMouseToElement({ type: 'move', element: track });
       await sendMouse({ type: 'down' });
