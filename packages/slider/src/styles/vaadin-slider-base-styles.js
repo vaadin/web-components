@@ -27,11 +27,8 @@ export const sliderStyles = css`
 
   :host([disabled]) {
     cursor: var(--vaadin-disabled-cursor);
-    /* TODO which color should we use as a fallback? */
-    --vaadin-slider-fill-background: var(
-      --vaadin-slider-disabled-background,
-      color-mix(in oklab, var(--vaadin-text-color) 50%, var(--vaadin-background-color))
-    );
+    /* TODO which color should we use ? */
+    --vaadin-slider-fill-background: color-mix(in oklab, var(--vaadin-text-color) 50%, var(--vaadin-background-color));
   }
 
   [part='track'] {
