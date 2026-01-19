@@ -64,7 +64,7 @@ describe('vaadin-slider', () => {
       expect(document.activeElement).to.equal(input);
     });
 
-    it('should not the input on focus() when disabled', () => {
+    it('should not focus the input on focus() when disabled', () => {
       slider.disabled = true;
       slider.focus();
       expect(document.activeElement).to.not.equal(input);
