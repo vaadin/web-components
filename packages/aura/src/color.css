@@ -54,7 +54,6 @@
 :where(:root),
 :where(:host),
 vaadin-app-layout > :not([slot]),
-vaadin-notification-container,
 vaadin-avatar,
 vaadin-button,
 vaadin-upload-button,
@@ -63,6 +62,9 @@ vaadin-crud-edit,
 vaadin-drawer-toggle,
 vaadin-menu-bar-button,
 vaadin-menu-bar-item,
+vaadin-notification-container,
+vaadin-notification-card,
+vaadin-notification-card::part(overlay),
 vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
@@ -75,7 +77,11 @@ vaadin-tab,
   .aura-accent-yellow,
   .aura-accent-green,
   .aura-accent-blue,
-  .aura-accent-purple
+  .aura-accent-purple,
+  .v-info,
+  .v-success,
+  .v-warning,
+  .v-error
 ) {
   --aura-neutral-light: oklch(
     from var(--aura-background-color-light) calc(0.2 - 0.05 * var(--aura-contrast-level)) calc(c * l * 0.8) h
@@ -180,25 +186,25 @@ vaadin-tab,
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-neutral) {
+:is(#id, .aura-accent-neutral, .v-neutral) {
   --aura-accent-color-light: var(--aura-neutral-light);
   --aura-accent-color-dark: var(--aura-neutral-dark);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, [theme~='danger'], [theme~='error'], .aura-accent-red) {
+:is(#id, [theme~='danger'], [theme~='error'], .aura-accent-red, .v-error) {
   --aura-accent-color-light: var(--aura-red);
   --aura-accent-color-dark: var(--aura-red);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-green) {
+:is(#id, .aura-accent-green, .v-success) {
   --aura-accent-color-light: var(--aura-green);
   --aura-accent-color-dark: var(--aura-green);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-yellow) {
+:is(#id, .aura-accent-yellow, .v-warning) {
   --aura-accent-color-light: var(--aura-yellow);
   --aura-accent-color-dark: var(--aura-yellow);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
@@ -216,7 +222,7 @@ vaadin-tab,
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-blue) {
+:is(#id, .aura-accent-blue, .v-info) {
   --aura-accent-color-light: var(--aura-blue);
   --aura-accent-color-dark: var(--aura-blue);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
