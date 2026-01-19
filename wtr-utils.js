@@ -1,6 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
-import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
 import { globSync } from 'glob';
@@ -44,6 +43,7 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
+const hasCIParam = process.argv.includes('--CI');
 const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
@@ -204,6 +204,13 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
         window.structuredClone = (value) => structuredClone(value, { lossy: true });
       </script>
       <script type="module" src="${testFramework}"></script>
+      <script type="module">
+        import { setViewport } from '@vaadin/test-runner-commands';
+
+        before(async () => {
+          await setViewport({ width: 1024, height: 627 });
+        });
+      </script>
     </body>
   </html>
 `;
@@ -261,7 +268,7 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme, browserVersion) => {
+const createVisualTestsConfig = async (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
@@ -274,18 +281,38 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  const sauceLabsLauncher = createSauceLabsLauncher(
-    {
-      user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
-    },
-    {
-      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
-      recordScreenshots: false,
-      recordVideo: false,
-    },
-  );
+  let browser;
+  if (hasLocalParam || hasCIParam) {
+    browser = playwrightLauncher({
+      product: 'chromium',
+      launchOptions: {
+        ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : { channel: 'chrome' }),
+        headless: true,
+        ignoreDefaultArgs: ['--hide-scrollbars'],
+      },
+    });
+  } else {
+    const { createSauceLabsLauncher } = await import('@web/test-runner-saucelabs');
+    const sauceLabsLauncher = createSauceLabsLauncher(
+      {
+        user: process.env.SAUCE_USERNAME,
+        key: process.env.SAUCE_ACCESS_KEY,
+      },
+      {
+        name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
+        build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+        recordScreenshots: false,
+        recordVideo: false,
+      },
+    );
+
+    browser = sauceLabsLauncher({
+      browserName: 'chrome',
+      platformName: 'Windows 10',
+      browserVersion,
+      'wdio:enforceWebDriverClassic': true,
+    });
+  }
 
   return {
     concurrency: 1,
@@ -295,22 +322,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         timeout: '20000', // Default 2000
       },
     },
-    browsers: [
-      hasLocalParam
-        ? playwrightLauncher({
-            product: 'chromium',
-            launchOptions: {
-              channel: 'chrome',
-              headless: true,
-            },
-          })
-        : sauceLabsLauncher({
-            browserName: 'chrome',
-            platformName: 'Windows 10',
-            browserVersion,
-            'wdio:enforceWebDriverClassic': true,
-          }),
-    ],
+    browsers: [browser],
     plugins: [
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({

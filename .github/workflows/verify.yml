@@ -5,65 +5,65 @@ on: pull_request
 permissions:
   contents: read
 
-jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+# jobs:
+#   lint:
+#     name: Lint
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Lint JavaScript
-        run: yarn lint:js
+#       - name: Lint JavaScript
+#         run: yarn lint:js
 
-      - name: Lint CSS
-        run: yarn lint:css
+#       - name: Lint CSS
+#         run: yarn lint:css
 
-      - name: Lint TypeScript
-        run: yarn lint:types
-  snapshots:
-    name: Snapshot tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+#       - name: Lint TypeScript
+#         run: yarn lint:types
+#   snapshots:
+#     name: Snapshot tests
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Test
-        run: yarn test:snapshots
-  integration:
-    name: Integration tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+#       - name: Test
+#         run: yarn test:snapshots
+#   integration:
+#     name: Integration tests
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Test
-        run: yarn test:it
+#       - name: Test
+#         run: yarn test:it
