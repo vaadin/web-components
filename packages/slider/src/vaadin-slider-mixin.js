@@ -37,6 +37,17 @@ export const SliderMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * When true, the user cannot modify the value of the slider.
+         * The difference between `disabled` and `readonly` is that the
+         * read-only slider remains focusable, is announced by screen
+         * readers and its value can be submitted as part of the form.
+         */
+        readonly: {
+          type: Boolean,
+          reflectToAttribute: true,
+        },
+
         /** @private */
         __value: {
           type: Array,
@@ -171,7 +182,7 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onPointerDown(event) {
-      if (this.disabled || event.button !== 0) {
+      if (this.disabled || this.readonly || event.button !== 0) {
         return;
       }
 

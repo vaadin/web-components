@@ -31,6 +31,10 @@ export const sliderStyles = css`
     --vaadin-slider-fill-background: color-mix(in oklab, var(--vaadin-text-color) 50%, var(--vaadin-background-color));
   }
 
+  :host([readonly]) {
+    --vaadin-slider-fill-background: var(--vaadin-background-color);
+  }
+
   [part='track'] {
     box-sizing: border-box;
     position: absolute;
@@ -58,6 +62,11 @@ export const sliderStyles = css`
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
     touch-action: none;
+  }
+
+  :host([readonly]) [part~='thumb'],
+  :host([readonly]) [part='track-fill'] {
+    border: dashed 1px var(--vaadin-border-color);
   }
 
   /* visually hidden */

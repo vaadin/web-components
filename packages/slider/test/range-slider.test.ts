@@ -254,6 +254,12 @@ describe('vaadin-range-slider', () => {
         await sendKeys({ press: 'ArrowLeft' });
         expect(spy).to.be.calledOnce;
       });
+
+      it('should not change value on arrow key when readonly', async () => {
+        slider.readonly = true;
+        await sendKeys({ press: 'ArrowRight' });
+        expect(slider.value).to.deep.equal([0, 100]);
+      });
     });
   });
 
@@ -357,6 +363,18 @@ describe('vaadin-range-slider', () => {
 
         expect(slider.value).to.deep.equal([0, 100]);
       });
+
+      it('should not update value property on thumb pointermove when readonly', async () => {
+        slider.readonly = true;
+
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 20, y] });
+
+        expect(slider.value).to.deep.equal([0, 100]);
+      });
     });
 
     describe('track', () => {
@@ -431,6 +449,17 @@ describe('vaadin-range-slider', () => {
 
       it('should not update value property on track pointerdown when disabled', async () => {
         slider.disabled = true;
+
+        const { x, y } = middleOfThumb(0);
+
+        await sendMouse({ type: 'move', position: [x - 20, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.deep.equal([20, 80]);
+      });
+
+      it('should not update value property on track pointerdown when readonly', async () => {
+        slider.readonly = true;
 
         const { x, y } = middleOfThumb(0);
 

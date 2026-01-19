@@ -27,6 +27,8 @@ assertType<number>(slider.max);
 assertType<number>(slider.min);
 assertType<number>(slider.step);
 assertType<number>(slider.value);
+assertType<boolean>(slider.disabled);
+assertType<boolean>(slider.readonly);
 
 // Mixins
 assertType<DisabledMixinClass>(slider);
