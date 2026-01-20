@@ -146,7 +146,7 @@ class Slider extends SliderMixin(
   updated(props) {
     super.updated(props);
 
-    if (props.has('value') || props.has('min') || props.has('max')) {
+    if (props.has('value') || props.has('min') || props.has('max') || props.has('step')) {
       this.__updateValue(this.value);
     }
   }

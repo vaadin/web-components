@@ -102,7 +102,9 @@ export const SliderMixin = (superClass) =>
       const nearestOffset = Math.round(offset / step) * step;
       const nearestValue = minValue + nearestOffset;
 
-      const newValue = Math.round(nearestValue);
+      // Ensure the last value matching step is used below the max limit.
+      // Example: max = 100, step = 1.5 - force maximum allowed value to 99.
+      const newValue = nearestValue <= maxValue ? nearestValue : nearestValue - step;
 
       this.__value = fullValue.with(index, newValue);
     }
