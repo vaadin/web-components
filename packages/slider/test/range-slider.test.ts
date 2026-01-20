@@ -291,7 +291,7 @@ describe('vaadin-range-slider', () => {
         await sendKeys({ press: 'ArrowRight' });
         expect(slider.value).to.deep.equal([0, 99]);
       });
- 
+
       it('should not change value on arrow key when readonly', async () => {
         slider.readonly = true;
         await sendKeys({ press: 'ArrowRight' });
