@@ -75,6 +75,7 @@
     "@vaadin/scroller": "25.1.0-alpha2",
     "@vaadin/select": "25.1.0-alpha2",
     "@vaadin/side-nav": "25.1.0-alpha2",
+    "@vaadin/slider": "25.1.0-alpha2",
     "@vaadin/split-layout": "25.1.0-alpha2",
     "@vaadin/tabs": "25.1.0-alpha2",
     "@vaadin/tabsheet": "25.1.0-alpha2",
@@ -345,6 +346,10 @@
       "types": "./RadioGroup.d.ts",
       "default": "./RadioGroup.js"
     },
+    "./RangeSlider.js": {
+      "types": "./RangeSlider.d.ts",
+      "default": "./RangeSlider.js"
+    },
     "./Scroller.js": {
       "types": "./Scroller.d.ts",
       "default": "./Scroller.js"
@@ -360,6 +365,10 @@
     "./SideNavItem.js": {
       "types": "./SideNavItem.d.ts",
       "default": "./SideNavItem.js"
+    },
+    "./Slider.js": {
+      "types": "./Slider.d.ts",
+      "default": "./Slider.js"
     },
     "./SplitLayout.js": {
       "types": "./SplitLayout.d.ts",
@@ -396,6 +405,18 @@
     "./Upload.js": {
       "types": "./Upload.d.ts",
       "default": "./Upload.js"
+    },
+    "./UploadButton.js": {
+      "types": "./UploadButton.d.ts",
+      "default": "./UploadButton.js"
+    },
+    "./UploadDropZone.js": {
+      "types": "./UploadDropZone.d.ts",
+      "default": "./UploadDropZone.js"
+    },
+    "./UploadFileList.js": {
+      "types": "./UploadFileList.d.ts",
+      "default": "./UploadFileList.js"
     },
     "./VerticalLayout.js": {
       "types": "./VerticalLayout.d.ts",
@@ -461,10 +482,12 @@
     "./ProgressBar": "./ProgressBar.js",
     "./RadioButton": "./RadioButton.js",
     "./RadioGroup": "./RadioGroup.js",
+    "./RangeSlider": "./RangeSlider.js",
     "./Scroller": "./Scroller.js",
     "./Select": "./Select.js",
     "./SideNav": "./SideNav.js",
     "./SideNavItem": "./SideNavItem.js",
+    "./Slider": "./Slider.js",
     "./SplitLayout": "./SplitLayout.js",
     "./Tab": "./Tab.js",
     "./Tabs": "./Tabs.js",
@@ -474,6 +497,9 @@
     "./TimePicker": "./TimePicker.js",
     "./Tooltip": "./Tooltip.js",
     "./Upload": "./Upload.js",
+    "./UploadButton": "./UploadButton.js",
+    "./UploadDropZone": "./UploadDropZone.js",
+    "./UploadFileList": "./UploadFileList.js",
     "./VerticalLayout": "./VerticalLayout.js",
     "./VirtualList": "./VirtualList.js",
     "./css/lumo/Utility.module.css": "./css/lumo/Utility.module.css",
