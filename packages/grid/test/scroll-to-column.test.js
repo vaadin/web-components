@@ -11,14 +11,14 @@ describe('scroll to column', () => {
   let columns;
   let warnSpy;
 
-  beforeEach(() => {
+  function setupGrid() {
     const columnsHtml = Array.from(
       { length: 10 },
       (_, i) => `<vaadin-grid-column header="col${i}"></vaadin-grid-column>`,
     ).join('');
 
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 400px;" size="5q">
+      <vaadin-grid style="width: 200px; height: 400px;" size="5">
         ${columnsHtml}
       </vaadin-grid>
     `);
@@ -31,6 +31,10 @@ describe('scroll to column', () => {
     });
 
     grid.dataProvider = infiniteDataProvider;
+  }
+
+  beforeEach(() => {
+    setupGrid();
     flushGrid(grid);
 
     warnSpy = sinon.stub(console, 'warn');
@@ -274,6 +278,22 @@ describe('scroll to column', () => {
 
       columns = Array.from(grid.querySelectorAll('vaadin-grid-column'));
       expect(isColumnInViewport(columns[9])).to.be.true;
+    });
+  });
+
+  describe('lazy column rendering', () => {
+    beforeEach(() => {
+      setupGrid();
+      grid.columnRendering = 'lazy';
+      flushGrid(grid);
+    });
+
+    it('should synchronously render cells when scrolling to column', () => {
+      expect(grid.textContent).to.not.contain('cell8');
+
+      grid.scrollToColumn(9);
+
+      expect(grid.textContent).to.contain('cell8');
     });
   });
 
