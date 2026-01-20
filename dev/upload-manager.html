@@ -17,117 +17,6 @@
         border: 2px dashed #ccc;
         border-radius: 8px;
       }
-
-      /* Temporary File List */
-      .temp-file-list {
-        list-style: none;
-        padding: 0;
-        margin: 16px 0;
-      }
-
-      .temp-file-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        margin-bottom: 8px;
-        background: #fafafa;
-      }
-
-      .temp-file-item.complete {
-        background: #e8f5e9;
-        border-color: #c8e6c9;
-      }
-
-      .temp-file-item.error {
-        background: #ffebee;
-        border-color: #ffcdd2;
-      }
-
-      .temp-file-item.uploading {
-        background: #e3f2fd;
-        border-color: #bbdefb;
-      }
-
-      .temp-file-info {
-        flex: 1;
-        min-width: 0;
-      }
-
-      .temp-file-name {
-        font-weight: 500;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .temp-file-status {
-        font-size: 12px;
-        color: #666;
-        margin-top: 4px;
-      }
-
-      .temp-file-status.error {
-        color: #d32f2f;
-      }
-
-      .temp-file-progress {
-        width: 100%;
-        height: 4px;
-        background: #e0e0e0;
-        border-radius: 2px;
-        margin-top: 8px;
-        overflow: hidden;
-      }
-
-      .temp-file-progress-bar {
-        height: 100%;
-        background: #1976d2;
-        transition: width 0.2s;
-      }
-
-      .temp-file-progress-bar.indeterminate {
-        width: 30% !important;
-        animation: indeterminate 1.5s infinite linear;
-      }
-      @keyframes indeterminate {
-        0% {
-          transform: translateX(-100%);
-        }
-
-        100% {
-          transform: translateX(400%);
-        }
-      }
-
-      .temp-file-actions {
-        display: flex;
-        gap: 8px;
-      }
-
-      .temp-file-actions button {
-        padding: 4px 8px;
-        font-size: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background: white;
-        cursor: pointer;
-      }
-
-      .temp-file-actions button:hover {
-        background: #f5f5f5;
-      }
-
-      .temp-file-actions button.remove {
-        color: #d32f2f;
-        border-color: #ffcdd2;
-      }
-
-      .temp-file-actions button.remove:hover {
-        background: #ffebee;
-      }
     </style>
   </head>
 
@@ -143,28 +32,14 @@
       <p>Drop files here</p>
     </vaadin-upload-drop-zone>
 
-    <ul class="temp-file-list" id="file-list"></ul>
+    <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
 
     <script type="module">
       import '@vaadin/upload/vaadin-upload-button.js';
       import '@vaadin/upload/vaadin-upload-drop-zone.js';
+      import '@vaadin/upload/vaadin-upload-file-list.js';
       import { xhrCreator } from '@vaadin/upload/test/helpers.js';
       import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
-
-      // Helper to format file size
-      function formatSize(bytes) {
-        if (bytes < 1024) return bytes + ' B';
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-      }
-
-      // Helper to format time
-      function formatTime(seconds) {
-        if (seconds < 60) return seconds + 's';
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}m ${secs}s`;
-      }
 
       // Create the manager
       const manager = new UploadManager({
@@ -173,105 +48,10 @@
       // Use mock XHR
       manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
 
-      // Link upload button to manager
-      const button = document.querySelector('#upload-button');
-      button.manager = manager;
-
-      // Link drop zone to manager
-      const dropzone = document.querySelector('#dropzone');
-      dropzone.manager = manager;
-
-      // Render file list
-      const fileList = document.querySelector('#file-list');
-
-      function render() {
-        fileList.innerHTML = '';
-        manager.files.forEach((file) => {
-          const li = document.createElement('li');
-          li.className = 'temp-file-item';
-          if (file.complete) li.classList.add('complete');
-          if (file.error) li.classList.add('error');
-          if (file.uploading && !file.complete) li.classList.add('uploading');
-
-          const info = document.createElement('div');
-          info.className = 'temp-file-info';
-
-          const name = document.createElement('div');
-          name.className = 'temp-file-name';
-          name.textContent = file.name;
-          info.appendChild(name);
-
-          const status = document.createElement('div');
-          status.className = 'temp-file-status';
-          if (file.error) {
-            status.classList.add('error');
-            status.textContent = file.error;
-          } else if (file.complete) {
-            status.textContent = `Complete - ${formatSize(file.size)}`;
-          } else if (file.uploading) {
-            if (file.held) {
-              status.textContent = 'Queued...';
-            } else if (file.stalled) {
-              status.textContent = 'Stalled...';
-            } else if (file.indeterminate) {
-              status.textContent = 'Connecting...';
-            } else {
-              const parts = [`${file.progress}%`];
-              if (file.speed) parts.push(`${file.speed} KB/s`);
-              if (file.remaining) parts.push(`${formatTime(file.remaining)} remaining`);
-              status.textContent = parts.join(' - ');
-            }
-          } else {
-            status.textContent = formatSize(file.size);
-          }
-          info.appendChild(status);
-
-          if (file.uploading && !file.complete && !file.held) {
-            const progress = document.createElement('div');
-            progress.className = 'temp-file-progress';
-            const bar = document.createElement('div');
-            bar.className = 'temp-file-progress-bar';
-            if (file.indeterminate) {
-              bar.classList.add('indeterminate');
-            } else {
-              bar.style.width = file.progress + '%';
-            }
-            progress.appendChild(bar);
-            info.appendChild(progress);
-          }
-
-          li.appendChild(info);
-
-          const actions = document.createElement('div');
-          actions.className = 'temp-file-actions';
-
-          if (file.error) {
-            const retryBtn = document.createElement('button');
-            retryBtn.textContent = 'Retry';
-            retryBtn.onclick = () => manager.retryUpload(file);
-            actions.appendChild(retryBtn);
-          }
-
-          if (file.uploading && !file.complete) {
-            const abortBtn = document.createElement('button');
-            abortBtn.textContent = 'Abort';
-            abortBtn.className = 'remove';
-            abortBtn.onclick = () => manager.abortUpload(file);
-            actions.appendChild(abortBtn);
-          } else {
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'Remove';
-            removeBtn.className = 'remove';
-            removeBtn.onclick = () => manager.removeFile(file);
-            actions.appendChild(removeBtn);
-          }
-
-          li.appendChild(actions);
-          fileList.appendChild(li);
-        });
-      }
-
-      manager.addEventListener('files-changed', render);
+      // Link components to manager
+      document.querySelector('#upload-button').manager = manager;
+      document.querySelector('#dropzone').manager = manager;
+      document.querySelector('#file-list').manager = manager;
     </script>
   </body>
 </html>

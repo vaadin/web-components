@@ -27,8 +27,15 @@ export const sliderStyles = css`
 
   :host([disabled]) {
     cursor: var(--vaadin-disabled-cursor);
-    /* TODO which color should we use ? */
-    --vaadin-slider-fill-background: color-mix(in oklab, var(--vaadin-text-color) 50%, var(--vaadin-background-color));
+    --vaadin-slider-fill-background: linear-gradient(
+        var(--vaadin-text-color-disabled),
+        var(--vaadin-text-color-disabled)
+      )
+      var(--vaadin-background-color);
+  }
+
+  :host([readonly]) {
+    --vaadin-slider-fill-background: var(--vaadin-background-color);
   }
 
   [part='track'] {
@@ -58,6 +65,11 @@ export const sliderStyles = css`
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
     touch-action: none;
+  }
+
+  :host([readonly]) [part~='thumb'],
+  :host([readonly]) [part='track-fill'] {
+    border: dashed 1px var(--vaadin-border-color);
   }
 
   /* visually hidden */

@@ -25,4 +25,12 @@ export declare class SliderMixinClass {
    * The stepping interval of the slider.
    */
   step: number;
+
+  /**
+   * When true, the user cannot modify the value of the slider.
+   * The difference between `disabled` and `readonly` is that the
+   * read-only slider remains focusable and is announced by screen
+   * readers.
+   */
+  readonly: boolean;
 }

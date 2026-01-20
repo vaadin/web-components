@@ -47,8 +47,12 @@ class RangeSlider extends SliderMixin(
       css`
         :host([focus-ring][start-focused]) [part~='thumb-start'],
         :host([focus-ring][end-focused]) [part~='thumb-end'] {
-          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
+        }
+
+        :host([readonly]) {
+          --_outline-style: dashed;
         }
       `,
     ];
@@ -278,16 +282,23 @@ class RangeSlider extends SliderMixin(
 
   /** @private */
   __onKeyDown(event) {
-    const index = this._inputElements.indexOf(event.target);
-
     const prevKeys = ['ArrowLeft', 'ArrowDown'];
     const nextKeys = ['ArrowRight', 'ArrowUp'];
+
+    const isNextKey = nextKeys.includes(event.key);
+    const isPrevKey = prevKeys.includes(event.key);
+
+    if (!isNextKey && !isPrevKey) {
+      return;
+    }
+
+    const index = this._inputElements.indexOf(event.target);
 
     // Suppress native `input` event if start and end thumbs point to the same value,
     // to prevent the case where slotted range inputs would end up in broken state.
     if (
-      this.__value[0] === this.__value[1] &&
-      ((index === 0 && nextKeys.includes(event.key)) || (index === 1 && prevKeys.includes(event.key)))
+      this.readonly ||
+      (this.__value[0] === this.__value[1] && ((index === 0 && isNextKey) || (index === 1 && isPrevKey)))
     ) {
       event.preventDefault();
     }
