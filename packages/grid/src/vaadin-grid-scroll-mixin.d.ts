@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { GridColumn } from './vaadin-grid-column.js';
 
 export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ScrollMixinClass> & T;
 
@@ -53,4 +54,12 @@ export declare class ScrollMixinClass {
    * the hierarchy of the items.
    */
   protected _scrollToFlatIndex(index: number): void;
+
+  /**
+   * Scrolls horizontally so that the column becomes visible in the viewport.
+   *
+   * The column can be specified either by its index (among visible columns
+   * in visual order, respecting any reordering) or by the column element itself.
+   */
+  scrollToColumn(indexOrColumn: GridColumn | number): void;
 }
