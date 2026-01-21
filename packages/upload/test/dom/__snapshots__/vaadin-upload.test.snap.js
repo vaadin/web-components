@@ -198,16 +198,18 @@ snapshots["vaadin-upload shadow default"] =
 `<div part="primary-buttons">
   <slot name="add-button">
   </slot>
-  <div
-    aria-hidden="true"
-    id="dropLabelContainer"
-    part="drop-label"
-  >
-    <slot name="drop-label-icon">
-    </slot>
-    <slot name="drop-label">
-    </slot>
-  </div>
+  <slot name="drop-label-content">
+    <div
+      aria-hidden="true"
+      id="dropLabelContainer"
+      part="drop-label"
+    >
+      <slot name="drop-label-icon">
+      </slot>
+      <slot name="drop-label">
+      </slot>
+    </div>
+  </slot>
 </div>
 <slot name="file-list">
 </slot>

@@ -39,6 +39,10 @@ export const uploadStyles = css`
     gap: var(--vaadin-gap-s);
   }
 
+  ::slotted([slot='drop-label-content']) {
+    flex: 100;
+  }
+
   [part='drop-label'] {
     align-items: center;
     color: var(--vaadin-upload-drop-label-color, var(--vaadin-text-color));
