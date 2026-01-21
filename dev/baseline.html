@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Field Baseline Alignment</title>
     <script type="module" src="./common.js"></script>
-
+    <script>
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.sliderComponent = true;
+    </script>
     <script type="module">
       import '@vaadin/button';
       import '@vaadin/checkbox';
@@ -17,6 +21,7 @@
       import '@vaadin/icons';
       import '@vaadin/number-field';
       import '@vaadin/select';
+      import '@vaadin/slider';
       import '@vaadin/radio-group';
       import '@vaadin/text-area';
       import '@vaadin/text-field';
@@ -120,6 +125,7 @@
         <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
         <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
       </vaadin-checkbox-group>
+      <vaadin-slider label="Label"></vaadin-slider>
       <vaadin-checkbox-group label="Label">
         <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
         <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
@@ -164,6 +170,7 @@
         <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
         <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
       </vaadin-checkbox-group>
+      <vaadin-slider label="Label" helper-text="Description text"></vaadin-slider>
       <vaadin-checkbox-group label="Label" helper-text="Description text">
         <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
         <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
@@ -220,6 +227,7 @@
         <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
         <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
       </vaadin-checkbox-group>
+      <vaadin-slider label="Label" helper-text="Description text" theme="helper-above-field"></vaadin-slider>
       <vaadin-checkbox-group label="Label" helper-text="Description text" theme="helper-above-field">
         <vaadin-checkbox value="a" label="A" checked></vaadin-checkbox>
         <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
@@ -295,6 +303,7 @@
         <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
         <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
       </vaadin-radio-group>
+      <vaadin-slider label="Label" helper-text="Description text" invalid error-message="Something is wrong"></vaadin-slider>
       <vaadin-custom-field
         label="Label that is long but doesn't wrap"
         helper-text="Description text"
