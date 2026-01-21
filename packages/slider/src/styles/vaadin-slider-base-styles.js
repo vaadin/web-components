@@ -8,9 +8,7 @@ import { css } from 'lit';
 
 export const sliderStyles = css`
   :host {
-    display: inline-grid;
     box-sizing: border-box;
-    width: 100%;
     user-select: none;
     -webkit-user-select: none;
     --_track-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
@@ -37,19 +35,27 @@ export const sliderStyles = css`
   }
 
   #controls {
+    grid-area: input;
     position: relative;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: var(--vaadin-field-default-width, 12em);
+    max-width: 100%;
     min-width: 100%;
-    display: grid;
-    grid-template-rows: var(--_thumb-height);
+    min-height: var(--_thumb-height);
+  }
+
+  :host([has-label]) #controls {
+    border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
+    padding-block: var(--vaadin-padding-block-container);
   }
 
   [part='track'] {
     box-sizing: border-box;
+    width: 100%;
     height: var(--_track-size);
     background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
     border-radius: var(--_track-radius);
-    align-self: center;
     pointer-events: none;
   }
 
@@ -65,10 +71,11 @@ export const sliderStyles = css`
 
   [part~='thumb'] {
     position: absolute;
+    top: 50%;
     box-sizing: border-box;
     width: var(--_thumb-width);
     height: var(--_thumb-height);
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-50%);
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
     touch-action: none;

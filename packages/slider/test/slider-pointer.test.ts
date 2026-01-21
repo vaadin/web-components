@@ -117,6 +117,22 @@ describe('vaadin-slider - pointer', () => {
       await sendMouse({ type: 'down' });
       expect(document.activeElement).to.equal(input);
     });
+
+    it('should focus an input on pointerdown on the label element', async () => {
+      slider.label = 'Label';
+      await nextRender();
+      const label = slider.shadowRoot!.querySelector('[part="label"]')!;
+      await sendMouseToElement({ type: 'click', element: label });
+      expect(document.activeElement).to.equal(input);
+    });
+
+    it('should not focus an input on pointerdown on the helper element', async () => {
+      slider.helperText = 'Helper';
+      await nextRender();
+      const helper = slider.shadowRoot!.querySelector('[part="helper-text"]')!;
+      await sendMouseToElement({ type: 'click', element: helper });
+      expect(document.activeElement).to.not.equal(input);
+    });
   });
 
   describe('disabled', () => {

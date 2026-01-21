@@ -11,6 +11,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -30,12 +32,13 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes FieldMixin
  * @mixes FocusMixin
  * @mixes SliderMixin
  * @mixes ThemableMixin
  */
-class RangeSlider extends SliderMixin(
-  FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+class RangeSlider extends FieldMixin(
+  SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-range-slider';
@@ -43,6 +46,7 @@ class RangeSlider extends SliderMixin(
 
   static get styles() {
     return [
+      field,
       sliderStyles,
       css`
         :host([focus-ring][start-focused]) [part~='thumb-start'],
@@ -84,6 +88,11 @@ class RangeSlider extends SliderMixin(
     const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
+      <div part="label" @click="${this.focus}">
+        <slot name="label"></slot>
+        <span part="required-indicator" aria-hidden="true"></span>
+      </div>
+
       <div id="controls">
         <div part="track">
           <div
@@ -104,6 +113,14 @@ class RangeSlider extends SliderMixin(
         ></div>
         <slot name="input"></slot>
       </div>
+
+      <div part="helper-text">
+        <slot name="helper"></slot>
+      </div>
+
+      <div part="error-message">
+        <slot name="error-message"></slot>
+      </div>
     `;
   }
 
@@ -121,6 +138,7 @@ class RangeSlider extends SliderMixin(
 
     const inputs = this.querySelectorAll('[slot="input"]');
     this._inputElements = [...inputs];
+    this.ariaTarget = this;
   }
 
   /**

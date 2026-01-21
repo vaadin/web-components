@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-range-slider.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { RangeSlider } from '../../src/vaadin-range-slider.js';
@@ -46,6 +46,35 @@ describe('vaadin-range-slider', () => {
 
     it('disabled', async () => {
       slider.disabled = true;
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('label', async () => {
+      slider.label = 'Label';
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      slider.disabled = true;
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      slider.helperText = 'Helper';
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('required', async () => {
+      slider.required = true;
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      slider.errorMessage = 'Error';
+      slider.invalid = true;
+      await aTimeout(0);
       await expect(slider).dom.to.equalSnapshot();
     });
   });
