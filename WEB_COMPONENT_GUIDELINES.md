@@ -40,29 +40,35 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 - CSS custom properties
 - Accessibility best practices
 
-### Important: Pure Lit Pattern
+### Important: Mixin Pattern
 
-**These guidelines use the pure Lit pattern for new components**, which means:
+**New components should use the standard Vaadin mixin pattern**, which includes:
 
-✅ **Use:**
+✅ **Required Mixins:**
+
+- `PolylitMixin` - **required** for proper integration with ThemableMixin and other Vaadin mixins
+- `LumoInjectionMixin` - **required** for Lumo theme auto-injection
+- `ThemableMixin` - provides theme attribute handling
+- `ElementMixin` - provides base element functionality
+
+✅ **Use Lit Patterns:**
 
 - Lit's native `static properties` with `reflect`, `attribute` (use `attribute: false` for internal properties)
 - Lit lifecycle methods: `firstUpdated()`, `updated()`, `connectedCallback()`
 - Field initializers for default values
 - `updated()` for reacting to property changes
-- `LumoInjectionMixin` - **required** for Lumo theme auto-injection
 
-❌ **Don't use (legacy Polymer patterns):**
+❌ **Avoid Polymer-style property options:**
 
-- `PolylitMixin` - provides Polymer-style properties (deprecated for new components)
-- Polymer-style property options: `value`, `observer`, `sync`, `notify`, `computed`
-- `ready()` lifecycle method
+- `value` - use field initializers instead
+- `observer` - use `updated()` method instead
+- `sync`, `notify`, `computed` - use Lit patterns
 
 **Important Notes:**
 
-- **LumoInjectionMixin is still required** for components to receive Lumo theme styles automatically. It enables the auto-injection mechanism that watches for Lumo CSS modules and injects them into component shadow DOMs.
-- **PolylitMixin is optional** - it only provides Polymer-style property behavior. Use pure Lit patterns instead.
-- Existing components use both mixins for backward compatibility. For new components, use LumoInjectionMixin but skip PolylitMixin.
+- **Both PolylitMixin and LumoInjectionMixin are required** for proper theme support and Vaadin mixin compatibility
+- **PolylitMixin provides compatibility** with ThemableMixin and other Vaadin infrastructure
+- All Vaadin components use this pattern: `PolylitMixin(LumoInjectionMixin(LitElement))`
 
 ---
 
@@ -432,8 +438,10 @@ class Component extends
   ComponentMixin(                        // Component-specific logic (outermost)
     ElementMixin(                        // Element base functionality
       ThemableMixin(                     // Theming support
-        LumoInjectionMixin(              // Lumo theme auto-injection (REQUIRED)
-          LitElement                     // Lit base class (innermost)
+        PolylitMixin(                    // Polymer compatibility (REQUIRED)
+          LumoInjectionMixin(            // Lumo theme auto-injection (REQUIRED)
+            LitElement                   // Lit base class (innermost)
+          )
         )
       )
     )
@@ -448,8 +456,10 @@ class DatePicker extends
     InputControlMixin(                   // Input control functionality
       ElementMixin(
         ThemableMixin(
-          LumoInjectionMixin(            // Lumo theme auto-injection (REQUIRED)
-            LitElement
+          PolylitMixin(                  // Polymer compatibility (REQUIRED)
+            LumoInjectionMixin(          // Lumo theme auto-injection (REQUIRED)
+              LitElement
+            )
           )
         )
       )
@@ -459,9 +469,9 @@ class DatePicker extends
 
 **Important Notes:**
 
-- **LumoInjectionMixin is required** for Lumo theme support. It enables automatic injection of Lumo CSS modules into component shadow DOMs.
-- **Do NOT use PolylitMixin** - it provides legacy Polymer-style property handling (`observer`, `sync`, `notify`, `value`, `computed`). Use pure Lit property patterns instead.
-- All existing components use both `PolylitMixin` and `LumoInjectionMixin` for backward compatibility, but new components should only use `LumoInjectionMixin`.
+- **Both PolylitMixin and LumoInjectionMixin are required** - PolylitMixin provides compatibility with ThemableMixin and Vaadin infrastructure
+- **PolylitMixin must come BEFORE LumoInjectionMixin** in the chain
+- All Vaadin components use this pattern for proper theme support and mixin integration
 
 ### 5. Property Definition
 
@@ -2197,11 +2207,11 @@ Use this checklist when creating a new component:
 
 ## Notes
 
-### Pure Lit Pattern
+### Mixin Pattern
 
-- **Always** use pure Lit patterns (no PolylitMixin) for new components
-- **Always** use LumoInjectionMixin for Lumo theme support
-- **Use** `firstUpdated()` and `updated()` instead of `ready()` and observers
+- **Always** use both PolylitMixin and LumoInjectionMixin for new components
+- **Always** use the correct mixin order: `ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))`
+- **Use** `firstUpdated()` and `updated()` instead of `ready()` and Polymer observers
 - **Use** field initializers for default values instead of `value` property option
 - **Use** `reflect: true` instead of `reflectToAttribute: true`
 
@@ -2218,17 +2228,19 @@ Use this checklist when creating a new component:
 - **Never** hardcode colors or sizes (use design tokens)
 - **Always** consider both light and dark modes (especially important for Aura)
 
-### Migration from Legacy Patterns
+### Property Pattern Migration
 
-If you need to understand or maintain existing components that use PolylitMixin:
+When using PolylitMixin with Lit patterns (recommended):
 
 - `value: defaultValue` → Use field initializer: `myProp = defaultValue;`
 - `observer: '_onPropChanged'` → Use `updated()` with `changedProperties.has('myProp')`
 - `reflectToAttribute: true` → Use `reflect: true`
-- `sync: true` → Not needed in pure Lit
+- `sync: true` → Not needed with Lit
 - `notify: true` → Manually fire events in setters or `updated()`
 - `computed: '_compute(a, b)'` → Use `updated()` or getters
 - `ready()` → Use `firstUpdated()` for one-time initialization
+
+**Note:** PolylitMixin is still required for Vaadin mixin compatibility, but prefer Lit property patterns over Polymer-style options.
 
 ---
 
@@ -2246,6 +2258,6 @@ If you need to understand or maintain existing components that use PolylitMixin:
 
 ---
 
-_Last updated: 2026-01-02_
+_Last updated: 2026-01-22_
 
-_Note: This guide uses pure Lit patterns with LumoInjectionMixin. Existing components may use both PolylitMixin and LumoInjectionMixin for backward compatibility, but new components should only use LumoInjectionMixin (skip PolylitMixin)._
+_Note: This guide uses the standard Vaadin mixin pattern with both PolylitMixin and LumoInjectionMixin. Both are required for proper theme support and Vaadin infrastructure compatibility._
