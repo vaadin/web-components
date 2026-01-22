@@ -4,17 +4,19 @@ import '@vaadin/aura/aura.css';
 import '../../../src/vaadin-badge.js';
 
 describe('badge', () => {
-  let div;
+  let div, _element;
 
   beforeEach(() => {
     div = document.createElement('div');
-    div.style.display = 'flex';
-    div.style.flexDirection = 'column';
-    div.style.gap = '8px';
+    div.style.display = 'inline-block';
     div.style.padding = '10px';
   });
 
   it('theme variants', async () => {
+    div.style.display = 'flex';
+    div.style.flexDirection = 'column';
+    div.style.gap = '8px';
+
     const variants = [
       'default',
       'primary',
@@ -28,97 +30,102 @@ describe('badge', () => {
       'contrast primary',
     ];
 
-    variants.forEach((variant) => {
-      const badge = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-      badge.textContent = variant === 'default' ? 'Default' : variant.charAt(0).toUpperCase() + variant.slice(1);
-      if (variant !== 'default') {
-        badge.setAttribute('theme', variant);
-      }
-    });
+    const html = variants
+      .map((variant) => {
+        const text = variant === 'default' ? 'Default' : variant.charAt(0).toUpperCase() + variant.slice(1);
+        const themeAttr = variant === 'default' ? '' : ` theme="${variant}"`;
+        return `<vaadin-badge${themeAttr}>${text}</vaadin-badge>`;
+      })
+      .join('\n');
 
+    _element = fixtureSync(html, div);
     await visualDiff(div, 'theme-variants');
   });
 
   it('size variants', async () => {
-    const regular = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-    regular.textContent = 'Regular';
+    div.style.display = 'flex';
+    div.style.flexDirection = 'column';
+    div.style.gap = '8px';
 
-    const small = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-    small.textContent = 'Small';
-    small.setAttribute('theme', 'small');
+    _element = fixtureSync(
+      `
+      <vaadin-badge>Regular</vaadin-badge>
+      <vaadin-badge theme="small">Small</vaadin-badge>
+    `,
+      div,
+    );
 
     await visualDiff(div, 'size-variants');
   });
 
   it('pill variant', async () => {
-    const regular = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-    regular.textContent = 'Regular';
+    div.style.display = 'flex';
+    div.style.flexDirection = 'column';
+    div.style.gap = '8px';
 
-    const pill = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-    pill.textContent = 'Pill';
-    pill.setAttribute('theme', 'pill');
-
-    const pillPrimary = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-    pillPrimary.textContent = 'Pill Primary';
-    pillPrimary.setAttribute('theme', 'pill primary');
+    _element = fixtureSync(
+      `
+      <vaadin-badge>Regular</vaadin-badge>
+      <vaadin-badge theme="pill">Pill</vaadin-badge>
+      <vaadin-badge theme="pill primary">Pill Primary</vaadin-badge>
+    `,
+      div,
+    );
 
     await visualDiff(div, 'pill-variant');
   });
 
   it('empty badges', async () => {
+    div.style.display = 'flex';
+    div.style.flexDirection = 'row';
+    div.style.gap = '8px';
+    div.style.alignItems = 'center';
+
     const variants = ['default', 'primary', 'success', 'error', 'warning', 'contrast'];
+    const html = variants
+      .map((variant) => {
+        const themeAttr = variant === 'default' ? '' : ` theme="${variant}"`;
+        return `<vaadin-badge${themeAttr}></vaadin-badge>`;
+      })
+      .join('\n');
 
-    const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.gap = '8px';
-    row.style.alignItems = 'center';
-    div.appendChild(row);
-
-    variants.forEach((variant) => {
-      const badge = fixtureSync('<vaadin-badge></vaadin-badge>', row);
-      if (variant !== 'default') {
-        badge.setAttribute('theme', variant);
-      }
-    });
-
+    _element = fixtureSync(html, div);
     await visualDiff(div, 'empty-badges');
   });
 
   it('empty small badges', async () => {
+    div.style.display = 'flex';
+    div.style.flexDirection = 'row';
+    div.style.gap = '8px';
+    div.style.alignItems = 'center';
+
     const variants = ['default', 'primary', 'success', 'error', 'warning', 'contrast'];
+    const html = variants
+      .map((variant) => {
+        const theme = variant === 'default' ? 'small' : `${variant} small`;
+        return `<vaadin-badge theme="${theme}"></vaadin-badge>`;
+      })
+      .join('\n');
 
-    const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.gap = '8px';
-    row.style.alignItems = 'center';
-    div.appendChild(row);
-
-    variants.forEach((variant) => {
-      const badge = fixtureSync('<vaadin-badge></vaadin-badge>', row);
-      if (variant === 'default') {
-        badge.setAttribute('theme', 'small');
-      } else {
-        badge.setAttribute('theme', `${variant} small`);
-      }
-    });
-
+    _element = fixtureSync(html, div);
     await visualDiff(div, 'empty-small-badges');
   });
 
   it('combinations', async () => {
-    const combinations = [
-      { text: 'Error Small', theme: 'error small' },
-      { text: 'Success Primary Pill', theme: 'success primary pill' },
-      { text: '99+', theme: 'error primary' },
-      { text: 'New', theme: 'success' },
-      { text: '!', theme: 'warning primary small' },
-    ];
+    div.style.display = 'flex';
+    div.style.flexDirection = 'column';
+    div.style.gap = '8px';
 
-    combinations.forEach((combo) => {
-      const badge = fixtureSync('<vaadin-badge></vaadin-badge>', div);
-      badge.textContent = combo.text;
-      badge.setAttribute('theme', combo.theme);
-    });
+    _element = fixtureSync(
+      `
+      <vaadin-badge theme="error small">Error Small</vaadin-badge>
+      <vaadin-badge theme="success primary pill">Success Primary Pill</vaadin-badge>
+      <vaadin-badge theme="error primary">99+</vaadin-badge>
+      <vaadin-badge theme="success">New</vaadin-badge>
+      <vaadin-badge theme="warning primary small">!</vaadin-badge>
+    `,
+      div,
+    );
 
     await visualDiff(div, 'combinations');
   });
