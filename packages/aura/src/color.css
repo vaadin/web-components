@@ -56,6 +56,7 @@
 vaadin-app-layout > :not([slot]),
 vaadin-notification-container,
 vaadin-avatar,
+vaadin-badge,
 vaadin-button,
 vaadin-upload-button,
 vaadin-context-menu-item,
