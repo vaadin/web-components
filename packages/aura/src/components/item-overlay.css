@@ -89,3 +89,20 @@ vaadin-select-item:where([role]) {
   margin-inline: calc(var(--vaadin-gap-xs) + var(--vaadin-padding-inline-container));
   border-color: var(--vaadin-border-color);
 }
+
+vaadin-combo-box,
+vaadin-multi-select-combo-box,
+vaadin-date-picker,
+vaadin-date-time-picker,
+vaadin-time-picker,
+vaadin-select,
+vaadin-menu-bar,
+vaadin-context-menu,
+vaadin-popover {
+  --vaadin-overlay-animation-duration: 80ms;
+
+  &[closing] {
+    --vaadin-overlay-animation-delay: 60ms;
+    --vaadin-overlay-animation-timing-function: ease-in;
+  }
+}

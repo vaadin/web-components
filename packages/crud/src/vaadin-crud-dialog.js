@@ -97,6 +97,21 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
 
   static get styles() {
     return css`
+      :host {
+        --vaadin-overlay-animation-duration: inherit;
+        --vaadin-overlay-animation-delay: inherit;
+        --vaadin-overlay-animation-direction: inherit;
+        --vaadin-overlay-animation-timing-function: inherit;
+        --vaadin-overlay-opacity-closed: inherit;
+        --vaadin-overlay-opacity-opened: inherit;
+        --vaadin-overlay-translate-closed: inherit;
+        --vaadin-overlay-translate-opened: inherit;
+        --vaadin-overlay-scale-closed: inherit;
+        --vaadin-overlay-scale-opened: inherit;
+        --vaadin-overlay-transform-closed: inherit;
+        --vaadin-overlay-transform-opened: inherit;
+      }
+
       :host([opened]),
       :host([opening]),
       :host([closing]) {
