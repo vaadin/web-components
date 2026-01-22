@@ -1,0 +1,54 @@
+{
+  "name": "@vaadin/badge",
+  "version": "25.1.0-alpha7",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-badge",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/badge"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-badge.js",
+  "module": "vaadin-badge.js",
+  "type": "module",
+  "files": [
+    "src",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "custom-elements.json",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "badge",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@vaadin/component-base": "25.1.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "25.1.0-alpha7",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/aura": "25.1.0-alpha7",
+    "@vaadin/chai-plugins": "25.1.0-alpha7",
+    "@vaadin/test-runner-commands": "25.1.0-alpha7",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.1.0-alpha7",
+    "sinon": "^21.0.0"
+  },
+  "customElements": "custom-elements.json",
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}
