@@ -8,18 +8,18 @@ permissions:
 jobs:
   lumo:
     name: Lumo
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -36,7 +36,7 @@ jobs:
           max_attempts: 3
           command: yarn test:lumo
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: screenshots
@@ -45,18 +45,18 @@ jobs:
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
   material:
     name: Material
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -73,7 +73,7 @@ jobs:
           max_attempts: 3
           command: yarn test:material
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: screenshots
