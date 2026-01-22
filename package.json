@@ -7,7 +7,7 @@
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
     "api-docs:start": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs start",
     "api-docs:build": "yarn analyze && yarn workspace api-docs generate ../analysis.json && yarn workspace api-docs build",
-    "cem": "cem analyze --globs \"packages/dashboard/src/*.js\"  --litelement --dev",
+    "cem": "lerna run cem",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dev:build": "yarn workspace dev build",
