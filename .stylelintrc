@@ -2,7 +2,8 @@
   "extends": ["stylelint-config-vaadin", "stylelint-config-html/html"],
   "plugins": [
     "./custom-rules/stylelint/no-shorthand-with-unresolved-longhand.js",
-    "./custom-rules/stylelint/license-header.js"
+    "./custom-rules/stylelint/license-header.js",
+    "./custom-rules/stylelint/content-with-css-escape.js"
   ],
   "overrides": [
     { "files": ["**/*.js"], "customSyntax": "postcss-lit" },
@@ -18,6 +19,7 @@
     "color-function-notation": "legacy",
     "custom-property-empty-line-before": ["never", { "ignore": ["after-custom-property"] }],
     "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
-    "no-duplicate-selectors": true
+    "no-duplicate-selectors": true,
+    "custom-rules/content-with-css-escape": true
   }
 }
