@@ -23,9 +23,13 @@
     "src",
     "vaadin-*.d.ts",
     "vaadin-*.js",
+    "custom-elements.json",
     "web-types.json",
     "web-types.lit.json"
   ],
+  "scripts": {
+    "cem": "cem analyze --globs \"src/*.js\" --litelement"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-date-time-picker",
@@ -50,6 +54,7 @@
     "@vaadin/vaadin-lumo-styles": "25.1.0-alpha3",
     "sinon": "^21.0.0"
   },
+  "customElements": "custom-elements.json",
   "web-types": [
     "web-types.json",
     "web-types.lit.json"
