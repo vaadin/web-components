@@ -56,7 +56,7 @@ describe('context-menu', () => {
         ],
       },
       { text: 'Menu Item 3', disabled: true },
-      { text: 'Menu Item 4', theme: 'danger' },
+      { text: 'Menu Item 4', className: 'aura-accent-red' },
     ];
     contextmenu(element);
     await openSubMenus(element);

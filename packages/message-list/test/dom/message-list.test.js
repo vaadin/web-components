@@ -22,8 +22,8 @@ describe('vaadin-message-list', () => {
     await expect(list).dom.to.equalSnapshot();
   });
 
-  it('theme', async () => {
-    list.items = [{ text: 'Partial service outage.', userName: 'Admin', theme: 'danger' }];
+  it('accent-color', async () => {
+    list.items = [{ text: 'Partial service outage.', userName: 'Admin', className: 'aura-accent-red' }];
     await nextFrame();
     await expect(list).dom.to.equalSnapshot();
   });
