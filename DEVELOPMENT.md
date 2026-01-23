@@ -130,6 +130,18 @@ yarn test --coverage
 
 To run the visual tests, please make sure that the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are defined.
 
+Run tests for base styles:
+
+```sh
+yarn test:base
+```
+
+Update reference screenshots for base styles:
+
+```sh
+yarn update:base
+```
+
 Run tests for Lumo:
 
 ```sh
@@ -146,6 +158,18 @@ Update screenshots for single package:
 
 ```sh
 yarn update:lumo --group combo-box
+```
+
+Run tests for Aura:
+
+```sh
+yarn test:aura
+```
+
+Update reference screenshots for Aura:
+
+```sh
+yarn update:aura
 ```
 
 ### Snapshot tests
