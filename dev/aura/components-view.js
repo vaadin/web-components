@@ -88,7 +88,7 @@ function initView(view) {
         { text: 'Share' },
         { text: 'Add to Favorites' },
         { component: 'hr' },
-        { text: 'Delete', theme: 'danger' },
+        { text: 'Delete', className: 'aura-accent-red' },
       ],
     },
   ];
@@ -96,10 +96,8 @@ function initView(view) {
   view.querySelector('#filled-menu-bar').addEventListener('change', (e) => {
     if (e.target.checked) {
       menuBar.setAttribute('theme', 'filled');
-      menuBar.items[0].children[9].theme = 'danger filled';
     } else {
       menuBar.removeAttribute('theme');
-      menuBar.items[0].children[9].theme = 'danger';
     }
   });
 
