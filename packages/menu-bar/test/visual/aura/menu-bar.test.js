@@ -91,7 +91,7 @@ describe('menu-bar', () => {
         { component: 'u', text: 'Home' },
         {
           component: makeIcon('lumo:chevron-down'),
-          children: [{ text: 'Notifications' }, { text: 'Mark as read', theme: 'danger' }],
+          children: [{ text: 'Notifications' }, { text: 'Mark as read', className: 'aura-accent-red' }],
         },
         { text: 'Manage', disabled: true },
         {

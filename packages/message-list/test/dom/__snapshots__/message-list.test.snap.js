@@ -57,7 +57,7 @@ snapshots["vaadin-message-list theme"] =
   <vaadin-message
     role="listitem"
     tabindex="0"
-    theme="danger"
+    class="aura-accent-red"
   >
     Partial service outage.
     <vaadin-avatar
