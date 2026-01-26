@@ -258,8 +258,8 @@ export const SliderMixin = (superClass) =>
       event.stopPropagation();
       const index = this.__getThumbIndex(event);
       this.__updateValue(event.target.value, index);
-      this.__commitValue();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      this.__commitValue();
     }
 
     /**
