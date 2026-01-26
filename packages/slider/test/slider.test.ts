@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
 
