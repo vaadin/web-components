@@ -24,6 +24,7 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * ```
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} input - Fired when the slider value changes during user interaction.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @customElement

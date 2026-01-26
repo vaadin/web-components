@@ -16,6 +16,13 @@ export type RangeSliderChangeEvent = Event & {
 };
 
 /**
+ * Fired when the slider value changes during user interaction.
+ */
+export type RangeSliderInputEvent = Event & {
+  target: RangeSlider;
+};
+
+/**
  * Fired when the `value` property changes.
  */
 export type RangeSliderValueChangedEvent = CustomEvent<{ value: number[] }>;
@@ -26,6 +33,7 @@ export interface RangeSliderCustomEventMap {
 
 export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCustomEventMap {
   change: RangeSliderChangeEvent;
+  input: RangeSliderInputEvent;
 }
 
 /**
@@ -37,6 +45,7 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * ```
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} input - Fired when the slider value changes during user interaction.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class RangeSlider extends SliderMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))) {

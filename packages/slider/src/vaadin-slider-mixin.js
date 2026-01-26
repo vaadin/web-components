@@ -255,9 +255,11 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onInput(event) {
+      event.stopPropagation();
       const index = this.__getThumbIndex(event);
       this.__updateValue(event.target.value, index);
       this.__commitValue();
+      this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
     }
 
     /**
@@ -268,6 +270,12 @@ export const SliderMixin = (superClass) =>
       event.stopPropagation();
       this.__detectAndDispatchChange();
     }
+
+    /**
+     * Fired when the slider value changes during user interaction.
+     *
+     * @event input
+     */
 
     /**
      * Fired when the user commits a value change.
