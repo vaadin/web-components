@@ -69,12 +69,12 @@ yarn start:aura       # Start with Aura theme specifically
 ### Testing
 
 ```bash
-yarn test                                         # Run tests for changed packages only
-yarn test --all                                   # Run tests for all packages
-yarn test --group button                          # Run tests for specific component
-yarn test --group button --glob="data-provider*"  # Run specific tests for specific component
-yarn test:firefox                                 # Run tests in Firefox
-yarn test:webkit                                  # Run tests in WebKit
+yarn test                                            # Run tests for changed packages only
+yarn test --all                                      # Run tests for all packages
+yarn test --group combo-box                          # Run tests for specific component
+yarn test --group combo-box --glob="data-provider*"  # Run specific tests for specific component
+yarn test:firefox                                    # Run tests in Firefox
+yarn test:webkit                                     # Run tests in WebKit
 ```
 
 ### Visual and Snapshot Tests
@@ -96,7 +96,6 @@ All visual and snapshot test commands support the same `--group` option to targe
 
 ```bash
 yarn test:it           # Run integration tests
-yarn debug:it          # Debug integration tests
 ```
 
 ### Linting and Type Checking
