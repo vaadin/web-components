@@ -1,0 +1,99 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_badge {
+  :host {
+    --vaadin-badge-background: var(--lumo-primary-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-primary-text-color);
+    --vaadin-badge-border-radius: var(--lumo-border-radius-s);
+    --vaadin-badge-font-family: var(--lumo-font-family);
+    --vaadin-badge-font-size: var(--lumo-font-size-s);
+    --vaadin-badge-font-weight: 500;
+    --vaadin-badge-min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+  }
+
+  /* Theme variants */
+  :host([theme~='success']) {
+    --vaadin-badge-background: var(--lumo-success-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-success-text-color);
+  }
+
+  :host([theme~='error']) {
+    --vaadin-badge-background: var(--lumo-error-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-error-text-color);
+  }
+
+  :host([theme~='warning']) {
+    --vaadin-badge-background: var(--lumo-warning-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-warning-text-color);
+  }
+
+  :host([theme~='contrast']) {
+    --vaadin-badge-background: var(--lumo-contrast-5pct);
+    --vaadin-badge-text-color: var(--lumo-contrast-80pct);
+  }
+
+  /* Primary variants */
+  :host([theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-primary-color);
+    --vaadin-badge-text-color: var(--lumo-primary-contrast-color);
+  }
+
+  :host([theme~='success'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-success-color);
+    --vaadin-badge-text-color: var(--lumo-success-contrast-color);
+  }
+
+  :host([theme~='error'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-error-color);
+    --vaadin-badge-text-color: var(--lumo-error-contrast-color);
+  }
+
+  :host([theme~='warning'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-warning-color);
+    --vaadin-badge-text-color: var(--lumo-warning-contrast-color);
+  }
+
+  :host([theme~='contrast'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-contrast);
+    --vaadin-badge-text-color: var(--lumo-base-color);
+  }
+
+  /* Size variants */
+  :host([theme~='small']) {
+    --vaadin-badge-font-size: var(--lumo-font-size-xxs);
+  }
+
+  /* Pill variant */
+  :host([theme~='pill']) {
+    --vaadin-badge-border-radius: 1em;
+  }
+
+  /* Empty badge styling */
+  :host([empty]) {
+    --vaadin-badge-background: var(--lumo-primary-color);
+  }
+
+  :host([theme~='small'][empty]) {
+    width: 0.75em;
+    height: 0.75em;
+  }
+
+  :host([theme~='contrast'][empty]) {
+    --vaadin-badge-background: var(--lumo-contrast);
+  }
+
+  :host([theme~='success'][empty]) {
+    --vaadin-badge-background: var(--lumo-success-color);
+  }
+
+  :host([theme~='error'][empty]) {
+    --vaadin-badge-background: var(--lumo-error-color);
+  }
+
+  :host([theme~='warning'][empty]) {
+    --vaadin-badge-background: var(--lumo-warning-color);
+  }
+}
