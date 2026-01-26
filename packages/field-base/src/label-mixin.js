@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { LabelController } from './label-controller.js';
 
 /**
@@ -11,53 +10,51 @@ import { LabelController } from './label-controller.js';
  *
  * @polymerMixin
  */
-export const LabelMixin = dedupeMixin(
-  (superclass) =>
-    class LabelMixinClass extends superclass {
-      static get properties() {
-        return {
-          /**
-           * The label text for the input node.
-           * When no light dom defined via [slot=label], this value will be used.
-           */
-          label: {
-            type: String,
-            observer: '_labelChanged',
-          },
-        };
-      }
+export const LabelMixin = (superclass) =>
+  class LabelMixinClass extends superclass {
+    static get properties() {
+      return {
+        /**
+         * The label text for the input node.
+         * When no light dom defined via [slot=label], this value will be used.
+         */
+        label: {
+          type: String,
+          observer: '_labelChanged',
+        },
+      };
+    }
 
-      constructor() {
-        super();
+    constructor() {
+      super();
 
-        this._labelController = new LabelController(this);
+      this._labelController = new LabelController(this);
 
-        this._labelController.addEventListener('slot-content-changed', (event) => {
-          this.toggleAttribute('has-label', event.detail.hasContent);
-        });
-      }
+      this._labelController.addEventListener('slot-content-changed', (event) => {
+        this.toggleAttribute('has-label', event.detail.hasContent);
+      });
+    }
 
-      /** @protected */
-      get _labelId() {
-        const node = this._labelNode;
-        return node && node.id;
-      }
+    /** @protected */
+    get _labelId() {
+      const node = this._labelNode;
+      return node && node.id;
+    }
 
-      /** @protected */
-      get _labelNode() {
-        return this._labelController.node;
-      }
+    /** @protected */
+    get _labelNode() {
+      return this._labelController.node;
+    }
 
-      /** @protected */
-      ready() {
-        super.ready();
+    /** @protected */
+    ready() {
+      super.ready();
 
-        this.addController(this._labelController);
-      }
+      this.addController(this._labelController);
+    }
 
-      /** @protected */
-      _labelChanged(label) {
-        this._labelController.setLabel(label);
-      }
-    },
-);
+    /** @protected */
+    _labelChanged(label) {
+      this._labelController.setLabel(label);
+    }
+  };
