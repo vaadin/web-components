@@ -11,6 +11,7 @@ This is the Vaadin Web Components monorepo - a collection of high-quality, acces
 - `packages/`: Individual component packages (each has src/, test/, and entry files)
 - `packages/component-base/`: Core utilities and mixins shared across components
 - `packages/a11y-base/`: Accessibility mixins and utilities
+- `packages/field-base/`: Field component mixins and utilities
 - `packages/aura/`: Aura theme
 - `packages/vaadin-lumo-styles/`: Lumo theme
 - `packages/vaadin-themable-mixin/`: Theming infrastructure
@@ -79,9 +80,13 @@ yarn test:webkit                                  # Run tests in WebKit
 ### Visual and Snapshot Tests
 
 ```bash
+yarn test:base               # Visual tests for component base styles
 yarn test:lumo               # Visual tests for Lumo theme
 yarn test:aura               # Visual tests for Aura theme
+yarn test:snapshots          # DOM snapshot tests
+yarn update:base             # Update component base styles reference screenshots
 yarn update:lumo             # Update Lumo reference screenshots
+yarn update:aura             # Update Aura reference screenshots
 yarn update:snapshots        # Update DOM snapshots
 ```
 
