@@ -33,6 +33,7 @@ export const uploadFileStyles = css`
     object-fit: cover;
     grid-column: 1;
     grid-row: 1;
+    align-self: center;
   }
 
   :host([theme~='thumbnails']) [part='thumbnail'] {
