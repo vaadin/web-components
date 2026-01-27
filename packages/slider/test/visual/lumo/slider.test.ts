@@ -107,5 +107,23 @@ describe('slider', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
     });
+
+    it('contrast', async () => {
+      element.value = 50;
+      element.setAttribute('theme', 'contrast');
+      await visualDiff(div, 'theme-contrast');
+    });
+
+    it('success', async () => {
+      element.value = 50;
+      element.setAttribute('theme', 'success');
+      await visualDiff(div, 'theme-success');
+    });
+
+    it('error', async () => {
+      element.value = 50;
+      element.setAttribute('theme', 'error');
+      await visualDiff(div, 'theme-error');
+    });
   });
 });
