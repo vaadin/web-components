@@ -93,6 +93,13 @@ describe('vaadin-slider', () => {
       expect(document.activeElement).to.not.equal(input);
     });
 
+    it('should focus the input on required indicator click', () => {
+      slider.required = true;
+      const indicator = slider.shadowRoot!.querySelector('[part="required-indicator"]') as HTMLElement;
+      indicator.click();
+      expect(document.activeElement).to.equal(input);
+    });
+
     it('should not throw when calling focus() before adding to the DOM', () => {
       expect(() => document.createElement('vaadin-slider').focus()).to.not.throw(Error);
     });

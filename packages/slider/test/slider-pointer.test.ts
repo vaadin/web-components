@@ -94,22 +94,44 @@ describe('vaadin-slider - pointer', () => {
   });
 
   describe('focus', () => {
+    let input: HTMLInputElement;
+
+    beforeEach(() => {
+      input = slider.querySelector('input')!;
+    });
+
     it('should focus slotted range input on thumb pointerdown', async () => {
       await sendMouseToElement({ type: 'move', element: thumb });
       await sendMouse({ type: 'down' });
-      expect(document.activeElement).to.equal(slider.querySelector('input'));
+      expect(document.activeElement).to.equal(input);
     });
 
     it('should focus slotted range input on track pointerdown', async () => {
       await sendMouse({ type: 'move', position: [50, y] });
       await sendMouse({ type: 'down' });
-      expect(document.activeElement).to.equal(slider.querySelector('input'));
+      expect(document.activeElement).to.equal(input);
     });
 
-    it('should not focus slotted range input on pointerdown below the track', async () => {
+    it('should focus slotted range input on pointerdown below the visible track', async () => {
       await sendMouse({ type: 'move', position: [50, y + 5] });
       await sendMouse({ type: 'down' });
-      expect(document.activeElement).to.not.equal(slider.querySelector('input'));
+      expect(document.activeElement).to.equal(input);
+    });
+
+    it('should focus an input on pointerdown on the label element', async () => {
+      slider.label = 'Label';
+      await nextRender();
+      const label = slider.shadowRoot!.querySelector('[part="label"]')!;
+      await sendMouseToElement({ type: 'click', element: label });
+      expect(document.activeElement).to.equal(input);
+    });
+
+    it('should not focus an input on pointerdown on the helper element', async () => {
+      slider.helperText = 'Helper';
+      await nextRender();
+      const helper = slider.shadowRoot!.querySelector('[part="helper-text"]')!;
+      await sendMouseToElement({ type: 'click', element: helper });
+      expect(document.activeElement).to.not.equal(input);
     });
   });
 
