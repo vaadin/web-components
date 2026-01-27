@@ -7,9 +7,15 @@
 
 vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio) {
-  --vaadin-checkbox-background: var(--aura-surface-color);
-  --vaadin-radio-button-background: var(--aura-surface-color);
   transition: background-color 100ms;
+}
+
+vaadin-checkbox:not([disabled], [readonly])::part(checkbox) {
+  background: var(--vaadin-checkbox-background, var(--aura-surface-color));
+}
+
+vaadin-radio-button:not([disabled], [readonly])::part(radio) {
+  background: var(--vaadin-radio-button-background, var(--aura-surface-color));
 }
 
 vaadin-checkbox:not([readonly], [disabled])::part(checkbox),
