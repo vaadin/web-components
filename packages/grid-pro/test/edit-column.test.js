@@ -54,6 +54,7 @@ describe('edit column', () => {
       await sendKeys({ press: 'Tab' });
       expect(getCellEditor(selectCell)).to.be.ok;
       await nextFrame();
+      await nextFrame();
 
       // Press Tab to edit the age cell
       await sendKeys({ press: 'Tab' });
