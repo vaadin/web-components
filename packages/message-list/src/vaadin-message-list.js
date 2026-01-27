@@ -107,10 +107,17 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
         gap: 6px;
       }
 
-      ${tag} .vaadin-message-attachment {
+      ${tag} button.vaadin-message-attachment {
         display: inline-flex;
         align-items: center;
         color: inherit;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        cursor: pointer;
+        text-align: start;
       }
 
       ${tag} .vaadin-message-attachment-image img {

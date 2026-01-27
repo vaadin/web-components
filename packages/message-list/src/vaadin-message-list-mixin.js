@@ -41,6 +41,7 @@ export const MessageListMixin = (superClass) =>
          * When a message has attachments, they are rendered in the attachments slot.
          * Image attachments (type starting with "image/") show a thumbnail preview,
          * while other attachments show a document icon with the file name.
+         * Clicking an attachment dispatches an `attachment-click` event.
          */
         items: {
           type: Array,
@@ -197,28 +198,41 @@ export const MessageListMixin = (superClass) =>
 
       if (isImage) {
         return html`
-          <a
+          <button
+            type="button"
             class="vaadin-message-attachment vaadin-message-attachment-image"
-            href="${attachment.url}"
-            target="_blank"
-            rel="noopener noreferrer"
+            @click="${() => this.__onAttachmentClick(attachment)}"
           >
-            <img src="${attachment.url}" alt="${attachment.name || ''}" />
-          </a>
+            <img src="${ifDefined(attachment.url)}" alt="${attachment.name || ''}" />
+          </button>
         `;
       }
 
       return html`
-        <a
+        <button
+          type="button"
           class="vaadin-message-attachment vaadin-message-attachment-file"
-          href="${attachment.url}"
-          target="_blank"
-          rel="noopener noreferrer"
+          @click="${() => this.__onAttachmentClick(attachment)}"
         >
           <span class="vaadin-message-attachment-icon"></span>
-          <span class="vaadin-message-attachment-name">${attachment.name || attachment.url}</span>
-        </a>
+          <span class="vaadin-message-attachment-name">${attachment.name}</span>
+        </button>
       `;
+    }
+
+    /**
+     * Dispatches an event when an attachment is clicked.
+     * @param {Object} attachment - The attachment that was clicked
+     * @private
+     */
+    __onAttachmentClick(attachment) {
+      this.dispatchEvent(
+        new CustomEvent('attachment-click', {
+          detail: { attachment },
+          bubbles: true,
+          composed: true,
+        }),
+      );
     }
 
     /** @private */

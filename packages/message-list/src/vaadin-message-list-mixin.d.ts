@@ -12,6 +12,10 @@ export interface MessageListItemAttachment {
   type?: string;
 }
 
+export interface MessageListAttachmentClickEvent {
+  attachment: MessageListItemAttachment;
+}
+
 export interface MessageListItem {
   text?: string;
   time?: string;
@@ -53,6 +57,7 @@ export declare class MessageListMixinClass {
    * When a message has attachments, they are rendered in the attachments slot.
    * Image attachments (type starting with "image/") show a thumbnail preview,
    * while other attachments show a document icon with the file name.
+   * Clicking an attachment dispatches an `attachment-click` event.
    */
   items: MessageListItem[] | null | undefined;
 

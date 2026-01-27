@@ -6,9 +6,17 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { MessageListMixin } from './vaadin-message-list-mixin.js';
+import { type MessageListItemAttachment, MessageListMixin } from './vaadin-message-list-mixin.js';
 
-export { MessageListItem, MessageListItemAttachment } from './vaadin-message-list-mixin.js';
+export {
+  MessageListAttachmentClickEvent,
+  MessageListItem,
+  MessageListItemAttachment,
+} from './vaadin-message-list-mixin.js';
+
+export type MessageListEventMap = HTMLElementEventMap & {
+  'attachment-click': CustomEvent<{ attachment: MessageListItemAttachment }>;
+};
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
@@ -43,7 +51,19 @@ export { MessageListItem, MessageListItemAttachment } from './vaadin-message-lis
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class MessageList extends SlotStylesMixin(MessageListMixin(ThemableMixin(ElementMixin(HTMLElement)))) {}
+declare class MessageList extends SlotStylesMixin(MessageListMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
+  addEventListener<K extends keyof MessageListEventMap>(
+    type: K,
+    listener: (this: MessageList, ev: MessageListEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof MessageListEventMap>(
+    type: K,
+    listener: (this: MessageList, ev: MessageListEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

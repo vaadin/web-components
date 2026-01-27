@@ -28,6 +28,7 @@
     <script type="module">
       import '@vaadin/message-input';
       import '@vaadin/message-list';
+      import { Notification } from '@vaadin/notification';
 
       /**
        * Simulates streaming text from an AI model
@@ -116,7 +117,7 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
       // Set initial messages
       list.items = [
         {
-          text: "Can you help me analyze these Q3 financial documents? I need a summary of the key findings and any concerns you spot.",
+          text: 'Can you help me analyze these Q3 financial documents? I need a summary of the key findings and any concerns you spot.',
           time: 'Yesterday',
           userName: 'User',
           userColorIndex: 1,
@@ -141,6 +142,12 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
           userColorIndex: 2,
         },
       ];
+
+      // Handle attachment clicks
+      list.addEventListener('attachment-click', (e) => {
+        const { attachment } = e.detail;
+        Notification.show(`Attachment clicked: ${attachment.name}`, { position: 'bottom-start' });
+      });
 
       // Handle new messages from user
       input.addEventListener('submit', async (e) => {

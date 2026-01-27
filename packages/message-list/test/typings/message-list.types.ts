@@ -32,6 +32,11 @@ assertType<string | undefined>(attachment.name);
 assertType<string | undefined>(attachment.url);
 assertType<string | undefined>(attachment.type);
 
+// Event listener
+list.addEventListener('attachment-click', (event) => {
+  assertType<MessageListItemAttachment>(event.detail.attachment);
+});
+
 // Mixins
 assertType<ElementMixinClass>(list);
 assertType<ThemableMixinClass>(list);
