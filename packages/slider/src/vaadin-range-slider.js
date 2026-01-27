@@ -66,6 +66,10 @@ class RangeSlider extends FieldMixin(
     return 'sliderComponent';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get properties() {
     return {
       /**

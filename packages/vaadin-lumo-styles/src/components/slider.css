@@ -1,0 +1,13 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_slider {
+  :host([focus-ring]) [part='thumb'] {
+    outline: none;
+    box-shadow:
+      0 0 0 1px var(--lumo-base-color),
+      0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+  }
+}
