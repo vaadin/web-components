@@ -82,7 +82,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateItems(items, __effectiveI18n, disabled)'];
+      return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
     }
 
     constructor() {
@@ -192,7 +192,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __updateItems(items, i18n) {
+    __updateItems(items, i18n, _disabled, _theme) {
       if (items && i18n) {
         // Apply i18n formatting to each file
         items.forEach((file) => this.__applyI18nToFile(file));
