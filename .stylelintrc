@@ -6,7 +6,13 @@
     "./custom-rules/stylelint/content-with-css-escape.js"
   ],
   "overrides": [
-    { "files": ["**/*.js"], "customSyntax": "postcss-lit" },
+    {
+      "files": ["**/*.js"],
+      "customSyntax": "postcss-lit",
+      "rules": {
+        "custom-rules/content-with-css-escape": true
+      }
+    },
     {
       "files": ["packages/vaadin-lumo-styles/**/*.css"],
       "rules": {
@@ -19,7 +25,6 @@
     "color-function-notation": "legacy",
     "custom-property-empty-line-before": ["never", { "ignore": ["after-custom-property"] }],
     "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
-    "no-duplicate-selectors": true,
-    "custom-rules/content-with-css-escape": true
+    "no-duplicate-selectors": true
   }
 }
