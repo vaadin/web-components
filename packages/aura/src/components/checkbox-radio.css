@@ -44,7 +44,7 @@ vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part
 }
 
 vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
- --vaadin-radio-button-background: var(--aura-accent-color);
+  --vaadin-radio-button-background: var(--aura-accent-color);
   --vaadin-radio-button-marker-color: var(--aura-accent-contrast-color);
   --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
   box-shadow: var(--aura-shadow-s);
