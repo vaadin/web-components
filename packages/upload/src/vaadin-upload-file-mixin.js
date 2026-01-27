@@ -117,7 +117,7 @@ export const UploadFileMixin = (superClass) =>
         },
 
         /** @private */
-        _thumbnail: {
+        __thumbnail: {
           type: String,
         },
       };
@@ -223,7 +223,7 @@ export const UploadFileMixin = (superClass) =>
       }
 
       if (!file) {
-        this._thumbnail = '';
+        this.__thumbnail = '';
         return;
       }
 
@@ -232,12 +232,12 @@ export const UploadFileMixin = (superClass) =>
         const reader = new FileReader();
         this.__thumbnailReader = reader;
         reader.onload = (e) => {
-          this._thumbnail = e.target.result;
+          this.__thumbnail = e.target.result;
           this.__thumbnailReader = null;
         };
         reader.readAsDataURL(file);
       } else {
-        this._thumbnail = '';
+        this.__thumbnail = '';
       }
     }
   };

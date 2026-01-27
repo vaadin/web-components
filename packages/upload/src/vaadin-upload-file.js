@@ -99,8 +99,8 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
     const isFileRetryVisible = this.errorMessage;
 
     return html`
-      <img src="${this._thumbnail}" alt="${this.fileName}" part="thumbnail" ?hidden="${!this._thumbnail}" />
-      <div part="file-icon" ?hidden="${!!this._thumbnail}" aria-hidden="true"></div>
+      <img src="${this.__thumbnail}" alt="${this.fileName}" part="thumbnail" ?hidden="${!this.__thumbnail}" />
+      <div part="file-icon" ?hidden="${!!this.__thumbnail}" aria-hidden="true"></div>
 
       <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
       <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
