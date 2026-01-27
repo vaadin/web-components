@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-range-slider host default"] = 
+snapshots["vaadin-range-slider host default"] =
 `<vaadin-range-slider>
   <input
     id="slider-0"
@@ -25,7 +25,7 @@ snapshots["vaadin-range-slider host default"] =
 `;
 /* end snapshot vaadin-range-slider host default */
 
-snapshots["vaadin-range-slider host value"] = 
+snapshots["vaadin-range-slider host value"] =
 `<vaadin-range-slider>
   <input
     id="slider-0"
@@ -49,7 +49,7 @@ snapshots["vaadin-range-slider host value"] =
 `;
 /* end snapshot vaadin-range-slider host value */
 
-snapshots["vaadin-range-slider host min"] = 
+snapshots["vaadin-range-slider host min"] =
 `<vaadin-range-slider>
   <input
     id="slider-0"
@@ -73,7 +73,7 @@ snapshots["vaadin-range-slider host min"] =
 `;
 /* end snapshot vaadin-range-slider host min */
 
-snapshots["vaadin-range-slider host max"] = 
+snapshots["vaadin-range-slider host max"] =
 `<vaadin-range-slider>
   <input
     id="slider-0"
@@ -97,7 +97,7 @@ snapshots["vaadin-range-slider host max"] =
 `;
 /* end snapshot vaadin-range-slider host max */
 
-snapshots["vaadin-range-slider host step"] = 
+snapshots["vaadin-range-slider host step"] =
 `<vaadin-range-slider>
   <input
     id="slider-0"
@@ -121,7 +121,7 @@ snapshots["vaadin-range-slider host step"] =
 `;
 /* end snapshot vaadin-range-slider host step */
 
-snapshots["vaadin-range-slider host disabled"] = 
+snapshots["vaadin-range-slider host disabled"] =
 `<vaadin-range-slider
   aria-disabled="true"
   disabled=""
@@ -151,117 +151,127 @@ snapshots["vaadin-range-slider host disabled"] =
 /* end snapshot vaadin-range-slider host disabled */
 
 snapshots["vaadin-range-slider shadow default"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline-start:0%;inset-inline-end:0%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline-start:0%;inset-inline-end:0%;"
+    part="thumb thumb-start"
+    style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 0 / 100);"
   >
   </div>
+  <div
+    part="thumb thumb-end"
+    style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 100 / 100);"
+  >
+  </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb thumb-start"
-  style="inset-inline-start:0%;"
->
-</div>
-<div
-  part="thumb thumb-end"
-  style="inset-inline-start:100%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-range-slider shadow default */
 
 snapshots["vaadin-range-slider shadow value"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 10% 80%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 10% 80%;"
+    part="thumb thumb-start"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 10 / 100);"
   >
   </div>
+  <div
+    part="thumb thumb-end"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 20 / 100);"
+  >
+  </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb thumb-start"
-  style="inset-inline-start: 10%;"
->
-</div>
-<div
-  part="thumb thumb-end"
-  style="inset-inline-start: 20%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-range-slider shadow value */
 
 snapshots["vaadin-range-slider shadow min"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 25%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 25%;"
+    part="thumb thumb-start"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
   >
   </div>
+  <div
+    part="thumb thumb-end"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
+  >
+  </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb thumb-start"
-  style="inset-inline-start: 25%;"
->
-</div>
-<div
-  part="thumb thumb-end"
-  style="inset-inline-start: 75%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-range-slider shadow min */
 
 snapshots["vaadin-range-slider shadow max"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 25%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 25%;"
+    part="thumb thumb-start"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
   >
   </div>
+  <div
+    part="thumb thumb-end"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
+  >
+  </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb thumb-start"
-  style="inset-inline-start: 25%;"
->
-</div>
-<div
-  part="thumb thumb-end"
-  style="inset-inline-start: 75%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-range-slider shadow max */
 
 snapshots["vaadin-range-slider shadow step"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 20% 40%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 20% 40%;"
+    part="thumb thumb-start"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 20 / 100);"
   >
   </div>
+  <div
+    part="thumb thumb-end"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 60 / 100);"
+  >
+  </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb thumb-start"
-  style="inset-inline-start: 20%;"
->
-</div>
-<div
-  part="thumb thumb-end"
-  style="inset-inline-start: 60%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-range-slider shadow step */
 

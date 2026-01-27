@@ -80,17 +80,19 @@ class Slider extends SliderMixin(
     const percent = this.__getPercentFromValue(value);
 
     return html`
-      <div part="track">
-        <div
-          part="track-fill"
-          style="${styleMap({
-            insetInlineStart: 0,
-            insetInlineEnd: `${100 - percent}%`,
-          })}"
-        ></div>
+      <div id="controls">
+        <div part="track">
+          <div
+            part="track-fill"
+            style="${styleMap({
+              insetInlineStart: 0,
+              insetInlineEnd: `${100 - percent}%`,
+            })}"
+          ></div>
+        </div>
+        <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
+        <slot name="input"></slot>
       </div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
-      <slot name="input"></slot>
     `;
   }
 

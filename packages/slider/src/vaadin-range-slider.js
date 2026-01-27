@@ -84,18 +84,26 @@ class RangeSlider extends SliderMixin(
     const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
-      <div part="track">
+      <div id="controls">
+        <div part="track">
+          <div
+            part="track-fill"
+            style="${styleMap({
+              insetInlineStart: `${startPercent}%`,
+              insetInlineEnd: `${100 - endPercent}%`,
+            })}"
+          ></div>
+        </div>
         <div
-          part="track-fill"
-          style="${styleMap({
-            insetInlineStart: `${startPercent}%`,
-            insetInlineEnd: `${100 - endPercent}%`,
-          })}"
+          part="thumb thumb-start"
+          style="${styleMap({ insetInlineStart: this.__getThumbPosition(startPercent) })}"
         ></div>
+        <div
+          part="thumb thumb-end"
+          style="${styleMap({ insetInlineStart: this.__getThumbPosition(endPercent) })}"
+        ></div>
+        <slot name="input"></slot>
       </div>
-      <div part="thumb thumb-start" style="${styleMap({ insetInlineStart: `${startPercent}%` })}"></div>
-      <div part="thumb thumb-end" style="${styleMap({ insetInlineStart: `${endPercent}%` })}"></div>
-      <slot name="input"></slot>
     `;
   }
 
@@ -253,8 +261,7 @@ class RangeSlider extends SliderMixin(
       }
     }
 
-    const percent = this.__getEventPercent(event);
-    const value = this.__getValueFromPercent(percent);
+    const value = this.__getEventValue(event);
 
     // First thumb position from the "end"
     const index = this.__value.findIndex((v) => value - v < 0);
