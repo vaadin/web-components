@@ -93,6 +93,25 @@
     color: var(--lumo-error-text-color);
   }
 
+  /* File icon for thumbnails theme - reset the mask override */
+  [part='file-icon'] {
+    align-self: center;
+    margin-top: 0;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+  }
+
+  [part='file-icon']::before {
+    background: var(--lumo-contrast-50pct);
+    mask-image: var(--_vaadin-upload-file-icon);
+    mask-size: 50%;
+    mask-position: 50%;
+    mask-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+  }
+
   ::slotted([slot='progress']) {
     margin-inline-end: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
   }
