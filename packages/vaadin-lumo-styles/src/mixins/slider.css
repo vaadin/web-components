@@ -14,6 +14,18 @@
     --_track-size: var(--vaadin-slider-track-size, calc(var(--lumo-size-l) / 10));
   }
 
+  :host([theme~='contrast']) {
+    --vaadin-slider-fill-background: var(--lumo-contrast-80pct);
+  }
+
+  :host([theme~='error']) {
+    --vaadin-slider-fill-background: var(--lumo-error-color);
+  }
+
+  :host([theme~='success']) {
+    --vaadin-slider-fill-background: var(--lumo-success-color);
+  }
+
   :host([disabled]) {
     --vaadin-slider-track-background: var(--lumo-contrast-10pct);
     --vaadin-slider-fill-background: linear-gradient(var(--lumo-contrast-30pct), var(--lumo-contrast-30pct))
