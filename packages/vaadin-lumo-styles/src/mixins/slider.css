@@ -1,0 +1,52 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_mixins_slider {
+  :host {
+    font-family: var(--lumo-font-family);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_thumb-width: var(--vaadin-slider-thumb-width, calc(var(--lumo-size-m) / 2));
+    --_thumb-height: var(--vaadin-slider-thumb-height, calc(var(--lumo-size-m) / 2));
+    --_track-radius: var(--vaadin-slider-track-border-radius, var(--lumo-border-radius-s));
+    --_track-size: var(--vaadin-slider-track-size, calc(var(--lumo-size-l) / 10));
+  }
+
+  :host([disabled]) {
+    --vaadin-slider-track-background: var(--lumo-contrast-10pct);
+    --vaadin-slider-fill-background: linear-gradient(var(--lumo-contrast-30pct), var(--lumo-contrast-30pct))
+      var(--lumo-base-color);
+  }
+
+  :host([readonly]) {
+    --vaadin-slider-fill-background: var(--lumo-base-color);
+  }
+
+  [part='track'] {
+    background: var(--vaadin-slider-track-background, var(--lumo-contrast-30pct));
+  }
+
+  [part~='thumb'],
+  [part='track-fill'] {
+    background: var(--vaadin-slider-fill-background, var(--lumo-primary-color));
+  }
+
+  :host([readonly]) [part~='thumb'],
+  :host([readonly]) [part='track-fill'] {
+    border-color: var(--lumo-contrast-50pct);
+  }
+
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
+    color: var(--lumo-body-text-color);
+  }
+
+  /* Touch device adjustment */
+  @media (pointer: coarse) {
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {
+      color: var(--lumo-secondary-text-color);
+    }
+  }
+}

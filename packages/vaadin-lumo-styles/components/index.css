@@ -56,10 +56,12 @@
 @import './progress-bar.css';
 @import './radio-button.css';
 @import './radio-group.css';
+@import './range-slider.css';
 @import './rich-text-editor.css';
 @import './scroller.css';
 @import './select.css';
 @import './side-nav.css';
+@import './slider.css';
 @import './split-layout.css';
 @import './tabs.css';
 @import './tabsheet.css';
