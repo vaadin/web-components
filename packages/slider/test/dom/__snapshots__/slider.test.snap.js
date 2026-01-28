@@ -279,186 +279,196 @@ snapshots["vaadin-slider host error"] =
 /* end snapshot vaadin-slider host error */
 
 snapshots["vaadin-slider shadow default"] = 
-`<div part="label">
-  <slot name="label">
-  </slot>
-  <span
-    aria-hidden="true"
-    part="required-indicator"
-  >
-  </span>
-</div>
-<div id="controls">
-  <div part="track">
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div id="controls">
+    <div part="track">
+      <div
+        part="track-fill"
+        style="inset-inline-start:0;inset-inline-end:100%;"
+      >
+      </div>
+    </div>
     <div
-      part="track-fill"
-      style="inset-inline-start:0;inset-inline-end:100%;"
+      part="thumb"
+      style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 0 / 100);"
     >
     </div>
+    <slot name="input">
+    </slot>
   </div>
-  <div
-    part="thumb"
-    style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 0 / 100);"
-  >
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
   </div>
-  <slot name="input">
-  </slot>
-</div>
-<div part="helper-text">
-  <slot name="helper">
-  </slot>
-</div>
-<div part="error-message">
-  <slot name="error-message">
-  </slot>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-slider shadow default */
 
 snapshots["vaadin-slider shadow value"] = 
-`<div part="label">
-  <slot name="label">
-  </slot>
-  <span
-    aria-hidden="true"
-    part="required-indicator"
-  >
-  </span>
-</div>
-<div id="controls">
-  <div part="track">
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div id="controls">
+    <div part="track">
+      <div
+        part="track-fill"
+        style="inset-inline: 0px 50%;"
+      >
+      </div>
+    </div>
     <div
-      part="track-fill"
-      style="inset-inline: 0px 50%;"
+      part="thumb"
+      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 50 / 100);"
     >
     </div>
+    <slot name="input">
+    </slot>
   </div>
-  <div
-    part="thumb"
-    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 50 / 100);"
-  >
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
   </div>
-  <slot name="input">
-  </slot>
-</div>
-<div part="helper-text">
-  <slot name="helper">
-  </slot>
-</div>
-<div part="error-message">
-  <slot name="error-message">
-  </slot>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-slider shadow value */
 
 snapshots["vaadin-slider shadow min"] = 
-`<div part="label">
-  <slot name="label">
-  </slot>
-  <span
-    aria-hidden="true"
-    part="required-indicator"
-  >
-  </span>
-</div>
-<div id="controls">
-  <div part="track">
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div id="controls">
+    <div part="track">
+      <div
+        part="track-fill"
+        style="inset-inline: 0px 25%;"
+      >
+      </div>
+    </div>
     <div
-      part="track-fill"
-      style="inset-inline: 0px 25%;"
+      part="thumb"
+      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
     >
     </div>
+    <slot name="input">
+    </slot>
   </div>
-  <div
-    part="thumb"
-    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
-  >
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
   </div>
-  <slot name="input">
-  </slot>
-</div>
-<div part="helper-text">
-  <slot name="helper">
-  </slot>
-</div>
-<div part="error-message">
-  <slot name="error-message">
-  </slot>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-slider shadow min */
 
 snapshots["vaadin-slider shadow max"] = 
-`<div part="label">
-  <slot name="label">
-  </slot>
-  <span
-    aria-hidden="true"
-    part="required-indicator"
-  >
-  </span>
-</div>
-<div id="controls">
-  <div part="track">
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div id="controls">
+    <div part="track">
+      <div
+        part="track-fill"
+        style="inset-inline: 0px 75%;"
+      >
+      </div>
+    </div>
     <div
-      part="track-fill"
-      style="inset-inline: 0px 75%;"
+      part="thumb"
+      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
     >
     </div>
+    <slot name="input">
+    </slot>
   </div>
-  <div
-    part="thumb"
-    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
-  >
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
   </div>
-  <slot name="input">
-  </slot>
-</div>
-<div part="helper-text">
-  <slot name="helper">
-  </slot>
-</div>
-<div part="error-message">
-  <slot name="error-message">
-  </slot>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-slider shadow max */
 
 snapshots["vaadin-slider shadow step"] = 
-`<div part="label">
-  <slot name="label">
-  </slot>
-  <span
-    aria-hidden="true"
-    part="required-indicator"
-  >
-  </span>
-</div>
-<div id="controls">
-  <div part="track">
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div id="controls">
+    <div part="track">
+      <div
+        part="track-fill"
+        style="inset-inline: 0px 50%;"
+      >
+      </div>
+    </div>
     <div
-      part="track-fill"
-      style="inset-inline: 0px 50%;"
+      part="thumb"
+      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 50 / 100);"
     >
     </div>
+    <slot name="input">
+    </slot>
   </div>
-  <div
-    part="thumb"
-    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 50 / 100);"
-  >
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
   </div>
-  <slot name="input">
-  </slot>
-</div>
-<div part="helper-text">
-  <slot name="helper">
-  </slot>
-</div>
-<div part="error-message">
-  <slot name="error-message">
-  </slot>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-slider shadow step */

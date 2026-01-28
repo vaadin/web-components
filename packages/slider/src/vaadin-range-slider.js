@@ -88,38 +88,40 @@ class RangeSlider extends FieldMixin(
     const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
-      <div part="label" @click="${this.focus}">
-        <slot name="label"></slot>
-        <span part="required-indicator" aria-hidden="true"></span>
-      </div>
-
-      <div id="controls">
-        <div part="track">
-          <div
-            part="track-fill"
-            style="${styleMap({
-              insetInlineStart: `${startPercent}%`,
-              insetInlineEnd: `${100 - endPercent}%`,
-            })}"
-          ></div>
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
-        <div
-          part="thumb thumb-start"
-          style="${styleMap({ insetInlineStart: this.__getThumbPosition(startPercent) })}"
-        ></div>
-        <div
-          part="thumb thumb-end"
-          style="${styleMap({ insetInlineStart: this.__getThumbPosition(endPercent) })}"
-        ></div>
-        <slot name="input"></slot>
-      </div>
 
-      <div part="helper-text">
-        <slot name="helper"></slot>
-      </div>
+        <div id="controls">
+          <div part="track">
+            <div
+              part="track-fill"
+              style="${styleMap({
+                insetInlineStart: `${startPercent}%`,
+                insetInlineEnd: `${100 - endPercent}%`,
+              })}"
+            ></div>
+          </div>
+          <div
+            part="thumb thumb-start"
+            style="${styleMap({ insetInlineStart: this.__getThumbPosition(startPercent) })}"
+          ></div>
+          <div
+            part="thumb thumb-end"
+            style="${styleMap({ insetInlineStart: this.__getThumbPosition(endPercent) })}"
+          ></div>
+          <slot name="input"></slot>
+        </div>
 
-      <div part="error-message">
-        <slot name="error-message"></slot>
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
     `;
   }

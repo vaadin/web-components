@@ -84,31 +84,33 @@ class Slider extends FieldMixin(
     const percent = this.__getPercentFromValue(value);
 
     return html`
-      <div part="label" @click="${this.focus}">
-        <slot name="label"></slot>
-        <span part="required-indicator" aria-hidden="true"></span>
-      </div>
-
-      <div id="controls">
-        <div part="track">
-          <div
-            part="track-fill"
-            style="${styleMap({
-              insetInlineStart: 0,
-              insetInlineEnd: `${100 - percent}%`,
-            })}"
-          ></div>
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
-        <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
-        <slot name="input"></slot>
-      </div>
 
-      <div part="helper-text">
-        <slot name="helper"></slot>
-      </div>
+        <div id="controls">
+          <div part="track">
+            <div
+              part="track-fill"
+              style="${styleMap({
+                insetInlineStart: 0,
+                insetInlineEnd: `${100 - percent}%`,
+              })}"
+            ></div>
+          </div>
+          <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
+          <slot name="input"></slot>
+        </div>
 
-      <div part="error-message">
-        <slot name="error-message"></slot>
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
     `;
   }
