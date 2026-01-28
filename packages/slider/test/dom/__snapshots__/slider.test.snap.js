@@ -96,92 +96,102 @@ snapshots["vaadin-slider host disabled"] =
 /* end snapshot vaadin-slider host disabled */
 
 snapshots["vaadin-slider shadow default"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline-start:0;inset-inline-end:100%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline-start:0;inset-inline-end:100%;"
+    part="thumb"
+    style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 0 / 100);"
   >
   </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb"
-  style="inset-inline-start:0%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-slider shadow default */
 
 snapshots["vaadin-slider shadow value"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 0px 50%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 0px 50%;"
+    part="thumb"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 50 / 100);"
   >
   </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb"
-  style="inset-inline-start: 50%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-slider shadow value */
 
 snapshots["vaadin-slider shadow min"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 0px 25%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 0px 25%;"
+    part="thumb"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
   >
   </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb"
-  style="inset-inline-start: 75%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-slider shadow min */
 
 snapshots["vaadin-slider shadow max"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 0px 75%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 0px 75%;"
+    part="thumb"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
   >
   </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb"
-  style="inset-inline-start: 25%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-slider shadow max */
 
 snapshots["vaadin-slider shadow step"] = 
-`<div part="track">
+`<div id="controls">
+  <div part="track">
+    <div
+      part="track-fill"
+      style="inset-inline: 0px 50%;"
+    >
+    </div>
+  </div>
   <div
-    part="track-fill"
-    style="inset-inline: 0px 50%;"
+    part="thumb"
+    style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 50 / 100);"
   >
   </div>
+  <slot name="input">
+  </slot>
 </div>
-<div
-  part="thumb"
-  style="inset-inline-start: 50%;"
->
-</div>
-<slot name="input">
-</slot>
 `;
 /* end snapshot vaadin-slider shadow step */
 

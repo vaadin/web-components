@@ -94,22 +94,28 @@ describe('vaadin-slider - pointer', () => {
   });
 
   describe('focus', () => {
+    let input: HTMLInputElement;
+
+    beforeEach(() => {
+      input = slider.querySelector('input')!;
+    });
+
     it('should focus slotted range input on thumb pointerdown', async () => {
       await sendMouseToElement({ type: 'move', element: thumb });
       await sendMouse({ type: 'down' });
-      expect(document.activeElement).to.equal(slider.querySelector('input'));
+      expect(document.activeElement).to.equal(input);
     });
 
     it('should focus slotted range input on track pointerdown', async () => {
       await sendMouse({ type: 'move', position: [50, y] });
       await sendMouse({ type: 'down' });
-      expect(document.activeElement).to.equal(slider.querySelector('input'));
+      expect(document.activeElement).to.equal(input);
     });
 
-    it('should not focus slotted range input on pointerdown below the track', async () => {
+    it('should focus slotted range input on pointerdown below the visible track', async () => {
       await sendMouse({ type: 'move', position: [50, y + 5] });
       await sendMouse({ type: 'down' });
-      expect(document.activeElement).to.not.equal(slider.querySelector('input'));
+      expect(document.activeElement).to.equal(input);
     });
   });
 

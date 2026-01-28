@@ -8,16 +8,14 @@ import { css } from 'lit';
 
 export const sliderStyles = css`
   :host {
-    display: inline-flex;
-    align-items: center;
+    display: inline-grid;
     box-sizing: border-box;
-    position: relative;
     width: 100%;
-    height: var(--_thumb-size);
     user-select: none;
     -webkit-user-select: none;
-    border-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
-    --_thumb-size: var(--vaadin-slider-thumb-size, 1lh);
+    --_track-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
+    --_thumb-width: var(--vaadin-slider-thumb-width, 1lh);
+    --_thumb-height: var(--vaadin-slider-thumb-height, 1lh);
     --_track-size: var(--vaadin-slider-track-size, 0.25lh);
   }
 
@@ -38,13 +36,21 @@ export const sliderStyles = css`
     --vaadin-slider-fill-background: var(--vaadin-background-color);
   }
 
+  #controls {
+    position: relative;
+    box-sizing: border-box;
+    min-width: 100%;
+    display: grid;
+    grid-template-rows: var(--_thumb-height);
+  }
+
   [part='track'] {
     box-sizing: border-box;
-    position: absolute;
     height: var(--_track-size);
-    width: 100%;
     background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
-    border-radius: inherit;
+    border-radius: var(--_track-radius);
+    align-self: center;
+    pointer-events: none;
   }
 
   [part='track-fill'] {
@@ -54,13 +60,14 @@ export const sliderStyles = css`
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-start-start-radius: inherit;
     border-end-start-radius: inherit;
+    pointer-events: none;
   }
 
   [part~='thumb'] {
     position: absolute;
     box-sizing: border-box;
-    width: var(--_thumb-size);
-    height: var(--_thumb-size);
+    width: var(--_thumb-width);
+    height: var(--_thumb-height);
     transform: translateX(-50%);
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
@@ -74,9 +81,10 @@ export const sliderStyles = css`
 
   /* visually hidden */
   ::slotted(input) {
-    flex: 1;
+    position: absolute;
+    inset: 0;
     font: inherit;
-    height: var(--_thumb-size);
+    height: var(--_thumb-height);
     opacity: 0 !important;
     margin: 0 !important;
     pointer-events: none;
