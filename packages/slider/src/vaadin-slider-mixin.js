@@ -160,7 +160,8 @@ export const SliderMixin = (superClass) =>
      */
     __getEventValue(event) {
       const percent = this.__getEventPercent(event);
-      return this.__getValueFromPercent(percent);
+      const isRTL = this.getAttribute('dir') === 'rtl';
+      return this.__getValueFromPercent(isRTL ? 1 - percent : percent);
     }
 
     /**

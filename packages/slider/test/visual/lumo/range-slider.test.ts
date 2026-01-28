@@ -134,4 +134,19 @@ describe('range-slider', () => {
       await visualDiff(div, 'theme-error');
     });
   });
+
+  describe('RTL', () => {
+    beforeEach(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('basic', async () => {
+      element.value = [10, 80];
+      await visualDiff(div, 'rtl-basic');
+    });
+  });
 });

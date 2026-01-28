@@ -123,4 +123,19 @@ describe('slider', () => {
       await visualDiff(div, 'theme-error');
     });
   });
+
+  describe('RTL', () => {
+    beforeEach(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('basic', async () => {
+      element.value = 50;
+      await visualDiff(div, 'rtl-basic');
+    });
+  });
 });

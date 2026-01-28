@@ -82,6 +82,10 @@ export const sliderStyles = css`
     touch-action: none;
   }
 
+  :host([dir='rtl']) [part~='thumb'] {
+    transform: translateX(50%) translateY(-50%);
+  }
+
   :host([readonly]) [part~='thumb'],
   :host([readonly]) [part='track-fill'] {
     border: dashed 1px var(--vaadin-border-color);
