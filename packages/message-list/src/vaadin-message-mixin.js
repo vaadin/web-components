@@ -162,16 +162,17 @@ export const MessageMixin = (superClass) =>
           <button
             type="button"
             part="attachment attachment-image"
+            aria-label="${attachment.name || ''}"
             @click="${() => this.__onAttachmentClick(attachment)}"
           >
-            <img part="attachment-preview" src="${ifDefined(attachment.url)}" alt="${attachment.name || ''}" />
+            <img part="attachment-preview" src="${ifDefined(attachment.url)}" alt="" />
           </button>
         `;
       }
 
       return html`
         <button type="button" part="attachment attachment-file" @click="${() => this.__onAttachmentClick(attachment)}">
-          <span part="attachment-icon"></span>
+          <span part="attachment-icon" aria-hidden="true"></span>
           <span part="attachment-name">${attachment.name}</span>
         </button>
       `;
