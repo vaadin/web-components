@@ -66,7 +66,7 @@ vaadin-upload-file {
   padding-block: var(--vaadin-padding-m);
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
-  &:not([error]):not([theme~='thumbnails'])::part(done-icon) {
+  &:not([error])::part(done-icon) {
     display: flex;
   }
 

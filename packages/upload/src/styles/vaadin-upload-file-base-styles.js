@@ -58,7 +58,7 @@ export const uploadFileStyles = css`
 
   :host([theme~='thumbnails']) [part='done-icon'],
   :host([theme~='thumbnails']) [part='warning-icon'] {
-    display: none;
+    display: none !important;
   }
 
   [part='done-icon']::before,
