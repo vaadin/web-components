@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-slider-tooltip.js';
 import { css, html, LitElement, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
@@ -75,6 +76,24 @@ class Slider extends FieldMixin(
         notify: true,
         sync: true,
       },
+
+      /**
+       * When true, a tooltip displaying the current value is shown
+       * above the thumb during interaction (focus or drag).
+       *
+       * @attr {boolean} with-tooltip
+       */
+      withTooltip: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
+      /** @private */
+      __focused: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -112,6 +131,8 @@ class Slider extends FieldMixin(
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -129,6 +150,8 @@ class Slider extends FieldMixin(
     const input = this.querySelector('[slot="input"]');
     this._inputElement = input;
     this.ariaTarget = input;
+
+    this.__thumbElement = this.shadowRoot.querySelector('[part="thumb"]');
   }
 
   /**
@@ -158,6 +181,13 @@ class Slider extends FieldMixin(
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
+        <vaadin-slider-tooltip
+          slot="tooltip"
+          .positionTarget="${this.__thumbElement}"
+          .opened="${this.withTooltip && (this.__focused || this.__thumbIndex != null)}"
+        >
+          ${value}
+        </vaadin-slider-tooltip>
       `,
       this,
       { host: this },
@@ -204,6 +234,19 @@ class Slider extends FieldMixin(
     if (this.readonly && arrowKeys.includes(event.key)) {
       event.preventDefault();
     }
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to update tooltip state.
+   *
+   * @param {boolean} focused
+   * @protected
+   * @override
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    this.__focused = focused;
   }
 }
 

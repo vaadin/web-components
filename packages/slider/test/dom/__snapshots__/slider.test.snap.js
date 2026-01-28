@@ -12,6 +12,9 @@ snapshots["vaadin-slider host default"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -38,6 +41,9 @@ snapshots["vaadin-slider host value"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    50
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -64,6 +70,9 @@ snapshots["vaadin-slider host min"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    80
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -90,6 +99,9 @@ snapshots["vaadin-slider host max"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    20
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -116,6 +128,9 @@ snapshots["vaadin-slider host step"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    50
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -146,6 +161,9 @@ snapshots["vaadin-slider host disabled"] =
     tabindex="-1"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -173,6 +191,9 @@ snapshots["vaadin-slider host label"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -201,6 +222,9 @@ snapshots["vaadin-slider host helper"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -233,6 +257,9 @@ snapshots["vaadin-slider host required"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -263,6 +290,9 @@ snapshots["vaadin-slider host error"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-slider-0"
     slot="label"
@@ -314,6 +344,8 @@ snapshots["vaadin-slider shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-slider shadow default */
 
@@ -353,6 +385,8 @@ snapshots["vaadin-slider shadow value"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-slider shadow value */
 
@@ -392,6 +426,8 @@ snapshots["vaadin-slider shadow min"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-slider shadow min */
 
@@ -431,6 +467,8 @@ snapshots["vaadin-slider shadow max"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-slider shadow max */
 
@@ -470,6 +508,8 @@ snapshots["vaadin-slider shadow step"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-slider shadow step */
 

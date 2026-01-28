@@ -53,6 +53,11 @@ export const SliderMixin = (superClass) =>
           type: Array,
           sync: true,
         },
+
+        /** @private */
+        __thumbIndex: {
+          type: Number,
+        },
       };
     }
 

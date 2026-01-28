@@ -134,4 +134,23 @@ describe('range-slider', () => {
       await visualDiff(div, 'theme-error');
     });
   });
+
+  describe('tooltip', () => {
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+      element.withTooltip = true;
+      element.value = [25, 75];
+    });
+
+    it('tooltip-start', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'tooltip-start');
+    });
+
+    it('tooltip-end', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'tooltip-end');
+    });
+  });
 });

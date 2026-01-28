@@ -21,6 +21,12 @@ snapshots["vaadin-range-slider host default"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    100
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -56,6 +62,12 @@ snapshots["vaadin-range-slider host value"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    10
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    20
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -91,6 +103,12 @@ snapshots["vaadin-range-slider host min"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    40
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    80
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -126,6 +144,12 @@ snapshots["vaadin-range-slider host max"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    20
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    60
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -161,6 +185,12 @@ snapshots["vaadin-range-slider host step"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    20
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    60
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -201,6 +231,12 @@ snapshots["vaadin-range-slider host disabled"] =
     tabindex="-1"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    100
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -239,6 +275,12 @@ snapshots["vaadin-range-slider host label"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    100
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -278,6 +320,12 @@ snapshots["vaadin-range-slider host helper"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    100
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -322,6 +370,12 @@ snapshots["vaadin-range-slider host required"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    100
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -361,6 +415,12 @@ snapshots["vaadin-range-slider host error"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-tooltip slot="tooltip">
+    0
+  </vaadin-slider-tooltip>
+  <vaadin-slider-tooltip slot="tooltip">
+    100
+  </vaadin-slider-tooltip>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -417,6 +477,8 @@ snapshots["vaadin-range-slider shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow default */
 
@@ -461,6 +523,8 @@ snapshots["vaadin-range-slider shadow value"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow value */
 
@@ -505,6 +569,8 @@ snapshots["vaadin-range-slider shadow min"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow min */
 
@@ -549,6 +615,8 @@ snapshots["vaadin-range-slider shadow max"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow max */
 
@@ -593,6 +661,8 @@ snapshots["vaadin-range-slider shadow step"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-range-slider shadow step */
 

@@ -46,6 +46,13 @@ declare class Slider extends FieldMixin(SliderMixin(FocusMixin(ThemableMixin(Ele
    */
   value: number;
 
+  /**
+   * When true, a tooltip displaying the current value is shown
+   * above the thumb during interaction (focus or drag).
+   * @attr {boolean} with-tooltip
+   */
+  withTooltip: boolean;
+
   addEventListener<K extends keyof SliderEventMap>(
     type: K,
     listener: (this: Slider, ev: SliderEventMap[K]) => void,

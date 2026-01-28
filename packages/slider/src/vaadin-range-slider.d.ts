@@ -46,6 +46,13 @@ declare class RangeSlider extends FieldMixin(SliderMixin(FocusMixin(ThemableMixi
    */
   value: number[];
 
+  /**
+   * When true, tooltips displaying the current values are shown
+   * above the thumbs during interaction (focus or drag).
+   * @attr {boolean} with-tooltip
+   */
+  withTooltip: boolean;
+
   addEventListener<K extends keyof RangeSliderEventMap>(
     type: K,
     listener: (this: RangeSlider, ev: RangeSliderEventMap[K]) => void,

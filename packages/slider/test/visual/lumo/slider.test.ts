@@ -123,4 +123,12 @@ describe('slider', () => {
       await visualDiff(div, 'theme-error');
     });
   });
+
+  it('tooltip', async () => {
+    div.style.paddingTop = '40px';
+    element.withTooltip = true;
+    element.value = 50;
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'tooltip');
+  });
 });
