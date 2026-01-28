@@ -107,15 +107,10 @@
     border-color: var(--lumo-contrast-50pct);
   }
 
-  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
-  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
-    color: var(--lumo-body-text-color);
-  }
-
-  /* Touch device adjustment */
-  @media (pointer: coarse) {
-    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {
-      color: var(--lumo-secondary-text-color);
+  @media (any-hover: hover) {
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
+      color: var(--lumo-body-text-color);
     }
   }
 }
