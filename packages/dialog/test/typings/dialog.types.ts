@@ -59,6 +59,7 @@ dialog.addEventListener('closed', (event) => {
 // Properties
 assertType<boolean>(dialog.opened);
 assertType<boolean>(dialog.modeless);
+assertType<boolean>(dialog.noFocusTrap);
 assertType<boolean>(dialog.draggable);
 assertType<boolean>(dialog.resizable);
 assertType<boolean>(dialog.noCloseOnEsc);
