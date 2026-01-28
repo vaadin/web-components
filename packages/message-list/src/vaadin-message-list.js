@@ -100,52 +100,6 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
       ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):last-child) {
         margin-bottom: 0;
       }
-
-      ${tag} .vaadin-message-attachments {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-
-      ${tag} button.vaadin-message-attachment {
-        display: inline-flex;
-        align-items: center;
-        color: inherit;
-        background: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-        font: inherit;
-        cursor: pointer;
-        text-align: start;
-      }
-
-      ${tag} .vaadin-message-attachment-image img {
-        display: block;
-        max-width: 200px;
-        max-height: 150px;
-      }
-
-      ${tag} .vaadin-message-attachment-file {
-        gap: 6px;
-      }
-
-      ${tag} .vaadin-message-attachment-icon {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        background: currentColor;
-        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
-        mask-size: contain;
-        mask-repeat: no-repeat;
-        flex-shrink: 0;
-      }
-
-      ${tag} .vaadin-message-attachment-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
       `,
     ];
   }

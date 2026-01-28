@@ -38,7 +38,7 @@ export const MessageListMixin = (superClass) =>
          * }>
          * ```
          *
-         * When a message has attachments, they are rendered in the attachments slot.
+         * When a message has attachments, they are rendered in the message's shadow DOM.
          * Image attachments (type starting with "image/") show a thumbnail preview,
          * while other attachments show a document icon with the file name.
          * Clicking an attachment dispatches an `attachment-click` event.
@@ -152,11 +152,12 @@ export const MessageListMixin = (superClass) =>
                 .userName="${item.userName}"
                 .userImg="${item.userImg}"
                 .userColorIndex="${item.userColorIndex}"
+                .attachments="${item.attachments}"
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
-                >${this.__renderAttachments(item)}${this.markdown
+                >${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
                   : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
@@ -165,73 +166,6 @@ export const MessageListMixin = (superClass) =>
         `,
         this,
         { host: this },
-      );
-    }
-
-    /**
-     * Renders attachments for a message item.
-     * @param {Object} item - The message item
-     * @return {import('lit').TemplateResult | string}
-     * @private
-     */
-    __renderAttachments(item) {
-      const attachments = item.attachments;
-      if (!attachments || attachments.length === 0) {
-        return '';
-      }
-
-      return html`
-        <div slot="attachments" class="vaadin-message-attachments">
-          ${attachments.map((attachment) => this.__renderAttachment(attachment))}
-        </div>
-      `;
-    }
-
-    /**
-     * Renders a single attachment.
-     * @param {Object} attachment - The attachment object with name, url, and type properties
-     * @return {import('lit').TemplateResult}
-     * @private
-     */
-    __renderAttachment(attachment) {
-      const isImage = attachment.type && attachment.type.startsWith('image/');
-
-      if (isImage) {
-        return html`
-          <button
-            type="button"
-            class="vaadin-message-attachment vaadin-message-attachment-image"
-            @click="${() => this.__onAttachmentClick(attachment)}"
-          >
-            <img src="${ifDefined(attachment.url)}" alt="${attachment.name || ''}" />
-          </button>
-        `;
-      }
-
-      return html`
-        <button
-          type="button"
-          class="vaadin-message-attachment vaadin-message-attachment-file"
-          @click="${() => this.__onAttachmentClick(attachment)}"
-        >
-          <span class="vaadin-message-attachment-icon"></span>
-          <span class="vaadin-message-attachment-name">${attachment.name}</span>
-        </button>
-      `;
-    }
-
-    /**
-     * Dispatches an event when an attachment is clicked.
-     * @param {Object} attachment - The attachment that was clicked
-     * @private
-     */
-    __onAttachmentClick(attachment) {
-      this.dispatchEvent(
-        new CustomEvent('attachment-click', {
-          detail: { attachment },
-          bubbles: true,
-          composed: true,
-        }),
       );
     }
 

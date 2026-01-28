@@ -5,16 +5,9 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import type { MessageAttachment, MessageAttachmentClickEvent } from './vaadin-message-mixin.js';
 
-export interface MessageListItemAttachment {
-  name?: string;
-  url?: string;
-  type?: string;
-}
-
-export interface MessageListAttachmentClickEvent {
-  attachment: MessageListItemAttachment;
-}
+export { MessageAttachment, MessageAttachmentClickEvent };
 
 export interface MessageListItem {
   text?: string;
@@ -25,7 +18,7 @@ export interface MessageListItem {
   userColorIndex?: number;
   theme?: string;
   className?: string;
-  attachments?: MessageListItemAttachment[];
+  attachments?: MessageAttachment[];
 }
 
 export declare function MessageListMixin<T extends Constructor<HTMLElement>>(
@@ -54,7 +47,7 @@ export declare class MessageListMixinClass {
    * }>
    * ```
    *
-   * When a message has attachments, they are rendered in the attachments slot.
+   * When a message has attachments, they are rendered in the message's shadow DOM.
    * Image attachments (type starting with "image/") show a thumbnail preview,
    * while other attachments show a document icon with the file name.
    * Clicking an attachment dispatches an `attachment-click` event.

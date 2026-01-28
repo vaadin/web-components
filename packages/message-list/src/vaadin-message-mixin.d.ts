@@ -6,6 +6,16 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 
+export interface MessageAttachment {
+  name?: string;
+  url?: string;
+  type?: string;
+}
+
+export interface MessageAttachmentClickEvent {
+  attachment: MessageAttachment;
+}
+
 export declare function MessageMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<FocusMixinClass> & Constructor<MessageMixinClass> & T;
@@ -64,4 +74,16 @@ export declare class MessageMixinClass {
    * @attr {number} user-color-index
    */
   userColorIndex: number | null | undefined;
+
+  /**
+   * An array of attachment objects to display with the message.
+   * Each attachment object can have the following properties:
+   * - `name`: The name of the attachment file
+   * - `url`: The URL of the attachment
+   * - `type`: The MIME type of the attachment (e.g., 'image/png', 'application/pdf')
+   *
+   * Image attachments (type starting with "image/") show a thumbnail preview,
+   * while other attachments show a document icon with the file name.
+   */
+  attachments: MessageAttachment[] | null | undefined;
 }
