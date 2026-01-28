@@ -46,6 +46,8 @@ export type MessageListEventMap = HTMLElementEventMap & {
  * state attributes and stylable shadow parts of message elements.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
  */
 declare class MessageList extends SlotStylesMixin(MessageListMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   addEventListener<K extends keyof MessageListEventMap>(
