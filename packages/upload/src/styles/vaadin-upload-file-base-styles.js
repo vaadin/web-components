@@ -29,11 +29,17 @@ export const uploadFileStyles = css`
   [part='thumbnail'],
   [part='file-icon'] {
     display: none;
+  }
+
+  :host([theme~='thumbnails']) {
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+  }
+
+  :host([theme~='thumbnails']) [part='thumbnail']:not([hidden]),
+  :host([theme~='thumbnails']) [part='file-icon']:not([hidden]) {
+    display: block;
     width: 3rem;
     height: 3rem;
-    border-radius: var(--vaadin-radius-s);
-    grid-column: 1;
-    grid-row: 1;
     align-self: center;
   }
 
@@ -42,34 +48,7 @@ export const uploadFileStyles = css`
   }
 
   [part='file-icon'] {
-    background: var(--vaadin-color-contrast-10, #e0e0e0);
-  }
-
-  [part='file-icon']::before {
-    --_vaadin-upload-file-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
-    content: '\\2003' / '';
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    background: var(--vaadin-color-contrast-50, #888);
-    mask-image: var(--_vaadin-upload-file-icon);
-    mask-size: 50%;
-    mask-position: 50%;
-    mask-repeat: no-repeat;
-  }
-
-  :host([theme~='thumbnails']) {
-    grid-template-columns: 3rem minmax(0, 1fr) auto;
-  }
-
-  :host([theme~='thumbnails']) [part='thumbnail']:not([hidden]) {
-    display: block;
-  }
-
-  :host([theme~='thumbnails']) [part='file-icon']:not([hidden]) {
-    display: flex;
+    background: #e0e0e0;
   }
 
   [part='done-icon']:not([hidden]),
@@ -77,24 +56,9 @@ export const uploadFileStyles = css`
     display: flex;
   }
 
-  /* Hide done-icon and warning-icon for non-image files in thumbnails theme */
-  :host([theme~='thumbnails']) [part='file-icon']:not([hidden]) ~ [part='done-icon']:not([hidden]),
-  :host([theme~='thumbnails']) [part='file-icon']:not([hidden]) ~ [part='warning-icon']:not([hidden]) {
+  :host([theme~='thumbnails']) [part='done-icon'],
+  :host([theme~='thumbnails']) [part='warning-icon'] {
     display: none;
-  }
-
-  /* Position done-icon as overlay on thumbnail in thumbnails theme */
-  :host([theme~='thumbnails']) [part='thumbnail']:not([hidden]) ~ [part='done-icon']:not([hidden]) {
-    grid-column: 1;
-    grid-row: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-    width: 3rem;
-    height: 3rem;
-    border-radius: var(--vaadin-radius-s);
-    background: rgba(255, 255, 255, 0.7);
   }
 
   [part='done-icon']::before,
