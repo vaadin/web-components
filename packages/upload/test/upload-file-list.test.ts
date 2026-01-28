@@ -523,4 +523,57 @@ describe('vaadin-upload-file-list', () => {
       expect(getUploadFiles().length).to.equal(3);
     });
   });
+
+  describe('theme propagation', () => {
+    it('should propagate theme to upload-file elements', async () => {
+      fileList.setAttribute('theme', 'thumbnails');
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.getAttribute('theme')).to.equal('thumbnails');
+    });
+
+    it('should propagate theme to multiple upload-file elements', async () => {
+      fileList.setAttribute('theme', 'thumbnails');
+      manager.addFiles(createFiles(3, 100, 'text/plain'));
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFiles = getUploadFiles();
+      uploadFiles.forEach((file) => {
+        expect(file.getAttribute('theme')).to.equal('thumbnails');
+      });
+    });
+
+    it('should update upload-file elements when theme changes', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.getAttribute('theme')).to.be.null;
+
+      fileList.setAttribute('theme', 'thumbnails');
+      await nextFrame();
+
+      expect(uploadFile.getAttribute('theme')).to.equal('thumbnails');
+    });
+
+    it('should remove theme from upload-file elements when theme is removed', async () => {
+      fileList.setAttribute('theme', 'thumbnails');
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.getAttribute('theme')).to.equal('thumbnails');
+
+      fileList.removeAttribute('theme');
+      await nextFrame();
+
+      expect(uploadFile.getAttribute('theme')).to.be.null;
+    });
+  });
 });

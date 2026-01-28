@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
@@ -81,7 +82,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateItems(items, __effectiveI18n, disabled)'];
+      return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
     }
 
     constructor() {
@@ -191,7 +192,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __updateItems(items, i18n) {
+    __updateItems(items, i18n, _disabled, _theme) {
       if (items && i18n) {
         // Apply i18n formatting to each file
         items.forEach((file) => this.__applyI18nToFile(file));
@@ -339,6 +340,7 @@ export const UploadFileListMixin = (superClass) =>
                   .status="${file.status}"
                   .uploading="${file.uploading}"
                   .i18n="${i18n}"
+                  theme="${ifDefined(this._theme)}"
                 ></vaadin-upload-file>
               </li>
             `,
