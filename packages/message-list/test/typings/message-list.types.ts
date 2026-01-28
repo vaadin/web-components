@@ -51,6 +51,11 @@ assertType<string | null | undefined>(message.userImg);
 assertType<number | null | undefined>(message.userColorIndex);
 assertType<MessageAttachment[] | null | undefined>(message.attachments);
 
+// Message event listener
+message.addEventListener('attachment-click', (event) => {
+  assertType<MessageAttachment>(event.detail.attachment);
+});
+
 assertType<ElementMixinClass>(message);
 assertType<FocusMixinClass>(message);
 assertType<ThemableMixinClass>(message);

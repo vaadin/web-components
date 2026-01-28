@@ -5,7 +5,13 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { MessageMixin } from './vaadin-message-mixin.js';
+import { type MessageAttachmentClickEvent, MessageMixin } from './vaadin-message-mixin.js';
+
+export { MessageAttachment, MessageAttachmentClickEvent } from './vaadin-message-mixin.js';
+
+export type MessageEventMap = HTMLElementEventMap & {
+  'attachment-click': CustomEvent<MessageAttachmentClickEvent>;
+};
 
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
@@ -45,7 +51,19 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *
  * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
  */
-declare class Message extends MessageMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
+declare class Message extends MessageMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+  addEventListener<K extends keyof MessageEventMap>(
+    type: K,
+    listener: (this: Message, ev: MessageEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof MessageEventMap>(
+    type: K,
+    listener: (this: Message, ev: MessageEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
