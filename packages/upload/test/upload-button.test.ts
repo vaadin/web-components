@@ -1,6 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enterKeyDown, fixtureSync, nextFrame, nextRender, spaceKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.aiComponents = true;
+
 import '../src/vaadin-upload-button.js';
 import type { UploadButton } from '../src/vaadin-upload-button.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';

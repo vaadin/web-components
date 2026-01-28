@@ -1,6 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.aiComponents = true;
+
 import '../src/vaadin-upload.js';
 import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 

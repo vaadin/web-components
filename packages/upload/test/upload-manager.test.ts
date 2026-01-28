@@ -4,6 +4,10 @@ import type { UploadFile } from '../src/vaadin-upload-manager.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFile, createFiles, xhrCreator } from './helpers.js';
 
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.aiComponents = true;
+
 type MockXhr = {
   readyState: number;
   status: number;

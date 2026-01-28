@@ -25,6 +25,11 @@
       }
     </style>
 
+    <script>
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.aiComponents = true;
+    </script>
     <script type="module">
       import '@vaadin/message-input';
       import '@vaadin/message-list';

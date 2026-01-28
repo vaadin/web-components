@@ -81,6 +81,10 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     return 'vaadin-upload-button';
   }
 
+  static get experimental() {
+    return 'aiComponents';
+  }
+
   static get styles() {
     return uploadButtonStyles;
   }

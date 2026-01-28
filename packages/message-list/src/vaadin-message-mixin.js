@@ -137,6 +137,10 @@ export const MessageMixin = (superClass) =>
      * @private
      */
     __renderAttachments() {
+      if (!(window.Vaadin && window.Vaadin.featureFlags && window.Vaadin.featureFlags.aiComponents)) {
+        return '';
+      }
+
       const attachments = this.attachments;
       if (!attachments || attachments.length === 0) {
         return '';

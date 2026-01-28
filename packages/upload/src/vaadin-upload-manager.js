@@ -4,10 +4,18 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+window.Vaadin = window.Vaadin || {};
+window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
+
 /**
  * A pure JavaScript class that manages file upload state and XHR requests.
  * It has no knowledge of UI components - components should listen to events and
  * call methods to interact with the manager.
+ *
+ * **Note:** This class is experimental and requires the `aiComponents` feature flag to be enabled:
+ * ```javascript
+ * window.Vaadin.featureFlags.aiComponents = true;
+ * ```
  *
  * @example
  * ```javascript
@@ -94,6 +102,12 @@ export class UploadManager extends EventTarget {
    */
   constructor(options = {}) {
     super();
+
+    if (!window.Vaadin.featureFlags.aiComponents) {
+      throw new Error(
+        'UploadManager requires the aiComponents feature flag. Enable it with: window.Vaadin.featureFlags.aiComponents = true',
+      );
+    }
 
     // Configuration properties - use setters for validation
     this.target = options.target || '';
