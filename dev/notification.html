@@ -8,9 +8,9 @@
     <script type="module" src="./common.js"></script>
     <script type="module">
       import '@vaadin/button';
-      import '@vaadin/checkbox-group';
-      import '@vaadin/checkbox';
       import '@vaadin/integer-field';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
       import '@vaadin/select';
       import { html } from 'lit';
       import { Notification } from '@vaadin/notification';
@@ -63,10 +63,7 @@
       }
 
       const positionSelect = document.querySelector('#position');
-      positionSelect.items = [
-        { label: 'All', value: 'all' },
-        { label: 'Random', value: 'random' },
-        { component: 'hr' },
+      const positionOptions = [
         { label: 'Top Stretch', value: 'top-stretch' },
         { label: 'Top Start', value: 'top-start' },
         { label: 'Top Center', value: 'top-center' },
@@ -77,22 +74,90 @@
         { label: 'Bottom End', value: 'bottom-end' },
         { label: 'Bottom Stretch', value: 'bottom-stretch' },
       ];
-      positionSelect.value = 'random';
+      positionSelect.renderer = function (root, select) {
+        root.innerHTML = `
+          <vaadin-select-list-box>
+            <vaadin-select-item value="all">All</vaadin-select-item>
+            <vaadin-select-item value="random">Random</vaadin-select-item>
+            <hr role="separator">
+          ${positionOptions
+            .map(({ label, value }) => {
+              return `<vaadin-select-item value="${value}">${label}</vaadin-select-item>`;
+            })
+            .join('')}
+          </vaadin-select-list-box>
+        `;
+      };
+      positionSelect.value = 'top-start';
 
       const durationInput = document.querySelector('#duration');
+      durationInput.value = 0;
+
+      const styleSelect = document.querySelector('#style');
+      const styleOptions = [
+        { label: 'Neutral', value: '' },
+        { label: 'Neutral, Primary', value: 'v-primary' },
+        { label: 'Purple', value: 'aura-accent-purple' },
+        { label: 'Info', value: 'v-info' },
+        { label: 'Info, Primary', value: 'v-primary v-info' },
+        { label: 'Success', value: 'v-success' },
+        { label: 'Success, Primary', value: 'v-primary v-success' },
+        { label: 'Warning', value: 'v-warning' },
+        { label: 'Warning, Primary', value: 'v-primary v-warning' },
+        { label: 'Orange', value: 'aura-accent-orange' },
+        { label: 'Error', value: 'v-error' },
+        { label: 'Error, Primary', value: 'v-primary v-error' },
+      ].filter((style) => {
+        const theme = document.documentElement.dataset.theme;
+        if (
+          theme?.startsWith('base') ||
+          (theme?.startsWith('lumo') && style.value.startsWith('aura')) ||
+          (theme?.startsWith('aura') && style.value.startsWith('v-primary'))
+        ) {
+          return false;
+        }
+        return true;
+      });
+      styleSelect.renderer = function (root, select) {
+        root.innerHTML = `
+          <vaadin-select-list-box>
+            <vaadin-select-item value="random">Random</vaadin-select-item>
+            <hr role="separator">
+          ${styleOptions
+            .map(({ label, value }) => {
+              return `<vaadin-select-item value="${value}" class="${value}">${label}</vaadin-select-item>`;
+            })
+            .join('')}
+          </vaadin-select-list-box>
+        `;
+      };
+      styleSelect.value = 'random';
 
       function showNotification(position) {
         let notification;
+
+        let style = styleSelect.value;
+        if (style === 'random' && styleOptions.length > 0) {
+          style = styleOptions[parseInt(Math.random() * styleOptions.length)].value;
+        }
 
         const close = () => {
           notification.close();
         };
 
         notification = Notification.show(
-          html`${generateRandomSentence()} <vaadin-button @click="${close}">Close</vaadin-button>`,
+          html`<div class="content">
+              <vaadin-icon icon="vaadin:info-circle"></vaadin-icon>
+              ${generateRandomSentence()}
+            </div>
+            <div class="actions">
+              <vaadin-button @click="${close}" theme="primary">Open</vaadin-button>
+              <vaadin-button @click="${close}">Dismiss</vaadin-button>
+            </div>`,
           {
             position,
             duration: durationInput.value !== '' ? parseInt(durationInput.value) * 1000 : 1000 + Math.random() * 6000,
+            className: style,
           },
         );
       }
@@ -100,14 +165,13 @@
       document.querySelector('#show-notification').addEventListener('click', () => {
         let position = positionSelect.value;
 
-        const posOptions = positionSelect.items.slice(3);
         if (position === 'all') {
-          posOptions.forEach(({ value }) => {
+          positionOptions.forEach(({ value }) => {
             showNotification(value);
           });
         } else {
           if (position === 'random') {
-            position = posOptions[parseInt(Math.random() * posOptions.length)].value;
+            position = positionOptions[parseInt(Math.random() * positionOptions.length)].value;
           }
           showNotification(position);
         }
@@ -121,23 +185,173 @@
         justify-content: center;
       }
 
+      vaadin-select-item::part(content) {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: var(--vaadin-gap-s);
+      }
+
+      vaadin-select-item::part(checkmark) {
+        order: 1;
+      }
+
+      vaadin-select-list-box hr {
+        margin-inline-start: 8px;
+      }
+
+      #position {
+        width: 10.5em;
+      }
+
+      #position vaadin-select-item::part(content)::before {
+        content: "";
+        width: 28px;
+        height: 20px;
+        border-radius: 4px;
+        background: var(--vaadin-background-container-strong);
+        border: 1px solid var(--vaadin-border-color-secondary);
+      }
+
+      #position vaadin-select-item:not([value="all"], [value="random"])::part(content)::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 4px;
+        background: var(--vaadin-text-color-secondary);
+        top: 2px;
+        margin-left: 2px;
+        border-radius: 3px;
+      }
+
+      #position vaadin-select-item[value^="bottom"]::part(content)::after {
+        top: auto;
+        bottom: 2px;
+      }
+
+      #position vaadin-select-item:is([value$="center"], [value="middle"])::part(content)::after {
+        margin-left: 10px;
+      }
+
+      #position vaadin-select-item[value$="end"]::part(content)::after {
+        margin-left: 18px;
+      }
+
+      #position vaadin-select-item[value$="stretch"]::part(content)::after {
+        width: 26px;
+        height: 3px;
+      }
+
+      #position vaadin-select-item[value="middle"]::part(content)::after {
+        top: 9px;
+      }
+
+      #position vaadin-select-item[value="random"]::part(content)::after {
+        position: absolute;
+        content: "?";
+        color: var(--vaadin-text-color-secondary);
+        font-weight: 600;
+        width: 30px;
+        text-align: center;
+      }
+
+      #position vaadin-select-item[value="all"]::part(content)::before {
+        background: var(--vaadin-text-color-secondary);
+      }
+
+      #position vaadin-select-item[value="all"]::part(content)::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 30px;
+        height: 16px;
+        border-radius: 3px;
+        border-block: 3px solid var(--vaadin-border-color);
+        background: repeating-linear-gradient(transparent 3px, currentColor 3px, currentColor 4px, transparent 4px, transparent 8px) border-box,
+        repeating-linear-gradient(-0.25turn, transparent 10px, currentColor 10px, currentColor 11px, transparent 11px, transparent 21px) content-box;
+        color: var(--vaadin-background-color);
+      }
+
       #duration {
         width: 7em;
       }
 
+      html[data-theme^="base"] #style {
+        display: none;
+      }
+
+      #style {
+        width: 8em;
+      }
+
+      #style vaadin-select-item:not([value="random"])::part(content)::before {
+        content: "";
+        background: var(--aura-accent-color, currentColor);
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 50%;
+      }
+
+      #style vaadin-select-item[value=""]::part(content)::before {
+        --aura-accent-color: var(--aura-neutral);
+        color: var(--lumo-contrast-50pct);
+      }
+
+      #style vaadin-select-item.v-info::part(content)::before {
+        color: var(--lumo-primary-color-50pct);
+      }
+
+      #style vaadin-select-item.v-warning::part(content)::before {
+        color: var(--lumo-warning-color-10pct);
+      }
+
+      #style vaadin-select-item.v-error::part(content)::before {
+        color: var(--lumo-error-color-50pct);
+      }
+
+      #style vaadin-select-item.v-success::part(content)::before {
+        color: var(--lumo-success-color-50pct);
+      }
+
+      #style vaadin-select-item.v-info.v-primary::part(content)::before {
+        color: var(--lumo-primary-color);
+      }
+
+      #style vaadin-select-item.v-warning.v-primary::part(content)::before {
+        color: var(--lumo-warning-color);
+      }
+
+      #style vaadin-select-item.v-error.v-primary::part(content)::before {
+        color: var(--lumo-error-color);
+      }
+
+      #style vaadin-select-item.v-success.v-primary::part(content)::before {
+        color: var(--lumo-success-color);
+      }
+
       vaadin-notification-card::part(content) {
-        display: grid;
-        grid-template-columns: 1fr minmax(0, auto);
+        display: flex;
         align-items: center;
-        gap: 1em;
+        gap: var(--vaadin-gap-m);
       }
 
-      vaadin-notification-card > * {
-        grid-column: 1;
+      vaadin-notification-card > .content {
+        display: flex;
+        gap: var(--vaadin-gap-s);
       }
 
-      vaadin-notification-card > vaadin-button {
-        grid-column: 2;
+      vaadin-notification-card > .actions {
+        margin-inline-start: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--vaadin-gap-xs);
+        align-self: start;
+        max-width: fit-content;
+        flex-shrink: 999;
+
+        vaadin-button {
+          flex-grow: 1;
+        }
       }
     </style>
   </head>
@@ -146,11 +360,13 @@
     <section class="section">
       <vaadin-select label="Position" id="position"></vaadin-select>
 
-      <vaadin-integer-field label="Duration" id="duration" placeholder="0–7" theme="align-right">
+      <vaadin-integer-field label="Duration" id="duration" placeholder="0–7" theme="align-right" clear-button-visible>
         <span slot="suffix">sec</span>
       </vaadin-integer-field>
 
-      <vaadin-button id="show-notification">Show</vaadin-button>
+      <vaadin-select label="Style" id="style"></vaadin-select>
+
+      <vaadin-button id="show-notification" theme="primary">Show</vaadin-button>
     </section>
   </body>
 </html>
