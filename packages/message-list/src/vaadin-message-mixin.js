@@ -144,7 +144,7 @@ export const MessageMixin = (superClass) =>
       }
 
       return html`
-        <div part="attachments"> ${attachments.map((attachment) => this.__renderAttachment(attachment))} </div>
+        <div part="attachments">${attachments.map((attachment) => this.__renderAttachment(attachment))}</div>
       `;
     }
 
