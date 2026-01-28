@@ -129,6 +129,13 @@ describe('vaadin-range-slider', () => {
       expect(document.activeElement).to.not.equal(inputs[1]);
     });
 
+    it('should focus the input on required indicator click', () => {
+      slider.required = true;
+      const indicator = slider.shadowRoot!.querySelector('[part="required-indicator"]') as HTMLElement;
+      indicator.click();
+      expect(document.activeElement).to.equal(inputs[0]);
+    });
+
     it('should not throw when calling focus() before adding to the DOM', () => {
       expect(() => document.createElement('vaadin-range-slider').focus()).to.not.throw(Error);
     });

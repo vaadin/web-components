@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-slider-tooltip.js';
 import { css, html, LitElement, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
@@ -11,6 +12,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -30,12 +33,13 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes FieldMixin
  * @mixes FocusMixin
  * @mixes SliderMixin
  * @mixes ThemableMixin
  */
-class RangeSlider extends SliderMixin(
-  FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+class RangeSlider extends FieldMixin(
+  SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-range-slider';
@@ -43,6 +47,7 @@ class RangeSlider extends SliderMixin(
 
   static get styles() {
     return [
+      field,
       sliderStyles,
       css`
         :host([focus-ring][start-focused]) [part~='thumb-start'],
@@ -50,16 +55,16 @@ class RangeSlider extends SliderMixin(
           outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
         }
-
-        :host([readonly]) {
-          --_outline-style: dashed;
-        }
       `,
     ];
   }
 
   static get experimental() {
     return 'sliderComponent';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -73,6 +78,31 @@ class RangeSlider extends SliderMixin(
         notify: true,
         sync: true,
       },
+
+      /**
+       * When true, tooltips displaying the current values are shown
+       * above the thumbs during interaction (focus or drag).
+       *
+       * @attr {boolean} with-tooltip
+       */
+      withTooltip: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
+      /** @private */
+      __startFocused: {
+        type: Boolean,
+        value: false,
+      },
+
+      /** @private */
+      __endFocused: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -84,26 +114,43 @@ class RangeSlider extends SliderMixin(
     const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
-      <div id="controls">
-        <div part="track">
-          <div
-            part="track-fill"
-            style="${styleMap({
-              insetInlineStart: `${startPercent}%`,
-              insetInlineEnd: `${100 - endPercent}%`,
-            })}"
-          ></div>
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
-        <div
-          part="thumb thumb-start"
-          style="${styleMap({ insetInlineStart: this.__getThumbPosition(startPercent) })}"
-        ></div>
-        <div
-          part="thumb thumb-end"
-          style="${styleMap({ insetInlineStart: this.__getThumbPosition(endPercent) })}"
-        ></div>
-        <slot name="input"></slot>
+
+        <div id="controls">
+          <div part="track">
+            <div
+              part="track-fill"
+              style="${styleMap({
+                insetInlineStart: `${startPercent}%`,
+                insetInlineEnd: `${100 - endPercent}%`,
+              })}"
+            ></div>
+          </div>
+          <div
+            part="thumb thumb-start"
+            style="${styleMap({ insetInlineStart: this.__getThumbPosition(startPercent) })}"
+          ></div>
+          <div
+            part="thumb thumb-end"
+            style="${styleMap({ insetInlineStart: this.__getThumbPosition(endPercent) })}"
+          ></div>
+          <slot name="input"></slot>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -121,6 +168,10 @@ class RangeSlider extends SliderMixin(
 
     const inputs = this.querySelectorAll('[slot="input"]');
     this._inputElements = [...inputs];
+    this.ariaTarget = this;
+
+    this.__thumbStartElement = this.shadowRoot.querySelector('[part~="thumb-start"]');
+    this.__thumbEndElement = this.shadowRoot.querySelector('[part~="thumb-end"]');
   }
 
   /**
@@ -164,6 +215,20 @@ class RangeSlider extends SliderMixin(
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
+        <vaadin-slider-tooltip
+          slot="tooltip"
+          .positionTarget="${this.__thumbStartElement}"
+          .opened="${this.withTooltip && (this.__startFocused || this.__thumbIndex === 0)}"
+        >
+          ${startValue}
+        </vaadin-slider-tooltip>
+        <vaadin-slider-tooltip
+          slot="tooltip"
+          .positionTarget="${this.__thumbEndElement}"
+          .opened="${this.withTooltip && (this.__endFocused || this.__thumbIndex === 1)}"
+        >
+          ${endValue}
+        </vaadin-slider-tooltip>
       `,
       this,
       { host: this },
@@ -210,8 +275,11 @@ class RangeSlider extends SliderMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
-    this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
+    this.__startFocused = isElementFocused(this._inputElements[0]);
+    this.__endFocused = isElementFocused(this._inputElements[1]);
+
+    this.toggleAttribute('start-focused', this.__startFocused);
+    this.toggleAttribute('end-focused', this.__endFocused);
   }
 
   /**

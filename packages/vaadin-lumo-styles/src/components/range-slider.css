@@ -1,0 +1,11 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_range-slider {
+  :host([focus-ring][start-focused]) [part~='thumb-start'],
+  :host([focus-ring][end-focused]) [part~='thumb-end'] {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+  }
+}

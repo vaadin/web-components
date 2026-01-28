@@ -5,6 +5,7 @@
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SliderMixin } from './vaadin-slider-mixin.js';
 
@@ -39,11 +40,18 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class RangeSlider extends SliderMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
+declare class RangeSlider extends FieldMixin(SliderMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
   /**
    * The value of the slider.
    */
   value: number[];
+
+  /**
+   * When true, tooltips displaying the current values are shown
+   * above the thumbs during interaction (focus or drag).
+   * @attr {boolean} with-tooltip
+   */
+  withTooltip: boolean;
 
   addEventListener<K extends keyof RangeSliderEventMap>(
     type: K,

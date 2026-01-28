@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-slider-tooltip.js';
 import { css, html, LitElement, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
@@ -10,6 +11,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -29,12 +32,13 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes FieldMixin
  * @mixes FocusMixin
  * @mixes SliderMixin
  * @mixes ThemableMixin
  */
-class Slider extends SliderMixin(
-  FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+class Slider extends FieldMixin(
+  SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-slider';
@@ -42,15 +46,12 @@ class Slider extends SliderMixin(
 
   static get styles() {
     return [
+      field,
       sliderStyles,
       css`
         :host([focus-ring]) [part='thumb'] {
-          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
-        }
-
-        :host([readonly][focus-ring]) [part~='thumb'] {
-          outline-style: dashed;
         }
       `,
     ];
@@ -58,6 +59,10 @@ class Slider extends SliderMixin(
 
   static get experimental() {
     return 'sliderComponent';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -71,6 +76,24 @@ class Slider extends SliderMixin(
         notify: true,
         sync: true,
       },
+
+      /**
+       * When true, a tooltip displaying the current value is shown
+       * above the thumb during interaction (focus or drag).
+       *
+       * @attr {boolean} with-tooltip
+       */
+      withTooltip: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
+      /** @private */
+      __focused: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -80,19 +103,36 @@ class Slider extends SliderMixin(
     const percent = this.__getPercentFromValue(value);
 
     return html`
-      <div id="controls">
-        <div part="track">
-          <div
-            part="track-fill"
-            style="${styleMap({
-              insetInlineStart: 0,
-              insetInlineEnd: `${100 - percent}%`,
-            })}"
-          ></div>
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
-        <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
-        <slot name="input"></slot>
+
+        <div id="controls">
+          <div part="track">
+            <div
+              part="track-fill"
+              style="${styleMap({
+                insetInlineStart: 0,
+                insetInlineEnd: `${100 - percent}%`,
+              })}"
+            ></div>
+          </div>
+          <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
+          <slot name="input"></slot>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -109,6 +149,9 @@ class Slider extends SliderMixin(
 
     const input = this.querySelector('[slot="input"]');
     this._inputElement = input;
+    this.ariaTarget = input;
+
+    this.__thumbElement = this.shadowRoot.querySelector('[part="thumb"]');
   }
 
   /**
@@ -138,6 +181,13 @@ class Slider extends SliderMixin(
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
+        <vaadin-slider-tooltip
+          slot="tooltip"
+          .positionTarget="${this.__thumbElement}"
+          .opened="${this.withTooltip && (this.__focused || this.__thumbIndex != null)}"
+        >
+          ${value}
+        </vaadin-slider-tooltip>
       `,
       this,
       { host: this },
@@ -184,6 +234,19 @@ class Slider extends SliderMixin(
     if (this.readonly && arrowKeys.includes(event.key)) {
       event.preventDefault();
     }
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to update tooltip state.
+   *
+   * @param {boolean} focused
+   * @protected
+   * @override
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    this.__focused = focused;
   }
 }
 
