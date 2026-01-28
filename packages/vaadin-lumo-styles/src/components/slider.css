@@ -5,9 +5,6 @@
  */
 @media lumo_components_slider {
   :host([focus-ring]) [part='thumb'] {
-    outline: none;
-    box-shadow:
-      0 0 0 1px var(--lumo-base-color),
-      0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) var(--_outline-style, solid) var(--_focus-ring-color);
   }
 }
