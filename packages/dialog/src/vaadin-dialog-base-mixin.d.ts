@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
@@ -31,6 +31,12 @@ export declare class DialogBaseMixinClass {
    * Set to true to remove backdrop and allow click events on background elements.
    */
   modeless: boolean;
+
+  /**
+   * Set to true to disable focus trapping.
+   * @attr {boolean} no-focus-trap
+   */
+  noFocusTrap: boolean;
 
   /**
    * The `role` attribute value to be set on the dialog. Defaults to "dialog".
