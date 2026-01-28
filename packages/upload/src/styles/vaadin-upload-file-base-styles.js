@@ -29,8 +29,8 @@ export const uploadFileStyles = css`
   [part='thumbnail'],
   [part='file-icon'] {
     display: none;
-    width: var(--vaadin-upload-file-thumbnail-size, 3rem);
-    height: var(--vaadin-upload-file-thumbnail-size, 3rem);
+    width: 3rem;
+    height: 3rem;
     border-radius: var(--vaadin-radius-s);
     grid-column: 1;
     grid-row: 1;
@@ -61,7 +61,7 @@ export const uploadFileStyles = css`
   }
 
   :host([theme~='thumbnails']) {
-    grid-template-columns: var(--vaadin-upload-file-thumbnail-size, 3rem) minmax(0, 1fr) auto;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
   }
 
   :host([theme~='thumbnails']) [part='thumbnail']:not([hidden]) {
@@ -91,8 +91,8 @@ export const uploadFileStyles = css`
     align-items: center;
     justify-content: center;
     align-self: center;
-    width: var(--vaadin-upload-file-thumbnail-size, 3rem);
-    height: var(--vaadin-upload-file-thumbnail-size, 3rem);
+    width: 3rem;
+    height: 3rem;
     border-radius: var(--vaadin-radius-s);
     background: rgba(255, 255, 255, 0.7);
   }
