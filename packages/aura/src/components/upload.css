@@ -11,7 +11,6 @@
   --vaadin-upload-file-name-font-weight: var(--aura-font-weight-medium);
   --vaadin-upload-file-padding: var(--vaadin-padding-s);
   --vaadin-upload-file-gap: 0 var(--vaadin-gap-s);
-  --vaadin-upload-file-button-padding: var(--vaadin-upload-file-padding);
   --vaadin-upload-file-button-border-width: 0;
   --vaadin-upload-file-status-font-size: var(--aura-font-size-s);
   --vaadin-upload-file-status-line-height: var(--aura-line-height-s);
@@ -67,23 +66,12 @@ vaadin-upload-file {
   padding-block: var(--vaadin-padding-m);
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
-  &::part(done-icon),
-  &::part(warning-icon),
-  &::part(commands) {
-    align-self: baseline;
-  }
-
-  &:not([complete], [error])::part(done-icon) {
-    display: block;
+  &:not([error])::part(done-icon) {
+    display: flex;
   }
 
   &:not([complete], [error])::part(done-icon)::before {
     background: var(--vaadin-border-color-secondary);
-  }
-
-  &::part(commands) {
-    margin-block: calc(var(--vaadin-upload-file-button-padding) * -1);
-    margin-inline-end: calc(var(--vaadin-upload-file-button-padding) * -1);
   }
 
   &::part(remove-button),
@@ -93,7 +81,6 @@ vaadin-upload-file {
   }
 
   vaadin-progress-bar {
-    display: block;
     height: var(--vaadin-gap-xs);
     margin-top: var(--vaadin-gap-xs);
   }
@@ -124,8 +111,9 @@ vaadin-upload-file {
 vaadin-upload[theme~='no-border'] {
   --vaadin-upload-padding: 0;
   --vaadin-upload-background: transparent;
-  --vaadin-upload-border: none;
+  --vaadin-upload-border-width: 0;
   --vaadin-upload-file-list-divider-width: 0;
+  --vaadin-upload-file-padding: var(--vaadin-padding-m);
   --_divider-offset-start: 0px;
   --_divider-offset-end: 0px;
   outline-offset: 2px;

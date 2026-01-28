@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -301,6 +301,12 @@ export const ChartMixin = (superClass) =>
         polar: {
           type: Boolean,
           reflectToAttribute: true,
+          sync: true,
+        },
+
+        /** @private */
+        __styledMode: {
+          type: Boolean,
           sync: true,
         },
       };
@@ -947,7 +953,7 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __initChart(options) {
       this.__initEventsListeners(options);
-      this.__updateStyledMode(options);
+      this.__styledMode = options.chart.styledMode;
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
       } else if (this.timeline) {
@@ -957,12 +963,6 @@ export const ChartMixin = (superClass) =>
       }
 
       this.__forceResize();
-    }
-
-    /** @private */
-    __updateStyledMode(options) {
-      const styledMode = options.chart.styledMode;
-      this.$.chart.toggleAttribute('styled-mode', !!styledMode);
     }
 
     /** @protected */

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2025 Vaadin Ltd.
+ * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
@@ -153,7 +153,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.setAttribute('aria-label', 'Select All');
+        checkbox.accessibleName = 'Select All';
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
         checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
@@ -174,7 +174,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.setAttribute('aria-label', 'Select Row');
+        checkbox.accessibleName = 'Select Row';
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);

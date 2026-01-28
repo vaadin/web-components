@@ -1,9 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../src/vaadin-dashboard-widget.js';
+import type { DashboardWidget } from '../../src/vaadin-dashboard-widget.js';
 
 describe('vaadin-dashboard-widget', () => {
-  let widget;
+  let widget: DashboardWidget;
 
   beforeEach(async () => {
     widget = fixtureSync('<vaadin-dashboard-widget></vaadin-dashboard-widget>');

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
@@ -147,6 +147,11 @@ export const OverlayMixin = (superClass) =>
         if (document.activeElement === document.body && this.$.overlay.getAttribute('tabindex') === '0') {
           this.$.overlay.focus();
         }
+      });
+
+      this.addEventListener('animationcancel', () => {
+        this._flushAnimation('opening');
+        this._flushAnimation('closing');
       });
     }
 

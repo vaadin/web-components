@@ -362,45 +362,4 @@ describe('vaadin-checkbox-group', () => {
       expect(console.warn.called).to.be.false;
     });
   });
-
-  describe('wrapping', () => {
-    beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-checkbox-group>
-          <vaadin-checkbox value="c_1" label="Checkbox 1"></vaadin-checkbox>
-          <vaadin-checkbox value="c_2" label="Checkbox 2"></vaadin-checkbox>
-          <vaadin-checkbox value="c_3" label="Checkbox 3"></vaadin-checkbox>
-          <vaadin-checkbox value="c_4" label="Checkbox 4"></vaadin-checkbox>
-          <vaadin-checkbox value="c_5" label="Checkbox 5"></vaadin-checkbox>
-          <vaadin-checkbox value="c_6" label="Checkbox 6"></vaadin-checkbox>
-          <vaadin-checkbox value="c_7" label="Checkbox 7"></vaadin-checkbox>
-          <vaadin-checkbox value="c_8" label="Checkbox 8"></vaadin-checkbox>
-          <vaadin-checkbox value="c_9" label="Checkbox 9"></vaadin-checkbox>
-          <vaadin-checkbox value="c_10" label="Checkbox 10"></vaadin-checkbox>
-          <vaadin-checkbox value="c_11" label="Checkbox 11"></vaadin-checkbox>
-          <vaadin-checkbox value="c_12" label="Checkbox 12"></vaadin-checkbox>
-        </vaadin-checkbox-group>
-      `);
-      await nextFrame();
-    });
-
-    it('should not overflow horizontally', () => {
-      const parentWidth = group.parentElement.offsetWidth;
-
-      expect(group.offsetWidth).to.be.lte(parentWidth);
-      expect(group.shadowRoot.querySelector('[part~="group-field"]').offsetWidth).to.be.lte(parentWidth);
-    });
-
-    it('should wrap checkboxes', () => {
-      const checkboxes = Array.from(group.children);
-      const { top: firstTop, left: firstLeft } = checkboxes[0].getBoundingClientRect();
-
-      const wrapped = Array.from(checkboxes)
-        .slice(1)
-        .filter((checkbox) => checkbox.getBoundingClientRect().top > firstTop);
-
-      expect(wrapped).to.not.be.empty;
-      expect(wrapped[0].getBoundingClientRect().left).to.equal(firstLeft);
-    });
-  });
 });

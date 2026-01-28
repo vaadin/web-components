@@ -26,6 +26,10 @@ packages/**/theme/**/*.d.ts
 .idea
 *.iml
 
+# Claude Code
+.claude/*.local.*
+CLAUDE.local.md
+
 # Generated web-types JSON files
 web-types.json
 web-types.lit.json

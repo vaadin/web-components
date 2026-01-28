@@ -241,6 +241,14 @@ describe('toolbar controls', () => {
             overlay = popup.shadowRoot.querySelector('vaadin-rich-text-editor-popup-overlay');
           });
 
+          it(`should focus first color button in ${style} popup when opened`, async () => {
+            getButton(style).click();
+            await oneEvent(overlay, 'vaadin-overlay-open');
+
+            const firstButton = popup.querySelector('button');
+            expect(document.activeElement).to.equal(firstButton);
+          });
+
           it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
             getButton(style).click();
             await oneEvent(overlay, 'vaadin-overlay-open');

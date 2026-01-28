@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2022 - 2025 Vaadin Ltd.
+ * Copyright (c) 2022 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
@@ -104,6 +104,7 @@ export const TabSheetMixin = (superClass) =>
          */
         __tabs: {
           type: Object,
+          value: () => [],
         },
 
         /**
@@ -111,6 +112,7 @@ export const TabSheetMixin = (superClass) =>
          */
         __panels: {
           type: Array,
+          value: () => [],
         },
       };
     }
@@ -189,7 +191,7 @@ export const TabSheetMixin = (superClass) =>
      * @private
      */
     __itemsOrPanelsChanged(items, panels) {
-      if (!items || !panels) {
+      if (!items) {
         return;
       }
       items.forEach((tabItem) => {
@@ -202,7 +204,7 @@ export const TabSheetMixin = (superClass) =>
      * @private
      */
     __selectedTabItemChanged(selected, items, panels) {
-      if (!items || !panels || selected === undefined) {
+      if (!items || selected === undefined) {
         return;
       }
       this.__togglePanels(items[selected], panels);

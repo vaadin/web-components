@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_scroller {
@@ -12,10 +12,5 @@
   :host([focus-ring]) {
     outline: none;
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-  }
-
-  :host([theme*='overflow-indicator'])::before,
-  :host([theme*='overflow-indicator'])::after {
-    background: var(--lumo-contrast-10pct);
   }
 }

@@ -7,13 +7,12 @@ describe('popover', () => {
   let div, target, element;
 
   beforeEach(async () => {
-    element = fixtureSync('<vaadin-popover></vaadin-popover>');
-    element.renderer = (root) => {
-      root.innerHTML = `
+    element = fixtureSync(`
+      <vaadin-popover>
         <div>This is the popover content</div>
         <div>It contains multiple lines</div>
-      `;
-    };
+      </vaadin-popover>
+    `);
     div = fixtureSync(`
       <div style="display: flex; width: 600px; height: 600px; justify-content: center; align-items: center">
         <div style="width: 100px; height: 100px; outline: 1px solid red;"></div>

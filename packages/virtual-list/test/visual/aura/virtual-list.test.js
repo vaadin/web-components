@@ -1,0 +1,47 @@
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/aura/aura.css';
+import '../../../vaadin-virtual-list.js';
+
+describe('virtual-list', () => {
+  let div, element;
+
+  beforeEach(async () => {
+    div = document.createElement('div');
+    div.style.padding = '10px';
+    element = fixtureSync(
+      `
+        <vaadin-virtual-list style="height: 200px"></vaadin-virtual-list>
+      `,
+      div,
+    );
+    element.items = Array.from({ length: 100000 }).map((_, i) => {
+      return { label: `Item ${i}` };
+    });
+    element.renderer = (root, _, { item }) => {
+      root.innerHTML = `<div>${item.label}</div>`;
+    };
+    await nextRender();
+  });
+
+  it('basic', async () => {
+    await visualDiff(div, 'basic');
+  });
+
+  it('theme-overflow-indicator-bottom', async () => {
+    element.setAttribute('theme', 'overflow-indicator-bottom');
+    await visualDiff(div, 'theme-overflow-indicator-bottom');
+  });
+
+  it('theme-overflow-indicators', async () => {
+    element.setAttribute('theme', 'overflow-indicators');
+    element.scrollTop = 100;
+    await visualDiff(div, 'theme-overflow-indicators');
+  });
+
+  it('theme-overflow-indicators-top', async () => {
+    element.setAttribute('theme', 'overflow-indicator-top');
+    element.scrollTop = element.scrollHeight - element.clientHeight;
+    await visualDiff(div, 'theme-overflow-indicator-top');
+  });
+});

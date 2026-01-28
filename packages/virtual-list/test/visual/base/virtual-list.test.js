@@ -27,20 +27,20 @@ describe('virtual-list', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('theme-overflow-indicators-bottom', async () => {
+  it('theme-overflow-indicator-bottom', async () => {
     element.setAttribute('theme', 'overflow-indicator-bottom');
-    await visualDiff(div, 'theme-overflow-indicators-bottom');
+    await visualDiff(div, 'theme-overflow-indicator-bottom');
   });
 
-  it('theme-overflow-indicators-both', async () => {
+  it('theme-overflow-indicators', async () => {
     element.setAttribute('theme', 'overflow-indicators');
     element.scrollTop = 100;
-    await visualDiff(div, 'theme-overflow-indicators-both');
+    await visualDiff(div, 'theme-overflow-indicators');
   });
 
-  it('theme-overflow-indicators-top', async () => {
+  it('theme-overflow-indicator-top', async () => {
     element.setAttribute('theme', 'overflow-indicator-top');
     element.scrollTop = element.scrollHeight - element.clientHeight;
-    await visualDiff(div, 'theme-overflow-indicators-top');
+    await visualDiff(div, 'theme-overflow-indicator-top');
   });
 });

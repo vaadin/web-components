@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-tabsheet.js';
 
@@ -425,6 +425,30 @@ describe('tabsheet - full height content', () => {
 
     // Panel bottom should not exceed tabsheet bottom
     expect(panelRect.bottom).to.be.at.most(tabsheetRect.bottom);
+  });
+});
+
+describe('tabsheet - without nodes in default slot', () => {
+  let tabsheet, tab;
+
+  beforeEach(async () => {
+    // Do not format, as TabSheet should only contain nodes in the tabs slot, but no nodes (like text nodes) in default slot
+    tabsheet = fixtureSync(`
+      <vaadin-tabsheet style="height: 300px;"><vaadin-tabs slot="tabs"><vaadin-tab id="tab-1">Tab 1</vaadin-tab></vaadin-tabs></vaadin-tabsheet>
+    `);
+    tab = tabsheet.querySelector('vaadin-tab');
+
+    // Wait for tabsheet to initialize and set up MutationObserver
+    await aTimeout(0);
+  });
+
+  it('should not throw when tab id is set and there are no panels', async () => {
+    await expect(async () => {
+      // SlotObserver for default slot has not fired, as there are no nodes in the default slot
+      // When MutationObserver runs due to changing the tab ID, it should not fail if no panels have been detected
+      tab.id = 'tab-1';
+      await aTimeout(0);
+    }).not.to.throw();
   });
 });
 

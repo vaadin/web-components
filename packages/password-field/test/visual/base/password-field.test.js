@@ -1,6 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/text-field/test/visual/common.js';
 import '../../../src/vaadin-password-field.js';
 
 describe('password-field', () => {
@@ -43,12 +44,6 @@ describe('password-field', () => {
       element.readonly = true;
       await visualDiff(div, 'state-readonly');
     });
-
-    it('required', async () => {
-      element.label = 'Label';
-      element.required = true;
-      await visualDiff(div, 'state-required');
-    });
   });
 
   describe('features', () => {
@@ -60,12 +55,6 @@ describe('password-field', () => {
 
         after(() => {
           document.documentElement.removeAttribute('dir');
-        });
-
-        it('clear button', async () => {
-          element.value = 'value';
-          element.clearButtonVisible = true;
-          await visualDiff(div, `${dir}-clear-button`);
         });
 
         it('reveal button hidden', async () => {

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2023 - 2025 Vaadin Ltd.
+ * Copyright (c) 2023 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/component-base/src/styles/style-props.js';
@@ -30,6 +30,7 @@ const sideNavItem = css`
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
     cursor: var(--vaadin-clickable-cursor);
     touch-action: manipulation;
+    contain: layout;
   }
 
   :host([current]) [part='content'] {

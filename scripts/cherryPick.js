@@ -9,9 +9,8 @@
  * - works for closed and merged PRs
  * - Commit PR labelled with {cherry-picked} or {need to pick manually} will be ignored.
  * - if cherry-pick cannot be done, the original PR will be labelled with need to pick manually
- *
  */
-import axios from 'axios';
+
 import https from 'https';
 import { exec as execCallback } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -25,6 +24,7 @@ const arrSHA = [];
 const arrBranch = [];
 const arrUser = [];
 const arrMergedBy = [];
+const arrBody = [];
 
 const repo = 'vaadin/web-components';
 const token = process.env['GITHUB_TOKEN'];
@@ -36,16 +36,14 @@ if (!token) {
 async function getAllCommits() {
   const url = `https://api.github.com/repos/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`;
   try {
-    const options = {
+    const res = await fetch(url, {
       headers: {
         'User-Agent': 'Vaadin Cherry Pick',
         Authorization: `token ${token}`,
         'Content-Type': 'application/json',
       },
-    };
-
-    const res = await axios.get(url, options);
-    let data = res.data;
+    });
+    let data = await res.json();
     data = data.filter((da) => da.labels.length > 0 && da.merged_at !== null);
 
     if (data.length === 0) {
@@ -69,10 +67,7 @@ async function getCommit(commitURL) {
       },
     };
 
-    const res = await axios.get(commitURL, options);
-    const data = res.data;
-
-    return data;
+    return await fetch(commitURL, options).then((res) => res.json());
   } catch (error) {
     console.error(`Cannot get the commit. ${error}`);
     process.exit(1);
@@ -112,6 +107,7 @@ async function filterCommits(commits) {
           branch[1],
           singleCommit.merged_by.login,
         );
+
         arrPR.push(commit.number);
         arrSHA.push(commit.merge_commit_sha);
         arrURL.push(commit.url);
@@ -119,6 +115,7 @@ async function filterCommits(commits) {
         arrTitle.push(`${commit.title} (#${commit.number}) (CP: ${branch[1]})`);
         arrUser.push(`@${commit.user.login}`);
         arrMergedBy.push(`@${singleCommit.merged_by.login}`);
+        arrBody.push(singleCommit.body || '');
       }
     }
   }
@@ -126,37 +123,51 @@ async function filterCommits(commits) {
 
 async function labelCommit(url, label) {
   const issueURL = `${url.replace('pulls', 'issues')}/labels`;
-  const options = {
+
+  await fetch(issueURL, {
+    method: 'POST',
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
       Authorization: `token ${token}`,
     },
-  };
-
-  await axios.post(issueURL, { labels: [label] }, options);
+    body: JSON.stringify({ labels: [label] }),
+  });
 }
 
 async function postComment(url, userName, mergedBy, branch, message) {
   const issueURL = `${url.replace('pulls', 'issues')}/comments`;
-  const options = {
+
+  await fetch(issueURL, {
+    method: 'POST',
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
       Authorization: `token ${token}`,
     },
-  };
-
-  await axios.post(
-    issueURL,
-    {
+    body: JSON.stringify({
       body: `Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`,
-    },
-    options,
-  );
+    }),
+  });
 }
 
-function createPR(title, head, base) {
+function buildCherryPickBody(originalPRNumber, originalBody, targetBranch) {
+  const quotedBody = (originalBody || '_No description provided in the original PR._')
+    .split('\n')
+    .map((line) => `> ${line}`)
+    .join('\n');
+
+  return `
+This PR cherry-picks changes from the original PR #${originalPRNumber} to branch ${targetBranch}.
+
+---
+
+#### Original PR description
+${quotedBody}
+`.trim();
+}
+
+function createPR(title, head, base, body) {
   return new Promise((resolve) => {
-    const content = JSON.stringify({ title, head, base }, null, 1);
+    const content = JSON.stringify({ title, head, base, body }, null, 1);
     const req = https.request(
       {
         method: 'POST',
@@ -168,19 +179,19 @@ function createPR(title, head, base) {
           'Content-Type': 'application/json',
           'Content-Length': content.length,
         },
-        body: content,
       },
       (res) => {
-        let body = '';
+        let responseBody = '';
         res.on('data', (data) => {
-          body += data;
+          responseBody += data;
         });
         res.on('end', () => {
-          resolve(body);
+          resolve(responseBody);
         });
       },
     );
     req.write(content);
+    req.end();
   }).then((body) => {
     const resp = JSON.parse(body);
     console.log(`Created PR '${title}' ${resp.url}`);
@@ -214,9 +225,11 @@ async function cherryPickCommits() {
       await exec(`git branch -D ${branchName}`);
       continue;
     }
+
     await exec(`git push origin HEAD:${branchName}`);
+
     try {
-      await createPR(arrTitle[i], branchName, arrBranch[i]);
+      await createPR(arrTitle[i], branchName, arrBranch[i], buildCherryPickBody(arrPR[i], arrBody[i], arrBranch[i]));
     } catch (err) {
       console.error(`Cannot create PR from ${branchName}, error : ${err}`);
       await labelCommit(arrURL[i], `cannot create PR from ${branchName}`);

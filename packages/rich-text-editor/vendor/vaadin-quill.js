@@ -1,7 +1,7 @@
 /*!
  * Quill Editor v2.0.3
  * https://quilljs.com
- * Copyright (c) 2017-2025, Slab
+ * Copyright (c) 2017-2026, Slab
  * Copyright (c) 2014, Jason Chen
  * Copyright (c) 2013, salesforce.com
  */

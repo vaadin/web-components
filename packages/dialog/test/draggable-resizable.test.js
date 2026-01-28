@@ -309,6 +309,26 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + dx));
   });
 
+  it('should dispatch resize-start event with correct details', () => {
+    const onResizeStart = sinon.spy();
+    dialog.addEventListener('resize-start', onResizeStart);
+
+    const resizer = overlayPart.querySelector('.w');
+    const resizerBounds = resizer.getBoundingClientRect();
+    dispatchMouseEvent(resizer, 'mousedown', {
+      x: Math.floor(resizerBounds.left + resizerBounds.width / 2),
+      y: Math.floor(resizerBounds.top + resizerBounds.height / 2),
+    });
+
+    expect(onResizeStart.calledOnce).to.be.true;
+
+    const { detail } = onResizeStart.firstCall.args[0];
+    expect(detail.width).to.be.eql(bounds.width);
+    expect(detail.height).to.be.eql(bounds.height);
+    expect(detail.top).to.be.eql(bounds.top);
+    expect(detail.left).to.be.eql(bounds.left);
+  });
+
   it('should dispatch resize event with correct details', () => {
     const onResize = sinon.spy();
     dialog.addEventListener('resize', onResize);
@@ -598,6 +618,23 @@ describe('draggable', () => {
     const bounds = overlay.getBoundingClientRect();
     expect(dialog.top).to.be.equal(bounds.top);
     expect(dialog.left).to.be.equal(bounds.left);
+  });
+
+  it('should fire "drag-start" event on drag start', async () => {
+    const onDragStart = sinon.spy();
+    dialog.addEventListener('drag-start', onDragStart);
+
+    dispatchMouseEvent(content, 'mousedown');
+    await nextRender();
+
+    expect(onDragStart.calledOnce).to.be.true;
+
+    const { detail } = onDragStart.args[0][0];
+    const overlayBounds = dialog.$.overlay.getBounds();
+    expect(detail.width).to.be.equal(overlayBounds.width);
+    expect(detail.height).to.be.equal(overlayBounds.height);
+    expect(detail.top).to.be.equal(overlayBounds.top);
+    expect(detail.left).to.be.equal(overlayBounds.left);
   });
 
   it('should fire "dragged" event on drag', async () => {

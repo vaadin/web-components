@@ -124,7 +124,7 @@ MockHttpRequest.prototype = {
     this.password = password;
 
     this.readyState = this.OPENED;
-    this.onreadystatechange();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
   },
 
   setRequestHeader(header, value) {
@@ -176,11 +176,11 @@ MockHttpRequest.prototype = {
 
     this.error = false;
     this.sent = true;
-    this.onreadystatechange();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
 
     // Fake send
     this.requestText = data;
-    this.onsend();
+    if (typeof this.onsend === 'function') this.onsend();
   },
 
   abort() {
@@ -190,8 +190,8 @@ MockHttpRequest.prototype = {
       delete this.requestHeaders[key];
     });
     delete this.requestText;
-    this.onreadystatechange();
-    this.onabort();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
+    if (typeof this.onabort === 'function') this.onabort();
     this.readyState = this.UNSENT;
   },
 
@@ -324,20 +324,20 @@ MockHttpRequest.prototype = {
     this.status = status;
     this.statusText = `${status} ${this.statusReasons[status]}`;
     this.readyState = this.HEADERS_RECEIVED;
-    this.onprogress();
-    this.onreadystatechange();
+    if (typeof this.onprogress === 'function') this.onprogress();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
 
     this.responseText = data;
     this.responseXML = this.makeXMLResponse(data);
 
     this.readyState = this.LOADING;
-    this.onprogress();
-    this.onreadystatechange();
+    if (typeof this.onprogress === 'function') this.onprogress();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
 
     this.readyState = this.DONE;
-    this.onreadystatechange();
-    this.onprogress();
-    this.onload();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
+    if (typeof this.onprogress === 'function') this.onprogress();
+    if (typeof this.onload === 'function') this.onload();
   },
 
   // Call this to simulate a request error (e.g. NETWORK_ERR)
@@ -356,8 +356,8 @@ MockHttpRequest.prototype = {
     if (!this.async) {
       throw exception;
     }
-    this.onreadystatechange();
-    this.onerror();
+    if (typeof this.onreadystatechange === 'function') this.onreadystatechange();
+    if (typeof this.onerror === 'function') this.onerror();
   },
 
   // Convenience method to verify HTTP credentials

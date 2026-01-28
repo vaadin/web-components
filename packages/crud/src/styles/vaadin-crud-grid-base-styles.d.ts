@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *

@@ -5,7 +5,7 @@
     var(--aura-background-color) padding-box;
 }
 
-:is(vaadin-grid, vaadin-crud-grid)::part(empty-state) {
+:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro)::part(empty-state) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,10 +20,10 @@ vaadin-grid-sorter::part(indicators) {
   transition: color 120ms;
 }
 
-:is(vaadin-grid, vaadin-crud)[theme~='column-borders'] {
+:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='column-borders'] {
   --vaadin-grid-column-border-width: 1px;
 }
 
-:is(vaadin-grid, vaadin-crud)[theme~='no-row-borders'] {
+:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='no-row-borders'] {
   --vaadin-grid-row-border-width: 0px;
 }

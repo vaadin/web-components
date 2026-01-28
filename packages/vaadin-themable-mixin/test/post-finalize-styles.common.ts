@@ -3,7 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
-function defineComponent(tagName, parentTagName = 'test-element') {
+function defineComponent(tagName: string, parentTagName = 'test-element') {
   customElements.define(
     tagName,
     class CustomElement extends ThemableMixin(customElements.get(parentTagName)!) {
@@ -12,19 +12,19 @@ function defineComponent(tagName, parentTagName = 'test-element') {
   );
 }
 
-function getCssText(instance) {
-  if (instance.shadowRoot.adoptedStyleSheets?.length) {
+function getCssText(instance: Element) {
+  if (instance.shadowRoot!.adoptedStyleSheets?.length) {
     // Uses adopted stylesheets
-    return [...instance.shadowRoot.adoptedStyleSheets].reduce((acc, sheet) => {
+    return [...instance.shadowRoot!.adoptedStyleSheets].reduce((acc, sheet) => {
       return sheet.rules ? acc + [...sheet.rules].reduce((acc, rule) => acc + rule.cssText, '') : acc;
-    });
+    }, '');
   }
   // Uses style elements
-  return [...instance.shadowRoot.querySelectorAll('style')].reduce((acc, style) => acc + style.textContent, '');
+  return [...instance.shadowRoot!.querySelectorAll('style')].reduce((acc, style) => acc + style.textContent, '');
 }
 
 describe('ThemableMixin - post-finalize styles', () => {
-  let warn;
+  let warn: sinon.SinonStub;
 
   let tagId = 0;
   function uniqueTagName() {
@@ -277,7 +277,7 @@ describe('ThemableMixin - post-finalize styles', () => {
       }
 
       // PolymerElement
-      _attachDom(dom) {
+      _attachDom(dom: DocumentFragment) {
         this.appendChild(dom);
       }
     }

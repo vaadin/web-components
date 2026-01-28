@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2025 Vaadin Ltd.
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
@@ -13,7 +13,7 @@ function dashToCamelCase(dash) {
 
 const experimentalMap = {};
 
-export function defineCustomElement(CustomElement, version = '25.1.0-alpha0') {
+export function defineCustomElement(CustomElement, version = '25.1.0-alpha3') {
   Object.defineProperty(CustomElement, 'version', {
     get() {
       return version;

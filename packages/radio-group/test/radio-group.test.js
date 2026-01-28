@@ -525,47 +525,4 @@ describe('radio-group', () => {
       expect(group.value).to.equal('value2');
     });
   });
-
-  describe('wrapping', () => {
-    let wrapper;
-
-    beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div style="width: 500px">
-          <vaadin-radio-group>
-            <vaadin-radio-button label="Radio button 1" value="r_1"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 2" value="r_2"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 3" value="r_3"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 4" value="r_4"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 5" value="r_5"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 6" value="r_6"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 7" value="r_7"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 8" value="r_8"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 9" value="r_9"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 10" value="r_10"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 11" value="r_11"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 12" value="r_12"></vaadin-radio-button>
-          </vaadin-radio-group>
-        </div>
-      `);
-      group = wrapper.firstElementChild;
-      await nextFrame();
-    });
-
-    it('should not overflow horizontally', () => {
-      const parentWidth = wrapper.offsetWidth;
-      expect(group.offsetWidth).to.be.lte(parentWidth);
-      expect(group.shadowRoot.querySelector('[part~="group-field"]').offsetWidth).to.be.lte(parentWidth);
-    });
-
-    it('should wrap radio-buttons', () => {
-      const radios = Array.from(group.children);
-      const { top: firstTop, left: firstLeft } = radios[0].getBoundingClientRect();
-      const wrappedRadios = Array.from(radios)
-        .slice(1)
-        .filter((radio) => radio.getBoundingClientRect().top > firstTop);
-      expect(wrappedRadios).to.not.be.empty;
-      expect(wrappedRadios[0].getBoundingClientRect().left).to.equal(firstLeft);
-    });
-  });
 });

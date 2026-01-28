@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
@@ -45,6 +45,18 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * `focus-ring` | Set when the item is focused using the keyboard.
  * `focused`    | Set when the item is focused.
  * `selected`   | Set when the item is selected
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                  |
+ * :------------------------------------|
+ * | `--vaadin-item-border-radius`      |
+ * | `--vaadin-item-checkmark-color`    |
+ * | `--vaadin-item-checkmark-display`  |
+ * | `--vaadin-item-gap`                |
+ * | `--vaadin-item-height`             |
+ * | `--vaadin-item-padding`            |
+ * | `--vaadin-item-text-align`         |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 /**
@@ -16,14 +16,13 @@ export const ThemePropertyMixin = (superClass) =>
          *
          * Enables the component implementation to propagate the `theme`
          * attribute value to the sub-components in Shadow DOM by binding
-         * the sub-component's "theme" attribute to the `theme` property of
-         * the host.
+         * the sub-component's "theme" attribute using the Lit template:
          *
-         * **NOTE:** Extending the mixin only provides the property for binding,
-         * and does not make the propagation alone.
-         *
-         * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/styling/styling-components/#sub-components).
-         * page for more information.
+         * ```html
+         * <vaadin-notification-card
+         *   theme="${ifDefined(this._theme)}"
+         * ></vaadin-notification-card>
+         * ```
          *
          * @protected
          */

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -30,6 +30,8 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { DashboardSection } from './vaadin-dashboard-section.js';
 import { WidgetReorderController } from './widget-reorder-controller.js';
 import { WidgetResizeController } from './widget-resize-controller.js';
+
+const DEFAULT_I18N = getDefaultI18n();
 
 /**
  * A responsive, grid-based dashboard layout component
@@ -107,7 +109,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
-  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+  I18nMixin(DEFAULT_I18N, ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-dashboard';

@@ -126,6 +126,7 @@ export function xhrCreator(c) {
     serverMessage: c.message || '{"message": "ok"}',
     serverType: c.serverType || 'application/json',
     serverValidation: c.serverValidation || function () {},
+    sync: c.sync || false,
   };
   return function () {
     const xhr = new MockHttpRequest();
@@ -149,7 +150,7 @@ export function xhrCreator(c) {
         const error = cfg.serverValidation(xhr);
         if (error) {
           xhr.setResponseHeader('Content-Type', cfg.serverType);
-          const status = error.status || 500;
+          const status = error.status !== undefined ? error.status : 500;
           const statusText = error.statusText || error;
           xhr.receive(status, { error: statusText });
         } else if (xhr.readyState === 0) {
@@ -161,20 +162,30 @@ export function xhrCreator(c) {
       }
 
       function progress() {
-        xhr.upload.onprogress({ total, loaded: done });
+        // Check if handler still exists (may be null after abort cleanup)
+        if (xhr.upload.onprogress) {
+          xhr.upload.onprogress({ total, loaded: done });
+        }
         if (done < total) {
-          setTimeout(progress, cfg.stepTime);
-          done = Math.min(total, done + step);
+          if (cfg.sync) {
+            done = Math.min(total, done + step);
+            progress();
+          } else {
+            setTimeout(progress, cfg.stepTime);
+            done = Math.min(total, done + step);
+          }
+        } else if (cfg.sync) {
+          finish();
         } else {
           setTimeout(finish, cfg.serverTime);
         }
       }
 
-      function start() {
+      if (cfg.sync) {
+        progress();
+      } else {
         setTimeout(progress, cfg.connectTime);
       }
-
-      start();
     };
     return xhr;
   };

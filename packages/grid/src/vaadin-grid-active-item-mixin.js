@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2025 Vaadin Ltd.
+ * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
@@ -70,6 +70,8 @@ export const ActiveItemMixin = (superClass) =>
       return (
         // Something has handled this click already, e. g., <vaadin-grid-sorter>
         e.defaultPrevented ||
+        // Skip if click event explicitly requests to skip cell activation
+        e.skipCellActivate ||
         // No clicked cell available
         !cell ||
         // Cell is a details cell

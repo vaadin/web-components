@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -93,11 +93,15 @@ export const DialogDraggableMixin = (superClass) =>
           window.addEventListener('touchend', this._stopDrag);
           window.addEventListener('mousemove', this._drag);
           window.addEventListener('touchmove', this._drag);
+
+          const { top, left, width, height } = this._originalBounds;
           if (this.$.overlay.$.overlay.style.position !== 'absolute') {
-            const { top, left } = this._originalBounds;
             this.top = top;
             this.left = left;
           }
+          this.dispatchEvent(
+            new CustomEvent('drag-start', { bubbles: true, composed: true, detail: { width, height, top, left } }),
+          );
         }
       }
     }
@@ -123,6 +127,12 @@ export const DialogDraggableMixin = (superClass) =>
       window.removeEventListener('mousemove', this._drag);
       window.removeEventListener('touchmove', this._drag);
     }
+
+    /**
+     * Fired when the dialog drag is started.
+     *
+     * @event drag-start
+     */
 
     /**
      * Fired when the dialog drag is finished.

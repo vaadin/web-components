@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -88,8 +88,8 @@ export function prepareExport(chart) {
     chart.tempBodyStyle = document.createElement('style');
     chart.tempBodyStyle.textContent = effectiveCss;
     document.body.appendChild(chart.tempBodyStyle);
-    if (chart.options.chart.styledMode) {
-      document.body.setAttribute('styled-mode', '');
+    if (chart.__styledMode) {
+      document.body.toggleAttribute('styled-mode', true);
     }
   }
 }
@@ -98,7 +98,7 @@ export function cleanupExport(chart) {
   if (chart.tempBodyStyle) {
     document.body.removeChild(chart.tempBodyStyle);
     delete chart.tempBodyStyle;
-    if (chart.options.chart.styledMode) {
+    if (chart.__styledMode) {
       document.body.removeAttribute('styled-mode');
     }
   }

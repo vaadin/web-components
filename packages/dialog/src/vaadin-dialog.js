@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-dialog-overlay.js';
@@ -88,7 +88,9 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} resize-start - Fired when the dialog resize is started.
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
+ * @fires {CustomEvent} drag-start - Fired when the dialog drag is started.
  * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.

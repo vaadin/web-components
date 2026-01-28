@@ -10,10 +10,7 @@ describe('popover', () => {
   let div, target, element;
 
   beforeEach(async () => {
-    element = fixtureSync('<vaadin-popover></vaadin-popover>');
-    element.renderer = (root) => {
-      root.textContent = 'Content';
-    };
+    element = fixtureSync('<vaadin-popover>Content</vaadin-popover>');
     div = fixtureSync(`
       <div style="display: flex; width: 300px; height: 300px; justify-content: center; align-items: center">
         <div style="width: 100px; height: 100px; outline: 1px solid red;"></div>
