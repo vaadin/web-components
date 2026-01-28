@@ -6,6 +6,6 @@
 @media lumo_components_range-slider {
   :host([focus-ring][start-focused]) [part~='thumb-start'],
   :host([focus-ring][end-focused]) [part~='thumb-end'] {
-    outline: var(--_focus-ring-width) var(--_outline-style, solid) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 }

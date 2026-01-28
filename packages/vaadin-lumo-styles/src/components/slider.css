@@ -5,6 +5,6 @@
  */
 @media lumo_components_slider {
   :host([focus-ring]) [part='thumb'] {
-    outline: var(--_focus-ring-width) var(--_outline-style, solid) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 }
