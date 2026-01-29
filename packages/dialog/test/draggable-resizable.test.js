@@ -683,6 +683,87 @@ describe('draggable', () => {
     await nextRender();
     expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.be.oneOf(['100%', 'min(100%, 100%)']);
   });
+
+  describe('keepInViewport', () => {
+    // Helper to drag to absolute coordinates within the viewport
+    function dragTo(target, toX, toY) {
+      const targetBounds = target.getBoundingClientRect();
+      const fromXY = {
+        x: Math.floor(targetBounds.left + targetBounds.width / 2),
+        y: Math.floor(targetBounds.top + targetBounds.height / 2),
+      };
+      const toXY = { x: toX, y: toY };
+      dispatchMouseEvent(target, 'mousedown', fromXY);
+      dispatchMouseEvent(target, 'mousemove', fromXY);
+      dispatchMouseEvent(target, 'mousemove', toXY);
+      dispatchMouseEvent(target, 'mouseup', toXY);
+    }
+
+    beforeEach(async () => {
+      dialog.keepInViewport = true;
+      await nextUpdate(dialog);
+    });
+
+    it('should not drag dialog past left viewport edge', async () => {
+      dragTo(container, 0, bounds.top + bounds.height / 2);
+      await nextRender();
+
+      const draggedBounds = container.getBoundingClientRect();
+      expect(Math.floor(draggedBounds.left)).to.be.closeTo(0, 1);
+    });
+
+    it('should not drag dialog past top viewport edge', async () => {
+      dragTo(container, bounds.left + bounds.width / 2, 0);
+      await nextRender();
+
+      const draggedBounds = container.getBoundingClientRect();
+      expect(Math.floor(draggedBounds.top)).to.closeTo(0, 1);
+    });
+
+    it('should not drag dialog past right viewport edge', async () => {
+      dragTo(container, window.innerWidth, bounds.top + bounds.height / 2);
+      await nextRender();
+
+      const draggedBounds = container.getBoundingClientRect();
+      expect(Math.floor(draggedBounds.right)).to.closeTo(window.innerWidth, 1);
+    });
+
+    it('should not drag dialog past bottom viewport edge', async () => {
+      dragTo(container, bounds.left + bounds.width / 2, window.innerHeight);
+      await nextRender();
+
+      const draggedBounds = container.getBoundingClientRect();
+      expect(Math.floor(draggedBounds.bottom)).to.closeTo(window.innerHeight, 1);
+    });
+
+    it('should allow normal dragging within viewport', async () => {
+      const initialBounds = container.getBoundingClientRect();
+      dx = 50;
+      drag(container);
+      await nextRender();
+      const draggedBounds = container.getBoundingClientRect();
+      expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(initialBounds.top + 50));
+      expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(initialBounds.left + 50));
+    });
+
+    it('should allow dragging outside of viewport with keepInViewport disabled', async () => {
+      dialog.keepInViewport = false;
+      await nextUpdate(dialog);
+
+      dragTo(container, 0, bounds.top + bounds.height / 2);
+      await nextRender();
+
+      const draggedBounds = container.getBoundingClientRect();
+      expect(Math.floor(draggedBounds.left)).to.lessThan(0);
+    });
+
+    it('should reflect keepInViewport attribute', async () => {
+      expect(dialog.hasAttribute('keep-in-viewport')).to.be.true;
+      dialog.keepInViewport = false;
+      await nextUpdate(dialog);
+      expect(dialog.hasAttribute('keep-in-viewport')).to.be.false;
+    });
+  });
 });
 
 describe('touch', () => {
