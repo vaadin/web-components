@@ -147,11 +147,27 @@ window.Vaadin.featureFlags.sliderComponent = true;
       expect(document.activeElement).to.equal(inputs[1]);
     });
 
-    it('should not focus any of inputs on pointerdown below the track', async () => {
+    it('should focus an input on pointerdown below the visible track', async () => {
       const { y } = middleOfThumb(0);
 
       await sendMouse({ type: 'move', position: [50, y + 10] });
       await sendMouse({ type: 'down' });
+      expect(document.activeElement).to.equal(inputs[0]);
+    });
+
+    it('should focus an input on pointerdown on the label element', async () => {
+      slider.label = 'Label';
+      await nextRender();
+      const label = slider.shadowRoot!.querySelector('[part="label"]')!;
+      await sendMouseToElement({ type: 'click', element: label });
+      expect(document.activeElement).to.equal(inputs[0]);
+    });
+
+    it('should not focus an input on pointerdown on the helper element', async () => {
+      slider.helperText = 'Helper';
+      await nextRender();
+      const helper = slider.shadowRoot!.querySelector('[part="helper-text"]')!;
+      await sendMouseToElement({ type: 'click', element: helper });
       inputs.forEach((input) => {
         expect(document.activeElement).to.not.equal(input);
       });
