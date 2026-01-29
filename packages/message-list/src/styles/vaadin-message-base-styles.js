@@ -66,4 +66,50 @@ export const messageStyles = css`
   ::slotted(vaadin-markdown) {
     white-space: normal;
   }
+
+  [part='attachments'] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  [part~='attachment'] {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: start;
+  }
+
+  [part~='attachment-image'] [part='attachment-preview'] {
+    display: block;
+    max-width: 200px;
+    max-height: 150px;
+  }
+
+  [part~='attachment-file'] {
+    gap: 6px;
+  }
+
+  [part='attachment-icon'] {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: currentColor;
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    flex-shrink: 0;
+  }
+
+  [part='attachment-name'] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;

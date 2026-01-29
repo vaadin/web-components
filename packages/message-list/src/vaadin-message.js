@@ -27,11 +27,18 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------|----------------
- * `name`    | Author's name
- * `time`    | When the message was posted
- * `content` | The message itself as a slotted content
+ * Part name           | Description
+ * --------------------|----------------
+ * `name`              | Author's name
+ * `time`              | When the message was posted
+ * `content`           | The message itself as a slotted content
+ * `attachments`       | Container for the attachments
+ * `attachment`        | Individual attachment button
+ * `attachment-image`  | Image attachment button (in addition to `attachment`)
+ * `attachment-file`   | File attachment button (in addition to `attachment`)
+ * `attachment-preview`| Image preview inside an image attachment
+ * `attachment-icon`   | File icon inside a file attachment
+ * `attachment-name`   | File name inside a file attachment
  *
  * The following state attributes are available for styling:
  *
@@ -41,6 +48,8 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  * `focused`    | Set when the message is focused.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
  *
  * @customElement
  * @extends HTMLElement
@@ -70,6 +79,7 @@ class Message extends MessageMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
           <span part="name">${this.userName}</span>
           <span part="time">${this.time}</span>
         </div>
+        ${this.__renderAttachments()}
         <div part="message"><slot></slot></div>
       </div>
     `;

@@ -29,9 +29,19 @@ export const MessageListMixin = (superClass) =>
          *   userImg: string,
          *   userColorIndex: number,
          *   className: string,
-         *   theme: string
+         *   theme: string,
+         *   attachments: Array<{
+         *     name: string,
+         *     url: string,
+         *     type: string
+         *   }>
          * }>
          * ```
+         *
+         * When a message has attachments, they are rendered in the message's shadow DOM.
+         * Image attachments (type starting with "image/") show a thumbnail preview,
+         * while other attachments show a document icon with the file name.
+         * Clicking an attachment dispatches an `attachment-click` event.
          */
         items: {
           type: Array,
@@ -142,6 +152,7 @@ export const MessageListMixin = (superClass) =>
                 .userName="${item.userName}"
                 .userImg="${item.userImg}"
                 .userColorIndex="${item.userColorIndex}"
+                .attachments="${item.attachments}"
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
