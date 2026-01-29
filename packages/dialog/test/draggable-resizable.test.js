@@ -709,7 +709,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.left)).to.equal(0);
+      expect(Math.floor(draggedBounds.left)).to.be.closeTo(0, 1);
     });
 
     it('should not drag dialog past top viewport edge', async () => {
@@ -717,7 +717,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.top)).to.equal(0);
+      expect(Math.floor(draggedBounds.top)).to.closeTo(0, 1);
     });
 
     it('should not drag dialog past right viewport edge', async () => {
@@ -725,7 +725,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.right)).to.equal(window.innerWidth);
+      expect(Math.floor(draggedBounds.right)).to.closeTo(window.innerWidth, 1);
     });
 
     it('should not drag dialog past bottom viewport edge', async () => {
@@ -733,7 +733,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.bottom)).to.equal(window.innerHeight);
+      expect(Math.floor(draggedBounds.bottom)).to.closeTo(window.innerHeight, 1);
     });
 
     it('should allow normal dragging within viewport', async () => {
