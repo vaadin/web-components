@@ -14,6 +14,7 @@ export interface MessageAttachment {
 
 export interface MessageAttachmentClickEvent {
   attachment: MessageAttachment;
+  attachmentIndex: number;
 }
 
 export declare function MessageMixin<T extends Constructor<HTMLElement>>(

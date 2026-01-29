@@ -6,12 +6,17 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { type MessageAttachmentClickEvent, MessageListMixin } from './vaadin-message-list-mixin.js';
+import { type MessageListAttachmentClickEvent, MessageListMixin } from './vaadin-message-list-mixin.js';
 
-export { MessageAttachment, MessageAttachmentClickEvent, MessageListItem } from './vaadin-message-list-mixin.js';
+export {
+  MessageAttachment,
+  MessageAttachmentClickEvent,
+  MessageListAttachmentClickEvent,
+  MessageListItem,
+} from './vaadin-message-list-mixin.js';
 
 export type MessageListEventMap = HTMLElementEventMap & {
-  'attachment-click': CustomEvent<MessageAttachmentClickEvent>;
+  'attachment-click': CustomEvent<MessageListAttachmentClickEvent>;
 };
 
 /**

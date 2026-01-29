@@ -89,6 +89,26 @@ export const MessageListMixin = (superClass) =>
     }
 
     /**
+     * Handles attachment-click events from child messages and dispatches
+     * a new event enriched with item and itemIndex.
+     * @param {CustomEvent} e
+     * @param {Object} item
+     * @param {number} itemIndex
+     * @private
+     */
+    __onAttachmentClick(e, item, itemIndex) {
+      this.dispatchEvent(
+        new CustomEvent('attachment-click', {
+          detail: {
+            ...e.detail,
+            item,
+            itemIndex,
+          },
+        }),
+      );
+    }
+
+    /**
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the list of message elements as items.
      *
@@ -144,7 +164,7 @@ export const MessageListMixin = (superClass) =>
       render(
         html`
           ${items.map(
-            (item) => html`
+            (item, index) => html`
               <vaadin-message
                 role="listitem"
                 .time="${item.time}"
@@ -156,6 +176,7 @@ export const MessageListMixin = (superClass) =>
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
+                @attachment-click="${(e) => this.__onAttachmentClick(e, item, index)}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
                 >${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`

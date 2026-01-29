@@ -35,6 +35,9 @@ assertType<string | undefined>(attachment.type);
 // Event listener
 list.addEventListener('attachment-click', (event) => {
   assertType<MessageAttachment>(event.detail.attachment);
+  assertType<number>(event.detail.attachmentIndex);
+  assertType<MessageListItem | null>(event.detail.item);
+  assertType<number>(event.detail.itemIndex);
 });
 
 // Mixins
@@ -54,6 +57,7 @@ assertType<MessageAttachment[] | null | undefined>(message.attachments);
 // Message event listener
 message.addEventListener('attachment-click', (event) => {
   assertType<MessageAttachment>(event.detail.attachment);
+  assertType<number>(event.detail.attachmentIndex);
 });
 
 assertType<ElementMixinClass>(message);
