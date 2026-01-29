@@ -16,7 +16,7 @@ import { messageInputButtonStyles } from './styles/vaadin-message-input-button-s
 /**
  * An element used internally by `<vaadin-message-input>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-message-input-button
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes DirMixin

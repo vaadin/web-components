@@ -17,7 +17,7 @@ import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-crud-form
  * @extends FormLayout
  * @mixes IncludedMixin
  * @private

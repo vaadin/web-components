@@ -55,7 +55,7 @@ import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-virtual-list
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

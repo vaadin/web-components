@@ -45,7 +45,7 @@ import { MessageListMixin } from './vaadin-message-list-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-message-list
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

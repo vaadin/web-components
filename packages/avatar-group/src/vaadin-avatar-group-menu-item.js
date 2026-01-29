@@ -15,7 +15,7 @@ import { avatarGroupMenuItemStyles } from './styles/vaadin-avatar-group-menu-ite
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-avatar-group-menu-item
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ItemMixin

@@ -15,7 +15,7 @@ import { GridColumnMixin } from './vaadin-grid-column-mixin.js';
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
  * to configure the `<vaadin-grid-column>`.
  *
- * @customElement
+ * @customElement vaadin-grid-column
  * @extends HTMLElement
  * @mixes GridColumnMixin
  */

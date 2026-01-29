@@ -10,7 +10,7 @@ import { menuBarButtonStyles } from './styles/vaadin-menu-bar-button-base-styles
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-menu-bar-button
  * @extends Button
  * @private
  */

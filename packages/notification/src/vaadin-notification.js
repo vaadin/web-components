@@ -17,7 +17,7 @@ import { NotificationContainerMixin, NotificationMixin } from './vaadin-notifica
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-notification-container
  * @extends HTMLElement
  * @mixes NotificationContainerMixin
  * @mixes ElementMixin
@@ -58,7 +58,7 @@ class NotificationContainer extends NotificationContainerMixin(
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-notification-card
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @private
@@ -137,7 +137,7 @@ class NotificationCard extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the notification is closed.
  *
- * @customElement
+ * @customElement vaadin-notification
  * @extends HTMLElement
  * @mixes NotificationMixin
  * @mixes ElementMixin

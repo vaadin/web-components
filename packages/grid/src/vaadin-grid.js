@@ -265,7 +265,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  *
- * @customElement
+ * @customElement vaadin-grid
  * @extends HTMLElement
  * @mixes GridMixin
  * @mixes ThemableMixin

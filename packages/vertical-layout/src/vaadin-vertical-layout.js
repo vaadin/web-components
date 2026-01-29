@@ -44,7 +44,7 @@ import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-base-style
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-vertical-layout
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

@@ -16,7 +16,7 @@ import { PopoverOverlayMixin } from './vaadin-popover-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-popover>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-popover-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes PopoverOverlayMixin

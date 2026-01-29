@@ -16,7 +16,7 @@ import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-base-style
 /**
  * An element used internally by `<vaadin-tooltip>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-tooltip-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ThemableMixin

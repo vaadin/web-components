@@ -68,7 +68,7 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  *
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
- * @customElement
+ * @customElement vaadin-menu-bar
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes MenuBarMixin

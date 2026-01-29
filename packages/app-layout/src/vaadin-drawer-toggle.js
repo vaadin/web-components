@@ -55,7 +55,7 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-base-styles.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-drawer-toggle
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes DirMixin

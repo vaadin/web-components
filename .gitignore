@@ -2,6 +2,7 @@ node_modules
 coverage
 dist
 analysis.json
+custom-elements.json
 yarn-error.log
 .env
 

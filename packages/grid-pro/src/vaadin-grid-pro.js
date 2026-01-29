@@ -47,7 +47,7 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  *
- * @customElement
+ * @customElement vaadin-grid-pro
  * @extends Grid
  * @mixes InlineEditingMixin
  */

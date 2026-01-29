@@ -64,7 +64,7 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-dashboard-section
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

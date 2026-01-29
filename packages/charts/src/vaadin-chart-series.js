@@ -56,7 +56,7 @@ import { ChartSeriesMixin } from './vaadin-chart-series-mixin.js';
  * chart.removeChild(seriesToBeRemoved);
  * ```
  *
- * @customElement
+ * @customElement vaadin-chart-series
  * @extends HTMLElement
  * @mixes ChartSeriesMixin
  */

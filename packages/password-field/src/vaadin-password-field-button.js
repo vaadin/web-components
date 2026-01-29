@@ -15,7 +15,7 @@ import { passwordFieldButton } from './styles/vaadin-password-field-button-base-
 /**
  * An element used internally by `<vaadin-password-field>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-password-field-button
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes DirMixin

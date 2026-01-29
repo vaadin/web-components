@@ -17,7 +17,7 @@ import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-combo-box-overlay
  * @extends HTMLElement
  * @mixes ComboBoxOverlayMixin
  * @mixes DirMixin

@@ -51,7 +51,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-progress-bar
  * @extends HTMLElement
  * @mixes ProgressMixin
  * @mixes ThemableMixin
