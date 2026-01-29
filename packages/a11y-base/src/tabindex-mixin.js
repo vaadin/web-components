@@ -23,9 +23,10 @@ export const TabindexMixin = (superclass) =>
          *
          * @protected
          */
-        tabindex: {
+        tabIndex: {
           type: Number,
           reflectToAttribute: true,
+          attribute: 'tabindex',
           observer: '_tabindexChanged',
           sync: true,
         },
@@ -39,6 +40,15 @@ export const TabindexMixin = (superclass) =>
           type: Number,
         },
       };
+    }
+
+    /**
+     * Override to indicate that the component should not set tabindex attribute
+     * on the host element but instead delegate it to an element in light DOM.
+     * @protected
+     */
+    get _shouldUseHostTabIndex() {
+      return true;
     }
 
     /**
@@ -58,16 +68,12 @@ export const TabindexMixin = (superclass) =>
       }
 
       if (disabled) {
-        if (this.tabindex !== undefined) {
-          this._lastTabIndex = this.tabindex;
+        if (this.tabIndex !== undefined) {
+          this._lastTabIndex = this.tabIndex;
         }
         this.setAttribute('tabindex', '-1');
       } else if (oldDisabled) {
-        if (this._lastTabIndex !== undefined) {
-          this.setAttribute('tabindex', this._lastTabIndex);
-        } else {
-          this.tabindex = undefined;
-        }
+        this.tabIndex = this._lastTabIndex;
       }
     }
 
@@ -80,6 +86,10 @@ export const TabindexMixin = (superclass) =>
      */
     _tabindexChanged(tabindex) {
       if (this.__shouldAllowFocusWhenDisabled()) {
+        return;
+      }
+
+      if (!this._shouldUseHostTabIndex) {
         return;
       }
 
