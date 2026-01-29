@@ -54,6 +54,58 @@ class RangeSlider extends FieldMixin(
           outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
         }
+
+        #controls {
+          grid-template-columns:
+            [track-start]
+            calc(var(--start-value) * var(--_track-width))
+            [thumb1]
+            0
+            [fill-start]
+            calc((var(--end-value) - var(--start-value)) * var(--_track-width))
+            [fill-end thumb2]
+            0
+            calc((1 - var(--end-value)) * var(--_track-width))
+            var(--_thumb-width)
+            [track-end];
+        }
+
+        [part='track-fill'] {
+          margin-inline-start: var(--_thumb-width);
+        }
+
+        [part~='thumb-end'] {
+          grid-column: thumb2;
+        }
+
+        :host([readonly]) [part='track-fill'] {
+          border-inline-start: none;
+        }
+
+        ::slotted(input:last-of-type) {
+          clip-path: inset(
+            0 0 0
+              clamp(
+                0%,
+                var(--_thumb-width) / 2 + var(--start-value) * var(--_track-width) +
+                  (var(--end-value) - var(--start-value)) * var(--_track-width) / 2,
+                100%
+              )
+          );
+        }
+
+        :host([dir='rtl']) ::slotted(input:last-of-type) {
+          clip-path: inset(
+            0
+              clamp(
+                0%,
+                var(--_thumb-width) / 2 + var(--start-value) * var(--_track-width) +
+                  (var(--end-value) - var(--start-value)) * var(--_track-width) / 2,
+                100%
+              )
+              0 0
+          );
+        }
       `,
     ];
   }
@@ -94,24 +146,12 @@ class RangeSlider extends FieldMixin(
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div id="controls">
+        <div id="controls" style="${styleMap({ '--start-value': startPercent, '--end-value': endPercent })}">
           <div part="track">
-            <div
-              part="track-fill"
-              style="${styleMap({
-                insetInlineStart: `${startPercent}%`,
-                insetInlineEnd: `${100 - endPercent}%`,
-              })}"
-            ></div>
+            <div part="track-fill"></div>
           </div>
-          <div
-            part="thumb thumb-start"
-            style="${styleMap({ insetInlineStart: this.__getThumbPosition(startPercent) })}"
-          ></div>
-          <div
-            part="thumb thumb-end"
-            style="${styleMap({ insetInlineStart: this.__getThumbPosition(endPercent) })}"
-          ></div>
+          <div part="thumb thumb-start"></div>
+          <div part="thumb thumb-end"></div>
           <slot name="input"></slot>
         </div>
 
@@ -167,7 +207,7 @@ class RangeSlider extends FieldMixin(
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
           @keydown="${this.__onKeyDown}"
-          @input="${this.__onInput}"
+          @input="${this.__onStartInput}"
           @change="${this.__onChange}"
         />
         <input
@@ -181,7 +221,7 @@ class RangeSlider extends FieldMixin(
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
           @keydown="${this.__onKeyDown}"
-          @input="${this.__onInput}"
+          @input="${this.__onEndInput}"
           @change="${this.__onChange}"
         />
       `,
@@ -234,77 +274,33 @@ class RangeSlider extends FieldMixin(
     this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
   }
 
-  /**
-   * @param {PointerEvent} event
-   * @private
-   */
-  __focusInput(event) {
-    const index = this.__getThumbIndex(event);
-    this._inputElements[index].focus();
-  }
-
   /** @private */
   __commitValue() {
     this.value = [...this.__value];
   }
 
-  /**
-   * @param {Event} event
-   * @return {number}
-   */
-  __getThumbIndex(event) {
-    if (event.type === 'input') {
-      return this._inputElements.indexOf(event.target);
+  /** @private */
+  __onStartInput(event) {
+    // Use second input value as first input max limit
+    if (parseFloat(event.target.value) > this.__value[1]) {
+      event.target.value = this.__value[1];
     }
 
-    return this.__getClosestThumb(event);
+    const value = event.target.value;
+    this.__updateValue(value, 0);
+    this.__commitValue();
   }
 
-  /**
-   * @param {PointerEvent} event
-   * @return {number}
-   * @private
-   */
-  __getClosestThumb(event) {
-    let closestThumb;
-
-    // If both thumbs are at the start, use the second thumb,
-    // and if both are at tne end, use the first one instead.
-    if (this.__value[0] === this.__value[1]) {
-      const { min, max } = this.__getConstraints();
-      if (this.__value[0] === min) {
-        return 1;
-      }
-
-      if (this.__value[0] === max) {
-        return 0;
-      }
+  /** @private */
+  __onEndInput(event) {
+    // Use first input value as second input min limit
+    if (parseFloat(event.target.value) < this.__value[0]) {
+      event.target.value = this.__value[0];
     }
 
-    const value = this.__getEventValue(event);
-
-    // First thumb position from the "end"
-    const index = this.__value.findIndex((v) => value - v < 0);
-
-    // Pick the first one
-    if (index === 0) {
-      closestThumb = index;
-    } else if (index === -1) {
-      // Pick the last one (position is past all the thumbs)
-      closestThumb = this.__value.length - 1;
-    } else {
-      const lastStart = this.__value[index - 1];
-      const firstEnd = this.__value[index];
-      // Pick the first one from the "start" unless thumbs are stacked on top of each other
-      if (Math.abs(lastStart - value) < Math.abs(firstEnd - value)) {
-        closestThumb = index - 1;
-      } else {
-        // Pick the last one from the "end"
-        closestThumb = index;
-      }
-    }
-
-    return closestThumb;
+    const value = event.target.value;
+    this.__updateValue(value, 1);
+    this.__commitValue();
   }
 
   /** @private */

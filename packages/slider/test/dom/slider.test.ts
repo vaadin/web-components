@@ -106,5 +106,24 @@ describe('vaadin-slider', () => {
       slider.value = 50;
       await expect(slider).shadowDom.to.equalSnapshot();
     });
+
+    it('negative', async () => {
+      slider.min = -80;
+      slider.max = -20;
+      slider.value = -50;
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
+    it('min > value', async () => {
+      slider.min = 10;
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
+    it('max < value', async () => {
+      slider.min = -80;
+      slider.max = -20;
+      slider.value = 0;
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
   });
 });

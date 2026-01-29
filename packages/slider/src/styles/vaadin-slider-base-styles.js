@@ -11,10 +11,8 @@ export const sliderStyles = css`
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
-    --_track-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
     --_thumb-width: var(--vaadin-slider-thumb-width, 1lh);
     --_thumb-height: var(--vaadin-slider-thumb-height, 1lh);
-    --_track-size: var(--vaadin-slider-track-size, 0.25lh);
   }
 
   :host([hidden]) {
@@ -37,13 +35,13 @@ export const sliderStyles = css`
 
   #controls {
     grid-area: input;
-    position: relative;
-    display: flex;
+    display: inline-grid;
     align-items: center;
     width: var(--vaadin-field-default-width, 12em);
     max-width: 100%;
     min-width: 100%;
     min-height: var(--_thumb-height);
+    --_track-width: calc(100% - var(--_thumb-width));
   }
 
   :host([has-label]) #controls {
@@ -53,30 +51,30 @@ export const sliderStyles = css`
 
   [part='track'] {
     box-sizing: border-box;
+    grid-row: 1;
+    grid-column: track-start / track-end;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
     width: 100%;
-    height: var(--_track-size);
+    height: var(--vaadin-slider-track-height, 0.25lh);
     background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
-    border-radius: var(--_track-radius);
-    pointer-events: none;
+    border-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
   }
 
   [part='track-fill'] {
     box-sizing: border-box;
-    position: absolute;
-    height: var(--_track-size);
+    grid-column: fill-start / fill-end;
+    height: 100%;
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
-    border-start-start-radius: inherit;
-    border-end-start-radius: inherit;
-    pointer-events: none;
   }
 
   [part~='thumb'] {
-    position: absolute;
-    top: 50%;
     box-sizing: border-box;
+    grid-row: 1;
+    grid-column: thumb1;
     width: var(--_thumb-width);
     height: var(--_thumb-height);
-    transform: translateX(-50%) translateY(-50%);
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
     touch-action: none;
@@ -87,14 +85,20 @@ export const sliderStyles = css`
     border: dashed 1px var(--vaadin-border-color);
   }
 
-  /* visually hidden */
+  :host([readonly]) [part='track-fill'] {
+    border-inline-end: none;
+  }
+
   ::slotted(input) {
-    position: absolute;
-    inset: 0;
+    grid-row: 1;
+    grid-column: track-start / track-end;
+    appearance: none;
+    width: 100%;
+    height: 100%;
     font: inherit;
-    height: var(--_thumb-height);
-    opacity: 0 !important;
-    margin: 0 !important;
-    pointer-events: none;
+    margin: 0;
+    background: transparent;
+    outline: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 `;
