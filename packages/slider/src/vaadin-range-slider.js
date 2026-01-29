@@ -54,16 +54,16 @@ class RangeSlider extends FieldMixin(
           outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
         }
-
-        :host([readonly]) {
-          --_outline-style: dashed;
-        }
       `,
     ];
   }
 
   static get experimental() {
     return 'sliderComponent';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {

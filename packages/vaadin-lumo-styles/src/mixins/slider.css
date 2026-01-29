@@ -1,0 +1,116 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_mixins_slider {
+  :host {
+    display: inline-flex;
+    color: var(--lumo-body-text-color);
+    font-size: var(--lumo-font-size-m);
+    font-family: var(--lumo-font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    padding: var(--lumo-space-xs) 0;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_thumb-width: var(--vaadin-slider-thumb-width, calc(var(--lumo-size-m) / 2));
+    --_thumb-height: var(--vaadin-slider-thumb-height, calc(var(--lumo-size-m) / 2));
+    --_track-radius: var(--vaadin-slider-track-border-radius, var(--lumo-border-radius-s));
+    --_track-size: var(--vaadin-slider-track-size, calc(var(--lumo-size-l) / 10));
+  }
+
+  :host::before {
+    content: '\2003';
+    height: var(--lumo-size-s);
+    width: 0;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    align-self: auto;
+  }
+
+  [class$='container'] {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    max-width: 100%;
+    width: var(--vaadin-field-default-width, 12em);
+  }
+
+  :host([theme~='contrast']) {
+    --vaadin-slider-fill-background: var(--lumo-contrast-80pct);
+  }
+
+  :host([theme~='error']) {
+    --vaadin-slider-fill-background: var(--lumo-error-color);
+  }
+
+  :host([theme~='success']) {
+    --vaadin-slider-fill-background: var(--lumo-success-color);
+  }
+
+  :host([disabled]) {
+    --vaadin-slider-track-background: var(--lumo-contrast-10pct);
+    --vaadin-slider-fill-background: linear-gradient(var(--lumo-contrast-30pct), var(--lumo-contrast-30pct))
+      var(--lumo-base-color);
+  }
+
+  :host([readonly]) {
+    --vaadin-slider-fill-background: var(--lumo-base-color);
+  }
+
+  [part='track'] {
+    background: var(--vaadin-slider-track-background, var(--lumo-contrast-30pct));
+  }
+
+  [part~='thumb'],
+  [part='track-fill'] {
+    background: var(--vaadin-slider-fill-background, var(--lumo-primary-color));
+  }
+
+  [part='label'] {
+    margin-top: -0.25em;
+    margin-bottom: 0;
+  }
+
+  [part='helper-text'] {
+    margin: 0;
+  }
+
+  #controls {
+    min-height: var(--lumo-size-s);
+  }
+
+  :host([has-label]) #controls {
+    padding: 0;
+    border: 0;
+  }
+
+  [part='error-message'] {
+    display: block;
+    margin-top: 0;
+  }
+
+  :host([has-error-message]) [part='error-message']::before {
+    height: 0.4em;
+    mask: none;
+    background: transparent;
+  }
+
+  :host([readonly]) [part~='thumb'],
+  :host([readonly]) [part='track-fill'] {
+    border-color: var(--lumo-contrast-50pct);
+  }
+
+  @media (any-hover: hover) {
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
+      color: var(--lumo-body-text-color);
+    }
+  }
+}

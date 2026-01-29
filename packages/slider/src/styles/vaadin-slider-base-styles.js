@@ -32,6 +32,7 @@ export const sliderStyles = css`
 
   :host([readonly]) {
     --vaadin-slider-fill-background: var(--vaadin-background-color);
+    --_outline-style: dashed;
   }
 
   #controls {
