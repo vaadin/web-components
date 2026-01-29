@@ -522,20 +522,7 @@ describe('message-list', () => {
       expect(attachmentsContainer).to.be.null;
     });
 
-    it('should dispatch attachment-click event with attachment details', () => {
-      const spy = sinon.spy();
-      messageList.addEventListener('attachment-click', spy);
-
-      const firstMessage = messageList.querySelector('vaadin-message');
-      const button = firstMessage.shadowRoot.querySelector('[part~="attachment-file"]');
-      button.click();
-
-      expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].detail.attachment.name).to.equal('document.pdf');
-      expect(spy.firstCall.args[0].detail.attachmentIndex).to.equal(1);
-    });
-
-    it('should include item and itemIndex in attachment-click event', () => {
+    it('should dispatch attachment-click event with attachment and item', () => {
       const spy = sinon.spy();
       messageList.addEventListener('attachment-click', spy);
 
@@ -545,12 +532,11 @@ describe('message-list', () => {
 
       expect(spy.calledOnce).to.be.true;
       const detail = spy.firstCall.args[0].detail;
+      expect(detail.attachment.name).to.equal('document.pdf');
       expect(detail.item).to.equal(messageList.items[0]);
-      expect(detail.itemIndex).to.equal(0);
-      expect(detail.attachmentIndex).to.equal(1);
     });
 
-    it('should include correct itemIndex for second message', async () => {
+    it('should include correct item for second message', async () => {
       // Add attachments to the second item
       messageList.items = [
         ...messageList.items.slice(0, 1),
@@ -570,9 +556,8 @@ describe('message-list', () => {
 
       expect(spy.calledOnce).to.be.true;
       const detail = spy.firstCall.args[0].detail;
+      expect(detail.attachment.name).to.equal('other.pdf');
       expect(detail.item).to.equal(messageList.items[1]);
-      expect(detail.itemIndex).to.equal(1);
-      expect(detail.attachmentIndex).to.equal(0);
     });
 
     it('should update attachments when items change', async () => {

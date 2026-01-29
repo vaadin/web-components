@@ -11,7 +11,6 @@ export { MessageAttachment, MessageAttachmentClickEvent };
 
 export interface MessageListAttachmentClickEvent extends MessageAttachmentClickEvent {
   item: MessageListItem | null;
-  itemIndex: number;
 }
 
 export interface MessageListItem {

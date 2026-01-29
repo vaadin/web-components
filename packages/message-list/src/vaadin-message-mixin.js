@@ -144,20 +144,17 @@ export const MessageMixin = (superClass) =>
       }
 
       return html`
-        <div part="attachments">
-          ${attachments.map((attachment, index) => this.__renderAttachment(attachment, index))}
-        </div>
+        <div part="attachments"> ${attachments.map((attachment) => this.__renderAttachment(attachment))} </div>
       `;
     }
 
     /**
      * Renders a single attachment.
      * @param {Object} attachment - The attachment object with name, url, and type properties
-     * @param {number} index - The index of this attachment in the attachments array
      * @return {import('lit').TemplateResult}
      * @private
      */
-    __renderAttachment(attachment, index) {
+    __renderAttachment(attachment) {
       const isImage = attachment.type && attachment.type.startsWith('image/');
 
       if (isImage) {
@@ -166,7 +163,7 @@ export const MessageMixin = (superClass) =>
             type="button"
             part="attachment attachment-image"
             aria-label="${attachment.name || ''}"
-            @click="${() => this.__onAttachmentClick(attachment, index)}"
+            @click="${() => this.__onAttachmentClick(attachment)}"
           >
             <img part="attachment-preview" src="${ifDefined(attachment.url)}" alt="" />
           </button>
@@ -174,11 +171,7 @@ export const MessageMixin = (superClass) =>
       }
 
       return html`
-        <button
-          type="button"
-          part="attachment attachment-file"
-          @click="${() => this.__onAttachmentClick(attachment, index)}"
-        >
+        <button type="button" part="attachment attachment-file" @click="${() => this.__onAttachmentClick(attachment)}">
           <span part="attachment-icon" aria-hidden="true"></span>
           <span part="attachment-name">${attachment.name}</span>
         </button>
@@ -188,16 +181,12 @@ export const MessageMixin = (superClass) =>
     /**
      * Dispatches an event when an attachment is clicked.
      * @param {Object} attachment - The attachment that was clicked
-     * @param {number} attachmentIndex - The index of the attachment in the attachments array
      * @private
      */
-    __onAttachmentClick(attachment, attachmentIndex) {
+    __onAttachmentClick(attachment) {
       this.dispatchEvent(
         new CustomEvent('attachment-click', {
-          detail: {
-            attachment,
-            attachmentIndex,
-          },
+          detail: { attachment },
         }),
       );
     }

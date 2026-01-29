@@ -90,19 +90,17 @@ export const MessageListMixin = (superClass) =>
 
     /**
      * Handles attachment-click events from child messages and dispatches
-     * a new event enriched with item and itemIndex.
+     * a new event enriched with the item.
      * @param {CustomEvent} e
      * @param {Object} item
-     * @param {number} itemIndex
      * @private
      */
-    __onAttachmentClick(e, item, itemIndex) {
+    __onAttachmentClick(e, item) {
       this.dispatchEvent(
         new CustomEvent('attachment-click', {
           detail: {
             ...e.detail,
             item,
-            itemIndex,
           },
         }),
       );
@@ -164,7 +162,7 @@ export const MessageListMixin = (superClass) =>
       render(
         html`
           ${items.map(
-            (item, index) => html`
+            (item) => html`
               <vaadin-message
                 role="listitem"
                 .time="${item.time}"
@@ -176,7 +174,7 @@ export const MessageListMixin = (superClass) =>
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
-                @attachment-click="${(e) => this.__onAttachmentClick(e, item, index)}"
+                @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
                 >${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`

@@ -151,7 +151,6 @@ describe('message', () => {
 
         expect(spy.calledOnce).to.be.true;
         expect(spy.firstCall.args[0].detail.attachment).to.deep.equal(attachment);
-        expect(spy.firstCall.args[0].detail.attachmentIndex).to.equal(0);
       });
 
       it('should dispatch attachment-click event when image attachment is clicked', async () => {
@@ -168,10 +167,9 @@ describe('message', () => {
 
         expect(spy.calledOnce).to.be.true;
         expect(spy.firstCall.args[0].detail.attachment).to.deep.equal(attachment);
-        expect(spy.firstCall.args[0].detail.attachmentIndex).to.equal(0);
       });
 
-      it('should dispatch event with correct attachment and attachmentIndex when multiple attachments exist', async () => {
+      it('should dispatch event with correct attachment when multiple attachments exist', async () => {
         const imgUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
         const attachments = [
           { name: 'photo.png', url: imgUrl, type: 'image/png' },
@@ -188,10 +186,9 @@ describe('message', () => {
 
         expect(spy.calledOnce).to.be.true;
         expect(spy.firstCall.args[0].detail.attachment).to.deep.equal(attachments[1]);
-        expect(spy.firstCall.args[0].detail.attachmentIndex).to.equal(1);
       });
 
-      it('should not include item or itemIndex in standalone message event', async () => {
+      it('should not include item in standalone message event', async () => {
         message.attachments = [{ name: 'file.pdf', type: 'application/pdf' }];
         await nextRender();
 
@@ -203,7 +200,6 @@ describe('message', () => {
 
         expect(spy.calledOnce).to.be.true;
         expect(spy.firstCall.args[0].detail).to.not.have.property('item');
-        expect(spy.firstCall.args[0].detail).to.not.have.property('itemIndex');
       });
     });
 
