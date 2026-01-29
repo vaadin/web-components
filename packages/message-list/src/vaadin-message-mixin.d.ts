@@ -12,9 +12,10 @@ export interface MessageAttachment {
   type?: string;
 }
 
-export interface MessageAttachmentClickEvent {
-  attachment: MessageAttachment;
-}
+/**
+ * Fired when an attachment is clicked.
+ */
+export type MessageAttachmentClickEvent = CustomEvent<{ attachment: MessageAttachment }>;
 
 export declare function MessageMixin<T extends Constructor<HTMLElement>>(
   base: T,

@@ -16,7 +16,7 @@ export {
 } from './vaadin-message-list-mixin.js';
 
 export type MessageListEventMap = HTMLElementEventMap & {
-  'attachment-click': CustomEvent<MessageListAttachmentClickEvent>;
+  'attachment-click': MessageListAttachmentClickEvent;
 };
 
 /**

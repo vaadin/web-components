@@ -144,7 +144,7 @@ export const MessageMixin = (superClass) =>
       }
 
       return html`
-        <div part="attachments"> ${attachments.map((attachment) => this.__renderAttachment(attachment))} </div>
+        <div part="attachments">${attachments.map((attachment) => this.__renderAttachment(attachment))}</div>
       `;
     }
 
@@ -173,7 +173,7 @@ export const MessageMixin = (superClass) =>
       return html`
         <button type="button" part="attachment attachment-file" @click="${() => this.__onAttachmentClick(attachment)}">
           <span part="attachment-icon" aria-hidden="true"></span>
-          <span part="attachment-name">${attachment.name}</span>
+          <span part="attachment-name">${attachment.name || ''}</span>
         </button>
       `;
     }

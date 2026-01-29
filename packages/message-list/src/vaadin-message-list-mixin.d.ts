@@ -9,9 +9,10 @@ import type { MessageAttachment, MessageAttachmentClickEvent } from './vaadin-me
 
 export { MessageAttachment, MessageAttachmentClickEvent };
 
-export interface MessageListAttachmentClickEvent extends MessageAttachmentClickEvent {
-  item: MessageListItem | null;
-}
+/**
+ * Fired when an attachment is clicked in a message list item.
+ */
+export type MessageListAttachmentClickEvent = CustomEvent<{ attachment: MessageAttachment; item: MessageListItem }>;
 
 export interface MessageListItem {
   text?: string;

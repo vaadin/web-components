@@ -10,7 +10,7 @@ import { type MessageAttachmentClickEvent, MessageMixin } from './vaadin-message
 export { MessageAttachment, MessageAttachmentClickEvent } from './vaadin-message-mixin.js';
 
 export type MessageEventMap = HTMLElementEventMap & {
-  'attachment-click': CustomEvent<MessageAttachmentClickEvent>;
+  'attachment-click': MessageAttachmentClickEvent;
 };
 
 /**
