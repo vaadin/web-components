@@ -1,9 +1,15 @@
 name: Visual tests
 
-on: pull_request_target
+on: 
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 permissions:
   contents: read
+
+env:
+  _HEAD_SHA: ${{ github.event.pull_request.head.sha }}}}
 
 jobs:
   base:
@@ -15,6 +21,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{env._HEAD_SHA}}
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -51,6 +58,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{env._HEAD_SHA}}
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -89,6 +97,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{env._HEAD_SHA}}
 
       - name: Setup Node
         uses: actions/setup-node@v6
