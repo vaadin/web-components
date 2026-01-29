@@ -213,6 +213,7 @@ export const SliderMixin = (superClass) =>
       if (event.composedPath()[0] === this.$.controls) {
         const newValue = this.__getEventValue(event);
         this.__updateValue(newValue, this.__thumbIndex);
+        this.__dispatchInputEvent();
         this.__commitValue();
       }
     }
@@ -224,6 +225,7 @@ export const SliderMixin = (superClass) =>
     __onPointerMove(event) {
       const newValue = this.__getEventValue(event);
       this.__updateValue(newValue, this.__thumbIndex);
+      this.__dispatchInputEvent();
       this.__commitValue();
     }
 
@@ -251,6 +253,11 @@ export const SliderMixin = (superClass) =>
     }
 
     /** @private */
+    __dispatchInputEvent() {
+      this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    }
+
+    /** @private */
     __detectAndDispatchChange() {
       if (JSON.stringify(this.__lastCommittedValue) !== JSON.stringify(this.value)) {
         this.__lastCommittedValue = this.value;
@@ -263,8 +270,10 @@ export const SliderMixin = (superClass) =>
      * @private
      */
     __onInput(event) {
+      event.stopPropagation();
       const index = this.__getThumbIndex(event);
       this.__updateValue(event.target.value, index);
+      this.__dispatchInputEvent();
       this.__commitValue();
     }
 
@@ -276,6 +285,12 @@ export const SliderMixin = (superClass) =>
       event.stopPropagation();
       this.__detectAndDispatchChange();
     }
+
+    /**
+     * Fired when the slider value changes during user interaction.
+     *
+     * @event input
+     */
 
     /**
      * Fired when the user commits a value change.
