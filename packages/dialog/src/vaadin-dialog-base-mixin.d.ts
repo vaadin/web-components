@@ -33,6 +33,12 @@ export declare class DialogBaseMixinClass {
   modeless: boolean;
 
   /**
+   * Set to true to disable focus trapping.
+   * @attr {boolean} no-focus-trap
+   */
+  noFocusTrap: boolean;
+
+  /**
    * The `role` attribute value to be set on the dialog. Defaults to "dialog".
    *
    * @attr {string} overlay-role
