@@ -32,6 +32,7 @@ export const sliderStyles = css`
 
   :host([readonly]) {
     --vaadin-slider-fill-background: var(--vaadin-background-color);
+    --_outline-style: dashed;
   }
 
   #controls {
@@ -79,6 +80,10 @@ export const sliderStyles = css`
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     border-radius: 50%;
     touch-action: none;
+  }
+
+  :host([dir='rtl']) [part~='thumb'] {
+    transform: translateX(50%) translateY(-50%);
   }
 
   :host([readonly]) [part~='thumb'],

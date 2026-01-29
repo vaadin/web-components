@@ -43,7 +43,8 @@
   "devDependencies": {
     "@vaadin/chai-plugins": "25.1.0-alpha3",
     "@vaadin/test-runner-commands": "25.1.0-alpha3",
-    "@vaadin/testing-helpers": "^2.0.0"
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.1.0-alpha3"
   },
   "web-types": [
     "web-types.json",

@@ -49,12 +49,8 @@ class Slider extends FieldMixin(
       sliderStyles,
       css`
         :host([focus-ring]) [part='thumb'] {
-          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
-        }
-
-        :host([readonly][focus-ring]) [part~='thumb'] {
-          outline-style: dashed;
         }
       `,
     ];
@@ -62,6 +58,10 @@ class Slider extends FieldMixin(
 
   static get experimental() {
     return 'sliderComponent';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
