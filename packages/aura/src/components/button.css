@@ -15,8 +15,8 @@ vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='tertiary'])) {
-  --aura-surface-level: 6;
-  --aura-surface-opacity: 0.3;
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.5;
   box-shadow: var(--vaadin-button-shadow);
 }
 
