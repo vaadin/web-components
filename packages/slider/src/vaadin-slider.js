@@ -50,6 +50,13 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * `track-fill`         | The filled portion of the track
  * `thumb`              | The slider thumb
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute   | Description
+ * ------------|-------------
+ * `disabled`  | Set when the slider is disabled
+ * `readonly`  | Set when the slider is read-only
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
