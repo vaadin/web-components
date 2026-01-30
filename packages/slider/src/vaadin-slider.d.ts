@@ -52,11 +52,15 @@ export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMa
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name      | Description
- * ---------------|-----------------
- * `track`        | The slider track
- * `track-fill`   | The filled portion of the track
- * `thumb`        | The slider thumb
+ * Part name            | Description
+ * ---------------------|-----------------
+ * `label`              | The label element
+ * `required-indicator` | The required indicator element
+ * `helper-text`        | The helper text element
+ * `error-message`      | The error message element
+ * `track`              | The slider track
+ * `track-fill`         | The filled portion of the track
+ * `thumb`              | The slider thumb
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
