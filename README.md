@@ -1,6 +1,4 @@
-<p align="center">
-  <a href="https://vaadin.com" rel="noopener" target="_blank"><img width="100" src="https://raw.githubusercontent.com/vaadin/web-components/main/vaadin-logo.svg" alt="Vaadin logo"></a></p>
-</p>
+
 
 <h1 align="center">Vaadin web components</h1>
 
