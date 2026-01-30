@@ -26,6 +26,42 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * <vaadin-range-slider min="0" max="100" step="1"></vaadin-range-slider>
  * ```
  *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|-----------------
+ * `label`              | The label element
+ * `required-indicator` | The required indicator element
+ * `helper-text`        | The helper text element
+ * `error-message`      | The error message element
+ * `track`              | The slider track
+ * `track-fill`         | The filled portion of the track
+ * `thumb`              | The slider thumb (applies to both thumbs)
+ * `thumb-start`        | The start (lower value) thumb
+ * `thumb-end`          | The end (upper value) thumb
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute   | Description
+ * ------------|-------------
+ * `disabled`  | Set when the slider is disabled
+ * `readonly`  | Set when the slider is read-only
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * | `--vaadin-slider-fill-background`      |
+ * | `--vaadin-slider-thumb-height`         |
+ * | `--vaadin-slider-thumb-width`          |
+ * | `--vaadin-slider-track-background`     |
+ * | `--vaadin-slider-track-border-radius`  |
+ * | `--vaadin-slider-track-height`         |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
