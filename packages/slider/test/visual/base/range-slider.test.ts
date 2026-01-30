@@ -39,6 +39,11 @@ describe('range-slider', () => {
     await visualDiff(div, 'value-always-visible');
   });
 
+  it('min max visible', async () => {
+    element.minMaxVisible = true;
+    await visualDiff(div, 'min-max-visible');
+  });
+
   it('disabled', async () => {
     element.disabled = true;
     await visualDiff(div, 'disabled');
@@ -108,6 +113,11 @@ describe('range-slider', () => {
       element.value = [10, 80];
       element.readonly = true;
       await visualDiff(div, 'rtl-readonly');
+    });
+
+    it('min max visible', async () => {
+      element.minMaxVisible = true;
+      await visualDiff(div, 'rtl-min-max-visible');
     });
   });
 });

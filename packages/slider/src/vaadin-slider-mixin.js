@@ -61,6 +61,15 @@ export const SliderMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * When true, displays the min and max values below the slider track.
+         * @attr {boolean} min-max-visible
+         */
+        minMaxVisible: {
+          type: Boolean,
+          reflectToAttribute: true,
+        },
+
         /** @private */
         __value: {
           type: Array,

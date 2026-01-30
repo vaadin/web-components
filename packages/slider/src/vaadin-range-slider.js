@@ -43,19 +43,23 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * `thumb`              | The slider thumb (applies to both thumbs)
  * `thumb-start`        | The start (lower value) thumb
  * `thumb-end`          | The end (upper value) thumb
+ * `marks`              | Container for min/max labels
+ * `min`                | Minimum value label
+ * `max`                | Maximum value label
  *
  * The following state attributes are available for styling:
  *
- * Attribute       | Description
- * ----------------|-------------
- * `disabled`      | Set when the slider is disabled
- * `readonly`      | Set when the slider is read-only
- * `focused`       | Set when the slider has focus
- * `focus-ring`    | Set when the slider is focused using the keyboard
- * `start-active`  | Set when the start thumb is activated with mouse or touch
- * `end-active`    | Set when the end thumb is activated with mouse or touch
- * `start-focused` | Set when the start thumb has focus
- * `end-focused`   | Set when the end thumb has focus
+ * Attribute          | Description
+ * -------------------|-------------
+ * `disabled`         | Set when the slider is disabled
+ * `readonly`         | Set when the slider is read-only
+ * `focused`          | Set when the slider has focus
+ * `focus-ring`       | Set when the slider is focused using the keyboard
+ * `start-active`     | Set when the start thumb is activated with mouse or touch
+ * `end-active`       | Set when the end thumb is activated with mouse or touch
+ * `start-focused`    | Set when the start thumb has focus
+ * `end-focused`      | Set when the end thumb has focus
+ * `min-max-visible`  | Set when the min/max labels are displayed
  *
  * The following custom CSS properties are available for styling:
  *
@@ -276,6 +280,7 @@ class RangeSlider extends FieldMixin(
 
     const startPercent = this.__getPercentFromValue(startValue);
     const endPercent = this.__getPercentFromValue(endValue);
+    const { min, max } = this.__getConstraints();
 
     return html`
       <div class="vaadin-slider-container">
@@ -292,6 +297,11 @@ class RangeSlider extends FieldMixin(
           <div part="thumb thumb-end"></div>
           <slot name="input"></slot>
           <slot name="bubble"></slot>
+        </div>
+
+        <div part="marks" aria-hidden="true">
+          <span part="min">${min}</span>
+          <span part="max">${max}</span>
         </div>
 
         <div part="helper-text">

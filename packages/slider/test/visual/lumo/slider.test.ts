@@ -37,6 +37,11 @@ describe('slider', () => {
       await visualDiff(div, 'value-max');
     });
 
+    it('min max visible', async () => {
+      element.minMaxVisible = true;
+      await visualDiff(div, 'min-max-visible');
+    });
+
     it('disabled', async () => {
       element.disabled = true;
       await visualDiff(div, 'disabled');
@@ -161,6 +166,11 @@ describe('slider', () => {
       element.value = 50;
       element.readonly = true;
       await visualDiff(div, 'rtl-readonly');
+    });
+
+    it('min max visible', async () => {
+      element.minMaxVisible = true;
+      await visualDiff(div, 'rtl-min-max-visible');
     });
   });
 });

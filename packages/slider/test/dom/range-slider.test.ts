@@ -95,6 +95,12 @@ describe('vaadin-range-slider', () => {
       await nextUpdate(slider);
       await expect(slider).dom.to.equalSnapshot();
     });
+
+    it('min max visible', async () => {
+      slider.minMaxVisible = true;
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', async () => {

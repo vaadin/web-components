@@ -41,4 +41,10 @@ export declare class SliderMixinClass {
    * @attr {boolean} value-always-visible
    */
   valueAlwaysVisible: boolean;
+
+  /**
+   * When true, displays the min and max values below the slider track.
+   * @attr {boolean} min-max-visible
+   */
+  minMaxVisible: boolean;
 }

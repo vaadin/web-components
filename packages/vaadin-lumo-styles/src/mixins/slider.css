@@ -96,6 +96,11 @@
     border: 0;
   }
 
+  [part='marks'] {
+    font-size: var(--lumo-font-size-xs);
+    line-height: var(--lumo-line-height-xs);
+  }
+
   [part='error-message'] {
     display: block;
     margin-top: 0;
