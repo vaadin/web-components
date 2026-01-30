@@ -13,6 +13,7 @@ env:
 
 jobs:
   base:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Base
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
