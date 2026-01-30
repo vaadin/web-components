@@ -88,7 +88,9 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} resize-start - Fired when the dialog resize is started.
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
+ * @fires {CustomEvent} drag-start - Fired when the dialog drag is started.
  * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
@@ -154,7 +156,7 @@ class Dialog extends DialogSizeMixin(
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"
         restore-focus-on-close
-        focus-trap
+        ?focus-trap="${!this.noFocusTrap}"
         exportparts="backdrop, overlay, header, title, header-content, content, footer"
       >
         <slot name="title" slot="title"></slot>

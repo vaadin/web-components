@@ -70,6 +70,8 @@ export const ActiveItemMixin = (superClass) =>
       return (
         // Something has handled this click already, e. g., <vaadin-grid-sorter>
         e.defaultPrevented ||
+        // Skip if click event explicitly requests to skip cell activation
+        e.skipCellActivate ||
         // No clicked cell available
         !cell ||
         // Cell is a details cell

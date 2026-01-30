@@ -7,11 +7,13 @@ import type {
   Dialog,
   DialogClosedEvent,
   DialogDraggedEvent,
+  DialogDragStartEvent,
   DialogOpenedChangedEvent,
   DialogPosition,
   DialogRenderer,
   DialogResizeDimensions,
   DialogResizeEvent,
+  DialogResizeStartEvent,
 } from '../../vaadin-dialog.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -30,8 +32,18 @@ dialog.addEventListener('opened-changed', (event) => {
   assertType<boolean>(event.detail.value);
 });
 
+dialog.addEventListener('resize-start', (event) => {
+  assertType<DialogResizeStartEvent>(event);
+  assertType<DialogResizeDimensions>(event.detail);
+});
+
 dialog.addEventListener('resize', (event) => {
   assertType<DialogResizeEvent>(event);
+  assertType<DialogResizeDimensions>(event.detail);
+});
+
+dialog.addEventListener('drag-start', (event) => {
+  assertType<DialogDragStartEvent>(event);
   assertType<DialogResizeDimensions>(event.detail);
 });
 
@@ -47,6 +59,7 @@ dialog.addEventListener('closed', (event) => {
 // Properties
 assertType<boolean>(dialog.opened);
 assertType<boolean>(dialog.modeless);
+assertType<boolean>(dialog.noFocusTrap);
 assertType<boolean>(dialog.draggable);
 assertType<boolean>(dialog.resizable);
 assertType<boolean>(dialog.noCloseOnEsc);

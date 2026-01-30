@@ -11,6 +11,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -30,12 +32,13 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes FieldMixin
  * @mixes FocusMixin
  * @mixes SliderMixin
  * @mixes ThemableMixin
  */
-class RangeSlider extends SliderMixin(
-  FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+class RangeSlider extends FieldMixin(
+  SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-range-slider';
@@ -43,12 +46,65 @@ class RangeSlider extends SliderMixin(
 
   static get styles() {
     return [
+      field,
       sliderStyles,
       css`
         :host([focus-ring][start-focused]) [part~='thumb-start'],
         :host([focus-ring][end-focused]) [part~='thumb-end'] {
-          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
+        }
+
+        #controls {
+          grid-template-columns:
+            [track-start]
+            calc(var(--start-value) * var(--_track-width))
+            [thumb1]
+            0
+            [fill-start]
+            calc((var(--end-value) - var(--start-value)) * var(--_track-width))
+            [fill-end thumb2]
+            0
+            calc((1 - var(--end-value)) * var(--_track-width))
+            var(--_thumb-width)
+            [track-end];
+        }
+
+        [part='track-fill'] {
+          margin-inline-start: var(--_thumb-width);
+        }
+
+        [part~='thumb-end'] {
+          grid-column: thumb2;
+        }
+
+        :host([readonly]) [part='track-fill'] {
+          border-inline-start: none;
+        }
+
+        ::slotted(input:last-of-type) {
+          clip-path: inset(
+            0 0 0
+              clamp(
+                0%,
+                var(--_thumb-width) / 2 + var(--start-value) * var(--_track-width) +
+                  (var(--end-value) - var(--start-value)) * var(--_track-width) / 2,
+                100%
+              )
+          );
+        }
+
+        :host([dir='rtl']) ::slotted(input:last-of-type) {
+          clip-path: inset(
+            0
+              clamp(
+                0%,
+                var(--_thumb-width) / 2 + var(--start-value) * var(--_track-width) +
+                  (var(--end-value) - var(--start-value)) * var(--_track-width) / 2,
+                100%
+              )
+              0 0
+          );
         }
       `,
     ];
@@ -56,6 +112,10 @@ class RangeSlider extends SliderMixin(
 
   static get experimental() {
     return 'sliderComponent';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -80,18 +140,29 @@ class RangeSlider extends SliderMixin(
     const endPercent = this.__getPercentFromValue(endValue);
 
     return html`
-      <div part="track">
-        <div
-          part="track-fill"
-          style="${styleMap({
-            insetInlineStart: `${startPercent}%`,
-            insetInlineEnd: `${100 - endPercent}%`,
-          })}"
-        ></div>
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
+        </div>
+
+        <div id="controls" style="${styleMap({ '--start-value': startPercent, '--end-value': endPercent })}">
+          <div part="track">
+            <div part="track-fill"></div>
+          </div>
+          <div part="thumb thumb-start"></div>
+          <div part="thumb thumb-end"></div>
+          <slot name="input"></slot>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
-      <div part="thumb thumb-start" style="${styleMap({ insetInlineStart: `${startPercent}%` })}"></div>
-      <div part="thumb thumb-end" style="${styleMap({ insetInlineStart: `${endPercent}%` })}"></div>
-      <slot name="input"></slot>
     `;
   }
 
@@ -101,8 +172,6 @@ class RangeSlider extends SliderMixin(
     this.__value = [...this.value];
     this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
-
-    this.addEventListener('mousedown', (e) => this._onMouseDown(e));
   }
 
   /** @protected */
@@ -111,6 +180,7 @@ class RangeSlider extends SliderMixin(
 
     const inputs = this.querySelectorAll('[slot="input"]');
     this._inputElements = [...inputs];
+    this.ariaTarget = this;
   }
 
   /**
@@ -122,7 +192,7 @@ class RangeSlider extends SliderMixin(
     super.update(props);
 
     const [startValue, endValue] = this.__value;
-    const { min, max } = this.__getConstraints();
+    const { min, max, step } = this.__getConstraints();
 
     render(
       html`
@@ -132,10 +202,12 @@ class RangeSlider extends SliderMixin(
           slot="input"
           .min="${min}"
           .max="${max}"
+          .step="${step}"
           .value="${startValue}"
-          tabindex="0"
+          .disabled="${this.disabled}"
+          tabindex="${this.disabled ? -1 : 0}"
           @keydown="${this.__onKeyDown}"
-          @input="${this.__onInput}"
+          @input="${this.__onStartInput}"
           @change="${this.__onChange}"
         />
         <input
@@ -144,10 +216,12 @@ class RangeSlider extends SliderMixin(
           slot="input"
           .min="${min}"
           .max="${max}"
+          .step="${step}"
           .value="${endValue}"
-          tabindex="0"
+          .disabled="${this.disabled}"
+          tabindex="${this.disabled ? -1 : 0}"
           @keydown="${this.__onKeyDown}"
-          @input="${this.__onInput}"
+          @input="${this.__onEndInput}"
           @change="${this.__onChange}"
         />
       `,
@@ -160,10 +234,10 @@ class RangeSlider extends SliderMixin(
   updated(props) {
     super.updated(props);
 
-    if (props.has('value') || props.has('min') || props.has('max')) {
-      const value = Array.isArray(this.value) ? this.value : [];
-      value.forEach((value, idx) => {
-        this.__updateValue(value, idx);
+    if (props.has('value') || props.has('min') || props.has('max') || props.has('step')) {
+      const value = [...this.value];
+      value.forEach((v, idx) => {
+        this.__updateValue(v, idx, value);
       });
     }
   }
@@ -174,6 +248,10 @@ class RangeSlider extends SliderMixin(
    * @override
    */
   focus(options) {
+    if (this.disabled) {
+      return;
+    }
+
     if (this._inputElements) {
       this._inputElements[0].focus();
     }
@@ -196,36 +274,54 @@ class RangeSlider extends SliderMixin(
     this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
   }
 
-  /**
-   * @param {PointerEvent} event
-   * @protected
-   */
-  _onMouseDown(event) {
-    // Prevent blur if already focused
-    event.preventDefault();
-
-    // Focus the input to allow modifying value using keyboard
-    this.focus({ focusVisible: false });
-  }
-
   /** @private */
   __commitValue() {
     this.value = [...this.__value];
   }
 
   /** @private */
-  __onKeyDown(event) {
-    this.__thumbIndex = this._inputElements.indexOf(event.target);
+  __onStartInput(event) {
+    // Use second input value as first input max limit
+    if (parseFloat(event.target.value) > this.__value[1]) {
+      event.target.value = this.__value[1];
+    }
 
+    const value = event.target.value;
+    this.__updateValue(value, 0);
+    this.__commitValue();
+  }
+
+  /** @private */
+  __onEndInput(event) {
+    // Use first input value as second input min limit
+    if (parseFloat(event.target.value) < this.__value[0]) {
+      event.target.value = this.__value[0];
+    }
+
+    const value = event.target.value;
+    this.__updateValue(value, 1);
+    this.__commitValue();
+  }
+
+  /** @private */
+  __onKeyDown(event) {
     const prevKeys = ['ArrowLeft', 'ArrowDown'];
     const nextKeys = ['ArrowRight', 'ArrowUp'];
+
+    const isNextKey = nextKeys.includes(event.key);
+    const isPrevKey = prevKeys.includes(event.key);
+
+    if (!isNextKey && !isPrevKey) {
+      return;
+    }
+
+    const index = this._inputElements.indexOf(event.target);
 
     // Suppress native `input` event if start and end thumbs point to the same value,
     // to prevent the case where slotted range inputs would end up in broken state.
     if (
-      this.__value[0] === this.__value[1] &&
-      ((this.__thumbIndex === 0 && nextKeys.includes(event.key)) ||
-        (this.__thumbIndex === 1 && prevKeys.includes(event.key)))
+      this.readonly ||
+      (this.__value[0] === this.__value[1] && ((index === 0 && isNextKey) || (index === 1 && isPrevKey)))
     ) {
       event.preventDefault();
     }

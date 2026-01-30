@@ -8,6 +8,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { getFilesFromDropEvent } from './vaadin-upload-helpers.js';
 
 export const DEFAULT_I18N = {
   dropFiles: {
@@ -380,7 +381,7 @@ export const UploadMixin = (superClass) =>
       return [
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
-        '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
+        '__updateFileList(_fileList, files, __effectiveI18n, disabled, _theme)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -589,6 +590,11 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
+        if (this._theme) {
+          list.setAttribute('theme', this._theme);
+        } else {
+          list.removeAttribute('theme');
+        }
       }
     }
 
@@ -616,57 +622,9 @@ export const UploadMixin = (superClass) =>
         event.preventDefault();
         this._dragover = this._dragoverValid = false;
 
-        const files = await this.__getFilesFromDropEvent(event);
+        const files = await getFilesFromDropEvent(event);
         this._addFiles(files);
       }
-    }
-
-    /**
-     * Get the files from the drop event. The dropped items may contain a
-     * combination of files and directories. If a dropped item is a directory,
-     * it will be recursively traversed to get all files.
-     *
-     * @param {!DragEvent} dropEvent - The drop event
-     * @returns {Promise<File[]>} - The files from the drop event
-     * @private
-     */
-    __getFilesFromDropEvent(dropEvent) {
-      async function getFilesFromEntry(entry) {
-        if (entry.isFile) {
-          return new Promise((resolve) => {
-            // In case of an error, resolve without any files
-            entry.file(resolve, () => resolve([]));
-          });
-        } else if (entry.isDirectory) {
-          const reader = entry.createReader();
-          const entries = await new Promise((resolve) => {
-            // In case of an error, resolve without any files
-            reader.readEntries(resolve, () => resolve([]));
-          });
-          const files = await Promise.all(entries.map(getFilesFromEntry));
-          return files.flat();
-        }
-      }
-
-      // In some cases (like dragging attachments from Outlook on Windows), "webkitGetAsEntry"
-      // can return null for "dataTransfer" items. Also, there is no reason to check for
-      // "webkitGetAsEntry" when there are no folders. Therefore, "dataTransfer.files" is used
-      // to handle such cases.
-      const containsFolders = Array.from(dropEvent.dataTransfer.items)
-        .filter((item) => !!item)
-        .filter((item) => typeof item.webkitGetAsEntry === 'function')
-        .map((item) => item.webkitGetAsEntry())
-        .some((entry) => !!entry && entry.isDirectory);
-      if (!containsFolders) {
-        return Promise.resolve(dropEvent.dataTransfer.files ? Array.from(dropEvent.dataTransfer.files) : []);
-      }
-
-      const filePromises = Array.from(dropEvent.dataTransfer.items)
-        .map((item) => item.webkitGetAsEntry())
-        .filter((entry) => !!entry)
-        .map(getFilesFromEntry);
-
-      return Promise.all(filePromises).then((files) => files.flat());
     }
 
     /** @private */

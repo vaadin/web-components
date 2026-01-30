@@ -109,6 +109,7 @@
     background-image: none;
     outline: none;
     -webkit-tap-highlight-color: transparent;
+    width: max-content;
   }
 
   :host(:is([has-header], [has-title])) [part='header'] + [part='content'] {

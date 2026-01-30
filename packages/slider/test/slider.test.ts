@@ -29,6 +29,29 @@ describe('vaadin-slider', () => {
     });
   });
 
+  describe('value property', () => {
+    beforeEach(async () => {
+      slider = fixtureSync('<vaadin-slider></vaadin-slider>');
+      slider.value = 2;
+      await nextRender();
+    });
+
+    it('should not update the value when changing min', () => {
+      slider.min = 3;
+      expect(slider.value).to.equal(2);
+    });
+
+    it('should not update the value when changing max', () => {
+      slider.max = 1;
+      expect(slider.value).to.equal(2);
+    });
+
+    it('should not update the value when changing step', () => {
+      slider.step = 1.5;
+      expect(slider.value).to.equal(2);
+    });
+  });
+
   describe('focus', () => {
     let firstGlobalFocusable: HTMLElement;
     let lastGlobalFocusable: HTMLElement;
@@ -61,6 +84,19 @@ describe('vaadin-slider', () => {
 
     it('should focus the input on focus()', () => {
       slider.focus();
+      expect(document.activeElement).to.equal(input);
+    });
+
+    it('should not focus the input on focus() when disabled', () => {
+      slider.disabled = true;
+      slider.focus();
+      expect(document.activeElement).to.not.equal(input);
+    });
+
+    it('should focus the input on required indicator click', () => {
+      slider.required = true;
+      const indicator = slider.shadowRoot!.querySelector('[part="required-indicator"]') as HTMLElement;
+      indicator.click();
       expect(document.activeElement).to.equal(input);
     });
 
@@ -117,6 +153,26 @@ describe('vaadin-slider', () => {
       slider.addEventListener('change', spy);
       await sendKeys({ press: 'ArrowRight' });
       expect(spy).to.be.calledOnce;
+    });
+
+    it('should preserve decimals when changing value using fractional step', async () => {
+      slider.value = 3;
+      slider.step = 1.5;
+      await sendKeys({ press: 'ArrowLeft' });
+      expect(slider.value).to.equal(1.5);
+    });
+
+    it('should not increase value past max allowed value with fractional step', async () => {
+      slider.step = 1.5;
+      slider.value = 99;
+      await sendKeys({ press: 'ArrowRight' });
+      expect(slider.value).to.equal(99);
+    });
+
+    it('should not change value on arrow key when readonly', async () => {
+      slider.readonly = true;
+      await sendKeys({ press: 'ArrowRight' });
+      expect(slider.value).to.equal(0);
     });
   });
 });

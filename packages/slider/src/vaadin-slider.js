@@ -10,6 +10,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -29,12 +31,13 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes FieldMixin
  * @mixes FocusMixin
  * @mixes SliderMixin
  * @mixes ThemableMixin
  */
-class Slider extends SliderMixin(
-  FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+class Slider extends FieldMixin(
+  SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-slider';
@@ -42,11 +45,27 @@ class Slider extends SliderMixin(
 
   static get styles() {
     return [
+      field,
       sliderStyles,
       css`
         :host([focus-ring]) [part='thumb'] {
-          outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+          outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
+        }
+
+        #controls {
+          grid-template-columns:
+            [track-start fill-start]
+            calc(var(--value) * var(--_track-width))
+            [fill-end thumb1]
+            var(--_thumb-width)
+            calc((1 - var(--value)) * var(--_track-width))
+            [track-end];
+        }
+
+        [part='track-fill'] {
+          border-start-start-radius: inherit;
+          border-end-start-radius: inherit;
         }
       `,
     ];
@@ -54,6 +73,10 @@ class Slider extends SliderMixin(
 
   static get experimental() {
     return 'sliderComponent';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {
@@ -76,17 +99,28 @@ class Slider extends SliderMixin(
     const percent = this.__getPercentFromValue(value);
 
     return html`
-      <div part="track">
-        <div
-          part="track-fill"
-          style="${styleMap({
-            insetInlineStart: 0,
-            insetInlineEnd: `${100 - percent}%`,
-          })}"
-        ></div>
+      <div class="vaadin-slider-container">
+        <div part="label" @click="${this.focus}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
+        </div>
+
+        <div id="controls" style="${styleMap({ '--value': percent })}">
+          <div part="track">
+            <div part="track-fill"></div>
+          </div>
+          <div part="thumb"></div>
+          <slot name="input"></slot>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
-      <div part="thumb" style="${styleMap({ insetInlineStart: `${percent}%` })}"></div>
-      <slot name="input"></slot>
     `;
   }
 
@@ -95,8 +129,6 @@ class Slider extends SliderMixin(
 
     this.__value = [this.value];
     this.__inputId = `slider-${generateUniqueId()}`;
-
-    this.addEventListener('mousedown', (e) => this._onMouseDown(e));
   }
 
   /** @protected */
@@ -105,6 +137,7 @@ class Slider extends SliderMixin(
 
     const input = this.querySelector('[slot="input"]');
     this._inputElement = input;
+    this.ariaTarget = input;
   }
 
   /**
@@ -116,7 +149,7 @@ class Slider extends SliderMixin(
     super.update(props);
 
     const [value] = this.__value;
-    const { min, max } = this.__getConstraints();
+    const { min, max, step } = this.__getConstraints();
 
     render(
       html`
@@ -127,7 +160,10 @@ class Slider extends SliderMixin(
           .min="${min}"
           .max="${max}"
           .value="${value}"
-          tabindex="0"
+          .step="${step}"
+          .disabled="${this.disabled}"
+          tabindex="${this.disabled ? -1 : 0}"
+          @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
         />
@@ -141,7 +177,7 @@ class Slider extends SliderMixin(
   updated(props) {
     super.updated(props);
 
-    if (props.has('value') || props.has('min') || props.has('max')) {
+    if (props.has('value') || props.has('min') || props.has('max') || props.has('step')) {
       this.__updateValue(this.value);
     }
   }
@@ -152,6 +188,10 @@ class Slider extends SliderMixin(
    * @override
    */
   focus(options) {
+    if (this.disabled) {
+      return;
+    }
+
     if (this._inputElement) {
       this._inputElement.focus();
     }
@@ -167,16 +207,18 @@ class Slider extends SliderMixin(
     this.value = this.__value[0];
   }
 
-  /**
-   * @param {PointerEvent} event
-   * @protected
-   */
-  _onMouseDown(event) {
-    // Prevent blur if already focused
-    event.preventDefault();
+  /** @private */
+  __onInput(event) {
+    this.__updateValue(event.target.value, 0);
+    this.__commitValue();
+  }
 
-    // Focus the input to allow modifying value using keyboard
-    this.focus({ focusVisible: false });
+  /** @private */
+  __onKeyDown(event) {
+    const arrowKeys = ['ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp'];
+    if (this.readonly && arrowKeys.includes(event.key)) {
+      event.preventDefault();
+    }
   }
 }
 

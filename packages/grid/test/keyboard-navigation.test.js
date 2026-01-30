@@ -20,12 +20,14 @@ import '../all-imports.js';
 import {
   attributeRenderer,
   flushGrid,
+  getBodyCell,
   getCell,
   getCellContent,
   getContainerCell,
   getFirstVisibleItem,
   getFocusedCellIndex,
   getFocusedRowIndex,
+  getHeaderCell,
   getLastVisibleItem,
   getPhysicalItems,
   getRowCells,
@@ -99,6 +101,11 @@ function spaceDown(target) {
 
 function spaceUp(target) {
   keyUpOn(target || grid.shadowRoot.activeElement, 32, [], ' ');
+}
+
+function spacePress(target) {
+  spaceDown(target);
+  spaceUp(target);
 }
 
 function pageUp(target) {
@@ -1399,7 +1406,7 @@ describe('keyboard navigation', () => {
     it('should activate on space keydown', () => {
       tabToBody();
 
-      spaceDown();
+      spacePress();
 
       expect(grid.activeItem).to.equal('foo');
     });
@@ -1409,7 +1416,7 @@ describe('keyboard navigation', () => {
       clickItem(0);
 
       down();
-      spaceDown();
+      spacePress();
 
       expect(grid.activeItem).to.equal('bar');
     });
@@ -1418,7 +1425,7 @@ describe('keyboard navigation', () => {
       focusItem(0);
       clickItem(0); // Activates first item on click
 
-      spaceDown();
+      spacePress();
 
       expect(grid.activeItem).to.be.null;
     });
@@ -1468,7 +1475,7 @@ describe('keyboard navigation', () => {
     it('should not activate on space keydown click on a native input', () => {
       const input = focusFirstBodyInput(0);
       escape(input);
-      spaceDown();
+      spacePress();
 
       expect(grid.activeItem).to.be.null;
     });
@@ -1477,7 +1484,7 @@ describe('keyboard navigation', () => {
       clickItem(0);
 
       tabToHeader();
-      spaceDown();
+      spacePress();
 
       expect(grid.activeItem).to.equal('foo');
     });
@@ -1500,32 +1507,41 @@ describe('keyboard navigation', () => {
     });
 
     describe('space click shortcut', () => {
-      beforeEach(() => {
-        header.children[0].children[1].focus();
-        right();
+      function verifyClickOnSpace(cell) {
+        let composedPath;
+        const clickSpy = sinon.spy((e) => {
+          composedPath = e.composedPath();
+        });
+        grid.addEventListener('click', clickSpy);
+
+        const firstElementChild = getCellContent(cell).firstElementChild;
+
+        spaceDown(cell);
+        expect(clickSpy.called).to.be.false;
+
+        spaceUp(cell);
+        expect(clickSpy.calledOnce).to.be.true;
+
+        const event = clickSpy.args[0][0];
+        const target = composedPath[0];
+
+        expect(event instanceof MouseEvent).to.be.true;
+        expect(event.type).to.equal('click');
+        expect(target).to.equal(firstElementChild || cell);
+      }
+
+      it('should dispatch click event on space keyup in header cells', () => {
+        // Verify for various cells with either text nodes or element children
+        grid.querySelectorAll('vaadin-grid-column').forEach((_, index) => {
+          verifyClickOnSpace(getHeaderCell(grid, 0, index));
+        });
       });
 
-      it('should dispatch click event on first cell child on space keyup', () => {
-        const firstChild = getCellContent(header.children[0].children[2]).children[0];
-        const dispatchEventStub = sinon.stub(firstChild, 'dispatchEvent');
-
-        spaceDown();
-        expect(dispatchEventStub.called).to.be.false;
-
-        spaceUp();
-        expect(dispatchEventStub.called).to.be.true;
-        expect(dispatchEventStub.args[0][0] instanceof MouseEvent).to.be.true;
-        expect(dispatchEventStub.args[0][0].type).to.equal('click');
-      });
-
-      it('should not dispatch click event on other cell children on space keyup', () => {
-        const secondChild = getCellContent(header.children[0].children[2]).children[1];
-        const dispatchEventStub = sinon.stub(secondChild, 'dispatchEvent');
-
-        spaceDown();
-        spaceUp();
-
-        expect(dispatchEventStub.called).to.be.false;
+      it('should dispatch click event on space keyup in body cells', () => {
+        // Verify for various cells with either text nodes or element children
+        grid.querySelectorAll('vaadin-grid-column').forEach((_, index) => {
+          verifyClickOnSpace(getBodyCell(grid, 0, index));
+        });
       });
 
       it('should prevent default keydown action when clicking on space', () => {
@@ -1537,21 +1553,16 @@ describe('keyboard navigation', () => {
       });
 
       it('should not activate if synthetic click has default prevented', () => {
-        const firstBodyRowFirstChild = getCellContent(getRows(body)[0].children[2]).children[0];
+        const bodyCell = getBodyCell(grid, 0, 2);
+        const firstChild = getCellContent(bodyCell).children[0];
 
         const spy = sinon.spy();
-        listenOnce(firstBodyRowFirstChild, 'click', (e) => {
+        listenOnce(firstChild, 'click', (e) => {
           spy();
           e.preventDefault();
         });
 
-        // Navigate to body, row 1, column 3
-        tabToBody();
-        right();
-        right();
-
-        spaceDown();
-        spaceUp();
+        spacePress(bodyCell);
 
         expect(spy.called).to.be.true;
         expect(grid.activeItem).to.be.null;

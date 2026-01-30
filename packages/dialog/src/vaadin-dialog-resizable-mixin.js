@@ -74,6 +74,9 @@ export const DialogResizableMixin = (superClass) =>
         window.addEventListener('touchend', this._resizeListeners.stop[direction]);
         this.$.overlay.setBounds(this._originalBounds);
         this.$.overlay.setAttribute('has-bounds-set', '');
+
+        const { width, height, top, left } = this._originalBounds;
+        this.dispatchEvent(new CustomEvent('resize-start', { detail: { width, height, top, left } }));
       }
     }
 
@@ -147,6 +150,12 @@ export const DialogResizableMixin = (superClass) =>
       const { width, height, top, left } = getComputedStyle(this.$.overlay.$.overlay);
       return { width, height, top, left };
     }
+
+    /**
+     * Fired when the dialog resize is started.
+     *
+     * @event resize-start
+     */
 
     /**
      * Fired when the dialog resize is finished.

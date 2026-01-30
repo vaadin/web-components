@@ -1,25 +1,33 @@
 name: Visual tests
 
-on: pull_request
+on: 
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 permissions:
   contents: read
 
+env:
+  _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
 jobs:
   base:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Base
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{ env._HEAD_SHA }}
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -36,26 +44,28 @@ jobs:
           max_attempts: 3
           command: yarn test:base
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: base-screenshots
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
   lumo:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Lumo
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{ env._HEAD_SHA }}
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -72,7 +82,7 @@ jobs:
           max_attempts: 3
           command: yarn test:lumo
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: lumo-screenshots
@@ -81,19 +91,21 @@ jobs:
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
 
   aura:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Aura
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{ env._HEAD_SHA }}
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -121,7 +133,7 @@ jobs:
           max_attempts: 3
           command: yarn test:aura:dark
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: base-screenshots

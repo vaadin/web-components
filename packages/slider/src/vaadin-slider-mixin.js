@@ -3,12 +3,16 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes DisabledMixin
+ * @mixes SlotStylesMixin
  */
 export const SliderMixin = (superClass) =>
-  class SliderMixinClass extends superClass {
+  class SliderMixinClass extends SlotStylesMixin(DisabledMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -32,6 +36,18 @@ export const SliderMixin = (superClass) =>
          */
         step: {
           type: Number,
+          sync: true,
+        },
+
+        /**
+         * When true, the user cannot modify the value of the slider.
+         * The difference between `disabled` and `readonly` is that the
+         * read-only slider remains focusable and is announced by screen
+         * readers.
+         */
+        readonly: {
+          type: Boolean,
+          reflectToAttribute: true,
         },
 
         /** @private */
@@ -42,43 +58,82 @@ export const SliderMixin = (superClass) =>
       };
     }
 
+    /** @protected */
+    get slotStyles() {
+      const tag = this.localName;
+
+      return [
+        `
+          ${tag} > input::-webkit-slider-runnable-track {
+            height: 100%;
+          }
+
+          ${tag} > input::-webkit-slider-thumb {
+            appearance: none;
+            width: var(--_thumb-width);
+            height: 100%;
+            /* iOS needs these */
+            background: transparent;
+            box-shadow: none;
+          }
+
+          ${tag} > input::-moz-range-thumb {
+            border: 0;
+            background: transparent;
+            width: var(--_thumb-width);
+            height: 100%;
+          }
+        `,
+      ];
+    }
+
     constructor() {
       super();
 
-      this.__thumbIndex = 0;
+      this.addEventListener('mousedown', (e) => this.__onMouseDown(e));
+    }
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.__lastCommittedValue = this.value;
     }
 
     /**
      * @param {number} value
      * @param {number} index
+     * @param {number[]} fullValue
      * @private
      */
-    __updateValue(value, index = this.__thumbIndex) {
-      const { min, max } = this.__getConstraints();
-      const step = this.step || 1;
+    __updateValue(value, index, fullValue = this.__value) {
+      const { min, max, step } = this.__getConstraints();
 
-      const minValue = this.__value[index - 1] || min;
-      const maxValue = this.__value[index + 1] || max;
+      const minValue = fullValue[index - 1] !== undefined ? fullValue[index - 1] : min;
+      const maxValue = fullValue[index + 1] !== undefined ? fullValue[index + 1] : max;
 
       const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
-      const offset = safeValue - min;
+      const offset = safeValue - minValue;
       const nearestOffset = Math.round(offset / step) * step;
-      const nearestValue = min + nearestOffset;
+      const nearestValue = minValue + nearestOffset;
 
-      const newValue = Math.round(nearestValue);
+      // Ensure the last value matching step is used below the max limit.
+      // Example: max = 100, step = 1.5 - force maximum allowed value to 99.
+      const newValue = nearestValue <= maxValue ? nearestValue : nearestValue - step;
 
-      this.__value = this.__value.with(index, newValue);
+      this.__value = fullValue.with(index, newValue);
     }
 
     /**
-     * @return {{ min: number, max: number}}
+     * @return {{ min: number, max: number, step: number}}
      * @private
      */
     __getConstraints() {
       return {
         min: this.min || 0,
         max: this.max || 100,
+        step: this.step || 1,
       };
     }
 
@@ -89,27 +144,40 @@ export const SliderMixin = (superClass) =>
      */
     __getPercentFromValue(value) {
       const { min, max } = this.__getConstraints();
-      return (100 * (value - min)) / (max - min);
+      const safeValue = Math.min(Math.max(value, min), max);
+      return (safeValue - min) / (max - min);
+    }
+
+    /**
+     * @param {PointerEvent} event
+     * @private
+     */
+    __onMouseDown(event) {
+      if (!event.composedPath().includes(this.$.controls)) {
+        return;
+      }
+
+      // Prevent modifying value when readonly
+      if (this.readonly) {
+        event.preventDefault();
+      }
     }
 
     /** @private */
     __detectAndDispatchChange() {
-      if (this.__lastCommittedValue !== this.value) {
+      if (JSON.stringify(this.__lastCommittedValue) !== JSON.stringify(this.value)) {
         this.__lastCommittedValue = this.value;
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }
 
-    /** @private */
-    __onInput(event) {
-      this.__updateValue(event.target.value);
-      this.__commitValue();
-      this.__detectAndDispatchChange();
-    }
-
-    /** @private */
+    /**
+     * @param {Event} event
+     * @private
+     */
     __onChange(event) {
       event.stopPropagation();
+      this.__detectAndDispatchChange();
     }
 
     /**
