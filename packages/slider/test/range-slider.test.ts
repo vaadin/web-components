@@ -139,6 +139,18 @@ describe('vaadin-range-slider', () => {
     it('should not throw when calling focus() before adding to the DOM', () => {
       expect(() => document.createElement('vaadin-range-slider').focus()).to.not.throw(Error);
     });
+
+    it('should blur the start input on blur()', () => {
+      inputs[0].focus();
+      slider.blur();
+      expect(document.activeElement).to.not.equal(inputs[0]);
+    });
+
+    it('should blur the end input on blur()', () => {
+      inputs[1].focus();
+      slider.blur();
+      expect(document.activeElement).to.not.equal(inputs[1]);
+    });
   });
 
   describe('keyboard input', () => {

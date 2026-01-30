@@ -260,6 +260,19 @@ class RangeSlider extends FieldMixin(
   }
 
   /**
+   * @protected
+   * @override
+   */
+  blur() {
+    if (this._inputElements) {
+      const focusedInput = this._inputElements.find((input) => isElementFocused(input));
+      if (focusedInput) {
+        focusedInput.blur();
+      }
+    }
+  }
+
+  /**
    * Override method inherited from `FocusMixin` to set
    * state attributes indicating which thumb has focus.
    *
