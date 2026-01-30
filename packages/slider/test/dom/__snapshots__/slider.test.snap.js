@@ -12,6 +12,12 @@ snapshots["vaadin-slider host default"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -39,6 +45,12 @@ snapshots["vaadin-slider host value"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    50
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -66,6 +78,12 @@ snapshots["vaadin-slider host min"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    80
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -93,6 +111,12 @@ snapshots["vaadin-slider host max"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    20
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -120,6 +144,12 @@ snapshots["vaadin-slider host step"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    50
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -151,6 +181,12 @@ snapshots["vaadin-slider host disabled"] =
     tabindex="-1"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -179,6 +215,12 @@ snapshots["vaadin-slider host label"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -208,6 +250,12 @@ snapshots["vaadin-slider host helper"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -241,6 +289,12 @@ snapshots["vaadin-slider host required"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -272,6 +326,12 @@ snapshots["vaadin-slider host error"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
   <label
     for="slider-3"
     id="label-vaadin-slider-0"
@@ -311,6 +371,8 @@ snapshots["vaadin-slider shadow default"] =
     </div>
     <slot name="input">
     </slot>
+    <slot name="bubble">
+    </slot>
   </div>
   <div part="helper-text">
     <slot name="helper">
@@ -346,6 +408,8 @@ snapshots["vaadin-slider shadow value"] =
     <div part="thumb">
     </div>
     <slot name="input">
+    </slot>
+    <slot name="bubble">
     </slot>
   </div>
   <div part="helper-text">
@@ -383,6 +447,8 @@ snapshots["vaadin-slider shadow min"] =
     </div>
     <slot name="input">
     </slot>
+    <slot name="bubble">
+    </slot>
   </div>
   <div part="helper-text">
     <slot name="helper">
@@ -418,6 +484,8 @@ snapshots["vaadin-slider shadow max"] =
     <div part="thumb">
     </div>
     <slot name="input">
+    </slot>
+    <slot name="bubble">
     </slot>
   </div>
   <div part="helper-text">
@@ -455,6 +523,8 @@ snapshots["vaadin-slider shadow step"] =
     </div>
     <slot name="input">
     </slot>
+    <slot name="bubble">
+    </slot>
   </div>
   <div part="helper-text">
     <slot name="helper">
@@ -490,6 +560,8 @@ snapshots["vaadin-slider shadow negative"] =
     <div part="thumb">
     </div>
     <slot name="input">
+    </slot>
+    <slot name="bubble">
     </slot>
   </div>
   <div part="helper-text">
@@ -527,6 +599,8 @@ snapshots["vaadin-slider shadow min > value"] =
     </div>
     <slot name="input">
     </slot>
+    <slot name="bubble">
+    </slot>
   </div>
   <div part="helper-text">
     <slot name="helper">
@@ -562,6 +636,8 @@ snapshots["vaadin-slider shadow max < value"] =
     <div part="thumb">
     </div>
     <slot name="input">
+    </slot>
+    <slot name="bubble">
     </slot>
   </div>
   <div part="helper-text">

@@ -59,26 +59,9 @@ describe('slider', () => {
       await visualDiff(div, 'readonly-value');
     });
 
-    it('focus', async () => {
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus');
-    });
-
-    it('readonly focus', async () => {
-      element.readonly = true;
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus-readonly');
-    });
-
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
-    });
-
-    it('label focused', async () => {
-      element.label = 'Label';
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'label-focused');
     });
 
     it('label disabled', async () => {
@@ -104,7 +87,32 @@ describe('slider', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
     });
+  });
 
+  describe('focus', () => {
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+    });
+
+    it('focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus');
+    });
+
+    it('focus readonly', async () => {
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-readonly');
+    });
+
+    it('focus label', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-label');
+    });
+  });
+
+  describe('theme', () => {
     it('contrast', async () => {
       element.value = 50;
       element.setAttribute('theme', 'contrast');

@@ -1,0 +1,27 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_slider-bubble-overlay {
+  :host {
+    --_border-width: 0px;
+  }
+
+  [part='overlay'] {
+    background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+    font-size: var(--lumo-font-size-xs);
+    line-height: var(--lumo-line-height-s);
+    overflow: visible;
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
+  }
+
+  @media (forced-colors: active) {
+    [part='overlay'] {
+      outline: 1px dashed;
+    }
+  }
+}

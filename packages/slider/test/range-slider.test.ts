@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-range-slider.js';
+import type { SliderBubble } from '../src/vaadin-slider-bubble.js';
 import type { RangeSlider } from '../vaadin-range-slider.js';
 
 window.Vaadin ??= {};
@@ -149,6 +150,93 @@ describe('vaadin-range-slider', () => {
       inputs[1].focus();
       slider.blur();
       expect(document.activeElement).to.not.equal(inputs[1]);
+    });
+  });
+
+  describe('bubble', () => {
+    let bubbles: SliderBubble[];
+    let thumbs: Element[];
+
+    beforeEach(async () => {
+      // Set margin: 10px on the wrapper to prevent mouse cursor
+      // from staying on top of the slider at [0, 0] coordinates
+      [slider] = fixtureSync(
+        `<div style="margin: 10px">
+          <vaadin-range-slider></vaadin-range-slider>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).children as unknown as [RangeSlider];
+      await nextRender();
+      bubbles = [...slider.querySelectorAll('vaadin-slider-bubble')];
+      thumbs = [...slider.shadowRoot!.querySelectorAll('[part~="thumb"]')];
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should open start bubble on keyboard focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should close start bubble on blur', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[0].opened).to.be.true;
+
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[0].opened).to.be.false;
+    });
+
+    it('should open end bubble on keyboard focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.true;
+    });
+
+    it('should close end bubble on blur', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[1].opened).to.be.true;
+
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should open both bubbles on pointer enter', async () => {
+      await sendMouseToElement({ type: 'move', element: slider });
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.true;
+    });
+
+    it('should close both bubbles on pointer leave', async () => {
+      await sendMouseToElement({ type: 'move', element: slider });
+      await sendMouse({ type: 'move', position: [300, 300] });
+      await sendMouse({ type: 'down' });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should not close bubble on pointer leave if focused', async () => {
+      await sendMouseToElement({ type: 'click', element: thumbs[0] });
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should open start bubble on programmatic focus', () => {
+      slider.focus();
+      expect(bubbles[0].opened).to.be.true;
+    });
+
+    it('should close start bubble on programmatic blur', () => {
+      slider.focus();
+      expect(bubbles[0].opened).to.be.true;
+
+      slider.blur();
+      expect(bubbles[0].opened).to.be.false;
     });
   });
 });

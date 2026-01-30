@@ -55,6 +55,13 @@ export const SliderMixin = (superClass) =>
           type: Array,
           sync: true,
         },
+
+        /** @private */
+        __hoverInside: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
       };
     }
 
@@ -91,6 +98,8 @@ export const SliderMixin = (superClass) =>
       super();
 
       this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
+      this.addEventListener('mouseenter', (e) => this.__onMouseEnter(e));
+      this.addEventListener('mouseleave', (e) => this.__onMouseLeave(e));
     }
 
     /** @protected */
@@ -161,6 +170,16 @@ export const SliderMixin = (superClass) =>
       if (this.readonly) {
         event.preventDefault();
       }
+    }
+
+    /** @private */
+    __onMouseEnter() {
+      this.__hoverInside = true;
+    }
+
+    /** @private */
+    __onMouseLeave() {
+      this.__hoverInside = false;
     }
 
     /** @private */

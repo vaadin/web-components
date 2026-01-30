@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, isFirefox, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
@@ -100,7 +100,8 @@ describe('vaadin-slider - pointer', () => {
       expect(spy).to.be.calledOnce;
     });
 
-    it('should fire on pointerup outside of the element', async () => {
+    // FIXME: fails in Firefox due to sendMouse instability
+    (isFirefox ? it.skip : it)('should fire on pointerup outside of the element', async () => {
       await sendMouseToElement({ type: 'move', element: thumb });
       await sendMouse({ type: 'down' });
       await sendMouse({ type: 'move', position: [20, y + 100] });

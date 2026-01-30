@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-slider-bubble.js';
 import { css, html, LitElement, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
@@ -201,6 +202,20 @@ class RangeSlider extends FieldMixin(
       accessibleNameEnd: {
         type: String,
       },
+
+      /** @private */
+      __startFocused: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __endFocused: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -225,6 +240,7 @@ class RangeSlider extends FieldMixin(
           <div part="thumb thumb-start"></div>
           <div part="thumb thumb-end"></div>
           <slot name="input"></slot>
+          <slot name="bubble"></slot>
         </div>
 
         <div part="helper-text">
@@ -255,6 +271,11 @@ class RangeSlider extends FieldMixin(
     const inputs = this.querySelectorAll('[slot="input"]');
     this._inputElements = [...inputs];
     this.ariaTarget = this;
+
+    this.__thumbStartElement = this.shadowRoot.querySelector('[part~="thumb-start"]');
+    this.__thumbEndElement = this.shadowRoot.querySelector('[part~="thumb-end"]');
+
+    this.__bubbleElements = [...this.querySelectorAll('vaadin-slider-bubble')];
   }
 
   /** @private */
@@ -322,6 +343,20 @@ class RangeSlider extends FieldMixin(
           @input="${this.__onEndInput}"
           @change="${this.__onChange}"
         />
+        <vaadin-slider-bubble
+          slot="bubble"
+          .positionTarget="${this.__thumbStartElement}"
+          .opened="${this.__hoverInside || this.__startFocused}"
+        >
+          ${startValue}
+        </vaadin-slider-bubble>
+        <vaadin-slider-bubble
+          slot="bubble"
+          .positionTarget="${this.__thumbEndElement}"
+          .opened="${this.__hoverInside || this.__endFocused}"
+        >
+          ${endValue}
+        </vaadin-slider-bubble>
       `,
       this,
       { host: this },
@@ -381,8 +416,11 @@ class RangeSlider extends FieldMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
-    this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
+    this.__startFocused = isElementFocused(this._inputElements[0]);
+    this.__endFocused = isElementFocused(this._inputElements[1]);
+
+    this.toggleAttribute('start-focused', this.__startFocused);
+    this.toggleAttribute('end-focused', this.__endFocused);
   }
 
   /** @private */
@@ -406,6 +444,7 @@ class RangeSlider extends FieldMixin(
 
     const value = event.target.value;
     this.__updateValue(value, 0);
+    this.__updateBubble(0);
     this.__dispatchInputEvent();
     this.__commitValue();
   }
@@ -421,6 +460,7 @@ class RangeSlider extends FieldMixin(
 
     const value = event.target.value;
     this.__updateValue(value, 1);
+    this.__updateBubble(1);
     this.__dispatchInputEvent();
     this.__commitValue();
   }
@@ -447,6 +487,11 @@ class RangeSlider extends FieldMixin(
     ) {
       event.preventDefault();
     }
+  }
+
+  /** @private */
+  __updateBubble(idx) {
+    this.__bubbleElements[idx].$.overlay._updatePosition();
   }
 }
 

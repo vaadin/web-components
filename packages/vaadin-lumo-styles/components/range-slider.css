@@ -7,8 +7,10 @@
 @import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
+@import '../src/mixins/overlay.css';
 @import '../src/mixins/slider.css';
 @import '../src/components/range-slider.css';
+@import '../src/components/slider-bubble-overlay.css';
 
 :root::before,
 :host::before {
@@ -20,4 +22,9 @@
     lumo_mixins_field-helper,
     lumo_mixins_slider,
     lumo_components_range-slider;
+
+  --_lumo-vaadin-slider-bubble-overlay-inject: 1;
+  --_lumo-vaadin-slider-bubble-overlay-inject-modules:
+    lumo_mixins_overlay,
+    lumo_components_slider-bubble-overlay;
 }

@@ -55,21 +55,33 @@ describe('range-slider', () => {
     await visualDiff(div, 'readonly-value');
   });
 
-  it('start focus', async () => {
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus-start');
-  });
+  describe('focus', () => {
+    beforeEach(() => {
+      div.style.padding = '40px 20px 0';
+    });
 
-  it('end focus', async () => {
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus-end');
-  });
+    it('focus start', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-start');
+    });
 
-  it('readonly focus', async () => {
-    element.readonly = true;
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus-readonly');
+    it('focus end', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-end');
+    });
+
+    it('focus readonly', async () => {
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-readonly');
+    });
+
+    it('focus label', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-label');
+    });
   });
 
   describe('RTL', () => {
