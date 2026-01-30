@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, isFirefox, middleOfNode, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, isFirefox, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-range-slider.js';
 import type { RangeSlider } from '../vaadin-range-slider.js';
@@ -40,22 +40,56 @@ window.Vaadin.featureFlags.sliderComponent = true;
   });
 
   describe('value', () => {
-    it('should update slider value property on first thumb pointermove', async () => {
-      await sendMouseToElement({ type: 'move', element: thumbs[0] });
-      await sendMouse({ type: 'down' });
-      // Half of the thumb = 10px + 10 * 2px = 20px
-      await sendMouse({ type: 'move', position: [30, 10] });
+    describe('default', () => {
+      it('should update slider value property on first thumb pointermove', async () => {
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        // Half of the thumb = 10px + 10 * 2px = 20px
+        await sendMouse({ type: 'move', position: [30, 10] });
 
-      expect(slider.value).to.deep.equal([10, 100]);
+        expect(slider.value).to.deep.equal([10, 100]);
+      });
+
+      it('should update slider value property on second thumb pointermove', async () => {
+        await sendMouseToElement({ type: 'move', element: thumbs[1] });
+        await sendMouse({ type: 'down' });
+        // Half of the thumb = 10px + 10 * 2px = 30px
+        await sendMouse({ type: 'move', position: [170, 10] });
+
+        expect(slider.value).to.deep.equal([0, 90]);
+      });
     });
 
-    it('should update slider value property on second thumb pointermove', async () => {
-      await sendMouseToElement({ type: 'move', element: thumbs[1] });
-      await sendMouse({ type: 'down' });
-      // Half of the thumb = 10px + 10 * 2px = 30px
-      await sendMouse({ type: 'move', position: [170, 10] });
+    describe('RTL', () => {
+      let x: number;
 
-      expect(slider.value).to.deep.equal([0, 90]);
+      beforeEach(async () => {
+        document.documentElement.setAttribute('dir', 'rtl');
+        await nextUpdate(slider);
+        x = slider.offsetLeft;
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('should update slider value property on first thumb pointermove', async () => {
+        await sendMouseToElement({ type: 'move', element: thumbs[0] });
+        await sendMouse({ type: 'down' });
+        // Half of the thumb = 10px + 10 * 2px = 30px
+        await sendMouse({ type: 'move', position: [x + 170, 10] });
+
+        expect(slider.value).to.deep.equal([10, 100]);
+      });
+
+      it('should update slider value property on second thumb pointermove', async () => {
+        await sendMouseToElement({ type: 'move', element: thumbs[1] });
+        await sendMouse({ type: 'down' });
+        // Half of the thumb = 10px + 10 * 2px = 30px
+        await sendMouse({ type: 'move', position: [x + 30, 10] });
+
+        expect(slider.value).to.deep.equal([0, 90]);
+      });
     });
   });
 
