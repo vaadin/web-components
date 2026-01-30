@@ -5,10 +5,11 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
 export declare function SliderMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<DisabledMixinClass> & Constructor<SliderMixinClass> & T;
+): Constructor<DisabledMixinClass> & Constructor<SliderMixinClass> & Constructor<SlotStylesMixinClass> & T;
 
 export declare class SliderMixinClass {
   /**

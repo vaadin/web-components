@@ -16,7 +16,12 @@ describe('vaadin-slider - pointer', () => {
   let y: number;
 
   beforeEach(async () => {
-    slider = fixtureSync('<vaadin-slider style="width: 200px"></vaadin-slider>');
+    slider = fixtureSync(`
+      <vaadin-slider
+        step="10"
+        style="width: 200px; --vaadin-slider-thumb-width: 20px"
+      ></vaadin-slider>
+    `);
     await nextRender();
     thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
     track = slider.shadowRoot!.querySelector('[part="track"]')!;
@@ -31,8 +36,8 @@ describe('vaadin-slider - pointer', () => {
     it('should update on thumb pointermove', async () => {
       await sendMouseToElement({ type: 'move', element: thumb });
       await sendMouse({ type: 'down' });
-      await sendMouse({ type: 'move', position: [20, y] });
-
+      // Half of the thumb = 10px + 10 * 2px = 30px
+      await sendMouse({ type: 'move', position: [30, y] });
       expect(slider.value).to.equal(10);
     });
 

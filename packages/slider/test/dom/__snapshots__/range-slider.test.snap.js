@@ -387,23 +387,17 @@ snapshots["vaadin-range-slider shadow default"] =
     >
     </span>
   </div>
-  <div id="controls">
+  <div
+    id="controls"
+    style="--start-value:0;--end-value:1;"
+  >
     <div part="track">
-      <div
-        part="track-fill"
-        style="inset-inline-start:0%;inset-inline-end:0%;"
-      >
+      <div part="track-fill">
       </div>
     </div>
-    <div
-      part="thumb thumb-start"
-      style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 0 / 100);"
-    >
+    <div part="thumb thumb-start">
     </div>
-    <div
-      part="thumb thumb-end"
-      style="inset-inline-start:calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 100 / 100);"
-    >
+    <div part="thumb thumb-end">
     </div>
     <slot name="input">
     </slot>
@@ -431,23 +425,17 @@ snapshots["vaadin-range-slider shadow value"] =
     >
     </span>
   </div>
-  <div id="controls">
+  <div
+    id="controls"
+    style="--start-value: 0.1; --end-value: 0.2;"
+  >
     <div part="track">
-      <div
-        part="track-fill"
-        style="inset-inline: 10% 80%;"
-      >
+      <div part="track-fill">
       </div>
     </div>
-    <div
-      part="thumb thumb-start"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 10 / 100);"
-    >
+    <div part="thumb thumb-start">
     </div>
-    <div
-      part="thumb thumb-end"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 20 / 100);"
-    >
+    <div part="thumb thumb-end">
     </div>
     <slot name="input">
     </slot>
@@ -475,23 +463,17 @@ snapshots["vaadin-range-slider shadow min"] =
     >
     </span>
   </div>
-  <div id="controls">
+  <div
+    id="controls"
+    style="--start-value: 0.25; --end-value: 0.75;"
+  >
     <div part="track">
-      <div
-        part="track-fill"
-        style="inset-inline: 25%;"
-      >
+      <div part="track-fill">
       </div>
     </div>
-    <div
-      part="thumb thumb-start"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
-    >
+    <div part="thumb thumb-start">
     </div>
-    <div
-      part="thumb thumb-end"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
-    >
+    <div part="thumb thumb-end">
     </div>
     <slot name="input">
     </slot>
@@ -519,23 +501,17 @@ snapshots["vaadin-range-slider shadow max"] =
     >
     </span>
   </div>
-  <div id="controls">
+  <div
+    id="controls"
+    style="--start-value: 0.25; --end-value: 0.75;"
+  >
     <div part="track">
-      <div
-        part="track-fill"
-        style="inset-inline: 25%;"
-      >
+      <div part="track-fill">
       </div>
     </div>
-    <div
-      part="thumb thumb-start"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 25 / 100);"
-    >
+    <div part="thumb thumb-start">
     </div>
-    <div
-      part="thumb thumb-end"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 75 / 100);"
-    >
+    <div part="thumb thumb-end">
     </div>
     <slot name="input">
     </slot>
@@ -563,23 +539,17 @@ snapshots["vaadin-range-slider shadow step"] =
     >
     </span>
   </div>
-  <div id="controls">
+  <div
+    id="controls"
+    style="--start-value: 0.2; --end-value: 0.6;"
+  >
     <div part="track">
-      <div
-        part="track-fill"
-        style="inset-inline: 20% 40%;"
-      >
+      <div part="track-fill">
       </div>
     </div>
-    <div
-      part="thumb thumb-start"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 20 / 100);"
-    >
+    <div part="thumb thumb-start">
     </div>
-    <div
-      part="thumb thumb-end"
-      style="inset-inline-start: calc(var(--_thumb-width) / 2 + calc(100% - var(--_thumb-width)) * 60 / 100);"
-    >
+    <div part="thumb thumb-end">
     </div>
     <slot name="input">
     </slot>
@@ -595,4 +565,118 @@ snapshots["vaadin-range-slider shadow step"] =
 </div>
 `;
 /* end snapshot vaadin-range-slider shadow step */
+
+snapshots["vaadin-range-slider shadow negative"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 0.25; --end-value: 0.75;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow negative */
+
+snapshots["vaadin-range-slider shadow min > value"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value:0;--end-value:1;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow min > value */
+
+snapshots["vaadin-range-slider shadow max < value"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 1; --end-value: 1;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow max < value */
 

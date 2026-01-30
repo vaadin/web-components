@@ -52,6 +52,21 @@ class Slider extends FieldMixin(
           outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
         }
+
+        #controls {
+          grid-template-columns:
+            [track-start fill-start]
+            calc(var(--value) * var(--_track-width))
+            [fill-end thumb1]
+            var(--_thumb-width)
+            calc((1 - var(--value)) * var(--_track-width))
+            [track-end];
+        }
+
+        [part='track-fill'] {
+          border-start-start-radius: inherit;
+          border-end-start-radius: inherit;
+        }
       `,
     ];
   }
@@ -90,17 +105,11 @@ class Slider extends FieldMixin(
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div id="controls">
+        <div id="controls" style="${styleMap({ '--value': percent })}">
           <div part="track">
-            <div
-              part="track-fill"
-              style="${styleMap({
-                insetInlineStart: 0,
-                insetInlineEnd: `${100 - percent}%`,
-              })}"
-            ></div>
+            <div part="track-fill"></div>
           </div>
-          <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
+          <div part="thumb"></div>
           <slot name="input"></slot>
         </div>
 
@@ -196,6 +205,12 @@ class Slider extends FieldMixin(
    */
   __commitValue() {
     this.value = this.__value[0];
+  }
+
+  /** @private */
+  __onInput(event) {
+    this.__updateValue(event.target.value, 0);
+    this.__commitValue();
   }
 
   /** @private */
