@@ -200,6 +200,16 @@ class Slider extends FieldMixin(
   }
 
   /**
+   * @protected
+   * @override
+   */
+  blur() {
+    if (this._inputElement) {
+      this._inputElement.blur();
+    }
+  }
+
+  /**
    * @private
    * @override
    */

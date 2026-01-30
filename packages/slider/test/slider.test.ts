@@ -103,6 +103,12 @@ describe('vaadin-slider', () => {
     it('should not throw when calling focus() before adding to the DOM', () => {
       expect(() => document.createElement('vaadin-slider').focus()).to.not.throw(Error);
     });
+
+    it('should blur the input on blur()', () => {
+      slider.focus();
+      slider.blur();
+      expect(document.activeElement).to.not.equal(input);
+    });
   });
 
   describe('keyboard input', () => {
