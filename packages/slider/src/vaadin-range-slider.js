@@ -28,17 +28,6 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * ### Styling
  *
- * The following custom CSS properties are available for styling:
- *
- * Custom CSS property                      |
- * :----------------------------------------|
- * | `--vaadin-slider-fill-background`      |
- * | `--vaadin-slider-thumb-height`         |
- * | `--vaadin-slider-thumb-width`          |
- * | `--vaadin-slider-track-background`     |
- * | `--vaadin-slider-track-border-radius`  |
- * | `--vaadin-slider-track-height`         |
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name            | Description
@@ -59,6 +48,17 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * ------------|-------------
  * `disabled`  | Set when the slider is disabled
  * `readonly`  | Set when the slider is read-only
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * | `--vaadin-slider-fill-background`      |
+ * | `--vaadin-slider-thumb-height`         |
+ * | `--vaadin-slider-thumb-width`          |
+ * | `--vaadin-slider-track-background`     |
+ * | `--vaadin-slider-track-border-radius`  |
+ * | `--vaadin-slider-track-height`         |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
