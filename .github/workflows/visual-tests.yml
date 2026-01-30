@@ -13,6 +13,7 @@ env:
 
 jobs:
   base:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Base
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
@@ -50,6 +51,7 @@ jobs:
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
   lumo:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Lumo
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
@@ -89,6 +91,7 @@ jobs:
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
 
   aura:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Aura
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
