@@ -2,7 +2,18 @@
 export const snapshots = {};
 
 snapshots["vaadin-upload-file shadow default"] = 
-`<div
+`<img
+  alt="Workflow.pdf"
+  hidden=""
+  part="thumbnail"
+  src=""
+>
+<div
+  aria-hidden="true"
+  part="file-icon"
+>
+</div>
+<div
   aria-hidden="true"
   hidden=""
   part="done-icon"
