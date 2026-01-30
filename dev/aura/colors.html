@@ -47,6 +47,10 @@
           component.parentElement.parentElement.append(clone);
         });
 
+      document.querySelector('#surface-pattern').addEventListener('change', (e) => {
+        document.querySelectorAll('.surfaces').forEach((el) => el.classList.toggle('pattern', e.target.checked));
+      });
+
       document.querySelector('#filled-badges').addEventListener('change', (e) => {
         document.querySelectorAll('.aura-badge').forEach((badge) => {
           badge.classList.toggle('aura-badge-filled', e.target.checked);
@@ -76,6 +80,11 @@
         --aura-accent-color-light: var(--aura-blue);
         --aura-accent-color-dark: var(--aura-blue);
         --surface-level: 1;
+        --surface-opacity: 0.5;
+      }
+
+      theme-switcher {
+        display: none;
       }
 
       .section {
@@ -110,12 +119,24 @@
         margin-top: -0.75em;
       }
 
+      .surfaces.pattern {
+        background-image:
+          linear-gradient(45deg, var(--vaadin-background-container-strong) 25%, transparent 25%, transparent),
+          linear-gradient(-45deg, var(--vaadin-background-container-strong) 25%, transparent 25%, transparent),
+          linear-gradient(45deg, transparent 75%, var(--vaadin-background-container-strong) 75%),
+          linear-gradient(-45deg, transparent 75%, var(--vaadin-background-container-strong) 75%);
+        background-size: 10px 10px;
+        background-position: 5px 5px;
+        background-clip: padding-box;
+      }
+
       .surfaces .aura-surface {
         flex: 1;
         height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
+        --aura-surface-opacity: var(--surface-opacity);
 
         &::before {
           counter-reset: variable var(--aura-surface-level);
@@ -168,7 +189,6 @@
         max="6"
         step="0.5"
       ></aura-number-control>
-      <aura-number-control property="--surface-level" label="Surface Level" min="-2" max="6"></aura-number-control>
       <aura-color-control property="--aura-background-color-light" label="Background (Light)"></aura-color-control>
       <aura-color-control property="--aura-accent-color-light" label="Accent (Light)"></aura-color-control>
       <aura-color-control property="--aura-background-color-dark" label="Background (Dark)"></aura-color-control>
@@ -176,6 +196,11 @@
     </section>
 
     <h3 class="heading">Surface Colors</h3>
+    <section class="section">
+      <aura-number-control property="--surface-level" label="Surface Level" min="-2" max="6"></aura-number-control>
+      <aura-number-control property="--surface-opacity" label="Surface Opacity" min="0" max="1" step="0.1"></aura-number-control>
+      <vaadin-checkbox label="Show Transparency" id="surface-pattern"></vaadin-checkbox>
+    </section>
     <section class="section surfaces">
       <div class="aura-surface level--1"></div>
       <div class="aura-surface level-0"></div>
