@@ -164,6 +164,11 @@ export const SliderMixin = (superClass) =>
     }
 
     /** @private */
+    __dispatchInputEvent() {
+      this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    }
+
+    /** @private */
     __detectAndDispatchChange() {
       if (JSON.stringify(this.__lastCommittedValue) !== JSON.stringify(this.value)) {
         this.__lastCommittedValue = this.value;
@@ -179,6 +184,12 @@ export const SliderMixin = (superClass) =>
       event.stopPropagation();
       this.__detectAndDispatchChange();
     }
+
+    /**
+     * Fired when the slider value changes during user interaction.
+     *
+     * @event input
+     */
 
     /**
      * Fired when the user commits a value change.
