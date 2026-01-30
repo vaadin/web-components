@@ -53,6 +53,16 @@ export const DialogBaseMixin = (superClass) =>
         },
 
         /**
+         * Set to true to disable focus trapping.
+         * @attr {boolean} no-focus-trap
+         * @type {boolean}
+         */
+        noFocusTrap: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * Set the distance of the dialog from the top of the viewport.
          * If a unitless number is provided, pixels are assumed.
          *
