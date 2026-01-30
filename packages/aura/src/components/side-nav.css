@@ -17,8 +17,8 @@ vaadin-side-nav::part(label) {
 }
 
 vaadin-side-nav-item::part(content) {
-  --aura-surface-level: 6;
-  --aura-surface-opacity: 0.3;
+  --aura-surface-level: 4;
+  --aura-surface-opacity: 0.5;
   transition: color 80ms;
 }
 
