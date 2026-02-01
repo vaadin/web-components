@@ -55,14 +55,25 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                      |
- * :----------------------------------------|
- * | `--vaadin-slider-fill-background`      |
- * | `--vaadin-slider-thumb-height`         |
- * | `--vaadin-slider-thumb-width`          |
- * | `--vaadin-slider-track-background`     |
- * | `--vaadin-slider-track-border-radius`  |
- * | `--vaadin-slider-track-height`         |
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * `--vaadin-field-default-width`               |
+ * `--vaadin-input-field-error-color`           |
+ * `--vaadin-input-field-error-font-size`       |
+ * `--vaadin-input-field-error-font-weight`     |
+ * `--vaadin-input-field-helper-color`          |
+ * `--vaadin-input-field-helper-font-size`      |
+ * `--vaadin-input-field-helper-font-weight`    |
+ * `--vaadin-input-field-label-color`           |
+ * `--vaadin-input-field-label-font-size`       |
+ * `--vaadin-input-field-label-font-weight`     |
+ * `--vaadin-input-field-required-indicator`    |
+ * `--vaadin-slider-fill-background`            |
+ * `--vaadin-slider-thumb-height`               |
+ * `--vaadin-slider-thumb-width`                |
+ * `--vaadin-slider-track-background`           |
+ * `--vaadin-slider-track-border-radius`        |
+ * `--vaadin-slider-track-height`               |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
