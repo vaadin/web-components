@@ -55,10 +55,14 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  *
  * The following state attributes are available for styling:
  *
- * Attribute   | Description
- * ------------|-------------
- * `disabled`  | Set when the slider is disabled
- * `readonly`  | Set when the slider is read-only
+ * Attribute       | Description
+ * ----------------|-------------
+ * `disabled`      | Set when the slider is disabled
+ * `readonly`      | Set when the slider is read-only
+ * `focused`       | Set when the slider has focus
+ * `focus-ring`    | Set when the slider is focused using the keyboard
+ * `start-focused` | Set when the start thumb has focus
+ * `end-focused`   | Set when the end thumb has focus
  *
  * The following custom CSS properties are available for styling:
  *

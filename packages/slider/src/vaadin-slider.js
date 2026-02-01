@@ -41,10 +41,12 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute   | Description
- * ------------|-------------
- * `disabled`  | Set when the slider is disabled
- * `readonly`  | Set when the slider is read-only
+ * Attribute    | Description
+ * -------------|-------------
+ * `disabled`   | Set when the slider is disabled
+ * `readonly`   | Set when the slider is read-only
+ * `focused`    | Set when the slider has focus
+ * `focus-ring` | Set when the slider is focused using the keyboard
  *
  * The following custom CSS properties are available for styling:
  *
