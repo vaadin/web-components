@@ -11,6 +11,8 @@ import type {
   RangeSlider,
   RangeSliderChangeEvent,
   RangeSliderInputEvent,
+  RangeSliderInvalidChangedEvent,
+  RangeSliderValidatedEvent,
   RangeSliderValueChangedEvent,
 } from '../../vaadin-range-slider.js';
 
@@ -23,6 +25,16 @@ assertType<RangeSlider>(slider);
 slider.addEventListener('value-changed', (event) => {
   assertType<RangeSliderValueChangedEvent>(event);
   assertType<number[]>(event.detail.value);
+});
+
+slider.addEventListener('invalid-changed', (event) => {
+  assertType<RangeSliderInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+slider.addEventListener('validated', (event) => {
+  assertType<RangeSliderValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 slider.addEventListener('change', (event) => {

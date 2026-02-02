@@ -24,12 +24,26 @@ export type RangeSliderInputEvent = Event & {
 };
 
 /**
+ * Fired when the `invalid` property changes.
+ */
+export type RangeSliderInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type RangeSliderValueChangedEvent = CustomEvent<{ value: number[] }>;
 
+/**
+ * Fired whenever the slider is validated.
+ */
+export type RangeSliderValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface RangeSliderCustomEventMap {
+  'invalid-changed': RangeSliderInvalidChangedEvent;
+
   'value-changed': RangeSliderValueChangedEvent;
+
+  validated: RangeSliderValidatedEvent;
 }
 
 export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCustomEventMap {
