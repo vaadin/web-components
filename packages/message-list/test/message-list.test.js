@@ -14,6 +14,7 @@ import {
   nextResize,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-message-list.js';
 
 describe('message-list', () => {
@@ -479,6 +480,99 @@ describe('message-list', () => {
       expect(messageList.getAttribute('aria-live')).to.equal('polite');
       messageList.announceMessages = false;
       expect(messageList.getAttribute('aria-live')).to.be.null;
+    });
+  });
+
+  describe('attachments', () => {
+    const imgUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    beforeEach(async () => {
+      messageList.items = [
+        {
+          text: 'Message with attachments',
+          userName: 'Joan Doe',
+          attachments: [
+            { name: 'photo.png', url: imgUrl, type: 'image/png' },
+            { name: 'document.pdf', url: 'http://example.com/doc.pdf', type: 'application/pdf' },
+          ],
+        },
+        {
+          text: 'Message without attachments',
+          userName: 'Steve Mops',
+        },
+      ];
+      await nextRender();
+    });
+
+    it('should pass attachments property to vaadin-message', () => {
+      const firstMessage = messageList.querySelector('vaadin-message');
+      expect(firstMessage.attachments).to.have.length(2);
+      expect(firstMessage.attachments[0].name).to.equal('photo.png');
+    });
+
+    it('should render attachments in message shadow DOM', () => {
+      const firstMessage = messageList.querySelector('vaadin-message');
+      const attachments = firstMessage.shadowRoot.querySelectorAll('[part~="attachment"]');
+      expect(attachments.length).to.equal(2);
+    });
+
+    it('should not render attachments for message without attachments property', () => {
+      const secondMessage = messageList.querySelectorAll('vaadin-message')[1];
+      const attachmentsContainer = secondMessage.shadowRoot.querySelector('[part="attachments"]');
+      expect(attachmentsContainer).to.be.null;
+    });
+
+    it('should dispatch attachment-click event with attachment and item', () => {
+      const spy = sinon.spy();
+      messageList.addEventListener('attachment-click', spy);
+
+      const firstMessage = messageList.querySelector('vaadin-message');
+      const button = firstMessage.shadowRoot.querySelector('[part~="attachment-file"]');
+      button.click();
+
+      expect(spy.calledOnce).to.be.true;
+      const detail = spy.firstCall.args[0].detail;
+      expect(detail.attachment.name).to.equal('document.pdf');
+      expect(detail.item).to.equal(messageList.items[0]);
+    });
+
+    it('should include correct item for second message', async () => {
+      // Add attachments to the second item
+      messageList.items = [
+        ...messageList.items.slice(0, 1),
+        {
+          ...messageList.items[1],
+          attachments: [{ name: 'other.pdf', type: 'application/pdf' }],
+        },
+      ];
+      await nextRender();
+
+      const spy = sinon.spy();
+      messageList.addEventListener('attachment-click', spy);
+
+      const secondMessage = messageList.querySelectorAll('vaadin-message')[1];
+      const button = secondMessage.shadowRoot.querySelector('[part~="attachment-file"]');
+      button.click();
+
+      expect(spy.calledOnce).to.be.true;
+      const detail = spy.firstCall.args[0].detail;
+      expect(detail.attachment.name).to.equal('other.pdf');
+      expect(detail.item).to.equal(messageList.items[1]);
+    });
+
+    it('should update attachments when items change', async () => {
+      messageList.items = [
+        {
+          text: 'Updated message',
+          userName: 'Joan Doe',
+          attachments: [{ name: 'new-file.txt', type: 'text/plain' }],
+        },
+      ];
+      await nextRender();
+
+      const message = messageList.querySelector('vaadin-message');
+      expect(message.attachments).to.have.length(1);
+      expect(message.attachments[0].name).to.equal('new-file.txt');
     });
   });
 });

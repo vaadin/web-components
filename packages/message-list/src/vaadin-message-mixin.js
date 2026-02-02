@@ -3,6 +3,8 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
@@ -78,6 +80,22 @@ export const MessageMixin = (superClass) =>
           type: Number,
         },
 
+        /**
+         * An array of attachment objects to display with the message.
+         * Each attachment object can have the following properties:
+         * - `name`: The name of the attachment file
+         * - `url`: The URL of the attachment
+         * - `type`: The MIME type of the attachment (e.g., 'image/png', 'application/pdf')
+         *
+         * Image attachments (type starting with "image/") show a thumbnail preview,
+         * while other attachments show a document icon with the file name.
+         *
+         * @type {Array<{name?: string, url?: string, type?: string}>}
+         */
+        attachments: {
+          type: Array,
+        },
+
         /** @private */
         _avatar: {
           type: Object,
@@ -112,5 +130,62 @@ export const MessageMixin = (superClass) =>
           colorIndex: userColorIndex,
         });
       }
+    }
+
+    /**
+     * Renders attachments for the message.
+     * @private
+     */
+    __renderAttachments() {
+      const attachments = this.attachments;
+      if (!attachments || attachments.length === 0) {
+        return '';
+      }
+
+      return html`
+        <div part="attachments">${attachments.map((attachment) => this.__renderAttachment(attachment))}</div>
+      `;
+    }
+
+    /**
+     * Renders a single attachment.
+     * @param {Object} attachment - The attachment object with name, url, and type properties
+     * @private
+     */
+    __renderAttachment(attachment) {
+      const isImage = attachment.type && attachment.type.startsWith('image/');
+
+      if (isImage) {
+        return html`
+          <button
+            type="button"
+            part="attachment attachment-image"
+            aria-label="${attachment.name || ''}"
+            @click="${() => this.__onAttachmentClick(attachment)}"
+          >
+            <img part="attachment-preview" src="${ifDefined(attachment.url)}" alt="" />
+          </button>
+        `;
+      }
+
+      return html`
+        <button type="button" part="attachment attachment-file" @click="${() => this.__onAttachmentClick(attachment)}">
+          <span part="attachment-icon" aria-hidden="true"></span>
+          <span part="attachment-name">${attachment.name || ''}</span>
+        </button>
+      `;
+    }
+
+    /**
+     * Dispatches an event when an attachment is clicked.
+     * @param {Object} attachment - The attachment that was clicked
+     * @private
+     */
+    __onAttachmentClick(attachment) {
+      this.dispatchEvent(
+        new CustomEvent('attachment-click', {
+          detail: { attachment },
+        }),
+      );
     }
   };

@@ -3,7 +3,7 @@ import '../../vaadin-message-list.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { MessageListItem } from '../../vaadin-message-list.js';
+import type { MessageAttachment, MessageListItem } from '../../vaadin-message-list.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 
@@ -24,6 +24,19 @@ assertType<string | undefined>(item.userImg);
 assertType<number | undefined>(item.userColorIndex);
 assertType<string | undefined>(item.theme);
 assertType<string | undefined>(item.className);
+assertType<MessageAttachment[] | undefined>(item.attachments);
+
+// Attachment properties
+const attachment: MessageAttachment = item.attachments ? item.attachments[0] : {};
+assertType<string | undefined>(attachment.name);
+assertType<string | undefined>(attachment.url);
+assertType<string | undefined>(attachment.type);
+
+// Event listener
+list.addEventListener('attachment-click', (event) => {
+  assertType<MessageAttachment>(event.detail.attachment);
+  assertType<MessageListItem>(event.detail.item);
+});
 
 // Mixins
 assertType<ElementMixinClass>(list);
@@ -37,6 +50,12 @@ assertType<string | null | undefined>(message.userName);
 assertType<string | null | undefined>(message.userAbbr);
 assertType<string | null | undefined>(message.userImg);
 assertType<number | null | undefined>(message.userColorIndex);
+assertType<MessageAttachment[] | null | undefined>(message.attachments);
+
+// Message event listener
+message.addEventListener('attachment-click', (event) => {
+  assertType<MessageAttachment>(event.detail.attachment);
+});
 
 assertType<ElementMixinClass>(message);
 assertType<FocusMixinClass>(message);

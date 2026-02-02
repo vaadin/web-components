@@ -29,9 +29,19 @@ export const MessageListMixin = (superClass) =>
          *   userImg: string,
          *   userColorIndex: number,
          *   className: string,
-         *   theme: string
+         *   theme: string,
+         *   attachments: Array<{
+         *     name: string,
+         *     url: string,
+         *     type: string
+         *   }>
          * }>
          * ```
+         *
+         * When a message has attachments, they are rendered in the message's shadow DOM.
+         * Image attachments (type starting with "image/") show a thumbnail preview,
+         * while other attachments show a document icon with the file name.
+         * Clicking an attachment dispatches an `attachment-click` event.
          */
         items: {
           type: Array,
@@ -76,6 +86,24 @@ export const MessageListMixin = (superClass) =>
       // Make screen readers announce new messages
       this.setAttribute('aria-relevant', 'additions');
       this.setAttribute('role', 'region');
+    }
+
+    /**
+     * Handles attachment-click events from child messages and dispatches
+     * a new event enriched with the item.
+     * @param {CustomEvent} e
+     * @param {Object} item
+     * @private
+     */
+    __onAttachmentClick(e, item) {
+      this.dispatchEvent(
+        new CustomEvent('attachment-click', {
+          detail: {
+            ...e.detail,
+            item,
+          },
+        }),
+      );
     }
 
     /**
@@ -142,9 +170,11 @@ export const MessageListMixin = (superClass) =>
                 .userName="${item.userName}"
                 .userImg="${item.userImg}"
                 .userColorIndex="${item.userColorIndex}"
+                .attachments="${item.attachments}"
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
+                @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
                 >${this.markdown
                   ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`

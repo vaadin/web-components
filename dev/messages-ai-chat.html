@@ -28,6 +28,7 @@
     <script type="module">
       import '@vaadin/message-input';
       import '@vaadin/message-list';
+      import { Notification } from '@vaadin/notification';
 
       /**
        * Simulates streaming text from an AI model
@@ -115,9 +116,38 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
 
       // Set initial messages
       list.items = [
-        createItem('Hello! Can you help me with a question?'),
-        createItem("Of course! I'm here to help. What's your question?", true),
+        {
+          text: 'Can you help me analyze these Q3 financial documents? I need a summary of the key findings and any concerns you spot.',
+          time: 'Yesterday',
+          userName: 'User',
+          userColorIndex: 1,
+          attachments: [
+            { name: 'proposal.pdf', url: '#proposal.pdf', type: 'application/pdf' },
+            {
+              name: 'budget.xlsx',
+              url: '#budget.xlsx',
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            },
+            {
+              name: 'chart.png',
+              url: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"%3E%3Crect fill="%23f0f0f0" width="200" height="150"/%3E%3Crect fill="%234CAF50" x="20" y="100" width="30" height="40"/%3E%3Crect fill="%232196F3" x="60" y="70" width="30" height="70"/%3E%3Crect fill="%23FF9800" x="100" y="50" width="30" height="90"/%3E%3Crect fill="%239C27B0" x="140" y="30" width="30" height="110"/%3E%3Ctext x="100" y="20" text-anchor="middle" font-size="12" fill="%23333"%3EQ3 Growth%3C/text%3E%3C/svg%3E',
+              type: 'image/svg+xml',
+            },
+          ],
+        },
+        {
+          text: "I've reviewed your Q3 financial documents. Here's a summary:\n\n**Key Findings:**\n- Revenue increased 12% compared to Q2\n- Operating costs remained stable\n- The chart shows positive growth trends\n\n**Concerns:**\n- Marketing spend is 15% over budget\n- Cash flow projections need revision\n\nWould you like me to elaborate on any of these points?",
+          time: 'Yesterday',
+          userName: 'Assistant',
+          userColorIndex: 2,
+        },
       ];
+
+      // Handle attachment clicks
+      list.addEventListener('attachment-click', (e) => {
+        const { attachment } = e.detail;
+        Notification.show(`Attachment clicked: ${attachment.name}`, { position: 'bottom-start' });
+      });
 
       // Handle new messages from user
       input.addEventListener('submit', async (e) => {
