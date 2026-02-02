@@ -21,4 +21,12 @@ export declare class DialogDraggableMixinClass {
    * "`draggable-leaf-only`" class name.
    */
   draggable: boolean;
+
+  /**
+   * Set to true to prevent dragging the dialog outside the viewport bounds.
+   * When enabled, all four edges of the dialog will remain visible during dragging.
+   * The dialog may still become partially hidden when the viewport is resized.
+   * @attr {boolean} keep-in-viewport
+   */
+  keepInViewport: boolean;
 }

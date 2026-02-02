@@ -1,12 +1,19 @@
 name: Visual tests
 
-on: pull_request
+on: 
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 permissions:
   contents: read
 
+env:
+  _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
 jobs:
   base:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Base
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
@@ -15,6 +22,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{ env._HEAD_SHA }}
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -43,6 +51,7 @@ jobs:
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
   lumo:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Lumo
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
@@ -51,6 +60,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{ env._HEAD_SHA }}
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -81,6 +91,7 @@ jobs:
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
 
   aura:
+    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Aura
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
@@ -89,6 +100,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
+          ref: ${{ env._HEAD_SHA }}
 
       - name: Setup Node
         uses: actions/setup-node@v6

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/field-highlighter",
-  "version": "25.1.0-alpha3",
+  "version": "25.1.0-alpha5",
   "publishConfig": {
     "access": "public"
   },
@@ -32,29 +32,29 @@
     "field"
   ],
   "dependencies": {
-    "@vaadin/a11y-base": "25.1.0-alpha3",
-    "@vaadin/component-base": "25.1.0-alpha3",
-    "@vaadin/overlay": "25.1.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "25.1.0-alpha3",
+    "@vaadin/a11y-base": "25.1.0-alpha5",
+    "@vaadin/component-base": "25.1.0-alpha5",
+    "@vaadin/overlay": "25.1.0-alpha5",
+    "@vaadin/vaadin-themable-mixin": "25.1.0-alpha5",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/aura": "25.1.0-alpha3",
-    "@vaadin/chai-plugins": "25.1.0-alpha3",
-    "@vaadin/checkbox": "25.1.0-alpha3",
-    "@vaadin/checkbox-group": "25.1.0-alpha3",
-    "@vaadin/date-picker": "25.1.0-alpha3",
-    "@vaadin/date-time-picker": "25.1.0-alpha3",
-    "@vaadin/item": "25.1.0-alpha3",
-    "@vaadin/list-box": "25.1.0-alpha3",
-    "@vaadin/radio-group": "25.1.0-alpha3",
-    "@vaadin/select": "25.1.0-alpha3",
-    "@vaadin/test-runner-commands": "25.1.0-alpha3",
+    "@vaadin/aura": "25.1.0-alpha5",
+    "@vaadin/chai-plugins": "25.1.0-alpha5",
+    "@vaadin/checkbox": "25.1.0-alpha5",
+    "@vaadin/checkbox-group": "25.1.0-alpha5",
+    "@vaadin/date-picker": "25.1.0-alpha5",
+    "@vaadin/date-time-picker": "25.1.0-alpha5",
+    "@vaadin/item": "25.1.0-alpha5",
+    "@vaadin/list-box": "25.1.0-alpha5",
+    "@vaadin/radio-group": "25.1.0-alpha5",
+    "@vaadin/select": "25.1.0-alpha5",
+    "@vaadin/test-runner-commands": "25.1.0-alpha5",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/text-area": "25.1.0-alpha3",
-    "@vaadin/text-field": "25.1.0-alpha3",
-    "@vaadin/time-picker": "25.1.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "25.1.0-alpha3",
+    "@vaadin/text-area": "25.1.0-alpha5",
+    "@vaadin/text-field": "25.1.0-alpha5",
+    "@vaadin/time-picker": "25.1.0-alpha5",
+    "@vaadin/vaadin-lumo-styles": "25.1.0-alpha5",
     "sinon": "^21.0.0"
   }
 }

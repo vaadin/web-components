@@ -132,6 +132,18 @@ describe('vaadin-dialog', () => {
       });
     });
 
+    describe('no-focus-trap', () => {
+      it('should have focus-trap by default', () => {
+        expect(overlay.hasAttribute('focus-trap')).to.be.true;
+      });
+
+      it('should not have focus-trap when no-focus-trap is true', async () => {
+        dialog.noFocusTrap = true;
+        await nextUpdate(dialog);
+        expect(overlay.hasAttribute('focus-trap')).to.be.false;
+      });
+    });
+
     describe('removing and adding to the DOM', () => {
       it('should close the overlay when removed from DOM', async () => {
         dialog.remove();

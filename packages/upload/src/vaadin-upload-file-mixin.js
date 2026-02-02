@@ -115,11 +115,20 @@ export const UploadFileMixin = (superClass) =>
         _progress: {
           type: Object,
         },
+
+        /** @private */
+        __thumbnail: {
+          type: String,
+        },
       };
     }
 
     static get observers() {
-      return ['__updateTabindex(tabindex, disabled)', '__updateProgress(_progress, progress, indeterminate)'];
+      return [
+        '__updateTabindex(tabindex, disabled)',
+        '__updateProgress(_progress, progress, indeterminate)',
+        '__updateThumbnail(file)',
+      ];
     }
 
     /** @protected */
@@ -203,5 +212,32 @@ export const UploadFileMixin = (superClass) =>
           composed: true,
         }),
       );
+    }
+
+    /** @private */
+    __updateThumbnail(file) {
+      // Abort any pending read
+      if (this.__thumbnailReader) {
+        this.__thumbnailReader.abort();
+        this.__thumbnailReader = null;
+      }
+
+      if (!file) {
+        this.__thumbnail = '';
+        return;
+      }
+
+      // Check if file is an image and is an actual File/Blob object
+      if (file.type && file.type.startsWith('image/') && file instanceof Blob) {
+        const reader = new FileReader();
+        this.__thumbnailReader = reader;
+        reader.onload = (e) => {
+          this.__thumbnail = e.target.result;
+          this.__thumbnailReader = null;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.__thumbnail = '';
+      }
     }
   };

@@ -17,8 +17,6 @@
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_thumb-width: var(--vaadin-slider-thumb-width, calc(var(--lumo-size-m) / 2));
     --_thumb-height: var(--vaadin-slider-thumb-height, calc(var(--lumo-size-m) / 2));
-    --_track-radius: var(--vaadin-slider-track-border-radius, var(--lumo-border-radius-s));
-    --_track-size: var(--vaadin-slider-track-size, calc(var(--lumo-size-l) / 10));
   }
 
   :host::before {
@@ -66,6 +64,8 @@
 
   [part='track'] {
     background: var(--vaadin-slider-track-background, var(--lumo-contrast-30pct));
+    border-radius: var(--vaadin-slider-track-border-radius, var(--lumo-border-radius-s));
+    height: var(--vaadin-slider-track-height, calc(var(--lumo-size-l) / 10));
   }
 
   [part~='thumb'],

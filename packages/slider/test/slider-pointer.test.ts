@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
@@ -16,7 +16,12 @@ describe('vaadin-slider - pointer', () => {
   let y: number;
 
   beforeEach(async () => {
-    slider = fixtureSync('<vaadin-slider style="width: 200px"></vaadin-slider>');
+    slider = fixtureSync(`
+      <vaadin-slider
+        step="10"
+        style="width: 200px; --vaadin-slider-thumb-width: 20px"
+      ></vaadin-slider>
+    `);
     await nextRender();
     thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
     track = slider.shadowRoot!.querySelector('[part="track"]')!;
@@ -28,19 +33,51 @@ describe('vaadin-slider - pointer', () => {
   });
 
   describe('value', () => {
-    it('should update on thumb pointermove', async () => {
-      await sendMouseToElement({ type: 'move', element: thumb });
-      await sendMouse({ type: 'down' });
-      await sendMouse({ type: 'move', position: [20, y] });
+    describe('default', () => {
+      it('should update on thumb pointermove', async () => {
+        await sendMouseToElement({ type: 'move', element: thumb });
+        await sendMouse({ type: 'down' });
+        // Half of the thumb = 10px + 10 * 2px = 30px
+        await sendMouse({ type: 'move', position: [30, y] });
 
-      expect(slider.value).to.equal(10);
+        expect(slider.value).to.equal(10);
+      });
+
+      it('should update on track pointerdown', async () => {
+        await sendMouse({ type: 'move', position: [40, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.equal(20);
+      });
     });
 
-    it('should update on track pointerdown', async () => {
-      await sendMouseToElement({ type: 'move', element: track });
-      await sendMouse({ type: 'down' });
+    describe('RTL', () => {
+      let x: number;
 
-      expect(slider.value).to.equal(50);
+      beforeEach(async () => {
+        document.documentElement.setAttribute('dir', 'rtl');
+        await nextUpdate(slider);
+        x = slider.offsetLeft;
+      });
+
+      afterEach(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('should update on thumb pointermove', async () => {
+        await sendMouseToElement({ type: 'move', element: thumb });
+        await sendMouse({ type: 'down' });
+        await sendMouse({ type: 'move', position: [x + 30, y] });
+
+        expect(slider.value).to.equal(90);
+      });
+
+      it('should update on track pointerdown', async () => {
+        await sendMouse({ type: 'move', position: [x + 40, y] });
+        await sendMouse({ type: 'down' });
+
+        expect(slider.value).to.equal(80);
+      });
     });
   });
 
@@ -89,6 +126,30 @@ describe('vaadin-slider - pointer', () => {
       expect(spy).to.be.not.called;
 
       await sendMouse({ type: 'up' });
+      expect(spy).to.be.calledOnce;
+    });
+  });
+
+  describe('input event', () => {
+    let spy: sinon.SinonSpy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      slider.addEventListener('input', spy);
+    });
+
+    it('should fire on thumb pointermove', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire on track pointerdown', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+
       expect(spy).to.be.calledOnce;
     });
   });

@@ -7,7 +7,14 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { SliderMixinClass } from '../../src/vaadin-slider-mixin.js';
-import type { RangeSlider, RangeSliderChangeEvent, RangeSliderValueChangedEvent } from '../../vaadin-range-slider.js';
+import type {
+  RangeSlider,
+  RangeSliderChangeEvent,
+  RangeSliderInputEvent,
+  RangeSliderInvalidChangedEvent,
+  RangeSliderValidatedEvent,
+  RangeSliderValueChangedEvent,
+} from '../../vaadin-range-slider.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -20,8 +27,23 @@ slider.addEventListener('value-changed', (event) => {
   assertType<number[]>(event.detail.value);
 });
 
+slider.addEventListener('invalid-changed', (event) => {
+  assertType<RangeSliderInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+slider.addEventListener('validated', (event) => {
+  assertType<RangeSliderValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
+});
+
 slider.addEventListener('change', (event) => {
   assertType<RangeSliderChangeEvent>(event);
+  assertType<RangeSlider>(event.target);
+});
+
+slider.addEventListener('input', (event) => {
+  assertType<RangeSliderInputEvent>(event);
   assertType<RangeSlider>(event.target);
 });
 

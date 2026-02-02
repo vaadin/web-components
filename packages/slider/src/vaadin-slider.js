@@ -25,7 +25,55 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * <vaadin-slider min="0" max="100" step="1"></vaadin-slider>
  * ```
  *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|-----------------
+ * `label`              | The label element
+ * `required-indicator` | The required indicator element
+ * `helper-text`        | The helper text element
+ * `error-message`      | The error message element
+ * `track`              | The slider track
+ * `track-fill`         | The filled portion of the track
+ * `thumb`              | The slider thumb
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `disabled`   | Set when the slider is disabled
+ * `readonly`   | Set when the slider is read-only
+ * `focused`    | Set when the slider has focus
+ * `focus-ring` | Set when the slider is focused using the keyboard
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * `--vaadin-field-default-width`               |
+ * `--vaadin-input-field-error-color`           |
+ * `--vaadin-input-field-error-font-size`       |
+ * `--vaadin-input-field-error-font-weight`     |
+ * `--vaadin-input-field-helper-color`          |
+ * `--vaadin-input-field-helper-font-size`      |
+ * `--vaadin-input-field-helper-font-weight`    |
+ * `--vaadin-input-field-label-color`           |
+ * `--vaadin-input-field-label-font-size`       |
+ * `--vaadin-input-field-label-font-weight`     |
+ * `--vaadin-input-field-required-indicator`    |
+ * `--vaadin-slider-fill-background`            |
+ * `--vaadin-slider-thumb-height`               |
+ * `--vaadin-slider-thumb-width`                |
+ * `--vaadin-slider-track-background`           |
+ * `--vaadin-slider-track-border-radius`        |
+ * `--vaadin-slider-track-height`               |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} input - Fired when the slider value changes during user interaction.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @customElement
@@ -51,6 +99,21 @@ class Slider extends FieldMixin(
         :host([focus-ring]) [part='thumb'] {
           outline: var(--vaadin-focus-ring-width) var(--_outline-style, solid) var(--vaadin-focus-ring-color);
           outline-offset: 1px;
+        }
+
+        #controls {
+          grid-template-columns:
+            [track-start fill-start]
+            calc(var(--value) * var(--_track-width))
+            [fill-end thumb1]
+            var(--_thumb-width)
+            calc((1 - var(--value)) * var(--_track-width))
+            [track-end];
+        }
+
+        [part='track-fill'] {
+          border-start-start-radius: inherit;
+          border-end-start-radius: inherit;
         }
       `,
     ];
@@ -90,17 +153,11 @@ class Slider extends FieldMixin(
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div id="controls">
+        <div id="controls" style="${styleMap({ '--value': percent })}">
           <div part="track">
-            <div
-              part="track-fill"
-              style="${styleMap({
-                insetInlineStart: 0,
-                insetInlineEnd: `${100 - percent}%`,
-              })}"
-            ></div>
+            <div part="track-fill"></div>
           </div>
-          <div part="thumb" style="${styleMap({ insetInlineStart: this.__getThumbPosition(percent) })}"></div>
+          <div part="thumb"></div>
           <slot name="input"></slot>
         </div>
 
@@ -191,11 +248,29 @@ class Slider extends FieldMixin(
   }
 
   /**
+   * @protected
+   * @override
+   */
+  blur() {
+    if (this._inputElement) {
+      this._inputElement.blur();
+    }
+  }
+
+  /**
    * @private
    * @override
    */
   __commitValue() {
     this.value = this.__value[0];
+  }
+
+  /** @private */
+  __onInput(event) {
+    event.stopPropagation();
+    this.__updateValue(event.target.value, 0);
+    this.__dispatchInputEvent();
+    this.__commitValue();
   }
 
   /** @private */

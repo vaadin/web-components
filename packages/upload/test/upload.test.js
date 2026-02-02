@@ -690,4 +690,32 @@ describe('upload', () => {
       upload._queueFileUpload(file);
     });
   });
+
+  describe('theme', () => {
+    it('should propagate theme to file list', async () => {
+      upload.setAttribute('theme', 'thumbnails');
+      await nextUpdate(upload);
+      expect(upload._fileList.getAttribute('theme')).to.equal('thumbnails');
+    });
+
+    it('should update file list theme when theme changes', async () => {
+      upload.setAttribute('theme', 'thumbnails');
+      await nextUpdate(upload);
+      expect(upload._fileList.getAttribute('theme')).to.equal('thumbnails');
+
+      upload.setAttribute('theme', 'other');
+      await nextUpdate(upload);
+      expect(upload._fileList.getAttribute('theme')).to.equal('other');
+    });
+
+    it('should remove file list theme when theme is removed', async () => {
+      upload.setAttribute('theme', 'thumbnails');
+      await nextUpdate(upload);
+      expect(upload._fileList.getAttribute('theme')).to.equal('thumbnails');
+
+      upload.removeAttribute('theme');
+      await nextUpdate(upload);
+      expect(upload._fileList.getAttribute('theme')).to.be.null;
+    });
+  });
 });

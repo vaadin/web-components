@@ -4,13 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes DisabledMixin
+ * @mixes SlotStylesMixin
  */
 export const SliderMixin = (superClass) =>
-  class SliderMixinClass extends DisabledMixin(superClass) {
+  class SliderMixinClass extends SlotStylesMixin(DisabledMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -56,17 +58,39 @@ export const SliderMixin = (superClass) =>
       };
     }
 
+    /** @protected */
+    get slotStyles() {
+      const tag = this.localName;
+
+      return [
+        `
+          ${tag} > input::-webkit-slider-runnable-track {
+            height: 100%;
+          }
+
+          ${tag} > input::-webkit-slider-thumb {
+            appearance: none;
+            width: var(--_thumb-width);
+            height: 100%;
+            /* iOS needs these */
+            background: transparent;
+            box-shadow: none;
+          }
+
+          ${tag} > input::-moz-range-thumb {
+            border: 0;
+            background: transparent;
+            width: var(--_thumb-width);
+            height: 100%;
+          }
+        `,
+      ];
+    }
+
     constructor() {
       super();
 
-      this.__onPointerMove = this.__onPointerMove.bind(this);
-      this.__onPointerUp = this.__onPointerUp.bind(this);
-
-      // Use separate mousedown listener for focusing the input, as
-      // pointerdown fires too early and the global `keyboardActive`
-      // flag isn't updated yet, which incorrectly shows focus-ring
       this.addEventListener('mousedown', (e) => this.__onMouseDown(e));
-      this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
     }
 
     /** @protected */
@@ -74,14 +98,6 @@ export const SliderMixin = (superClass) =>
       super.firstUpdated();
 
       this.__lastCommittedValue = this.value;
-    }
-
-    /**
-     * @param {Event} event
-     * @return {number}
-     */
-    __getThumbIndex(_event) {
-      return 0;
     }
 
     /**
@@ -128,49 +144,8 @@ export const SliderMixin = (superClass) =>
      */
     __getPercentFromValue(value) {
       const { min, max } = this.__getConstraints();
-      return (100 * (value - min)) / (max - min);
-    }
-
-    /**
-     * @param {number} percent
-     * @return {number}
-     * @private
-     */
-    __getValueFromPercent(percent) {
-      const { min, max } = this.__getConstraints();
-      return min + percent * (max - min);
-    }
-
-    /**
-     * @param {PointerEvent} event
-     * @return {number}
-     * @private
-     */
-    __getEventPercent(event) {
-      const offset = event.offsetX;
-      const size = this.offsetWidth;
-      const safeOffset = Math.min(Math.max(offset, 0), size);
-      return safeOffset / size;
-    }
-
-    /**
-     * @param {PointerEvent} event
-     * @return {number}
-     * @private
-     */
-    __getEventValue(event) {
-      const percent = this.__getEventPercent(event);
-      return this.__getValueFromPercent(percent);
-    }
-
-    /**
-     * @param {number} percent
-     * @return {string}
-     * @private
-     */
-    __getThumbPosition(percent) {
-      const controlSize = `calc(100% - var(--_thumb-width))`;
-      return `calc(var(--_thumb-width) / 2 + ${controlSize} * ${percent} / 100)`;
+      const safeValue = Math.min(Math.max(value, min), max);
+      return (safeValue - min) / (max - min);
     }
 
     /**
@@ -182,72 +157,15 @@ export const SliderMixin = (superClass) =>
         return;
       }
 
-      // Prevent losing focus
-      event.preventDefault();
-
-      this.__focusInput(event);
-    }
-
-    /**
-     * @param {PointerEvent} event
-     * @private
-     */
-    __onPointerDown(event) {
-      if (this.disabled || this.readonly || event.button !== 0) {
-        return;
-      }
-
-      // Only handle pointerdown on the thumb, track or track-fill
-      if (!event.composedPath().includes(this.$.controls)) {
-        return;
-      }
-
-      this.setPointerCapture(event.pointerId);
-      this.addEventListener('pointermove', this.__onPointerMove);
-      this.addEventListener('pointerup', this.__onPointerUp);
-      this.addEventListener('pointercancel', this.__onPointerUp);
-
-      this.__thumbIndex = this.__getThumbIndex(event);
-
-      // Update value on click within a track, but outside a thumb.
-      if (event.composedPath()[0] === this.$.controls) {
-        const newValue = this.__getEventValue(event);
-        this.__updateValue(newValue, this.__thumbIndex);
-        this.__commitValue();
+      // Prevent modifying value when readonly
+      if (this.readonly) {
+        event.preventDefault();
       }
     }
 
-    /**
-     * @param {PointerEvent} event
-     * @private
-     */
-    __onPointerMove(event) {
-      const newValue = this.__getEventValue(event);
-      this.__updateValue(newValue, this.__thumbIndex);
-      this.__commitValue();
-    }
-
-    /**
-     * @param {PointerEvent} event
-     * @private
-     */
-    __onPointerUp(event) {
-      this.__thumbIndex = null;
-
-      this.releasePointerCapture(event.pointerId);
-      this.removeEventListener('pointermove', this.__onPointerMove);
-      this.removeEventListener('pointerup', this.__onPointerUp);
-      this.removeEventListener('pointercancel', this.__onPointerUp);
-
-      this.__detectAndDispatchChange();
-    }
-
-    /**
-     * @param {Event} event
-     * @private
-     */
-    __focusInput(_event) {
-      this.focus({ focusVisible: false });
+    /** @private */
+    __dispatchInputEvent() {
+      this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
     }
 
     /** @private */
@@ -262,20 +180,16 @@ export const SliderMixin = (superClass) =>
      * @param {Event} event
      * @private
      */
-    __onInput(event) {
-      const index = this.__getThumbIndex(event);
-      this.__updateValue(event.target.value, index);
-      this.__commitValue();
-    }
-
-    /**
-     * @param {Event} event
-     * @private
-     */
     __onChange(event) {
       event.stopPropagation();
       this.__detectAndDispatchChange();
     }
+
+    /**
+     * Fired when the slider value changes during user interaction.
+     *
+     * @event input
+     */
 
     /**
      * Fired when the user commits a value change.

@@ -264,7 +264,7 @@ const createUnitTestsConfig = (config) => {
 const createVisualTestsConfig = (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'slider');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
   } else if (theme === 'aura') {
     visualPackages = getAllVisualPackages().filter(
       (dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base' && dir !== 'slider',

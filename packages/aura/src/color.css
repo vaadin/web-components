@@ -128,17 +128,34 @@ vaadin-tab,
   --aura-accent-text-color: light-dark(var(--aura-accent-text-color-light), var(--aura-accent-text-color-dark));
   --_accent-surface-light: color-mix(
     in srgb,
-    oklch(from var(--aura-accent-color-light) l c h / min(1, c + (1 - l) / 20))
-      calc((60% - 6% * abs(var(--aura-surface-level))) * var(--aura-surface-opacity)),
-    var(--aura-surface-color-solid) calc((25% + 20% * abs(var(--aura-surface-level))) * var(--aura-surface-opacity))
+    color-mix(
+        in srgb,
+        oklch(from var(--aura-accent-color-light) l c h / min(max(c / 0.4, 0), 1))
+          calc(23% - 4% * var(--aura-surface-level)),
+        var(--aura-surface-color-solid)
+      )
+      calc(100% * var(--aura-surface-opacity)),
+    transparent
   );
   --_accent-surface-dark: color-mix(
     in srgb,
-    oklch(from var(--aura-accent-color-dark) l c h / min(1, c + (1 - l) / 10))
-      calc((60% - 6% * abs(var(--aura-surface-level))) * var(--aura-surface-opacity)),
-    var(--aura-surface-color-solid) calc((40% + 6% * abs(var(--aura-surface-level))) * var(--aura-surface-opacity))
+    color-mix(
+        in srgb,
+        oklch(from var(--aura-accent-color-dark) l c h / min(max(c / 0.4, 0), 1))
+          calc(23% - 3% * var(--aura-surface-level)),
+        var(--aura-surface-color-solid)
+      )
+      calc(100% * var(--aura-surface-opacity)),
+    transparent
   );
+  /* This color is very slightly semi-transparent, depending on the saturation/chroma of the accent color (only an issue in Safari 17). */
   --aura-accent-surface: light-dark(var(--_accent-surface-light), var(--_accent-surface-dark));
+  @supports (color: hsl(0 0 0)) {
+    /* This removes the semi-transparency */
+    --aura-accent-surface: oklch(
+      from light-dark(var(--_accent-surface-light), var(--_accent-surface-dark)) l c h / var(--aura-surface-opacity)
+    );
+  }
   --_accent-border: light-dark(
     oklch(from var(--aura-accent-color-light) 0.8 calc(c * 1.1) h / min(1, c + (1 - l) / 10)),
     oklch(from var(--aura-accent-color-dark) 0.8 calc(c * 1.1) h / min(1, c + (1 - l) / 10))
