@@ -346,14 +346,14 @@ class RangeSlider extends FieldMixin(
         <vaadin-slider-bubble
           slot="bubble"
           .positionTarget="${this.__thumbStartElement}"
-          .opened="${this.__hoverInside || this.__startFocused}"
+          .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__startFocused}"
         >
           ${startValue}
         </vaadin-slider-bubble>
         <vaadin-slider-bubble
           slot="bubble"
           .positionTarget="${this.__thumbEndElement}"
-          .opened="${this.__hoverInside || this.__endFocused}"
+          .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__endFocused}"
         >
           ${endValue}
         </vaadin-slider-bubble>

@@ -43,6 +43,7 @@ class SliderBubble extends PolylitMixin(LitElement) {
       opened: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
       },
     };
   }

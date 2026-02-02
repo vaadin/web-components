@@ -238,5 +238,27 @@ describe('vaadin-range-slider', () => {
       slider.blur();
       expect(bubbles[0].opened).to.be.false;
     });
+
+    it('should open both bubbles when valueAlwaysVisible is set to true', async () => {
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.false;
+
+      slider.valueAlwaysVisible = true;
+      await nextRender();
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.true;
+    });
+
+    it('should close both bubbles when valueAlwaysVisible is set to false', async () => {
+      slider.valueAlwaysVisible = true;
+      await nextRender();
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.true;
+
+      slider.valueAlwaysVisible = false;
+      await nextRender();
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.false;
+    });
   });
 });

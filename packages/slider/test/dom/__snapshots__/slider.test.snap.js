@@ -348,6 +348,41 @@ snapshots["vaadin-slider host error"] =
 `;
 /* end snapshot vaadin-slider host error */
 
+snapshots["vaadin-slider host value always visible"] = 
+`<vaadin-slider>
+  <input
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <vaadin-slider-bubble
+    modeless=""
+    opened=""
+    slot="bubble"
+    start-aligned=""
+    top-aligned=""
+  >
+    0
+  </vaadin-slider-bubble>
+  <label
+    id="label-vaadin-slider-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-slider-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-slider>
+`;
+/* end snapshot vaadin-slider host value always visible */
+
 snapshots["vaadin-slider shadow default"] = 
 `<div class="vaadin-slider-container">
   <div part="label">

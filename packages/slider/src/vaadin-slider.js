@@ -254,7 +254,7 @@ class Slider extends FieldMixin(
         <vaadin-slider-bubble
           slot="bubble"
           .positionTarget="${this.__thumbElement}"
-          .opened="${this.__hoverInside || this.__focusInside}"
+          .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__focusInside}"
         >
           ${value}
         </vaadin-slider-bubble>

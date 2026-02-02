@@ -34,4 +34,11 @@ export declare class SliderMixinClass {
    * readers.
    */
   readonly: boolean;
+
+  /**
+   * When true, the value bubble is always visible,
+   * regardless of focus or hover state.
+   * @attr {boolean} value-always-visible
+   */
+  valueAlwaysVisible: boolean;
 }

@@ -173,5 +173,21 @@ describe('vaadin-slider', () => {
       slider.blur();
       expect(bubble.opened).to.be.false;
     });
+
+    it('should open when valueAlwaysVisible is set to true', async () => {
+      slider.valueAlwaysVisible = true;
+      await nextRender();
+      expect(bubble.opened).to.be.true;
+    });
+
+    it('should close when valueAlwaysVisible is set to false', async () => {
+      slider.valueAlwaysVisible = true;
+      await nextRender();
+      expect(bubble.opened).to.be.true;
+
+      slider.valueAlwaysVisible = false;
+      await nextRender();
+      expect(bubble.opened).to.be.false;
+    });
   });
 });

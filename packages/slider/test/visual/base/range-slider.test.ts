@@ -33,6 +33,12 @@ describe('range-slider', () => {
     await visualDiff(div, 'value-same');
   });
 
+  it('value always visible', async () => {
+    div.style.padding = '40px 20px 10px';
+    element.valueAlwaysVisible = true;
+    await visualDiff(div, 'value-always-visible');
+  });
+
   it('disabled', async () => {
     element.disabled = true;
     await visualDiff(div, 'disabled');
