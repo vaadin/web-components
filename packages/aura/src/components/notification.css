@@ -11,11 +11,32 @@ vaadin-notification-container {
 
 vaadin-notification-card::part(overlay) {
   --aura-surface-level: 3.5;
-  --vaadin-notification-background: var(--aura-surface-color);
+  background: var(--vaadin-notification-background, var(--aura-surface-color));
 
   /* TODO probably should be in base styles */
   /* Keeps notifications on top of MDL view transitions */
   view-transition-name: vaadin-notification;
+}
+
+vaadin-notification-card:is(
+    .aura-accent-color,
+    .aura-accent-red,
+    .aura-accent-orange,
+    .aura-accent-yellow,
+    .aura-accent-green,
+    .aura-accent-blue,
+    .aura-accent-purple,
+    .v-info,
+    .v-success,
+    .v-warning,
+    .v-error
+  )::part(overlay) {
+  --vaadin-notification-background: var(--aura-accent-surface);
+  --vaadin-icon-color: var(--aura-accent-text-color);
+  box-shadow:
+    inset 0 0 0 1px light-dark(transparent, var(--aura-accent-border-color)),
+    0 0 0 1px light-dark(var(--aura-accent-border-color), transparent),
+    var(--vaadin-notification-shadow, var(--aura-shadow-m));
 }
 
 ::view-transition-group(vaadin-notification) {

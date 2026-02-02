@@ -153,59 +153,95 @@
     --vaadin-focus-ring-color: var(--lumo-primary-contrast-color);
   }
 
-  :host([theme~='primary']) [part='overlay'] {
+  :host(:is([theme~='primary'], .v-info.v-primary)) [part='overlay'] {
     background: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
     box-shadow: var(--lumo-box-shadow-l);
   }
 
-  :host([theme~='primary']) {
+  :host(:is([theme~='primary'], .v-info.v-primary)) {
     --vaadin-button-background: var(--lumo-shade-20pct);
     --vaadin-button-text-color: var(--lumo-primary-contrast-color);
     --vaadin-button-primary-background: var(--lumo-primary-contrast-color);
     --vaadin-button-primary-text-color: var(--lumo-primary-text-color);
   }
 
-  :host([theme~='contrast']) [part='overlay'] {
+  :host(.v-info) [part='overlay'] {
+    background: linear-gradient(var(--lumo-primary-color-10pct), var(--lumo-primary-color-10pct)) var(--lumo-base-color);
+    color: var(--lumo-primary-text-color);
+  }
+
+  :host(.v-info) {
+    --vaadin-button-background: var(--lumo-primary-color-10pct);
+    --vaadin-button-text-color: var(--lumo-primary-text-color);
+    --vaadin-button-primary-background: var(--lumo-primary-color);
+    --vaadin-button-primary-text-color: var(--lumo-primary-contrast-color);
+  }
+
+  :host(:is([theme~='contrast'], .v-primary)) [part='overlay'] {
     background: var(--lumo-contrast);
     color: var(--lumo-base-color);
     box-shadow: var(--lumo-box-shadow-l);
   }
 
-  :host([theme~='contrast']) {
+  :host(:is([theme~='contrast'], .v-primary)) {
     --vaadin-button-background: var(--lumo-contrast-20pct);
     --vaadin-button-text-color: var(--lumo-base-color);
     --vaadin-button-primary-background: var(--lumo-base-color);
     --vaadin-button-primary-text-color: var(--lumo-contrast);
   }
 
-  :host([theme~='success']) [part='overlay'] {
+  :host(:is([theme~='success'], .v-success.v-primary)) [part='overlay'] {
     background: var(--lumo-success-color);
     color: var(--lumo-success-contrast-color);
     box-shadow: var(--lumo-box-shadow-l);
   }
 
-  :host([theme~='success']) {
+  :host(:is([theme~='success'], .v-success.v-primary)) {
     --vaadin-button-background: var(--lumo-shade-20pct);
     --vaadin-button-text-color: var(--lumo-success-contrast-color);
     --vaadin-button-primary-background: var(--lumo-success-contrast-color);
     --vaadin-button-primary-text-color: var(--lumo-success-text-color);
   }
 
-  :host([theme~='error']) [part='overlay'] {
+  :host(.v-success) [part='overlay'] {
+    background: linear-gradient(var(--lumo-success-color-10pct), var(--lumo-success-color-10pct)) var(--lumo-base-color);
+    color: var(--lumo-success-text-color);
+  }
+
+  :host(.v-success) {
+    --vaadin-button-background: var(--lumo-success-color-10pct);
+    --vaadin-button-text-color: var(--lumo-success-text-color);
+    --vaadin-button-primary-background: var(--lumo-success-color);
+    --vaadin-button-primary-text-color: var(--lumo-success-contrast-color);
+  }
+
+  :host(:is([theme~='error'], .v-error.v-primary)) [part='overlay'] {
     background: var(--lumo-error-color);
     color: var(--lumo-error-contrast-color);
     box-shadow: var(--lumo-box-shadow-l);
   }
 
-  :host([theme~='error']) {
+  :host(:is([theme~='error'], .v-error.v-primary)) {
     --vaadin-button-background: var(--lumo-shade-20pct);
     --vaadin-button-text-color: var(--lumo-error-contrast-color);
     --vaadin-button-primary-background: var(--lumo-error-contrast-color);
     --vaadin-button-primary-text-color: var(--lumo-error-text-color);
   }
 
-  :host([theme~='warning']) [part='overlay'] {
+  :host(.v-error) [part='overlay'] {
+    background: linear-gradient(var(--lumo-error-color-10pct), var(--lumo-error-color-10pct)) var(--lumo-base-color);
+    color: var(--lumo-error-text-color);
+  }
+
+  :host(.v-error) {
+    --vaadin-button-background: var(--lumo-error-color-10pct);
+    --vaadin-button-text-color: var(--lumo-error-text-color);
+    --vaadin-button-primary-background: var(--lumo-error-color);
+    --vaadin-button-primary-text-color: var(--lumo-error-contrast-color);
+  }
+
+  :host(:is([theme~='warning'], .v-warning.v-primary)) [part='overlay'] {
     background: var(--lumo-warning-color);
     color: var(--lumo-warning-contrast-color);
     box-shadow:
@@ -213,11 +249,23 @@
       var(--lumo-box-shadow-l);
   }
 
-  :host([theme~='warning']) {
+  :host(:is([theme~='warning'], .v-warning.v-primary)) {
     --vaadin-button-background: var(--lumo-shade-20pct);
     --vaadin-button-text-color: var(--lumo-warning-contrast-color);
     --vaadin-button-primary-background: var(--lumo-shade-50pct);
     --vaadin-button-primary-text-color: var(--lumo-primary-contrast-color);
+  }
+
+  :host(.v-warning) [part='overlay'] {
+    background: linear-gradient(var(--lumo-warning-color-10pct), var(--lumo-warning-color-10pct)) var(--lumo-base-color);
+    color: var(--lumo-warning-text-color);
+  }
+
+  :host(.v-warning) {
+    --vaadin-button-background: var(--lumo-warning-color-10pct);
+    --vaadin-button-text-color: var(--lumo-warning-text-color);
+    --vaadin-button-primary-background: var(--lumo-warning-color);
+    --vaadin-button-primary-text-color: var(--lumo-warning-contrast-color);
   }
 
   @media (forced-colors: active) {
