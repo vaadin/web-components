@@ -197,9 +197,25 @@ describe('title and description', () => {
 
     expect(titleElement.textContent).to.be.equal('The newest title');
     expect(descriptionElement.textContent).to.be.equal('The newest description');
+  });
 
-    expect(login.title).to.be.equal(login.i18n.header.title);
-    expect(login.description).to.be.equal(login.i18n.header.description);
+  it('should restore default title and description when i18n is reset', async () => {
+    const defaultTitle = login.title;
+    const defaultDescription = login.description;
+
+    // Set custom i18n header
+    login.i18n = { header: { title: 'Custom title', description: 'Custom description' } };
+    await nextUpdate(login);
+
+    expect(titleElement.textContent).to.be.equal('Custom title');
+    expect(descriptionElement.textContent).to.be.equal('Custom description');
+
+    // Reset i18n to empty object
+    login.i18n = {};
+    await nextUpdate(login);
+
+    expect(titleElement.textContent).to.be.equal(defaultTitle);
+    expect(descriptionElement.textContent).to.be.equal(defaultDescription);
   });
 });
 
