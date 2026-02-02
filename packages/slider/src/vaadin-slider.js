@@ -60,6 +60,7 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} input - Fired when the slider value changes during user interaction.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @customElement
@@ -253,7 +254,9 @@ class Slider extends FieldMixin(
 
   /** @private */
   __onInput(event) {
+    event.stopPropagation();
     this.__updateValue(event.target.value, 0);
+    this.__dispatchInputEvent();
     this.__commitValue();
   }
 

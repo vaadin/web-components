@@ -7,7 +7,7 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { SliderMixinClass } from '../../src/vaadin-slider-mixin.js';
-import type { Slider, SliderChangeEvent, SliderValueChangedEvent } from '../../vaadin-slider.js';
+import type { Slider, SliderChangeEvent, SliderInputEvent, SliderValueChangedEvent } from '../../vaadin-slider.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -22,6 +22,11 @@ slider.addEventListener('value-changed', (event) => {
 
 slider.addEventListener('change', (event) => {
   assertType<SliderChangeEvent>(event);
+  assertType<Slider>(event.target);
+});
+
+slider.addEventListener('input', (event) => {
+  assertType<SliderInputEvent>(event);
   assertType<Slider>(event.target);
 });
 

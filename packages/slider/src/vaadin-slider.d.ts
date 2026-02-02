@@ -17,6 +17,13 @@ export type SliderChangeEvent = Event & {
 };
 
 /**
+ * Fired when the slider value changes during user interaction.
+ */
+export type SliderInputEvent = Event & {
+  target: Slider;
+};
+
+/**
  * Fired when the `value` property changes.
  */
 export type SliderValueChangedEvent = CustomEvent<{ value: number }>;
@@ -27,6 +34,7 @@ export interface SliderCustomEventMap {
 
 export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMap {
   change: SliderChangeEvent;
+  input: SliderInputEvent;
 }
 
 /**
@@ -72,6 +80,7 @@ export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMa
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} input - Fired when the slider value changes during user interaction.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class Slider extends FieldMixin(SliderMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))) {

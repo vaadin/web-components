@@ -130,6 +130,30 @@ describe('vaadin-slider - pointer', () => {
     });
   });
 
+  describe('input event', () => {
+    let spy: sinon.SinonSpy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      slider.addEventListener('input', spy);
+    });
+
+    it('should fire on thumb pointermove', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y] });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire on track pointerdown', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+
+      expect(spy).to.be.calledOnce;
+    });
+  });
+
   describe('focus', () => {
     let input: HTMLInputElement;
 

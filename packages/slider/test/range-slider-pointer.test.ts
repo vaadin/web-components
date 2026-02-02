@@ -149,6 +149,36 @@ window.Vaadin.featureFlags.sliderComponent = true;
     });
   });
 
+  describe('input event', () => {
+    let spy: sinon.SinonSpy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      slider.addEventListener('input', spy);
+    });
+
+    it('should fire on thumb pointermove', async () => {
+      const { x, y } = middleOfThumb(0);
+
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [x + 20, y] });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire on track pointerdown', async () => {
+      slider.value = [20, 80];
+
+      const { x, y } = middleOfThumb(0);
+
+      await sendMouse({ type: 'move', position: [x - 20, y] });
+      await sendMouse({ type: 'down' });
+
+      expect(spy).to.be.calledOnce;
+    });
+  });
+
   describe('track', () => {
     beforeEach(() => {
       slider.value = [20, 80];

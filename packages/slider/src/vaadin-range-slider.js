@@ -63,6 +63,7 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} input - Fired when the slider value changes during user interaction.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @customElement
@@ -330,6 +331,8 @@ class RangeSlider extends FieldMixin(
 
   /** @private */
   __onStartInput(event) {
+    event.stopPropagation();
+
     // Use second input value as first input max limit
     if (parseFloat(event.target.value) > this.__value[1]) {
       event.target.value = this.__value[1];
@@ -337,11 +340,14 @@ class RangeSlider extends FieldMixin(
 
     const value = event.target.value;
     this.__updateValue(value, 0);
+    this.__dispatchInputEvent();
     this.__commitValue();
   }
 
   /** @private */
   __onEndInput(event) {
+    event.stopPropagation();
+
     // Use first input value as second input min limit
     if (parseFloat(event.target.value) < this.__value[0]) {
       event.target.value = this.__value[0];
@@ -349,6 +355,7 @@ class RangeSlider extends FieldMixin(
 
     const value = event.target.value;
     this.__updateValue(value, 1);
+    this.__dispatchInputEvent();
     this.__commitValue();
   }
 
