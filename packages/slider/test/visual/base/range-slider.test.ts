@@ -71,4 +71,25 @@ describe('range-slider', () => {
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-readonly');
   });
+
+  describe('RTL', () => {
+    beforeEach(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('basic', async () => {
+      element.value = [10, 80];
+      await visualDiff(div, 'rtl-basic');
+    });
+
+    it('readonly', async () => {
+      element.value = [10, 80];
+      element.readonly = true;
+      await visualDiff(div, 'rtl-readonly');
+    });
+  });
 });
