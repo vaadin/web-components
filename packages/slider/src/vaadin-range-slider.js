@@ -44,21 +44,36 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute   | Description
- * ------------|-------------
- * `disabled`  | Set when the slider is disabled
- * `readonly`  | Set when the slider is read-only
+ * Attribute       | Description
+ * ----------------|-------------
+ * `disabled`      | Set when the slider is disabled
+ * `readonly`      | Set when the slider is read-only
+ * `focused`       | Set when the slider has focus
+ * `focus-ring`    | Set when the slider is focused using the keyboard
+ * `start-focused` | Set when the start thumb has focus
+ * `end-focused`   | Set when the end thumb has focus
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                      |
- * :----------------------------------------|
- * | `--vaadin-slider-fill-background`      |
- * | `--vaadin-slider-thumb-height`         |
- * | `--vaadin-slider-thumb-width`          |
- * | `--vaadin-slider-track-background`     |
- * | `--vaadin-slider-track-border-radius`  |
- * | `--vaadin-slider-track-height`         |
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * `--vaadin-field-default-width`               |
+ * `--vaadin-input-field-error-color`           |
+ * `--vaadin-input-field-error-font-size`       |
+ * `--vaadin-input-field-error-font-weight`     |
+ * `--vaadin-input-field-helper-color`          |
+ * `--vaadin-input-field-helper-font-size`      |
+ * `--vaadin-input-field-helper-font-weight`    |
+ * `--vaadin-input-field-label-color`           |
+ * `--vaadin-input-field-label-font-size`       |
+ * `--vaadin-input-field-label-font-weight`     |
+ * `--vaadin-input-field-required-indicator`    |
+ * `--vaadin-slider-fill-background`            |
+ * `--vaadin-slider-thumb-height`               |
+ * `--vaadin-slider-thumb-width`                |
+ * `--vaadin-slider-track-background`           |
+ * `--vaadin-slider-track-border-radius`        |
+ * `--vaadin-slider-track-height`               |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
