@@ -134,7 +134,6 @@ export const MessageMixin = (superClass) =>
 
     /**
      * Renders attachments for the message.
-     * @return {import('lit').TemplateResult | string}
      * @private
      */
     __renderAttachments() {
@@ -151,7 +150,6 @@ export const MessageMixin = (superClass) =>
     /**
      * Renders a single attachment.
      * @param {Object} attachment - The attachment object with name, url, and type properties
-     * @return {import('lit').TemplateResult}
      * @private
      */
     __renderAttachment(attachment) {
