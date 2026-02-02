@@ -24,12 +24,26 @@ export type SliderInputEvent = Event & {
 };
 
 /**
+ * Fired when the `invalid` property changes.
+ */
+export type SliderInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type SliderValueChangedEvent = CustomEvent<{ value: number }>;
 
+/**
+ * Fired whenever the slider is validated.
+ */
+export type SliderValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface SliderCustomEventMap {
+  'invalid-changed': SliderInvalidChangedEvent;
+
   'value-changed': SliderValueChangedEvent;
+
+  validated: SliderValidatedEvent;
 }
 
 export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMap {
