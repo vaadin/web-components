@@ -137,88 +137,35 @@ export const DialogOverlayMixin = (superClass) =>
     }
 
     /**
-     * Checks if a node has meaningful content.
-     * @private
-     * @param {Node} node - The node to check
-     * @return {boolean} True if the node has content
-     */
-    __hasNodeContent(node) {
-      // Ignore renderer-created containers
-      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'VAADIN-DIALOG-CONTENT') {
-        return false;
-      }
-      // Check element nodes
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        return node.hasChildNodes() || node.textContent.trim().length > 0;
-      }
-      // Check text nodes
-      if (node.nodeType === Node.TEXT_NODE) {
-        return node.textContent.trim().length > 0;
-      }
-      return false;
-    }
-
-    /**
-     * Checks if a slot element (nested slot forwarding) has meaningful content.
-     * @private
-     * @param {HTMLSlotElement} slotElement - The slot element to check
-     * @return {boolean} True if the slot has content
-     */
-    __isSlotElementWithContent(slotElement) {
-      const slotContent = slotElement.assignedNodes({ flatten: true });
-      if (slotContent.length === 0) {
-        return false;
-      }
-      // Check if the slot has meaningful content (excluding renderer containers)
-      return slotContent.some((slotNode) => this.__hasNodeContent(slotNode));
-    }
-
-    /**
-     * Checks if a slot has meaningful content, excluding empty elements and renderer containers.
-     * Handles nested slot forwarding by recursively checking slot elements.
+     * Checks if a slot has any content.
      * @private
      * @param {string} slotName - The name of the slot to check
      * @return {boolean} True if the slot has content
      */
     __hasSlottedContent(slotName) {
       const slot = this.shadowRoot.querySelector(`slot[name="${slotName}"]`);
-      if (!slot) {
-        return false;
-      }
-
       const nodes = slot.assignedNodes({ flatten: true });
-      return nodes.some((node) => {
-        // Ignore vaadin-dialog-content elements as they are created by renderers
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'VAADIN-DIALOG-CONTENT') {
-          return false;
-        }
-        // Handle nested slot forwarding
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SLOT') {
-          return this.__isSlotElementWithContent(node);
-        }
-        // Check for regular element and text nodes with content
-        return this.__hasNodeContent(node);
-      });
+      return nodes.length > 0;
     }
 
     /**
-     * Updates the has-header attribute based on headerRenderer and slotted content.
+     * Updates the has-header attribute based on whether there is any slotted content.
      * @private
      */
     __updateHasHeader() {
-      const hasSlottedHeader = this.__hasSlottedContent('header-content');
-      const hasHeader = !!this.headerRenderer || hasSlottedHeader;
-      setOverlayStateAttribute(this, 'has-header', hasHeader);
+      const hasHeaderContent = this.__hasSlottedContent('header-content');
+      setOverlayStateAttribute(this, 'has-header', hasHeaderContent);
+      this.__updateOverflow();
     }
 
     /**
-     * Updates the has-footer attribute based on footerRenderer and slotted content.
+     * Updates the has-footer attribute based on whether there is any slotted content.
      * @private
      */
     __updateHasFooter() {
-      const hasSlottedFooter = this.__hasSlottedContent('footer');
-      const hasFooter = !!this.footerRenderer || hasSlottedFooter;
-      setOverlayStateAttribute(this, 'has-footer', hasFooter);
+      const hasFooterContent = this.__hasSlottedContent('footer');
+      setOverlayStateAttribute(this, 'has-footer', hasFooterContent);
+      this.__updateOverflow();
     }
 
     /** @private */
@@ -261,18 +208,12 @@ export const DialogOverlayMixin = (superClass) =>
       const openedChanged = this._oldOpenedFooterHeader !== opened;
       this._oldOpenedFooterHeader = opened;
 
-      // Set attributes here to update styles before detecting content overflow
-      // Check both renderers and slotted content
-      this.__updateHasHeader();
-      this.__updateHasFooter();
-
       if (headerRendererChanged) {
         if (headerRenderer) {
           this.headerContainer = this.__initContainer(this.headerContainer, 'header-content');
         } else if (this.headerContainer) {
           this.headerContainer.remove();
           this.headerContainer = null;
-          this.__updateOverflow();
         }
       }
 
@@ -282,7 +223,6 @@ export const DialogOverlayMixin = (superClass) =>
         } else if (this.footerContainer) {
           this.footerContainer.remove();
           this.footerContainer = null;
-          this.__updateOverflow();
         }
       }
 

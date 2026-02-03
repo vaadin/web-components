@@ -208,6 +208,7 @@ describe('header/footer feature', () => {
 
       dialog.headerRenderer = null;
       await nextUpdate(dialog);
+      await nextUpdate(dialog);
       expect(dialog.hasAttribute('has-header')).to.be.not.ok;
       expect(overlay.hasAttribute('has-header')).to.be.not.ok;
     });
@@ -293,6 +294,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.footerRenderer = null;
+      await nextUpdate(dialog);
       await nextUpdate(dialog);
       expect(dialog.hasAttribute('has-footer')).to.be.not.ok;
       expect(overlay.hasAttribute('has-footer')).to.be.not.ok;
@@ -479,6 +481,7 @@ describe('header/footer feature', () => {
       dialog.headerTitle = null;
       dialog.headerRenderer = null;
       await nextUpdate(dialog);
+      await nextUpdate(dialog);
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
     });
   });
@@ -600,17 +603,6 @@ describe('slotted header content', () => {
     expect(overlay.hasAttribute('has-header')).to.be.true;
   });
 
-  it('should not set [has-header] attribute with empty slotted content', async () => {
-    const header = document.createElement('div');
-    header.setAttribute('slot', 'header-content');
-    dialog.appendChild(header);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(overlay.hasAttribute('has-header')).to.be.false;
-  });
-
   it('[part=header] should be displayed when header content is slotted', async () => {
     const header = document.createElement('button');
     header.setAttribute('slot', 'header-content');
@@ -717,17 +709,6 @@ describe('slotted footer content', () => {
     await nextRender();
 
     expect(overlay.hasAttribute('has-footer')).to.be.true;
-  });
-
-  it('should not set [has-footer] attribute with empty slotted content', async () => {
-    const footer = document.createElement('div');
-    footer.setAttribute('slot', 'footer');
-    dialog.appendChild(footer);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(overlay.hasAttribute('has-footer')).to.be.false;
   });
 
   it('[part=footer] should be displayed when footer content is slotted', async () => {

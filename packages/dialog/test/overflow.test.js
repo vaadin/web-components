@@ -121,6 +121,7 @@ describe('overflow', () => {
 
         dialog.headerRenderer = null;
         await nextUpdate(dialog);
+        await nextUpdate(dialog);
         expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
@@ -133,6 +134,7 @@ describe('overflow', () => {
         expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.footerRenderer = null;
+        await nextUpdate(dialog);
         await nextUpdate(dialog);
         expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
@@ -182,6 +184,7 @@ describe('overflow', () => {
         dialog.headerRenderer = null;
         dialog.footerRenderer = null;
         dialog.headerTitle = null;
+        await nextUpdate(dialog);
         await nextUpdate(dialog);
         expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;

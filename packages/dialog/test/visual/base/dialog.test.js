@@ -185,18 +185,5 @@ describe('dialog', () => {
       await nextUpdate(element);
       await visualDiff(div, 'mixed-renderer-slotted');
     });
-
-    it('empty slotted elements', async () => {
-      const header = document.createElement('div');
-      header.setAttribute('slot', 'header-content');
-      element.appendChild(header);
-
-      const footer = document.createElement('div');
-      footer.setAttribute('slot', 'footer');
-      element.appendChild(footer);
-
-      await nextUpdate(element);
-      await visualDiff(div, 'empty-slotted-elements');
-    });
   });
 });
