@@ -41,6 +41,16 @@ export const LoginOverlayMixin = (superClass) =>
           type: String,
           value: 'App name',
         },
+
+        /** @private */
+        __effectiveTitle: {
+          type: String,
+        },
+
+        /** @private */
+        __effectiveDescription: {
+          type: String,
+        },
       };
     }
 
@@ -62,9 +72,10 @@ export const LoginOverlayMixin = (superClass) =>
     willUpdate(props) {
       super.willUpdate(props);
 
-      if (props.has('__effectiveI18n') && this.__effectiveI18n.header) {
-        this.title = this.__effectiveI18n.header.title;
-        this.description = this.__effectiveI18n.header.description;
+      if (props.has('__effectiveI18n') || props.has('title') || props.has('description')) {
+        const header = this.__effectiveI18n && this.__effectiveI18n.header;
+        this.__effectiveTitle = header && header.title != null ? header.title : this.title;
+        this.__effectiveDescription = header && header.description != null ? header.description : this.description;
       }
     }
 
@@ -72,8 +83,8 @@ export const LoginOverlayMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('title') || props.has('__effectiveI18n')) {
-        this.__titleController.setTitle(this.title);
+      if (props.has('__effectiveTitle')) {
+        this.__titleController.setTitle(this.__effectiveTitle);
       }
 
       if (props.has('headingLevel')) {
