@@ -93,47 +93,15 @@ export const DialogOverlayMixin = (superClass) =>
       });
 
       // Observe header-content and footer slots for dynamic content
-      this.__observeHeaderSlot();
-      this.__observeFooterSlot();
-    }
+      const headerSlot = this.shadowRoot.querySelector('slot[name="header-content"]');
+      this.__headerSlotObserver = new SlotObserver(headerSlot, () => {
+        this.__updateHasHeader();
+      });
 
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      // Clean up slot observers
-      if (this.__headerSlotObserver) {
-        this.__headerSlotObserver.disconnect();
-      }
-      if (this.__footerSlotObserver) {
-        this.__footerSlotObserver.disconnect();
-      }
-    }
-
-    /**
-     * Observes the header-content slot for changes and updates the has-header attribute.
-     * @private
-     */
-    __observeHeaderSlot() {
-      const slot = this.shadowRoot.querySelector('slot[name="header-content"]');
-      if (slot) {
-        this.__headerSlotObserver = new SlotObserver(slot, () => {
-          this.__updateHasHeader();
-        });
-      }
-    }
-
-    /**
-     * Observes the footer slot for changes and updates the has-footer attribute.
-     * @private
-     */
-    __observeFooterSlot() {
-      const slot = this.shadowRoot.querySelector('slot[name="footer"]');
-      if (slot) {
-        this.__footerSlotObserver = new SlotObserver(slot, () => {
-          this.__updateHasFooter();
-        });
-      }
+      const footerSlot = this.shadowRoot.querySelector('slot[name="footer"]');
+      this.__footerSlotObserver = new SlotObserver(footerSlot, () => {
+        this.__updateHasFooter();
+      });
     }
 
     /**
