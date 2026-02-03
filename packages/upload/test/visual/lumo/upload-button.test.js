@@ -5,6 +5,11 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/upload-button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.aiComponents = true;
+
 import '../../../vaadin-upload-button.js';
 
 describe('upload-button', () => {
