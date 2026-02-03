@@ -1,5 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+
+window.Vaadin = window.Vaadin || {};
+window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
+window.Vaadin.featureFlags.aiComponents = true;
+
 import '../../src/vaadin-upload-file.js';
 
 describe('vaadin-upload-file', () => {

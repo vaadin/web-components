@@ -1,6 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextUpdate } from '@vaadin/testing-helpers';
+
+window.Vaadin = window.Vaadin || {};
+window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
+window.Vaadin.featureFlags.aiComponents = true;
+
 import '../../src/vaadin-upload-button.js';
 
 describe('vaadin-upload-button', () => {
