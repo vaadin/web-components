@@ -226,6 +226,8 @@ class RangeSlider extends FieldMixin(
       __startFocused: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
+        attribute: 'start-focused',
         sync: true,
       },
 
@@ -233,6 +235,8 @@ class RangeSlider extends FieldMixin(
       __endFocused: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
+        attribute: 'end-focused',
         sync: true,
       },
     };
@@ -441,9 +445,6 @@ class RangeSlider extends FieldMixin(
 
     this.__startFocused = isElementFocused(this._inputElements[0]);
     this.__endFocused = isElementFocused(this._inputElements[1]);
-
-    this.toggleAttribute('start-focused', this.__startFocused);
-    this.toggleAttribute('end-focused', this.__endFocused);
   }
 
   /** @private */
