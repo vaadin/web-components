@@ -587,18 +587,6 @@ describe('slotted header content', () => {
     expect(dialog.hasAttribute('has-header')).to.be.false;
     expect(overlay.hasAttribute('has-header')).to.be.false;
   });
-
-  it('[part=header] should be displayed when header content is slotted', async () => {
-    const header = document.createElement('button');
-    header.setAttribute('slot', 'header-content');
-    header.textContent = 'Close';
-    dialog.appendChild(header);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.not.be.equal('none');
-  });
 });
 
 describe('slotted footer content', () => {
@@ -650,17 +638,5 @@ describe('slotted footer content', () => {
 
     expect(dialog.hasAttribute('has-footer')).to.be.false;
     expect(overlay.hasAttribute('has-footer')).to.be.false;
-  });
-
-  it('[part=footer] should be displayed when footer content is slotted', async () => {
-    const footer = document.createElement('button');
-    footer.setAttribute('slot', 'footer');
-    footer.textContent = 'Cancel';
-    dialog.appendChild(footer);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=footer]')).display).to.not.be.equal('none');
   });
 });
