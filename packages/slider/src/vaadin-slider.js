@@ -43,6 +43,7 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * Attribute    | Description
  * -------------|-------------
+ * `active`     | Set when the slider is activated with mouse or touch
  * `disabled`   | Set when the slider is disabled
  * `readonly`   | Set when the slider is read-only
  * `focused`    | Set when the slider has focus
@@ -177,6 +178,8 @@ class Slider extends FieldMixin(
 
     this.__value = [this.value];
     this.__inputId = `slider-${generateUniqueId()}`;
+
+    this.__onPointerUp = this.__onPointerUp.bind(this);
   }
 
   /** @protected */
@@ -186,6 +189,26 @@ class Slider extends FieldMixin(
     const input = this.querySelector('[slot="input"]');
     this._inputElement = input;
     this.ariaTarget = input;
+  }
+
+  /** @private */
+  __onPointerDown(event) {
+    super.__onPointerDown(event);
+
+    if (event.composedPath()[0] === this._inputElement) {
+      document.addEventListener('pointerup', this.__onPointerUp);
+      document.addEventListener('pointercancel', this.__onPointerUp);
+
+      this.setAttribute('active', '');
+    }
+  }
+
+  /** @private */
+  __onPointerUp() {
+    document.removeEventListener('pointerup', this.__onPointerUp);
+    document.removeEventListener('pointercancel', this.__onPointerUp);
+
+    this.removeAttribute('active');
   }
 
   /**

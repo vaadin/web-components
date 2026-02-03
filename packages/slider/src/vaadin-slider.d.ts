@@ -77,6 +77,7 @@ export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMa
  *
  * Attribute    | Description
  * -------------|-------------
+ * `active`     | Set when the slider is activated with mouse or touch
  * `disabled`   | Set when the slider is disabled
  * `readonly`   | Set when the slider is read-only
  * `focused`    | Set when the slider has focus

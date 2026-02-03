@@ -237,4 +237,40 @@ describe('vaadin-slider - pointer', () => {
       expect(slider.value).to.equal(0);
     });
   });
+
+  describe('active', () => {
+    it('should set active attribute on thumb pointerdown', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('active')).to.be.true;
+    });
+
+    it('should remove active attribute on pointerup', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'up' });
+
+      expect(slider.hasAttribute('active')).to.be.false;
+    });
+
+    it('should remove active attribute on pointerup outside of the element', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, y + 100] });
+      await sendMouse({ type: 'up' });
+
+      expect(slider.hasAttribute('active')).to.be.false;
+    });
+
+    it('should not set active attribute on label pointerdown', async () => {
+      slider.label = 'Label';
+      await nextRender();
+      const label = slider.querySelector('label')!;
+      await sendMouseToElement({ type: 'move', element: label });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('active')).to.be.false;
+    });
+  });
 });

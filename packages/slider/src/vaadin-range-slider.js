@@ -50,6 +50,8 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * `readonly`      | Set when the slider is read-only
  * `focused`       | Set when the slider has focus
  * `focus-ring`    | Set when the slider is focused using the keyboard
+ * `start-active`  | Set when the start thumb is activated with mouse or touch
+ * `end-active`    | Set when the end thumb is activated with mouse or touch
  * `start-focused` | Set when the start thumb has focus
  * `end-focused`   | Set when the end thumb has focus
  *
@@ -224,6 +226,8 @@ class RangeSlider extends FieldMixin(
     this.__value = [...this.value];
     this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
+
+    this.__onPointerUp = this.__onPointerUp.bind(this);
   }
 
   /** @protected */
@@ -233,6 +237,31 @@ class RangeSlider extends FieldMixin(
     const inputs = this.querySelectorAll('[slot="input"]');
     this._inputElements = [...inputs];
     this.ariaTarget = this;
+  }
+
+  /** @private */
+  __onPointerDown(event) {
+    super.__onPointerDown(event);
+
+    const target = event.composedPath()[0];
+    const index = this._inputElements.indexOf(target);
+
+    if (index !== -1) {
+      document.addEventListener('pointerup', this.__onPointerUp);
+      document.addEventListener('pointercancel', this.__onPointerUp);
+
+      this.toggleAttribute('start-active', index === 0);
+      this.toggleAttribute('end-active', index === 1);
+    }
+  }
+
+  /** @private */
+  __onPointerUp() {
+    document.removeEventListener('pointerup', this.__onPointerUp);
+    document.removeEventListener('pointercancel', this.__onPointerUp);
+
+    this.removeAttribute('start-active');
+    this.removeAttribute('end-active');
   }
 
   /**

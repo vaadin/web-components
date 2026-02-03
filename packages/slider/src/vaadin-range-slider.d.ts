@@ -83,6 +83,8 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * `readonly`      | Set when the slider is read-only
  * `focused`       | Set when the slider has focus
  * `focus-ring`    | Set when the slider is focused using the keyboard
+ * `start-active`  | Set when the start thumb is activated with mouse or touch
+ * `end-active`    | Set when the end thumb is activated with mouse or touch
  * `start-focused` | Set when the start thumb has focus
  * `end-focused`   | Set when the end thumb has focus
  *
