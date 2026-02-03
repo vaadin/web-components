@@ -227,7 +227,8 @@ class RangeSlider extends FieldMixin(
     this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
 
-    this.__onPointerUp = this.__onPointerUp.bind(this);
+    this.addEventListener('pointerup', (e) => this.__onPointerUp(e));
+    this.addEventListener('pointercancel', (e) => this.__onPointerUp(e));
   }
 
   /** @protected */
@@ -243,25 +244,20 @@ class RangeSlider extends FieldMixin(
   __onPointerDown(event) {
     super.__onPointerDown(event);
 
-    const target = event.composedPath()[0];
-    const index = this._inputElements.indexOf(target);
+    const index = this._inputElements.indexOf(event.composedPath()[0]);
 
     if (index !== -1) {
-      document.addEventListener('pointerup', this.__onPointerUp);
-      document.addEventListener('pointercancel', this.__onPointerUp);
-
       this.toggleAttribute('start-active', index === 0);
       this.toggleAttribute('end-active', index === 1);
     }
   }
 
   /** @private */
-  __onPointerUp() {
-    document.removeEventListener('pointerup', this.__onPointerUp);
-    document.removeEventListener('pointercancel', this.__onPointerUp);
-
-    this.removeAttribute('start-active');
-    this.removeAttribute('end-active');
+  __onPointerUp(event) {
+    if (this._inputElements.includes(event.composedPath()[0])) {
+      this.removeAttribute('start-active');
+      this.removeAttribute('end-active');
+    }
   }
 
   /**

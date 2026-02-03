@@ -179,7 +179,8 @@ class Slider extends FieldMixin(
     this.__value = [this.value];
     this.__inputId = `slider-${generateUniqueId()}`;
 
-    this.__onPointerUp = this.__onPointerUp.bind(this);
+    this.addEventListener('pointerup', (e) => this.__onPointerUp(e));
+    this.addEventListener('pointercancel', (e) => this.__onPointerUp(e));
   }
 
   /** @protected */
@@ -196,19 +197,15 @@ class Slider extends FieldMixin(
     super.__onPointerDown(event);
 
     if (event.composedPath()[0] === this._inputElement) {
-      document.addEventListener('pointerup', this.__onPointerUp);
-      document.addEventListener('pointercancel', this.__onPointerUp);
-
       this.setAttribute('active', '');
     }
   }
 
   /** @private */
-  __onPointerUp() {
-    document.removeEventListener('pointerup', this.__onPointerUp);
-    document.removeEventListener('pointercancel', this.__onPointerUp);
-
-    this.removeAttribute('active');
+  __onPointerUp(event) {
+    if (event.composedPath()[0] === this._inputElement) {
+      this.removeAttribute('active');
+    }
   }
 
   /**
