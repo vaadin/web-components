@@ -158,6 +158,13 @@ class Slider extends FieldMixin(
         value: false,
         sync: true,
       },
+
+      /** @private */
+      __hoverInside: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -257,6 +264,9 @@ class Slider extends FieldMixin(
           .step="${step}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onPointerEnter}"
+          @pointermove="${this.__onPointerMove}"
+          @pointerleave="${this.__onPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onInput}"
           @change="${this.__onChange}"
@@ -348,6 +358,34 @@ class Slider extends FieldMixin(
     super._setFocused(focused);
 
     this.__focusInside = focused;
+  }
+
+  /** @private */
+  __isThumbEvent(event) {
+    const rect = this.__thumbElement.getBoundingClientRect();
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    );
+  }
+
+  /** @private */
+  __onPointerEnter(event) {
+    if (this.__isThumbEvent(event)) {
+      this.__hoverInside = true;
+    }
+  }
+
+  /** @private */
+  __onPointerMove(event) {
+    this.__hoverInside = this.__isThumbEvent(event);
+  }
+
+  /** @private */
+  __onPointerLeave() {
+    this.__hoverInside = false;
   }
 
   /** @private */

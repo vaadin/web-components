@@ -155,20 +155,25 @@ describe('vaadin-range-slider', () => {
 
   describe('bubble', () => {
     let bubbles: SliderBubble[];
+    let focusable: HTMLInputElement;
     let thumbs: Element[];
+    let track: Element;
 
     beforeEach(async () => {
       // Set margin: 10px on the wrapper to prevent mouse cursor
       // from staying on top of the slider at [0, 0] coordinates
-      [slider] = fixtureSync(
+      [focusable, slider] = fixtureSync(
         `<div style="margin: 10px">
+          <input id="first-global-focusable" />
           <vaadin-range-slider></vaadin-range-slider>
           <input id="last-global-focusable" />
         </div>`,
-      ).children as unknown as [RangeSlider];
+      ).children as unknown as [HTMLInputElement, RangeSlider];
       await nextRender();
       bubbles = [...slider.querySelectorAll('vaadin-slider-bubble')];
       thumbs = [...slider.shadowRoot!.querySelectorAll('[part~="thumb"]')];
+      track = slider.shadowRoot!.querySelector('[part="track"]')!;
+      focusable.focus();
     });
 
     afterEach(async () => {
@@ -181,11 +186,11 @@ describe('vaadin-range-slider', () => {
       expect(bubbles[1].opened).to.be.false;
     });
 
-    it('should close start bubble on blur', async () => {
+    it('should close start bubble on keyboard blur', async () => {
       await sendKeys({ press: 'Tab' });
       expect(bubbles[0].opened).to.be.true;
 
-      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(bubbles[0].opened).to.be.false;
     });
 
@@ -196,7 +201,7 @@ describe('vaadin-range-slider', () => {
       expect(bubbles[1].opened).to.be.true;
     });
 
-    it('should close end bubble on blur', async () => {
+    it('should close end bubble on keyboard blur', async () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Tab' });
       expect(bubbles[1].opened).to.be.true;
@@ -205,23 +210,94 @@ describe('vaadin-range-slider', () => {
       expect(bubbles[1].opened).to.be.false;
     });
 
-    it('should open both bubbles on pointer enter', async () => {
-      await sendMouseToElement({ type: 'move', element: slider });
+    it('should open start bubble on pointer enter over start thumb', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
       expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should open end bubble on pointer enter over end thumb', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      expect(bubbles[0].opened).to.be.false;
       expect(bubbles[1].opened).to.be.true;
     });
 
-    it('should close both bubbles on pointer leave', async () => {
-      await sendMouseToElement({ type: 'move', element: slider });
-      await sendMouse({ type: 'move', position: [300, 300] });
-      await sendMouse({ type: 'down' });
+    it('should open start bubble on pointer move from track to start thumb', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      expect(bubbles[0].opened).to.be.false;
+
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should open end bubble on pointer move from track to end thumb', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      expect(bubbles[1].opened).to.be.false;
+
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.true;
+    });
+
+    it('should not open bubbles on pointer move outside thumbs', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
       expect(bubbles[0].opened).to.be.false;
       expect(bubbles[1].opened).to.be.false;
     });
 
-    it('should not close bubble on pointer leave if focused', async () => {
+    it('should close start bubble on pointer leave', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[0].opened).to.be.false;
+    });
+
+    it('should close end bubble on pointer leave', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should close start bubble on pointer leave if focused', async () => {
       await sendMouseToElement({ type: 'click', element: thumbs[0] });
       await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should close end bubble on pointer leave if focused', async () => {
+      await sendMouseToElement({ type: 'click', element: thumbs[1] });
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should close start bubble open on hover when focusing the second input', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.true;
+    });
+
+    it('should close end bubble open on hover when focusing the first input', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendKeys({ press: 'Tab' });
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should close start bubble open on focus when moving pointer over end thumb', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.true;
+    });
+
+    it('should close end bubble open on focus on moving pointer over start thumb', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
       expect(bubbles[0].opened).to.be.true;
       expect(bubbles[1].opened).to.be.false;
     });

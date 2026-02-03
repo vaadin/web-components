@@ -114,6 +114,7 @@ describe('vaadin-slider', () => {
   describe('bubble', () => {
     let bubble: SliderBubble;
     let thumb: Element;
+    let track: Element;
 
     beforeEach(async () => {
       // Set margin: 10px on the wrapper to prevent mouse cursor
@@ -127,6 +128,7 @@ describe('vaadin-slider', () => {
       await nextRender();
       bubble = slider.querySelector('vaadin-slider-bubble')!;
       thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
+      track = slider.shadowRoot!.querySelector('[part="track"]')!;
     });
 
     afterEach(async () => {
@@ -144,9 +146,22 @@ describe('vaadin-slider', () => {
       expect(bubble.opened).to.be.false;
     });
 
-    it('should open on pointer enter', async () => {
+    it('should open on pointer enter over thumb', async () => {
       await sendMouseToElement({ type: 'move', element: thumb });
       expect(bubble.opened).to.be.true;
+    });
+
+    it('should open on pointer move from track to thumb', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      expect(bubble.opened).to.be.false;
+
+      await sendMouseToElement({ type: 'move', element: thumb });
+      expect(bubble.opened).to.be.true;
+    });
+
+    it('should not open on pointer move outside thumb', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      expect(bubble.opened).to.be.false;
     });
 
     it('should close on pointer leave', async () => {

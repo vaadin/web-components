@@ -239,6 +239,34 @@ class RangeSlider extends FieldMixin(
         attribute: 'end-focused',
         sync: true,
       },
+
+      /** @private */
+      __startHover: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __endHover: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __startBubbleOpened: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __endBubbleOpened: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -347,6 +375,9 @@ class RangeSlider extends FieldMixin(
           .value="${startValue}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onStartPointerEnter}"
+          @pointermove="${this.__onStartPointerMove}"
+          @pointerleave="${this.__onStartPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onStartInput}"
           @change="${this.__onChange}"
@@ -362,6 +393,9 @@ class RangeSlider extends FieldMixin(
           .value="${endValue}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onEndPointerEnter}"
+          @pointermove="${this.__onEndPointerMove}"
+          @pointerleave="${this.__onEndPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onEndInput}"
           @change="${this.__onChange}"
@@ -369,7 +403,7 @@ class RangeSlider extends FieldMixin(
         <vaadin-slider-bubble
           slot="bubble"
           .positionTarget="${this.__thumbStartElement}"
-          .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__startFocused}"
+          .opened="${this.valueAlwaysVisible || this.__startBubbleOpened}"
           theme="${ifDefined(this._theme)}"
           .active="${this.__startActive}"
         >
@@ -378,7 +412,7 @@ class RangeSlider extends FieldMixin(
         <vaadin-slider-bubble
           slot="bubble"
           .positionTarget="${this.__thumbEndElement}"
-          .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__endFocused}"
+          .opened="${this.valueAlwaysVisible || this.__endBubbleOpened}"
           theme="${ifDefined(this._theme)}"
           .active="${this.__endActive}"
         >
@@ -388,6 +422,51 @@ class RangeSlider extends FieldMixin(
       this,
       { host: this },
     );
+  }
+
+  /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('__startFocused')) {
+      if (this.__startFocused) {
+        this.__startBubbleOpened = true;
+        this.__endBubbleOpened = false;
+      } else if (props.get('__startFocused')) {
+        // Close bubble on blur unless the thumb has hover
+        this.__startBubbleOpened = this.__startHover;
+      }
+    }
+
+    if (props.has('__endFocused')) {
+      if (this.__endFocused) {
+        this.__endBubbleOpened = true;
+        this.__startBubbleOpened = false;
+      } else if (props.get('__endFocused')) {
+        // Close bubble on blur unless the thumb has hover
+        this.__endBubbleOpened = this.__endHover;
+      }
+    }
+
+    if (props.has('__startHover')) {
+      if (this.__startHover) {
+        this.__startBubbleOpened = true;
+        this.__endBubbleOpened = false;
+      } else if (props.get('__startHover')) {
+        // Close bubble on pointerleave even if thumb has focus
+        this.__startBubbleOpened = false;
+      }
+    }
+
+    if (props.has('__endHover')) {
+      if (this.__endHover) {
+        this.__endBubbleOpened = true;
+        this.__startBubbleOpened = false;
+      } else if (props.get('__endHover')) {
+        // Close bubble on pointerleave even if thumb has focus
+        this.__endBubbleOpened = false;
+      }
+    }
   }
 
   /** @protected */
@@ -487,6 +566,51 @@ class RangeSlider extends FieldMixin(
     this.__updateBubble(1);
     this.__dispatchInputEvent();
     this.__commitValue();
+  }
+
+  /** @private */
+  __isThumbEvent(event, thumb) {
+    const rect = thumb.getBoundingClientRect();
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    );
+  }
+
+  /** @private */
+  __onStartPointerEnter(event) {
+    if (this.__isThumbEvent(event, this.__thumbStartElement)) {
+      this.__startHover = true;
+    }
+  }
+
+  /** @private */
+  __onStartPointerMove(event) {
+    this.__startHover = this.__isThumbEvent(event, this.__thumbStartElement);
+  }
+
+  /** @private */
+  __onStartPointerLeave() {
+    this.__startHover = false;
+  }
+
+  /** @private */
+  __onEndPointerEnter(event) {
+    if (this.__isThumbEvent(event, this.__thumbEndElement)) {
+      this.__endHover = true;
+    }
+  }
+
+  /** @private */
+  __onEndPointerMove(event) {
+    this.__endHover = this.__isThumbEvent(event, this.__thumbEndElement);
+  }
+
+  /** @private */
+  __onEndPointerLeave() {
+    this.__endHover = false;
   }
 
   /** @private */
