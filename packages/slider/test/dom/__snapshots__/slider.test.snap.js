@@ -13,6 +13,7 @@ snapshots["vaadin-slider host default"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -39,6 +40,7 @@ snapshots["vaadin-slider host value"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -65,6 +67,7 @@ snapshots["vaadin-slider host min"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -91,6 +94,7 @@ snapshots["vaadin-slider host max"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -117,6 +121,7 @@ snapshots["vaadin-slider host step"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -147,6 +152,7 @@ snapshots["vaadin-slider host disabled"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -174,6 +180,7 @@ snapshots["vaadin-slider host label"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -202,6 +209,7 @@ snapshots["vaadin-slider host helper"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -234,6 +242,7 @@ snapshots["vaadin-slider host required"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
@@ -264,6 +273,7 @@ snapshots["vaadin-slider host error"] =
     type="range"
   >
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >

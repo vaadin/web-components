@@ -11,6 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -148,9 +149,9 @@ class Slider extends FieldMixin(
 
     return html`
       <div class="vaadin-slider-container">
-        <div part="label" @click="${this.focus}">
+        <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <div id="controls" style="${styleMap({ '--value': percent })}">
@@ -180,12 +181,14 @@ class Slider extends FieldMixin(
   }
 
   /** @protected */
-  firstUpdated() {
-    super.firstUpdated();
+  ready() {
+    super.ready();
 
     const input = this.querySelector('[slot="input"]');
     this._inputElement = input;
     this.ariaTarget = input;
+
+    this.addController(new LabelledInputController(input, this._labelController));
   }
 
   /**
