@@ -113,7 +113,7 @@ class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(Themabl
         id="overlay"
         .owner="${this}"
         .opened="${this.opened}"
-        .description="${this.description}"
+        .description="${this.__effectiveDescription}"
         focus-trap
         with-backdrop
         theme="${ifDefined(this._theme)}"
