@@ -5,6 +5,7 @@
  */
 import './vaadin-slider-bubble.js';
 import { css, html, LitElement, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -204,6 +205,24 @@ class RangeSlider extends FieldMixin(
       },
 
       /** @private */
+      __startActive: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'start-active',
+        sync: true,
+      },
+
+      /** @private */
+      __endActive: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'end-active',
+        sync: true,
+      },
+
+      /** @private */
       __startFocused: {
         type: Boolean,
         value: false,
@@ -347,6 +366,8 @@ class RangeSlider extends FieldMixin(
           slot="bubble"
           .positionTarget="${this.__thumbStartElement}"
           .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__startFocused}"
+          theme="${ifDefined(this._theme)}"
+          .active="${this.__startActive}"
         >
           ${startValue}
         </vaadin-slider-bubble>
@@ -354,6 +375,8 @@ class RangeSlider extends FieldMixin(
           slot="bubble"
           .positionTarget="${this.__thumbEndElement}"
           .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__endFocused}"
+          theme="${ifDefined(this._theme)}"
+          .active="${this.__endActive}"
         >
           ${endValue}
         </vaadin-slider-bubble>

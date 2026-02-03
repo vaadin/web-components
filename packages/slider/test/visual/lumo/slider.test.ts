@@ -1,4 +1,4 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -129,6 +129,47 @@ describe('slider', () => {
       element.value = 50;
       element.setAttribute('theme', 'error');
       await visualDiff(div, 'theme-error');
+    });
+  });
+
+  describe('active', () => {
+    let input: HTMLElement;
+
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+      element.value = 50;
+      input = element.querySelector('input')!;
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('active', async () => {
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'active');
+    });
+
+    it('contrast active', async () => {
+      element.setAttribute('theme', 'contrast');
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-contrast-active');
+    });
+
+    it('success active', async () => {
+      element.setAttribute('theme', 'success');
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-success-active');
+    });
+
+    it('error active', async () => {
+      element.setAttribute('theme', 'error');
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-error-active');
     });
   });
 

@@ -5,6 +5,7 @@
  */
 import './vaadin-slider-bubble.js';
 import { css, html, LitElement, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -143,6 +144,15 @@ class Slider extends FieldMixin(
       },
 
       /** @private */
+      __active: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'active',
+        sync: true,
+      },
+
+      /** @private */
       __focusInside: {
         type: Boolean,
         value: false,
@@ -255,6 +265,8 @@ class Slider extends FieldMixin(
           slot="bubble"
           .positionTarget="${this.__thumbElement}"
           .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__focusInside}"
+          .active="${this.__active}"
+          theme="${ifDefined(this._theme)}"
         >
           ${value}
         </vaadin-slider-bubble>

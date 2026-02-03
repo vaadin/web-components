@@ -6,10 +6,13 @@
 @media lumo_components_slider-bubble-overlay {
   :host {
     --_border-width: 0px;
+    --_bubble-background: var(--lumo-contrast-5pct);
+    --_bubble-color: var(--lumo-body-text-color);
   }
 
   [part='overlay'] {
-    background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+    background: var(--lumo-base-color) linear-gradient(var(--_bubble-background), var(--_bubble-background));
+    color: var(--_bubble-color);
     font-size: var(--lumo-font-size-xs);
     line-height: var(--lumo-line-height-s);
     overflow: visible;
@@ -17,6 +20,23 @@
 
   [part='content'] {
     padding: var(--lumo-space-xs) var(--lumo-space-s);
+  }
+
+  :host([active]) {
+    --_bubble-background: var(--lumo-primary-color);
+    --_bubble-color: var(--lumo-base-color);
+  }
+
+  :host([theme~='contrast'][active]) {
+    --_bubble-background: var(--lumo-contrast-80pct);
+  }
+
+  :host([theme~='error'][active]) {
+    --_bubble-background: var(--lumo-error-color);
+  }
+
+  :host([theme~='success'][active]) {
+    --_bubble-background: var(--lumo-success-color);
   }
 
   @media (forced-colors: active) {

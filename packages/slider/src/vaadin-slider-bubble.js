@@ -5,8 +5,10 @@
  */
 import './vaadin-slider-bubble-overlay.js';
 import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
  * An element used internally by `<vaadin-slider>`. Not intended to be used separately.
@@ -15,7 +17,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
  * @extends HTMLElement
  * @private
  */
-class SliderBubble extends PolylitMixin(LitElement) {
+class SliderBubble extends ThemePropertyMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-slider-bubble';
   }
@@ -30,6 +32,15 @@ class SliderBubble extends PolylitMixin(LitElement) {
 
   static get properties() {
     return {
+      /**
+       * Whether the bubble is active.
+       */
+      active: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
       /**
        * The thumb element next to which the overlay should be aligned.
        */
@@ -56,6 +67,8 @@ class SliderBubble extends PolylitMixin(LitElement) {
         .owner="${this}"
         .opened="${this.opened}"
         .positionTarget="${this.positionTarget}"
+        ?active="${this.active}"
+        theme="${ifDefined(this._theme)}"
         vertical-align="bottom"
         no-vertical-overlap
         modeless
