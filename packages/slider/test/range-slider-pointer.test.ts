@@ -374,4 +374,78 @@ window.Vaadin.featureFlags.sliderComponent = true;
       expect(slider.value).to.deep.equal([20, 80]);
     });
   });
+
+  describe('start-active', () => {
+    it('should set start-active attribute on start thumb pointerdown', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('start-active')).to.be.true;
+      expect(slider.hasAttribute('end-active')).to.be.false;
+    });
+
+    it('should remove start-active attribute on pointerup', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'up' });
+
+      expect(slider.hasAttribute('start-active')).to.be.false;
+    });
+
+    it('should remove start-active attribute on pointerup outside of the element', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, 100] });
+      await sendMouse({ type: 'up' });
+
+      expect(slider.hasAttribute('start-active')).to.be.false;
+    });
+
+    it('should not set start-active attribute on label pointerdown', async () => {
+      slider.label = 'Label';
+      await nextRender();
+      const label = slider.querySelector('label')!;
+      await sendMouseToElement({ type: 'move', element: label });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('start-active')).to.be.false;
+    });
+  });
+
+  describe('end-active', () => {
+    it('should set end-active attribute on end thumb pointerdown', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('end-active')).to.be.true;
+      expect(slider.hasAttribute('start-active')).to.be.false;
+    });
+
+    it('should remove end-active attribute on pointerup', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'up' });
+
+      expect(slider.hasAttribute('end-active')).to.be.false;
+    });
+
+    it('should remove end-active attribute on pointerup outside of the element', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [20, 100] });
+      await sendMouse({ type: 'up' });
+
+      expect(slider.hasAttribute('end-active')).to.be.false;
+    });
+
+    it('should not set end-active attribute on label pointerdown', async () => {
+      slider.label = 'Label';
+      await nextRender();
+      const label = slider.querySelector('label')!;
+      await sendMouseToElement({ type: 'move', element: label });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('end-active')).to.be.false;
+    });
+  });
 });

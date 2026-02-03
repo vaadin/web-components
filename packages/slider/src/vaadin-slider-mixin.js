@@ -90,7 +90,7 @@ export const SliderMixin = (superClass) =>
     constructor() {
       super();
 
-      this.addEventListener('mousedown', (e) => this.__onMouseDown(e));
+      this.addEventListener('pointerdown', (e) => this.__onPointerDown(e));
     }
 
     /** @protected */
@@ -152,7 +152,7 @@ export const SliderMixin = (superClass) =>
      * @param {PointerEvent} event
      * @private
      */
-    __onMouseDown(event) {
+    __onPointerDown(event) {
       if (!event.composedPath().includes(this.$.controls)) {
         return;
       }
