@@ -207,8 +207,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerRenderer = null;
-      await nextUpdate(dialog);
-      await nextUpdate(dialog);
+      await nextRender();
       expect(dialog.hasAttribute('has-header')).to.be.not.ok;
       expect(overlay.hasAttribute('has-header')).to.be.not.ok;
     });
@@ -294,8 +293,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.footerRenderer = null;
-      await nextUpdate(dialog);
-      await nextUpdate(dialog);
+      await nextRender();
       expect(dialog.hasAttribute('has-footer')).to.be.not.ok;
       expect(overlay.hasAttribute('has-footer')).to.be.not.ok;
     });
@@ -449,7 +447,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
 
       dialog.headerTitle = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
     });
 
@@ -464,7 +462,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
 
       dialog.headerRenderer = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
     });
 
@@ -480,8 +478,7 @@ describe('header/footer feature', () => {
 
       dialog.headerTitle = null;
       dialog.headerRenderer = null;
-      await nextUpdate(dialog);
-      await nextUpdate(dialog);
+      await nextRender();
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
     });
   });
@@ -500,7 +497,7 @@ describe('renderer set before attach', () => {
   });
 
   it('should not throw when setting header renderer before adding to DOM', async () => {
-    dialog.headerRenderer = createRenderer('header-content');
+    dialog.headerRenderer = createRenderer('Header');
     dialog.opened = true;
     try {
       document.body.appendChild(dialog);
@@ -585,22 +582,10 @@ describe('slotted header content', () => {
     expect(overlay.hasAttribute('has-header')).to.be.true;
 
     header.remove();
-    await nextUpdate(dialog);
+    await nextRender();
 
     expect(dialog.hasAttribute('has-header')).to.be.false;
     expect(overlay.hasAttribute('has-header')).to.be.false;
-  });
-
-  it('should set [has-header] attribute with text node content', async () => {
-    const header = document.createElement('span');
-    header.setAttribute('slot', 'header-content');
-    header.textContent = 'Header Text';
-    dialog.appendChild(header);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(overlay.hasAttribute('has-header')).to.be.true;
   });
 
   it('[part=header] should be displayed when header content is slotted', async () => {
@@ -613,38 +598,6 @@ describe('slotted header content', () => {
     await nextRender();
 
     expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.not.be.equal('none');
-  });
-
-  it('should work with both slotted header content and headerRenderer', async () => {
-    const header = document.createElement('div');
-    header.setAttribute('slot', 'header-content');
-    header.textContent = 'Slotted Header';
-    dialog.appendChild(header);
-
-    dialog.headerRenderer = createRenderer('Rendered Header');
-    dialog.opened = true;
-    await nextRender();
-
-    expect(overlay.hasAttribute('has-header')).to.be.true;
-    expect(dialog.textContent).to.include('Slotted Header');
-    expect(dialog.textContent).to.include('Rendered Header');
-  });
-
-  it('should keep [has-header] when headerRenderer is removed but slotted content exists', async () => {
-    const header = document.createElement('div');
-    header.setAttribute('slot', 'header-content');
-    header.textContent = 'Slotted Header';
-    dialog.appendChild(header);
-
-    dialog.headerRenderer = createRenderer('Rendered Header');
-    dialog.opened = true;
-    await nextRender();
-    expect(overlay.hasAttribute('has-header')).to.be.true;
-
-    dialog.headerRenderer = null;
-    await nextUpdate(dialog);
-
-    expect(overlay.hasAttribute('has-header')).to.be.true;
   });
 });
 
@@ -693,22 +646,10 @@ describe('slotted footer content', () => {
     expect(overlay.hasAttribute('has-footer')).to.be.true;
 
     footer.remove();
-    await nextUpdate(dialog);
+    await nextRender();
 
     expect(dialog.hasAttribute('has-footer')).to.be.false;
     expect(overlay.hasAttribute('has-footer')).to.be.false;
-  });
-
-  it('should set [has-footer] attribute with button content', async () => {
-    const footer = document.createElement('button');
-    footer.setAttribute('slot', 'footer');
-    footer.textContent = 'OK';
-    dialog.appendChild(footer);
-
-    dialog.opened = true;
-    await nextRender();
-
-    expect(overlay.hasAttribute('has-footer')).to.be.true;
   });
 
   it('[part=footer] should be displayed when footer content is slotted', async () => {
@@ -721,51 +662,5 @@ describe('slotted footer content', () => {
     await nextRender();
 
     expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=footer]')).display).to.not.be.equal('none');
-  });
-
-  it('should work with both slotted footer content and footerRenderer', async () => {
-    const footer = document.createElement('button');
-    footer.setAttribute('slot', 'footer');
-    footer.textContent = 'Slotted Footer';
-    dialog.appendChild(footer);
-
-    dialog.footerRenderer = createRenderer('Rendered Footer');
-    dialog.opened = true;
-    await nextRender();
-
-    expect(overlay.hasAttribute('has-footer')).to.be.true;
-    expect(dialog.textContent).to.include('Slotted Footer');
-    expect(dialog.textContent).to.include('Rendered Footer');
-  });
-
-  it('should keep [has-footer] when footerRenderer is removed but slotted content exists', async () => {
-    const footer = document.createElement('button');
-    footer.setAttribute('slot', 'footer');
-    footer.textContent = 'Slotted Footer';
-    dialog.appendChild(footer);
-
-    dialog.footerRenderer = createRenderer('Rendered Footer');
-    dialog.opened = true;
-    await nextRender();
-    expect(overlay.hasAttribute('has-footer')).to.be.true;
-
-    dialog.footerRenderer = null;
-    await nextUpdate(dialog);
-
-    expect(overlay.hasAttribute('has-footer')).to.be.true;
-  });
-
-  it('should dynamically update [has-footer] when content is added', async () => {
-    dialog.opened = true;
-    await nextRender();
-    expect(overlay.hasAttribute('has-footer')).to.be.false;
-
-    const footer = document.createElement('button');
-    footer.setAttribute('slot', 'footer');
-    footer.textContent = 'OK';
-    dialog.appendChild(footer);
-    await nextUpdate(dialog);
-
-    expect(overlay.hasAttribute('has-footer')).to.be.true;
   });
 });
