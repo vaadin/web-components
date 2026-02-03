@@ -369,6 +369,7 @@ snapshots["vaadin-slider host value always visible"] =
     0
   </vaadin-slider-bubble>
   <label
+    for="slider-3"
     id="label-vaadin-slider-0"
     slot="label"
   >
