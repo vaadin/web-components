@@ -182,7 +182,7 @@ describe('vaadin-slider - pointer', () => {
     it('should focus an input on pointerdown on the label element', async () => {
       slider.label = 'Label';
       await nextRender();
-      const label = slider.shadowRoot!.querySelector('[part="label"]')!;
+      const label = slider.querySelector('[slot="label"]')!;
       await sendMouseToElement({ type: 'click', element: label });
       expect(document.activeElement).to.equal(input);
     });
