@@ -55,9 +55,9 @@ describe('item', () => {
       await resetMouse();
     });
 
-    it('danger', async () => {
-      element.setAttribute('theme', 'danger');
-      await visualDiff(div, 'theme-danger');
+    it('accent-red', async () => {
+      element.classList.add('aura-accent-red');
+      await visualDiff(div, 'accent-red');
     });
 
     it('filled', async () => {
@@ -66,10 +66,11 @@ describe('item', () => {
       await visualDiff(div, 'theme-filled');
     });
 
-    it('danger filled', async () => {
-      element.setAttribute('theme', 'danger filled');
+    it('accent-red filled', async () => {
+      element.setAttribute('theme', 'filled');
+      element.classList.add('aura-accent-red');
       await sendMouseToElement({ type: 'move', element });
-      await visualDiff(div, 'theme-danger-filled');
+      await visualDiff(div, 'accent-red-filled');
     });
   });
 });

@@ -72,8 +72,21 @@ vaadin-select-item:where([role]) {
     background: var(--vaadin-background-container-strong);
   }
 
-  &:where([theme~='danger']) {
-    color: var(--aura-red-text);
+  &:where(
+    [theme~='danger'],
+    .aura-accent-color,
+    .aura-accent-red,
+    .aura-accent-orange,
+    .aura-accent-yellow,
+    .aura-accent-green,
+    .aura-accent-blue,
+    .aura-accent-purple,
+    .v-info,
+    .v-success,
+    .v-warning,
+    .v-error
+  ) {
+    color: var(--aura-accent-text-color);
 
     > * {
       --aura-accent-color-light: var(--aura-accent-color-light-initial);
