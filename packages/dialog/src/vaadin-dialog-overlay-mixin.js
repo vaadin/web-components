@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
@@ -90,6 +91,19 @@ export const DialogOverlayMixin = (superClass) =>
       this.shadowRoot.addEventListener('slotchange', () => {
         this.__updateOverflow();
       });
+
+      // Observe header-content and footer slots for dynamic content
+      const headerSlot = this.shadowRoot.querySelector('slot[name="header-content"]');
+      this.__headerSlotObserver = new SlotObserver(headerSlot, ({ currentNodes }) => {
+        setOverlayStateAttribute(this, 'has-header', currentNodes.length > 0);
+        this.__updateOverflow();
+      });
+
+      const footerSlot = this.shadowRoot.querySelector('slot[name="footer"]');
+      this.__footerSlotObserver = new SlotObserver(footerSlot, ({ currentNodes }) => {
+        setOverlayStateAttribute(this, 'has-footer', currentNodes.length > 0);
+        this.__updateOverflow();
+      });
     }
 
     /** @private */
@@ -132,17 +146,12 @@ export const DialogOverlayMixin = (superClass) =>
       const openedChanged = this._oldOpenedFooterHeader !== opened;
       this._oldOpenedFooterHeader = opened;
 
-      // Set attributes here to update styles before detecting content overflow
-      setOverlayStateAttribute(this, 'has-header', !!headerRenderer);
-      setOverlayStateAttribute(this, 'has-footer', !!footerRenderer);
-
       if (headerRendererChanged) {
         if (headerRenderer) {
           this.headerContainer = this.__initContainer(this.headerContainer, 'header-content');
         } else if (this.headerContainer) {
           this.headerContainer.remove();
           this.headerContainer = null;
-          this.__updateOverflow();
         }
       }
 
@@ -152,7 +161,6 @@ export const DialogOverlayMixin = (superClass) =>
         } else if (this.footerContainer) {
           this.footerContainer.remove();
           this.footerContainer = null;
-          this.__updateOverflow();
         }
       }
 

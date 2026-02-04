@@ -37,7 +37,7 @@ describe('vaadin-dialog', () => {
       dialog.headerRenderer = (root) => {
         root.textContent = 'Header';
       };
-      await nextUpdate(dialog);
+      await nextRender();
       await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
@@ -45,7 +45,7 @@ describe('vaadin-dialog', () => {
       dialog.footerRenderer = (root) => {
         root.textContent = 'Footer';
       };
-      await nextUpdate(dialog);
+      await nextRender();
       await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });

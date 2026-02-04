@@ -83,4 +83,51 @@ describe('dialog', () => {
     await nextUpdate(element);
     await visualDiff(div, 'content-no-padding-theme');
   });
+
+  describe('slotted content', () => {
+    it('slotted header', async () => {
+      const header = document.createElement('div');
+      header.setAttribute('slot', 'header-content');
+      header.textContent = 'Slotted Header';
+      element.appendChild(header);
+      await nextUpdate(element);
+      await visualDiff(div, 'slotted-header');
+    });
+
+    it('slotted footer', async () => {
+      const footer = document.createElement('div');
+      footer.setAttribute('slot', 'footer');
+      footer.textContent = 'Slotted Footer';
+      element.appendChild(footer);
+      await nextUpdate(element);
+      await visualDiff(div, 'slotted-footer');
+    });
+
+    it('slotted header and footer', async () => {
+      const header = document.createElement('div');
+      header.setAttribute('slot', 'header-content');
+      header.textContent = 'Slotted Header';
+      element.appendChild(header);
+
+      const footer = document.createElement('div');
+      footer.setAttribute('slot', 'footer');
+      footer.textContent = 'Slotted Footer';
+      element.appendChild(footer);
+
+      await nextUpdate(element);
+      await visualDiff(div, 'slotted-header-footer');
+    });
+
+    it('title with slotted header', async () => {
+      element.headerTitle = 'Dialog Title';
+
+      const header = document.createElement('div');
+      header.setAttribute('slot', 'header-content');
+      header.textContent = 'Close';
+      element.appendChild(header);
+
+      await nextUpdate(element);
+      await visualDiff(div, 'title-slotted-header');
+    });
+  });
 });

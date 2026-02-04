@@ -207,7 +207,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerRenderer = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(dialog.hasAttribute('has-header')).to.be.not.ok;
       expect(overlay.hasAttribute('has-header')).to.be.not.ok;
     });
@@ -293,7 +293,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.footerRenderer = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(dialog.hasAttribute('has-footer')).to.be.not.ok;
       expect(overlay.hasAttribute('has-footer')).to.be.not.ok;
     });
@@ -447,7 +447,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
 
       dialog.headerTitle = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
     });
 
@@ -462,7 +462,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
 
       dialog.headerRenderer = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
     });
 
@@ -478,7 +478,7 @@ describe('header/footer feature', () => {
 
       dialog.headerTitle = null;
       dialog.headerRenderer = null;
-      await nextUpdate(dialog);
+      await nextRender();
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
     });
   });
@@ -534,5 +534,109 @@ describe('renderer set before attach', () => {
     document.body.appendChild(dialog);
     await nextRender();
     expect(spy.calledOnce).to.be.true;
+  });
+});
+
+describe('slotted header content', () => {
+  let dialog, overlay;
+
+  beforeEach(async () => {
+    dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    await nextRender();
+    overlay = dialog.$.overlay;
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextRender();
+  });
+
+  it('should not have [has-header] attribute when no header content is slotted', async () => {
+    dialog.opened = true;
+    await nextRender();
+    expect(dialog.hasAttribute('has-header')).to.be.false;
+    expect(overlay.hasAttribute('has-header')).to.be.false;
+  });
+
+  it('should set [has-header] attribute when header content is slotted', async () => {
+    const header = document.createElement('div');
+    header.setAttribute('slot', 'header-content');
+    header.textContent = 'Header Content';
+    dialog.appendChild(header);
+
+    dialog.opened = true;
+    await nextRender();
+
+    expect(dialog.hasAttribute('has-header')).to.be.true;
+    expect(overlay.hasAttribute('has-header')).to.be.true;
+  });
+
+  it('should remove [has-header] attribute when slotted header content is removed', async () => {
+    const header = document.createElement('div');
+    header.setAttribute('slot', 'header-content');
+    header.textContent = 'Header Content';
+    dialog.appendChild(header);
+
+    dialog.opened = true;
+    await nextRender();
+    expect(overlay.hasAttribute('has-header')).to.be.true;
+
+    header.remove();
+    await nextRender();
+
+    expect(dialog.hasAttribute('has-header')).to.be.false;
+    expect(overlay.hasAttribute('has-header')).to.be.false;
+  });
+});
+
+describe('slotted footer content', () => {
+  let dialog, overlay;
+
+  beforeEach(async () => {
+    dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    await nextRender();
+    overlay = dialog.$.overlay;
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextRender();
+  });
+
+  it('should not have [has-footer] attribute when no footer content is slotted', async () => {
+    dialog.opened = true;
+    await nextRender();
+    expect(dialog.hasAttribute('has-footer')).to.be.false;
+    expect(overlay.hasAttribute('has-footer')).to.be.false;
+  });
+
+  it('should set [has-footer] attribute when footer content is slotted', async () => {
+    const footer = document.createElement('div');
+    footer.setAttribute('slot', 'footer');
+    footer.textContent = 'Footer Content';
+    dialog.appendChild(footer);
+
+    dialog.opened = true;
+    await nextRender();
+
+    expect(dialog.hasAttribute('has-footer')).to.be.true;
+    expect(overlay.hasAttribute('has-footer')).to.be.true;
+  });
+
+  it('should remove [has-footer] attribute when slotted footer content is removed', async () => {
+    const footer = document.createElement('div');
+    footer.setAttribute('slot', 'footer');
+    footer.textContent = 'Footer Content';
+    dialog.appendChild(footer);
+
+    dialog.opened = true;
+    await nextRender();
+    expect(overlay.hasAttribute('has-footer')).to.be.true;
+
+    footer.remove();
+    await nextRender();
+
+    expect(dialog.hasAttribute('has-footer')).to.be.false;
+    expect(overlay.hasAttribute('has-footer')).to.be.false;
   });
 });
