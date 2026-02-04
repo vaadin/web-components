@@ -413,6 +413,7 @@ export const gridStyles = css`
   #emptystaterow {
     display: flex;
     flex: 1;
+    background-color: var(--vaadin-grid-row-background-color, var(--vaadin-background-color));
   }
 
   #emptystatecell {
