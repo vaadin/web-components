@@ -7,7 +7,7 @@ import { css } from 'lit';
 
 export const iconStyles = css`
   :host {
-    display: inline-flex !important;
+    display: inline-flex;
     justify-content: center !important;
     align-items: center !important;
     font-size: inherit !important;
