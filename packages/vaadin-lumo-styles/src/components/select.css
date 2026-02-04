@@ -53,7 +53,7 @@
     color: var(--lumo-contrast-80pct);
   }
 
-  :host([theme~='small']) [part='input-field'] ::slotted([slot='value']) {
+  :host(:is([theme~='small'], .v-small)) [part='input-field'] ::slotted([slot='value']) {
     --_lumo-selected-item-height: var(--lumo-size-s);
     --_lumo-selected-item-padding: 0;
   }

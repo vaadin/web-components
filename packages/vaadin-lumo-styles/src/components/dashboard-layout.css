@@ -10,18 +10,18 @@
     --_default-row-min-height: 12rem;
   }
 
-  :host([theme~='shaded-background']) {
+  :host(:is([theme~='shaded-background'], .v-shaded-background)) {
     background: var(--lumo-shade-5pct);
   }
 
-  :host([theme~='elevated-widgets']) {
+  :host(:is([theme~='elevated-widgets'], .v-elevated-widgets)) {
     --vaadin-dashboard-widget-shadow: var(--lumo-box-shadow-xs);
     --vaadin-dashboard-widget-border-color: var(--lumo-contrast-10pct);
     --vaadin-dashboard-widget-background: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct))
       var(--lumo-base-color);
   }
 
-  :host([theme~='flat-widgets']) {
+  :host(:is([theme~='flat-widgets'], .v-flat-widgets)) {
     --vaadin-dashboard-widget-background: var(--lumo-contrast-5pct);
     --vaadin-dashboard-widget-border-color: transparent;
   }

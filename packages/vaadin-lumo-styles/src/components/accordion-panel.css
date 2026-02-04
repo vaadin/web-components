@@ -28,11 +28,11 @@
     border-bottom: none;
   }
 
-  :host([theme~='filled']) {
+  :host(:is([theme~='filled'], .v-filled)) {
     border-bottom: none;
   }
 
-  :host([theme~='filled']:not(:last-child)) {
+  :host(:is([theme~='filled'], .v-filled):not(:last-child)) {
     margin-bottom: 2px;
   }
 }

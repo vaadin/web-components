@@ -20,10 +20,10 @@ vaadin-grid-sorter::part(indicators) {
   transition: color 120ms;
 }
 
-:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='column-borders'] {
+:is(vaadin-grid, vaadin-crud, vaadin-grid-pro):is([theme~='column-borders'], .v-column-borders) {
   --vaadin-grid-column-border-width: 1px;
 }
 
-:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='no-row-borders'] {
+:is(vaadin-grid, vaadin-crud, vaadin-grid-pro):is([theme~='no-row-borders'], .v-no-row-borders) {
   --vaadin-grid-row-border-width: 0px;
 }

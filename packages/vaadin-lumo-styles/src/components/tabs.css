@@ -40,7 +40,7 @@
     margin: 0 0.75rem;
   }
 
-  :host([orientation='horizontal']) [part='tabs'] ::slotted(vaadin-tab:not([theme~='icon-on-top'])) {
+  :host([orientation='horizontal']) [part='tabs'] ::slotted(vaadin-tab:not([theme~='icon-on-top'], .v-icon-on-top)) {
     justify-content: center;
   }
 
@@ -155,40 +155,44 @@
 
   /* Centered */
 
-  :host([theme~='centered'][orientation='horizontal']) ::slotted(vaadin-tab:first-of-type) {
+  :host(:is([theme~='centered'], .v-centered)[orientation='horizontal']) ::slotted(vaadin-tab:first-of-type) {
     margin-inline-start: auto;
   }
 
-  :host([theme~='centered'][orientation='horizontal']) ::slotted(vaadin-tab:last-of-type) {
+  :host(:is([theme~='centered'], .v-centered)[orientation='horizontal']) ::slotted(vaadin-tab:last-of-type) {
     margin-inline-end: auto;
   }
 
   /* Small */
 
-  :host([theme~='small']),
-  :host([theme~='small']) [part='tabs'] {
+  :host(:is([theme~='small'], .v-small)),
+  :host(:is([theme~='small'], .v-small)) [part='tabs'] {
     min-height: var(--lumo-size-m);
   }
 
-  :host([theme~='small']) [part='tabs'] ::slotted(vaadin-tab) {
+  :host(:is([theme~='small'], .v-small)) [part='tabs'] ::slotted(vaadin-tab) {
     font-size: var(--lumo-font-size-s);
   }
 
   /* Minimal */
 
-  :host([theme~='minimal']) {
+  :host(:is([theme~='minimal'], .v-minimal)) {
     box-shadow: none;
     --_lumo-tab-marker-display: none;
   }
 
   /* Hide-scroll-buttons */
 
-  :host([theme~='hide-scroll-buttons']) [part='back-button'],
-  :host([theme~='hide-scroll-buttons']) [part='forward-button'] {
+  :host(:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)) [part='back-button'],
+  :host(:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)) [part='forward-button'] {
     display: none;
   }
 
-  :host([theme~='hide-scroll-buttons'][overflow~='start'][overflow~='end']:not([orientation='vertical']))
+  :host(
+      :is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)[overflow~='start'][overflow~='end']:not(
+          [orientation='vertical']
+        )
+    )
     [part='tabs'] {
     --_lumo-tabs-overflow-mask-image: linear-gradient(
       90deg,
@@ -199,20 +203,22 @@
     );
   }
 
-  :host([theme~='hide-scroll-buttons'][overflow~='end']:not([orientation='vertical'])) [part='tabs'] {
+  :host(:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)[overflow~='end']:not([orientation='vertical']))
+    [part='tabs'] {
     --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 2em), transparent 100%);
   }
 
-  :host([theme~='hide-scroll-buttons'][overflow~='start']:not([orientation='vertical'])) [part='tabs'] {
+  :host(:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)[overflow~='start']:not([orientation='vertical']))
+    [part='tabs'] {
     --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em);
   }
 
   /* Equal-width tabs */
-  :host([theme~='equal-width-tabs']) {
+  :host(:is([theme~='equal-width-tabs'], .v-stretch-tabs)) {
     flex: auto;
   }
 
-  :host([theme~='equal-width-tabs']) [part='tabs'] ::slotted(vaadin-tab) {
+  :host(:is([theme~='equal-width-tabs'], .v-stretch-tabs)) [part='tabs'] ::slotted(vaadin-tab) {
     flex: 1 0 0%;
   }
 
@@ -264,7 +270,11 @@
     --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent 2em, #000 4em);
   }
 
-  :host([dir='rtl'][theme~='hide-scroll-buttons'][overflow~='start'][overflow~='end']:not([orientation='vertical']))
+  :host(
+      [dir='rtl']:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)[overflow~='start'][overflow~='end']:not(
+          [orientation='vertical']
+        )
+    )
     [part='tabs'] {
     --_lumo-tabs-overflow-mask-image: linear-gradient(
       -90deg,
@@ -275,11 +285,21 @@
     );
   }
 
-  :host([dir='rtl'][theme~='hide-scroll-buttons'][overflow~='end']:not([orientation='vertical'])) [part='tabs'] {
+  :host(
+      [dir='rtl']:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)[overflow~='end']:not(
+          [orientation='vertical']
+        )
+    )
+    [part='tabs'] {
     --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, #000 calc(100% - 2em), transparent 100%);
   }
 
-  :host([dir='rtl'][theme~='hide-scroll-buttons'][overflow~='start']:not([orientation='vertical'])) [part='tabs'] {
+  :host(
+      [dir='rtl']:is([theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)[overflow~='start']:not(
+          [orientation='vertical']
+        )
+    )
+    [part='tabs'] {
     --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent, #000 2em);
   }
 }

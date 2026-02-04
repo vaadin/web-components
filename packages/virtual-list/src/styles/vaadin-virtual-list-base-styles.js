@@ -65,13 +65,13 @@ export const virtualListStyles = css`
     opacity: var(--vaadin-virtual-list-overflow-indicator-bottom-opacity);
   }
 
-  :host([theme~='overflow-indicator-top'][overflow~='top']),
-  :host([theme~='overflow-indicators'][overflow~='top']) {
+  :host(:is([theme~='overflow-indicator-top'], .v-overflow-indicator-top)[overflow~='top']),
+  :host(:is([theme~='overflow-indicators'], .v-overflow-indicators)[overflow~='top']) {
     --vaadin-virtual-list-overflow-indicator-top-opacity: 1;
   }
 
-  :host([theme~='overflow-indicators'][overflow~='bottom']),
-  :host([theme~='overflow-indicator-bottom'][overflow~='bottom']) {
+  :host(:is([theme~='overflow-indicators'], .v-overflow-indicators)[overflow~='bottom']),
+  :host(:is([theme~='overflow-indicator-bottom'], .v-overflow-indicator-bottom)[overflow~='bottom']) {
     --vaadin-virtual-list-overflow-indicator-bottom-opacity: 1;
   }
 `;

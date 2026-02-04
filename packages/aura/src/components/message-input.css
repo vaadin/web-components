@@ -6,7 +6,7 @@ vaadin-message-input:not([readonly], [disabled]) > vaadin-text-area::part(input-
   box-shadow: none;
 }
 
-vaadin-message-input[theme~='icon-button'] > vaadin-message-input-button {
+vaadin-message-input:is([theme~='icon-button'], .v-icon-button) > vaadin-message-input-button {
   width: var(--vaadin-icon-size, 1lh);
   height: var(--vaadin-icon-size, 1lh);
   color: transparent;
@@ -14,7 +14,7 @@ vaadin-message-input[theme~='icon-button'] > vaadin-message-input-button {
   contain: strict;
 }
 
-vaadin-message-input[theme~='icon-button'] > vaadin-message-input-button::before {
+vaadin-message-input:is([theme~='icon-button'], .v-icon-button) > vaadin-message-input-button::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -22,12 +22,12 @@ vaadin-message-input[theme~='icon-button'] > vaadin-message-input-button::before
   background: var(--vaadin-button-text-color);
 }
 
-vaadin-message-input[theme~='icon-button'][dir='rtl'] > vaadin-message-input-button::before {
+vaadin-message-input:is([theme~='icon-button'], .v-icon-button)[dir='rtl'] > vaadin-message-input-button::before {
   scale: -1;
 }
 
 @media (forced-colors: active) {
-  vaadin-message-input[theme~='icon-button'] > vaadin-message-input-button {
+  vaadin-message-input:is([theme~='icon-button'], .v-icon-button) > vaadin-message-input-button {
     forced-color-adjust: none;
     --vaadin-button-text-color: CanvasText;
   }

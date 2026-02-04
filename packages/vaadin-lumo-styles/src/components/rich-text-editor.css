@@ -301,37 +301,37 @@
   /* Theme variants */
 
   /* No border */
-  :host(:not([theme~='no-border'])) {
+  :host(:not([theme~='no-border'], .v-no-border)) {
     border: 1px solid var(--lumo-contrast-20pct);
   }
 
-  :host(:not([theme~='no-border']):not([readonly])) [part='content'] {
+  :host(:not([theme~='no-border'], .v-no-border):not([readonly])) [part='content'] {
     border-top: 1px solid var(--lumo-contrast-20pct);
   }
 
-  :host([theme~='no-border']) [part='toolbar'] {
+  :host(:is([theme~='no-border'], .v-no-border)) [part='toolbar'] {
     --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-s) var(--lumo-space-xs);
   }
 
   /* Compact */
-  :host([theme~='compact']) {
+  :host(:is([theme~='compact'], .v-compact)) {
     min-height: calc(var(--lumo-size-m) * 6);
   }
 
-  :host([theme~='compact']) [part='toolbar'] {
+  :host(:is([theme~='compact'], .v-compact)) [part='toolbar'] {
     --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-xs) 0;
   }
 
-  :host([theme~='compact'][theme~='no-border']) [part='toolbar'] {
+  :host(:is([theme~='compact'], .v-compact):is([theme~='no-border'], .v-no-border)) [part='toolbar'] {
     --vaadin-rich-text-editor-toolbar-padding: calc(var(--lumo-space-xs) + 1px) 0;
   }
 
-  :host([theme~='compact']) [part~='toolbar-button'] {
+  :host(:is([theme~='compact'], .v-compact)) [part~='toolbar-button'] {
     width: var(--lumo-size-s);
     height: var(--lumo-size-s);
   }
 
-  :host([theme~='compact']) [part~='toolbar-group'] {
+  :host(:is([theme~='compact'], .v-compact)) [part~='toolbar-group'] {
     margin: 0 calc(var(--lumo-space-m) / 2 - 1px);
   }
 

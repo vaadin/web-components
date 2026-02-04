@@ -65,12 +65,12 @@ export const tabSheetStyles = [
       margin: auto;
     }
 
-    :host([theme~='no-border']) {
+    :host(:is([theme~='no-border'], .v-no-border)) {
       border: 0;
       border-radius: 0;
     }
 
-    :host([theme~='no-padding']) [part='content'] {
+    :host(:is([theme~='no-padding'], .v-no-padding)) [part='content'] {
       padding: 0 !important;
       --vaadin-scroller-padding-block: 0px !important;
       --vaadin-scroller-padding-inline: 0px !important;

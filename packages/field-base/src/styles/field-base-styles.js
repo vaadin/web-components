@@ -194,7 +194,7 @@ export const field = css`
     background: currentColor;
   }
 
-  :host([theme~='helper-above-field']) {
+  :host(:is([theme~='helper-above-field'], .v-helper-above)) {
     --_helper-above-field: initial;
     --_helper-below-field: ;
   }

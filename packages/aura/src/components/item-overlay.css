@@ -52,7 +52,7 @@ vaadin-select-item:where([role]) {
     &:not([disabled], [aria-disabled='true']):hover {
       background: var(--_highlight-color);
 
-      &[theme~='filled'] {
+      &:is([theme~='filled'], .v-filled) {
         background: var(--aura-accent-color);
         color: var(--aura-accent-contrast-color);
         --vaadin-text-color: var(--aura-accent-contrast-color);

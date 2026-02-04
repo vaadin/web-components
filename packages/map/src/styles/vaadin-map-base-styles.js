@@ -28,12 +28,12 @@ export const mapStyles = css`
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  :host(:not([theme~='no-border'])) {
+  :host(:not(:is([theme~='no-border'], .v-no-border))) {
     border-radius: var(--vaadin-map-border-radius, var(--vaadin-radius-m));
     position: relative;
   }
 
-  :host(:not([theme~='no-border']))::before {
+  :host(:not(:is([theme~='no-border'], .v-no-border)))::before {
     content: '';
     position: absolute;
     inset: 0;

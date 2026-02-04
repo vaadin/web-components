@@ -55,13 +55,13 @@ export const buttonStyles = css`
     outline-offset: 1px;
   }
 
-  :host([theme~='primary']) {
+  :host(:is([theme~='primary'], .v-primary)) {
     --vaadin-button-background: var(--vaadin-text-color);
     --vaadin-button-text-color: var(--vaadin-background-color);
     --vaadin-button-border-color: transparent;
   }
 
-  :host([theme~='tertiary']) {
+  :host(:is([theme~='tertiary'], .v-tertiary)) {
     background: transparent;
     border-color: transparent;
   }
@@ -72,7 +72,7 @@ export const buttonStyles = css`
     opacity: 0.5;
   }
 
-  :host([disabled][theme~='primary']) {
+  :host([disabled]:is([theme~='primary'], .v-primary)) {
     --vaadin-button-text-color: var(--vaadin-background-container-strong);
     --vaadin-button-background: var(--vaadin-text-color-disabled);
   }
@@ -84,7 +84,7 @@ export const buttonStyles = css`
       --vaadin-button-text-color: ButtonText;
     }
 
-    :host([theme~='primary']) {
+    :host(:is([theme~='primary'], .v-primary)) {
       forced-color-adjust: none;
       --vaadin-button-background: CanvasText;
       --vaadin-button-text-color: Canvas;

@@ -89,22 +89,22 @@ export const splitLayoutStyles = css`
     border-radius: 50%;
   }
 
-  :host([theme~='small']) > [part='splitter'] {
+  :host(:is([theme~='small'], .v-small)) > [part='splitter'] {
     --vaadin-split-layout-splitter-size: 1px;
     --vaadin-split-layout-splitter-target-size: 5px;
     --vaadin-split-layout-handle-size: 3px;
   }
 
-  :host([theme~='small']) [part='splitter'] [part='handle'] {
+  :host(:is([theme~='small'], .v-small)) [part='splitter'] [part='handle'] {
     opacity: 0;
   }
 
-  :host([theme~='small']) [part='splitter']:active [part='handle'] {
+  :host(:is([theme~='small'], .v-small)) [part='splitter']:active [part='handle'] {
     opacity: 1;
   }
 
   @media (any-hover: hover) {
-    :host([theme~='small']) [part='splitter']:hover [part='handle'] {
+    :host(:is([theme~='small'], .v-small)) [part='splitter']:hover [part='handle'] {
       opacity: 1;
     }
   }

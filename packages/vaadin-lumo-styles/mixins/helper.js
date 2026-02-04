@@ -38,30 +38,30 @@ export const helper = css`
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::before {
+  :host([has-helper]:is([theme~='helper-above-field'], .v-helper-above)) [part='helper-text']::before {
     display: none;
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::after {
+  :host([has-helper]:is([theme~='helper-above-field'], .v-helper-above)) [part='helper-text']::after {
     content: '';
     display: block;
     height: var(--_helper-spacing);
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='label'] {
+  :host([has-helper]:is([theme~='helper-above-field'], .v-helper-above)) [part='label'] {
     order: 0;
     padding-bottom: var(--_helper-spacing);
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {
+  :host([has-helper]:is([theme~='helper-above-field'], .v-helper-above)) [part='helper-text'] {
     order: 1;
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='label'] + * {
+  :host([has-helper]:is([theme~='helper-above-field'], .v-helper-above)) [part='label'] + * {
     order: 2;
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='error-message'] {
+  :host([has-helper]:is([theme~='helper-above-field'], .v-helper-above)) [part='error-message'] {
     order: 3;
   }
 `;

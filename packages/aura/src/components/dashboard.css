@@ -29,11 +29,11 @@ vaadin-dashboard-widget {
     transition-duration: 50ms;
   }
 
-  &[theme~='outlined'] {
+  &:is([theme~='outlined'], .v-outlined) {
     --vaadin-dashboard-widget-border-color: var(--vaadin-border-color);
   }
 
-  &[theme~='elevated'] {
+  &:is([theme~='elevated'], .v-elevated) {
     --aura-surface-opacity: 0.7;
     --aura-surface-level: 3;
     box-shadow: var(--vaadin-dashboard-widget-shadow, var(--aura-shadow-s));

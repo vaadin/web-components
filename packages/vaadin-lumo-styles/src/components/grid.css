@@ -375,19 +375,19 @@
 
   /* No (outer) border */
 
-  :host(:not([theme~='no-border'])) {
+  :host(:not([theme~='no-border'], .v-no-border)) {
     border: var(--_lumo-grid-border-width) solid var(--_lumo-grid-border-color);
   }
 
   /* Cell styles */
 
   /* Apply row borders by default and introduce the "no-row-borders" variant */
-  :host(:not([theme~='no-row-borders'])) .cell:not(.details-cell) {
+  :host(:not([theme~='no-row-borders'], .v-no-row-borders)) .cell:not(.details-cell) {
     border-top: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
   }
 
   /* Hide first body row top border */
-  :host(:not([theme~='no-row-borders'])) .first-row .cell:not(.details-cell) {
+  :host(:not([theme~='no-row-borders'], .v-no-row-borders)) .first-row .cell:not(.details-cell) {
     border-top: 0;
     min-height: calc(var(--lumo-size-m) - var(--_lumo-grid-border-width));
   }
@@ -450,7 +450,7 @@
     right: -1px;
   }
 
-  :host([theme~='no-row-borders']) [dragover] .cell::after {
+  :host(:is([theme~='no-row-borders'], .v-no-row-borders)) [dragover] .cell::after {
     height: 2px;
   }
 
@@ -537,7 +537,7 @@
   /* Header borders */
 
   /* Hide first header row top border */
-  :host(:not([theme~='no-row-borders'])) .first-header-row .header-cell {
+  :host(:not([theme~='no-row-borders'], .v-no-row-borders)) .first-header-row .header-cell {
     border-top: 0;
   }
 
@@ -550,7 +550,7 @@
     border-bottom: var(--_lumo-grid-border-width) solid transparent;
   }
 
-  :host(:not([theme~='no-row-borders'])) .last-header-row .header-cell {
+  :host(:not([theme~='no-row-borders'], .v-no-row-borders)) .last-header-row .header-cell {
     border-bottom-color: var(--_lumo-grid-secondary-border-color);
   }
 
@@ -565,7 +565,7 @@
     border-top: var(--_lumo-grid-border-width) solid transparent;
   }
 
-  :host(:not([theme~='no-row-borders'])) .first-footer-row .footer-cell {
+  :host(:not([theme~='no-row-borders'], .v-no-row-borders)) .first-footer-row .footer-cell {
     border-top-color: var(--_lumo-grid-secondary-border-color);
   }
 
@@ -620,7 +620,7 @@
 
   /* Column borders */
 
-  :host([theme~='column-borders']) .cell:not([last-column]):not(.details-cell) {
+  :host(:is([theme~='column-borders'], .v-column-borders)) .cell:not([last-column]):not(.details-cell) {
     border-right: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
   }
 
@@ -641,8 +641,8 @@
 
   /* Row stripes */
 
-  :host([theme~='row-stripes']) .even-row .body-cell,
-  :host([theme~='row-stripes']) .even-row .details-cell {
+  :host(:is([theme~='row-stripes'], .v-row-stripes)) .even-row .body-cell,
+  :host(:is([theme~='row-stripes'], .v-row-stripes)) .even-row .details-cell {
     background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
     background-repeat: repeat-x;
   }
@@ -660,32 +660,32 @@
   }
 
   /* Cover the border of an unselected row */
-  :host(:not([theme~='no-row-borders'])) .row[selected] .cell:not(.details-cell) {
+  :host(:not([theme~='no-row-borders'], .v-no-row-borders)) .row[selected] .cell:not(.details-cell) {
     box-shadow: 0 var(--_lumo-grid-border-width) 0 0 var(--_lumo-grid-selected-row-color);
   }
 
   /* Compact */
 
-  :host([theme~='compact']) .header-row:only-child .header-cell {
+  :host(:is([theme~='compact'], .v-compact)) .header-row:only-child .header-cell {
     min-height: var(--lumo-size-m);
   }
 
-  :host([theme~='compact']) .cell {
+  :host(:is([theme~='compact'], .v-compact)) .cell {
     min-height: var(--lumo-size-s);
     --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-s);
   }
 
-  :host([theme~='compact']) .first-row .cell:not(.details-cell) {
+  :host(:is([theme~='compact'], .v-compact)) .first-row .cell:not(.details-cell) {
     min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
   }
 
-  :host([theme~='compact']) .empty-state {
+  :host(:is([theme~='compact'], .v-compact)) .empty-state {
     padding: var(--lumo-space-s);
   }
 
   /* Wrap cell contents */
 
-  :host([theme~='wrap-cell-content']) .cell ::slotted(vaadin-grid-cell-content) {
+  :host(:is([theme~='wrap-cell-content'], .v-wrap-cell-content)) .cell ::slotted(vaadin-grid-cell-content) {
     white-space: normal;
   }
 
@@ -699,7 +699,7 @@
     border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
   }
 
-  :host([dir='rtl'][theme~='column-borders']) .cell:not([last-column]):not(.details-cell) {
+  :host([dir='rtl']:is([theme~='column-borders'], .v-column-borders)) .cell:not([last-column]):not(.details-cell) {
     border-right: none;
     border-left: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
   }

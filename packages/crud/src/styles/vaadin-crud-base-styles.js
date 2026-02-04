@@ -164,7 +164,7 @@ export const crudStyles = css`
     margin-inline-start: auto;
   }
 
-  :host([theme~='no-border']) {
+  :host(:is([theme~='no-border'], .v-no-border)) {
     border: 0;
     border-radius: 0;
   }

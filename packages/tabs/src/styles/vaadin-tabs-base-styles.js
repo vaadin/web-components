@@ -88,12 +88,12 @@ export const tabsStyles = css`
     rotate: -90deg;
   }
 
-  :host(:is([orientation='vertical'], [theme~='hide-scroll-buttons'])) [part$='button'] {
+  :host(:is([orientation='vertical'], [theme~='hide-scroll-buttons'], .v-hide-scroll-buttons)) [part$='button'] {
     display: none;
   }
 
   @media (pointer: coarse) {
-    :host(:not([theme~='show-scroll-buttons'])) [part$='button'] {
+    :host(:not([theme~='show-scroll-buttons'], .v-show-scroll-buttons)) [part$='button'] {
       display: none;
     }
   }

@@ -25,26 +25,26 @@
     padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
   }
 
-  :host([theme~='small']) [part='label'] ::slotted(vaadin-menu-bar-item) {
+  :host(:is([theme~='small'], .v-small)) [part='label'] ::slotted(vaadin-menu-bar-item) {
     min-height: var(--lumo-size-s);
     margin: 0 calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2) * -1);
     padding-left: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
     padding-right: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
   }
 
-  :host([theme~='tertiary']) [part='label'] ::slotted(vaadin-menu-bar-item) {
+  :host(:is([theme~='tertiary'], .v-tertiary)) [part='label'] ::slotted(vaadin-menu-bar-item) {
     margin: 0 calc((var(--lumo-button-size) / 6) * -1);
     padding-left: calc(var(--lumo-button-size) / 6);
     padding-right: calc(var(--lumo-button-size) / 6);
   }
 
-  :host([theme~='tertiary-inline']) {
+  :host(:is([theme~='tertiary-inline'], .v-text)) {
     margin-top: calc(var(--lumo-space-xs) / 2);
     margin-bottom: calc(var(--lumo-space-xs) / 2);
     margin-right: calc(var(--lumo-space-xs) / 2);
   }
 
-  :host([theme~='tertiary-inline']) [part='label'] ::slotted(vaadin-menu-bar-item) {
+  :host(:is([theme~='tertiary-inline'], .v-text)) [part='label'] ::slotted(vaadin-menu-bar-item) {
     margin: 0;
     padding: 0;
   }
@@ -61,8 +61,8 @@
     border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
   }
 
-  :host([theme~='tertiary']),
-  :host([theme~='tertiary-inline']) {
+  :host(:is([theme~='tertiary'], .v-tertiary)),
+  :host(:is([theme~='tertiary-inline'], .v-text)) {
     border-radius: var(--lumo-border-radius-m);
   }
 
@@ -100,12 +100,12 @@
   }
 
   /* prettier-ignore */
-  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary'][aria-haspopup]) [part='suffix'] {
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon']):is([theme~='tertiary'], .v-tertiary)[aria-haspopup]) [part='suffix'] {
     inset-inline-start: 0.05em;
   }
 
   /* prettier-ignore */
-  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary-inline'][aria-haspopup]) [part='suffix'] {
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon']):is([theme~='tertiary-inline'], .v-text)[aria-haspopup]) [part='suffix'] {
     inset-inline-start: 0;
   }
 

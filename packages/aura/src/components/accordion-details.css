@@ -4,20 +4,23 @@
   --vaadin-details-summary-gap: var(--vaadin-gap-xs);
 }
 
-:is(vaadin-details, vaadin-accordion-panel):not([theme~='no-padding'])::part(content) {
+vaadin-accordion:not([theme~='no-padding'], .v-no-padding)
+  > vaadin-accordion-panel:not([theme~='no-padding'], .v-no-padding)::part(content),
+vaadin-details:not([theme~='no-padding'], .v-no-padding)::part(content) {
   padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
   padding-top: 0;
 }
 
-vaadin-details:not([theme~='no-padding'], [theme~='reverse'])::part(content) {
+vaadin-details:not([theme~='no-padding'], .v-no-padding, [theme~='reverse'], .v-reverse)::part(content) {
   margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-details-summary-gap));
 }
 
-vaadin-accordion-panel:not([theme~='no-padding'], [theme~='reverse'])::part(content) {
+vaadin-accordion:not([theme~='no-padding'], .v-no-padding, [theme~='reverse'], .v-reverse)
+  > vaadin-accordion-panel:not([theme~='no-padding'], .v-no-padding, [theme~='reverse'], .v-reverse)::part(content) {
   margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-accordion-heading-gap));
 }
 
-:is(vaadin-details, vaadin-accordion-panel)[theme~='reverse'] {
+:is(vaadin-details, vaadin-accordion-panel):is([theme~='reverse'], .v-reverse) {
   > [slot='summary']::part(content) {
     width: 100%;
   }

@@ -47,7 +47,8 @@ const gridPro = css`
 
   /* Indicate editable cells */
 
-  :host([theme~='highlight-editable-cells']) .body-cell:is([part~='editable-cell'], :has([part~='editable-cell'])) {
+  :host(:is([theme~='highlight-editable-cells'], .v-highlight-editable-cells))
+    .body-cell:is([part~='editable-cell'], :has([part~='editable-cell'])) {
     --vaadin-grid-row-highlight-background-color: var(
       --vaadin-grid-pro-editable-cell-background-color,
       var(--_highlight-color)
@@ -56,7 +57,8 @@ const gridPro = css`
 
   /* Indicate read-only cells */
 
-  :host([theme~='highlight-read-only-cells']) .body-cell:not([part~='editable-cell'], :has([part~='editable-cell'])) {
+  :host(:is([theme~='highlight-read-only-cells'], .v-highlight-read-only-cells))
+    .body-cell:not([part~='editable-cell'], :has([part~='editable-cell'])) {
     --_cell-highlight-background-image: repeating-linear-gradient(
       -45deg,
       transparent,

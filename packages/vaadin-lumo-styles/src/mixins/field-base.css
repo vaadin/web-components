@@ -147,16 +147,16 @@
   }
 
   /* Small theme */
-  :host([theme~='small']) {
+  :host(:is([theme~='small'], .v-small)) {
     font-size: var(--lumo-font-size-s);
     --lumo-text-field-size: var(--lumo-size-s);
   }
 
-  :host([theme~='small']) [part='label'] {
+  :host(:is([theme~='small'], .v-small)) [part='label'] {
     font-size: var(--lumo-font-size-xs);
   }
 
-  :host([theme~='small']) [part='error-message'] {
+  :host(:is([theme~='small'], .v-small)) [part='error-message'] {
     font-size: var(--lumo-font-size-xxs);
   }
 

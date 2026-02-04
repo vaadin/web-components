@@ -8,7 +8,7 @@
     pointer-events: none;
   }
 
-  :host([step-buttons-visible]:not([theme~='align-right'])) ::slotted(input) {
+  :host([step-buttons-visible]:not([theme~='align-right'], .v-align-right)) ::slotted(input) {
     text-align: center;
   }
 
@@ -47,7 +47,7 @@
     direction: ltr;
   }
 
-  :host([dir='rtl']:not([theme~='align-right'])) ::slotted(input) {
+  :host([dir='rtl']:not([theme~='align-right'], .v-align-right)) ::slotted(input) {
     --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
   }
 }

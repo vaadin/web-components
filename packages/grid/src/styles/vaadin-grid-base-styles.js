@@ -40,7 +40,7 @@ export const gridStyles = css`
   }
 
   /* Variant: No outer border */
-  :host([theme~='no-border']) {
+  :host(:is([theme~='no-border'], .v-no-border)) {
     border-width: 0;
     border-radius: 0;
   }
@@ -351,7 +351,7 @@ export const gridStyles = css`
     }
   }
 
-  :host([theme~='row-stripes']) .odd-row {
+  :host(:is([theme~='row-stripes'], .v-row-stripes)) .odd-row {
     --_row-odd-background-color: var(
       --vaadin-grid-row-odd-background-color,
       color-mix(in srgb, var(--vaadin-text-color) 4%, transparent)
@@ -361,7 +361,7 @@ export const gridStyles = css`
 
   /* Variant: wrap cell contents */
 
-  :host([theme~='wrap-cell-content']) .cell:not(.details-cell) {
+  :host(:is([theme~='wrap-cell-content'], .v-wrap-cell-content)) .cell:not(.details-cell) {
     white-space: normal;
   }
 

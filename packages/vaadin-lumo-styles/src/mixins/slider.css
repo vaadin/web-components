@@ -41,15 +41,15 @@
     width: var(--vaadin-field-default-width, 12em);
   }
 
-  :host([theme~='contrast']) {
+  :host(:is([theme~='contrast'], .v-contrast)) {
     --vaadin-slider-fill-background: var(--lumo-contrast-80pct);
   }
 
-  :host([theme~='error']) {
+  :host(:is([theme~='error'], .v-error)) {
     --vaadin-slider-fill-background: var(--lumo-error-color);
   }
 
-  :host([theme~='success']) {
+  :host(:is([theme~='success'], .v-success)) {
     --vaadin-slider-fill-background: var(--lumo-success-color);
   }
 

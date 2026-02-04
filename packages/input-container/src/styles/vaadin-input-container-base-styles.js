@@ -118,23 +118,23 @@ export const inputContainerStyles = css`
     --vaadin-input-field-border-color: transparent;
   }
 
-  :host([theme~='align-start']) slot:not([name])::slotted(*) {
+  :host(:is([theme~='align-start'], .v-align-start)) slot:not([name])::slotted(*) {
     text-align: start;
   }
 
-  :host([theme~='align-center']) slot:not([name])::slotted(*) {
+  :host(:is([theme~='align-center'], .v-align-center)) slot:not([name])::slotted(*) {
     text-align: center;
   }
 
-  :host([theme~='align-end']) slot:not([name])::slotted(*) {
+  :host(:is([theme~='align-end'], .v-align-end)) slot:not([name])::slotted(*) {
     text-align: end;
   }
 
-  :host([theme~='align-left']) slot:not([name])::slotted(*) {
+  :host(:is([theme~='align-left'], .v-align-left)) slot:not([name])::slotted(*) {
     text-align: left;
   }
 
-  :host([theme~='align-right']) slot:not([name])::slotted(*) {
+  :host(:is([theme~='align-right'], .v-align-right)) slot:not([name])::slotted(*) {
     text-align: right;
   }
 

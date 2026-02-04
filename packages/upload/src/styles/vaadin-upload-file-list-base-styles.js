@@ -32,17 +32,17 @@ export const uploadFileListStyles = css`
   }
 
   /* Thumbnails theme variant */
-  :host([theme~='thumbnails']) [part='list'] {
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) [part='list'] {
     display: flex;
     flex-wrap: wrap;
     gap: var(--vaadin-gap-s);
   }
 
-  :host([theme~='thumbnails']) ::slotted(:first-child) {
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) ::slotted(:first-child) {
     margin-top: 0;
   }
 
-  :host([theme~='thumbnails']) ::slotted(li) {
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) ::slotted(li) {
     border-bottom: none;
   }
 `;

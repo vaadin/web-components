@@ -32,7 +32,7 @@ vaadin-avatar[img][has-color-index] {
   --vaadin-avatar-border-width: 2px;
 }
 
-vaadin-avatar[theme~='filled'] {
+vaadin-avatar:is([theme~='filled'], .v-filled) {
   background: var(--aura-accent-color) content-box;
   color: var(--aura-accent-contrast-color);
 }

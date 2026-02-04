@@ -44,7 +44,7 @@ export const cardStyles = css`
     display: none !important;
   }
 
-  :host(:not([theme~='horizontal'])) {
+  :host(:not([theme~='horizontal'], .v-horizontal)) {
     justify-content: space-between;
   }
 
@@ -157,17 +157,17 @@ export const cardStyles = css`
   }
 
   /* Horizontal */
-  :host([theme~='horizontal']) {
+  :host(:is([theme~='horizontal'], .v-horizontal)) {
     align-items: start;
     display: grid;
     grid-template-columns: repeat(var(--_media), minmax(auto, max-content)) 1fr;
   }
 
-  :host([theme~='horizontal'][_f]) {
+  :host(:is([theme~='horizontal'], .v-horizontal)[_f]) {
     grid-template-rows: 1fr auto;
   }
 
-  :host([theme~='horizontal'][_c]) {
+  :host(:is([theme~='horizontal'], .v-horizontal)[_c]) {
     grid-template-rows: repeat(var(--_header), auto) 1fr;
   }
 
@@ -197,11 +197,11 @@ export const cardStyles = css`
     grid-row: calc(1 + var(--_header) + var(--_content));
   }
 
-  :host([theme~='horizontal']) [part='footer'] {
+  :host(:is([theme~='horizontal'], .v-horizontal)) [part='footer'] {
     align-self: end;
   }
 
-  :host(:not([theme~='horizontal'])) ::slotted([slot='media']:is(img, video, svg)) {
+  :host(:not([theme~='horizontal'], .v-horizontal)) ::slotted([slot='media']:is(img, video, svg)) {
     max-width: 100%;
   }
 
@@ -209,7 +209,7 @@ export const cardStyles = css`
     vertical-align: middle;
   }
 
-  :host(:is([theme~='cover-media'], [theme~='stretch-media']))
+  :host(:is([theme~='cover-media'], .v-cover-media, [theme~='stretch-media'], .v-stretch-media))
     ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
     height: auto;
@@ -219,17 +219,31 @@ export const cardStyles = css`
     width: 100%;
   }
 
-  :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
+  :host(
+    :is([theme~='horizontal'], .v-horizontal):is(
+      [theme~='cover-media'],
+      .v-cover-media,
+      [theme~='stretch-media'],
+      .v-stretch-media
+    )
+  ) {
     grid-template-columns: repeat(var(--_media), minmax(auto, 0.5fr)) 1fr;
   }
 
-  :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media']))
+  :host(
+      :is([theme~='horizontal'], .v-horizontal):is(
+        [theme~='cover-media'],
+        .v-cover-media,
+        [theme~='stretch-media'],
+        .v-stretch-media
+      )
+    )
     ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     aspect-ratio: auto;
     height: 100%;
   }
 
-  :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host(:is([theme~='cover-media'], .v-cover-media)) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     border-radius: inherit;
     border-end-end-radius: 0;
     border-end-start-radius: 0;
@@ -239,7 +253,8 @@ export const cardStyles = css`
     width: calc(100% + var(--_padding) * 2);
   }
 
-  :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host(:is([theme~='horizontal'], .v-horizontal):is([theme~='cover-media'], .v-cover-media))
+    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     border-radius: inherit;
     border-end-end-radius: 0;
     border-start-end-radius: 0;
@@ -260,12 +275,12 @@ export const cardStyles = css`
   }
 
   /* Outlined */
-  :host([theme~='outlined']) {
+  :host(:is([theme~='outlined'], .v-outlined)) {
     --vaadin-card-border-width: 1px;
   }
 
   /* Elevated */
-  :host([theme~='elevated']) {
+  :host(:is([theme~='elevated'], .v-elevated)) {
     --vaadin-card-background: var(--vaadin-background-color);
     box-shadow: var(--vaadin-card-shadow, 0 1px 4px -1px rgba(0, 0, 0, 0.3));
   }

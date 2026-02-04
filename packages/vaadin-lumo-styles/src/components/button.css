@@ -84,12 +84,12 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
     padding: calc(var(--lumo-button-size) / 6) 0;
   }
 
-  :host([theme~='small']) {
+  :host(:is([theme~='small'], .v-small)) {
     font-size: var(--lumo-font-size-s);
     --lumo-button-size: var(--lumo-size-s);
   }
 
-  :host([theme~='large']) {
+  :host(:is([theme~='large'], .v-large)) {
     font-size: var(--lumo-font-size-l);
     --lumo-button-size: var(--lumo-size-l);
   }
@@ -144,30 +144,30 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
       0 0 0 calc(var(--_focus-ring-width) + 1px * var(--_focus-ring-gap-on, 0)) var(--_focus-ring-color);
   }
 
-  :host([theme~='primary'][focus-ring]) {
+  :host(:is([theme~='primary'], .v-primary)[focus-ring]) {
     --_focus-ring-gap-on: 1;
   }
 
   /* Types (primary, tertiary, tertiary-inline */
 
-  :host([theme~='tertiary']),
-  :host([theme~='tertiary-inline']) {
+  :host(:is([theme~='tertiary'], .v-tertiary)),
+  :host(:is([theme~='tertiary-inline'], .v-text)) {
     background: var(--vaadin-button-tertiary-background, transparent) !important;
     min-width: 0;
   }
 
-  :host([theme~='tertiary']) {
+  :host(:is([theme~='tertiary'], .v-tertiary)) {
     border: var(--vaadin-button-tertiary-border, none);
     color: var(--vaadin-button-tertiary-text-color, var(--lumo-primary-text-color));
     font-weight: var(--vaadin-button-tertiary-font-weight, 500);
     padding: var(--vaadin-button-tertiary-padding, 0 calc(var(--_button-size) / 6));
   }
 
-  :host([theme~='tertiary-inline'])::before {
+  :host(:is([theme~='tertiary-inline'], .v-text))::before {
     display: none;
   }
 
-  :host([theme~='tertiary-inline']) {
+  :host(:is([theme~='tertiary-inline'], .v-text)) {
     margin: 0;
     height: auto;
     padding: 0;
@@ -175,13 +175,13 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
     font-size: inherit;
   }
 
-  :host([theme~='tertiary-inline']) [part='label'] {
+  :host(:is([theme~='tertiary-inline'], .v-text)) [part='label'] {
     padding: 0;
     overflow: visible;
     line-height: inherit;
   }
 
-  :host([theme~='primary']) {
+  :host(:is([theme~='primary'], .v-primary)) {
     background: var(--_lumo-button-primary-background);
     border: var(--vaadin-button-primary-border, none);
     color: var(--_lumo-button-primary-text-color);
@@ -189,58 +189,58 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
     min-width: calc(var(--lumo-button-size) * 2.5);
   }
 
-  :host([theme~='primary'])::before {
+  :host(:is([theme~='primary'], .v-primary))::before {
     background-color: black;
   }
 
   @media (any-hover: hover) {
-    :host([theme~='primary']:not([disabled]):hover)::before {
+    :host(:is([theme~='primary'], .v-primary):not([disabled]):hover)::before {
       opacity: 0.05;
     }
   }
 
-  :host([theme~='primary'][active])::before {
+  :host(:is([theme~='primary'], .v-primary)[active])::before {
     opacity: 0.1;
   }
 
-  :host([theme~='primary'][active])::after {
+  :host(:is([theme~='primary'], .v-primary)[active])::after {
     opacity: 0.2;
   }
 
   /* Colors (success, warning, error, contrast) */
 
-  :host([theme~='success']) {
+  :host(:is([theme~='success'], .v-success)) {
     color: var(--lumo-success-text-color);
   }
 
-  :host([theme~='success'][theme~='primary']) {
+  :host(:is([theme~='success'], .v-success):is([theme~='primary'], .v-primary)) {
     background-color: var(--lumo-success-color);
     color: var(--lumo-success-contrast-color);
   }
 
-  :host([theme~='warning']) {
+  :host(:is([theme~='warning'], .v-warning)) {
     color: var(--lumo-warning-text-color);
   }
 
-  :host([theme~='warning'][theme~='primary']) {
+  :host(:is([theme~='warning'], .v-warning):is([theme~='primary'], .v-primary)) {
     background-color: var(--lumo-warning-color);
     color: var(--lumo-warning-contrast-color);
   }
 
-  :host([theme~='error']) {
+  :host(:is([theme~='error'], .v-error)) {
     color: var(--lumo-error-text-color);
   }
 
-  :host([theme~='error'][theme~='primary']) {
+  :host(:is([theme~='error'], .v-error):is([theme~='primary'], .v-primary)) {
     background-color: var(--lumo-error-color);
     color: var(--lumo-error-contrast-color);
   }
 
-  :host([theme~='contrast']) {
+  :host(:is([theme~='contrast'], .v-contrast)) {
     color: var(--lumo-contrast);
   }
 
-  :host([theme~='contrast'][theme~='primary']) {
+  :host(:is([theme~='contrast'], .v-contrast):is([theme~='primary'], .v-primary)) {
     background-color: var(--lumo-contrast);
     color: var(--lumo-base-color);
   }
@@ -253,12 +253,12 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
     cursor: not-allowed;
   }
 
-  :host([theme~='primary'][disabled]) {
+  :host(:is([theme~='primary'], .v-primary)[disabled]) {
     background-color: var(--lumo-contrast-30pct);
     color: var(--lumo-base-color);
   }
 
-  :host([theme~='primary'][disabled]) [part] {
+  :host(:is([theme~='primary'], .v-primary)[disabled]) [part] {
     opacity: 0.7;
   }
 

@@ -118,7 +118,7 @@
     margin-right: var(--lumo-space-s);
   }
 
-  :host([theme~='no-border']) [part='toolbar'] {
+  :host(:is([theme~='no-border'], .v-no-border)) [part='toolbar'] {
     border: 0;
   }
 
@@ -139,11 +139,11 @@
     box-shadow: var(--lumo-box-shadow-m);
   }
 
-  :host(:not([theme~='no-border']):not([editor-position=''])) [part='editor']:not([hidden]) {
+  :host(:not(:is([theme~='no-border'], .v-no-border)):not([editor-position=''])) [part='editor']:not([hidden]) {
     border: 1px solid var(--lumo-contrast-20pct);
   }
 
-  :host(:not([theme~='no-border'])[editor-position='bottom']) [part='editor']:not([hidden]) {
+  :host(:not(:is([theme~='no-border'], .v-no-border))[editor-position='bottom']) [part='editor']:not([hidden]) {
     border-top: 0;
   }
 
@@ -151,7 +151,8 @@
     border-left: 0;
   }
 
-  :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
+  :host([dir='rtl']:not(:is([theme~='no-border'], .v-no-border))[editor-position='aside'])
+    [part='editor']:not([hidden]) {
     border-right: 0;
   }
 }

@@ -19,11 +19,11 @@
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
-  :host(:not([theme~='no-border'])) {
+  :host(:not(:is([theme~='no-border'], .v-no-border))) {
     border-radius: var(--vaadin-map-border-radius, var(--lumo-border-radius-l));
   }
 
-  :host(:not([theme~='no-border']))::before {
+  :host(:not(:is([theme~='no-border'], .v-no-border)))::before {
     border: 1px solid var(--vaadin-map-border-color, var(--lumo-contrast-10pct));
   }
 

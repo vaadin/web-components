@@ -52,35 +52,35 @@
     border-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
   }
 
-  :host([theme~='xlarge']) [part='abbr'] {
+  :host(:is([theme~='xlarge'], .v-xlarge)) [part='abbr'] {
     font-size: 2.5em;
   }
 
-  :host([theme~='large']) [part='abbr'] {
+  :host(:is([theme~='large'], .v-large)) [part='abbr'] {
     font-size: 2.375em;
   }
 
-  :host([theme~='small']) [part='abbr'] {
+  :host(:is([theme~='small'], .v-small)) [part='abbr'] {
     font-size: 2.75em;
   }
 
-  :host([theme~='xsmall']) [part='abbr'] {
+  :host(:is([theme~='xsmall'], .v-xsmall)) [part='abbr'] {
     font-size: 3em;
   }
 
-  :host([theme~='xlarge']) {
+  :host(:is([theme~='xlarge'], .v-xlarge)) {
     --vaadin-avatar-size: var(--lumo-size-xl);
   }
 
-  :host([theme~='large']) {
+  :host(:is([theme~='large'], .v-large)) {
     --vaadin-avatar-size: var(--lumo-size-l);
   }
 
-  :host([theme~='small']) {
+  :host(:is([theme~='small'], .v-small)) {
     --vaadin-avatar-size: var(--lumo-size-s);
   }
 
-  :host([theme~='xsmall']) {
+  :host(:is([theme~='xsmall'], .v-xsmall)) {
     --vaadin-avatar-size: var(--lumo-size-xs);
   }
 }

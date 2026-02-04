@@ -35,7 +35,7 @@
     padding: var(--lumo-space-s) 0;
   }
 
-  :host([theme~='filled']) {
+  :host(:is([theme~='filled'], .v-filled)) {
     padding-top: 0;
     padding-bottom: 0;
   }

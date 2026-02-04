@@ -34,15 +34,15 @@
     margin-block-end: var(--lumo-space-xs);
   }
 
-  :host([theme~='align-left']) {
+  :host(:is([theme~='align-left'], .v-align-left)) {
     text-align: left;
   }
 
-  :host([theme~='align-right']) {
+  :host(:is([theme~='align-right'], .v-align-right)) {
     text-align: right;
   }
 
-  :host([theme~='align-center']) {
+  :host(:is([theme~='align-center'], .v-align-center)) {
     text-align: center;
   }
 

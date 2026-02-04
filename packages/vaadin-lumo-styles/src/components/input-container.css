@@ -166,31 +166,31 @@
     }
   }
 
-  :host([theme~='align-left']) ::slotted(:not([slot$='fix'])) {
+  :host(:is([theme~='align-left'], .v-align-left)) ::slotted(:not([slot$='fix'])) {
     text-align: start;
     --_lumo-text-field-overflow-mask-image: none;
   }
 
-  :host([theme~='align-center']) ::slotted(:not([slot$='fix'])) {
+  :host(:is([theme~='align-center'], .v-align-center)) ::slotted(:not([slot$='fix'])) {
     text-align: center;
     --_lumo-text-field-overflow-mask-image: none;
   }
 
-  :host([theme~='align-right']) ::slotted(:not([slot$='fix'])) {
+  :host(:is([theme~='align-right'], .v-align-right)) ::slotted(:not([slot$='fix'])) {
     text-align: end;
     --_lumo-text-field-overflow-mask-image: none;
   }
 
   @-moz-document url-prefix() {
     /* Firefox is smart enough to align overflowing text to right */
-    :host([theme~='align-right']) ::slotted(:not([slot$='fix'])) {
+    :host(:is([theme~='align-right'], .v-align-right)) ::slotted(:not([slot$='fix'])) {
       --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
     }
   }
 
   @-moz-document url-prefix() {
     /* Firefox is smart enough to align overflowing text to right */
-    :host([theme~='align-left']) ::slotted(:not([slot$='fix'])) {
+    :host(:is([theme~='align-left'], .v-align-left)) ::slotted(:not([slot$='fix'])) {
       --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
     }
   }
@@ -200,28 +200,28 @@
     transform-origin: 0% 0;
   }
 
-  :host([theme~='align-left'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+  :host(:is([theme~='align-left'], .v-align-left)[dir='rtl']) ::slotted(:not([slot$='fix'])) {
     --_lumo-text-field-overflow-mask-image: none;
   }
 
-  :host([theme~='align-center'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+  :host(:is([theme~='align-center'], .v-align-center)[dir='rtl']) ::slotted(:not([slot$='fix'])) {
     --_lumo-text-field-overflow-mask-image: none;
   }
 
-  :host([theme~='align-right'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+  :host(:is([theme~='align-right'], .v-align-right)[dir='rtl']) ::slotted(:not([slot$='fix'])) {
     --_lumo-text-field-overflow-mask-image: none;
   }
 
   @-moz-document url-prefix() {
     /* Firefox is smart enough to align overflowing text to right */
-    :host([theme~='align-right'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+    :host(:is([theme~='align-right'], .v-align-right)[dir='rtl']) ::slotted(:not([slot$='fix'])) {
       --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
     }
   }
 
   @-moz-document url-prefix() {
     /* Firefox is smart enough to align overflowing text to right */
-    :host([theme~='align-left'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
+    :host(:is([theme~='align-left'], .v-align-left)[dir='rtl']) ::slotted(:not([slot$='fix'])) {
       --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
     }
   }

@@ -21,17 +21,17 @@
     line-height: var(--lumo-line-height-m);
   }
 
-  :host([theme~='filled']) {
+  :host(:is([theme~='filled'], .v-filled)) {
     background-color: var(--lumo-contrast-5pct);
     border-radius: var(--lumo-border-radius-m);
   }
 
-  :host([theme~='filled']) [part='content'] {
+  :host(:is([theme~='filled'], .v-filled)) [part='content'] {
     padding-left: var(--lumo-space-m);
     padding-right: var(--lumo-space-m);
   }
 
-  :host([theme~='small']) [part$='content'] {
+  :host(:is([theme~='small'], .v-small)) [part$='content'] {
     font-size: var(--lumo-font-size-s);
   }
 }

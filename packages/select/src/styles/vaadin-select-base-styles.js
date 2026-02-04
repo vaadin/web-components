@@ -40,43 +40,43 @@ export const selectStyles = css`
     display: none;
   }
 
-  :host([theme~='align-start']) {
+  :host(:is([theme~='align-start'], .v-align-start)) {
     --vaadin-item-text-align: start;
   }
 
-  :host([theme~='align-center']) {
+  :host(:is([theme~='align-center'], .v-align-center)) {
     --vaadin-item-text-align: center;
   }
 
-  :host([theme~='align-end']) {
+  :host(:is([theme~='align-end'], .v-align-end)) {
     --vaadin-item-text-align: end;
   }
 
-  :host([theme~='align-left']) {
+  :host(:is([theme~='align-left'], .v-align-left)) {
     --vaadin-item-text-align: left;
   }
 
-  :host([theme~='align-right']) {
+  :host(:is([theme~='align-right'], .v-align-right)) {
     --vaadin-item-text-align: right;
   }
 
-  :host([theme~='align-start']) ::slotted([slot='value']) {
+  :host(:is([theme~='align-start'], .v-align-start)) ::slotted([slot='value']) {
     justify-content: start;
   }
 
-  :host([theme~='align-center']) ::slotted([slot='value']) {
+  :host(:is([theme~='align-center'], .v-align-center)) ::slotted([slot='value']) {
     justify-content: center;
   }
 
-  :host([theme~='align-end']) ::slotted([slot='value']) {
+  :host(:is([theme~='align-end'], .v-align-end)) ::slotted([slot='value']) {
     justify-content: end;
   }
 
-  :host([theme~='align-left']) ::slotted([slot='value']) {
+  :host(:is([theme~='align-left'], .v-align-left)) ::slotted([slot='value']) {
     justify-content: left;
   }
 
-  :host([theme~='align-right']) ::slotted([slot='value']) {
+  :host(:is([theme~='align-right'], .v-align-right)) ::slotted([slot='value']) {
     justify-content: right;
   }
 `;

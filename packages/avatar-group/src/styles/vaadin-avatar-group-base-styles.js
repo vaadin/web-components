@@ -15,7 +15,7 @@ export const avatarGroupStyles = css`
     --_dir: 1;
   }
 
-  :host([theme~='reverse']) {
+  :host(:is([theme~='reverse'], .v-reverse)) {
     --_dir: -1;
   }
 
@@ -48,9 +48,9 @@ export const avatarGroupStyles = css`
     margin-inline-start: calc((var(--_outline-width) + var(--_overlap) - var(--_gap)) * -1);
   }
 
-  :host(:not([theme~='reverse'])) ::slotted(vaadin-avatar:last-child),
-  :host(:not([theme~='reverse']):not([has-overflow])) ::slotted(vaadin-avatar:nth-last-child(2)),
-  :host([theme~='reverse']) ::slotted(vaadin-avatar:first-of-type) {
+  :host(:not([theme~='reverse'], .v-reverse)) ::slotted(vaadin-avatar:last-child),
+  :host(:not([theme~='reverse'], .v-reverse):not([has-overflow])) ::slotted(vaadin-avatar:nth-last-child(2)),
+  :host(:is([theme~='reverse'], .v-reverse)) ::slotted(vaadin-avatar:first-of-type) {
     mask-image: none;
   }
 `;

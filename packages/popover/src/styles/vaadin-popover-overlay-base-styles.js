@@ -50,7 +50,7 @@ const popoverOverlay = css`
     padding: var(--vaadin-popover-padding, var(--vaadin-padding-s));
   }
 
-  :host([theme~='no-padding']) [part='content'] {
+  :host(:is([theme~='no-padding'], .v-no-padding)) [part='content'] {
     padding: 0 !important;
   }
 

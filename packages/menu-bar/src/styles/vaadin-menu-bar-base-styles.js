@@ -36,19 +36,19 @@ export const menuBarStyles = css`
 
   ::slotted([first-visible]),
   :host([has-single-button]) ::slotted([slot='overflow']),
-  ::slotted(vaadin-menu-bar-button[theme~='tertiary']) {
+  ::slotted(vaadin-menu-bar-button:is([theme~='tertiary'], .v-tertiary)) {
     border-start-start-radius: var(--_rad-button);
     border-end-start-radius: var(--_rad-button);
   }
 
   ::slotted(:is([last-visible], [slot='overflow'])),
-  ::slotted(vaadin-menu-bar-button[theme~='tertiary']) {
+  ::slotted(vaadin-menu-bar-button:is([theme~='tertiary'], .v-tertiary)) {
     border-start-end-radius: var(--_rad-button);
     border-end-end-radius: var(--_rad-button);
   }
 
-  :host([theme~='end-aligned']) ::slotted(vaadin-menu-bar-button[first-visible]),
-  :host([theme~='end-aligned'][has-single-button]) ::slotted(vaadin-menu-bar-button) {
+  :host(:is([theme~='end-aligned'], .v-align-end)) ::slotted(vaadin-menu-bar-button[first-visible]),
+  :host(:is([theme~='end-aligned'], .v-align-end)[has-single-button]) ::slotted(vaadin-menu-bar-button) {
     margin-inline-start: auto;
   }
 `;

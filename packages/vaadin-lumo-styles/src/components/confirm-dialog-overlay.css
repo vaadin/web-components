@@ -30,7 +30,7 @@
     max-width: 100%;
   }
 
-  ::slotted([slot$='button'][theme~='tertiary']) {
+  ::slotted([slot$='button']:is([theme~='tertiary'], .v-tertiary)) {
     padding-left: var(--lumo-space-s);
     padding-right: var(--lumo-space-s);
   }

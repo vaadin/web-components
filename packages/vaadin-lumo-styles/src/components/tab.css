@@ -158,7 +158,7 @@
     margin-right: 0;
   }
 
-  :host([theme~='icon-on-top']) {
+  :host(:is([theme~='icon-on-top'], .v-icon-on-top)) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,14 +168,14 @@
     padding-top: 0.25rem;
   }
 
-  :host([theme~='icon-on-top']) ::slotted(a) {
+  :host(:is([theme~='icon-on-top'], .v-icon-on-top)) ::slotted(a) {
     flex-direction: column;
     align-items: center;
     margin-top: -0.25rem;
     padding-top: 0.25rem;
   }
 
-  :host([theme~='icon-on-top']) ::slotted(vaadin-icon) {
+  :host(:is([theme~='icon-on-top'], .v-icon-on-top)) ::slotted(vaadin-icon) {
     margin: 0;
   }
 

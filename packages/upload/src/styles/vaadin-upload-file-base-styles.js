@@ -31,12 +31,12 @@ export const uploadFileStyles = css`
     display: none;
   }
 
-  :host([theme~='thumbnails']) {
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) {
     grid-template-columns: 3rem minmax(0, 1fr) auto;
   }
 
-  :host([theme~='thumbnails']) [part='thumbnail']:not([hidden]),
-  :host([theme~='thumbnails']) [part='file-icon']:not([hidden]) {
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) [part='thumbnail']:not([hidden]),
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) [part='file-icon']:not([hidden]) {
     display: block;
     width: 3rem;
     height: 3rem;
@@ -56,8 +56,8 @@ export const uploadFileStyles = css`
     display: flex;
   }
 
-  :host([theme~='thumbnails']) [part='done-icon'],
-  :host([theme~='thumbnails']) [part='warning-icon'] {
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) [part='done-icon'],
+  :host(:is([theme~='thumbnails'], .v-thumbnails)) [part='warning-icon'] {
     display: none !important;
   }
 

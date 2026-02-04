@@ -24,23 +24,23 @@
   }
 
   /* Small overrides */
-  :host([theme~='small']) > [part='splitter'] {
+  :host(:is([theme~='small'], .v-small)) > [part='splitter'] {
     --vaadin-split-layout-handle-size: 5px;
     background: var(--lumo-contrast-10pct);
   }
 
   /* Minimal */
-  :host([theme~='minimal']) > [part='splitter'] {
+  :host(:is([theme~='minimal'], .v-minimal)) > [part='splitter'] {
     --vaadin-split-layout-splitter-size: 0px;
     --vaadin-split-layout-handle-size: 5px;
     --vaadin-split-layout-splitter-target-size: 5px;
   }
 
-  :host([theme~='minimal']) > [part='splitter'] > [part='handle'] {
+  :host(:is([theme~='minimal'], .v-minimal)) > [part='splitter'] > [part='handle'] {
     opacity: 0;
   }
 
-  :host([theme~='minimal']) > [part='splitter']:is(:hover, :active) > [part='handle'] {
+  :host(:is([theme~='minimal'], .v-minimal)) > [part='splitter']:is(:hover, :active) > [part='handle'] {
     opacity: 1;
   }
 

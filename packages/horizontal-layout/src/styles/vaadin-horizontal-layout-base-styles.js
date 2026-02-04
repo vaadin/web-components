@@ -29,7 +29,7 @@ export const baseStyles = css`
     gap: var(--vaadin-horizontal-layout-gap, var(--vaadin-gap-s));
   }
 
-  :host([theme~='wrap']) {
+  :host(:is([theme~='wrap'], .v-wrap)) {
     flex-wrap: wrap;
   }
 
