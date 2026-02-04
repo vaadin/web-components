@@ -94,46 +94,16 @@ export const DialogOverlayMixin = (superClass) =>
 
       // Observe header-content and footer slots for dynamic content
       const headerSlot = this.shadowRoot.querySelector('slot[name="header-content"]');
-      this.__headerSlotObserver = new SlotObserver(headerSlot, () => {
-        this.__updateHasHeader();
+      this.__headerSlotObserver = new SlotObserver(headerSlot, ({ currentNodes }) => {
+        setOverlayStateAttribute(this, 'has-header', currentNodes.length > 0);
+        this.__updateOverflow();
       });
 
       const footerSlot = this.shadowRoot.querySelector('slot[name="footer"]');
-      this.__footerSlotObserver = new SlotObserver(footerSlot, () => {
-        this.__updateHasFooter();
+      this.__footerSlotObserver = new SlotObserver(footerSlot, ({ currentNodes }) => {
+        setOverlayStateAttribute(this, 'has-footer', currentNodes.length > 0);
+        this.__updateOverflow();
       });
-    }
-
-    /**
-     * Checks if a slot has any content.
-     * @private
-     * @param {string} slotName - The name of the slot to check
-     * @return {boolean} True if the slot has content
-     */
-    __hasSlottedContent(slotName) {
-      const slot = this.shadowRoot.querySelector(`slot[name="${slotName}"]`);
-      const nodes = slot.assignedNodes({ flatten: true });
-      return nodes.length > 0;
-    }
-
-    /**
-     * Updates the has-header attribute based on whether there is any slotted content.
-     * @private
-     */
-    __updateHasHeader() {
-      const hasHeaderContent = this.__hasSlottedContent('header-content');
-      setOverlayStateAttribute(this, 'has-header', hasHeaderContent);
-      this.__updateOverflow();
-    }
-
-    /**
-     * Updates the has-footer attribute based on whether there is any slotted content.
-     * @private
-     */
-    __updateHasFooter() {
-      const hasFooterContent = this.__hasSlottedContent('footer');
-      setOverlayStateAttribute(this, 'has-footer', hasFooterContent);
-      this.__updateOverflow();
     }
 
     /** @private */
