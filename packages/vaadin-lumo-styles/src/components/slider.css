@@ -4,6 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_slider {
+  :host([focus-ring]:not([readonly])) [part='thumb'],
+  :host([active]) [part='thumb'] {
+    background: linear-gradient(var(--_fill-background), var(--_fill-background)) var(--lumo-base-color);
+  }
+
   :host([focus-ring]) [part='thumb'] {
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
