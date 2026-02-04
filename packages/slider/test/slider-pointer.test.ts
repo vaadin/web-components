@@ -339,10 +339,10 @@ describe('vaadin-slider - pointer', () => {
       expect(bubble.opened).to.be.false;
     });
 
-    it('should not close on pointer leave if focused', async () => {
+    it('should close on pointer leave if focused', async () => {
       await sendMouseToElement({ type: 'click', element: thumb });
       await sendMouse({ type: 'move', position: [300, 300] });
-      expect(bubble.opened).to.be.true;
+      expect(bubble.opened).to.be.false;
     });
 
     it('should open on programmatic focus', () => {

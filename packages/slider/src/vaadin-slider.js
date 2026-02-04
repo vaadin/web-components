@@ -165,6 +165,13 @@ class Slider extends FieldMixin(
         value: false,
         sync: true,
       },
+
+      /** @private */
+      __bubbleOpened: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -274,7 +281,7 @@ class Slider extends FieldMixin(
         <vaadin-slider-bubble
           slot="bubble"
           .positionTarget="${this.__thumbElement}"
-          .opened="${this.valueAlwaysVisible || this.__hoverInside || this.__focusInside}"
+          .opened="${this.valueAlwaysVisible || this.__bubbleOpened}"
           .active="${this.__active}"
           theme="${ifDefined(this._theme)}"
         >
@@ -284,6 +291,29 @@ class Slider extends FieldMixin(
       this,
       { host: this },
     );
+  }
+
+  /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('__focusInside')) {
+      if (this.__focusInside) {
+        this.__bubbleOpened = true;
+      } else if (props.get('__focusInside')) {
+        // Close bubble on blur unless the thumb has hover
+        this.__bubbleOpened = this.__hoverInside;
+      }
+    }
+
+    if (props.has('__hoverInside')) {
+      if (this.__hoverInside) {
+        this.__bubbleOpened = true;
+      } else if (props.get('__hoverInside')) {
+        // Close bubble on pointerleave even if thumb has focus
+        this.__bubbleOpened = false;
+      }
+    }
   }
 
   /** @protected */
