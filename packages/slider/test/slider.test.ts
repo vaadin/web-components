@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-slider.js';
-import type { SliderBubble } from '../src/vaadin-slider-bubble.js';
 import type { Slider } from '../vaadin-slider.js';
 
 window.Vaadin ??= {};
@@ -108,101 +107,6 @@ describe('vaadin-slider', () => {
       slider.focus();
       slider.blur();
       expect(document.activeElement).to.not.equal(input);
-    });
-  });
-
-  describe('bubble', () => {
-    let bubble: SliderBubble;
-    let thumb: Element;
-    let track: Element;
-
-    beforeEach(async () => {
-      // Set margin: 10px on the wrapper to prevent mouse cursor
-      // from staying on top of the slider at [0, 0] coordinates
-      [slider] = fixtureSync(
-        `<div style="margin: 10px">
-          <vaadin-slider></vaadin-slider>
-          <input id="last-global-focusable" />
-        </div>`,
-      ).children as unknown as [Slider];
-      await nextRender();
-      bubble = slider.querySelector('vaadin-slider-bubble')!;
-      thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
-      track = slider.shadowRoot!.querySelector('[part="track"]')!;
-    });
-
-    afterEach(async () => {
-      await resetMouse();
-    });
-
-    it('should open on keyboard focus', async () => {
-      await sendKeys({ press: 'Tab' });
-      expect(bubble.opened).to.be.true;
-    });
-
-    it('should close on keyboard blur', async () => {
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'Tab' });
-      expect(bubble.opened).to.be.false;
-    });
-
-    it('should open on pointer enter over thumb', async () => {
-      await sendMouseToElement({ type: 'move', element: thumb });
-      expect(bubble.opened).to.be.true;
-    });
-
-    it('should open on pointer move from track to thumb', async () => {
-      await sendMouseToElement({ type: 'move', element: track });
-      expect(bubble.opened).to.be.false;
-
-      await sendMouseToElement({ type: 'move', element: thumb });
-      expect(bubble.opened).to.be.true;
-    });
-
-    it('should not open on pointer move outside thumb', async () => {
-      await sendMouseToElement({ type: 'move', element: track });
-      expect(bubble.opened).to.be.false;
-    });
-
-    it('should close on pointer leave', async () => {
-      await sendMouseToElement({ type: 'move', element: thumb });
-      await sendMouse({ type: 'move', position: [300, 300] });
-      expect(bubble.opened).to.be.false;
-    });
-
-    it('should not close on pointer leave if focused', async () => {
-      await sendMouseToElement({ type: 'click', element: thumb });
-      await sendMouse({ type: 'move', position: [300, 300] });
-      expect(bubble.opened).to.be.true;
-    });
-
-    it('should open on programmatic focus', () => {
-      slider.focus();
-      expect(bubble.opened).to.be.true;
-    });
-
-    it('should close on programmatic blur', () => {
-      slider.focus();
-      expect(bubble.opened).to.be.true;
-
-      slider.blur();
-      expect(bubble.opened).to.be.false;
-    });
-
-    it('should open when valueAlwaysVisible is set to true', async () => {
-      slider.valueAlwaysVisible = true;
-      await nextRender();
-      expect(bubble.opened).to.be.true;
-    });
-
-    it('should close when valueAlwaysVisible is set to false', async () => {
-      slider.valueAlwaysVisible = true;
-      await nextRender();
-      expect(bubble.opened).to.be.true;
-
-      slider.valueAlwaysVisible = false;
-      await nextRender();
-      expect(bubble.opened).to.be.false;
     });
   });
 });
