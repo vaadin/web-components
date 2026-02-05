@@ -122,6 +122,20 @@ declare class RangeSlider extends FieldMixin(SliderMixin(FocusMixin(ThemableMixi
    */
   value: number[];
 
+  /**
+   * Custom accessible name for the start (minimum) input.
+   * When not set, defaults to "${label} min" or "min" if no label.
+   * @attr {string} accessible-name-start
+   */
+  accessibleNameStart: string | null | undefined;
+
+  /**
+   * Custom accessible name for the end (maximum) input.
+   * When not set, defaults to "${label} max" or "max" if no label.
+   * @attr {string} accessible-name-end
+   */
+  accessibleNameEnd: string | null | undefined;
+
   addEventListener<K extends keyof RangeSliderEventMap>(
     type: K,
     listener: (this: RangeSlider, ev: RangeSliderEventMap[K]) => void,

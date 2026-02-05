@@ -183,6 +183,24 @@ class RangeSlider extends FieldMixin(
         notify: true,
         sync: true,
       },
+
+      /**
+       * Custom accessible name for the start (minimum) input.
+       * When not set, defaults to "${label} min" or "min" if no label.
+       * @attr {string} accessible-name-start
+       */
+      accessibleNameStart: {
+        type: String,
+      },
+
+      /**
+       * Custom accessible name for the end (maximum) input.
+       * When not set, defaults to "${label} max" or "max" if no label.
+       * @attr {string} accessible-name-end
+       */
+      accessibleNameEnd: {
+        type: String,
+      },
     };
   }
 
@@ -277,6 +295,7 @@ class RangeSlider extends FieldMixin(
           type="range"
           id="${this.__inputId0}"
           slot="input"
+          aria-label="${this.accessibleNameStart || this.__getAriaLabel('min')}"
           .min="${min}"
           .max="${max}"
           .step="${step}"
@@ -291,6 +310,7 @@ class RangeSlider extends FieldMixin(
           type="range"
           id="${this.__inputId1}"
           slot="input"
+          aria-label="${this.accessibleNameEnd || this.__getAriaLabel('max')}"
           .min="${min}"
           .max="${max}"
           .step="${step}"
@@ -362,6 +382,11 @@ class RangeSlider extends FieldMixin(
 
     this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
     this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
+  }
+
+  /** @private */
+  __getAriaLabel(suffix) {
+    return this.label ? `${this.label} ${suffix}` : suffix;
   }
 
   /** @private */
