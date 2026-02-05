@@ -453,7 +453,6 @@ window.Vaadin.featureFlags.sliderComponent = true;
   describe('bubble', () => {
     let bubbles: SliderBubble[];
     let focusable: HTMLInputElement;
-    let thumbs: Element[];
     let track: Element;
 
     beforeEach(async () => {
@@ -541,6 +540,22 @@ window.Vaadin.featureFlags.sliderComponent = true;
       await sendMouseToElement({ type: 'move', element: track });
       expect(bubbles[0].opened).to.be.false;
       expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should open start bubble on track pointerdown closer to first thumb', async () => {
+      const { x, y } = middleOfThumb(0);
+      await sendMouse({ type: 'move', position: [x + 40, y] });
+      await sendMouse({ type: 'down' });
+      expect(bubbles[0].opened).to.be.true;
+      expect(bubbles[1].opened).to.be.false;
+    });
+
+    it('should open end bubble on track pointerdown closer to second thumb', async () => {
+      const { x, y } = middleOfThumb(1);
+      await sendMouse({ type: 'move', position: [x - 40, y] });
+      await sendMouse({ type: 'down' });
+      expect(bubbles[0].opened).to.be.false;
+      expect(bubbles[1].opened).to.be.true;
     });
 
     it('should close start bubble on pointer leave', async () => {

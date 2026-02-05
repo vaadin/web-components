@@ -333,6 +333,12 @@ describe('vaadin-slider - pointer', () => {
       expect(bubble.opened).to.be.false;
     });
 
+    it('should open on pointerdown on the track', async () => {
+      await sendMouseToElement({ type: 'move', element: track });
+      await sendMouse({ type: 'down' });
+      expect(bubble.opened).to.be.true;
+    });
+
     it('should close on pointer leave', async () => {
       await sendMouseToElement({ type: 'move', element: thumb });
       await sendMouse({ type: 'move', position: [300, 300] });

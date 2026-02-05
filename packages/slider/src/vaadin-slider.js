@@ -297,6 +297,17 @@ class Slider extends FieldMixin(
   willUpdate(props) {
     super.willUpdate(props);
 
+    if (props.has('__active')) {
+      if (this.__active) {
+        // When slider is activated by track pointerdown, the hover flag
+        // isn't set, but the thumb is actually moved, so we set it here.
+        this.__hoverInside = true;
+      } else if (props.get('__active')) {
+        // Close bubble when drag ends unless the thumb has hover
+        this.__bubbleOpened = this.__hoverInside;
+      }
+    }
+
     if (props.has('__focusInside')) {
       if (this.__focusInside) {
         this.__bubbleOpened = true;
@@ -313,11 +324,6 @@ class Slider extends FieldMixin(
         // Keep bubble open during drag (active state)
         this.__bubbleOpened = this.__active;
       }
-    }
-
-    if (props.has('__active') && !this.__active && props.get('__active')) {
-      // Close bubble when drag ends unless the thumb has hover
-      this.__bubbleOpened = this.__hoverInside;
     }
   }
 
