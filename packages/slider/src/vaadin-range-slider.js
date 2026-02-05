@@ -284,13 +284,7 @@ class RangeSlider extends FieldMixin(
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div
-          id="controls"
-          style="${styleMap({ '--start-value': startPercent, '--end-value': endPercent })}"
-          @pointerenter="${this.__onPointerEnter}"
-          @pointermove="${this.__onPointerMove}"
-          @pointerleave="${this.__onPointerLeave}"
-        >
+        <div id="controls" style="${styleMap({ '--start-value': startPercent, '--end-value': endPercent })}">
           <div part="track">
             <div part="track-fill"></div>
           </div>
@@ -381,6 +375,9 @@ class RangeSlider extends FieldMixin(
           .value="${startValue}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onStartPointerEnter}"
+          @pointermove="${this.__onStartPointerMove}"
+          @pointerleave="${this.__onStartPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onStartInput}"
           @change="${this.__onChange}"
@@ -396,6 +393,9 @@ class RangeSlider extends FieldMixin(
           .value="${endValue}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onEndPointerEnter}"
+          @pointermove="${this.__onEndPointerMove}"
+          @pointerleave="${this.__onEndPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onEndInput}"
           @change="${this.__onChange}"
@@ -602,23 +602,36 @@ class RangeSlider extends FieldMixin(
   }
 
   /** @private */
-  __onPointerEnter(event) {
+  __onStartPointerEnter(event) {
     if (this.__isThumbEvent(event, this.__thumbStartElement)) {
       this.__startHover = true;
-    } else if (this.__isThumbEvent(event, this.__thumbEndElement)) {
+    }
+  }
+
+  /** @private */
+  __onStartPointerMove(event) {
+    this.__startHover = this.__isThumbEvent(event, this.__thumbStartElement);
+  }
+
+  /** @private */
+  __onStartPointerLeave() {
+    this.__startHover = false;
+  }
+
+  /** @private */
+  __onEndPointerEnter(event) {
+    if (this.__isThumbEvent(event, this.__thumbEndElement)) {
       this.__endHover = true;
     }
   }
 
   /** @private */
-  __onPointerMove(event) {
-    this.__startHover = this.__isThumbEvent(event, this.__thumbStartElement);
+  __onEndPointerMove(event) {
     this.__endHover = this.__isThumbEvent(event, this.__thumbEndElement);
   }
 
   /** @private */
-  __onPointerLeave() {
-    this.__startHover = false;
+  __onEndPointerLeave() {
     this.__endHover = false;
   }
 
