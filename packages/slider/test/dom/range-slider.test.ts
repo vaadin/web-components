@@ -55,6 +55,18 @@ describe('vaadin-range-slider', () => {
       await expect(slider).dom.to.equalSnapshot();
     });
 
+    it('accessibleNameStart', async () => {
+      slider.accessibleNameStart = 'Custom Start';
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
+    it('accessibleNameEnd', async () => {
+      slider.accessibleNameEnd = 'Custom End';
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
     it('disabled', async () => {
       slider.disabled = true;
       await expect(slider).dom.to.equalSnapshot();

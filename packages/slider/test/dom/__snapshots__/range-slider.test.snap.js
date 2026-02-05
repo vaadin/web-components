@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-range-slider host default"] = 
 `<vaadin-range-slider>
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -13,6 +14,7 @@ snapshots["vaadin-range-slider host default"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -39,6 +41,7 @@ snapshots["vaadin-range-slider host default"] =
 snapshots["vaadin-range-slider host value"] = 
 `<vaadin-range-slider>
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -48,6 +51,7 @@ snapshots["vaadin-range-slider host value"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -74,6 +78,7 @@ snapshots["vaadin-range-slider host value"] =
 snapshots["vaadin-range-slider host min"] = 
 `<vaadin-range-slider>
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="20"
@@ -83,6 +88,7 @@ snapshots["vaadin-range-slider host min"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="20"
@@ -109,6 +115,7 @@ snapshots["vaadin-range-slider host min"] =
 snapshots["vaadin-range-slider host max"] = 
 `<vaadin-range-slider>
   <input
+    aria-label="min"
     id="slider-3"
     max="80"
     min="0"
@@ -118,6 +125,7 @@ snapshots["vaadin-range-slider host max"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="80"
     min="0"
@@ -144,6 +152,7 @@ snapshots["vaadin-range-slider host max"] =
 snapshots["vaadin-range-slider host step"] = 
 `<vaadin-range-slider>
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -153,6 +162,7 @@ snapshots["vaadin-range-slider host step"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -182,6 +192,7 @@ snapshots["vaadin-range-slider host disabled"] =
   disabled=""
 >
   <input
+    aria-label="min"
     disabled=""
     id="slider-3"
     max="100"
@@ -192,6 +203,7 @@ snapshots["vaadin-range-slider host disabled"] =
     type="range"
   >
   <input
+    aria-label="max"
     disabled=""
     id="slider-4"
     max="100"
@@ -222,6 +234,7 @@ snapshots["vaadin-range-slider host label"] =
   has-label=""
 >
   <input
+    aria-label="Label min"
     id="slider-3"
     max="100"
     min="0"
@@ -231,6 +244,7 @@ snapshots["vaadin-range-slider host label"] =
     type="range"
   >
   <input
+    aria-label="Label max"
     id="slider-4"
     max="100"
     min="0"
@@ -261,6 +275,7 @@ snapshots["vaadin-range-slider host helper"] =
   has-helper=""
 >
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -270,6 +285,7 @@ snapshots["vaadin-range-slider host helper"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -305,6 +321,7 @@ snapshots["vaadin-range-slider host required"] =
   required=""
 >
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -314,6 +331,7 @@ snapshots["vaadin-range-slider host required"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -344,6 +362,7 @@ snapshots["vaadin-range-slider host error"] =
   invalid=""
 >
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -353,6 +372,7 @@ snapshots["vaadin-range-slider host error"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -679,4 +699,78 @@ snapshots["vaadin-range-slider shadow max < value"] =
 </div>
 `;
 /* end snapshot vaadin-range-slider shadow max < value */
+
+snapshots["vaadin-range-slider host accessibleNameStart"] = 
+`<vaadin-range-slider>
+  <input
+    aria-label="Custom Start"
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    aria-label="max"
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <label
+    id="label-vaadin-range-slider-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-range-slider-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-range-slider>
+`;
+/* end snapshot vaadin-range-slider host accessibleNameStart */
+
+snapshots["vaadin-range-slider host accessibleNameEnd"] = 
+`<vaadin-range-slider>
+  <input
+    aria-label="min"
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    aria-label="Custom End"
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <label
+    id="label-vaadin-range-slider-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-range-slider-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-range-slider>
+`;
+/* end snapshot vaadin-range-slider host accessibleNameEnd */
 
