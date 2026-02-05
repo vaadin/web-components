@@ -519,6 +519,7 @@ snapshots["vaadin-range-slider host error"] =
 snapshots["vaadin-range-slider host value always visible"] = 
 `<vaadin-range-slider>
   <input
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -528,6 +529,7 @@ snapshots["vaadin-range-slider host value always visible"] =
     type="range"
   >
   <input
+    aria-label="max"
     id="slider-4"
     max="100"
     min="0"
@@ -911,6 +913,18 @@ snapshots["vaadin-range-slider host accessibleNameStart"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    100
+  </vaadin-slider-bubble>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
@@ -948,6 +962,18 @@ snapshots["vaadin-range-slider host accessibleNameEnd"] =
     tabindex="0"
     type="range"
   >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    100
+  </vaadin-slider-bubble>
   <label
     id="label-vaadin-range-slider-0"
     slot="label"
