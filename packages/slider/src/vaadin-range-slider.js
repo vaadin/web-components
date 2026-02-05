@@ -245,8 +245,7 @@ class RangeSlider extends FieldMixin(
     this.__inputId0 = `slider-${generateUniqueId()}`;
     this.__inputId1 = `slider-${generateUniqueId()}`;
 
-    this.addEventListener('pointerup', (e) => this.__onPointerUp(e));
-    this.addEventListener('pointercancel', (e) => this.__onPointerUp(e));
+    this.__onPointerUp = this.__onPointerUp.bind(this);
   }
 
   /** @protected */
@@ -267,15 +266,17 @@ class RangeSlider extends FieldMixin(
     if (index !== -1) {
       this.toggleAttribute('start-active', index === 0);
       this.toggleAttribute('end-active', index === 1);
+      window.addEventListener('pointerup', this.__onPointerUp);
+      window.addEventListener('pointercancel', this.__onPointerUp);
     }
   }
 
   /** @private */
-  __onPointerUp(event) {
-    if (this._inputElements.includes(event.composedPath()[0])) {
-      this.removeAttribute('start-active');
-      this.removeAttribute('end-active');
-    }
+  __onPointerUp() {
+    window.removeEventListener('pointerup', this.__onPointerUp);
+    window.removeEventListener('pointercancel', this.__onPointerUp);
+    this.removeAttribute('start-active');
+    this.removeAttribute('end-active');
   }
 
   /**
