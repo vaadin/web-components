@@ -17,12 +17,17 @@ describe('vaadin-slider - pointer', () => {
   let y: number;
 
   beforeEach(async () => {
-    slider = fixtureSync(`
-      <vaadin-slider
-        step="10"
-        style="width: 200px; --vaadin-slider-thumb-width: 20px"
-      ></vaadin-slider>
+    const wrapper = fixtureSync(`
+      <div style="display: flex; flex-direction: column">
+        <input id="first-global-focusable" />
+        <vaadin-slider
+          step="10"
+          style="width: 200px; --vaadin-slider-thumb-width: 20px"
+        ></vaadin-slider>
+        <input id="last-global-focusable" />
+      </div>
     `);
+    slider = wrapper.querySelector('vaadin-slider')!;
     await nextRender();
     thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
     track = slider.shadowRoot!.querySelector('[part="track"]')!;
@@ -278,29 +283,12 @@ describe('vaadin-slider - pointer', () => {
 
   describe('bubble', () => {
     let bubble: SliderBubble;
-    let focusable: HTMLInputElement;
-    let thumb: Element;
-    let track: Element;
+    let focusable: HTMLElement;
 
-    beforeEach(async () => {
-      // Set margin: 10px on the wrapper to prevent mouse cursor
-      // from staying on top of the slider at [0, 0] coordinates
-      [focusable, slider] = fixtureSync(
-        `<div style="margin: 10px">
-          <input id="first-global-focusable" />
-          <vaadin-slider></vaadin-slider>
-          <input id="last-global-focusable" />
-        </div>`,
-      ).children as unknown as [HTMLInputElement, Slider];
-      await nextRender();
+    beforeEach(() => {
       bubble = slider.querySelector('vaadin-slider-bubble')!;
-      thumb = slider.shadowRoot!.querySelector('[part="thumb"]')!;
-      track = slider.shadowRoot!.querySelector('[part="track"]')!;
+      focusable = document.getElementById('first-global-focusable')!;
       focusable.focus();
-    });
-
-    afterEach(async () => {
-      await resetMouse();
     });
 
     it('should open on keyboard focus', async () => {

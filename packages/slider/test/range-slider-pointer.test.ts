@@ -13,6 +13,7 @@ window.Vaadin.featureFlags.sliderComponent = true;
 // Pointer tests randomly fail in Firefox
 (isFirefox ? describe.skip : describe)('vaadin-range-slider - pointer', () => {
   let slider: RangeSlider;
+  let track: HTMLElement;
   let thumbs: Element[];
   let inputs: HTMLInputElement[];
 
@@ -25,14 +26,20 @@ window.Vaadin.featureFlags.sliderComponent = true;
   }
 
   beforeEach(async () => {
-    slider = fixtureSync(`
-      <vaadin-range-slider
-        step="10"
-        style="width: 200px; --vaadin-slider-thumb-width: 20px"
-      ></vaadin-range-slider>
+    const wrapper = fixtureSync(`
+      <div style="display: flex; flex-direction: column">
+        <input id="first-global-focusable" />
+        <vaadin-range-slider
+          step="10"
+          style="width: 200px; --vaadin-slider-thumb-width: 20px"
+        ></vaadin-range-slider>
+        <input id="last-global-focusable" />
+      </div>
     `);
+    slider = wrapper.querySelector('vaadin-range-slider')!;
     await nextRender();
     thumbs = [...slider.shadowRoot!.querySelectorAll('[part~="thumb"]')];
+    track = slider.shadowRoot!.querySelector('[part="track"]')!;
     inputs = [...slider.querySelectorAll('input')];
   });
 
@@ -186,7 +193,8 @@ window.Vaadin.featureFlags.sliderComponent = true;
     });
 
     it('should focus first input on track pointerdown before the first thumb', async () => {
-      await sendMouse({ type: 'move', position: [30, 10] });
+      const { x, y } = middleOfThumb(0);
+      await sendMouse({ type: 'move', position: [x - 20, y] });
       await sendMouse({ type: 'down' });
 
       expect(slider.value).to.deep.equal([10, 80]);
@@ -194,7 +202,8 @@ window.Vaadin.featureFlags.sliderComponent = true;
     });
 
     it('should focus second input on track pointerdown after the second thumb', async () => {
-      await sendMouse({ type: 'move', position: [170, 10] });
+      const { x, y } = middleOfThumb(1);
+      await sendMouse({ type: 'move', position: [x + 20, y] });
       await sendMouse({ type: 'down' });
 
       expect(slider.value).to.deep.equal([20, 90]);
@@ -202,7 +211,8 @@ window.Vaadin.featureFlags.sliderComponent = true;
     });
 
     it('should focus first input on track pointerdown between thumbs closer to the first one', async () => {
-      await sendMouse({ type: 'move', position: [80, 10] });
+      const { x, y } = middleOfThumb(0);
+      await sendMouse({ type: 'move', position: [x + 30, y] });
       await sendMouse({ type: 'down' });
 
       expect(slider.value).to.deep.equal([40, 80]);
@@ -210,7 +220,8 @@ window.Vaadin.featureFlags.sliderComponent = true;
     });
 
     it('should focus second input on track pointerdown between thumbs closer to the second one', async () => {
-      await sendMouse({ type: 'move', position: [120, 10] });
+      const { x, y } = middleOfThumb(1);
+      await sendMouse({ type: 'move', position: [x - 30, y] });
       await sendMouse({ type: 'down' });
 
       expect(slider.value).to.deep.equal([20, 60]);
@@ -452,28 +463,12 @@ window.Vaadin.featureFlags.sliderComponent = true;
 
   describe('bubble', () => {
     let bubbles: SliderBubble[];
-    let focusable: HTMLInputElement;
-    let track: Element;
+    let focusable: HTMLElement;
 
-    beforeEach(async () => {
-      // Set margin: 10px on the wrapper to prevent mouse cursor
-      // from staying on top of the slider at [0, 0] coordinates
-      [focusable, slider] = fixtureSync(
-        `<div style="margin: 10px">
-          <input id="first-global-focusable" />
-          <vaadin-range-slider></vaadin-range-slider>
-          <input id="last-global-focusable" />
-        </div>`,
-      ).children as unknown as [HTMLInputElement, RangeSlider];
-      await nextRender();
+    beforeEach(() => {
       bubbles = [...slider.querySelectorAll('vaadin-slider-bubble')];
-      thumbs = [...slider.shadowRoot!.querySelectorAll('[part~="thumb"]')];
-      track = slider.shadowRoot!.querySelector('[part="track"]')!;
+      focusable = document.getElementById('first-global-focusable')!;
       focusable.focus();
-    });
-
-    afterEach(async () => {
-      await resetMouse();
     });
 
     it('should open start bubble on keyboard focus', async () => {
