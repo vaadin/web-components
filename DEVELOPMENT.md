@@ -202,97 +202,58 @@ yarn test:it
 
 ## Making a version bump
 
-### Create a branch for the current major
-
-Checkout main and pull latest changes:
+Use the [`scripts/createVersionBranch.sh`](scripts/createVersionBranch.sh) script to bump versions:
 
 ```sh
-git checkout main && git pull
+./scripts/createVersionBranch.sh <base-branch> <version-branch> <bump-version>
 ```
 
-Create a new branch from main:
+The script requires:
+- Node / NPM
+- GitHub CLI (`gh`)
+
+### Scenarios
+
+**New minor from main**:
 
 ```sh
-git checkout -b 25.0
+# Assuming latest major is 25, 25.1 is the current minor and we want to bump main to 25.2
+./scripts/createVersionBranch.sh main 25.1 25.2.0-alpha0
 ```
 
-Push a newly created branch:
+- Creates branch `25.1` from `main`
+- Creates PR against `main` to bump version to `25.2.0-alpha0`
+- Creates PR against `25.1` to update WTR script to detect changes against `25.1` branch
+
+**New major from main**:
 
 ```sh
-git push origin 25.0
+# Assuming latest major is 25, 25.1 is the current minor and we want to bump main to 26.0
+./scripts/createVersionBranch.sh main 25.1 26.0.0-alpha0
 ```
 
-The newly created branch for the current major is protected by default.
-The rest of the changes to that branch should happen the usual way, through a PR.
+- Creates branch `25.1` from `main`
+- Creates PR against `main` to bump version to `26.0.0-alpha0`
+- Creates PR against `25.1` to update WTR script to detect changes against `25.1` branch
 
-Create another branch:
+**New minor for a previous major**:
 
 ```sh
-git checkout -b update-v25.0
+# Assuming 24 is a previous major, its current minor is 24.9 and we want to create 24.10
+./scripts/createVersionBranch.sh 24.9 24.10 24.10.0-alpha0
 ```
 
-Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/main/wtr-utils.js) as follows:
+- Creates branch `24.10` from `24.9`
+- Creates PR against `24.10` to bump version to `24.10.0-alpha0`
+- Creates PR against `24.10` to update WTR script to detect changes against `24.10` branch
 
-```diff
-const isLockfileChanged = () => {
--  const log = execSync('git diff --name-only origin/main HEAD').toString();
-+  const log = execSync('git diff --name-only origin/25.0 HEAD').toString();
-  return log.split('\n').some((line) => line.includes('yarn.lock'));
-};
-```
+### Manual steps after running the script
 
-```diff
-const getChangedPackages = () => {
--  const output = execSync('./node_modules/.bin/lerna ls --since origin/main --json --loglevel silent');
-+  const output = execSync('./node_modules/.bin/lerna ls --since origin/25.0 --json --loglevel silent');
-  return JSON.parse(output.toString());
-};
-```
-
-Create a PR to the version branch ([example](https://github.com/vaadin/web-components/pull/4432)).
-
-Update the [`check-branches.js`](https://github.com/vaadin/components-team-tasks/blob/master/release-app/check-branches.js) script of the release app to include the new version branch.
-
-### Update the version in `main`
-
-Create a new branch from main:
-
-```sh
-git checkout main && git checkout -b bump-v25.1
-```
-
-Prepare a new version for the `updateVersion` script by running the following command:
-
-```sh
-export npm_config_bump=25.1.0-alpha0
-```
-
-Run the script to bump version in `packages/component-base/define.js`:
-
-```sh
-node scripts/updateVersion.js
-```
-
-Mark the new version with Lerna:
-
-```sh
-lerna version 25.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
-```
-
-Commit all the changes:
-
-```sh
-git commit -a -m "chore: update main branch to Vaadin 25.1"
-```
-
-Create a PR to the `main` branch ([example](https://github.com/vaadin/web-components/pull/4433)).
-
-### CI build updates
-
-Add the new version branch to the `CheckoutBranch` parameter:
-
-- [Release build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_ReleaseVaadinWebComponents)
-- [API docs build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_PublishWebComponentsApiDocs)
+1. Review and merge the created PRs
+2. Add the new version branch to CI build parameters:
+   - [Release build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_ReleaseVaadinWebComponents)
+   - [API docs build](https://bender.vaadin.com/admin/editBuildParams.html?id=buildType:VaadinWebComponents_PublishWebComponentsApiDocs)
+3. Update [`check-branches.js`](https://github.com/vaadin/components-team-tasks/blob/master/release-app/check-branches.js) in the release app to include the new version branch
 
 ## Miscellaneous
 
