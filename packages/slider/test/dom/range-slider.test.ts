@@ -89,6 +89,12 @@ describe('vaadin-range-slider', () => {
       await aTimeout(0);
       await expect(slider).dom.to.equalSnapshot();
     });
+
+    it('value always visible', async () => {
+      slider.valueAlwaysVisible = true;
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', async () => {

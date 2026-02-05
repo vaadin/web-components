@@ -1,4 +1,4 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -59,26 +59,9 @@ describe('slider', () => {
       await visualDiff(div, 'readonly-value');
     });
 
-    it('focus', async () => {
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus');
-    });
-
-    it('readonly focus', async () => {
-      element.readonly = true;
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus-readonly');
-    });
-
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
-    });
-
-    it('label focused', async () => {
-      element.label = 'Label';
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'label-focused');
     });
 
     it('label disabled', async () => {
@@ -104,7 +87,32 @@ describe('slider', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
     });
+  });
 
+  describe('focus', () => {
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+    });
+
+    it('focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus');
+    });
+
+    it('focus readonly', async () => {
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-readonly');
+    });
+
+    it('focus label', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-label');
+    });
+  });
+
+  describe('theme', () => {
     it('contrast', async () => {
       element.value = 50;
       element.setAttribute('theme', 'contrast');
@@ -121,6 +129,47 @@ describe('slider', () => {
       element.value = 50;
       element.setAttribute('theme', 'error');
       await visualDiff(div, 'theme-error');
+    });
+  });
+
+  describe('active', () => {
+    let input: HTMLElement;
+
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+      element.value = 50;
+      input = element.querySelector('input')!;
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('active', async () => {
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'active');
+    });
+
+    it('contrast active', async () => {
+      element.setAttribute('theme', 'contrast');
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-contrast-active');
+    });
+
+    it('success active', async () => {
+      element.setAttribute('theme', 'success');
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-success-active');
+    });
+
+    it('error active', async () => {
+      element.setAttribute('theme', 'error');
+      await sendMouseToElement({ type: 'move', element: input });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-error-active');
     });
   });
 

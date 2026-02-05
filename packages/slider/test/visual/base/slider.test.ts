@@ -55,15 +55,27 @@ describe('slider', () => {
     await visualDiff(div, 'readonly-value');
   });
 
-  it('keyboard focus', async () => {
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus');
-  });
+  describe('focus', () => {
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+    });
 
-  it('readonly focus', async () => {
-    element.readonly = true;
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus-readonly');
+    it('focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus');
+    });
+
+    it('focus readonly', async () => {
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-readonly');
+    });
+
+    it('focus label', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-label');
+    });
   });
 
   describe('RTL', () => {

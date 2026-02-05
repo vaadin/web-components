@@ -3,7 +3,9 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-slider-bubble.js';
 import { css, html, LitElement, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -201,6 +203,70 @@ class RangeSlider extends FieldMixin(
       accessibleNameEnd: {
         type: String,
       },
+
+      /** @private */
+      __startActive: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'start-active',
+        sync: true,
+      },
+
+      /** @private */
+      __endActive: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'end-active',
+        sync: true,
+      },
+
+      /** @private */
+      __startFocused: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'start-focused',
+        sync: true,
+      },
+
+      /** @private */
+      __endFocused: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        attribute: 'end-focused',
+        sync: true,
+      },
+
+      /** @private */
+      __startHover: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __endHover: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __startBubbleOpened: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
+
+      /** @private */
+      __endBubbleOpened: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -225,6 +291,7 @@ class RangeSlider extends FieldMixin(
           <div part="thumb thumb-start"></div>
           <div part="thumb thumb-end"></div>
           <slot name="input"></slot>
+          <slot name="bubble"></slot>
         </div>
 
         <div part="helper-text">
@@ -255,6 +322,11 @@ class RangeSlider extends FieldMixin(
     const inputs = this.querySelectorAll('[slot="input"]');
     this._inputElements = [...inputs];
     this.ariaTarget = this;
+
+    this.__thumbStartElement = this.shadowRoot.querySelector('[part~="thumb-start"]');
+    this.__thumbEndElement = this.shadowRoot.querySelector('[part~="thumb-end"]');
+
+    this.__bubbleElements = [...this.querySelectorAll('vaadin-slider-bubble')];
   }
 
   /** @private */
@@ -303,6 +375,9 @@ class RangeSlider extends FieldMixin(
           .value="${startValue}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onStartPointerEnter}"
+          @pointermove="${this.__onStartPointerMove}"
+          @pointerleave="${this.__onStartPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onStartInput}"
           @change="${this.__onChange}"
@@ -318,14 +393,102 @@ class RangeSlider extends FieldMixin(
           .value="${endValue}"
           .disabled="${this.disabled}"
           tabindex="${this.disabled ? -1 : 0}"
+          @pointerenter="${this.__onEndPointerEnter}"
+          @pointermove="${this.__onEndPointerMove}"
+          @pointerleave="${this.__onEndPointerLeave}"
           @keydown="${this.__onKeyDown}"
           @input="${this.__onEndInput}"
           @change="${this.__onChange}"
         />
+        <vaadin-slider-bubble
+          slot="bubble"
+          .positionTarget="${this.__thumbStartElement}"
+          .opened="${this.valueAlwaysVisible || this.__startBubbleOpened}"
+          theme="${ifDefined(this._theme)}"
+          .active="${!this.readonly && (this.__startActive || this.__startHover || this.__startFocused)}"
+        >
+          ${startValue}
+        </vaadin-slider-bubble>
+        <vaadin-slider-bubble
+          slot="bubble"
+          .positionTarget="${this.__thumbEndElement}"
+          .opened="${this.valueAlwaysVisible || this.__endBubbleOpened}"
+          theme="${ifDefined(this._theme)}"
+          .active="${!this.readonly && (this.__endActive || this.__endHover || this.__endFocused)}"
+        >
+          ${endValue}
+        </vaadin-slider-bubble>
       `,
       this,
       { host: this },
     );
+  }
+
+  /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('__startActive')) {
+      if (this.__startActive) {
+        // When slider is activated by track pointerdown, the hover flag
+        // isn't set, but the thumb is actually moved, so we set it here.
+        this.__startHover = true;
+      } else if (props.get('__startActive')) {
+        // Close bubble when drag ends unless the thumb has hover
+        this.__startBubbleOpened = this.__startHover;
+      }
+    }
+
+    if (props.has('__endActive')) {
+      if (this.__endActive) {
+        // When slider is activated by track pointerdown, the hover flag
+        // isn't set, but the thumb is actually moved, so we set it here.
+        this.__endHover = true;
+      } else if (props.get('__endActive')) {
+        // Close bubble when drag ends unless the thumb has hover
+        this.__endBubbleOpened = this.__endHover;
+      }
+    }
+
+    if (props.has('__startFocused')) {
+      if (this.__startFocused) {
+        this.__startBubbleOpened = true;
+        this.__endBubbleOpened = false;
+      } else if (props.get('__startFocused')) {
+        // Close bubble on blur unless the thumb has hover
+        this.__startBubbleOpened = this.__startHover;
+      }
+    }
+
+    if (props.has('__endFocused')) {
+      if (this.__endFocused) {
+        this.__endBubbleOpened = true;
+        this.__startBubbleOpened = false;
+      } else if (props.get('__endFocused')) {
+        // Close bubble on blur unless the thumb has hover
+        this.__endBubbleOpened = this.__endHover;
+      }
+    }
+
+    if (props.has('__startHover')) {
+      if (this.__startHover) {
+        this.__startBubbleOpened = true;
+        this.__endBubbleOpened = false;
+      } else if (props.get('__startHover')) {
+        // Keep bubble open during drag (active state)
+        this.__startBubbleOpened = this.__startActive;
+      }
+    }
+
+    if (props.has('__endHover')) {
+      if (this.__endHover) {
+        this.__endBubbleOpened = true;
+        this.__startBubbleOpened = false;
+      } else if (props.get('__endHover')) {
+        // Keep bubble open during drag (active state)
+        this.__endBubbleOpened = this.__endActive;
+      }
+    }
   }
 
   /** @protected */
@@ -381,8 +544,8 @@ class RangeSlider extends FieldMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    this.toggleAttribute('start-focused', isElementFocused(this._inputElements[0]));
-    this.toggleAttribute('end-focused', isElementFocused(this._inputElements[1]));
+    this.__startFocused = isElementFocused(this._inputElements[0]);
+    this.__endFocused = isElementFocused(this._inputElements[1]);
   }
 
   /** @private */
@@ -406,6 +569,7 @@ class RangeSlider extends FieldMixin(
 
     const value = event.target.value;
     this.__updateValue(value, 0);
+    this.__updateBubble(0);
     this.__dispatchInputEvent();
     this.__commitValue();
   }
@@ -421,8 +585,54 @@ class RangeSlider extends FieldMixin(
 
     const value = event.target.value;
     this.__updateValue(value, 1);
+    this.__updateBubble(1);
     this.__dispatchInputEvent();
     this.__commitValue();
+  }
+
+  /** @private */
+  __isThumbEvent(event, thumb) {
+    const rect = thumb.getBoundingClientRect();
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    );
+  }
+
+  /** @private */
+  __onStartPointerEnter(event) {
+    if (this.__isThumbEvent(event, this.__thumbStartElement)) {
+      this.__startHover = true;
+    }
+  }
+
+  /** @private */
+  __onStartPointerMove(event) {
+    this.__startHover = this.__isThumbEvent(event, this.__thumbStartElement);
+  }
+
+  /** @private */
+  __onStartPointerLeave() {
+    this.__startHover = false;
+  }
+
+  /** @private */
+  __onEndPointerEnter(event) {
+    if (this.__isThumbEvent(event, this.__thumbEndElement)) {
+      this.__endHover = true;
+    }
+  }
+
+  /** @private */
+  __onEndPointerMove(event) {
+    this.__endHover = this.__isThumbEvent(event, this.__thumbEndElement);
+  }
+
+  /** @private */
+  __onEndPointerLeave() {
+    this.__endHover = false;
   }
 
   /** @private */
@@ -447,6 +657,11 @@ class RangeSlider extends FieldMixin(
     ) {
       event.preventDefault();
     }
+  }
+
+  /** @private */
+  __updateBubble(idx) {
+    this.__bubbleElements[idx].$.overlay._updatePosition();
   }
 }
 

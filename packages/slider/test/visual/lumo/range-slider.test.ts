@@ -1,4 +1,4 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -42,6 +42,12 @@ describe('range-slider', () => {
       await visualDiff(div, 'value-max');
     });
 
+    it('value always visible', async () => {
+      div.style.padding = '40px 20px 10px';
+      element.valueAlwaysVisible = true;
+      await visualDiff(div, 'value-always-visible');
+    });
+
     it('disabled', async () => {
       element.disabled = true;
       await visualDiff(div, 'disabled');
@@ -64,32 +70,9 @@ describe('range-slider', () => {
       await visualDiff(div, 'readonly-value');
     });
 
-    it('focus start', async () => {
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus-start');
-    });
-
-    it('focus end', async () => {
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus-end');
-    });
-
-    it('readonly focus', async () => {
-      element.readonly = true;
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus-readonly');
-    });
-
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
-    });
-
-    it('label focused', async () => {
-      element.label = 'Label';
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'label-focused');
     });
 
     it('label disabled', async () => {
@@ -115,7 +98,38 @@ describe('range-slider', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
     });
+  });
 
+  describe('focus', () => {
+    beforeEach(() => {
+      div.style.padding = '40px 20px 0';
+    });
+
+    it('focus start', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-start');
+    });
+
+    it('focus end', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-end');
+    });
+
+    it('focus label', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-label');
+    });
+
+    it('focus readonly', async () => {
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focus-readonly');
+    });
+  });
+
+  describe('theme', () => {
     it('contrast', async () => {
       element.value = [25, 75];
       element.setAttribute('theme', 'contrast');
@@ -132,6 +146,74 @@ describe('range-slider', () => {
       element.value = [25, 75];
       element.setAttribute('theme', 'error');
       await visualDiff(div, 'theme-error');
+    });
+  });
+
+  describe('active', () => {
+    let thumbs: Element[];
+
+    beforeEach(() => {
+      div.style.paddingTop = '40px';
+      element.value = [25, 75];
+      thumbs = [...element.shadowRoot!.querySelectorAll('[part~="thumb"]')];
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('active-start', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'active-start');
+    });
+
+    it('active-end', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'active-end');
+    });
+
+    it('contrast active start', async () => {
+      element.setAttribute('theme', 'contrast');
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-contrast-active-start');
+    });
+
+    it('contrast active end', async () => {
+      element.setAttribute('theme', 'contrast');
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-contrast-active-end');
+    });
+
+    it('success active start', async () => {
+      element.setAttribute('theme', 'success');
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-success-active-start');
+    });
+
+    it('success active end', async () => {
+      element.setAttribute('theme', 'success');
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-success-active-end');
+    });
+
+    it('error active start', async () => {
+      element.setAttribute('theme', 'error');
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-error-active-start');
+    });
+
+    it('error active end', async () => {
+      element.setAttribute('theme', 'error');
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      await visualDiff(div, 'theme-error-active-end');
     });
   });
 

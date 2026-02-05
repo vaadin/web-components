@@ -50,6 +50,17 @@ export const SliderMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * When true, the value bubble is always visible,
+         * regardless of focus or hover state.
+         * @attr {boolean} value-always-visible
+         */
+        valueAlwaysVisible: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
         /** @private */
         __value: {
           type: Array,
