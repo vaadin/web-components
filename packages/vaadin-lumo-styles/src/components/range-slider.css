@@ -4,10 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_range-slider {
-  :host([start-active]) [part~='thumb-start'],
-  :host([end-active]) [part~='thumb-end'],
-  :host([focus-ring][start-focused]:not([readonly])) [part~='thumb-start'],
-  :host([focus-ring][end-focused]:not([readonly])) [part~='thumb-end'] {
+  :host(:not([readonly]):is([start-active], [focus-ring][start-focused])) [part~='thumb-start'],
+  :host(:not([readonly]):is([end-active], [focus-ring][end-focused])) [part~='thumb-end'] {
     background: linear-gradient(var(--_fill-background), var(--_fill-background)) var(--lumo-base-color);
   }
 
