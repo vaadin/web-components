@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Range Slider</title>
+    <script type="module" src="../common.js"></script>
+    <script>
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.sliderComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/slider/vaadin-range-slider.js';
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Plain</h2>
+      <vaadin-range-slider value="[25, 75]"></vaadin-range-slider>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Bells & Whistles</h2>
+      <vaadin-range-slider
+        label="Price Range"
+        helper-text="Select minimum and maximum price."
+        value="[200, 800]"
+        min="0"
+        max="1000"
+        step="50"
+        error-message="Please select a valid price range."
+        required
+      ></vaadin-range-slider>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">States</h2>
+      <vaadin-range-slider
+        label="Read-only"
+        helper-text="This range slider cannot be modified."
+        value="[30, 70]"
+        readonly
+      ></vaadin-range-slider>
+
+      <vaadin-range-slider
+        label="Disabled"
+        helper-text="This range slider is disabled."
+        value="[20, 60]"
+        disabled
+      ></vaadin-range-slider>
+
+      <vaadin-range-slider
+        label="Invalid"
+        helper-text="Please select a range."
+        error-message="A range is required."
+        required
+        invalid
+      ></vaadin-range-slider>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Helper Above Field</h2>
+      <vaadin-range-slider
+        theme="helper-above-field"
+        label="Time Range"
+        helper-text="Select start and end hours."
+        value="[9, 17]"
+        min="0"
+        max="24"
+        step="1"
+      ></vaadin-range-slider>
+    </section>
+  </body>
+</html>
