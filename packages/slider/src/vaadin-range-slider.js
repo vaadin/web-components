@@ -453,8 +453,8 @@ class RangeSlider extends FieldMixin(
         this.__startBubbleOpened = true;
         this.__endBubbleOpened = false;
       } else if (props.get('__startHover')) {
-        // Close bubble on pointerleave even if thumb has focus
-        this.__startBubbleOpened = false;
+        // Keep bubble open during drag (active state)
+        this.__startBubbleOpened = this.__startActive;
       }
     }
 
@@ -463,9 +463,19 @@ class RangeSlider extends FieldMixin(
         this.__endBubbleOpened = true;
         this.__startBubbleOpened = false;
       } else if (props.get('__endHover')) {
-        // Close bubble on pointerleave even if thumb has focus
-        this.__endBubbleOpened = false;
+        // Keep bubble open during drag (active state)
+        this.__endBubbleOpened = this.__endActive;
       }
+    }
+
+    if (props.has('__startActive') && !this.__startActive && props.get('__startActive')) {
+      // Close bubble when drag ends unless the thumb has hover
+      this.__startBubbleOpened = this.__startHover;
+    }
+
+    if (props.has('__endActive') && !this.__endActive && props.get('__endActive')) {
+      // Close bubble when drag ends unless the thumb has hover
+      this.__endBubbleOpened = this.__endHover;
     }
   }
 

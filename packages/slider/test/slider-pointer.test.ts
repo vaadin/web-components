@@ -345,6 +345,18 @@ describe('vaadin-slider - pointer', () => {
       expect(bubble.opened).to.be.false;
     });
 
+    it('should only close on pointerup but not pointerleave if active', async () => {
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+      expect(bubble.opened).to.be.true;
+
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubble.opened).to.be.true;
+
+      await sendMouse({ type: 'up' });
+      expect(bubble.opened).to.be.false;
+    });
+
     it('should open on programmatic focus', () => {
       slider.focus();
       expect(bubble.opened).to.be.true;

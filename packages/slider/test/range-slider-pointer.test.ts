@@ -569,6 +569,30 @@ window.Vaadin.featureFlags.sliderComponent = true;
       expect(bubbles[1].opened).to.be.false;
     });
 
+    it('should only close start bubble on pointerup outside but not pointerleave', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+      expect(bubbles[0].opened).to.be.true;
+
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[0].opened).to.be.true;
+
+      await sendMouse({ type: 'up' });
+      expect(bubbles[0].opened).to.be.false;
+    });
+
+    it('should close end bubble on pointerup outside but not pointerleave', async () => {
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
+      await sendMouse({ type: 'down' });
+      expect(bubbles[1].opened).to.be.true;
+
+      await sendMouse({ type: 'move', position: [300, 300] });
+      expect(bubbles[1].opened).to.be.true;
+
+      await sendMouse({ type: 'up' });
+      expect(bubbles[1].opened).to.be.false;
+    });
+
     it('should close start bubble open on hover when focusing the second input', async () => {
       await sendMouseToElement({ type: 'move', element: thumbs[0] });
       await sendKeys({ press: 'Tab' });

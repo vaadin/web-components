@@ -310,9 +310,14 @@ class Slider extends FieldMixin(
       if (this.__hoverInside) {
         this.__bubbleOpened = true;
       } else if (props.get('__hoverInside')) {
-        // Close bubble on pointerleave even if thumb has focus
-        this.__bubbleOpened = false;
+        // Keep bubble open during drag (active state)
+        this.__bubbleOpened = this.__active;
       }
+    }
+
+    if (props.has('__active') && !this.__active && props.get('__active')) {
+      // Close bubble when drag ends unless the thumb has hover
+      this.__bubbleOpened = this.__hoverInside;
     }
   }
 
