@@ -22,6 +22,7 @@ const sliderBubbleOverlay = css`
   [part='overlay'] {
     position: relative;
     overflow: visible;
+    color: inherit;
   }
 
   [part='content'] {
