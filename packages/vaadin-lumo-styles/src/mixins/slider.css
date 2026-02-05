@@ -60,6 +60,7 @@
   :host([disabled]) {
     --vaadin-slider-track-background: var(--lumo-contrast-10pct);
     --vaadin-slider-fill-background: var(--lumo-contrast-30pct);
+    pointer-events: none;
   }
 
   [part='track'] {
