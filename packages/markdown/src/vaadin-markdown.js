@@ -22,7 +22,7 @@ import { renderMarkdownToElement } from './markdown-helpers.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-markdown
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

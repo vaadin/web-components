@@ -51,7 +51,7 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *
  * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
  *
- * @customElement
+ * @customElement vaadin-message
  * @extends HTMLElement
  * @mixes MessageMixin
  * @mixes ThemableMixin

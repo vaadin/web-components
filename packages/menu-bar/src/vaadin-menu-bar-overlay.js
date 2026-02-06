@@ -16,7 +16,7 @@ import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-base-styl
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-menu-bar-overlay
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes MenuOverlayMixin

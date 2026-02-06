@@ -12,7 +12,7 @@ import { monthCalendarStyles } from './styles/vaadin-month-calendar-base-styles.
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 
 /**
- * @customElement
+ * @customElement vaadin-month-calendar
  * @extends HTMLElement
  * @private
  */

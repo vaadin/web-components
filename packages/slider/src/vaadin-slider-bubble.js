@@ -13,7 +13,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 /**
  * An element used internally by `<vaadin-slider>`. Not intended to be used separately.
  *
- * @customElement
+ * @customElement vaadin-slider-bubble
  * @extends HTMLElement
  * @private
  */

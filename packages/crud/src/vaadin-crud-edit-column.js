@@ -28,7 +28,7 @@ import { editColumnDefaultRenderer } from './vaadin-crud-helpers.js';
  *    ...
  * ```
  *
- * @customElement
+ * @customElement vaadin-crud-edit-column
  * @extends GridColumn
  */
 class CrudEditColumn extends GridColumn {

@@ -51,7 +51,7 @@ import { MapMixin } from './vaadin-map-mixin.js';
  * </script>
  * ```
  *
- * @customElement
+ * @customElement vaadin-map
  * @extends HTMLElement
  * @mixes MapMixin
  * @mixes ThemableMixin

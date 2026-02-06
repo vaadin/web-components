@@ -267,7 +267,7 @@ import { {ComponentName}Mixin } from './vaadin-{name}-mixin.js';
  * @fires {Event} change - Fired when the value changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
- * @customElement
+ * @customElement vaadin-{name}
  * @extends HTMLElement
  * @mixes {ComponentName}Mixin
  * @mixes ElementMixin
@@ -1722,7 +1722,7 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
  * @fires {Event} change - Fired when the value changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
- * @customElement
+ * @customElement vaadin-{name}
  * @extends HTMLElement
  * @mixes {ComponentName}Mixin
  * @mixes ElementMixin
