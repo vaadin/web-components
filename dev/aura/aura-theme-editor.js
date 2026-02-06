@@ -82,7 +82,7 @@ customElements.define(
             ></aura-number-control>
             <aura-inset-control></aura-inset-control>
             <aura-number-control property="--aura-base-radius" min="0" max="8" step="0.5"></aura-number-control>
-            <aura-number-control property="--aura-base-size" min="12" max="20"></aura-number-control>
+            <aura-number-control property="--aura-base-size" min="8" max="24" step="4"></aura-number-control>
             <aura-number-control
               property="--aura-base-font-size"
               label="--aura-base-font-size"
