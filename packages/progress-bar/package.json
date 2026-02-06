@@ -23,6 +23,7 @@
     "src",
     "vaadin-*.d.ts",
     "vaadin-*.js",
+    "custom-elements.json",
     "web-types.json",
     "web-types.lit.json"
   ],
@@ -46,6 +47,7 @@
     "@vaadin/testing-helpers": "^2.0.0",
     "@vaadin/vaadin-lumo-styles": "25.1.0-alpha6"
   },
+  "customElements": "custom-elements.json",
   "web-types": [
     "web-types.json",
     "web-types.lit.json"

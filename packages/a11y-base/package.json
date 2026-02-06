@@ -22,7 +22,8 @@
   "files": [
     "index.d.ts",
     "index.js",
-    "src"
+    "src",
+    "custom-elements.json"
   ],
   "keywords": [
     "Vaadin",
@@ -39,5 +40,6 @@
     "@vaadin/test-runner-commands": "25.1.0-alpha6",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^21.0.0"
-  }
+  },
+  "customElements": "custom-elements.json"
 }
