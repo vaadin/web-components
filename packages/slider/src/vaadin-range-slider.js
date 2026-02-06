@@ -405,7 +405,6 @@ class RangeSlider extends FieldMixin(
           .positionTarget="${this.__thumbStartElement}"
           .opened="${this.valueAlwaysVisible || this.__startBubbleOpened}"
           theme="${ifDefined(this._theme)}"
-          .active="${!this.readonly && (this.__startActive || this.__startHover || this.__startFocused)}"
         >
           ${startValue}
         </vaadin-slider-bubble>
@@ -414,7 +413,6 @@ class RangeSlider extends FieldMixin(
           .positionTarget="${this.__thumbEndElement}"
           .opened="${this.valueAlwaysVisible || this.__endBubbleOpened}"
           theme="${ifDefined(this._theme)}"
-          .active="${!this.readonly && (this.__endActive || this.__endHover || this.__endFocused)}"
         >
           ${endValue}
         </vaadin-slider-bubble>

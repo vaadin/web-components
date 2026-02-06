@@ -282,7 +282,6 @@ class Slider extends FieldMixin(
           slot="bubble"
           .positionTarget="${this.__thumbElement}"
           .opened="${this.valueAlwaysVisible || this.__bubbleOpened}"
-          .active="${!this.readonly && (this.__active || this.__hoverInside || this.__focusInside)}"
           theme="${ifDefined(this._theme)}"
         >
           ${value}
