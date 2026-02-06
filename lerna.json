@@ -1,5 +1,8 @@
 {
-  "packages": ["test/*", "packages/*"],
+  "packages": [
+    "test/*",
+    "packages/*"
+  ],
   "npmClient": "yarn",
-  "version": "24.9.10"
+  "version": "24.10.0-alpha0"
 }
