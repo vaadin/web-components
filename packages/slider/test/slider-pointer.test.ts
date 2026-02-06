@@ -279,6 +279,14 @@ describe('vaadin-slider - pointer', () => {
 
       expect(slider.hasAttribute('active')).to.be.false;
     });
+
+    it('should not set active attribute on thumb pointerdown when readonly', async () => {
+      slider.readonly = true;
+      await sendMouseToElement({ type: 'move', element: thumb });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('active')).to.be.false;
+    });
   });
 
   describe('bubble', () => {

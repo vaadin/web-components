@@ -422,6 +422,14 @@ window.Vaadin.featureFlags.sliderComponent = true;
 
       expect(slider.hasAttribute('start-active')).to.be.false;
     });
+
+    it('should not set start-active attribute on start thumb pointerdown when readonly', async () => {
+      slider.readonly = true;
+      await sendMouseToElement({ type: 'move', element: thumbs[0] });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('start-active')).to.be.false;
+    });
   });
 
   describe('end-active', () => {
@@ -455,6 +463,14 @@ window.Vaadin.featureFlags.sliderComponent = true;
       await nextRender();
       const label = slider.querySelector('label')!;
       await sendMouseToElement({ type: 'move', element: label });
+      await sendMouse({ type: 'down' });
+
+      expect(slider.hasAttribute('end-active')).to.be.false;
+    });
+
+    it('should not set end-active attribute on end thumb pointerdown when readonly', async () => {
+      slider.readonly = true;
+      await sendMouseToElement({ type: 'move', element: thumbs[1] });
       await sendMouse({ type: 'down' });
 
       expect(slider.hasAttribute('end-active')).to.be.false;

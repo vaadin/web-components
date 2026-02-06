@@ -335,7 +335,7 @@ class RangeSlider extends FieldMixin(
 
     const index = this._inputElements.indexOf(event.composedPath()[0]);
 
-    if (index !== -1) {
+    if (!this.readonly && index !== -1) {
       this.toggleAttribute('start-active', index === 0);
       this.toggleAttribute('end-active', index === 1);
       window.addEventListener('pointerup', this.__onPointerUp);

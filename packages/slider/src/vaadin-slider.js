@@ -234,7 +234,7 @@ class Slider extends FieldMixin(
   __onPointerDown(event) {
     super.__onPointerDown(event);
 
-    if (event.composedPath()[0] === this._inputElement) {
+    if (!this.readonly && event.composedPath()[0] === this._inputElement) {
       this.setAttribute('active', '');
       window.addEventListener('pointerup', this.__onPointerUp);
       window.addEventListener('pointercancel', this.__onPointerUp);
