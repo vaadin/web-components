@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/date-picker';
+    </script>
+    
+    <style>
+      html, body {
+        margin: 0;
+      }
+      
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        box-shadow: var(--aura-shadow-m);
+        background: white;
+      }
+    </style>
+  </head>
+
+  <body>
+  <header>
+    <h1>Vaadin DS Github Dashboard</h1>
+    <div class="actions">
+      <vaadin-date-picker label="Show data since"></vaadin-date-picker>
+      <vaadin-button>Refresh data</vaadin-button>
+    </div>
+  </header>
+    
+  </body>
+</html>

@@ -1,0 +1,4 @@
+[WARNING] Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information. @ http://localhost:8000/node_modules/@lit/reactive-element/development/reactive-element.js:49
+[LOG] Initial __effectiveI18n: {form: Object, errorMessage: Object} @ http://localhost:8000/dev/login-i18n-test.html:131
+[LOG] Initial __customI18n: {form: Object, errorMessage: Object} @ http://localhost:8000/dev/login-i18n-test.html:132
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8000/favicon.ico:0

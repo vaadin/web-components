@@ -1,0 +1,33 @@
+- generic:
+  - dialog "Title" [active]:
+    - generic [ref=e14]:
+      - generic:
+        - heading "Title" [level=2] [ref=e15]
+        - generic [ref=e16]:
+          - generic [ref=e17]: Header content
+          - button "close dialog" [ref=e18]:
+            - generic "close dialog" [ref=e21]:
+              - img [ref=e22]
+      - generic [ref=e25]:
+        - paragraph [ref=e26]: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.
+        - button "Open dialog 2" [ref=e27]:
+          - generic [ref=e29]:
+            - generic: Open dialog 2
+      - generic [ref=e30]:
+        - generic [ref=e31]: Footer content
+        - button "Action" [ref=e32]:
+          - generic [ref=e34]:
+            - generic: Action
+        - button "Action" [ref=e35]:
+          - generic [ref=e37]:
+            - generic: Action
+  - button "Open dialog 1":
+    - generic:
+      - generic:
+        - generic: Open dialog 1
+  - generic:
+    - button "Base"
+    - button "Lumo"
+    - button "Aura"
+    - button "Switch to dark mode":
+      - img

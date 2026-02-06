@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/tooltip';
+      import { isFocusable } from '@vaadin/grid/src/vaadin-grid-active-item-mixin.js';
+
+      const grid = document.querySelector('vaadin-grid');
+
+      grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+        // Let's have 100 root-level items and 5 items on every child level
+        const levelSize = parentItem ? 5 : 100;
+
+        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+          const indexInLevel = page * pageSize + i;
+
+          return {
+            name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+            children: true,
+          };
+        });
+
+        cb(pageItems, levelSize);
+      };
+
+      const tooltip = document.querySelector('[slot="tooltip"]');
+      tooltip.generator = ({ column, item }) => {
+        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
+      };
+
+      grid.querySelector('#button').renderer = (root) => {
+        if (root.firstElementChild) {
+          return;
+        }
+
+        const button = document.createElement('button');
+        button.textContent = 'Button';
+        button.addEventListener('click', () => {
+          console.log('cell button clicked');
+        });
+        root.append(button);
+      };
+
+      grid.querySelector('#checkbox').renderer = (root) => {
+        if (root.firstElementChild) {
+          return;
+        }
+
+        const checkbox = document.createElement('vaadin-checkbox');
+        checkbox.label = 'Checkbox';
+        root.append(checkbox);
+      };
+      
+      grid.rowDetailsRenderer = (root, grid, item) => {
+        if (!root.firstElementChild) {
+          const details = document.createElement('button');
+          details.textContent = `Details for ${item.name}`;
+          root.append(details);
+        }
+      };
+
+      let clickCount = 0;
+      grid.addEventListener('click', (e) => {
+        if (e.defaultPrevented) {
+          return;
+        }
+        const path = event.composedPath();
+        const idx = path.findIndex((node) => node.localName === 'td' || node.localName === 'th');
+        const cell = path[idx];
+        const content = path.slice(0, idx);
+        // Do not fire item click event if cell content contains focusable elements.
+        // Use this instead of event.target to detect cases like icon inside button.
+        // See https://github.com/vaadin/flow-components/issues/4065
+        if (
+          content.some((node) => {
+            // Ignore focus buttons that the component renders into cells in focus button mode on MacOS
+            const focusable = cell?._focusButton !== node && isFocusable(node);
+            return focusable || node instanceof HTMLLabelElement;
+          })
+        ) {
+          return;
+        }
+
+        const eventContext = grid.getEventContext(event);
+        if (!eventContext.item) {
+          return;
+        }
+        clickCount++;
+        console.log(`item-click ${clickCount}`);
+      });
+      
+      grid.addEventListener('active-item-changed', (e) => {
+        console.log(`active-item-changed: ${e.detail.value ? e.detail.value.name : null}`);
+        grid.detailsOpenedItems = e.detail.value ? [e.detail.value] : [];
+      });
+
+      grid.__fireClickOnSpace = true;
+      const fireClickOnSpace = document.getElementById('fire-click-on-space');
+      fireClickOnSpace.checked = grid.__fireClickOnSpace;
+      fireClickOnSpace.addEventListener('change', (e) => {
+        grid.__fireClickOnSpace = e.target.checked;
+      });
+    </script>
+
+    <vaadin-grid item-id-path="name">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
+      <vaadin-grid-column id="button" path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column id="checkbox" path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+
+      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
+    </vaadin-grid>
+
+    <br />
+
+    <label>
+      <input id="fire-click-on-space" type="checkbox" />
+      <span>Fire click on space</span>
+    </label>
+  </body>
+</html>

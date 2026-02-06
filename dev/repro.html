@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/confirm-dialog';
+
+      document.querySelector('vaadin-button').addEventListener('click', () => {
+        const dialog = document.createElement('vaadin-confirm-dialog');
+        dialog.header = 'Header';
+        dialog.message = 'Message';
+        dialog.cancelButtonVisible = true;
+        dialog.opened = true;
+        document.body.insertBefore(dialog, document.body.firstChild);
+      });
+    </script>
+    <style>
+      .container {
+        font-size: 64px;
+        line-height: 128px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-button>
+      Show dialog
+    </vaadin-button>
+    <div class="container">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+  </body>
+</html>

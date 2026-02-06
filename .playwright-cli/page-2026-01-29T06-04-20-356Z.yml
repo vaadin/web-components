@@ -1,0 +1,10 @@
+- generic [active] [ref=e1]:
+  - button "Open dialog 1" [ref=e2]:
+    - generic [ref=e4]:
+      - generic: Open dialog 1
+  - generic [ref=e5]:
+    - button "Base" [ref=e6] [cursor=pointer]
+    - button "Lumo" [ref=e7] [cursor=pointer]
+    - button "Aura" [ref=e8] [cursor=pointer]
+    - button "Switch to dark mode" [ref=e9] [cursor=pointer]:
+      - img [ref=e10]

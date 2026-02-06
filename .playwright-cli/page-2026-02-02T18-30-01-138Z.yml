@@ -1,0 +1,42 @@
+- generic [ref=e1]:
+  - heading "Login Overlay i18n Test" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - 'heading "Test: Set custom i18n, then empty object, then open" [level=2] [ref=e4]'
+    - paragraph [ref=e5]: "Expected: After setting empty i18n, the overlay should show default values (\"Log in\", \"Username\", \"Password\")"
+    - button "Run Test 1" [ref=e6]
+    - generic [ref=e7]: "After setting empty i18n {}: __effectiveI18n: { \"form\": { \"title\": \"Log in\", \"username\": \"Username\", \"password\": \"Password\", \"submit\": \"Log in\", \"forgotPassword\": \"Forgot password\" }, \"errorMessage\": { \"title\": \"Incorrect username or password\", \"message\": \"Check that you have entered the correct username and password and try again.\", \"username\": \"Username is required\", \"password\": \"Password is required\" } } __customI18n: {}"
+  - generic [ref=e8]:
+    - 'heading "Test: Set custom i18n before opening" [level=2] [ref=e9]'
+    - paragraph [ref=e10]: "Expected: Custom values should be displayed"
+    - button "Run Test 2" [ref=e11]
+    - generic [ref=e12]: "After setting custom i18n: __effectiveI18n: { \"form\": { \"title\": \"Custom Login Title\", \"username\": \"Custom Username\", \"password\": \"Custom Password\", \"submit\": \"Custom Submit\", \"forgotPassword\": \"Forgot password\" }, \"errorMessage\": { \"title\": \"Incorrect username or password\", \"message\": \"Check that you have entered the correct username and password and try again.\", \"username\": \"Username is required\", \"password\": \"Password is required\" } } __customI18n: { \"form\": { \"title\": \"Custom Login Title\", \"username\": \"Custom Username\", \"password\": \"Custom Password\", \"submit\": \"Custom Submit\" } }"
+  - generic [ref=e13]:
+    - 'heading "Test: Open with default i18n" [level=2] [ref=e14]'
+    - paragraph [ref=e15]: "Expected: Default values should be displayed"
+    - button "Run Test 3" [ref=e16]
+  - dialog "App name" [active]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - heading "App name" [level=1] [ref=e23]
+        - generic [ref=e24]: Application description
+      - region "Custom Login Title" [ref=e49]:
+        - heading "Custom Login Title" [level=2] [ref=e50]
+        - generic [ref=e28]:
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - generic: Custom Username
+              - generic [ref=e32]: "*"
+            - textbox "Custom Username" [ref=e51]
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - generic: Custom Password
+              - generic [ref=e38]: "*"
+            - generic [ref=e39]:
+              - textbox "Custom Password" [ref=e52]
+              - button "Show password" [ref=e42] [cursor=pointer]
+        - button "Custom Submit" [ref=e53] [cursor=pointer]:
+          - generic [ref=e45]:
+            - generic: Custom Submit
+        - button "Forgot password" [ref=e46] [cursor=pointer]:
+          - generic [ref=e48]:
+            - generic: Forgot password

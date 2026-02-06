@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popover Issue</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/popover';
+      import '@vaadin/vertical-layout';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-vertical-layout theme="spacing padding">
+      <!-- Row 1: openOnFocus=true, openOnHover=false -->
+      <vaadin-horizontal-layout theme="spacing">
+        <vaadin-button id="focus1">on focus 1</vaadin-button>
+        <vaadin-button id="focus2">on focus 2</vaadin-button>
+        <vaadin-button id="focus3">on focus 3</vaadin-button>
+      </vaadin-horizontal-layout>
+
+      <!-- Row 2: openOnFocus=false, openOnHover=true -->
+      <vaadin-horizontal-layout theme="spacing">
+        <vaadin-button id="hover1">on hover 1</vaadin-button>
+        <vaadin-button id="hover2">on hover 2</vaadin-button>
+        <vaadin-button id="hover3">on hover 3</vaadin-button>
+      </vaadin-horizontal-layout>
+
+      <!-- Row 3: openOnFocus=true, openOnHover=true -->
+      <vaadin-horizontal-layout theme="spacing">
+        <vaadin-button id="both1">on both 1</vaadin-button>
+        <vaadin-button id="both2">on both 2</vaadin-button>
+        <vaadin-button id="both3">on both 3</vaadin-button>
+      </vaadin-horizontal-layout>
+    </vaadin-vertical-layout>
+
+    <!-- Popovers for focus row -->
+    <vaadin-popover for="focus1" id="popover-focus1"></vaadin-popover>
+    <vaadin-popover for="focus2" id="popover-focus2"></vaadin-popover>
+    <vaadin-popover for="focus3" id="popover-focus3"></vaadin-popover>
+
+    <!-- Popovers for hover row -->
+    <vaadin-popover for="hover1" id="popover-hover1"></vaadin-popover>
+    <vaadin-popover for="hover2" id="popover-hover2"></vaadin-popover>
+    <vaadin-popover for="hover3" id="popover-hover3"></vaadin-popover>
+
+    <!-- Popovers for both row -->
+    <vaadin-popover for="both1" id="popover-both1"></vaadin-popover>
+    <vaadin-popover for="both2" id="popover-both2"></vaadin-popover>
+    <vaadin-popover for="both3" id="popover-both3"></vaadin-popover>
+
+    <script type="module">
+      // Configure popovers with renderer and triggers
+      function setupPopover(id, trigger) {
+        const popover = document.querySelector(`#${id}`);
+        popover.trigger = trigger;
+        popover.renderer = (root) => {
+          if (!root.firstChild) {
+            const label = document.createElement('span');
+            label.textContent = 'tooltip';
+            root.appendChild(label);
+          }
+        };
+      }
+
+      // Focus only popovers
+      setupPopover('popover-focus1', ['focus']);
+      setupPopover('popover-focus2', ['focus']);
+      setupPopover('popover-focus3', ['focus']);
+
+      // Hover only popovers
+      setupPopover('popover-hover1', ['hover']);
+      setupPopover('popover-hover2', ['hover']);
+      setupPopover('popover-hover3', ['hover']);
+
+      // Both focus and hover popovers
+      setupPopover('popover-both1', ['focus', 'hover']);
+      setupPopover('popover-both2', ['focus', 'hover']);
+      setupPopover('popover-both3', ['focus', 'hover']);
+    </script>
+  </body>
+</html>

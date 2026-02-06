@@ -1,0 +1,41 @@
+- generic [ref=e1]:
+  - heading "Login Overlay i18n Test" [level=1] [ref=e2]
+  - generic [ref=e3]:
+    - 'heading "Test 1: Set custom header i18n, then empty object, then open" [level=2] [ref=e4]'
+    - paragraph [ref=e5]: "Expected: After setting empty i18n, the overlay header should show default \"App name\" (not \"Custom Header Title\")"
+    - button "Run Test 1" [ref=e6]
+    - generic [ref=e7]: "Step 1 - After setting custom header i18n: overlay.title: Custom Header Title overlay.description: Custom Header Description __effectiveI18n.header: {\"title\":\"Custom Header Title\",\"description\":\"Custom Header Description\"} Step 2 - After setting empty i18n {}: overlay.title: Custom Header Title overlay.description: Custom Header Description __effectiveI18n.header: undefined"
+  - generic [ref=e8]:
+    - 'heading "Test 2: Set custom header i18n before opening" [level=2] [ref=e9]'
+    - paragraph [ref=e10]: "Expected: Custom header title/description should be displayed"
+    - button "Run Test 2" [ref=e11]
+  - generic [ref=e13]:
+    - 'heading "Test 3: Fresh overlay default state" [level=2] [ref=e14]'
+    - paragraph [ref=e15]: "Expected: Default values should be displayed"
+    - button "Run Test 3" [ref=e16]
+  - dialog "Custom Header Title" [active]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - heading "Custom Header Title" [level=1] [ref=e23]
+        - generic [ref=e24]: Custom Header Description
+      - region "Log in" [ref=e26]:
+        - heading "Log in" [level=2] [ref=e27]
+        - generic [ref=e28]:
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - generic: Username
+              - generic [ref=e32]: "*"
+            - textbox "Username" [ref=e34]
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - generic: Password
+              - generic [ref=e38]: "*"
+            - generic [ref=e39]:
+              - textbox "Password" [ref=e40]
+              - button "Show password" [ref=e42] [cursor=pointer]
+        - button "Log in" [ref=e43] [cursor=pointer]:
+          - generic [ref=e45]:
+            - generic: Log in
+        - button "Forgot password" [ref=e46] [cursor=pointer]:
+          - generic [ref=e48]:
+            - generic: Forgot password

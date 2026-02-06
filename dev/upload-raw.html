@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/radio-group';
+      import '@vaadin/upload';
+      
+      const upload = document.querySelector('vaadin-upload');
+      upload.addEventListener('upload-request', (event) => {
+        console.log('Upload request event:', event.detail);
+      });
+      upload.addEventListener('upload-success', (event) => {
+        console.log('Upload success event:', event.detail);
+      });
+    </script>
+  </head>
+
+  <body>
+    <vaadin-upload target="http://localhost:8080/api/upload" upload-format="raw"></vaadin-upload>
+  </body>
+</html>

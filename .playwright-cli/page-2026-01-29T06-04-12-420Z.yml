@@ -1,0 +1,240 @@
+- generic [active] [ref=e1]:
+  - heading "Web Component development pages" [level=1] [ref=e2]
+  - heading "Sub pages" [level=2] [ref=e3]
+  - list [ref=e4]:
+    - listitem [ref=e5]:
+      - link "charts/" [ref=e6] [cursor=pointer]:
+        - /url: charts/
+    - listitem [ref=e7]:
+      - link "playground/" [ref=e8] [cursor=pointer]:
+        - /url: playground/
+  - heading "Pages" [level=2] [ref=e9]
+  - list [ref=e10]:
+    - listitem [ref=e11]:
+      - link "accordion.html" [ref=e12] [cursor=pointer]:
+        - /url: accordion.html
+    - listitem [ref=e13]:
+      - link "app-layout.html" [ref=e14] [cursor=pointer]:
+        - /url: app-layout.html
+    - listitem [ref=e15]:
+      - link "aura.html" [ref=e16] [cursor=pointer]:
+        - /url: aura.html
+    - listitem [ref=e17]:
+      - link "avatar-group.html" [ref=e18] [cursor=pointer]:
+        - /url: avatar-group.html
+    - listitem [ref=e19]:
+      - link "avatar.html" [ref=e20] [cursor=pointer]:
+        - /url: avatar.html
+    - listitem [ref=e21]:
+      - link "baseline.html" [ref=e22] [cursor=pointer]:
+        - /url: baseline.html
+    - listitem [ref=e23]:
+      - link "button.html" [ref=e24] [cursor=pointer]:
+        - /url: button.html
+    - listitem [ref=e25]:
+      - link "card.html" [ref=e26] [cursor=pointer]:
+        - /url: card.html
+    - listitem [ref=e27]:
+      - link "checkbox-group.html" [ref=e28] [cursor=pointer]:
+        - /url: checkbox-group.html
+    - listitem [ref=e29]:
+      - link "checkbox.html" [ref=e30] [cursor=pointer]:
+        - /url: checkbox.html
+    - listitem [ref=e31]:
+      - link "combo-box.html" [ref=e32] [cursor=pointer]:
+        - /url: combo-box.html
+    - listitem [ref=e33]:
+      - link "confirm-dialog.html" [ref=e34] [cursor=pointer]:
+        - /url: confirm-dialog.html
+    - listitem [ref=e35]:
+      - link "context-menu.html" [ref=e36] [cursor=pointer]:
+        - /url: context-menu.html
+    - listitem [ref=e37]:
+      - link "crud.html" [ref=e38] [cursor=pointer]:
+        - /url: crud.html
+    - listitem [ref=e39]:
+      - link "custom-field.html" [ref=e40] [cursor=pointer]:
+        - /url: custom-field.html
+    - listitem [ref=e41]:
+      - link "dashboard-layout.html" [ref=e42] [cursor=pointer]:
+        - /url: dashboard-layout.html
+    - listitem [ref=e43]:
+      - link "dashboard-mock.html" [ref=e44] [cursor=pointer]:
+        - /url: dashboard-mock.html
+    - listitem [ref=e45]:
+      - link "dashboard.html" [ref=e46] [cursor=pointer]:
+        - /url: dashboard.html
+    - listitem [ref=e47]:
+      - link "date-picker.html" [ref=e48] [cursor=pointer]:
+        - /url: date-picker.html
+    - listitem [ref=e49]:
+      - link "date-time-picker.html" [ref=e50] [cursor=pointer]:
+        - /url: date-time-picker.html
+    - listitem [ref=e51]:
+      - link "details.html" [ref=e52] [cursor=pointer]:
+        - /url: details.html
+    - listitem [ref=e53]:
+      - link "dialog.html" [ref=e54] [cursor=pointer]:
+        - /url: dialog.html
+    - listitem [ref=e55]:
+      - link "email-field.html" [ref=e56] [cursor=pointer]:
+        - /url: email-field.html
+    - listitem [ref=e57]:
+      - link "field-highlighter.html" [ref=e58] [cursor=pointer]:
+        - /url: field-highlighter.html
+    - listitem [ref=e59]:
+      - link "focus-ring.html" [ref=e60] [cursor=pointer]:
+        - /url: focus-ring.html
+    - listitem [ref=e61]:
+      - link "form-layout-auto-responsive.html" [ref=e62] [cursor=pointer]:
+        - /url: form-layout-auto-responsive.html
+    - listitem [ref=e63]:
+      - link "form-layout.html" [ref=e64] [cursor=pointer]:
+        - /url: form-layout.html
+    - listitem [ref=e65]:
+      - link "grid-item-click.html" [ref=e66] [cursor=pointer]:
+        - /url: grid-item-click.html
+    - listitem [ref=e67]:
+      - link "grid-performance.html" [ref=e68] [cursor=pointer]:
+        - /url: grid-performance.html
+    - listitem [ref=e69]:
+      - link "grid-pro.html" [ref=e70] [cursor=pointer]:
+        - /url: grid-pro.html
+    - listitem [ref=e71]:
+      - link "grid-scroll-to-column.html" [ref=e72] [cursor=pointer]:
+        - /url: grid-scroll-to-column.html
+    - listitem [ref=e73]:
+      - link "grid.html" [ref=e74] [cursor=pointer]:
+        - /url: grid.html
+    - listitem [ref=e75]:
+      - link "horizontal-layout.html" [ref=e76] [cursor=pointer]:
+        - /url: horizontal-layout.html
+    - listitem [ref=e77]:
+      - link "icon.html" [ref=e78] [cursor=pointer]:
+        - /url: icon.html
+    - listitem [ref=e79]:
+      - link "input-container.html" [ref=e80] [cursor=pointer]:
+        - /url: input-container.html
+    - listitem [ref=e81]:
+      - link "integer-field.html" [ref=e82] [cursor=pointer]:
+        - /url: integer-field.html
+    - listitem [ref=e83]:
+      - link "list-box.html" [ref=e84] [cursor=pointer]:
+        - /url: list-box.html
+    - listitem [ref=e85]:
+      - link "login-form.html" [ref=e86] [cursor=pointer]:
+        - /url: login-form.html
+    - listitem [ref=e87]:
+      - link "login-overlay.html" [ref=e88] [cursor=pointer]:
+        - /url: login-overlay.html
+    - listitem [ref=e89]:
+      - link "map.html" [ref=e90] [cursor=pointer]:
+        - /url: map.html
+    - listitem [ref=e91]:
+      - link "markdown.html" [ref=e92] [cursor=pointer]:
+        - /url: markdown.html
+    - listitem [ref=e93]:
+      - link "master-detail-layout.html" [ref=e94] [cursor=pointer]:
+        - /url: master-detail-layout.html
+    - listitem [ref=e95]:
+      - link "menu-bar.html" [ref=e96] [cursor=pointer]:
+        - /url: menu-bar.html
+    - listitem [ref=e97]:
+      - link "messages-ai-chat.html" [ref=e98] [cursor=pointer]:
+        - /url: messages-ai-chat.html
+    - listitem [ref=e99]:
+      - link "messages.html" [ref=e100] [cursor=pointer]:
+        - /url: messages.html
+    - listitem [ref=e101]:
+      - link "multi-select-combo-box.html" [ref=e102] [cursor=pointer]:
+        - /url: multi-select-combo-box.html
+    - listitem [ref=e103]:
+      - link "notification.html" [ref=e104] [cursor=pointer]:
+        - /url: notification.html
+    - listitem [ref=e105]:
+      - link "number-field.html" [ref=e106] [cursor=pointer]:
+        - /url: number-field.html
+    - listitem [ref=e107]:
+      - link "password-field.html" [ref=e108] [cursor=pointer]:
+        - /url: password-field.html
+    - listitem [ref=e109]:
+      - link "popover-drag-drop.html" [ref=e110] [cursor=pointer]:
+        - /url: popover-drag-drop.html
+    - listitem [ref=e111]:
+      - link "popover-issue.html" [ref=e112] [cursor=pointer]:
+        - /url: popover-issue.html
+    - listitem [ref=e113]:
+      - link "popover.html" [ref=e114] [cursor=pointer]:
+        - /url: popover.html
+    - listitem [ref=e115]:
+      - link "progress-bar.html" [ref=e116] [cursor=pointer]:
+        - /url: progress-bar.html
+    - listitem [ref=e117]:
+      - link "radio-group.html" [ref=e118] [cursor=pointer]:
+        - /url: radio-group.html
+    - listitem [ref=e119]:
+      - link "range-slider.html" [ref=e120] [cursor=pointer]:
+        - /url: range-slider.html
+    - listitem [ref=e121]:
+      - link "repro.html" [ref=e122] [cursor=pointer]:
+        - /url: repro.html
+    - listitem [ref=e123]:
+      - link "rich-text-editor.html" [ref=e124] [cursor=pointer]:
+        - /url: rich-text-editor.html
+    - listitem [ref=e125]:
+      - link "scroller.html" [ref=e126] [cursor=pointer]:
+        - /url: scroller.html
+    - listitem [ref=e127]:
+      - link "select.html" [ref=e128] [cursor=pointer]:
+        - /url: select.html
+    - listitem [ref=e129]:
+      - link "side-nav.html" [ref=e130] [cursor=pointer]:
+        - /url: side-nav.html
+    - listitem [ref=e131]:
+      - link "slider.html" [ref=e132] [cursor=pointer]:
+        - /url: slider.html
+    - listitem [ref=e133]:
+      - link "split-layout.html" [ref=e134] [cursor=pointer]:
+        - /url: split-layout.html
+    - listitem [ref=e135]:
+      - link "tabs.html" [ref=e136] [cursor=pointer]:
+        - /url: tabs.html
+    - listitem [ref=e137]:
+      - link "tabsheet.html" [ref=e138] [cursor=pointer]:
+        - /url: tabsheet.html
+    - listitem [ref=e139]:
+      - link "text-area.html" [ref=e140] [cursor=pointer]:
+        - /url: text-area.html
+    - listitem [ref=e141]:
+      - link "text-field.html" [ref=e142] [cursor=pointer]:
+        - /url: text-field.html
+    - listitem [ref=e143]:
+      - link "time-picker.html" [ref=e144] [cursor=pointer]:
+        - /url: time-picker.html
+    - listitem [ref=e145]:
+      - link "tooltip.html" [ref=e146] [cursor=pointer]:
+        - /url: tooltip.html
+    - listitem [ref=e147]:
+      - link "upload-manager.html" [ref=e148] [cursor=pointer]:
+        - /url: upload-manager.html
+    - listitem [ref=e149]:
+      - link "upload-raw.html" [ref=e150] [cursor=pointer]:
+        - /url: upload-raw.html
+    - listitem [ref=e151]:
+      - link "upload.html" [ref=e152] [cursor=pointer]:
+        - /url: upload.html
+    - listitem [ref=e153]:
+      - link "vertical-layout.html" [ref=e154] [cursor=pointer]:
+        - /url: vertical-layout.html
+    - listitem [ref=e155]:
+      - link "virtual-list.html" [ref=e156] [cursor=pointer]:
+        - /url: virtual-list.html
+    - listitem [ref=e157]:
+      - link "virtualizer.html" [ref=e158] [cursor=pointer]:
+        - /url: virtualizer.html
+  - generic [ref=e159]:
+    - button "Base" [ref=e160] [cursor=pointer]
+    - button "Lumo" [ref=e161] [cursor=pointer]
+    - button "Aura" [ref=e162] [cursor=pointer]
+    - button "Switch to dark mode" [ref=e163] [cursor=pointer]:
+      - img [ref=e164]

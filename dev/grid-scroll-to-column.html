@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Scroll To Column</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/grid/vaadin-grid.js';
+      import '@vaadin/grid/vaadin-grid-column.js';
+      import '@vaadin/integer-field';
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+
+      const grid = document.querySelector('vaadin-grid');
+      const columns = document.querySelectorAll('vaadin-grid-column');
+      const indexInput = document.querySelector('#column-index');
+      const scrollButton = document.querySelector('#scroll-button');
+      const frozenFirstCheckbox = document.querySelector('#frozen-first');
+      const frozenLastCheckbox = document.querySelector('#frozen-last');
+      const rtlCheckbox = document.querySelector('#rtl');
+      const reverseOrderCheckbox = document.querySelector('#reverse-order');
+      const hideOddCheckbox = document.querySelector('#hide-odd');
+      const lazyColumnsCheckbox = document.querySelector('#lazy-columns');
+
+      // Generate items
+      const items = [];
+      for (let i = 0; i < 100; i++) {
+        const item = {};
+        for (let j = 0; j < 20; j++) {
+          item[`col${j}`] = `Row ${i} Col ${j}`;
+        }
+        items.push(item);
+      }
+      grid.items = items;
+
+      // Scroll to column
+      scrollButton.addEventListener('click', () => {
+        const index = parseInt(indexInput.value, 10);
+        if (!isNaN(index)) {
+          grid.scrollToColumn(index);
+        }
+      });
+
+      // Frozen first column
+      frozenFirstCheckbox.addEventListener('change', (e) => {
+        columns[1].frozen = e.target.checked;
+      });
+
+      // Frozen last column
+      frozenLastCheckbox.addEventListener('change', (e) => {
+        columns[columns.length - 1].frozenToEnd = e.target.checked;
+      });
+
+      // RTL toggle
+      rtlCheckbox.addEventListener('change', (e) => {
+        document.documentElement.setAttribute('dir', e.target.checked ? 'rtl' : 'ltr');
+      });
+
+      // Reverse column order
+      reverseOrderCheckbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          // Swap orders to reverse
+          const orders = Array.from(columns).map((col) => col._order);
+          columns.forEach((col, i) => {
+            col._order = orders[columns.length - 1 - i];
+          });
+        } else {
+          // Restore original order
+          columns.forEach((col, i) => {
+            col._order = (i + 1) * 10000000;
+          });
+        }
+        // Trigger re-render
+        grid._updateColumnTree();
+      });
+
+      // Hide odd columns
+      hideOddCheckbox.addEventListener('change', (e) => {
+        columns.forEach((col, i) => {
+          if (i % 2 === 1) {
+            col.hidden = e.target.checked;
+          }
+        });
+      });
+
+      // Lazy column rendering
+      lazyColumnsCheckbox.addEventListener('change', (e) => {
+        grid.columnRendering = e.target.checked ? 'lazy' : 'eager';
+      });
+    </script>
+    <style>
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 16px;
+        background: var(--lumo-contrast-5pct);
+        border-radius: 8px;
+      }
+
+      .control-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      vaadin-grid {
+        width: 600px;
+        height: 400px;
+      }
+
+      .info {
+        margin-top: 16px;
+        padding: 16px;
+        background: var(--lumo-contrast-5pct);
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Grid Scroll To Column</h1>
+
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-integer-field id="column-index" label="Column index" value="10" min="0" max="19" step-buttons-visible></vaadin-integer-field>
+        <vaadin-button id="scroll-button" theme="primary">Scroll to Column</vaadin-button>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox id="frozen-first" label="Freeze first column"></vaadin-checkbox>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox id="frozen-last" label="Freeze last column (to end)"></vaadin-checkbox>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox id="rtl" label="RTL"></vaadin-checkbox>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox id="reverse-order" label="Reverse column order"></vaadin-checkbox>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox id="hide-odd" label="Hide odd columns"></vaadin-checkbox>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox id="lazy-columns" label="Lazy column rendering"></vaadin-checkbox>
+      </div>
+    </div>
+
+    <vaadin-grid>
+      <vaadin-grid-column path="col0" header="Column 0"></vaadin-grid-column>
+      <vaadin-grid-column path="col1" header="Column 1"></vaadin-grid-column>
+      <vaadin-grid-column path="col2" header="Column 2"></vaadin-grid-column>
+      <vaadin-grid-column path="col3" header="Column 3"></vaadin-grid-column>
+      <vaadin-grid-column path="col4" header="Column 4"></vaadin-grid-column>
+      <vaadin-grid-column path="col5" header="Column 5"></vaadin-grid-column>
+      <vaadin-grid-column path="col6" header="Column 6"></vaadin-grid-column>
+      <vaadin-grid-column path="col7" header="Column 7"></vaadin-grid-column>
+      <vaadin-grid-column path="col8" header="Column 8"></vaadin-grid-column>
+      <vaadin-grid-column path="col9" header="Column 9"></vaadin-grid-column>
+      <vaadin-grid-column path="col10" header="Column 10"></vaadin-grid-column>
+      <vaadin-grid-column path="col11" header="Column 11"></vaadin-grid-column>
+      <vaadin-grid-column path="col12" header="Column 12"></vaadin-grid-column>
+      <vaadin-grid-column path="col13" header="Column 13"></vaadin-grid-column>
+      <vaadin-grid-column path="col14" header="Column 14"></vaadin-grid-column>
+      <vaadin-grid-column path="col15" header="Column 15"></vaadin-grid-column>
+      <vaadin-grid-column path="col16" header="Column 16"></vaadin-grid-column>
+      <vaadin-grid-column path="col17" header="Column 17"></vaadin-grid-column>
+      <vaadin-grid-column path="col18" header="Column 18"></vaadin-grid-column>
+      <vaadin-grid-column path="col19" header="Column 19"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <div class="info">
+      <strong>Notes:</strong>
+      <ul>
+        <li>Column index refers to visible columns in visual order</li>
+        <li>Hidden columns are skipped in index calculation</li>
+        <li>When "Hide odd columns" is checked, index 1 = Column 2, index 2 = Column 4, etc.</li>
+        <li>When "Reverse column order" is checked, index 0 = Column 19, index 19 = Column 0</li>
+        <li>Frozen columns are always visible, scrolling to them has no effect</li>
+        <li>Check console for warnings on invalid inputs</li>
+      </ul>
+    </div>
+  </body>
+</html>

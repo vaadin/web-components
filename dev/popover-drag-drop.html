@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popover</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/checkbox-group';
+      import '@vaadin/popover';
+      import '@vaadin/radio-group';
+    </script>
+  </head>
+
+  <body>
+    <style>
+      #wrapper {
+        width: 100%;
+        height: 400px;
+        position: relative;
+      }
+
+      #target {
+        width: 50px;
+        height: 50px;
+        background: #1676f3;
+        cursor: grab;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 4px;
+      }
+
+      #target:active {
+        cursor: grabbing;
+      }
+    </style>
+
+    <vaadin-radio-group id="positionGroup" label="Tooltip Position" theme="horizontal" value="bottom">
+      <vaadin-radio-button value="bottom-start" label="Bottom Start"></vaadin-radio-button>
+      <vaadin-radio-button value="bottom" label="Bottom"></vaadin-radio-button>
+      <vaadin-radio-button value="bottom-end" label="Bottom End"></vaadin-radio-button>
+      <vaadin-radio-button value="start-top" label="Start Top"></vaadin-radio-button>
+      <vaadin-radio-button value="start" label="Start"></vaadin-radio-button>
+      <vaadin-radio-button value="start-bottom" label="Start Bottom"></vaadin-radio-button>
+      <vaadin-radio-button value="top-start" label="Top Start"></vaadin-radio-button>
+      <vaadin-radio-button value="top" label="Top"></vaadin-radio-button>
+      <vaadin-radio-button value="top-end" label="Top End"></vaadin-radio-button>
+      <vaadin-radio-button value="end-top" label="End Top"></vaadin-radio-button>
+      <vaadin-radio-button value="end" label="End"></vaadin-radio-button>
+      <vaadin-radio-button value="end-bottom" label="End Bottom"></vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <vaadin-checkbox-group id="triggerGroup" label="Trigger" theme="horizontal">
+      <vaadin-checkbox value="click" label="Click"></vaadin-checkbox>
+      <vaadin-checkbox value="focus" label="Focus"></vaadin-checkbox>
+      <vaadin-checkbox value="hover" label="Hover"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+
+    <div id="wrapper">
+      <div id="target"></div>
+      <vaadin-popover for="target" theme="arrow" id="popover" position="bottom"></vaadin-popover>
+    </div>
+
+    <script type="module">
+      const popover = document.querySelector('vaadin-popover');
+      const radioGroup = document.querySelector('#positionGroup');
+
+      radioGroup.addEventListener('change', (e) => {
+        popover.position = e.target.value;
+      });
+
+      const checkboxGroup = document.querySelector('#triggerGroup');
+      checkboxGroup.value = ['click'];
+
+      checkboxGroup.addEventListener('change', (e) => {
+        popover.trigger = checkboxGroup.value;
+      });
+
+      popover.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+
+        popover.innerHTML = `This is some long popover content to demonstrate positioning`;
+      };
+
+      // Drag functionality
+      const target = document.querySelector('#target');
+      const wrapper = document.querySelector('#wrapper');
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      target.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const targetRect = target.getBoundingClientRect();
+        const wrapperRect = wrapper.getBoundingClientRect();
+        offsetX = e.clientX - targetRect.left;
+        offsetY = e.clientY - targetRect.top;
+        // Set initial position based on current visual position relative to wrapper
+        target.style.left = `${targetRect.left - wrapperRect.left}px`;
+        target.style.top = `${targetRect.top - wrapperRect.top}px`;
+        target.style.transform = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        target.style.left = `${e.clientX - wrapperRect.left - offsetX}px`;
+        target.style.top = `${e.clientY - wrapperRect.top - offsetY}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    </script>
+  </body>
+</html>
