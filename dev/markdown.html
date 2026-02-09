@@ -12,32 +12,157 @@
 
       const markdown = document.querySelector('vaadin-markdown');
       markdown.content = `
-# H1 – Main Title
+# Vaadin Adventures 🚀
+## Building UIs with Style
+### A Fun, Practical Markdown Showcase
+#### Powered by Java, Web Components, and ☕
+##### Now With Extra Components
+###### (Yes, even H6 matters)
 
-## H2 – Section Title
+---
 
-### H3 – Sub-section
+## Introduction
 
-Plain paragraph text with **bold**, *italic*, ***bold-italic***, ~~strikethrough~~, and \`inline code\`.
+Welcome to **Vaadin Adventures**, where *server-side logic* meets **frontend magic**.
+This article exists to demonstrate **everything Markdown can do**—while Vaadin components cheer from the sidelines.
 
-> Blockquote:  
-> This line should render as a quoted paragraph.
+Vaadin lets you write **Java**, render **HTML**, and feel like a **frontend wizard** without touching JavaScript (unless you *want* to).
 
-1. First ordered item  
-2. Second ordered item  
-   1. Nested ordered item
+---
 
-- Unordered list item  
-  - Nested unordered item
+## Text Formatting
 
-\`\`\`js
-// Fenced code block with syntax highlighting
-function greet(name = "world") {
-  console.log(\`Hello, ${name}!\`);
+You can make text *italic*, **bold**, or ***bold and italic***.
+
+You can also ~~break~~ refactor things safely with **Flow**.
+
+Inline code looks like this: \`new Button("Click me!")\`
+
+---
+
+## Blockquote Wisdom 🧙‍♂️
+
+> “With great components comes great responsibility.”
+>
+> — *A Vaadin Developer*
+
+Nested thoughts:
+
+> Vaadin is great
+> > Especially when combined with Spring Boot
+
+---
+
+## Lists of Components
+
+### Unordered List
+
+- Button
+- Grid
+- FormLayout
+  - TextField
+  - ComboBox
+  - DatePicker
+
+### Ordered List
+
+1. Create a Vaadin project
+2. Add components
+3. Deploy
+4. Celebrate 🎉
+
+---
+
+## Task List (GFM)
+
+- [x] Install Vaadin
+- [x] Create UI
+- [ ] Refactor CSS
+- [ ] Add dark mode 🌙
+
+---
+
+## Links
+
+Inline link to the official site:
+[Vaadin Framework](https://vaadin.com)
+
+Reference-style link to Flow docs:
+[Vaadin Flow][flow]
+
+[flow]: https://vaadin.com/flow
+
+---
+
+## Images
+
+A Vaadin-friendly placeholder image:
+
+<figure>
+
+![Vaadin UI Placeholder](https://placehold.co/1200x675/0433ff/ffffff.jpg?text=Vaadin%20UI&font=inter)
+
+<figcaption>This image has a bright blue background with the text "Vaadin UI" written in a large, white font.</figcaption>
+</figure>
+
+---
+
+## Code Blocks
+
+### Java (Vaadin Flow)
+
+\`\`\`java
+Button button = new Button("Click me!", event ->
+    Notification.show("Hello from Vaadin!")
+);
+add(button);
+\`\`\`
+
+### CSS (Lumo Vibes)
+
+\`\`\`css
+vaadin-button {
+  border-radius: var(--lumo-border-radius-l);
 }
 \`\`\`
+
+---
+
+## Tables
+
+| Component     | Purpose        | Fun Level |
+|---------------|----------------|-----------|
+| Button        | Click things   | ⭐⭐⭐⭐     |
+| Grid          | Display data   | ⭐⭐⭐⭐⭐    |
+| Dialog        | Surprise users | ⭐⭐⭐⭐     |
+| Notification  | Gentle nagging | ⭐⭐⭐      |
+
+---
+
+## Escaping Characters
+
+You can show \`<vaadin-grid>\` without rendering it.
+You can escape \`*\`, \`_\`, and backticks \\\` safely.
+
+---
+
+## Final Thoughts
+
+If Markdown were a Vaadin component, it would be:
+
+  - Declarative
+    - Developer-friendly
+    - Surprisingly powerful
+
+Thanks for scrolling — may your **UIs be responsive** and your **builds stay green** ✅
 `;
     </script>
+    <style>
+      vaadin-markdown {
+        max-width: 70ch;
+        margin: 0 auto;
+      }
+    </style>
   </head>
 
   <body>
