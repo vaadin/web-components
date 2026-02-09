@@ -33,15 +33,6 @@ class SliderBubble extends ThemePropertyMixin(PolylitMixin(LitElement)) {
   static get properties() {
     return {
       /**
-       * Whether the bubble is active.
-       */
-      active: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-      },
-
-      /**
        * The thumb element next to which the overlay should be aligned.
        */
       positionTarget: {
@@ -67,7 +58,6 @@ class SliderBubble extends ThemePropertyMixin(PolylitMixin(LitElement)) {
         .owner="${this}"
         .opened="${this.opened}"
         .positionTarget="${this.positionTarget}"
-        ?active="${this.active}"
         theme="${ifDefined(this._theme)}"
         vertical-align="bottom"
         no-vertical-overlap

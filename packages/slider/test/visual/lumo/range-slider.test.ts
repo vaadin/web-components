@@ -173,48 +173,6 @@ describe('range-slider', () => {
       await sendMouse({ type: 'down' });
       await visualDiff(div, 'active-end');
     });
-
-    it('contrast active start', async () => {
-      element.setAttribute('theme', 'contrast');
-      await sendMouseToElement({ type: 'move', element: thumbs[0] });
-      await sendMouse({ type: 'down' });
-      await visualDiff(div, 'theme-contrast-active-start');
-    });
-
-    it('contrast active end', async () => {
-      element.setAttribute('theme', 'contrast');
-      await sendMouseToElement({ type: 'move', element: thumbs[1] });
-      await sendMouse({ type: 'down' });
-      await visualDiff(div, 'theme-contrast-active-end');
-    });
-
-    it('success active start', async () => {
-      element.setAttribute('theme', 'success');
-      await sendMouseToElement({ type: 'move', element: thumbs[0] });
-      await sendMouse({ type: 'down' });
-      await visualDiff(div, 'theme-success-active-start');
-    });
-
-    it('success active end', async () => {
-      element.setAttribute('theme', 'success');
-      await sendMouseToElement({ type: 'move', element: thumbs[1] });
-      await sendMouse({ type: 'down' });
-      await visualDiff(div, 'theme-success-active-end');
-    });
-
-    it('error active start', async () => {
-      element.setAttribute('theme', 'error');
-      await sendMouseToElement({ type: 'move', element: thumbs[0] });
-      await sendMouse({ type: 'down' });
-      await visualDiff(div, 'theme-error-active-start');
-    });
-
-    it('error active end', async () => {
-      element.setAttribute('theme', 'error');
-      await sendMouseToElement({ type: 'move', element: thumbs[1] });
-      await sendMouse({ type: 'down' });
-      await visualDiff(div, 'theme-error-active-end');
-    });
   });
 
   describe('RTL', () => {
