@@ -86,4 +86,47 @@ describe('vaadin-slider - keyboard input', () => {
     await sendKeys({ press: 'ArrowRight' });
     expect(slider.value).to.equal(0);
   });
+
+  it('should increase value on PageUp', async () => {
+    await sendKeys({ press: 'PageUp' });
+    expect(slider.value).to.equal(10);
+  });
+
+  it('should decrease value on PageDown', async () => {
+    slider.value = 50;
+    await sendKeys({ press: 'PageDown' });
+    expect(slider.value).to.equal(40);
+  });
+
+  it('should set value to min on Home', async () => {
+    slider.value = 50;
+    await sendKeys({ press: 'Home' });
+    expect(slider.value).to.equal(0);
+  });
+
+  it('should set value to max on End', async () => {
+    await sendKeys({ press: 'End' });
+    expect(slider.value).to.equal(100);
+  });
+
+  it('should not increase value past max on PageUp', async () => {
+    slider.value = 95;
+    await sendKeys({ press: 'PageUp' });
+    expect(slider.value).to.equal(100);
+  });
+
+  it('should not decrease value past min on PageDown', async () => {
+    slider.value = 5;
+    await sendKeys({ press: 'PageDown' });
+    expect(slider.value).to.equal(0);
+  });
+
+  ['PageUp', 'PageDown', 'Home', 'End'].forEach((key) => {
+    it(`should not change value on ${key} when readonly`, async () => {
+      slider.readonly = true;
+      slider.value = 50;
+      await sendKeys({ press: key });
+      expect(slider.value).to.equal(50);
+    });
+  });
 });

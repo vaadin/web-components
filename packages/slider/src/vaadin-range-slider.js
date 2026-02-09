@@ -645,8 +645,8 @@ class RangeSlider extends FieldMixin(
 
   /** @private */
   __onKeyDown(event) {
-    const prevKeys = ['ArrowLeft', 'ArrowDown'];
-    const nextKeys = ['ArrowRight', 'ArrowUp'];
+    const prevKeys = ['ArrowLeft', 'ArrowDown', 'PageDown', 'Home'];
+    const nextKeys = ['ArrowRight', 'ArrowUp', 'PageUp', 'End'];
 
     const isNextKey = nextKeys.includes(event.key);
     const isPrevKey = prevKeys.includes(event.key);

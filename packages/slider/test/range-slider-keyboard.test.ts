@@ -92,6 +92,41 @@ describe('vaadin-range-slider - keyboard input', () => {
       await sendKeys({ press: 'ArrowRight' });
       expect(spy).to.be.calledOnce;
     });
+
+    it('should increase lower value on PageUp', async () => {
+      await sendKeys({ press: 'PageUp' });
+      expect(slider.value).to.deep.equal([10, 100]);
+    });
+
+    it('should decrease lower value on PageDown', async () => {
+      slider.value = [50, 100];
+      await sendKeys({ press: 'PageDown' });
+      expect(slider.value).to.deep.equal([40, 100]);
+    });
+
+    it('should set lower value to min on Home', async () => {
+      slider.value = [50, 100];
+      await sendKeys({ press: 'Home' });
+      expect(slider.value).to.deep.equal([0, 100]);
+    });
+
+    it('should set lower value up to upper boundary on End', async () => {
+      slider.value = [50, 80];
+      await sendKeys({ press: 'End' });
+      expect(slider.value).to.deep.equal([80, 80]);
+    });
+
+    it('should suppress PageUp when values are equal', async () => {
+      slider.value = [10, 10];
+      await sendKeys({ press: 'PageUp' });
+      expect(slider.value).to.deep.equal([10, 10]);
+    });
+
+    it('should suppress End when values are equal', async () => {
+      slider.value = [10, 10];
+      await sendKeys({ press: 'End' });
+      expect(slider.value).to.deep.equal([10, 10]);
+    });
   });
 
   describe('end thumb', () => {
@@ -186,6 +221,51 @@ describe('vaadin-range-slider - keyboard input', () => {
       slider.readonly = true;
       await sendKeys({ press: 'ArrowRight' });
       expect(slider.value).to.deep.equal([0, 100]);
+    });
+
+    it('should increase upper value on PageUp', async () => {
+      slider.value = [0, 50];
+      await sendKeys({ press: 'PageUp' });
+      expect(slider.value).to.deep.equal([0, 60]);
+    });
+
+    it('should decrease upper value on PageDown', async () => {
+      slider.value = [0, 50];
+      await sendKeys({ press: 'PageDown' });
+      expect(slider.value).to.deep.equal([0, 40]);
+    });
+
+    it('should set upper value to max on End', async () => {
+      slider.value = [0, 50];
+      await sendKeys({ press: 'End' });
+      expect(slider.value).to.deep.equal([0, 100]);
+    });
+
+    it('should set upper value down to lower boundary on Home', async () => {
+      slider.value = [20, 50];
+      await sendKeys({ press: 'Home' });
+      expect(slider.value).to.deep.equal([20, 20]);
+    });
+
+    it('should suppress PageDown when values are equal', async () => {
+      slider.value = [10, 10];
+      await sendKeys({ press: 'PageDown' });
+      expect(slider.value).to.deep.equal([10, 10]);
+    });
+
+    it('should suppress Home when values are equal', async () => {
+      slider.value = [10, 10];
+      await sendKeys({ press: 'Home' });
+      expect(slider.value).to.deep.equal([10, 10]);
+    });
+
+    ['PageUp', 'PageDown', 'Home', 'End'].forEach((key) => {
+      it(`should not change value on ${key} when readonly`, async () => {
+        slider.readonly = true;
+        slider.value = [0, 50];
+        await sendKeys({ press: key });
+        expect(slider.value).to.deep.equal([0, 50]);
+      });
     });
   });
 });

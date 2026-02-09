@@ -391,8 +391,8 @@ class Slider extends FieldMixin(
 
   /** @private */
   __onKeyDown(event) {
-    const arrowKeys = ['ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp'];
-    if (this.readonly && arrowKeys.includes(event.key)) {
+    const inputKeys = ['ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'PageUp', 'PageDown', 'Home', 'End'];
+    if (this.readonly && inputKeys.includes(event.key)) {
       event.preventDefault();
     }
   }
