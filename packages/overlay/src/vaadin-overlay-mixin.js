@@ -252,7 +252,7 @@ export const OverlayMixin = (superClass) =>
       if (landscape && clientHeight > innerHeight) {
         this.style.setProperty('--vaadin-overlay-viewport-bottom', `${clientHeight - innerHeight}px`);
       } else {
-        this.style.setProperty('--vaadin-overlay-viewport-bottom', '0');
+        this.style.setProperty('--vaadin-overlay-viewport-bottom', '0px');
       }
     }
 
