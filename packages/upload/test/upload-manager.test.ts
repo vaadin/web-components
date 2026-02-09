@@ -120,6 +120,7 @@ describe('UploadManager', () => {
       expect(manager.uploadFormat).to.equal('raw');
       expect(manager.maxConcurrentUploads).to.equal(3);
       expect(manager.formDataName).to.equal('file');
+      expect(manager.disabled).to.be.false;
     });
 
     it('should create manager with custom options', () => {
@@ -136,6 +137,7 @@ describe('UploadManager', () => {
         uploadFormat: 'multipart',
         maxConcurrentUploads: 5,
         formDataName: 'document',
+        disabled: true,
       });
 
       expect(manager.target).to.equal('/api/upload');
@@ -150,6 +152,7 @@ describe('UploadManager', () => {
       expect(manager.uploadFormat).to.equal('multipart');
       expect(manager.maxConcurrentUploads).to.equal(5);
       expect(manager.formDataName).to.equal('document');
+      expect(manager.disabled).to.be.true;
     });
   });
 
@@ -271,6 +274,65 @@ describe('UploadManager', () => {
       manager.addFiles(createFiles(2, 100, 'text/plain'));
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.value).to.be.true;
+    });
+  });
+
+  describe('disabled', () => {
+    beforeEach(() => {
+      manager = new UploadManager({ noAuto: true });
+    });
+
+    it('should start with disabled as false', () => {
+      expect(manager.disabled).to.be.false;
+    });
+
+    it('should allow setting disabled via constructor', () => {
+      manager = new UploadManager({ disabled: true });
+      expect(manager.disabled).to.be.true;
+    });
+
+    it('should allow setting disabled to true', () => {
+      manager.disabled = true;
+      expect(manager.disabled).to.be.true;
+    });
+
+    it('should allow setting disabled to false', () => {
+      manager.disabled = true;
+      manager.disabled = false;
+      expect(manager.disabled).to.be.false;
+    });
+
+    it('should dispatch disabled-changed event when disabled is set to true', () => {
+      const spy = sinon.spy();
+      manager.addEventListener('disabled-changed', spy);
+      manager.disabled = true;
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.value).to.be.true;
+    });
+
+    it('should dispatch disabled-changed event when disabled is set to false', () => {
+      manager.disabled = true;
+      const spy = sinon.spy();
+      manager.addEventListener('disabled-changed', spy);
+      manager.disabled = false;
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.value).to.be.false;
+    });
+
+    it('should not dispatch disabled-changed event when value does not change', () => {
+      const spy = sinon.spy();
+      manager.addEventListener('disabled-changed', spy);
+      manager.disabled = false;
+      expect(spy.called).to.be.false;
+    });
+
+    it('should coerce non-boolean values to boolean', () => {
+      (manager as any).disabled = 'true';
+      expect(manager.disabled).to.be.true;
+      (manager as any).disabled = 0;
+      expect(manager.disabled).to.be.false;
+      (manager as any).disabled = 1;
+      expect(manager.disabled).to.be.true;
     });
   });
 

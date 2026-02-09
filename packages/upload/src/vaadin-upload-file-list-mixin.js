@@ -78,16 +78,27 @@ export const UploadFileListMixin = (superClass) =>
           value: null,
           observer: '__managerChanged',
         },
+
+        /**
+         * True when the manager is disabled.
+         * @type {boolean}
+         * @private
+         */
+        __managerDisabled: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
     static get observers() {
-      return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
+      return ['__updateItems(items, __effectiveI18n, disabled, __managerDisabled, _theme)'];
     }
 
     constructor() {
       super();
       this.__onManagerFilesChanged = this.__onManagerFilesChanged.bind(this);
+      this.__onManagerDisabledChanged = this.__onManagerDisabledChanged.bind(this);
       this.__onFileRetry = this.__onFileRetry.bind(this);
       this.__onFileAbort = this.__onFileAbort.bind(this);
       this.__onFileStart = this.__onFileStart.bind(this);
@@ -112,6 +123,7 @@ export const UploadFileListMixin = (superClass) =>
       // Clean up manager listener to prevent memory leaks
       if (this.manager instanceof UploadManager) {
         this.manager.removeEventListener('files-changed', this.__onManagerFilesChanged);
+        this.manager.removeEventListener('disabled-changed', this.__onManagerDisabledChanged);
       }
     }
 
@@ -122,8 +134,9 @@ export const UploadFileListMixin = (superClass) =>
       // Re-attach manager listener when reconnected to DOM
       if (this.manager instanceof UploadManager) {
         this.manager.addEventListener('files-changed', this.__onManagerFilesChanged);
+        this.manager.addEventListener('disabled-changed', this.__onManagerDisabledChanged);
 
-        // Sync state with current manager files
+        // Sync state with current manager
         this.__syncFromManager();
       }
     }
@@ -133,17 +146,20 @@ export const UploadFileListMixin = (superClass) =>
       // Remove listeners from old manager
       if (oldManager instanceof UploadManager) {
         oldManager.removeEventListener('files-changed', this.__onManagerFilesChanged);
+        oldManager.removeEventListener('disabled-changed', this.__onManagerDisabledChanged);
       }
 
       // Add listeners to new manager only when connected
       if (this.isConnected && manager instanceof UploadManager) {
         manager.addEventListener('files-changed', this.__onManagerFilesChanged);
+        manager.addEventListener('disabled-changed', this.__onManagerDisabledChanged);
 
         // Sync initial state
         this.__syncFromManager();
       } else {
         // Clear the list when manager is removed
         this.items = [];
+        this.__managerDisabled = false;
       }
     }
 
@@ -153,9 +169,15 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
+    __onManagerDisabledChanged(event) {
+      this.__managerDisabled = event.detail.value;
+    }
+
+    /** @private */
     __syncFromManager() {
       if (this.manager instanceof UploadManager) {
         this.items = [...this.manager.files];
+        this.__managerDisabled = !!this.manager.disabled;
       }
     }
 
@@ -192,7 +214,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __updateItems(items, i18n, _disabled, _theme) {
+    __updateItems(items, i18n, _disabled, _managerDisabled, _theme) {
       if (items && i18n) {
         // Apply i18n formatting to each file
         items.forEach((file) => this.__applyI18nToFile(file));
@@ -321,7 +343,8 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     requestContentUpdate() {
-      const { items, __effectiveI18n: i18n, disabled } = this;
+      const { items, __effectiveI18n: i18n, disabled, __managerDisabled: managerDisabled } = this;
+      const effectiveDisabled = disabled || managerDisabled;
 
       render(
         html`
@@ -329,7 +352,7 @@ export const UploadFileListMixin = (superClass) =>
             (file) => html`
               <li>
                 <vaadin-upload-file
-                  .disabled="${disabled}"
+                  .disabled="${effectiveDisabled}"
                   .file="${file}"
                   .complete="${file.complete}"
                   .errorMessage="${file.error}"
