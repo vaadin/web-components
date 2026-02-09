@@ -78,21 +78,11 @@ export const UploadFileListMixin = (superClass) =>
           value: null,
           observer: '__managerChanged',
         },
-
-        /**
-         * True when the manager is disabled.
-         * @type {boolean}
-         * @private
-         */
-        __managerDisabled: {
-          type: Boolean,
-          value: false,
-        },
       };
     }
 
     static get observers() {
-      return ['__updateItems(items, __effectiveI18n, disabled, __managerDisabled, _theme)'];
+      return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
     }
 
     constructor() {
@@ -159,7 +149,6 @@ export const UploadFileListMixin = (superClass) =>
       } else {
         // Clear the list when manager is removed
         this.items = [];
-        this.__managerDisabled = false;
       }
     }
 
@@ -169,15 +158,14 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __onManagerDisabledChanged(event) {
-      this.__managerDisabled = event.detail.value;
+    __onManagerDisabledChanged() {
+      this.requestContentUpdate();
     }
 
     /** @private */
     __syncFromManager() {
       if (this.manager instanceof UploadManager) {
         this.items = [...this.manager.files];
-        this.__managerDisabled = !!this.manager.disabled;
       }
     }
 
@@ -214,7 +202,7 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __updateItems(items, i18n, _disabled, _managerDisabled, _theme) {
+    __updateItems(items, i18n, _disabled, _theme) {
       if (items && i18n) {
         // Apply i18n formatting to each file
         items.forEach((file) => this.__applyI18nToFile(file));
@@ -343,7 +331,8 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     requestContentUpdate() {
-      const { items, __effectiveI18n: i18n, disabled, __managerDisabled: managerDisabled } = this;
+      const { items, __effectiveI18n: i18n, disabled } = this;
+      const managerDisabled = this.manager instanceof UploadManager && this.manager.disabled;
       const effectiveDisabled = disabled || managerDisabled;
 
       render(

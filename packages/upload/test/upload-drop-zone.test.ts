@@ -400,22 +400,17 @@ describe('vaadin-upload-drop-zone', () => {
       expect(dropZone.maxFilesReached).to.be.true;
     });
 
-    it('should sync initial disabled state from manager', async () => {
+    it('should block drops when manager is initially disabled', async () => {
       uploadManager.disabled = true;
 
-      // Set manager - drop zone should sync disabled state
+      // Set manager - drop zone should respect manager disabled state
       dropZone.manager = uploadManager;
       await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.true;
-    });
 
-    it('should reflect disabled state from manager', async () => {
-      dropZone.manager = uploadManager;
-      expect(dropZone.__managerDisabled).to.be.false;
-
-      uploadManager.disabled = true;
+      const files = createFiles(1, 100, 'text/plain');
+      dropZone.dispatchEvent(createDropEvent(files));
       await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.true;
+      expect(uploadManager.files).to.be.empty;
     });
 
     it('should not show dragover state when manager is disabled', async () => {
@@ -457,27 +452,35 @@ describe('vaadin-upload-drop-zone', () => {
       expect(uploadManager.files).to.be.empty;
     });
 
-    it('should re-enable when manager is re-enabled', async () => {
+    it('should allow drops when manager is re-enabled', async () => {
       dropZone.manager = uploadManager;
       uploadManager.disabled = true;
       await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.true;
 
       uploadManager.disabled = false;
       await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.false;
+
+      const files = createFiles(1, 100, 'text/plain');
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.have.lengthOf(1);
     });
 
-    it('should reset managerDisabled when manager is set to null', async () => {
+    it('should allow drops when manager is set to null', async () => {
       dropZone.manager = uploadManager;
       uploadManager.disabled = true;
       await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.true;
 
-      // Set manager to null - should reset managerDisabled
+      // Set manager to null - disabled state no longer applies
       dropZone.manager = null;
       await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.false;
+
+      // Without a manager, drops have no effect (no addFiles target)
+      // but the drop zone itself should not be blocked
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+      await nextFrame();
+      expect(dropZone.hasAttribute('dragover')).to.be.true;
     });
 
     it('should block drops when both explicitly disabled and manager is disabled', async () => {
@@ -535,53 +538,24 @@ describe('vaadin-upload-drop-zone', () => {
       expect(uploadManager.files).to.have.lengthOf(1);
     });
 
-    it('should remove listener when disconnected from DOM', async () => {
-      dropZone.manager = uploadManager;
-
-      // Remove drop zone from DOM
-      dropZone.remove();
-
-      // Disable manager
-      uploadManager.disabled = true;
-
-      // Drop zone should not sync disabled state since listener was removed on disconnect
-      expect(dropZone.__managerDisabled).to.be.false;
-    });
-
-    it('should re-attach listener when reconnected to DOM', async () => {
+    it('should block drops when reconnected while manager is disabled', async () => {
       dropZone.manager = uploadManager;
       await nextFrame();
 
-      // Remove and re-add drop zone
+      // Remove drop zone, disable manager while disconnected
       const parent = dropZone.parentElement!;
       dropZone.remove();
-      parent.appendChild(dropZone);
-      await nextFrame();
-
-      // Disable manager - should sync disabled state on drop zone since it's reconnected
       uploadManager.disabled = true;
-      await nextFrame();
-      expect(dropZone.__managerDisabled).to.be.true;
-    });
-
-    it('should sync disabled state when reconnected after manager disabled', async () => {
-      dropZone.manager = uploadManager;
-      await nextFrame();
-
-      // Disable manager
-      uploadManager.disabled = true;
-      await nextFrame();
-
-      // Remove drop zone from DOM
-      const parent = dropZone.parentElement!;
-      dropZone.remove();
 
       // Reconnect drop zone
       parent.appendChild(dropZone);
       await nextFrame();
 
-      // Drop zone should now have managerDisabled (synced with manager state on reconnect)
-      expect(dropZone.__managerDisabled).to.be.true;
+      // Should block drops because manager is still disabled
+      const files = createFiles(1, 100, 'text/plain');
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.be.empty;
     });
   });
 });
