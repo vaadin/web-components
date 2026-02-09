@@ -19,6 +19,7 @@ const ignoredStaticMembers = [
   'delegateAttrs',
   'delegateProps',
   'lumoInjector',
+  'experimental',
 ];
 
 /**
