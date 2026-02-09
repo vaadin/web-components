@@ -72,16 +72,20 @@ export interface SliderEventMap extends HTMLElementEventMap, SliderCustomEventMa
  * `track`              | The slider track
  * `track-fill`         | The filled portion of the track
  * `thumb`              | The slider thumb
+ * `marks`              | Container for min/max labels
+ * `min`                | Minimum value label
+ * `max`                | Maximum value label
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `active`     | Set when the slider is activated with mouse or touch
- * `disabled`   | Set when the slider is disabled
- * `readonly`   | Set when the slider is read-only
- * `focused`    | Set when the slider has focus
- * `focus-ring` | Set when the slider is focused using the keyboard
+ * Attribute          | Description
+ * -------------------|-------------
+ * `active`           | Set when the slider is activated with mouse or touch
+ * `disabled`         | Set when the slider is disabled
+ * `readonly`         | Set when the slider is read-only
+ * `focused`          | Set when the slider has focus
+ * `focus-ring`       | Set when the slider is focused using the keyboard
+ * `min-max-visible`  | Set when the min/max labels are displayed
  *
  * The following custom CSS properties are available for styling:
  *

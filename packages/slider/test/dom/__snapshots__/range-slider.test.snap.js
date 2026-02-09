@@ -353,6 +353,104 @@ snapshots["vaadin-range-slider host label"] =
 `;
 /* end snapshot vaadin-range-slider host label */
 
+snapshots["vaadin-range-slider host accessibleNameStart"] = 
+`<vaadin-range-slider>
+  <input
+    aria-label="Custom Start"
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    aria-label="max"
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    100
+  </vaadin-slider-bubble>
+  <label
+    id="label-vaadin-range-slider-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-range-slider-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-range-slider>
+`;
+/* end snapshot vaadin-range-slider host accessibleNameStart */
+
+snapshots["vaadin-range-slider host accessibleNameEnd"] = 
+`<vaadin-range-slider>
+  <input
+    aria-label="min"
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    aria-label="Custom End"
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    100
+  </vaadin-slider-bubble>
+  <label
+    id="label-vaadin-range-slider-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-range-slider-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-range-slider>
+`;
+/* end snapshot vaadin-range-slider host accessibleNameEnd */
+
 snapshots["vaadin-range-slider host helper"] = 
 `<vaadin-range-slider
   aria-describedby="helper-vaadin-range-slider-1"
@@ -571,330 +669,10 @@ snapshots["vaadin-range-slider host value always visible"] =
 `;
 /* end snapshot vaadin-range-slider host value always visible */
 
-snapshots["vaadin-range-slider shadow default"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value:0;--end-value:1;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow default */
-
-snapshots["vaadin-range-slider shadow value"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value: 0.1; --end-value: 0.2;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow value */
-
-snapshots["vaadin-range-slider shadow min"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value: 0.25; --end-value: 0.75;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow min */
-
-snapshots["vaadin-range-slider shadow max"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value: 0.25; --end-value: 0.75;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow max */
-
-snapshots["vaadin-range-slider shadow step"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value: 0.2; --end-value: 0.6;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow step */
-
-snapshots["vaadin-range-slider shadow negative"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value: 0.25; --end-value: 0.75;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow negative */
-
-snapshots["vaadin-range-slider shadow min > value"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value:0;--end-value:1;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow min > value */
-
-snapshots["vaadin-range-slider shadow max < value"] = 
-`<div class="vaadin-slider-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div
-    id="controls"
-    style="--start-value: 1; --end-value: 1;"
-  >
-    <div part="track">
-      <div part="track-fill">
-      </div>
-    </div>
-    <div part="thumb thumb-start">
-    </div>
-    <div part="thumb thumb-end">
-    </div>
-    <slot name="input">
-    </slot>
-    <slot name="bubble">
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-range-slider shadow max < value */
-
-snapshots["vaadin-range-slider host accessibleNameStart"] = 
-`<vaadin-range-slider>
+snapshots["vaadin-range-slider host min max visible"] = 
+`<vaadin-range-slider min-max-visible="">
   <input
-    aria-label="Custom Start"
+    aria-label="min"
     id="slider-3"
     max="100"
     min="0"
@@ -938,54 +716,413 @@ snapshots["vaadin-range-slider host accessibleNameStart"] =
   </div>
 </vaadin-range-slider>
 `;
-/* end snapshot vaadin-range-slider host accessibleNameStart */
+/* end snapshot vaadin-range-slider host min max visible */
 
-snapshots["vaadin-range-slider host accessibleNameEnd"] = 
-`<vaadin-range-slider>
-  <input
-    aria-label="min"
-    id="slider-3"
-    max="100"
-    min="0"
-    slot="input"
-    step="1"
-    tabindex="0"
-    type="range"
-  >
-  <input
-    aria-label="Custom End"
-    id="slider-4"
-    max="100"
-    min="0"
-    slot="input"
-    step="1"
-    tabindex="0"
-    type="range"
-  >
-  <vaadin-slider-bubble
-    modeless=""
-    slot="bubble"
-  >
-    0
-  </vaadin-slider-bubble>
-  <vaadin-slider-bubble
-    modeless=""
-    slot="bubble"
-  >
-    100
-  </vaadin-slider-bubble>
-  <label
-    id="label-vaadin-range-slider-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-range-slider-2"
-    slot="error-message"
-  >
+snapshots["vaadin-range-slider shadow default"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
   </div>
-</vaadin-range-slider>
+  <div
+    id="controls"
+    style="--start-value:0;--end-value:1;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      0
+    </span>
+    <span part="max">
+      100
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
 `;
-/* end snapshot vaadin-range-slider host accessibleNameEnd */
+/* end snapshot vaadin-range-slider shadow default */
+
+snapshots["vaadin-range-slider shadow value"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 0.1; --end-value: 0.2;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      0
+    </span>
+    <span part="max">
+      100
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow value */
+
+snapshots["vaadin-range-slider shadow min"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 0.25; --end-value: 0.75;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      20
+    </span>
+    <span part="max">
+      100
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow min */
+
+snapshots["vaadin-range-slider shadow max"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 0.25; --end-value: 0.75;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      0
+    </span>
+    <span part="max">
+      80
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow max */
+
+snapshots["vaadin-range-slider shadow step"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 0.2; --end-value: 0.6;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      0
+    </span>
+    <span part="max">
+      100
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow step */
+
+snapshots["vaadin-range-slider shadow negative"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 0.25; --end-value: 0.75;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      -80
+    </span>
+    <span part="max">
+      -20
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow negative */
+
+snapshots["vaadin-range-slider shadow min > value"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value:0;--end-value:1;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      10
+    </span>
+    <span part="max">
+      100
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow min > value */
+
+snapshots["vaadin-range-slider shadow max < value"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 1; --end-value: 1;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      -80
+    </span>
+    <span part="max">
+      -20
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow max < value */
 

@@ -41,16 +41,20 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * `track`              | The slider track
  * `track-fill`         | The filled portion of the track
  * `thumb`              | The slider thumb
+ * `marks`              | Container for min/max labels
+ * `min`                | Minimum value label
+ * `max`                | Maximum value label
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `active`     | Set when the slider is activated with mouse or touch
- * `disabled`   | Set when the slider is disabled
- * `readonly`   | Set when the slider is read-only
- * `focused`    | Set when the slider has focus
- * `focus-ring` | Set when the slider is focused using the keyboard
+ * Attribute          | Description
+ * -------------------|-------------
+ * `active`           | Set when the slider is activated with mouse or touch
+ * `disabled`         | Set when the slider is disabled
+ * `readonly`         | Set when the slider is read-only
+ * `focused`          | Set when the slider has focus
+ * `focus-ring`       | Set when the slider is focused using the keyboard
+ * `min-max-visible`  | Set when the min/max labels are displayed
  *
  * The following custom CSS properties are available for styling:
  *
@@ -179,6 +183,7 @@ class Slider extends FieldMixin(
   render() {
     const [value] = this.__value;
     const percent = this.__getPercentFromValue(value);
+    const { min, max } = this.__getConstraints();
 
     return html`
       <div class="vaadin-slider-container">
@@ -194,6 +199,11 @@ class Slider extends FieldMixin(
           <div part="thumb"></div>
           <slot name="input"></slot>
           <slot name="bubble"></slot>
+        </div>
+
+        <div part="marks" aria-hidden="true">
+          <span part="min">${min}</span>
+          <span part="max">${max}</span>
         </div>
 
         <div part="helper-text">

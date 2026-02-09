@@ -33,6 +33,15 @@ export const sliderStyles = css`
     --_outline-style: dashed;
   }
 
+  :host([min-max-visible]) {
+    grid-template:
+      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr 'marks' auto var(
+        --_helper-below-field,
+        'helper' auto
+      )
+      'error' auto / 100%;
+  }
+
   #controls {
     grid-area: input;
     display: inline-grid;
@@ -100,5 +109,17 @@ export const sliderStyles = css`
     background: transparent;
     outline: 0;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  [part='marks'] {
+    display: none;
+    font-size: 0.75em;
+    color: var(--vaadin-secondary-text-color);
+  }
+
+  :host([min-max-visible]) [part='marks'] {
+    grid-area: marks;
+    display: flex;
+    justify-content: space-between;
   }
 `;

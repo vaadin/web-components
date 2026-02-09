@@ -55,6 +55,7 @@ assertType<number[]>(slider.value);
 assertType<boolean>(slider.disabled);
 assertType<boolean>(slider.readonly);
 assertType<boolean>(slider.valueAlwaysVisible);
+assertType<boolean>(slider.minMaxVisible);
 
 // Mixins
 assertType<DisabledMixinClass>(slider);
