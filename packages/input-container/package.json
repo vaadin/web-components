@@ -22,7 +22,8 @@
   "files": [
     "src",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "custom-elements.json"
   ],
   "keywords": [
     "Vaadin",
@@ -43,5 +44,6 @@
     "@vaadin/testing-helpers": "^2.0.0",
     "@vaadin/vaadin-lumo-styles": "25.1.0-alpha6",
     "sinon": "^21.0.0"
-  }
+  },
+  "customElements": "custom-elements.json"
 }

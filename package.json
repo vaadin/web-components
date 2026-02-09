@@ -17,7 +17,8 @@
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky",
-    "release": "yarn release:themes && yarn release:web-types",
+    "release": "yarn release:themes && yarn release:web-types && yarn release:cem",
+    "release:cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.js && node ./scripts/split-cem.js",
     "release:themes": "yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",
     "release:web-types": "yarn analyze && node scripts/buildWebtypes.js",
     "start": "web-dev-server --node-resolve --open /dev",
@@ -41,6 +42,7 @@
     "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
     "@types/mocha": "^10.0.7",
     "@ungap/structured-clone": "^1.3.0",
     "@vaadin/testing-helpers": "^2.0.0",
