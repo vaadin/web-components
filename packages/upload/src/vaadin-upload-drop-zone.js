@@ -210,7 +210,6 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   __onMaxFilesReachedChanged(event) {
     this.maxFilesReached = event.detail.value;
   }
-
 }
 
 defineCustomElement(UploadDropZone);
