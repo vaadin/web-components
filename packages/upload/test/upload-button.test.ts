@@ -32,29 +32,51 @@ describe('vaadin-upload-button', () => {
       expect(button.getAttribute('role')).to.equal('button');
     });
 
-    it('should have tabindex="0"', () => {
-      expect(button.getAttribute('tabindex')).to.equal('0');
+    it('should have manager property defaulting to null', () => {
+      expect(button.manager).to.be.null;
     });
 
-    it('should have disabled property defaulting to false', () => {
-      expect(button.disabled).to.be.false;
-    });
-
-    it('should reflect disabled to attribute', async () => {
-      button.disabled = true;
-      await nextFrame();
+    it('should be disabled when no manager is set', () => {
+      expect(button.disabled).to.be.true;
       expect(button.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should have manager property defaulting to null', () => {
-      expect(button.manager).to.be.null;
+    it('should have tabindex="-1" when no manager is set', () => {
+      expect(button.getAttribute('tabindex')).to.equal('-1');
+    });
+
+    it('should be enabled when manager is set', async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
+      expect(button.disabled).to.be.false;
+      expect(button.getAttribute('tabindex')).to.equal('0');
+    });
+
+    it('should be disabled again when manager is removed', async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
+      expect(button.disabled).to.be.false;
+
+      button.manager = null;
+      await nextFrame();
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should reflect explicit disabled to attribute', async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
+      button.disabled = true;
+      await nextFrame();
+      expect(button.hasAttribute('disabled')).to.be.true;
     });
   });
 
   describe('file picker', () => {
     let fileInput: HTMLInputElement;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
       fileInput = getFileInput(button);
     });
 
@@ -74,7 +96,7 @@ describe('vaadin-upload-button', () => {
       expect(fileInput.multiple).to.be.true;
     });
 
-    it('should default to multiple when no manager', () => {
+    it('should default to multiple when manager has no maxFiles', () => {
       button.openFilePicker();
       expect(fileInput.multiple).to.be.true;
     });
@@ -356,6 +378,7 @@ describe('vaadin-upload-button', () => {
       it('should return disabled=true when maxFilesReached is true', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.disabled).to.be.false;
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
@@ -367,6 +390,7 @@ describe('vaadin-upload-button', () => {
       it('should have disabled attribute when maxFilesReached is true', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.hasAttribute('disabled')).to.be.false;
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
@@ -452,6 +476,7 @@ describe('vaadin-upload-button', () => {
       it('should not be focusable when disabled due to maxFilesReached', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
@@ -476,6 +501,7 @@ describe('vaadin-upload-button', () => {
     describe('disabled state when manager is disabled', () => {
       it('should return disabled=true when manager is disabled', async () => {
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.disabled).to.be.false;
 
         uploadManager.disabled = true;
@@ -485,6 +511,7 @@ describe('vaadin-upload-button', () => {
 
       it('should have disabled attribute when manager is disabled', async () => {
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.hasAttribute('disabled')).to.be.false;
 
         uploadManager.disabled = true;
@@ -562,6 +589,7 @@ describe('vaadin-upload-button', () => {
 
       it('should not be focusable when manager is disabled', async () => {
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
 
         uploadManager.disabled = true;

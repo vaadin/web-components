@@ -153,13 +153,17 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   }
 
   /** @private */
+  get __effectiveDisabled() {
+    return this.disabled || !(this.manager instanceof UploadManager) || this.manager.disabled || this.maxFilesReached;
+  }
+
+  /** @private */
   __onDragover(event) {
     event.preventDefault();
-    const effectiveDisabled = this.disabled || (this.manager instanceof UploadManager && this.manager.disabled) || this.maxFilesReached;
-    if (!effectiveDisabled) {
+    if (!this.__effectiveDisabled) {
       this.__dragover = true;
     }
-    event.dataTransfer.dropEffect = effectiveDisabled ? 'none' : 'copy';
+    event.dataTransfer.dropEffect = this.__effectiveDisabled ? 'none' : 'copy';
   }
 
   /** @private */
@@ -178,9 +182,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     event.preventDefault();
     this.__dragover = false;
 
-    // If we have a manager and not disabled, add the files
-    const effectiveDisabled = this.disabled || (this.manager instanceof UploadManager && this.manager.disabled) || this.maxFilesReached;
-    if (!effectiveDisabled && this.manager instanceof UploadManager) {
+    if (!this.__effectiveDisabled) {
       const files = await getFilesFromDropEvent(event);
       this.manager.addFiles(files);
     }

@@ -138,9 +138,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
   set disabled(value) {
     this.__explicitDisabled = Boolean(value);
-    const managerDisabled = this.manager instanceof UploadManager && this.manager.disabled;
-    // Set super.disabled to effective value - this triggers Lit's property system correctly
-    super.disabled = this.__explicitDisabled || managerDisabled || this.maxFilesReached;
+    super.disabled = this.__effectiveDisabled;
   }
 
   /** @protected */
@@ -195,8 +193,8 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     if (this.manager instanceof UploadManager) {
       this.manager.addEventListener('max-files-reached-changed', this.__syncFromManager);
       this.manager.addEventListener('disabled-changed', this.__syncFromManager);
-      this.__syncFromManager();
     }
+    this.__syncFromManager();
   }
 
   /**
@@ -268,6 +266,13 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   }
 
   /** @private */
+  get __effectiveDisabled() {
+    const noManager = !(this.manager instanceof UploadManager);
+    const managerDisabled = !noManager && this.manager.disabled;
+    return this.__explicitDisabled || noManager || managerDisabled || this.maxFilesReached;
+  }
+
+  /** @private */
   __syncFromManager() {
     if (this.manager instanceof UploadManager) {
       this.maxFilesReached = this.manager.maxFilesReached;
@@ -275,12 +280,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       this.maxFilesReached = false;
     }
 
-    // Sync effective disabled state
-    const managerDisabled = this.manager instanceof UploadManager && this.manager.disabled;
-    const effectiveDisabled = this.__explicitDisabled || managerDisabled || this.maxFilesReached;
-    if (super.disabled !== effectiveDisabled) {
-      super.disabled = effectiveDisabled;
-    }
+    super.disabled = this.__effectiveDisabled;
   }
 
   /** @override */

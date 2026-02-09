@@ -76,9 +76,30 @@ describe('vaadin-upload-drop-zone', () => {
     it('should not have dragover attribute by default', () => {
       expect(dropZone.hasAttribute('dragover')).to.be.false;
     });
+
+    it('should not show dragover state when no manager is set', async () => {
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+      await nextFrame();
+      expect(dropZone.hasAttribute('dragover')).to.be.false;
+      expect(event.dataTransfer!.dropEffect).to.equal('none');
+    });
+
+    it('should allow dragover after manager is set', async () => {
+      dropZone.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+      await nextFrame();
+      expect(dropZone.hasAttribute('dragover')).to.be.true;
+      expect(event.dataTransfer!.dropEffect).to.equal('copy');
+    });
   });
 
   describe('drag events', () => {
+    beforeEach(() => {
+      dropZone.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+    });
+
     it('should set dragover attribute on dragover', async () => {
       const event = createDragEvent('dragover');
       dropZone.dispatchEvent(event);
@@ -466,21 +487,19 @@ describe('vaadin-upload-drop-zone', () => {
       expect(uploadManager.files).to.have.lengthOf(1);
     });
 
-    it('should allow drops when manager is set to null', async () => {
+    it('should block drops when manager is set to null', async () => {
       dropZone.manager = uploadManager;
-      uploadManager.disabled = true;
       await nextFrame();
 
-      // Set manager to null - disabled state no longer applies
+      // Set manager to null - drop zone should be disabled
       dropZone.manager = null;
       await nextFrame();
 
-      // Without a manager, drops have no effect (no addFiles target)
-      // but the drop zone itself should not be blocked
       const event = createDragEvent('dragover');
       dropZone.dispatchEvent(event);
       await nextFrame();
-      expect(dropZone.hasAttribute('dragover')).to.be.true;
+      expect(dropZone.hasAttribute('dragover')).to.be.false;
+      expect(event.dataTransfer!.dropEffect).to.equal('none');
     });
 
     it('should block drops when both explicitly disabled and manager is disabled', async () => {
