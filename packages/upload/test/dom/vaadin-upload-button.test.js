@@ -4,7 +4,7 @@ import { fixtureSync, mousedown, nextUpdate } from '@vaadin/testing-helpers';
 
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
-window.Vaadin.featureFlags.aiComponents = true;
+window.Vaadin.featureFlags.modularUpload = true;
 
 import '../../src/vaadin-upload-button.js';
 

@@ -590,7 +590,7 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
-        if (window.Vaadin && window.Vaadin.featureFlags && window.Vaadin.featureFlags.aiComponents && this._theme) {
+        if (window.Vaadin && window.Vaadin.featureFlags && (window.Vaadin.featureFlags.modularUpload || window.Vaadin.featureFlags.aiComponents) && this._theme) {
           list.setAttribute('theme', this._theme);
         } else {
           list.removeAttribute('theme');

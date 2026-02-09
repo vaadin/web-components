@@ -57,10 +57,6 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     return 'vaadin-upload-drop-zone';
   }
 
-  static get experimental() {
-    return 'aiComponents';
-  }
-
   static get styles() {
     return uploadDropZoneStyles;
   }

@@ -6,7 +6,7 @@ import { createFile, createFiles, xhrCreator } from './helpers.js';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.aiComponents = true;
+window.Vaadin.featureFlags.modularUpload = true;
 
 type MockXhr = {
   readyState: number;

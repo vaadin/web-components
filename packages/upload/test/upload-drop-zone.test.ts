@@ -4,7 +4,7 @@ import sinon from 'sinon';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.aiComponents = true;
+window.Vaadin.featureFlags.modularUpload = true;
 
 import '../src/vaadin-upload-drop-zone.js';
 import type { UploadDropZone } from '../src/vaadin-upload-drop-zone.js';

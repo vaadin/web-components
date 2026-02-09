@@ -137,7 +137,13 @@ export const MessageMixin = (superClass) =>
      * @private
      */
     __renderAttachments() {
-      if (!(window.Vaadin && window.Vaadin.featureFlags && window.Vaadin.featureFlags.aiComponents)) {
+      if (
+        !(
+          window.Vaadin &&
+          window.Vaadin.featureFlags &&
+          (window.Vaadin.featureFlags.messageListAttachments || window.Vaadin.featureFlags.aiComponents)
+        )
+      ) {
         return '';
       }
 

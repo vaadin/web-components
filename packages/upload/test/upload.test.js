@@ -4,7 +4,7 @@ import sinon from 'sinon';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.aiComponents = true;
+window.Vaadin.featureFlags.modularUpload = true;
 
 import '../src/vaadin-upload.js';
 import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';

@@ -6,7 +6,7 @@ import '@vaadin/icons/vaadin-iconset.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.aiComponents = true;
+window.Vaadin.featureFlags.modularUpload = true;
 
 import '../../../src/vaadin-upload-button.js';
 

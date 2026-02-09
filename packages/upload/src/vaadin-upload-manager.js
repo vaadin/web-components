@@ -12,9 +12,9 @@ window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
  * It has no knowledge of UI components - components should listen to events and
  * call methods to interact with the manager.
  *
- * **Note:** This class is experimental and requires the `aiComponents` feature flag to be enabled:
+ * **Note:** This class is experimental and requires the `modularUpload` or `aiComponents` feature flag to be enabled:
  * ```javascript
- * window.Vaadin.featureFlags.aiComponents = true;
+ * window.Vaadin.featureFlags.modularUpload = true;
  * ```
  *
  * @example
@@ -103,9 +103,9 @@ export class UploadManager extends EventTarget {
   constructor(options = {}) {
     super();
 
-    if (!window.Vaadin.featureFlags.aiComponents) {
+    if (!window.Vaadin.featureFlags.modularUpload && !window.Vaadin.featureFlags.aiComponents) {
       throw new Error(
-        'UploadManager requires the aiComponents feature flag. Enable it with: window.Vaadin.featureFlags.aiComponents = true',
+        'UploadManager requires the modularUpload feature flag. Enable it with: window.Vaadin.featureFlags.modularUpload = true',
       );
     }
 

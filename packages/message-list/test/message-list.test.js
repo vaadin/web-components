@@ -18,7 +18,7 @@ import sinon from 'sinon';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.aiComponents = true;
+window.Vaadin.featureFlags.messageListAttachments = true;
 
 import '../src/vaadin-message-list.js';
 
