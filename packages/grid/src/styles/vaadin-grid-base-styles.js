@@ -391,6 +391,7 @@ export const gridStyles = css`
     min-width: 0;
   }
 
+  .details-cell,
   .frozen-cell,
   .frozen-to-end-cell {
     z-index: 2;
