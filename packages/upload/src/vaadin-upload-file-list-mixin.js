@@ -340,7 +340,11 @@ export const UploadFileListMixin = (superClass) =>
                   .status="${file.status}"
                   .uploading="${file.uploading}"
                   .i18n="${i18n}"
-                  theme="${ifDefined(this._theme)}"
+                  theme="${ifDefined(
+                    window.Vaadin.featureFlags.modularUpload || window.Vaadin.featureFlags.aiComponents
+                      ? this._theme
+                      : undefined,
+                  )}"
                 ></vaadin-upload-file>
               </li>
             `,

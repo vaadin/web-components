@@ -1,6 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.messageListAttachments = true;
+
 import '../src/vaadin-message.js';
 
 describe('message', () => {

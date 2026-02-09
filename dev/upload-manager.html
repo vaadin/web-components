@@ -35,6 +35,11 @@
     <vaadin-upload-file-list id="file-list"></vaadin-upload-file-list>
 
     <script type="module">
+      // Enable the modularUpload feature flag before importing
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.modularUpload = true;
+
       import '@vaadin/upload/vaadin-upload-button.js';
       import '@vaadin/upload/vaadin-upload-drop-zone.js';
       import '@vaadin/upload/vaadin-upload-file-list.js';

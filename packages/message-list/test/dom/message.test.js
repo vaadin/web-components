@@ -1,5 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.messageListAttachments = true;
+
 import '../../src/vaadin-message.js';
 
 describe('vaadin-message', () => {

@@ -3,6 +3,11 @@ import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/src/vaadin-icon.js';
 import '@vaadin/icons/vaadin-iconset.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.modularUpload = true;
+
 import '../../../src/vaadin-upload-button.js';
 
 describe('upload-button', () => {
