@@ -7,8 +7,10 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { renderMarkdownToElement } from './markdown-helpers.js';
+import { markdownSlotStyles } from './styles/vaadin-markdown-base-styles.js';
 
 /**
  * `<vaadin-markdown>` is a web component for rendering Markdown content.
@@ -26,8 +28,9 @@ import { renderMarkdownToElement } from './markdown-helpers.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes SlotStylesMixin
  */
-class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-markdown';
   }
@@ -42,6 +45,11 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         display: none !important;
       }
     `;
+  }
+
+  /** @protected */
+  get slotStyles() {
+    return [markdownSlotStyles];
   }
 
   static get properties() {

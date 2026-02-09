@@ -1,0 +1,45 @@
+:where(vaadin-markdown) {
+  /* Use the margins defined by vaadin-markdown base styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  hr {
+    margin-block: revert-layer;
+  }
+
+  code {
+    font-size: var(--aura-font-size-s);
+    line-height: var(--aura-line-height-s);
+    font-weight: var(--aura-font-weight-semibold);
+  }
+
+  pre code {
+    font-weight: var(--aura-font-weight-medium);
+  }
+
+  b,
+  strong {
+    font-weight: var(--aura-font-weight-medium);
+  }
+
+  blockquote {
+    font-weight: var(--aura-font-weight-medium);
+    border-left-color: var(--aura-accent-border-color);
+  }
+
+  ol li::marker {
+    font-weight: var(--aura-font-weight-regular);
+  }
+
+  figcaption {
+    font-size: var(--aura-font-size-s);
+    line-height: var(--aura-line-height-s);
+  }
+
+  th {
+    font-weight: var(--aura-font-weight-medium);
+  }
+}

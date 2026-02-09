@@ -87,16 +87,26 @@
 }
 
 :where(h1) {
+  font-size: round(var(--aura-font-size-xl) * 1.75, 0.0625rem);
+  line-height: round(var(--aura-line-height-xl) * 1.25, 0.125rem);
+}
+
+:where(h2) {
+  font-size: round(var(--aura-font-size-xl) * 1.25, 0.0625rem);
+  line-height: round(var(--aura-line-height-xl) * 1.125, 0.125rem);
+}
+
+:where(h3) {
   font-size: var(--aura-font-size-xl);
   line-height: var(--aura-line-height-xl);
 }
 
-:where(h2, h3) {
+:where(h4) {
   font-size: var(--aura-font-size-l);
   line-height: var(--aura-line-height-l);
 }
 
-:where(h4, h5) {
+:where(h5) {
   font-size: var(--aura-font-size-m);
   line-height: var(--aura-line-height-m);
 }
