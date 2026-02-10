@@ -114,6 +114,14 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * `--vaadin-slider-track-border-radius`        |
  * `--vaadin-slider-track-height`               |
  *
+ * In order to style the slider bubble, use `<vaadin-slider-bubble>` shadow DOM parts:
+ *
+ * Part name        | Description
+ * -----------------|----------------------
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ * `arrow`          | Arrow pointing to the thumb
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
