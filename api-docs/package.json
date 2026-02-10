@@ -17,6 +17,6 @@
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
     "node-html-parser": "^7.0.1",
-    "tsx": "^4.20.3"
+    "tsx": "^4.21.0"
   }
 }
