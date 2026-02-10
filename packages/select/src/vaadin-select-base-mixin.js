@@ -156,7 +156,10 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_updateAriaExpanded(opened, focusElement)', '_updateSelectedItem(value, _items, placeholder)'];
+      return [
+        '_updateAriaExpanded(opened, focusElement)',
+        '_updateSelectedItem(value, _items, placeholder, focusElement)',
+      ];
     }
 
     constructor() {
@@ -558,7 +561,7 @@ export const SelectBaseMixin = (superClass) =>
 
       valueButton.innerHTML = '';
 
-      const selected = this._items[this._menuElement.selected];
+      const selected = this._items ? this._items[this._menuElement.selected] : undefined;
 
       valueButton.removeAttribute('placeholder');
 
@@ -599,7 +602,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _updateSelectedItem(value, items) {
+    _updateSelectedItem(value, items, placeholder) {
       if (items) {
         const valueAsString = value == null ? value : value.toString();
         this._menuElement.selected = items.reduce((prev, item, idx) => {
@@ -610,6 +613,8 @@ export const SelectBaseMixin = (superClass) =>
           this.__updateValueButton();
           delete this._valueChanging;
         }
+      } else if (placeholder) {
+        this.__updateValueButton();
       }
     }
 
