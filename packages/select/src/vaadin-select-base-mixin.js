@@ -156,7 +156,10 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_updateAriaExpanded(opened, focusElement)', '_updateSelectedItem(value, _items, placeholder)'];
+      return [
+        '_updateAriaExpanded(opened, focusElement)',
+        '_updateSelectedItem(value, _items, placeholder, focusElement)',
+      ];
     }
 
     constructor() {

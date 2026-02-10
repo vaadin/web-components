@@ -93,14 +93,12 @@ describe('vaadin-select', () => {
 
     describe('no items', () => {
       beforeEach(async () => {
-        select = fixtureSync('<vaadin-select></vaadin-select>');
+        select = fixtureSync('<vaadin-select placeholder="Select an item"></vaadin-select>');
         await nextRender();
         valueButton = select.querySelector('vaadin-select-value-button');
       });
 
-      it('should display placeholder when no items or renderer is set', async () => {
-        select.placeholder = 'Select an item';
-        await nextUpdate(select);
+      it('should display placeholder when no items or renderer is set', () => {
         expect(valueButton.textContent).to.equal('Select an item');
       });
     });
