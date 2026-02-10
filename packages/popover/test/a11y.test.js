@@ -713,5 +713,108 @@ describe('a11y', () => {
         expect(getDeepActiveElement()).to.equal(popoverTarget);
       });
     });
+
+    describe('Tab navigation with focusable content between target and popover', () => {
+      let popover2, popoverBtn, btn3, overlay2;
+
+      beforeEach(async () => {
+        // Create a second popover targeting btn3, with buttons between target and popover in DOM
+        // DOM order: btn1, btn2, btn3(target), btn4, vaadin-popover2(contains <button>), btn5
+        popover2 = document.createElement('vaadin-popover');
+        popoverBtn = document.createElement('button');
+        popoverBtn.textContent = 'Inside';
+        popover2.appendChild(popoverBtn);
+        popover2.trigger = [];
+
+        const root = btn1.parentNode;
+
+        // Insert popover2 before btn5 in the DOM
+        root.insertBefore(popover2, btn5);
+
+        popover2.target = dialog.querySelector('#btn3');
+        btn3 = dialog.querySelector('#btn3');
+        await nextUpdate(popover2);
+
+        overlay2 = popover2.shadowRoot.querySelector('vaadin-popover-overlay');
+
+        popover2.opened = true;
+        await oneEvent(overlay2, 'vaadin-overlay-open');
+      });
+
+      afterEach(async () => {
+        popover2.opened = false;
+        await nextRender();
+      });
+
+      it('should move focus from popover inside button to btn4 on Tab', async () => {
+        popoverBtn.focus();
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(btn4);
+      });
+
+      it('should move focus from btn4 to btn5 on Tab skipping popover content', async () => {
+        btn4.focus();
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(btn5);
+      });
+
+      it('should move focus from btn5 to btn4 on Shift+Tab skipping popover content', async () => {
+        btn5.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(btn4);
+      });
+
+      it('should move focus from btn4 to popover inside button on Shift+Tab', async () => {
+        btn4.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(popoverBtn);
+      });
+
+      it('should complete full forward Tab cycle', async () => {
+        btn3.focus();
+        expect(getDeepActiveElement()).to.equal(btn3);
+
+        // Tab to popover2
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(popover2);
+
+        // Tab to inside button
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(popoverBtn);
+
+        // Tab to btn4 (next after popover content)
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(btn4);
+
+        // Tab to btn5
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(btn5);
+      });
+
+      it('should complete full backward Shift+Tab cycle', async () => {
+        btn5.focus();
+        expect(getDeepActiveElement()).to.equal(btn5);
+
+        // Shift+Tab to btn4
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(btn4);
+
+        // Shift+Tab to popover inside button
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(popoverBtn);
+
+        // Shift+Tab to popover2
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(popover2);
+
+        // Shift+Tab to btn3 (target)
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(btn3);
+      });
+    });
   });
 });

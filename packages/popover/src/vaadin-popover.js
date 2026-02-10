@@ -826,15 +826,20 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
+  __isPopoverContent(el) {
+    return el !== this && this.contains(el);
+  }
+
+  /** @private */
   __getNextBodyFocusable(target) {
-    const focusables = getFocusableElements(document.body);
+    const focusables = getFocusableElements(document.body).filter((el) => !this.__isPopoverContent(el));
     const idx = focusables.findIndex((el) => el === target);
     return focusables[idx + 1];
   }
 
   /** @private */
   __getPrevBodyFocusable(target, { includeSelf = false } = {}) {
-    let focusables = getFocusableElements(document.body);
+    let focusables = getFocusableElements(document.body).filter((el) => !this.__isPopoverContent(el));
     if (!includeSelf) {
       focusables = focusables.filter((el) => el !== this);
     }
