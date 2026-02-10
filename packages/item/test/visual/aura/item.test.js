@@ -33,10 +33,10 @@ describe('item', () => {
     await visualDiff(div, 'selected');
   });
 
-  it('focused', async () => {
+  it('focus-ring', async () => {
     setIconVisible(div);
-    element.setAttribute('focused', '');
-    await visualDiff(div, 'focused');
+    element.setAttribute('focus-ring', '');
+    await visualDiff(div, 'focus-ring');
   });
 
   it('disabled', async () => {

@@ -15,7 +15,7 @@ describe('list-box', () => {
     element = fixtureSync(
       `
         <vaadin-list-box>
-          <vaadin-item focused>Item 0</vaadin-item>
+          <vaadin-item focus-ring>Item 0</vaadin-item>
           <vaadin-item>Item 1</vaadin-item>
           <vaadin-item>Item 2</vaadin-item>
           <vaadin-item disabled>Item 3</vaadin-item>
