@@ -391,15 +391,13 @@ export const KeyboardNavigationMixin = (superClass) =>
             this.collapseItem(activeRow._item);
             return;
           }
-        } else {
+        } else if (activeCell === activeRow.firstElementChild || isDetailsCell(activeCell)) {
           // In cell focus mode
-          const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
-          if (activeCell === activeRowCells[0] || isDetailsCell(activeCell)) {
-            // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
-            this.__rowFocusMode = true;
-            this._onRowNavigation(activeRow, 0);
-            return;
-          }
+
+          // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
+          this.__rowFocusMode = true;
+          this._onRowNavigation(activeRow, 0);
+          return;
         }
       }
 
@@ -524,15 +522,8 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      let columnIndex = [...activeRow.children].indexOf(activeCell);
-      if (this.$.items.contains(activeCell)) {
-        // lazy column rendering may be enabled, so we need use the always visible sizer cells to find the column index
-        columnIndex = [...this.$.sizer.children].findIndex((sizerCell) => sizerCell._column === activeCell._column);
-      }
-
       const isCurrentCellRowDetails = isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
-      const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
 
       // _focusedColumnOrder is memoized - this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
@@ -540,9 +531,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (isCurrentCellRowDetails) {
           this._focusedColumnOrder = 0;
         } else {
-          this._focusedColumnOrder = this._getColumns(activeRowGroup, currentRowIndex).filter((c) => !c.hidden)[
-            columnIndex
-          ]._order;
+          // Use the cell's column order directly instead of indexing into _getColumns,
+          // since cells may be physically reordered and DOM order doesn't match _columnTree order
+          this._focusedColumnOrder = activeCell._column._order;
         }
       }
 
@@ -577,15 +568,12 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._focusedColumnOrder = undefined;
         }
 
-        const columnIndexByOrder = dstColumns.reduce((acc, col, i) => {
-          acc[col._order] = i;
-          return acc;
-        }, {});
-        const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
+        // Get the target column from the sorted column orders
+        const dstColumn = dstColumns.find((col) => col._order === dstSortedColumnOrders[dstOrderedColumnIndex]);
 
         let dstCell;
         if (this.$.items.contains(activeCell)) {
-          const dstSizerCell = this.$.sizer.children[dstColumnIndex];
+          const dstSizerCell = [...this.$.sizer.children].find((cell) => cell._column === dstColumn);
           if (this._lazyColumns) {
             // If the column is not in the viewport, scroll it into view.
             if (!this.__isColumnInViewport(dstSizerCell._column)) {
@@ -599,7 +587,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           // Ensure correct horizontal scroll position once the destination cell is available.
           this._scrollHorizontallyToCell(dstCell);
         } else {
-          dstCell = dstRow.children[dstColumnIndex];
+          // For header/footer, find the cell whose column contains the target column
+          dstCell = [...dstRow.children].find((cell) => cell._column.contains(dstColumn));
           this._scrollHorizontallyToCell(dstCell);
         }
 

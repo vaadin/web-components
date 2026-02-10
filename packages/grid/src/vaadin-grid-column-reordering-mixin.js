@@ -388,12 +388,24 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
+     * Swaps column orders and physically reorders cells in all rows.
      * @param {!GridColumn} column1
      * @param {!GridColumn} column2
      * @protected
      */
     _swapColumnOrders(column1, column2) {
+      // Swap order values and determine which column should come first
       [column1._order, column2._order] = [column2._order, column1._order];
+      const [firstColumn, secondColumn] = column1._order < column2._order ? [column1, column2] : [column2, column1];
+
+      // Reorder cells in all rows (header, footer, body, sizer)
+      [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
+        const cells = [...row.children];
+        const secondColFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
+        cells.filter((cell) => firstColumn.contains(cell._column)).forEach((cell) => secondColFirstCell.before(cell));
+        row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+      });
+
       this._debounceUpdateFrozenColumn();
       this._updateFirstAndLastColumn();
     }
