@@ -444,67 +444,21 @@ class RangeSlider extends FieldMixin(
   willUpdate(props) {
     super.willUpdate(props);
 
-    if (props.has('__startActive')) {
-      if (this.__startActive) {
-        // When slider is activated by track pointerdown, the hover flag
-        // isn't set, but the thumb is actually moved, so we set it here.
-        this.__startHover = true;
-      } else if (props.get('__startActive')) {
-        // Close bubble when drag ends unless the thumb has hover
-        this.__startBubbleOpened = this.__startHover;
-      }
-    }
+    this.__updateBubbleState(props, {
+      active: '__startActive',
+      focused: '__startFocused',
+      hover: '__startHover',
+      opened: '__startBubbleOpened',
+      otherOpened: '__endBubbleOpened',
+    });
 
-    if (props.has('__endActive')) {
-      if (this.__endActive) {
-        // When slider is activated by track pointerdown, the hover flag
-        // isn't set, but the thumb is actually moved, so we set it here.
-        this.__endHover = true;
-      } else if (props.get('__endActive')) {
-        // Close bubble when drag ends unless the thumb has hover
-        this.__endBubbleOpened = this.__endHover;
-      }
-    }
-
-    if (props.has('__startFocused')) {
-      if (this.__startFocused) {
-        this.__startBubbleOpened = true;
-        this.__endBubbleOpened = false;
-      } else if (props.get('__startFocused')) {
-        // Close bubble on blur unless the thumb has hover
-        this.__startBubbleOpened = this.__startHover;
-      }
-    }
-
-    if (props.has('__endFocused')) {
-      if (this.__endFocused) {
-        this.__endBubbleOpened = true;
-        this.__startBubbleOpened = false;
-      } else if (props.get('__endFocused')) {
-        // Close bubble on blur unless the thumb has hover
-        this.__endBubbleOpened = this.__endHover;
-      }
-    }
-
-    if (props.has('__startHover')) {
-      if (this.__startHover) {
-        this.__startBubbleOpened = true;
-        this.__endBubbleOpened = false;
-      } else if (props.get('__startHover')) {
-        // Keep bubble open during drag (active state)
-        this.__startBubbleOpened = this.__startActive;
-      }
-    }
-
-    if (props.has('__endHover')) {
-      if (this.__endHover) {
-        this.__endBubbleOpened = true;
-        this.__startBubbleOpened = false;
-      } else if (props.get('__endHover')) {
-        // Keep bubble open during drag (active state)
-        this.__endBubbleOpened = this.__endActive;
-      }
-    }
+    this.__updateBubbleState(props, {
+      active: '__endActive',
+      focused: '__endFocused',
+      hover: '__endHover',
+      opened: '__endBubbleOpened',
+      otherOpened: '__startBubbleOpened',
+    });
   }
 
   /** @protected */

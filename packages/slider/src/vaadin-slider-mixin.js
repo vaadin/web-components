@@ -169,6 +169,54 @@ export const SliderMixin = (superClass) =>
     }
 
     /**
+     * Updates bubble visibility for a thumb based on trigger state changes.
+     * @param {Map} props - Changed properties from willUpdate
+     * @param {object} config
+     * @param {string} config.active - Active state property name
+     * @param {string} config.focused - Focused state property name
+     * @param {string} config.hover - Hover state property name
+     * @param {string} config.opened - Bubble opened property name
+     * @param {string} [config.otherOpened] - Other thumb's opened property (range slider)
+     * @private
+     */
+    __updateBubbleState(props, { active, focused, hover, opened, otherOpened }) {
+      if (props.has(active)) {
+        if (this[active]) {
+          // When slider is activated by track pointerdown, the hover flag
+          // isn't set, but the thumb is actually moved, so we set it here.
+          this[hover] = true;
+        } else if (props.get(active)) {
+          // Close bubble when drag ends unless the thumb has hover
+          this[opened] = this[hover];
+        }
+      }
+
+      if (props.has(focused)) {
+        if (this[focused]) {
+          this[opened] = true;
+          if (otherOpened) {
+            this[otherOpened] = false;
+          }
+        } else if (props.get(focused)) {
+          // Close bubble on blur unless the thumb has hover
+          this[opened] = this[hover];
+        }
+      }
+
+      if (props.has(hover)) {
+        if (this[hover]) {
+          this[opened] = true;
+          if (otherOpened) {
+            this[otherOpened] = false;
+          }
+        } else if (props.get(hover)) {
+          // Keep bubble open during drag (active state)
+          this[opened] = this[active];
+        }
+      }
+    }
+
+    /**
      * @param {PointerEvent} event
      * @private
      */
