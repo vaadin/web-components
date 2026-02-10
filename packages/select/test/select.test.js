@@ -76,6 +76,51 @@ describe('vaadin-select', () => {
     });
   });
 
+  describe('placeholder', () => {
+    let valueButton;
+
+    describe('no items', () => {
+      beforeEach(async () => {
+        select = fixtureSync('<vaadin-select placeholder="Select an item"></vaadin-select>');
+        await nextFrame();
+        valueButton = select._valueButton;
+      });
+
+      it('should display placeholder when no items or renderer is set', () => {
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+    });
+
+    describe('with items', () => {
+      beforeEach(async () => {
+        select = fixtureSync('<vaadin-select placeholder="Select an item"></vaadin-select>');
+        await nextFrame();
+        select.renderer = (root) => {
+          render(
+            html`
+              <vaadin-list-box>
+                <vaadin-item>Option 1</vaadin-item>
+                <vaadin-item value="v2" label="o2">Option 2</vaadin-item>
+                <vaadin-item value="">Option 3</vaadin-item>
+                <vaadin-item></vaadin-item>
+                <vaadin-item label="">Empty</vaadin-item>
+              </vaadin-list-box>
+            `,
+            root,
+          );
+        };
+        valueButton = select._valueButton;
+        await nextFrame();
+      });
+
+      it('should show placeholder when setting value property to null', async () => {
+        select.value = null;
+        await nextFrame();
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+    });
+  });
+
   describe('with items', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
@@ -449,14 +494,6 @@ describe('vaadin-select', () => {
         overlay.setAttribute('phone', '');
         overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
         expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('50px');
-      });
-    });
-
-    describe('placeholder', () => {
-      it('should set placeholder as a value node text content', () => {
-        select.value = null;
-        select.placeholder = 'Select an item';
-        expect(valueButton.textContent).to.equal('Select an item');
       });
     });
 
