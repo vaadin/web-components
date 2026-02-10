@@ -90,6 +90,89 @@ describe('vaadin-select', () => {
     });
   });
 
+  describe('placeholder', () => {
+    let valueButton;
+
+    describe('no items', () => {
+      beforeEach(async () => {
+        select = fixtureSync('<vaadin-select placeholder="Select an item"></vaadin-select>');
+        await nextRender();
+        valueButton = select.querySelector('vaadin-select-value-button');
+      });
+
+      it('should display placeholder when no items or renderer is set', () => {
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+    });
+
+    describe('with items', () => {
+      let items;
+
+      beforeEach(async () => {
+        select = fixtureSync('<vaadin-select placeholder="Select an item"></vaadin-select>');
+        await nextRender();
+        select.renderer = (root) => {
+          render(
+            html`
+              <vaadin-list-box>
+                <vaadin-item>Option 1</vaadin-item>
+                <vaadin-item value="v2" label="o2"><span>Option 2</span></vaadin-item>
+                <vaadin-item value="">Option 3</vaadin-item>
+                <vaadin-item></vaadin-item>
+                <vaadin-item label="">Empty</vaadin-item>
+                <vaadin-item value="5">A number</vaadin-item>
+                <vaadin-item value="false">A boolean</vaadin-item>
+                <vaadin-item label="foo"></vaadin-item>
+                <vaadin-item>
+                  <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" />
+                </vaadin-item>
+              </vaadin-list-box>
+            `,
+            root,
+          );
+        };
+        valueButton = select.querySelector('vaadin-select-value-button');
+        await nextUpdate(select);
+        items = select._items;
+      });
+
+      it('should show placeholder when setting value property to null', async () => {
+        select.value = null;
+        await nextUpdate(select);
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+
+      it('should show placeholder when selecting an item with empty label', async () => {
+        select.opened = true;
+        await nextRender();
+        click(items[4]);
+        await nextUpdate(select);
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+
+      it('should show placeholder when selecting an item with empty text', async () => {
+        select.opened = true;
+        await nextRender();
+        click(items[3]);
+        await nextUpdate(select);
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+
+      it('should not show placeholder for items with label, text content or child elements', async () => {
+        const emptyItems = [items[3], items[4]];
+        const nonEmptyItems = items.filter((item) => !emptyItems.includes(item));
+
+        for (const item of nonEmptyItems) {
+          select.opened = true;
+          await nextRender();
+          click(item);
+          await nextUpdate(select);
+          expect(valueButton.textContent).not.to.equal('Select an item');
+        }
+      });
+    });
+  });
+
   describe('with items', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
@@ -453,47 +536,6 @@ describe('vaadin-select', () => {
         overlay.setAttribute('phone', '');
         overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
         expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('50px');
-      });
-    });
-
-    describe('placeholder', () => {
-      beforeEach(() => {
-        select.placeholder = 'Select an item';
-      });
-
-      it('should set placeholder as a value node text content', async () => {
-        select.value = null;
-        await nextUpdate(select);
-        expect(valueButton.textContent).to.equal('Select an item');
-      });
-
-      it('should show placeholder when selecting an item with empty label', async () => {
-        select.opened = true;
-        await nextRender();
-        click(select._items[4]);
-        await nextUpdate(select);
-        expect(valueButton.textContent).to.equal('Select an item');
-      });
-
-      it('should show placeholder when selecting an item with empty text', async () => {
-        select.opened = true;
-        await nextRender();
-        click(select._items[3]);
-        await nextUpdate(select);
-        expect(valueButton.textContent).to.equal('Select an item');
-      });
-
-      it('should not show placeholder for items with label, text content or child elements', async () => {
-        const emptyItems = [select._items[3], select._items[4]];
-        const nonEmptyItems = select._items.filter((item) => !emptyItems.includes(item));
-
-        for (const item of nonEmptyItems) {
-          select.opened = true;
-          await nextRender();
-          click(item);
-          await nextUpdate(select);
-          expect(valueButton.textContent).not.to.equal('Select an item');
-        }
       });
     });
 
