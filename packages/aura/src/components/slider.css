@@ -1,0 +1,3 @@
+:is(vaadin-slider, vaadin-range-slider):not([readonly], [disabled]) {
+  --vaadin-slider-fill-background: var(--aura-accent-color);
+}
