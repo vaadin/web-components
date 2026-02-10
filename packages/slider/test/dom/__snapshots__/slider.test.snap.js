@@ -711,6 +711,55 @@ snapshots["vaadin-slider shadow negative"] =
 `;
 /* end snapshot vaadin-slider shadow negative */
 
+snapshots["vaadin-slider shadow max zero"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--value: 0;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      -50
+    </span>
+    <span part="max">
+      0
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-slider shadow max zero */
+
 snapshots["vaadin-slider shadow min > value"] = 
 `<div class="vaadin-slider-container">
   <div part="label">

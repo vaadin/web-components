@@ -138,6 +138,13 @@ describe('vaadin-range-slider', () => {
       await expect(slider).shadowDom.to.equalSnapshot();
     });
 
+    it('max zero', async () => {
+      slider.min = -50;
+      slider.max = 0;
+      slider.value = [0, 0];
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
     it('min > value', async () => {
       slider.min = 10;
       await expect(slider).shadowDom.to.equalSnapshot();
