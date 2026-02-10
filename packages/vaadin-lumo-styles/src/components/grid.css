@@ -263,35 +263,35 @@
 
   /* Resizing styles */
 
-  [last-column] .resize-handle::before,
-  [last-frozen] .resize-handle::before {
+  .last-column-cell .resize-handle::before,
+  .last-frozen-cell .resize-handle::before {
     width: 18px;
     transform: none;
     right: 0;
   }
 
-  [frozen-to-end] .resize-handle {
+  .frozen-to-end-cell .resize-handle {
     left: 0;
     right: auto;
   }
 
-  [frozen-to-end] .resize-handle::before {
+  .frozen-to-end-cell .resize-handle::before {
     left: 0;
     right: auto;
   }
 
-  [first-frozen-to-end] .resize-handle::before {
+  .first-frozen-to-end-cell .resize-handle::before {
     width: 18px;
     transform: none;
   }
 
-  [first-frozen-to-end] {
+  .first-frozen-to-end-cell {
     margin-inline-start: auto;
     border-left: var(--_lumo-grid-border-width) solid transparent;
   }
 
   /* Hide resize handle if scrolled to end */
-  :host(:not([overflow~='end'])) [first-frozen-to-end] .resize-handle {
+  :host(:not([overflow~='end'])) .first-frozen-to-end-cell .resize-handle {
     display: none;
   }
 
@@ -357,18 +357,18 @@
     transform: translateX(50%);
   }
 
-  :host([dir='rtl']) [last-column] .resize-handle::before,
-  :host([dir='rtl']) [last-frozen] .resize-handle::before {
+  :host([dir='rtl']) .last-column-cell .resize-handle::before,
+  :host([dir='rtl']) .last-frozen-cell .resize-handle::before {
     left: 0;
     right: auto;
   }
 
-  :host([dir='rtl']) [frozen-to-end] .resize-handle {
+  :host([dir='rtl']) .frozen-to-end-cell .resize-handle {
     right: 0;
     left: auto;
   }
 
-  :host([dir='rtl']) [frozen-to-end] .resize-handle::before {
+  :host([dir='rtl']) .frozen-to-end-cell .resize-handle::before {
     right: 0;
     left: auto;
   }
@@ -387,7 +387,7 @@
   }
 
   /* Hide first body row top border */
-  :host(:not([theme~='no-row-borders'])) .first-row .cell:not(.details-cell) {
+  :host(:not([theme~='no-row-borders'])) .cell.first-row-cell:not(.details-cell) {
     border-top: 0;
     min-height: calc(var(--lumo-size-m) - var(--_lumo-grid-border-width));
   }
@@ -446,7 +446,7 @@
     background: var(--lumo-primary-color-50pct);
   }
 
-  .body-row[dragover] .cell[last-frozen]::after {
+  .body-row[dragover] .cell.last-frozen-cell::after {
     right: -1px;
   }
 
@@ -480,16 +480,16 @@
     opacity: 0.5;
   }
 
-  .row[dragstart] .cell {
+  .row.dragstart-row .cell {
     border: none !important;
     box-shadow: none !important;
   }
 
-  .row[dragstart] .cell[last-column] {
+  .row.dragstart-row .dragstart-row-cell.last-column-cell {
     border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
   }
 
-  .row[dragstart] .cell[first-column] {
+  .row.dragstart-row .dragstart-row-cell.first-column-cell {
     border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
   }
 
@@ -537,7 +537,7 @@
   /* Header borders */
 
   /* Hide first header row top border */
-  :host(:not([theme~='no-row-borders'])) .first-header-row .header-cell {
+  :host(:not([theme~='no-row-borders'])) .header-cell.first-header-row-cell {
     border-top: 0;
   }
 
@@ -546,31 +546,31 @@
     border-top: 0;
   }
 
-  .last-header-row .header-cell {
+  .header-cell.last-header-row-cell {
     border-bottom: var(--_lumo-grid-border-width) solid transparent;
   }
 
-  :host(:not([theme~='no-row-borders'])) .last-header-row .header-cell {
+  :host(:not([theme~='no-row-borders'])) .header-cell.last-header-row-cell {
     border-bottom-color: var(--_lumo-grid-secondary-border-color);
   }
 
   /* Overflow uses a stronger border color */
-  :host([overflow~='top']) .last-header-row .header-cell {
+  :host([overflow~='top']) .header-cell.last-header-row-cell {
     border-bottom-color: var(--_lumo-grid-border-color);
   }
 
   /* Footer borders */
 
-  .first-footer-row .footer-cell {
+  .footer-cell.first-footer-row-cell {
     border-top: var(--_lumo-grid-border-width) solid transparent;
   }
 
-  :host(:not([theme~='no-row-borders'])) .first-footer-row .footer-cell {
+  :host(:not([theme~='no-row-borders'])) .footer-cell.first-footer-row-cell {
     border-top-color: var(--_lumo-grid-secondary-border-color);
   }
 
   /* Overflow uses a stronger border color */
-  :host([overflow~='bottom']) .first-footer-row .footer-cell {
+  :host([overflow~='bottom']) .footer-cell.first-footer-row-cell {
     border-top-color: var(--_lumo-grid-border-color);
   }
 
@@ -580,11 +580,11 @@
     background: linear-gradient(var(--lumo-shade-20pct), var(--lumo-shade-20pct)) var(--lumo-base-color);
   }
 
-  :host([reordering]) .cell[reorder-status='allowed'] {
+  :host([reordering]) .cell.reorder-allowed-cell {
     background: var(--lumo-base-color);
   }
 
-  :host([reordering]) .cell[reorder-status='dragging'] {
+  :host([reordering]) .cell.reorder-dragging-cell {
     background: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)) var(--lumo-base-color);
   }
 
@@ -620,22 +620,22 @@
 
   /* Column borders */
 
-  :host([theme~='column-borders']) .cell:not([last-column]):not(.details-cell) {
+  :host([theme~='column-borders']) .cell:not(.last-column-cell, .details-cell) {
     border-right: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
   }
 
   /* Frozen columns */
 
-  [last-frozen] {
+  .last-frozen-cell {
     border-right: var(--_lumo-grid-border-width) solid transparent;
     overflow: hidden;
   }
 
-  :host([overflow~='start']) .cell[last-frozen]:not(.details-cell) {
+  :host([overflow~='start']) .cell.last-frozen-cell:not(.details-cell) {
     border-right-color: var(--_lumo-grid-border-color);
   }
 
-  :host([overflow~='end']) .cell[first-frozen-to-end]:not(.details-cell) {
+  :host([overflow~='end']) .cell.first-frozen-to-end-cell:not(.details-cell) {
     border-left-color: var(--_lumo-grid-border-color);
   }
 
@@ -650,17 +650,17 @@
   /* Selected row */
 
   /* Raise the selected rows above unselected rows (so that box-shadow can cover unselected rows) */
-  :host(:not([reordering])) .row[selected] {
+  :host(:not([reordering])) .row.selected-row {
     z-index: 1;
   }
 
-  :host(:not([reordering])) .row[selected] .body-cell:not(.details-cell) {
+  :host(:not([reordering])) .row.selected-row .selected-row-cell:not(.details-cell) {
     background-image: linear-gradient(var(--_lumo-grid-selected-row-color), var(--_lumo-grid-selected-row-color));
     background-repeat: repeat;
   }
 
   /* Cover the border of an unselected row */
-  :host(:not([theme~='no-row-borders'])) .row[selected] .cell:not(.details-cell) {
+  :host(:not([theme~='no-row-borders'])) .row.selected-row .selected-row-cell:not(.details-cell) {
     box-shadow: 0 var(--_lumo-grid-border-width) 0 0 var(--_lumo-grid-selected-row-color);
   }
 
@@ -675,7 +675,7 @@
     --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-s);
   }
 
-  :host([theme~='compact']) .first-row .cell:not(.details-cell) {
+  :host([theme~='compact']) .cell.first-row-cell:not(.details-cell) {
     min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
   }
 
@@ -691,34 +691,34 @@
 
   /* RTL specific styles */
 
-  :host([dir='rtl']) .row[dragstart] .cell[last-column] {
+  :host([dir='rtl']) .row.dragstart-row .cell.last-column-cell {
     border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
   }
 
-  :host([dir='rtl']) .row[dragstart] .cell[first-column] {
+  :host([dir='rtl']) .row.dragstart-row .cell.first-column-cell {
     border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
   }
 
-  :host([dir='rtl'][theme~='column-borders']) .cell:not([last-column]):not(.details-cell) {
+  :host([dir='rtl'][theme~='column-borders']) .cell:not(.last-column-cell, .details-cell) {
     border-right: none;
     border-left: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
   }
 
-  :host([dir='rtl']) [last-frozen] {
+  :host([dir='rtl']) .last-frozen-cell {
     border-right: none;
     border-left: var(--_lumo-grid-border-width) solid transparent;
   }
 
-  :host([dir='rtl']) [first-frozen-to-end] {
+  :host([dir='rtl']) .first-frozen-to-end-cell {
     border-left: none;
     border-right: var(--_lumo-grid-border-width) solid transparent;
   }
 
-  :host([dir='rtl'][overflow~='start']) .cell[last-frozen]:not(.details-cell) {
+  :host([dir='rtl'][overflow~='start']) .cell.last-frozen-cell:not(.details-cell) {
     border-left-color: var(--_lumo-grid-border-color);
   }
 
-  :host([dir='rtl'][overflow~='end']) .cell[first-frozen-to-end]:not(.details-cell) {
+  :host([dir='rtl'][overflow~='end']) .cell.first-frozen-to-end-cell:not(.details-cell) {
     border-right-color: var(--_lumo-grid-border-color);
   }
 

@@ -1,5 +1,6 @@
 import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import { updateBooleanRowStates, updateStringRowStates } from '../../src/vaadin-grid-helpers.js';
 import { flushGrid } from '../helpers.js';
 import { users } from './users.js';
 
@@ -297,41 +298,41 @@ describe('grid', () => {
     });
 
     it('dragover on top', async () => {
-      element.$.items.children[1].setAttribute('dragover', 'on-top');
+      updateStringRowStates(element.$.items.children[1], { dragover: 'on-top' });
       await visualDiff(element, 'row-dragover-on-top');
     });
 
     it('dragover above', async () => {
-      element.$.items.children[1].setAttribute('dragover', 'above');
+      updateStringRowStates(element.$.items.children[1], { dragover: 'above' });
       await visualDiff(element, 'row-dragover-above');
     });
 
     it('dragover below', async () => {
-      element.$.items.children[1].setAttribute('dragover', 'below');
+      updateStringRowStates(element.$.items.children[1], { dragover: 'below' });
       await visualDiff(element, 'row-dragover-below');
     });
 
     it('dragover above details', async () => {
       element.detailsOpenedItems = [element.items[1]];
-      element.$.items.children[1].setAttribute('dragover', 'above');
+      updateStringRowStates(element.$.items.children[1], { dragover: 'above' });
       await visualDiff(element, 'row-dragover-above-details');
     });
 
     it('dragover below details', async () => {
       element.detailsOpenedItems = [element.items[1]];
-      element.$.items.children[1].setAttribute('dragover', 'below');
+      updateStringRowStates(element.$.items.children[1], { dragover: 'below' });
       await visualDiff(element, 'row-dragover-below-details');
     });
 
     it('dragover row dragstart', async () => {
-      element.$.items.children[1].setAttribute('dragstart', '123');
+      updateBooleanRowStates(element.$.items.children[1], { dragstart: '123' });
       await visualDiff(element, 'row-dragstart');
     });
 
     it('dragover below last row with all rows visible', async () => {
       element.allRowsVisible = true;
       element.items = element.items.slice(0, 2);
-      element.$.items.children[1].setAttribute('dragover', 'below');
+      updateStringRowStates(element.$.items.children[1], { dragover: 'below' });
       await visualDiff(element, 'dragover-below-last-row-all-rows-visible');
     });
   });
