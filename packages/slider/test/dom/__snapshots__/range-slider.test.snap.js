@@ -1024,6 +1024,57 @@ snapshots["vaadin-range-slider shadow negative"] =
 `;
 /* end snapshot vaadin-range-slider shadow negative */
 
+snapshots["vaadin-range-slider shadow max zero"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--start-value: 1; --end-value: 1;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb thumb-start">
+    </div>
+    <div part="thumb thumb-end">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      -50
+    </span>
+    <span part="max">
+      0
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-range-slider shadow max zero */
+
 snapshots["vaadin-range-slider shadow min > value"] = 
 `<div class="vaadin-slider-container">
   <div part="label">
