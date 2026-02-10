@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { comboBoxItemStyles } from '@vaadin/combo-box/src/styles/vaadin-combo-box-item-base-styles.js';
 import { ComboBoxItemMixin } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -47,7 +48,7 @@ export class MultiSelectComboBoxItem extends ComboBoxItemMixin(
   }
 
   static get styles() {
-    return itemStyles;
+    return [itemStyles, comboBoxItemStyles];
   }
 
   /** @protected */

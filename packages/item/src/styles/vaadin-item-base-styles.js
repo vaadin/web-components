@@ -19,7 +19,7 @@ export const itemStyles = css`
     -webkit-tap-highlight-color: transparent;
   }
 
-  :host([focused]) {
+  :host([focus-ring]) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) / -1);
   }
