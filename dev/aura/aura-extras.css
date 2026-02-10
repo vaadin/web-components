@@ -1,7 +1,5 @@
 html {
   height: 100dvh;
-  --aura-accent-color-light: var(--aura-blue);
-  --aura-accent-color-dark: var(--aura-blue);
   --vaadin-user-color: var(--aura-accent-color);
   /* TODO how to use a different surface level in dark mode? */
 }
