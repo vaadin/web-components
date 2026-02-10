@@ -2,8 +2,8 @@
 :where(:host) {
   --aura-contrast-level: 1;
 
-  --aura-accent-color-light: var(--aura-neutral-light);
-  --aura-accent-color-dark: var(--aura-neutral-dark);
+  --aura-accent-color-light: var(--aura-blue);
+  --aura-accent-color-dark: var(--aura-blue);
 
   --aura-accent-color-light-initial: var(--aura-accent-color-light);
   --aura-accent-color-dark-initial: var(--aura-accent-color-dark);
