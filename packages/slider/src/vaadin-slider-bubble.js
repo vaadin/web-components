@@ -62,7 +62,7 @@ class SliderBubble extends ThemePropertyMixin(PolylitMixin(LitElement)) {
         vertical-align="bottom"
         no-vertical-overlap
         modeless
-        exportparts="overlay, content"
+        exportparts="overlay, content, arrow"
       >
         <slot></slot>
       </vaadin-slider-bubble-overlay>
