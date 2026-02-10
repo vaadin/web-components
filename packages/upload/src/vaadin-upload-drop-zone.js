@@ -42,7 +42,7 @@ import { UploadManager } from './vaadin-upload-manager.js';
  * Attribute          | Description
  * -------------------|--------------------------------------------
  * `dragover`         | Set when files are being dragged over the element
- * `disabled`         | Set when the drop zone is explicitly disabled
+ * `disabled`         | Set when the drop zone is effectively disabled
  * `max-files-reached`| Set when the manager has reached maxFiles
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
@@ -80,12 +80,12 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
 
       /**
        * Whether the drop zone is disabled.
+       * Returns true if either explicitly disabled, manager is disabled, or no manager is set.
        * @type {boolean}
        */
       disabled: {
         type: Boolean,
         value: false,
-        reflect: true,
       },
 
       /**
@@ -110,9 +110,27 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     };
   }
 
+  /**
+   * Whether the drop zone is disabled.
+   * Returns true if either explicitly disabled, manager is disabled, or no manager is set.
+   * @type {boolean}
+   * @override
+   */
+  get disabled() {
+    return this.__effectiveDisabled;
+  }
+
+  set disabled(value) {
+    if (this.__syncingDisabled) return;
+    this.__explicitDisabled = Boolean(value);
+    this.__syncDisabledState();
+  }
+
   constructor() {
     super();
+    this.__explicitDisabled = false;
     this.__onMaxFilesReachedChanged = this.__onMaxFilesReachedChanged.bind(this);
+    this.__syncDisabledState = this.__syncDisabledState.bind(this);
   }
 
   /** @protected */
@@ -128,9 +146,10 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    // Clean up manager listener to prevent memory leaks
+    // Clean up manager listeners to prevent memory leaks
     if (this.manager instanceof UploadManager) {
       this.manager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+      this.manager.removeEventListener('disabled-changed', this.__syncDisabledState);
     }
   }
 
@@ -138,13 +157,15 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   connectedCallback() {
     super.connectedCallback();
 
-    // Re-attach manager listener when reconnected to DOM
+    // Re-attach manager listeners when reconnected to DOM
     if (this.manager instanceof UploadManager) {
       this.manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+      this.manager.addEventListener('disabled-changed', this.__syncDisabledState);
 
       // Sync state with current manager state
       this.maxFilesReached = !!this.manager.maxFilesReached;
     }
+    this.__syncDisabledState();
   }
 
   /** @protected */
@@ -154,7 +175,8 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
 
   /** @private */
   get __effectiveDisabled() {
-    return this.disabled || !(this.manager instanceof UploadManager) || this.manager.disabled || this.maxFilesReached;
+    const noManager = !(this.manager instanceof UploadManager);
+    return this.__explicitDisabled || noManager || this.manager.disabled || this.maxFilesReached;
   }
 
   /** @private */
@@ -190,25 +212,39 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
 
   /** @private */
   __managerChanged(manager, oldManager) {
-    // Remove listener from old manager
+    // Remove listeners from old manager
     if (oldManager instanceof UploadManager) {
       oldManager.removeEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+      oldManager.removeEventListener('disabled-changed', this.__syncDisabledState);
     }
 
-    // Add listener to new manager
+    // Add listeners to new manager
     if (this.isConnected && manager instanceof UploadManager) {
       manager.addEventListener('max-files-reached-changed', this.__onMaxFilesReachedChanged);
+      manager.addEventListener('disabled-changed', this.__syncDisabledState);
 
       // Sync initial state
       this.maxFilesReached = !!manager.maxFilesReached;
     } else {
       this.maxFilesReached = false;
     }
+
+    if (this.isConnected) {
+      this.__syncDisabledState();
+    }
   }
 
   /** @private */
   __onMaxFilesReachedChanged(event) {
     this.maxFilesReached = event.detail.value;
+    this.__syncDisabledState();
+  }
+
+  /** @private */
+  __syncDisabledState() {
+    this.__syncingDisabled = true;
+    this.toggleAttribute('disabled', this.__effectiveDisabled);
+    this.__syncingDisabled = false;
   }
 }
 

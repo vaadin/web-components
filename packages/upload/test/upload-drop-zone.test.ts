@@ -421,6 +421,57 @@ describe('vaadin-upload-drop-zone', () => {
       expect(dropZone.maxFilesReached).to.be.true;
     });
 
+    it('should have disabled attribute when manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should remove disabled attribute when manager is re-enabled', async () => {
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      uploadManager.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should have disabled attribute when no manager is set', async () => {
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should remove disabled attribute when manager is set', async () => {
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      dropZone.manager = uploadManager;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should keep disabled attribute when manager is re-enabled but explicitly disabled', async () => {
+      dropZone.manager = uploadManager;
+      dropZone.disabled = true;
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      uploadManager.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      dropZone.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+    });
+
     it('should block drops when manager is initially disabled', async () => {
       uploadManager.disabled = true;
 
