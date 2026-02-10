@@ -10,6 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { comboBoxItemStyles } from './styles/vaadin-combo-box-item-base-styles.js';
 import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
 
 /**
@@ -47,7 +48,7 @@ export class ComboBoxItem extends ComboBoxItemMixin(
   }
 
   static get styles() {
-    return itemStyles;
+    return [itemStyles, comboBoxItemStyles];
   }
 
   /** @protected */
