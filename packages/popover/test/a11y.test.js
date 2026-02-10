@@ -3,6 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, focusout, nextRender, nextUpdate, oneEvent, outsideClick, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
+import '@vaadin/dialog';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
@@ -570,6 +571,146 @@ describe('a11y', () => {
 
         const activeElement = getDeepActiveElement();
         expect(activeElement).to.equal(popover);
+      });
+    });
+  });
+
+  describe('inside dialog', () => {
+    let dialog, btn1, btn4, btn5, popoverTarget, popoverInput;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
+      await nextRender();
+
+      // Create popover element separately to ensure proper upgrade
+      popover = document.createElement('vaadin-popover');
+      popoverInput = document.createElement('input');
+      popoverInput.id = 'popover-input';
+      popover.appendChild(popoverInput);
+      popover.trigger = [];
+
+      dialog.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        root.innerHTML = `
+          <button id="btn1">Button 1</button>
+          <button id="btn2">Button 2</button>
+          <button id="btn3">Button 3</button>
+          <button id="btn4">Button 4</button>
+          <button id="btn5">Button 5</button>
+        `;
+        root.appendChild(popover);
+      };
+      await nextUpdate(dialog);
+      // Content is rendered into the dialog element itself, not the overlay
+      btn1 = dialog.querySelector('#btn1');
+      btn4 = dialog.querySelector('#btn4');
+      btn5 = dialog.querySelector('#btn5');
+      popover.target = btn4;
+      await nextUpdate(popover);
+
+      popoverTarget = btn4;
+      overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+    });
+
+    afterEach(async () => {
+      dialog.opened = false;
+      await nextRender();
+    });
+
+    describe('Tab navigation', () => {
+      beforeEach(async () => {
+        popover.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should move focus from target to popover on Tab', async () => {
+        popoverTarget.focus();
+        await sendKeys({ press: 'Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(popover);
+      });
+
+      it('should move focus from popover to input on Tab', async () => {
+        popover.focus();
+        await sendKeys({ press: 'Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(popoverInput);
+      });
+
+      it('should move focus from popover input to button 5 on Tab', async () => {
+        popoverInput.focus();
+        await sendKeys({ press: 'Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(btn5);
+      });
+
+      it('should move focus from button 5 to popover input on Shift+Tab', async () => {
+        btn5.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(popoverInput);
+      });
+
+      it('should move focus from popover input to popover on Shift+Tab', async () => {
+        popoverInput.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(popover);
+      });
+
+      it('should move focus from popover to target on Shift+Tab', async () => {
+        popover.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(popoverTarget);
+      });
+
+      it('should complete full Tab cycle through dialog with popover', async () => {
+        btn1.focus();
+        expect(getDeepActiveElement()).to.equal(btn1);
+
+        // Tab through buttons 1-4
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(popoverTarget);
+
+        // Tab to popover
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(popover);
+
+        // Tab to popover input
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(popoverInput);
+
+        // Tab to button 5
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.equal(btn5);
+      });
+
+      it('should complete full Shift+Tab cycle through dialog with popover', async () => {
+        btn5.focus();
+        expect(getDeepActiveElement()).to.equal(btn5);
+
+        // Shift+Tab to popover input
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(popoverInput);
+
+        // Shift+Tab to popover
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(popover);
+
+        // Shift+Tab to button 4 (target)
+        await sendKeys({ press: 'Shift+Tab' });
+        expect(getDeepActiveElement()).to.equal(popoverTarget);
       });
     });
   });

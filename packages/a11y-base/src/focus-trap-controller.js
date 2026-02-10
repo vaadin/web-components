@@ -123,6 +123,11 @@ export class FocusTrapController {
     }
 
     if (event.key === 'Tab') {
+      // Skip if another handler already processed this event
+      if (event.defaultPrevented) {
+        return;
+      }
+
       event.preventDefault();
 
       const backward = event.shiftKey;

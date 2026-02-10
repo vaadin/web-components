@@ -741,9 +741,10 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    // Move focus to the next element after target on content Tab
-    const lastFocusable = this.__getLastFocusable(this);
-    if (lastFocusable && isElementFocused(lastFocusable)) {
+    // Move focus to the next element after target on last content Tab,
+    // or when popover itself is focused and has no focusable content
+    const lastFocusable = this.__getLastFocusable();
+    if (lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this)) {
       const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
       if (focusable && focusable !== this) {
         event.preventDefault();
@@ -752,13 +753,27 @@ class Popover extends PopoverPositionMixin(
       }
     }
 
-    // Prevent focusing the popover content on previous element Tab
+    // Handle cases where Tab from the current element would land on the popover
     const activeElement = getDeepActiveElement();
     const nextFocusable = this.__getNextBodyFocusable(activeElement);
-    if (nextFocusable === this && lastFocusable) {
+    if (nextFocusable === this) {
+      // Skip popover when tabbing from "next element after target"
+      const nextAfterTarget = this.__getNextBodyFocusable(this.__getTargetFocusable());
+      if (activeElement === nextAfterTarget) {
+        const focusableAfterPopover = this.__getNextBodyFocusable(this);
+        if (focusableAfterPopover) {
+          event.preventDefault();
+          focusableAfterPopover.focus();
+          return;
+        }
+      }
+
+      // Prevent focusing the popover content on previous element Tab.
       // Move focus to the last overlay focusable and do NOT prevent keydown
       // to move focus outside the popover content (e.g. to the URL bar).
-      lastFocusable.focus();
+      if (lastFocusable) {
+        lastFocusable.focus();
+      }
     }
   }
 
@@ -777,14 +792,36 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    // Move focus back to the popover on next element Shift + Tab
-    const nextFocusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
-    if (nextFocusable && isElementFocused(nextFocusable)) {
-      const lastFocusable = this.__getLastFocusable(this);
+    // Don't intercept if focus is inside the popover content
+    const activeElement = getDeepActiveElement();
+    if (this.contains(activeElement)) {
+      return;
+    }
+
+    // Get previous focusable elements with and without the popover
+    const prevFocusable = this.__getPrevBodyFocusable(activeElement);
+    const prevFocusableNative = this.__getPrevBodyFocusable(activeElement, { includeSelf: true });
+    const targetFocusable = this.__getTargetFocusable();
+
+    // Intercept Shift+Tab when it would naturally go to the target
+    // (if we exclude the popover from the focusable list)
+    if (prevFocusable === targetFocusable) {
+      event.preventDefault();
+      const lastFocusable = this.__getLastFocusable();
       if (lastFocusable) {
-        event.preventDefault();
         lastFocusable.focus();
+      } else {
+        // No focusable content, focus popover itself
+        this.focus();
       }
+      return;
+    }
+
+    // Skip the popover when native Shift+Tab would land on it
+    // and redirect to the actual previous element
+    if (prevFocusableNative === this && prevFocusable) {
+      event.preventDefault();
+      prevFocusable.focus();
     }
   }
 
@@ -796,8 +833,23 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __getLastFocusable(container) {
-    const focusables = getFocusableElements(container);
+  __getPrevBodyFocusable(target, { includeSelf = false } = {}) {
+    let focusables = getFocusableElements(document.body);
+    if (!includeSelf) {
+      focusables = focusables.filter((el) => el !== this);
+    }
+    const idx = focusables.findIndex((el) => el === target);
+    return idx > 0 ? focusables[idx - 1] : null;
+  }
+
+  /** @private */
+  __getLastFocusable() {
+    // Search within the overlay's content area to avoid returning the popover element itself
+    const content = this._overlayElement && this._overlayElement.$.content;
+    if (!content) {
+      return null;
+    }
+    const focusables = getFocusableElements(content);
     return focusables.pop();
   }
 

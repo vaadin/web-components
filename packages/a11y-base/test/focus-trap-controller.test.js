@@ -374,4 +374,52 @@ describe('FocusTrapController', () => {
       expect(document.activeElement).to.equal(trapInput1);
     });
   });
+
+  describe('defaultPrevented', () => {
+    let trapInput1;
+
+    beforeEach(() => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      controller = new FocusTrapController(element);
+      element.addController(controller);
+      trap = element.querySelector('#trap');
+      trapInput1 = trap.querySelector('#trap-input-1');
+    });
+
+    it('should not handle Tab when event.defaultPrevented is true', () => {
+      controller.trapFocus(trap);
+      trapInput1.focus();
+
+      // Simulate another handler (e.g., popover) calling preventDefault in capture phase
+      const captureHandler = (e) => {
+        e.preventDefault();
+      };
+      document.addEventListener('keydown', captureHandler, true);
+
+      const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+      trapInput1.dispatchEvent(event);
+
+      document.removeEventListener('keydown', captureHandler, true);
+
+      expect(document.activeElement).to.equal(trapInput1);
+    });
+
+    it('should not handle Shift+Tab when event.defaultPrevented is true', () => {
+      controller.trapFocus(trap);
+      trapInput1.focus();
+
+      // Simulate another handler (e.g., popover) calling preventDefault in capture phase
+      const captureHandler = (e) => {
+        e.preventDefault();
+      };
+      document.addEventListener('keydown', captureHandler, true);
+
+      const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+      trapInput1.dispatchEvent(event);
+
+      document.removeEventListener('keydown', captureHandler, true);
+
+      expect(document.activeElement).to.equal(trapInput1);
+    });
+  });
 });
