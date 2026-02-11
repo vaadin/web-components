@@ -9,6 +9,7 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-st
 const popoverOverlay = css`
   :host {
     --_arrow-size: var(--vaadin-popover-arrow-size, 8px);
+    --_arrow-inset: var(--vaadin-popover-arrow-inset, calc(var(--_arrow-size) * 2));
     --_default-offset: 4px;
     --_rtl-multiplier: 1;
     --_border-width: var(--vaadin-popover-border-width, var(--vaadin-overlay-border-width, 1px));
@@ -129,11 +130,11 @@ const popoverOverlay = css`
 
   /* bottom / top */
   :host([theme~='arrow']:is([position^='bottom'], [position^='top'])[start-aligned]) [part='arrow'] {
-    inset-inline-start: calc(var(--_arrow-size) * 2);
+    inset-inline-start: var(--_arrow-inset);
   }
 
   :host([theme~='arrow']:is([position^='bottom'], [position^='top'])[end-aligned]) [part='arrow'] {
-    inset-inline-end: calc(var(--_arrow-size) * 2);
+    inset-inline-end: var(--_arrow-inset);
   }
 
   :host([theme~='arrow']:is([position^='bottom'], [position^='top'])[arrow-centered]) [part='arrow'] {
@@ -164,12 +165,12 @@ const popoverOverlay = css`
   /* start / end */
   :host([theme~='arrow']:is([position^='start'], [position^='end'])[top-aligned]) [part='arrow'] {
     rotate: -45deg;
-    top: calc(var(--_arrow-size) * 2);
+    top: var(--_arrow-inset);
   }
 
   :host([theme~='arrow']:is([position^='start'], [position^='end'])[bottom-aligned]) [part='arrow'] {
     rotate: -45deg;
-    bottom: calc(var(--_arrow-size) * 2);
+    bottom: var(--_arrow-inset);
   }
 
   :host([theme~='arrow']:is([position='start'], [position='end'])[top-aligned]) [part='arrow'] {

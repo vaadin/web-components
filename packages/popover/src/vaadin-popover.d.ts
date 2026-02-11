@@ -57,6 +57,7 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * :----------------------------------------|
  * |`--vaadin-overlay-backdrop-background`  |
  * |`--vaadin-popover-arrow-border-radius`  |
+ * |`--vaadin-popover-arrow-inset`          |
  * |`--vaadin-popover-arrow-size`           |
  * |`--vaadin-popover-background`           |
  * |`--vaadin-popover-border-color`         |
