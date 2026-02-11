@@ -517,6 +517,8 @@ export class UploadManager extends EventTarget {
           file.errorKey = 'serverUnavailable';
         } else if (xhr.status >= 500) {
           file.errorKey = 'unexpectedServerError';
+        } else if (xhr.status === 413) {
+          file.errorKey = 'fileTooLarge';
         } else if (xhr.status >= 400) {
           file.errorKey = 'forbidden';
         }
