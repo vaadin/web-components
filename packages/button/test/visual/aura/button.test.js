@@ -86,4 +86,15 @@ describe('button', () => {
       });
     });
   });
+
+  describe('variants', () => {
+    ['basic', 'primary', 'tertiary'].forEach((baseVariant) => {
+      ['warning', 'error', 'success'].forEach((colorVariant) => {
+        it(`${baseVariant} ${colorVariant}`, async () => {
+          element.setAttribute('theme', `${baseVariant} ${colorVariant}`);
+          await visualDiff(div, `variant-${baseVariant}-${colorVariant}`);
+        });
+      });
+    });
+  });
 });
