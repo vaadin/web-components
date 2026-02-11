@@ -79,11 +79,9 @@ export const checkable = (part, propName = part) => css`
     appearance: none;
     cursor: var(--_cursor);
     /* Ensure minimum click target (WCAG) */
-    width: 3px;
-    height: 3px;
-    scale: 8;
-    transform: translate(1px, 1px);
-    margin: 0 !important;
+    margin: min(0px, (24px - 100%) / -2) !important;
+    /* Extend the input to cover the gap between the checkbox/radio and label */
+    margin-inline-end: calc(min(0px, (24px - 100%) / -2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s))) !important;
   }
 
   /* Control container (checkbox, radio button) */
