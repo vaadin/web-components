@@ -19,7 +19,7 @@
   @media (prefers-reduced-transparency: reduce) {
     --aura-overlay-surface-opacity: 1 !important;
   }
-  --vaadin-popover-arrow-size: 6px;
+  --vaadin-popover-arrow-size: 8px;
   --vaadin-popover-arrow-inset: var(--vaadin-gap-l);
   --vaadin-popover-border-radius: var(--vaadin-radius-l);
 }
