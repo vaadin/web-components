@@ -17,8 +17,8 @@
 @import '../src/components/menu-bar-overlay.css';
 @import '../src/components/menu-bar.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-menu-bar-inject: 1;
   --_lumo-vaadin-menu-bar-inject-modules: lumo_components_menu-bar;
 

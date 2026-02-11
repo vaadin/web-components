@@ -6,8 +6,8 @@
 @import '../src/components/grid-sorter.css';
 @import '../src/components/grid-sorter-icons.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-grid-sorter-inject: 1;
   --_lumo-vaadin-grid-sorter-inject-modules: lumo_components_grid-sorter;
 }

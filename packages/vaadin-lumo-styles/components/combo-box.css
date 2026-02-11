@@ -20,8 +20,8 @@
 @import '../src/components/item.css';
 @import './input-container.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-combo-box-inject: 1;
   --_lumo-vaadin-combo-box-inject-modules:
     lumo_mixins_field-label,
