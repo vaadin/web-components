@@ -5,8 +5,8 @@
  */
 @import '../src/components/avatar.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-avatar-inject: 1;
   --_lumo-vaadin-avatar-inject-modules: lumo_components_avatar;
 }

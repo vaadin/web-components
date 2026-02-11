@@ -19,8 +19,8 @@
 @import '../src/components/select.css';
 @import './input-container.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-select-inject: 1;
   --_lumo-vaadin-select-inject-modules:
     lumo_mixins_field-label,

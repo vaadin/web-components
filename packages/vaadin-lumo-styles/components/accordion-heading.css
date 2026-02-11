@@ -6,8 +6,8 @@
 @import '../src/components/accordion-heading.css';
 @import '../src/components/details-summary.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-accordion-heading-inject: 1;
   --_lumo-vaadin-accordion-heading-inject-modules:
     lumo_components_details-summary,

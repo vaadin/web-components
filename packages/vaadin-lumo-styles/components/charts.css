@@ -5,8 +5,8 @@
  */
 @import '../src/components/chart.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-chart-inject: 1;
   --_lumo-vaadin-chart-inject-modules: lumo_components_chart;
 }

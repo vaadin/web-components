@@ -5,8 +5,8 @@
  */
 @import './button.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-message-input-button-inject: 1;
   --_lumo-vaadin-message-input-button-inject-modules: lumo_components_button;
 }
