@@ -28,7 +28,7 @@
   }
 
   &::part(track-fill) {
-    margin-inline: calc(var(--vaadin-slider-thumb-width) - 1px) -1px;
+    margin-inline-end: -1px;
   }
 
   &::part(thumb) {
@@ -82,6 +82,10 @@
       opacity 100ms,
       background-color 100ms;
   }
+}
+
+vaadin-range-slider::part(track-fill) {
+  margin-inline-start: calc(var(--vaadin-slider-thumb-width) - 1px);
 }
 
 vaadin-slider[active]:not([readonly], [disabled])::part(thumb)::before,
