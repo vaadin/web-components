@@ -106,24 +106,22 @@ describe('vaadin-overlay', () => {
       overlay.opened = false;
     });
 
-    it('should call showPopover when opened property is set to true', async () => {
-      const showSpy = sinon.spy(overlay, 'showPopover');
+    it('should show popover when opened property is set to true', async () => {
+      expect(overlay.matches(':popover-open')).to.be.false;
 
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      expect(showSpy).to.be.calledOnce;
+      expect(overlay.matches(':popover-open')).to.be.true;
     });
 
-    it('should call hidePopover opened property is set to false', async () => {
+    it('should hide popover when opened property is set to false', async () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-
-      const hideSpy = sinon.spy(overlay, 'hidePopover');
 
       overlay.opened = false;
 
-      expect(hideSpy).to.be.calledOnce;
+      expect(overlay.matches(':popover-open')).to.be.false;
     });
 
     it('should not call showPopover when opened is set to true while disconnected', async () => {
@@ -139,6 +137,39 @@ describe('vaadin-overlay', () => {
 
       expect(overlay.opened).to.be.false;
       expect(showSpy).to.be.not.called;
+    });
+
+    it('should show popover again when element is moved in the DOM', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const newParent = fixtureSync(`<div></div>`);
+      newParent.appendChild(overlay);
+
+      expect(overlay.matches(':popover-open')).to.be.true;
+    });
+
+    describe('open before connecting', () => {
+      beforeEach(() => {
+        overlay = document.createElement('vaadin-overlay');
+        overlay.renderer = (root) => {
+          root.textContent = 'overlay content';
+        };
+      });
+
+      afterEach(() => {
+        overlay.opened = false;
+        overlay.remove();
+      });
+
+      it('should call showPopover once when opened is set before connecting', async () => {
+        const showSpy = sinon.spy(overlay, 'showPopover');
+        overlay.opened = true;
+        document.body.append(overlay);
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        expect(showSpy).to.be.calledOnce;
+      });
     });
   });
 
