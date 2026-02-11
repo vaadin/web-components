@@ -4,6 +4,9 @@
   --vaadin-tooltip-font-size: var(--aura-font-size-s);
   --vaadin-tooltip-font-weight: var(--aura-font-weight-medium);
   --vaadin-tooltip-line-height: var(--aura-line-height-s);
-  --vaadin-tooltip-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
   --vaadin-tooltip-border-radius: var(--vaadin-radius-s);
+}
+
+vaadin-tooltip::part(overlay) {
+  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
 }
