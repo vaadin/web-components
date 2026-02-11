@@ -5,8 +5,8 @@
  */
 @import '../src/components/details-summary.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-details-summary-inject: 1;
   --_lumo-vaadin-details-summary-inject-modules: lumo_components_details-summary;
 }

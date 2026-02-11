@@ -14,8 +14,8 @@
 @import './date-picker.css';
 @import './time-picker.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-date-time-picker-inject: 1;
   --_lumo-vaadin-date-time-picker-inject-modules:
     lumo_mixins_field-label,

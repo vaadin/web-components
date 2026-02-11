@@ -5,8 +5,8 @@
  */
 @import '../src/mixins/overlay.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-overlay-inject: 1;
   --_lumo-vaadin-overlay-inject-modules: lumo_mixins_overlay;
 }

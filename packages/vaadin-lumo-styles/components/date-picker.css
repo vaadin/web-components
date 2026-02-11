@@ -20,8 +20,8 @@
 @import './button.css';
 @import './input-container.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-date-picker-inject: 1;
   --_lumo-vaadin-date-picker-inject-modules:
     lumo_mixins_field-label,
