@@ -812,9 +812,7 @@ class Popover extends PopoverPositionMixin(
     // Get previous focusable element excluding the popover
     const prevFocusable = this.__getPrevBodyFocusable(activeElement, focusables);
     // Get previous focusable element including the popover (simulates native Tab order)
-    const prevFocusableNative = this.__getPrevBodyFocusable(activeElement, focusables, {
-      includePopover: true,
-    });
+    const prevFocusableNative = this.__getPrevBodyFocusable(activeElement, focusables, true);
     const targetFocusable = this.__getTargetFocusable();
 
     // Intercept Shift+Tab when it would naturally go to the target
@@ -866,7 +864,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __getPrevBodyFocusable(target, focusables = this.__getBodyFocusables(), { includePopover = false } = {}) {
+  __getPrevBodyFocusable(target, focusables = this.__getBodyFocusables(), includePopover = false) {
     const list = includePopover ? focusables : focusables.filter((el) => el !== this);
     const idx = list.findIndex((el) => el === target);
     // Returns null both when target is the first element (idx === 0)
