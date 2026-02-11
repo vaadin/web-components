@@ -12,8 +12,8 @@
 @import '../src/components/range-slider.css';
 @import '../src/components/slider-bubble-overlay.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-range-slider-inject: 1;
   --_lumo-vaadin-range-slider-inject-modules:
     lumo_mixins_field-label,

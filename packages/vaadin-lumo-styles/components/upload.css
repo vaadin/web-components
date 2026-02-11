@@ -10,8 +10,8 @@
 @import './button.css';
 @import './progress-bar.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-upload-inject: 1;
   --_lumo-vaadin-upload-inject-modules: lumo_components_upload;
 

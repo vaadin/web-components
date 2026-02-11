@@ -6,8 +6,8 @@
 @import '../src/components/side-nav.css';
 @import './side-nav-item.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-side-nav-inject: 1;
   --_lumo-vaadin-side-nav-inject-modules: lumo_components_side-nav;
 }

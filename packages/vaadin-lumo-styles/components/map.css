@@ -5,8 +5,8 @@
  */
 @import '../src/components/map.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-map-inject: 1;
   --_lumo-vaadin-map-inject-modules: lumo_components_map;
 }

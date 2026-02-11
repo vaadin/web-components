@@ -900,8 +900,8 @@ packages/vaadin-lumo-styles/
  */
 @import '../src/components/{name}.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-{name}-inject: 1;
   --_lumo-vaadin-{name}-inject-modules: lumo_components_{name};
 }

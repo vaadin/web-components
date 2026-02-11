@@ -5,8 +5,8 @@
  */
 @import '../src/components/horizontal-layout.css';
 
-:root::before,
-:host::before {
+:root,
+:host {
   --_lumo-vaadin-horizontal-layout-inject: 1;
   --_lumo-vaadin-horizontal-layout-inject-modules: lumo_components_horizontal-layout;
 }
