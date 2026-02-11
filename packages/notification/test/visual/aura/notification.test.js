@@ -37,3 +37,42 @@ describe('notification', () => {
     });
   });
 });
+
+describe('variants', () => {
+  let element;
+
+  beforeEach(() => {
+    element = fixtureSync('<vaadin-notification duration="0"></vaadin-notification>');
+    element.renderer = (root) => {
+      root.textContent = 'Notification';
+    };
+  });
+
+  afterEach(() => {
+    element.opened = false;
+  });
+
+  describe('class', () => {
+    ['v-info', 'v-warning', 'v-error', 'v-success'].forEach((variant) => {
+      it(variant, async () => {
+        element.overlayClass = variant;
+        element.opened = true;
+        await nextRender();
+        const notification = document.querySelector('vaadin-notification-card');
+        await visualDiff(notification, `class-${variant}`);
+      });
+    });
+  });
+
+  describe('theme', () => {
+    ['info', 'warning', 'error', 'success'].forEach((variant) => {
+      it(variant, async () => {
+        element.setAttribute('theme', variant);
+        element.opened = true;
+        await nextRender();
+        const notification = document.querySelector('vaadin-notification-card');
+        await visualDiff(notification, `theme-${variant}`);
+      });
+    });
+  });
+});

@@ -215,13 +215,13 @@ vaadin-tab,
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-green, .v-success) {
+:is(#id, [theme~='success'], .aura-accent-green, .v-success) {
   --aura-accent-color-light: var(--aura-green);
   --aura-accent-color-dark: var(--aura-green);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-yellow, .v-warning) {
+:is(#id, [theme~='warning'], .aura-accent-yellow, .v-warning) {
   --aura-accent-color-light: var(--aura-yellow);
   --aura-accent-color-dark: var(--aura-yellow);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
@@ -239,7 +239,7 @@ vaadin-tab,
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
 }
 
-:is(#id, .aura-accent-blue, .v-info) {
+:is(#id, [theme~='info'], .aura-accent-blue, .v-info) {
   --aura-accent-color-light: var(--aura-blue);
   --aura-accent-color-dark: var(--aura-blue);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
