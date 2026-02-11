@@ -242,6 +242,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
 
   /** @private */
   __syncDisabledState() {
+    if (!this.isConnected) return;
     this.__syncingDisabled = true;
     this.toggleAttribute('disabled', this.__effectiveDisabled);
     this.__syncingDisabled = false;

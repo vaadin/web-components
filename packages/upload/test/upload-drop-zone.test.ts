@@ -64,6 +64,20 @@ describe('vaadin-upload-drop-zone', () => {
     await nextRender();
   });
 
+  describe('programmatic creation', () => {
+    it('should not throw when created without a manager', () => {
+      expect(() => document.createElement('vaadin-upload-drop-zone')).to.not.throw();
+    });
+
+    it('should have disabled attribute after being connected without a manager', async () => {
+      const el = document.createElement('vaadin-upload-drop-zone') as UploadDropZone;
+      document.body.appendChild(el);
+      await nextRender();
+      expect(el.hasAttribute('disabled')).to.be.true;
+      el.remove();
+    });
+  });
+
   describe('basic', () => {
     it('should render slotted content', () => {
       expect(dropZone.textContent).to.equal('Drop files here');
