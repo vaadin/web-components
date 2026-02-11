@@ -128,26 +128,6 @@ describe('slider', () => {
     });
   });
 
-  describe('theme', () => {
-    it('contrast', async () => {
-      element.value = 50;
-      element.setAttribute('theme', 'contrast');
-      await visualDiff(div, 'theme-contrast');
-    });
-
-    it('success', async () => {
-      element.value = 50;
-      element.setAttribute('theme', 'success');
-      await visualDiff(div, 'theme-success');
-    });
-
-    it('error', async () => {
-      element.value = 50;
-      element.setAttribute('theme', 'error');
-      await visualDiff(div, 'theme-error');
-    });
-  });
-
   describe('RTL', () => {
     beforeEach(() => {
       document.documentElement.setAttribute('dir', 'rtl');

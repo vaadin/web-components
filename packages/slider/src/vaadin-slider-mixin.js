@@ -103,6 +103,30 @@ export const SliderMixin = (superClass) =>
             width: var(--_thumb-width);
             height: 100%;
           }
+
+          ${tag}:not([readonly]) > input::-webkit-slider-thumb {
+            cursor: var(--vaadin-slider-thumb-cursor, grab);
+          }
+
+          ${tag}:not([readonly]) > input::-moz-range-thumb {
+            cursor: var(--vaadin-slider-thumb-cursor, grab);
+          }
+
+          ${tag}:is([active], [start-active], [end-active]) > input::-webkit-slider-thumb {
+            cursor: var(--vaadin-slider-thumb-cursor-active, grabbing);
+          }
+
+          ${tag}:is([active], [start-active], [end-active]) > input::-moz-range-thumb {
+            cursor: var(--vaadin-slider-thumb-cursor-active, grabbing);
+          }
+
+          ${tag}[disabled] > input::-webkit-slider-thumb {
+            cursor: var(--vaadin-disabled-cursor, not-allowed);
+          }
+
+          ${tag}[disabled] > input::-moz-range-thumb {
+            cursor: var(--vaadin-disabled-cursor, not-allowed);
+          }
         `,
       ];
     }

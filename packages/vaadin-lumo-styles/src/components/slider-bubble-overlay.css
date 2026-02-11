@@ -14,6 +14,7 @@
     font-size: var(--lumo-font-size-xs);
     line-height: var(--lumo-line-height-s);
     overflow: visible;
+    padding: 0;
   }
 
   [part='content'] {
