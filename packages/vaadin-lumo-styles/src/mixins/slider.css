@@ -41,25 +41,15 @@
     width: var(--vaadin-field-default-width, 12em);
   }
 
-  :host([theme~='contrast']) {
-    --vaadin-slider-fill-background: var(--lumo-contrast-80pct);
-  }
-
-  :host([theme~='error']) {
-    --vaadin-slider-fill-background: var(--lumo-error-color);
-  }
-
-  :host([theme~='success']) {
-    --vaadin-slider-fill-background: var(--lumo-success-color);
-  }
-
   :host([readonly]) {
-    --vaadin-slider-fill-background: var(--lumo-contrast-50pct);
+    --_fill-background: var(--lumo-contrast-70pct);
+    --vaadin-slider-thumb-border-color: var(--_fill-background);
   }
 
   :host([disabled]) {
     --vaadin-slider-track-background: var(--lumo-contrast-10pct);
     --vaadin-slider-fill-background: var(--lumo-contrast-30pct);
+    --vaadin-slider-thumb-border-color: var(--_fill-background);
     pointer-events: none;
   }
 
@@ -75,7 +65,8 @@
 
   [part~='thumb'] {
     background: var(--lumo-base-color);
-    border: solid 3px var(--_fill-background);
+    border-width: var(--vaadin-slider-thumb-border-width, 3px);
+    border-color: var(--vaadin-slider-thumb-border-color, var(--_fill-background));
   }
 
   [part='label'] {
@@ -110,10 +101,6 @@
     height: 0.4em;
     mask: none;
     background: transparent;
-  }
-
-  :host([readonly]) [part~='thumb'] {
-    border: solid 3px var(--lumo-contrast-50pct);
   }
 
   :host([readonly]) [part='track-fill'] {

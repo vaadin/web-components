@@ -74,7 +74,7 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * `thumb`              | The slider thumb (applies to both thumbs)
  * `thumb-start`        | The start (lower value) thumb
  * `thumb-end`          | The end (upper value) thumb
- * `marks`             | Container for min/max labels
+ * `marks`              | Container for min/max labels
  * `min`                | Minimum value label
  * `max`                | Maximum value label
  *
@@ -107,11 +107,35 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * `--vaadin-input-field-label-font-size`       |
  * `--vaadin-input-field-label-font-weight`     |
  * `--vaadin-input-field-required-indicator`    |
+ * `--vaadin-slider-bubble-arrow-size`          |
+ * `--vaadin-slider-bubble-background`          |
+ * `--vaadin-slider-bubble-border-color`        |
+ * `--vaadin-slider-bubble-border-radius`       |
+ * `--vaadin-slider-bubble-border-width`        |
+ * `--vaadin-slider-bubble-offset`              |
+ * `--vaadin-slider-bubble-padding`             |
+ * `--vaadin-slider-bubble-shadow`              |
+ * `--vaadin-slider-bubble-text-color`          |
+ * `--vaadin-slider-bubble-font-size`           |
+ * `--vaadin-slider-bubble-font-weight`         |
+ * `--vaadin-slider-bubble-line-height`         |
  * `--vaadin-slider-fill-background`            |
+ * `--vaadin-slider-fill-border-color`          |
+ * `--vaadin-slider-fill-border-width`          |
+ * `--vaadin-slider-marks-color`                |
+ * `--vaadin-slider-marks-font-size`            |
+ * `--vaadin-slider-marks-font-weight`          |
+ * `--vaadin-slider-thumb-border-color`         |
+ * `--vaadin-slider-thumb-border-radius`        |
+ * `--vaadin-slider-thumb-border-width`         |
+ * `--vaadin-slider-thumb-cursor`               |
+ * `--vaadin-slider-thumb-cursor-active`        |
  * `--vaadin-slider-thumb-height`               |
  * `--vaadin-slider-thumb-width`                |
  * `--vaadin-slider-track-background`           |
+ * `--vaadin-slider-track-border-color`         |
  * `--vaadin-slider-track-border-radius`        |
+ * `--vaadin-slider-track-border-width`         |
  * `--vaadin-slider-track-height`               |
  *
  * In order to style the slider bubble, use `<vaadin-slider-bubble>` shadow DOM parts:

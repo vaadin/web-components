@@ -22,14 +22,18 @@ export const sliderStyles = css`
   :host([disabled]) {
     cursor: var(--vaadin-disabled-cursor);
     --vaadin-slider-fill-background: linear-gradient(
-        var(--vaadin-text-color-disabled),
-        var(--vaadin-text-color-disabled)
+        var(--vaadin-border-color-secondary),
+        var(--vaadin-border-color-secondary)
       )
       var(--vaadin-background-color);
+    --vaadin-slider-thumb-background: var(--vaadin-slider-fill-background);
+    --vaadin-slider-thumb-border-color: transparent;
   }
 
   :host([readonly]) {
-    --vaadin-slider-fill-background: var(--vaadin-background-color);
+    --vaadin-slider-fill-background: var(--vaadin-border-color);
+    --vaadin-slider-thumb-background: var(--vaadin-background-color);
+    --vaadin-slider-thumb-border-color: var(--vaadin-border-color);
     --_outline-style: dashed;
   }
 
@@ -49,7 +53,6 @@ export const sliderStyles = css`
     width: var(--vaadin-field-default-width, 12em);
     max-width: 100%;
     min-width: 100%;
-    min-height: var(--_thumb-height);
     --_track-width: calc(100% - var(--_thumb-width));
   }
 
@@ -69,6 +72,8 @@ export const sliderStyles = css`
     height: var(--vaadin-slider-track-height, 0.25lh);
     background: var(--vaadin-slider-track-background, var(--vaadin-background-container));
     border-radius: var(--vaadin-slider-track-border-radius, var(--vaadin-radius-m));
+    border: var(--vaadin-slider-track-border-width, 0) solid
+      var(--vaadin-slider-track-border-color, var(--vaadin-border-color-secondary));
   }
 
   [part='track-fill'] {
@@ -76,6 +81,8 @@ export const sliderStyles = css`
     grid-column: fill-start / fill-end;
     height: 100%;
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
+    box-shadow: inset 0 0 0 var(--vaadin-slider-fill-border-width, 1px)
+      var(--vaadin-slider-fill-border-color, transparent);
   }
 
   [part~='thumb'] {
@@ -84,14 +91,11 @@ export const sliderStyles = css`
     grid-column: thumb1;
     width: var(--_thumb-width);
     height: var(--_thumb-height);
-    background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
-    border-radius: 50%;
+    background: var(--vaadin-slider-thumb-background, var(--vaadin-background-color));
+    border: var(--vaadin-slider-thumb-border-width, 1px) solid
+      var(--vaadin-slider-thumb-border-color, var(--vaadin-text-color));
+    border-radius: var(--vaadin-slider-thumb-border-radius, var(--vaadin-radius-l));
     touch-action: none;
-  }
-
-  :host([readonly]) [part~='thumb'],
-  :host([readonly]) [part='track-fill'] {
-    border: dashed 1px var(--vaadin-border-color);
   }
 
   :host([readonly]) [part='track-fill'] {
@@ -109,12 +113,15 @@ export const sliderStyles = css`
     background: transparent;
     outline: 0;
     -webkit-tap-highlight-color: transparent;
+    cursor: inherit;
+    z-index: 999;
   }
 
   [part='marks'] {
     display: none;
-    font-size: 0.75em;
-    color: var(--vaadin-secondary-text-color);
+    font-size: var(--vaadin-slider-marks-font-size, 0.75em);
+    font-weight: var(--vaadin-slider-marks-font-weight, inherit);
+    color: var(--vaadin-slider-marks-color, var(--vaadin-text-color-secondary));
   }
 
   :host([min-max-visible]) [part='marks'] {

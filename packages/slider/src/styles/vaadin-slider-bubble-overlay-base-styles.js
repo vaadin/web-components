@@ -10,7 +10,10 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-st
 const sliderBubbleOverlay = css`
   :host {
     --_arrow-size: var(--vaadin-slider-bubble-arrow-size, 8px);
-    --_border-width: var(--vaadin-slider-bubble-border-width, var(--vaadin-overlay-border-width, 1px));
+    --_border-width: var(
+      --vaadin-slider-bubble-border-width,
+      var(--vaadin-tooltip-border-width, var(--vaadin-overlay-border-width, 1px))
+    );
     --_default-offset: var(--vaadin-slider-bubble-offset, 2px);
     --_rtl-multiplier: 1;
   }
@@ -22,11 +25,33 @@ const sliderBubbleOverlay = css`
   [part='overlay'] {
     position: relative;
     overflow: visible;
-    color: inherit;
-  }
-
-  [part='content'] {
-    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+    max-width: var(--vaadin-tooltip-max-width, 40ch);
+    padding: var(
+      --vaadin-slider-bubble-padding,
+      var(--vaadin-tooltip-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container))
+    );
+    border: var(
+        --vaadin-slider-bubble-border-width,
+        var(--vaadin-tooltip-border-width, var(--vaadin-overlay-border-width, 1px))
+      )
+      solid
+      var(
+        --vaadin-slider-bubble-border-color,
+        var(--vaadin-tooltip-border-color, var(--vaadin-overlay-border-color, var(--vaadin-border-color-secondary)))
+      );
+    border-radius: var(
+      --vaadin-slider-bubble-border-radius,
+      var(--vaadin-tooltip-border-radius, var(--vaadin-radius-m))
+    );
+    background: var(
+      --vaadin-slider-bubble-background,
+      var(--vaadin-tooltip-background, var(--vaadin-background-color))
+    );
+    color: var(--vaadin-slider-bubble-text-color, var(--vaadin-tooltip-text-color, inherit));
+    font-size: var(--vaadin-slider-bubble-font-size, var(--vaadin-tooltip-font-size, 0.9em));
+    font-weight: var(--vaadin-slider-bubble-font-weight, var(--vaadin-tooltip-font-weight, inherit));
+    line-height: var(--vaadin-slider-bubble-line-height, var(--vaadin-tooltip-line-height, inherit));
+    box-shadow: var(--vaadin-slider-bubble-shadow, var(--vaadin-tooltip-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2)));
   }
 
   :host([top-aligned]) [part='overlay'] {
@@ -42,7 +67,7 @@ const sliderBubbleOverlay = css`
     position: absolute;
     background: inherit;
     border: inherit;
-    border-start-start-radius: var(--vaadin-popover-arrow-border-radius, 0);
+    border-start-start-radius: var(--vaadin-slider-bubble-arrow-border-radius, 0);
     inset-inline-start: 50%;
     outline: inherit;
     box-shadow: inherit;
