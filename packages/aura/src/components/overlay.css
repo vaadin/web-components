@@ -31,9 +31,19 @@
   box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-overlay-shadow, var(--aura-overlay-shadow));
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
+}
+
+:not(vaadin-tooltip)::part(overlay) {
   font-family: var(--aura-font-family);
   font-size: var(--aura-font-size-m);
   font-weight: var(--aura-font-weight-regular);
   line-height: var(--aura-line-height-m);
   color: var(--vaadin-text-color);
+}
+
+vaadin-popover {
+  &::part(arrow) {
+    background: var(--aura-surface-color-solid);
+    margin: 1px;
+  }
 }
