@@ -56,7 +56,7 @@ describe('themes', () => {
     element.opened = false;
   });
 
-  ['primary', 'warning', 'success', 'error'].forEach((variant) => {
+  ['info', 'primary', 'warning', 'success', 'error'].forEach((variant) => {
     it(variant, async () => {
       element.setAttribute('theme', variant);
       const notification = document.querySelector('vaadin-notification-card');

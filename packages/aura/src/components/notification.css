@@ -29,7 +29,11 @@ vaadin-notification-card:is(
     .v-info,
     .v-success,
     .v-warning,
-    .v-error
+    .v-error,
+    [theme~='info'],
+    [theme~='success'],
+    [theme~='warning'],
+    [theme~='error']
   )::part(overlay) {
   --vaadin-notification-background: var(--aura-accent-surface);
   --vaadin-icon-color: var(--aura-accent-text-color);
