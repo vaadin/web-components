@@ -32,29 +32,51 @@ describe('vaadin-upload-button', () => {
       expect(button.getAttribute('role')).to.equal('button');
     });
 
-    it('should have tabindex="0"', () => {
-      expect(button.getAttribute('tabindex')).to.equal('0');
+    it('should have manager property defaulting to null', () => {
+      expect(button.manager).to.be.null;
     });
 
-    it('should have disabled property defaulting to false', () => {
-      expect(button.disabled).to.be.false;
-    });
-
-    it('should reflect disabled to attribute', async () => {
-      button.disabled = true;
-      await nextFrame();
+    it('should be disabled when no manager is set', () => {
+      expect(button.disabled).to.be.true;
       expect(button.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should have manager property defaulting to null', () => {
-      expect(button.manager).to.be.null;
+    it('should have tabindex="-1" when no manager is set', () => {
+      expect(button.getAttribute('tabindex')).to.equal('-1');
+    });
+
+    it('should be enabled when manager is set', async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
+      expect(button.disabled).to.be.false;
+      expect(button.getAttribute('tabindex')).to.equal('0');
+    });
+
+    it('should be disabled again when manager is removed', async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
+      expect(button.disabled).to.be.false;
+
+      button.manager = null;
+      await nextFrame();
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should reflect explicit disabled to attribute', async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
+      button.disabled = true;
+      await nextFrame();
+      expect(button.hasAttribute('disabled')).to.be.true;
     });
   });
 
   describe('file picker', () => {
     let fileInput: HTMLInputElement;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      await nextFrame();
       fileInput = getFileInput(button);
     });
 
@@ -74,7 +96,7 @@ describe('vaadin-upload-button', () => {
       expect(fileInput.multiple).to.be.true;
     });
 
-    it('should default to multiple when no manager', () => {
+    it('should default to multiple when manager has no maxFiles', () => {
       button.openFilePicker();
       expect(fileInput.multiple).to.be.true;
     });
@@ -356,6 +378,7 @@ describe('vaadin-upload-button', () => {
       it('should return disabled=true when maxFilesReached is true', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.disabled).to.be.false;
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
@@ -367,6 +390,7 @@ describe('vaadin-upload-button', () => {
       it('should have disabled attribute when maxFilesReached is true', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.hasAttribute('disabled')).to.be.false;
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
@@ -452,6 +476,7 @@ describe('vaadin-upload-button', () => {
       it('should not be focusable when disabled due to maxFilesReached', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
+        await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
@@ -470,6 +495,170 @@ describe('vaadin-upload-button', () => {
         uploadManager.removeFile(uploadManager.files[0]);
         await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
+      });
+    });
+
+    describe('disabled state when manager is disabled', () => {
+      it('should return disabled=true when manager is disabled', async () => {
+        button.manager = uploadManager;
+        await nextFrame();
+        expect(button.disabled).to.be.false;
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+      });
+
+      it('should have disabled attribute when manager is disabled', async () => {
+        button.manager = uploadManager;
+        await nextFrame();
+        expect(button.hasAttribute('disabled')).to.be.false;
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.hasAttribute('disabled')).to.be.true;
+      });
+
+      it('should return disabled=false when manager is re-enabled', async () => {
+        button.manager = uploadManager;
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.false;
+      });
+
+      it('should preserve explicit disabled=true when manager is re-enabled', async () => {
+        button.manager = uploadManager;
+        button.disabled = true;
+        await nextFrame();
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Re-enable manager - button should stay disabled
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+      });
+
+      it('should allow setting disabled=false while manager is disabled', async () => {
+        button.manager = uploadManager;
+        button.disabled = true;
+        await nextFrame();
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Setting disabled=false should still return true due to manager being disabled
+        button.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // But once manager is re-enabled, button should be enabled
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.false;
+      });
+
+      it('should have aria-disabled attribute when manager is disabled', async () => {
+        button.manager = uploadManager;
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.getAttribute('aria-disabled')).to.equal('true');
+      });
+
+      it('should not open file picker when manager is disabled', async () => {
+        button.manager = uploadManager;
+
+        uploadManager.disabled = true;
+        await nextFrame();
+
+        const input = getFileInput(button);
+        const spy = sinon.spy();
+        input.addEventListener('click', spy);
+        button.click();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not be focusable when manager is disabled', async () => {
+        button.manager = uploadManager;
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('0');
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should restore tabindex when manager is re-enabled', async () => {
+        button.manager = uploadManager;
+
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('-1');
+
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.getAttribute('tabindex')).to.equal('0');
+      });
+
+      it('should sync initial disabled state from manager', async () => {
+        uploadManager.disabled = true;
+
+        // Set manager - button should sync disabled state
+        button.manager = uploadManager;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+      });
+
+      it('should be disabled when both explicitly disabled and manager is disabled', async () => {
+        button.manager = uploadManager;
+        button.disabled = true;
+        uploadManager.disabled = true;
+        await nextFrame();
+
+        expect(button.disabled).to.be.true;
+
+        // Re-enable manager - button should still be disabled
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Re-enable button - button should be enabled
+        button.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.false;
+      });
+
+      it('should be disabled when both manager disabled and maxFilesReached', async () => {
+        uploadManager.maxFiles = 1;
+        button.manager = uploadManager;
+        uploadManager.disabled = true;
+        await nextFrame();
+
+        expect(button.disabled).to.be.true;
+
+        // Add file to reach max - button should still be disabled
+        uploadManager.addFiles([createFile(100, 'text/plain')]);
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Re-enable manager - button should still be disabled due to maxFilesReached
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.disabled).to.be.true;
+
+        // Remove file - button should be enabled
+        uploadManager.removeFile(uploadManager.files[0]);
+        await nextFrame();
+        expect(button.disabled).to.be.false;
       });
     });
 

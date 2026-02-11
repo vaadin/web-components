@@ -125,6 +125,13 @@ export interface UploadManagerOptions {
    * @default 'file'
    */
   formDataName?: string;
+
+  /**
+   * Whether the upload manager is disabled.
+   * When true, connected components (upload-button, upload-drop-zone) will be automatically disabled.
+   * @default false
+   */
+  disabled?: boolean;
 }
 
 export interface UploadManagerEventMap {
@@ -147,6 +154,7 @@ export interface UploadManagerEventMap {
   'upload-abort': CustomEvent<{ file: UploadFile; xhr: XMLHttpRequest }>;
   'files-changed': CustomEvent<{ value: UploadFile[] }>;
   'max-files-reached-changed': CustomEvent<{ value: boolean }>;
+  'disabled-changed': CustomEvent<{ value: boolean }>;
 }
 
 /**
@@ -291,6 +299,12 @@ export class UploadManager extends EventTarget {
    * Specifies if the maximum number of files have been uploaded.
    */
   readonly maxFilesReached: boolean;
+
+  /**
+   * Whether the upload manager is disabled.
+   * When true, connected components (upload-button, upload-drop-zone) will be automatically disabled.
+   */
+  disabled: boolean;
 
   /**
    * Add files to the upload list.

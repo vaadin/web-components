@@ -58,6 +58,7 @@ window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
  * @fires {CustomEvent} upload-abort - Fired when abort is requested
  * @fires {CustomEvent} files-changed - Fired when the files array changes
  * @fires {CustomEvent} max-files-reached-changed - Fired when maxFilesReached changes
+ * @fires {CustomEvent} disabled-changed - Fired when disabled changes
  */
 export class UploadManager extends EventTarget {
   /** @type {Array<UploadFile>} */
@@ -65,6 +66,9 @@ export class UploadManager extends EventTarget {
 
   /** @type {boolean} */
   #maxFilesReached = false;
+
+  /** @type {boolean} */
+  #disabled = false;
 
   /** @type {Array<UploadFile>} */
   #uploadQueue = [];
@@ -99,6 +103,7 @@ export class UploadManager extends EventTarget {
    * @param {string} [options.uploadFormat='raw'] - Specifies the upload format to use when sending files to the server. 'raw': Send file as raw binary data with the file's MIME type as Content-Type (default). 'multipart': Send file using multipart/form-data encoding.
    * @param {number} [options.maxConcurrentUploads=3] - Specifies the maximum number of files that can be uploaded simultaneously. This helps prevent browser performance degradation and XHR limitations when uploading large numbers of files. Files exceeding this limit will be queued and uploaded as active uploads complete.
    * @param {string} [options.formDataName='file'] - Specifies the 'name' property at Content-Disposition for multipart uploads. This property is ignored when uploadFormat is 'raw'.
+   * @param {boolean} [options.disabled=false] - Whether the upload manager is disabled. When true, connected components (upload-button, upload-drop-zone) will be automatically disabled.
    */
   constructor(options = {}) {
     super();
@@ -122,6 +127,7 @@ export class UploadManager extends EventTarget {
     this.uploadFormat = options.uploadFormat || 'raw';
     this.maxConcurrentUploads = options.maxConcurrentUploads === undefined ? 3 : options.maxConcurrentUploads;
     this.formDataName = options.formDataName || 'file';
+    this.disabled = options.disabled === undefined ? false : options.disabled;
   }
 
   /**
@@ -253,6 +259,27 @@ export class UploadManager extends EventTarget {
    */
   get maxFilesReached() {
     return this.#maxFilesReached;
+  }
+
+  /**
+   * Whether the upload manager is disabled.
+   * When true, connected components (upload-button, upload-drop-zone) will be automatically disabled.
+   * @type {boolean}
+   */
+  get disabled() {
+    return this.#disabled;
+  }
+
+  set disabled(value) {
+    const disabled = Boolean(value);
+    if (disabled !== this.#disabled) {
+      this.#disabled = disabled;
+      this.dispatchEvent(
+        new CustomEvent('disabled-changed', {
+          detail: { value: disabled },
+        }),
+      );
+    }
   }
 
   /**

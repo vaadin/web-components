@@ -36,7 +36,7 @@ import type { UploadManager } from './vaadin-upload-manager.js';
  * Attribute          | Description
  * -------------------|--------------------------------------------
  * `dragover`         | Set when files are being dragged over the element
- * `disabled`         | Set when the drop zone is explicitly disabled
+ * `disabled`         | Set when the drop zone is effectively disabled
  * `max-files-reached`| Set when the manager has reached maxFiles
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
@@ -50,6 +50,7 @@ declare class UploadDropZone extends HTMLElement {
 
   /**
    * Whether the drop zone is disabled.
+   * Returns true if either explicitly disabled, manager is disabled, or no manager is set.
    */
   disabled: boolean;
 

@@ -1,18 +1,21 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
 window.Vaadin.featureFlags.modularUpload = true;
 
 import '../../src/vaadin-upload-button.js';
+import { UploadManager } from '../../src/vaadin-upload-manager.js';
 
 describe('vaadin-upload-button', () => {
   let button;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     button = fixtureSync('<vaadin-upload-button>Upload</vaadin-upload-button>');
+    button.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+    await nextFrame();
   });
 
   describe('host', () => {

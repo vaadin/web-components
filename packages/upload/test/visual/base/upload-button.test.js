@@ -1,23 +1,25 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/src/vaadin-icon.js';
 import '@vaadin/icons/vaadin-iconset.js';
+import '../../../src/vaadin-upload-button.js';
+import { UploadManager } from '../../../src/vaadin-upload-manager.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.modularUpload = true;
 
-import '../../../src/vaadin-upload-button.js';
-
 describe('upload-button', () => {
   let div, element;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-upload-button>Upload</vaadin-upload-button>', div);
+    element.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+    await nextFrame();
   });
 
   afterEach(async () => {

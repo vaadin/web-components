@@ -529,6 +529,141 @@ describe('vaadin-upload-file-list', () => {
     });
   });
 
+  describe('disabled state when manager is disabled', () => {
+    it('should propagate manager disabled state to upload-file elements', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.disabled).to.be.false;
+
+      manager.disabled = true;
+      await nextFrame();
+      expect(uploadFile.disabled).to.be.true;
+    });
+
+    it('should re-enable upload-file elements when manager is re-enabled', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      manager.disabled = true;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.disabled).to.be.true;
+
+      manager.disabled = false;
+      await nextFrame();
+      expect(uploadFile.disabled).to.be.false;
+    });
+
+    it('should sync initial disabled state from manager', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.disabled = true;
+
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.disabled).to.be.true;
+    });
+
+    it('should keep files disabled when manager is re-enabled but explicitly disabled', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      fileList.disabled = true;
+      manager.disabled = true;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.disabled).to.be.true;
+
+      // Re-enable manager - files should still be disabled due to explicit disabled
+      manager.disabled = false;
+      await nextFrame();
+      expect(uploadFile.disabled).to.be.true;
+
+      // Re-enable file list - files should now be enabled
+      fileList.disabled = false;
+      await nextFrame();
+      expect(uploadFile.disabled).to.be.false;
+    });
+
+    it('should reset managerDisabled when manager is set to null', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      manager.disabled = true;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.disabled).to.be.true;
+
+      fileList.manager = null;
+      await nextFrame();
+      // File list clears items when manager is null, so check managerDisabled was reset
+      // by setting a new manager with files
+      const manager2 = new UploadManager({ target: '/api/upload', noAuto: true });
+      manager2.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager2;
+      await nextFrame();
+
+      expect(getUploadFile().disabled).to.be.false;
+    });
+
+    it('should remove listener when disconnected from DOM', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      const uploadFile = getUploadFile();
+      expect(uploadFile.disabled).to.be.false;
+
+      // Remove file list from DOM
+      fileList.remove();
+
+      // Disable manager - should not affect file list since listener was removed
+      manager.disabled = true;
+      expect(uploadFile.disabled).to.be.false;
+    });
+
+    it('should re-attach listener when reconnected to DOM', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      // Remove and re-add file list
+      const parent = fileList.parentElement!;
+      fileList.remove();
+      parent.appendChild(fileList);
+      await nextFrame();
+
+      // Disable manager - should sync since listener is re-attached
+      manager.disabled = true;
+      await nextFrame();
+      expect(getUploadFile().disabled).to.be.true;
+    });
+
+    it('should sync disabled state when reconnected after manager disabled', async () => {
+      manager.addFiles([createFile(100, 'text/plain')]);
+      fileList.manager = manager;
+      await nextFrame();
+
+      // Remove file list from DOM
+      const parent = fileList.parentElement!;
+      fileList.remove();
+
+      // Disable manager WHILE file list is disconnected
+      manager.disabled = true;
+
+      // Reconnect file list
+      parent.appendChild(fileList);
+      await nextFrame();
+
+      // File should now be disabled (synced with manager state on reconnect)
+      expect(getUploadFile().disabled).to.be.true;
+    });
+  });
+
   describe('theme propagation', () => {
     it('should propagate theme to upload-file elements', async () => {
       fileList.setAttribute('theme', 'thumbnails');

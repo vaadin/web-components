@@ -76,9 +76,30 @@ describe('vaadin-upload-drop-zone', () => {
     it('should not have dragover attribute by default', () => {
       expect(dropZone.hasAttribute('dragover')).to.be.false;
     });
+
+    it('should not show dragover state when no manager is set', async () => {
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+      await nextFrame();
+      expect(dropZone.hasAttribute('dragover')).to.be.false;
+      expect(event.dataTransfer!.dropEffect).to.equal('none');
+    });
+
+    it('should allow dragover after manager is set', async () => {
+      dropZone.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+      await nextFrame();
+      expect(dropZone.hasAttribute('dragover')).to.be.true;
+      expect(event.dataTransfer!.dropEffect).to.equal('copy');
+    });
   });
 
   describe('drag events', () => {
+    beforeEach(() => {
+      dropZone.manager = new UploadManager({ target: '/api/upload', noAuto: true });
+    });
+
     it('should set dragover attribute on dragover', async () => {
       const event = createDragEvent('dragover');
       dropZone.dispatchEvent(event);
@@ -398,6 +419,213 @@ describe('vaadin-upload-drop-zone', () => {
 
       // Drop zone should now have maxFilesReached (synced with manager state on reconnect)
       expect(dropZone.maxFilesReached).to.be.true;
+    });
+
+    it('should have disabled attribute when manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should remove disabled attribute when manager is re-enabled', async () => {
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      uploadManager.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should have disabled attribute when no manager is set', async () => {
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should remove disabled attribute when manager is set', async () => {
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      dropZone.manager = uploadManager;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should keep disabled attribute when manager is re-enabled but explicitly disabled', async () => {
+      dropZone.manager = uploadManager;
+      dropZone.disabled = true;
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      uploadManager.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      dropZone.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should block drops when manager is initially disabled', async () => {
+      uploadManager.disabled = true;
+
+      // Set manager - drop zone should respect manager disabled state
+      dropZone.manager = uploadManager;
+      await nextFrame();
+
+      const files = createFiles(1, 100, 'text/plain');
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.be.empty;
+    });
+
+    it('should not show dragover state when manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+
+      uploadManager.disabled = true;
+      await nextFrame();
+
+      // Try to trigger dragover on disabled drop zone
+      dropZone.dispatchEvent(createDragEvent('dragover'));
+      await nextFrame();
+
+      // Should not set dragover attribute when manager is disabled
+      expect(dropZone.hasAttribute('dragover')).to.be.false;
+    });
+
+    it('should set dropEffect to none when manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+
+      expect(event.dataTransfer!.dropEffect).to.equal('none');
+    });
+
+    it('should not add files when manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+
+      const files = createFiles(2, 100, 'text/plain');
+      const dropEvent = createDropEvent(files);
+      dropZone.dispatchEvent(dropEvent);
+      await nextFrame();
+
+      // Should not add files when manager is disabled
+      expect(uploadManager.files).to.be.empty;
+    });
+
+    it('should allow drops when manager is re-enabled', async () => {
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+
+      uploadManager.disabled = false;
+      await nextFrame();
+
+      const files = createFiles(1, 100, 'text/plain');
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.have.lengthOf(1);
+    });
+
+    it('should block drops when manager is set to null', async () => {
+      dropZone.manager = uploadManager;
+      await nextFrame();
+
+      // Set manager to null - drop zone should be disabled
+      dropZone.manager = null;
+      await nextFrame();
+
+      const event = createDragEvent('dragover');
+      dropZone.dispatchEvent(event);
+      await nextFrame();
+      expect(dropZone.hasAttribute('dragover')).to.be.false;
+      expect(event.dataTransfer!.dropEffect).to.equal('none');
+    });
+
+    it('should block drops when both explicitly disabled and manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      dropZone.disabled = true;
+      uploadManager.disabled = true;
+      await nextFrame();
+
+      const files = createFiles(2, 100, 'text/plain');
+      const dropEvent = createDropEvent(files);
+      dropZone.dispatchEvent(dropEvent);
+      await nextFrame();
+
+      // Should not add files when both disabled
+      expect(uploadManager.files).to.be.empty;
+
+      // Re-enable manager - should still block due to explicit disabled
+      uploadManager.disabled = false;
+      await nextFrame();
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.be.empty;
+
+      // Re-enable drop zone - should allow drops
+      dropZone.disabled = false;
+      await nextFrame();
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.have.lengthOf(2);
+    });
+
+    it('should block drops when manager disabled and maxFilesReached', async () => {
+      uploadManager.maxFiles = 1;
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+
+      // Add file to reach max
+      uploadManager.addFiles([createFiles(1, 100, 'text/plain')[0]]);
+      await nextFrame();
+
+      const files = createFiles(1, 100, 'text/plain');
+      const dropEvent = createDropEvent(files);
+      dropZone.dispatchEvent(dropEvent);
+      await nextFrame();
+
+      // Should have only 1 file (the one added via manager)
+      expect(uploadManager.files).to.have.lengthOf(1);
+
+      // Re-enable manager - should still block due to maxFilesReached
+      uploadManager.disabled = false;
+      await nextFrame();
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.have.lengthOf(1);
+    });
+
+    it('should block drops when reconnected while manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      await nextFrame();
+
+      // Remove drop zone, disable manager while disconnected
+      const parent = dropZone.parentElement!;
+      dropZone.remove();
+      uploadManager.disabled = true;
+
+      // Reconnect drop zone
+      parent.appendChild(dropZone);
+      await nextFrame();
+
+      // Should block drops because manager is still disabled
+      const files = createFiles(1, 100, 'text/plain');
+      dropZone.dispatchEvent(createDropEvent(files));
+      await nextFrame();
+      expect(uploadManager.files).to.be.empty;
     });
   });
 });

@@ -30,6 +30,7 @@ const options: UploadManagerOptions = {
   uploadFormat: 'multipart',
   maxConcurrentUploads: 5,
   formDataName: 'document',
+  disabled: true,
 };
 const manager2 = new UploadManagerClass(options);
 assertType<UploadManager>(manager2);
@@ -49,6 +50,7 @@ assertType<number>(manager2.maxConcurrentUploads);
 assertType<string>(manager2.formDataName);
 assertType<UploadFile[]>(manager2.files);
 assertType<boolean>(manager2.maxFilesReached);
+assertType<boolean>(manager2.disabled);
 
 // Methods
 manager2.addFiles([new File([''], 'test.txt')]);
@@ -135,6 +137,11 @@ manager2.addEventListener('files-changed', (event) => {
 
 manager2.addEventListener('max-files-reached-changed', (event) => {
   assertType<UploadManagerEventMap['max-files-reached-changed']>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+manager2.addEventListener('disabled-changed', (event) => {
+  assertType<UploadManagerEventMap['disabled-changed']>(event);
   assertType<boolean>(event.detail.value);
 });
 
