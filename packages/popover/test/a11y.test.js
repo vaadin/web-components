@@ -714,6 +714,68 @@ describe('a11y', () => {
       });
     });
 
+    describe('Tab navigation with no focusable content', () => {
+      let popoverNoContent, overlayNoContent;
+
+      beforeEach(async () => {
+        // Create a popover with only text content (no focusable elements)
+        popoverNoContent = document.createElement('vaadin-popover');
+        const span = document.createElement('span');
+        span.textContent = 'Tooltip-like content';
+        popoverNoContent.appendChild(span);
+        popoverNoContent.trigger = [];
+
+        const root = btn1.parentNode;
+
+        // Remove the original popover and use this one instead
+        popover.opened = false;
+        root.removeChild(popover);
+
+        root.appendChild(popoverNoContent);
+        popoverNoContent.target = btn4;
+        await nextUpdate(popoverNoContent);
+
+        popoverTarget = btn4;
+        overlayNoContent = popoverNoContent.shadowRoot.querySelector('vaadin-popover-overlay');
+
+        popoverNoContent.opened = true;
+        await oneEvent(overlayNoContent, 'vaadin-overlay-open');
+      });
+
+      afterEach(async () => {
+        popoverNoContent.opened = false;
+        await nextRender();
+      });
+
+      it('should move focus from target to popover on Tab', async () => {
+        popoverTarget.focus();
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(popoverNoContent);
+      });
+
+      it('should move focus from popover to button 5 on Tab', async () => {
+        popoverNoContent.focus();
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(btn5);
+      });
+
+      it('should move focus from button 5 to popover on Shift+Tab', async () => {
+        btn5.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(popoverNoContent);
+      });
+
+      it('should move focus from popover to target on Shift+Tab', async () => {
+        popoverNoContent.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(popoverTarget);
+      });
+    });
+
     describe('Tab navigation with focusable content between target and popover', () => {
       let popover2, popoverBtn, btn3, overlay2;
 

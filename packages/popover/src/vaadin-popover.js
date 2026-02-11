@@ -741,11 +741,15 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
+    // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
+    const focusables = this.__getBodyFocusables();
+
     // Move focus to the next element after target on last content Tab,
     // or when popover itself is focused and has no focusable content
     const lastFocusable = this.__getLastFocusable();
-    if (lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this)) {
-      const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
+    const isFocused = lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this);
+    if (isFocused) {
+      const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable(), focusables);
       if (focusable && focusable !== this) {
         event.preventDefault();
         focusable.focus();
@@ -755,12 +759,14 @@ class Popover extends PopoverPositionMixin(
 
     // Handle cases where Tab from the current element would land on the popover
     const activeElement = getDeepActiveElement();
-    const nextFocusable = this.__getNextBodyFocusable(activeElement);
+    const nextFocusable = this.__getNextBodyFocusable(activeElement, focusables);
     if (nextFocusable === this) {
-      // Skip popover when tabbing from "next element after target"
-      const nextAfterTarget = this.__getNextBodyFocusable(this.__getTargetFocusable());
+      // Skip popover when tabbing from the element right after the target.
+      // This handles the case where focusable elements exist between
+      // the target and the popover in the DOM.
+      const nextAfterTarget = this.__getNextBodyFocusable(this.__getTargetFocusable(), focusables);
       if (activeElement === nextAfterTarget) {
-        const focusableAfterPopover = this.__getNextBodyFocusable(this);
+        const focusableAfterPopover = this.__getNextBodyFocusable(this, focusables);
         if (focusableAfterPopover) {
           event.preventDefault();
           focusableAfterPopover.focus();
@@ -792,15 +798,23 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    // Don't intercept if focus is inside the popover content
+    // Don't intercept if focus is inside the popover content.
+    // The browser's native Shift+Tab handles navigation within
+    // the overlay (e.g. from popoverInput to popover element).
     const activeElement = getDeepActiveElement();
     if (this.contains(activeElement)) {
       return;
     }
 
-    // Get previous focusable elements with and without the popover
-    const prevFocusable = this.__getPrevBodyFocusable(activeElement);
-    const prevFocusableNative = this.__getPrevBodyFocusable(activeElement, { includeSelf: true });
+    // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
+    const focusables = this.__getBodyFocusables();
+
+    // Get previous focusable element excluding the popover
+    const prevFocusable = this.__getPrevBodyFocusable(activeElement, focusables);
+    // Get previous focusable element including the popover (simulates native Tab order)
+    const prevFocusableNative = this.__getPrevBodyFocusable(activeElement, focusables, {
+      includePopover: true,
+    });
     const targetFocusable = this.__getTargetFocusable();
 
     // Intercept Shift+Tab when it would naturally go to the target
@@ -825,26 +839,39 @@ class Popover extends PopoverPositionMixin(
     }
   }
 
-  /** @private */
+  /**
+   * Returns whether the element is a light DOM child of this popover
+   * (i.e. slotted popover content, excluding the popover element itself).
+   * @param {Element} el
+   * @return {boolean}
+   * @private
+   */
   __isPopoverContent(el) {
     return el !== this && this.contains(el);
   }
 
+  /**
+   * Returns body focusable elements with popover light DOM children filtered out.
+   * @return {Element[]}
+   * @private
+   */
+  __getBodyFocusables() {
+    return getFocusableElements(document.body).filter((el) => !this.__isPopoverContent(el));
+  }
+
   /** @private */
-  __getNextBodyFocusable(target) {
-    const focusables = getFocusableElements(document.body).filter((el) => !this.__isPopoverContent(el));
+  __getNextBodyFocusable(target, focusables = this.__getBodyFocusables()) {
     const idx = focusables.findIndex((el) => el === target);
     return focusables[idx + 1];
   }
 
   /** @private */
-  __getPrevBodyFocusable(target, { includeSelf = false } = {}) {
-    let focusables = getFocusableElements(document.body).filter((el) => !this.__isPopoverContent(el));
-    if (!includeSelf) {
-      focusables = focusables.filter((el) => el !== this);
-    }
-    const idx = focusables.findIndex((el) => el === target);
-    return idx > 0 ? focusables[idx - 1] : null;
+  __getPrevBodyFocusable(target, focusables = this.__getBodyFocusables(), { includePopover = false } = {}) {
+    const list = includePopover ? focusables : focusables.filter((el) => el !== this);
+    const idx = list.findIndex((el) => el === target);
+    // Returns null both when target is the first element (idx === 0)
+    // and when target is not found in the list (idx === -1)
+    return idx > 0 ? list[idx - 1] : null;
   }
 
   /** @private */
