@@ -472,6 +472,20 @@ describe('vaadin-upload-drop-zone', () => {
       expect(dropZone.hasAttribute('disabled')).to.be.false;
     });
 
+    it('should keep disabled attribute when toggled via attribute while manager is disabled', async () => {
+      dropZone.manager = uploadManager;
+      uploadManager.disabled = true;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+
+      dropZone.toggleAttribute('disabled', true);
+      await nextFrame();
+
+      uploadManager.disabled = false;
+      await nextFrame();
+      expect(dropZone.hasAttribute('disabled')).to.be.true;
+    });
+
     it('should block drops when manager is initially disabled', async () => {
       uploadManager.disabled = true;
 

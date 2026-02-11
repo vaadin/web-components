@@ -141,6 +141,22 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     super.disabled = this.__effectiveDisabled;
   }
 
+  /**
+   * Override to intercept external disabled attribute changes.
+   * `toggleAttribute('disabled', true)` is a no-op per DOM spec when the
+   * attribute already exists, so `attributeChangedCallback` won't fire.
+   * This override ensures `__explicitDisabled` is updated in that case.
+   * @override
+   */
+  toggleAttribute(name, force) {
+    if (name === 'disabled') {
+      this.__explicitDisabled = force === undefined ? !this.hasAttribute('disabled') : Boolean(force);
+      super.disabled = this.__effectiveDisabled;
+      return this.hasAttribute('disabled');
+    }
+    return super.toggleAttribute(name, force);
+  }
+
   /** @protected */
   render() {
     return html`

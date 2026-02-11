@@ -546,6 +546,20 @@ describe('vaadin-upload-button', () => {
         expect(button.disabled).to.be.true;
       });
 
+      it('should preserve disabled when toggled via attribute while manager is disabled', async () => {
+        button.manager = uploadManager;
+        uploadManager.disabled = true;
+        await nextFrame();
+        expect(button.hasAttribute('disabled')).to.be.true;
+
+        button.toggleAttribute('disabled', true);
+        await nextFrame();
+
+        uploadManager.disabled = false;
+        await nextFrame();
+        expect(button.hasAttribute('disabled')).to.be.true;
+      });
+
       it('should allow setting disabled=false while manager is disabled', async () => {
         button.manager = uploadManager;
         button.disabled = true;

@@ -126,6 +126,22 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     this.__syncDisabledState();
   }
 
+  /**
+   * Override to intercept external disabled attribute changes.
+   * `toggleAttribute('disabled', true)` is a no-op per DOM spec when the
+   * attribute already exists, so `attributeChangedCallback` won't fire.
+   * This override ensures `__explicitDisabled` is updated in that case.
+   * @override
+   */
+  toggleAttribute(name, force) {
+    if (name === 'disabled' && !this.__syncingDisabled) {
+      this.__explicitDisabled = force === undefined ? !this.hasAttribute('disabled') : Boolean(force);
+      this.__syncDisabledState();
+      return this.hasAttribute('disabled');
+    }
+    return super.toggleAttribute(name, force);
+  }
+
   constructor() {
     super();
     this.__explicitDisabled = false;
