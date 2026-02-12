@@ -197,7 +197,7 @@ describe('SlotObserver', () => {
     expect(spy).to.be.not.called;
   });
 
-  it('should run callback if there is no child nodes with force: true', async () => {
+  it('should run callback if there is no child nodes with forceInitial: true', async () => {
     host.innerHTML = '';
 
     spy = sinon.spy();
@@ -205,5 +205,19 @@ describe('SlotObserver', () => {
     await Promise.resolve();
 
     expect(spy).to.be.calledOnce;
+  });
+
+  it('should not run callback again after flush with forceInitial: true', async () => {
+    host.innerHTML = '';
+
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy, true);
+    await Promise.resolve();
+
+    spy.resetHistory();
+
+    observer.flush();
+
+    expect(spy).to.be.not.called;
   });
 });
