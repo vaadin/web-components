@@ -22,6 +22,7 @@
   --vaadin-popover-arrow-size: 8px;
   --vaadin-popover-arrow-inset: var(--vaadin-gap-l);
   --vaadin-popover-border-radius: var(--vaadin-radius-l);
+  --vaadin-slider-bubble-arrow-size: 6px;
 }
 
 ::part(overlay) {
@@ -33,7 +34,7 @@
   backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
-:not(vaadin-tooltip)::part(overlay) {
+:not(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
   font-family: var(--aura-font-family);
   font-size: var(--aura-font-size-m);
   font-weight: var(--aura-font-weight-regular);
@@ -41,7 +42,8 @@
   color: var(--vaadin-text-color);
 }
 
-vaadin-popover {
+vaadin-popover,
+vaadin-slider-bubble {
   &::part(arrow) {
     background: var(--aura-surface-color-solid);
     margin: 1px;
