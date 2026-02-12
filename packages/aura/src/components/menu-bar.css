@@ -1,6 +1,11 @@
 @container not style(--vaadin-menu-bar-gap) {
   vaadin-menu-bar:not([has-single-button]) vaadin-menu-bar-button:not([first-visible]) {
-    border-inline-start-color: transparent;
+    border-inline-start: 0;
+    margin-inline-start: 0;
+
+    &:not([focus-ring]) {
+      clip-path: inset(-10px -10px -10px -1px);
+    }
   }
 }
 

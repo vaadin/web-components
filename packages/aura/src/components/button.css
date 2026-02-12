@@ -136,9 +136,3 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary'][active]:not([disabled])::before {
   opacity: 0.16;
 }
-
-@container style(--_gap: 0) {
-  vaadin-menu-bar-button:not(:first-of-type) {
-    border-inline-start-color: transparent;
-  }
-}
