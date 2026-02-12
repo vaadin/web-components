@@ -864,11 +864,7 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __getLastFocusable() {
     // Search within the overlay's content area to avoid returning the popover element itself
-    const content = this._overlayElement && this._overlayElement.$.content;
-    if (!content) {
-      return null;
-    }
-    const focusables = getFocusableElements(content);
+    const focusables = getFocusableElements(this._overlayElement.$.content);
     return focusables.pop();
   }
 
