@@ -391,15 +391,10 @@ describe('FocusTrapController', () => {
       trapInput1.focus();
 
       // Simulate another handler (e.g., popover) calling preventDefault in capture phase
-      const captureHandler = (e) => {
-        e.preventDefault();
-      };
-      document.addEventListener('keydown', captureHandler, true);
+      document.addEventListener('keydown', (e) => e.preventDefault(), { capture: true, once: true });
 
       const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
       trapInput1.dispatchEvent(event);
-
-      document.removeEventListener('keydown', captureHandler, true);
 
       expect(document.activeElement).to.equal(trapInput1);
     });

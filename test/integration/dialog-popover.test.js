@@ -158,10 +158,6 @@ describe('popover Tab navigation in dialog', () => {
     Popover.setDefaultFocusDelay(0);
   });
 
-  after(() => {
-    Popover.setDefaultFocusDelay(null);
-  });
-
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
     await nextRender();
