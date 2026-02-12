@@ -164,6 +164,11 @@ export const OverlayMixin = (superClass) =>
         this._detectIosNavbar();
         window.addEventListener('resize', this._boundIosResizeListener);
       }
+
+      // Show popover again if overlay was just moved in the DOM
+      if (this.opened) {
+        this._attachOverlay();
+      }
     }
 
     /** @protected */
@@ -468,7 +473,9 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _attachOverlay() {
-      this.showPopover();
+      if (!this.matches(':popover-open')) {
+        this.showPopover();
+      }
     }
 
     /** @private */
