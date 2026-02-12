@@ -8,7 +8,6 @@
     var(--aura-item-overlay-padding-inline) * 100,
     var(--vaadin-radius-m) - min(var(--aura-item-overlay-padding-inline), var(--aura-item-overlay-padding-block))
   );
-  --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   --vaadin-item-gap: var(--vaadin-gap-s);
 }
 
@@ -21,7 +20,6 @@ vaadin-menu-bar-item,
 vaadin-multi-select-combo-box-item,
 vaadin-select-item:where([role]) {
   font-weight: var(--aura-font-weight-medium);
-  --vaadin-item-checkmark-color: var(--aura-accent-text-color);
   -webkit-user-select: none;
   user-select: none;
   --_highlight-color: light-dark(
@@ -32,6 +30,7 @@ vaadin-select-item:where([role]) {
   gap: 0;
 
   &::part(checkmark) {
+    color: var(--vaadin-item-checkmark-color, var(--aura-accent-text-color));
     --vaadin-icon-visual-size: 75%;
   }
 

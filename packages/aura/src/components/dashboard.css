@@ -40,7 +40,7 @@ vaadin-dashboard-widget {
   }
 
   &[editable] {
-    --vaadin-dashboard-widget-shadow: var(--aura-shadow-s);
+    box-shadow: var(--vaadin-dashboard-widget-shadow, var(--aura-shadow-s));
   }
 }
 
