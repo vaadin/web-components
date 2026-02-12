@@ -1,0 +1,105 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_badge {
+  :host {
+    background: var(--vaadin-badge-background, var(--lumo-primary-color-10pct));
+    border-radius: var(--vaadin-badge-border-radius, 1em);
+    color: var(--vaadin-badge-text-color, var(--lumo-primary-text-color));
+    font-family: var(--vaadin-badge-font-family, var(--lumo-font-family));
+    font-size: var(--vaadin-badge-font-size, var(--lumo-font-size-s));
+    min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+    padding: var(--vaadin-badge-padding, 0.4em 0.75em);
+  }
+
+  :host([theme~='success']) {
+    --vaadin-badge-background: var(--lumo-success-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-success-text-color);
+  }
+
+  :host([theme~='error']) {
+    --vaadin-badge-background: var(--lumo-error-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-error-text-color);
+  }
+
+  :host([theme~='warning']) {
+    --vaadin-badge-background: var(--lumo-warning-color-10pct);
+    --vaadin-badge-text-color: var(--lumo-warning-text-color);
+  }
+
+  :host([theme~='contrast']) {
+    --vaadin-badge-background: var(--lumo-contrast-5pct);
+    --vaadin-badge-text-color: var(--lumo-contrast-80pct);
+  }
+
+  :host([theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-primary-color);
+    --vaadin-badge-text-color: var(--lumo-primary-contrast-color);
+  }
+
+  :host([theme~='success'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-success-color);
+    --vaadin-badge-text-color: var(--lumo-success-contrast-color);
+  }
+
+  :host([theme~='error'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-error-color);
+    --vaadin-badge-text-color: var(--lumo-error-contrast-color);
+  }
+
+  :host([theme~='warning'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-warning-color);
+    --vaadin-badge-text-color: var(--lumo-warning-contrast-color);
+  }
+
+  :host([theme~='contrast'][theme~='primary']) {
+    --vaadin-badge-background: var(--lumo-contrast);
+    --vaadin-badge-text-color: var(--lumo-base-color);
+  }
+
+  :host([theme~='small']) {
+    --vaadin-badge-font-size: var(--lumo-font-size-xxs);
+  }
+
+  :host(:not([has-content], [has-icon])) {
+    --vaadin-badge-background: var(--lumo-primary-color);
+  }
+
+  :host([has-icon]:not([has-content])) {
+    font-size: var(--lumo-font-size-xxs);
+    padding: 0.5em;
+  }
+
+  :host([has-icon]:not([has-content])[theme~='small']) {
+    width: var(--lumo-icon-size-s);
+    height: var(--lumo-icon-size-s);
+  }
+
+  :host([has-icon]) ::slotted(vaadin-icon) {
+    width: var(--lumo-icon-size-s);
+    height: var(--lumo-icon-size-s);
+  }
+
+  :host([theme~='small']:not([has-content], [has-icon])) {
+    width: 0.75em;
+    height: 0.75em;
+  }
+
+  :host([theme~='contrast']:not([has-content], [has-icon])) {
+    --vaadin-badge-background: var(--lumo-contrast);
+  }
+
+  :host([theme~='success']:not([has-content], [has-icon])) {
+    --vaadin-badge-background: var(--lumo-success-color);
+  }
+
+  :host([theme~='error']:not([has-content], [has-icon])) {
+    --vaadin-badge-background: var(--lumo-error-color);
+  }
+
+  :host([theme~='warning']:not([has-content], [has-icon])) {
+    --vaadin-badge-background: var(--lumo-warning-color);
+  }
+}
