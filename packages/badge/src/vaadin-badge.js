@@ -5,12 +5,13 @@
  */
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
-import { BadgeMixin } from './vaadin-badge-mixin.js';
 
 /**
  * `<vaadin-badge>` is a Web Component for displaying badges.
@@ -57,15 +58,12 @@ import { BadgeMixin } from './vaadin-badge-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {Event} empty-changed - Fired when the empty state changes
- *
  * @customElement
  * @extends HTMLElement
- * @mixes BadgeMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Badge extends BadgeMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-badge';
   }
@@ -81,6 +79,21 @@ class Badge extends BadgeMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjec
   /** @protected */
   render() {
     return html`<slot></slot>`;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    const slot = this.shadowRoot.querySelector('slot');
+    this.__slotObserver = new SlotObserver(
+      slot,
+      ({ currentNodes }) => {
+        const isEmpty = currentNodes.filter((node) => !isEmptyTextNode(node)).length === 0;
+        this.toggleAttribute('empty', isEmpty);
+      },
+      true,
+    );
   }
 }
 

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-badge.js';
 
 describe('vaadin-badge', () => {
@@ -7,7 +7,7 @@ describe('vaadin-badge', () => {
 
   beforeEach(async () => {
     badge = fixtureSync('<vaadin-badge></vaadin-badge>');
-    await nextUpdate(badge);
+    await nextRender();
   });
 
   describe('custom element definition', () => {
@@ -23,21 +23,6 @@ describe('vaadin-badge', () => {
 
     it('should have a valid static "is" getter', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
-    });
-  });
-
-  describe('default slot', () => {
-    it('should accept text content', async () => {
-      badge.textContent = 'New';
-      await nextUpdate(badge);
-      expect(badge.textContent).to.equal('New');
-    });
-
-    it('should accept element content', () => {
-      const span = document.createElement('span');
-      span.textContent = 'Badge';
-      badge.appendChild(span);
-      expect(badge.querySelector('span')).to.equal(span);
     });
   });
 

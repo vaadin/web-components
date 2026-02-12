@@ -5,7 +5,6 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { BadgeMixin } from './vaadin-badge-mixin.js';
 
 /**
  * `<vaadin-badge>` is a Web Component for displaying badges.
@@ -52,7 +51,7 @@ import { BadgeMixin } from './vaadin-badge-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Badge extends BadgeMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
+declare class Badge extends ElementMixin(ThemableMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
