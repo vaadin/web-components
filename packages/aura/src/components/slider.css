@@ -9,6 +9,7 @@
 }
 
 :is(vaadin-slider, vaadin-range-slider) {
+  --aura-surface-level: 6;
   --vaadin-slider-fill-background: linear-gradient(
       var(--_bg-dir, 90deg) in oklab,
       var(--aura-accent-color),
@@ -33,7 +34,6 @@
 
   &::part(thumb) {
     position: relative;
-    --aura-surface-level: 1.5;
     background: var(
         --vaadin-slider-thumb-background,
         linear-gradient(
@@ -45,28 +45,34 @@
           var(--aura-surface-color-solid)
       )
       border-box;
-    border-color: var(--vaadin-slider-thumb-border-color, light-dark(transparent, var(--vaadin-border-color)));
+    border-color: var(--vaadin-slider-thumb-border-color, oklch(1 0 0 / 0.1));
     outline-offset: -1px;
     box-shadow:
-      0 0 0 1px light-dark(var(--vaadin-border-color), transparent),
+      0 0 0 1px light-dark(var(--vaadin-border-color), oklch(0 0 0 / 0.1)),
       var(--_thumb-shadow, var(--aura-shadow-s));
   }
 
-  &:is([readonly], [disabled]) {
-    --vaadin-slider-fill-background: var(--vaadin-border-color);
-    --vaadin-slider-fill-border-color: transparent;
-    --vaadin-slider-thumb-border-color: light-dark(transparent, var(--vaadin-border-color));
+  &[readonly] {
+    --aura-surface-level: 4;
+    --vaadin-slider-fill-background: var(--vaadin-text-color-secondary);
+    --vaadin-slider-thumb-background: var(--aura-surface-color-solid);
+    --vaadin-slider-thumb-border-color: oklch(1 0 0 / 0.1);
     --_thumb-shadow: 0 0 0 0 transparent;
   }
 
   &[disabled] {
+    --aura-surface-level: 0;
     --vaadin-slider-track-background: var(--vaadin-background-container);
     --vaadin-slider-fill-background: var(--vaadin-border-color-secondary);
+    --vaadin-slider-fill-border-color: transparent;
+    --vaadin-slider-thumb-background: linear-gradient(
+        var(--vaadin-background-container),
+        var(--vaadin-background-container)
+      )
+      var(--vaadin-background-color);
+    --vaadin-slider-thumb-border-color: var(--vaadin-border-color-secondary);
 
     &::part(thumb) {
-      --vaadin-slider-thumb-background: linear-gradient(var(--vaadin-border-color), var(--vaadin-border-color))
-        var(--vaadin-background-color);
-      --vaadin-slider-thumb-border-color: transparent;
       box-shadow: none;
     }
   }
