@@ -79,6 +79,7 @@ snapshots["vaadin-upload-button shadow default"] =
   </span>
   <span part="label">
     <slot>
+      Upload Files...
     </slot>
   </span>
   <span

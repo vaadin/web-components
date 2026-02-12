@@ -7,12 +7,20 @@ import { html, LitElement } from 'lit';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { uploadButtonStyles } from './styles/vaadin-upload-button-base-styles.js';
 import { UploadManager } from './vaadin-upload-manager.js';
+
+const DEFAULT_I18N = {
+  addFiles: {
+    one: 'Upload File...',
+    many: 'Upload Files...',
+  },
+};
 
 /**
  * `<vaadin-upload-button>` is a button component for file uploads.
@@ -76,7 +84,9 @@ import { UploadManager } from './vaadin-upload-manager.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class UploadButton extends ButtonMixin(
+  I18nMixin(DEFAULT_I18N, ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-upload-button';
   }
@@ -123,6 +133,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   constructor() {
     super();
     this.__syncFromManager = this.__syncFromManager.bind(this);
+    this.__onMaxFilesChanged = this.__onMaxFilesChanged.bind(this);
     this.__explicitDisabled = false;
   }
 
@@ -149,7 +160,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           <slot name="prefix"></slot>
         </span>
         <span part="label">
-          <slot></slot>
+          <slot>${this.__buttonText}</slot>
         </span>
         <span part="suffix" aria-hidden="true">
           <slot name="suffix"></slot>
@@ -182,6 +193,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     if (this.manager instanceof UploadManager) {
       this.manager.removeEventListener('max-files-reached-changed', this.__syncFromManager);
       this.manager.removeEventListener('disabled-changed', this.__syncFromManager);
+      this.manager.removeEventListener('max-files-changed', this.__onMaxFilesChanged);
     }
   }
 
@@ -193,6 +205,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     if (this.manager instanceof UploadManager) {
       this.manager.addEventListener('max-files-reached-changed', this.__syncFromManager);
       this.manager.addEventListener('disabled-changed', this.__syncFromManager);
+      this.manager.addEventListener('max-files-changed', this.__onMaxFilesChanged);
     }
     this.__syncFromManager();
   }
@@ -252,12 +265,14 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     if (oldManager instanceof UploadManager) {
       oldManager.removeEventListener('max-files-reached-changed', this.__syncFromManager);
       oldManager.removeEventListener('disabled-changed', this.__syncFromManager);
+      oldManager.removeEventListener('max-files-changed', this.__onMaxFilesChanged);
     }
 
     // Add listener to new manager and sync state only when connected
     if (this.isConnected && manager instanceof UploadManager) {
       manager.addEventListener('max-files-reached-changed', this.__syncFromManager);
       manager.addEventListener('disabled-changed', this.__syncFromManager);
+      manager.addEventListener('max-files-changed', this.__onMaxFilesChanged);
       this.__syncFromManager();
     } else if (this.isConnected) {
       // No manager - reset state
@@ -270,6 +285,17 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     const noManager = !(this.manager instanceof UploadManager);
     const managerDisabled = !noManager && this.manager.disabled;
     return this.__explicitDisabled || noManager || managerDisabled || this.maxFilesReached;
+  }
+
+  /** @private */
+  __onMaxFilesChanged() {
+    this.requestUpdate();
+  }
+
+  /** @private */
+  get __buttonText() {
+    const maxFiles = this.manager instanceof UploadManager ? this.manager.maxFiles : undefined;
+    return maxFiles === 1 ? this.__effectiveI18n.addFiles.one : this.__effectiveI18n.addFiles.many;
   }
 
   /** @private */

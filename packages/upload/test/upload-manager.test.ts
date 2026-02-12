@@ -275,6 +275,31 @@ describe('UploadManager', () => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.value).to.be.true;
     });
+
+    it('should dispatch max-files-changed event when maxFiles is set via setter', () => {
+      const spy = sinon.spy();
+      manager.addEventListener('max-files-changed', spy);
+      manager.maxFiles = 5;
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.value).to.equal(5);
+    });
+
+    it('should not dispatch max-files-changed event when value does not change', () => {
+      const spy = sinon.spy();
+      manager.addEventListener('max-files-changed', spy);
+      manager.maxFiles = 2; // Already 2 from beforeEach
+      expect(spy.called).to.be.false;
+    });
+
+    it('should dispatch max-files-changed event for each distinct value change', () => {
+      const spy = sinon.spy();
+      manager.addEventListener('max-files-changed', spy);
+      manager.maxFiles = 3;
+      manager.maxFiles = 1;
+      expect(spy.calledTwice).to.be.true;
+      expect(spy.firstCall.args[0].detail.value).to.equal(3);
+      expect(spy.secondCall.args[0].detail.value).to.equal(1);
+    });
   });
 
   describe('disabled', () => {

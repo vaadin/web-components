@@ -57,6 +57,7 @@ window.Vaadin.featureFlags = window.Vaadin.featureFlags || {};
  * @fires {CustomEvent} upload-retry - Fired when retry is requested
  * @fires {CustomEvent} upload-abort - Fired when abort is requested
  * @fires {CustomEvent} files-changed - Fired when the files array changes
+ * @fires {CustomEvent} max-files-changed - Fired when maxFiles changes
  * @fires {CustomEvent} max-files-reached-changed - Fired when maxFilesReached changes
  * @fires {CustomEvent} disabled-changed - Fired when disabled changes
  */
@@ -157,8 +158,12 @@ export class UploadManager extends EventTarget {
     if (value < 0) {
       throw new Error(`Invalid maxFiles "${value}". Value must be non-negative.`);
     }
+    const oldValue = this.#maxFiles;
     this.#maxFiles = value;
     this.#updateMaxFilesReached();
+    if (oldValue !== value) {
+      this.dispatchEvent(new CustomEvent('max-files-changed', { detail: { value } }));
+    }
   }
 
   /**
