@@ -36,11 +36,6 @@ export const badgeStyles = css`
     border-radius: 50%;
   }
 
-  :host([theme~='primary']) {
-    --vaadin-badge-background: var(--vaadin-text-color);
-    --vaadin-badge-text-color: var(--vaadin-background-color);
-  }
-
   @media (forced-colors: active) {
     :host {
       border: 1px solid;

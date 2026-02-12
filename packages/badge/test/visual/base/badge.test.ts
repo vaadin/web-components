@@ -26,15 +26,4 @@ describe('badge', () => {
   it('empty', async () => {
     await visualDiff(div, 'empty');
   });
-
-  it('primary', async () => {
-    element.textContent = 'Badge';
-    element.setAttribute('theme', 'primary');
-    await visualDiff(div, 'primary');
-  });
-
-  it('primary empty', async () => {
-    element.setAttribute('theme', 'primary');
-    await visualDiff(div, 'primary-empty');
-  });
 });
