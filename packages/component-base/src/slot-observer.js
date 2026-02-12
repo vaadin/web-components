@@ -8,12 +8,15 @@
  * A helper for observing slot changes.
  */
 export class SlotObserver {
-  constructor(slot, callback) {
+  constructor(slot, callback, force) {
     /** @type HTMLSlotElement */
     this.slot = slot;
 
     /** @type Function */
     this.callback = callback;
+
+    /** @type boolean */
+    this.force = force;
 
     /** @type {Node[]} */
     this._storedNodes = [];
@@ -96,7 +99,9 @@ export class SlotObserver {
       });
     }
 
-    if (addedNodes.length || removedNodes.length || movedNodes.length) {
+    // By default, callback is not invoked if there is no child nodes in the slot.
+    // Use `force` flag if needed to also invoke it for the initial empty state.
+    if (addedNodes.length || removedNodes.length || movedNodes.length || this.force) {
       this.callback({ addedNodes, currentNodes, movedNodes, removedNodes });
     }
 
