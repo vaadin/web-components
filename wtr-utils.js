@@ -270,7 +270,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       (dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base' && dir !== 'badge',
     );
   } else {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'badge');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base');
   }
 
   const packages = getTestPackages(visualPackages);
