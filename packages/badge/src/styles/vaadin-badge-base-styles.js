@@ -20,7 +20,7 @@ export const badgeStyles = css`
     line-height: var(--vaadin-badge-line-height, 1);
     color: var(--vaadin-badge-text-color, var(--vaadin-text-color));
     background: var(--vaadin-badge-background, var(--vaadin-background-container));
-    border-radius: var(--vaadin-badge-border-radius, var(--vaadin-radius-m));
+    border-radius: var(--vaadin-badge-border-radius, var(--vaadin-radius-l));
     flex-shrink: 0;
   }
 
