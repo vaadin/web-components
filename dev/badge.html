@@ -13,6 +13,8 @@
     </script>
     <script type="module">
       import '@vaadin/badge';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
     </script>
   </head>
 
@@ -25,6 +27,17 @@
     <section class="section">
       <h2 class="heading">Empty</h2>
       <vaadin-badge></vaadin-badge>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Icon</h2>
+      <vaadin-badge>
+        <vaadin-icon slot="icon" icon="vaadin:check"></vaadin-icon>
+        <span>Completed</span>
+      </vaadin-badge>
+      <vaadin-badge>
+        <vaadin-icon slot="icon" icon="vaadin:check"></vaadin-icon>
+      </vaadin-badge>
     </section>
   </body>
 </html>

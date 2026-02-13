@@ -13,13 +13,21 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * <vaadin-badge>New</vaadin-badge>
  * ```
  *
+ * ### Slots
+ *
+ * Name   | Description
+ * -------|-------------
+ * (none) | Default slot for the badge text content
+ * `icon` | Slot for an icon element (e.g. `<vaadin-icon>`)
+ *
  * ### Styling
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description
- * ----------|-------------
- * `empty`   | Set when the badge has no text content or child elements
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-icon`     | Set when the badge has an icon in the icon slot
+ * `has-content`  | Set when the badge has content in the default slot
  *
  * The following custom CSS properties are available for styling:
  *
@@ -30,6 +38,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `--vaadin-badge-font-size`       |
  * `--vaadin-badge-font-weight`     |
  * `--vaadin-badge-font-family`     |
+ * `--vaadin-badge-gap`             |
  * `--vaadin-badge-line-height`     |
  * `--vaadin-badge-padding`         |
  * `--vaadin-badge-text-color`      |

@@ -13,6 +13,7 @@ export const badgeStyles = css`
     justify-content: center;
     box-sizing: border-box;
     vertical-align: baseline;
+    gap: var(--vaadin-badge-gap, 0.25em);
     padding: var(--vaadin-badge-padding, 0.4em calc(0.5em + var(--vaadin-badge-border-radius, 0.25em) / 4));
     font-family: var(--vaadin-badge-font-family, inherit);
     font-size: var(--vaadin-badge-font-size, 0.875em);
@@ -28,11 +29,16 @@ export const badgeStyles = css`
     display: none !important;
   }
 
-  :host([empty]) {
+  :host(:not([has-content]):not([has-icon])) {
     min-width: 0;
     width: 1em;
     height: 1em;
     padding: 0;
+    border-radius: 50%;
+  }
+
+  :host(:not([has-content])[has-icon]) {
+    padding: var(--vaadin-padding-xs);
     border-radius: 50%;
   }
 
