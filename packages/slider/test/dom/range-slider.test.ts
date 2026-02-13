@@ -156,5 +156,17 @@ describe('vaadin-range-slider', () => {
       slider.value = [0, 0];
       await expect(slider).shadowDom.to.equalSnapshot();
     });
+
+    it('min == max', async () => {
+      slider.min = 0;
+      slider.max = 0;
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
+
+    it('max < min', async () => {
+      slider.min = 0;
+      slider.max = -10;
+      await expect(slider).shadowDom.to.equalSnapshot();
+    });
   });
 });
