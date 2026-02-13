@@ -9,6 +9,12 @@
     border-radius: var(--_card-border-pseudo-radius, inherit);
   }
 
+  :host([theme~='compact']) {
+    --vaadin-card-gap: var(--lumo-space-s);
+    --vaadin-card-title-font-size: var(--lumo-font-size-m);
+    --vaadin-card-subtitle-font-size: var(--lumo-font-size-s);
+  }
+
   :host([theme~='outlined']) {
     --vaadin-card-border-width: 1px;
     --vaadin-card-background: var(--lumo-base-color);
