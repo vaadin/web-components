@@ -188,6 +188,9 @@ export const SliderMixin = (superClass) =>
      */
     __getPercentFromValue(value) {
       const { min, max } = this.__getConstraints();
+      if (max <= min) {
+        return 0;
+      }
       const safeValue = Math.min(Math.max(value, min), max);
       return (safeValue - min) / (max - min);
     }
