@@ -8,6 +8,13 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { UploadManager } from './vaadin-upload-manager.js';
 
+export interface UploadButtonI18n {
+  addFiles?: {
+    one?: string;
+    many?: string;
+  };
+}
+
 /**
  * `<vaadin-upload-button>` is a button component for file uploads.
  * When clicked, it opens a file picker dialog and calls addFiles
@@ -89,6 +96,24 @@ declare class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(HTMLEl
    * Opens the file picker dialog.
    */
   openFilePicker(): void;
+
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```js
+   * {
+   *   addFiles: {
+   *     one: 'Upload File...',
+   *     many: 'Upload Files...'
+   *   }
+   * }
+   * ```
+   */
+  i18n: UploadButtonI18n;
 }
 
 declare global {

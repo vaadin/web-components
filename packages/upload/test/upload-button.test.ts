@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enterKeyDown, fixtureSync, nextFrame, nextRender, spaceKeyDown } from '@vaadin/testing-helpers';
+import { enterKeyDown, fixtureSync, nextFrame, nextRender, nextUpdate, spaceKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 window.Vaadin ??= {};
@@ -705,6 +705,210 @@ describe('vaadin-upload-button', () => {
       await nextFrame();
       // Button should still not have maxFilesReached (listener was removed)
       expect(button.maxFilesReached).to.be.false;
+    });
+  });
+
+  describe('i18n', () => {
+    let noTextButton: UploadButton;
+    let defaultSlot: HTMLSlotElement;
+
+    function getDefaultSlot(btn: UploadButton): HTMLSlotElement {
+      return btn.shadowRoot!.querySelector('slot:not([name])')!;
+    }
+
+    beforeEach(async () => {
+      noTextButton = fixtureSync(`<vaadin-upload-button></vaadin-upload-button>`);
+      await nextRender();
+      defaultSlot = getDefaultSlot(noTextButton);
+    });
+
+    it('should have default i18n with addFiles property', () => {
+      expect(noTextButton.i18n).to.deep.equal({
+        addFiles: {
+          one: 'Upload File...',
+          many: 'Upload Files...',
+        },
+      });
+    });
+
+    it('should show addFiles.many as slot fallback by default', () => {
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should show addFiles.one when manager has maxFiles=1', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+    });
+
+    it('should show addFiles.many when manager has maxFiles>1', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 3, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should show addFiles.many when manager has no maxFiles', async () => {
+      const manager = new UploadManager({ target: '/api/upload', noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should update text when custom i18n is set', async () => {
+      noTextButton.i18n = {
+        addFiles: {
+          one: 'Datei hochladen...',
+          many: 'Dateien hochladen...',
+        },
+      };
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Dateien hochladen...');
+    });
+
+    it('should support partial i18n that merges with defaults', async () => {
+      noTextButton.i18n = {
+        addFiles: {
+          one: 'Custom One',
+        },
+      };
+      await nextUpdate(noTextButton);
+      // many should remain the default
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+
+      // Set maxFiles=1 to verify partial override
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Custom One');
+    });
+
+    it('should use custom i18n with maxFiles=1', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      noTextButton.i18n = {
+        addFiles: {
+          one: 'Datei hochladen...',
+          many: 'Dateien hochladen...',
+        },
+      };
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Datei hochladen...');
+    });
+
+    it('should update text when manager changes to one with different maxFiles', async () => {
+      const manager1 = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager1;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+
+      const manager2 = new UploadManager({ target: '/api/upload', maxFiles: 5, noAuto: true });
+      noTextButton.manager = manager2;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should update text when maxFiles changes on existing manager', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+
+      manager.maxFiles = 5;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should update text when maxFiles changes from many to 1', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 3, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+
+      manager.maxFiles = 1;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+    });
+
+    it('should show user-provided slot content instead of i18n fallback', async () => {
+      // The button in the outer beforeEach has slot content "Add Files"
+      const slottedButton = button;
+      const slot = getDefaultSlot(slottedButton);
+      const assignedNodes = slot.assignedNodes();
+      expect(assignedNodes.length).to.be.greaterThan(0);
+      expect(assignedNodes[0].textContent).to.equal('Add Files');
+    });
+
+    it('should not update text on maxFiles change when disconnected from DOM', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+
+      // Disconnect button from DOM
+      noTextButton.remove();
+
+      // Change maxFiles while disconnected
+      manager.maxFiles = 5;
+      await nextUpdate(noTextButton);
+
+      // Button should still show the old text since listener was removed
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+    });
+
+    it('should update text on maxFiles change after reconnecting to DOM', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+
+      // Disconnect and reconnect
+      const parent = noTextButton.parentElement!;
+      noTextButton.remove();
+      parent.appendChild(noTextButton);
+      await nextUpdate(noTextButton);
+
+      // Change maxFiles after reconnecting - listener should be re-attached
+      manager.maxFiles = 5;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should not update text on maxFiles change from old manager', async () => {
+      const manager1 = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager1;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+
+      // Switch to a new manager
+      const manager2 = new UploadManager({ target: '/api/upload', maxFiles: 3, noAuto: true });
+      noTextButton.manager = manager2;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+
+      // Change maxFiles on old manager - should not affect button
+      manager1.maxFiles = 5;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+    });
+
+    it('should not update text on maxFiles change after manager set to null', async () => {
+      const manager = new UploadManager({ target: '/api/upload', maxFiles: 1, noAuto: true });
+      noTextButton.manager = manager;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload File...');
+
+      // Remove manager
+      noTextButton.manager = null;
+      await nextUpdate(noTextButton);
+      // With no manager, shows "many" form
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
+
+      // Change maxFiles on old manager - should not affect button
+      manager.maxFiles = 1;
+      await nextUpdate(noTextButton);
+      expect(defaultSlot.textContent).to.equal('Upload Files...');
     });
   });
 });

@@ -125,7 +125,6 @@ describe('upload-button', () => {
         element.textContent = '';
         icon = document.createElement('vaadin-icon');
         icon.setAttribute('icon', 'lumo:upload');
-        icon.setAttribute('slot', 'prefix');
         element.appendChild(icon);
       });
 
