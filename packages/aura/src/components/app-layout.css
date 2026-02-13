@@ -25,7 +25,7 @@ vaadin-app-layout {
 }
 
 vaadin-app-layout[overlay]::part(drawer) {
-  --vaadin-app-layout-drawer-background: var(--aura-surface-color);
+  background: var(--vaadin-app-layout-drawer-background, var(--aura-surface-color));
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
@@ -37,7 +37,7 @@ vaadin-app-layout:not([has-drawer]) {
 }
 
 vaadin-app-layout::part(navbar) {
-  --vaadin-app-layout-navbar-background: transparent;
+  background: var(--vaadin-app-layout-navbar-background, transparent);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
@@ -52,7 +52,6 @@ vaadin-app-layout[has-navbar]::part(drawer) {
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {
-  /* TODO would need a dedicated padding-top property */
   --vaadin-scroller-padding-inline: var(--vaadin-padding-m);
   --vaadin-scroller-padding-block: var(--vaadin-padding-s);
   scrollbar-width: thin;

@@ -7,7 +7,7 @@
   transition: scale 180ms;
   position: relative;
   --_background: var(--aura-accent-surface) padding-box;
-  --vaadin-button-text-color: var(--aura-accent-text-color);
+  color: var(--vaadin-button-text-color, var(--aura-accent-text-color));
 }
 
 vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
@@ -23,7 +23,7 @@ vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
 /* prettier-ignore */
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([theme~='primary'], [theme~='tertiary']) {
   background: var(--vaadin-button-background, var(--_background));
-  --vaadin-button-border-color: var(--aura-accent-border-color);
+  border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
 }
 
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(:not([theme~='primary'])) {

@@ -2,7 +2,6 @@
 :where(:host) {
   --vaadin-date-picker-year-scroller-background: light-dark(var(--vaadin-background-container), transparent);
   --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
-  /* TODO add/use selection color */
   --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
   --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast-color);
 }

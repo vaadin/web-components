@@ -76,7 +76,7 @@ vaadin-upload-file {
 
   &::part(remove-button),
   &::part(retry-button) {
-    --vaadin-upload-file-button-text-color: var(--vaadin-text-color-secondary);
+    color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color-secondary));
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
