@@ -259,6 +259,16 @@ export const cardStyles = css`
     margin-inline: calc(var(--_padding) * -1);
   }
 
+  :host([theme~='transparent']) {
+    --vaadin-card-border-width: 0px;
+    --vaadin-card-background: transparent;
+  }
+
+  :host([theme~='compact']) {
+    --_padding: 0;
+    --_gap: var(--vaadin-gap-s);
+  }
+
   /* Outlined */
   :host([theme~='outlined']) {
     --vaadin-card-border-width: 1px;
