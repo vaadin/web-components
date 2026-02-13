@@ -316,6 +316,79 @@ describe('popover Tab navigation in dialog', () => {
     });
   });
 
+  describe('Tab navigation with popover on last button', () => {
+    beforeEach(async () => {
+      popover.target = btn5;
+      popoverTarget = btn5;
+      await nextUpdate(popover);
+
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+    });
+
+    describe('with popover before target in DOM', () => {
+      beforeEach(() => {
+        const root = btn1.parentNode;
+        root.insertBefore(popover, root.children[2]); // Before btn3
+      });
+
+      it('should not move Tab focus to button 3 when popover is between btn2 and btn3', async () => {
+        popover.focus();
+        await sendKeys({ press: 'Tab' });
+        expect(getDeepActiveElement()).to.not.equal(dialog.querySelector('#btn3'));
+      });
+
+      it('should wrap Shift+Tab to popover content when popover is before target in DOM', async () => {
+        // From dialog element (first focusable), Shift+Tab should wrap to
+        // popover's last content, not btn5 (which is last in DOM order)
+        btn1.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+        // Now on dialog element
+        await sendKeys({ press: 'Shift+Tab' });
+        // Should reach popover input (last logical element)
+        expect(getDeepActiveElement()).to.equal(popoverInput);
+      });
+    });
+
+    it('should not let Tab from popover input escape the dialog', async () => {
+      popoverInput.focus();
+      await sendKeys({ press: 'Tab' });
+
+      // Focus should stay within the dialog, not escape to outside elements
+      const activeElement = getDeepActiveElement();
+      expect(activeElement === dialog || dialog.contains(activeElement)).to.be.true;
+    });
+
+    it('should wrap Tab focus back to button 1 within dialog', async () => {
+      popoverInput.focus();
+      // First Tab wraps within dialog (to dialog element due to FocusTrapController)
+      await sendKeys({ press: 'Tab' });
+      // Second Tab reaches button 1
+      await sendKeys({ press: 'Tab' });
+
+      expect(getDeepActiveElement()).to.equal(btn1);
+    });
+
+    it('should not let Shift+Tab from button 1 escape the dialog', async () => {
+      btn1.focus();
+      await sendKeys({ press: 'Shift+Tab' });
+
+      // Focus should stay within the dialog
+      const activeElement = getDeepActiveElement();
+      expect(activeElement === dialog || dialog.contains(activeElement)).to.be.true;
+    });
+
+    it('should wrap Shift+Tab focus back to popover input within dialog', async () => {
+      btn1.focus();
+      // First Shift+Tab wraps within dialog (to dialog element due to FocusTrapController)
+      await sendKeys({ press: 'Shift+Tab' });
+      // Second Shift+Tab reaches popover input
+      await sendKeys({ press: 'Shift+Tab' });
+
+      expect(getDeepActiveElement()).to.equal(popoverInput);
+    });
+  });
+
   ['after target', 'before target'].forEach((position) => {
     describe(`Tab navigation with popover ${position} in DOM`, () => {
       beforeEach(async () => {
