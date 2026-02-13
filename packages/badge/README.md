@@ -6,6 +6,8 @@ A web component for displaying badges with various theme variants.
 
 [![npm version](https://badgen.net/npm/v/@vaadin/badge)](https://www.npmjs.com/package/@vaadin/badge)
 
+> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.badgeComponent = true`.
+
 ```html
 <vaadin-badge>Badge</vaadin-badge>
 <vaadin-badge theme="primary">Primary</vaadin-badge>
