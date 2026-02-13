@@ -8,6 +8,23 @@ import { getFocusableElements, isElementFocused, isKeyboardActive } from './focu
 const instances = [];
 
 /**
+ * Returns the innermost active focus trap node that contains the given element,
+ * or null if the element is not inside any active focus trap.
+ *
+ * @param {HTMLElement} element
+ * @return {HTMLElement | null}
+ */
+export function getActiveTrappingNode(element) {
+  // Iterate backwards since instances are ordered outer-to-inner (push/pop)
+  for (let i = instances.length - 1; i >= 0; i--) {
+    if (instances[i].__trapNode?.contains(element)) {
+      return instances[i].__trapNode;
+    }
+  }
+  return null;
+}
+
+/**
  * A controller for trapping focus within a DOM node.
  */
 export class FocusTrapController {

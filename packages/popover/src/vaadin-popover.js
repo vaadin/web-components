@@ -6,6 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { getActiveTrappingNode } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import {
   getDeepActiveElement,
   getFocusableElements,
@@ -749,10 +750,24 @@ class Popover extends PopoverPositionMixin(
     const lastFocusable = this.__getLastFocusable();
     const isFocused = lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this);
     if (isFocused) {
-      const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable(), focusables);
-      if (focusable && focusable !== this) {
+      let focusable = this.__getNextBodyFocusable(this.__getTargetFocusable(), focusables);
+      // If the next element after the target is the popover itself (DOM position
+      // differs from logical position), skip past it to the actual next element.
+      if (focusable === this) {
+        focusable = this.__getNextBodyFocusable(this, focusables);
+      }
+      if (focusable) {
         event.preventDefault();
         focusable.focus();
+        return;
+      }
+      // No next element after the target in the scope. When inside a focus trap,
+      // wrap explicitly to the first focusable. Don't fall through - the
+      // FocusTrapController uses DOM order which may differ from the popover's
+      // logical tab position.
+      if (getActiveTrappingNode(this) && focusables[0]) {
+        event.preventDefault();
+        focusables[0].focus();
         return;
       }
     }
@@ -806,14 +821,22 @@ class Popover extends PopoverPositionMixin(
     // (if we exclude the popover from the focusable list)
     if (prevFocusable === targetFocusable) {
       event.preventDefault();
-      const lastFocusable = this.__getLastFocusable();
-      if (lastFocusable) {
-        lastFocusable.focus();
-      } else {
-        // No focusable content, focus popover itself
-        this.focus();
-      }
+      this.__focusLastOrSelf();
       return;
+    }
+
+    // No previous element in the scope (at the beginning of the focus trap).
+    // When the target is the last non-popover focusable, the popover is logically
+    // last. Wrap explicitly to the popover's last focusable content (or the popover
+    // itself). Don't fall through - the FocusTrapController uses DOM order which
+    // may differ from the popover's logical tab position.
+    if (!prevFocusable && getActiveTrappingNode(this)) {
+      const list = focusables.filter((el) => el !== this);
+      if (list.at(-1) === targetFocusable) {
+        event.preventDefault();
+        this.__focusLastOrSelf();
+        return;
+      }
     }
 
     // Get previous focusable element including the popover (simulates native Tab order)
@@ -843,7 +866,8 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __getBodyFocusables() {
-    return getFocusableElements(document.body).filter((el) => !this.__isPopoverContent(el));
+    const scope = getActiveTrappingNode(this) || document.body;
+    return getFocusableElements(scope).filter((el) => !this.__isPopoverContent(el));
   }
 
   /** @private */
@@ -866,6 +890,11 @@ class Popover extends PopoverPositionMixin(
     // Search within the overlay's content area to avoid returning the popover element itself
     const focusables = getFocusableElements(this._overlayElement.$.content);
     return focusables.pop();
+  }
+
+  /** @private */
+  __focusLastOrSelf() {
+    (this.__getLastFocusable() || this).focus();
   }
 
   /** @private */
