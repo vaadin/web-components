@@ -18,7 +18,6 @@ vaadin-card {
 
 vaadin-card[theme~='transparent'] {
   --aura-surface-opacity: 0;
-  --vaadin-card-border-color: transparent;
 }
 
 vaadin-card[theme~='compact'] {
