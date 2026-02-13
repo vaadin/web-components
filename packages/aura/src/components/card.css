@@ -16,6 +16,16 @@ vaadin-card {
   --_padding: calc(var(--vaadin-card-padding) - var(--vaadin-card-border-width, 1px));
 }
 
+vaadin-card[theme~='transparent'] {
+  --aura-surface-opacity: 0;
+  --vaadin-card-border-color: transparent;
+}
+
+vaadin-card[theme~='compact'] {
+  --_padding: 0;
+  --vaadin-card-gap: var(--vaadin-gap-s);
+}
+
 vaadin-card[theme~='outlined'] {
   --vaadin-card-border-color: var(--vaadin-border-color);
 }
