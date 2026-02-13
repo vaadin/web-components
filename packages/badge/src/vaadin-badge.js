@@ -20,13 +20,21 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  * <vaadin-badge>New</vaadin-badge>
  * ```
  *
+ * ### Slots
+ *
+ * Name   | Description
+ * -------|-------------
+ * (none) | Default slot for the badge text content
+ * `icon` | Slot for an icon element (e.g. `<vaadin-icon>`)
+ *
  * ### Styling
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description
- * ----------|-------------
- * `empty`   | Set when the badge has no text content or child elements
+ * Attribute      | Description
+ * ---------------|-------------
+ * `has-icon`     | Set when the badge has an icon in the icon slot
+ * `has-content`  | Set when the badge has content in the default slot
  *
  * The following custom CSS properties are available for styling:
  *
@@ -37,6 +45,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  * `--vaadin-badge-font-size`       |
  * `--vaadin-badge-font-weight`     |
  * `--vaadin-badge-font-family`     |
+ * `--vaadin-badge-gap`             |
  * `--vaadin-badge-line-height`     |
  * `--vaadin-badge-padding`         |
  * `--vaadin-badge-text-color`      |
@@ -67,21 +76,22 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
 
   /** @protected */
   render() {
-    return html`<slot></slot>`;
+    return html`<slot name="icon"></slot><slot></slot>`;
   }
 
   /** @protected */
   firstUpdated() {
     super.firstUpdated();
 
-    const slot = this.shadowRoot.querySelector('slot');
-    this.__slotObserver = new SlotObserver(
-      slot,
-      ({ currentNodes }) => {
-        this.toggleAttribute('empty', currentNodes.filter((node) => !isEmptyTextNode(node)).length === 0);
-      },
-      true,
-    );
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    this.__slotObserver = new SlotObserver(slot, ({ currentNodes }) => {
+      this.toggleAttribute('has-content', currentNodes.filter((node) => !isEmptyTextNode(node)).length > 0);
+    });
+
+    const iconSlot = this.shadowRoot.querySelector('slot[name="icon"]');
+    this.__iconSlotObserver = new SlotObserver(iconSlot, ({ currentNodes }) => {
+      this.toggleAttribute('has-icon', currentNodes.length > 0);
+    });
   }
 }
 

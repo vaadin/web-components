@@ -1,5 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '../../../src/vaadin-badge.js';
 import type { Badge } from '../../../src/vaadin-badge.js';
 
@@ -25,5 +27,22 @@ describe('badge', () => {
 
   it('empty', async () => {
     await visualDiff(div, 'empty');
+  });
+
+  it('icon', async () => {
+    const icon = document.createElement('vaadin-icon');
+    icon.setAttribute('slot', 'icon');
+    icon.icon = 'vaadin:check';
+    element.appendChild(icon);
+    element.append('Completed');
+    await visualDiff(div, 'icon');
+  });
+
+  it('icon-only', async () => {
+    const icon = document.createElement('vaadin-icon');
+    icon.setAttribute('slot', 'icon');
+    icon.icon = 'vaadin:check';
+    element.appendChild(icon);
+    await visualDiff(div, 'icon-only');
   });
 });
