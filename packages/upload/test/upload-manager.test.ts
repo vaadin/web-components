@@ -570,6 +570,22 @@ describe('UploadManager', () => {
       expect(errorSpy.firstCall.args[0].detail.file.errorKey).to.equal('forbidden');
     });
 
+    it('should set file.errorKey to fileTooLarge on 413 status', () => {
+      (manager as any)._createXhr = xhrCreator({
+        sync: true,
+        serverValidation: () => ({ status: 413 }),
+      });
+
+      const errorSpy = sinon.spy();
+      manager.addEventListener('upload-error', errorSpy);
+
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+
+      expect(errorSpy.calledOnce).to.be.true;
+      expect(errorSpy.firstCall.args[0].detail.file.errorKey).to.equal('fileTooLarge');
+    });
+
     it('should set file.total during progress', () => {
       (manager as any)._createXhr = xhrCreator({ sync: true });
 

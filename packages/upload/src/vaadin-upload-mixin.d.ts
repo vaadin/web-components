@@ -54,6 +54,7 @@ export interface UploadI18n {
       serverUnavailable?: string;
       unexpectedServerError?: string;
       forbidden?: string;
+      fileTooLarge?: string;
     };
   };
   units?: {

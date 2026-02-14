@@ -39,6 +39,7 @@ export const DEFAULT_I18N = {
       serverUnavailable: 'Upload failed, please try again later',
       unexpectedServerError: 'Upload failed due to server error',
       forbidden: 'Upload forbidden',
+      fileTooLarge: 'File is too large',
     },
   },
   file: {
@@ -795,6 +796,8 @@ export const UploadMixin = (superClass) =>
             file.error = this.__effectiveI18n.uploading.error.serverUnavailable;
           } else if (xhr.status >= 500) {
             file.error = this.__effectiveI18n.uploading.error.unexpectedServerError;
+          } else if (xhr.status === 413) {
+            file.error = this.__effectiveI18n.uploading.error.fileTooLarge;
           } else if (xhr.status >= 400) {
             file.error = this.__effectiveI18n.uploading.error.forbidden;
           }

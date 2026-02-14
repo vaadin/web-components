@@ -9,7 +9,13 @@ export type UploadFormat = 'raw' | 'multipart';
 
 export type FileRejectError = 'tooManyFiles' | 'fileIsTooBig' | 'incorrectFileType';
 
-export type UploadErrorKey = 'timeout' | 'serverUnavailable' | 'unexpectedServerError' | 'forbidden' | 'sendFailed';
+export type UploadErrorKey =
+  | 'timeout'
+  | 'serverUnavailable'
+  | 'unexpectedServerError'
+  | 'forbidden'
+  | 'sendFailed'
+  | 'fileTooLarge';
 
 export interface UploadFile extends File {
   uploadTarget: string;
