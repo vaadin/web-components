@@ -268,7 +268,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   } else if (theme === 'aura') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base');
   } else {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'badge');
   }
 
   const packages = getTestPackages(visualPackages);
