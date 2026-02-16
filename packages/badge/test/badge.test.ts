@@ -36,32 +36,30 @@ describe('vaadin-badge', () => {
       expect(badge.hasAttribute('has-content')).to.be.false;
     });
 
-    it('should set has-content attribute when badge has text content', async () => {
-      badge.textContent = 'Text';
-      await nextUpdate(badge);
-      expect(badge.hasAttribute('has-content')).to.be.true;
-    });
-
-    it('should set has-content attribute when badge has element content', async () => {
-      const span = document.createElement('span');
-      span.textContent = 'Content';
-      badge.appendChild(span);
-      await nextUpdate(badge);
-      expect(badge.hasAttribute('has-content')).to.be.true;
-    });
-
-    it('should not set has-content attribute when content is only whitespace', async () => {
-      badge.textContent = '   ';
-      await nextUpdate(badge);
-      expect(badge.hasAttribute('has-content')).to.be.false;
-    });
-
-    it('should remove has-content attribute when content is removed', async () => {
+    it('should toggle has-content attribute on text content change', async () => {
       badge.textContent = 'Text';
       await nextUpdate(badge);
       expect(badge.hasAttribute('has-content')).to.be.true;
 
       badge.textContent = '';
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-content')).to.be.false;
+    });
+
+    it('should toggle has-content attribute on element content change', async () => {
+      const span = document.createElement('span');
+      span.textContent = 'Content';
+      badge.appendChild(span);
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-content')).to.be.true;
+
+      badge.removeChild(span);
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-content')).to.be.false;
+    });
+
+    it('should not set has-content attribute when content is only whitespace', async () => {
+      badge.textContent = '   ';
       await nextUpdate(badge);
       expect(badge.hasAttribute('has-content')).to.be.false;
     });
@@ -72,15 +70,7 @@ describe('vaadin-badge', () => {
       expect(badge.hasAttribute('has-icon')).to.be.false;
     });
 
-    it('should set has-icon attribute when icon slot has content', async () => {
-      const icon = document.createElement('span');
-      icon.setAttribute('slot', 'icon');
-      badge.appendChild(icon);
-      await nextUpdate(badge);
-      expect(badge.hasAttribute('has-icon')).to.be.true;
-    });
-
-    it('should remove has-icon attribute when icon is removed', async () => {
+    it('should toggle has-icon attribute on icon slot content change', async () => {
       const icon = document.createElement('span');
       icon.setAttribute('slot', 'icon');
       badge.appendChild(icon);
