@@ -32,7 +32,7 @@ export const badgeStyles = css`
     display: none !important;
   }
 
-  :host(:not([has-content])[has-icon]) {
+  :host([has-icon]:not([has-content])) {
     padding: var(--vaadin-padding-xs);
     border-radius: 50%;
   }
