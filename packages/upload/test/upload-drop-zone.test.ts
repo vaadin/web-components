@@ -11,7 +11,11 @@ import type { UploadDropZone } from '../src/vaadin-upload-drop-zone.js';
 import { UploadManager } from '../src/vaadin-upload-manager.js';
 import { createFiles } from './helpers.js';
 
-function createDragEvent(type: string, files: File[] = [], relatedTarget?: EventTarget | null): DragEvent {
+function createDragEvent(
+  type: string,
+  files: File[] = [],
+  options?: { clientX?: number; clientY?: number },
+): DragEvent {
   const dataTransfer = {
     files,
     items: files.map((file) => ({
@@ -29,8 +33,11 @@ function createDragEvent(type: string, files: File[] = [], relatedTarget?: Event
 
   const event = new Event(type, { bubbles: true, cancelable: true }) as DragEvent;
   Object.defineProperty(event, 'dataTransfer', { value: dataTransfer });
-  if (relatedTarget !== undefined) {
-    Object.defineProperty(event, 'relatedTarget', { value: relatedTarget });
+  if (options?.clientX !== undefined) {
+    Object.defineProperty(event, 'clientX', { value: options.clientX });
+  }
+  if (options?.clientY !== undefined) {
+    Object.defineProperty(event, 'clientY', { value: options.clientY });
   }
   return event;
 }
@@ -142,7 +149,7 @@ describe('vaadin-upload-drop-zone', () => {
       await nextFrame();
       expect(dropZone.hasAttribute('dragover')).to.be.true;
 
-      // Then trigger dragleave
+      // Then trigger dragleave (coordinates default to 0,0 which is outside the element)
       dropZone.dispatchEvent(createDragEvent('dragleave'));
       await nextFrame();
       expect(dropZone.hasAttribute('dragover')).to.be.false;
@@ -155,46 +162,41 @@ describe('vaadin-upload-drop-zone', () => {
       expect(event.defaultPrevented).to.be.true;
     });
 
-    it('should not remove dragover when dragleave fires for child element', async () => {
-      // Add a child element to the drop zone
-      const child = document.createElement('p');
-      child.textContent = 'Child element';
-      dropZone.appendChild(child);
-      await nextFrame();
-
+    it('should not remove dragover when cursor is still inside the drop zone', async () => {
       // Trigger dragover on drop zone
       dropZone.dispatchEvent(createDragEvent('dragover'));
       await nextFrame();
       expect(dropZone.hasAttribute('dragover')).to.be.true;
 
-      // Simulate dragleave when entering child element (relatedTarget is the child)
-      const dragleaveEvent = createDragEvent('dragleave', [], child);
+      // Simulate dragleave with cursor coordinates still inside the drop zone
+      const rect = dropZone.getBoundingClientRect();
+      const dragleaveEvent = createDragEvent('dragleave', [], {
+        clientX: rect.left + rect.width / 2,
+        clientY: rect.top + rect.height / 2,
+      });
       dropZone.dispatchEvent(dragleaveEvent);
       await nextFrame();
 
-      // Should still have dragover because we're still inside the drop zone
+      // Should still have dragover because cursor is inside the drop zone
       expect(dropZone.hasAttribute('dragover')).to.be.true;
     });
 
-    it('should only remove dragover when leaving the drop zone entirely', async () => {
-      // Add a child element
-      const child = document.createElement('p');
-      child.textContent = 'Child element';
-      dropZone.appendChild(child);
-      await nextFrame();
-
+    it('should remove dragover when cursor leaves the drop zone', async () => {
       // Trigger dragover
       dropZone.dispatchEvent(createDragEvent('dragover'));
       await nextFrame();
       expect(dropZone.hasAttribute('dragover')).to.be.true;
 
-      // Simulate dragleave when leaving the drop zone entirely (relatedTarget is outside)
-      const outsideElement = document.body;
-      const dragleaveEvent = createDragEvent('dragleave', [], outsideElement);
+      // Simulate dragleave with cursor coordinates outside the drop zone
+      const rect = dropZone.getBoundingClientRect();
+      const dragleaveEvent = createDragEvent('dragleave', [], {
+        clientX: rect.right + 10,
+        clientY: rect.bottom + 10,
+      });
       dropZone.dispatchEvent(dragleaveEvent);
       await nextFrame();
 
-      // Should remove dragover because we left the drop zone
+      // Should remove dragover because cursor left the drop zone
       expect(dropZone.hasAttribute('dragover')).to.be.false;
     });
 
