@@ -117,6 +117,13 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).minWidth).to.equal('min(100%, 300px)');
       });
 
+      it('should set fixed width on the master area when masterSize is set and no detail is present', async () => {
+        layout.masterSize = '400px';
+        detailContent.remove();
+        await nextRender();
+        expect(getComputedStyle(master).width).to.equal('400px');
+      });
+
       it('should not overflow in split mode when masterSize is set', async () => {
         layout.masterSize = '500px';
         detail.remove();
@@ -165,6 +172,13 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).flexBasis).to.equal('auto');
         expect(getComputedStyle(detail).flexGrow).to.equal('0');
         expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      });
+
+      it('should set fixed height on the master area when masterSize is set and no detail is present', async () => {
+        layout.masterSize = '200px';
+        detailContent.remove();
+        await nextRender();
+        expect(getComputedStyle(master).height).to.equal('200px');
       });
 
       it('should use masterMinSize as min-height', () => {

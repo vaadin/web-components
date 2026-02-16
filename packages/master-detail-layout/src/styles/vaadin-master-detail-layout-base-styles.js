@@ -109,11 +109,11 @@ export const masterDetailLayoutStyles = css`
     flex-shrink: 0;
   }
 
-  :host([orientation='horizontal'][has-master-size][has-detail]) [part='master'] {
+  :host([orientation='horizontal'][has-master-size]) [part='master'] {
     width: var(--_master-size);
   }
 
-  :host([orientation='vertical'][has-master-size][has-detail]) [part='master'] {
+  :host([orientation='vertical'][has-master-size]) [part='master'] {
     height: var(--_master-size);
   }
 
