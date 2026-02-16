@@ -186,4 +186,38 @@ describe('SlotObserver', () => {
     expect(newCurrentNodes.length).to.equal(2);
     expect(newCurrentNodes).to.eql([childNodes[0], childNodes[2]]);
   });
+
+  it('should not run callback if there is no child nodes by default', async () => {
+    host.innerHTML = '';
+
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    await Promise.resolve();
+
+    expect(spy).to.be.not.called;
+  });
+
+  it('should run callback if there is no child nodes with forceInitial: true', async () => {
+    host.innerHTML = '';
+
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy, true);
+    await Promise.resolve();
+
+    expect(spy).to.be.calledOnce;
+  });
+
+  it('should not run callback again after flush with forceInitial: true', async () => {
+    host.innerHTML = '';
+
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy, true);
+    await Promise.resolve();
+
+    spy.resetHistory();
+
+    observer.flush();
+
+    expect(spy).to.be.not.called;
+  });
 });

@@ -20,9 +20,6 @@ vaadin-avatar:where([has-color-index]) {
   --aura-accent-color-light: var(--vaadin-avatar-user-color);
   --aura-accent-color-dark: var(--vaadin-avatar-user-color);
   --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
-  color: var(--vaadin-avatar-text-color, var(--aura-accent-text-color));
-  --vaadin-avatar-background: var(--vaadin-accent-surface);
-  --vaadin-avatar-text-color: var(--aura-accent-text-color);
   --vaadin-avatar-border-color: var(--aura-accent-border-color);
   --vaadin-avatar-border-width: 1px;
 }

@@ -858,3 +858,101 @@ snapshots["vaadin-slider shadow max < value"] =
 `;
 /* end snapshot vaadin-slider shadow max < value */
 
+snapshots["vaadin-slider shadow min == max"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--value:0;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      0
+    </span>
+    <span part="max">
+      0
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-slider shadow min == max */
+
+snapshots["vaadin-slider shadow max < min"] = 
+`<div class="vaadin-slider-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div
+    id="controls"
+    style="--value:0;"
+  >
+    <div part="track">
+      <div part="track-fill">
+      </div>
+    </div>
+    <div part="thumb">
+    </div>
+    <slot name="input">
+    </slot>
+    <slot name="bubble">
+    </slot>
+  </div>
+  <div
+    aria-hidden="true"
+    part="marks"
+  >
+    <span part="min">
+      0
+    </span>
+    <span part="max">
+      -10
+    </span>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-slider shadow max < min */
+

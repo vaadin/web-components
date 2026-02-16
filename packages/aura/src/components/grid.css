@@ -11,11 +11,6 @@
   justify-content: center;
 }
 
-/* TODO custom part name: how should we indicate an active row? Should we have a built-in part name? */
-vaadin-grid::part(active-nav-item) {
-  --vaadin-grid-row-highlight-background-color: var(--vaadin-background-container);
-}
-
 vaadin-grid-sorter::part(indicators) {
   transition: color 120ms;
 }

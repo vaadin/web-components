@@ -11,6 +11,7 @@ export class SlotObserver {
   constructor(
     slot: HTMLSlotElement,
     callback: (info: { addedNodes: Node[]; currentNodes: Node[]; movedNodes: Node[]; removedNodes: Node[] }) => void,
+    forceInitial?: boolean,
   );
 
   /**
