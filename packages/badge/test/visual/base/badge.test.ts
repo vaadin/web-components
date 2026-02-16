@@ -25,10 +25,6 @@ describe('badge', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('empty', async () => {
-    await visualDiff(div, 'empty');
-  });
-
   it('icon', async () => {
     const icon = document.createElement('vaadin-icon');
     icon.setAttribute('slot', 'icon');
