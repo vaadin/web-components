@@ -136,7 +136,7 @@ jobs:
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
-          name: base-screenshots
+          name: aura-screenshots
           path: |
             packages/*/test/visual/aura/screenshots/dark/*/failed/*.png
             packages/*/test/visual/aura/screenshots/default/*/failed/*.png
