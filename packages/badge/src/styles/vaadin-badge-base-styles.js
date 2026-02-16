@@ -14,7 +14,10 @@ export const badgeStyles = css`
     box-sizing: border-box;
     vertical-align: baseline;
     gap: var(--vaadin-badge-gap, 0.25em);
-    padding: var(--vaadin-badge-padding, 0.4em calc(0.5em + var(--vaadin-badge-border-radius, 0.25em) / 4));
+    padding: var(
+      --vaadin-badge-padding,
+      var(--vaadin-padding-xs) calc(var(--vaadin-padding-s) + var(--vaadin-badge-border-radius, 0.25em) / 4)
+    );
     font-family: var(--vaadin-badge-font-family, inherit);
     font-size: var(--vaadin-badge-font-size, 0.875em);
     font-weight: var(--vaadin-badge-font-weight, 500);
