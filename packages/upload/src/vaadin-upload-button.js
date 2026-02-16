@@ -208,6 +208,7 @@ class UploadButton extends ButtonMixin(
       this.manager.addEventListener('max-files-changed', this.__onMaxFilesChanged);
     }
     this.__syncFromManager();
+    this.requestUpdate();
   }
 
   /**
