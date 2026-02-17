@@ -1,9 +1,6 @@
 {
-  "packages": [
-    "integration",
-    "packages/*"
-  ],
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "packages": ["integration", "packages/*"],
   "npmClient": "yarn",
-  "useWorkspaces": true,
   "version": "23.6.3"
 }
