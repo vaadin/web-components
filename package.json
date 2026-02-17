@@ -27,6 +27,7 @@
     "test": "web-test-runner",
     "test:aura": "yarn test --config web-test-runner-aura.config.js",
     "test:aura:dark": "yarn test --config web-test-runner-aura.config.js --dark",
+    "test:aura-props": "yarn test --config web-test-runner-aura-props.config.js",
     "test:base": "yarn test --config web-test-runner-base.config.js",
     "test:firefox": "yarn test --config web-test-runner-firefox.config.js",
     "test:it": "yarn test --config web-test-runner-it.config.js",

@@ -108,7 +108,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
+    files: ['packages/**/*', 'test/integration/**', 'test/aura-props/**', 'dev/**/*', 'api-docs/js/**'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -177,7 +177,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/test/**', 'test/integration/**'],
+    files: ['packages/**/test/**', 'test/integration/**', 'test/aura-props/**'],
     languageOptions: {
       globals: {
         ...globals.mocha,
