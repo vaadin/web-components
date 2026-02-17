@@ -22,10 +22,10 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * ### Slots
  *
- * Name   | Description
- * -------|-------------
- * (none) | Default slot for the badge text content
- * `icon` | Slot for an icon element (e.g. `<vaadin-icon>`)
+ * Name     | Description
+ * ---------|-------------
+ * (none)   | Default slot for the badge text content
+ * `prefix` | Slot for an element to place before the text, e.g. an icon
  *
  * ### Styling
  *
@@ -33,7 +33,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * Attribute      | Description
  * ---------------|-------------
- * `has-icon`     | Set when the badge has an icon in the icon slot
+ * `has-prefix`   | Set when the badge has content in the prefix slot
  * `has-content`  | Set when the badge has content in the default slot
  *
  * The following custom CSS properties are available for styling:
@@ -76,7 +76,7 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
 
   /** @protected */
   render() {
-    return html`<slot name="icon"></slot><slot></slot>`;
+    return html`<slot name="prefix"></slot><slot></slot>`;
   }
 
   /** @protected */
@@ -88,9 +88,9 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
       this.toggleAttribute('has-content', currentNodes.filter((node) => !isEmptyTextNode(node)).length > 0);
     });
 
-    const iconSlot = this.shadowRoot.querySelector('slot[name="icon"]');
-    this.__iconSlotObserver = new SlotObserver(iconSlot, ({ currentNodes }) => {
-      this.toggleAttribute('has-icon', currentNodes.length > 0);
+    const prefixSlot = this.shadowRoot.querySelector('slot[name="prefix"]');
+    this.__prefixSlotObserver = new SlotObserver(prefixSlot, ({ currentNodes }) => {
+      this.toggleAttribute('has-prefix', currentNodes.length > 0);
     });
   }
 }

@@ -15,10 +15,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * ### Slots
  *
- * Name   | Description
- * -------|-------------
- * (none) | Default slot for the badge text content
- * `icon` | Slot for an icon element (e.g. `<vaadin-icon>`)
+ * Name     | Description
+ * ---------|-------------
+ * (none)   | Default slot for the badge text content
+ * `prefix` | Slot for an element to place before the text, e.g. an icon
  *
  * ### Styling
  *
@@ -26,7 +26,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Attribute      | Description
  * ---------------|-------------
- * `has-icon`     | Set when the badge has an icon in the icon slot
+ * `has-prefix`   | Set when the badge has content in the prefix slot
  * `has-content`  | Set when the badge has content in the default slot
  *
  * The following custom CSS properties are available for styling:
