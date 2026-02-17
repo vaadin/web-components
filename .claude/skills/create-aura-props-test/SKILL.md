@@ -62,6 +62,7 @@ For each CSS custom property that is supported by Aura (identified in Step 1), d
    - `element.focus()` for focus state properties
    - Setting content/attributes to make parts visible (e.g., `element.label = 'Test'` to show label part)
    - Check the component's API documentation for available properties
+   - If testing properties requires opening an overlay (e.g., combo-box), use the component's API to open it. Check existing tests on how to wait for the overlay to open and its content to be rendered before checking styles.
 
 ### Step 3: Write the Test File
 
