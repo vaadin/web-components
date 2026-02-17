@@ -783,6 +783,11 @@ class Popover extends PopoverPositionMixin(
       if (focusableAfterPopover) {
         event.preventDefault();
         focusableAfterPopover.focus();
+      } else if (getActiveTrappingNode(this) && focusables[0]) {
+        // Popover is last in DOM scope but shouldn't be Tab-reachable from
+        // non-target elements. Wrap to first focusable in focus trap.
+        event.preventDefault();
+        focusables[0].focus();
       }
     }
   }
@@ -855,9 +860,20 @@ class Popover extends PopoverPositionMixin(
     const prevFocusableNative = this.__getPrevScopeFocusable(activeElement, focusables, true);
     // Skip the popover when native Shift+Tab would land on it
     // and redirect to the actual previous element
-    if (prevFocusableNative === this && prevFocusable) {
-      event.preventDefault();
-      prevFocusable.focus();
+    if (prevFocusableNative === this) {
+      if (prevFocusable) {
+        event.preventDefault();
+        prevFocusable.focus();
+      } else if (getActiveTrappingNode(this)) {
+        // Popover is first in DOM scope but shouldn't be Shift+Tab-reachable
+        // from non-target elements. Wrap to last non-popover focusable.
+        const list = focusables.filter((el) => el !== this);
+        const last = list.at(-1);
+        if (last) {
+          event.preventDefault();
+          last.focus();
+        }
+      }
     }
   }
 
