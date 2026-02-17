@@ -29,12 +29,21 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name  | Description
+ * -----------|-------------
+ * `prefix`   | The container for the prefix slot
+ * `number`   | The container for the number value
+ * `content`  | The container for the default slot
+ *
  * The following state attributes are available for styling:
  *
  * Attribute      | Description
  * ---------------|-------------
  * `has-prefix`   | Set when the badge has content in the prefix slot
  * `has-content`  | Set when the badge has content in the default slot
+ * `has-number`   | Set when the badge has a number value
  *
  * The following custom CSS properties are available for styling:
  *
@@ -47,6 +56,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  * `--vaadin-badge-font-family`     |
  * `--vaadin-badge-gap`             |
  * `--vaadin-badge-line-height`     |
+ * `--vaadin-badge-min-width`       |
  * `--vaadin-badge-padding`         |
  * `--vaadin-badge-text-color`      |
  *
@@ -74,9 +84,33 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     return true;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The number to display in the badge.
+       */
+      number: {
+        type: Number,
+      },
+    };
+  }
+
   /** @protected */
   render() {
-    return html`<slot name="prefix"></slot><slot></slot>`;
+    return html`
+      <div part="prefix"><slot name="prefix"></slot></div>
+      <div part="number">${this.number}</div>
+      <div part="content"><slot></slot></div>
+    `;
+  }
+
+  /** @protected */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    if (props.has('number')) {
+      this.toggleAttribute('has-number', this.number != null);
+    }
   }
 
   /** @protected */

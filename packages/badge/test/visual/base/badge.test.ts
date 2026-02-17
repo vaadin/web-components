@@ -3,6 +3,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import '../../../src/vaadin-badge.js';
+import type { Icon } from '@vaadin/icon';
 import type { Badge } from '../../../src/vaadin-badge.js';
 
 window.Vaadin ??= {};
@@ -25,20 +26,42 @@ describe('badge', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('icon', async () => {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'prefix');
-    icon.icon = 'vaadin:check';
-    element.appendChild(icon);
-    element.append('Completed');
-    await visualDiff(div, 'icon');
+  it('number', async () => {
+    element.number = 5;
+    await visualDiff(div, 'number');
   });
 
-  it('icon-only', async () => {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'prefix');
-    icon.icon = 'vaadin:check';
-    element.appendChild(icon);
-    await visualDiff(div, 'icon-only');
+  it('number-content', async () => {
+    element.number = 3;
+    element.textContent = 'Messages';
+    await visualDiff(div, 'number-content');
+  });
+
+  describe('icon', () => {
+    let icon: Icon;
+
+    beforeEach(() => {
+      icon = document.createElement('vaadin-icon');
+      icon.setAttribute('slot', 'prefix');
+      icon.icon = 'vaadin:check';
+    });
+
+    it('icon', async () => {
+      element.appendChild(icon);
+      await visualDiff(div, 'icon');
+    });
+
+    it('icon-content', async () => {
+      element.appendChild(icon);
+      element.append('Completed');
+      await visualDiff(div, 'icon-content');
+    });
+
+    it('icon-number-content', async () => {
+      element.number = 3;
+      element.appendChild(icon);
+      element.append('Completed');
+      await visualDiff(div, 'icon-number-content');
+    });
   });
 });
