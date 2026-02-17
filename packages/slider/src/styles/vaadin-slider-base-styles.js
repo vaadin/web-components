@@ -95,7 +95,6 @@ export const sliderStyles = css`
     border: var(--vaadin-slider-thumb-border-width, 1px) solid
       var(--vaadin-slider-thumb-border-color, var(--vaadin-text-color));
     border-radius: var(--vaadin-slider-thumb-border-radius, var(--vaadin-radius-l));
-    touch-action: none;
   }
 
   :host([readonly]) [part='track-fill'] {
@@ -114,6 +113,7 @@ export const sliderStyles = css`
     outline: 0;
     -webkit-tap-highlight-color: transparent;
     cursor: inherit;
+    touch-action: none;
     z-index: 999;
   }
 
