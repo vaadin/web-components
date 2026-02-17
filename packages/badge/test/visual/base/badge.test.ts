@@ -41,4 +41,15 @@ describe('badge', () => {
     element.appendChild(icon);
     await visualDiff(div, 'icon-only');
   });
+
+  it('number', async () => {
+    element.number = 5;
+    await visualDiff(div, 'number');
+  });
+
+  it('number-content', async () => {
+    element.number = 3;
+    element.textContent = 'Messages';
+    await visualDiff(div, 'number-content');
+  });
 });

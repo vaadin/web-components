@@ -65,6 +65,58 @@ describe('vaadin-badge', () => {
     });
   });
 
+  describe('has-number attribute', () => {
+    it('should not set has-number attribute by default', () => {
+      expect(badge.hasAttribute('has-number')).to.be.false;
+    });
+
+    it('should set has-number attribute when number property is set', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-number')).to.be.true;
+    });
+
+    it('should remove has-number attribute when number is set to null', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
+      badge.number = null;
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-number')).to.be.false;
+    });
+
+    it('should remove has-number attribute when number is set to undefined', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
+      badge.number = undefined;
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-number')).to.be.false;
+    });
+
+    it('should set has-number attribute when number is 0', async () => {
+      badge.number = 0;
+      await nextUpdate(badge);
+      expect(badge.hasAttribute('has-number')).to.be.true;
+    });
+  });
+
+  describe('number rendering', () => {
+    it('should render the number value in the number part', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
+      const numberPart = badge.shadowRoot!.querySelector('[part="number"]')!;
+      expect(numberPart.textContent).to.equal('5');
+    });
+
+    it('should update rendered number when property changes', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
+      badge.number = 10;
+      await nextUpdate(badge);
+      const numberPart = badge.shadowRoot!.querySelector('[part="number"]')!;
+      expect(numberPart.textContent).to.equal('10');
+    });
+  });
+
   describe('has-prefix attribute', () => {
     it('should not set has-prefix attribute by default', () => {
       expect(badge.hasAttribute('has-prefix')).to.be.false;

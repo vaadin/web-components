@@ -14,11 +14,38 @@ snapshots["vaadin-badge host content"] =
 `;
 /* end snapshot vaadin-badge host content */
 
+snapshots["vaadin-badge host number"] = 
+`<vaadin-badge has-number="">
+</vaadin-badge>
+`;
+/* end snapshot vaadin-badge host number */
+
 snapshots["vaadin-badge shadow default"] = 
-`<slot name="prefix">
-</slot>
-<slot>
-</slot>
+`<div part="prefix">
+  <slot name="prefix">
+  </slot>
+</div>
+<div part="number">
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-badge shadow default */
+
+snapshots["vaadin-badge shadow number"] = 
+`<div part="prefix">
+  <slot name="prefix">
+  </slot>
+</div>
+<div part="number">
+  5
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-badge shadow number */
 

@@ -9,3 +9,6 @@ const badge = document.createElement('vaadin-badge');
 // Mixins
 assertType<ElementMixinClass>(badge);
 assertType<ThemableMixinClass>(badge);
+
+// Properties
+assertType<number | null | undefined>(badge.number);

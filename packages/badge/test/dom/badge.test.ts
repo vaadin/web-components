@@ -25,10 +25,22 @@ describe('vaadin-badge', () => {
       await nextUpdate(badge);
       await expect(badge).dom.to.equalSnapshot();
     });
+
+    it('number', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
+      await expect(badge).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
     it('default', async () => {
+      await expect(badge).shadowDom.to.equalSnapshot();
+    });
+
+    it('number', async () => {
+      badge.number = 5;
+      await nextUpdate(badge);
       await expect(badge).shadowDom.to.equalSnapshot();
     });
   });
