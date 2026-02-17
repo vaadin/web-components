@@ -158,15 +158,24 @@ export const SliderMixin = (superClass) =>
 
       const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
+      // Round to step precision to avoid floating-point artifacts.
+      const precision = this.__getStepPrecision(step);
+
       const offset = safeValue - minValue;
       const nearestOffset = Math.round(offset / step) * step;
-      const nearestValue = minValue + nearestOffset;
+      const nearestValue = parseFloat((minValue + nearestOffset).toFixed(precision));
 
       // Ensure the last value matching step is used below the max limit.
       // Example: max = 100, step = 1.5 - force maximum allowed value to 99.
-      const newValue = nearestValue <= maxValue ? nearestValue : nearestValue - step;
+      const newValue = nearestValue <= maxValue ? nearestValue : parseFloat((nearestValue - step).toFixed(precision));
 
       this.__value = fullValue.with(index, newValue);
+    }
+
+    /** @private */
+    __getStepPrecision(step) {
+      const afterDecimal = String(step).split('.')[1];
+      return afterDecimal ? afterDecimal.length : 0;
     }
 
     /**
