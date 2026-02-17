@@ -15,7 +15,7 @@ snapshots["vaadin-badge host content"] =
 /* end snapshot vaadin-badge host content */
 
 snapshots["vaadin-badge shadow default"] = 
-`<slot name="icon">
+`<slot name="prefix">
 </slot>
 <slot>
 </slot>

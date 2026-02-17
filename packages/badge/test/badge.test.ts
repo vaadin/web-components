@@ -65,21 +65,21 @@ describe('vaadin-badge', () => {
     });
   });
 
-  describe('has-icon attribute', () => {
-    it('should not set has-icon attribute by default', () => {
-      expect(badge.hasAttribute('has-icon')).to.be.false;
+  describe('has-prefix attribute', () => {
+    it('should not set has-prefix attribute by default', () => {
+      expect(badge.hasAttribute('has-prefix')).to.be.false;
     });
 
-    it('should toggle has-icon attribute on icon slot content change', async () => {
-      const icon = document.createElement('span');
-      icon.setAttribute('slot', 'icon');
-      badge.appendChild(icon);
+    it('should toggle has-prefix attribute on prefix slot content change', async () => {
+      const prefix = document.createElement('span');
+      prefix.setAttribute('slot', 'prefix');
+      badge.appendChild(prefix);
       await nextUpdate(badge);
-      expect(badge.hasAttribute('has-icon')).to.be.true;
+      expect(badge.hasAttribute('has-prefix')).to.be.true;
 
-      badge.removeChild(icon);
+      badge.removeChild(prefix);
       await nextUpdate(badge);
-      expect(badge.hasAttribute('has-icon')).to.be.false;
+      expect(badge.hasAttribute('has-prefix')).to.be.false;
     });
   });
 });

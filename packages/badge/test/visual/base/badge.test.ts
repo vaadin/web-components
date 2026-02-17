@@ -27,7 +27,7 @@ describe('badge', () => {
 
   it('icon', async () => {
     const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'icon');
+    icon.setAttribute('slot', 'prefix');
     icon.icon = 'vaadin:check';
     element.appendChild(icon);
     element.append('Completed');
@@ -36,7 +36,7 @@ describe('badge', () => {
 
   it('icon-only', async () => {
     const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'icon');
+    icon.setAttribute('slot', 'prefix');
     icon.icon = 'vaadin:check';
     element.appendChild(icon);
     await visualDiff(div, 'icon-only');
