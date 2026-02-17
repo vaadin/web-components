@@ -195,6 +195,24 @@ describe('vaadin-upload-file-list', () => {
       await nextFrame();
 
       expect(getErrorText()).to.equal('Upload failed, please try again later');
+
+      manager.files[0].errorKey = 'unexpectedServerError';
+      manager.files = [...manager.files];
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('Upload failed due to server error');
+
+      manager.files[0].errorKey = 'forbidden';
+      manager.files = [...manager.files];
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('Upload forbidden');
+
+      manager.files[0].errorKey = 'fileTooLarge';
+      manager.files = [...manager.files];
+      await nextFrame();
+
+      expect(getErrorText()).to.equal('File is too large');
     });
 
     it('should render progress status with formatted file size', async () => {
