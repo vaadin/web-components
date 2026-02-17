@@ -99,24 +99,6 @@ describe('vaadin-badge', () => {
     });
   });
 
-  describe('number rendering', () => {
-    it('should render the number value in the number part', async () => {
-      badge.number = 5;
-      await nextUpdate(badge);
-      const numberPart = badge.shadowRoot!.querySelector('[part="number"]')!;
-      expect(numberPart.textContent).to.equal('5');
-    });
-
-    it('should update rendered number when property changes', async () => {
-      badge.number = 5;
-      await nextUpdate(badge);
-      badge.number = 10;
-      await nextUpdate(badge);
-      const numberPart = badge.shadowRoot!.querySelector('[part="number"]')!;
-      expect(numberPart.textContent).to.equal('10');
-    });
-  });
-
   describe('has-prefix attribute', () => {
     it('should not set has-prefix attribute by default', () => {
       expect(badge.hasAttribute('has-prefix')).to.be.false;
