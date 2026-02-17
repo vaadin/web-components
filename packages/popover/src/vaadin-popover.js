@@ -743,18 +743,18 @@ class Popover extends PopoverPositionMixin(
     }
 
     // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
-    const focusables = this.__getBodyFocusables();
+    const focusables = this.__getScopeFocusables();
 
     // Move focus to the next element after target on last content Tab,
     // or when popover itself is focused and has no focusable content
     const lastFocusable = this.__getLastFocusable();
-    const isFocused = lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this);
-    if (isFocused) {
-      let focusable = this.__getNextBodyFocusable(this.__getTargetFocusable(), focusables);
+    const isFocusOut = lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this);
+    if (isFocusOut) {
+      let focusable = this.__getNextScopeFocusable(this.__getTargetFocusable(), focusables);
       // If the next element after the target is the popover itself (DOM position
       // differs from logical position), skip past it to the actual next element.
       if (focusable === this) {
-        focusable = this.__getNextBodyFocusable(this, focusables);
+        focusable = this.__getNextScopeFocusable(this, focusables);
       }
       if (focusable) {
         event.preventDefault();
@@ -774,12 +774,12 @@ class Popover extends PopoverPositionMixin(
 
     // Handle cases where Tab from the current element would land on the popover
     const activeElement = getDeepActiveElement();
-    const nextFocusable = this.__getNextBodyFocusable(activeElement, focusables);
+    const nextFocusable = this.__getNextScopeFocusable(activeElement, focusables);
     if (nextFocusable === this) {
       // The popover should only be Tab-reachable from its target (handled above).
       // Skip the popover when Tab from any other element would land on it
       // due to its DOM position.
-      const focusableAfterPopover = this.__getNextBodyFocusable(this, focusables);
+      const focusableAfterPopover = this.__getNextScopeFocusable(this, focusables);
       if (focusableAfterPopover) {
         event.preventDefault();
         focusableAfterPopover.focus();
@@ -804,31 +804,34 @@ class Popover extends PopoverPositionMixin(
 
     // Don't intercept if focus is inside the popover content.
     // The browser's native Shift+Tab handles navigation within
-    // the overlay (e.g. from popoverInput to popover element).
+    // the overlay (e.g. between focusable content and the popover element itself).
     const activeElement = getDeepActiveElement();
     if (this.contains(activeElement)) {
       return;
     }
 
     // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
-    const focusables = this.__getBodyFocusables();
+    const focusables = this.__getScopeFocusables();
 
     // Get previous focusable element excluding the popover
-    const prevFocusable = this.__getPrevBodyFocusable(activeElement, focusables);
+    const prevFocusable = this.__getPrevScopeFocusable(activeElement, focusables);
     const targetFocusable = this.__getTargetFocusable();
 
-    // Intercept Shift+Tab when it would naturally go to the target
-    // (if we exclude the popover from the focusable list)
+    // Intercept Shift+Tab when the previous focusable (excluding the popover)
+    // is the target. Instead of moving to the target, redirect focus into
+    // the popover's last focusable content (or the popover itself).
     if (prevFocusable === targetFocusable) {
       event.preventDefault();
       this.__focusLastOrSelf();
       return;
     }
 
-    // No previous element in the scope (at the beginning of the focus trap).
-    // When the target is the last non-popover focusable, the popover is logically
-    // last. Wrap explicitly to the popover's last focusable content (or the popover
-    // itself). Don't fall through - the FocusTrapController uses DOM order which
+    // Move focus into the popover when:
+    // 1. There is no previous focusable element in the focus trap (at the
+    //    beginning, would wrap around), and
+    // 2. The target is the last focusable in the focus trap (making the
+    //    popover logically last).
+    // Don't fall through - the FocusTrapController uses DOM order which
     // may differ from the popover's logical tab position.
     if (!prevFocusable && getActiveTrappingNode(this)) {
       const list = focusables.filter((el) => el !== this);
@@ -840,7 +843,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     // Get previous focusable element including the popover (simulates native Tab order)
-    const prevFocusableNative = this.__getPrevBodyFocusable(activeElement, focusables, true);
+    const prevFocusableNative = this.__getPrevScopeFocusable(activeElement, focusables, true);
     // Skip the popover when native Shift+Tab would land on it
     // and redirect to the actual previous element
     if (prevFocusableNative === this && prevFocusable) {
@@ -861,23 +864,24 @@ class Popover extends PopoverPositionMixin(
   }
 
   /**
-   * Returns body focusable elements with popover light DOM children filtered out.
+   * Returns focusable elements within the current scope (active focus trap or
+   * document body) with popover light DOM children filtered out.
    * @return {Element[]}
    * @private
    */
-  __getBodyFocusables() {
+  __getScopeFocusables() {
     const scope = getActiveTrappingNode(this) || document.body;
     return getFocusableElements(scope).filter((el) => !this.__isPopoverContent(el));
   }
 
   /** @private */
-  __getNextBodyFocusable(target, focusables = this.__getBodyFocusables()) {
+  __getNextScopeFocusable(target, focusables = this.__getScopeFocusables()) {
     const idx = focusables.findIndex((el) => el === target);
     return idx >= 0 ? focusables[idx + 1] : undefined;
   }
 
   /** @private */
-  __getPrevBodyFocusable(target, focusables = this.__getBodyFocusables(), includePopover = false) {
+  __getPrevScopeFocusable(target, focusables = this.__getScopeFocusables(), includePopover = false) {
     const list = includePopover ? focusables : focusables.filter((el) => el !== this);
     const idx = list.findIndex((el) => el === target);
     // Returns null both when target is the first element (idx === 0)
