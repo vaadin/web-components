@@ -25,7 +25,7 @@ export const badgeStyles = css`
     color: var(--vaadin-badge-text-color, var(--vaadin-text-color));
     background: var(--vaadin-badge-background, var(--vaadin-background-container));
     border-radius: var(--vaadin-badge-border-radius, var(--vaadin-radius-l));
-    min-width: var(--vaadin-badge-min-width, calc(1lh + var(--vaadin-padding-xs) * 2));
+    min-width: var(--vaadin-badge-min-width, calc(1lh + var(--vaadin-badge-padding, var(--vaadin-padding-xs)) * 2));
     flex-shrink: 0;
   }
 
@@ -41,7 +41,7 @@ export const badgeStyles = css`
 
   :host([has-prefix]:not([has-content], [has-number])),
   :host([has-number]:not([has-content], [has-prefix])) {
-    padding: var(--vaadin-padding-xs);
+    padding: var(--vaadin-badge-padding, var(--vaadin-padding-xs));
     border-radius: 50%;
   }
 
