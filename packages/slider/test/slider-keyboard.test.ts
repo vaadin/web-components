@@ -81,6 +81,24 @@ describe('vaadin-slider - keyboard input', () => {
     expect(slider.value).to.equal(99);
   });
 
+  it('should not produce rounding errors with fractional step and min', async () => {
+    slider.min = 0.5;
+    slider.max = 3.9;
+    slider.step = 0.1;
+    slider.value = 1.1;
+    await sendKeys({ press: 'ArrowRight' });
+    expect(slider.value).to.equal(1.2);
+  });
+
+  it('should allow reaching max with fractional step and min', async () => {
+    slider.min = 0.5;
+    slider.max = 3.9;
+    slider.step = 0.1;
+    slider.value = 3.8;
+    await sendKeys({ press: 'ArrowRight' });
+    expect(slider.value).to.equal(3.9);
+  });
+
   it('should not change value on arrow key when readonly', async () => {
     slider.readonly = true;
     await sendKeys({ press: 'ArrowRight' });
