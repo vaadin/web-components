@@ -15,8 +15,10 @@
       const nextUpload = document.querySelector('#next-upload');
 
       const upload = document.querySelector('vaadin-upload');
-      // Use a fake xhr for testing
-      upload._createXhr = () => {
+      const nodropUpload = document.querySelector('vaadin-upload[nodrop]');
+      
+      // Create a shared XHR creator function that both uploads will use
+      const createConfiguredXhr = () => {
         if (nextUpload.value === 'successful') {
           return xhrCreator({ size: 512, uploadTime: 3000, stepTime: 1000 })();
         } else if (nextUpload.value === 'rejected') {
@@ -29,8 +31,21 @@
               };
             },
           })();
+        } else if (nextUpload.value === 'file-too-large') {
+          return xhrCreator({
+            serverValidation: () => {
+              return {
+                status: 413,
+                statusText: 'Payload Too Large',
+              };
+            },
+          })();
         }
       };
+      
+      // Use the shared function for both upload components
+      upload._createXhr = createConfiguredXhr;
+      nodropUpload._createXhr = createConfiguredXhr;
 
       const files = [
         { name: 'Annual Report.docx', complete: true },
@@ -55,12 +70,15 @@
   <body>
     <vaadin-upload target="/api/fileupload"></vaadin-upload>
     <hr style="margin-block: 24px" />
+    <h3>Upload with nodrop (no drag and drop)</h3>
+    <p>Test: This upload component has drag and drop disabled. Click the button to select files. It respects the same "Next file upload" configuration as the first upload.</p>
     <vaadin-upload nodrop target="/api/fileupload"></vaadin-upload>
     <hr style="margin-block: 24px" />
     <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
       <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
       <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
       <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
+      <vaadin-radio-button value="file-too-large" label="File too large (413)"></vaadin-radio-button>
     </vaadin-radio-group>
     <hr style="margin-block: 24px" />
     <h3>no-auto + max-concurrent-uploads=1</h3>

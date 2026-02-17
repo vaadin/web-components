@@ -34,6 +34,7 @@ const DEFAULT_I18N = {
       serverUnavailable: 'Upload failed, please try again later',
       unexpectedServerError: 'Upload failed due to server error',
       forbidden: 'Upload forbidden',
+      fileTooLarge: 'File is too large',
     },
   },
   units: {

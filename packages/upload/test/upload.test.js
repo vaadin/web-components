@@ -330,6 +330,10 @@ describe('upload', () => {
           await expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status);
         });
       });
+
+      it('should fail with file too large error for status code 413', async () => {
+        await expectResponseErrorForStatus(upload.i18n.uploading.error.fileTooLarge, 413);
+      });
     });
   });
 

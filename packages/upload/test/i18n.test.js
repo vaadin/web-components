@@ -34,6 +34,7 @@ const CUSTOM_I18N = {
       serverUnavailable: 'Hochladen fehlgeschlagen, bitte später erneut versuchen',
       unexpectedServerError: 'Hochladen aufgrund eines Serverfehlers fehlgeschlagen',
       forbidden: 'Hochladen verboten',
+      fileTooLarge: 'Datei ist zu groß',
     },
   },
   file: {
@@ -126,6 +127,10 @@ describe('upload i18n', () => {
         await setupFile({ serverValidation: () => ({ status: 403 }) }, 50);
       }
 
+      async function setupFileTooLargeFile() {
+        await setupFile({ serverValidation: () => ({ status: 413 }) }, 50);
+      }
+
       async function setupServerUnavailableFile() {
         await setupFile({ serverValidation: () => ({ status: 0 }) }, 50);
       }
@@ -187,6 +192,9 @@ describe('upload i18n', () => {
 
         await setupForbiddenFile();
         expect(getFileError()).to.equal(expectedI18n.uploading.error.forbidden);
+
+        await setupFileTooLargeFile();
+        expect(getFileError()).to.equal(expectedI18n.uploading.error.fileTooLarge);
 
         await setupServerUnavailableFile();
         expect(getFileError()).to.equal(expectedI18n.uploading.error.serverUnavailable);
