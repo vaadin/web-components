@@ -200,194 +200,106 @@ describe('popover Tab navigation in dialog', () => {
     await nextRender();
   });
 
-  describe('with focusable content', () => {
-    ['after target', 'before target'].forEach((position) => {
-      describe(`popover ${position} in DOM`, () => {
-        beforeEach(async () => {
-          if (position === 'before target') {
-            const root = btn1.parentNode;
-            root.insertBefore(popover, btn1);
-          }
-          popover.opened = true;
-          await oneEvent(overlay, 'vaadin-overlay-open');
-        });
-
-        it('should Tab forward through all elements in correct order', async () => {
-          btn1.focus();
-          expect(getDeepActiveElement()).to.equal(btn1);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn2);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn3);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn4);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(popover);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(popoverInput);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn5);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(dialog);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn1);
-        });
-
-        it('should Shift+Tab backward through all elements in correct order', async () => {
-          btn5.focus();
-          expect(getDeepActiveElement()).to.equal(btn5);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(popoverInput);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(popover);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn4);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn3);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn2);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn1);
-        });
+  [
+    { name: 'with focusable content', hasFocusable: true },
+    { name: 'with no focusable content', hasFocusable: false },
+  ].forEach(({ name, hasFocusable }) => {
+    describe(name, () => {
+      beforeEach(async () => {
+        if (!hasFocusable) {
+          // Replace the focusable input with a plain text span
+          popover.removeChild(popoverInput);
+          const span = document.createElement('span');
+          span.textContent = 'Tooltip-like content';
+          popover.appendChild(span);
+          await nextUpdate(popover);
+        }
       });
-    });
-  });
 
-  describe('Tab wrap-around at focus trap boundary', () => {
-    ['after target', 'before target'].forEach((position) => {
-      describe(`popover ${position} in DOM`, () => {
-        beforeEach(async () => {
-          if (position === 'before target') {
+      [
+        { name: 'after last button', position: 'afterLast' },
+        { name: 'before first button', position: 'beforeFirst' },
+        { name: 'right before target', position: 'beforeTarget' },
+        { name: 'right after target', position: 'afterTarget' },
+      ].forEach(({ name, position }) => {
+        describe(`popover ${name} in DOM`, () => {
+          beforeEach(async () => {
             const root = btn1.parentNode;
-            root.insertBefore(popover, btn1);
-          }
-          popover.opened = true;
-          await oneEvent(overlay, 'vaadin-overlay-open');
-        });
+            if (position === 'beforeFirst') {
+              root.insertBefore(popover, btn1);
+            } else if (position === 'beforeTarget') {
+              root.insertBefore(popover, btn4);
+            } else if (position === 'afterTarget') {
+              root.insertBefore(popover, btn5);
+            }
+            // 'afterLast' — no move needed, popover is already after btn5
+            popover.opened = true;
+            await oneEvent(overlay, 'vaadin-overlay-open');
+          });
 
-        if (position === 'after target') {
-          it('should wrap Tab from last button to dialog, not to popover', async () => {
-            btn5.focus();
+          it('should Tab forward through all elements in correct order', async () => {
+            btn1.focus();
+            expect(getDeepActiveElement()).to.equal(btn1);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn2);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn3);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn4);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(popover);
+
+            if (hasFocusable) {
+              await sendKeys({ press: 'Tab' });
+              expect(getDeepActiveElement()).to.equal(popoverInput);
+            }
+
+            await sendKeys({ press: 'Tab' });
             expect(getDeepActiveElement()).to.equal(btn5);
 
             await sendKeys({ press: 'Tab' });
             expect(getDeepActiveElement()).to.equal(dialog);
+
+            // Should wrap back to the first button
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn1);
           });
 
-          it('should wrap Shift+Tab from dialog to last button, not to popover', async () => {
-            dialog.focus();
+          it('should Shift+Tab backward through all elements in correct order', async () => {
+            btn5.focus();
+            expect(getDeepActiveElement()).to.equal(btn5);
+
+            if (hasFocusable) {
+              await sendKeys({ press: 'Shift+Tab' });
+              expect(getDeepActiveElement()).to.equal(popoverInput);
+            }
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(popover);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn4);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn3);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn2);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn1);
+
+            await sendKeys({ press: 'Shift+Tab' });
             expect(getDeepActiveElement()).to.equal(dialog);
 
+            // Should wrap back to the last button, not to the popover
             await sendKeys({ press: 'Shift+Tab' });
             expect(getDeepActiveElement()).to.equal(btn5);
           });
-        }
-
-        if (position === 'before target') {
-          it('should wrap Shift+Tab from dialog to last button, not to popover', async () => {
-            dialog.focus();
-            expect(getDeepActiveElement()).to.equal(dialog);
-
-            await sendKeys({ press: 'Shift+Tab' });
-            expect(getDeepActiveElement()).to.equal(btn5);
-          });
-        }
-      });
-    });
-  });
-
-  describe('with no focusable content', () => {
-    let popoverNoContent, overlayNoContent;
-
-    beforeEach(async () => {
-      // Create a popover with only text content (no focusable elements)
-      popoverNoContent = document.createElement('vaadin-popover');
-      const span = document.createElement('span');
-      span.textContent = 'Tooltip-like content';
-      popoverNoContent.appendChild(span);
-      popoverNoContent.trigger = [];
-
-      const root = btn1.parentNode;
-
-      // Remove the original popover and use this one instead
-      popover.opened = false;
-      root.removeChild(popover);
-
-      root.appendChild(popoverNoContent);
-      popoverNoContent.target = btn4;
-      await nextUpdate(popoverNoContent);
-
-      overlayNoContent = popoverNoContent.shadowRoot.querySelector('vaadin-popover-overlay');
-    });
-
-    afterEach(async () => {
-      popoverNoContent.opened = false;
-      await nextRender();
-    });
-
-    ['after target', 'before target'].forEach((position) => {
-      describe(`popover ${position} in DOM`, () => {
-        beforeEach(async () => {
-          if (position === 'before target') {
-            const root = btn1.parentNode;
-            root.insertBefore(popoverNoContent, btn1);
-          }
-          popoverNoContent.opened = true;
-          await oneEvent(overlayNoContent, 'vaadin-overlay-open');
-        });
-
-        it('should Tab forward through all elements in correct order', async () => {
-          btn1.focus();
-          expect(getDeepActiveElement()).to.equal(btn1);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn2);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn3);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn4);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(popoverNoContent);
-
-          await sendKeys({ press: 'Tab' });
-          expect(getDeepActiveElement()).to.equal(btn5);
-        });
-
-        it('should Shift+Tab backward through all elements in correct order', async () => {
-          btn5.focus();
-          expect(getDeepActiveElement()).to.equal(btn5);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(popoverNoContent);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn4);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn3);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn2);
-
-          await sendKeys({ press: 'Shift+Tab' });
-          expect(getDeepActiveElement()).to.equal(btn1);
         });
       });
     });
