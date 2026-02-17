@@ -840,6 +840,15 @@ class Popover extends PopoverPositionMixin(
         this.__focusLastOrSelf();
         return;
       }
+      // Popover is last in DOM but target is not the last focusable.
+      // Wrap to last non-popover focusable to prevent FocusTrapController
+      // from landing on the popover.
+      const last = list.at(-1);
+      if (last) {
+        event.preventDefault();
+        last.focus();
+        return;
+      }
     }
 
     // Get previous focusable element including the popover (simulates native Tab order)

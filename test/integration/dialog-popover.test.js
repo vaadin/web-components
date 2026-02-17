@@ -287,6 +287,14 @@ describe('popover Tab navigation in dialog', () => {
             await sendKeys({ press: 'Tab' });
             expect(getDeepActiveElement()).to.equal(dialog);
           });
+
+          it('should wrap Shift+Tab from dialog to last button, not to popover', async () => {
+            dialog.focus();
+            expect(getDeepActiveElement()).to.equal(dialog);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn5);
+          });
         }
 
         if (position === 'before target') {
