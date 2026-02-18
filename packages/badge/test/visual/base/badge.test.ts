@@ -39,16 +39,6 @@ describe('badge', () => {
       element.textContent = 'Messages';
       await visualDiff(div, 'number-content');
     });
-
-    it('number-only', async () => {
-      const icon = document.createElement('vaadin-icon');
-      icon.setAttribute('slot', 'icon');
-      icon.icon = 'vaadin:check';
-      element.appendChild(icon);
-      element.append('Completed');
-      element.setAttribute('theme', 'number-only');
-      await visualDiff(div, 'number-only');
-    });
   });
 
   describe('icon', () => {
@@ -77,13 +67,31 @@ describe('badge', () => {
       element.append('Completed');
       await visualDiff(div, 'icon-number-content');
     });
+  });
 
-    it('icon-only', async () => {
+  describe('theme', () => {
+    beforeEach(() => {
       element.number = 3;
+      const icon = document.createElement('vaadin-icon');
+      icon.setAttribute('slot', 'icon');
+      icon.icon = 'vaadin:check';
       element.appendChild(icon);
       element.append('Completed');
+    });
+
+    it('icon-only', async () => {
       element.setAttribute('theme', 'icon-only');
-      await visualDiff(div, 'icon-only');
+      await visualDiff(div, 'theme-icon-only');
+    });
+
+    it('number-only', async () => {
+      element.setAttribute('theme', 'number-only');
+      await visualDiff(div, 'theme-number-only');
+    });
+
+    it('dot', async () => {
+      element.setAttribute('theme', 'dot');
+      await visualDiff(div, 'theme-dot');
     });
   });
 });

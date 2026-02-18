@@ -53,9 +53,18 @@ export const badgeStyles = css`
   }
 
   :host([theme~='icon-only']) :is([part='content'], [part='number']),
-  :host([theme~='number-only']) :is([part='content'], [part='icon']) {
+  :host([theme~='number-only']) :is([part='content'], [part='icon']),
+  :host([theme~='dot']) [part] {
     width: 0;
     overflow: clip;
+  }
+
+  :host([theme~='dot']) {
+    min-width: 0;
+    width: 1em;
+    height: 1em;
+    padding: 0;
+    border-radius: 50%;
   }
 
   @media (forced-colors: active) {

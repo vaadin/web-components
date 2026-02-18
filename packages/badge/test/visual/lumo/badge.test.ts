@@ -101,6 +101,12 @@ describe('badge', () => {
       element.setAttribute('theme', 'small');
       await visualDiff(div, 'theme-small');
     });
+
+    it('dot', async () => {
+      element.textContent = 'Badge';
+      element.setAttribute('theme', 'dot');
+      await visualDiff(div, 'theme-dot');
+    });
   });
 
   ['success', 'error', 'warning', 'contrast'].forEach((variant) => {
@@ -115,6 +121,12 @@ describe('badge', () => {
         element.textContent = 'Badge';
         element.setAttribute('theme', `${variant} primary`);
         await visualDiff(div, `theme-${variant}-primary`);
+      });
+
+      it(`${variant} dot`, async () => {
+        element.textContent = 'Badge';
+        element.setAttribute('theme', `${variant} dot`);
+        await visualDiff(div, `theme-${variant}-dot`);
       });
     });
   });

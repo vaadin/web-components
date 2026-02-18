@@ -65,6 +65,26 @@
     --vaadin-badge-font-size: var(--lumo-font-size-xxs);
   }
 
+  :host([theme~='dot']) {
+    --vaadin-badge-background: var(--lumo-primary-color);
+  }
+
+  :host([theme~='dot'][theme~='success']) {
+    --vaadin-badge-background: var(--lumo-success-color);
+  }
+
+  :host([theme~='dot'][theme~='error']) {
+    --vaadin-badge-background: var(--lumo-error-color);
+  }
+
+  :host([theme~='dot'][theme~='warning']) {
+    --vaadin-badge-background: var(--lumo-warning-color);
+  }
+
+  :host([theme~='dot'][theme~='contrast']) {
+    --vaadin-badge-background: var(--lumo-contrast);
+  }
+
   :host([theme~='icon-only']),
   :host([theme~='number-only']),
   :host([has-icon]:not([has-content], [has-number])),
