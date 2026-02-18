@@ -65,12 +65,25 @@
     --vaadin-badge-font-size: var(--lumo-font-size-xxs);
   }
 
-  :host([has-icon]:not([has-content])) {
+  :host([theme~='icon-only']),
+  :host([theme~='number-only']),
+  :host([has-icon]:not([has-content], [has-number])),
+  :host([has-number]:not([has-content], [has-icon])) {
     padding: 0;
     min-width: 0;
+  }
+
+  :host([theme~='icon-only']),
+  :host([has-icon]:not([has-content], [has-number])) {
     font-size: 1rem;
     width: var(--lumo-icon-size-m);
     height: var(--lumo-icon-size-m);
+  }
+
+  :host([theme~='number-only']),
+  :host([has-number]:not([has-content], [has-icon])) {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   :host([has-icon]) ::slotted(vaadin-icon) {
