@@ -1,9 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
-import '@vaadin/popover/src/vaadin-popover.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { Popover } from '@vaadin/popover/src/vaadin-popover.js';
 
 describe('popover in dialog', () => {
   let dialog, popover, button, overlay;
@@ -145,6 +146,161 @@ describe('dialog in popover', () => {
         await sendKeys({ press: 'Escape' });
 
         expect(popover.opened).to.be.false;
+      });
+    });
+  });
+});
+
+describe('popover Tab navigation in dialog', () => {
+  let dialog, popover, overlay, btn1, btn2, btn3, btn4, btn5, popoverInput;
+
+  before(() => {
+    Popover.setDefaultFocusDelay(0);
+  });
+
+  beforeEach(async () => {
+    dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
+    await nextRender();
+
+    // Create popover element separately to ensure proper upgrade
+    popover = document.createElement('vaadin-popover');
+    popoverInput = document.createElement('input');
+    popoverInput.id = 'popover-input';
+    popover.appendChild(popoverInput);
+    popover.trigger = [];
+
+    dialog.renderer = (root) => {
+      if (root.firstChild) {
+        return;
+      }
+      root.innerHTML = `
+        <button id="btn1">Button 1</button>
+        <button id="btn2">Button 2</button>
+        <button id="btn3">Button 3</button>
+        <button id="btn4">Button 4</button>
+        <button id="btn5">Button 5</button>
+      `;
+      root.appendChild(popover);
+    };
+    await nextUpdate(dialog);
+    // Content is rendered into the dialog element itself, not the overlay
+    btn1 = dialog.querySelector('#btn1');
+    btn2 = dialog.querySelector('#btn2');
+    btn3 = dialog.querySelector('#btn3');
+    btn4 = dialog.querySelector('#btn4');
+    btn5 = dialog.querySelector('#btn5');
+    popover.target = btn4;
+    await nextUpdate(popover);
+
+    overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextRender();
+  });
+
+  [
+    { name: 'with focusable content', hasFocusable: true },
+    { name: 'with no focusable content', hasFocusable: false },
+  ].forEach(({ name, hasFocusable }) => {
+    describe(name, () => {
+      beforeEach(async () => {
+        if (!hasFocusable) {
+          // Replace the focusable input with a plain text span
+          popover.removeChild(popoverInput);
+          const span = document.createElement('span');
+          span.textContent = 'Tooltip-like content';
+          popover.appendChild(span);
+          await nextUpdate(popover);
+        }
+      });
+
+      [
+        { name: 'after last button', position: 'afterLast' },
+        { name: 'before first button', position: 'beforeFirst' },
+        { name: 'right before target', position: 'beforeTarget' },
+        { name: 'right after target', position: 'afterTarget' },
+      ].forEach(({ name, position }) => {
+        describe(`popover ${name} in DOM`, () => {
+          beforeEach(async () => {
+            const root = btn1.parentNode;
+            if (position === 'beforeFirst') {
+              root.insertBefore(popover, btn1);
+            } else if (position === 'beforeTarget') {
+              root.insertBefore(popover, btn4);
+            } else if (position === 'afterTarget') {
+              root.insertBefore(popover, btn5);
+            }
+            // 'afterLast' — no move needed, popover is already after btn5
+            popover.opened = true;
+            await oneEvent(overlay, 'vaadin-overlay-open');
+          });
+
+          it('should Tab forward through all elements in correct order', async () => {
+            btn1.focus();
+            expect(getDeepActiveElement()).to.equal(btn1);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn2);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn3);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn4);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(popover);
+
+            if (hasFocusable) {
+              await sendKeys({ press: 'Tab' });
+              expect(getDeepActiveElement()).to.equal(popoverInput);
+            }
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn5);
+
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(dialog);
+
+            // Should wrap back to the first button
+            await sendKeys({ press: 'Tab' });
+            expect(getDeepActiveElement()).to.equal(btn1);
+          });
+
+          it('should Shift+Tab backward through all elements in correct order', async () => {
+            btn5.focus();
+            expect(getDeepActiveElement()).to.equal(btn5);
+
+            if (hasFocusable) {
+              await sendKeys({ press: 'Shift+Tab' });
+              expect(getDeepActiveElement()).to.equal(popoverInput);
+            }
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(popover);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn4);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn3);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn2);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn1);
+
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(dialog);
+
+            // Should wrap back to the last button, not to the popover
+            await sendKeys({ press: 'Shift+Tab' });
+            expect(getDeepActiveElement()).to.equal(btn5);
+          });
+        });
       });
     });
   });
