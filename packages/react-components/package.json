@@ -32,6 +32,7 @@
     "@vaadin/app-layout": "25.1.0-alpha8",
     "@vaadin/avatar": "25.1.0-alpha8",
     "@vaadin/avatar-group": "25.1.0-alpha8",
+    "@vaadin/badge": "25.1.0-alpha8",
     "@vaadin/button": "25.1.0-alpha8",
     "@vaadin/card": "25.1.0-alpha8",
     "@vaadin/checkbox": "25.1.0-alpha8",
@@ -145,6 +146,10 @@
     "./AvatarGroup.js": {
       "types": "./AvatarGroup.d.ts",
       "default": "./AvatarGroup.js"
+    },
+    "./Badge.js": {
+      "types": "./Badge.d.ts",
+      "default": "./Badge.js"
     },
     "./Button.js": {
       "types": "./Button.d.ts",
@@ -432,6 +437,7 @@
     "./AppLayout": "./AppLayout.js",
     "./Avatar": "./Avatar.js",
     "./AvatarGroup": "./AvatarGroup.js",
+    "./Badge": "./Badge.js",
     "./Button": "./Button.js",
     "./Card": "./Card.js",
     "./Checkbox": "./Checkbox.js",
