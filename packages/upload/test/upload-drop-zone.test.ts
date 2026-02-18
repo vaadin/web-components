@@ -167,9 +167,9 @@ describe('vaadin-upload-drop-zone', () => {
       await nextFrame();
       expect(dropZone.hasAttribute('dragover')).to.be.true;
 
-      // Simulate dragleave when entering child element (relatedTarget is the child)
-      const dragleaveEvent = createDragEvent('dragleave', [], child);
-      dropZone.dispatchEvent(dragleaveEvent);
+      // Simulate dragleave from a child element (event bubbles up from child)
+      const dragleaveEvent = createDragEvent('dragleave');
+      child.dispatchEvent(dragleaveEvent);
       await nextFrame();
 
       // Should still have dragover because we're still inside the drop zone

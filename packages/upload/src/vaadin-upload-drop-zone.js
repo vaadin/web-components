@@ -193,7 +193,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     event.preventDefault();
     // Only remove dragover if we're actually leaving the drop zone
     // (not just entering a child element)
-    if (event.relatedTarget && this.contains(event.relatedTarget)) {
+    if (event.target !== this) {
       return;
     }
     this.__dragover = false;
