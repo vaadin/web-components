@@ -33,14 +33,14 @@ export const badgeStyles = css`
     display: none !important;
   }
 
-  :host(:not([has-prefix])) [part='prefix'],
+  :host(:not([has-icon])) [part='icon'],
   :host(:not([has-content])) [part='content'],
   :host(:not([has-number])) [part='number'] {
     display: none;
   }
 
-  :host([has-prefix]:not([has-content], [has-number])),
-  :host([has-number]:not([has-content], [has-prefix])) {
+  :host([has-icon]:not([has-content], [has-number])),
+  :host([has-number]:not([has-content], [has-icon])) {
     padding: var(--vaadin-badge-padding, var(--vaadin-padding-xs));
     border-radius: 50%;
   }

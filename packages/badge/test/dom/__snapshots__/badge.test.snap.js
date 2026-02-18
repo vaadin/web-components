@@ -21,8 +21,8 @@ snapshots["vaadin-badge host number"] =
 /* end snapshot vaadin-badge host number */
 
 snapshots["vaadin-badge shadow default"] = 
-`<div part="prefix">
-  <slot name="prefix">
+`<div part="icon">
+  <slot name="icon">
   </slot>
 </div>
 <div part="number">
@@ -35,8 +35,8 @@ snapshots["vaadin-badge shadow default"] =
 /* end snapshot vaadin-badge shadow default */
 
 snapshots["vaadin-badge shadow number"] = 
-`<div part="prefix">
-  <slot name="prefix">
+`<div part="icon">
+  <slot name="icon">
   </slot>
 </div>
 <div part="number">

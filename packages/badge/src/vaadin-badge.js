@@ -25,7 +25,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  * Name     | Description
  * ---------|-------------
  * (none)   | Default slot for the badge text content
- * `prefix` | Slot for an element to place before the text, e.g. an icon
+ * `icon`   | Slot for an icon to place before the text
  *
  * ### Styling
  *
@@ -33,7 +33,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * Part name  | Description
  * -----------|-------------
- * `prefix`   | The container for the prefix slot
+ * `icon`     | The container for the icon slot
  * `number`   | The container for the number value
  * `content`  | The container for the default slot
  *
@@ -41,7 +41,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * Attribute      | Description
  * ---------------|-------------
- * `has-prefix`   | Set when the badge has content in the prefix slot
+ * `has-icon`     | Set when the badge has content in the icon slot
  * `has-content`  | Set when the badge has content in the default slot
  * `has-number`   | Set when the badge has a number value
  *
@@ -98,7 +98,7 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
   /** @protected */
   render() {
     return html`
-      <div part="prefix"><slot name="prefix"></slot></div>
+      <div part="icon"><slot name="icon"></slot></div>
       <div part="number">${this.number}</div>
       <div part="content"><slot></slot></div>
     `;
@@ -122,9 +122,9 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
       this.toggleAttribute('has-content', currentNodes.filter((node) => !isEmptyTextNode(node)).length > 0);
     });
 
-    const prefixSlot = this.shadowRoot.querySelector('slot[name="prefix"]');
-    this.__prefixSlotObserver = new SlotObserver(prefixSlot, ({ currentNodes }) => {
-      this.toggleAttribute('has-prefix', currentNodes.length > 0);
+    const iconSlot = this.shadowRoot.querySelector('slot[name="icon"]');
+    this.__iconSlotObserver = new SlotObserver(iconSlot, ({ currentNodes }) => {
+      this.toggleAttribute('has-icon', currentNodes.length > 0);
     });
   }
 }
