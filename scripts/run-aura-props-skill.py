@@ -17,7 +17,7 @@ COMPONENTS = {
     "app-layout": "https://vaadin.com/docs/latest/components/app-layout/styling",
     "avatar": "https://vaadin.com/docs/latest/components/avatar/styling",
     "avatar-group": "https://vaadin.com/docs/latest/components/avatar/styling",
-    "badge": "https://vaadin.com/docs/latest/components/badge/styling",
+    "badge": "",
     "board": "",
     "button": "https://vaadin.com/docs/latest/components/button/styling",
     "card": "https://vaadin.com/docs/latest/components/card/styling",
@@ -39,8 +39,8 @@ COMPONENTS = {
     "grid": "https://vaadin.com/docs/latest/components/grid/styling",
     "grid-pro": "https://vaadin.com/docs/latest/components/grid-pro/styling",
     "horizontal-layout": "https://vaadin.com/docs/latest/components/horizontal-layout/styling",
-    "icon": "https://vaadin.com/docs/latest/components/icon/styling",
-    "integer-field": "https://vaadin.com/docs/latest/components/integer-field/styling",
+    "icon": "https://vaadin.com/docs/latest/components/icons/styling",
+    "integer-field": "https://vaadin.com/docs/latest/components/number-field/styling",
     "list-box": "https://vaadin.com/docs/latest/components/list-box/styling",
     "login": "https://vaadin.com/docs/latest/components/login/styling",
     "map": "",
@@ -60,7 +60,7 @@ COMPONENTS = {
     "scroller": "https://vaadin.com/docs/latest/components/scroller/styling",
     "select": "https://vaadin.com/docs/latest/components/select/styling",
     "side-nav": "https://vaadin.com/docs/latest/components/side-nav/styling",
-    "slider": "https://vaadin.com/docs/latest/components/slider/styling",
+    "slider": "",
     "split-layout": "https://vaadin.com/docs/latest/components/split-layout/styling",
     "spreadsheet": "",
     "tabs": "https://vaadin.com/docs/latest/components/tabs/styling",
@@ -143,6 +143,14 @@ def main():
         help="Skip components that already have a test file",
     )
     parser.add_argument(
+        "--batch",
+        type=int,
+        nargs="?",
+        const=5,
+        metavar="N",
+        help="Process the next N components without test files (default: 5)",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Print the prompt without executing Claude",
@@ -150,11 +158,21 @@ def main():
 
     args = parser.parse_args()
 
-    if not args.components and not args.all:
-        parser.error("Specify component names or use --all")
+    if not args.components and not args.all and args.batch is None:
+        parser.error("Specify component names, --all, or --batch")
 
     # Determine which components to process
-    if args.all:
+    if args.batch is not None:
+        targets = [
+            (name, url)
+            for name, url in COMPONENTS.items()
+            if url and not has_existing_test(name)
+        ]
+        targets = targets[: args.batch]
+        if not targets:
+            print("No components left to process (all have test files).")
+            return
+    elif args.all:
         targets = [(name, url) for name, url in COMPONENTS.items() if url]
     else:
         targets = []
