@@ -28,15 +28,29 @@ describe('badge', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('number', async () => {
-    element.number = 5;
-    await visualDiff(div, 'number');
-  });
+  describe('number', () => {
+    beforeEach(() => {
+      element.number = 3;
+    });
 
-  it('number-content', async () => {
-    element.number = 3;
-    element.textContent = 'Messages';
-    await visualDiff(div, 'number-content');
+    it('number', async () => {
+      await visualDiff(div, 'number');
+    });
+
+    it('number-content', async () => {
+      element.textContent = 'Messages';
+      await visualDiff(div, 'number-content');
+    });
+
+    it('number-only', async () => {
+      const icon = document.createElement('vaadin-icon');
+      icon.setAttribute('slot', 'icon');
+      icon.icon = 'vaadin:check';
+      element.appendChild(icon);
+      element.append('Completed');
+      element.setAttribute('theme', 'number-only');
+      await visualDiff(div, 'number-only');
+    });
   });
 
   describe('icon', () => {
@@ -64,6 +78,14 @@ describe('badge', () => {
       element.appendChild(icon);
       element.append('Completed');
       await visualDiff(div, 'icon-number-content');
+    });
+
+    it('icon-only', async () => {
+      element.number = 3;
+      element.appendChild(icon);
+      element.append('Completed');
+      element.setAttribute('theme', 'icon-only');
+      await visualDiff(div, 'icon-only');
     });
   });
 

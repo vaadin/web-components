@@ -39,10 +39,23 @@ export const badgeStyles = css`
     display: none;
   }
 
+  :host([theme~='icon-only']),
+  :host([theme~='number-only']),
   :host([has-icon]:not([has-content], [has-number])),
   :host([has-number]:not([has-content], [has-icon])) {
     padding: var(--vaadin-badge-padding, var(--vaadin-padding-xs));
     border-radius: 50%;
+  }
+
+  :host([theme~='icon-only']),
+  :host([theme~='number-only']) {
+    gap: 0;
+  }
+
+  :host([theme~='icon-only']) :is([part='content'], [part='number']),
+  :host([theme~='number-only']) :is([part='content'], [part='icon']) {
+    width: 0;
+    overflow: clip;
   }
 
   @media (forced-colors: active) {
