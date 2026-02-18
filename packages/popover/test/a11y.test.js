@@ -443,12 +443,17 @@ describe('a11y', () => {
         });
 
         it('should not focus the overlay part on the next element Tab', async () => {
+          // Add another input after the test input that focus can move to.
+          // Otherwise the browser sometimes wraps focus back to the overlay
+          // instead of the body.
+          const anotherInput = document.createElement('input');
+          input.after(anotherInput);
+
           input.focus();
 
           await sendKeys({ press: 'Tab' });
 
-          const activeElement = getDeepActiveElement();
-          expect(activeElement).to.not.equal(overlay.$.overlay);
+          expect(document.activeElement).to.equal(anotherInput);
         });
 
         it('should focus previous element on target Shift Tab while opened', async () => {
