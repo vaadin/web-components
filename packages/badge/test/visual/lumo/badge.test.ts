@@ -44,7 +44,7 @@ describe('badge', () => {
 
     beforeEach(() => {
       icon = document.createElement('vaadin-icon');
-      icon.setAttribute('slot', 'prefix');
+      icon.setAttribute('slot', 'icon');
       icon.icon = 'vaadin:check';
     });
 

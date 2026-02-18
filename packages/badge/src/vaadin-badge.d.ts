@@ -18,7 +18,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Name     | Description
  * ---------|-------------
  * (none)   | Default slot for the badge text content
- * `prefix` | Slot for an element to place before the text, e.g. an icon
+ * `icon`   | Slot for an icon to place before the text
  *
  * ### Styling
  *
@@ -26,7 +26,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Part name  | Description
  * -----------|-------------
- * `prefix`   | The container for the prefix slot
+ * `icon`     | The container for the icon slot
  * `number`   | The container for the number value
  * `content`  | The container for the default slot
  *
@@ -34,7 +34,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Attribute      | Description
  * ---------------|-------------
- * `has-prefix`   | Set when the badge has content in the prefix slot
+ * `has-icon`     | Set when the badge has content in the icon slot
  * `has-content`  | Set when the badge has content in the default slot
  * `has-number`   | Set when the badge has a number value
  *

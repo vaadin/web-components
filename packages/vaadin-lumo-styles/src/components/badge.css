@@ -65,7 +65,7 @@
     --vaadin-badge-font-size: var(--lumo-font-size-xxs);
   }
 
-  :host([has-prefix]:not([has-content])) {
+  :host([has-icon]:not([has-content])) {
     padding: 0;
     min-width: 0;
     font-size: 1rem;
@@ -73,7 +73,7 @@
     height: var(--lumo-icon-size-m);
   }
 
-  :host([has-prefix]) ::slotted(vaadin-icon) {
+  :host([has-icon]) ::slotted(vaadin-icon) {
     margin: -0.25em 0;
   }
 }
