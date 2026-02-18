@@ -6,6 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { getActiveTrappingNode } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import {
   getDeepActiveElement,
   getFocusableElements,
@@ -662,24 +663,76 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    // Move focus to the next element after target on content Tab
-    const lastFocusable = this.__getLastFocusable(overlayPart);
-    if (lastFocusable && isElementFocused(lastFocusable)) {
-      const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
-      if (focusable && focusable !== overlayPart) {
+    // Handle Tab within the overlay content explicitly. The overlay is
+    // teleported to the body and is outside the dialog's focus trap, so the
+    // FocusTrapController would otherwise intercept the Tab event.
+    if (isElementFocused(overlayPart)) {
+      const contentFocusables = getFocusableElements(this._overlayElement.$.content);
+      if (contentFocusables.length > 0) {
+        event.preventDefault();
+        contentFocusables[0].focus();
+        return;
+      }
+      // No focusable content - fall through to isFocusOut handling below
+    } else if (this._overlayElement.contains(getDeepActiveElement())) {
+      const contentFocusables = getFocusableElements(this._overlayElement.$.content);
+      const activeEl = getDeepActiveElement();
+      const idx = contentFocusables.indexOf(activeEl);
+      if (idx >= 0 && idx < contentFocusables.length - 1) {
+        event.preventDefault();
+        contentFocusables[idx + 1].focus();
+        return;
+      }
+      // Last content focusable - fall through to isFocusOut handling below
+    }
+
+    // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
+    const focusables = this.__getScopeFocusables();
+
+    // Move focus to the next element after target on last content Tab,
+    // or when overlay part itself is focused and has no focusable content
+    const lastFocusable = this.__getLastFocusable();
+    const isFocusOut = lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(overlayPart);
+    if (isFocusOut) {
+      let focusable = this.__getNextScopeFocusable(this.__getTargetFocusable(), focusables);
+      // If the next element after the target is the overlay part (DOM position
+      // differs from logical position), skip past it to the actual next element.
+      if (focusable === overlayPart) {
+        focusable = this.__getNextScopeFocusable(overlayPart, focusables);
+      }
+      if (focusable) {
         event.preventDefault();
         focusable.focus();
         return;
       }
+      // No next element after the target in the scope. When inside a focus trap,
+      // wrap explicitly to the first focusable. Don't fall through - the
+      // FocusTrapController uses DOM order which may differ from the popover's
+      // logical tab position.
+      if (getActiveTrappingNode(this) && focusables[0]) {
+        event.preventDefault();
+        focusables[0].focus();
+        return;
+      }
     }
 
-    // Prevent focusing the popover content on previous element Tab
+    // Handle cases where Tab from the current element would land on the overlay
     const activeElement = getDeepActiveElement();
-    const nextFocusable = this.__getNextBodyFocusable(activeElement);
-    if (nextFocusable === overlayPart && lastFocusable) {
-      // Move focus to the last overlay focusable and do NOT prevent keydown
-      // to move focus outside the popover content (e.g. to the URL bar).
-      lastFocusable.focus();
+    const nextFocusable = this.__getNextScopeFocusable(activeElement, focusables);
+    if (nextFocusable === overlayPart) {
+      // The overlay should only be Tab-reachable from its target (handled above).
+      // Skip the overlay when Tab from any other element would land on it
+      // due to its DOM position.
+      const focusableAfterOverlay = this.__getNextScopeFocusable(overlayPart, focusables);
+      if (focusableAfterOverlay) {
+        event.preventDefault();
+        focusableAfterOverlay.focus();
+      } else if (getActiveTrappingNode(this) && focusables[0]) {
+        // Overlay is last in DOM scope but shouldn't be Tab-reachable from
+        // non-target elements. Wrap to first focusable in focus trap.
+        event.preventDefault();
+        focusables[0].focus();
+      }
     }
   }
 
@@ -700,28 +753,134 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    // Move focus back to the popover on next element Shift + Tab
-    const nextFocusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
-    if (nextFocusable && isElementFocused(nextFocusable)) {
-      const lastFocusable = this.__getLastFocusable(overlayPart);
-      if (lastFocusable) {
+    // Handle Shift+Tab within the overlay content explicitly. The overlay is
+    // teleported to the body and is outside the dialog's focus trap, so the
+    // FocusTrapController would otherwise intercept the Shift+Tab event.
+    const activeElement = getDeepActiveElement();
+    if (this._overlayElement.contains(activeElement)) {
+      const contentFocusables = getFocusableElements(this._overlayElement.$.content);
+      const idx = contentFocusables.indexOf(activeElement);
+      if (idx > 0) {
         event.preventDefault();
-        lastFocusable.focus();
+        contentFocusables[idx - 1].focus();
+        return;
+      }
+      // First content focusable or not found - move to overlay part
+      event.preventDefault();
+      overlayPart.focus();
+      return;
+    }
+
+    // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
+    const focusables = this.__getScopeFocusables();
+
+    // Get previous focusable element excluding the overlay
+    const prevFocusable = this.__getPrevScopeFocusable(activeElement, focusables);
+    const targetFocusable = this.__getTargetFocusable();
+
+    // Intercept Shift+Tab when the previous focusable (excluding the overlay)
+    // is the target. Instead of moving to the target, redirect focus into
+    // the overlay's last focusable content (or the overlay part itself).
+    if (prevFocusable === targetFocusable) {
+      event.preventDefault();
+      this.__focusLastOrSelf();
+      return;
+    }
+
+    // Move focus into the overlay when:
+    // 1. There is no previous focusable element in the focus trap (at the
+    //    beginning, would wrap around), and
+    // 2. The target is the last focusable in the focus trap (making the
+    //    overlay logically last).
+    // Don't fall through - the FocusTrapController uses DOM order which
+    // may differ from the popover's logical tab position.
+    if (!prevFocusable && getActiveTrappingNode(this)) {
+      const list = focusables.filter((el) => el !== overlayPart);
+      if (list.at(-1) === targetFocusable) {
+        event.preventDefault();
+        this.__focusLastOrSelf();
+        return;
+      }
+      // Overlay is last in DOM but target is not the last focusable.
+      // Wrap to last non-overlay focusable to prevent FocusTrapController
+      // from landing on the overlay.
+      const last = list.at(-1);
+      if (last) {
+        event.preventDefault();
+        last.focus();
+        return;
+      }
+    }
+
+    // Get previous focusable element including the overlay (simulates native Tab order)
+    const prevFocusableNative = this.__getPrevScopeFocusable(activeElement, focusables, true);
+    // Skip the overlay when native Shift+Tab would land on it
+    // and redirect to the actual previous element
+    if (prevFocusableNative === overlayPart) {
+      if (prevFocusable) {
+        event.preventDefault();
+        prevFocusable.focus();
+      } else if (getActiveTrappingNode(this)) {
+        // Overlay is first in DOM scope but shouldn't be Shift+Tab-reachable
+        // from non-target elements. Wrap to last non-overlay focusable.
+        const list = focusables.filter((el) => el !== overlayPart);
+        const last = list.at(-1);
+        if (last) {
+          event.preventDefault();
+          last.focus();
+        }
       }
     }
   }
 
-  /** @private */
-  __getNextBodyFocusable(target) {
-    const focusables = getFocusableElements(document.body);
-    const idx = focusables.findIndex((el) => el === target);
-    return focusables[idx + 1];
+  /**
+   * Returns whether the element is an overlay content child of this popover
+   * (i.e. content rendered inside the overlay, excluding the overlay part itself).
+   * @param {Element} el
+   * @return {boolean}
+   * @private
+   */
+  __isPopoverContent(el) {
+    return this._overlayElement && el !== this._overlayElement && this._overlayElement.contains(el);
+  }
+
+  /**
+   * Returns focusable elements within the current scope (active focus trap or
+   * document body) with popover overlay content children filtered out.
+   * @return {Element[]}
+   * @private
+   */
+  __getScopeFocusables() {
+    const scope = getActiveTrappingNode(this) || document.body;
+    return getFocusableElements(scope).filter((el) => !this.__isPopoverContent(el));
   }
 
   /** @private */
-  __getLastFocusable(container) {
-    const focusables = getFocusableElements(container);
+  __getNextScopeFocusable(target, focusables = this.__getScopeFocusables()) {
+    const idx = focusables.findIndex((el) => el === target);
+    return idx >= 0 ? focusables[idx + 1] : undefined;
+  }
+
+  /** @private */
+  __getPrevScopeFocusable(target, focusables = this.__getScopeFocusables(), includeOverlay = false) {
+    const overlayPart = this._overlayElement.$.overlay;
+    const list = includeOverlay ? focusables : focusables.filter((el) => el !== overlayPart);
+    const idx = list.findIndex((el) => el === target);
+    // Returns null both when target is the first element (idx === 0)
+    // and when target is not found in the list (idx === -1)
+    return idx > 0 ? list[idx - 1] : null;
+  }
+
+  /** @private */
+  __getLastFocusable() {
+    // Search within the overlay's content area to avoid returning the overlay part itself
+    const focusables = getFocusableElements(this._overlayElement.$.content);
     return focusables.pop();
+  }
+
+  /** @private */
+  __focusLastOrSelf() {
+    (this.__getLastFocusable() || this._overlayElement.$.overlay).focus();
   }
 
   /** @private */

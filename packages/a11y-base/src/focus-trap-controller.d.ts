@@ -6,6 +6,12 @@
 import type { ReactiveController } from 'lit';
 
 /**
+ * Returns the innermost active focus trap node that contains the given element,
+ * or null if the element is not inside any active focus trap.
+ */
+export declare function getActiveTrappingNode(element: HTMLElement): HTMLElement | null;
+
+/**
  * A controller for trapping focus within a DOM node.
  */
 export class FocusTrapController implements ReactiveController {
