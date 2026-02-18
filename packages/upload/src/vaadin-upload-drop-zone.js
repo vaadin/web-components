@@ -191,16 +191,9 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   /** @private */
   __onDragleave(event) {
     event.preventDefault();
-    // Use bounding rect to detect whether the cursor actually left the drop zone.
-    // This avoids relying on event.relatedTarget which Safari reports as null
-    // for elements inside shadow roots, causing false leave detections.
-    const rect = this.getBoundingClientRect();
-    if (
-      event.clientX >= rect.left &&
-      event.clientX <= rect.right &&
-      event.clientY >= rect.top &&
-      event.clientY <= rect.bottom
-    ) {
+    // Only remove dragover if we're actually leaving the drop zone
+    // (not just entering a child element)
+    if (event.relatedTarget && this.contains(event.relatedTarget)) {
       return;
     }
     this.__dragover = false;
