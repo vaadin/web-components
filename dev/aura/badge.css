@@ -1,27 +1,3 @@
-.aura-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25em;
-  font-size: var(--aura-font-size-s);
-  font-weight: var(--aura-font-weight-medium);
-  height: calc(1lh - 2px);
-  border: 1px solid var(--aura-accent-border-color);
-  background: var(--aura-accent-surface) padding-box;
-  background-clip: padding-box;
-  color: var(--aura-accent-text-color);
-  padding: 0 0.5em;
-  border-radius: var(--vaadin-radius-l);
-  min-width: calc(1lh - 1em - 2px);
-  --vaadin-icon-size: 0.75lh;
-  --aura-surface-level: 1;
-}
-
-.aura-badge.aura-badge-filled {
-  background: var(--aura-accent-color);
-  color: var(--aura-accent-contrast-color);
-}
-
 /* Special case for filled badges within filled variants */
 /* TODO is there a way to solve this without explicitly listing the special cases */
 :is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'],
@@ -35,7 +11,7 @@ vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
     vaadin-multi-select-combo-box-item,
     vaadin-select-item[role]
   )[theme~='filled']:not([disabled], [aria-disabled='true']):hover {
-  > .aura-badge-filled:not(
+  > vaadin-badge[theme~='filled']:not(
       .aura-accent-red,
       .aura-accent-orange,
       .aura-accent-yellow,
@@ -49,18 +25,10 @@ vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
   }
 }
 
-.aura-badge.aura-badge-point::before {
+vaadin-badge.aura-badge-point::before {
   content: '';
   width: 0.5em;
   height: 0.5em;
   border-radius: 50%;
   background: currentColor;
-}
-
-.aura-badge:empty {
-  padding: 0;
-  width: 5px;
-  height: 5px;
-  position: absolute;
-  inset-inline-end: 5px;
 }

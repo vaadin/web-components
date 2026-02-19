@@ -15,6 +15,7 @@
       window.Vaadin ||= {};
       window.Vaadin.featureFlags ||= {};
       window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+      window.Vaadin.featureFlags.badgeComponent = true;
     </script>
     <script type="module">
       import './aura/aura-theme-editor.js';
@@ -22,6 +23,7 @@
       import './aura/dashboard-view.js';
       import '@vaadin/app-layout';
       import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
+      import '@vaadin/badge';
       import '@vaadin/icons';
       import '@vaadin/item';
 
@@ -81,7 +83,7 @@
           <vaadin-side-nav-item path="" data-view-name="dashboard-view">
             <vaadin-icon src="./assets/lucide-icons/layout-panel-left.svg" slot="prefix"></vaadin-icon>
             Overview
-            <span class="aura-badge aura-accent-color" slot="suffix" aria-label="(2 new items)">2</span>
+            <vaadin-badge slot="suffix" number="2" aria-label="(2 new items)"></vaadin-badge>
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>

@@ -39,7 +39,7 @@ const generateItems = (count) => {
 function createMenuItemWithFeatures(text, iconName, badgeLabel) {
   const item = document.createElement('vaadin-menu-bar-item');
   const icon = document.createElement('vaadin-icon');
-  const badge = document.createElement('span');
+  const badge = document.createElement('vaadin-badge');
 
   if (iconName) {
     icon.setAttribute('src', `./assets/lucide-icons/${iconName}.svg`);
@@ -49,7 +49,7 @@ function createMenuItemWithFeatures(text, iconName, badgeLabel) {
     item.append(document.createTextNode(text));
   }
   if (badgeLabel) {
-    badge.classList.add('aura-badge', 'aura-accent-purple');
+    badge.classList.add('aura-accent-purple');
     badge.textContent = badgeLabel;
     item.append(badge);
   }
@@ -207,7 +207,7 @@ function initView(view) {
   grid.selectedItems = [grid.items[0]];
   const badgeColors = ['neutral', 'green', 'yellow', 'purple', 'orange', 'blue', 'red'];
   grid.querySelector('vaadin-grid-column[header="Status"]').renderer = (root, _, model) => {
-    root.innerHTML = `<span class="aura-badge aura-accent-${badgeColors[model.index % badgeColors.length]}">Status</span>`;
+    root.innerHTML = `<vaadin-badge class="aura-accent-${badgeColors[model.index % badgeColors.length]}">Status</vaadin-badge>`;
   };
   grid.querySelector('vaadin-grid-column.avatar').renderer = (root, _, model) => {
     root.innerHTML = `<vaadin-avatar name="${model.item.name}" color-index="${model.index % 9}"></vaadin-avatar>`;
@@ -331,79 +331,79 @@ customElements.define(
 
                   <div class="aura-surface component wide tall">
                     <div class="badges">
-                      <span class="aura-badge aura-accent-color">Accent</span>
-                      <span class="aura-badge aura-accent-neutral">Neutral</span>
-                      <span class="aura-badge aura-accent-red">Red</span>
-                      <span class="aura-badge aura-accent-orange">Orange</span>
-                      <span class="aura-badge aura-accent-yellow">Yellow</span>
-                      <span class="aura-badge aura-accent-green">Green</span>
-                      <span class="aura-badge aura-accent-blue">Blue</span>
-                      <span class="aura-badge aura-accent-purple">Purple</span>
+                      <vaadin-badge class="aura-accent-color">Accent</vaadin-badge>
+                      <vaadin-badge class="aura-accent-neutral">Neutral</vaadin-badge>
+                      <vaadin-badge class="aura-accent-red">Red</vaadin-badge>
+                      <vaadin-badge class="aura-accent-orange">Orange</vaadin-badge>
+                      <vaadin-badge class="aura-accent-yellow">Yellow</vaadin-badge>
+                      <vaadin-badge class="aura-accent-green">Green</vaadin-badge>
+                      <vaadin-badge class="aura-accent-blue">Blue</vaadin-badge>
+                      <vaadin-badge class="aura-accent-purple">Purple</vaadin-badge>
                     </div>
 
                     <div class="badges">
-                      <span class="aura-badge aura-badge-filled">Accent</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-neutral">Neutral</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-red">Red</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-orange">Orange</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-yellow">Yellow</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-green">Green</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-blue">Blue</span>
-                      <span class="aura-badge aura-badge-filled aura-accent-purple">Purple</span>
+                      <vaadin-badge theme="filled">Accent</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-neutral">Neutral</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-red">Red</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-orange">Orange</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-yellow">Yellow</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-green">Green</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-blue">Blue</vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-purple">Purple</vaadin-badge>
                     </div>
 
                     <div class="badges">
-                      <span class="aura-badge aura-accent-color">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-neutral">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-red">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-orange">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-yellow">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-green">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-blue">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-accent-purple">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
+                      <vaadin-badge class="aura-accent-color">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-neutral">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-red">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-orange">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-yellow">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-green">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-blue">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge class="aura-accent-purple">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
                     </div>
 
                     <div class="badges">
-                      <span class="aura-badge aura-badge-filled">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-neutral">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-red">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-orange">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-yellow">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-green">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-blue">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
-                      <span class="aura-badge aura-badge-filled aura-accent-purple">
-                        <vaadin-icon src="./assets/lucide-icons/file-text.svg"></vaadin-icon>
-                      </span>
+                      <vaadin-badge theme="filled">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-neutral">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-red">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-orange">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-yellow">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-green">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-blue">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
+                      <vaadin-badge theme="filled" class="aura-accent-purple">
+                        <vaadin-icon src="./assets/lucide-icons/file-text.svg" slot="icon"></vaadin-icon>
+                      </vaadin-badge>
                     </div>
                   </div>
 
@@ -420,7 +420,12 @@ customElements.define(
                       <vaadin-side-nav-item path="">
                         <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
                         <span>Components</span>
-                        <span class="aura-badge aura-accent-color" slot="suffix" aria-label="(2 new items)">2</span>
+                        <vaadin-badge
+                          class="aura-accent-color"
+                          slot="suffix"
+                          number="2"
+                          aria-label="(2 new items)"
+                        ></vaadin-badge>
                       </vaadin-side-nav-item>
                       <vaadin-side-nav-item>
                         <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
@@ -445,7 +450,7 @@ customElements.define(
                       ><vaadin-side-nav-item>
                         <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="prefix"></vaadin-icon>
                         <span>Support</span>
-                        <span class="aura-badge aura-accent-green" slot="suffix">Online</span>
+                        <vaadin-badge class="aura-accent-green" slot="suffix">Online</vaadin-badge>
                       </vaadin-side-nav-item>
                     </vaadin-side-nav>
                     <vaadin-checkbox id="filled-side-nav" label="Filled" checked>
@@ -462,7 +467,7 @@ customElements.define(
 
                   <div class="aura-surface component wide">
                     <vaadin-tabs>
-                      <vaadin-tab>Details<span class="aura-badge aura-accent-color">2</span></vaadin-tab>
+                      <vaadin-tab>Details<vaadin-badge class="aura-accent-color" number="2"></vaadin-badge></vaadin-tab>
                       <vaadin-tab>Preferences</vaadin-tab>
                       <vaadin-tab>Settings</vaadin-tab>
                     </vaadin-tabs>

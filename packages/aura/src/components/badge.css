@@ -1,0 +1,30 @@
+vaadin-badge {
+  color: var(--vaadin-badge-text-color, var(--aura-accent-text-color));
+  background: var(--vaadin-badge-background, var(--aura-accent-surface));
+  background-clip: padding-box;
+  border: 1px solid var(--aura-accent-border-color);
+  border-radius: var(--vaadin-badge-border-radius, var(--vaadin-radius-m));
+  font-size: var(--vaadin-badge-font-size, var(--aura-font-size-s));
+  line-height: var(--vaadin-badge-line-height, var(--aura-line-height-s));
+  min-width: var(--vaadin-badge-min-width, calc(1lh + 2px));
+  padding: var(--vaadin-badge-padding, 0 var(--vaadin-padding-s));
+  --aura-surface-level: 1;
+  --vaadin-icon-size: 0.75lh;
+}
+
+vaadin-badge[theme~='filled'] {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+}
+
+vaadin-badge:is([theme~='icon-only'], [theme~='number-only'], [theme~='dot']),
+vaadin-badge[has-icon]:not([has-content], [has-number]),
+vaadin-badge[has-number]:not([has-content], [has-icon]) {
+  padding: 0;
+  border-radius: 50%;
+}
+
+vaadin-badge[theme~='dot'] {
+  min-width: 0;
+  background: var(--aura-accent-color);
+}
