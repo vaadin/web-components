@@ -1,6 +1,6 @@
 vaadin-badge {
   color: var(--vaadin-badge-text-color, var(--aura-accent-text-color));
-  background: var(--aura-accent-surface);
+  background: var(--vaadin-badge-background, var(--aura-accent-surface));
   background-clip: padding-box;
   border: 1px solid var(--aura-accent-border-color);
   border-radius: var(--vaadin-badge-border-radius, var(--vaadin-radius-m));
