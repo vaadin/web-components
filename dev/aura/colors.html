@@ -13,11 +13,13 @@
       window.Vaadin = {};
       window.Vaadin.featureFlags = {};
       window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+      window.Vaadin.featureFlags.badgeComponent = true;
     </script>
     <script type="module">
       import './aura-scheme-control.js';
       import './aura-color-control.js';
       import './aura-number-control.js';
+      import '@vaadin/badge';
       import '@vaadin/button';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
@@ -52,15 +54,19 @@
       });
 
       document.querySelector('#filled-badges').addEventListener('change', (e) => {
-        document.querySelectorAll('.aura-badge').forEach((badge) => {
-          badge.classList.toggle('aura-badge-filled', e.target.checked);
+        document.querySelectorAll('vaadin-badge').forEach((badge) => {
+          if (e.target.checked) {
+            badge.setAttribute('theme', 'filled');
+          } else {
+            badge.removeAttribute('theme');
+          }
         });
       });
 
       document.querySelector('#colored-badges').addEventListener('change', (e) => {
         document.querySelectorAll(`.generate-variations`).forEach((section) => {
           accentColors.forEach((color, i) => {
-            section.querySelectorAll(`:scope > :nth-child(${i + 1}) .aura-badge`).forEach((badge) => {
+            section.querySelectorAll(`:scope > :nth-child(${i + 1}) vaadin-badge`).forEach((badge) => {
               badge.classList.toggle('aura-accent-' + color.toLowerCase(), e.target.checked);
               badge.textContent = e.target.checked ? color : 'Accent';
             });
@@ -69,7 +75,7 @@
       });
 
       document.querySelector('#point-badges').addEventListener('change', (e) => {
-        document.querySelectorAll('.aura-badge').forEach((badge) => {
+        document.querySelectorAll('vaadin-badge').forEach((badge) => {
           badge.classList.toggle('aura-badge-point', e.target.checked);
         });
       });
@@ -235,20 +241,20 @@
     </vaadin-checkbox-group>
 
     <section class="section">
-      <span class="aura-badge aura-surface aura-accent-neutral">Neutral</span>
-      <span class="aura-badge aura-surface aura-accent-color">Accent</span>
-      <span class="aura-badge aura-surface aura-accent-red">Red</span>
-      <span class="aura-badge aura-surface aura-accent-orange">Orange</span>
-      <span class="aura-badge aura-surface aura-accent-yellow">Yellow</span>
-      <span class="aura-badge aura-surface aura-accent-green">Green</span>
-      <span class="aura-badge aura-surface aura-accent-blue">Blue</span>
-      <span class="aura-badge aura-surface aura-accent-purple">Purple</span>
+      <vaadin-badge class="aura-accent-neutral">Neutral</vaadin-badge>
+      <vaadin-badge class="aura-accent-color">Accent</vaadin-badge>
+      <vaadin-badge class="aura-accent-red">Red</vaadin-badge>
+      <vaadin-badge class="aura-accent-orange">Orange</vaadin-badge>
+      <vaadin-badge class="aura-accent-yellow">Yellow</vaadin-badge>
+      <vaadin-badge class="aura-accent-green">Green</vaadin-badge>
+      <vaadin-badge class="aura-accent-blue">Blue</vaadin-badge>
+      <vaadin-badge class="aura-accent-purple">Purple</vaadin-badge>
     </section>
 
     <section class="section generate-variations">
       <vaadin-button>
         Button
-        <span class="aura-badge aura-surface aura-accent-color" slot="suffix">Accent</span>
+        <vaadin-badge class="aura-accent-color" slot="suffix">Accent</vaadin-badge>
       </vaadin-button>
     </section>
 
@@ -256,11 +262,11 @@
       <vaadin-tabs>
         <vaadin-tab>
           Tab
-          <span class="aura-badge aura-surface aura-accent-color">Accent</span>
+          <vaadin-badge class="aura-accent-color">Accent</vaadin-badge>
         </vaadin-tab>
         <vaadin-tab>
           Tab
-          <span class="aura-badge aura-surface aura-accent-color">Accent</span>
+          <vaadin-badge class="aura-accent-color">Accent</vaadin-badge>
         </vaadin-tab>
       </vaadin-tabs>
     </section>
@@ -269,11 +275,11 @@
       <vaadin-side-nav>
         <vaadin-side-nav-item path="">
           Nav Item
-          <span class="aura-badge aura-surface aura-accent-color" slot="suffix">Accent</span>
+          <vaadin-badge class="aura-accent-color" slot="suffix">Accent</vaadin-badge>
         </vaadin-side-nav-item>
         <vaadin-side-nav-item path="foo">
           Nav Item
-          <span class="aura-badge aura-surface aura-accent-color" slot="suffix">Accent</span>
+          <vaadin-badge class="aura-accent-color" slot="suffix">Accent</vaadin-badge>
         </vaadin-side-nav-item>
       </vaadin-side-nav>
     </section>

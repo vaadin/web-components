@@ -1,3 +1,4 @@
+import '@vaadin/badge';
 import '@vaadin/charts';
 import '@vaadin/dashboard/vaadin-dashboard-layout.js';
 import '@vaadin/dashboard/vaadin-dashboard-widget.js';
@@ -101,7 +102,7 @@ function initView(view) {
   };
 
   grid.querySelector('vaadin-grid-column[header="Change %"]').renderer = (root, _, model) => {
-    root.innerHTML = `<span class="aura-badge aura-accent-${model.item.changePercent.startsWith('-') ? 'red' : 'green'}">${model.item.changePercent}</span>`;
+    root.innerHTML = `<vaadin-badge class="aura-accent-${model.item.changePercent.startsWith('-') ? 'red' : 'green'}">${model.item.changePercent}</vaadin-badge>`;
   };
 }
 
@@ -202,7 +203,12 @@ customElements.define(
                   <vaadin-button theme="tertiary" aria-label="Notifications">
                     <vaadin-tooltip slot="tooltip" text="Notifications"></vaadin-tooltip>
                     <vaadin-icon src="./assets/lucide-icons/bell.svg"></vaadin-icon>
-                    <span class="aura-badge aura-badge-filled aura-accent-red" aria-label="Unread"></span>
+                    <vaadin-badge
+                      class="aura-accent-red"
+                      aria-label="Unread"
+                      theme="dot"
+                      style="position: absolute; inset-inline-end: 5px; width: 7px; height: 7px"
+                    ></vaadin-badge>
                   </vaadin-button>
                   <vaadin-button aria-label="New Dashboard">
                     <vaadin-tooltip slot="tooltip" text="New Dashboard"></vaadin-tooltip>
@@ -272,13 +278,13 @@ customElements.define(
                       <tr>
                         <td>Cloud Pro</td>
                         <td>$112,300</td>
-                        <td><span class="aura-badge aura-accent-green">+3.1%</span></td>
+                        <td><vaadin-badge class="aura-accent-green">+3.1%</vaadin-badge></td>
                         <td>SaaS</td>
                       </tr>
                       <tr>
                         <td>Analytics Suite</td>
                         <td>$76,500</td>
-                        <td><span class="aura-badge aura-accent-red">-0.8%</span></td>
+                        <td><vaadin-badge class="aura-accent-red">-0.8%</vaadin-badge></td>
                         <td>SaaS</td>
                       </tr>
                     </table>
@@ -325,13 +331,13 @@ customElements.define(
                       <tr>
                         <td>SMB</td>
                         <td>$86,500</td>
-                        <td><span class="aura-badge aura-accent-green">+1.2%</span></td>
+                        <td><vaadin-badge class="aura-accent-green">+1.2%</vaadin-badge></td>
                         <td>Global</td>
                       </tr>
                       <tr>
                         <td>Enterprise</td>
                         <td>$124,700</td>
-                        <td><span class="aura-badge aura-accent-green">+2.4%</span></td>
+                        <td><vaadin-badge class="aura-accent-green">+2.4%</vaadin-badge></td>
                         <td>Global</td>
                       </tr>
                     </table>
@@ -375,13 +381,13 @@ customElements.define(
                       <tr>
                         <td>Automation Engine</td>
                         <td>75,200</td>
-                        <td><span class="aura-badge aura-accent-green">+4.3%</span></td>
+                        <td><vaadin-badge class="aura-accent-green">+4.3%</vaadin-badge></td>
                         <td>Premium</td>
                       </tr>
                       <tr>
                         <td>Data Hub</td>
                         <td>53,100</td>
-                        <td><span class="aura-badge aura-accent-green">+1.7%</span></td>
+                        <td><vaadin-badge class="aura-accent-green">+1.7%</vaadin-badge></td>
                         <td>Standard</td>
                       </tr>
                     </table>
