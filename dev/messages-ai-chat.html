@@ -20,20 +20,48 @@
         height: 100%;
       }
 
+      #compose-area {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px;
+      }
+
+      #input-layout {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
       vaadin-message-list {
         flex: 1 1 auto;
+      }
+
+      vaadin-message-input {
+        flex: 1;
+      }
+
+      vaadin-upload-drop-zone {
+        height: 100%;
       }
     </style>
 
     <script>
       window.Vaadin ??= {};
       window.Vaadin.featureFlags ??= {};
-      window.Vaadin.featureFlags.messageListAttachments = true;
+      window.Vaadin.featureFlags.aiComponents = true;
     </script>
     <script type="module">
       import '@vaadin/message-input';
       import '@vaadin/message-list';
+      import '@vaadin/upload/vaadin-upload-button.js';
+      import '@vaadin/upload/vaadin-upload-drop-zone.js';
+      import '@vaadin/upload/vaadin-upload-file-list.js';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
       import { Notification } from '@vaadin/notification';
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
 
       /**
        * Simulates streaming text from an AI model
@@ -156,8 +184,24 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
 
       // Handle new messages from user
       input.addEventListener('submit', async (e) => {
+        // Convert uploaded files to message attachments
+        const attachments = manager.files
+          .filter((file) => file.complete)
+          .map((file) => ({
+            name: file.name,
+            url: file.type?.startsWith('image/') ? URL.createObjectURL(file) : `#${file.name}`,
+            type: file.type,
+          }));
+
         // Add user message to the list
-        list.items = [...list.items, createItem(e.detail.value)];
+        const userItem = createItem(e.detail.value);
+        if (attachments.length) {
+          userItem.attachments = attachments;
+        }
+        list.items = [...list.items, userItem];
+
+        // Clear uploaded files
+        manager.files = [];
 
         // Create empty assistant message that will be populated gradually
         const newAssistantItem = createItem('', true);
@@ -169,13 +213,36 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
           list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
         });
       });
+
+      // Create the manager
+      const manager = new UploadManager({
+        target: '/api/upload',
+      });
+      // Use mock XHR
+      manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
+
+      // Link components to manager
+      document.querySelectorAll('.upload').forEach((el) => {
+        el.manager = manager;
+      });
     </script>
   </head>
 
   <body>
-    <div id="chat">
-      <vaadin-message-list markdown></vaadin-message-list>
-      <vaadin-message-input></vaadin-message-input>
-    </div>
+    <vaadin-upload-drop-zone class="upload">
+      <div id="chat">
+        <vaadin-message-list markdown></vaadin-message-list>
+
+        <div id="compose-area">
+          <vaadin-upload-file-list class="upload" theme="thumbnails"></vaadin-upload-file-list>
+          <div id="input-layout">
+            <vaadin-upload-button class="upload" theme="icon">
+              <vaadin-icon icon="vaadin:upload"></vaadin-icon>
+            </vaadin-upload-button>
+            <vaadin-message-input></vaadin-message-input>
+          </div>
+        </div>
+      </div>
+    </vaadin-upload-drop-zone>
   </body>
 </html>
