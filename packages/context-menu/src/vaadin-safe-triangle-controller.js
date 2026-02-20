@@ -26,30 +26,106 @@ const FALLBACK_TIMEOUT_MS = 400;
  * - Only active for pointer/mouse input; ignored for touch and pen
  */
 export class SafeTriangleController {
-  constructor() {
-    /** @private */
-    this._hasLastPosition = false;
-    /** @private */
-    this._lastX = 0;
-    /** @private */
-    this._lastY = 0;
-    /** @private */
-    this._invalidCount = 0;
-    /** @private */
-    this._active = false;
-    /** @private */
-    this._lastMoveTime = 0;
-    /** @private */
-    this._submenuElement = null;
-    /** @private */
-    this._parentItemElement = null;
-    /** @private */
-    this._pendingSwitch = null;
-    /** @private */
-    this._pendingTimeout = null;
-    /** @private */
-    this._boundOnPointerMove = this._onPointerMove.bind(this);
-  }
+  #hasLastPosition = false;
+
+  #lastX = 0;
+
+  #lastY = 0;
+
+  #invalidCount = 0;
+
+  #active = false;
+
+  #lastMoveTime = 0;
+
+  #submenuElement = null;
+
+  #parentItemElement = null;
+
+  #pendingSwitch = null;
+
+  #pendingTimeout = null;
+
+  #onPointerMove = (event) => {
+    // Only handle mouse pointer, not touch or pen
+    if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+      return;
+    }
+
+    const now = performance.now();
+    if (now - this.#lastMoveTime < THROTTLE_MS) {
+      return;
+    }
+    this.#lastMoveTime = now;
+
+    const x = event.clientX;
+    const y = event.clientY;
+
+    if (!this.#hasLastPosition) {
+      this.#hasLastPosition = true;
+      this.#lastX = x;
+      this.#lastY = y;
+      return;
+    }
+
+    if (!this.#submenuElement) {
+      this.#lastX = x;
+      this.#lastY = y;
+      return;
+    }
+
+    const submenuRect = this.#submenuElement.$.overlay.getBoundingClientRect();
+
+    // Skip if submenu is not visible
+    if (submenuRect.width === 0 || submenuRect.height === 0) {
+      this.#lastX = x;
+      this.#lastY = y;
+      return;
+    }
+
+    // Determine submenu direction from actual position, not RTL flag
+    const parentRect = this.#parentItemElement.getBoundingClientRect();
+    const submenuIsRight = submenuRect.left >= parentRect.left;
+
+    const dx = x - this.#lastX;
+
+    // Early exit: moving horizontally away from the submenu
+    if ((submenuIsRight && dx < -1) || (!submenuIsRight && dx > 1)) {
+      this.#invalidCount += 1;
+    } else {
+      // Compute the near edge corners of the submenu
+      const nearX = submenuIsRight ? submenuRect.left : submenuRect.right;
+      const topY = submenuRect.top;
+      const bottomY = submenuRect.bottom;
+
+      // Angle from previous cursor position to the two submenu corners
+      const thetaTop = Math.atan2(topY - this.#lastY, nearX - this.#lastX);
+      const thetaBottom = Math.atan2(bottomY - this.#lastY, nearX - this.#lastX);
+
+      // Angle of cursor movement vector
+      const dy = y - this.#lastY;
+      const thetaPointer = Math.atan2(dy, dx);
+
+      // Determine the angular bounds (top and bottom may swap depending on direction)
+      const minAngle = Math.min(thetaTop, thetaBottom);
+      const maxAngle = Math.max(thetaTop, thetaBottom);
+
+      if (thetaPointer >= minAngle - TOLERANCE_RAD && thetaPointer <= maxAngle + TOLERANCE_RAD) {
+        // Cursor is aimed at the submenu
+        this.#invalidCount = 0;
+      } else {
+        this.#invalidCount += 1;
+      }
+    }
+
+    this.#lastX = x;
+    this.#lastY = y;
+
+    // If the user has moved outside the safe triangle enough times, execute pending switch
+    if (this.#invalidCount >= INVALID_THRESHOLD && this.#pendingSwitch) {
+      this.#executePendingSwitch();
+    }
+  };
 
   /**
    * Activate the safe triangle tracking for the given submenu overlay.
@@ -59,17 +135,17 @@ export class SafeTriangleController {
    * @param {HTMLElement} parentItem - The parent menu item that triggered the submenu
    */
   activate(submenuOverlay, parentItem) {
-    this._submenuElement = submenuOverlay;
-    this._parentItemElement = parentItem;
-    this._invalidCount = 0;
-    this._lastMoveTime = 0;
-    this._hasLastPosition = false;
-    this._lastX = 0;
-    this._lastY = 0;
+    this.#submenuElement = submenuOverlay;
+    this.#parentItemElement = parentItem;
+    this.#invalidCount = 0;
+    this.#lastMoveTime = 0;
+    this.#hasLastPosition = false;
+    this.#lastX = 0;
+    this.#lastY = 0;
 
-    if (!this._active) {
-      this._active = true;
-      document.addEventListener('pointermove', this._boundOnPointerMove);
+    if (!this.#active) {
+      this.#active = true;
+      document.addEventListener('pointermove', this.#onPointerMove);
     }
   }
 
@@ -78,14 +154,14 @@ export class SafeTriangleController {
    * Should be called when a submenu closes.
    */
   deactivate() {
-    if (this._active) {
-      this._active = false;
-      document.removeEventListener('pointermove', this._boundOnPointerMove);
+    if (this.#active) {
+      this.#active = false;
+      document.removeEventListener('pointermove', this.#onPointerMove);
     }
-    this._submenuElement = null;
-    this._parentItemElement = null;
-    this._invalidCount = 0;
-    this._cancelPendingSwitch();
+    this.#submenuElement = null;
+    this.#parentItemElement = null;
+    this.#invalidCount = 0;
+    this.#cancelPendingSwitch();
   }
 
   /**
@@ -95,15 +171,15 @@ export class SafeTriangleController {
    * @return {boolean}
    */
   shouldKeepOpen() {
-    if (!this._active || !this._submenuElement) {
+    if (!this.#active || !this.#submenuElement) {
       return false;
     }
     // Only block switches if we've actually tracked pointer movement.
     // Without movement data, we can't determine intent.
-    if (this._lastMoveTime === 0) {
+    if (this.#lastMoveTime === 0) {
       return false;
     }
-    return this._invalidCount < INVALID_THRESHOLD;
+    return this.#invalidCount < INVALID_THRESHOLD;
   }
 
   /**
@@ -113,113 +189,29 @@ export class SafeTriangleController {
    * @param {Function} callback - The function to call when the switch should happen
    */
   scheduleSwitch(callback) {
-    this._cancelPendingSwitch();
-    this._pendingSwitch = callback;
+    this.#cancelPendingSwitch();
+    this.#pendingSwitch = callback;
     // Fallback: if the user stops moving entirely, execute the switch
     // after a timeout so the submenu doesn't stay stuck indefinitely.
-    this._pendingTimeout = setTimeout(() => {
-      this._executePendingSwitch();
+    this.#pendingTimeout = setTimeout(() => {
+      this.#executePendingSwitch();
     }, FALLBACK_TIMEOUT_MS);
   }
 
-  /** @private */
-  _cancelPendingSwitch() {
-    this._pendingSwitch = null;
-    if (this._pendingTimeout) {
-      clearTimeout(this._pendingTimeout);
-      this._pendingTimeout = null;
+  #cancelPendingSwitch() {
+    this.#pendingSwitch = null;
+    if (this.#pendingTimeout) {
+      clearTimeout(this.#pendingTimeout);
+      this.#pendingTimeout = null;
     }
   }
 
-  /** @private */
-  _executePendingSwitch() {
-    const callback = this._pendingSwitch;
-    this._pendingSwitch = null;
-    this._pendingTimeout = null;
+  #executePendingSwitch() {
+    const callback = this.#pendingSwitch;
+    this.#pendingSwitch = null;
+    this.#pendingTimeout = null;
     if (callback) {
       callback();
-    }
-  }
-
-  /** @private */
-  _onPointerMove(event) {
-    // Only handle mouse pointer, not touch or pen
-    if (event.pointerType === 'touch' || event.pointerType === 'pen') {
-      return;
-    }
-
-    const now = performance.now();
-    if (now - this._lastMoveTime < THROTTLE_MS) {
-      return;
-    }
-    this._lastMoveTime = now;
-
-    const x = event.clientX;
-    const y = event.clientY;
-
-    if (!this._hasLastPosition) {
-      this._hasLastPosition = true;
-      this._lastX = x;
-      this._lastY = y;
-      return;
-    }
-
-    if (!this._submenuElement) {
-      this._lastX = x;
-      this._lastY = y;
-      return;
-    }
-
-    const submenuRect = this._submenuElement.$.overlay.getBoundingClientRect();
-
-    // Skip if submenu is not visible
-    if (submenuRect.width === 0 || submenuRect.height === 0) {
-      this._lastX = x;
-      this._lastY = y;
-      return;
-    }
-
-    // Determine submenu direction from actual position, not RTL flag
-    const parentRect = this._parentItemElement.getBoundingClientRect();
-    const submenuIsRight = submenuRect.left >= parentRect.left;
-
-    const dx = x - this._lastX;
-
-    // Early exit: moving horizontally away from the submenu
-    if ((submenuIsRight && dx < -1) || (!submenuIsRight && dx > 1)) {
-      this._invalidCount += 1;
-    } else {
-      // Compute the near edge corners of the submenu
-      const nearX = submenuIsRight ? submenuRect.left : submenuRect.right;
-      const topY = submenuRect.top;
-      const bottomY = submenuRect.bottom;
-
-      // Angle from previous cursor position to the two submenu corners
-      const thetaTop = Math.atan2(topY - this._lastY, nearX - this._lastX);
-      const thetaBottom = Math.atan2(bottomY - this._lastY, nearX - this._lastX);
-
-      // Angle of cursor movement vector
-      const dy = y - this._lastY;
-      const thetaPointer = Math.atan2(dy, dx);
-
-      // Determine the angular bounds (top and bottom may swap depending on direction)
-      const minAngle = Math.min(thetaTop, thetaBottom);
-      const maxAngle = Math.max(thetaTop, thetaBottom);
-
-      if (thetaPointer >= minAngle - TOLERANCE_RAD && thetaPointer <= maxAngle + TOLERANCE_RAD) {
-        // Cursor is aimed at the submenu
-        this._invalidCount = 0;
-      } else {
-        this._invalidCount += 1;
-      }
-    }
-
-    this._lastX = x;
-    this._lastY = y;
-
-    // If the user has moved outside the safe triangle enough times, execute pending switch
-    if (this._invalidCount >= INVALID_THRESHOLD && this._pendingSwitch) {
-      this._executePendingSwitch();
     }
   }
 }
