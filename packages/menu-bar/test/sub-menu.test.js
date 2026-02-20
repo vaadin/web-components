@@ -736,3 +736,140 @@ describe('touch', () => {
     });
   });
 });
+
+(isTouch ? describe.skip : describe)('safe triangle', () => {
+  let menu, buttons, subMenu;
+
+  function pointerMove(x, y) {
+    document.dispatchEvent(
+      new PointerEvent('pointermove', {
+        clientX: x,
+        clientY: y,
+        bubbles: true,
+        pointerType: 'mouse',
+      }),
+    );
+  }
+
+  beforeEach(async () => {
+    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    menu.items = [
+      {
+        text: 'Menu Item 1',
+        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }],
+      },
+      { text: 'Menu Item 2' },
+      {
+        text: 'Menu Item 3',
+        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
+      },
+    ];
+    menu.openOnHover = true;
+    await nextRender();
+    subMenu = menu._subMenu;
+    buttons = menu._buttons;
+  });
+
+  it('should keep submenu open when pointer moves toward it', async () => {
+    // Open submenu for button 0
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+
+    const btnRect = buttons[0].getBoundingClientRect();
+    const overlayRect = subMenu._overlayElement.getBoundingClientRect();
+
+    // Start from center of expanded button
+    const startX = btnRect.left + btnRect.width / 2;
+    const startY = btnRect.top + btnRect.height / 2;
+    pointerMove(startX, startY);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    // Move pointer toward the submenu overlay (downward toward it)
+    const targetX = overlayRect.left + overlayRect.width / 2;
+    const targetY = overlayRect.top + overlayRect.height / 2;
+    const midX = (startX + targetX) / 2;
+    const midY = (startY + targetY) / 2;
+    pointerMove(midX, midY);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    // Hover over another button — should NOT switch due to safe triangle
+    fire(buttons[2], 'mouseover');
+    await nextRender();
+
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[0]);
+  });
+
+  it('should switch submenu when pointer moves away', async () => {
+    // Open submenu for button 0
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+
+    const btnRect = buttons[0].getBoundingClientRect();
+
+    // Start from center of expanded button
+    const startX = btnRect.left + btnRect.width / 2;
+    const startY = btnRect.top + btnRect.height / 2;
+    pointerMove(startX, startY);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    // Move pointer upward (away from submenu which opens below)
+    pointerMove(startX, startY - 50);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    // Move again to exceed threshold
+    pointerMove(startX, startY - 100);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20);
+    });
+
+    // Hover over another button — should switch
+    fire(buttons[2], 'mouseover');
+    await nextRender();
+
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[2]);
+  });
+
+  it('should deactivate safe triangle when submenu closes', async () => {
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+
+    const safeTriangle = menu.__safeTriangle;
+    expect(safeTriangle).to.exist;
+
+    menu.close();
+    await nextRender();
+
+    expect(safeTriangle.shouldKeepOpen()).to.be.false;
+  });
+
+  it('should not interfere when no pointer movement is tracked', async () => {
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+
+    // Without any pointermove events, hovering another button should switch immediately
+    fire(buttons[2], 'mouseover');
+    await nextRender();
+
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[2]);
+  });
+});

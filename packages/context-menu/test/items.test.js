@@ -730,4 +730,106 @@ describe('items', () => {
       expect(getMenuItems(rootMenu)[1].hasAttribute('focused')).to.be.true;
     });
   });
+
+  (isTouch ? describe.skip : describe)('safe triangle', () => {
+    function pointerMove(x, y) {
+      document.dispatchEvent(
+        new PointerEvent('pointermove', {
+          clientX: x,
+          clientY: y,
+          bubbles: true,
+          pointerType: 'mouse',
+        }),
+      );
+    }
+
+    it('should keep submenu open when pointer moves diagonally toward it', async () => {
+      const parentItem = getMenuItems(rootMenu)[0];
+      const parentRect = parentItem.getBoundingClientRect();
+      const subMenuOverlay = subMenu._overlayElement;
+      const subMenuRect = subMenuOverlay.getBoundingClientRect();
+
+      // Start from the center of the parent item
+      const startX = parentRect.left + parentRect.width / 2;
+      const startY = parentRect.top + parentRect.height / 2;
+
+      // Simulate pointer movement toward the submenu (diagonally)
+      pointerMove(startX, startY);
+
+      // Wait for throttle
+      await new Promise((resolve) => {
+        setTimeout(resolve, 20);
+      });
+
+      // Move diagonally toward the submenu
+      const targetX = subMenuRect.left + subMenuRect.width / 2;
+      const targetY = subMenuRect.top + subMenuRect.height / 2;
+      const midX = (startX + targetX) / 2;
+      const midY = (startY + targetY) / 2;
+      pointerMove(midX, midY);
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 20);
+      });
+
+      // Now hover over a sibling item — submenu should stay open
+      const siblingItem = getMenuItems(rootMenu)[3];
+      activateItem(siblingItem);
+
+      expect(subMenu.opened).to.be.true;
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-0-0');
+    });
+
+    it('should switch submenu when pointer moves away from it', async () => {
+      const parentItem = getMenuItems(rootMenu)[0];
+      const parentRect = parentItem.getBoundingClientRect();
+
+      // Start from the center of the parent item
+      const startX = parentRect.left + parentRect.width / 2;
+      const startY = parentRect.top + parentRect.height / 2;
+
+      // Simulate pointer movement away from the submenu (moving left)
+      pointerMove(startX, startY);
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 20);
+      });
+
+      // Move away (to the left, opposite of submenu)
+      pointerMove(startX - 50, startY);
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 20);
+      });
+
+      // Move away again to exceed the threshold
+      pointerMove(startX - 100, startY);
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 20);
+      });
+
+      // Now hover over the other parent item — should switch
+      activateItem(getMenuItems(rootMenu)[3]);
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-3-0');
+    });
+
+    it('should not interfere with keyboard navigation', async () => {
+      // Arrow right on an item with children should open nested submenu
+      const items = getMenuItems(subMenu);
+      const itemWithChildren = items[2]; // foo-0-2 has children
+      itemWithChildren.focus();
+      arrowRightKeyDown(itemWithChildren);
+      const subMenu2 = getSubMenu(subMenu);
+      await nextRender();
+      expect(subMenu2.opened).to.be.true;
+    });
+
+    it('should deactivate when submenu closes', () => {
+      const safeTriangle = rootMenu.querySelector('[slot="submenu"]').__safeTriangle;
+      expect(safeTriangle).to.exist;
+      subMenu.close();
+      expect(safeTriangle.shouldKeepOpen()).to.be.false;
+    });
+  });
 });

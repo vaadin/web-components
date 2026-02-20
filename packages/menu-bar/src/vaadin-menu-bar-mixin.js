@@ -11,10 +11,12 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SafeTriangleController } from '@vaadin/context-menu/src/vaadin-safe-triangle-controller.js';
 
 /**
  * Custom Lit directive for rendering item components
@@ -313,6 +315,10 @@ export const MenuBarMixin = (superClass) =>
 
       this.addEventListener('mousedown', () => this._hideTooltip(true));
       this.addEventListener('mouseleave', () => this._hideTooltip());
+
+      if (!isTouch) {
+        this.__safeTriangle = new SafeTriangleController();
+      }
 
       this._container = this.shadowRoot.querySelector('[part="container"]');
     }
@@ -907,7 +913,15 @@ export const MenuBarMixin = (superClass) =>
         // with children, regardless of whether openOnHover is set.
         // If the button has no children, keep the sub-menu opened.
         if (button.item.children && (this.openOnHover || this._subMenu.opened)) {
-          this.__openSubMenu(button, false);
+          // If a submenu is open and the safe triangle indicates the user is
+          // aiming at it, defer the switch instead of switching immediately.
+          if (this._subMenu.opened && this.__safeTriangle && this.__safeTriangle.shouldKeepOpen()) {
+            this.__safeTriangle.scheduleSwitch(() => {
+              this.__openSubMenu(button, false);
+            });
+          } else {
+            this.__openSubMenu(button, false);
+          }
         }
 
         if (button === this._overflow || (this.openOnHover && button.item.children)) {
@@ -995,6 +1009,11 @@ export const MenuBarMixin = (superClass) =>
         }),
       );
 
+      // Activate safe triangle tracking for the newly opened submenu
+      if (this.__safeTriangle) {
+        this.__safeTriangle.activate(overlay, button);
+      }
+
       overlay.addEventListener(
         'vaadin-overlay-open',
         () => {
@@ -1064,6 +1083,10 @@ export const MenuBarMixin = (superClass) =>
       this.__deactivateButton(restoreFocus);
       if (this._subMenu.opened) {
         this._subMenu.close();
+      }
+      // Deactivate safe triangle tracking when submenu closes
+      if (this.__safeTriangle) {
+        this.__safeTriangle.deactivate();
       }
     }
 
