@@ -38,6 +38,17 @@ export function getSubMenu(menu) {
   return menu.querySelector(':scope > vaadin-context-menu[slot="submenu"]');
 }
 
+export function pointerMove(x, y) {
+  document.dispatchEvent(
+    new PointerEvent('pointermove', {
+      clientX: x,
+      clientY: y,
+      bubbles: true,
+      pointerType: 'mouse',
+    }),
+  );
+}
+
 export async function openSubMenus(menu) {
   await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
   const itemElement = menu.querySelector(':scope > [slot="overlay"] [aria-haspopup="true"]');
