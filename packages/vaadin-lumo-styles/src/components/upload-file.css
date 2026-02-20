@@ -3,6 +3,7 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+
 @media lumo_components_upload-file {
   :host {
     padding: var(--vaadin-upload-file-padding, var(--lumo-space-s) 0);
@@ -15,6 +16,10 @@
   :host(:focus-visible) {
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
     outline-offset: calc(var(--_focus-ring-width) * -1);
+  }
+
+  [part='loader'] {
+    display: none;
   }
 
   [part='status'],
@@ -95,5 +100,73 @@
 
   ::slotted([slot='progress']) {
     margin-inline-end: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+  }
+
+  /* THUMBNAILS VARIANT */
+
+  :host([theme~='thumbnails']) {
+    background: var(--lumo-contrast-5pct);
+    --_prefix-area-size: var(--lumo-size-m);
+    min-height: var(--_prefix-area-size);
+    border-radius: var(--lumo-border-radius-l);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    font-size: var(--lumo-font-size-xs);
+    color: var(--lumo-secondary-text-color);
+
+    [part='loader']:not([hidden]) {
+      display: block;
+      margin: calc((var(--_prefix-area-size) - var(--lumo-icon-size-s)) / 2);
+    }
+
+    [part$='icon'] {
+      margin: 0;
+    }
+
+    [part='done-icon'] {
+      background: var(--lumo-contrast-5pct);
+
+      &::before {
+        /* TODO: Replace with Lumo file icon, once it exists. */
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
+        mask-size: contain;
+        background: var(--lumo-secondary-text-color);
+      }
+    }
+
+    [part='warning-icon'] {
+      background: var(--lumo-error-color-10pct);
+    }
+
+    & [part='meta'] {
+      margin-inline-start: var(--lumo-space-s);
+    }
+
+    & [part='commands'] {
+      align-self: center;
+      padding-inline: var(--lumo-space-xs) var(--lumo-space-xs);
+
+      & > button {
+        margin: 0;
+        width: var(--lumo-size-xs);
+        height: var(--lumo-size-xs);
+      }
+    }
+  }
+
+  :host([theme~='thumbnails'][uploading]) {
+    & ::slotted([slot='progress']) {
+      display: block !important;
+      grid-column: 1 / -1;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      margin: 0;
+      clip-path: none;
+      --lumo-primary-color: var(--lumo-primary-color-10pct);
+      --lumo-contrast-10pct: transparent;
+    }
   }
 }
