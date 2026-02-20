@@ -64,6 +64,12 @@ export const DialogDraggableMixin = (superClass) =>
         return;
       }
 
+      // Don't initiate drag if a nested dialog already handled this event.
+      // This prevents dragging both dialogs simultaneously.
+      if (e.defaultPrevented) {
+        return;
+      }
+
       if (this.draggable && (e.button === 0 || e.touches)) {
         const resizerContainer = this.$.overlay.$.resizerContainer;
         const isResizerContainer = e.target === resizerContainer;
@@ -83,9 +89,8 @@ export const DialogDraggableMixin = (superClass) =>
         });
 
         if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
-          if (!isDraggable) {
-            e.preventDefault();
-          }
+          // Signal that we're handling this drag event, so parent dialogs won't also drag
+          e.preventDefault();
           this._originalBounds = this.$.overlay.getBounds();
           const event = getMouseOrFirstTouchEvent(e);
           this._originalMouseCoords = { top: event.pageY, left: event.pageX };
