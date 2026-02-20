@@ -76,12 +76,15 @@ export default {
             }
 
             // Transform attributes:
+            // - Filter out attributes whose corresponding field member is not public.
             // - Filter out starting with underscore e.g. `_lastTabIndex`
             // - Filter out `dir` attribute inherited from DirMixin.
             // - Filter out attributes with non-primitive types (can't be set via HTML attributes).
             // - Transform camelCase attribute names to dash-case.
             if (declaration?.attributes?.length) {
+              const publicMemberNames = new Set((declaration.members || []).map((m) => m.name));
               declaration.attributes = declaration.attributes
+                .filter((attr) => !attr.fieldName || publicMemberNames.has(attr.fieldName))
                 .filter((member) => !inheritanceDenyList.includes(member.inheritedFrom?.name))
                 .filter((member) => !member.name.startsWith('_') && member.name !== 'dir')
                 .filter((member) => !ignoredAttributeTypes.some((type) => member.type?.text?.includes(type)))
