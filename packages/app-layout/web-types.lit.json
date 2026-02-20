@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/app-layout",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-app-layout",
+          "description": "`<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.\n\n```html\n<vaadin-app-layout primary-section=\"navbar|drawer\">\n <vaadin-drawer-toggle slot=\"navbar [touch-optimized]\"></vaadin-drawer-toggle>\n <h3 slot=\"navbar [touch-optimized]\">Company Name</h3>\n <vaadin-tabs orientation=\"vertical\" slot=\"drawer\">\n   <vaadin-tab>Menu item 1</vaadin-tab>\n </vaadin-tabs>\n <!-- Everything else will be the page content -->\n <div>\n   <h3>Page title</h3>\n   <p>Page content</p>\n </div>\n</vaadin-app-layout>\n```\n\nFor best results, the component should be added to the root level of your application (i.e., as a direct child of `<body>`).\n\nThe page should include a viewport meta tag which contains `viewport-fit=cover`, like the following:\n```html\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n```\n\nThis causes the viewport to be scaled to fill the device display.\nTo ensure that important content is displayed, use the provided css variables:\n\n- `--safe-area-inset-top`\n- `--safe-area-inset-right`\n- `--safe-area-inset-bottom`\n- `--safe-area-inset-left`\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name        | Description\n-----------------|---------------------------------------------------------|\n`backdrop`       | Backdrop covering the layout when drawer is open as an overlay\n`navbar`         | Container for the navigation bar\n`navbar-top`     | Container for the top navigation bar\n`navbar-bottom`  | Container for the bottom navigation bar\n`drawer`         | Container for the drawer area\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`has-drawer`   | Set when the element has light DOM content in the drawer slot.\n`has-navbar`   | Set when the element has light DOM content in the navbar slot.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                                  |\n:----------------------------------------------------|\n| `--vaadin-app-layout-drawer-background`            |\n| `--vaadin-app-layout-drawer-width`                 |\n| `--vaadin-app-layout-navbar-background`            |\n| `--vaadin-app-layout-navbar-gap`                   |\n| `--vaadin-app-layout-navbar-padding-bottom`        |\n| `--vaadin-app-layout-navbar-padding-inline-end`    |\n| `--vaadin-app-layout-navbar-padding-inline-start`  |\n| `--vaadin-app-layout-navbar-padding-top`           |\n| `--vaadin-app-layout-transition-duration`          |\n| `--vaadin-overlay-backdrop-background`             |\n| `--vaadin-overlay-shadow`                          |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Component's slots\n\nThe following slots are available to be set\n\nSlot name          | Description\n-------------------|---------------------------------------------------|\nno name            | Default container for the page content\n`navbar `          | Container for the top navbar area\n`drawer`           | Container for an application menu\n`touch-optimized`  | Container for the bottom navbar area (only visible for mobile devices)\n\n#### Touch optimized\n\nApp Layout has a pseudo-slot `touch-optimized` in order to give more control of the presentation of\nelements with `slot[navbar]`. Internally, when the user is interacting with App Layout from a\ntouchscreen device, the component will search for elements with `slot[navbar touch-optimized]` and move\nthem to the bottom of the page.\n\n### Navigation\n\nAs the drawer opens as an overlay in small devices, it makes sense to close it once a navigation happens.\nIf you are using Vaadin Router, this will happen automatically unless you change the `closeDrawerOn` event name.\n\nIn order to do so, there are two options:\n- If the `vaadin-app-layout` instance is available, then `drawerOpened` can be set to `false`\n- If not, a custom event `close-overlay-drawer` can be dispatched either by calling\n `window.dispatchEvent(new CustomEvent('close-overlay-drawer'))` or by calling\n `AppLayout.dispatchCloseOverlayDrawerEvent()`\n\n### Scrolling areas\n\nBy default, the component will act with the \"body scrolling\", so on mobile (iOS Safari and Android Chrome),\nthe toolbars will collapse when a scroll happens.\n\nTo use the \"content scrolling\", in case of the content of the page relies on a pre-defined height (for instance,\nit has a `height:100%`), then the developer can set `height: 100%` to both `html` and `body`.\nThat will make the `[content]` element of app layout scrollable.\nOn this case, the toolbars on mobile device won't collapse.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?drawerOpened",
+              "description": "Controls whether the drawer is opened (visible) or not.\nIts default value depends on the viewport:\n- `true`, for desktop size views\n- `false`, for mobile size views",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".closeDrawerOn",
+              "description": "A global event that causes the drawer to close (be hidden) when it is in overlay mode.\n- The default is `vaadin-router-location-changed` dispatched by Vaadin Router",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following structure and default values:\n```js\n{\n  drawer: 'Drawer'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".primarySection",
+              "description": "Defines whether navbar or drawer will come first visually.\n- By default (`primary-section=\"navbar\"`), the navbar takes the full available width and moves the drawer down.\n- If `primary-section=\"drawer\"` is set, then the drawer will move the navbar, taking the full available height.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@close-overlay-drawer",
+              "description": "App Layout listens to `close-overlay-drawer` on the window level.\nA custom event can be dispatched and the App Layout will close the drawer in overlay.\n\nThat can be used, for instance, when a navigation occurs when user clicks in a menu item inside the drawer.\n\nSee `dispatchCloseOverlayDrawerEvent()` helper method.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@drawer-opened-changed",
+              "description": "Fired when the `drawerOpened` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@overlay-changed",
+              "description": "Fired when the `overlay` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@primary-section-changed",
+              "description": "Fired when the `primarySection` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-drawer-toggle",
+          "description": "The Drawer Toggle component controls the drawer in App Layout component.\n\n```html\n<vaadin-app-layout>\n  <vaadin-drawer-toggle slot=\"navbar\">Toggle drawer</vaadin-drawer-toggle>\n</vaadin-app-layout>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name    | Description\n-------------|------------\n`icon`       | The icon element\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|------------\n`focus-ring` | Set when the element is focused using the keyboard\n`focused`    | Set when the element is focused\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                |\n:----------------------------------|\n| `--vaadin-button-background`     |\n| `--vaadin-button-border-color`   |\n| `--vaadin-button-border-radius`  |\n| `--vaadin-button-border-width`   |\n| `--vaadin-button-font-size`      |\n| `--vaadin-button-line-height`    |\n| `--vaadin-button-margin`         |\n| `--vaadin-button-padding`        |\n| `--vaadin-button-text-color`     |\n| `--vaadin-icon-size`             |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".ariaLabel",
+              "description": "",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

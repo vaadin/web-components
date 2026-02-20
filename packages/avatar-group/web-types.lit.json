@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/avatar-group",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-avatar-group",
+          "description": "`<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.\n\nTo create the avatar group, first add the component to the page:\n\n```html\n<vaadin-avatar-group></vaadin-avatar-group>\n```\n\nAnd then use [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-avatar-group#property-items) property to initialize the structure:\n\n```js\ndocument.querySelector('vaadin-avatar-group').items = [\n  {name: 'John Doe'},\n  {abbr: 'AB'}\n];\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name   | Description\n----------- | ---------------\n`container` | The container element\n`overlay`   | The overflow avatar menu overlay\n`content`   | The overflow avatar menu overlay content\n\nSee the [`<vaadin-avatar>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-avatar) documentation for the available\nstate attributes and stylable shadow parts of avatar elements.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Internal components\n\nIn addition to `<vaadin-avatar-group>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-list-box).\n- `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-item).",
+          "extension": true,
+          "attributes": [
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n```js\n{\n  // Translation of the anonymous user avatar tooltip.\n  anonymous: 'anonymous',\n  // Translation of the avatar group accessible label.\n  // {count} is replaced with the actual count of users.\n  activeUsers: {\n    one: 'Currently one active user',\n    many: 'Currently {count} active users'\n  },\n  // Screen reader announcement when user joins group.\n  // {user} is replaced with the name or abbreviation.\n  // When neither is set, \"anonymous\" is used instead.\n  joined: '{user} joined',\n  // Screen reader announcement when user leaves group.\n  // {user} is replaced with the name or abbreviation.\n  // When neither is set, \"anonymous\" is used instead.\n  left: '{user} left'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".items",
+              "description": "An array containing the items which will be stamped as avatars.\n\nThe items objects allow to configure [`name`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-avatar#property-name),\n[`abbr`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-avatar#property-abbr), [`img`](#/elements/vaadin-avatar#property-img)\nand [`colorIndex`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-avatar#property-colorIndex) properties on the\nstamped avatars, and set `className` to provide CSS class names.\n\n#### Example\n\n```js\ngroup.items = [\n  {\n    name: 'User name',\n    img: 'url-to-image.png',\n    className: 'even'\n  },\n  {\n    abbr: 'JD',\n    colorIndex: 1,\n    className: 'odd'\n  },\n];\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".maxItemsVisible",
+              "description": "The maximum number of avatars to display. By default, all the avatars are displayed.\nWhen _maxItemsVisible_ is set, the overflowing avatars are grouped into one avatar with\na dropdown. Setting 0 or 1 has no effect so there are always at least two avatars visible.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/progress-bar",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-progress-bar",
+          "description": "`<vaadin-progress-bar>` is a Web Component for progress bars.\n\n```html\n<vaadin-progress-bar min=\"0\" max=\"1\" value=\"0.5\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|----------------\n`bar`      | Progress-bar's background\n`value`    | Progress-bar's foreground\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n| `--vaadin-progress-bar-animation-duration` |\n| `--vaadin-progress-bar-background`         |\n| `--vaadin-progress-bar-border-color`       |\n| `--vaadin-progress-bar-border-radius`      |\n| `--vaadin-progress-bar-border-width`       |\n| `--vaadin-progress-bar-height`             |\n| `--vaadin-progress-bar-padding`            |\n| `--vaadin-progress-bar-value-background`   |\n| `--vaadin-progress-value`                  |\n\nThe following state attributes are available for styling:\n\nAttribute       | Description\n----------------|-------------------------------------\n`indeterminate` | Set to an indeterminate progress bar\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?indeterminate",
+              "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".max",
+              "description": "Maximum bound of the progress bar.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".min",
+              "description": "Minimum bound of the progress bar.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "Current progress value.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

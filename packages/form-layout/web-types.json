@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/form-layout",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-form-item",
+          "description": "`<vaadin-form-item>` is a Web Component providing labelled form item wrapper\nfor using inside `<vaadin-form-layout>`.\n\n`<vaadin-form-item>` accepts a single child as the input content,\nand also has a separate named `label` slot:\n\n```html\n<vaadin-form-item>\n  <label slot=\"label\">Label aside</label>\n  <input>\n</vaadin-form-item>\n```\n\nThe label is optional and can be omitted:\n\n```html\n<vaadin-form-item>\n  <input type=\"checkbox\"> Subscribe to our Newsletter\n</vaadin-form-item>\n```\n\nBy default, the `label` slot content is displayed aside of the input content.\nWhen `label-position=\"top\"` is set, the `label` slot content is displayed on top:\n\n```html\n<vaadin-form-item label-position=\"top\">\n  <label slot=\"label\">Label on top</label>\n  <input>\n</vaadin-form-item>\n```\n\n**Note:** Normally, `<vaadin-form-item>` is used as a child of\na `<vaadin-form-layout>` element. Setting `label-position` is unnecessary,\nbecause the `label-position` attribute is triggered automatically by the parent\n`<vaadin-form-layout>`, depending on its width and responsive behavior.\n\n**Deprecation note:** The `label-position` attribute is deprecated since 24.7 and\nwill be removed in Vaadin 25, when a new approach for setting the label position\nwill be introduced.\n\n### Input Width\n\nBy default, `<vaadin-form-item>` does not manipulate the width of the slotted\ninput element. Optionally you can stretch the child input element to fill\nthe available width for the input content by adding the `full-width` class:\n\n```html\n<vaadin-form-item>\n  <label slot=\"label\">Label</label>\n  <input class=\"full-width\">\n</vaadin-form-item>\n```\n\n### Styling\n\nThe `label-position` host attribute can be used to target the label on top state:\n\n```css\n:host([label-position=\"top\"]) {\n  padding-top: 0.5rem;\n}\n```\n\n**Deprecation note:** The `label-position` attribute is deprecated since 24.7 and\nwill be removed in Vaadin 25, when a new approach to styling the form-item\nbased on the label position will be introduced.\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\nlabel | The label slot container\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-form-layout",
+          "description": "`<vaadin-form-layout>` is a Web Component providing configurable responsive\nlayout for form elements.\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item>\n    <label slot=\"label\">First Name</label>\n    <input class=\"full-width\" value=\"Jane\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Last Name</label>\n    <input class=\"full-width\" value=\"Doe\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Email</label>\n    <input class=\"full-width\" value=\"jane.doe@example.com\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\nIt supports any child elements as layout items.\n\nBy default, it makes a layout of two columns if the element width is equal or\nwider than 40em, and a single column layout otherwise.\n\nThe number of columns and the responsive behavior are customizable with\nthe `responsiveSteps` property.\n\n### Spanning Items on Multiple Columns\n\nYou can use `colspan` or `data-colspan` attribute on the items.\nIn the example below, the first text field spans on two columns:\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item colspan=\"2\">\n    <label slot=\"label\">Address</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">First Name</label>\n    <input class=\"full-width\" value=\"Jane\">\n  </vaadin-form-item>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Last Name</label>\n    <input class=\"full-width\" value=\"Doe\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\n### Explicit New Row\n\nUse the `<br>` line break element to wrap the items on a new row:\n\n```html\n<vaadin-form-layout>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Email</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n  <br>\n\n  <vaadin-form-item>\n    <label slot=\"label\">Confirm Email</label>\n    <input class=\"full-width\">\n  </vaadin-form-item>\n\n</vaadin-form-layout>\n```\n\n### Auto Responsive Mode\n\nTo avoid manually dealing with responsive breakpoints, Form Layout provides an auto-responsive mode\nthat automatically creates and adjusts fixed-width columns based on the container's available space.\n\nThe [`columnWidth`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-layout#property-columnWidth) and\n[`maxColumns`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-layout#property-maxColumns) properties define the width of\neach column and the maximum number of columns that the component can create. By default, the component\ncreates up to 10 columns, each with a width of `12em` or the value of the `--vaadin-field-default-width`\nCSS custom property, if defined.\n\nThe auto-responsive mode is disabled by default. To enable it for an individual instance, set the\n`auto-responsive` attribute:\n\n```html\n<vaadin-form-layout auto-responsive>\n  <vaadin-text-field label=\"First Name\"></vaadin-text-field>\n  <vaadin-text-field label=\"Last Name\"></vaadin-text-field>\n  <vaadin-text-area label=\"Address\" colspan=\"2\"></vaadin-text-area>\n</vaadin-form-layout>\n```\n\nYou can also enable it for all instances by enabling the following feature flag\nbefore `<vaadin-form-layout>` elements are added to the DOM:\n\n```js\nwindow.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;\n```\n\n#### Organizing Fields into Rows\n\nBy default, each field is placed on a new row. To organize fields into rows, you can either:\n\n1. Manually wrap fields into [`<vaadin-form-row>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-row) elements.\n\n2. Enable the [`autoRows`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-layout#property-autoRows) property to\n   let Form Layout automatically arrange fields in available columns, wrapping to a new\n   row when necessary. `<br>` elements can be used to force a new row.\n\nHere is an example of using `<vaadin-form-row>`:\n\n```html\n<vaadin-form-layout auto-responsive>\n  <vaadin-form-row>\n    <vaadin-text-field label=\"First Name\"></vaadin-text-field>\n    <vaadin-text-field label=\"Last Name\"></vaadin-text-field>\n  </vaadin-form-row>\n  <vaadin-form-row>\n    <vaadin-text-area label=\"Address\" colspan=\"2\"></vaadin-text-area>\n  </vaadin-form-row>\n</vaadin-form-layout>\n```\n\n#### Expanding Columns and Fields\n\nYou can configure Form Layout to expand columns to evenly fill any remaining space after\nall fixed-width columns have been created.\nTo enable this, set the [`expandColumns`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-layout#property-expandColumns)\nproperty to `true`.\n\nAlso, Form Layout can stretch fields to make them take up all available space within columns.\nTo enable this, set the [`expandFields`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-layout#property-expandFields)\nproperty to `true`.\n\n#### Customizing Label Position\n\nBy default, Form Layout displays labels above the fields. To position labels beside fields, you\nneed to wrap each field in a `<vaadin-form-item>` element and define its labels on the wrapper.\nThen, you can enable the [`labelsAside`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-form-layout#property-labelsAside)\nproperty:\n\n```html\n<vaadin-form-layout auto-responsive labels-aside>\n  <vaadin-form-row>\n    <vaadin-form-item>\n      <label slot=\"label\">First Name</label>\n      <vaadin-text-field></vaadin-text-field>\n   </vaadin-form-item>\n   <vaadin-form-item>\n     <label slot=\"label\">Last Name</label>\n      <vaadin-text-field></vaadin-text-field>\n    </vaadin-form-item>\n  </vaadin-form-row>\n  <vaadin-form-row>\n    <vaadin-form-item colspan=\"2\">\n      <label slot=\"label\">Address</label>\n      <vaadin-text-area></vaadin-text-area>\n    </vaadin-form-item>\n  </vaadin-form-row>\n</vaadin-form-layout>\n```\n\nWith this, FormLayout will display labels beside fields, falling back to\nthe default position above the fields only when there isn't enough space.\n\n### CSS Properties Reference\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`\n`--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`\n`--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`\n`--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`",
+          "attributes": [
+            {
+              "name": "auto-responsive",
+              "description": "When set to `true`, the component automatically creates and adjusts columns based on\nthe container's width. Columns have a fixed width defined by `columnWidth` and their\nnumber increases up to the limit set by `maxColumns`. The component dynamically adjusts\nthe number of columns as the container size changes. When this mode is enabled,\n`responsiveSteps` are ignored.\n\nBy default, each field is placed on a new row. To organize fields into rows, there are\ntwo options:\n\n1. Use `<vaadin-form-row>` to explicitly group fields into rows.\n\n2. Enable the `autoRows` property to automatically arrange fields in available columns,\n   wrapping to a new row when necessary. `<br>` elements can be used to force a new row.\n\nThe auto-responsive mode is disabled by default. To enable it for an individual instance,\nuse this property. Alternatively, if you want it to be enabled for all instances by default,\nenable the `defaultAutoResponsiveFormLayout` feature flag before `<vaadin-form-layout>`\nelements are added to the DOM:\n\n```js\nwindow.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;\n```",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "auto-rows",
+              "description": "When enabled with `autoResponsive`, distributes fields across columns\nby placing each field in the next available column and wrapping to\nthe next row when the current row is full. `<br>` elements can be\nused to force a new row.\n\nThe default value is `false`.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "column-width",
+              "description": "When `autoResponsive` is enabled, defines the width of each column.\nThe value must be defined in CSS length units, e.g. `100px`.\n\nIf the column width isn't explicitly set, it defaults to `12em`\nor `--vaadin-field-default-width` if that CSS property is defined.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "expand-columns",
+              "description": "When `autoResponsive` is enabled, specifies whether the columns should expand\nin width to evenly fill any remaining space after all columns have been created.\n\nThe default value is `false`.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "expand-fields",
+              "description": "When `autoResponsive` is enabled, specifies whether fields should stretch\nto take up all available space within columns. This setting also applies\nto fields inside `<vaadin-form-item>` elements.\n\nThe default value is `false`.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "labels-aside",
+              "description": "When enabled with `autoResponsive`, `<vaadin-form-item>` prefers positioning\nlabels beside the fields. If the layout is too narrow to fit a single column\nwith a side label, the component will automatically switch labels to their\ndefault position above the fields.\n\nThe default value is `false`.\n\nTo customize the label width and the gap between the label and the field,\nuse the following CSS properties:\n\n- `--vaadin-form-layout-label-width`\n- `--vaadin-form-layout-label-spacing`",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "max-columns",
+              "description": "When `autoResponsive` is enabled, defines the maximum number of columns\nthat the layout can create. The layout will create columns up to this\nlimit based on the available container width.\n\nThe default value is `10`.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "min-columns",
+              "description": "When `autoResponsive` is enabled, defines the minimum number of columns\nthat the layout can create. The layout will create columns at least up\nto this limit.\n\nThe default value is `1`.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autoResponsive",
+                "description": "When set to `true`, the component automatically creates and adjusts columns based on\nthe container's width. Columns have a fixed width defined by `columnWidth` and their\nnumber increases up to the limit set by `maxColumns`. The component dynamically adjusts\nthe number of columns as the container size changes. When this mode is enabled,\n`responsiveSteps` are ignored.\n\nBy default, each field is placed on a new row. To organize fields into rows, there are\ntwo options:\n\n1. Use `<vaadin-form-row>` to explicitly group fields into rows.\n\n2. Enable the `autoRows` property to automatically arrange fields in available columns,\n   wrapping to a new row when necessary. `<br>` elements can be used to force a new row.\n\nThe auto-responsive mode is disabled by default. To enable it for an individual instance,\nuse this property. Alternatively, if you want it to be enabled for all instances by default,\nenable the `defaultAutoResponsiveFormLayout` feature flag before `<vaadin-form-layout>`\nelements are added to the DOM:\n\n```js\nwindow.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;\n```",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autoRows",
+                "description": "When enabled with `autoResponsive`, distributes fields across columns\nby placing each field in the next available column and wrapping to\nthe next row when the current row is full. `<br>` elements can be\nused to force a new row.\n\nThe default value is `false`.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "columnWidth",
+                "description": "When `autoResponsive` is enabled, defines the width of each column.\nThe value must be defined in CSS length units, e.g. `100px`.\n\nIf the column width isn't explicitly set, it defaults to `12em`\nor `--vaadin-field-default-width` if that CSS property is defined.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "expandColumns",
+                "description": "When `autoResponsive` is enabled, specifies whether the columns should expand\nin width to evenly fill any remaining space after all columns have been created.\n\nThe default value is `false`.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "expandFields",
+                "description": "When `autoResponsive` is enabled, specifies whether fields should stretch\nto take up all available space within columns. This setting also applies\nto fields inside `<vaadin-form-item>` elements.\n\nThe default value is `false`.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "labelsAside",
+                "description": "When enabled with `autoResponsive`, `<vaadin-form-item>` prefers positioning\nlabels beside the fields. If the layout is too narrow to fit a single column\nwith a side label, the component will automatically switch labels to their\ndefault position above the fields.\n\nThe default value is `false`.\n\nTo customize the label width and the gap between the label and the field,\nuse the following CSS properties:\n\n- `--vaadin-form-layout-label-width`\n- `--vaadin-form-layout-label-spacing`",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "maxColumns",
+                "description": "When `autoResponsive` is enabled, defines the maximum number of columns\nthat the layout can create. The layout will create columns up to this\nlimit based on the available container width.\n\nThe default value is `10`.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "minColumns",
+                "description": "When `autoResponsive` is enabled, defines the minimum number of columns\nthat the layout can create. The layout will create columns at least up\nto this limit.\n\nThe default value is `1`.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "responsiveSteps",
+                "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsPosition` string of `\"aside\"` or `\"top\"`. At least one item is required.\n\nNOTE: Responsive steps are ignored in auto-responsive mode, which may be\nenabled explicitly via the `autoResponsive` property or implicitly\nif the following feature flag is set:\n\n```js\nwindow.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true\n```\n\n#### Examples\n\n```javascript\nformLayout.responsiveSteps = [{columns: 1}];\n// The layout is always a single column, labels aside.\n```\n```javascript\nformLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Sets two responsive steps:\n// 1. When the layout width is < 40em, one column, labels aside.\n// 2. Width >= 40em, two columns, labels aside.\n```\n```javascript\nformLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1, labelsPosition: 'top'},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Default value. Three responsive steps:\n// 1. Width < 20em, one column, labels on top.\n// 2. 20em <= width < 40em, one column, labels aside.\n// 3. Width >= 40em, two columns, labels aside.\n```",
+                "value": {
+                  "type": [
+                    "Array.<FormLayoutResponsiveStep>"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-form-row",
+          "description": "`<vaadin-form-row>` is a web component for arranging fields into rows\ninside a `<vaadin-form-layout>` that is set to autoResponsive mode.\n\nEach `<vaadin-form-row>` always starts on a new row. Fields that exceed\nthe available columns wrap to a new row, which then remains reserved\nexclusively for the fields of that `<vaadin-form-row>` element.",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

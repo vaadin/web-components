@@ -1,0 +1,2769 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/grid",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-grid-column-group",
+          "description": "A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and\nto configure additional headers and footers.\n\nGroups can be nested to create complex header and footer configurations.\n\n#### Example:\n```html\n<vaadin-grid-column-group resizable id=\"columnGroup\">\n  <vaadin-grid-column id=\"column1\"></vaadin-grid-column>\n  <vaadin-grid-column id=\"column2\"></vaadin-grid-column>\n</vaadin-grid-column-group>\n```\n```js\nconst columnGroup = document.querySelector('#columnGroup');\ncolumnGroup.headerRenderer = (root, columnGroup) => {\n  root.textContent = 'header';\n}\n\nconst column1 = document.querySelector('#column1');\ncolumn1.headerRenderer = (root, column) => { ... };\ncolumn1.renderer = (root, column, model) => { ... };\n\nconst column2 = document.querySelector('#column2');\ncolumn2.headerRenderer = (root, column) => { ... };\ncolumn2.renderer = (root, column, model) => { ... };\n```",
+          "attributes": [
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text content to display in the header cell of the column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-grid-column",
+          "description": "A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`\nshould look like.\n\nSee [`<vaadin-grid>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid) documentation for instructions on how\nto configure the `<vaadin-grid-column>`.",
+          "attributes": [
+            {
+              "name": "auto-width",
+              "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "flex-grow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "Path to an item sub-property whose value gets displayed in the column body cells.\nThe property name is also shown in the column header if an explicit header or renderer isn't defined.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autoWidth",
+                "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "flexGrow",
+                "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text content to display in the header cell of the column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "Path to an item sub-property whose value gets displayed in the column body cells.\nThe property name is also shown in the column header if an explicit header or renderer isn't defined.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+                "value": {
+                  "type": [
+                    "GridBodyRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-grid-filter",
+          "description": "`<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,\nand handlers for filtering the grid data.\n\n#### Example:\n```html\n<vaadin-grid-column id=\"column\"></vaadin-grid-column>\n```\n```js\nconst column = document.querySelector('#column');\ncolumn.headerRenderer = (root, column) => {\n  let filter = root.firstElementChild;\n  if (!filter) {\n    filter = document.createElement('vaadin-grid-filter');\n    root.appendChild(filter);\n  }\n  filter.path = 'name.first';\n};\ncolumn.renderer = (root, column, model) => {\n  root.textContent = model.item.name.first;\n};\n```",
+          "attributes": [
+            {
+              "name": "path",
+              "description": "JS Path of the property in the item used for filtering the data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "value",
+              "description": "Current filter value.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "path",
+                "description": "JS Path of the property in the item used for filtering the data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "value",
+                "description": "Current filter value.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "value-changed",
+                "description": "Fired when the `value` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-grid-filter-column",
+          "description": "`<vaadin-grid-filter-column>` is a helper element for the `<vaadin-grid>`\nthat provides default header renderer and functionality for filtering.\n\n#### Example:\n```html\n<vaadin-grid>\n <vaadin-grid-filter-column path=\"name.first\"></vaadin-grid-filter-column>\n\n <vaadin-grid-column>\n   ...\n```",
+          "attributes": [
+            {
+              "name": "auto-width",
+              "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "flex-grow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text to display as the label of the column filter text-field.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "JS Path of the property in the item used for filtering the data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autoWidth",
+                "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "flexGrow",
+                "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text to display as the label of the column filter text-field.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "JS Path of the property in the item used for filtering the data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+                "value": {
+                  "type": [
+                    "GridBodyRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-grid-selection-column",
+          "description": "`<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`\nthat provides default renderers and functionality for item selection.\n\n#### Example:\n```html\n<vaadin-grid>\n <vaadin-grid-selection-column frozen auto-select></vaadin-grid-selection-column>\n\n <vaadin-grid-column>\n   ...\n```\n\nBy default the selection column displays `<vaadin-checkbox>` elements in the\ncolumn cells. The checkboxes in the body rows toggle selection of the corresponding row items.\n\nWhen the grid data is provided as an array of [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid#property-items),\nthe column header gets an additional checkbox that can be used for toggling\nselection for all the items at once.\n\n__The default content can also be overridden__",
+          "attributes": [
+            {
+              "name": "auto-select",
+              "description": "When true, the active item gets automatically selected.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "auto-width",
+              "description": "Override `autoWidth` to enable auto-width",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "drag-select",
+              "description": "When true, rows can be selected by dragging over the selection column.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "flex-grow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "Path to an item sub-property whose value gets displayed in the column body cells.\nThe property name is also shown in the column header if an explicit header or renderer isn't defined.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "select-all",
+              "description": "When true, all the items are selected.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Width of the cells for this column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autoSelect",
+                "description": "When true, the active item gets automatically selected.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autoWidth",
+                "description": "Override `autoWidth` to enable auto-width",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "dragSelect",
+                "description": "When true, rows can be selected by dragging over the selection column.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "flexGrow",
+                "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text content to display in the header cell of the column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "Path to an item sub-property whose value gets displayed in the column body cells.\nThe property name is also shown in the column header if an explicit header or renderer isn't defined.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+                "value": {
+                  "type": [
+                    "GridBodyRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selectAll",
+                "description": "When true, all the items are selected.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Width of the cells for this column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "select-all-changed",
+                "description": "Fired when the `selectAll` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-grid-sorter",
+          "description": "`<vaadin-grid-sorter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,\nvisual feedback, and handlers for sorting the grid data.\n\n#### Example:\n```html\n<vaadin-grid-column id=\"column\"></vaadin-grid-column>\n```\n```js\nconst column = document.querySelector('#column');\ncolumn.renderer = (root, column, model) => {\n  let sorter = root.firstElementChild;\n  if (!sorter) {\n    sorter = document.createElement('vaadin-grid-sorter');\n    root.appendChild(sorter);\n  }\n  sorter.path = 'name.first';\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`content` | The slotted content wrapper\n`indicators` | The internal sorter indicators.\n`order` | The internal sorter order\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|---------------------------\n`direction`  | Sort direction of a sorter",
+          "attributes": [
+            {
+              "name": "direction",
+              "description": "How to sort the data.\nPossible values are `asc` to use an ascending algorithm, `desc` to sort the data in\ndescending direction, or `null` for not sorting the data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "JS Path of the property in the item used for sorting the data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "direction",
+                "description": "How to sort the data.\nPossible values are `asc` to use an ascending algorithm, `desc` to sort the data in\ndescending direction, or `null` for not sorting the data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "JS Path of the property in the item used for sorting the data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "direction-changed",
+                "description": "Fired when the `direction` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-grid-sort-column",
+          "description": "`<vaadin-grid-sort-column>` is a helper element for the `<vaadin-grid>`\nthat provides default header renderer and functionality for sorting.\n\n#### Example:\n```html\n<vaadin-grid>\n <vaadin-grid-sort-column path=\"name.first\" direction=\"asc\"></vaadin-grid-sort-column>\n\n <vaadin-grid-column>\n   ...\n```",
+          "attributes": [
+            {
+              "name": "auto-width",
+              "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "direction",
+              "description": "How to sort the data.\nPossible values are `asc` to use an ascending algorithm, `desc` to sort the data in\ndescending direction, or `null` for not sorting the data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "flex-grow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "JS Path of the property in the item used for sorting the data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autoWidth",
+                "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "direction",
+                "description": "How to sort the data.\nPossible values are `asc` to use an ascending algorithm, `desc` to sort the data in\ndescending direction, or `null` for not sorting the data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "flexGrow",
+                "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text content to display in the header cell of the column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "JS Path of the property in the item used for sorting the data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+                "value": {
+                  "type": [
+                    "GridBodyRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "direction-changed",
+                "description": "Fired when the `direction` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-grid-tree-toggle",
+          "description": "`<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item tree.\n\n#### Example:\n```html\n<vaadin-grid-column id=\"column\"></vaadin-grid-column>\n```\n```js\nconst column = document.querySelector('#column');\ncolumn.renderer = (root, column, model) => {\n  let treeToggle = root.firstElementChild;\n  if (!treeToggle) {\n    treeToggle = document.createElement('vaadin-grid-tree-toggle');\n    treeToggle.addEventListener('expanded-changed', () => { ... });\n    root.appendChild(treeToggle);\n  }\n  treeToggle.leaf = !model.item.hasChildren;\n  treeToggle.level = level;\n  treeToggle.expanded = expanded;\n  treeToggle.textContent = model.item.name;\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`toggle` | The tree toggle icon\n\nThe following state attributes are available for styling:\n\nAttribute  | Description\n-----------|-------------------------------------\n`expanded` | When present, the toggle is expanded\n`leaf`     | When present, the toggle is not expandable, i. e., the current item is a leaf\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`",
+          "attributes": [
+            {
+              "name": "expanded",
+              "description": "Sublevel toggle state.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "leaf",
+              "description": "Hides the toggle icon and disables toggling a tree sublevel.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "level",
+              "description": "Current level of the tree represented with a horizontal offset\nof the toggle button.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "expanded",
+                "description": "Sublevel toggle state.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "leaf",
+                "description": "Hides the toggle icon and disables toggling a tree sublevel.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "level",
+                "description": "Current level of the tree represented with a horizontal offset\nof the toggle button.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "expanded-changed",
+                "description": "Fired when the `expanded` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-grid-tree-column",
+          "description": "`<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`\nthat provides default renderer and functionality for toggling tree/hierarchical items.\n\n#### Example:\n```html\n<vaadin-grid>\n <vaadin-grid-tree-column path=\"name.first\"></vaadin-grid-tree-column>\n\n <vaadin-grid-column>\n   ...\n```",
+          "attributes": [
+            {
+              "name": "auto-width",
+              "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "flex-grow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "JS Path of the property in the item used as text content for the tree toggle.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autoWidth",
+                "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "flexGrow",
+                "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text content to display in the header cell of the column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "JS Path of the property in the item used as text content for the tree toggle.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+                "value": {
+                  "type": [
+                    "GridBodyRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-grid",
+          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the\nthe grid can be populated by using renderer callback function.\n\n### Quick Start\n\nStart with an assigning an array to the [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid#property-items) property to visualize your data.\n\nUse the [`<vaadin-grid-column>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid-column) element to configure the grid columns. Set `path` and `header`\nshorthand properties for the columns to define what gets rendered in the cells of the column.\n\n#### Example:\n```html\n<vaadin-grid>\n  <vaadin-grid-column path=\"name.first\" header=\"First name\"></vaadin-grid-column>\n  <vaadin-grid-column path=\"name.last\" header=\"Last name\"></vaadin-grid-column>\n  <vaadin-grid-column path=\"email\"></vaadin-grid-column>\n</vaadin-grid>\n```\n\nFor custom content `vaadin-grid-column` element provides you with three types of `renderer` callback functions: `headerRenderer`,\n`renderer` and `footerRenderer`.\n\nEach of those renderer functions provides `root`, `column`, `model` arguments when applicable.\nGenerate DOM content, append it to the `root` element and control the state\nof the host element by accessing `column`. Before generating new content,\nusers are able to check if there is already content in `root` for reusing it.\n\nRenderers are called on initialization of new column cells and each time the\nrelated row model is updated. DOM generated during the renderer call can be reused\nin the next renderer call and will be provided with the `root` argument.\nOn first call it will be empty.\n\n#### Example:\n```html\n<vaadin-grid>\n  <vaadin-grid-column></vaadin-grid-column>\n  <vaadin-grid-column></vaadin-grid-column>\n  <vaadin-grid-column></vaadin-grid-column>\n</vaadin-grid>\n```\n```js\nconst grid = document.querySelector('vaadin-grid');\ngrid.items = [{'name': 'John', 'surname': 'Lennon', 'role': 'singer'},\n              {'name': 'Ringo', 'surname': 'Starr', 'role': 'drums'}];\n\nconst columns = grid.querySelectorAll('vaadin-grid-column');\n\ncolumns[0].headerRenderer = function(root) {\n  root.textContent = 'Name';\n};\ncolumns[0].renderer = function(root, column, model) {\n  root.textContent = model.item.name;\n};\n\ncolumns[1].headerRenderer = function(root) {\n  root.textContent = 'Surname';\n};\ncolumns[1].renderer = function(root, column, model) {\n  root.textContent = model.item.surname;\n};\n\ncolumns[2].headerRenderer = function(root) {\n  root.textContent = 'Role';\n};\ncolumns[2].renderer = function(root, column, model) {\n  root.textContent = model.item.role;\n};\n```\n\nThe following properties are available in the `model` argument:\n\nProperty name | Type | Description\n--------------|------|------------\n`index`| Number | The index of the item.\n`item` | String or Object | The item.\n`level` | Number | Number of the item's tree sublevel, starts from 0.\n`expanded` | Boolean | True if the item's tree sublevel is expanded.\n`selected` | Boolean | True if the item is selected.\n`detailsOpened` | Boolean | True if the item's row details are open.\n`hasChildren` | Boolean | True if the item has children\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid-selection-column)\n- [`<vaadin-grid-tree-toggle>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid-tree-toggle)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.js` entrypoint.\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-grid#property-dataProvider) property\ndocumentation for the detailed data provider arguments description.\n\n__Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__\n\n__Also, note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = ({page, pageSize}, callback) => {\n  // page: the requested page index\n  // pageSize: number of items on one page\n  const url = `https://api.example/data?page=${page}&per_page=${pageSize}`;\n\n  fetch(url)\n    .then((res) => res.json())\n    .then(({ employees, totalSize }) => {\n      callback(employees, totalSize);\n    });\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = ({page, pageSize}, callback) => {\n  const url = `https://api.example/data?page=${page}&per_page=${pageSize}`;\n\n  fetch(url)\n    .then((res) => res.json())\n    .then((resJson) => callback(resJson.employees));\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name                  | Description\n---------------------------|----------------\n`row`                      | Row in the internal table\n`body-row`                 | Body row in the internal table\n`header-row`               | Header row in the internal table\n`footer-row`               | Footer row in the internal table\n`collapsed-row`            | Collapsed row\n`expanded-row`             | Expanded row\n`selected-row`             | Selected row\n`nonselectable-row`        | Row that the user may not select or deselect\n`details-opened-row`       | Row with details open\n`odd-row`                  | Odd row\n`even-row`                 | Even row\n`first-row`                | The first body row\n`first-header-row`         | The first header row\n`first-footer-row`         | The first footer row\n`last-row`                 | The last body row\n`last-header-row`          | The last header row\n`last-footer-row`          | The last footer row\n`dragstart-row`            | Set on the row for one frame when drag is starting.\n`dragover-above-row`       | Set on the row when the a row is dragged over above\n`dragover-below-row`       | Set on the row when the a row is dragged over below\n`dragover-on-top-row`      | Set on the row when the a row is dragged over on top\n`drag-disabled-row`        | Set to a row that isn't available for dragging\n`drop-disabled-row`        | Set to a row that can't be dropped on top of\n`cell`                     | Cell in the internal table\n`header-cell`              | Header cell in the internal table\n`body-cell`                | Body cell in the internal table\n`footer-cell`              | Footer cell in the internal table\n`details-cell`             | Row details cell in the internal table\n`focused-cell`             | Focused cell in the internal table\n`odd-row-cell`             | Cell in an odd row\n`even-row-cell`            | Cell in an even row\n`first-row-cell`           | Cell in the first body row\n`last-row-cell`            | Cell in the last body row\n`first-header-row-cell`    | Cell in the first header row\n`first-footer-row-cell`    | Cell in the first footer row\n`last-header-row-cell`     | Cell in the last header row\n`last-footer-row-cell`     | Cell in the last footer row\n`loading-row-cell`         | Cell in a row that is waiting for data from data provider\n`selected-row-cell`        | Cell in a selected row\n`nonselectable-row-cell`   | Cell in a row that the user may not select or deselect\n`collapsed-row-cell`       | Cell in a collapsed row\n`expanded-row-cell`        | Cell in an expanded row\n`details-opened-row-cell`  | Cell in an row with details open\n`dragstart-row-cell`       | Cell in the ghost image row, but not in a source row\n`drag-source-row-cell`     | Cell in a source row, but not in the ghost image\n`dragover-above-row-cell`  | Cell in a row that has another row dragged over above\n`dragover-below-row-cell`  | Cell in a row that has another row dragged over below\n`dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top\n`drag-disabled-row-cell`   | Cell in a row that isn't available for dragging\n`drop-disabled-row-cell`   | Cell in a row that can't be dropped on top of\n`frozen-cell`              | Frozen cell in the internal table\n`frozen-to-end-cell`       | Frozen to end cell in the internal table\n`last-frozen-cell`         | Last frozen cell\n`first-frozen-to-end-cell` | First cell frozen to end\n`first-column-cell`        | First visible cell on a row\n`last-column-cell`         | Last visible cell on a row\n`reorder-allowed-cell`     | Cell in a column where another column can be reordered\n`reorder-dragging-cell`    | Cell in a column currently being reordered\n`resize-handle`            | Handle for resizing the columns\n`empty-state`              | The container for the content to be displayed when there are no body rows to show\n`reorder-ghost`            | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute             | Description                                                                                       | Part name\n----------------------|---------------------------------------------------------------------------------------------------|-----------\n`loading`             | Set when the grid is loading data from data provider                                              | :host\n`interacting`         | Keyboard navigation in interaction mode                                                           | :host\n`navigating`          | Keyboard navigation in navigation mode                                                            | :host\n`overflow`            | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `start`, `end` | :host\n`reordering`          | Set when the grid's columns are being reordered                                                   | :host\n`dragover`            | Set when the grid (not a specific row) is dragged over                                            | :host\n`dragging-rows`       | Set when grid rows are dragged                                                                    | :host\n`reorder-status`      | Reflects the status of a cell while columns are being reordered                                   | cell\n`frozen`              | Frozen cell                                                                                       | cell\n`frozen-to-end`       | Cell frozen to end                                                                                | cell\n`last-frozen`         | Last frozen cell                                                                                  | cell\n`first-frozen-to-end` | First cell frozen to end                                                                          | cell\n`first-column`        | First visible cell on a row                                                                       | cell\n`last-column`         | Last visible cell on a row                                                                        | cell\n`selected`            | Selected row                                                                                      | row\n`expanded`            | Expanded row                                                                                      | row\n`details-opened`      | Row with details open                                                                             | row\n`loading`             | Row that is waiting for data from data provider                                                   | row\n`odd`                 | Odd row                                                                                           | row\n`first`               | The first body row                                                                                | row\n`last`                | The last body row                                                                                 | row\n`dragstart`           | Set for one frame when starting to drag a row. The value is a number when dragging multiple rows  | row\n`dragover`            | Set when the row is dragged over                                                                  | row\n`drag-disabled`       | Set to a row that isn't available for dragging                                                    | row\n`drop-disabled`       | Set to a row that can't be dropped on top of                                                      | row\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "accessible-name",
+              "description": "String used to label the grid to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "all-rows-visible",
+              "description": "If true, the grid's height is defined by its rows.\n\nEffectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.\nIf the grid has a large number of items, using the feature is discouraged to avoid performance issues.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "column-rendering",
+              "description": "Allows you to choose between modes for rendering columns in the grid:\n\n\"eager\" (default): All columns are rendered upfront, regardless of their visibility within the viewport.\nThis mode should generally be preferred, as it avoids the limitations imposed by the \"lazy\" mode.\nUse this mode unless the grid has a large number of columns and performance outweighs the limitations\nin priority.\n\n\"lazy\": Optimizes the rendering of cells when there are multiple columns in the grid by virtualizing\nhorizontal scrolling. In this mode, body cells are rendered only when their corresponding columns are\ninside the visible viewport.\n\nUsing \"lazy\" rendering should be used only if you're dealing with a large number of columns and performance\nis your highest priority. For most use cases, the default \"eager\" mode is recommended due to the\nlimitations imposed by the \"lazy\" mode.\n\nWhen using the \"lazy\" mode, keep the following limitations in mind:\n\n- Row Height: When only a number of columns are visible at once, the height of a row can only be that of\nthe highest cell currently visible on that row. Make sure each cell on a single row has the same height\nas all other cells on that row. If row cells have different heights, users may experience jumpiness when\nscrolling the grid horizontally as lazily rendered cells with different heights are scrolled into view.\n\n- Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,\nonly the header content is taken into account when calculating the column width because the body cells\nof the columns outside the viewport are not initially rendered.\n\n- Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct\nheaders when only a subset of the body cells on a row is rendered.\n\n- Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because\nsome of the columns that would include focusable elements in the body cells may be outside the visible viewport\nand thus not rendered.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "column-reordering-allowed",
+              "description": "Set to true to allow column reordering.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "drop-mode",
+              "description": "Defines the locations within the Grid row where an element can be dropped.\n\nPossible values are:\n- `between`: The drop event can happen between Grid rows.\n- `on-top`: The drop event can happen on top of Grid rows.\n- `on-top-or-between`: The drop event can happen either on top of or between Grid rows.\n- `on-grid`: The drop event will not happen on any specific row, it will show the drop target outline around the whole grid.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "item-has-children-path",
+              "description": "Path to an item sub-property that indicates whether the item has child items.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "item-id-path",
+              "description": "Path to an item sub-property that identifies the item.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "multi-sort",
+              "description": "When `true`, all `<vaadin-grid-sorter>` are applied for sorting.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "multi-sort-on-shift-click",
+              "description": "When `true`, Shift-clicking an unsorted column's sorter adds it to the multi-sort.\nShift + Space does the same action via keyboard. This property has precedence over the\n`multiSort` property. If `multiSortOnShiftClick` is true, the multiSort property is effectively ignored.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "multi-sort-priority",
+              "description": "Controls how columns are added to the sort order when using multi-sort.\nThe sort order is visually indicated by numbers in grid sorters placed in column headers.\n\nBy default, whenever an unsorted column is sorted, or the sort-direction of a column is\nchanged, that column gets sort priority 1, thus affecting the priority for all the other\nsorted columns. This is identical to using `multi-sort-priority=\"prepend\"`.\n\nUsing this property allows to change this behavior so that sorting an unsorted column\nwould add it to the \"end\" of the sort, and changing column's sort direction would retain\nit's previous priority. To set this, use `multi-sort-priority=\"append\"`.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "page-size",
+              "description": "Number of items fetched at a time from the dataprovider.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "rows-draggable",
+              "description": "Marks the grid's rows to be available for dragging.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "size",
+              "description": "The number of root-level items in the grid.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "accessibleName",
+                "description": "String used to label the grid to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "activeItem",
+                "description": "The item user has last interacted with. Turns to `null` after user deactivates\nthe item by re-interacting with the currently active item.",
+                "value": {
+                  "type": [
+                    "GridItem"
+                  ]
+                }
+              },
+              {
+                "name": "allRowsVisible",
+                "description": "If true, the grid's height is defined by its rows.\n\nEffectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.\nIf the grid has a large number of items, using the feature is discouraged to avoid performance issues.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "cellPartNameGenerator",
+                "description": "A function that allows generating CSS `part` names for grid cells in Shadow DOM based\non their row and column, for styling from outside using the `::part()` selector.\n\nThe return value should be the generated part name as a string, or multiple part names\nseparated by whitespace characters.\n\nReceives two arguments:\n- `column` The `<vaadin-grid-column>` element (`undefined` for details-cell).\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.",
+                "value": {
+                  "type": [
+                    "GridCellPartNameGenerator",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "columnRendering",
+                "description": "Allows you to choose between modes for rendering columns in the grid:\n\n\"eager\" (default): All columns are rendered upfront, regardless of their visibility within the viewport.\nThis mode should generally be preferred, as it avoids the limitations imposed by the \"lazy\" mode.\nUse this mode unless the grid has a large number of columns and performance outweighs the limitations\nin priority.\n\n\"lazy\": Optimizes the rendering of cells when there are multiple columns in the grid by virtualizing\nhorizontal scrolling. In this mode, body cells are rendered only when their corresponding columns are\ninside the visible viewport.\n\nUsing \"lazy\" rendering should be used only if you're dealing with a large number of columns and performance\nis your highest priority. For most use cases, the default \"eager\" mode is recommended due to the\nlimitations imposed by the \"lazy\" mode.\n\nWhen using the \"lazy\" mode, keep the following limitations in mind:\n\n- Row Height: When only a number of columns are visible at once, the height of a row can only be that of\nthe highest cell currently visible on that row. Make sure each cell on a single row has the same height\nas all other cells on that row. If row cells have different heights, users may experience jumpiness when\nscrolling the grid horizontally as lazily rendered cells with different heights are scrolled into view.\n\n- Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,\nonly the header content is taken into account when calculating the column width because the body cells\nof the columns outside the viewport are not initially rendered.\n\n- Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct\nheaders when only a subset of the body cells on a row is rendered.\n\n- Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because\nsome of the columns that would include focusable elements in the body cells may be outside the visible viewport\nand thus not rendered.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "columnReorderingAllowed",
+                "description": "Set to true to allow column reordering.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "dataProvider",
+                "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When tree is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When tree sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when tree is not used, required for tree.",
+                "value": {
+                  "type": [
+                    "GridDataProvider",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "detailsOpenedItems",
+                "description": "An array containing references to items with open row details.",
+                "value": {
+                  "type": [
+                    "Array.<GridItem>"
+                  ]
+                }
+              },
+              {
+                "name": "dragFilter",
+                "description": "A function that filters dragging of specific grid rows. The return value should be false\nif dragging of the row should be disabled.\n\nReceives one argument:\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.",
+                "value": {
+                  "type": [
+                    "GridDragAndDropFilter",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "dropFilter",
+                "description": "A function that filters dropping on specific grid rows. The return value should be false\nif dropping on the row should be disabled.\n\nReceives one argument:\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.",
+                "value": {
+                  "type": [
+                    "GridDragAndDropFilter",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "dropMode",
+                "description": "Defines the locations within the Grid row where an element can be dropped.\n\nPossible values are:\n- `between`: The drop event can happen between Grid rows.\n- `on-top`: The drop event can happen on top of Grid rows.\n- `on-top-or-between`: The drop event can happen either on top of or between Grid rows.\n- `on-grid`: The drop event will not happen on any specific row, it will show the drop target outline around the whole grid.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "expandedItems",
+                "description": "An array that contains the expanded items.",
+                "value": {
+                  "type": [
+                    "Array.<GridItem>"
+                  ]
+                }
+              },
+              {
+                "name": "isItemSelectable",
+                "description": "A function to check whether a specific item in the grid may be\nselected or deselected by the user. Used by the selection column to\nconditionally enable to disable checkboxes for individual items. This\nfunction does not prevent programmatic selection/deselection of\nitems. Changing the function does not modify the currently selected\nitems.\n\nConfiguring this function hides the select all checkbox of the grid\nselection column, which means users can not select or deselect all\nitems anymore, nor do they get feedback on whether all items are\nselected or not.\n\nReceives an item instance and should return a boolean indicating\nwhether users may change the selection state of that item.",
+                "value": {
+                  "type": [
+                    "Function",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemHasChildrenPath",
+                "description": "Path to an item sub-property that indicates whether the item has child items.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemIdPath",
+                "description": "Path to an item sub-property that identifies the item.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "items",
+                "description": "An array containing the items which will be passed to renderer functions.",
+                "value": {
+                  "type": [
+                    "Array.<GridItem>",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "multiSort",
+                "description": "When `true`, all `<vaadin-grid-sorter>` are applied for sorting.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "multiSortOnShiftClick",
+                "description": "When `true`, Shift-clicking an unsorted column's sorter adds it to the multi-sort.\nShift + Space does the same action via keyboard. This property has precedence over the\n`multiSort` property. If `multiSortOnShiftClick` is true, the multiSort property is effectively ignored.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "multiSortPriority",
+                "description": "Controls how columns are added to the sort order when using multi-sort.\nThe sort order is visually indicated by numbers in grid sorters placed in column headers.\n\nBy default, whenever an unsorted column is sorted, or the sort-direction of a column is\nchanged, that column gets sort priority 1, thus affecting the priority for all the other\nsorted columns. This is identical to using `multi-sort-priority=\"prepend\"`.\n\nUsing this property allows to change this behavior so that sorting an unsorted column\nwould add it to the \"end\" of the sort, and changing column's sort direction would retain\nit's previous priority. To set this, use `multi-sort-priority=\"append\"`.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "pageSize",
+                "description": "Number of items fetched at a time from the dataprovider.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowDetailsRenderer",
+                "description": "Custom function for rendering the content of the row details.\nReceives three arguments:\n\n- `root` The row details content DOM element. Append your content to it.\n- `grid` The `<vaadin-grid>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.level` The number of the item's tree sublevel, starts from 0.\n  - `model.expanded` True if the item's tree sublevel is expanded.\n  - `model.selected` True if the item is selected.",
+                "value": {
+                  "type": [
+                    "GridRowDetailsRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rowsDraggable",
+                "description": "Marks the grid's rows to be available for dragging.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selectedItems",
+                "description": "An array that contains the selected items.",
+                "value": {
+                  "type": [
+                    "Array.<GridItem>"
+                  ]
+                }
+              },
+              {
+                "name": "size",
+                "description": "The number of root-level items in the grid.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "active-item-changed",
+                "description": "Fired when the `activeItem` property changes."
+              },
+              {
+                "name": "cell-activate",
+                "description": "Fired when the cell is activated with click or keyboard."
+              },
+              {
+                "name": "cell-focus",
+                "description": "Fired when a cell is focused with click or keyboard navigation.\n\nUse context property of @see {@link GridCellFocusEvent} to get detail information about the event."
+              },
+              {
+                "name": "column-reorder",
+                "description": "Fired when the columns in the grid are reordered."
+              },
+              {
+                "name": "column-resize",
+                "description": "Fired when a column in the grid is resized by the user."
+              },
+              {
+                "name": "data-provider-changed",
+                "description": "Fired when the `dataProvider` property changes."
+              },
+              {
+                "name": "expanded-items-changed",
+                "description": "Fired when the `expandedItems` property changes."
+              },
+              {
+                "name": "grid-dragend",
+                "description": "Fired when the dragging of the rows ends."
+              },
+              {
+                "name": "grid-dragstart",
+                "description": "Fired when starting to drag grid rows."
+              },
+              {
+                "name": "grid-drop",
+                "description": "Fired when a drop occurs on top of the grid."
+              },
+              {
+                "name": "item-toggle",
+                "description": "Fired when the user selects or deselects an item through the selection column."
+              },
+              {
+                "name": "loading-changed",
+                "description": "Fired when the `loading` property changes."
+              },
+              {
+                "name": "selected-items-changed",
+                "description": "Fired when the `selectedItems` property changes."
+              },
+              {
+                "name": "size-changed",
+                "description": "Fired when the `size` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

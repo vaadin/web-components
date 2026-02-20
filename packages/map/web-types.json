@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/map",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-map",
+          "description": "`vaadin-map` is a web component for displaying web maps.\n\nThe component is a light-weight wrapper around the OpenLayers mapping library.\n\n### Basic Usage\n\nAdd a `<vaadin-map>` element to your HTML:\n\n```html\n<vaadin-map></vaadin-map>\n```\n\nThen use the exposed OpenLayers API to configure it:\n```html\n<script type=\"module\">\n  import \"@vaadin/map\";\n  import TileLayer from \"ol/layer/Tile\";\n  import OSM from \"ol/source/OSM\";\n  import View from \"ol/View\";\n\n  const map = document.querySelector(\"vaadin-map\");\n  customElements.whenDefined(\"vaadin-map\").then(() => {\n    map.configuration.addLayer(new TileLayer({\n      source: new OSM()\n    }));\n    map.configuration.setView(new View({\n      center: [0, 0],\n      zoom: 3\n    }));\n  });\n</script>\n```",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

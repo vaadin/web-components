@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/checkbox",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-checkbox",
+          "description": "`<vaadin-checkbox>` is an input field representing a binary choice.\n\n```html\n<vaadin-checkbox label=\"I accept the terms and conditions\"></vaadin-checkbox>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|-------------\n`checkbox`           | The element representing a stylable custom checkbox\n`label`              | The slotted label element wrapper\n`helper-text`        | The slotted helper text element wrapper\n`error-message`      | The slotted error message element wrapper\n`required-indicator` | The `required` state indicator element\n\nThe following state attributes are available for styling:\n\nAttribute            | Description\n---------------------|-------------\n`active`             | Set when the checkbox is activated with mouse, touch or the keyboard.\n`checked`            | Set when the checkbox is checked.\n`disabled`           | Set when the checkbox is disabled.\n`readonly`           | Set when the checkbox is readonly.\n`focus-ring`         | Set when the checkbox is focused using the keyboard.\n`focused`            | Set when the checkbox is focused.\n`indeterminate`      | Set when the checkbox is in the indeterminate state.\n`invalid`            | Set when the checkbox is invalid.\n`has-label`          | Set when the checkbox has a label.\n`has-helper`         | Set when the checkbox has helper text.\n`has-error-message`  | Set when the checkbox has an error message.\n`has-tooltip`        | Set when the checkbox has a slotted tooltip.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                      |\n:----------------------------------------|\n| `--vaadin-checkbox-background`         |\n| `--vaadin-checkbox-border-color`       |\n| `--vaadin-checkbox-border-radius`      |\n| `--vaadin-checkbox-border-width`       |\n| `--vaadin-checkbox-gap`                |\n| `--vaadin-checkbox-label-color`        |\n| `--vaadin-checkbox-label-font-size`    |\n| `--vaadin-checkbox-label-font-weight`  |\n| `--vaadin-checkbox-label-line-height`  |\n| `--vaadin-checkbox-marker-color`       |\n| `--vaadin-checkbox-marker-size`        |\n| `--vaadin-checkbox-size`               |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "accessible-name",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "accessible-name-ref",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "checked",
+              "description": "True if the element is checked.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "helper-text",
+              "description": "String used for the helper text.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "indeterminate",
+              "description": "True if the checkbox is in the indeterminate state which means\nit is not possible to say whether it is checked or unchecked.\nThe state is reset once the user switches the checkbox by hand.\n\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "manual-validation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "name",
+              "description": "The name of the checkbox.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "readonly",
+              "description": "When true, the user cannot modify the value of the checkbox.\nThe difference between `disabled` and `readonly` is that the\nread-only checkbox remains focusable, is announced by screen\nreaders and its value can be submitted as part of the form.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "value",
+              "description": "The value of the field.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "accessibleName",
+                "description": "String used to label the component to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "accessibleNameRef",
+                "description": "Id of the element used as label of the component to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autofocus",
+                "description": "Specify that this control should have input focus when the page loads.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "checked",
+                "description": "True if the element is checked.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "errorMessage",
+                "description": "Error to show when the field is invalid.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "helperText",
+                "description": "String used for the helper text.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "indeterminate",
+                "description": "True if the checkbox is in the indeterminate state which means\nit is not possible to say whether it is checked or unchecked.\nThe state is reset once the user switches the checkbox by hand.\n\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "invalid",
+                "description": "Set to true when the field is invalid.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "label",
+                "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "manualValidation",
+                "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "name",
+                "description": "The name of the checkbox.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "readonly",
+                "description": "When true, the user cannot modify the value of the checkbox.\nThe difference between `disabled` and `readonly` is that the\nread-only checkbox remains focusable, is announced by screen\nreaders and its value can be submitted as part of the form.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "required",
+                "description": "Specifies that the user must fill in a value.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "value",
+                "description": "The value of the field.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "change",
+                "description": "Fired when the checkbox is checked or unchecked by the user."
+              },
+              {
+                "name": "checked-changed",
+                "description": "Fired when the `checked` property changes."
+              },
+              {
+                "name": "indeterminate-changed",
+                "description": "Fired when the `indeterminate` property changes."
+              },
+              {
+                "name": "invalid-changed",
+                "description": "Fired when the `invalid` property changes."
+              },
+              {
+                "name": "validated",
+                "description": "Fired whenever the field is validated."
+              },
+              {
+                "name": "value-changed",
+                "description": "Fired when the `value` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

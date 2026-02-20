@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/context-menu",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-context-menu",
+          "description": "`<vaadin-context-menu>` is a Web Component for creating context menus.\n\n### Items\n\nItems is a higher level convenience API for defining a (hierarchical) menu structure for the component.\nIf a menu item has a non-empty `children` set, a sub-menu with the child items is opened\nnext to the parent menu on mouseover, tap or a right arrow keypress.\n\nWhen an item is selected, `<vaadin-context-menu>` dispatches an \"item-selected\" event\nwith the selected item as `event.detail.value` property.\nIf item does not have `keepOpen` property the menu will be closed.\n\n```javascript\ncontextMenu.items = [\n  { text: 'Menu Item 1', theme: 'primary', className: 'first', children:\n    [\n      { text: 'Menu Item 1-1', checked: true, keepOpen: true },\n      { text: 'Menu Item 1-2' }\n    ]\n  },\n  { component: 'hr' },\n  { text: 'Menu Item 2', children:\n    [\n      { text: 'Menu Item 2-1' },\n      { text: 'Menu Item 2-2', disabled: true }\n    ]\n  },\n  { text: 'Menu Item 3', disabled: true, className: 'last' }\n];\n\ncontextMenu.addEventListener('item-selected', e => {\n  const item = e.detail.value;\n  console.log(`${item.text} selected`);\n});\n```\n\n**NOTE:** when the `items` array is defined, the renderer cannot be used.\n\n### Rendering\n\nThe content of the menu can be populated by using the renderer callback function.\n\nThe renderer function provides `root`, `contextMenu`, `model` arguments when applicable.\nGenerate DOM content by using `model` object properties if needed, append it to the `root`\nelement and control the state of the host element by accessing `contextMenu`. Before generating\nnew content, the renderer function should check if there is already content in `root` for reusing it.\n\n```html\n<vaadin-context-menu id=\"contextMenu\">\n <p>This paragraph has a context menu.</p>\n</vaadin-context-menu>\n```\n```js\nconst contextMenu = document.querySelector('#contextMenu');\ncontextMenu.renderer = (root, contextMenu, context) => {\n  let listBox = root.firstElementChild;\n  if (!listBox) {\n    listBox = document.createElement('vaadin-list-box');\n    root.appendChild(listBox);\n  }\n\n  let item = listBox.querySelector('vaadin-item');\n  if (!item) {\n    item = document.createElement('vaadin-item');\n    listBox.appendChild(item);\n  }\n  item.textContent = 'Content of the selector: ' + context.target.textContent;\n};\n```\n\nYou can access the menu context inside the renderer using\n`context.target` and `context.detail`.\n\nRenderer is called on the opening of the context-menu and each time the related context is updated.\nDOM generated during the renderer call can be reused\nin the next renderer call and will be provided with the `root` argument.\nOn first call it will be empty.\n\n### `vaadin-contextmenu` Gesture Event\n\n`vaadin-contextmenu` is a gesture event (a custom event),\nwhich is dispatched after either `contextmenu` or long touch events.\nThis enables support for both mouse and touch environments in a uniform way.\n\n`<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`\nevent by default.\n\n### Menu Listener\n\nBy default, the `<vaadin-context-menu>` element listens for the menu opening\nevent on itself. In case if you do not want to wrap the target, you can listen for\nevents on an element outside the `<vaadin-context-menu>` by setting the\n`listenOn` property:\n\n```html\n<vaadin-context-menu id=\"contextMenu\"></vaadin-context-menu>\n\n<div id=\"menuListener\">The element that listens for the contextmenu event.</div>\n```\n```javascript\nconst contextMenu = document.querySelector('#contextMenu');\ncontextMenu.listenOn = document.querySelector('#menuListener');\n```\n\n### Filtering Menu Targets\n\nBy default, the listener element and all its descendants open the context\nmenu. You can filter the menu targets to a smaller set of elements inside\nthe listener element by setting the `selector` property.\n\nIn the following example, only the elements matching `.has-menu` will open the context menu:\n\n```html\n<vaadin-context-menu selector=\".has-menu\">\n  <p class=\"has-menu\">This paragraph opens the context menu</p>\n  <p>This paragraph does not open the context menu</p>\n</vaadin-context-menu>\n```\n\n### Menu Context\n\nThe following properties are available in the `context` argument:\n\n- `target` is the menu opening event target, which is the element that\nthe user has called the context menu for\n- `detail` is the menu opening event detail\n\nIn the following example, the menu item text is composed with the contents\nof the element that opened the menu:\n\n```html\n<vaadin-context-menu selector=\"li\" id=\"contextMenu\">\n  <ul>\n    <li>Foo</li>\n    <li>Bar</li>\n    <li>Baz</li>\n  </ul>\n</vaadin-context-menu>\n```\n```js\nconst contextMenu = document.querySelector('#contextMenu');\ncontextMenu.renderer = (root, contextMenu, context) => {\n  let listBox = root.firstElementChild;\n  if (!listBox) {\n    listBox = document.createElement('vaadin-list-box');\n    root.appendChild(listBox);\n  }\n\n  let item = listBox.querySelector('vaadin-item');\n  if (!item) {\n    item = document.createElement('vaadin-item');\n    listBox.appendChild(item);\n  }\n  item.textContent = 'The menu target: ' + context.target.textContent;\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name        | Description\n-----------------|-------------------------------------------\n`backdrop`       | Backdrop of the overlay\n`overlay`        | The overlay container\n`content`        | The overlay content\n\n### Custom CSS Properties\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                   | Description\n--------------------------------------|-------------\n`--vaadin-context-menu-offset-top`    | Used as an offset when using `position` and the context menu is aligned vertically below the target\n`--vaadin-context-menu-offset-bottom` | Used as an offset when using `position` and the context menu is aligned vertically above the target\n`--vaadin-context-menu-offset-start`  | Used as an offset when using `position` and the context menu is aligned horizontally after the target\n`--vaadin-context-menu-offset-end`    | Used as an offset when using `position` and the context menu is aligned horizontally before the target\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Internal components\n\nWhen using `items` API the following internal components are themable:\n\n- `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-item).\n- `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-list-box).\n\nThe `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes\non top of the built-in `<vaadin-item>` state attributes:\n\nAttribute  | Description\n---------- |-------------\n`expanded` | Expanded parent item.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": ".closeOn",
+              "description": "Event name to listen for closing the context menu.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".items",
+              "description": "Defines a (hierarchical) menu structure for the component.\nIf a menu item has a non-empty `children` set, a sub-menu with the child items is opened\nnext to the parent menu on mouseover, tap or a right arrow keypress.\n\nThe items API can't be used together with a renderer!\n\n#### Example\n\n```javascript\ncontextMenu.items = [\n  { text: 'Menu Item 1', theme: 'primary', className: 'first', children:\n    [\n      { text: 'Menu Item 1-1', checked: true, keepOpen: true },\n      { text: 'Menu Item 1-2' }\n    ]\n  },\n  { component: 'hr' },\n  { text: 'Menu Item 2', children:\n    [\n      { text: 'Menu Item 2-1' },\n      { text: 'Menu Item 2-2', disabled: true }\n    ]\n  },\n  { text: 'Menu Item 3', disabled: true, className: 'last' }\n];\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".listenOn",
+              "description": "The target element that's listened to for context menu opening events.\nBy default the vaadin-context-menu listens to the target's `vaadin-contextmenu`\nevents.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".openOn",
+              "description": "Event name to listen for opening the context menu.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".position",
+              "description": "Position of the overlay with respect to the target.\nSupported values: null, `top-start`, `top`, `top-end`,\n`bottom-start`, `bottom`, `bottom-end`, `start-top`,\n`start`, `start-bottom`, `end-top`, `end`, `end-bottom`.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".renderer",
+              "description": "Custom function for rendering the content of the menu overlay.\nReceives three arguments:\n\n- `root` The root container DOM element. Append your content to it.\n- `contextMenu` The reference to the `<vaadin-context-menu>` element.\n- `context` The object with the menu context, contains:\n  - `context.target`  the target of the menu opening event,\n  - `context.detail` the menu opening event detail.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".selector",
+              "description": "CSS selector that can be used to target any child element\nof the context menu to listen for `openOn` events.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@closed",
+              "description": "Fired when the context menu is closed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@item-selected",
+              "description": "Fired when an item is selected when the context menu is populated using the `items` API.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@opened-changed",
+              "description": "Fired when the `opened` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

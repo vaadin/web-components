@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/popover",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-popover",
+          "description": "`<vaadin-popover>` is a Web Component for creating overlays\nthat are positioned next to specified DOM element (target).\n\nUnlike `<vaadin-tooltip>`, the popover supports rich content\nthat can be provided by using `renderer` function.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name        | Description\n-----------------|-------------------------------------------\n`backdrop`       | Backdrop of the overlay\n`overlay`        | The overlay container\n`content`        | The overlay content\n`arrow`          | Optional arrow pointing to the target when using `theme=\"arrow\"`\n\nThe following state attributes are available for styling:\n\nAttribute        | Description\n-----------------|----------------------------------------\n`position`       | Reflects the `position` property value.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                      |\n:----------------------------------------|\n|`--vaadin-overlay-backdrop-background`  |\n|`--vaadin-popover-arrow-border-radius`  |\n|`--vaadin-popover-arrow-inset`          |\n|`--vaadin-popover-arrow-size`           |\n|`--vaadin-popover-background`           |\n|`--vaadin-popover-border-color`         |\n|`--vaadin-popover-border-radius`        |\n|`--vaadin-popover-border-width`         |\n|`--vaadin-popover-offset-bottom`        |\n|`--vaadin-popover-offset-end`           |\n|`--vaadin-popover-offset-start`         |\n|`--vaadin-popover-offset-top`           |\n|`--vaadin-popover-padding`              |\n|`--vaadin-popover-shadow`               |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "accessible-name",
+              "description": "String used to label the popover to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "accessible-name-ref",
+              "description": "Id of the element used as label of the popover to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "autofocus",
+              "description": "When true, the popover content automatically receives focus after\nit is opened. Modal popovers use this behavior by default.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "focus-delay",
+              "description": "The delay in milliseconds before the popover is opened\non focus when the corresponding trigger is used.\n\nWhen not specified, the global default (500ms) is used.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "for",
+              "description": "The id of the element to be used as `target` value.\nThe element should be in the DOM by the time when\nthe attribute is set, otherwise a warning is shown.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "height",
+              "description": "Set the height of the popover.\nIf a unitless number is provided, pixels are assumed.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hide-delay",
+              "description": "The delay in milliseconds before the popover is closed\non losing hover, when the corresponding trigger is used.\nOn blur, the popover is closed immediately.\n\nWhen not specified, the global default (500ms) is used.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hover-delay",
+              "description": "The delay in milliseconds before the popover is opened\non hover when the corresponding trigger is used.\n\nWhen not specified, the global default (500ms) is used.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "modal",
+              "description": "When true, the popover prevents interacting with background elements\nby setting `pointer-events` style on the document body to `none`.\nThis also enables trapping focus inside the popover.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "no-close-on-esc",
+              "description": "Set to true to disable closing popover on Escape press.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "no-close-on-outside-click",
+              "description": "Set to true to disable closing popover on outside click.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "True if the popover is visible and available for interaction.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "overlay-role",
+              "description": "The `role` attribute value to be set on the popover.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "position",
+              "description": "Position of the overlay with respect to the target.\nSupported values: `top-start`, `top`, `top-end`,\n`bottom-start`, `bottom`, `bottom-end`, `start-top`,\n`start`, `start-bottom`, `end-top`, `end`, `end-bottom`.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "role",
+              "description": "The `role` attribute value to be set on the popover.\nWhen not specified, defaults to 'dialog'.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Set the width of the popover.\nIf a unitless number is provided, pixels are assumed.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "with-backdrop",
+              "description": "When true, the popover has a backdrop (modality curtain) on top of the\nunderlying page content, covering the whole viewport.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "accessibleName",
+                "description": "String used to label the popover to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "accessibleNameRef",
+                "description": "Id of the element used as label of the popover to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autofocus",
+                "description": "When true, the popover content automatically receives focus after\nit is opened. Modal popovers use this behavior by default.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "focusDelay",
+                "description": "The delay in milliseconds before the popover is opened\non focus when the corresponding trigger is used.\n\nWhen not specified, the global default (500ms) is used.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "for",
+                "description": "The id of the element to be used as `target` value.\nThe element should be in the DOM by the time when\nthe attribute is set, otherwise a warning is shown.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "height",
+                "description": "Set the height of the popover.\nIf a unitless number is provided, pixels are assumed.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hideDelay",
+                "description": "The delay in milliseconds before the popover is closed\non losing hover, when the corresponding trigger is used.\nOn blur, the popover is closed immediately.\n\nWhen not specified, the global default (500ms) is used.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hoverDelay",
+                "description": "The delay in milliseconds before the popover is opened\non hover when the corresponding trigger is used.\n\nWhen not specified, the global default (500ms) is used.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "modal",
+                "description": "When true, the popover prevents interacting with background elements\nby setting `pointer-events` style on the document body to `none`.\nThis also enables trapping focus inside the popover.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noCloseOnEsc",
+                "description": "Set to true to disable closing popover on Escape press.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noCloseOnOutsideClick",
+                "description": "Set to true to disable closing popover on outside click.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "True if the popover is visible and available for interaction.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "overlayRole",
+                "description": "The `role` attribute value to be set on the popover.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "position",
+                "description": "Position of the overlay with respect to the target.\nSupported values: `top-start`, `top`, `top-end`,\n`bottom-start`, `bottom`, `bottom-end`, `start-top`,\n`start`, `start-bottom`, `end-top`, `end`, `end-bottom`.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the content of the popover.\nReceives two arguments:\n\n- `root` The root container DOM element. Append your content to it.\n- `popover` The reference to the `vaadin-popover` element.",
+                "value": {
+                  "type": [
+                    "Object",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "role",
+                "description": "The `role` attribute value to be set on the popover.\nWhen not specified, defaults to 'dialog'.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "target",
+                "description": "Reference to the DOM element used both to trigger the overlay\nby user interaction and to visually position it on the screen.\n\nDefaults to an element referenced with `for` attribute, in\nwhich case it must be located in the same shadow scope.",
+                "value": {
+                  "type": [
+                    "Object",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "trigger",
+                "description": "Popover trigger mode, used to configure how the popover is opened or closed.\nCould be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.\n\nSupported values:\n- `click` (default) - opens and closes on target click.\n- `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse\nto the popover content keeps the popover opened.\n- `focus` - opens on target focus, closes on target blur. Moving focus to the\npopover content keeps the popover opened.\n\nIn addition to the behavior specified by `trigger`, the popover can be closed by:\n- pressing Escape key (unless `noCloseOnEsc` property is true)\n- outside click (unless `noCloseOnOutsideClick` property is true)\n\nWhen setting `trigger` property to `null`, `undefined` or empty array, the popover\ncan be only opened programmatically by changing `opened` property. Note, closing\non Escape press or outside click is still allowed unless explicitly disabled.",
+                "value": {
+                  "type": [
+                    "Array",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Set the width of the popover.\nIf a unitless number is provided, pixels are assumed.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "withBackdrop",
+                "description": "When true, the popover has a backdrop (modality curtain) on top of the\nunderlying page content, covering the whole viewport.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "closed",
+                "description": "Fired when the popover is closed."
+              },
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

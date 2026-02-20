@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/tabs",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-tab",
+          "description": "`<vaadin-tab>` is a Web Component providing an accessible and customizable tab.\n\n```html\n<vaadin-tab>Tab 1</vaadin-tab>\n```\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|---------------------------------\n`disabled`     | Set when the element is disabled\n`focused`      | Set when the element is focused\n`focus-ring`   | Set when the element is keyboard focused\n`selected`     | Set when the tab is selected\n`active`       | Set when mousedown or enter/spacebar pressed\n`orientation`  | Set to `horizontal` or `vertical` depending on the direction of items\n`has-tooltip`  | Set when the tab has a slotted tooltip\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property            |\n:------------------------------|\n| `--vaadin-tab-background`    |\n| `--vaadin-tab-border-color`  |\n| `--vaadin-tab-border-width`  |\n| `--vaadin-tab-font-size`     |\n| `--vaadin-tab-font-weight`   |\n| `--vaadin-tab-gap`           |\n| `--vaadin-tab-padding`       |\n| `--vaadin-tab-text-color`    |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "selected",
+              "description": "If true, the item is in selected state.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selected",
+                "description": "If true, the item is in selected state.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "value",
+                "description": "",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-tabs",
+          "description": "`<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.\n\n```html\n<vaadin-tabs selected=\"4\">\n  <vaadin-tab>Page 1</vaadin-tab>\n  <vaadin-tab>Page 2</vaadin-tab>\n  <vaadin-tab>Page 3</vaadin-tab>\n  <vaadin-tab>Page 4</vaadin-tab>\n</vaadin-tabs>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|--------------------------------------\n`back-button`     | Button for moving the scroll back\n`tabs`            | The tabs container\n`forward-button`  | Button for moving the scroll forward\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|--------------------------------------\n`orientation`  | Tabs disposition, valid values are `horizontal` and `vertical`\n`overflow`     | It's set to `start`, `end`, none or both.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property              |\n:--------------------------------|\n| `--vaadin-tabs-background`     |\n| `--vaadin-tabs-border-color`   |\n| `--vaadin-tabs-border-radius`  |\n| `--vaadin-tabs-border-width`   |\n| `--vaadin-tabs-font-size`      |\n| `--vaadin-tabs-font-weight`    |\n| `--vaadin-tabs-gap`            |\n| `--vaadin-tabs-padding`        |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.\nWhen the element is disabled, the selected item is\nnot updated when `selected` property is changed.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "orientation",
+              "description": "Set tabs disposition. Possible values are `horizontal|vertical`",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "selected",
+              "description": "The index of the selected tab.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.\nWhen the element is disabled, the selected item is\nnot updated when `selected` property is changed.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "orientation",
+                "description": "Set tabs disposition. Possible values are `horizontal|vertical`",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selected",
+                "description": "The index of the selected tab.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "items-changed",
+                "description": "Fired when the `items` property changes."
+              },
+              {
+                "name": "selected-changed",
+                "description": "Fired when the selection is changed.\nNot fired when used in `multiple` selection mode."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

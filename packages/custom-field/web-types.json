@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/custom-field",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-custom-field",
+          "description": "`<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.\n\n```html\n<vaadin-custom-field label=\"Appointment time\">\n  <vaadin-date-picker></vaadin-date-picker>\n  <vaadin-time-picker></vaadin-time-picker>\n</vaadin-custom-field>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|----------------\n`label`              | The slotted label element wrapper\n`helper-text`        | The slotted helper text element wrapper\n`error-message`      | The slotted error message element wrapper\n`required-indicator` | The `required` state indicator element\n`input-fields`       | The slotted input elements wrapper\n\nThe following state attributes are available for styling:\n\nAttribute           | Description\n--------------------|--------------------------------\n`invalid`           | Set when the element is invalid\n`focused`           | Set when the element is focused\n`has-label`         | Set when the element has a label\n`has-value`         | Set when the element has a value\n`has-helper`        | Set when the element has helper text\n`has-error-message` | Set when the element has an error message\n`has-tooltip`       | Set when the element has a slotted tooltip\n\nYou may also manually set `disabled` or `readonly` attribute on this component to make the label\npart look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                                |\n:--------------------------------------------------|\n| `--vaadin-input-field-error-color`               |\n| `--vaadin-input-field-error-font-size`           |\n| `--vaadin-input-field-error-font-weight`         |\n| `--vaadin-input-field-error-line-height`         |\n| `--vaadin-input-field-label-color`               |\n| `--vaadin-input-field-label-font-size`           |\n| `--vaadin-input-field-label-font-weight`         |\n| `--vaadin-input-field-label-line-height`         |\n| `--vaadin-input-field-helper-color`              |\n| `--vaadin-input-field-helper-font-size`          |\n| `--vaadin-input-field-helper-font-weight`        |\n| `--vaadin-input-field-helper-line-height`        |\n| `--vaadin-input-field-required-indicator-color`  |\n| `--vaadin-input-field-required-indicator`        |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "accessible-name",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "accessible-name-ref",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "helper-text",
+              "description": "String used for the helper text.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "manual-validation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "name",
+              "description": "The name of the control, which is submitted with the form data.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "value",
+              "description": "The value of the field. When wrapping several inputs, it will contain `\\t`\n(Tab character) as a delimiter indicating parts intended to be used as the\ncorresponding inputs values.\nUse the [`formatValue`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-custom-field#property-formatValue)\nand [`parseValue`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-custom-field#property-parseValue)\nproperties to customize this behavior.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "accessibleName",
+                "description": "String used to label the component to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "accessibleNameRef",
+                "description": "Id of the element used as label of the component to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "errorMessage",
+                "description": "Error to show when the field is invalid.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "formatValue",
+                "description": "A function to format the values of the individual fields contained by\nthe custom field into a single component value. The function receives\nan array of all values of the individual fields in the order of their\npresence in the DOM, and must return a single component value.\nThis function is called each time a value of an internal field is\nchanged.\n\nExample:\n```js\ncustomField.formatValue = (fieldValues) => {\n  return fieldValues.join(\"-\");\n}\n```",
+                "value": {
+                  "type": [
+                    "CustomFieldFormatValueFn",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "helperText",
+                "description": "String used for the helper text.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "invalid",
+                "description": "Set to true when the field is invalid.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "label",
+                "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "manualValidation",
+                "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "name",
+                "description": "The name of the control, which is submitted with the form data.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "parseValue",
+                "description": "A function to parse the component value into values for the individual\nfields contained by the custom field. The function receives the\ncomponent value, and must return an array of values for the individual\nfields in the order of their presence in the DOM.\nThe function is called each time the value of the component changes.\n\nExample:\n```js\ncustomField.parseValue = (componentValue) => {\n  return componentValue.split(\"-\");\n}\n```",
+                "value": {
+                  "type": [
+                    "CustomFieldParseValueFn",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "required",
+                "description": "Specifies that the user must fill in a value.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "value",
+                "description": "The value of the field. When wrapping several inputs, it will contain `\\t`\n(Tab character) as a delimiter indicating parts intended to be used as the\ncorresponding inputs values.\nUse the [`formatValue`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-custom-field#property-formatValue)\nand [`parseValue`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-custom-field#property-parseValue)\nproperties to customize this behavior.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "change",
+                "description": "Fired when the user commits a value change for any of the internal inputs."
+              },
+              {
+                "name": "invalid-changed",
+                "description": "Fired when the `invalid` property changes."
+              },
+              {
+                "name": "validated",
+                "description": "Fired whenever the field is validated."
+              },
+              {
+                "name": "value-changed",
+                "description": "Fired when the `value` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

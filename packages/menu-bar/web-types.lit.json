@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/menu-bar",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-menu-bar",
+          "description": "`<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering\nthe user quick access to a consistent set of commands. Each button can toggle a submenu with\nsupport for additional levels of nested menus.\n\nTo create the menu bar, first add the component to the page:\n\n```html\n<vaadin-menu-bar></vaadin-menu-bar>\n```\n\nAnd then use [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-menu-bar#property-items) property to initialize the structure:\n\n```js\ndocument.querySelector('vaadin-menu-bar').items = [{text: 'File'}, {text: 'Edit'}];\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name         | Description\n------------------|----------------\n`container`       | The container wrapping menu bar buttons.\n\nThe following state attributes are available for styling:\n\nAttribute           | Description\n--------------------|----------------------------------\n`disabled`          | Set when the menu bar is disabled\n`has-single-button` | Set when there is only one button visible\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Internal components\n\nIn addition to `<vaadin-menu-bar>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-button).\n- `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-item).\n- `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-list-box).\n- `<vaadin-menu-bar-submenu>` - has the same API as [`<vaadin-context-menu>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-context-menu).\n\nThe `<vaadin-menu-bar-item>` sub-menu elements have the following additional state attributes\non top of the built-in `<vaadin-item>` state attributes:\n\nAttribute  | Description\n---------- |-------------\n`expanded` | Expanded parent item.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?openOnHover",
+              "description": "If true, the submenu will open on hover (mouseover) instead of click.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?reverseCollapse",
+              "description": "If true, the buttons will be collapsed into the overflow menu\nstarting from the \"start\" end of the bar instead of the \"end\".",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?tabNavigation",
+              "description": "If true, the top-level menu items is traversable by tab\ninstead of arrow keys (i.e. disabling roving tabindex)",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n```js\n{\n  moreOptions: 'More options'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".items",
+              "description": "Defines a hierarchical structure, where root level items represent menu bar buttons,\nand `children` property configures a submenu with items to be opened below\nthe button on click, Enter, Space, Up and Down arrow keys.\n\n#### Example\n\n```js\nmenubar.items = [\n  {\n    text: 'File',\n    className: 'file',\n    children: [\n      {text: 'Open', className: 'file open'}\n      {text: 'Auto Save', checked: true},\n    ]\n  },\n  {component: 'hr'},\n  {\n    text: 'Edit',\n    children: [\n      {text: 'Undo', disabled: true},\n      {text: 'Redo'}\n    ]\n  },\n  {text: 'Help'}\n];\n```\n\n#### Disabled buttons\n\nWhen disabled, menu bar buttons (root-level items) are rendered\nas \"dimmed\" and prevent all user interactions (mouse and keyboard).\n\nSince disabled buttons are not focusable and cannot react to hover\nevents by default, it can cause accessibility issues by making them\nentirely invisible to assistive technologies, and prevents the use\nof Tooltips to explain why the action is not available. This can be\naddressed by enabling the feature flag `accessibleDisabledButtons`,\nwhich makes disabled buttons focusable and hoverable, while still\npreventing them from being triggered:\n\n```js\n// Set before any menu bar is attached to the DOM.\nwindow.Vaadin.featureFlags.accessibleDisabledButtons = true;\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@item-selected",
+              "description": "Fired when either a submenu item or menu bar button without nested children is clicked.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,845 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/multi-select-combo-box",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-multi-select-combo-box",
+          "description": "`<vaadin-multi-select-combo-box>` is a web component that wraps `<vaadin-combo-box>` and extends\nits functionality to allow selecting multiple items, in addition to basic features.\n\n```html\n<vaadin-multi-select-combo-box id=\"comboBox\"></vaadin-multi-select-combo-box>\n```\n```js\nconst comboBox = document.querySelector('#comboBox');\ncomboBox.items = ['apple', 'banana', 'lemon', 'orange'];\ncomboBox.selectedItems = ['lemon', 'orange'];\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name              | Description\n-----------------------|----------------\n`chips`                | The element that wraps slotted chips for selected items\n`label`                | The label element\n`input-field`          | The element that wraps prefix, value and suffix\n`field-button`         | Set on both clear and toggle buttons\n`clear-button`         | The clear button\n`error-message`        | The error message element\n`helper-text`          | The helper text element wrapper\n`required-indicator`   | The `required` state indicator element\n`toggle-button`        | The toggle button\n`overlay`              | The overlay container\n`content`              | The overlay content\n`loader`               | The loading indicator shown while loading items\n\nThe following state attributes are available for styling:\n\nAttribute              | Description\n-----------------------|-----------------\n`disabled`             | Set to a disabled element\n`has-value`            | Set when the element has a value\n`has-label`            | Set when the element has a label\n`has-helper`           | Set when the element has helper text or slot\n`has-error-message`    | Set when the element has an error message\n`has-tooltip`          | Set when the element has a slotted tooltip\n`invalid`              | Set when the element is invalid\n`focused`              | Set when the element is focused\n`focus-ring`           | Set when the element is keyboard focused\n`loading`              | Set when loading items from the data provider\n`opened`               | Set when the dropdown is open\n`readonly`             | Set to a readonly element\n\nThe following custom CSS properties are available for styling:\n\nCustom property                                      | Description                | Default\n-----------------------------------------------------|----------------------------|--------\n`--vaadin-field-default-width`                       | Default width of the field | `12em`\n`--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`\n`--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`\n`--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`\n\n### Internal components\n\nIn addition to `<vaadin-multi-select-combo-box>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-multi-select-combo-box-chip>`\n- `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "accessible-name",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "accessible-name-ref",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "allow-custom-value",
+              "description": "When true, the user can input a value that is not present in the items list.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "allowed-char-pattern",
+              "description": "A pattern matched against individual characters the user inputs.\n\nWhen set, the field will prevent:\n- `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`\n- `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`\n- `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`\n\nFor example, to allow entering only numbers and minus signs, use:\n`allowedCharPattern = \"[\\\\d-]\"`",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "auto-expand-horizontally",
+              "description": "Set to true to auto expand horizontally, causing input field to\ngrow until max width is reached.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "auto-expand-vertically",
+              "description": "Set to true to not collapse selected items chips into the overflow\nchip and instead always expand vertically, causing input field to\nwrap into multiple lines when width is limited.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "auto-open-disabled",
+              "description": "Set true to prevent the overlay from opening automatically.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "autoselect",
+              "description": "If true, the input text gets fully selected when the field is focused using click or touch / tap.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "clear-button-visible",
+              "description": "Set to true to display the clear icon which clears the input.\n\nIt is up to the component to choose where to place the clear icon:\nin the Shadow DOM or in the light DOM. In any way, a reference to\nthe clear icon element should be provided via the `clearElement` getter.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "filter",
+              "description": "Filtering string the user has typed into the input field.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "helper-text",
+              "description": "String used for the helper text.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "item-id-path",
+              "description": "Path for the id of the item, used to detect whether the item is selected.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "item-label-path",
+              "description": "Path for label of the item. If `items` is an array of objects, the\n`itemLabelPath` is used to fetch the displayed string label for each\nitem.\n\nThe item label is also used for matching items when processing user\ninput, i.e., for filtering and selecting items.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "item-value-path",
+              "description": "Path for the value of the item. If `items` is an array of objects, the\n`itemValuePath:` is used to fetch the string value for the selected\nitem.\n\nThe item value is used in the `value` property of the combo box,\nto provide the form value.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "keep-filter",
+              "description": "When true, filter string isn't cleared after selecting an item.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "loading",
+              "description": "True when loading items from the data provider, false otherwise.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "manual-validation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "name",
+              "description": "The name of this field.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "True if the dropdown is open, false otherwise.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "page-size",
+              "description": "Number of items fetched at a time from the dataprovider.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "placeholder",
+              "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be only displayed in the case when\nthere is no item selected.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "readonly",
+              "description": "When present, it specifies that the field is read-only.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "selected-items-on-top",
+              "description": "Set to true to group selected items at the top of the overlay.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "size",
+              "description": "Total number of items.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "title",
+              "description": "The text usually displayed in a tooltip popup when the mouse is over the field.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "value",
+              "description": "The value of the field.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "accessibleName",
+                "description": "String used to label the component to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "accessibleNameRef",
+                "description": "Id of the element used as label of the component to screen reader users.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "allowCustomValue",
+                "description": "When true, the user can input a value that is not present in the items list.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "allowedCharPattern",
+                "description": "A pattern matched against individual characters the user inputs.\n\nWhen set, the field will prevent:\n- `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`\n- `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`\n- `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`\n\nFor example, to allow entering only numbers and minus signs, use:\n`allowedCharPattern = \"[\\\\d-]\"`",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autoExpandHorizontally",
+                "description": "Set to true to auto expand horizontally, causing input field to\ngrow until max width is reached.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autoExpandVertically",
+                "description": "Set to true to not collapse selected items chips into the overflow\nchip and instead always expand vertically, causing input field to\nwrap into multiple lines when width is limited.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autofocus",
+                "description": "Specify that this control should have input focus when the page loads.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autoOpenDisabled",
+                "description": "Set true to prevent the overlay from opening automatically.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autoselect",
+                "description": "If true, the input text gets fully selected when the field is focused using click or touch / tap.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "clearButtonVisible",
+                "description": "Set to true to display the clear icon which clears the input.\n\nIt is up to the component to choose where to place the clear icon:\nin the Shadow DOM or in the light DOM. In any way, a reference to\nthe clear icon element should be provided via the `clearElement` getter.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "dataProvider",
+                "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filter` Currently applied filter\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items.",
+                "value": {
+                  "type": [
+                    "ComboBoxDataProvider",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "errorMessage",
+                "description": "Error to show when the field is invalid.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "filter",
+                "description": "Filtering string the user has typed into the input field.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "filteredItems",
+                "description": "A subset of items, filtered based on the user input. Filtered items\ncan be assigned directly to omit the internal filtering functionality.\nThe items can be of either `String` or `Object` type.",
+                "value": {
+                  "type": [
+                    "Array.<ComboBoxItem",
+                    "string>",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "helperText",
+                "description": "String used for the helper text.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "i18n",
+                "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n```js\n{\n  // Screen reader announcement on clear button click.\n  cleared: 'Selection cleared',\n  // Screen reader announcement when a chip is focused.\n  focused: ' focused. Press Backspace to remove',\n  // Screen reader announcement when item is selected.\n  selected: 'added to selection',\n  // Screen reader announcement when item is deselected.\n  deselected: 'removed from selection',\n  // Screen reader announcement of the selected items count.\n  // {count} is replaced with the actual count of items.\n  total: '{count} items selected',\n}\n```",
+                "value": {
+                  "type": [
+                    "?"
+                  ]
+                }
+              },
+              {
+                "name": "invalid",
+                "description": "Set to true when the field is invalid.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemClassNameGenerator",
+                "description": "A function used to generate CSS class names for dropdown\nitems and selected chips based on the item. The return\nvalue should be the generated class name as a string, or\nmultiple class names separated by whitespace characters.",
+                "value": {
+                  "type": [
+                    "Object",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemIdPath",
+                "description": "Path for the id of the item, used to detect whether the item is selected.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemLabelGenerator",
+                "description": "A function that is used to generate the label for dropdown\nitems based on the item. Receives one argument:\n- `item` The item to generate the label for.",
+                "value": {
+                  "type": [
+                    "Object",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemLabelPath",
+                "description": "Path for label of the item. If `items` is an array of objects, the\n`itemLabelPath` is used to fetch the displayed string label for each\nitem.\n\nThe item label is also used for matching items when processing user\ninput, i.e., for filtering and selecting items.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "items",
+                "description": "A full set of items to filter the visible options from.\nThe items can be of either `String` or `Object` type.",
+                "value": {
+                  "type": [
+                    "Array.<ComboBoxItem",
+                    "string>",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "itemValuePath",
+                "description": "Path for the value of the item. If `items` is an array of objects, the\n`itemValuePath:` is used to fetch the string value for the selected\nitem.\n\nThe item value is used in the `value` property of the combo box,\nto provide the form value.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "keepFilter",
+                "description": "When true, filter string isn't cleared after selecting an item.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "label",
+                "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "loading",
+                "description": "True when loading items from the data provider, false otherwise.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "manualValidation",
+                "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "name",
+                "description": "The name of this field.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "True if the dropdown is open, false otherwise.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "pageSize",
+                "description": "Number of items fetched at a time from the dataprovider.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "placeholder",
+                "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be only displayed in the case when\nthere is no item selected.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "readonly",
+                "description": "When present, it specifies that the field is read-only.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the content of every item.\nReceives three arguments:\n\n- `root` The `<vaadin-multi-select-combo-box-item>` internal container DOM element.\n- `comboBox` The reference to the `<vaadin-multi-select-combo-box>` element.\n- `model` The object with the properties related with the rendered\n  item, contains:\n  - `model.index` The index of the rendered item.\n  - `model.item` The item.",
+                "value": {
+                  "type": [
+                    "Function",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "required",
+                "description": "Specifies that the user must fill in a value.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selectedItems",
+                "description": "The list of selected items.\nNote: modifying the selected items creates a new array each time.",
+                "value": {
+                  "type": [
+                    "Array",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selectedItemsOnTop",
+                "description": "Set to true to group selected items at the top of the overlay.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "size",
+                "description": "Total number of items.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "title",
+                "description": "The text usually displayed in a tooltip popup when the mouse is over the field.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "change",
+                "description": "Fired when the user commits a value change."
+              },
+              {
+                "name": "custom-value-set",
+                "description": "Fired when the user sets a custom value."
+              },
+              {
+                "name": "filter-changed",
+                "description": "Fired when the `filter` property changes."
+              },
+              {
+                "name": "input",
+                "description": "Fired when the value is changed by the user: on every typing keystroke,\nand the value is cleared using the clear button."
+              },
+              {
+                "name": "invalid-changed",
+                "description": "Fired when the `invalid` property changes."
+              },
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              },
+              {
+                "name": "selected-items-changed",
+                "description": "Fired when the `selectedItems` property changes."
+              },
+              {
+                "name": "validated",
+                "description": "Fired whenever the field is validated."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
