@@ -186,16 +186,51 @@ function readonlyPlugin() {
   };
 }
 
+/**
+ * CEM plugin that marks class declarations with `@private` or `@protected` JSDoc tags
+ * so they can be filtered out during the packageLinkPhase.
+ */
+function classPrivacyPlugin() {
+  return {
+    analyzePhase({ ts, node, moduleDoc }) {
+      if (!ts.isClassDeclaration(node) || !node.name) return;
+
+      const tag = (node.jsDoc || [])
+        .flatMap((doc) => doc.tags || [])
+        .find((t) => t.tagName?.text === 'private' || t.tagName?.text === 'protected');
+
+      if (!tag) return;
+
+      const decl = moduleDoc.declarations?.find((d) => d.name === node.name.text);
+      if (decl) {
+        decl.privacy = tag.tagName.text;
+      }
+    },
+  };
+}
+
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
   litelement: true,
   plugins: [
+    classPrivacyPlugin(),
     mixesPlugin(),
     readonlyPlugin(),
     {
       packageLinkPhase({ customElementsManifest }) {
         for (const definition of customElementsManifest.modules) {
+          // Filter out class declarations marked as @private or @protected
+          const privateClassNames = new Set(
+            (definition.declarations || [])
+              .filter((d) => d.privacy === 'private' || d.privacy === 'protected')
+              .map((d) => d.name),
+          );
+          if (privateClassNames.size > 0) {
+            definition.declarations = definition.declarations.filter((d) => !privateClassNames.has(d.name));
+            definition.exports = (definition.exports || []).filter((e) => !privateClassNames.has(e.declaration?.name));
+          }
+
           for (const declaration of definition.declarations) {
             // Filter out private and protected API and internal static getters.
             // Transform field members' attribute property from camelCase to dash-case.
@@ -241,6 +276,11 @@ export default {
             }
           }
         }
+
+        // Remove modules with empty declarations and exports
+        customElementsManifest.modules = customElementsManifest.modules.filter(
+          (mod) => mod.declarations?.length || mod.exports?.length,
+        );
       },
     },
   ],
