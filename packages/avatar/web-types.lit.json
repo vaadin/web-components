@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/avatar",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-avatar",
+          "description": "`<vaadin-avatar>` is a Web Component providing avatar displaying functionality.\n\n```html\n<vaadin-avatar img=\"avatars/avatar-1.jpg\"></vaadin-avatar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n--------- | ---------------\n`abbr`    | The abbreviation element\n`icon`    | The icon element\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property            | Description\n-------------------------------|-------------\n`--vaadin-avatar-background`   | Background color of the avatar\n`--vaadin-avatar-border-color` | Border color of the avatar\n`--vaadin-avatar-border-width` | Border width of the avatar\n`--vaadin-avatar-font-size`    | Font size of the avatar\n`--vaadin-avatar-font-weight`  | Font weight of the avatar\n`--vaadin-avatar-size`         | Size of the avatar\n`--vaadin-avatar-text-color`   | Text color of the avatar\n\nThe following state attributes are available for styling:\n\nAttribute         | Description\n------------------|-------------\n`focus-ring`      | Set when the avatar is focused using the keyboard.\n`focused`         | Set when the avatar is focused.\n`has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.\n`has-tooltip`     | Set when the element has a slotted tooltip.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?withTooltip",
+              "description": "When true, the avatar has tooltip shown on hover and focus.\nThe tooltip text is based on the `name` and `abbr` properties.\nWhen neither is provided, `i18n.anonymous` is used instead.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n```js\n{\n  // Translation of the anonymous user avatar tooltip.\n  anonymous: 'anonymous'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".img",
+              "description": "The path to the image",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".abbr",
+              "description": "A shortened form of name that is displayed\nin the avatar when `img` is not provided.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".name",
+              "description": "Full name of the user\nused for the tooltip of the avatar.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".colorIndex",
+              "description": "Color index used for avatar background.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/badge",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-badge",
+          "description": "`<vaadin-badge>` is a Web Component for displaying badges.\n\n```html\n<vaadin-badge>New</vaadin-badge>\n```\n\n### Slots\n\nName     | Description\n---------|-------------\n(none)   | Default slot for the badge text content\n`icon`   | Slot for an icon to place before the text\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|-------------\n`icon`     | The container for the icon slot\n`number`   | The container for the number value\n`content`  | The container for the default slot\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`has-icon`     | Set when the badge has content in the icon slot\n`has-content`  | Set when the badge has content in the default slot\n`has-number`   | Set when the badge has a number value\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property              |\n:--------------------------------|\n`--vaadin-badge-background`      |\n`--vaadin-badge-border-radius`   |\n`--vaadin-badge-font-size`       |\n`--vaadin-badge-font-weight`     |\n`--vaadin-badge-font-family`     |\n`--vaadin-badge-gap`             |\n`--vaadin-badge-line-height`     |\n`--vaadin-badge-min-width`       |\n`--vaadin-badge-padding`         |\n`--vaadin-badge-text-color`      |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": ".number",
+              "description": "The number to display in the badge.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

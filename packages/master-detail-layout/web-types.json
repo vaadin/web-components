@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/master-detail-layout",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-master-detail-layout",
+          "description": "`<vaadin-master-detail-layout>` is a web component for building UIs with a master\n(or primary) area and a detail (or secondary) area that is displayed next to, or\noverlaid on top of, the master area, depending on configuration and viewport size.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name      | Description\n---------------|----------------------\n`backdrop`     | Backdrop covering the master area in the drawer mode\n`master`       | The master area\n`detail`       | The detail area\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------| -----------\n`containment`  | Set to `layout` or `viewport` depending on the containment.\n`orientation`  | Set to `horizontal` or `vertical` depending on the orientation.\n`has-detail`   | Set when the detail content is provided.\n`drawer`       | Set when the layout is using the drawer mode.\n`stack`        | Set when the layout is using the stack mode.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                                  |\n:----------------------------------------------------|\n| `--vaadin-master-detail-layout-border-color`       |\n| `--vaadin-master-detail-layout-border-width`       |\n| `--vaadin-master-detail-layout-detail-background`  |\n| `--vaadin-master-detail-layout-detail-shadow`      |\n| `--vaadin-overlay-backdrop-background`             |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "detail-size",
+              "description": "Fixed size (in CSS length units) to be set on the detail area.\nWhen specified, it prevents the detail area from growing or\nshrinking. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "detail-min-size",
+              "description": "Minimum size (in CSS length units) to be set on the detail area.\nWhen specified, it prevents the detail area from shrinking below\nthis size. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "master-size",
+              "description": "Fixed size (in CSS length units) to be set on the master area.\nWhen specified, it prevents the master area from growing or\nshrinking. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "master-min-size",
+              "description": "Minimum size (in CSS length units) to be set on the master area.\nWhen specified, it prevents the master area from shrinking below\nthis size. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "orientation",
+              "description": "Define how master and detail areas are shown next to each other,\nand the way how size and min-size properties are applied to them.\nPossible values are: `horizontal` or `vertical`.\nDefaults to horizontal.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "force-overlay",
+              "description": "When specified, forces the details to be shown as an overlay\n(either as drawer or stack), even if there is enough space for\nmaster and detail to be shown next to each other using the default\n(split) mode.\n\nIn order to enforce the stack mode, use this property together with\n`stackOverlay` property and set both to `true`.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "containment",
+              "description": "Defines the containment of the detail area when the layout is in\noverlay mode. When set to `layout`, the overlay is confined to the\nlayout. When set to `viewport`, the overlay is confined to the\nbrowser's viewport. Defaults to `layout`.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "stack-overlay",
+              "description": "When true, the layout in the overlay mode is rendered as a stack,\nmaking detail area fully cover the master area. Otherwise, it is\nrendered as a drawer and has a visual backdrop.\n\nIn order to enforce the stack mode, use this property together with\n`forceOverlay` property and set both to `true`.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "no-animation",
+              "description": "When true, the layout does not use animated transitions for the detail area.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "detailSize",
+                "description": "Fixed size (in CSS length units) to be set on the detail area.\nWhen specified, it prevents the detail area from growing or\nshrinking. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "detailMinSize",
+                "description": "Minimum size (in CSS length units) to be set on the detail area.\nWhen specified, it prevents the detail area from shrinking below\nthis size. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "masterSize",
+                "description": "Fixed size (in CSS length units) to be set on the master area.\nWhen specified, it prevents the master area from growing or\nshrinking. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "masterMinSize",
+                "description": "Minimum size (in CSS length units) to be set on the master area.\nWhen specified, it prevents the master area from shrinking below\nthis size. If there is not enough space to show master and detail\nareas next to each other, the details are shown as an overlay:\neither as drawer or stack, depending on the `stackOverlay` property.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "orientation",
+                "description": "Define how master and detail areas are shown next to each other,\nand the way how size and min-size properties are applied to them.\nPossible values are: `horizontal` or `vertical`.\nDefaults to horizontal.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "forceOverlay",
+                "description": "When specified, forces the details to be shown as an overlay\n(either as drawer or stack), even if there is enough space for\nmaster and detail to be shown next to each other using the default\n(split) mode.\n\nIn order to enforce the stack mode, use this property together with\n`stackOverlay` property and set both to `true`.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "containment",
+                "description": "Defines the containment of the detail area when the layout is in\noverlay mode. When set to `layout`, the overlay is confined to the\nlayout. When set to `viewport`, the overlay is confined to the\nbrowser's viewport. Defaults to `layout`.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "stackOverlay",
+                "description": "When true, the layout in the overlay mode is rendered as a stack,\nmaking detail area fully cover the master area. Otherwise, it is\nrendered as a drawer and has a visual backdrop.\n\nIn order to enforce the stack mode, use this property together with\n`forceOverlay` property and set both to `true`.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noAnimation",
+                "description": "When true, the layout does not use animated transitions for the detail area.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "backdrop-click",
+                "description": "backdrop-click\nFired when the user clicks the backdrop in the drawer mode."
+              },
+              {
+                "name": "detail-escape-press",
+                "description": "detail-escape-press\nFired when the user presses Escape in the detail area."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

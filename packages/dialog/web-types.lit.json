@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/dialog",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-dialog",
+          "description": "`<vaadin-dialog>` is a Web Component for creating customized modal dialogs.\n\n### Rendering\n\nThe content of the dialog can be populated by using the renderer callback function.\n\nThe renderer function provides `root`, `dialog` arguments.\nGenerate DOM content, append it to the `root` element and control the state\nof the host element by accessing `dialog`. Before generating new content,\nusers are able to check if there is already content in `root` for reusing it.\n\n```html\n<vaadin-dialog id=\"dialog\"></vaadin-dialog>\n```\n```js\nconst dialog = document.querySelector('#dialog');\ndialog.renderer = function(root, dialog) {\n  root.textContent = \"Sample dialog\";\n};\n```\n\nRenderer is called on the opening of the dialog.\nDOM generated during the renderer call can be reused\nin the next renderer call and will be provided with the `root` argument.\nOn first call it will be empty.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name        | Description\n-----------------|-------------------------------------------\n`backdrop`       | Backdrop of the overlay\n`overlay`        | The overlay container\n`content`        | The overlay content\n`header`         | Element wrapping title and header content\n`header-content` | Element wrapping the header content slot\n`title`          | Element wrapping the title slot\n`footer`         | Element wrapping the footer slot\n\nThe following state attributes are available for styling:\n\nAttribute        | Description\n-----------------|--------------------------------------------\n`has-title`      | Set when the element has a title\n`has-header`     | Set when the element has header renderer\n`has-footer`     | Set when the element has footer renderer\n`overflow`       | Set to `top`, `bottom`, none or both\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                      |\n:----------------------------------------|\n|`--vaadin-dialog-background`            |\n|`--vaadin-dialog-border-color`          |\n|`--vaadin-dialog-border-radius`         |\n|`--vaadin-dialog-border-width`          |\n|`--vaadin-dialog-max-width`             |\n|`--vaadin-dialog-min-width`             |\n|`--vaadin-dialog-padding`               |\n|`--vaadin-dialog-shadow`                |\n|`--vaadin-dialog-title-color`           |\n|`--vaadin-dialog-title-font-size`       |\n|`--vaadin-dialog-title-font-weight`     |\n|`--vaadin-dialog-title-line-height`     |\n|`--vaadin-overlay-backdrop-background`  |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?opened",
+              "description": "True if the dialog is visible and available for interaction.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?noCloseOnOutsideClick",
+              "description": "Set to true to disable closing dialog on outside click",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?noCloseOnEsc",
+              "description": "Set to true to disable closing dialog on Escape press",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?modeless",
+              "description": "Set to true to remove backdrop and allow click events on background elements.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?noFocusTrap",
+              "description": "Set to true to disable focus trapping.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?draggable",
+              "description": "Set to true to enable repositioning the dialog by clicking and dragging.\n\nBy default, only the overlay area can be used to drag the element. But,\na child element can be marked as a draggable area by adding a\n\"`draggable`\" class to it, this will by default make all of its children draggable also.\nIf you want a child element to be draggable\nbut still have its children non-draggable (by default), mark it with\n\"`draggable-leaf-only`\" class name.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?keepInViewport",
+              "description": "Set to true to prevent dragging the dialog outside the viewport bounds.\nWhen enabled, all four edges of the dialog will remain visible during dragging.\nThe dialog may still become partially hidden when the viewport is resized.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?resizable",
+              "description": "Set to true to enable resizing the dialog by dragging the corners and edges.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".top",
+              "description": "Set the distance of the dialog from the top of the viewport.\nIf a unitless number is provided, pixels are assumed.\n\nNote that the dialog uses an internal container that has some\nadditional spacing, which can be overridden by the theme.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".left",
+              "description": "Set the distance of the dialog from the left of the viewport.\nIf a unitless number is provided, pixels are assumed.\n\nNote that the dialog uses an internal container that has some\nadditional spacing, which can be overridden by the theme.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".overlayRole",
+              "description": "The `role` attribute value to be set on the dialog. Defaults to \"dialog\".",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".renderer",
+              "description": "Custom function for rendering the content of the dialog.\nReceives two arguments:\n\n- `root` The root container DOM element. Append your content to it.\n- `dialog` The reference to the `<vaadin-dialog>` element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".headerTitle",
+              "description": "String used for rendering a dialog title.\n\nIf both `headerTitle` and `headerRenderer` are defined, the title\nand the elements created by the renderer will be placed next to\neach other, with the title coming first.\n\nWhen `headerTitle` is set, the attribute `has-title` is set on the dialog.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".headerRenderer",
+              "description": "Custom function for rendering the dialog header.\nReceives two arguments:\n\n- `root` The root container DOM element. Append your content to it.\n- `dialog` The reference to the `<vaadin-dialog>` element.\n\nIf both `headerTitle` and `headerRenderer` are defined, the title\nand the elements created by the renderer will be placed next to\neach other, with the title coming first.\n\nWhen `headerRenderer` is set, the attribute `has-header` is set on the dialog.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".footerRenderer",
+              "description": "Custom function for rendering the dialog footer.\nReceives two arguments:\n\n- `root` The root container DOM element. Append your content to it.\n- `dialog` The reference to the `<vaadin-dialog>` element.\n\nWhen `footerRenderer` is set, the attribute `has-footer` is set on the dialog.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".width",
+              "description": "Set the width of the dialog.\nIf a unitless number is provided, pixels are assumed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".height",
+              "description": "Set the height of the dialog.\nIf a unitless number is provided, pixels are assumed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@closed",
+              "description": "Fired when the dialog is closed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@drag-start",
+              "description": "Fired when the dialog drag is started.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@dragged",
+              "description": "Fired when the dialog drag is finished.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@resize",
+              "description": "Fired when the dialog resize is finished.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@resize-start",
+              "description": "Fired when the dialog resize is started.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@opened-changed",
+              "description": "Fired when the `opened` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

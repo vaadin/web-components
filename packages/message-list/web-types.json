@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/message-list",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-message",
+          "description": "`<vaadin-message>` is a Web Component for showing a single message with an author, message and time.\n\n```html\n<vaadin-message time=\"2021-01-28 10:43\"\n    user-name = \"Bob Ross\"\n    user-abbr = \"BR\"\n    user-img = \"/static/img/avatar.jpg\">There is no real ending. It's just the place where you stop the story.</vaadin-message>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name           | Description\n--------------------|----------------\n`name`              | Author's name\n`time`              | When the message was posted\n`content`           | The message itself as a slotted content\n`attachments`       | Container for the attachments\n`attachment`        | Individual attachment button\n`attachment-image`  | Image attachment button (in addition to `attachment`)\n`attachment-file`   | File attachment button (in addition to `attachment`)\n`attachment-preview`| Image preview inside an image attachment\n`attachment-icon`   | File icon inside a file attachment\n`attachment-name`   | File name inside a file attachment\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|-------------\n`focus-ring` | Set when the message is focused using the keyboard.\n`focused`    | Set when the message is focused.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "time",
+              "description": "Time of sending the message. It is rendered as-is to the part='time' slot,\nso the formatting is up to you.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "user-name",
+              "description": "The name of the user posting the message.\nIt will be placed in the name part to indicate who has sent the message.\nIt is also used as a tooltip for the avatar.\nExample: `message.userName = \"Jessica Jacobs\";`",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "user-abbr",
+              "description": "The abbreviation of the user.\nThe abbreviation will be passed on to avatar of the message.\nIf the user does not have an avatar picture set with `userImg`, `userAbbr` will be shown in the avatar.\nExample: `message.userAbbr = \"JJ\";`",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "user-img",
+              "description": "An URL for a user image.\nThe image will be used in the avatar component to show who has sent the message.\nExample: `message.userImg = \"/static/img/avatar.jpg\";`",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "user-color-index",
+              "description": "A color index to be used to render the color of the avatar.\nWith no `userColorIndex` set, the basic avatar color will be used.\nBy setting a userColorIndex, the component will check if there exists a CSS variable defining the color, and uses it if there is one.\nIf now CSS variable is found for the color index, the property for the color will not be set.\n\nExample:\nCSS:\n```css\nhtml {\n  --vaadin-user-color-1: red;\n}\n```\n\nJavaScript:\n```js\nmessage.userColorIndex = 1;\n```",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "time",
+                "description": "Time of sending the message. It is rendered as-is to the part='time' slot,\nso the formatting is up to you.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "userName",
+                "description": "The name of the user posting the message.\nIt will be placed in the name part to indicate who has sent the message.\nIt is also used as a tooltip for the avatar.\nExample: `message.userName = \"Jessica Jacobs\";`",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "userAbbr",
+                "description": "The abbreviation of the user.\nThe abbreviation will be passed on to avatar of the message.\nIf the user does not have an avatar picture set with `userImg`, `userAbbr` will be shown in the avatar.\nExample: `message.userAbbr = \"JJ\";`",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "userImg",
+                "description": "An URL for a user image.\nThe image will be used in the avatar component to show who has sent the message.\nExample: `message.userImg = \"/static/img/avatar.jpg\";`",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "userColorIndex",
+                "description": "A color index to be used to render the color of the avatar.\nWith no `userColorIndex` set, the basic avatar color will be used.\nBy setting a userColorIndex, the component will check if there exists a CSS variable defining the color, and uses it if there is one.\nIf now CSS variable is found for the color index, the property for the color will not be set.\n\nExample:\nCSS:\n```css\nhtml {\n  --vaadin-user-color-1: red;\n}\n```\n\nJavaScript:\n```js\nmessage.userColorIndex = 1;\n```",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "attachments",
+                "description": "An array of attachment objects to display with the message.\nEach attachment object can have the following properties:\n- `name`: The name of the attachment file\n- `url`: The URL of the attachment\n- `type`: The MIME type of the attachment (e.g., 'image/png', 'application/pdf')\n\nImage attachments (type starting with \"image/\") show a thumbnail preview,\nwhile other attachments show a document icon with the file name.",
+                "value": {
+                  "type": [
+                    "Array",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-message-list",
+          "description": "`<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>\n\n### Example\n\nTo create a new message list, add the component to the page:\n\n```html\n<vaadin-message-list></vaadin-message-list>\n```\n\nProvide the messages to the message list with the [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-message-list#property-items) property.\n\n```js\ndocument.querySelector('vaadin-message-list').items = [\n  { text: 'Hello list', time: 'yesterday', userName: 'Matt Mambo', userAbbr: 'MM', userColorIndex: 1 },\n  { text: 'Another message', time: 'right now', userName: 'Linsey Listy', userAbbr: 'LL', userColorIndex: 2, userImg: '/static/img/avatar.jpg' }\n];\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------|----------------\n`list`    | The container wrapping messages.\n\nSee the [`<vaadin-message>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-message) documentation for the available\nstate attributes and stylable shadow parts of message elements.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "markdown",
+              "description": "When set to `true`, the message text is parsed as Markdown.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "announce-messages",
+              "description": "When set to `true`, new messages are announced to assistive technologies using ARIA live regions.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "items",
+                "description": "An array of objects which will be rendered as messages.\nThe message objects can have the following properties:\n```js\nArray<{\n  text: string,\n  time: string,\n  userName: string,\n  userAbbr: string,\n  userImg: string,\n  userColorIndex: number,\n  className: string,\n  theme: string,\n  attachments: Array<{\n    name: string,\n    url: string,\n    type: string\n  }>\n}>\n```\n\nWhen a message has attachments, they are rendered in the message's shadow DOM.\nImage attachments (type starting with \"image/\") show a thumbnail preview,\nwhile other attachments show a document icon with the file name.\nClicking an attachment dispatches an `attachment-click` event.",
+                "value": {
+                  "type": [
+                    "Array",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "markdown",
+                "description": "When set to `true`, the message text is parsed as Markdown.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "announceMessages",
+                "description": "When set to `true`, new messages are announced to assistive technologies using ARIA live regions.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

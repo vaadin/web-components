@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/login",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-login-form",
+          "description": "`<vaadin-login-form>` is a Web Component providing an easy way to require users\nto log in into an application. Note that component has no shadowRoot.\n\n```html\n<vaadin-login-form></vaadin-login-form>\n```\n\nComponent has to be accessible from the `document` layer in order to allow password managers to work properly with form values.\nUsing `<vaadin-login-overlay>` allows to always attach the component to the document body.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name      | Description\n---------------|---------------------------------------------------------|\n`form`         | Container for the entire component's content\n`form-title`   | Title of the login form\n`error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.\n`error-message-title`       | Container for error message title\n`error-message-description` | Container for error message description\n`footer`  | Container additional information text from `i18n` object\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                        |\n:------------------------------------------|\n| `--vaadin-login-form-background`         |\n| `--vaadin-login-form-border-radius`      |\n| `--vaadin-login-form-error-color`        |\n| `--vaadin-login-form-error-font-size`    |\n| `--vaadin-login-form-error-font-weight`  |\n| `--vaadin-login-form-error-gap`          |\n| `--vaadin-login-form-error-line-height`  |\n| `--vaadin-login-form-gap`                |\n| `--vaadin-login-form-padding`            |\n| `--vaadin-login-form-title-color`        |\n| `--vaadin-login-form-title-font-size`    |\n| `--vaadin-login-form-title-font-weight`  |\n| `--vaadin-login-form-title-line-height`  |\n| `--vaadin-login-form-width`              |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "action",
+              "description": "If set, a synchronous POST call will be fired to the path defined.\nThe `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.",
+              "value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            {
+              "name": "disabled",
+              "description": "If set, disable the \"Log in\" button and prevent user from submitting login form.\nIt is re-enabled automatically, when error is set to true, allowing form resubmission\nafter user makes changes.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "error",
+              "description": "If set, the error message is shown. The message is hidden by default.\nWhen set, it changes the disabled state of the submit button.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "no-forgot-password",
+              "description": "Whether to hide the forgot password button. The button is visible by default.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "no-autofocus",
+              "description": "If set, the user name field automatically receives focus when the component is attached to the document.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "heading-level",
+              "description": "Sets the root heading level (`aria-level`) for the heading hierarchy. Default value: 1.\nChild headings automatically increment from this base level i.e. standalone login form\nrenders its title as `<h1>`, whereas the form in the overlay uses `<h2>`, as the `<h1>`\nelement is used by the overlay's own title.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "i18n",
+                "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure (by default it doesn't include `additionalInformation`\nand `header` sections, `header` can be added to override `title` and `description` properties\nin `vaadin-login-overlay`):\n\n```js\n{\n  header: {\n    title: 'App name',\n    description: 'Inspiring application description'\n  },\n  form: {\n    title: 'Log in',\n    username: 'Username',\n    password: 'Password',\n    submit: 'Log in',\n    forgotPassword: 'Forgot password'\n  },\n  errorMessage: {\n    title: 'Incorrect username or password',\n    message: 'Check that you have entered the correct username and password and try again.',\n    username: 'Username is required',\n    password: 'Password is required'\n  },\n  additionalInformation: 'In case you need to provide some additional info for the user.'\n}\n```",
+                "value": {
+                  "type": [
+                    "LoginI18n"
+                  ]
+                }
+              },
+              {
+                "name": "action",
+                "description": "If set, a synchronous POST call will be fired to the path defined.\nThe `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              {
+                "name": "disabled",
+                "description": "If set, disable the \"Log in\" button and prevent user from submitting login form.\nIt is re-enabled automatically, when error is set to true, allowing form resubmission\nafter user makes changes.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "error",
+                "description": "If set, the error message is shown. The message is hidden by default.\nWhen set, it changes the disabled state of the submit button.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "noForgotPassword",
+                "description": "Whether to hide the forgot password button. The button is visible by default.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "noAutofocus",
+                "description": "If set, the user name field automatically receives focus when the component is attached to the document.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "headingLevel",
+                "description": "Sets the root heading level (`aria-level`) for the heading hierarchy. Default value: 1.\nChild headings automatically increment from this base level i.e. standalone login form\nrenders its title as `<h1>`, whereas the form in the overlay uses `<h2>`, as the `<h1>`\nelement is used by the overlay's own title.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "forgot-password",
+                "description": "Fired when user clicks on the \"Forgot password\" button."
+              },
+              {
+                "name": "login",
+                "description": "Fired when an user submits the login.\nThe event contains `username` and `password` values in the `detail` property."
+              },
+              {
+                "name": "disabled-changed",
+                "description": "Fired when the `disabled` property changes."
+              },
+              {
+                "name": "error-changed",
+                "description": "Fired when the `error` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-login-overlay",
+          "description": "`<vaadin-login-overlay>` is a web component which renders a login form in an overlay and\nprovides an additional `brand` part for application title and description.\n\n```html\n<vaadin-login-overlay opened></vaadin-login-overlay>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name                    | Description\n-----------------------------|--------------------------------\n`backdrop`                   | Backdrop of the overlay\n`overlay`                    | The overlay container element\n`content`                    | The overlay content element\n`card`                       | Container for the brand and form wrapper\n`brand`                      | Container for application title and description\n`description`                | The application description\n`form-wrapper`               | The login form wrapper element\n`form`                       | The login form element\n`form-title`                 | Title of the login form\n`error-message`              | Container for error message\n`error-message-title`        | Container for error message title\n`error-message-description`  | Container for error message description\n`footer`                     | Container for the footer element\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                                |\n:--------------------------------------------------|\n| `--vaadin-login-overlay-background`              |\n| `--vaadin-login-overlay-border-color`            |\n| `--vaadin-login-overlay-border-radius`           |\n| `--vaadin-login-overlay-border-width`            |\n| `--vaadin-login-overlay-brand-background`        |\n| `--vaadin-login-overlay-brand-padding`           |\n| `--vaadin-login-overlay-description-color`       |\n| `--vaadin-login-overlay-description-font-size`   |\n| `--vaadin-login-overlay-description-font-weight` |\n| `--vaadin-login-overlay-description-line-height` |\n| `--vaadin-login-overlay-title-color`             |\n| `--vaadin-login-overlay-title-font-size`         |\n| `--vaadin-login-overlay-title-font-weight`       |\n| `--vaadin-login-overlay-title-line-height`       |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "action",
+              "description": "If set, a synchronous POST call will be fired to the path defined.\nThe `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.",
+              "value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            {
+              "name": "disabled",
+              "description": "If set, disable the \"Log in\" button and prevent user from submitting login form.\nIt is re-enabled automatically, when error is set to true, allowing form resubmission\nafter user makes changes.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "error",
+              "description": "If set, the error message is shown. The message is hidden by default.\nWhen set, it changes the disabled state of the submit button.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "no-forgot-password",
+              "description": "Whether to hide the forgot password button. The button is visible by default.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "no-autofocus",
+              "description": "If set, the user name field automatically receives focus when the component is attached to the document.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "heading-level",
+              "description": "Sets the root heading level (`aria-level`) for the heading hierarchy. Default value: 1.\nChild headings automatically increment from this base level i.e. standalone login form\nrenders its title as `<h1>`, whereas the form in the overlay uses `<h2>`, as the `<h1>`\nelement is used by the overlay's own title.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "description",
+              "description": "Defines the application description",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "True if the overlay is currently displayed.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "title",
+              "description": "Defines the application title",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "i18n",
+                "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure (by default it doesn't include `additionalInformation`\nand `header` sections, `header` can be added to override `title` and `description` properties\nin `vaadin-login-overlay`):\n\n```js\n{\n  header: {\n    title: 'App name',\n    description: 'Inspiring application description'\n  },\n  form: {\n    title: 'Log in',\n    username: 'Username',\n    password: 'Password',\n    submit: 'Log in',\n    forgotPassword: 'Forgot password'\n  },\n  errorMessage: {\n    title: 'Incorrect username or password',\n    message: 'Check that you have entered the correct username and password and try again.',\n    username: 'Username is required',\n    password: 'Password is required'\n  },\n  additionalInformation: 'In case you need to provide some additional info for the user.'\n}\n```",
+                "value": {
+                  "type": [
+                    "LoginI18n"
+                  ]
+                }
+              },
+              {
+                "name": "action",
+                "description": "If set, a synchronous POST call will be fired to the path defined.\nThe `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              {
+                "name": "disabled",
+                "description": "If set, disable the \"Log in\" button and prevent user from submitting login form.\nIt is re-enabled automatically, when error is set to true, allowing form resubmission\nafter user makes changes.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "error",
+                "description": "If set, the error message is shown. The message is hidden by default.\nWhen set, it changes the disabled state of the submit button.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "noForgotPassword",
+                "description": "Whether to hide the forgot password button. The button is visible by default.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "noAutofocus",
+                "description": "If set, the user name field automatically receives focus when the component is attached to the document.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "headingLevel",
+                "description": "Sets the root heading level (`aria-level`) for the heading hierarchy. Default value: 1.\nChild headings automatically increment from this base level i.e. standalone login form\nrenders its title as `<h1>`, whereas the form in the overlay uses `<h2>`, as the `<h1>`\nelement is used by the overlay's own title.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "description",
+                "description": "Defines the application description",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "True if the overlay is currently displayed.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "title",
+                "description": "Defines the application title",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "forgot-password",
+                "description": "Fired when user clicks on the \"Forgot password\" button."
+              },
+              {
+                "name": "login",
+                "description": "Fired when an user submits the login.\nThe event contains `username` and `password` values in the `detail` property."
+              },
+              {
+                "name": "closed",
+                "description": "Fired when the overlay is closed."
+              },
+              {
+                "name": "disabled-changed",
+                "description": "Fired when the `disabled` property changes."
+              },
+              {
+                "name": "error-changed",
+                "description": "Fired when the `error` property changes."
+              },
+              {
+                "name": "description-changed",
+                "description": "Fired when the `description` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

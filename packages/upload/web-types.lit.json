@@ -1,0 +1,433 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/upload",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-upload-button",
+          "description": "`<vaadin-upload-button>` is a button component for file uploads.\nWhen clicked, it opens a file picker dialog and calls addFiles\non a linked UploadManager.\n\n```html\n<vaadin-upload-button>Upload Files</vaadin-upload-button>\n```\n\nThe button must be linked to an UploadManager by setting the\n`manager` property:\n\n```javascript\nconst button = document.querySelector('vaadin-upload-button');\nbutton.manager = uploadManager;\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------|-------------\n`label`   | The label (text) inside the button.\n`prefix`  | A slot for content before the label (e.g. an icon).\n`suffix`  | A slot for content after the label (e.g. an icon).\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`active`       | Set when the button is pressed down, either with mouse, touch or the keyboard\n`disabled`     | Set when the button is disabled\n`focus-ring`   | Set when the button is focused using the keyboard\n`focused`      | Set when the button is focused\n`has-tooltip`  | Set when the button has a slotted tooltip\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                |\n:----------------------------------|\n| `--vaadin-button-background`     |\n| `--vaadin-button-border-color`   |\n| `--vaadin-button-border-radius`  |\n| `--vaadin-button-border-width`   |\n| `--vaadin-button-font-size`      |\n| `--vaadin-button-font-weight`    |\n| `--vaadin-button-gap`            |\n| `--vaadin-button-height`         |\n| `--vaadin-button-line-height`    |\n| `--vaadin-button-margin`         |\n| `--vaadin-button-padding`        |\n| `--vaadin-button-text-color`     |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?maxFilesReached",
+              "description": "True when max files has been reached on the manager.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".disabled",
+              "description": "Whether the button is disabled.\nReturns true if either explicitly disabled, manager is disabled, or maxFilesReached is true.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".manager",
+              "description": "Reference to an UploadManager.\nWhen set, the button will automatically disable when maxFilesReached\nbecomes true on the manager.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".capture",
+              "description": "Capture attribute for mobile file input.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-upload-drop-zone",
+          "description": "`<vaadin-upload-drop-zone>` is a Web Component that can be used as a drop zone\nfor file uploads. When files are dropped on the drop zone, they are added to\na linked UploadManager.\n\n```html\n<vaadin-upload-drop-zone>\n  <p>Drop files here</p>\n</vaadin-upload-drop-zone>\n```\n\nThe drop zone must be linked to an UploadManager by setting the\n`manager` property:\n\n```javascript\nconst dropZone = document.querySelector('vaadin-upload-drop-zone');\ndropZone.manager = uploadManager;\n```\n\n### Styling\n\nThe component has no styling by default. When files are dragged over,\nthe `dragover` attribute is set and the component uses a hover effect.\nTo override the hover effect, use `vaadin-upload-drop-zone[dragover]::after`\nselector to style the pseudo-element covering the drop zone during dragover.\n\nAttribute          | Description\n-------------------|--------------------------------------------\n`dragover`         | Set when files are being dragged over the element\n`disabled`         | Set when the drop zone is effectively disabled\n`max-files-reached`| Set when the manager has reached maxFiles\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "Whether the drop zone is disabled.\nReturns true if either explicitly disabled, manager is disabled, or no manager is set.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?maxFilesReached",
+              "description": "True when max files has been reached on the manager.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".manager",
+              "description": "Reference to an UploadManager.\nWhen set, dropped files will be automatically added to the manager.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-upload-file",
+          "description": "`<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name        | Description\n-----------------|-------------\n`thumbnail`      | Image thumbnail for image files (used with `thumbnails` theme)\n`file-icon`      | Generic file icon for non-image files (used with `thumbnails` theme)\n`done-icon`      | File done status icon\n`warning-icon`   | File warning status icon\n`meta`           | Container for file name, status and error messages\n`name`           | File name\n`error`          | Error message, shown when error happens\n`status`         | Status message\n`commands`       | Container for file command buttons\n`start-button`   | Start file upload button\n`retry-button`   | Retry file upload button\n`remove-button`  | Remove file button\n\nThe following state attributes are available for styling:\n\nAttribute        | Description\n-----------------|-------------\n`disabled`       | Set when the element is disabled\n`focus-ring`     | Set when the element is focused using the keyboard.\n`focused`        | Set when the element is focused.\n`error`          | An error has happened during uploading.\n`indeterminate`  | Uploading is in progress, but the progress value is unknown.\n`uploading`      | Uploading is in progress.\n`complete`       | Uploading has finished successfully.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n`--vaadin-upload-file-border-radius`         |\n`--vaadin-upload-file-button-background`     |\n`--vaadin-upload-file-button-border-color`   |\n`--vaadin-upload-file-button-border-radius`  |\n`--vaadin-upload-file-button-border-width`   |\n`--vaadin-upload-file-button-text-color`     |\n`--vaadin-upload-file-button-padding`        |\n`--vaadin-upload-file-done-color`            |\n`--vaadin-upload-file-error-color`           |\n`--vaadin-upload-file-error-font-size`       |\n`--vaadin-upload-file-error-font-weight`     |\n`--vaadin-upload-file-error-line-height`     |\n`--vaadin-upload-file-gap`                   |\n`--vaadin-upload-file-name-color`            |\n`--vaadin-upload-file-name-font-size`        |\n`--vaadin-upload-file-name-font-weight`      |\n`--vaadin-upload-file-name-line-height`      |\n`--vaadin-upload-file-padding`               |\n`--vaadin-upload-file-status-color`          |\n`--vaadin-upload-file-status-font-size`      |\n`--vaadin-upload-file-status-font-weight`    |\n`--vaadin-upload-file-status-line-height`    |\n`--vaadin-upload-file-warning-color`         |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?complete",
+              "description": "True if uploading is completed, false otherwise.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?held",
+              "description": "True if uploading is not started, false otherwise.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?indeterminate",
+              "description": "True if remaining time is unknown, false otherwise.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?uploading",
+              "description": "True if uploading is in progress, false otherwise.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error message returned by the server, if any.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".file",
+              "description": "The object representing a file.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".fileName",
+              "description": "Name of the uploading file.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".progress",
+              "description": "Number representing the uploading progress.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".status",
+              "description": "Uploading status.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@file-abort",
+              "description": "Fired when abort button is pressed. It is listened by `vaadin-upload` which\nwill abort the upload in progress, and then remove the file from the list.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@file-retry",
+              "description": "Fired when the retry button is pressed. It is listened by `vaadin-upload`\nwhich will start a new upload process of this file.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@file-start",
+              "description": "Fired when the start button is pressed. It is listened by `vaadin-upload`\nwhich will start a new upload process of this file.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-upload-file-list",
+          "description": "`<vaadin-upload-file-list>` is a Web Component that displays a list of uploaded files.\nIt automatically syncs files from the manager and forwards file events back to it.\n\n```html\n<vaadin-upload-file-list></vaadin-upload-file-list>\n```\n\nThe file list must be linked to an UploadManager by setting the `manager` property:\n\n```javascript\nimport { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';\n\nconst manager = new UploadManager({ target: '/api/upload' });\nconst fileList = document.querySelector('vaadin-upload-file-list');\nfileList.manager = manager;\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------|-------------\n`list`    | The `<ul>` element wrapping the file items\n\nThe following state attributes are available for styling:\n\nAttribute  | Description\n-----------|-------------\n`disabled` | Set when the element is disabled\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n`--vaadin-upload-file-list-divider-color`    |\n`--vaadin-upload-file-list-divider-width`    |\n`--vaadin-upload-file-border-radius`         |\n`--vaadin-upload-file-button-background`     |\n`--vaadin-upload-file-button-border-color`   |\n`--vaadin-upload-file-button-border-radius`  |\n`--vaadin-upload-file-button-border-width`   |\n`--vaadin-upload-file-button-text-color`     |\n`--vaadin-upload-file-button-padding`        |\n`--vaadin-upload-file-done-color`            |\n`--vaadin-upload-file-error-color`           |\n`--vaadin-upload-file-error-font-size`       |\n`--vaadin-upload-file-error-font-weight`     |\n`--vaadin-upload-file-error-line-height`     |\n`--vaadin-upload-file-gap`                   |\n`--vaadin-upload-file-name-color`            |\n`--vaadin-upload-file-name-font-size`        |\n`--vaadin-upload-file-name-font-weight`      |\n`--vaadin-upload-file-name-line-height`      |\n`--vaadin-upload-file-padding`               |\n`--vaadin-upload-file-status-color`          |\n`--vaadin-upload-file-status-font-size`      |\n`--vaadin-upload-file-status-font-weight`    |\n`--vaadin-upload-file-status-line-height`    |\n`--vaadin-upload-file-warning-color`         |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nShould be overridden by subclasses to provide a custom JSDoc with the\ndefault I18N properties.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".items",
+              "description": "The array of files being processed, or already uploaded.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".manager",
+              "description": "Reference to an UploadManager to link this file list to.\nWhen set, the file list automatically:\n- Syncs files from the manager\n- Forwards retry/abort/start/remove events back to the manager",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-upload",
+          "description": "`<vaadin-upload>` is a Web Component for uploading multiple files with drag and drop support.\n\nExample:\n\n```html\n<vaadin-upload></vaadin-upload>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name          | Description\n-------------------|-------------------------------------\n`primary-buttons`  | Upload container\n`drop-label`       | Element wrapping drop label and icon\n\nThe following state attributes are available for styling:\n\nAttribute            | Description\n---------------------|---------------------------------\n`disabled`           | Set when the element is disabled\n`nodrop`             | Set when drag and drop is disabled (e.g., on touch devices)\n`dragover`           | Set when the file is being dragged over the element\n`dragover-valid`     | Set when the dragged file is valid with `maxFiles` and `accept` criteria\n`max-files-reached`  | Set when maximum number of files that the user is allowed to add has been reached\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n`--vaadin-upload-background`                 |\n`--vaadin-upload-border-color`               |\n`--vaadin-upload-border-radius`              |\n`--vaadin-upload-border-width`               |\n`--vaadin-upload-gap`                        |\n`--vaadin-upload-padding`                    |\n`--vaadin-upload-drop-label-color`           |\n`--vaadin-upload-drop-label-font-size`       |\n`--vaadin-upload-drop-label-font-weight`     |\n`--vaadin-upload-drop-label-gap`             |\n`--vaadin-upload-drop-label-line-height`     |\n`--vaadin-upload-file-list-divider-color`    |\n`--vaadin-upload-file-list-divider-width`    |\n`--vaadin-upload-file-border-radius`         |\n`--vaadin-upload-file-button-background`     |\n`--vaadin-upload-file-button-border-color`   |\n`--vaadin-upload-file-button-border-radius`  |\n`--vaadin-upload-file-button-border-width`   |\n`--vaadin-upload-file-button-text-color`     |\n`--vaadin-upload-file-button-padding`        |\n`--vaadin-upload-file-done-color`            |\n`--vaadin-upload-file-error-color`           |\n`--vaadin-upload-file-error-font-size`       |\n`--vaadin-upload-file-error-font-weight`     |\n`--vaadin-upload-file-error-line-height`     |\n`--vaadin-upload-file-gap`                   |\n`--vaadin-upload-file-name-color`            |\n`--vaadin-upload-file-name-font-size`        |\n`--vaadin-upload-file-name-font-weight`      |\n`--vaadin-upload-file-name-line-height`      |\n`--vaadin-upload-file-padding`               |\n`--vaadin-upload-file-status-color`          |\n`--vaadin-upload-file-status-font-size`      |\n`--vaadin-upload-file-status-font-weight`    |\n`--vaadin-upload-file-status-line-height`    |\n`--vaadin-upload-file-warning-color`         |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?nodrop",
+              "description": "Define whether the element supports dropping files on it for uploading.\nBy default it's enabled in desktop and disabled in touch devices\nbecause mobile devices do not support drag events in general. Setting\nit false means that drop is enabled even in touch-devices, and true\ndisables drop in all devices.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?noAuto",
+              "description": "Prevents upload(s) from immediately uploading upon adding file(s).\nWhen set, you must manually trigger uploads using the `uploadFiles` method",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?withCredentials",
+              "description": "Set the withCredentials flag on the request.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n\n```js\n{\n  dropFiles: {\n    one: 'Drop file here',\n    many: 'Drop files here'\n  },\n  addFiles: {\n    one: 'Upload File...',\n    many: 'Upload Files...'\n  },\n  error: {\n    tooManyFiles: 'Too Many Files.',\n    fileIsTooBig: 'File is Too Big.',\n    incorrectFileType: 'Incorrect File Type.'\n  },\n  uploading: {\n    status: {\n      connecting: 'Connecting...',\n      stalled: 'Stalled',\n      processing: 'Processing File...',\n      held: 'Queued'\n    },\n    remainingTime: {\n      prefix: 'remaining time: ',\n      unknown: 'unknown remaining time'\n    },\n    error: {\n      serverUnavailable: 'Upload failed, please try again later',\n      unexpectedServerError: 'Upload failed due to server error',\n      forbidden: 'Upload forbidden'\n    }\n  },\n  file: {\n    retry: 'Retry',\n    start: 'Start',\n    remove: 'Remove'\n  },\n  units: {\n    size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],\n    sizeBase: 1000\n  },\n  formatSize: function(bytes) {\n    // returns the size followed by the best suitable unit\n  },\n  formatTime: function(seconds, [secs, mins, hours]) {\n    // returns a 'HH:MM:SS' string\n  }\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".target",
+              "description": "The server URL. The default value is an empty string, which means that\n_window.location_ will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".method",
+              "description": "HTTP Method used to send the files. Only POST and PUT are allowed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".headers",
+              "description": "Key-Value map to send to the server. If you set this property as an\nattribute, use a valid JSON string, for example:\n```html\n<vaadin-upload headers='{\"X-Foo\": \"Bar\"}'></vaadin-upload>\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".timeout",
+              "description": "Max time in milliseconds for the entire upload process, if exceeded the\nrequest will be aborted. Zero means that there is no timeout.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".files",
+              "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while transferring data to the server.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".maxFiles",
+              "description": "Limit of files to upload, by default it is unlimited. If the value is\nset to one, native file browser will prevent selecting multiple files.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accept",
+              "description": "Specifies the types of files that the server accepts.\nSyntax: a comma-separated list of MIME type patterns (wildcards are\nallowed) or file extensions.\nNotice that MIME types are widely supported, while file extensions\nare only implemented in certain browsers, so avoid using it.\nExample: accept=\"video/*,image/tiff\" or accept=\".pdf,audio/mp3\"",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".maxFileSize",
+              "description": "Specifies the maximum file size in bytes allowed to upload.\nNotice that it is a client-side constraint, which will be checked before\nsending the request. Obviously you need to do the same validation in\nthe server-side and be sure that they are aligned.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".formDataName",
+              "description": "Specifies the 'name' property at Content-Disposition for multipart uploads.\nThis property is ignored when uploadFormat is 'raw'.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".uploadFormat",
+              "description": "Specifies the upload format to use when sending files to the server.\n- 'raw': Send file as raw binary data with the file's MIME type as Content-Type (default)\n- 'multipart': Send file using multipart/form-data encoding",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".maxConcurrentUploads",
+              "description": "Specifies the maximum number of files that can be uploaded simultaneously.\nThis helps prevent browser performance degradation and XHR limitations when\nuploading large numbers of files. Files exceeding this limit will be queued\nand uploaded as active uploads complete.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".capture",
+              "description": "Pass-through to input's capture attribute. Allows user to trigger device inputs\nsuch as camera or microphone immediately.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@file-reject",
+              "description": "Fired when a file cannot be added to the queue due to a constrain:\n file-size, file-type or maxFiles",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-abort",
+              "description": "Fired when retry abort is requested. If the default is prevented, then the\nfile upload would not be aborted.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-before",
+              "description": "Fired before the XHR is opened. Could be used for changing the request\nURL. If the default is prevented, then XHR would not be opened.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-error",
+              "description": "Fired in case the upload process failed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-progress",
+              "description": "Fired as many times as the progress is updated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-request",
+              "description": "Fired when the XHR has been opened but not sent yet. Useful for appending\ndata keys to the FormData object, for changing some parameters like\nheaders, etc. If the event is defaultPrevented, `vaadin-upload` will not\nsend the request allowing the user to do something on his own.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-response",
+              "description": "Fired when we have the actual server response, and before the component\nanalyses it. It's useful for developers to make the upload fail depending\non the server response. If the event is defaultPrevented the vaadin-upload\nwill return allowing the user to do something on his own like retry the\nupload, etc. since he has full access to the `xhr` and `file` objects.\nOtherwise, if the event is not prevented default `vaadin-upload` continues\nwith the normal workflow checking the `xhr.status` and `file.error`\nwhich also might be modified by the user to force a customized response.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-retry",
+              "description": "Fired when retry upload is requested. If the default is prevented, then\nretry would not be performed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-start",
+              "description": "Fired when the XHR is sent.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@upload-success",
+              "description": "Fired in case the upload process succeed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@files-changed",
+              "description": "Fired when the `files` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@max-files-reached-changed",
+              "description": "Fired when the `maxFilesReached` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

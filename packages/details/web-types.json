@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/details",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-details-summary",
+          "description": "The details summary element.\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name  | Description\n-----------|-------------------\n`toggle`   | The icon element\n`content`  | The content wrapper\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------| -----------\n`active`     | Set when the element is pressed down, either with mouse, touch or the keyboard.\n`opened`     | Set when the element is expanded and related collapsible content is visible.\n`disabled`   | Set when the element is disabled.\n`focus-ring` | Set when the element is focused using the keyboard.\n`focused`    | Set when the element is focused.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                        |\n:------------------------------------------|\n| `--vaadin-details-summary-background`    |\n| `--vaadin-details-summary-border-color`  |\n| `--vaadin-details-summary-border-radius` |\n| `--vaadin-details-summary-border-width`  |\n| `--vaadin-details-summary-font-size`     |\n| `--vaadin-details-summary-font-weight`   |\n| `--vaadin-details-summary-gap`           |\n| `--vaadin-details-summary-height`        |\n| `--vaadin-details-summary-padding`       |\n| `--vaadin-details-summary-text-color`    |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "When true, the element is opened.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "When true, the element is opened.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-details",
+          "description": "`<vaadin-details>` is a Web Component which the creates an\nexpandable panel similar to `<details>` HTML element.\n\n```html\n<vaadin-details>\n  <vaadin-details-summary slot=\"summary\">Expandable Details</vaadin-details-summary>\n  <div>\n    Toggle using mouse, Enter and Space keys.\n  </div>\n</vaadin-details>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name        | Description\n-----------------|----------------\n`content`        | The wrapper for the collapsible details content.\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|------------\n`opened`       | Set when the collapsible content is expanded and visible\n`disabled`     | Set when the element is disabled\n`focus-ring`   | Set when the element is focused using the keyboard\n`focused`      | Set when the element is focused\n`has-tooltip`  | Set when the element has a slotted tooltip\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "If true, the collapsible content is visible.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "summary",
+              "description": "A text that is displayed in the summary, if no\nelement is assigned to the `summary` slot.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "autofocus",
+                "description": "Specify that this control should have input focus when the page loads.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "If true, the collapsible content is visible.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "summary",
+                "description": "A text that is displayed in the summary, if no\nelement is assigned to the `summary` slot.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

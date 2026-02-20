@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/horizontal-layout",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-horizontal-layout",
+          "description": "`<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.\n\n```html\n<vaadin-horizontal-layout>\n  <div>Item 1</div>\n  <div>Item 2</div>\n</vaadin-horizontal-layout>\n```\n\n### Built-in Theme Variations\n\n`<vaadin-horizontal-layout>` supports the following theme variations:\n\nTheme variation    | Description\n-------------------|---------------\n`theme=\"margin\"`   | Applies the default amount of CSS margin for the host element\n`theme=\"padding\"`  | Applies the default amount of CSS padding for the host element\n`theme=\"spacing\"`  | Applies the default amount of CSS margin between items\n`theme=\"wrap\"`     | Items wrap to the next row when they exceed the layout width\n\n### Component's slots\n\nThe following slots are available to be set:\n\nSlot name          | Description\n-------------------|---------------\nno name            | Default slot\n`middle`           | Slot for the content placed in the middle\n`end`              | Slot for the content placed at the end\n\n### Custom CSS Properties\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                  | Description\n-------------------------------------|-------------\n`--vaadin-horizontal-layout-margin`  | The default CSS margin applied when using `theme=\"margin\"`\n`--vaadin-horizontal-layout-padding` | The default CSS padding applied when using `theme=\"padding\"`\n`--vaadin-horizontal-layout-gap`     | The default CSS gap applied when using `theme=\"spacing\"`\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": []
+        }
+      ]
+    }
+  }
+}

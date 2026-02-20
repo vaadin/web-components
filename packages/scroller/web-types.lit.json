@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/scroller",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-scroller",
+          "description": "`<vaadin-scroller>` provides a simple way to enable scrolling when its content is overflowing.\n\n```html\n<vaadin-scroller>\n  <div>Content</div>\n</vaadin-scroller>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------| -----------\n`focus-ring` | Set when the element is focused using the keyboard.\n`focused`    | Set when the element is focused.\n`overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.\n\n### Built-in Theme Variants\n\n`<vaadin-scroller>` supports the following theme variants:\n\nTheme variant                            | Description\n-----------------------------------------|---------------\n`theme=\"overflow-indicators\"`            | Shows visual indicators at the top and bottom when the content is scrolled\n`theme=\"overflow-indicator-top\"`         | Shows the visual indicator at the top when the content is scrolled\n`theme=\"overflow-indicator-top-bottom\"`  | Shows the visual indicator at the bottom when the content is scrolled\n\n### Custom CSS Properties\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                | Description\n-----------------------------------|-------------\n`--vaadin-scroller-padding-block`  | The CSS padding applied to top and bottom edges\n`--vaadin-scroller-padding-inline` | The CSS padding applied to left and right edges\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": ".scrollDirection",
+              "description": "This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.\nWhen `scrollDirection` is undefined scrollbars will be shown in both directions.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

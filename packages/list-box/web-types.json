@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/list-box",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-list-box",
+          "description": "`<vaadin-list-box>` is a Web Component for creating menus.\n\n```html\n<vaadin-list-box selected=\"2\">\n  <vaadin-item>Item 1</vaadin-item>\n  <vaadin-item>Item 2</vaadin-item>\n  <vaadin-item>Item 3</vaadin-item>\n  <vaadin-item>Item 4</vaadin-item>\n</vaadin-list-box>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|------------------------\n`items`           | The items container\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|---------------------------------\n`has-tooltip`  | Set when the element has a slotted tooltip\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.\nWhen the element is disabled, the selected item is\nnot updated when `selected` property is changed.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "selected",
+              "description": "The index of the item selected in the items array.\nNote: Not updated when used in `multiple` selection mode.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "multiple",
+              "description": "Specifies that multiple options can be selected at once.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.\nWhen the element is disabled, the selected item is\nnot updated when `selected` property is changed.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selected",
+                "description": "The index of the item selected in the items array.\nNote: Not updated when used in `multiple` selection mode.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "multiple",
+                "description": "Specifies that multiple options can be selected at once.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "selectedValues",
+                "description": "Array of indexes of the items selected in the items array\nNote: Not updated when used in single selection mode.",
+                "value": {
+                  "type": [
+                    "Array.<number>",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "selected-changed",
+                "description": "Fired when the selection is changed.\nNot fired when used in `multiple` selection mode."
+              },
+              {
+                "name": "selected-values-changed",
+                "description": "Fired when the selection is changed.\nNot fired in single selection mode."
+              },
+              {
+                "name": "items-changed",
+                "description": "Fired when the `items` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

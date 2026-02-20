@@ -1,0 +1,682 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/crud",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-crud-edit",
+          "description": "`<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides\nan easily themable button that fires an `edit` event with the row item as detail\nwhen clicked.\n\nTypical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside\na `<vaadin-crud>` to enable editing.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "When disabled, the button is rendered as \"dimmed\" and prevents all\nuser interactions (mouse and keyboard).\n\nSince disabled buttons are not focusable and cannot react to hover\nevents by default, it can cause accessibility issues by making them\nentirely invisible to assistive technologies, and prevents the use\nof Tooltips to explain why the action is not available. This can be\naddressed by enabling the feature flag `accessibleDisabledButtons`,\nwhich makes disabled buttons focusable and hoverable, while still\npreventing them from being triggered:\n\n```js\n// Set before any button is attached to the DOM.\nwindow.Vaadin.featureFlags.accessibleDisabledButtons = true\n```",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "When disabled, the button is rendered as \"dimmed\" and prevents all\nuser interactions (mouse and keyboard).\n\nSince disabled buttons are not focusable and cannot react to hover\nevents by default, it can cause accessibility issues by making them\nentirely invisible to assistive technologies, and prevents the use\nof Tooltips to explain why the action is not available. This can be\naddressed by enabling the feature flag `accessibleDisabledButtons`,\nwhich makes disabled buttons focusable and hoverable, while still\npreventing them from being triggered:\n\n```js\n// Set before any button is attached to the DOM.\nwindow.Vaadin.featureFlags.accessibleDisabledButtons = true\n```",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "edit",
+                "description": "Fired when user on the icon."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-crud-edit-column",
+          "description": "`<vaadin-crud-edit-column>` is a helper element for the `<vaadin-grid>`\nthat provides a clickable and themable edit icon.\n\nTypical usage is in a custom `<vaadin-grid>` inside a `<vaadin-crud>`.\n\n#### Example:\n```html\n<vaadin-grid>\n <vaadin-crud-edit-column></vaadin-crud-edit-column>\n\n <vaadin-grid-column>\n   ...\n```",
+          "attributes": [
+            {
+              "name": "resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "frozen-to-end",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "row-header",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "text-align",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "type": [
+                  "GridColumnTextAlign",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "header-part-name",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "footer-part-name",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "width",
+              "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "flex-grow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "type": [
+                  "number"
+                ]
+              }
+            },
+            {
+              "name": "path",
+              "description": "Path to an item sub-property whose value gets displayed in the column body cells.\nThe property name is also shown in the column header if an explicit header or renderer isn't defined.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "auto-width",
+              "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "aria-label",
+              "description": "The arial-label for the edit button",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "resizable",
+                "description": "When set to true, the column is user-resizable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "frozen",
+                "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "frozenToEnd",
+                "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "rowHeader",
+                "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the cells for this column are hidden.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Text content to display in the header cell of the column.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "textAlign",
+                "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+                "value": {
+                  "type": [
+                    "GridColumnTextAlign",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerPartName",
+                "description": "Custom part name for the header cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerPartName",
+                "description": "Custom part name for the footer cell.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "headerRenderer",
+                "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "footerRenderer",
+                "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+                "value": {
+                  "type": [
+                    "GridHeaderFooterRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "width",
+                "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+                "value": {
+                  "type": [
+                    "GridBodyRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "path",
+                "description": "Path to an item sub-property whose value gets displayed in the column body cells.\nThe property name is also shown in the column header if an explicit header or renderer isn't defined.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "ariaLabel",
+                "description": "The arial-label for the edit button",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-crud",
+          "description": "`<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.\n\n### Quick Start\n\nAssign an array to the [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud#property-items) property.\n\nA grid and an editor will be automatically generated and configured based on the data structure provided.\n\n```html\n<vaadin-crud></vaadin-crud>\n```\n```js\nconst crud = document.querySelector('vaadin-crud');\n\ncrud.items = [\n  { name: 'John', surname: 'Lennon', role: 'singer' },\n  { name: 'Ringo', surname: 'Starr', role: 'drums' },\n  // ... more items\n];\n```\n\n### Data Provider Function\n\nOtherwise, you can provide a [`dataProvider`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud#property-dataProvider) function.\n\n```js\nconst crud = document.querySelector('vaadin-crud');\n\nconst users = [\n  { name: 'John', surname: 'Lennon', role: 'singer' },\n  { name: 'Ringo', surname: 'Starr', role: 'drums' },\n  // ... more items\n];\n\ncrud.dataProvider = (params, callback) => {\n  const chunk = users.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);\n  callback(chunk, people.length);\n};\n```\n\nNOTE: The auto-generated editor only supports string types. If you need to handle special cases\ncustomizing the editor is discussed below.\n\n### Customization\n\nAlternatively you can fully configure the component by using `slot` names.\n\nSlot name      | Description\n---------------|----------------\n`grid`         | To replace the auto-generated grid with a custom one.\n`form`         | To replace the auto-generated form.\n`save-button`  | To replace the \"Save\" button.\n`cancel-button`| To replace the \"Cancel\" button.\n`delete-button`| To replace the \"Delete\" button.\n`toolbar`      | To provide the toolbar content (by default, it's empty).\n`new-button`   | To replace the \"New item\" button.\n\n#### Example:\n\n```html\n<vaadin-crud id=\"crud\">\n  <vaadin-grid slot=\"grid\">\n    <vaadin-crud-edit-column></vaadin-crud-edit-column>\n    <vaadin-grid-column id=\"column1\"></vaadin-grid-column>\n    <vaadin-grid-column id=\"column2\"></vaadin-grid-column>\n  </vaadin-grid>\n\n  <vaadin-form-layout slot=\"form\">\n    <vaadin-text-field label=\"First\" path=\"name\"></vaadin-text-field>\n    <vaadin-text-field label=\"Surname\" path=\"surname\"></vaadin-text-field>\n  </vaadin-form-layout>\n\n  <div slot=\"toolbar\">Total singers: 2</div>\n  <button slot=\"new-button\">New singer</button>\n\n  <button slot=\"save-button\">Save changes</button>\n  <button slot=\"cancel-button\">Discard changes</button>\n  <button slot=\"delete-button\">Delete singer</button>\n</vaadin-crud>\n```\n```js\nconst crud = document.querySelector('#crud');\n\nconst column1 = document.querySelector('#column1');\ncolumn1.headerRenderer = (root, column) => {\n  root.textContent = 'Name';\n};\ncolumn1.renderer = (root, column, model) => {\n  root.textContent = model.item.name;\n};\n\nconst column2 = document.querySelector('#column2');\ncolumn2.headerRenderer = (root, column) => {\n  root.textContent = 'Surname';\n};\ncolumn2.renderer = (root, column, model) => {\n  root.textContent = model.item.surname;\n};\n\ncrud.items = [\n  { name: 'John', surname: 'Lennon', role: 'singer' },\n  { name: 'Ringo', surname: 'Starr', role: 'drums' },\n  // ... more items\n];\n```\n\n### Helpers\n\nThe following elements are used to auto-configure the grid and the editor\n- [`<vaadin-crud-edit-column>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud-edit-column)\n- `<vaadin-crud-grid>` - can be replaced with custom [`<vaadin-grid>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-grid)\n- `<vaadin-crud-form>` - can be replaced with custom [`<vaadin-form-layout>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-form-layout)\n\n### Styling\n\nThe following shadow DOM parts are available for styling when the editor is rendered next to, or below, the grid:\n\nPart name | Description\n----------------|----------------\n`toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button\n`editor`   | The editor container\n`scroller` | The wrapper for the header and the form\n`header`   | The header of the editor\n`footer`   | The footer of the editor\n\nThe following shadow DOM parts are available for styling when the editor renders as a dialog:\n\nPart name | Description\n----------------|----------------\n`toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button\n`overlay`  | The dialog overlay\n`backdrop` | The dialog backdrop\n`header`   | The header of the dialog\n`footer`   | The footer of the dialog\n`content`  | The wrapper for the form\n\nThe following custom properties are available:\n\nCustom Property | Description | Default\n----------------|----------------\n--vaadin-crud-editor-max-height | max height of editor when opened on the bottom | 40%\n--vaadin-crud-editor-max-width | max width of editor when opened on the side | 40%\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nShould be overridden by subclasses to provide a custom JSDoc with the\ndefault I18N properties.",
+              "value": {
+                "type": [
+                  "Object"
+                ]
+              }
+            },
+            {
+              "name": "editor-position",
+              "description": "Sets how editor will be presented on desktop screen.\n\nAccepted values are:\n  - `` (default) - form will open as overlay\n  - `bottom` - form will open below the grid\n  - `aside` - form will open on the grid side (_right_, if lft and _left_ if rtl)",
+              "value": {
+                "type": [
+                  "CrudEditorPosition"
+                ]
+              }
+            },
+            {
+              "name": "edit-on-click",
+              "description": "Enables user to click on row to edit it.\nNote: When enabled, auto-generated grid won't show the edit column.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "no-filter",
+              "description": "Disable filtering when grid is autoconfigured.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "no-sort",
+              "description": "Disable sorting when grid is autoconfigured.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "no-head",
+              "description": "Remove grid headers when it is autoconfigured.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "include",
+              "description": "A comma-separated list of fields to include in the generated grid and the generated editor.\n\nIt can be used to explicitly define the field order.\n\nWhen it is defined [`exclude`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud#property-exclude) is ignored.\n\nDefault is undefined meaning that all properties in the object should be mapped to fields.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "exclude",
+              "description": "A comma-separated list of fields to be excluded from the generated grid and the generated editor.\n\nWhen [`include`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud#property-include) is defined, this parameter is ignored.\n\nDefault is to exclude all private fields (those properties starting with underscore)",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "editor-opened",
+              "description": "Reflects the opened status of the editor.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "no-toolbar",
+              "description": "Controls visibility state of toolbar.\nWhen set to false toolbar is hidden and shown when set to true.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "i18n",
+                "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n\n```js\n{\n  newItem: 'New item',\n  editItem: 'Edit item',\n  saveItem: 'Save',\n  cancel: 'Cancel',\n  deleteItem: 'Delete...',\n  editLabel: 'Edit',\n  confirm: {\n    delete: {\n      title: 'Confirm delete',\n      content: 'Are you sure you want to delete the selected item? This action cannot be undone.',\n      button: {\n        confirm: 'Delete',\n        dismiss: 'Cancel'\n      }\n    },\n    cancel: {\n      title: 'Unsaved changes',\n      content: 'There are unsaved modifications to the item.',\n      button: {\n        confirm: 'Discard',\n        dismiss: 'Continue editing'\n      }\n    }\n  }\n}\n```",
+                "value": {
+                  "type": [
+                    "CrudI18n"
+                  ]
+                }
+              },
+              {
+                "name": "items",
+                "description": "An array containing the items which will be stamped to the column template instances.",
+                "value": {
+                  "type": [
+                    "Array.<unknown>",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "editedItem",
+                "description": "The item being edited in the dialog.",
+                "value": {
+                  "type": [
+                    "unknown"
+                  ]
+                }
+              },
+              {
+                "name": "editorPosition",
+                "description": "Sets how editor will be presented on desktop screen.\n\nAccepted values are:\n  - `` (default) - form will open as overlay\n  - `bottom` - form will open below the grid\n  - `aside` - form will open on the grid side (_right_, if lft and _left_ if rtl)",
+                "value": {
+                  "type": [
+                    "CrudEditorPosition"
+                  ]
+                }
+              },
+              {
+                "name": "editOnClick",
+                "description": "Enables user to click on row to edit it.\nNote: When enabled, auto-generated grid won't show the edit column.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "dataProvider",
+                "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n`params.pageSize` Current page size\n`params.filters` Currently applied filters\n`params.sortOrders` Currently applied sorting orders\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items",
+                "value": {
+                  "type": [
+                    "CrudDataProvider",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noFilter",
+                "description": "Disable filtering when grid is autoconfigured.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noSort",
+                "description": "Disable sorting when grid is autoconfigured.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noHead",
+                "description": "Remove grid headers when it is autoconfigured.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "include",
+                "description": "A comma-separated list of fields to include in the generated grid and the generated editor.\n\nIt can be used to explicitly define the field order.\n\nWhen it is defined [`exclude`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud#property-exclude) is ignored.\n\nDefault is undefined meaning that all properties in the object should be mapped to fields.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "exclude",
+                "description": "A comma-separated list of fields to be excluded from the generated grid and the generated editor.\n\nWhen [`include`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-crud#property-include) is defined, this parameter is ignored.\n\nDefault is to exclude all private fields (those properties starting with underscore)",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "editorOpened",
+                "description": "Reflects the opened status of the editor.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "noToolbar",
+                "description": "Controls visibility state of toolbar.\nWhen set to false toolbar is hidden and shown when set to true.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "cancel",
+                "description": "Fired when user discards edition. If the default is prevented, then\nno action is performed, user is responsible to close dialog and reset\nitem and grid."
+              },
+              {
+                "name": "delete",
+                "description": "Fired when user wants to delete item. If the default is prevented, then\nno action is performed, items array is not modified nor dialog closed"
+              },
+              {
+                "name": "edit",
+                "description": "Fired when user wants to edit an existing item. If the default is prevented, then\na new item is not assigned to the form, giving that responsibility to the app, though\ndialog is always opened."
+              },
+              {
+                "name": "new",
+                "description": "Fired when user wants to create a new item."
+              },
+              {
+                "name": "save",
+                "description": "Fired when user wants to save a new or an existing item. If the default is prevented, then\nno action is performed, items array is not modified nor dialog closed"
+              },
+              {
+                "name": "items-changed",
+                "description": "Fired when the `items` property changes."
+              },
+              {
+                "name": "edited-item-changed",
+                "description": "Fired when the `editedItem` property changes."
+              },
+              {
+                "name": "editor-opened-changed",
+                "description": "Fired when the `editorOpened` property changes."
+              },
+              {
+                "name": "size-changed",
+                "description": "Fired when the `size` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

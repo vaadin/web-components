@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/item",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-item",
+          "description": "`<vaadin-item>` is a Web Component providing layout for items in tabs and menus.\n\n```html\n<vaadin-item>Item content</vaadin-item>\n```\n\n### Selectable\n\n`<vaadin-item>` has the `selected` property and the corresponding state attribute.\nCurrently, the component sets the `selected` to false, when `disabled` property is set to true.\nBut other than that, the `<vaadin-item>` does not switch selection by itself.\nIn general, it is the wrapper component, like `<vaadin-list-box>`, which should update\nthe `selected` property on the items, e. g. on mousedown or when Enter / Spacebar is pressed.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name    | Description\n-------------|----------------\n`checkmark`  | The graphical checkmark shown for a selected item\n`content`    | The element that wraps the slot\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|-------------\n`active`     | Set when the item is pressed down, either with mouse, touch or the keyboard.\n`disabled`   | Set when the item is disabled.\n`focus-ring` | Set when the item is focused using the keyboard.\n`focused`    | Set when the item is focused.\n`selected`   | Set when the item is selected\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                  |\n:------------------------------------|\n| `--vaadin-item-border-radius`      |\n| `--vaadin-item-checkmark-color`    |\n| `--vaadin-item-checkmark-display`  |\n| `--vaadin-item-gap`                |\n| `--vaadin-item-height`             |\n| `--vaadin-item-padding`            |\n| `--vaadin-item-text-align`         |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?selected",
+              "description": "If true, the item is in selected state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "Submittable string value. The default value is the trimmed text content of the element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "String that can be set to visually represent the selected item in `vaadin-select`.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

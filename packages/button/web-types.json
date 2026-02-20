@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/button",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-button",
+          "description": "`<vaadin-button>` is an accessible and customizable button that allows users to perform actions.\n\n```html\n<vaadin-button>Press me</vaadin-button>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------|-------------\n`label`   | The label (text) inside the button.\n`prefix`  | A slot for content before the label (e.g. an icon).\n`suffix`  | A slot for content after the label (e.g. an icon).\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`active`       | Set when the button is pressed down, either with mouse, touch or the keyboard\n`disabled`     | Set when the button is disabled\n`focus-ring`   | Set when the button is focused using the keyboard\n`focused`      | Set when the button is focused\n`has-tooltip`  | Set when the button has a slotted tooltip\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                |\n:----------------------------------|\n| `--vaadin-button-background`     |\n| `--vaadin-button-border-color`   |\n| `--vaadin-button-border-radius`  |\n| `--vaadin-button-border-width`   |\n| `--vaadin-button-font-size`      |\n| `--vaadin-button-font-weight`    |\n| `--vaadin-button-gap`            |\n| `--vaadin-button-height`         |\n| `--vaadin-button-line-height`    |\n| `--vaadin-button-margin`         |\n| `--vaadin-button-padding`        |\n| `--vaadin-button-text-color`     |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "When disabled, the button is rendered as \"dimmed\" and prevents all\nuser interactions (mouse and keyboard).\n\nSince disabled buttons are not focusable and cannot react to hover\nevents by default, it can cause accessibility issues by making them\nentirely invisible to assistive technologies, and prevents the use\nof Tooltips to explain why the action is not available. This can be\naddressed by enabling the feature flag `accessibleDisabledButtons`,\nwhich makes disabled buttons focusable and hoverable, while still\npreventing them from being triggered:\n\n```js\n// Set before any button is attached to the DOM.\nwindow.Vaadin.featureFlags.accessibleDisabledButtons = true\n```",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "When disabled, the button is rendered as \"dimmed\" and prevents all\nuser interactions (mouse and keyboard).\n\nSince disabled buttons are not focusable and cannot react to hover\nevents by default, it can cause accessibility issues by making them\nentirely invisible to assistive technologies, and prevents the use\nof Tooltips to explain why the action is not available. This can be\naddressed by enabling the feature flag `accessibleDisabledButtons`,\nwhich makes disabled buttons focusable and hoverable, while still\npreventing them from being triggered:\n\n```js\n// Set before any button is attached to the DOM.\nwindow.Vaadin.featureFlags.accessibleDisabledButtons = true\n```",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

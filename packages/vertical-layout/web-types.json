@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/vertical-layout",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-vertical-layout",
+          "description": "`<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.\n\n```html\n<vaadin-vertical-layout>\n  <div>Item 1</div>\n  <div>Item 2</div>\n</vaadin-vertical-layout>\n```\n\n### Built-in Theme Variations\n\n`<vaadin-vertical-layout>` supports the following theme variations:\n\nTheme variation    | Description\n-------------------|---------------\n`theme=\"margin\"`   | Applies the default amount of CSS margin for the host element\n`theme=\"padding\"`  | Applies the default amount of CSS padding for the host element\n`theme=\"spacing\"`  | Applies the default amount of CSS margin between items\n`theme=\"wrap\"`     | Items wrap to the next row when they exceed the layout width\n\n### Custom CSS Properties\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                | Description\n-----------------------------------|-------------\n`--vaadin-vertical-layout-margin`  | The default CSS margin applied when using `theme=\"margin\"`\n`--vaadin-vertical-layout-padding` | The default CSS padding applied when using `theme=\"padding\"`\n`--vaadin-vertical-layout-gap`     | The default CSS gap applied when using `theme=\"spacing\"`\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

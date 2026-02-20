@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/grid-pro",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-grid-pro-edit-column",
+          "description": "`<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`\nthat provides default inline editing for the items.\n\n__Note that the `path` property must be explicitly specified for edit column.__\n\n#### Example:\n```html\n<vaadin-grid-pro>\n <vaadin-grid-pro-edit-column path=\"name.first\"></vaadin-grid-pro-edit-column>\n\n <vaadin-grid-column>\n   ...\n```",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?resizable",
+              "description": "When set to true, the column is user-resizable.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?frozen",
+              "description": "When true, the column is frozen. When a column inside of a column group is frozen,\nall of the sibling columns inside the group will get frozen also.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?frozenToEnd",
+              "description": "When true, the column is frozen to end of grid.\n\nWhen a column inside of a column group is frozen to end, all of the sibling columns\ninside the group will get frozen to end also.\n\nColumn can not be set as `frozen` and `frozenToEnd` at the same time.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?rowHeader",
+              "description": "When true, the cells for this column will be rendered with the `role` attribute\nset as `rowheader`, instead of the `gridcell` role value used by default.\n\nWhen a column is set as row header, its cells will be announced by screen readers\nwhile navigating to help user identify the current row as uniquely as possible.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?hidden",
+              "description": "When set to true, the cells for this column are hidden.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoWidth",
+              "description": "Automatically sets the width of the column based on the column contents when this is set to `true`.\n\nFor performance reasons the column width is calculated automatically only once when the grid items\nare rendered for the first time and the calculation only considers the rows which are currently\nrendered in DOM (a bit more than what is currently visible). If the grid is scrolled, or the cell\ncontent changes, the column width might not match the contents anymore.\n\nHidden columns are ignored in the calculation and their widths are not automatically updated when\nyou show a column that was initially hidden.\n\nYou can manually trigger the auto sizing behavior again by calling `grid.recalculateColumnWidths()`.\n\nThe column width may still grow larger when `flexGrow` is not 0.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".header",
+              "description": "Text content to display in the header cell of the column.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".textAlign",
+              "description": "Aligns the columns cell content horizontally.\nSupported values: \"start\", \"center\" and \"end\".",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".headerPartName",
+              "description": "Custom part name for the header cell.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".footerPartName",
+              "description": "Custom part name for the footer cell.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".headerRenderer",
+              "description": "Custom function for rendering the header content.\nReceives two arguments:\n\n- `root` The header cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".footerRenderer",
+              "description": "Custom function for rendering the footer content.\nReceives two arguments:\n\n- `root` The footer cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".width",
+              "description": "Width of the cells for this column.\n\nPlease note that using the `em` length unit is discouraged as\nit might lead to misalignment issues if the header, body, and footer\ncells have different font sizes. Instead, use `rem` if you need\na length unit relative to the font size.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".flexGrow",
+              "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".renderer",
+              "description": "Custom function for rendering the cell content.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your content to it.\n- `column` The `<vaadin-grid-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.\n  - `model.hasChildren` Whether the item has children.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".path",
+              "description": "JS Path of the property in the item used for the editable content.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".editModeRenderer",
+              "description": "Custom function for rendering the cell content in edit mode.\nReceives three arguments:\n\n- `root` The cell content DOM element. Append your editor component to it.\n- `column` The `<vaadin-grid-pro-edit-column>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.\n  - `model.detailsOpened` Details opened state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".editorOptions",
+              "description": "The list of options which should be passed to cell editor component.\nUsed with the `select` editor type, to provide a list of items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".editorType",
+              "description": "Type of the cell editor component to be rendered. Allowed values:\n- `text` (default) - renders a text field\n- `checkbox` - renders a checkbox\n- `select` - renders a select with a list of items passed as `editorOptions`\n\nEditor type is set to `custom` when `editModeRenderer` is set.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".editorValuePath",
+              "description": "Path of the property used for the value of the editor component.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".isCellEditable",
+              "description": "A function to check whether a specific cell of this column can be\nedited. This allows to disable editing of individual rows or cells,\nbased on the item.\n\nReceives a `model` object containing the item for an individual row,\nand should return a boolean indicating whether the column's cell in\nthat row is editable.\n\nThe `model` object contains:\n- `model.index` The index of the item.\n- `model.item` The item.\n- `model.expanded` Sublevel toggle state.\n- `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n- `model.selected` Selected state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@editor-type-changed",
+              "description": "Fired when the `editorType` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-grid-pro",
+          "description": "`<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.\nIt extends `<vaadin-grid>` and adds extra features on top of the basic ones.\n\nSee [`<vaadin-grid>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-grid) documentation for details.\n\n```html\n<vaadin-grid-pro></vaadin-grid-pro>\n```\n\n### Internal components\n\nIn addition to `<vaadin-grid-pro>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-grid-pro-edit-checkbox>` - has the same API as [`<vaadin-checkbox>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-checkbox).\n- `<vaadin-grid-pro-edit-text-field>` - has the same API as [`<vaadin-text-field>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-text-field).\n- `<vaadin-grid-pro-edit-select>` - has the same API as [`<vaadin-select>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-select).",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?multiSort",
+              "description": "When `true`, all `<vaadin-grid-sorter>` are applied for sorting.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?multiSortOnShiftClick",
+              "description": "When `true`, Shift-clicking an unsorted column's sorter adds it to the multi-sort.\nShift + Space does the same action via keyboard. This property has precedence over the\n`multiSort` property. If `multiSortOnShiftClick` is true, the multiSort property is effectively ignored.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?columnReorderingAllowed",
+              "description": "Set to true to allow column reordering.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?rowsDraggable",
+              "description": "Marks the grid's rows to be available for dragging.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?allRowsVisible",
+              "description": "If true, the grid's height is defined by its rows.\n\nEffectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.\nIf the grid has a large number of items, using the feature is discouraged to avoid performance issues.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?enterNextRow",
+              "description": "When true, pressing Enter while in cell edit mode\nwill move focus to the editable cell in the next row\n(Shift + Enter - same, but for previous row).",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?singleCellEdit",
+              "description": "When true, after moving to next or previous editable cell using\nTab / Shift+Tab, it will be focused without edit mode.\n\nWhen `enterNextRow` is true, pressing Enter will also\npreserve edit mode, otherwise, it will have no effect.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?editOnClick",
+              "description": "When true, the grid enters cell edit mode on a single click\ninstead of the default double click.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the grid to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".activeItem",
+              "description": "The item user has last interacted with. Turns to `null` after user deactivates\nthe item by re-interacting with the currently active item.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".items",
+              "description": "An array containing the items which will be passed to renderer functions.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".size",
+              "description": "The number of root-level items in the grid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".pageSize",
+              "description": "Number of items fetched at a time from the dataprovider.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".dataProvider",
+              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When tree is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When tree sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when tree is not used, required for tree.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemHasChildrenPath",
+              "description": "Path to an item sub-property that indicates whether the item has child items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemIdPath",
+              "description": "Path to an item sub-property that identifies the item.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".expandedItems",
+              "description": "An array that contains the expanded items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".detailsOpenedItems",
+              "description": "An array containing references to items with open row details.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".rowDetailsRenderer",
+              "description": "Custom function for rendering the content of the row details.\nReceives three arguments:\n\n- `root` The row details content DOM element. Append your content to it.\n- `grid` The `<vaadin-grid>` element.\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.level` The number of the item's tree sublevel, starts from 0.\n  - `model.expanded` True if the item's tree sublevel is expanded.\n  - `model.selected` True if the item is selected.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".columnRendering",
+              "description": "Allows you to choose between modes for rendering columns in the grid:\n\n\"eager\" (default): All columns are rendered upfront, regardless of their visibility within the viewport.\nThis mode should generally be preferred, as it avoids the limitations imposed by the \"lazy\" mode.\nUse this mode unless the grid has a large number of columns and performance outweighs the limitations\nin priority.\n\n\"lazy\": Optimizes the rendering of cells when there are multiple columns in the grid by virtualizing\nhorizontal scrolling. In this mode, body cells are rendered only when their corresponding columns are\ninside the visible viewport.\n\nUsing \"lazy\" rendering should be used only if you're dealing with a large number of columns and performance\nis your highest priority. For most use cases, the default \"eager\" mode is recommended due to the\nlimitations imposed by the \"lazy\" mode.\n\nWhen using the \"lazy\" mode, keep the following limitations in mind:\n\n- Row Height: When only a number of columns are visible at once, the height of a row can only be that of\nthe highest cell currently visible on that row. Make sure each cell on a single row has the same height\nas all other cells on that row. If row cells have different heights, users may experience jumpiness when\nscrolling the grid horizontally as lazily rendered cells with different heights are scrolled into view.\n\n- Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,\nonly the header content is taken into account when calculating the column width because the body cells\nof the columns outside the viewport are not initially rendered.\n\n- Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct\nheaders when only a subset of the body cells on a row is rendered.\n\n- Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because\nsome of the columns that would include focusable elements in the body cells may be outside the visible viewport\nand thus not rendered.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".selectedItems",
+              "description": "An array that contains the selected items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".isItemSelectable",
+              "description": "A function to check whether a specific item in the grid may be\nselected or deselected by the user. Used by the selection column to\nconditionally enable to disable checkboxes for individual items. This\nfunction does not prevent programmatic selection/deselection of\nitems. Changing the function does not modify the currently selected\nitems.\n\nConfiguring this function hides the select all checkbox of the grid\nselection column, which means users can not select or deselect all\nitems anymore, nor do they get feedback on whether all items are\nselected or not.\n\nReceives an item instance and should return a boolean indicating\nwhether users may change the selection state of that item.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".multiSortPriority",
+              "description": "Controls how columns are added to the sort order when using multi-sort.\nThe sort order is visually indicated by numbers in grid sorters placed in column headers.\n\nBy default, whenever an unsorted column is sorted, or the sort-direction of a column is\nchanged, that column gets sort priority 1, thus affecting the priority for all the other\nsorted columns. This is identical to using `multi-sort-priority=\"prepend\"`.\n\nUsing this property allows to change this behavior so that sorting an unsorted column\nwould add it to the \"end\" of the sort, and changing column's sort direction would retain\nit's previous priority. To set this, use `multi-sort-priority=\"append\"`.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".cellPartNameGenerator",
+              "description": "A function that allows generating CSS `part` names for grid cells in Shadow DOM based\non their row and column, for styling from outside using the `::part()` selector.\n\nThe return value should be the generated part name as a string, or multiple part names\nseparated by whitespace characters.\n\nReceives two arguments:\n- `column` The `<vaadin-grid-column>` element (`undefined` for details-cell).\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".dropMode",
+              "description": "Defines the locations within the Grid row where an element can be dropped.\n\nPossible values are:\n- `between`: The drop event can happen between Grid rows.\n- `on-top`: The drop event can happen on top of Grid rows.\n- `on-top-or-between`: The drop event can happen either on top of or between Grid rows.\n- `on-grid`: The drop event will not happen on any specific row, it will show the drop target outline around the whole grid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".dragFilter",
+              "description": "A function that filters dragging of specific grid rows. The return value should be false\nif dragging of the row should be disabled.\n\nReceives one argument:\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".dropFilter",
+              "description": "A function that filters dropping on specific grid rows. The return value should be false\nif dropping on the row should be disabled.\n\nReceives one argument:\n- `model` The object with the properties related with\n  the rendered item, contains:\n  - `model.index` The index of the item.\n  - `model.item` The item.\n  - `model.expanded` Sublevel toggle state.\n  - `model.level` Level of the tree represented with a horizontal offset of the toggle button.\n  - `model.selected` Selected state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@active-item-changed",
+              "description": "Fired when the `activeItem` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@cell-activate",
+              "description": "Fired when the cell is activated with click or keyboard.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@column-resize",
+              "description": "Fired when a column in the grid is resized by the user.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@expanded-items-changed",
+              "description": "Fired when the `expandedItems` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@loading-changed",
+              "description": "Fired when the `loading` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@item-toggle",
+              "description": "Fired when the user selects or deselects an item through the selection column.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@selected-items-changed",
+              "description": "Fired when the `selectedItems` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@cell-focus",
+              "description": "Fired when a cell is focused with click or keyboard navigation.\n\nUse context property of @see {@link GridCellFocusEvent} to get detail information about the event.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@column-reorder",
+              "description": "Fired when the columns in the grid are reordered.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@grid-dragend",
+              "description": "Fired when the dragging of the rows ends.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@grid-dragstart",
+              "description": "Fired when starting to drag grid rows.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@grid-drop",
+              "description": "Fired when a drop occurs on top of the grid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@cell-edit-started",
+              "description": "Fired when the user starts editing a grid cell.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@item-property-changed",
+              "description": "Fired before exiting the cell edit mode, if the value has been changed.\nIf the default is prevented, value change would not be applied.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@size-changed",
+              "description": "Fired when the `size` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@data-provider-changed",
+              "description": "Fired when the `dataProvider` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@enter-next-row-changed",
+              "description": "Fired when the `enterNextRow` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@single-cell-edit-changed",
+              "description": "Fired when the `singleCellEdit` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/tooltip",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-tooltip",
+          "description": "`<vaadin-tooltip>` is a Web Component for creating tooltips.\n\n```html\n<button id=\"confirm\">Confirm</button>\n<vaadin-tooltip text=\"Click to save changes\" for=\"confirm\"></vaadin-tooltip>\n```\n\n### Markdown Support\n\nThe tooltip supports rendering Markdown content by setting the `markdown` property:\n\n```html\n<button id=\"info\">Info</button>\n<vaadin-tooltip\n  text=\"**Important:** Click to view *detailed* information\"\n  markdown\n  for=\"info\">\n</vaadin-tooltip>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name   | Description\n----------- | ---------------\n`overlay`   | The overlay element\n`content`   | The overlay content element\n\nThe following state attributes are available for styling:\n\nAttribute        | Description\n-----------------|----------------------------------------\n`markdown`       | Reflects the `markdown` property value.\n`position`       | Reflects the `position` property value.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                |\n:----------------------------------|\n| `--vaadin-tooltip-background`    |\n| `--vaadin-tooltip-border-color`  |\n| `--vaadin-tooltip-border-radius` |\n| `--vaadin-tooltip-border-width`  |\n| `--vaadin-tooltip-font-size`     |\n| `--vaadin-tooltip-font-weight`   |\n| `--vaadin-tooltip-line-height`   |\n| `--vaadin-tooltip-max-width`     |\n| `--vaadin-tooltip-offset-bottom` |\n| `--vaadin-tooltip-offset-end`    |\n| `--vaadin-tooltip-offset-start`  |\n| `--vaadin-tooltip-offset-top`    |\n| `--vaadin-tooltip-padding`       |\n| `--vaadin-tooltip-shadow`        |\n| `--vaadin-tooltip-text-color`    |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?manual",
+              "description": "When true, the tooltip is controlled programmatically\ninstead of reacting to focus and mouse events.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?opened",
+              "description": "When true, the tooltip is opened.\nIn manual mode, this can be set programmatically.\nIn automatic mode, this is set automatically by internal logic.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?markdown",
+              "description": "When enabled, the tooltip text is rendered as Markdown.\n\n**Note:** Using Markdown is discouraged if accessibility of the tooltip\ncontent is essential, as semantics of the rendered HTML content\n(headers, lists, ...) will not be conveyed to assistive technologies.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".position",
+              "description": "Position of the overlay with respect to the target.\nSupported values: `top-start`, `top`, `top-end`,\n`bottom-start`, `bottom`, `bottom-end`, `start-top`,\n`start`, `start-bottom`, `end-top`, `end`, `end-bottom`.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".for",
+              "description": "The id of the element to be used as `target` value.\nThe element should be in the DOM by the time when\nthe attribute is set, otherwise a warning is shown.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".target",
+              "description": "Reference to the DOM element used both to trigger the overlay\nby user interaction and to visually position it on the screen.\n\nDefaults to an element referenced with `for` attribute, in\nwhich case it must be located in the same shadow scope.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".ariaTarget",
+              "description": "Element used to link with the `aria-describedby`\nattribute. Supports array of multiple elements.\nWhen not set, defaults to `target`.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".context",
+              "description": "Object with properties passed to `generator` and\n`shouldShow` functions for generating tooltip text\nor detecting whether to show the tooltip or not.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".focusDelay",
+              "description": "The delay in milliseconds before the tooltip\nis opened on keyboard focus, when not in manual mode.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".generator",
+              "description": "Function used to generate the tooltip content.\nWhen provided, it overrides the `text` property.\nUse the `context` property to provide argument\nthat can be passed to the generator function.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".hideDelay",
+              "description": "The delay in milliseconds before the tooltip\nis closed on losing hover, when not in manual mode.\nOn blur, the tooltip is closed immediately.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".hoverDelay",
+              "description": "The delay in milliseconds before the tooltip\nis opened on hover, when not in manual mode.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".shouldShow",
+              "description": "Function used to detect whether to show the tooltip based on a condition,\ncalled every time the tooltip is about to be shown on hover and focus.\nThe function takes two parameters: `target` and `context`, which contain\nvalues of the corresponding tooltip properties at the time of calling.\nThe tooltip is only shown when the function invocation returns `true`.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".text",
+              "description": "String used as a tooltip content.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@content-changed",
+              "description": "Fired when the tooltip text content is changed.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

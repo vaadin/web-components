@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/message-input",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-message-input",
+          "description": "`<vaadin-message-input>` is a Web Component for sending messages.\nIt consists of a text area that grows on along with the content, and a send button to send message.\n\nThe message can be sent by one of the following actions:\n- by pressing Enter (use Shift + Enter to add a new line)\n- by clicking `submit` button.\n\n```html\n<vaadin-message-input></vaadin-message-input>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|---------------------------------\n`disabled`     | Set when the element is disabled\n`has-tooltip`  | Set when the element has a slotted tooltip\n\n### Internal components\n\nIn addition to `<vaadin-message-input>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-message-input-button>` - has the same API as `<vaadin-button>`\n- `<vaadin-text-area>`\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "Set to true to disable this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n```js\n{\n  // Used as the button label\n  send: 'Send',\n\n  // Used as the input field's placeholder and aria-label\n  message: 'Message'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "Current content of the text input field",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@submit",
+              "description": "Fired when a new message is submitted with `<vaadin-message-input>`, either\nby clicking the \"send\" button, or pressing the Enter key.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

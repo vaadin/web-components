@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/confirm-dialog",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-confirm-dialog",
+          "description": "`<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.\n\n```html\n<vaadin-confirm-dialog cancel-button-visible>\n  There are unsaved changes. Do you really want to leave?\n</vaadin-confirm-dialog>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name        | Description\n-----------------|-------------------------------------------\n`backdrop`       | Backdrop of the overlay\n`overlay`        | The overlay container\n`content`        | The overlay content\n`header`         | The header element wrapper\n`message`        | The message element wrapper\n`footer`         | The footer element that wraps the buttons\n`cancel-button`  | The \"Cancel\" button wrapper\n`confirm-button` | The \"Confirm\" button wrapper\n`reject-button`  | The \"Reject\" button wrapper\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                      |\n:----------------------------------------|\n|`--vaadin-confirm-dialog-max-width`     |\n|`--vaadin-confirm-dialog-min-width`     |\n|`--vaadin-dialog-background`            |\n|`--vaadin-dialog-border-color`          |\n|`--vaadin-dialog-border-radius`         |\n|`--vaadin-dialog-border-width`          |\n|`--vaadin-dialog-padding`               |\n|`--vaadin-dialog-shadow`                |\n|`--vaadin-dialog-title-color`           |\n|`--vaadin-dialog-title-font-size`       |\n|`--vaadin-dialog-title-font-weight`     |\n|`--vaadin-dialog-title-line-height`     |\n|`--vaadin-overlay-backdrop-background`  |\n\nUse `confirmTheme`, `cancelTheme` and `rejectTheme` properties to customize buttons theme.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Custom content\n\nThe following slots are available for providing custom content:\n\nSlot name         | Description\n------------------|---------------------------\n`header`          | Slot for header element\n`cancel-button`   | Slot for \"Cancel\" button\n`confirm-button`  | Slot for \"Confirm\" button\n`reject-button`   | Slot for \"Reject\" button",
+          "attributes": [
+            {
+              "name": "width",
+              "description": "Set the width of the dialog.\nIf a unitless number is provided, pixels are assumed.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "height",
+              "description": "Set the height of the dialog.\nIf a unitless number is provided, pixels are assumed.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "accessible-description-ref",
+              "description": "Sets the `aria-describedby` attribute of the dialog.\n\nBy default, the text contents of all elements inside the message area\nare combined into the `aria-description` attribute. However, there are\ncases where this can confuse screen reader users (e.g. the dialog\nmay present a password confirmation form). For these cases,\nit's better to associate only the elements that will help describe\nthe confirmation dialog through this API.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "True if the dialog is visible and available for interaction.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "header",
+              "description": "Set the confirmation dialog title.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "message",
+              "description": "Set the message or confirmation question.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "confirm-text",
+              "description": "Text displayed on confirm-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "confirm-theme",
+              "description": "Theme for a confirm-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "no-close-on-esc",
+              "description": "Set to true to disable closing dialog on Escape press",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "reject-button-visible",
+              "description": "Whether to show reject button or not.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "reject-text",
+              "description": "Text displayed on reject-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "reject-theme",
+              "description": "Theme for a reject-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "cancel-button-visible",
+              "description": "Whether to show cancel button or not.",
+              "value": {
+                "type": [
+                  "boolean"
+                ]
+              }
+            },
+            {
+              "name": "cancel-text",
+              "description": "Text displayed on cancel-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "cancel-theme",
+              "description": "Theme for a cancel-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+              "value": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "width",
+                "description": "Set the width of the dialog.\nIf a unitless number is provided, pixels are assumed.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "height",
+                "description": "Set the height of the dialog.\nIf a unitless number is provided, pixels are assumed.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "accessibleDescriptionRef",
+                "description": "Sets the `aria-describedby` attribute of the dialog.\n\nBy default, the text contents of all elements inside the message area\nare combined into the `aria-description` attribute. However, there are\ncases where this can confuse screen reader users (e.g. the dialog\nmay present a password confirmation form). For these cases,\nit's better to associate only the elements that will help describe\nthe confirmation dialog through this API.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "True if the dialog is visible and available for interaction.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "description": "Set the confirmation dialog title.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "message",
+                "description": "Set the message or confirmation question.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "confirmText",
+                "description": "Text displayed on confirm-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "confirmTheme",
+                "description": "Theme for a confirm-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "noCloseOnEsc",
+                "description": "Set to true to disable closing dialog on Escape press",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "rejectButtonVisible",
+                "description": "Whether to show reject button or not.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "rejectText",
+                "description": "Text displayed on reject-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "rejectTheme",
+                "description": "Theme for a reject-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "cancelButtonVisible",
+                "description": "Whether to show cancel button or not.",
+                "value": {
+                  "type": [
+                    "boolean"
+                  ]
+                }
+              },
+              {
+                "name": "cancelText",
+                "description": "Text displayed on cancel-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "name": "cancelTheme",
+                "description": "Theme for a cancel-button.\nThis only affects the default button, custom slotted buttons will not be altered.",
+                "value": {
+                  "type": [
+                    "string"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "closed",
+                "description": "Fired when the confirm dialog is closed."
+              },
+              {
+                "name": "cancel",
+                "description": "cancel\nfired when Cancel button or Escape key was pressed."
+              },
+              {
+                "name": "confirm",
+                "description": "confirm\nfired when Confirm button was pressed."
+              },
+              {
+                "name": "reject",
+                "description": "reject\nfired when Reject button was pressed."
+              },
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

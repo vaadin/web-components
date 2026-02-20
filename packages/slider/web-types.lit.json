@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/slider",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-range-slider",
+          "description": "`<vaadin-range-slider>` is a web component that represents a range slider\nfor selecting a subset of the given range.\n\n```html\n<vaadin-range-slider min=\"0\" max=\"100\" step=\"1\"></vaadin-range-slider>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|-----------------\n`label`              | The label element\n`required-indicator` | The required indicator element\n`helper-text`        | The helper text element\n`error-message`      | The error message element\n`track`              | The slider track\n`track-fill`         | The filled portion of the track\n`thumb`              | The slider thumb (applies to both thumbs)\n`thumb-start`        | The start (lower value) thumb\n`thumb-end`          | The end (upper value) thumb\n`marks`              | Container for min/max labels\n`min`                | Minimum value label\n`max`                | Maximum value label\n\nThe following state attributes are available for styling:\n\nAttribute          | Description\n-------------------|-------------\n`disabled`         | Set when the slider is disabled\n`readonly`         | Set when the slider is read-only\n`focused`          | Set when the slider has focus\n`focus-ring`       | Set when the slider is focused using the keyboard\n`start-active`     | Set when the start thumb is activated with mouse or touch\n`end-active`       | Set when the end thumb is activated with mouse or touch\n`start-focused`    | Set when the start thumb has focus\n`end-focused`      | Set when the end thumb has focus\n`min-max-visible`  | Set when the min/max labels are displayed\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n`--vaadin-field-default-width`               |\n`--vaadin-input-field-error-color`           |\n`--vaadin-input-field-error-font-size`       |\n`--vaadin-input-field-error-font-weight`     |\n`--vaadin-input-field-helper-color`          |\n`--vaadin-input-field-helper-font-size`      |\n`--vaadin-input-field-helper-font-weight`    |\n`--vaadin-input-field-label-color`           |\n`--vaadin-input-field-label-font-size`       |\n`--vaadin-input-field-label-font-weight`     |\n`--vaadin-input-field-required-indicator`    |\n`--vaadin-slider-bubble-arrow-size`          |\n`--vaadin-slider-bubble-background`          |\n`--vaadin-slider-bubble-border-color`        |\n`--vaadin-slider-bubble-border-radius`       |\n`--vaadin-slider-bubble-border-width`        |\n`--vaadin-slider-bubble-offset`              |\n`--vaadin-slider-bubble-padding`             |\n`--vaadin-slider-bubble-shadow`              |\n`--vaadin-slider-bubble-text-color`          |\n`--vaadin-slider-bubble-font-size`           |\n`--vaadin-slider-bubble-font-weight`         |\n`--vaadin-slider-bubble-line-height`         |\n`--vaadin-slider-fill-background`            |\n`--vaadin-slider-fill-border-color`          |\n`--vaadin-slider-fill-border-width`          |\n`--vaadin-slider-marks-color`                |\n`--vaadin-slider-marks-font-size`            |\n`--vaadin-slider-marks-font-weight`          |\n`--vaadin-slider-thumb-border-color`         |\n`--vaadin-slider-thumb-border-radius`        |\n`--vaadin-slider-thumb-border-width`         |\n`--vaadin-slider-thumb-cursor`               |\n`--vaadin-slider-thumb-cursor-active`        |\n`--vaadin-slider-thumb-height`               |\n`--vaadin-slider-thumb-width`                |\n`--vaadin-slider-track-background`           |\n`--vaadin-slider-track-border-color`         |\n`--vaadin-slider-track-border-radius`        |\n`--vaadin-slider-track-border-width`         |\n`--vaadin-slider-track-height`               |\n\nIn order to style the slider bubble, use `<vaadin-slider-bubble>` shadow DOM parts:\n\nPart name        | Description\n-----------------|----------------------\n`overlay`        | The overlay container\n`content`        | The overlay content\n`arrow`          | Arrow pointing to the thumb\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?manualValidation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "When true, the user cannot modify the value of the slider.\nThe difference between `disabled` and `readonly` is that the\nread-only slider remains focusable and is announced by screen\nreaders.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?valueAlwaysVisible",
+              "description": "When true, the value bubble is always visible,\nregardless of focus or hover state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?minMaxVisible",
+              "description": "When true, displays the min and max values below the slider track.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".helperText",
+              "description": "String used for the helper text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameRef",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".min",
+              "description": "The minimum allowed value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".max",
+              "description": "The maximum allowed value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".step",
+              "description": "The stepping interval of the slider.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "The value of the slider.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameStart",
+              "description": "Custom accessible name for the start (minimum) input.\nWhen not set, defaults to \"${label} min\" or \"min\" if no label.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameEnd",
+              "description": "Custom accessible name for the end (maximum) input.\nWhen not set, defaults to \"${label} max\" or \"max\" if no label.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@validated",
+              "description": "Fired whenever the field is validated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@change",
+              "description": "Fired when the user commits a value change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@input",
+              "description": "Fired when the slider value changes during user interaction.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when the `value` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-slider",
+          "description": "`<vaadin-slider>` is a web component that represents a range slider\nfor selecting numerical values within a defined range.\n\n```html\n<vaadin-slider min=\"0\" max=\"100\" step=\"1\"></vaadin-slider>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|-----------------\n`label`              | The label element\n`required-indicator` | The required indicator element\n`helper-text`        | The helper text element\n`error-message`      | The error message element\n`track`              | The slider track\n`track-fill`         | The filled portion of the track\n`thumb`              | The slider thumb\n`marks`              | Container for min/max labels\n`min`                | Minimum value label\n`max`                | Maximum value label\n\nThe following state attributes are available for styling:\n\nAttribute          | Description\n-------------------|-------------\n`active`           | Set when the slider is activated with mouse or touch\n`disabled`         | Set when the slider is disabled\n`readonly`         | Set when the slider is read-only\n`focused`          | Set when the slider has focus\n`focus-ring`       | Set when the slider is focused using the keyboard\n`min-max-visible`  | Set when the min/max labels are displayed\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n`--vaadin-field-default-width`               |\n`--vaadin-input-field-error-color`           |\n`--vaadin-input-field-error-font-size`       |\n`--vaadin-input-field-error-font-weight`     |\n`--vaadin-input-field-helper-color`          |\n`--vaadin-input-field-helper-font-size`      |\n`--vaadin-input-field-helper-font-weight`    |\n`--vaadin-input-field-label-color`           |\n`--vaadin-input-field-label-font-size`       |\n`--vaadin-input-field-label-font-weight`     |\n`--vaadin-input-field-required-indicator`    |\n`--vaadin-slider-bubble-arrow-size`          |\n`--vaadin-slider-bubble-background`          |\n`--vaadin-slider-bubble-border-color`        |\n`--vaadin-slider-bubble-border-radius`       |\n`--vaadin-slider-bubble-border-width`        |\n`--vaadin-slider-bubble-offset`              |\n`--vaadin-slider-bubble-padding`             |\n`--vaadin-slider-bubble-shadow`              |\n`--vaadin-slider-bubble-text-color`          |\n`--vaadin-slider-bubble-font-size`           |\n`--vaadin-slider-bubble-font-weight`         |\n`--vaadin-slider-bubble-line-height`         |\n`--vaadin-slider-fill-background`            |\n`--vaadin-slider-fill-border-color`          |\n`--vaadin-slider-fill-border-width`          |\n`--vaadin-slider-marks-color`                |\n`--vaadin-slider-marks-font-size`            |\n`--vaadin-slider-marks-font-weight`          |\n`--vaadin-slider-thumb-border-color`         |\n`--vaadin-slider-thumb-border-radius`        |\n`--vaadin-slider-thumb-border-width`         |\n`--vaadin-slider-thumb-cursor`               |\n`--vaadin-slider-thumb-cursor-active`        |\n`--vaadin-slider-thumb-height`               |\n`--vaadin-slider-thumb-width`                |\n`--vaadin-slider-track-background`           |\n`--vaadin-slider-track-border-color`         |\n`--vaadin-slider-track-border-radius`        |\n`--vaadin-slider-track-border-width`         |\n`--vaadin-slider-track-height`               |\n\nIn order to style the slider bubble, use `<vaadin-slider-bubble>` shadow DOM parts:\n\nPart name        | Description\n-----------------|----------------------\n`overlay`        | The overlay container\n`content`        | The overlay content\n`arrow`          | Arrow pointing to the thumb\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?manualValidation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "When true, the user cannot modify the value of the slider.\nThe difference between `disabled` and `readonly` is that the\nread-only slider remains focusable and is announced by screen\nreaders.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?valueAlwaysVisible",
+              "description": "When true, the value bubble is always visible,\nregardless of focus or hover state.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?minMaxVisible",
+              "description": "When true, displays the min and max values below the slider track.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".helperText",
+              "description": "String used for the helper text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameRef",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".min",
+              "description": "The minimum allowed value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".max",
+              "description": "The maximum allowed value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".step",
+              "description": "The stepping interval of the slider.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "The value of the slider.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@validated",
+              "description": "Fired whenever the field is validated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@change",
+              "description": "Fired when the user commits a value change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@input",
+              "description": "Fired when the slider value changes during user interaction.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when the `value` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/rich-text-editor",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-rich-text-editor",
+          "description": "`<vaadin-rich-text-editor>` is a Web Component for rich text editing.\nIt provides a set of toolbar controls to apply formatting on the content,\nwhich is stored and can be accessed as HTML5 or JSON string.\n\n```html\n<vaadin-rich-text-editor></vaadin-rich-text-editor>\n```\n\nVaadin Rich Text Editor focuses on the structure, not the styling of content.\nTherefore, the semantic HTML5 tags such as `<h1>`, `<strong>` and `<ul>` are used,\nand CSS usage is limited to most common cases, like horizontal text alignment.\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|------------------------------\n`disabled`   | Set to a disabled text editor\n`readonly`   | Set to a readonly text editor\n\nThe following shadow DOM parts are available for styling:\n\nPart name                            | Description\n-------------------------------------|----------------\n`content`                            | The content wrapper\n`toolbar`                            | The toolbar wrapper\n`toolbar-group`                      | The group for toolbar controls\n`toolbar-group-history`              | The group for history controls\n`toolbar-group-emphasis`             | The group for emphasis controls\n`toolbar-group-heading`              | The group for heading controls\n`toolbar-group-style`                | The group for style controls\n`toolbar-group-glyph-transformation` | The group for glyph transformation controls\n`toolbar-group-list`                 | The group for list controls\n`toolbar-group-indent`               | The group for indentation controls\n`toolbar-group-alignment`            | The group for alignment controls\n`toolbar-group-rich-text`            | The group for rich text controls\n`toolbar-group-block`                | The group for preformatted block controls\n`toolbar-group-format`               | The group for format controls\n`toolbar-button`                     | The toolbar button (applies to all buttons)\n`toolbar-button-pressed`             | The toolbar button in pressed state (applies to all buttons)\n`toolbar-button-undo`                | The \"undo\" button\n`toolbar-button-redo`                | The \"redo\" button\n`toolbar-button-bold`                | The \"bold\" button\n`toolbar-button-italic`              | The \"italic\" button\n`toolbar-button-underline`           | The \"underline\" button\n`toolbar-button-strike`              | The \"strike-through\" button\n`toolbar-button-color`               | The \"color\" button\n`toolbar-button-background`          | The \"background\" button\n`toolbar-button-h1`                  | The \"header 1\" button\n`toolbar-button-h2`                  | The \"header 2\" button\n`toolbar-button-h3`                  | The \"header 3\" button\n`toolbar-button-subscript`           | The \"subscript\" button\n`toolbar-button-superscript`         | The \"superscript\" button\n`toolbar-button-list-ordered`        | The \"ordered list\" button\n`toolbar-button-list-bullet`         | The \"bullet list\" button\n`toolbar-button-outdent`             | The \"decrease indentation\" button\n`toolbar-button-indent`              | The \"increase indentation\" button\n`toolbar-button-align-left`          | The \"left align\" button\n`toolbar-button-align-center`        | The \"center align\" button\n`toolbar-button-align-right`         | The \"right align\" button\n`toolbar-button-image`               | The \"image\" button\n`toolbar-button-link`                | The \"link\" button\n`toolbar-button-blockquote`          | The \"blockquote\" button\n`toolbar-button-code-block`          | The \"code block\" button\n`toolbar-button-clean`               | The \"clean formatting\" button\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property            |\n:-------------------------------|\n`--vaadin-rich-text-editor-background` |\n`--vaadin-rich-text-editor-content-color` |\n`--vaadin-rich-text-editor-content-font-size` |\n`--vaadin-rich-text-editor-content-line-height` |\n`--vaadin-rich-text-editor-content-padding` |\n`--vaadin-rich-text-editor-toolbar-background` |\n`--vaadin-rich-text-editor-toolbar-gap` |\n`--vaadin-rich-text-editor-toolbar-padding` |\n`--vaadin-rich-text-editor-toolbar-button-background` |\n`--vaadin-rich-text-editor-toolbar-button-border-width` |\n`--vaadin-rich-text-editor-toolbar-button-border-color` |\n`--vaadin-rich-text-editor-toolbar-button-border-radius` |\n`--vaadin-rich-text-editor-toolbar-button-text-color` |\n`--vaadin-rich-text-editor-toolbar-button-padding` |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "When true, the user can not modify, nor copy the editor content.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "When true, the user can not modify the editor content, but can copy it.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe properties are used e.g. as the tooltips for the editor toolbar\nbuttons.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "Value is a list of the operations which describe change to the document.\nEach of those operations describe the change at the current index.\nThey can be an `insert`, `delete` or `retain`. The format is as follows:\n\n```js\n [\n   { insert: 'Hello World' },\n   { insert: '!', attributes: { bold: true }}\n ]\n```\n\nSee also https://github.com/quilljs/delta for detailed documentation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".colorOptions",
+              "description": "The list of colors used by the background and text color\nselection controls. Should contain an array of HEX strings.\n\nWhen user selects `#000000` (black) as a text color,\nor `#ffffff` (white) as a background color, it resets\nthe corresponding format for the selected text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when the `value` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@html-value-changed",
+              "description": "Fired when the `htmlValue` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

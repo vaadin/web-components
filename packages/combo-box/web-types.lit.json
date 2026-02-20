@@ -1,0 +1,356 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/combo-box",
+  "version": "25.1.0-alpha8",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-combo-box",
+          "description": "`<vaadin-combo-box>` is a web component for choosing a value from a filterable list of options\npresented in a dropdown overlay. The options can be provided as a list of strings or objects\nby setting [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-combo-box#property-items) property on the element.\n\n```html\n<vaadin-combo-box id=\"combo-box\"></vaadin-combo-box>\n```\n```js\ndocument.querySelector('#combo-box').items = ['apple', 'orange', 'banana'];\n```\n\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\n### Item rendering\n\nTo customize the content of the `<vaadin-combo-box-item>` elements placed in the dropdown, use\n[`renderer`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-combo-box#property-renderer) property which accepts a function.\nThe renderer function is called with `root`, `comboBox`, and `model` as arguments.\n\nGenerate DOM content by using `model` object properties if needed, and append it to the `root`\nelement. The `comboBox` reference is provided to access the combo-box element state. Do not\nset combo-box properties in a `renderer` function.\n\n```js\nconst comboBox = document.querySelector('#combo-box');\ncomboBox.items = [{'label': 'Hydrogen', 'value': 'H'}];\ncomboBox.renderer = (root, comboBox, model) => {\n  const item = model.item;\n  root.innerHTML = `${model.index}: ${item.label} <b>${item.value}</b>`;\n};\n```\n\nRenderer is called on the opening of the combo-box and each time the related model is updated.\nBefore creating new content, it is recommended to check if there is already an existing DOM\nelement in `root` from a previous renderer call for reusing it. Even though combo-box uses\ninfinite scrolling, reducing DOM operations might improve performance.\n\nThe following properties are available in the `model` argument:\n\nProperty   | Type             | Description\n-----------|------------------|-------------\n`index`    | Number           | Index of the item in the `items` array\n`item`     | String or Object | The item reference\n`selected` | Boolean          | True when item is selected\n`focused`  | Boolean          | True when item is focused\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively use the\n[`dataProvider`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-combo-box#property-dataProvider) function property.\nThe `<vaadin-combo-box>` calls this function lazily, only when it needs more data\nto be displayed.\n\n__Note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```js\ncomboBox.dataProvider = async (params, callback) => {\n  const API = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries';\n  const { filter, page, pageSize } = params;\n  const index = page * pageSize;\n\n  const res = await fetch(`${API}?index=${index}&count=${pageSize}&filter=${filter}`);\n  if (res.ok) {\n    const { result, size } = await res.json();\n    callback(result, size);\n  }\n};\n```\n\n### Styling\n\nThe following custom properties are available for styling:\n\nCustom property                         | Description                | Default\n----------------------------------------|----------------------------|---------\n`--vaadin-field-default-width`          | Default width of the field | `12em`\n`--vaadin-combo-box-overlay-width`      | Width of the overlay       | `auto`\n`--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|----------------\n`label`              | The label element\n`input-field`        | The element that wraps prefix, value and buttons\n`field-button`       | Set on both clear and toggle buttons\n`clear-button`       | The clear button\n`error-message`      | The error message element\n`helper-text`        | The helper text element wrapper\n`required-indicator` | The `required` state indicator element\n`toggle-button`      | The toggle button\n`overlay`            | The overlay container\n`content`            | The overlay content\n`loader`             | The loading indicator shown while loading items\n\nThe following state attributes are available for styling:\n\nAttribute            | Description\n---------------------|---------------------------------\n`disabled`           | Set when the element is disabled\n`has-value`          | Set when the element has a value\n`has-label`          | Set when the element has a label\n`has-helper`         | Set when the element has helper text or slot\n`has-error-message`  | Set when the element has an error message\n`has-tooltip`        | Set when the element has a slotted tooltip\n`invalid`            | Set when the element is invalid\n`focused`            | Set when the element is focused\n`focus-ring`         | Set when the element is keyboard focused\n`readonly`           | Set when the element is readonly\n`opened`             | Set when the overlay is opened\n`loading`            | Set when loading items from the data provider\n\n### Internal components\n\nIn addition to `<vaadin-combo-box>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-alpha8/#/elements/vaadin-item).\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?manualValidation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?clearButtonVisible",
+              "description": "Set to true to display the clear icon which clears the input.\n\nIt is up to the component to choose where to place the clear icon:\nin the Shadow DOM or in the light DOM. In any way, a reference to\nthe clear icon element should be provided via the `clearElement` getter.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoselect",
+              "description": "If true, the input text gets fully selected when the field is focused using click or touch / tap.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "When present, it specifies that the field is read-only.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?opened",
+              "description": "True if the dropdown is open, false otherwise.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoOpenDisabled",
+              "description": "Set true to prevent the overlay from opening automatically.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?allowCustomValue",
+              "description": "If `true`, the user can input a value that is not present in the items list.\n`value` property will be set to the input value in this case.\nAlso, when `value` is set programmatically, the input value will be set\nto reflect that value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?loading",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".helperText",
+              "description": "String used for the helper text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameRef",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "The value of the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".allowedCharPattern",
+              "description": "A pattern matched against individual characters the user inputs.\n\nWhen set, the field will prevent:\n- `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`\n- `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`\n- `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`\n\nFor example, to allow entering only numbers and minus signs, use:\n`allowedCharPattern = \"[\\\\d-]\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".name",
+              "description": "The name of this field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".placeholder",
+              "description": "A hint to the user of what can be entered in the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".title",
+              "description": "The text usually displayed in a tooltip popup when the mouse is over the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".pattern",
+              "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".pageSize",
+              "description": "Number of items fetched at a time from the dataprovider.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".size",
+              "description": "Total number of items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".dataProvider",
+              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filter` Currently applied filter\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".items",
+              "description": "A full set of items to filter the visible options from.\nThe items can be of either `String` or `Object` type.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".filteredItems",
+              "description": "A subset of items, filtered based on the user input. Filtered items\ncan be assigned directly to omit the internal filtering functionality.\nThe items can be of either `String` or `Object` type.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".filter",
+              "description": "Filtering string the user has typed into the input field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemLabelGenerator",
+              "description": "A function that is used to generate the label for dropdown\nitems based on the item. Receives one argument:\n- `item` The item to generate the label for.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemLabelPath",
+              "description": "Path for label of the item. If `items` is an array of objects, the\n`itemLabelPath` is used to fetch the displayed string label for each\nitem.\n\nThe item label is also used for matching items when processing user\ninput, i.e., for filtering and selecting items.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemValuePath",
+              "description": "Path for the value of the item. If `items` is an array of objects, the\n`itemValuePath:` is used to fetch the string value for the selected\nitem.\n\nThe item value is used in the `value` property of the combo box,\nto provide the form value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".renderer",
+              "description": "Custom function for rendering the content of every item.\nReceives three arguments:\n\n- `root` The `<vaadin-combo-box-item>` internal container DOM element.\n- `comboBox` The reference to the `<vaadin-combo-box>` element.\n- `model` The object with the properties related with the rendered\n  item, contains:\n  - `model.index` The index of the rendered item.\n  - `model.item` The item.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".selectedItem",
+              "description": "The selected item from the `items` array.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemClassNameGenerator",
+              "description": "A function used to generate CSS class names for dropdown\nitems based on the item. The return value should be the\ngenerated class name as a string, or multiple class names\nseparated by whitespace characters.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".itemIdPath",
+              "description": "Path for the id of the item. If `items` is an array of objects,\nthe `itemIdPath` is used to compare and identify the same item\nin `selectedItem` and `filteredItems` (items given by the\n`dataProvider` callback).",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@validated",
+              "description": "Fired whenever the field is validated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@change",
+              "description": "Fired when the user commits a value change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@input",
+              "description": "Fired when the value is changed by the user: on every typing keystroke,\nand the value is cleared using the clear button.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@custom-value-set",
+              "description": "Fired when the user sets a custom value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@selected-item-changed",
+              "description": "Fired when selected item changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@vaadin-combo-box-dropdown-closed",
+              "description": "Fired after the `vaadin-combo-box-overlay` closes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@vaadin-combo-box-dropdown-opened",
+              "description": "Fired after the `vaadin-combo-box-overlay` opens.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when the value changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@opened-changed",
+              "description": "Fired when the `opened` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@filter-changed",
+              "description": "Fired when the `filter` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
