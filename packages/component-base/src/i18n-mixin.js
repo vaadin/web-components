@@ -41,15 +41,6 @@ export const I18nMixin = (defaultI18n, superClass) =>
   class I18nMixinClass extends superClass {
     static get properties() {
       return {
-        // Technically declaring a Polymer property is not needed, as we have a
-        // getter/setter for it below. However, the React components currently
-        // rely on the Polymer property declaration to detect which properties
-        // are available on a custom element, so we add a dummy declaration for
-        // it.
-        i18n: {
-          type: Object,
-        },
-
         /** @private */
         __effectiveI18n: {
           type: Object,
