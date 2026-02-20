@@ -4,6 +4,7 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
+  aTimeout,
   enterKeyDown,
   escKeyDown,
   fire,
@@ -18,7 +19,7 @@ import '../src/vaadin-context-menu.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
+import { activateItem, getMenuItems, getSubMenu, openMenu, pointerMove } from './helpers.js';
 
 describe('items', () => {
   let rootMenu, subMenu, target, rootOverlay, subOverlay1;
@@ -732,17 +733,6 @@ describe('items', () => {
   });
 
   (isTouch ? describe.skip : describe)('safe triangle', () => {
-    function pointerMove(x, y) {
-      document.dispatchEvent(
-        new PointerEvent('pointermove', {
-          clientX: x,
-          clientY: y,
-          bubbles: true,
-          pointerType: 'mouse',
-        }),
-      );
-    }
-
     it('should keep submenu open when pointer moves diagonally toward it', async () => {
       const parentItem = getMenuItems(rootMenu)[0];
       const parentRect = parentItem.getBoundingClientRect();
@@ -757,9 +747,7 @@ describe('items', () => {
       pointerMove(startX, startY);
 
       // Wait for throttle
-      await new Promise((resolve) => {
-        setTimeout(resolve, 20);
-      });
+      await aTimeout(20);
 
       // Move diagonally toward the submenu
       const targetX = subMenuRect.left + subMenuRect.width / 2;
@@ -768,9 +756,7 @@ describe('items', () => {
       const midY = (startY + targetY) / 2;
       pointerMove(midX, midY);
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 20);
-      });
+      await aTimeout(20);
 
       // Now hover over a sibling item — submenu should stay open
       const siblingItem = getMenuItems(rootMenu)[3];
@@ -791,23 +777,17 @@ describe('items', () => {
       // Simulate pointer movement away from the submenu (moving left)
       pointerMove(startX, startY);
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 20);
-      });
+      await aTimeout(20);
 
       // Move away (to the left, opposite of submenu)
       pointerMove(startX - 50, startY);
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 20);
-      });
+      await aTimeout(20);
 
       // Move away again to exceed the threshold
       pointerMove(startX - 100, startY);
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 20);
-      });
+      await aTimeout(20);
 
       // Now hover over the other parent item — should switch
       activateItem(getMenuItems(rootMenu)[3]);

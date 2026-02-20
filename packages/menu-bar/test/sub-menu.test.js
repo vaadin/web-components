@@ -3,6 +3,7 @@ import {
   arrowDown,
   arrowLeft,
   arrowUp,
+  aTimeout,
   click,
   enter,
   esc,
@@ -20,6 +21,7 @@ import sinon from 'sinon';
 import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { pointerMove } from '@vaadin/context-menu/test/helpers.js';
 
 const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 
@@ -708,17 +710,6 @@ describe('touch', () => {
 (isTouch ? describe.skip : describe)('safe triangle', () => {
   let menu, buttons, subMenu;
 
-  function pointerMove(x, y) {
-    document.dispatchEvent(
-      new PointerEvent('pointermove', {
-        clientX: x,
-        clientY: y,
-        bubbles: true,
-        pointerType: 'mouse',
-      }),
-    );
-  }
-
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [
@@ -752,9 +743,7 @@ describe('touch', () => {
     const startY = btnRect.top + btnRect.height / 2;
     pointerMove(startX, startY);
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
+    await aTimeout(20);
 
     // Move pointer toward the submenu overlay (downward toward it)
     const targetX = overlayRect.left + overlayRect.width / 2;
@@ -763,9 +752,7 @@ describe('touch', () => {
     const midY = (startY + targetY) / 2;
     pointerMove(midX, midY);
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
+    await aTimeout(20);
 
     // Hover over another button — should NOT switch due to safe triangle
     fire(buttons[2], 'mouseover');
@@ -788,23 +775,17 @@ describe('touch', () => {
     const startY = btnRect.top + btnRect.height / 2;
     pointerMove(startX, startY);
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
+    await aTimeout(20);
 
     // Move pointer upward (away from submenu which opens below)
     pointerMove(startX, startY - 50);
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
+    await aTimeout(20);
 
     // Move again to exceed threshold
     pointerMove(startX, startY - 100);
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
+    await aTimeout(20);
 
     // Hover over another button — should switch
     fire(buttons[2], 'mouseover');
