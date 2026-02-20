@@ -269,20 +269,18 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
+        // Extract item reference eagerly since composedPath() is only valid synchronously
+        const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
+
         // If a submenu is open and the safe triangle indicates the user is
         // aiming at it, defer the switch instead of switching immediately.
         if (this._subMenu.opened && this.__safeTriangle && this.__safeTriangle.shouldKeepOpen()) {
-          const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
-          const expandedItem = this._listBox && this._listBox.querySelector('[expanded]');
-          if (item && item !== expandedItem) {
-            this.__safeTriangle.scheduleSwitch(() => {
-              this.__showSubMenu(event, item);
-            });
-            return;
-          }
+          this.__safeTriangle.scheduleSwitch(() => {
+            this.__showSubMenu(event, item);
+          });
+        } else {
+          this.__showSubMenu(event, item);
         }
-
-        this.__showSubMenu(event);
       });
 
       overlay.addEventListener('keydown', (event) => {
