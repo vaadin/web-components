@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { SafeTriangleController } from './vaadin-safe-triangle-controller.js';
 
 /**
  * @polymerMixin
@@ -163,6 +164,11 @@ export const ItemsMixin = (superClass) =>
           },
         }),
       );
+
+      // Activate safe triangle tracking for the newly opened submenu
+      if (this.__safeTriangle) {
+        this.__safeTriangle.activate(subMenuOverlay, itemElement);
+      }
     }
 
     /** @private */
@@ -263,6 +269,19 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
+        // If a submenu is open and the safe triangle indicates the user is
+        // aiming at it, defer the switch instead of switching immediately.
+        if (!isTouch && this._subMenu.opened && this.__safeTriangle && this.__safeTriangle.shouldKeepOpen()) {
+          const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
+          const expandedItem = this._listBox && this._listBox.querySelector('[expanded]');
+          if (item && item !== expandedItem) {
+            this.__safeTriangle.scheduleSwitch(() => {
+              this.__showSubMenu(event, item);
+            });
+            return;
+          }
+        }
+
         this.__showSubMenu(event);
       });
 
@@ -348,6 +367,10 @@ export const ItemsMixin = (superClass) =>
           const expandedItem = this._listBox.querySelector('[expanded]');
           if (expandedItem) {
             this.__updateExpanded(expandedItem, false);
+          }
+          // Deactivate safe triangle tracking when submenu closes
+          if (this.__safeTriangle) {
+            this.__safeTriangle.deactivate();
           }
         }
       });
@@ -471,6 +494,10 @@ export const ItemsMixin = (superClass) =>
         subMenu.slot = 'submenu';
         this._subMenu = subMenu;
         this.appendChild(subMenu);
+
+        if (!isTouch) {
+          this.__safeTriangle = new SafeTriangleController();
+        }
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
