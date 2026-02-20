@@ -10,54 +10,55 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
  *
  * @polymerMixin
  */
-export const DisabledMixin = dedupeMixin(
-  (superclass) =>
-    class DisabledMixinClass extends superclass {
-      static get properties() {
-        return {
-          /**
-           * If true, the user cannot interact with this element.
-           */
-          disabled: {
-            type: Boolean,
-            value: false,
-            observer: '_disabledChanged',
-            reflectToAttribute: true,
-            sync: true,
-          },
-        };
-      }
+const DisabledMixinImplementation = (superclass) => {
+  return class DisabledMixinClass extends superclass {
+    static get properties() {
+      return {
+        /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          observer: '_disabledChanged',
+          reflectToAttribute: true,
+          sync: true,
+        },
+      };
+    }
 
-      /**
-       * @param {boolean} disabled
-       * @protected
-       */
-      _disabledChanged(disabled) {
-        this._setAriaDisabled(disabled);
-      }
+    /**
+     * @param {boolean} disabled
+     * @protected
+     */
+    _disabledChanged(disabled) {
+      this._setAriaDisabled(disabled);
+    }
 
-      /**
-       * @param {boolean} disabled
-       * @protected
-       */
-      _setAriaDisabled(disabled) {
-        if (disabled) {
-          this.setAttribute('aria-disabled', 'true');
-        } else {
-          this.removeAttribute('aria-disabled');
-        }
+    /**
+     * @param {boolean} disabled
+     * @protected
+     */
+    _setAriaDisabled(disabled) {
+      if (disabled) {
+        this.setAttribute('aria-disabled', 'true');
+      } else {
+        this.removeAttribute('aria-disabled');
       }
+    }
 
-      /**
-       * Overrides the default element `click` method in order to prevent
-       * firing the `click` event when the element is disabled.
-       * @protected
-       * @override
-       */
-      click() {
-        if (!this.disabled) {
-          super.click();
-        }
+    /**
+     * Overrides the default element `click` method in order to prevent
+     * firing the `click` event when the element is disabled.
+     * @protected
+     * @override
+     */
+    click() {
+      if (!this.disabled) {
+        super.click();
       }
-    },
-);
+    }
+  };
+};
+
+export const DisabledMixin = dedupeMixin(DisabledMixinImplementation);
