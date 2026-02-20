@@ -648,6 +648,92 @@ describe('draggable', () => {
   });
 });
 
+describe('nested draggable dialogs', () => {
+  let parentDialog, childDialog, parentContainer, childContainer, parentHeader, childHeader, dx;
+
+  function drag(target, deltaX, deltaY) {
+    const bounds = target.getBoundingClientRect();
+    const fromXY = {
+      x: Math.floor(bounds.left + bounds.width / 2),
+      y: Math.floor(bounds.top + bounds.height / 2),
+    };
+    const toXY = { x: fromXY.x + deltaX, y: fromXY.y + deltaY };
+    dispatchMouseEvent(target, 'mousedown', fromXY, 0);
+    dispatchMouseEvent(target, 'mousemove', fromXY, 0);
+    dispatchMouseEvent(target, 'mousemove', toXY, 0);
+    dispatchMouseEvent(target, 'mouseup', toXY, 0);
+  }
+
+  beforeEach(async () => {
+    parentDialog = fixtureSync('<vaadin-dialog draggable opened></vaadin-dialog>');
+    await nextRender();
+
+    parentDialog.headerTitle = 'Parent Dialog';
+    parentDialog.renderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = '<div>Parent dialog content</div>';
+
+        childDialog = document.createElement('vaadin-dialog');
+        childDialog.draggable = true;
+        childDialog.headerTitle = 'Child Dialog';
+        childDialog.renderer = (childRoot) => {
+          childRoot.innerHTML = '<div>Child dialog content</div>';
+        };
+        root.appendChild(childDialog);
+      }
+    };
+    await nextUpdate(parentDialog);
+
+    // Open the child dialog
+    childDialog.opened = true;
+    await nextRender();
+
+    parentContainer = parentDialog.$.overlay.$.resizerContainer;
+    childContainer = childDialog.$.overlay.$.resizerContainer;
+    parentHeader = parentDialog.$.overlay.headerTitleElement;
+    childHeader = childDialog.$.overlay.headerTitleElement;
+    dx = 50;
+  });
+
+  it('should only move the child dialog when dragging the child header', async () => {
+    const parentBounds = parentContainer.getBoundingClientRect();
+    const childBounds = childContainer.getBoundingClientRect();
+
+    drag(childHeader, dx, dx);
+    await nextRender();
+
+    const parentDraggedBounds = parentContainer.getBoundingClientRect();
+    const childDraggedBounds = childContainer.getBoundingClientRect();
+
+    // Parent should not have moved
+    expect(Math.floor(parentDraggedBounds.top)).to.be.eql(Math.floor(parentBounds.top));
+    expect(Math.floor(parentDraggedBounds.left)).to.be.eql(Math.floor(parentBounds.left));
+
+    // Child should have moved
+    expect(Math.floor(childDraggedBounds.top)).to.be.eql(Math.floor(childBounds.top + dx));
+    expect(Math.floor(childDraggedBounds.left)).to.be.eql(Math.floor(childBounds.left + dx));
+  });
+
+  it('should only move the parent dialog when dragging the parent header', async () => {
+    const parentBounds = parentContainer.getBoundingClientRect();
+    const childBounds = childContainer.getBoundingClientRect();
+
+    drag(parentHeader, dx, dx);
+    await nextRender();
+
+    const parentDraggedBounds = parentContainer.getBoundingClientRect();
+    const childDraggedBounds = childContainer.getBoundingClientRect();
+
+    // Parent should have moved
+    expect(Math.floor(parentDraggedBounds.top)).to.be.eql(Math.floor(parentBounds.top + dx));
+    expect(Math.floor(parentDraggedBounds.left)).to.be.eql(Math.floor(parentBounds.left + dx));
+
+    // Child should not have moved
+    expect(Math.floor(childDraggedBounds.top)).to.be.eql(Math.floor(childBounds.top));
+    expect(Math.floor(childDraggedBounds.left)).to.be.eql(Math.floor(childBounds.left));
+  });
+});
+
 describe('touch', () => {
   function dispatchTouchEvent(target, type, coords = { x: 0, y: 0 }, multitouch = false) {
     const e = new CustomEvent(type, {
