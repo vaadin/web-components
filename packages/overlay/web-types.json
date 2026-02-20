@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/overlay",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-overlay",
+          "description": "`<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay\ncan be populated imperatively by using `renderer` callback function.\n\n### Rendering\n\nThe renderer function provides `root`, `owner`, `model` arguments when applicable.\nGenerate DOM content by using `model` object properties if needed, append it to the `root`\nelement and control the state of the host element by accessing `owner`. Before generating new\ncontent, users are able to check if there is already content in `root` for reusing it.\n\n```html\n<vaadin-overlay id=\"overlay\"></vaadin-overlay>\n```\n```js\nconst overlay = document.querySelector('#overlay');\noverlay.renderer = function(root) {\n root.textContent = \"Overlay content\";\n};\n```\n\nRenderer is called on the opening of the overlay and each time the related model is updated.\nDOM generated during the renderer call can be reused\nin the next renderer call and will be provided with the `root` argument.\nOn first call it will be empty.\n\n### Styling\n\nThe following Shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|---------------------------------------------------------|\n`backdrop` | Backdrop of the overlay\n`overlay`  | Container for position/sizing/alignment of the content\n`content`  | Content of the overlay\n\nThe following state attributes are available for styling:\n\nAttribute | Description\n----------|------------\n`opening` | Applied just after the overlay is opened. You can apply a CSS animation for this state.\n`closing` | Applied just before the overlay is closed. You can apply a CSS animation for this state.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default value\n---|---|---\n`--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "focus-trap",
+              "description": "When true, opening the overlay moves focus to the first focusable child,\nor to the overlay part with tabindex if there are no focusable children.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "hidden",
+              "description": "When set to true, the overlay is hidden. This also closes the overlay\nimmediately in case there is a closing animation in progress.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "modeless",
+              "description": "When true the overlay won't disable the main content, showing\nit doesn't change the functionality of the user interface.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "When true, the overlay is visible and attached to body.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "restore-focus-on-close",
+              "description": "Set to true to enable restoring of focus when overlay is closed.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "with-backdrop",
+              "description": "When true the overlay has backdrop on top of content when opened.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "focusTrap",
+                "description": "When true, opening the overlay moves focus to the first focusable child,\nor to the overlay part with tabindex if there are no focusable children.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "hidden",
+                "description": "When set to true, the overlay is hidden. This also closes the overlay\nimmediately in case there is a closing animation in progress.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "model",
+                "description": "Object with properties that is passed to `renderer` function",
+                "value": {
+                  "type": [
+                    "Object",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "modeless",
+                "description": "When true the overlay won't disable the main content, showing\nit doesn't change the functionality of the user interface.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "When true, the overlay is visible and attached to body.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "owner",
+                "description": "Owner element passed with renderer function",
+                "value": {
+                  "type": [
+                    "HTMLElement"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the content of the overlay.\nReceives three arguments:\n\n- `root` The root container DOM element. Append your content to it.\n- `owner` The host element of the renderer function.\n- `model` The object with the properties related with rendering.",
+                "value": {
+                  "type": [
+                    "OverlayRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "restoreFocusNode",
+                "description": "Set to specify the element which should be focused on overlay close,\nif `restoreFocusOnClose` is set to true.",
+                "value": {
+                  "type": [
+                    "HTMLElement"
+                  ]
+                }
+              },
+              {
+                "name": "restoreFocusOnClose",
+                "description": "Set to true to enable restoring of focus when overlay is closed.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "withBackdrop",
+                "description": "When true the overlay has backdrop on top of content when opened.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              },
+              {
+                "name": "vaadin-overlay-close",
+                "description": "vaadin-overlay-close\nFired when the opened overlay is about to be closed.\nCalling `preventDefault()` on the event cancels the closing."
+              },
+              {
+                "name": "vaadin-overlay-closed",
+                "description": "vaadin-overlay-closed\nFired after the overlay is closed."
+              },
+              {
+                "name": "vaadin-overlay-closing",
+                "description": "vaadin-overlay-closing\nFired when the overlay starts to close.\nClosing the overlay can be asynchronous depending on the animation."
+              },
+              {
+                "name": "vaadin-overlay-escape-press",
+                "description": "vaadin-overlay-escape-press\nFired before the overlay is closed on Escape key press.\nCalling `preventDefault()` on the event cancels the closing."
+              },
+              {
+                "name": "vaadin-overlay-open",
+                "description": "vaadin-overlay-open\nFired after the overlay is opened."
+              },
+              {
+                "name": "vaadin-overlay-outside-click",
+                "description": "vaadin-overlay-outside-click\nFired before the overlay is closed on outside click.\nCalling `preventDefault()` on the event cancels the closing."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

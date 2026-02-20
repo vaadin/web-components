@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/card",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-card",
+          "description": "`<vaadin-card>` is a versatile container for grouping related content and actions.\nIt presents information in a structured and visually appealing manner, with\ncustomization options to fit various design requirements. The default ARIA role is `region`.\n\n```html\n<vaadin-card role=\"region\" theme=\"outlined cover-media\">\n  <img slot=\"media\" width=\"200\" src=\"...\" alt=\"\">\n  <div slot=\"title\">Lapland</div>\n  <div slot=\"subtitle\">The Exotic North</div>\n  <div>Lapland is the northern-most region of Finland and an active outdoor destination.</div>\n  <vaadin-button slot=\"footer\">Book Vacation</vaadin-button>\n</vaadin-card>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------|-------------\n`media`   | The container for the media element (e.g., image, video, icon). Shown above of before the card content.\n`header`  | The container for title and subtitle - or for custom header content - and header prefix and suffix elements.\n`content` | The container for the card content (usually text content).\n`footer`  | The container for footer elements. This part is always at the bottom of the card.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                    |\n:--------------------------------------|\n| `--vaadin-card-background`           |\n| `--vaadin-card-border-color`         |\n| `--vaadin-card-border-radius`        |\n| `--vaadin-card-border-width`         |\n| `--vaadin-card-gap`                  |\n| `--vaadin-card-media-aspect-ratio`   |\n| `--vaadin-card-padding`              |\n| `--vaadin-card-shadow`               |\n| `--vaadin-card-subtitle-color`       |\n| `--vaadin-card-subtitle-font-size`   |\n| `--vaadin-card-subtitle-line-height` |\n| `--vaadin-card-title-color`          |\n| `--vaadin-card-title-font-size`      |\n| `--vaadin-card-title-font-weight`    |\n| `--vaadin-card-title-line-height`    |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": ".cardTitle",
+              "description": "The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. If this title is used, an `aria-labelledby` attribute that points to the generated title element is set.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".titleHeadingLevel",
+              "description": "Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

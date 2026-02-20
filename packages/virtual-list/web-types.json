@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/virtual-list",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-virtual-list",
+          "description": "`<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.\n\n```html\n<vaadin-virtual-list></vaadin-virtual-list>\n```\n```js\nconst list = document.querySelector('vaadin-virtual-list');\nlist.items = items; // An array of data items\nlist.renderer = (root, list, {item, index}) => {\n  root.textContent = `#${index}: ${item.name}`\n}\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute        | Description\n-----------------|--------------------------------------------\n`overflow`       | Set to `top`, `bottom`, both, or none.\n\n### Built-in Theme Variants\n\n`<vaadin-virtual-list>` supports the following theme variants:\n\nTheme variant                            | Description\n-----------------------------------------|---------------\n`theme=\"overflow-indicators\"`            | Shows visual indicators at the top and bottom when the content is scrolled\n`theme=\"overflow-indicator-top\"`         | Shows the visual indicator at the top when the content is scrolled\n`theme=\"overflow-indicator-top-bottom\"`  | Shows the visual indicator at the bottom when the content is scrolled\n\n### Custom CSS Properties\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                    | Description\n---------------------------------------|-------------\n`--vaadin-virtual-list-padding-block`  | The CSS padding applied to top and bottom edges\n`--vaadin-virtual-list-padding-inline` | The CSS padding applied to left and right edges\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "itemAccessibleNameGenerator",
+                "description": "A function that generates accessible names for virtual list items.\nThe function gets the item as an argument and the\nreturn value should be a string representing that item. The\nresult gets applied to the corresponding virtual list child element\nas an `aria-label` attribute.",
+                "value": {
+                  "type": [
+                    "Function",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "items",
+                "description": "An array containing items determining how many instances to render.",
+                "value": {
+                  "type": [
+                    "Array.<VirtualListItem>",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering the content of every item.\nReceives three arguments:\n\n- `root` The render target element representing one item at a time.\n- `virtualList` The reference to the `<vaadin-virtual-list>` element.\n- `model` The object with the properties related with the rendered\n  item, contains:\n  - `model.index` The index of the rendered item.\n  - `model.item` The item.",
+                "value": {
+                  "type": [
+                    "VirtualListRenderer",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/date-picker",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-date-picker",
+          "description": "`<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.\n\n```html\n<vaadin-date-picker label=\"Birthday\"></vaadin-date-picker>\n```\n```js\ndatePicker.value = '2016-03-02';\n```\n\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\n### Styling\n\nThe following custom properties are available for styling:\n\nCustom property                | Description                | Default\n-------------------------------|----------------------------|---------\n`--vaadin-field-default-width` | Default width of the field | `12em`\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|----------------\n`label`              | The label element\n`input-field`        | The element that wraps prefix, value and buttons\n`field-button`       | Set on both clear and toggle buttons\n`clear-button`       | The clear button\n`error-message`      | The error message element\n`helper-text`        | The helper text element wrapper\n`required-indicator` | The `required` state indicator element\n`toggle-button`      | The toggle button\n`backdrop`           | Backdrop of the overlay\n`overlay`            | The overlay container\n`content`            | The overlay content\n\nThe following state attributes are available for styling:\n\nAttribute            | Description\n---------------------|---------------------------------\n`disabled`           | Set when the element is disabled\n`has-value`          | Set when the element has a value\n`has-label`          | Set when the element has a label\n`has-helper`         | Set when the element has helper text or slot\n`has-error-message`  | Set when the element has an error message\n`has-tooltip`        | Set when the element has a slotted tooltip\n`invalid`            | Set when the element is invalid\n`focused`            | Set when the element is focused\n`focus-ring`         | Set when the element is keyboard focused\n`readonly`           | Set when the element is readonly\n`opened`             | Set when the overlay is opened\n`week-numbers`       | Set when week numbers are shown in the calendar\n\n### Internal components\n\nIn addition to `<vaadin-date-picker>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-date-picker-overlay-content>`\n- `<vaadin-date-picker-month-scroller>`\n- `<vaadin-date-picker-year-scroller>`\n- `<vaadin-date-picker-year>`\n- `<vaadin-month-calendar>`\n\nIn order to style the overlay content, use `<vaadin-date-picker-overlay-content>` shadow DOM parts:\n\nPart name             | Description\n----------------------|--------------------\n`years-toggle-button` | Fullscreen mode years scroller toggle\n`toolbar`             | Toolbar with slotted buttons\n\nThe following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:\n\nAttribute       | Description\n----------------|-------------------------------------------------\n`desktop`       | Set when the overlay content is in desktop mode\n`fullscreen`    | Set when the overlay content is in fullscreen mode\n`years-visible` | Set when the year scroller is visible in fullscreen mode\n\nIn order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:\n\nPart name             | Description\n----------------------|--------------------\n`month-header`        | Month title\n`weekdays`            | Weekday container\n`weekday`             | Weekday element\n`week-numbers`        | Week numbers container\n`week-number`         | Week number element\n`date`                | Date element\n`disabled`            | Disabled date element\n`focused`             | Focused date element\n`selected`            | Selected date element\n`today`               | Date element corresponding to the current day\n`past`                | Date element corresponding to the date in the past\n`future`              | Date element corresponding to the date in the future\n\nIn order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:\n\nPart name             | Description\n----------------------|--------------------\n`year-number`         | Year number\n`year-separator`      | Year separator\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Change events\n\nDepending on the nature of the value change that the user attempts to commit e.g. by pressing Enter,\nthe component can fire either a `change` event or an `unparsable-change` event:\n\nValue change             | Event\n:------------------------|:------------------\nempty => parsable        | change\nempty => unparsable      | unparsable-change\nparsable => empty        | change\nparsable => parsable     | change\nparsable => unparsable   | change\nunparsable => empty      | unparsable-change\nunparsable => parsable   | change\nunparsable => unparsable | unparsable-change",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoOpenDisabled",
+              "description": "Set true to prevent the overlay from opening automatically.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoselect",
+              "description": "If true, the input text gets fully selected when the field is focused using click or touch / tap.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?clearButtonVisible",
+              "description": "Set to true to display the clear icon which clears the input.\n\nIt is up to the component to choose where to place the clear icon:\nin the Shadow DOM or in the light DOM. In any way, a reference to\nthe clear icon element should be provided via the `clearElement` getter.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?isDateDisabled",
+              "description": "A function to be used to determine whether the user can select a given date.\nReceives a `DatePickerDate` object of the date to be selected and should return a\nboolean.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?manualValidation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?opened",
+              "description": "Set true to open the date selector overlay.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "When present, it specifies that the field is read-only.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?showWeekNumbers",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameRef",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".allowedCharPattern",
+              "description": "A pattern matched against individual characters the user inputs.\n\nWhen set, the field will prevent:\n- `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`\n- `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`\n- `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`\n\nFor example, to allow entering only numbers and minus signs, use:\n`allowedCharPattern = \"[\\\\d-]\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".helperText",
+              "description": "String used for the helper text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following JSON structure and default values:\n\n```js\n{\n  // An array with the full names of months starting\n  // with January.\n  monthNames: [\n    'January', 'February', 'March', 'April', 'May',\n    'June', 'July', 'August', 'September',\n    'October', 'November', 'December'\n  ],\n\n  // An array of weekday names starting with Sunday. Used\n  // in screen reader announcements.\n  weekdays: [\n    'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n    'Thursday', 'Friday', 'Saturday'\n  ],\n\n  // An array of short weekday names starting with Sunday.\n  // Displayed in the calendar.\n  weekdaysShort: [\n    'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n  ],\n\n  // An integer indicating the first day of the week\n  // (0 = Sunday, 1 = Monday, etc.).\n  firstDayOfWeek: 0,\n\n  // Translation of the Today shortcut button text.\n  today: 'Today',\n\n  // Translation of the Cancel button text.\n  cancel: 'Cancel',\n\n  // Used for adjusting the year value when parsing dates with short years.\n  // The year values between 0 and 99 are evaluated and adjusted.\n  // Example: for a referenceDate of 1970-10-30;\n  //   dateToBeParsed: 40-10-30, result: 1940-10-30\n  //   dateToBeParsed: 80-10-30, result: 1980-10-30\n  //   dateToBeParsed: 10-10-30, result: 2010-10-30\n  // Supported date format: ISO 8601 `\"YYYY-MM-DD\"` (default)\n  // The default value is the current date.\n  referenceDate: '',\n\n  // A function to format given `Object` as\n  // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n  // Note: The argument month is 0-based. This means that January = 0 and December = 11.\n  formatDate: d => {\n    // returns a string representation of the given\n    // object in 'MM/DD/YYYY' -format\n  },\n\n  // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n  // Must properly parse (at least) text formatted by `formatDate`.\n  // Setting the property to null will disable keyboard input feature.\n  // Note: The argument month is 0-based. This means that January = 0 and December = 11.\n  parseDate: text => {\n    // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n    // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n  }\n\n  // A function to format given `monthName` and\n  // `fullYear` integer as calendar title string.\n  formatTitle: (monthName, fullYear) => {\n    return monthName + ' ' + fullYear;\n  }\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".initialPosition",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".max",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".min",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".name",
+              "description": "The name of this field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".placeholder",
+              "description": "A hint to the user of what can be entered in the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".title",
+              "description": "The text usually displayed in a tooltip popup when the mouse is over the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "Selected date.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@change",
+              "description": "Fired when the user commits a value change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@input",
+              "description": "Fired when the value is changed by the user: on every typing keystroke,\nand the value is cleared using the clear button.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@opened-changed",
+              "description": "Fired when `opened` property value changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@validated",
+              "description": "Fired whenever the field is validated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when `value` property value changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

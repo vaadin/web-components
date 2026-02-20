@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/date-time-picker",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-date-time-picker",
+          "description": "`<vaadin-date-time-picker>` is a Web Component providing a date time selection field.\n\n```html\n<vaadin-date-time-picker value=\"2019-09-16T15:00\"></vaadin-date-time-picker>\n```\n```js\ndateTimePicker.value = '2019-09-16T15:00';\n```\n\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|----------------\n`label`              | The slotted label element wrapper\n`input-fields`       | The date and time pickers wrapper\n`helper-text`        | The slotted helper text element wrapper\n`error-message`      | The slotted error message element wrapper\n`required-indicator` | The `required` state indicator element\n\nThe following state attributes are available for styling:\n\nAttribute           | Description\n--------------------|---------------------------------\n`disabled`          | Set when the element is disabled\n`focused`           | Set when the element is focused\n`focus-ring`        | Set when the element is keyboard focused\n`readonly`          | Set when the element is readonly\n`invalid`           | Set when the element is invalid\n`has-label`         | Set when the element has a label\n`has-value`         | Set when the element has a value\n`has-helper`        | Set when the element has helper text\n`has-error-message` | Set when the element has an error message\n`has-tooltip`       | Set when the element has a slotted tooltip\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                                |\n:--------------------------------------------------|\n| `--vaadin-date-time-picker-gap`                  |\n| `--vaadin-input-field-error-color`               |\n| `--vaadin-input-field-error-font-size`           |\n| `--vaadin-input-field-error-font-weight`         |\n| `--vaadin-input-field-error-line-height`         |\n| `--vaadin-input-field-label-color`               |\n| `--vaadin-input-field-label-font-size`           |\n| `--vaadin-input-field-label-font-weight`         |\n| `--vaadin-input-field-label-line-height`         |\n| `--vaadin-input-field-helper-color`              |\n| `--vaadin-input-field-helper-font-size`          |\n| `--vaadin-input-field-helper-font-weight`        |\n| `--vaadin-input-field-helper-line-height`        |\n| `--vaadin-input-field-required-indicator-color`  |\n| `--vaadin-input-field-required-indicator`        |\n\n### Internal components\n\nThe following components are created by `<vaadin-date-time-picker>` and placed in light DOM:\n\n- [`<vaadin-date-picker>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-date-picker).\n- [`<vaadin-time-picker>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-time-picker).\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Change events\n\nDepending on the nature of the value change that the user attempts to commit e.g. by pressing Enter,\nthe component can fire either a `change` event or an `unparsable-change` event:\n\nValue change             | Event\n:------------------------|:------------------\nempty => parsable        | change\nempty => unparsable      | unparsable-change\nparsable => empty        | change\nparsable => parsable     | change\nparsable => unparsable   | change\nunparsable => empty      | unparsable-change\nunparsable => parsable   | change\nunparsable => unparsable | unparsable-change\nincomplete => empty      | unparsable-change\nincomplete => parsable   | change\nincomplete => unparsable | unparsable-change\nempty => incomplete      | unparsable-change\nparsable => incomplete   | change\nunparsable => incomplete | unparsable-change",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoOpenDisabled",
+              "description": "Set to true to prevent the overlays from opening automatically.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?manualValidation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "Set to true to make this element read-only.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?showWeekNumbers",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameRef",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".datePlaceholder",
+              "description": "A placeholder string for the date field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".helperText",
+              "description": "String used for the helper text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following structure and default values:\n\n```js\n{\n  // Accessible label to the date picker.\n  // The property works in conjunction with label and accessibleName defined on the field.\n  // If both properties are defined, then accessibleName takes precedence.\n  // Then, the dateLabel value is concatenated with it.\n  dateLabel: undefined;\n\n  // Accessible label to the time picker.\n  // The property works in conjunction with label and accessibleName defined on the field.\n  // If both properties are defined, then accessibleName takes precedence.\n  // Then, the dateLabel value is concatenated with it.\n  timeLabel: undefined;\n}\n```\n\nAdditionally, all i18n properties from\n[`<vaadin-date-picker>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-date-picker) and\n[`<vaadin-time-picker>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-time-picker) are supported.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".initialPosition",
+              "description": "Date which should be visible in the date picker overlay when there is no value selected.\n\nThe same date formats as for the `value` property are supported but without the time part.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".max",
+              "description": "The latest value (date and time) that can be selected. All later values will be disabled.\n\nSupported date time format is based on ISO 8601 (without a time zone designator):\n- Minute precision `\"YYYY-MM-DDThh:mm\"`\n- Second precision `\"YYYY-MM-DDThh:mm:ss\"`\n- Millisecond precision `\"YYYY-MM-DDThh:mm:ss.fff\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".min",
+              "description": "The earliest allowed value (date and time) that can be selected. All earlier values will be disabled.\n\nSupported date time format is based on ISO 8601 (without a time zone designator):\n- Minute precision `\"YYYY-MM-DDThh:mm\"`\n- Second precision `\"YYYY-MM-DDThh:mm:ss\"`\n- Millisecond precision `\"YYYY-MM-DDThh:mm:ss.fff\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".name",
+              "description": "The name of the control, which is submitted with the form data.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".step",
+              "description": "Defines the time interval (in seconds) between the items displayed\nin the time selection box. The default is 1 hour (i.e. `3600`).\n\nIt also configures the precision of the time part of the value string. By default\nthe component formats time values as `hh:mm` but setting a step value\nlower than one minute or one second, format resolution changes to\n`hh:mm:ss` and `hh:mm:ss.fff` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day.\n\nNote: it is possible to define step that is dividing an hour in inexact\nfragments (i.e. 5760 seconds which equals 1 hour 36 minutes), but it is\nnot recommended to use it for better UX.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".timePlaceholder",
+              "description": "A placeholder string for the time field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "The value for this element.\n\nSupported date time format is based on ISO 8601 (without a time zone designator):\n- Minute precision `\"YYYY-MM-DDThh:mm\"` (default)\n- Second precision `\"YYYY-MM-DDThh:mm:ss\"`\n- Millisecond precision `\"YYYY-MM-DDThh:mm:ss.fff\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@change",
+              "description": "Fired when the user commits a value change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@validated",
+              "description": "Fired whenever the field is validated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when the `value` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/side-nav",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-side-nav-item",
+          "description": "A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.\nNot intended to be used separately.\n\n```html\n<vaadin-side-nav-item>\n  Item 1\n  <vaadin-side-nav-item path=\"/path1\" slot=\"children\">\n    Child item 1\n  </vaadin-side-nav-item>\n  <vaadin-side-nav-item path=\"/path2\" slot=\"children\">\n    Child item 2\n  </vaadin-side-nav-item>\n</vaadin-side-nav-item>\n```\n\n### Customization\n\nYou can configure the item by using `slot` names.\n\nSlot name | Description\n----------|-------------\n`prefix`  | A slot for content before the label (e.g. an icon).\n`suffix`  | A slot for content after the label (e.g. an icon).\n\n#### Example\n\n```html\n<vaadin-side-nav-item>\n  <vaadin-icon icon=\"vaadin:chart\" slot=\"prefix\"></vaadin-icon>\n  Item\n  <span theme=\"badge primary\" slot=\"suffix\">Suffix</span>\n</vaadin-side-nav-item>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name       | Description\n----------------|----------------\n`content`       | The element that wraps link and toggle button\n`children`      | The element that wraps child items\n`link`          | The clickable anchor used for navigation\n`toggle-button` | The toggle button\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`disabled`     | Set when the element is disabled.\n`expanded`     | Set when the element is expanded.\n`has-children` | Set when the element has child items.\n`has-tooltip`  | Set when the element has a slotted tooltip.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?expanded",
+              "description": "Whether to show the child items or not",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?matchNested",
+              "description": "Whether to also match nested paths / routes. `false` by default.\n\nWhen enabled, an item with the path `/path` is considered current when\nthe browser URL is `/path`, `/path/child`, `/path/child/grandchild`,\netc.\n\nNote that this only affects matching of the URLs path, not the base\norigin or query parameters.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?routerIgnore",
+              "description": "Whether to exclude the item from client-side routing. When enabled,\nthis causes the item to behave like a regular anchor, causing a full\npage reload. This only works with supported routers, such as the one\nprovided in Vaadin apps, or when using the side nav `onNavigate` hook.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following structure and default values:\n```js\n{\n  toggle: 'Toggle child items'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".path",
+              "description": "The path to navigate to",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".pathAliases",
+              "description": "The list of alternative paths matching this item",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".target",
+              "description": "The target of the link. Works only when `path` is set.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@expanded-changed",
+              "description": "Fired when the `expanded` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        },
+        {
+          "name": "vaadin-side-nav",
+          "description": "`<vaadin-side-nav>` is a Web Component for navigation menus.\n\n```html\n<vaadin-side-nav>\n  <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>\n  <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>\n  <vaadin-side-nav-item>Item 3</vaadin-side-nav-item>\n  <vaadin-side-nav-item>Item 4</vaadin-side-nav-item>\n</vaadin-side-nav>\n```\n\n### Customization\n\nYou can configure the component by using `slot` names.\n\nSlot name | Description\n----------|-------------\n`label`   | The label (text) inside the side nav.\n\n#### Example\n\n```html\n<vaadin-side-nav>\n  <span slot=\"label\">Main menu</span>\n  <vaadin-side-nav-item>Item</vaadin-side-nav-item>\n</vaadin-side-nav>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name       | Description\n----------------|----------------\n`label`         | The label element\n`children`      | The element that wraps child items\n`toggle-button` | The toggle button\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|-------------\n`collapsed`  | Set when the element is collapsed.\n`focus-ring` | Set when the label is focused using the keyboard.\n`focused`    | Set when the label is focused.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?collapsed",
+              "description": "Whether the side nav is collapsed. When collapsed, the items are hidden.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?collapsible",
+              "description": "Whether the side nav is collapsible. When enabled, the toggle icon is shown.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?noAutoExpand",
+              "description": "Whether to expand parent items of the nested matching item after initial\nrendering or navigation. By default, all the parent items are expanded.\nSet to true to disable this behavior.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?onNavigate",
+              "description": "Callback function for router integration.\n\nWhen a side nav item link is clicked, this function is called and the default click action is cancelled.\nThis delegates the responsibility of navigation to the function's logic.\n\nThe click event action is not cancelled in the following cases:\n- The click event has a modifier (e.g. `metaKey`, `shiftKey`)\n- The click event is on an external link\n- The click event is on a link with `target=\"_blank\"`\n- The function explicitly returns `false`\n\nThe function receives an object with the properties of the clicked side-nav item:\n- `path`: The path of the navigation item.\n- `target`: The target of the navigation item.\n- `current`: A boolean indicating whether the navigation item is currently selected.\n- `expanded`: A boolean indicating whether the navigation item is expanded.\n- `pathAliases`: An array of path aliases for the navigation item.\n- `originalEvent`: The original DOM event that triggered the navigation.\n\nAlso see the `location` property for updating the highlighted navigation item on route change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following structure and default values:\n```js\n{\n  toggle: 'Toggle child items'\n}\n```",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".location",
+              "description": "A change to this property triggers an update of the highlighted item in the side navigation. While it typically\ncorresponds to the browser's URL, the specific value assigned to the property is irrelevant. The component has\nits own internal logic for determining which item is highlighted.\n\nThe main use case for this property is when the side navigation is used with a client-side router. In this case,\nthe component needs to be informed about route changes so it can update the highlighted item.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@collapsed-changed",
+              "description": "Fired when the `collapsed` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

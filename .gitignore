@@ -32,8 +32,8 @@ packages/**/theme/**/*.d.ts
 CLAUDE.local.md
 
 # Generated web-types JSON files
-web-types.json
-web-types.lit.json
+#web-types.json
+#web-types.lit.json
 
 # Generated auto-complete CSS file for Lumo theme
 packages/vaadin-lumo-styles/auto-complete.css

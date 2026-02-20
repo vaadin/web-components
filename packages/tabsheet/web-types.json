@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/tabsheet",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-tabsheet",
+          "description": "`<vaadin-tabsheet>` is a Web Component for organizing and grouping content\ninto scrollable panels. The panels can be switched between by using tabs.\n\n```html\n<vaadin-tabsheet>\n  <div slot=\"prefix\">Prefix</div>\n  <div slot=\"suffix\">Suffix</div>\n\n  <vaadin-tabs slot=\"tabs\">\n    <vaadin-tab id=\"tab-1\">Tab 1</vaadin-tab>\n    <vaadin-tab id=\"tab-2\">Tab 2</vaadin-tab>\n    <vaadin-tab id=\"tab-3\">Tab 3</vaadin-tab>\n  </vaadin-tabs>\n\n  <div tab=\"tab-1\">Panel 1</div>\n  <div tab=\"tab-2\">Panel 2</div>\n  <div tab=\"tab-3\">Panel 3</div>\n</vaadin-tabsheet>\n```\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name | Description\n--------- | ---------------\n`tabs-container`    | The container for the slotted prefix, tabs and suffix\n`content`    | The container for the slotted panels\n\nThe following state attributes are available for styling:\n\nAttribute         | Description\n------------------|-------------\n`loading` | Set when a tab without associated content is selected\n`overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                  |\n:------------------------------------|\n| `--vaadin-tabsheet-border-color`   |\n| `--vaadin-tabsheet-border-radius`  |\n| `--vaadin-tabsheet-border-width`   |\n| `--vaadin-tabsheet-gap`            |\n| `--vaadin-tabsheet-padding`        |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "selected",
+              "description": "The index of the selected tab.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "selected",
+                "description": "The index of the selected tab.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "items-changed",
+                "description": "Fired when the `items` property changes."
+              },
+              {
+                "name": "selected-changed",
+                "description": "Fired when the `selected` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

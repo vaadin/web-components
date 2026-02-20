@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/dashboard",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-dashboard-layout",
+          "description": "A responsive, grid-based dashboard layout component\n\n```html\n<vaadin-dashboard-layout>\n  <vaadin-dashboard-widget widget-title=\"Widget 1\"></vaadin-dashboard-widget>\n  <vaadin-dashboard-widget widget-title=\"Widget 2\"></vaadin-dashboard-widget>\n  <vaadin-dashboard-section section-title=\"Section\">\n    <vaadin-dashboard-widget widget-title=\"Widget in Section\"></vaadin-dashboard-widget>\n  </vaadin-dashboard-section>\n</vaadin-dashboard-layout>\n```\n\n### Styling\n\nThe following custom properties are available:\n\nCustom Property                     | Description\n------------------------------------|-------------\n`--vaadin-dashboard-col-min-width`  | minimum column width of the layout\n`--vaadin-dashboard-col-max-width`  | maximum column width of the layout\n`--vaadin-dashboard-row-min-height` | minimum row height of the layout\n`--vaadin-dashboard-col-max-count`  | maximum column count of the layout\n`--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)\n`--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`dense-layout` | Set when the dashboard is in dense mode.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "dense-layout",
+              "description": "Whether the dashboard layout is dense.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "root-heading-level",
+              "description": "Root heading level for sections and widgets. Defaults to 2.\n\nIf changed to e.g. 1:\n- sections will have the attribute `aria-level` with value 1\n- non-nested widgets will have the attribute `aria-level` with value 1\n- nested widgets will have the attribute `aria-level` with value 2",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "denseLayout",
+                "description": "Whether the dashboard layout is dense.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rootHeadingLevel",
+                "description": "Root heading level for sections and widgets. Defaults to 2.\n\nIf changed to e.g. 1:\n- sections will have the attribute `aria-level` with value 1\n- non-nested widgets will have the attribute `aria-level` with value 1\n- nested widgets will have the attribute `aria-level` with value 2",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-dashboard-section",
+          "description": "A section component for use with the Dashboard component\n\n```html\n<vaadin-dashboard-section section-title=\"Section Title\">\n  <vaadin-dashboard-widget widget-title=\"Widget 1\"></vaadin-dashboard-widget>\n  <vaadin-dashboard-widget widget-title=\"Widget 2\"></vaadin-dashboard-widget>\n</vaadin-dashboard-section>\n```\n\n#### Example\n\n```html\n<vaadin-dashboard-section section-title=\"Section title\">\n  <vaadin-dashboard-widget widget-title=\"Widget 1\"></vaadin-dashboard-widget>\n  <vaadin-dashboard-widget widget-title=\"Widget 2\"></vaadin-dashboard-widget>\n</vaadin-dashboard-section>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name              | Description\n-----------------------|-------------\n`header`               | The header of the section\n`title`                | The title of the section\n`move-button`          | The move button\n`remove-button`        | The remove button\n`move-backward-button` | The move backward button when in move mode\n`move-forward-button`  | The move forward button when in move mode\n`move-apply-button`    | The apply button when in move mode\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`selected`     | Set when the element is selected.\n`focused`      | Set when the element is focused.\n`move-mode`    | Set when the element is being moved.\n`editable`     | Set when the element is editable.\n`first-child`  | Set when the element is the first child of the parent.\n`last-child`   | Set when the element is the last child of the parent.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "section-title",
+              "description": "The title of the section",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "sectionTitle",
+                "description": "The title of the section",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-dashboard-widget",
+          "description": "A Widget component for use with the Dashboard component\n\n```html\n<vaadin-dashboard-widget widget-title=\"Title\">\n  <span slot=\"header-content\">Header</span>\n  <div>Content</div>\n</vaadin-dashboard-widget>\n```\n\n### Customization\n\nYou can configure the item by using `slot` names.\n\nSlot name        | Description\n-----------------|-------------\n`header-content` | A slot for the widget header content.\n\n#### Example\n\n```html\n<vaadin-dashboard-widget widget-title=\"Title\">\n  <span slot=\"header-content\">Header</span>\n  <div>Content</div>\n</vaadin-dashboard-widget>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name                     | Description\n------------------------------|-------------\n`header`                      | The header of the widget\n`title`                       | The title of the widget\n`content`                     | The content of the widget\n`move-button`                 | The move button\n`remove-button`               | The remove button\n`resize-button`               | The resize button\n`move-backward-button`        | The move backward button when in move mode\n`move-forward-button`         | The move forward button when in move mode\n`move-apply-button`           | The apply button when in move mode\n`resize-shrink-width-button`  | The shrink width button when in resize mode\n`resize-grow-width-button`    | The grow width button when in resize mode\n`resize-shrink-height-button` | The shrink height button when in resize mode\n`resize-grow-height-button`   | The grow height button when in resize mode\n`resize-apply-button`         | The apply button when in resize mode\n\nThe following custom properties are available:\n\nCustom Property                             | Description\n--------------------------------------------|----------------------\n`--vaadin-dashboard-widget-colspan`         | colspan of the widget\n`--vaadin-dashboard-widget-rowspan`         | rowspan of the widget\n`--vaadin-dashboard-widget-background`      | widget background\n`--vaadin-dashboard-widget-border-radius`   | widget corner radius\n`--vaadin-dashboard-widget-border-width`    | widget border width\n`--vaadin-dashboard-widget-border-color`    | widget border color\n`--vaadin-dashboard-widget-shadow`          | widget shadow (non edit mode)\n`--vaadin-dashboard-widget-padding`         | padding around widget content\n`--vaadin-dashboard-widget-title-wrap`      | widget title wrap\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|-------------\n`selected`     | Set when the element is selected.\n`focused`      | Set when the element is focused.\n`move-mode`    | Set when the element is being moved.\n`resize-mode`  | Set when the element is being resized.\n`resizing`     | Set when the element is being resized.\n`dragging`     | Set when the element is being dragged.\n`editable`     | Set when the element is editable.\n`first-child`  | Set when the element is the first child of the parent.\n`last-child`   | Set when the element is the last child of the parent.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "widget-title",
+              "description": "The title of the widget.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "widgetTitle",
+                "description": "The title of the widget.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-dashboard",
+          "description": "A responsive, grid-based dashboard layout component\n\n### Quick Start\n\nAssign an array to the [`items`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-dashboard#property-items) property.\nSet a renderer function to the [`renderer`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-dashboard#property-renderer) property.\n\nThe widgets and the sections will be generated and configured based on the renderer and the items provided.\n\n```html\n<vaadin-dashboard></vaadin-dashboard>\n```\n```js\nconst dashboard = document.querySelector('vaadin-dashboard');\n\ndashboard.items = [\n  { title: 'Widget 1 title', content: 'Text 1', rowspan: 2 },\n  { title: 'Widget 2 title', content: 'Text 2', colspan: 2 },\n  {\n    title: 'Section title',\n    items: [{ title: 'Widget in section title', content: 'Text 3' }]\n  },\n  // ... more items\n];\n\ndashboard.renderer = (root, _dashboard, { item }) => {\n  const widget = root.firstElementChild || document.createElement('vaadin-dashboard-widget');\n  if (!root.contains(widget)) {\n    root.appendChild(widget);\n  }\n  widget.widgetTitle = item.title;\n  widget.textContent = item.content;\n};\n```\n\n### Styling\n\nThe following custom properties are available:\n\nCustom Property                     | Description\n------------------------------------|-------------\n`--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard\n`--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard\n`--vaadin-dashboard-row-min-height` | minimum row height of the dashboard\n`--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard\n`--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)\n`--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)\n\nThe following state attributes are available for styling:\n\nAttribute            | Description\n---------------------|-------------\n`editable`           | Set when the dashboard is editable.\n`dense-layout`       | Set when the dashboard is in dense mode.\n`item-selected`      | Set when an item is selected.\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "dense-layout",
+              "description": "Whether the dashboard layout is dense.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "editable",
+              "description": "Whether the dashboard is editable.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "root-heading-level",
+              "description": "Root heading level for sections and widgets. Defaults to 2.\n\nIf changed to e.g. 1:\n- sections will have the attribute `aria-level` with value 1\n- non-nested widgets will have the attribute `aria-level` with value 1\n- nested widgets will have the attribute `aria-level` with value 2",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "denseLayout",
+                "description": "Whether the dashboard layout is dense.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "editable",
+                "description": "Whether the dashboard is editable.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "i18n",
+                "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides all properties, or\njust the individual properties you want to change.\n\nThe object has the following structure and default values:\n```js\n{\n  selectSection: 'Select section for editing',\n  selectWidget: 'Select widget for editing',\n  remove: 'Remove',\n  resize: 'Resize',\n  resizeApply: 'Apply',\n  resizeShrinkWidth: 'Shrink width',\n  resizeGrowWidth: 'Grow width',\n  resizeShrinkHeight: 'Shrink height',\n  resizeGrowHeight: 'Grow height',\n  move: 'Move',\n  moveApply: 'Apply',\n  moveForward: 'Move Forward',\n  moveBackward: 'Move Backward',\n}\n```",
+                "value": {
+                  "type": [
+                    "?"
+                  ]
+                }
+              },
+              {
+                "name": "items",
+                "description": "An array containing the items of the dashboard",
+                "value": {
+                  "type": [
+                    "Array.<DashboardItem>",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "renderer",
+                "description": "Custom function for rendering a widget for each dashboard item.\nPlacing something else than a widget in the wrapper is not supported.\nReceives three arguments:\n\n- `root` The container for the widget.\n- `dashboard` The reference to the `<vaadin-dashboard>` element.\n- `model` The object with the properties related with the rendered\n  item, contains:\n  - `model.item` The item.",
+                "value": {
+                  "type": [
+                    "DashboardRenderer",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "rootHeadingLevel",
+                "description": "Root heading level for sections and widgets. Defaults to 2.\n\nIf changed to e.g. 1:\n- sections will have the attribute `aria-level` with value 1\n- non-nested widgets will have the attribute `aria-level` with value 1\n- nested widgets will have the attribute `aria-level` with value 2",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "dashboard-item-before-remove",
+                "description": "Fired before an item is removed"
+              },
+              {
+                "name": "dashboard-item-move-mode-changed",
+                "description": "Fired when an item move mode changed"
+              },
+              {
+                "name": "dashboard-item-moved",
+                "description": "Fired when an item was moved"
+              },
+              {
+                "name": "dashboard-item-removed",
+                "description": "Fired when an item was removed"
+              },
+              {
+                "name": "dashboard-item-resize-mode-changed",
+                "description": "Fired when an item resize mode changed"
+              },
+              {
+                "name": "dashboard-item-resized",
+                "description": "Fired when an item was resized"
+              },
+              {
+                "name": "dashboard-item-selected-changed",
+                "description": "Fired when an item selected state changed"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

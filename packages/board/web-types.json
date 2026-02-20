@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/board",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-board-row",
+          "description": "`<vaadin-board-row>` is a web component that together with `<vaadin-board>` component allows\nto create flexible responsive layouts and build nice looking dashboard.\n\nEach row can contain up to four elements (fewer if colspan is used) and is automatically responsive.\nThe row changes between `large`, `medium` and `small` modes depending on the available width and\nthe set breakpoints.\n\nIn `large` mode, typically all content is shown side-by-side, in `medium` half of the content is\nside by side and in `small` mode, content is laid out vertically.\n\nThe breakpoints can be set using custom CSS properties.\nBy default the breakpoints are `small: <600px`, `medium: < 960px`, `large >= 960px`.\n\n```html\n<vaadin-board>\n  <vaadin-board-row>\n    <div>This could be chart 1</div>\n    <div>This could be chart 2</div>\n    <div>This could be chart 3</div>\n    <div>This could be chart 4</div>\n  </vaadin-board-row>\n</vaadin-board>\n```\n\n### Styling\n\nThe following custom properties are available for styling:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`\n`--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-board",
+          "description": "`<vaadin-board>` is a web component to create flexible responsive layouts\nand build nice looking dashboards.\n\nA `<vaadin-board>` is built using `<vaadin-board-row>` elements containing your child elements.\nEach board row consists of four columns, and can contain up to four elements. Using column spans\nyou can tune the layout to your liking.\n\n```html\n<vaadin-board>\n  <vaadin-board-row>\n    <div>This could be chart 1</div>\n    <div>This could be chart 2</div>\n    <div>This could be chart 3</div>\n    <div>This could be chart 4</div>\n  </vaadin-board-row>\n</vaadin-board>\n```",
+          "attributes": [
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [],
+            "events": []
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/time-picker",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "framework": "lit",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "lit"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-time-picker",
+          "description": "`<vaadin-time-picker>` is a Web Component providing a time-selection field.\n\n```html\n<vaadin-time-picker></vaadin-time-picker>\n```\n```js\ntimePicker.value = '14:30';\n```\n\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\n### Styling\n\nThe following custom properties are available for styling:\n\nCustom property                          | Description                | Default\n-----------------------------------------|----------------------------|---------\n`--vaadin-field-default-width`           | Default width of the field | `12em`\n`--vaadin-time-picker-overlay-width`     | Width of the overlay       | `auto`\n`--vaadin-time-picker-overlay-max-height`| Max height of the overlay  | `65vh`\n\nThe following shadow DOM parts are available for styling:\n\nPart name            | Description\n---------------------|----------------\n`label`              | The label element\n`input-field`        | The element that wraps prefix, value and buttons\n`field-button`       | Set on both clear and toggle buttons\n`clear-button`       | The clear button\n`error-message`      | The error message element\n`helper-text`        | The helper text element wrapper\n`required-indicator` | The `required` state indicator element\n`toggle-button`      | The toggle button\n`overlay`            | The overlay container\n`content`            | The overlay content\n\nThe following state attributes are available for styling:\n\nAttribute            | Description\n---------------------|---------------------------------\n`disabled`           | Set when the element is disabled\n`has-value`          | Set when the element has a value\n`has-label`          | Set when the element has a label\n`has-helper`         | Set when the element has helper text or slot\n`has-error-message`  | Set when the element has an error message\n`has-tooltip`        | Set when the element has a slotted tooltip\n`invalid`            | Set when the element is invalid\n`focused`            | Set when the element is focused\n`focus-ring`         | Set when the element is keyboard focused\n`readonly`           | Set when the element is readonly\n`opened`             | Set when the overlay is opened\n\n### Internal components\n\nIn addition to `<vaadin-time-picker>` itself, the following internal\ncomponents are themable:\n\n- `<vaadin-time-picker-item>` - has the same API as [`<vaadin-item>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-item).\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.\n\n### Change events\n\nDepending on the nature of the value change that the user attempts to commit e.g. by pressing Enter,\nthe component can fire either a `change` event or an `unparsable-change` event:\n\nValue change             | Event\n:------------------------|:------------------\nempty => parsable        | change\nempty => unparsable      | unparsable-change\nparsable => empty        | change\nparsable => parsable     | change\nparsable => unparsable   | change\nunparsable => empty      | unparsable-change\nunparsable => parsable   | change\nunparsable => unparsable | unparsable-change",
+          "extension": true,
+          "attributes": [
+            {
+              "name": "?autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoOpenDisabled",
+              "description": "Set true to prevent the overlay from opening automatically.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?autoselect",
+              "description": "If true, the input text gets fully selected when the field is focused using click or touch / tap.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?clearButtonVisible",
+              "description": "Set to true to display the clear icon which clears the input.\n\nIt is up to the component to choose where to place the clear icon:\nin the Shadow DOM or in the light DOM. In any way, a reference to\nthe clear icon element should be provided via the `clearElement` getter.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?invalid",
+              "description": "Set to true when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?manualValidation",
+              "description": "Set to true to enable manual validation mode. This mode disables automatic\nconstraint validation, allowing you to control the validation process yourself.\nYou can still trigger constraint validation manually with the `validate()` method\nor use `checkValidity()` to assess the component's validity without affecting\nthe invalid state. In manual validation mode, you can also manipulate\nthe `invalid` property directly through your application logic without conflicts\nwith the component's internal validation.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?opened",
+              "description": "True if the dropdown is open, false otherwise.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?readonly",
+              "description": "When present, it specifies that the field is read-only.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "?required",
+              "description": "Specifies that the user must fill in a value.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleName",
+              "description": "String used to label the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".accessibleNameRef",
+              "description": "Id of the element used as label of the component to screen reader users.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".allowedCharPattern",
+              "description": "A pattern matched against individual characters the user inputs.\n\nWhen set, the field will prevent:\n- `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`\n- `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`\n- `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`\n\nFor example, to allow entering only numbers and minus signs, use:\n`allowedCharPattern = \"[\\\\d-]\"`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".errorMessage",
+              "description": "Error to show when the field is invalid.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".helperText",
+              "description": "String used for the helper text.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".i18n",
+              "description": "The object used to localize this component. To change the default\nlocalization, replace this with an object that provides both the\ntime parsing and formatting functions.\n\nThe object has the following JSON structure:\n\n```js\n{\n  // A function to format given `Object` as\n  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`\n  formatTime: (time) => {\n    // returns a string representation of the given\n    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats\n  },\n\n  // A function to parse the given text to an `Object` in the format\n  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.\n  // Must properly parse (at least) text\n  // formatted by `formatTime`.\n  parseTime: text => {\n    // Parses a string in object/string that can be formatted by`formatTime`.\n  }\n}\n```\n\nNOTE: `formatTime` and `parseTime` must be implemented in a\ncompatible manner to ensure the component works properly.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".label",
+              "description": "The label text for the input node.\nWhen no light dom defined via [slot=label], this value will be used.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".max",
+              "description": "Maximum time allowed.\n\nSupported time formats are in ISO 8601:\n- `hh:mm`\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".min",
+              "description": "Minimum time allowed.\n\nSupported time formats are in ISO 8601:\n- `hh:mm`\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".name",
+              "description": "The name of this field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".pattern",
+              "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".placeholder",
+              "description": "A hint to the user of what can be entered in the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".step",
+              "description": "Defines the time interval (in seconds) between the items displayed\nin the time selection box. The default is 1 hour (i.e. `3600`).\n\nIt also configures the precision of the value string. By default\nthe component formats values as `hh:mm` but setting a step value\nlower than one minute or one second, format resolution changes to\n`hh:mm:ss` and `hh:mm:ss.fff` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day.\n\nNote: it is possible to define step that is dividing an hour in inexact\nfragments (i.e. 5760 seconds which equals 1 hour 36 minutes), but it is\nnot recommended to use it for better UX experience.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".title",
+              "description": "The text usually displayed in a tooltip popup when the mouse is over the field.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": ".value",
+              "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `hh:mm` (default)\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@change",
+              "description": "Fired when the user commits a value change.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@input",
+              "description": "Fired when the value is changed by the user: on every typing keystroke,\nand the value is cleared using the clear button.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@opened-changed",
+              "description": "Fired when the `opened` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@validated",
+              "description": "Fired whenever the field is validated.",
+              "value": {
+                "kind": "expression"
+              }
+            },
+            {
+              "name": "@value-changed",
+              "description": "Fired when the `value` property changes.",
+              "value": {
+                "kind": "expression"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vaadin/accordion",
+  "version": "25.1.0-beta2",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "vaadin-accordion-heading",
+          "description": "The accordion heading element.\n\n`vaadin-accordion-heading` is the element for the headings in the accordion.\nAs recommended by the WAI ARIA Best Practices, each heading needs to wrap a\n`<button>`. This element puts that button in the Shadow DOM, as it is more\nconvenient to use and doesn't make styling of the heading more problematic.\n\nThe WAI ARIA Best Practices also recommend setting `aria-level` depending\non what level the headings are. It is hard to determine the level of a heading\nalgorithmically, and setting it is not strictly required to have an accessible\naccordion. To keep things easier to use, this element does not set `aria-level`\nattribute but leaves that to the developer creating an accordion.\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name  | Description\n-----------|-------------------\n`toggle`   | The icon element\n`content`  | The content wrapper\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------| -----------\n`active`     | Set when the element is pressed down, either with mouse, touch or the keyboard.\n`opened`     | Set when the collapsible content is expanded and visible.\n`disabled`   | Set when the element is disabled.\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property                          |\n:--------------------------------------------|\n| `--vaadin-accordion-heading-background`    |\n| `--vaadin-accordion-heading-border-color`  |\n| `--vaadin-accordion-heading-border-radius` |\n| `--vaadin-accordion-heading-border-width`  |\n| `--vaadin-accordion-heading-font-size`     |\n| `--vaadin-accordion-heading-font-weight`   |\n| `--vaadin-accordion-heading-gap`           |\n| `--vaadin-accordion-heading-height`        |\n| `--vaadin-accordion-heading-padding`       |\n| `--vaadin-accordion-heading-text-color`    |\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "When true, the element is opened.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "When true, the element is opened.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": []
+          }
+        },
+        {
+          "name": "vaadin-accordion-panel",
+          "description": "The accordion panel element.\n\n### Styling\n\nThe following shadow DOM parts are exposed for styling:\n\nPart name        | Description\n-----------------|----------------\n`content`        | The wrapper for the collapsible panel content.\n\nThe following state attributes are available for styling:\n\nAttribute      | Description\n---------------|------------\n`opened`       | Set when the collapsible content is expanded and visible\n`disabled`     | Set when the element is disabled\n`focus-ring`   | Set when the element is focused using the keyboard\n`focused`      | Set when the element is focused\n`has-tooltip`  | Set when the element has a slotted tooltip\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "opened",
+              "description": "If true, the collapsible content is visible.",
+              "value": {
+                "type": [
+                  "boolean",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "summary",
+              "description": "A text that is displayed in the heading, if no\nelement is assigned to the `summary` slot.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "autofocus",
+                "description": "Specify that this control should have input focus when the page loads.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "disabled",
+                "description": "If true, the user cannot interact with this element.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "opened",
+                "description": "If true, the collapsible content is visible.",
+                "value": {
+                  "type": [
+                    "boolean",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              },
+              {
+                "name": "summary",
+                "description": "A text that is displayed in the heading, if no\nelement is assigned to the `summary` slot.",
+                "value": {
+                  "type": [
+                    "string",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaadin-accordion",
+          "description": "`<vaadin-accordion>` is a Web Component implementing accordion widget:\na vertically stacked set of expandable panels. The component should be\nused as a wrapper for two or more `<vaadin-accordion-panel>` components.\n\nPanel headings function as controls that enable users to open (expand)\nor hide (collapse) their associated sections of content. The user can\ntoggle panels by mouse click, Enter and Space keys.\n\nOnly one panel can be opened at a time, opening a new one forces\nprevious panel to close and hide its content.\n\n```html\n<vaadin-accordion>\n  <vaadin-accordion-panel>\n    <vaadin-accordion-heading slot=\"summary\">Panel 1</vaadin-accordion-heading>\n    <div>This panel is opened, so the text is visible by default.</div>\n  </vaadin-accordion-panel>\n  <vaadin-accordion-panel>\n    <vaadin-accordion-heading slot=\"summary\">Panel 2</vaadin-accordion-heading>\n    <div>After opening this panel, the first one becomes closed.</div>\n  </vaadin-accordion-panel>\n</vaadin-accordion>\n```\n\n### Styling\n\nAccordion does not have own stylable shadow parts or state attributes. Instead, apply styles to\nthe following components:\n\n- [`<vaadin-accordion-heading>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-accordion-heading)\n- [`<vaadin-accordion-panel>`](https://cdn.vaadin.com/vaadin-web-components/25.1.0-beta2/#/elements/vaadin-accordion-panel)\n\nSee [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.",
+          "attributes": [
+            {
+              "name": "opened",
+              "description": "The index of currently opened panel. First panel is opened by\ndefault. Only one panel can be opened at the same time.\nSetting null or undefined closes all the accordion panels.",
+              "value": {
+                "type": [
+                  "number",
+                  "null",
+                  "undefined"
+                ]
+              }
+            },
+            {
+              "name": "theme",
+              "description": "The theme variants to apply to the component.",
+              "value": {
+                "type": [
+                  "string",
+                  "null",
+                  "undefined"
+                ]
+              }
+            }
+          ],
+          "js": {
+            "properties": [
+              {
+                "name": "opened",
+                "description": "The index of currently opened panel. First panel is opened by\ndefault. Only one panel can be opened at the same time.\nSetting null or undefined closes all the accordion panels.",
+                "value": {
+                  "type": [
+                    "number",
+                    "null",
+                    "undefined"
+                  ]
+                }
+              }
+            ],
+            "events": [
+              {
+                "name": "items-changed",
+                "description": "Fired when the `items` property changes."
+              },
+              {
+                "name": "opened-changed",
+                "description": "Fired when the `opened` property changes."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
