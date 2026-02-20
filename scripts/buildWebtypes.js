@@ -114,6 +114,7 @@ function getPublicWritableProperties(elementAnalysis) {
 function createPlainElementDefinition(packageJson, elementAnalysis) {
   const attributes = [...elementAnalysis.attributes, ...additionalAttributes]
     .filter((attribute) => isWritablePrimitiveAttribute(elementAnalysis, attribute))
+    .sort((a, b) => a.name.localeCompare(b.name))
     .map((attribute) => ({
       name: attribute.name,
       description: transformDescription(packageJson, attribute.description),
@@ -121,17 +122,23 @@ function createPlainElementDefinition(packageJson, elementAnalysis) {
         type: mapType(attribute.type),
       },
     }));
-  const properties = getPublicWritableProperties(elementAnalysis).map((prop) => ({
-    name: prop.name,
-    description: transformDescription(packageJson, prop.description),
-    value: {
-      type: mapType(prop.type),
-    },
-  }));
-  const events = elementAnalysis.events.map((event) => ({
-    name: event.name,
-    description: transformDescription(packageJson, event.description),
-  }));
+
+  const properties = getPublicWritableProperties(elementAnalysis)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((prop) => ({
+      name: prop.name,
+      description: transformDescription(packageJson, prop.description),
+      value: {
+        type: mapType(prop.type),
+      },
+    }));
+
+  const events = [...elementAnalysis.events]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((event) => ({
+      name: event.name,
+      description: transformDescription(packageJson, event.description),
+    }));
 
   return {
     name: elementAnalysis.tagname,
@@ -162,6 +169,7 @@ function createLitElementDefinition(packageJson, elementAnalysis) {
   const publicProperties = getPublicWritableProperties(elementAnalysis);
   const booleanAttributes = publicProperties
     .filter((prop) => prop.type.includes('boolean'))
+    .sort((a, b) => a.name.localeCompare(b.name))
     .map((prop) => ({
       name: `?${prop.name}`,
       description: transformDescription(packageJson, prop.description),
@@ -171,8 +179,10 @@ function createLitElementDefinition(packageJson, elementAnalysis) {
         kind: 'expression',
       },
     }));
+
   const propertyAttributes = publicProperties
     .filter((prop) => !prop.type.includes('boolean'))
+    .sort((a, b) => a.name.localeCompare(b.name))
     .map((prop) => ({
       name: `.${prop.name}`,
       description: transformDescription(packageJson, prop.description),
@@ -182,15 +192,18 @@ function createLitElementDefinition(packageJson, elementAnalysis) {
         kind: 'expression',
       },
     }));
-  const eventAttributes = elementAnalysis.events.map((event) => ({
-    name: `@${event.name}`,
-    description: transformDescription(packageJson, event.description),
-    value: {
-      // Type checking does not work with template tagged literals
-      // Since this Lit binding should use an expression, just declare it as such
-      kind: 'expression',
-    },
-  }));
+
+  const eventAttributes = [...elementAnalysis.events]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((event) => ({
+      name: `@${event.name}`,
+      description: transformDescription(packageJson, event.description),
+      value: {
+        // Type checking does not work with template tagged literals
+        // Since this Lit binding should use an expression, just declare it as such
+        kind: 'expression',
+      },
+    }));
 
   return {
     name: elementAnalysis.tagname,
