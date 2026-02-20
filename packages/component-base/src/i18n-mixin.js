@@ -42,16 +42,6 @@ export const I18nMixin = (defaultI18n, superClass) =>
     static get properties() {
       return {
         /** @private */
-        // Technically declaring a Polymer property is not needed, as we have a
-        // getter/setter for it below. However, the React components currently
-        // rely on the Polymer property declaration to detect which properties
-        // are available on a custom element, so we add a dummy declaration for
-        // it.
-        i18n: {
-          type: Object,
-        },
-
-        /** @private */
         __effectiveI18n: {
           type: Object,
           sync: true,
@@ -59,10 +49,26 @@ export const I18nMixin = (defaultI18n, superClass) =>
       };
     }
 
+    static get observedAttributes() {
+      return [...super.observedAttributes, 'i18n'];
+    }
+
     constructor() {
       super();
 
       this.i18n = deepMerge({}, defaultI18n);
+    }
+
+    /** @protected */
+    attributeChangedCallback(name, oldValue, newValue) {
+      super.attributeChangedCallback(name, oldValue, newValue);
+      if (name === 'i18n') {
+        try {
+          this.i18n = JSON.parse(newValue);
+        } catch (_) {
+          // Invalid JSON, ignore
+        }
+      }
     }
 
     /**

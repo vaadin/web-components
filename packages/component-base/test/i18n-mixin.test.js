@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { LitElement } from 'lit';
 import { I18nMixin } from '../src/i18n-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
@@ -78,5 +78,26 @@ describe('I18nMixin', () => {
     element.i18n = customI18n;
 
     expect(element.__effectiveI18n).to.equal(effectiveI18n);
+  });
+
+  it('should initialize property from i18n attribute JSON string', () => {
+    const i18nJson = JSON.stringify({ foo: 'Custom Foo' });
+    element = fixtureSync(`<i18n-mixin-lit-element i18n='${i18nJson}'></i18n-mixin-lit-element>`);
+
+    expect(element.i18n).to.have.property('foo', 'Custom Foo');
+    expect(element.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, foo: 'Custom Foo' });
+  });
+
+  it('should update property when i18n attribute is changed', () => {
+    element.setAttribute('i18n', JSON.stringify({ foo: 'Updated Foo' }));
+
+    expect(element.i18n).to.have.property('foo', 'Updated Foo');
+    expect(element.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, foo: 'Updated Foo' });
+  });
+
+  it('should ignore invalid JSON in i18n attribute', () => {
+    element.setAttribute('i18n', 'not valid json');
+
+    expect(element.i18n).to.deep.equal(DEFAULT_I18N);
   });
 });
