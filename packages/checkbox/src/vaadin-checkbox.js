@@ -71,6 +71,8 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  * @fires {Event} change - Fired when the checkbox is checked or unchecked by the user.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
  * @customElement
  * @extends HTMLElement
