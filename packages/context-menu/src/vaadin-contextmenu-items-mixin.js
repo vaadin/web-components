@@ -271,7 +271,7 @@ export const ItemsMixin = (superClass) =>
 
         // If a submenu is open and the safe triangle indicates the user is
         // aiming at it, defer the switch instead of switching immediately.
-        if (!isTouch && this._subMenu.opened && this.__safeTriangle && this.__safeTriangle.shouldKeepOpen()) {
+        if (this._subMenu.opened && this.__safeTriangle && this.__safeTriangle.shouldKeepOpen()) {
           const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
           const expandedItem = this._listBox && this._listBox.querySelector('[expanded]');
           if (item && item !== expandedItem) {

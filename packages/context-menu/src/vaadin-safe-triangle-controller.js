@@ -7,6 +7,7 @@
 const TOLERANCE_RAD = 15 * (Math.PI / 180);
 const INVALID_THRESHOLD = 2;
 const THROTTLE_MS = 16;
+const FALLBACK_TIMEOUT_MS = 400;
 
 /**
  * A controller that implements the "safe triangle" pattern for submenu navigation.
@@ -27,6 +28,8 @@ const THROTTLE_MS = 16;
 export class SafeTriangleController {
   constructor() {
     /** @private */
+    this._hasLastPosition = false;
+    /** @private */
     this._lastX = 0;
     /** @private */
     this._lastY = 0;
@@ -40,6 +43,8 @@ export class SafeTriangleController {
     this._submenuElement = null;
     /** @private */
     this._parentItemElement = null;
+    /** @private */
+    this._pendingSwitch = null;
     /** @private */
     this._pendingTimeout = null;
     /** @private */
@@ -58,6 +63,9 @@ export class SafeTriangleController {
     this._parentItemElement = parentItem;
     this._invalidCount = 0;
     this._lastMoveTime = 0;
+    this._hasLastPosition = false;
+    this._lastX = 0;
+    this._lastY = 0;
 
     if (!this._active) {
       this._active = true;
@@ -107,6 +115,11 @@ export class SafeTriangleController {
   scheduleSwitch(callback) {
     this._cancelPendingSwitch();
     this._pendingSwitch = callback;
+    // Fallback: if the user stops moving entirely, execute the switch
+    // after a timeout so the submenu doesn't stay stuck indefinitely.
+    this._pendingTimeout = setTimeout(() => {
+      this._executePendingSwitch();
+    }, FALLBACK_TIMEOUT_MS);
   }
 
   /** @private */
@@ -144,7 +157,8 @@ export class SafeTriangleController {
     const x = event.clientX;
     const y = event.clientY;
 
-    if (this._lastX === 0 && this._lastY === 0) {
+    if (!this._hasLastPosition) {
+      this._hasLastPosition = true;
       this._lastX = x;
       this._lastY = y;
       return;
