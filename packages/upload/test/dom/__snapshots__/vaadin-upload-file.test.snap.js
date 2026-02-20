@@ -8,10 +8,6 @@ snapshots["vaadin-upload-file shadow default"] =
   part="thumbnail"
   src=""
 >
-<div
-  aria-hidden="true"
-  part="file-icon"
->
 </div>
 <div
   aria-hidden="true"

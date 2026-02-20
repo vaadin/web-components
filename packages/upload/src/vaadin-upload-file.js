@@ -23,7 +23,6 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  * Part name        | Description
  * -----------------|-------------
  * `thumbnail`      | Image thumbnail for image files (used with `thumbnails` theme)
- * `file-icon`      | Generic file icon for non-image files (used with `thumbnails` theme)
  * `done-icon`      | File done status icon
  * `warning-icon`   | File warning status icon
  * `meta`           | Container for file name, status and error messages
@@ -101,8 +100,8 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
     const isFileRetryVisible = this.errorMessage;
 
     return html`
+      <div part="loader" ?hidden="${!this.uploading}"></div>
       <img src="${this.__thumbnail}" alt="${this.fileName}" part="thumbnail" ?hidden="${!this.__thumbnail}" />
-      <div part="file-icon" ?hidden="${!!this.__thumbnail}" aria-hidden="true"></div>
 
       <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
       <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
