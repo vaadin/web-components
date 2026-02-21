@@ -114,7 +114,6 @@
     padding: 0;
     gap: 0;
     font-size: var(--lumo-font-size-xs);
-    color: var(--lumo-secondary-text-color);
 
     [part='loader']:not([hidden]) {
       display: block;
