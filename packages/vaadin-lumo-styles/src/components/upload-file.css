@@ -128,6 +128,8 @@
       background: var(--lumo-contrast-5pct);
 
       &::before {
+        width: var(--lumo-icon-size-s);
+        height: var(--lumo-icon-size-s);
         /* TODO: Replace with Lumo file icon, once it exists. */
         mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
         mask-size: contain;
