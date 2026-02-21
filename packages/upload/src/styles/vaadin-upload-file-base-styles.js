@@ -158,23 +158,30 @@ export const uploadFileStyles = css`
   /* THUMBNAILS VARIANT */
 
   :host([theme~='thumbnails']) {
-    --_prefix-area-size: 3rem;
+    --_prefix-area-size: 2rem;
 
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: var(--_prefix-area-size) minmax(0, 1fr) auto;
     grid-auto-columns: auto;
     grid-template-rows: auto;
     position: relative;
     align-items: center;
     background: var(--vaadin-background-container);
+    gap: var(--vaadin-gap-s);
 
     & [part='thumbnail'],
     & [part='done-icon'],
     & [part='warning-icon'] {
-      width: var(--_prefix-area-size);
-      height: var(--_prefix-area-size);
+      width: 100%;
+      aspect-ratio: 1 / 1;
       align-items: center;
       justify-content: center;
       grid-column: 1;
+    }
+
+    & [part='loader']:not([hidden]) {
+      display: flex;
+      align-self: stretch;
+      aspect-ratio: 1 / 1;
     }
 
     & [part='done-icon'] {
