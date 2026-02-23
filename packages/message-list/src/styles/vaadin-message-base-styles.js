@@ -70,7 +70,7 @@ export const messageStyles = css`
   [part='attachments'] {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--vaadin-gap-m);
+    gap: 6px;
   }
 
   [part~='attachment'] {
