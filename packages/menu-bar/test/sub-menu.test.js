@@ -839,6 +839,17 @@ describe('touch', () => {
     const safeTriangle = menu.__safeTriangle;
     expect(safeTriangle).to.exist;
 
+    // Track pointer movement so shouldKeepOpen() would return true if still active
+    const btnRect = buttons[0].getBoundingClientRect();
+    const overlayRect = subMenu._overlayElement.getBoundingClientRect();
+    pointerMove(btnRect.left + btnRect.width / 2, btnRect.top + btnRect.height / 2);
+    await aTimeout(20);
+    pointerMove(overlayRect.left + overlayRect.width / 2, overlayRect.top + overlayRect.height / 2);
+    await aTimeout(20);
+
+    // Verify safe triangle is active before closing
+    expect(safeTriangle.shouldKeepOpen()).to.be.true;
+
     menu.close();
     await nextRender();
 
