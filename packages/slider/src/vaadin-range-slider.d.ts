@@ -150,7 +150,9 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {Event} input - Fired when the slider value changes during user interaction.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class RangeSlider extends FieldMixin(SliderMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
   /**
