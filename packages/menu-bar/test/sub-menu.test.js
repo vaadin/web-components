@@ -747,7 +747,7 @@ describe('touch', () => {
     menu.items = [
       {
         text: 'Menu Item 1',
-        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }],
+        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2', children: [{ text: 'Menu Item 1 2 1' }] }],
       },
       { text: 'Menu Item 2' },
       {
@@ -759,6 +759,10 @@ describe('touch', () => {
     await nextRender();
     subMenu = menu._subMenu;
     buttons = menu._buttons;
+  });
+
+  afterEach(() => {
+    document.documentElement.setAttribute('dir', 'ltr');
   });
 
   it('should keep submenu open when pointer moves toward it', async () => {
@@ -852,5 +856,96 @@ describe('touch', () => {
 
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[2]);
+  });
+
+  it('should switch submenu after fallback timeout when pointer stops moving', async () => {
+    // Open submenu for button 0
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+
+    const btnRect = buttons[0].getBoundingClientRect();
+    const overlayRect = subMenu._overlayElement.getBoundingClientRect();
+
+    // Start from center of expanded button
+    const startX = btnRect.left + btnRect.width / 2;
+    const startY = btnRect.top + btnRect.height / 2;
+    pointerMove(startX, startY);
+
+    await aTimeout(20);
+
+    // Move pointer toward the submenu overlay (inside safe triangle)
+    const targetX = overlayRect.left + overlayRect.width / 2;
+    const targetY = overlayRect.top + overlayRect.height / 2;
+    const midX = (startX + targetX) / 2;
+    const midY = (startY + targetY) / 2;
+    pointerMove(midX, midY);
+
+    await aTimeout(20);
+
+    // Hover over another button — deferred by safe triangle
+    fire(buttons[2], 'mouseover');
+    await nextRender();
+
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[0]);
+
+    // Wait for fallback timeout (400ms) to expire
+    await aTimeout(450);
+
+    // The pending switch should have executed
+    expect(subMenu.listenOn).to.equal(buttons[2]);
+  });
+
+  it('should keep nested submenu open when pointer moves toward it in RTL', async () => {
+    document.documentElement.setAttribute('dir', 'rtl');
+    menu.style.position = 'absolute';
+    menu.style.left = '0px';
+    await nextRender();
+
+    // Open first-level submenu via button hover
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+
+    const subMenuOverlay = subMenu._overlayElement;
+    const items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
+    const parentItem = items[1]; // 'Menu Item 1 2' has children
+
+    // Open nested submenu
+    const nestedSubMenu = subMenu.querySelector('vaadin-menu-bar-submenu');
+    subMenu.__openListenerActive = true;
+    fire(parentItem, 'mouseover');
+    await oneEvent(nestedSubMenu._overlayElement, 'vaadin-overlay-open');
+    expect(nestedSubMenu.opened).to.be.true;
+
+    const parentRect = parentItem.getBoundingClientRect();
+    const nestedOverlayRect = nestedSubMenu._overlayElement.getBoundingClientRect();
+
+    // In RTL, nested submenu opens to the left
+    expect(nestedOverlayRect.right).to.be.at.most(parentRect.left + 1);
+
+    // Start from center of parent item
+    const startX = parentRect.left + parentRect.width / 2;
+    const startY = parentRect.top + parentRect.height / 2;
+    pointerMove(startX, startY);
+
+    await aTimeout(20);
+
+    // Move diagonally toward the nested submenu (leftward in RTL)
+    const targetX = nestedOverlayRect.left + nestedOverlayRect.width / 2;
+    const targetY = nestedOverlayRect.top + nestedOverlayRect.height / 2;
+    const midX = (startX + targetX) / 2;
+    const midY = (startY + targetY) / 2;
+    pointerMove(midX, midY);
+
+    await aTimeout(20);
+
+    // Hover a sibling item in the first-level submenu
+    const siblingItem = items[0]; // 'Menu Item 1 1'
+    fire(siblingItem, 'mouseover');
+
+    // Nested submenu should stay open (safe triangle protects it)
+    expect(nestedSubMenu.opened).to.be.true;
   });
 });
