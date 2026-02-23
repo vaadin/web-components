@@ -604,8 +604,8 @@ class MyComponentMixinClass extends ... {
     // ... methods that dispatch events ...
 
     /**
-     * Fired when the value changes.
-     * @event value-changed
+     * Fired when the user commits a value change.
+     * @event change
      */
   };
 ```
