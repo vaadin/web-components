@@ -135,6 +135,7 @@ export class SafeTriangleController {
    * @param {HTMLElement} parentItem - The parent menu item that triggered the submenu
    */
   activate(submenuOverlay, parentItem) {
+    this.#cancelPendingSwitch();
     this.#submenuElement = submenuOverlay;
     this.#parentItemElement = parentItem;
     this.#invalidCount = 0;
@@ -209,6 +210,7 @@ export class SafeTriangleController {
   #executePendingSwitch() {
     const callback = this.#pendingSwitch;
     this.#pendingSwitch = null;
+    clearTimeout(this.#pendingTimeout);
     this.#pendingTimeout = null;
     if (callback) {
       callback();

@@ -805,6 +805,86 @@ describe('items', () => {
       expect(subMenu2.opened).to.be.true;
     });
 
+    it('should switch submenu after fallback timeout when pointer stops moving', async () => {
+      const parentItem = getMenuItems(rootMenu)[0];
+      const parentRect = parentItem.getBoundingClientRect();
+      const subMenuOverlay = subMenu._overlayElement;
+      const subMenuRect = subMenuOverlay.getBoundingClientRect();
+
+      // Start from the center of the parent item
+      const startX = parentRect.left + parentRect.width / 2;
+      const startY = parentRect.top + parentRect.height / 2;
+      pointerMove(startX, startY);
+
+      await aTimeout(20);
+
+      // Move diagonally toward the submenu (inside the safe triangle)
+      const targetX = subMenuRect.left + subMenuRect.width / 2;
+      const targetY = subMenuRect.top + subMenuRect.height / 2;
+      const midX = (startX + targetX) / 2;
+      const midY = (startY + targetY) / 2;
+      pointerMove(midX, midY);
+
+      await aTimeout(20);
+
+      // Hover a sibling item — deferred by safe triangle
+      const siblingItem = getMenuItems(rootMenu)[3];
+      activateItem(siblingItem);
+
+      // Submenu should still be open (safe triangle active)
+      expect(subMenu.opened).to.be.true;
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-0-0');
+
+      // Wait for fallback timeout (400ms) to expire
+      await aTimeout(450);
+
+      // The pending switch should have executed
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-3-0');
+    });
+
+    it('should keep submenu open when pointer moves toward it in RTL', async () => {
+      document.documentElement.setAttribute('dir', 'rtl');
+      await nextFrame();
+
+      // Close and reopen to get RTL positioning
+      subMenu.close();
+      rootMenu.close();
+      await nextRender();
+      await openMenu(target);
+      await openMenu(getMenuItems(rootMenu)[0]);
+
+      const parentItem = getMenuItems(rootMenu)[0];
+      const parentRect = parentItem.getBoundingClientRect();
+      const subMenuOverlay = getSubMenu(rootMenu)._overlayElement;
+      const subMenuRect = subMenuOverlay.getBoundingClientRect();
+
+      // In RTL, submenu opens to the left
+      expect(subMenuRect.right).to.be.at.most(parentRect.left + 1);
+
+      // Start from the center of the parent item
+      const startX = parentRect.left + parentRect.width / 2;
+      const startY = parentRect.top + parentRect.height / 2;
+      pointerMove(startX, startY);
+
+      await aTimeout(20);
+
+      // Move diagonally toward the submenu (leftward in RTL)
+      const targetX = subMenuRect.left + subMenuRect.width / 2;
+      const targetY = subMenuRect.top + subMenuRect.height / 2;
+      const midX = (startX + targetX) / 2;
+      const midY = (startY + targetY) / 2;
+      pointerMove(midX, midY);
+
+      await aTimeout(20);
+
+      // Now hover over a sibling item — submenu should stay open
+      const siblingItem = getMenuItems(rootMenu)[3];
+      activateItem(siblingItem);
+
+      expect(getSubMenu(rootMenu).opened).to.be.true;
+      expect(getMenuItems(getSubMenu(rootMenu))[0].textContent).to.equal('foo-0-0');
+    });
+
     it('should deactivate when submenu closes', () => {
       const safeTriangle = rootMenu.querySelector('[slot="submenu"]').__safeTriangle;
       expect(safeTriangle).to.exist;
