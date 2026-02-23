@@ -574,6 +574,8 @@ this.dispatchEvent(
 
 **Document events in JSDoc:**
 
+The `@fires` tag on the class-level JSDoc is used for documentation purposes:
+
 ```javascript
 /**
  * @fires {Event} input - Fired when the value is changed by the user.
@@ -581,6 +583,31 @@ this.dispatchEvent(
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  */
+```
+
+**Register events for the Polymer Analyzer with `@event`:**
+
+The Polymer Analyzer (used to generate `web-types.json`, which is required for React wrapper
+generation) discovers events from two sources:
+
+1. **`notify: true`** on a property declaration automatically generates a `{property}-changed`
+   event (e.g., `value` with `notify: true` generates `value-changed`). No `@event` annotation
+   is needed for these.
+2. **`@event` JSDoc annotations** inside the class body (component class or mixin) are needed
+   for all other events. Without `@event`, the event won't appear in web-types even if `@fires`
+   is present on the class JSDoc.
+
+Note: `@fires` on the class-level JSDoc is **not** read by the Polymer Analyzer.
+
+```javascript
+class MyComponentMixinClass extends ... {
+    // ... methods that dispatch events ...
+
+    /**
+     * Fired when the value changes.
+     * @event value-changed
+     */
+  };
 ```
 
 ### 7. Lifecycle Methods
