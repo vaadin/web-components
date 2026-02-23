@@ -23,6 +23,7 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  * Part name        | Description
  * -----------------|-------------
  * `thumbnail`      | Image thumbnail for image files (used with `thumbnails` theme)
+ * `loader`         | Loading spinner (used with `thumbnails` theme)
  * `done-icon`      | File done status icon
  * `warning-icon`   | File warning status icon
  * `meta`           | Container for file name, status and error messages
