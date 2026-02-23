@@ -37,6 +37,8 @@ class CodeBlockContainer extends QuillCodeBlockContainer {
 
 Quill.register('formats/code-block-container', CodeBlockContainer, true);
 
+const NAVIGATION_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'];
+
 const HANDLERS = [
   'bold',
   'italic',
@@ -290,6 +292,7 @@ export const RichTextEditorMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
+      cancelAnimationFrame(this.__toolbarUpdateRaf);
       this._editor.emitter.disconnect();
     }
 
@@ -376,6 +379,24 @@ export const RichTextEditorMixin = (superClass) =>
         } else if (this.__tabBindings) {
           this._editor.keyboard.bindings.Tab = this.__tabBindings;
           this.__tabBindings = null;
+        }
+      });
+
+      // Workaround for Quill 2.0 reporting stale selection on navigation keys.
+      // Quill's selectionchange handler reads the selection before the browser
+      // commits the new cursor position, causing toolbar to show previous format.
+      // Deferring via rAF ensures we read the correct, committed selection.
+      // See https://github.com/slab/quill/issues/4305
+      // See https://github.com/slab/quill/issues/4168
+      editorContent.addEventListener('keydown', (e) => {
+        if (NAVIGATION_KEYS.includes(e.key)) {
+          cancelAnimationFrame(this.__toolbarUpdateRaf);
+          this.__toolbarUpdateRaf = requestAnimationFrame(() => {
+            const selection = this._editor.getSelection();
+            if (selection) {
+              this._editor.getModule('toolbar').update(selection);
+            }
+          });
         }
       });
 

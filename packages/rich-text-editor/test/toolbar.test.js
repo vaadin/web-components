@@ -229,6 +229,41 @@ describe('toolbar controls', () => {
         expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
         expect(linkBtn.part.contains('toolbar-button-pressed')).to.be.true;
       });
+
+      it('should update toolbar pressed state on navigation keydown', async () => {
+        const delta = new window.Quill.imports.delta([
+          { attributes: { bold: true }, insert: 'Foo\n' },
+          { attributes: { italic: true }, insert: 'Bar\n' },
+        ]);
+        editor.setContents(delta, 'user');
+        editor.focus();
+
+        const boldBtn = getButton('bold');
+        const italicBtn = getButton('italic');
+        const toolbar = editor.getModule('toolbar');
+
+        // Position at italic text — toolbar shows italic pressed
+        editor.setSelection(4, 1);
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.true;
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
+
+        // Force toolbar into stale state by updating with wrong range
+        // (simulates Quill 2.0 reading old selection on arrow key navigation)
+        toolbar.update({ index: 0, length: 1 });
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.true;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
+
+        // Dispatch navigation keydown — our fix should correct the stale toolbar
+        const editorContent = rte.shadowRoot.querySelector('.ql-editor');
+        editorContent.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+
+        // Wait for requestAnimationFrame callback
+        await nextRender();
+
+        // Toolbar should reflect the actual selection (italic text at index 4)
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.true;
+      });
     });
 
     describe('style', () => {
