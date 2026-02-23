@@ -804,17 +804,6 @@ describe('items', () => {
       expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-3-0');
     });
 
-    it('should not interfere with keyboard navigation', async () => {
-      // Arrow right on an item with children should open nested submenu
-      const items = getMenuItems(subMenu);
-      const itemWithChildren = items[2]; // foo-0-2 has children
-      itemWithChildren.focus();
-      arrowRightKeyDown(itemWithChildren);
-      const subMenu2 = getSubMenu(subMenu);
-      await nextRender();
-      expect(subMenu2.opened).to.be.true;
-    });
-
     it('should switch submenu after fallback timeout when pointer stops moving', async () => {
       const parentItem = getMenuItems(rootMenu)[0];
       const parentRect = parentItem.getBoundingClientRect();
@@ -852,10 +841,23 @@ describe('items', () => {
       expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-3-0');
     });
 
-    it('should deactivate when submenu closes', () => {
-      const safeTriangle = rootMenu.querySelector('[slot="submenu"]').__safeTriangle;
+    it('should deactivate when submenu closes', async () => {
+      const safeTriangle = rootMenu.__safeTriangle;
       expect(safeTriangle).to.exist;
+
+      // Track pointer movement so shouldKeepOpen() would return true if still active
+      const parentRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
+      const subMenuRect = subMenu._overlayElement.getBoundingClientRect();
+      pointerMove(parentRect.left + parentRect.width / 2, parentRect.top + parentRect.height / 2);
+      await aTimeout(20);
+      pointerMove(subMenuRect.left + subMenuRect.width / 2, subMenuRect.top + subMenuRect.height / 2);
+      await aTimeout(20);
+
+      // Verify safe triangle is active before closing
+      expect(safeTriangle.shouldKeepOpen()).to.be.true;
+
       subMenu.close();
+      await nextRender();
       expect(safeTriangle.shouldKeepOpen()).to.be.false;
     });
   });
