@@ -109,6 +109,7 @@
     --_prefix-area-size: var(--lumo-size-m);
     min-height: var(--_prefix-area-size);
     border-radius: var(--lumo-border-radius-l);
+    border: 0;
     overflow: hidden;
     margin: 0;
     padding: 0;
