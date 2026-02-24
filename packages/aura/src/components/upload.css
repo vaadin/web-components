@@ -66,10 +66,6 @@ vaadin-upload-file {
   padding-block: var(--vaadin-padding-m);
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
-  &:not([error])::part(done-icon) {
-    display: flex;
-  }
-
   &:not([complete], [error])::part(done-icon)::before {
     background: var(--vaadin-border-color-secondary);
   }
@@ -105,6 +101,31 @@ vaadin-upload-file {
     transition: 200ms height;
     height: 0;
     margin-top: 0;
+  }
+
+  &[theme~='thumbnails'] {
+    --aura-surface-level: 4;
+    --_background: var(--aura-accent-surface) padding-box;
+    padding: 0 var(--vaadin-padding-xs) 0 0;
+    overflow: hidden;
+    background: var(--_background);
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
+    min-height: var(--_prefix-area-size);
+
+    &::part(loader) {
+      place-self: center center;
+    }
+
+    &::part(commands) {
+      gap: 0;
+    }
+
+    &[error] {
+      --aura-accent-color-light: var(--aura-red);
+      --aura-accent-color-dark: var(--aura-red);
+    }
   }
 }
 

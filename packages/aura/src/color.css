@@ -70,6 +70,7 @@ vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
 vaadin-tab,
+vaadin-upload-file,
 :where(
   .aura-accent-color,
   .aura-accent-neutral,
