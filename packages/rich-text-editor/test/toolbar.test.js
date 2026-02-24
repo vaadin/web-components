@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   enter,
   esc,
@@ -240,27 +241,16 @@ describe('toolbar controls', () => {
 
         const boldBtn = getButton('bold');
         const italicBtn = getButton('italic');
-        const toolbar = editor.getModule('toolbar');
 
-        // Position at italic text — toolbar shows italic pressed
-        editor.setSelection(4, 1);
-        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.true;
-        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
-
-        // Force toolbar into stale state by updating with wrong range
-        // (simulates Quill 2.0 reading old selection on arrow key navigation)
-        toolbar.update({ index: 0, length: 1 });
+        // Position cursor at end of the bold line
+        editor.setSelection(3, 0);
         expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.true;
         expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
 
-        // Dispatch navigation keydown — our fix should correct the stale toolbar
-        const editorContent = rte.shadowRoot.querySelector('.ql-editor');
-        editorContent.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
-
-        // Wait for requestAnimationFrame callback
+        // Navigate into the italic line using a real key press
+        await sendKeys({ press: 'ArrowDown' });
         await nextRender();
 
-        // Toolbar should reflect the actual selection (italic text at index 4)
         expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
         expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.true;
       });

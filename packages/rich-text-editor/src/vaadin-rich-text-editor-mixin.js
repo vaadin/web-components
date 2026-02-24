@@ -292,7 +292,6 @@ export const RichTextEditorMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      cancelAnimationFrame(this.__toolbarUpdateRaf);
       this._editor.emitter.disconnect();
     }
 
@@ -390,8 +389,7 @@ export const RichTextEditorMixin = (superClass) =>
       // See https://github.com/slab/quill/issues/4168
       editorContent.addEventListener('keydown', (e) => {
         if (NAVIGATION_KEYS.includes(e.key)) {
-          cancelAnimationFrame(this.__toolbarUpdateRaf);
-          this.__toolbarUpdateRaf = requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
             const selection = this._editor.getSelection();
             if (selection) {
               this._editor.getModule('toolbar').update(selection);
