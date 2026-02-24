@@ -67,6 +67,13 @@ vaadin-select-item:where([role]) {
     background: var(--_highlight-color);
   }
 
+  /* Suppress hover highlight during safe triangle navigation */
+  @media (any-hover: hover) {
+    [safe-triangle-active] > &:not([aria-expanded='true']):not([disabled], [aria-disabled='true']):hover {
+      background: transparent;
+    }
+  }
+
   &[aria-expanded='true']:not(:hover) {
     background: var(--vaadin-background-container-strong);
   }
