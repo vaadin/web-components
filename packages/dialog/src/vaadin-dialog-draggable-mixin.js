@@ -123,16 +123,14 @@ export const DialogDraggableMixin = (superClass) =>
         let left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
 
         if (this.keepInViewport) {
+          // Constrain the dialog position so that it stays within the overlay host bounds,
+          // respecting the `--vaadin-overlay-viewport-inset` (offset from the viewport edges).
           const { width, height } = this._originalBounds;
-          // Get the overlay container's position to account for its offset from the viewport
-          const containerBounds = this.$.overlay.getBoundingClientRect();
-          // Calculate bounds so the dialog's visual edges stay within the viewport
-          const minLeft = -containerBounds.left;
-          const maxLeft = window.innerWidth - containerBounds.left - width;
-          const minTop = -containerBounds.top;
-          const maxTop = window.innerHeight - containerBounds.top - height;
-          left = Math.max(minLeft, Math.min(left, maxLeft));
-          top = Math.max(minTop, Math.min(top, maxTop));
+          const overlayHostBounds = this.$.overlay.getBoundingClientRect();
+          const maxLeft = overlayHostBounds.right - overlayHostBounds.left - width;
+          const maxTop = overlayHostBounds.bottom - overlayHostBounds.top - height;
+          left = Math.max(0, Math.min(left, maxLeft));
+          top = Math.max(0, Math.min(top, maxTop));
         }
 
         this.top = top;
