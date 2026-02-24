@@ -860,5 +860,19 @@ describe('items', () => {
       await nextRender();
       expect(safeTriangle.shouldKeepOpen()).to.be.false;
     });
+
+    it('should set safe-triangle-active attribute on list-box when active', () => {
+      const listBox = rootMenu._listBox;
+      expect(listBox.hasAttribute('safe-triangle-active')).to.be.true;
+    });
+
+    it('should remove safe-triangle-active attribute when deactivated', async () => {
+      const listBox = rootMenu._listBox;
+      expect(listBox.hasAttribute('safe-triangle-active')).to.be.true;
+
+      subMenu.close();
+      await nextRender();
+      expect(listBox.hasAttribute('safe-triangle-active')).to.be.false;
+    });
   });
 });

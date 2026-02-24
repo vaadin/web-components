@@ -1002,7 +1002,7 @@ export const MenuBarMixin = (superClass) =>
 
       // Activate safe triangle tracking for the newly opened submenu
       if (this.__safeTriangle) {
-        this.__safeTriangle.activate(overlay, button);
+        this.__safeTriangle.activate(overlay, button, this);
       }
 
       overlay.addEventListener(

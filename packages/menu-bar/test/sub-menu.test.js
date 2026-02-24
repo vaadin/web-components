@@ -927,4 +927,21 @@ describe('touch', () => {
     // Nested submenu should stay open (safe triangle protects it)
     expect(nestedSubMenu.opened).to.be.true;
   });
+
+  it('should set safe-triangle-active attribute on menu-bar when active', async () => {
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+    expect(menu.hasAttribute('safe-triangle-active')).to.be.true;
+  });
+
+  it('should remove safe-triangle-active attribute when deactivated', async () => {
+    fire(buttons[0], 'mouseover');
+    await nextRender();
+    expect(menu.hasAttribute('safe-triangle-active')).to.be.true;
+
+    menu.close();
+    await nextRender();
+    expect(menu.hasAttribute('safe-triangle-active')).to.be.false;
+  });
 });

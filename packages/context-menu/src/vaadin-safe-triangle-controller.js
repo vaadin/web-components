@@ -46,6 +46,8 @@ export class SafeTriangleController {
 
   #pendingTimeout = null;
 
+  #parentContainer = null;
+
   #onPointerMove = (event) => {
     // Only handle mouse pointer, not touch or pen
     if (event.pointerType === 'touch' || event.pointerType === 'pen') {
@@ -133,8 +135,9 @@ export class SafeTriangleController {
    *
    * @param {HTMLElement} submenuOverlay - The submenu overlay element
    * @param {HTMLElement} parentItem - The parent menu item that triggered the submenu
+   * @param {HTMLElement} [parentContainer] - Optional container element to set safe-triangle-active attribute on
    */
-  activate(submenuOverlay, parentItem) {
+  activate(submenuOverlay, parentItem, parentContainer) {
     this.#cancelPendingSwitch();
     this.#submenuElement = submenuOverlay;
     this.#parentItemElement = parentItem;
@@ -143,6 +146,11 @@ export class SafeTriangleController {
     this.#hasLastPosition = false;
     this.#lastX = 0;
     this.#lastY = 0;
+
+    if (parentContainer) {
+      this.#parentContainer = parentContainer;
+      parentContainer.setAttribute('safe-triangle-active', '');
+    }
 
     if (!this.#active) {
       this.#active = true;
@@ -155,6 +163,10 @@ export class SafeTriangleController {
    * Should be called when a submenu closes.
    */
   deactivate() {
+    if (this.#parentContainer) {
+      this.#parentContainer.removeAttribute('safe-triangle-active');
+      this.#parentContainer = null;
+    }
     if (this.#active) {
       this.#active = false;
       document.removeEventListener('pointermove', this.#onPointerMove);

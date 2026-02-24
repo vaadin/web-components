@@ -25,6 +25,11 @@
     background-color: var(--lumo-primary-color-10pct);
   }
 
+  /* Suppress hover highlight during safe triangle navigation */
+  :host([safe-triangle-active]) [part='items'] ::slotted([role='menuitem']:hover:not([disabled]):not([expanded])) {
+    background-color: transparent;
+  }
+
   /* RTL styles */
   :host([dir='rtl']) [part='items'] ::slotted([role='menuitem']) {
     padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);

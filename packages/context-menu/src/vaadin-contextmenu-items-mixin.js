@@ -167,7 +167,7 @@ export const ItemsMixin = (superClass) =>
 
       // Activate safe triangle tracking for the newly opened submenu
       if (this.__safeTriangle) {
-        this.__safeTriangle.activate(subMenuOverlay, itemElement);
+        this.__safeTriangle.activate(subMenuOverlay, itemElement, this._listBox);
       }
     }
 
