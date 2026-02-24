@@ -1050,6 +1050,9 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __onEscapeClose() {
       this.__deactivateButton(true);
+      if (this.__safeTriangle) {
+        this.__safeTriangle.deactivate();
+      }
     }
 
     /** @private */

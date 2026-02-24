@@ -147,6 +147,9 @@ export class SafeTriangleController {
     this.#lastX = 0;
     this.#lastY = 0;
 
+    if (this.#parentContainer && this.#parentContainer !== parentContainer) {
+      this.#parentContainer.removeAttribute('safe-triangle-active');
+    }
     if (parentContainer) {
       this.#parentContainer = parentContainer;
       parentContainer.setAttribute('safe-triangle-active', '');
