@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -73,7 +75,7 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
   }
 
   static get styles() {
-    return badgeStyles;
+    return [badgeStyles, screenReaderOnly];
   }
 
   static get lumoInjector() {
@@ -97,10 +99,19 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
 
   /** @protected */
   render() {
+    const theme = (this._theme || '').split(' ');
+    const iconOnly = theme.includes('icon-only');
+    const numberOnly = theme.includes('number-only');
+    const dot = theme.includes('dot');
+
     return html`
-      <div part="icon"><slot name="icon"></slot></div>
-      <div part="number">${this.number}</div>
-      <div part="content"><slot></slot></div>
+      <div part="icon" class="${classMap({ 'sr-only': numberOnly || dot })}">
+        <slot name="icon"></slot>
+      </div>
+      <div part="number" class="${classMap({ 'sr-only': iconOnly || dot })}">${this.number}</div>
+      <div part="content" class="${classMap({ 'sr-only': numberOnly || iconOnly || dot })}">
+        <slot></slot>
+      </div>
     `;
   }
 

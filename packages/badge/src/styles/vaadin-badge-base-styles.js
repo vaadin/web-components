@@ -13,6 +13,7 @@ export const badgeStyles = css`
     justify-content: center;
     box-sizing: border-box;
     vertical-align: baseline;
+    position: relative;
     gap: var(--vaadin-badge-gap, 0.25em);
     padding: var(
       --vaadin-badge-padding,
@@ -50,13 +51,6 @@ export const badgeStyles = css`
   :host([theme~='icon-only']),
   :host([theme~='number-only']) {
     gap: 0;
-  }
-
-  :host([theme~='icon-only']) :is([part='content'], [part='number']),
-  :host([theme~='number-only']) :is([part='content'], [part='icon']),
-  :host([theme~='dot']) [part] {
-    width: 0;
-    overflow: clip;
   }
 
   :host([theme~='dot']) {

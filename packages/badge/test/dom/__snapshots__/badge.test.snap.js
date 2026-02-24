@@ -49,3 +49,66 @@ snapshots["vaadin-badge shadow number"] =
 `;
 /* end snapshot vaadin-badge shadow number */
 
+snapshots["vaadin-badge shadow dot"] = 
+`<div
+  class="sr-only"
+  part="icon"
+>
+  <slot name="icon">
+  </slot>
+</div>
+<div
+  class="sr-only"
+  part="number"
+>
+</div>
+<div
+  class="sr-only"
+  part="content"
+>
+  <slot>
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-badge shadow dot */
+
+snapshots["vaadin-badge shadow icon-only"] = 
+`<div part="icon">
+  <slot name="icon">
+  </slot>
+</div>
+<div
+  class="sr-only"
+  part="number"
+>
+</div>
+<div
+  class="sr-only"
+  part="content"
+>
+  <slot>
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-badge shadow icon-only */
+
+snapshots["vaadin-badge shadow number-only"] = 
+`<div
+  class="sr-only"
+  part="icon"
+>
+  <slot name="icon">
+  </slot>
+</div>
+<div part="number">
+</div>
+<div
+  class="sr-only"
+  part="content"
+>
+  <slot>
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-badge shadow number-only */
+

@@ -43,5 +43,23 @@ describe('vaadin-badge', () => {
       await nextUpdate(badge);
       await expect(badge).shadowDom.to.equalSnapshot();
     });
+
+    it('dot', async () => {
+      badge.setAttribute('theme', 'dot');
+      await nextUpdate(badge);
+      await expect(badge).shadowDom.to.equalSnapshot();
+    });
+
+    it('icon-only', async () => {
+      badge.setAttribute('theme', 'icon-only');
+      await nextUpdate(badge);
+      await expect(badge).shadowDom.to.equalSnapshot();
+    });
+
+    it('number-only', async () => {
+      badge.setAttribute('theme', 'number-only');
+      await nextUpdate(badge);
+      await expect(badge).shadowDom.to.equalSnapshot();
+    });
   });
 });
