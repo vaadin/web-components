@@ -8,6 +8,7 @@ import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
+import { setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -247,6 +248,9 @@ export const GridMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+
+      setTouchAction(this, '');
+      setTouchAction(this.$.scroller, '');
 
       this.__virtualizer = new Virtualizer({
         createElements: this._createScrollerRows.bind(this),
