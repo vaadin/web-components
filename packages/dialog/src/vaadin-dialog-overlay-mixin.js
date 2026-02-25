@@ -33,6 +33,14 @@ export const DialogOverlayMixin = (superClass) =>
         footerRenderer: {
           type: Object,
         },
+
+        /**
+         * Whether to keep the overlay within the viewport.
+         */
+        keepInViewport: {
+          type: Boolean,
+          reflectToAttribute: true,
+        },
       };
     }
 
@@ -40,6 +48,7 @@ export const DialogOverlayMixin = (superClass) =>
       return [
         '_headerFooterRendererChange(headerRenderer, footerRenderer, opened)',
         '_headerTitleChanged(headerTitle, opened)',
+        '__keepInViewportChanged(keepInViewport, opened)',
       ];
     }
 
@@ -50,6 +59,7 @@ export const DialogOverlayMixin = (superClass) =>
       // Update overflow attribute on resize
       this.__resizeObserver = new ResizeObserver(() => {
         this.__updateOverflow();
+        this.__adjustPosition();
       });
       this.__resizeObserver.observe(this.$.resizerContainer);
 
@@ -57,6 +67,8 @@ export const DialogOverlayMixin = (superClass) =>
       this.$.content.addEventListener('scroll', () => {
         this.__updateOverflow();
       });
+
+      this.__handleWindowResize = this.__handleWindowResize.bind(this);
     }
 
     /** @private */
@@ -214,6 +226,8 @@ export const DialogOverlayMixin = (superClass) =>
       });
 
       Object.assign(overlay.style, parsedBounds);
+
+      this.__adjustPosition();
     }
 
     /**
@@ -253,6 +267,56 @@ export const DialogOverlayMixin = (superClass) =>
         this.setAttribute('overflow', value);
       } else if (value.length === 0 && this.hasAttribute('overflow')) {
         this.removeAttribute('overflow');
+      }
+    }
+
+    /** @private */
+    __keepInViewportChanged(keepInViewport, opened) {
+      if (opened && keepInViewport) {
+        window.addEventListener('resize', this.__handleWindowResize);
+      } else {
+        window.removeEventListener('resize', this.__handleWindowResize);
+      }
+    }
+
+    /** @private */
+    __handleWindowResize() {
+      this.__adjustPosition();
+    }
+
+    /**
+     * Adjusts the position of the overlay to keep it within the viewport if `keepInViewport` is true.
+     * @private
+     */
+    __adjustPosition() {
+      if (!this.opened || !this.keepInViewport) {
+        return;
+      }
+
+      // Centered dialogs do not use absolute positioning and automatically adjust their position / size to fit the viewport
+      const style = getComputedStyle(this.$.overlay);
+      if (style.position !== 'absolute') {
+        return;
+      }
+
+      const overlayHostBounds = this.getBoundingClientRect();
+      const bounds = this.getBounds();
+      // Prefer dimensions from getComputedStyle, as bounding rect is affected
+      // by scale transform applied by opening animation in Lumo
+      const width = parseFloat(style.width) || bounds.width;
+      const height = parseFloat(style.height) || bounds.height;
+
+      const maxLeft = overlayHostBounds.right - overlayHostBounds.left - width;
+      const maxTop = overlayHostBounds.bottom - overlayHostBounds.top - height;
+
+      if (bounds.left > maxLeft || bounds.top > maxTop) {
+        const left = Math.max(0, Math.min(bounds.left, maxLeft));
+        const top = Math.max(0, Math.min(bounds.top, maxTop));
+
+        Object.assign(this.$.overlay.style, {
+          left: `${left}px`,
+          top: `${top}px`,
+        });
       }
     }
   };

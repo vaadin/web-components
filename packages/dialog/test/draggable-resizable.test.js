@@ -737,13 +737,6 @@ describe('draggable', () => {
       const draggedBounds = container.getBoundingClientRect();
       expect(Math.floor(draggedBounds.left)).to.lessThan(0);
     });
-
-    it('should reflect keepInViewport attribute', async () => {
-      expect(dialog.hasAttribute('keep-in-viewport')).to.be.true;
-      dialog.keepInViewport = false;
-      await nextUpdate(dialog);
-      expect(dialog.hasAttribute('keep-in-viewport')).to.be.false;
-    });
   });
 });
 

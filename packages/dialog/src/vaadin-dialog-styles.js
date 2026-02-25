@@ -74,7 +74,7 @@ export const dialogOverlay = css`
     min-width: 12em; /* matches the default <vaadin-text-field> width */
   }
 
-  :host([has-bounds-set]) [part='overlay'] {
+  :host([has-bounds-set]:not([keep-in-viewport])) [part='overlay'] {
     max-width: none;
   }
 
