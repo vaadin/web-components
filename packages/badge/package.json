@@ -34,6 +34,7 @@
     "web-component"
   ],
   "dependencies": {
+    "@vaadin/a11y-base": "25.1.0-alpha9",
     "@vaadin/component-base": "25.1.0-alpha9",
     "@vaadin/vaadin-themable-mixin": "25.1.0-alpha9",
     "lit": "^3.0.0"
