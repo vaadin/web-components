@@ -124,6 +124,9 @@ const dialogResizableOverlay = css`
 
   :host([has-bounds-set]) [part='overlay'] {
     min-width: 0;
+  }
+
+  :host([has-bounds-set]:not([keep-in-viewport])) [part='overlay'] {
     max-width: none;
     max-height: none;
   }

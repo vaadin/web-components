@@ -454,6 +454,42 @@ describe('vaadin-dialog', () => {
       await setViewport({ width: windowWidth, height: windowHeight });
     });
 
+    it('should reflect keepInViewport attribute', async () => {
+      expect(dialog.hasAttribute('keep-in-viewport')).to.be.true;
+      dialog.keepInViewport = false;
+      await nextUpdate(dialog);
+      expect(dialog.hasAttribute('keep-in-viewport')).to.be.false;
+    });
+
+    it('should forward keep-in-viewport attribute to overlay', async () => {
+      expect(overlayHost.hasAttribute('keep-in-viewport')).to.be.true;
+      dialog.keepInViewport = false;
+      await nextUpdate(dialog);
+      expect(overlayHost.hasAttribute('keep-in-viewport')).to.be.false;
+    });
+
+    it('should constrain dialog width to viewport when has-bounds-set is applied', async () => {
+      // `has-bounds-set` is applied when the dialog is resized by the user, which removes the max-width constraint
+      overlayHost.setAttribute('has-bounds-set', '');
+      dialog.width = 1200;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      const overlayWidth = overlay.getBoundingClientRect().width;
+      expect(overlayWidth).to.be.at.most(window.innerWidth);
+    });
+
+    it('should constrain dialog height to viewport', async () => {
+      dialog.height = 1000;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      const overlayWidth = overlay.getBoundingClientRect().width;
+      expect(overlayWidth).to.be.at.most(window.innerWidth);
+    });
+
     it('should adjust dialog to the left when it is opened', async () => {
       dialog.left = 700;
       dialog.opened = true;
