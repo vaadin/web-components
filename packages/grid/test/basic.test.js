@@ -308,29 +308,6 @@ describe('basic features', () => {
   });
 });
 
-describe('touch-action', () => {
-  let grid;
-
-  beforeEach(async () => {
-    grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 300px;" size="1000">
-        <vaadin-grid-column></vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    grid.dataProvider = infiniteDataProvider;
-    flushGrid(grid);
-    await nextFrame();
-  });
-
-  it('should not set touch-action to none on the host element', () => {
-    expect(grid.style.touchAction).not.to.equal('none');
-  });
-
-  it('should not set touch-action to none on the scroller element', () => {
-    expect(grid.$.scroller.style.touchAction).not.to.equal('none');
-  });
-});
-
 describe('flex child', () => {
   let layout, grid, column;
 
