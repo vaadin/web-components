@@ -451,6 +451,9 @@ describe('vaadin-dialog', () => {
     afterEach(async () => {
       dialog.opened = false;
       await nextRender();
+    });
+
+    after(async () => {
       await setViewport({ width: windowWidth, height: windowHeight });
     });
 
