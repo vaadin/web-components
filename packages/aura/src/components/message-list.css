@@ -1,0 +1,20 @@
+vaadin-message::part(attachment) {
+  --aura-surface-level: 4;
+  --_background: var(--aura-accent-surface) padding-box;
+  padding: 0 var(--vaadin-padding-xs) 0 0;
+  overflow: hidden;
+  background: var(--_background);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
+  min-height: var(--_prefix-area-size);
+  border-radius: var(--vaadin-radius-m);
+}
+
+vaadin-message::part(attachment-image) {
+  padding: 0;
+}
+
+vaadin-message::part(attachment-preview) {
+  object-fit: cover;
+}
