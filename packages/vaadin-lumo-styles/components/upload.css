@@ -9,6 +9,7 @@
 @import '../src/components/upload.css';
 @import './button.css';
 @import './progress-bar.css';
+@import '../src/mixins/loader.css';
 
 :root,
 :host {
@@ -20,6 +21,7 @@
 
   --_lumo-vaadin-upload-file-inject: 1;
   --_lumo-vaadin-upload-file-inject-modules:
+    lumo_mixins_loader,
     lumo_mixins_field-button,
     lumo_components_upload-file;
 }
