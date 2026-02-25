@@ -256,6 +256,15 @@ export const DialogOverlayMixin = (superClass) =>
       return { top, left, width, height };
     }
 
+    /**
+     * Override method from OverlayMixin to adjust the position of the overlay if `keepInViewport` is true.
+     * @override
+     */
+    setBounds(bounds, absolute = true) {
+      super.setBounds(bounds, absolute);
+      this.__adjustPosition();
+    }
+
     /** @private */
     __updateOverflow() {
       let overflow = '';
@@ -312,7 +321,10 @@ export const DialogOverlayMixin = (superClass) =>
         const left = Math.max(0, Math.min(bounds.left, maxLeft));
         const top = Math.max(0, Math.min(bounds.top, maxTop));
 
-        this.setBounds({ top, left });
+        Object.assign(this.$.overlay.style, {
+          left: `${left}px`,
+          top: `${top}px`,
+        });
       }
     }
   };

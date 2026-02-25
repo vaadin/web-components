@@ -514,7 +514,7 @@ describe('vaadin-dialog', () => {
       expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
     });
 
-    it('should adjust dialog position to the left when dialog is resized', async () => {
+    it('should adjust dialog position to the left when dialog is resized programmatically', async () => {
       dialog.left = 400;
       dialog.opened = true;
       await nextRender();
@@ -530,13 +530,43 @@ describe('vaadin-dialog', () => {
       expect(overlayBounds.right).to.be.at.most(hostBounds.right);
     });
 
-    it('should adjust dialog position to the top when dialog is resized', async () => {
+    it('should adjust dialog position to the top when dialog is resized programmatically', async () => {
       dialog.top = 400;
       dialog.opened = true;
       await nextRender();
       await nextFrame();
 
       dialog.height = 700;
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
+    });
+
+    it('should adjust dialog position to the left when dialog is moved programmatically', async () => {
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      dialog.left = 800;
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.right).to.be.at.most(hostBounds.right);
+    });
+
+    it('should adjust dialog position to the top when dialog is moved programmatically', async () => {
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      dialog.top = 700;
       await nextRender();
       await nextFrame();
 
