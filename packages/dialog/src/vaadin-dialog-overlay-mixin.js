@@ -113,6 +113,20 @@ export const DialogOverlayMixin = (superClass) =>
         setOverlayStateAttribute(this, 'has-footer', currentNodes.length > 0);
         this.__updateOverflow();
       });
+
+      this.__handleWindowResize = this.__handleWindowResize.bind(this);
+    }
+
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('opened') || props.has('keepInViewport')) {
+        if (this.opened && this.keepInViewport) {
+          window.addEventListener('resize', this.__handleWindowResize);
+        } else {
+          window.removeEventListener('resize', this.__handleWindowResize);
+        }
+      }
     }
 
     /** @private */
@@ -262,6 +276,11 @@ export const DialogOverlayMixin = (superClass) =>
       } else if (value.length === 0 && this.hasAttribute('overflow')) {
         setOverlayStateAttribute(this, 'overflow', null);
       }
+    }
+
+    /** @private */
+    __handleWindowResize() {
+      this.__adjustPosition();
     }
 
     /**

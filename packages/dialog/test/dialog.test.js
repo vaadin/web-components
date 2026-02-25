@@ -545,6 +545,38 @@ describe('vaadin-dialog', () => {
 
       expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
     });
+
+    it('should adjust dialog position to the left when window is resized', async () => {
+      dialog.left = 400;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      await setViewport({ width: 600, height: 600 });
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.right).to.be.at.most(hostBounds.right);
+    });
+
+    it('should adjust dialog position to the top when window is resized', async () => {
+      dialog.top = 400;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      await setViewport({ width: 600, height: 600 });
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
+    });
   });
 
   describe('role', () => {
