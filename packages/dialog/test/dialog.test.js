@@ -577,6 +577,29 @@ describe('vaadin-dialog', () => {
 
       expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
     });
+
+    it('should not adjust position when dialog is center positioned and window is resized', async () => {
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      const initialOverlayBounds = overlay.getBoundingClientRect();
+      let overlayPosition = getComputedStyle(overlay).position;
+
+      // Sanity check: it's a centered dialog
+      expect(overlayPosition).not.to.equal('absolute');
+
+      await setViewport({ width: 600, height: 600 });
+      await nextRender();
+      await nextFrame();
+
+      const overlayBounds = overlay.getBoundingClientRect();
+      overlayPosition = getComputedStyle(overlay).position;
+
+      // Still a centered dialog, adjusts position to the left to stay centered
+      expect(overlayPosition).not.to.equal('absolute');
+      expect(overlayBounds.left).to.be.lessThan(initialOverlayBounds.left);
+    });
   });
 
   describe('role', () => {

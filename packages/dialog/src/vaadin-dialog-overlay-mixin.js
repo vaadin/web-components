@@ -292,21 +292,26 @@ export const DialogOverlayMixin = (superClass) =>
         return;
       }
 
+      // Centered dialogs do not use absolute positioning and automatically adjust their position / size to fit the viewport
+      const style = getComputedStyle(this.$.overlay);
+      if (style.position !== 'absolute') {
+        return;
+      }
+
       const overlayHostBounds = this.getBoundingClientRect();
       const bounds = this.getBounds();
       // Prefer dimensions from getComputedStyle, as bounding rect is affected
       // by scale transform applied by opening animation in Lumo
-      const style = getComputedStyle(this.$.overlay);
       const width = parseFloat(style.width) || bounds.width;
       const height = parseFloat(style.height) || bounds.height;
 
       const maxLeft = overlayHostBounds.right - overlayHostBounds.left - width;
       const maxTop = overlayHostBounds.bottom - overlayHostBounds.top - height;
 
-      const left = Math.max(0, Math.min(bounds.left, maxLeft));
-      const top = Math.max(0, Math.min(bounds.top, maxTop));
+      if (bounds.left > maxLeft || bounds.top > maxTop) {
+        const left = Math.max(0, Math.min(bounds.left, maxLeft));
+        const top = Math.max(0, Math.min(bounds.top, maxTop));
 
-      if (left !== this.left || top !== this.top) {
         this.setBounds({ top, left });
       }
     }
