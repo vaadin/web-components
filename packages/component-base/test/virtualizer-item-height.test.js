@@ -201,7 +201,14 @@ describe('virtualizer - item height - initial render', () => {
     const scrollContainer = scrollTarget.firstElementChild;
     elementsContainer = scrollContainer;
 
-    createElements = sinon.spy((count) => Array.from({ length: count }, () => document.createElement('div')));
+    createElements = sinon.spy((count) =>
+      Array.from({ length: count }, () => {
+        const el = document.createElement('el');
+        // Disables the placeholder logic
+        el.style.minHeight = '10px';
+        return el;
+      }),
+    );
 
     virtualizer = new Virtualizer({
       createElements,
