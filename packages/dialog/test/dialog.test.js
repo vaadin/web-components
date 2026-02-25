@@ -486,8 +486,8 @@ describe('vaadin-dialog', () => {
       await nextRender();
       await nextFrame();
 
-      const overlayWidth = overlay.getBoundingClientRect().width;
-      expect(overlayWidth).to.be.at.most(window.innerWidth);
+      const overlayHeight = overlay.getBoundingClientRect().height;
+      expect(overlayHeight).to.be.at.most(window.innerHeight);
     });
 
     it('should adjust dialog to the left when it is opened', async () => {
