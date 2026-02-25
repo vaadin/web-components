@@ -26,6 +26,11 @@ export declare class DialogOverlayMixinClass {
   headerTitle: string;
 
   /**
+   * Whether to keep the overlay within the viewport.
+   */
+  keepInViewport: boolean;
+
+  /**
    * Custom function for rendering the dialog header.
    */
   headerRenderer: DialogRenderer | null | undefined;

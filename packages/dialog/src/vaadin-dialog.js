@@ -148,6 +148,7 @@ class Dialog extends DialogSizeMixin(
         .renderer="${this.renderer}"
         .headerRenderer="${this.headerRenderer}"
         .footerRenderer="${this.footerRenderer}"
+        .keepInViewport="${this.keepInViewport}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"

@@ -1,6 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, click, fixtureSync, listenOnce, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
+import {
+  aTimeout,
+  click,
+  fixtureSync,
+  listenOnce,
+  nextFrame,
+  nextRender,
+  nextUpdate,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -415,6 +424,90 @@ describe('vaadin-dialog', () => {
       await nextRender();
 
       expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+    });
+  });
+
+  describe('keepInViewport', () => {
+    let dialog, overlayHost, overlay;
+    let windowWidth, windowHeight;
+
+    before(() => {
+      windowWidth = window.innerWidth;
+      windowHeight = window.innerHeight;
+    });
+
+    beforeEach(async () => {
+      await setViewport({ width: 1000, height: 800 });
+
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      dialog.width = 400;
+      dialog.height = 300;
+      dialog.keepInViewport = true;
+      await nextRender();
+      overlayHost = dialog.$.overlay;
+      overlay = dialog.$.overlay.$.overlay;
+    });
+
+    afterEach(async () => {
+      dialog.opened = false;
+      await nextRender();
+      await setViewport({ width: windowWidth, height: windowHeight });
+    });
+
+    it('should adjust dialog to the left when it is opened', async () => {
+      dialog.left = 700;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.right).to.be.at.most(hostBounds.right);
+    });
+
+    it('should adjust dialog to the top when it is opened', async () => {
+      dialog.top = 600;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
+    });
+
+    it('should adjust dialog position to the left when dialog is resized', async () => {
+      dialog.left = 400;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      dialog.width = 700;
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.right).to.be.at.most(hostBounds.right);
+    });
+
+    it('should adjust dialog position to the top when dialog is resized', async () => {
+      dialog.top = 400;
+      dialog.opened = true;
+      await nextRender();
+      await nextFrame();
+
+      dialog.height = 700;
+      await nextRender();
+      await nextFrame();
+
+      const hostBounds = overlayHost.getBoundingClientRect();
+      const overlayBounds = overlay.getBoundingClientRect();
+
+      expect(overlayBounds.bottom).to.be.at.most(hostBounds.bottom);
     });
   });
 
