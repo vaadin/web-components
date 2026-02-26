@@ -350,6 +350,9 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
+    // Prevent element update while the scroll position is being restored
+    this.__preventElementUpdates = true;
+
     // Record the scroll position before changing the size
     let fvi; // First visible index
     let fviOffsetBefore; // Scroll offset of the first visible index
@@ -373,13 +376,14 @@ export class IronListAdapter {
       // causing the virtualizer to add more items when size is increased,
       // and remove exceeding items when size is decreased.
       this.scrollToIndex(fvi);
-      flush();
 
       const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
       if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
         this._scrollTop += fviOffsetBefore - fviOffsetAfter;
       }
     }
+
+    this.__preventElementUpdates = false;
 
     // When reducing size while invisible, iron-list does not update items, so
     // their hidden state is not updated and their __lastUpdatedIndex is not
@@ -392,6 +396,9 @@ export class IronListAdapter {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
+    // Schedule and flush a resize handler
+    this._resizeHandler();
+    flush();
     // Schedule an update to ensure item positions are correct after subsequent size changes
     // Fix for https://github.com/vaadin/flow-components/issues/6269
     this._debounce('_update', this._update, microTask);
