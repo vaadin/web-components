@@ -16,6 +16,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
+  makeMultiTouchEvent,
 } from './helpers.js';
 
 describe('selection', () => {
@@ -928,6 +929,62 @@ describe('multi selection column', () => {
       clock.tick(10);
 
       expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
+    });
+
+    describe('multi-touch', () => {
+      it('should cancel drag-select when second finger touches during drag', () => {
+        const row0cell = getBodyCellContent(grid, 0, 0);
+        const row1cell = getBodyCellContent(grid, 1, 0);
+        const row2cell = getBodyCellContent(grid, 2, 0);
+        const row3cell = getBodyCellContent(grid, 3, 0);
+
+        // Start drag-select on row 0
+        fireTrackEvent(row0cell, row0cell, 'start');
+        clock.tick(10);
+
+        // Drag to row 1 to trigger selection
+        fireTrackEvent(row1cell, row0cell, 'track');
+        clock.tick(10);
+
+        // Rows 0-1 should be selected
+        expect(grid.selectedItems).to.include(grid.items[0]);
+        expect(grid.selectedItems).to.include(grid.items[1]);
+
+        // Second finger arrives (pinch-zoom gesture)
+        const rect = row2cell.getBoundingClientRect();
+        makeMultiTouchEvent(
+          'touchstart',
+          [
+            { x: rect.left, y: rect.top },
+            { x: rect.left + 100, y: rect.top + 100 },
+          ],
+          grid.$.scroller,
+        );
+
+        // Continue dragging to row 3
+        fireTrackEvent(row3cell, row0cell, 'track');
+        clock.tick(10);
+
+        // Row 3 should not be selected since drag was cancelled
+        expect(grid.selectedItems).to.not.include(grid.items[3]);
+      });
+
+      it('should not cancel drag-select on single touch', () => {
+        const row0cell = getBodyCellContent(grid, 0, 0);
+        const row1cell = getBodyCellContent(grid, 1, 0);
+
+        // Start drag-select
+        fireTrackEvent(row0cell, row0cell, 'start');
+        clock.tick(10);
+
+        // Drag to row 1
+        fireTrackEvent(row1cell, row0cell, 'track');
+        clock.tick(10);
+
+        // Both rows should be selected
+        expect(grid.selectedItems).to.include(grid.items[0]);
+        expect(grid.selectedItems).to.include(grid.items[1]);
+      });
     });
   });
 

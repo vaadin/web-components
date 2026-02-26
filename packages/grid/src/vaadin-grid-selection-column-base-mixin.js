@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 
 /**
  * A mixin that provides basic functionality for the
@@ -118,6 +118,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
       this.__onGridInteraction = this.__onGridInteraction.bind(this);
       this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
+      this.__onTouchStart = this.__onTouchStart.bind(this);
       this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
       this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
     }
@@ -130,6 +131,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
+        if (this._grid.$) {
+          this._grid.$.scroller.addEventListener('touchstart', this.__onTouchStart);
+        }
       }
     }
 
@@ -141,6 +145,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
+        if (this._grid.$) {
+          this._grid.$.scroller.removeEventListener('touchstart', this.__onTouchStart);
+        }
       }
     }
 
@@ -178,6 +185,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);
+        setTouchAction(root, '');
         root.addEventListener('mousedown', this.__onCellMouseDown);
         root.addEventListener('click', this.__onCellClick);
       }
@@ -263,6 +271,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this.dragSelect) {
         // Prevent text selection when starting to drag
         e.preventDefault();
+      }
+    }
+
+    /** @private */
+    __onTouchStart(e) {
+      // Cancel drag-select on multi-touch (e.g. pinch-zoom)
+      if (e.touches.length > 1 && this.__dragStartIndex !== undefined) {
+        this.__dragStartIndex = undefined;
+        this.__dragStartItem = undefined;
       }
     }
 
