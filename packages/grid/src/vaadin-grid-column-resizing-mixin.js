@@ -16,8 +16,25 @@ export const ColumnResizingMixin = (superClass) =>
       const scroller = this.$.scroller;
       addListener(scroller, 'track', this._onHeaderTrack.bind(this));
 
-      // Disallow scrolling while resizing
-      scroller.addEventListener('touchmove', (e) => scroller.hasAttribute('column-resizing') && e.preventDefault());
+      // Cancel resizing on multi-touch (e.g. pinch-zoom)
+      scroller.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 1 && scroller.hasAttribute('column-resizing')) {
+          scroller.toggleAttribute('column-resizing', false);
+        }
+      });
+
+      // Disallow scrolling while resizing, but allow multi-touch gestures
+      scroller.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 1) {
+          if (scroller.hasAttribute('column-resizing')) {
+            scroller.toggleAttribute('column-resizing', false);
+          }
+          return;
+        }
+        if (scroller.hasAttribute('column-resizing')) {
+          e.preventDefault();
+        }
+      });
 
       // Disable contextmenu on any resize separator.
       scroller.addEventListener('contextmenu', (e) => e.target.part.contains('resize-handle') && e.preventDefault());
@@ -30,6 +47,11 @@ export const ColumnResizingMixin = (superClass) =>
     _onHeaderTrack(e) {
       const handle = e.target;
       if (handle.part.contains('resize-handle')) {
+        // Ignore track events after multi-touch cancelled resizing
+        if (e.detail.state !== 'start' && !this.$.scroller.hasAttribute('column-resizing')) {
+          return;
+        }
+
         const cell = handle.parentElement;
         let column = cell._column;
 
