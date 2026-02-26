@@ -141,7 +141,7 @@ const dialogResizableOverlay = css`
   }
 
   [part='header'],
-  :host(:not([has-title]):not([has-header])) [part='content'] {
+  :host(:not([has-title], [has-header])) [part='content'] {
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
   }
