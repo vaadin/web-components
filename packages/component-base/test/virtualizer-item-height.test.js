@@ -201,14 +201,7 @@ describe('virtualizer - item height - initial render', () => {
     const scrollContainer = scrollTarget.firstElementChild;
     elementsContainer = scrollContainer;
 
-    createElements = sinon.spy((count) =>
-      Array.from({ length: count }, () => {
-        const el = document.createElement('el');
-        // Disables the placeholder logic
-        el.style.minHeight = '10px';
-        return el;
-      }),
-    );
+    createElements = sinon.spy((count) => Array.from({ length: count }, () => document.createElement('div')));
 
     virtualizer = new Virtualizer({
       createElements,
@@ -251,6 +244,50 @@ describe('virtualizer - item height - initial render', () => {
 
     it('should have created the items in the expected amount of batches', () => {
       expect(createElements.callCount).to.equal(2);
+    });
+  });
+
+  describe('without placeholders', () => {
+    beforeEach(() => {
+      fixtureSync(`
+        <style>
+          .container div {
+            min-height: 10px;
+          }
+        </style>
+      `);
+    });
+
+    describe('large item height', () => {
+      beforeEach(async () => {
+        itemHeight = '100px';
+        virtualizer.size = 100;
+        await nextFrame();
+      });
+
+      it('should have the expected amount of physical elements', () => {
+        expect(elementsContainer.childElementCount).to.equal(5);
+      });
+
+      it('should have created the items in the expected amount of batches', () => {
+        expect(createElements.callCount).to.equal(2);
+      });
+    });
+
+    describe('small item height', () => {
+      beforeEach(async () => {
+        itemHeight = '20px';
+        virtualizer.size = 100;
+        await nextFrame();
+      });
+
+      it('should have the expected amount of physical elements', () => {
+        expect(elementsContainer.childElementCount).to.equal(20);
+      });
+
+      it('should have created the items in the expected amount of batches', () => {
+        expect(createElements.callCount).to.equal(2);
+      });
     });
   });
 });
