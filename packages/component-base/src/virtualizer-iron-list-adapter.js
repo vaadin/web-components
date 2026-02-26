@@ -400,8 +400,10 @@ export class IronListAdapter {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
-    // Trigger the resize handler to re-render items once the scroll
-    // position has been restored.
+    // Re-render items once the scroll position has been restored.
+    // This call also ensures that enough virtual elements are
+    // created to fill the full viewport regardless if the scroll
+    // restoration was necessary.
     this._resizeHandler();
     flush();
 
