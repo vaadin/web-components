@@ -50,7 +50,7 @@ vaadin-upload-file-list li {
   margin-inline: var(--_divider-offset-start) var(--_divider-offset-end);
 
   &:first-child {
-    margin-top: 0;
+    margin-top: var(--vaadin-upload-gap, 0);
   }
 }
 
@@ -62,8 +62,8 @@ vaadin-upload:not([theme~='no-border']) > vaadin-upload-file-list:has(> ul > li)
 
 vaadin-upload-file {
   --vaadin-icon-visual-size: 0.75lh;
-  border-radius: var(--vaadin-radius-m);
-  padding-block: var(--vaadin-padding-m);
+  border-radius: var(--vaadin-upload-file-border-radius, var(--vaadin-radius-m));
+  padding-block: var(--vaadin-upload-file-padding, var(--vaadin-padding-m));
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
   &:not([complete], [error])::part(done-icon)::before {
