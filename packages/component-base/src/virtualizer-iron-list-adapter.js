@@ -406,7 +406,6 @@ export class IronListAdapter {
     // restoration was necessary.
     this._resizeHandler();
     flush();
-
     // Schedule an update to ensure item positions are correct after subsequent size changes
     // Fix for https://github.com/vaadin/flow-components/issues/6269
     this._debounce('_update', this._update, microTask);
