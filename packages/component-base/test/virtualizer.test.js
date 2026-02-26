@@ -408,4 +408,27 @@ describe('virtualizer', () => {
       expect(elementsContainer.childElementCount).to.be.above(initialCount);
     });
   });
+
+  it('should not request a different set of items on size increase', async () => {
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
+    init({ size: 100, updateElement });
+
+    // Scroll halfway down the list
+    updateElement.resetHistory();
+    virtualizer.scrollToIndex(50);
+    await aTimeout(100);
+    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+
+    // Increase the size so it shouldn't affect the current viewport items
+    updateElement.resetHistory();
+    virtualizer.size = 200;
+    const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+
+    if (postResizeUpdatedIndexes.length > 0) {
+      expect(postResizeUpdatedIndexes).to.eql(updatedIndexes);
+    }
+    expect(postResizeUpdatedIndexes).not.to.include(0);
+  });
 });
