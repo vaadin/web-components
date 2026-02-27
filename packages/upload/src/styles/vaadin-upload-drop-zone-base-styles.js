@@ -9,15 +9,11 @@ import { css } from 'lit';
 export const uploadDropZoneStyles = css`
   :host {
     display: block;
-    position: relative;
+    color: var(--vaadin-text-color-secondary);
   }
 
-  :host([dragover])::after {
-    content: '';
-    position: absolute;
-    inset: 0;
+  :host([dragover]) {
     background: var(--vaadin-background-container);
-    opacity: 0.7;
   }
 
   :host([hidden]) {
