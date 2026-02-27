@@ -234,24 +234,59 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
-  it('should request a different set of items on size decrease', () => {
+  it('should not call updateElement when size increase does not affect visible indexes', () => {
     const updateElement = sinon.spy((el, index) => {
       el.textContent = `item-${index}`;
     });
     init({ size: 100, updateElement });
 
     // Scroll halfway down the list
-    updateElement.resetHistory();
     virtualizer.scrollToIndex(50);
-    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+    virtualizer.flush();
+    updateElement.resetHistory();
+
+    // Increase the size in a way that doesn't affect the current visible indexes
+    virtualizer.size = 200;
+    virtualizer.flush();
+
+    expect(updateElement).to.be.not.called;
+  });
+
+  it('should not call updateElement when size decrease does not affect visible indexes', () => {
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
+    init({ size: 100, updateElement });
+
+    // Scroll halfway down the list
+    virtualizer.scrollToIndex(50);
+    virtualizer.flush();
+    updateElement.resetHistory();
+
+    // Decrease the size in a way that doesn't affect the current visible indexes
+    virtualizer.size = 80;
+    virtualizer.flush();
+
+    expect(updateElement).to.be.not.called;
+  });
+
+  it('should call updateElement when size decrease affects visible indexes', () => {
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
+    init({ size: 100, updateElement });
+
+    // Scroll halfway down the list
+    virtualizer.scrollToIndex(50);
+    virtualizer.flush();
+    updateElement.resetHistory();
 
     // Decrease the size so that we end up at the top of the list
-    updateElement.resetHistory();
     virtualizer.size = 5;
-    const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+    virtualizer.flush();
 
-    expect(postResizeUpdatedIndexes).not.to.include.members(updatedIndexes);
-    expect(postResizeUpdatedIndexes).to.include(0);
+    const updatedIndexes = updateElement.args.map(([_el, index]) => index);
+    expect(updatedIndexes).to.eql([0, 1, 2, 3, 4]);
   });
 
   it('should request an index only once', async () => {
@@ -407,28 +442,5 @@ describe('virtualizer', () => {
       virtualizer.flush();
       expect(elementsContainer.childElementCount).to.be.above(initialCount);
     });
-  });
-
-  it('should not request a different set of items on size increase', async () => {
-    const updateElement = sinon.spy((el, index) => {
-      el.textContent = `item-${index}`;
-    });
-    init({ size: 100, updateElement });
-
-    // Scroll halfway down the list
-    updateElement.resetHistory();
-    virtualizer.scrollToIndex(50);
-    await aTimeout(100);
-    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
-
-    // Increase the size so it shouldn't affect the current viewport items
-    updateElement.resetHistory();
-    virtualizer.size = 200;
-    const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
-
-    if (postResizeUpdatedIndexes.length > 0) {
-      expect(postResizeUpdatedIndexes).to.eql(updatedIndexes);
-    }
-    expect(postResizeUpdatedIndexes).not.to.include(0);
   });
 });
