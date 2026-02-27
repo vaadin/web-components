@@ -3,6 +3,8 @@
   --vaadin-avatar-border-color: var(--aura-accent-border-color);
   --vaadin-avatar-font-weight: var(--aura-font-weight-medium);
   --vaadin-avatar-font-size: var(--aura-font-size-m);
+  --vaadin-avatar-group-gap: 0px;
+  --vaadin-avatar-group-overlap: 6px;
 }
 
 vaadin-avatar {
@@ -32,4 +34,13 @@ vaadin-avatar[img][has-color-index] {
 vaadin-avatar[theme~='filled'] {
   background: var(--aura-accent-color) content-box;
   color: var(--aura-accent-contrast-color);
+}
+
+vaadin-avatar:is([theme~='xsmall'], [theme~='small']) {
+  font-size: var(--aura-font-size-l);
+}
+
+vaadin-avatar-group[theme~='filled'] {
+  --vaadin-avatar-group-gap: 2px;
+  --vaadin-avatar-group-overlap: 8px;
 }
