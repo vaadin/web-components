@@ -185,7 +185,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);
-        setTouchAction(root, '');
+        setTouchAction(root, 'pinch-zoom');
         root.addEventListener('mousedown', this.__onCellMouseDown);
         root.addEventListener('click', this.__onCellClick);
       }
