@@ -21,15 +21,13 @@ export const loaderStyles = css`
 
   [part='loader'] {
     animation:
-      spin var(--vaadin-spinner-animation-duration, 1s) linear infinite,
-      fade-in 0.3s 0.3s both;
-    border: var(--vaadin-spinner-width, 2px) solid;
-    --_spinner-color: var(--vaadin-spinner-color, var(--vaadin-text-color));
-    --_spinner-color2: color-mix(in srgb, var(--_spinner-color) 20%, transparent);
-    border-color: var(--_spinner-color) var(--_spinner-color) var(--_spinner-color2) var(--_spinner-color2);
+      spin var(--vaadin-spinner-animation-duration, 0.7s) linear infinite,
+      fade-in 0.15s 0.3s both;
+    border: var(--vaadin-spinner-width, 2px) solid var(--vaadin-spinner-color, var(--vaadin-text-color));
     border-radius: 50%;
     box-sizing: border-box;
     height: var(--vaadin-spinner-size, 1lh);
+    mask-image: radial-gradient(circle at 50% var(--vaadin-spinner-width, 2px), transparent 40%, #000 70%);
     pointer-events: none;
     width: var(--vaadin-spinner-size, 1lh);
   }
