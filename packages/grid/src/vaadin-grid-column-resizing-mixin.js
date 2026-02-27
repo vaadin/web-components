@@ -18,17 +18,15 @@ export const ColumnResizingMixin = (superClass) =>
 
       // Cancel resizing on multi-touch (e.g. pinch-zoom)
       scroller.addEventListener('touchstart', (e) => {
-        if (e.touches.length > 1 && scroller.hasAttribute('column-resizing')) {
-          scroller.toggleAttribute('column-resizing', false);
+        if (e.touches.length > 1) {
+          scroller.removeAttribute('column-resizing');
         }
       });
 
       // Disallow scrolling while resizing, but allow multi-touch gestures
       scroller.addEventListener('touchmove', (e) => {
         if (e.touches.length > 1) {
-          if (scroller.hasAttribute('column-resizing')) {
-            scroller.toggleAttribute('column-resizing', false);
-          }
+          scroller.removeAttribute('column-resizing');
           return;
         }
         if (scroller.hasAttribute('column-resizing')) {

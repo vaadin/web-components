@@ -959,7 +959,7 @@ describe('multi selection column', () => {
             { x: rect.left, y: rect.top },
             { x: rect.left + 100, y: rect.top + 100 },
           ],
-          grid.$.scroller,
+          grid,
         );
 
         // Continue dragging to row 3
@@ -983,7 +983,7 @@ describe('multi selection column', () => {
             { x: rect.left, y: rect.top },
             { x: rect.left + 100, y: rect.top + 100 },
           ],
-          grid.$.scroller,
+          grid,
         );
 
         // Track gesture fires after 5px movement threshold
@@ -1002,7 +1002,7 @@ describe('multi selection column', () => {
 
         // First finger touches
         const rect = row0cell.getBoundingClientRect();
-        makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, grid.$.scroller);
+        makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, grid);
 
         // Second finger arrives (pinch gesture)
         makeMultiTouchEvent(
@@ -1011,7 +1011,7 @@ describe('multi selection column', () => {
             { x: rect.left, y: rect.top },
             { x: rect.left + 100, y: rect.top + 100 },
           ],
-          grid.$.scroller,
+          grid,
         );
 
         // Track gesture fires after 5px movement threshold

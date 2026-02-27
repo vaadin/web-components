@@ -131,9 +131,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
-        if (this._grid.$) {
-          this._grid.$.scroller.addEventListener('touchstart', this.__onTouchStart);
-        }
+        this._grid.addEventListener('touchstart', this.__onTouchStart);
       }
     }
 
@@ -145,9 +143,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
-        if (this._grid.$) {
-          this._grid.$.scroller.removeEventListener('touchstart', this.__onTouchStart);
-        }
+        this._grid.removeEventListener('touchstart', this.__onTouchStart);
       }
     }
 
@@ -283,10 +279,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (e.touches.length > 1) {
         this.__multiTouchActive = true;
         // Cancel in-progress drag-select on multi-touch (e.g. pinch-zoom)
-        if (this.__dragStartIndex !== undefined) {
-          this.__dragStartIndex = undefined;
-          this.__dragStartItem = undefined;
-        }
+        this.__dragStartIndex = undefined;
+        this.__dragStartItem = undefined;
       } else {
         this.__multiTouchActive = false;
       }
