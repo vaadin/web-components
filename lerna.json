@@ -2,5 +2,5 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "packages": ["test/*", "packages/*"],
   "npmClient": "yarn",
-  "version": "24.9.10"
+  "version": "24.9.11"
 }
