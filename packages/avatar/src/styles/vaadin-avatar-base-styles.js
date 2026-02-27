@@ -15,7 +15,7 @@ export const avatarStyles = css`
     cursor: default;
     color: var(--vaadin-avatar-text-color, var(--vaadin-text-color-secondary));
     overflow: hidden;
-    --_size: var(--vaadin-avatar-size, calc(1lh + var(--vaadin-padding-xs) * 2));
+    --_size: var(--vaadin-avatar-size, calc(1lh + var(--vaadin-padding-block-container) * 2));
     height: var(--_size);
     width: var(--_size);
     border: var(--vaadin-focus-ring-width) solid transparent;
@@ -29,6 +29,7 @@ export const avatarStyles = css`
     position: relative;
     font-weight: var(--vaadin-avatar-font-weight, 400);
     font-size: var(--vaadin-avatar-font-size, inherit);
+    contain: strict;
   }
 
   /* Overlay border on top of image and icon as well */
