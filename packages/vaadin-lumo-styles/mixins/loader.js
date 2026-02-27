@@ -10,6 +10,7 @@ issueWarning('Lumo .js mixins are deprecated and will be removed in V26');
 
 const loader = css`
   [part~='loader'] {
+    display: none;
     box-sizing: border-box;
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
@@ -19,16 +20,13 @@ const loader = css`
     border-radius: calc(0.5 * var(--lumo-icon-size-s));
     opacity: 0;
     pointer-events: none;
-  }
-
-  :host(:not([loading])) [part~='loader'] {
-    display: none;
-  }
-
-  :host([loading]) [part~='loader'] {
     animation:
       1s linear infinite lumo-loader-rotate,
       0.3s 0.1s lumo-loader-fade-in both;
+  }
+
+  :host([loading]) [part~='loader'] {
+    display: block;
   }
 
   @keyframes lumo-loader-fade-in {
