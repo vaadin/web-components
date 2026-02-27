@@ -171,4 +171,8 @@
       --lumo-contrast-10pct: transparent;
     }
   }
+
+  :host([uploading]) [part='loader'] {
+    display: block;
+  }
 }

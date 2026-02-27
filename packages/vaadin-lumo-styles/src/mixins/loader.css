@@ -5,6 +5,7 @@
  */
 @media lumo_mixins_loader {
   [part='loader'] {
+    display: none;
     box-sizing: border-box;
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
@@ -14,22 +15,13 @@
     border-radius: calc(0.5 * var(--lumo-icon-size-s));
     opacity: 0;
     pointer-events: none;
+    animation:
+      1s linear infinite lumo-loader-rotate,
+      0.3s 0.1s lumo-loader-fade-in both;
   }
 
-  :host(:not([loading])),
-  :host(:not([uploading])) {
-    & [part='loader'] {
-      display: none;
-    }
-  }
-
-  :host([loading]),
-  :host([uploading]) {
-    & [part='loader'] {
-      animation:
-        1s linear infinite lumo-loader-rotate,
-        0.3s 0.1s lumo-loader-fade-in both;
-    }
+  :host([loading]) [part='loader'] {
+    display: block;
   }
 
   @keyframes lumo-loader-fade-in {
