@@ -242,6 +242,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__dragCurrentY = event.detail.y;
       this.__dragDy = event.detail.dy;
       if (event.detail.state === 'start') {
+        // Don't start drag-select during multi-touch (e.g. pinch-zoom)
+        if (this.__multiTouchActive) {
+          return;
+        }
         const renderedRows = this._grid._getRenderedRows();
         // Get the row where the drag started
         const dragStartRow = renderedRows.find((row) => row.contains(event.currentTarget.assignedSlot));
@@ -276,10 +280,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onTouchStart(e) {
-      // Cancel drag-select on multi-touch (e.g. pinch-zoom)
-      if (e.touches.length > 1 && this.__dragStartIndex !== undefined) {
-        this.__dragStartIndex = undefined;
-        this.__dragStartItem = undefined;
+      if (e.touches.length > 1) {
+        this.__multiTouchActive = true;
+        // Cancel in-progress drag-select on multi-touch (e.g. pinch-zoom)
+        if (this.__dragStartIndex !== undefined) {
+          this.__dragStartIndex = undefined;
+          this.__dragStartItem = undefined;
+        }
+      } else {
+        this.__multiTouchActive = false;
       }
     }
 
