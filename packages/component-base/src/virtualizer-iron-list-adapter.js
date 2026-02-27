@@ -351,30 +351,31 @@ export class IronListAdapter {
     }
 
     // Record the scroll position before changing the size
-    let fvi; // First visible index
-    let fviOffsetBefore; // Scroll offset of the first visible index
+    let fvi = 0; // First visible index
+    let fviOffsetBefore = 0; // Scroll offset of the first visible index
     if (size > 0) {
       fvi = this.adjustedFirstVisibleIndex;
       fviOffsetBefore = this.__getIndexScrollOffset(fvi);
     }
+
+    const shouldRestoreScrollPosition = fvi > 0 || fviOffsetBefore < 0;
 
     // Change the size
     this.__size = size;
 
     // Attempts to update elements during _itemsChanged and the subsequent
     // scrollToIndex should be skipped when the scroll position needs to be
-    // restored (first visible index was > 0 before size change). Otherwise,
-    // these element updates can cause the component to make incorrect server
+    // restored (scroll position > 0 before size change). Otherwise, these
+    // element updates can cause the component to make incorrect server
     // requests in its updateElement callback.
-    this.__preventElementUpdates = fvi > 0;
+    this.__preventElementUpdates = shouldRestoreScrollPosition;
 
     this._itemsChanged({
       path: 'items',
     });
     flush();
 
-    // Try to restore the scroll position if the new size is larger than 0
-    if (size > 0 && fvi > 0) {
+    if (shouldRestoreScrollPosition) {
       fvi = Math.min(fvi, size - 1);
       // Note, calling scrollToIndex also updates the virtual index offset,
       // causing the virtualizer to add more items when size is increased,
@@ -401,11 +402,15 @@ export class IronListAdapter {
     }
 
     // Re-render items once the scroll position has been restored.
-    // This call also ensures that enough virtual elements are
-    // created to fill the full viewport regardless if the scroll
-    // restoration was necessary.
+    // This call also updates the cached scrollTarget height and
+    // rechecks whether more virtual elements are needed, since the
+    // scrollTarget's height may change after the scrollContainer's
+    // height is determined and set, requiring more elements to fill
+    // the viewport (e.g., in combo-box, where the scroller height
+    // depends on the height of #selector element in the shadow DOM).
     this._resizeHandler();
     flush();
+
     // Schedule an update to ensure item positions are correct after subsequent size changes
     // Fix for https://github.com/vaadin/flow-components/issues/6269
     this._debounce('_update', this._update, microTask);
