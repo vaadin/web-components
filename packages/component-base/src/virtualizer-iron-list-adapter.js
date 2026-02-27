@@ -350,15 +350,15 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
+    const shouldRestoreScrollPosition = size > 0 && this._scrollTop > 0;
+
     // Record the scroll position before changing the size
-    let fvi = 0; // First visible index
-    let fviOffsetBefore = 0; // Scroll offset of the first visible index
-    if (size > 0) {
+    let fvi; // First visible index
+    let fviOffsetBefore; // Scroll offset of the first visible index
+    if (shouldRestoreScrollPosition) {
       fvi = this.adjustedFirstVisibleIndex;
       fviOffsetBefore = this.__getIndexScrollOffset(fvi);
     }
-
-    const shouldRestoreScrollPosition = fvi > 0 || fviOffsetBefore < 0;
 
     // Change the size
     this.__size = size;
