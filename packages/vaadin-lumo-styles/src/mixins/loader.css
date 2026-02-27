@@ -16,20 +16,14 @@
     pointer-events: none;
   }
 
-  :host(:not([loading])),
-  :host(:not([uploading])) {
-    & [part='loader'] {
-      display: none;
-    }
+  :host(:not([loading])) [part='loader'] {
+    display: none;
   }
 
-  :host([loading]),
-  :host([uploading]) {
-    & [part='loader'] {
-      animation:
-        1s linear infinite lumo-loader-rotate,
-        0.3s 0.1s lumo-loader-fade-in both;
-    }
+  :host([loading]) [part='loader'] {
+    animation:
+      1s linear infinite lumo-loader-rotate,
+      0.3s 0.1s lumo-loader-fade-in both;
   }
 
   @keyframes lumo-loader-fade-in {

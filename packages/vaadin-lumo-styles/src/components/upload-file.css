@@ -171,4 +171,15 @@
       --lumo-contrast-10pct: transparent;
     }
   }
+
+  :host(:not([uploading])) [part='loader'] {
+    display: none;
+  }
+
+  :host([uploading]) [part='loader'] {
+    display: block;
+    animation:
+      1s linear infinite lumo-loader-rotate,
+      0.3s 0.1s lumo-loader-fade-in both;
+  }
 }
