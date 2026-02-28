@@ -190,7 +190,7 @@ describe('virtualizer - item height - sub-pixel', () => {
 });
 
 describe('virtualizer - item height - initial render', () => {
-  let virtualizer, elementsContainer, itemHeight, createElements;
+  let virtualizer, elementsContainer, itemHeight, createElements, updateElement;
 
   beforeEach(() => {
     const scrollTarget = fixtureSync(`
@@ -201,15 +201,19 @@ describe('virtualizer - item height - initial render', () => {
     const scrollContainer = scrollTarget.firstElementChild;
     elementsContainer = scrollContainer;
 
-    createElements = sinon.spy((count) => Array.from({ length: count }, () => document.createElement('div')));
+    createElements = sinon.spy((count) => {
+      return Array.from({ length: count }, () => document.createElement('div'));
+    });
+
+    updateElement = sinon.spy((el, index) => {
+      el.style.width = '100%';
+      el.style.height = itemHeight;
+      el.textContent = `Item ${index}`;
+    });
 
     virtualizer = new Virtualizer({
       createElements,
-      updateElement: (el, index) => {
-        el.style.width = '100%';
-        el.style.height = itemHeight;
-        el.textContent = `Item ${index}`;
-      },
+      updateElement,
       scrollTarget,
       scrollContainer,
     });
@@ -227,7 +231,11 @@ describe('virtualizer - item height - initial render', () => {
     });
 
     it('should have created the items in the expected amount of batches', () => {
-      expect(createElements.callCount).to.equal(2);
+      expect(createElements).to.have.callCount(2);
+    });
+
+    it('should call updateElement for each item once', () => {
+      expect(updateElement).to.have.callCount(5);
     });
   });
 
@@ -243,7 +251,63 @@ describe('virtualizer - item height - initial render', () => {
     });
 
     it('should have created the items in the expected amount of batches', () => {
-      expect(createElements.callCount).to.equal(2);
+      expect(createElements).to.have.callCount(2);
+    });
+
+    it('should call updateElement for each item once', () => {
+      expect(updateElement).to.have.callCount(20);
+    });
+  });
+
+  describe('without placeholders', () => {
+    beforeEach(() => {
+      fixtureSync(`
+        <style>
+          .container > div {
+            min-height: 10px;
+          }
+        </style>
+      `);
+    });
+
+    describe('large item height', () => {
+      beforeEach(async () => {
+        itemHeight = '100px';
+        virtualizer.size = 100;
+        await nextFrame();
+      });
+
+      it('should have the expected amount of physical elements', () => {
+        expect(elementsContainer.childElementCount).to.equal(5);
+      });
+
+      it('should have created the items in the expected amount of batches', () => {
+        expect(createElements).to.have.callCount(2);
+      });
+
+      it('should call updateElement for each item once', () => {
+        expect(updateElement).to.have.callCount(5);
+      });
+    });
+
+    describe('small item height', () => {
+      beforeEach(async () => {
+        itemHeight = '20px';
+        virtualizer.size = 100;
+        await nextFrame();
+      });
+
+      it('should have the expected amount of physical elements', () => {
+        expect(elementsContainer.childElementCount).to.equal(20);
+      });
+
+      it('should have created the items in the expected amount of batches', () => {
+        expect(createElements).to.have.callCount(2);
+      });
+
+      it('should call updateElement for each item once', () => {
+        expect(updateElement).to.have.callCount(20);
+      });
     });
   });
 });
