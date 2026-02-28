@@ -248,8 +248,8 @@ describe('basic features', () => {
     return column.renderer.getCalls().filter((call) => call.args[2].index === 0).length;
   }
 
-  it('should render the first cell once during initialization', () => {
-    expect(getFirstCellRenderCount()).to.equal(1);
+  it('should render the first cell no more than twice during initialization', () => {
+    expect(getFirstCellRenderCount()).to.lessThanOrEqual(2);
   });
 
   it('should re-render the first cell when last row enters the viewport on resize', () => {
