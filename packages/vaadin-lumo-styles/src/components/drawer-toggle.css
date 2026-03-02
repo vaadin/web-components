@@ -22,11 +22,9 @@
   [part='icon'],
   [part='icon']::after,
   [part='icon']::before {
-    position: inherit;
     height: auto;
     width: auto;
     background: transparent;
-    top: auto;
   }
 
   [part='icon']::after,
