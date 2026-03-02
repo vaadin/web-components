@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-grid host default"] = 
-`<vaadin-grid style="touch-action: none;">
+`<vaadin-grid style="">
   <vaadin-grid-column path="name.first">
   </vaadin-grid-column>
   <vaadin-grid-column path="name.last">
@@ -40,7 +40,7 @@ snapshots["vaadin-grid host default"] =
 snapshots["vaadin-grid shadow default"] = 
 `<div
   id="scroller"
-  style="touch-action: none;"
+  style=""
 >
   <table
     aria-colcount="2"
@@ -264,7 +264,7 @@ snapshots["vaadin-grid shadow default"] =
 snapshots["vaadin-grid shadow selected"] = 
 `<div
   id="scroller"
-  style="touch-action: none;"
+  style=""
 >
   <table
     aria-colcount="2"
@@ -489,7 +489,7 @@ snapshots["vaadin-grid shadow selected"] =
 snapshots["vaadin-grid shadow details opened"] = 
 `<div
   id="scroller"
-  style="touch-action: none;"
+  style=""
 >
   <table
     aria-colcount="2"
@@ -714,7 +714,7 @@ snapshots["vaadin-grid shadow hidden column"] =
 `<div
   id="scroller"
   scrolling=""
-  style="touch-action: none;"
+  style=""
 >
   <table
     aria-colcount="2"
@@ -887,7 +887,7 @@ snapshots["vaadin-grid shadow hidden column selected"] =
 `<div
   id="scroller"
   scrolling=""
-  style="touch-action: none;"
+  style=""
 >
   <table
     aria-colcount="2"

@@ -273,6 +273,26 @@ export const makeSoloTouchEvent = (type, xy, node) => {
   return event;
 };
 
+export const makeMultiTouchEvent = (type, touchPoints, node) => {
+  const touches = touchPoints.map((point, index) => ({
+    identifier: index,
+    target: node,
+    clientX: point.x,
+    clientY: point.y,
+  }));
+  const touchEventInit = {
+    touches,
+    targetTouches: touches,
+    changedTouches: [touches[touches.length - 1]],
+  };
+  const event = new CustomEvent(type, { bubbles: true, cancelable: true });
+  Object.entries(touchEventInit).forEach(([key, value]) => {
+    event[key] = value;
+  });
+  node.dispatchEvent(event);
+  return event;
+};
+
 /**
  * Resolves once the function is invoked on the given object.
  */
