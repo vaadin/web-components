@@ -10,6 +10,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
+  makeMultiTouchEvent,
 } from './helpers.js';
 
 function getElementFromPoint(context, x, y) {
@@ -224,6 +225,66 @@ describe('column resizing', () => {
     const event = new CustomEvent('mousedown', { bubbles: true, cancelable: true, composed: true });
     headerCells[0].dispatchEvent(event);
     expect(event.defaultPrevented).to.be.false;
+  });
+
+  describe('multi-touch during resize', () => {
+    it('should cancel resizing when second finger touches during resize', () => {
+      fire('track', { state: 'start' }, { node: handle });
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.true;
+
+      const rect = headerCells[0].getBoundingClientRect();
+      makeMultiTouchEvent(
+        'touchstart',
+        [
+          { x: rect.left, y: rect.top },
+          { x: rect.left + 100, y: rect.top + 100 },
+        ],
+        grid.$.scroller,
+      );
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.false;
+    });
+
+    it('should cancel resizing when multi-touch move detected during resize', () => {
+      fire('track', { state: 'start' }, { node: handle });
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.true;
+
+      const rect = headerCells[0].getBoundingClientRect();
+      makeMultiTouchEvent(
+        'touchmove',
+        [
+          { x: rect.left + 10, y: rect.top },
+          { x: rect.left + 110, y: rect.top + 100 },
+        ],
+        grid.$.scroller,
+      );
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.false;
+    });
+
+    it('should ignore track events after multi-touch cancellation', () => {
+      const options = { node: handle };
+      const rect = headerCells[0].getBoundingClientRect();
+
+      // Start resize
+      fire('track', { state: 'start' }, options);
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.true;
+      const widthAfterStart = headerCells[0].offsetWidth;
+
+      // Multi-touch cancels resize
+      makeMultiTouchEvent(
+        'touchstart',
+        [
+          { x: rect.left, y: rect.top },
+          { x: rect.left + 100, y: rect.top + 100 },
+        ],
+        grid.$.scroller,
+      );
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.false;
+
+      // Subsequent track event should be ignored (no column-resizing attribute re-set)
+      fire('track', { state: 'track', x: rect.left + 200, y: 0 }, options);
+      expect(grid.$.scroller.hasAttribute('column-resizing')).to.be.false;
+      expect(headerCells[0].offsetWidth).to.equal(widthAfterStart);
+    });
   });
 });
 
