@@ -8,7 +8,7 @@ snapshots["vaadin-crud host default"] =
   </h3>
   <vaadin-crud-grid
     slot="grid"
-    style="touch-action: none;"
+    style=""
   >
     <vaadin-grid-column-group>
       <vaadin-grid-column>

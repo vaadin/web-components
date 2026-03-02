@@ -13,6 +13,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
+  makeMultiTouchEvent,
   makeSoloTouchEvent,
 } from './helpers.js';
 
@@ -227,6 +228,68 @@ describe('reordering simple grid', () => {
       makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
       makeSoloTouchEvent('touchend', { x: 0, y: 0 }, headerContent[0]);
       clock.tick(500);
+      expect(grid.hasAttribute('reordering')).to.be.false;
+    });
+  });
+
+  describe('multi-touch', () => {
+    let clock;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should not start reordering on multi-touch touchstart', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      makeMultiTouchEvent(
+        'touchstart',
+        [
+          { x: rect.left, y: rect.top },
+          { x: rect.left + 100, y: rect.top + 100 },
+        ],
+        headerContent[0],
+      );
+      clock.tick(500);
+      expect(grid.hasAttribute('reordering')).to.be.false;
+    });
+
+    it('should cancel pending reorder when second finger arrives', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      // First finger starts
+      makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
+      // Second finger arrives before 100ms timeout
+      makeMultiTouchEvent(
+        'touchstart',
+        [
+          { x: rect.left, y: rect.top },
+          { x: rect.left + 100, y: rect.top + 100 },
+        ],
+        headerContent[0],
+      );
+      clock.tick(500);
+      expect(grid.hasAttribute('reordering')).to.be.false;
+    });
+
+    it('should cancel active reorder when multi-touch move detected', () => {
+      const rect = headerContent[0].getBoundingClientRect();
+      // Start reorder via touch
+      makeSoloTouchEvent('touchstart', { x: rect.left, y: rect.top }, headerContent[0]);
+      clock.tick(500);
+      expect(grid.hasAttribute('reordering')).to.be.true;
+
+      // Multi-touch move cancels the reorder
+      makeMultiTouchEvent(
+        'touchmove',
+        [
+          { x: rect.left + 10, y: rect.top },
+          { x: rect.left + 110, y: rect.top + 100 },
+        ],
+        headerContent[0],
+      );
       expect(grid.hasAttribute('reordering')).to.be.false;
     });
   });
