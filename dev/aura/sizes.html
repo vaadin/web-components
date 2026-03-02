@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura Sizes</title>
+    <script type="module" src="../common.js"></script>
+    <link rel="stylesheet" href="../../packages/aura/aura.css" />
+    <link rel="stylesheet" href="./badge.css" />
+
+    <script type="module">
+      window.Vaadin = {};
+      window.Vaadin.featureFlags = {};
+      window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+      window.Vaadin.featureFlags.badgeComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/avatar';
+      import '@vaadin/badge';
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/select';
+      import '@vaadin/side-nav';
+      import '@vaadin/tabs';
+      import '@vaadin/text-field';
+
+      const medium = document.querySelector('.size-medium');
+      ['xsmall', 'small', 'large', 'xlarge'].forEach(variant => {
+        const components = medium.cloneNode(true);
+        components.setAttribute('theme', variant);
+        components.className = 'size-' + variant;
+        document.body.append(components)
+      });
+
+      document.querySelectorAll('vaadin-select').forEach(select => {
+        select.items = [
+          { label: 'Option 1', value: '1' },
+          { label: 'Option 2', value: '2' },
+          { label: 'Option 3', value: '3' },
+        ];
+        select.value = '1';
+      });
+    </script>
+
+    <style>
+      theme-switcher {
+        display: none;
+      }
+
+      body {
+        display: flex;
+        gap: var(--vaadin-gap-m);
+      }
+
+      body > div {
+        flex: none;
+        background: var(--aura-surface-color) padding-box;
+        border: 1px solid var(--vaadin-border-color-secondary);
+        border-radius: var(--vaadin-radius-l);
+        padding: var(--vaadin-padding-l);
+        margin-top: 1rem;
+        position: relative;
+
+        &::before {
+          position: absolute;
+          top: -1lh;
+          left: 0;
+          font-size: 0.875rem;
+          line-height: 2;
+          font-weight: var(--aura-font-weight-medium);
+          color: var(--vaadin-text-color-secondary);
+        }
+      }
+
+      section {
+        margin: 1lh 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .size-xsmall::before {
+        content: "theme=xsmall";
+      }
+
+      .size-small::before {
+        content: "theme=small";
+      }
+
+      .size-medium {
+        order: 1;
+
+        &::before {
+          content: "theme=medium";
+        }
+      }
+
+      .size-large {
+        order: 2;
+
+        &::before {
+          content: "theme=large";
+        }
+      }
+
+      .size-xlarge {
+        order: 3;
+
+        &::before {
+          content: "theme=xlarge";
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="size-medium">
+      <section class="text">
+        <h1>Heading 1</h1>
+        <h2>Heading 2</h2>
+        <h3>Heading 3</h3>
+        <h4>Heading 4</h4>
+        <h5>Heading 5</h5>
+        <h6>Heading 6</h6>
+        <div style="font-size: var(--aura-font-size-xl); line-height: var(--aura-line-height-xl);">X-Large text</div>
+        <div style="font-size: var(--aura-font-size-l); line-height: var(--aura-line-height-l);">Large text</div>
+        <div>Medium text</div>
+        <div style="font-size: var(--aura-font-size-s); line-height: var(--aura-line-height-s);">Small text</div>
+        <div style="font-size: var(--aura-font-size-xs); line-height: var(--aura-line-height-xs);">X-Small text</div>
+      </section>
+
+      <section>
+        <vaadin-avatar></vaadin-avatar>
+      </section>
+
+      <section>
+        <vaadin-button>
+          Button
+          <vaadin-badge slot="suffix">1</vaadin-badge>
+        </vaadin-button>
+      </section>
+
+      <section>
+        <vaadin-text-field label="Text Field"></vaadin-text-field>
+      </section>
+
+      <section>
+        <vaadin-select label="Select"></vaadin-select>
+      </section>
+
+      <section>
+        <vaadin-checkbox label="Checkbox"></vaadin-checkbox>
+      </section>
+
+      <section>
+        <vaadin-tabs>
+          <vaadin-tab>
+            Tab
+            <vaadin-badge>1</vaadin-badge>
+          </vaadin-tab>
+          <vaadin-tab>
+            Tab
+          </vaadin-tab>
+        </vaadin-tabs>
+      </section>
+
+      <section>
+        <vaadin-side-nav>
+          <vaadin-side-nav-item path="">
+            Nav Item
+            <vaadin-badge slot="suffix">1</vaadin-badge>
+          </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="foo">
+            Nav Item
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      </section>
+    </div>
+  </body>
+</html>
