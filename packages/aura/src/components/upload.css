@@ -9,7 +9,7 @@
   --vaadin-upload-file-warning-color: var(--aura-red);
   --vaadin-upload-file-done-color: var(--aura-green);
   --vaadin-upload-file-name-font-weight: var(--aura-font-weight-medium);
-  --vaadin-upload-file-padding: var(--vaadin-padding-s);
+  --vaadin-upload-file-padding: var(--vaadin-padding-m) var(--vaadin-padding-s);
   --vaadin-upload-file-gap: 0 var(--vaadin-gap-s);
   --vaadin-upload-file-button-border-width: 0;
   --vaadin-upload-file-status-font-size: var(--aura-font-size-s);
@@ -63,13 +63,13 @@ vaadin-upload:not([theme~='no-border']) > vaadin-upload-file-list:has(> ul > li)
 vaadin-upload-file {
   --vaadin-icon-visual-size: 0.75lh;
   border-radius: var(--vaadin-upload-file-border-radius, var(--vaadin-radius-m));
-  padding-block: var(--vaadin-upload-file-padding, var(--vaadin-padding-m));
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
   &:not([complete], [error])::part(done-icon)::before {
     background: var(--vaadin-border-color-secondary);
   }
 
+  &::part(start-button),
   &::part(remove-button),
   &::part(retry-button) {
     color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color-secondary));
@@ -77,7 +77,7 @@ vaadin-upload-file {
   }
 
   vaadin-progress-bar {
-    height: var(--vaadin-gap-xs);
+    --vaadin-progress-bar-height: var(--vaadin-gap-xs);
     margin-top: var(--vaadin-gap-xs);
   }
 
@@ -99,32 +99,57 @@ vaadin-upload-file {
   &[complete] vaadin-progress-bar {
     visibility: hidden;
     transition: 200ms height;
-    height: 0;
+    --vaadin-progress-bar-height: 0;
     margin-top: 0;
   }
+}
 
-  &[theme~='thumbnails'] {
-    --aura-surface-level: 4;
-    --_background: var(--aura-accent-surface) padding-box;
-    padding: 0 var(--vaadin-padding-xs) 0 0;
-    overflow: hidden;
-    background: var(--_background);
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
-    min-height: var(--_prefix-area-size);
+vaadin-upload-file[theme~='thumbnails'] {
+  --aura-surface-level: 3;
+  --vaadin-upload-file-padding: var(--vaadin-padding-s);
+  --vaadin-upload-file-done-color: var(--aura-accent-color);
+  --vaadin-spinner-size: 1em;
+  background: var(--aura-surface-color) padding-box;
+  border: 1px solid light-dark(var(--vaadin-border-color-secondary), transparent);
 
-    &::part(loader) {
-      place-self: center center;
-    }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid light-dark(transparent, var(--vaadin-border-color-secondary));
+    pointer-events: none;
+  }
 
-    &::part(commands) {
-      gap: 0;
-    }
+  &::part(done-icon),
+  &::part(warning-icon) {
+    --vaadin-icon-visual-size: 1lh;
+    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  }
 
-    &[error] {
-      --aura-accent-color-light: var(--aura-red);
-      --aura-accent-color-dark: var(--aura-red);
+  &::part(commands) {
+    gap: 0;
+  }
+
+  &::part(start-button),
+  &::part(retry-button),
+  &::part(remove-button) {
+    --vaadin-icon-visual-size: 0.8lh;
+  }
+
+  &[error] {
+    --aura-accent-color-light: var(--aura-red);
+    --aura-accent-color-dark: var(--aura-red);
+  }
+
+  & vaadin-progress-bar {
+    margin-top: 0;
+    align-self: end;
+    --vaadin-progress-bar-height: 2px;
+    --vaadin-border-color-secondary: transparent;
+
+    &:not([indeterminate]) {
+      opacity: 1;
     }
   }
 }
@@ -156,6 +181,7 @@ vaadin-upload[theme~='no-border'] {
 }
 
 @media (any-hover: hover) {
+  vaadin-upload-file::part(start-button):hover,
   vaadin-upload-file::part(remove-button):hover,
   vaadin-upload-file::part(retry-button):hover {
     --vaadin-upload-file-button-text-color: var(--vaadin-text-color);
