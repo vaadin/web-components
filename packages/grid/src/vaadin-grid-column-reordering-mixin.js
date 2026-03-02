@@ -64,7 +64,23 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /** @private */
+    _cancelReorderForMultiTouch(e) {
+      if (e.touches.length > 1) {
+        clearTimeout(this._startTouchReorderTimeout);
+        if (this._draggedColumn) {
+          this._onTrackEnd();
+        }
+        return true;
+      }
+      return false;
+    }
+
+    /** @private */
     _onTouchStart(e) {
+      if (this._cancelReorderForMultiTouch(e)) {
+        return;
+      }
+
       // Touch event, delay activation by 100ms
       this._startTouchReorderTimeout = setTimeout(() => {
         this._onTrackStart({
@@ -78,6 +94,10 @@ export const ColumnReorderingMixin = (superClass) =>
 
     /** @private */
     _onTouchMove(e) {
+      if (this._cancelReorderForMultiTouch(e)) {
+        return;
+      }
+
       if (this._draggedColumn) {
         e.preventDefault();
       }
