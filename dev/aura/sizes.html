@@ -26,14 +26,14 @@
       import '@vaadin/text-field';
 
       const medium = document.querySelector('.size-medium');
-      ['xsmall', 'small', 'large', 'xlarge'].forEach(variant => {
+      ['xsmall', 'small', 'large', 'xlarge'].forEach((variant) => {
         const components = medium.cloneNode(true);
         components.setAttribute('theme', variant);
         components.className = 'size-' + variant;
-        document.body.append(components)
+        document.body.append(components);
       });
 
-      document.querySelectorAll('vaadin-select').forEach(select => {
+      document.querySelectorAll('vaadin-select').forEach((select) => {
         select.items = [
           { label: 'Option 1', value: '1' },
           { label: 'Option 2', value: '2' },
