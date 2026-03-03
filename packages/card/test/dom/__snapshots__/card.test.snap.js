@@ -138,6 +138,16 @@ snapshots["vaadin-card host content"] =
 `;
 /* end snapshot vaadin-card host content */
 
+snapshots["vaadin-card host text content"] = 
+`<vaadin-card
+  _c=""
+  role="region"
+>
+  Text content
+</vaadin-card>
+`;
+/* end snapshot vaadin-card host text content */
+
 snapshots["vaadin-card host footer"] = 
 `<vaadin-card
   _f=""

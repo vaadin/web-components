@@ -5,6 +5,7 @@
  */
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -157,11 +158,17 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
     );
     this.toggleAttribute('_hp', this.querySelector(':scope > [slot="header-prefix"]'));
     this.toggleAttribute('_hs', this.querySelector(':scope > [slot="header-suffix"]'));
-    this.toggleAttribute('_c', this.querySelector(':scope > :not([slot])'));
+    this.toggleAttribute('_c', this.__hasContent());
     this.toggleAttribute('_f', this.querySelector(':scope > [slot="footer"]'));
     if (this.__getCustomTitleElement()) {
       this.__clearStringTitle();
     }
+  }
+
+  /** @private */
+  __hasContent() {
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    return slot.assignedNodes({ flatten: true }).filter((node) => !isEmptyTextNode(node)).length > 0;
   }
 
   /** @private */

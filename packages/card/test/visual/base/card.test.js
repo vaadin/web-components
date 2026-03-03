@@ -22,7 +22,7 @@ describe('card', () => {
     div.style.padding = '20px';
   });
 
-  const cardFixture = (content) => fixtureSync(`<vaadin-card>${content}</vaadin-card>`, div);
+  const cardFixture = (content = '') => fixtureSync(`<vaadin-card>${content}</vaadin-card>`, div);
 
   const mediaFixture = (showImage, theme) => {
     const media = showImage
