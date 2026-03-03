@@ -28,5 +28,11 @@ describe('vaadin-upload-file', () => {
     it('default', async () => {
       await expect(uploadFile).shadowDom.to.equalSnapshot();
     });
+
+    it('thumbnail', async () => {
+      uploadFile.__thumbnail = 'data:image/png;base64,abc';
+      await nextUpdate(uploadFile);
+      await expect(uploadFile).shadowDom.to.equalSnapshot();
+    });
   });
 });

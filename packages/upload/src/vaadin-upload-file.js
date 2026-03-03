@@ -103,9 +103,11 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
     return html`
       <div part="loader" ?hidden="${!this.uploading}" aria-hidden="true"></div>
 
-      <div part="thumbnail" ?hidden="${!this.__thumbnail}">
-        <img src="${this.__thumbnail}" alt="${this.fileName}" />
-      </div>
+      ${this.__thumbnail
+        ? html`<div part="thumbnail">
+            <img src="${this.__thumbnail}" alt="${this.fileName}" />
+          </div>`
+        : nothing}
 
       <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
       <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
