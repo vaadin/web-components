@@ -81,7 +81,7 @@
 
 :where(body),
 :where(:host),
-:where([theme]) {
+:where([theme]:not(html)) {
   font-size: var(--aura-font-size-m);
   line-height: var(--aura-line-height-m);
 }
