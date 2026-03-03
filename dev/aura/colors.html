@@ -7,7 +7,6 @@
     <title>Aura Colors</title>
     <script type="module" src="../common.js"></script>
     <link rel="stylesheet" href="../../packages/aura/aura.css" />
-    <link rel="stylesheet" href="./badge.css" />
 
     <script type="module">
       window.Vaadin = {};
@@ -71,12 +70,6 @@
               badge.textContent = e.target.checked ? color : 'Accent';
             });
           });
-        });
-      });
-
-      document.querySelector('#point-badges').addEventListener('change', (e) => {
-        document.querySelectorAll('vaadin-badge').forEach((badge) => {
-          badge.classList.toggle('aura-badge-point', e.target.checked);
         });
       });
     </script>
@@ -237,7 +230,6 @@
     <vaadin-checkbox-group label="Badges">
       <vaadin-checkbox label="Filled" id="filled-badges" value="filled"></vaadin-checkbox>
       <vaadin-checkbox label="Colored" id="colored-badges" value="colored"></vaadin-checkbox>
-      <vaadin-checkbox label="Point" id="point-badges" value="point"></vaadin-checkbox>
     </vaadin-checkbox-group>
 
     <section class="section">
