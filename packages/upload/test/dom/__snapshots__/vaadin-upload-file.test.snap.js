@@ -8,12 +8,15 @@ snapshots["vaadin-upload-file shadow default"] =
   part="loader"
 >
 </div>
-<img
-  alt="Workflow.pdf"
+<div
   hidden=""
   part="thumbnail"
-  src=""
 >
+  <img
+    alt="Workflow.pdf"
+    src=""
+  >
+</div>
 <div
   aria-hidden="true"
   hidden=""
