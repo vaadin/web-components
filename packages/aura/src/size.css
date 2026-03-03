@@ -48,6 +48,10 @@
   --aura-base-size: var(--_base-size-s);
 }
 
+[theme~='medium'] {
+  --aura-base-size: var(--_base-size-m);
+}
+
 [theme~='large'] {
   --aura-base-size: var(--_base-size-l);
 }
