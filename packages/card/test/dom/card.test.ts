@@ -109,6 +109,12 @@ describe('vaadin-card', () => {
       await expect(card).dom.to.equalSnapshot();
     });
 
+    it('text content', async () => {
+      card.appendChild(document.createTextNode('Text content'));
+      await nextUpdate(card);
+      await expect(card).dom.to.equalSnapshot();
+    });
+
     it('footer', async () => {
       const footer = document.createElement('div');
       footer.setAttribute('slot', 'footer');
