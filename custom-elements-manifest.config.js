@@ -1,3 +1,6 @@
+import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
+import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
+
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 
 // Attribute types that can't be set via HTML attributes
@@ -131,12 +134,65 @@ function mixesPlugin() {
   };
 }
 
+/**
+ * CEM plugin that marks `readOnly: true` properties as `readonly` in custom-elements.json
+ * to filter them out of Lit property bindings when generating web-types-lit.json files.
+ */
+function readonlyPlugin() {
+  return {
+    analyzePhase({ ts, node, moduleDoc }) {
+      const mixinNodes = extractMixinNodes(node);
+      const classNode = mixinNodes ? mixinNodes.mixinClass : ts.isClassDeclaration(node) ? node : undefined;
+      if (!classNode) return;
+
+      // Find `static get properties()` method
+      for (const member of classNode.members || []) {
+        if (!ts.isGetAccessorDeclaration(member) || !isStaticMember(member) || member.name?.text !== 'properties') {
+          continue;
+        }
+
+        // Find the return statement's object literal
+        const returnStmt = member.body?.statements?.find(ts.isReturnStatement);
+        const returnObj = returnStmt?.expression;
+        if (!returnObj || !ts.isObjectLiteralExpression(returnObj)) continue;
+
+        for (const prop of returnObj.properties) {
+          if (!ts.isPropertyAssignment(prop)) continue;
+          const propName = prop.name?.text;
+          if (!propName) continue;
+
+          // Check if the property config object has `readOnly: true`
+          const configObj = prop.initializer;
+          if (!ts.isObjectLiteralExpression(configObj)) continue;
+
+          const hasReadOnly = configObj.properties.some(
+            (p) =>
+              ts.isPropertyAssignment(p) &&
+              p.name?.text === 'readOnly' &&
+              p.initializer?.kind === ts.SyntaxKind.TrueKeyword,
+          );
+          if (!hasReadOnly) continue;
+
+          // Find the matching member in moduleDoc declarations and mark it readonly
+          for (const declaration of moduleDoc.declarations || []) {
+            const cemMember = declaration.members?.find((m) => m.name === propName);
+            if (cemMember) {
+              cemMember.readonly = true;
+            }
+          }
+        }
+      }
+    },
+  };
+}
+
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
   litelement: true,
   plugins: [
     mixesPlugin(),
+    readonlyPlugin(),
     {
       packageLinkPhase({ customElementsManifest }) {
         for (const definition of customElementsManifest.modules) {
