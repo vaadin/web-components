@@ -20,8 +20,14 @@
 
   <body>
     <section class="section">
-      <h2 class="heading">Default</h2>
+      <h2 class="heading">Label</h2>
+      <vaadin-badge>Completed</vaadin-badge>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Size</h2>
       <vaadin-badge>Default</vaadin-badge>
+      <vaadin-badge theme="small">Small</vaadin-badge>
     </section>
 
     <section class="section">
@@ -40,7 +46,9 @@
       <vaadin-badge number="3">
         <span>new emails</span>
       </vaadin-badge>
-      <vaadin-badge number="3"></vaadin-badge>
+      <vaadin-badge number="1"></vaadin-badge>
+      <vaadin-badge number="12"></vaadin-badge>
+      <vaadin-badge number="123"></vaadin-badge>
     </section>
 
     <section class="section">
@@ -61,6 +69,24 @@
         <vaadin-icon slot="icon" icon="vaadin:check"></vaadin-icon>
         <span>Completed</span>
       </vaadin-badge>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Colors</h2>
+      <vaadin-badge>Default</vaadin-badge>
+      <vaadin-badge theme="success">Success</vaadin-badge>
+      <vaadin-badge theme="warning">Warning</vaadin-badge>
+      <vaadin-badge theme="error">Error</vaadin-badge>
+      <vaadin-badge theme="contrast" class="aura-accent-neutral">Neutral</vaadin-badge>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Filled</h2>
+      <vaadin-badge theme="filled">Default</vaadin-badge>
+      <vaadin-badge theme="filled success">Success</vaadin-badge>
+      <vaadin-badge theme="filled warning">Warning</vaadin-badge>
+      <vaadin-badge theme="filled error">Error</vaadin-badge>
+      <vaadin-badge theme="filled contrast" class="aura-accent-neutral">Neutral</vaadin-badge>
     </section>
   </body>
 </html>

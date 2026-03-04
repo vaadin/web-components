@@ -43,13 +43,14 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Custom CSS property              |
  * :--------------------------------|
  * `--vaadin-badge-background`      |
+ * `--vaadin-badge-border-color`    |
  * `--vaadin-badge-border-radius`   |
+ * `--vaadin-badge-border-width`    |
  * `--vaadin-badge-font-size`       |
  * `--vaadin-badge-font-weight`     |
  * `--vaadin-badge-font-family`     |
  * `--vaadin-badge-gap`             |
  * `--vaadin-badge-line-height`     |
- * `--vaadin-badge-min-width`       |
  * `--vaadin-badge-padding`         |
  * `--vaadin-badge-text-color`      |
  *
