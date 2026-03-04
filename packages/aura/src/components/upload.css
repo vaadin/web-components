@@ -9,7 +9,7 @@
   --vaadin-upload-file-warning-color: var(--aura-red);
   --vaadin-upload-file-done-color: var(--aura-green);
   --vaadin-upload-file-name-font-weight: var(--aura-font-weight-medium);
-  --vaadin-upload-file-padding: var(--vaadin-padding-s);
+  --vaadin-upload-file-padding: var(--vaadin-padding-m) var(--vaadin-padding-s);
   --vaadin-upload-file-gap: 0 var(--vaadin-gap-s);
   --vaadin-upload-file-button-border-width: 0;
   --vaadin-upload-file-status-font-size: var(--aura-font-size-s);
@@ -63,7 +63,6 @@ vaadin-upload:not([theme~='no-border']) > vaadin-upload-file-list:has(> ul > li)
 vaadin-upload-file {
   --vaadin-icon-visual-size: 0.75lh;
   border-radius: var(--vaadin-radius-m);
-  padding-block: var(--vaadin-padding-m);
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
   &:not([error])::part(done-icon) {
