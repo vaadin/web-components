@@ -43,4 +43,48 @@ describe('avatar', () => {
       });
     });
   });
+
+  it('theme-xlarge', async () => {
+    element.setAttribute('theme', 'xlarge');
+    await visualDiff(div, 'theme-xlarge');
+  });
+
+  it('theme-large', async () => {
+    element.setAttribute('theme', 'large');
+    await visualDiff(div, 'theme-large');
+  });
+
+  it('theme-small', async () => {
+    element.setAttribute('theme', 'small');
+    await visualDiff(div, 'theme-small');
+  });
+
+  it('theme-xsmall', async () => {
+    element.setAttribute('theme', 'xsmall');
+    await visualDiff(div, 'theme-xsmall');
+  });
+
+  it('abbr theme-xlarge', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'xlarge');
+    await visualDiff(div, 'abbr-theme-xlarge');
+  });
+
+  it('abbr theme-large', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'large');
+    await visualDiff(div, 'abbr-theme-large');
+  });
+
+  it('abbr theme-small', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'small');
+    await visualDiff(div, 'abbr-theme-small');
+  });
+
+  it('abbr theme-xsmall', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'xsmall');
+    await visualDiff(div, 'abbr-theme-xsmall');
+  });
 });

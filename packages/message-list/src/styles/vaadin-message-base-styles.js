@@ -70,46 +70,56 @@ export const messageStyles = css`
   [part='attachments'] {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: var(--vaadin-gap-s);
   }
 
   [part~='attachment'] {
-    display: inline-flex;
+    --_prefix-area-size: 2rem;
+    display: inline-grid;
+    grid-template-columns: var(--_prefix-area-size) auto;
     align-items: center;
+    background: var(--vaadin-background-container);
     color: inherit;
-    background: none;
     border: none;
     padding: 0;
     margin: 0;
     font: inherit;
-    cursor: pointer;
     text-align: start;
   }
 
-  [part~='attachment-image'] [part='attachment-preview'] {
-    display: block;
-    max-width: 200px;
-    max-height: 150px;
-  }
-
-  [part~='attachment-file'] {
-    gap: 6px;
-  }
-
   [part='attachment-icon'] {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    background: currentColor;
-    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    flex-shrink: 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1;
+    text-align: center;
+
+    &::before {
+      /* TODO: Replace with vaadin file icon, once it exists. */
+      content: '';
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+      height: var(--vaadin-icon-size, 1lh);
+      width: var(--vaadin-icon-size, 1lh);
+      mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>');
+      mask-size: contain;
+      background: currentColor;
+    }
+  }
+
+  [part='attachment-preview'] {
+    grid-column: 1;
+    width: 100%;
+    aspect-ratio: 1 / 1;
   }
 
   [part='attachment-name'] {
+    grid-column: 2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-inline-end: var(--vaadin-padding-s);
   }
 `;

@@ -85,7 +85,7 @@
     box-shadow: 0 1px 0 0 var(--lumo-contrast-10pct);
   }
 
-  :host([has-bounds-set]) [part='overlay'] {
+  :host([has-bounds-set]:not([keep-in-viewport])) [part='overlay'] {
     max-width: none;
   }
 

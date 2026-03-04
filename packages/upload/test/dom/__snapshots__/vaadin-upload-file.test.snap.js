@@ -2,15 +2,10 @@
 export const snapshots = {};
 
 snapshots["vaadin-upload-file shadow default"] = 
-`<img
-  alt="Workflow.pdf"
-  hidden=""
-  part="thumbnail"
-  src=""
->
-<div
+`<div
   aria-hidden="true"
-  part="file-icon"
+  hidden=""
+  part="loader"
 >
 </div>
 <div
@@ -74,4 +69,79 @@ snapshots["vaadin-upload-file shadow default"] =
 </slot>
 `;
 /* end snapshot vaadin-upload-file shadow default */
+
+snapshots["vaadin-upload-file shadow thumbnail"] = 
+`<div
+  aria-hidden="true"
+  hidden=""
+  part="loader"
+>
+</div>
+<div part="thumbnail">
+  <img
+    alt="Workflow.pdf"
+    src="data:image/png;base64,abc"
+  >
+</div>
+<div
+  aria-hidden="true"
+  hidden=""
+  part="done-icon"
+>
+</div>
+<div
+  aria-hidden="true"
+  hidden=""
+  part="warning-icon"
+>
+</div>
+<div part="meta">
+  <div
+    id="name"
+    part="name"
+  >
+    Workflow.pdf
+  </div>
+  <div
+    id="status"
+    part="status"
+  >
+    19.7 MB: 60% (remaining time: 00:12:34)
+  </div>
+  <div
+    hidden=""
+    id="error"
+    part="error"
+  >
+  </div>
+</div>
+<div part="commands">
+  <button
+    aria-describedby="name"
+    file-event="file-start"
+    hidden=""
+    part="start-button"
+    type="button"
+  >
+  </button>
+  <button
+    aria-describedby="name"
+    file-event="file-retry"
+    hidden=""
+    part="retry-button"
+    type="button"
+  >
+  </button>
+  <button
+    aria-describedby="name"
+    file-event="file-abort"
+    part="remove-button"
+    type="button"
+  >
+  </button>
+</div>
+<slot name="progress">
+</slot>
+`;
+/* end snapshot vaadin-upload-file shadow thumbnail */
 

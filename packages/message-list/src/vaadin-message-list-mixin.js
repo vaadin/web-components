@@ -237,4 +237,9 @@ export const MessageListMixin = (superClass) =>
     __announceChanged(announceMessages) {
       this.ariaLive = announceMessages ? 'polite' : null;
     }
+
+    /**
+     * Fired when an attachment is clicked.
+     * @event attachment-click
+     */
   };

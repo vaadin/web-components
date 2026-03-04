@@ -124,6 +124,9 @@ const dialogResizableOverlay = css`
 
   :host([has-bounds-set]) [part='overlay'] {
     min-width: 0;
+  }
+
+  :host([has-bounds-set]:not([keep-in-viewport])) [part='overlay'] {
     max-width: none;
     max-height: none;
   }
@@ -138,7 +141,7 @@ const dialogResizableOverlay = css`
   }
 
   [part='header'],
-  :host(:not([has-header])) [part='content'] {
+  :host(:not([has-title], [has-header])) [part='content'] {
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
   }

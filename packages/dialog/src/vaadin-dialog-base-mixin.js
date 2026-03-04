@@ -93,6 +93,21 @@ export const DialogBaseMixin = (superClass) =>
         overlayRole: {
           type: String,
         },
+
+        /**
+         * Set to true to prevent the dialog from moving outside the viewport bounds.
+         * When enabled, all four edges of the dialog will remain visible, for example
+         * when dragging the dialog or when the viewport is resized. Note that the
+         * dialog will also adjust any programmatically configured size and position
+         * so that it stays within the viewport.
+         * @attr {boolean} keep-in-viewport
+         * @type {boolean}
+         */
+        keepInViewport: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
       };
     }
 

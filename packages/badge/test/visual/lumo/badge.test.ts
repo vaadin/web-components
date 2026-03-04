@@ -90,16 +90,10 @@ describe('badge', () => {
   });
 
   describe('theme', () => {
-    it('primary', async () => {
+    it('filled', async () => {
       element.textContent = 'Badge';
-      element.setAttribute('theme', 'primary');
-      await visualDiff(div, 'theme-primary');
-    });
-
-    it('small', async () => {
-      element.textContent = 'Badge';
-      element.setAttribute('theme', 'small');
-      await visualDiff(div, 'theme-small');
+      element.setAttribute('theme', 'filled');
+      await visualDiff(div, 'theme-filled');
     });
 
     it('dot', async () => {
@@ -117,10 +111,10 @@ describe('badge', () => {
         await visualDiff(div, `theme-${variant}`);
       });
 
-      it(`${variant} primary`, async () => {
+      it(`${variant} filled`, async () => {
         element.textContent = 'Badge';
-        element.setAttribute('theme', `${variant} primary`);
-        await visualDiff(div, `theme-${variant}-primary`);
+        element.setAttribute('theme', `${variant} filled`);
+        await visualDiff(div, `theme-${variant}-filled`);
       });
 
       it(`${variant} dot`, async () => {

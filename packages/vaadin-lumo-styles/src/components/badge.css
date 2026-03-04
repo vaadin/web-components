@@ -5,15 +5,15 @@
  */
 @media lumo_components_badge {
   :host {
+    border-width: var(--vaadin-badge-border-width, 0);
     background: var(--vaadin-badge-background, var(--lumo-primary-color-10pct));
-    border-radius: var(--vaadin-badge-border-radius, 1em);
     color: var(--vaadin-badge-text-color, var(--lumo-primary-text-color));
     font-family: var(--vaadin-badge-font-family, var(--lumo-font-family));
     font-size: var(--vaadin-badge-font-size, var(--lumo-font-size-s));
-    gap: var(--vaadin-badge-gap, 0.375em);
-    min-width: var(--vaadin-badge-min-width, calc(var(--lumo-line-height-xs) * 1em + 0.45em));
-    padding: var(--vaadin-badge-padding, 0.4em 0.75em);
-    --vaadin-icon-size: var(--lumo-icon-size-s);
+  }
+
+  :host([theme~='small']) {
+    font-size: var(--lumo-font-size-xxs);
   }
 
   :host([theme~='success']) {
@@ -31,78 +31,53 @@
     --vaadin-badge-text-color: var(--lumo-warning-text-color);
   }
 
-  :host([theme~='contrast']) {
+  :host(:is([theme~='neutral'], [theme~='contrast'])) {
     --vaadin-badge-background: var(--lumo-contrast-5pct);
     --vaadin-badge-text-color: var(--lumo-contrast-80pct);
   }
 
-  :host([theme~='primary']) {
-    --vaadin-badge-background: var(--lumo-primary-color);
-    --vaadin-badge-text-color: var(--lumo-primary-contrast-color);
+  :host([theme~='filled']) {
+    background: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
   }
 
-  :host([theme~='success'][theme~='primary']) {
-    --vaadin-badge-background: var(--lumo-success-color);
-    --vaadin-badge-text-color: var(--lumo-success-contrast-color);
+  :host([theme~='success'][theme~='filled']) {
+    background: var(--lumo-success-color);
+    color: var(--lumo-success-contrast-color);
   }
 
-  :host([theme~='error'][theme~='primary']) {
-    --vaadin-badge-background: var(--lumo-error-color);
-    --vaadin-badge-text-color: var(--lumo-error-contrast-color);
+  :host([theme~='error'][theme~='filled']) {
+    background: var(--lumo-error-color);
+    color: var(--lumo-error-contrast-color);
   }
 
-  :host([theme~='warning'][theme~='primary']) {
-    --vaadin-badge-background: var(--lumo-warning-color);
-    --vaadin-badge-text-color: var(--lumo-warning-contrast-color);
+  :host([theme~='warning'][theme~='filled']) {
+    background: var(--lumo-warning-color);
+    color: var(--lumo-warning-contrast-color);
   }
 
-  :host([theme~='contrast'][theme~='primary']) {
-    --vaadin-badge-background: var(--lumo-contrast);
-    --vaadin-badge-text-color: var(--lumo-base-color);
-  }
-
-  :host([theme~='small']) {
-    --vaadin-badge-font-size: var(--lumo-font-size-xxs);
+  :host(:is([theme~='neutral'], [theme~='contrast'])[theme~='filled']) {
+    background: var(--lumo-contrast);
+    color: var(--lumo-base-color);
   }
 
   :host([theme~='dot']) {
-    --vaadin-badge-background: var(--lumo-primary-color);
+    background: var(--lumo-primary-color);
   }
 
   :host([theme~='dot'][theme~='success']) {
-    --vaadin-badge-background: var(--lumo-success-color);
+    background: var(--lumo-success-color);
   }
 
   :host([theme~='dot'][theme~='error']) {
-    --vaadin-badge-background: var(--lumo-error-color);
+    background: var(--lumo-error-color);
   }
 
   :host([theme~='dot'][theme~='warning']) {
-    --vaadin-badge-background: var(--lumo-warning-color);
+    background: var(--lumo-warning-color);
   }
 
-  :host([theme~='dot'][theme~='contrast']) {
-    --vaadin-badge-background: var(--lumo-contrast);
-  }
-
-  :host([theme~='icon-only']),
-  :host([theme~='number-only']),
-  :host([has-icon]:not([has-content], [has-number])),
-  :host([has-number]:not([has-content], [has-icon])) {
-    width: 1.5rem;
-    height: 1.5rem;
-    padding: 0;
-    min-width: 0;
-  }
-
-  :host([theme~='icon-only']),
-  :host([has-icon]:not([has-content], [has-number])) {
-    font-size: 1rem;
-  }
-
-  :host([has-icon]) ::slotted(vaadin-icon) {
-    margin: calc(var(--lumo-space-xs) * -1);
-    padding: calc(var(--lumo-space-xs));
-    --vaadin-icon-size: var(--lumo-icon-size-m);
+  :host([theme~='dot']:is([theme~='neutral'], [theme~='contrast'])) {
+    background: var(--lumo-contrast);
   }
 }

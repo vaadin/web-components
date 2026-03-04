@@ -9,6 +9,7 @@
   --vaadin-icon-baseline-font-family: var(--aura-font-family);
 
   --aura-base-font-size: 14;
+  --_base-font-size-m: var(--aura-base-font-size);
   --aura-base-line-height: 1.4;
 
   --aura-font-weight-regular: 400;
@@ -50,6 +51,11 @@
   --aura-font-size-l: round(var(--aura-font-size-m) * 1.125, 0.0625rem);
   --aura-font-size-xl: round(var(--aura-font-size-l) * 1.125, 0.0625rem);
 
+  --_base-font-size-xs: clamp(10, round(var(--_base-font-size-m) * 0.75, 1), 13);
+  --_base-font-size-s: round((var(--_base-font-size-m) + var(--_base-font-size-xs)) / 2, 1);
+  --_base-font-size-l: round(var(--_base-font-size-m) * 1.125, 1);
+  --_base-font-size-xl: round(var(--_base-font-size-l) * 1.125, 1);
+
   --aura-line-height-xs: round(var(--aura-font-size-xs) * var(--aura-base-line-height), 0.125rem);
   --aura-line-height-s: round(var(--aura-font-size-s) * var(--aura-base-line-height), 0.125rem);
   --aura-line-height-m: round(var(--aura-font-size-m) * var(--aura-base-line-height), 0.125rem);
@@ -78,6 +84,26 @@
 :where([theme]:not(html)) {
   font-size: var(--aura-font-size-m);
   line-height: var(--aura-line-height-m);
+}
+
+[theme~='xsmall'] {
+  --aura-base-font-size: var(--_base-font-size-xs);
+}
+
+[theme~='small'] {
+  --aura-base-font-size: var(--_base-font-size-s);
+}
+
+[theme~='medium'] {
+  --aura-base-font-size: var(--_base-font-size-m);
+}
+
+[theme~='large'] {
+  --aura-base-font-size: var(--_base-font-size-l);
+}
+
+[theme~='xlarge'] {
+  --aura-base-font-size: var(--_base-font-size-xl);
 }
 
 :where(h1, h2, h3, h4, h5, h6) {

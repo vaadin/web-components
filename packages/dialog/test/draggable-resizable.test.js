@@ -685,6 +685,8 @@ describe('draggable', () => {
   });
 
   describe('keepInViewport', () => {
+    let overlayHostBounds;
+
     // Helper to drag to absolute coordinates within the viewport
     function dragTo(target, toX, toY) {
       const targetBounds = target.getBoundingClientRect();
@@ -700,6 +702,10 @@ describe('draggable', () => {
     }
 
     beforeEach(async () => {
+      // Re-enable inset on overlay host to verify that keepInViewport respects `--vaadin-overlay-viewport-inset`
+      const overlayHost = dialog.$.overlay;
+      overlayHost.style.inset = '10px';
+      overlayHostBounds = overlayHost.getBoundingClientRect();
       dialog.keepInViewport = true;
       await nextUpdate(dialog);
     });
@@ -709,7 +715,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.left)).to.be.closeTo(0, 1);
+      expect(Math.floor(draggedBounds.left)).to.be.closeTo(overlayHostBounds.left, 1);
     });
 
     it('should not drag dialog past top viewport edge', async () => {
@@ -717,7 +723,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.top)).to.closeTo(0, 1);
+      expect(Math.floor(draggedBounds.top)).to.closeTo(overlayHostBounds.top, 1);
     });
 
     it('should not drag dialog past right viewport edge', async () => {
@@ -725,7 +731,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.right)).to.closeTo(window.innerWidth, 1);
+      expect(Math.floor(draggedBounds.right)).to.closeTo(overlayHostBounds.right, 1);
     });
 
     it('should not drag dialog past bottom viewport edge', async () => {
@@ -733,7 +739,7 @@ describe('draggable', () => {
       await nextRender();
 
       const draggedBounds = container.getBoundingClientRect();
-      expect(Math.floor(draggedBounds.bottom)).to.closeTo(window.innerHeight, 1);
+      expect(Math.floor(draggedBounds.bottom)).to.closeTo(overlayHostBounds.bottom, 1);
     });
 
     it('should allow normal dragging within viewport', async () => {
@@ -755,13 +761,6 @@ describe('draggable', () => {
 
       const draggedBounds = container.getBoundingClientRect();
       expect(Math.floor(draggedBounds.left)).to.lessThan(0);
-    });
-
-    it('should reflect keepInViewport attribute', async () => {
-      expect(dialog.hasAttribute('keep-in-viewport')).to.be.true;
-      dialog.keepInViewport = false;
-      await nextUpdate(dialog);
-      expect(dialog.hasAttribute('keep-in-viewport')).to.be.false;
     });
   });
 });

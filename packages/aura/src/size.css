@@ -1,6 +1,7 @@
 :where(:root),
 :where(:host) {
   --aura-base-size: 16;
+  --_base-size-m: var(--aura-base-size);
   --aura-base-radius: 3;
   --vaadin-radius-s: min(0.25lh, round(var(--aura-base-radius) * 1px + 2px, 1px));
   --vaadin-radius-m: round(var(--aura-base-radius) * 2px + 3px, 1px);
@@ -25,6 +26,11 @@
   --vaadin-padding-m: round(var(--aura-base-size) * 0.75 * 1px, 1px);
   --vaadin-padding-l: round(var(--aura-base-size) * 1px, 1px);
   --vaadin-padding-xl: round(var(--aura-base-size) * 1.5 * 1px, 1px);
+
+  --_base-size-xs: round(var(--_base-size-m) * 0.75, 1);
+  --_base-size-s: round(var(--_base-size-m) * 0.875, 1);
+  --_base-size-l: round(var(--_base-size-m) * 1.125, 1);
+  --_base-size-xl: round(var(--_base-size-m) * 1.25, 1);
 }
 
 @media (pointer: coarse) {
@@ -32,4 +38,24 @@
   :where(:host) {
     --aura-base-size: 18;
   }
+}
+
+[theme~='xsmall'] {
+  --aura-base-size: var(--_base-size-xs);
+}
+
+[theme~='small'] {
+  --aura-base-size: var(--_base-size-s);
+}
+
+[theme~='medium'] {
+  --aura-base-size: var(--_base-size-m);
+}
+
+[theme~='large'] {
+  --aura-base-size: var(--_base-size-l);
+}
+
+[theme~='xlarge'] {
+  --aura-base-size: var(--_base-size-xl);
 }

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   enter,
   esc,
@@ -228,6 +229,30 @@ describe('toolbar controls', () => {
         expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
         expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
         expect(linkBtn.part.contains('toolbar-button-pressed')).to.be.true;
+      });
+
+      it('should update toolbar pressed state on navigation keydown', async () => {
+        const delta = new window.Quill.imports.delta([
+          { attributes: { bold: true }, insert: 'Foo\n' },
+          { attributes: { italic: true }, insert: 'Bar\n' },
+        ]);
+        editor.setContents(delta, 'user');
+        editor.focus();
+
+        const boldBtn = getButton('bold');
+        const italicBtn = getButton('italic');
+
+        // Position cursor at end of the bold line
+        editor.setSelection(3, 0);
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.true;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.false;
+
+        // Navigate into the italic line using a real key press
+        await sendKeys({ press: 'ArrowDown' });
+        await nextRender();
+
+        expect(boldBtn.part.contains('toolbar-button-pressed')).to.be.false;
+        expect(italicBtn.part.contains('toolbar-button-pressed')).to.be.true;
       });
     });
 

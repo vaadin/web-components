@@ -119,7 +119,9 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {Event} input - Fired when the slider value changes during user interaction.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
  * @customElement vaadin-range-slider
  * @extends HTMLElement
