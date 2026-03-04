@@ -50,11 +50,93 @@ function sortName(a, b) {
   return 0;
 }
 
+/**
+ * Extracts @mixes JSDoc tag names from a node's JSDoc comments.
+ * @param {object} node - A TypeScript AST node
+ * @param {object} ts - The TypeScript module
+ * @returns {string[]} - Array of mixin names
+ */
+function getJsDocMixesTags(node, ts) {
+  return (node.jsDoc || [])
+    .flatMap((doc) => doc.tags || [])
+    .filter((tag) => ts.isJSDocUnknownTag(tag) && tag.tagName.text === 'mixes')
+    .map((tag) => tag.comment?.trim())
+    .filter(Boolean);
+}
+
+/**
+ * Resolves a mixin name to a package reference by checking the module's imports.
+ * @param {object} sourceFile - The TypeScript source file AST
+ * @param {string} mixinName - The mixin name (e.g., "InputControlMixin")
+ * @param {object} ts - The TypeScript module
+ * @returns {{ name: string, package?: string, module?: string } | null}
+ */
+function resolveMixinRef(sourceFile, mixinName, ts) {
+  for (const statement of sourceFile.statements) {
+    if (!ts.isImportDeclaration(statement)) continue;
+    const moduleSpecifier = statement.moduleSpecifier.text;
+    const importClause = statement.importClause;
+    if (!importClause) continue;
+
+    // Check named imports
+    const namedBindings = importClause.namedBindings;
+    if (!namedBindings || !ts.isNamedImports(namedBindings)) continue;
+
+    const match = namedBindings.elements.find((el) => el.name.text === mixinName);
+    if (!match) continue;
+
+    if (moduleSpecifier.startsWith('.')) {
+      // Same-package import
+      return { name: mixinName, module: moduleSpecifier.replace(/^\.\//u, '') };
+    }
+    // Cross-package import
+    return { name: mixinName, package: moduleSpecifier };
+  }
+  return null;
+}
+
+/**
+ * CEM plugin that augments mixin declarations with @mixes JSDoc tag references
+ * that the analyzer couldn't capture from static analysis (e.g., when
+ * I18nMixin wraps other mixins as: I18nMixin(defaultI18n, Chain(superClass))).
+ */
+function mixesPlugin() {
+  return {
+    analyzePhase({ ts, node, moduleDoc }) {
+      // Only process mixin export declarations (const Mixin = (superClass) => class ...)
+      if (!ts.isVariableStatement(node)) return;
+
+      for (const decl of node.declarationList.declarations) {
+        const mixesNames = getJsDocMixesTags(node, ts);
+        if (mixesNames.length === 0) continue;
+
+        const mixinName = decl.name.text;
+        const mixinDecl = moduleDoc.declarations?.find((d) => d.name === mixinName && d.kind === 'mixin');
+        if (!mixinDecl) continue;
+
+        const existingMixinNames = new Set((mixinDecl.mixins || []).map((m) => m.name));
+        const sourceFile = node.getSourceFile();
+
+        for (const mixName of mixesNames) {
+          if (existingMixinNames.has(mixName)) continue;
+
+          const ref = resolveMixinRef(sourceFile, mixName, ts);
+          if (ref) {
+            mixinDecl.mixins ||= [];
+            mixinDecl.mixins.push(ref);
+          }
+        }
+      }
+    },
+  };
+}
+
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
   litelement: true,
   plugins: [
+    mixesPlugin(),
     {
       packageLinkPhase({ customElementsManifest }) {
         for (const definition of customElementsManifest.modules) {
