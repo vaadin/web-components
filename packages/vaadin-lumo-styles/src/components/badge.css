@@ -77,7 +77,7 @@
     background: var(--lumo-warning-color);
   }
 
-  :host([theme~='dot'][theme~='contrast']) {
+  :host([theme~='dot']:is([theme~='neutral'], [theme~='contrast'])) {
     background: var(--lumo-contrast);
   }
 }
