@@ -335,7 +335,7 @@ export const CrudMixin = (superClass) =>
      *   }
      * }
      * ```
-     * @return {!CrudI18n}
+     * @type {!CrudI18n}
      */
     get i18n() {
       return super.i18n;

@@ -256,7 +256,7 @@ export const RichTextEditorMixin = (superClass) =>
      * The properties are used e.g. as the tooltips for the editor toolbar
      * buttons.
      *
-     * @return {!RichTextEditorI18n}
+     * @type {!RichTextEditorI18n}
      */
     get i18n() {
       return super.i18n;

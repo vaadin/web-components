@@ -239,7 +239,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      *   total: '{count} items selected',
      * }
      * ```
-     * @return {!MultiSelectComboBoxI18n}
+     * @type {!MultiSelectComboBoxI18n}
      */
     get i18n() {
       return super.i18n;

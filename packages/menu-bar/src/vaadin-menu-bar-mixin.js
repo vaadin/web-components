@@ -190,7 +190,7 @@ export const MenuBarMixin = (superClass) =>
      *   moreOptions: 'More options'
      * }
      * ```
-     * @return {!MenuBarI18n}
+     * @type {!MenuBarI18n}
      */
     get i18n() {
       return super.i18n;

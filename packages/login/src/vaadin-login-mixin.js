@@ -151,7 +151,7 @@ export const LoginMixin = (superClass) =>
      *   additionalInformation: 'In case you need to provide some additional info for the user.'
      * }
      * ```
-     * @return {!LoginI18n}
+     * @type {!LoginI18n}
      */
     get i18n() {
       return super.i18n;

@@ -196,7 +196,7 @@ class Dashboard extends DashboardLayoutMixin(
    *   moveBackward: 'Move Backward',
    * }
    * ```
-   * @return {!DashboardI18n}
+   * @type {!DashboardI18n}
    */
   get i18n() {
     return super.i18n;

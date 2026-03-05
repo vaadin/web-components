@@ -369,7 +369,7 @@ export const DatePickerMixin = (subclass) =>
      *   }
      * }
      * ```
-     * @return {!DatePickerI18n}
+     * @type {!DatePickerI18n}
      */
     get i18n() {
       return super.i18n;
