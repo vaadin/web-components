@@ -13,7 +13,6 @@ export const DialogResizableMixin = (superClass) =>
       return {
         /**
          * Set to true to enable resizing the dialog by dragging the corners and edges.
-         * @type {boolean}
          */
         resizable: {
           type: Boolean,

@@ -134,7 +134,6 @@ export const GridMixin = (superClass) =>
          * Effectively, this disables the grid's virtual scrolling so that all the rows are rendered in the DOM at once.
          * If the grid has a large number of items, using the feature is discouraged to avoid performance issues.
          * @attr {boolean} all-rows-visible
-         * @type {boolean}
          */
         allRowsVisible: {
           type: Boolean,

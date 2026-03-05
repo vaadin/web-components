@@ -13,7 +13,6 @@ export const DialogBaseMixin = (superClass) =>
       return {
         /**
          * True if the dialog is visible and available for interaction.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -26,7 +25,6 @@ export const DialogBaseMixin = (superClass) =>
         /**
          * Set to true to disable closing dialog on outside click
          * @attr {boolean} no-close-on-outside-click
-         * @type {boolean}
          */
         noCloseOnOutsideClick: {
           type: Boolean,
@@ -36,7 +34,6 @@ export const DialogBaseMixin = (superClass) =>
         /**
          * Set to true to disable closing dialog on Escape press
          * @attr {boolean} no-close-on-esc
-         * @type {boolean}
          */
         noCloseOnEsc: {
           type: Boolean,
@@ -45,7 +42,6 @@ export const DialogBaseMixin = (superClass) =>
 
         /**
          * Set to true to remove backdrop and allow click events on background elements.
-         * @type {boolean}
          */
         modeless: {
           type: Boolean,
@@ -55,7 +51,6 @@ export const DialogBaseMixin = (superClass) =>
         /**
          * Set to true to disable focus trapping.
          * @attr {boolean} no-focus-trap
-         * @type {boolean}
          */
         noFocusTrap: {
           type: Boolean,
@@ -101,7 +96,6 @@ export const DialogBaseMixin = (superClass) =>
          * dialog will also adjust any programmatically configured size and position
          * so that it stays within the viewport.
          * @attr {boolean} keep-in-viewport
-         * @type {boolean}
          */
         keepInViewport: {
           type: Boolean,

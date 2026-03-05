@@ -31,7 +31,6 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
       /**
        * If set, the error message is shown. The message is hidden by default.
        * When set, it changes the disabled state of the submit button.
-       * @type {boolean}
        */
       error: {
         type: Boolean,

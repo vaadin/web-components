@@ -21,7 +21,6 @@ export const ProgressMixin = (superClass) =>
 
         /**
          * Minimum bound of the progress bar.
-         * @type {number}
          */
         min: {
           type: Number,
@@ -31,7 +30,6 @@ export const ProgressMixin = (superClass) =>
 
         /**
          * Maximum bound of the progress bar.
-         * @type {number}
          */
         max: {
           type: Number,
@@ -42,7 +40,6 @@ export const ProgressMixin = (superClass) =>
         /**
          * Indeterminate state of the progress bar.
          * This property takes precedence over other state properties (min, max, value).
-         * @type {boolean}
          */
         indeterminate: {
           type: Boolean,

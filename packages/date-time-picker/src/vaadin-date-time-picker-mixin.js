@@ -66,7 +66,6 @@ export const DateTimePickerMixin = (superClass) =>
          * - Minute precision `"YYYY-MM-DDThh:mm"` (default)
          * - Second precision `"YYYY-MM-DDThh:mm:ss"`
          * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
-         * @type {string}
          */
         value: {
           type: String,
@@ -201,7 +200,6 @@ export const DateTimePickerMixin = (superClass) =>
 
         /**
          * Set to true to make this element read-only.
-         * @type {boolean}
          */
         readonly: {
           type: Boolean,
@@ -212,7 +210,6 @@ export const DateTimePickerMixin = (superClass) =>
 
         /**
          * Specify that this control should have input focus when the page loads.
-         * @type {boolean}
          */
         autofocus: {
           type: Boolean,

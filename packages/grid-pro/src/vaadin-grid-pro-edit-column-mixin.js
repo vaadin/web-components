@@ -68,7 +68,6 @@ export const GridProEditColumnMixin = (superClass) =>
         /**
          * Path of the property used for the value of the editor component.
          * @attr {string} editor-value-path
-         * @type {string}
          */
         editorValuePath: {
           type: String,

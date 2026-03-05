@@ -39,7 +39,6 @@ export const ColumnBaseMixin = (superClass) =>
         /**
          * When true, the column is frozen. When a column inside of a column group is frozen,
          * all of the sibling columns inside the group will get frozen also.
-         * @type {boolean}
          */
         frozen: {
           type: Boolean,
@@ -55,7 +54,6 @@ export const ColumnBaseMixin = (superClass) =>
          *
          * Column can not be set as `frozen` and `frozenToEnd` at the same time.
          * @attr {boolean} frozen-to-end
-         * @type {boolean}
          */
         frozenToEnd: {
           type: Boolean,
@@ -71,7 +69,6 @@ export const ColumnBaseMixin = (superClass) =>
          * while navigating to help user identify the current row as uniquely as possible.
          *
          * @attr {boolean} row-header
-         * @type {boolean}
          */
         rowHeader: {
           type: Boolean,
@@ -128,7 +125,6 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * @type {boolean}
          * @protected
          */
         _lastFrozen: {
@@ -138,7 +134,6 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * @type {boolean}
          * @protected
          */
         _bodyContentHidden: {
@@ -148,7 +143,6 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * @type {boolean}
          * @protected
          */
         _firstFrozenToEnd: {
@@ -847,7 +841,6 @@ export const GridColumnMixin = (superClass) =>
         /**
          * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
          * @attr {number} flex-grow
-         * @type {number}
          */
         flexGrow: {
           type: Number,
@@ -914,7 +907,6 @@ export const GridColumnMixin = (superClass) =>
          *
          * The column width may still grow larger when `flexGrow` is not 0.
          * @attr {boolean} auto-width
-         * @type {boolean}
          */
         autoWidth: {
           type: Boolean,

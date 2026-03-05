@@ -110,7 +110,6 @@ class SideNavItem extends SideNavChildrenMixin(
       /**
        * Whether to show the child items or not
        *
-       * @type {boolean}
        */
       expanded: {
         type: Boolean,
@@ -129,7 +128,6 @@ class SideNavItem extends SideNavChildrenMixin(
        * Note that this only affects matching of the URLs path, not the base
        * origin or query parameters.
        *
-       * @type {boolean}
        * @attr {boolean} match-nested
        */
       matchNested: {
@@ -149,7 +147,6 @@ class SideNavItem extends SideNavChildrenMixin(
        * The state is updated when the item is added to the DOM or when the browser
        * navigates to a new page.
        *
-       * @type {boolean}
        */
       current: {
         type: Boolean,
@@ -169,7 +166,6 @@ class SideNavItem extends SideNavChildrenMixin(
        * page reload. This only works with supported routers, such as the one
        * provided in Vaadin apps, or when using the side nav `onNavigate` hook.
        *
-       * @type {boolean}
        * @attr {boolean} router-ignore
        */
       routerIgnore: {

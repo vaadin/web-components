@@ -89,7 +89,6 @@ class SideNav extends SideNavChildrenMixin(
       /**
        * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
        *
-       * @type {boolean}
        */
       collapsible: {
         type: Boolean,
@@ -100,7 +99,6 @@ class SideNav extends SideNavChildrenMixin(
       /**
        * Whether the side nav is collapsed. When collapsed, the items are hidden.
        *
-       * @type {boolean}
        */
       collapsed: {
         type: Boolean,

@@ -53,7 +53,6 @@ export const SelectBaseMixin = (superClass) =>
 
         /**
          * Set when the select is open
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -86,7 +85,6 @@ export const SelectBaseMixin = (superClass) =>
          * Hint: If you do not want to select any item by default, you can either set all
          * the values of inner vaadin-items, or set the vaadin-select value to
          * an inexistent value in the items list.
-         * @type {string}
          */
         value: {
           type: String,
@@ -116,7 +114,6 @@ export const SelectBaseMixin = (superClass) =>
 
         /**
          * When present, it specifies that the element is read-only.
-         * @type {boolean}
          */
         readonly: {
           type: Boolean,

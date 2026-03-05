@@ -14,7 +14,6 @@ export const SplitLayoutMixin = (superClass) =>
       return {
         /**
          * The split layout's orientation. Possible values are: `horizontal|vertical`.
-         * @type {string}
          */
         orientation: {
           type: String,

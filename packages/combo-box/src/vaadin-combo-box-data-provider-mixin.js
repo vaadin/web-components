@@ -16,7 +16,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         /**
          * Number of items fetched at a time from the dataprovider.
          * @attr {number} page-size
-         * @type {number}
          */
         pageSize: {
           type: Number,
@@ -27,7 +26,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
         /**
          * Total number of items.
-         * @type {number | undefined}
          */
         size: {
           type: Number,

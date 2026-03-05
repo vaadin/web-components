@@ -17,7 +17,6 @@ export const ColumnReorderingMixin = (superClass) =>
         /**
          * Set to true to allow column reordering.
          * @attr {boolean} column-reordering-allowed
-         * @type {boolean}
          */
         columnReorderingAllowed: {
           type: Boolean,

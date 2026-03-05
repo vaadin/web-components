@@ -52,7 +52,6 @@ export const MessageListMixin = (superClass) =>
 
         /**
          * When set to `true`, the message text is parsed as Markdown.
-         * @type {boolean}
          */
         markdown: {
           type: Boolean,
@@ -63,7 +62,6 @@ export const MessageListMixin = (superClass) =>
         /**
          * When set to `true`, new messages are announced to assistive technologies using ARIA live regions.
          * @attr {boolean} announce-messages
-         * @type {boolean}
          */
         announceMessages: {
           type: Boolean,

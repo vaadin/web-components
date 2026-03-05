@@ -48,7 +48,6 @@ export const AppLayoutMixin = (superclass) =>
          * - `true`, for desktop size views
          * - `false`, for mobile size views
          * @attr {boolean} drawer-opened
-         * @type {boolean}
          */
         drawerOpened: {
           type: Boolean,
@@ -62,7 +61,6 @@ export const AppLayoutMixin = (superclass) =>
         /**
          * Drawer is an overlay on top of the content
          * Controlled via CSS using `--vaadin-app-layout-drawer-overlay: true|false`;
-         * @type {boolean}
          */
         overlay: {
           type: Boolean,
@@ -79,7 +77,6 @@ export const AppLayoutMixin = (superclass) =>
          * - The default is `vaadin-router-location-changed` dispatched by Vaadin Router
          *
          * @attr {string} close-drawer-on
-         * @type {string}
          */
         closeDrawerOn: {
           type: String,

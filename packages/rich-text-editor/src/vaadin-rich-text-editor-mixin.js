@@ -116,7 +116,6 @@ export const RichTextEditorMixin = (superClass) =>
          * ```
          *
          * See also https://github.com/quilljs/delta for detailed documentation.
-         * @type {string}
          */
         value: {
           type: String,
@@ -136,7 +135,6 @@ export const RichTextEditorMixin = (superClass) =>
 
         /**
          * When true, the user can not modify, nor copy the editor content.
-         * @type {boolean}
          */
         disabled: {
           type: Boolean,
@@ -146,7 +144,6 @@ export const RichTextEditorMixin = (superClass) =>
 
         /**
          * When true, the user can not modify the editor content, but can copy it.
-         * @type {boolean}
          */
         readonly: {
           type: Boolean,

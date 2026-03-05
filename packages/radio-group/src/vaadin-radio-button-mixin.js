@@ -30,7 +30,6 @@ export const RadioButtonMixin = (superclass) =>
         /**
          * The name of the radio button.
          *
-         * @type {string}
          */
         name: {
           type: String,

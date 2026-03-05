@@ -57,7 +57,6 @@ class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       /**
        * The Markdown content.
        *
-       * @type {string}
        */
       content: {
         type: String,

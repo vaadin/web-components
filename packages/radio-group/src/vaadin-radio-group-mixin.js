@@ -36,7 +36,6 @@ export const RadioGroupMixin = (superclass) =>
         /**
          * The value of the radio group.
          *
-         * @type {string}
          */
         value: {
           type: String,
@@ -52,7 +51,6 @@ export const RadioGroupMixin = (superclass) =>
          * While the `disabled` property disables all radio buttons inside the group,
          * the `readonly` property disables only unchecked ones.
          *
-         * @type {boolean}
          */
         readonly: {
           type: Boolean,
@@ -63,7 +61,6 @@ export const RadioGroupMixin = (superclass) =>
         },
 
         /**
-         * @type {string}
          * @private
          */
         _fieldName: {

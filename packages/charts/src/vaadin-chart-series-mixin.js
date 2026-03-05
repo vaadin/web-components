@@ -71,7 +71,6 @@ export const ChartSeriesMixin = (superClass) =>
 
         /**
          * The name of the series as shown in the legend, tooltip etc.
-         * @type {string}
          */
         title: {
           type: String,

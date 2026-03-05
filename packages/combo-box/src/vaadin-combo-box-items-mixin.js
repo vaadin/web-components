@@ -68,7 +68,6 @@ export const ComboBoxItemsMixin = (superClass) =>
 
         /**
          * Filtering string the user has typed into the input field.
-         * @type {string}
          */
         filter: {
           type: String,
@@ -94,7 +93,6 @@ export const ComboBoxItemsMixin = (superClass) =>
          * The item label is also used for matching items when processing user
          * input, i.e., for filtering and selecting items.
          * @attr {string} item-label-path
-         * @type {string}
          */
         itemLabelPath: {
           type: String,
@@ -111,7 +109,6 @@ export const ComboBoxItemsMixin = (superClass) =>
          * The item value is used in the `value` property of the combo box,
          * to provide the form value.
          * @attr {string} item-value-path
-         * @type {string}
          */
         itemValuePath: {
           type: String,

@@ -30,7 +30,6 @@ export const IconMixin = (superClass) =>
          * See also [`name`](#/elements/vaadin-iconset#property-name) property of `vaadin-iconset`.
          *
          * @attr {string} icon
-         * @type {string}
          */
         icon: {
           type: String,
@@ -55,7 +54,6 @@ export const IconMixin = (superClass) =>
          * - a string in the format `data:image/svg+xml,<svg>...</svg>`. You may need to use the `encodeURIComponent`
          *   function for the SVG content passed
          *
-         * @type {string}
          */
         src: {
           type: String,
@@ -66,7 +64,6 @@ export const IconMixin = (superClass) =>
          * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
          * `src` property
          *
-         * @type {string}
          */
         symbol: {
           type: String,
@@ -79,7 +76,6 @@ export const IconMixin = (superClass) =>
          * Example: "fa-solid fa-user"
          *
          * @attr {string} icon-class
-         * @type {string}
          */
         iconClass: {
           type: String,
@@ -92,7 +88,6 @@ export const IconMixin = (superClass) =>
          *
          * Example: "e001"
          *
-         * @type {string}
          */
         char: {
           type: String,
@@ -104,7 +99,6 @@ export const IconMixin = (superClass) =>
          *
          * Example: "home".
          *
-         * @type {string}
          */
         ligature: {
           type: String,
@@ -115,7 +109,6 @@ export const IconMixin = (superClass) =>
          * The font family to use for the font icon.
          *
          * @attr {string} font-family
-         * @type {string}
          */
         fontFamily: {
           type: String,

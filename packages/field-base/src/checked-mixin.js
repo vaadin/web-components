@@ -21,7 +21,6 @@ export const CheckedMixin = (superclass) =>
       return {
         /**
          * True if the element is checked.
-         * @type {boolean}
          */
         checked: {
           type: Boolean,
