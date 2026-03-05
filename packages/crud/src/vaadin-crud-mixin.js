@@ -154,7 +154,6 @@ export const CrudMixin = (superClass) =>
          * Enables user to click on row to edit it.
          * Note: When enabled, auto-generated grid won't show the edit column.
          * @attr {boolean} edit-on-click
-         * @type {boolean}
          */
         editOnClick: {
           type: Boolean,
@@ -267,7 +266,6 @@ export const CrudMixin = (superClass) =>
         __isNew: Boolean,
 
         /**
-         * @type {boolean}
          * @protected
          */
         _fullscreen: {
@@ -277,7 +275,6 @@ export const CrudMixin = (superClass) =>
         },
 
         /**
-         * @type {string}
          * @protected
          */
         _fullscreenMediaQuery: {

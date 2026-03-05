@@ -42,7 +42,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         /**
          * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
          * @attr {number} flex-grow
-         * @type {number}
          */
         flexGrow: {
           type: Number,
@@ -53,7 +52,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         /**
          * When true, all the items are selected.
          * @attr {boolean} select-all
-         * @type {boolean}
          */
         selectAll: {
           type: Boolean,
@@ -65,7 +63,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         /**
          * When true, the active item gets automatically selected.
          * @attr {boolean} auto-select
-         * @type {boolean}
          */
         autoSelect: {
           type: Boolean,
@@ -76,7 +73,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         /**
          * When true, rows can be selected by dragging over the selection column.
          * @attr {boolean} drag-select
-         * @type {boolean}
          */
         dragSelect: {
           type: Boolean,

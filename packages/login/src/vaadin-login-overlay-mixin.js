@@ -14,7 +14,6 @@ export const LoginOverlayMixin = (superClass) =>
       return {
         /**
          * Defines the application description
-         * @type {string}
          */
         description: {
           type: String,
@@ -24,7 +23,6 @@ export const LoginOverlayMixin = (superClass) =>
 
         /**
          * True if the overlay is currently displayed.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -35,7 +33,6 @@ export const LoginOverlayMixin = (superClass) =>
 
         /**
          * Defines the application title
-         * @type {string}
          */
         title: {
           type: String,

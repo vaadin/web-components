@@ -56,7 +56,6 @@ export const LoginMixin = (superClass) =>
          * If set, disable the "Log in" button and prevent user from submitting login form.
          * It is re-enabled automatically, when error is set to true, allowing form resubmission
          * after user makes changes.
-         * @type {boolean}
          */
         disabled: {
           type: Boolean,
@@ -67,7 +66,6 @@ export const LoginMixin = (superClass) =>
         /**
          * If set, the error message is shown. The message is hidden by default.
          * When set, it changes the disabled state of the submit button.
-         * @type {boolean}
          */
         error: {
           type: Boolean,
@@ -78,7 +76,6 @@ export const LoginMixin = (superClass) =>
 
         /**
          * Whether to hide the forgot password button. The button is visible by default.
-         * @type {boolean}
          * @attr {boolean} no-forgot-password
          */
         noForgotPassword: {
@@ -88,7 +85,6 @@ export const LoginMixin = (superClass) =>
 
         /**
          * If set, the user name field automatically receives focus when the component is attached to the document.
-         * @type {boolean}
          * @attr {boolean} no-autofocus
          */
         noAutofocus: {

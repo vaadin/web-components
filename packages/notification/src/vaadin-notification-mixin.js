@@ -20,7 +20,6 @@ export const NotificationContainerMixin = (superClass) =>
       return {
         /**
          * True when the container is opened
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -127,7 +126,6 @@ export const NotificationMixin = (superClass) =>
         /**
          * The duration in milliseconds to show the notification.
          * Set to `0` or a negative number to disable the notification auto-closing.
-         * @type {number}
          */
         duration: {
           type: Number,
@@ -137,7 +135,6 @@ export const NotificationMixin = (superClass) =>
 
         /**
          * True if the notification is currently displayed.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,

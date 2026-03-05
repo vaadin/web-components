@@ -27,7 +27,6 @@ export const ContextMenuMixin = (superClass) =>
 
         /**
          * True if the overlay is currently displayed.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -41,7 +40,6 @@ export const ContextMenuMixin = (superClass) =>
         /**
          * Event name to listen for opening the context menu.
          * @attr {string} open-on
-         * @type {string}
          */
         openOn: {
           type: String,
@@ -67,7 +65,6 @@ export const ContextMenuMixin = (superClass) =>
         /**
          * Event name to listen for closing the context menu.
          * @attr {string} close-on
-         * @type {string}
          */
         closeOn: {
           type: String,

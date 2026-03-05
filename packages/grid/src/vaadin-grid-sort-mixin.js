@@ -16,7 +16,6 @@ export const SortMixin = (superClass) =>
         /**
          * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
          * @attr {boolean} multi-sort
-         * @type {boolean}
          */
         multiSort: {
           type: Boolean,
@@ -48,7 +47,6 @@ export const SortMixin = (superClass) =>
          * `multiSort` property. If `multiSortOnShiftClick` is true, the multiSort property is effectively ignored.
          *
          * @attr {boolean} multi-sort-on-shift-click
-         * @type {boolean}
          */
         multiSortOnShiftClick: {
           type: Boolean,

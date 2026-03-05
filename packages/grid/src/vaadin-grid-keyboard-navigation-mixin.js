@@ -82,7 +82,6 @@ export const KeyboardNavigationMixin = (superClass) =>
          * the grid from receiving focus, allowing the user to switch focus to
          * controls in adjacent cells, rather than focussing the outer cell
          * itself.
-         * @type {boolean}
          * @private
          */
         interacting: {

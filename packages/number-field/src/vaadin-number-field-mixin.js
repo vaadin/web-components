@@ -44,7 +44,6 @@ export const NumberFieldMixin = (superClass) =>
 
         /**
          * Specifies the allowed number intervals of the field.
-         * @type {number}
          */
         step: {
           type: Number,

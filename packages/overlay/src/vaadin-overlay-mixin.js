@@ -62,7 +62,6 @@ export const OverlayMixin = (superClass) =>
         /**
          * When true the overlay won't disable the main content, showing
          * it doesn't change the functionality of the user interface.
-         * @type {boolean}
          */
         modeless: {
           type: Boolean,
@@ -75,7 +74,6 @@ export const OverlayMixin = (superClass) =>
         /**
          * When set to true, the overlay is hidden. This also closes the overlay
          * immediately in case there is a closing animation in progress.
-         * @type {boolean}
          */
         hidden: {
           type: Boolean,
@@ -86,7 +84,6 @@ export const OverlayMixin = (superClass) =>
 
         /**
          * When true the overlay has backdrop on top of content when opened.
-         * @type {boolean}
          */
         withBackdrop: {
           type: Boolean,

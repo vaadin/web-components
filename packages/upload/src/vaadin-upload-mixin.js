@@ -114,7 +114,6 @@ export const UploadMixin = (superClass) =>
       return {
         /**
          * If true, the user cannot interact with this element.
-         * @type {boolean}
          */
         disabled: {
           type: Boolean,
@@ -129,7 +128,6 @@ export const UploadMixin = (superClass) =>
          * it false means that drop is enabled even in touch-devices, and true
          * disables drop in all devices.
          *
-         * @type {boolean}
          * @default true in touch-devices, false otherwise.
          */
         nodrop: {
@@ -141,7 +139,6 @@ export const UploadMixin = (superClass) =>
         /**
          * The server URL. The default value is an empty string, which means that
          * _window.location_ will be used.
-         * @type {string}
          */
         target: {
           type: String,
@@ -173,7 +170,6 @@ export const UploadMixin = (superClass) =>
         /**
          * Max time in milliseconds for the entire upload process, if exceeded the
          * request will be aborted. Zero means that there is no timeout.
-         * @type {number}
          */
         timeout: {
           type: Number,
@@ -221,7 +217,6 @@ export const UploadMixin = (superClass) =>
          * Limit of files to upload, by default it is unlimited. If the value is
          * set to one, native file browser will prevent selecting multiple files.
          * @attr {number} max-files
-         * @type {number}
          */
         maxFiles: {
           type: Number,
@@ -232,7 +227,6 @@ export const UploadMixin = (superClass) =>
         /**
          * Specifies if the maximum number of files have been uploaded
          * @attr {boolean} max-files-reached
-         * @type {boolean}
          */
         maxFilesReached: {
           type: Boolean,
@@ -249,7 +243,6 @@ export const UploadMixin = (superClass) =>
          * Notice that MIME types are widely supported, while file extensions
          * are only implemented in certain browsers, so avoid using it.
          * Example: accept="video/*,image/tiff" or accept=".pdf,audio/mp3"
-         * @type {string}
          */
         accept: {
           type: String,
@@ -262,7 +255,6 @@ export const UploadMixin = (superClass) =>
          * sending the request. Obviously you need to do the same validation in
          * the server-side and be sure that they are aligned.
          * @attr {number} max-file-size
-         * @type {number}
          */
         maxFileSize: {
           type: Number,
@@ -284,7 +276,6 @@ export const UploadMixin = (superClass) =>
          * Specifies the 'name' property at Content-Disposition for multipart uploads.
          * This property is ignored when uploadFormat is 'raw'.
          * @attr {string} form-data-name
-         * @type {string}
          */
         formDataName: {
           type: String,
@@ -295,7 +286,6 @@ export const UploadMixin = (superClass) =>
          * Prevents upload(s) from immediately uploading upon adding file(s).
          * When set, you must manually trigger uploads using the `uploadFiles` method
          * @attr {boolean} no-auto
-         * @type {boolean}
          */
         noAuto: {
           type: Boolean,
@@ -305,7 +295,6 @@ export const UploadMixin = (superClass) =>
         /**
          * Set the withCredentials flag on the request.
          * @attr {boolean} with-credentials
-         * @type {boolean}
          */
         withCredentials: {
           type: Boolean,
@@ -317,7 +306,6 @@ export const UploadMixin = (superClass) =>
          * - 'raw': Send file as raw binary data with the file's MIME type as Content-Type (default)
          * - 'multipart': Send file using multipart/form-data encoding
          * @attr {string} upload-format
-         * @type {string}
          */
         uploadFormat: {
           type: String,
@@ -330,7 +318,6 @@ export const UploadMixin = (superClass) =>
          * uploading large numbers of files. Files exceeding this limit will be queued
          * and uploaded as active uploads complete.
          * @attr {number} max-concurrent-uploads
-         * @type {number}
          */
         maxConcurrentUploads: {
           type: Number,

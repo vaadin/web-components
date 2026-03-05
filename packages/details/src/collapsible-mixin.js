@@ -17,7 +17,6 @@ export const CollapsibleMixin = (superClass) =>
       return {
         /**
          * If true, the collapsible content is visible.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,

@@ -49,7 +49,6 @@ export const ComboBoxMixin = (superClass) =>
          * Also, when `value` is set programmatically, the input value will be set
          * to reflect that value.
          * @attr {boolean} allow-custom-value
-         * @type {boolean}
          */
         allowCustomValue: {
           type: Boolean,
@@ -58,7 +57,6 @@ export const ComboBoxMixin = (superClass) =>
 
         /**
          * When set to `true`, "loading" attribute is added to host and the overlay element.
-         * @type {boolean}
          */
         loading: {
           type: Boolean,

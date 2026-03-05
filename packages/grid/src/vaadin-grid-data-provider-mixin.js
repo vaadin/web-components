@@ -18,7 +18,6 @@ export const DataProviderMixin = (superClass) =>
         /**
          * The number of root-level items in the grid.
          * @attr {number} size
-         * @type {number}
          */
         size: {
           type: Number,
@@ -38,7 +37,6 @@ export const DataProviderMixin = (superClass) =>
         /**
          * Number of items fetched at a time from the dataprovider.
          * @attr {number} page-size
-         * @type {number}
          */
         pageSize: {
           type: Number,

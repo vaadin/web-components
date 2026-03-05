@@ -15,7 +15,6 @@ export const GridTreeToggleMixin = (superClass) =>
         /**
          * Current level of the tree represented with a horizontal offset
          * of the toggle button.
-         * @type {number}
          */
         level: {
           type: Number,
@@ -26,7 +25,6 @@ export const GridTreeToggleMixin = (superClass) =>
 
         /**
          * Hides the toggle icon and disables toggling a tree sublevel.
-         * @type {boolean}
          */
         leaf: {
           type: Boolean,
@@ -36,7 +34,6 @@ export const GridTreeToggleMixin = (superClass) =>
 
         /**
          * Sublevel toggle state.
-         * @type {boolean}
          */
         expanded: {
           type: Boolean,

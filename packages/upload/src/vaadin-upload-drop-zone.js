@@ -81,7 +81,6 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       /**
        * Whether the drop zone is disabled.
        * Returns true if either explicitly disabled, manager is disabled, or no manager is set.
-       * @type {boolean}
        */
       disabled: {
         type: Boolean,
@@ -90,7 +89,6 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
 
       /**
        * True when max files has been reached on the manager.
-       * @type {boolean}
        * @readonly
        */
       maxFilesReached: {

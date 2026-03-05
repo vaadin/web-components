@@ -26,7 +26,6 @@ export const ComboBoxBaseMixin = (superClass) =>
       return {
         /**
          * True if the dropdown is open, false otherwise.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -48,7 +47,6 @@ export const ComboBoxBaseMixin = (superClass) =>
 
         /**
          * When present, it specifies that the field is read-only.
-         * @type {boolean}
          */
         readonly: {
           type: Boolean,
@@ -57,7 +55,6 @@ export const ComboBoxBaseMixin = (superClass) =>
         },
 
         /**
-         * @type {number}
          * @protected
          */
         _focusedIndex: {

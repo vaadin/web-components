@@ -24,7 +24,6 @@ export const DashboardLayoutMixin = (superClass) =>
          * Whether the dashboard layout is dense.
          *
          * @attr {boolean} dense-layout
-         * @type {boolean}
          */
         denseLayout: {
           type: Boolean,

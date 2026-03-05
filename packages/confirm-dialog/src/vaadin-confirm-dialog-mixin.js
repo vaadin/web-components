@@ -31,7 +31,6 @@ export const ConfirmDialogMixin = (superClass) =>
 
         /**
          * True if the dialog is visible and available for interaction.
-         * @type {boolean}
          */
         opened: {
           type: Boolean,
@@ -43,7 +42,6 @@ export const ConfirmDialogMixin = (superClass) =>
 
         /**
          * Set the confirmation dialog title.
-         * @type {string}
          */
         header: {
           type: String,
@@ -62,7 +60,6 @@ export const ConfirmDialogMixin = (superClass) =>
          * Text displayed on confirm-button.
          * This only affects the default button, custom slotted buttons will not be altered.
          * @attr {string} confirm-text
-         * @type {string}
          */
         confirmText: {
           type: String,
@@ -73,7 +70,6 @@ export const ConfirmDialogMixin = (superClass) =>
          * Theme for a confirm-button.
          * This only affects the default button, custom slotted buttons will not be altered.
          * @attr {string} confirm-theme
-         * @type {string}
          */
         confirmTheme: {
           type: String,
@@ -83,7 +79,6 @@ export const ConfirmDialogMixin = (superClass) =>
         /**
          * Set to true to disable closing dialog on Escape press
          * @attr {boolean} no-close-on-esc
-         * @type {boolean}
          */
         noCloseOnEsc: {
           type: Boolean,
@@ -93,7 +88,6 @@ export const ConfirmDialogMixin = (superClass) =>
         /**
          * Whether to show reject button or not.
          * @attr {boolean} reject-button-visible
-         * @type {boolean}
          */
         rejectButtonVisible: {
           type: Boolean,
@@ -105,7 +99,6 @@ export const ConfirmDialogMixin = (superClass) =>
          * Text displayed on reject-button.
          * This only affects the default button, custom slotted buttons will not be altered.
          * @attr {string} reject-text
-         * @type {string}
          */
         rejectText: {
           type: String,
@@ -116,7 +109,6 @@ export const ConfirmDialogMixin = (superClass) =>
          * Theme for a reject-button.
          * This only affects the default button, custom slotted buttons will not be altered.
          * @attr {string} reject-theme
-         * @type {string}
          */
         rejectTheme: {
           type: String,
@@ -126,7 +118,6 @@ export const ConfirmDialogMixin = (superClass) =>
         /**
          * Whether to show cancel button or not.
          * @attr {boolean} cancel-button-visible
-         * @type {boolean}
          */
         cancelButtonVisible: {
           type: Boolean,
@@ -138,7 +129,6 @@ export const ConfirmDialogMixin = (superClass) =>
          * Text displayed on cancel-button.
          * This only affects the default button, custom slotted buttons will not be altered.
          * @attr {string} cancel-text
-         * @type {string}
          */
         cancelText: {
           type: String,
@@ -149,7 +139,6 @@ export const ConfirmDialogMixin = (superClass) =>
          * Theme for a cancel-button.
          * This only affects the default button, custom slotted buttons will not be altered.
          * @attr {string} cancel-theme
-         * @type {string}
          */
         cancelTheme: {
           type: String,

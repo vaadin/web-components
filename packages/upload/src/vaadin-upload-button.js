@@ -101,7 +101,6 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
       /**
        * Capture attribute for mobile file input.
-       * @type {string}
        */
       capture: {
         type: String,
@@ -109,7 +108,6 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
       /**
        * True when max files has been reached on the manager.
-       * @type {boolean}
        */
       maxFilesReached: {
         type: Boolean,

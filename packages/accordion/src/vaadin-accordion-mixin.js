@@ -21,7 +21,6 @@ export const AccordionMixin = (superClass) =>
          * The index of currently opened panel. First panel is opened by
          * default. Only one panel can be opened at the same time.
          * Setting null or undefined closes all the accordion panels.
-         * @type {number}
          */
         opened: {
           type: Number,

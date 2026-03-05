@@ -31,7 +31,6 @@ export const MessageInputMixin = (superClass) =>
 
         /**
          * Set to true to disable this element.
-         * @type {boolean}
          */
         disabled: {
           type: Boolean,

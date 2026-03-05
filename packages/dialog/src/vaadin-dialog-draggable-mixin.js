@@ -23,7 +23,6 @@ export const DialogDraggableMixin = (superClass) =>
          * but still have its children non-draggable (by default), mark it with
          * "`draggable-leaf-only`" class name.
          *
-         * @type {boolean}
          */
         draggable: {
           type: Boolean,

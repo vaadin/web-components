@@ -23,7 +23,6 @@ export const ItemMixin = (superClass) =>
          * Used for mixin detection because `instanceof` does not work with mixins.
          * e.g. in VaadinListMixin it filters items by using the
          * `element._hasVaadinItemMixin` condition.
-         * @type {boolean}
          */
         _hasVaadinItemMixin: {
           value: true,
@@ -31,7 +30,6 @@ export const ItemMixin = (superClass) =>
 
         /**
          * If true, the item is in selected state.
-         * @type {boolean}
          */
         selected: {
           type: Boolean,

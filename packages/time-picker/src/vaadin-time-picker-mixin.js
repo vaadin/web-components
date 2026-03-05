@@ -43,7 +43,6 @@ export const TimePickerMixin = (superClass) =>
          * - `hh:mm` (default)
          * - `hh:mm:ss`
          * - `hh:mm:ss.fff`
-         * @type {string}
          */
         value: {
           type: String,
@@ -59,7 +58,6 @@ export const TimePickerMixin = (superClass) =>
          * - `hh:mm`
          * - `hh:mm:ss`
          * - `hh:mm:ss.fff`
-         * @type {string}
          */
         min: {
           type: String,
@@ -74,7 +72,6 @@ export const TimePickerMixin = (superClass) =>
          * - `hh:mm`
          * - `hh:mm:ss`
          * - `hh:mm:ss.fff`
-         * @type {string}
          */
         max: {
           type: String,

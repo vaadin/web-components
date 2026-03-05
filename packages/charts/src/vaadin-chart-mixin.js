@@ -222,7 +222,6 @@ export const ChartMixin = (superClass) =>
 
         /**
          * Represents the title of the chart.
-         * @type {string}
          */
         title: {
           type: String,
@@ -276,7 +275,6 @@ export const ChartMixin = (superClass) =>
         /**
          * Specifies the message displayed on a chart without displayable data.
          * @attr {string} empty-text
-         * @type {string}
          */
         emptyText: {
           type: String,

@@ -119,7 +119,6 @@ export const DatePickerMixin = (subclass) =>
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
          *
-         * @type {string}
          */
         value: {
           type: String,
@@ -169,7 +168,6 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
-         * @type {boolean}
          * @protected
          */
         _fullscreen: {
@@ -179,7 +177,6 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
-         * @type {string}
          * @protected
          */
         _fullscreenMediaQuery: {

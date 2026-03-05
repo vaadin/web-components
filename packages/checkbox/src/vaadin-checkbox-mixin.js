@@ -34,7 +34,6 @@ export const CheckboxMixin = (superclass) =>
          *
          * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
          *
-         * @type {boolean}
          */
         indeterminate: {
           type: Boolean,
@@ -46,7 +45,6 @@ export const CheckboxMixin = (superclass) =>
         /**
          * The name of the checkbox.
          *
-         * @type {string}
          */
         name: {
           type: String,
