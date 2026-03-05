@@ -386,6 +386,11 @@ export class IronListAdapter {
       if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
         this._scrollTop += fviOffsetBefore - fviOffsetAfter;
       }
+
+      // Skip the next virtual index offset adjustment to prevent the async
+      // scroll event (caused by the scrollToIndex + _scrollTop change above) from
+      // disrupting the restored scroll position.
+      this.__skipNextVirtualIndexAdjust = true;
     }
 
     this.__preventElementUpdates = false;

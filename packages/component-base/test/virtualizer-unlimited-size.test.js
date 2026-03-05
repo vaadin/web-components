@@ -267,8 +267,7 @@ describe('unlimited size', () => {
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
-  // FIXME: Fails due to a scroll offset reset caused by _adjustVirtualIndexOffset on scroll event.
-  it.skip('should preserve scroll position when size decrease does not affect any rendered indexes', async () => {
+  it('should preserve scroll position when size decrease does not affect any rendered indexes', async () => {
     // Scroll to an index and add an additional scroll offset.
     const index = virtualizer.size - 2000;
     virtualizer.scrollToIndex(index);
@@ -282,13 +281,24 @@ describe('unlimited size', () => {
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
-  // FIXME: Fails due to a scroll offset reset caused by _adjustVirtualIndexOffset on scroll event.
-  it.skip('should preserve scroll position on size increase', async () => {
+  it('should preserve scroll position on size increase', async () => {
     const index = virtualizer.size - 2000;
     virtualizer.scrollToIndex(index);
     scrollTarget.scrollTop += 10;
 
     virtualizer.size += 1000;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  it('should preserve scroll position on large size decrease', async () => {
+    const index = 300000;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
+
+    virtualizer.size = 500000;
     await oneEvent(scrollTarget, 'scroll');
 
     const item = elementsContainer.querySelector(`#item-${index}`);
