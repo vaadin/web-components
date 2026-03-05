@@ -70,7 +70,7 @@ export const SideNavChildrenMixin = (superClass) =>
      *   toggle: 'Toggle child items'
      * }
      * ```
-     * @return {!SideNavI18n}
+     * @type {!SideNavI18n}
      */
     get i18n() {
       return super.i18n;

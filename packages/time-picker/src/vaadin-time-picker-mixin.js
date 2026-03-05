@@ -177,7 +177,7 @@ export const TimePickerMixin = (superClass) =>
      * NOTE: `formatTime` and `parseTime` must be implemented in a
      * compatible manner to ensure the component works properly.
      *
-     * @return {!TimePickerI18n}
+     * @type {!TimePickerI18n}
      */
     get i18n() {
       return super.i18n;

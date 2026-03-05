@@ -111,7 +111,7 @@ export const AppLayoutMixin = (superclass) =>
      *   drawer: 'Drawer'
      * }
      * ```
-     * @return {!AppLayoutI18n}
+     * @type {!AppLayoutI18n}
      */
     get i18n() {
       return super.i18n;

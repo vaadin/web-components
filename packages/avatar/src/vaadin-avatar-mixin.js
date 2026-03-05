@@ -102,7 +102,7 @@ export const AvatarMixin = (superClass) =>
      *   anonymous: 'anonymous'
      * }
      * ```
-     * @return {!AvatarI18n}
+     * @type {!AvatarI18n}
      */
     get i18n() {
       return super.i18n;

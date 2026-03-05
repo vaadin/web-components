@@ -79,22 +79,12 @@ export const I18nMixin = (defaultI18n, superClass) =>
      * Should be overridden by subclasses to provide a custom JSDoc with the
      * default I18N properties.
      *
-     * @returns {Object}
+     * @type {Object}
      */
     get i18n() {
       return this.__customI18n;
     }
 
-    /**
-     * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
-     * just the individual properties you want to change.
-     *
-     * Should be overridden by subclasses to provide a custom JSDoc with the
-     * default I18N properties.
-     *
-     * @param {Object} value
-     */
     set i18n(value) {
       if (value === this.__customI18n) {
         return;

@@ -76,7 +76,7 @@ export const MessageInputMixin = (superClass) =>
      *   message: 'Message'
      * }
      * ```
-     * @return {!MessageInputI18n}
+     * @type {!MessageInputI18n}
      */
     get i18n() {
       return super.i18n;

@@ -443,7 +443,7 @@ export const UploadMixin = (superClass) =>
      *   }
      * }
      * ```
-     * @return {!UploadI18n}
+     * @type {!UploadI18n}
      */
     get i18n() {
       return super.i18n;

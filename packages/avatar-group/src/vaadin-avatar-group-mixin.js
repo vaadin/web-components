@@ -127,7 +127,7 @@ export const AvatarGroupMixin = (superClass) =>
      *   left: '{user} left'
      * }
      * ```
-     * @return {!AvatarGroupI18n}
+     * @type {!AvatarGroupI18n}
      */
     get i18n() {
       return super.i18n;
