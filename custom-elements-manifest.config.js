@@ -307,10 +307,13 @@ export default {
                 .filter((member) => !ignoredMembers.includes(member.name))
                 .filter((member) => !(member.static && ignoredStaticMembers.includes(member.name)))
                 .map((member) => {
-                  if (member.kind === 'field' && member.attribute) {
-                    return { ...member, attribute: camelToDash(member.attribute) };
+                  // Default privacy to 'public' for members that passed the filter
+                  // (e.g., inherited members from mixins may lack an explicit privacy)
+                  const normalized = member.privacy ? member : { ...member, privacy: 'public' };
+                  if (normalized.kind === 'field' && normalized.attribute) {
+                    return { ...normalized, attribute: camelToDash(normalized.attribute) };
                   }
-                  return member;
+                  return normalized;
                 })
                 .sort(sortName);
             }
