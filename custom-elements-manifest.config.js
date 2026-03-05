@@ -217,6 +217,53 @@ function classPrivacyPlugin() {
   };
 }
 
+function copyMissingItems(target, source, key) {
+  const existing = new Set((target[key] || []).map((item) => item.name));
+  let changed = false;
+  for (const item of source[key] || []) {
+    if (!existing.has(item.name)) {
+      target[key] ||= [];
+      target[key].push({ ...item });
+      existing.add(item.name);
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+function copyMissingFromParents(decl, allDeclarations) {
+  const parentRefs = [...(decl.mixins || [])];
+  if (decl.superclass?.name) {
+    parentRefs.push(decl.superclass);
+  }
+
+  let changed = false;
+  for (const parentRef of parentRefs) {
+    const parentDecl = allDeclarations.get(parentRef.name);
+    if (!parentDecl) continue;
+    changed = copyMissingItems(decl, parentDecl, 'members') || changed;
+    changed = copyMissingItems(decl, parentDecl, 'attributes') || changed;
+  }
+  return changed;
+}
+
+/**
+ * Copy missing members and attributes from mixin/superclass declarations
+ * to class declarations. Runs multiple passes to handle multi-level
+ * inheritance chains (e.g., EmailField → TextField → FieldMixin → LabelMixin).
+ */
+function resolveInheritedMembers(allDeclarations) {
+  const classDeclarations = [...allDeclarations.values()].filter((d) => d.kind === 'class');
+
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const decl of classDeclarations) {
+      changed = copyMissingFromParents(decl, allDeclarations) || changed;
+    }
+  }
+}
+
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
@@ -227,6 +274,18 @@ export default {
     readonlyPlugin(),
     {
       packageLinkPhase({ customElementsManifest }) {
+        const allDeclarations = new Map();
+        for (const mod of customElementsManifest.modules) {
+          for (const decl of mod.declarations || []) {
+            allDeclarations.set(decl.name, decl);
+          }
+        }
+
+        // Resolve missing inherited members from mixins and superclasses.
+        // The analyzer only follows inheritedFrom one level deep, so members
+        // inherited through 2+ levels are dropped from class declarations.
+        resolveInheritedMembers(allDeclarations);
+
         for (const definition of customElementsManifest.modules) {
           // Filter out class declarations marked as @private or @protected
           const privateClassNames = new Set(
