@@ -177,7 +177,6 @@ export const ChartMixin = (superClass) =>
          * Defaults to `undefined`
          *
          * @attr {left|right|top|bottom} category-position
-         * @type {ChartCategoryPosition | undefined}
          */
         categoryPosition: {
           type: String,
@@ -202,7 +201,6 @@ export const ChartMixin = (superClass) =>
          * If "stack" property is not defined on the vaadin-chart-series elements, then series will be put into
          * the default stack.
          * @attr {normal|percent} stacking
-         * @type {ChartStacking | undefined}
          */
         stacking: {
           type: String,
