@@ -48,8 +48,6 @@ export declare class SelectBaseMixinClass {
    *
    * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
    * To render the item with a custom component, provide a tag name by the `component` property.
-   *
-   * @type {!Array<!SelectItem>}
    */
   items: SelectItem[] | null | undefined;
 

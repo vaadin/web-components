@@ -157,7 +157,6 @@ class DashboardWidget extends DashboardItemMixin(
        * The title of the widget.
        *
        * @attr {string} widget-title
-       * @type {string | null | undefined}
        */
       widgetTitle: {
         type: String,

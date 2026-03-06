@@ -250,7 +250,6 @@ export const ChartMixin = (superClass) =>
 
         /**
          * Represents the subtitle of the chart.
-         * @type {string | undefined}
          */
         subtitle: {
           type: String,

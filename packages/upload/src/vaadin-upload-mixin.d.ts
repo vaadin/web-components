@@ -273,7 +273,6 @@ export declare class UploadMixinClass {
    * }
    * ```
    *
-   * @type {!UploadI18n}
    * @default {English}
    */
   i18n: UploadI18n;
