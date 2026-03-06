@@ -129,6 +129,73 @@ describe('color-scheme', () => {
     });
   });
 
+  describe('backwards compatibility: light-only override', () => {
+    let style;
+
+    before(() => {
+      // Simulate a user overriding only the light value
+      style = document.createElement('style');
+      style.textContent = `
+        html {
+          --lumo-base-color: pink;
+        }
+      `;
+      document.head.appendChild(style);
+    });
+
+    after(() => {
+      style.remove();
+    });
+
+    it('should use the overridden value in light mode', () => {
+      const el = fixtureSync('<div style="background-color: var(--lumo-base-color)"></div>');
+      // Pink in computed style
+      expect(getColor(el, 'background-color')).to.not.equal(WHITE);
+    });
+
+    it('should use the dark fallback (not the light override) in dark mode', () => {
+      document.documentElement.setAttribute('theme', 'dark');
+      const el = fixtureSync('<div style="background-color: var(--lumo-base-color)"></div>');
+      const bg = getColor(el, 'background-color');
+      // Should NOT be pink — the dark fallback block should win
+      expect(bg).to.not.equal('rgb(255, 192, 203)');
+      // Should be the Lumo dark base color
+      expect(bg).to.not.equal(WHITE);
+    });
+  });
+
+  describe('backwards compatibility: light and dark override', () => {
+    let style;
+
+    before(() => {
+      style = document.createElement('style');
+      style.textContent = `
+        html {
+          --lumo-base-color: pink;
+        }
+        html[theme~='dark'] {
+          --lumo-base-color: darkslategray;
+        }
+      `;
+      document.head.appendChild(style);
+    });
+
+    after(() => {
+      style.remove();
+    });
+
+    it('should use the light override in light mode', () => {
+      const el = fixtureSync('<div style="background-color: var(--lumo-base-color)"></div>');
+      expect(getColor(el, 'background-color')).to.equal('rgb(255, 192, 203)');
+    });
+
+    it('should use the dark override in dark mode', () => {
+      document.documentElement.setAttribute('theme', 'dark');
+      const el = fixtureSync('<div style="background-color: var(--lumo-base-color)"></div>');
+      expect(getColor(el, 'background-color')).to.equal('rgb(47, 79, 79)');
+    });
+  });
+
   describe('light-dark mode', () => {
     it('should set color-scheme to light dark', () => {
       const el = fixtureSync('<div theme="light-dark"></div>');
