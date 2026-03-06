@@ -8,7 +8,7 @@ import { TanStackAdapter } from './virtualizer-tanstack-adapter.js';
 export class Virtualizer {
   /**
    * @typedef {Object} VirtualizerConfig
-   * @property {Function} createElement Function that returns the given number of new elements
+   * @property {Function} createElements Function that returns the given number of new elements
    * @property {Function} updateElement Function that updates the element at a specific index
    * @property {HTMLElement} scrollTarget Reference to the scrolling element
    * @property {HTMLElement} scrollContainer Reference to a wrapper for the item elements (or a slot) inside the scrollTarget
