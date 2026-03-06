@@ -56,6 +56,7 @@ export const overlayStyles = css`
   }
 
   [part='overlay'] {
+    color: var(--vaadin-overlay-text-color, var(--vaadin-text-color));
     background: var(--vaadin-overlay-background, var(--vaadin-background-color));
     border: var(--vaadin-overlay-border-width, 1px) solid
       var(--vaadin-overlay-border-color, var(--vaadin-border-color-secondary));
@@ -69,7 +70,6 @@ export const overlayStyles = css`
     -webkit-tap-highlight-color: initial;
 
     /* CSS reset for font styles */
-    color: initial;
     font: initial;
     letter-spacing: initial;
     text-align: initial;

@@ -5,6 +5,7 @@ import '@vaadin/checkbox';
 import '@vaadin/checkbox-group';
 import '@vaadin/combo-box';
 import '@vaadin/date-time-picker';
+import '@vaadin/confirm-dialog';
 import '@vaadin/grid';
 import '@vaadin/grid/src/vaadin-grid-selection-column.js';
 import '@vaadin/horizontal-layout';
@@ -212,6 +213,19 @@ function initView(view) {
   grid.querySelector('vaadin-grid-column.avatar').renderer = (root, _, model) => {
     root.innerHTML = `<vaadin-avatar name="${model.item.name}" color-index="${model.index % 9}"></vaadin-avatar>`;
   };
+
+  // Confirm Dialog
+  view.querySelector('#open-confirm-dialog').addEventListener('click', () => {
+    const temp = document.createElement('div');
+    temp.innerHTML = `<vaadin-confirm-dialog id="confirm-dialog-example" header="Unsaved Changes" confirm-text="Save" reject-text="Discard"
+      cancel-button-visible reject-button-visible>
+      Do you want to save or discard the changes? That is the question. But whatever you choose, there will be no
+      consequences.
+    </vaadin-confirm-dialog>`;
+    const dialog = temp.firstElementChild;
+    document.body.append(dialog);
+    dialog.opened = true;
+  });
 }
 
 customElements.define(
@@ -471,6 +485,10 @@ customElements.define(
                       <vaadin-tab>Preferences</vaadin-tab>
                       <vaadin-tab>Settings</vaadin-tab>
                     </vaadin-tabs>
+                  </div>
+
+                  <div class="aura-surface component">
+                    <vaadin-button id="open-confirm-dialog">Open Dialog</vaadin-button>
                   </div>
 
                   <div class="aura-surface component wide">
