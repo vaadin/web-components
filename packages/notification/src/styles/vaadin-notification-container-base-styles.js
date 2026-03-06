@@ -71,6 +71,7 @@ export const notificationContainerStyles = css`
     position: fixed;
     top: 50%;
     left: 50%;
+    translate: round(-50%, 1px) round(-50%, 1px);
     translate: -50% -50%;
     max-width: calc(100% - var(--_padding) * 2);
   }
