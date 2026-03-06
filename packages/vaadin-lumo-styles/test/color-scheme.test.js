@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 // Ensure registered custom properties are available
-import '../../component-base/src/styles/style-props.js';
+import '@vaadin/component-base/src/styles/style-props.js';
 
 // Load Lumo CSS
 function loadCSS(href) {
