@@ -204,6 +204,7 @@ const isLastOverlay = (overlay) => {
  * |`--vaadin-popover-offset-start`         |
  * |`--vaadin-popover-offset-top`           |
  * |`--vaadin-popover-padding`              |
+ * |`--vaadin-popover-text-color`           |
  * |`--vaadin-popover-shadow`               |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
