@@ -301,10 +301,16 @@ function copyMissingItems(target, source, key) {
       target[key].push({ ...item });
       existingMap.set(item.name, item);
       changed = true;
-    } else if (!existing.type?.text && item.type?.text) {
-      // Fill in missing type from parent
-      existing.type = { ...item.type };
-      changed = true;
+    } else {
+      // Fill in missing type or description from parent
+      if (!existing.type?.text && item.type?.text) {
+        existing.type = { ...item.type };
+        changed = true;
+      }
+      if (!existing.description && item.description) {
+        existing.description = item.description;
+        changed = true;
+      }
     }
   }
   return changed;
