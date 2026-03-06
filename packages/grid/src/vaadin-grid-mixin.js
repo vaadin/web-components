@@ -252,7 +252,7 @@ export const GridMixin = (superClass) =>
       setTouchAction(this.$.scroller, '');
 
       this.__virtualizer = new Virtualizer({
-        createElement: this._createScrollerRow.bind(this),
+        createElements: this._createScrollerRows.bind(this),
         updateElement: this._updateScrollerItem.bind(this),
         scrollContainer: this.$.items,
         scrollTarget: this.$.table,
@@ -353,14 +353,18 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _createScrollerRow() {
-      const row = document.createElement('tr');
-      row.setAttribute('role', 'row');
-      row.setAttribute('tabindex', '-1');
-      updatePart(row, 'row', true);
-      updatePart(row, 'body-row', true);
-      if (this._columnTree) {
-        this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
+    _createScrollerRows(count) {
+      const rows = [];
+      for (let i = 0; i < count; i++) {
+        const row = document.createElement('tr');
+        row.setAttribute('role', 'row');
+        row.setAttribute('tabindex', '-1');
+        updatePart(row, 'row', true);
+        updatePart(row, 'body-row', true);
+        if (this._columnTree) {
+          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
+        }
+        rows.push(row);
       }
 
       if (this._columnTree) {
@@ -378,7 +382,7 @@ export const GridMixin = (superClass) =>
           this._afterScroll();
         },
       );
-      return row;
+      return rows;
     }
 
     /** @private */
