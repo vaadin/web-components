@@ -471,7 +471,7 @@ describe('reordering simple grid', () => {
     });
 
     describe('hidden columns', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         grid = fixtureSync(`
           <vaadin-grid column-reordering-allowed>
             <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
@@ -488,7 +488,6 @@ describe('reordering simple grid', () => {
 
         grid.items = [{ name: 'foo' }];
         flushGrid(grid);
-        await aTimeout(0);
 
         headerContent = [getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1)];
       });
@@ -531,7 +530,7 @@ describe('reordering simple grid', () => {
     });
 
     describe('tab navigation', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         grid = fixtureSync(`
           <vaadin-grid column-reordering-allowed>
             <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
@@ -539,17 +538,15 @@ describe('reordering simple grid', () => {
             <vaadin-grid-column id="col3" header="Col3"></vaadin-grid-column>
           </vaadin-grid>
         `);
-        const inputRenderer = (root, column) => {
-          root.innerHTML = `<input id="input-${column.id}">`;
-        };
 
         grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
-          col.renderer = inputRenderer;
+          col.renderer = (root, column) => {
+            root.innerHTML = `<input id="input-${column.id}">`;
+          };
         });
 
         grid.items = [{ name: 'foo' }];
         flushGrid(grid);
-        await aTimeout(0);
 
         // Use visual cell content lookup like other tests do
         headerContent = [getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1)];
@@ -587,7 +584,7 @@ describe('reordering simple grid', () => {
     });
 
     describe('arrow key navigation', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         grid = fixtureSync(`
           <vaadin-grid column-reordering-allowed>
             <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
@@ -604,7 +601,6 @@ describe('reordering simple grid', () => {
 
         grid.items = [{ name: 'foo' }, { name: 'bar' }];
         flushGrid(grid);
-        await aTimeout(0);
 
         headerContent = [getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1)];
       });
@@ -622,12 +618,12 @@ describe('reordering simple grid', () => {
         // Navigate right - should go to col1 (visually second)
         await sendKeys({ press: 'ArrowRight' });
         const secondCell = getContainerCell(grid.$.items, 0, 1);
-        expect(grid.shadowRoot.activeElement === secondCell).to.be.true;
+        expect(grid.shadowRoot.activeElement).to.equal(secondCell);
 
         // Navigate right again - should go to col3 (visually third)
         await sendKeys({ press: 'ArrowRight' });
         const thirdCell = getContainerCell(grid.$.items, 0, 2);
-        expect(grid.shadowRoot.activeElement === thirdCell).to.be.true;
+        expect(grid.shadowRoot.activeElement).to.equal(thirdCell);
       });
 
       it('should navigate header cells with arrow keys in visual order after reordering', async () => {
@@ -643,12 +639,12 @@ describe('reordering simple grid', () => {
         // Navigate right - should go to col1 header (visually second)
         await sendKeys({ press: 'ArrowRight' });
         const secondHeaderCell = getContainerCell(grid.$.header, 0, 1);
-        expect(grid.shadowRoot.activeElement === secondHeaderCell).to.be.true;
+        expect(grid.shadowRoot.activeElement).to.equal(secondHeaderCell);
 
         // Navigate right again - should go to col3 header (visually third)
         await sendKeys({ press: 'ArrowRight' });
         const thirdHeaderCell = getContainerCell(grid.$.header, 0, 2);
-        expect(grid.shadowRoot.activeElement === thirdHeaderCell).to.be.true;
+        expect(grid.shadowRoot.activeElement).to.equal(thirdHeaderCell);
       });
 
       it('should navigate header cells vertically in column groups with arrow keys after reordering', async () => {
@@ -687,10 +683,10 @@ describe('reordering simple grid', () => {
         col1HeaderCell.focus();
 
         await sendKeys({ press: 'ArrowDown' });
-        expect(grid.shadowRoot.activeElement === getVisualCell(grid.$.header, 1, 2)).to.be.true;
+        expect(grid.shadowRoot.activeElement).to.equal(getVisualCell(grid.$.header, 1, 2));
 
         await sendKeys({ press: 'ArrowDown' });
-        expect(grid.shadowRoot.activeElement === getVisualCell(grid.$.header, 2, 2)).to.be.true;
+        expect(grid.shadowRoot.activeElement).to.equal(getVisualCell(grid.$.header, 2, 2));
       });
     });
   });
