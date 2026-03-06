@@ -65,7 +65,7 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @customElement
+ * @customElement vaadin-badge
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
