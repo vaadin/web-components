@@ -1,5 +1,4 @@
 import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
-import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 
@@ -54,14 +53,22 @@ function sortName(a, b) {
 }
 
 /**
+ * Returns all JSDoc tags from a node's JSDoc comments.
+ * @param {object} node - A TypeScript AST node
+ * @returns {object[]} - Array of JSDoc tag objects
+ */
+function getJsDocTags(node) {
+  return (node.jsDoc || []).flatMap((doc) => doc.tags || []);
+}
+
+/**
  * Extracts @mixes JSDoc tag names from a node's JSDoc comments.
  * @param {object} node - A TypeScript AST node
  * @param {object} ts - The TypeScript module
  * @returns {string[]} - Array of mixin names
  */
 function getJsDocMixesTags(node, ts) {
-  return (node.jsDoc || [])
-    .flatMap((doc) => doc.tags || [])
+  return getJsDocTags(node)
     .filter((tag) => ts.isJSDocUnknownTag(tag) && tag.tagName.text === 'mixes')
     .map((tag) => tag.comment?.trim())
     .filter(Boolean);
@@ -185,9 +192,7 @@ function typeOverridePlugin() {
         if (!propName) continue;
 
         // Extract @type from JSDoc on the getter
-        const typeTag = (member.jsDoc || [])
-          .flatMap((doc) => doc.tags || [])
-          .find((tag) => tag.tagName?.text === 'type');
+        const typeTag = getJsDocTags(member).find((tag) => tag.tagName?.text === 'type');
 
         if (!typeTag?.typeExpression) continue;
 
@@ -213,8 +218,7 @@ function typeOverridePlugin() {
 function readonlyPlugin() {
   return {
     analyzePhase({ ts, node, moduleDoc }) {
-      const mixinNodes = extractMixinNodes(node);
-      const classNode = mixinNodes ? mixinNodes.mixinClass : ts.isClassDeclaration(node) ? node : undefined;
+      const classNode = findClassNode(node, ts);
       if (!classNode) return;
 
       // Find `static get properties()` method
@@ -267,9 +271,7 @@ function classPrivacyPlugin() {
     analyzePhase({ ts, node, moduleDoc }) {
       if (!ts.isClassDeclaration(node) || !node.name) return;
 
-      const tag = (node.jsDoc || [])
-        .flatMap((doc) => doc.tags || [])
-        .find((t) => t.tagName?.text === 'private' || t.tagName?.text === 'protected');
+      const tag = getJsDocTags(node).find((t) => t.tagName?.text === 'private' || t.tagName?.text === 'protected');
 
       if (!tag) return;
 
