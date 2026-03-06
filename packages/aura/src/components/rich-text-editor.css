@@ -6,7 +6,6 @@
   --vaadin-rich-text-editor-toolbar-button-background: transparent;
   --vaadin-rich-text-editor-toolbar-button-border-radius: calc(var(--vaadin-radius-m) - 2px);
   --vaadin-rich-text-editor-toolbar-button-padding: var(--vaadin-padding-xs);
-  --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color-secondary);
 }
 
 vaadin-rich-text-editor {
@@ -47,6 +46,7 @@ vaadin-rich-text-editor::part(toolbar-button) {
     scale 180ms;
   outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   position: relative;
+  color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color-secondary));
 }
 
 vaadin-rich-text-editor::part(toolbar-button-pressed) {
