@@ -1,5 +1,4 @@
 import { isStaticMember } from '@custom-elements-manifest/analyzer/src/utils/ast-helpers.js';
-import { extractMixinNodes } from '@custom-elements-manifest/analyzer/src/utils/mixins.js';
 
 const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 
@@ -63,14 +62,22 @@ function sortName(a, b) {
 }
 
 /**
+ * Returns all JSDoc tags from a node's JSDoc comments.
+ * @param {object} node - A TypeScript AST node
+ * @returns {object[]} - Array of JSDoc tag objects
+ */
+function getJsDocTags(node) {
+  return (node.jsDoc || []).flatMap((doc) => doc.tags || []);
+}
+
+/**
  * Extracts @mixes JSDoc tag names from a node's JSDoc comments.
  * @param {object} node - A TypeScript AST node
  * @param {object} ts - The TypeScript module
  * @returns {string[]} - Array of mixin names
  */
 function getJsDocMixesTags(node, ts) {
-  return (node.jsDoc || [])
-    .flatMap((doc) => doc.tags || [])
+  return getJsDocTags(node)
     .filter((tag) => ts.isJSDocUnknownTag(tag) && tag.tagName.text === 'mixes')
     .map((tag) => tag.comment?.trim())
     .filter(Boolean);
@@ -144,14 +151,85 @@ function mixesPlugin() {
 }
 
 /**
+ * Finds the class node from a top-level AST node, supporting both
+ * class declarations and mixin patterns (arrow function with class expression).
+ *
+ * NOTE: Cannot use `extractMixinNodes` here because it does not handle
+ * two-argument mixin patterns like `I18nMixin(defaultI18n, superClass)`.
+ */
+function findClassNode(node, ts) {
+  if (ts.isClassDeclaration(node)) return node;
+  if (!ts.isVariableStatement(node)) return undefined;
+
+  const decl = node.declarationList.declarations[0];
+  const init = decl?.initializer;
+  if (!init || !ts.isArrowFunction(init)) return undefined;
+
+  // Arrow function body is the class expression
+  const body = init.body;
+  if (ts.isClassExpression(body)) return body;
+
+  // Or the body is a block with a return statement
+  if (ts.isBlock(body)) {
+    const ret = body.statements.find(ts.isReturnStatement);
+    if (ret?.expression && ts.isClassExpression(ret.expression)) return ret.expression;
+  }
+  return undefined;
+}
+
+/**
+ * CEM plugin that collects @type JSDoc overrides from getter declarations.
+ * The CEM analyzer keeps the inherited member type (e.g., `Object` from I18nMixin)
+ * even when a subclass overrides the getter with a more specific `@type` JSDoc tag
+ * (e.g., `@type {!AppLayoutI18n}`). Overrides are collected during analyzePhase
+ * and re-applied in packageLinkPhase by `applyTypeOverrides` (after CEM's own
+ * inheritance resolution has run).
+ */
+function typeOverridePlugin() {
+  // Shared between analyzePhase and packageLinkPhase within the same run.
+  const typeOverrides = new Map();
+
+  return {
+    typeOverrides,
+
+    analyzePhase({ ts, node, moduleDoc }) {
+      const classNode = findClassNode(node, ts);
+      if (!classNode) return;
+
+      for (const member of classNode.members || []) {
+        if (!ts.isGetAccessorDeclaration(member) || isStaticMember(member)) continue;
+
+        const propName = member.name?.text;
+        if (!propName) continue;
+
+        // Extract @type from JSDoc on the getter
+        const typeTag = getJsDocTags(member).find((tag) => tag.tagName?.text === 'type');
+
+        if (!typeTag?.typeExpression) continue;
+
+        const typeText = typeTag.typeExpression.type.getText().replace(/^!/u, '');
+
+        // Store the override keyed by declaration name
+        for (const declaration of moduleDoc.declarations || []) {
+          if (!declaration.members?.some((m) => m.name === propName)) continue;
+          if (!typeOverrides.has(declaration.name)) {
+            typeOverrides.set(declaration.name, new Map());
+          }
+          typeOverrides.get(declaration.name).set(propName, typeText);
+        }
+      }
+    },
+  };
+}
+
+/**
  * CEM plugin that marks `readOnly: true` properties as `readonly` in custom-elements.json
  * to filter them out of Lit property bindings when generating web-types-lit.json files.
  */
 function readonlyPlugin() {
   return {
     analyzePhase({ ts, node, moduleDoc }) {
-      const mixinNodes = extractMixinNodes(node);
-      const classNode = mixinNodes ? mixinNodes.mixinClass : ts.isClassDeclaration(node) ? node : undefined;
+      const classNode = findClassNode(node, ts);
       if (!classNode) return;
 
       // Find `static get properties()` method
@@ -204,9 +282,7 @@ function classPrivacyPlugin() {
     analyzePhase({ ts, node, moduleDoc }) {
       if (!ts.isClassDeclaration(node) || !node.name) return;
 
-      const tag = (node.jsDoc || [])
-        .flatMap((doc) => doc.tags || [])
-        .find((t) => t.tagName?.text === 'private' || t.tagName?.text === 'protected');
+      const tag = getJsDocTags(node).find((t) => t.tagName?.text === 'private' || t.tagName?.text === 'protected');
 
       if (!tag) return;
 
@@ -249,6 +325,58 @@ function copyMissingFromParents(decl, allDeclarations) {
 }
 
 /**
+ * BFS through a declaration's own overrides, then its mixin/superclass chain,
+ * applying the closest (most specific) @type override for each member.
+ */
+function applyClosestOverrides(decl, allDeclarations, typeOverrides) {
+  const memberMap = new Map((decl.members || []).map((m) => [m.name, m]));
+  const attrMap = new Map((decl.attributes || []).map((a) => [a.fieldName || a.name, a]));
+  const visited = new Set();
+  const applied = new Set();
+  // Start with self to apply direct overrides, then walk the inheritance chain
+  const queue = [{ name: decl.name }, ...(decl.mixins || [])];
+  if (decl.superclass?.name) queue.push(decl.superclass);
+
+  while (queue.length > 0) {
+    const ref = queue.shift();
+    if (visited.has(ref.name)) continue;
+    visited.add(ref.name);
+
+    const overrides = typeOverrides.get(ref.name);
+    if (overrides) {
+      for (const [memberName, typeText] of overrides) {
+        if (applied.has(memberName)) continue;
+        const member = memberMap.get(memberName);
+        if (!member) continue;
+        member.type = { text: typeText };
+        // Also update the corresponding attribute type
+        const attr = attrMap.get(memberName);
+        if (attr) {
+          attr.type = { text: typeText };
+        }
+        applied.add(memberName);
+      }
+    }
+
+    const parentDecl = allDeclarations.get(ref.name);
+    if (!parentDecl) continue;
+    for (const m of parentDecl.mixins || []) queue.push(m);
+    if (parentDecl.superclass?.name) queue.push(parentDecl.superclass);
+  }
+}
+
+/**
+ * Apply collected @type JSDoc overrides to declaration members and attributes.
+ * The CEM analyzer's own inheritance resolution overwrites types set
+ * during analyzePhase, so we re-apply them here after all resolution.
+ */
+function applyTypeOverrides(allDeclarations, typeOverrides) {
+  for (const decl of allDeclarations.values()) {
+    applyClosestOverrides(decl, allDeclarations, typeOverrides);
+  }
+}
+
+/**
  * Copy missing members and attributes from mixin/superclass declarations
  * to class declarations. Runs multiple passes to handle multi-level
  * inheritance chains (e.g., EmailField → TextField → FieldMixin → LabelMixin).
@@ -265,6 +393,8 @@ function resolveInheritedMembers(allDeclarations) {
   }
 }
 
+const typeOverride = typeOverridePlugin();
+
 export default {
   globs: ['packages/**/src/(vaadin-*.js|*-mixin.js)'],
   packagejson: false,
@@ -272,6 +402,7 @@ export default {
   plugins: [
     classPrivacyPlugin(),
     mixesPlugin(),
+    typeOverride,
     readonlyPlugin(),
     {
       packageLinkPhase({ customElementsManifest }) {
@@ -286,6 +417,11 @@ export default {
         // The analyzer only follows inheritedFrom one level deep, so members
         // inherited through 2+ levels are dropped from class declarations.
         resolveInheritedMembers(allDeclarations);
+
+        // Re-apply @type JSDoc overrides collected during analyzePhase.
+        // The CEM analyzer's inheritance resolution overwrites specific types
+        // (e.g., AppLayoutI18n) with generic ones from base mixins (e.g., Object).
+        applyTypeOverrides(allDeclarations, typeOverride.typeOverrides);
 
         for (const definition of customElementsManifest.modules) {
           // Filter out class declarations marked as @private or @protected
