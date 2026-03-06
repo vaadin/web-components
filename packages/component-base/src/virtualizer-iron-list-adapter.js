@@ -333,6 +333,19 @@ export class IronListAdapter {
     return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
   }
 
+  /**
+   * Adjusts the scroll position to compensate for any offset change of a given index.
+   * @param {number} index - The index whose scroll offset to restore
+   * @param {number|undefined} offsetBefore - The scroll offset of the index before the change
+   * @private
+   */
+  __restoreScrollOffset(index, offsetBefore) {
+    const offsetAfter = this.__getIndexScrollOffset(index);
+    if (offsetBefore !== undefined && offsetAfter !== undefined) {
+      this._scrollTop += offsetBefore - offsetAfter;
+    }
+  }
+
   get size() {
     return this.__size;
   }
@@ -382,15 +395,7 @@ export class IronListAdapter {
       // and remove exceeding items when size is decreased.
       this.scrollToIndex(fvi);
 
-      const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
-      if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
-        this._scrollTop += fviOffsetBefore - fviOffsetAfter;
-      }
-
-      // Skip the next virtual index offset adjustment to prevent the async
-      // scroll event (caused by the scrollToIndex + _scrollTop change above) from
-      // disrupting the restored scroll position.
-      this.__skipNextVirtualIndexAdjust = true;
+      this.__restoreScrollOffset(fvi, fviOffsetBefore);
     }
 
     this.__preventElementUpdates = false;
@@ -856,6 +861,9 @@ export class IronListAdapter {
       const threshold = OFFSET_ADJUST_MIN_THRESHOLD;
       const maxShift = 100;
 
+      const fvi = this.adjustedFirstVisibleIndex;
+      const fviOffsetBefore = this.__getIndexScrollOffset(fvi);
+
       // Near start
       if (this._scrollTop === 0) {
         this._vidxOffset = 0;
@@ -877,6 +885,8 @@ export class IronListAdapter {
         this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
         super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
       }
+
+      this.__restoreScrollOffset(fvi, fviOffsetBefore);
     }
   }
 }
