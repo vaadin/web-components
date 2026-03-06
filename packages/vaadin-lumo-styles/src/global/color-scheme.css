@@ -15,6 +15,17 @@
   color: var(--lumo-body-text-color);
   background-color: var(--lumo-base-color);
   color-scheme: dark;
+
+  /* Re-set registered <color> properties so they recompute in dark context.
+     These are registered via CSS.registerProperty() in component-base/style-props.js
+     and their values get resolved at definition time, so they won't update
+     by just changing color-scheme on a subtree. */
+  --vaadin-text-color: var(--lumo-body-text-color);
+  --vaadin-text-color-secondary: var(--lumo-secondary-text-color);
+  --vaadin-text-color-disabled: var(--lumo-disabled-text-color);
+  --vaadin-border-color: var(--lumo-contrast-30pct);
+  --vaadin-border-color-secondary: var(--lumo-contrast-10pct);
+  --vaadin-background-color: var(--lumo-base-color);
 }
 
 :host([theme~='light-dark']),
@@ -22,4 +33,12 @@
   color: var(--lumo-body-text-color);
   background-color: var(--lumo-base-color);
   color-scheme: light dark;
+
+  /* Re-set registered <color> properties so they recompute based on system preference */
+  --vaadin-text-color: var(--lumo-body-text-color);
+  --vaadin-text-color-secondary: var(--lumo-secondary-text-color);
+  --vaadin-text-color-disabled: var(--lumo-disabled-text-color);
+  --vaadin-border-color: var(--lumo-contrast-30pct);
+  --vaadin-border-color-secondary: var(--lumo-contrast-10pct);
+  --vaadin-background-color: var(--lumo-base-color);
 }
