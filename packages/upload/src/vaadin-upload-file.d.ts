@@ -96,6 +96,10 @@ export interface UploadFileEventMap extends HTMLElementEventMap, UploadFileCusto
  * `--vaadin-upload-file-warning-color`         |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} file-abort - Fired when abort button is pressed.
+ * @fires {CustomEvent} file-retry - Fired when retry button is pressed.
+ * @fires {CustomEvent} file-start - Fired when start button is pressed.
  */
 declare class UploadFile extends UploadFileMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof UploadFileEventMap>(

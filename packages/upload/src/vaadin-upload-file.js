@@ -77,6 +77,10 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} file-abort - Fired when abort button is pressed.
+ * @fires {CustomEvent} file-retry - Fired when retry button is pressed.
+ * @fires {CustomEvent} file-start - Fired when start button is pressed.
+ *
  * @customElement vaadin-upload-file
  * @extends HTMLElement
  * @mixes UploadFileMixin
