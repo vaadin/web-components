@@ -328,7 +328,9 @@ export const UploadMixin = (superClass) =>
          * Pass-through to input's capture attribute. Allows user to trigger device inputs
          * such as camera or microphone immediately.
          */
-        capture: String,
+        capture: {
+          type: String,
+        },
 
         /** @private */
         _addButton: {

@@ -95,7 +95,9 @@ class SideNavItem extends SideNavChildrenMixin(
       /**
        * The path to navigate to
        */
-      path: String,
+      path: {
+        type: String,
+      },
 
       /**
        * The list of alternative paths matching this item
@@ -158,7 +160,9 @@ class SideNavItem extends SideNavChildrenMixin(
       /**
        * The target of the link. Works only when `path` is set.
        */
-      target: String,
+      target: {
+        type: String,
+      },
 
       /**
        * Whether to exclude the item from client-side routing. When enabled,

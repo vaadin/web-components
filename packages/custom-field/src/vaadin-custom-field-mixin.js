@@ -42,7 +42,9 @@ export const CustomFieldMixin = (superClass) =>
         /**
          * The name of the control, which is submitted with the form data.
          */
-        name: String,
+        name: {
+          type: String,
+        },
 
         /**
          * The value of the field. When wrapping several inputs, it will contain `\t`
