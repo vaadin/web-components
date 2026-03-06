@@ -25,19 +25,25 @@ export const CrudGridMixin = (superClass) =>
          * Disable filtering in the generated columns.
          * @attr {boolean} no-filter
          */
-        noFilter: Boolean,
+        noFilter: {
+          type: Boolean,
+        },
 
         /**
          * Disable sorting in the generated columns.
          * @attr {boolean} no-sort
          */
-        noSort: Boolean,
+        noSort: {
+          type: Boolean,
+        },
 
         /**
          * Do not add headers to columns.
          * @attr {boolean} no-head
          */
-        noHead: Boolean,
+        noHead: {
+          type: Boolean,
+        },
 
         /**
          * Determines whether the edit column should be hidden.

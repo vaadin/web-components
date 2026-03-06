@@ -180,19 +180,25 @@ export const CrudMixin = (superClass) =>
          * Disable filtering when grid is autoconfigured.
          * @attr {boolean} no-filter
          */
-        noFilter: Boolean,
+        noFilter: {
+          type: Boolean,
+        },
 
         /**
          * Disable sorting when grid is autoconfigured.
          * @attr {boolean} no-sort
          */
-        noSort: Boolean,
+        noSort: {
+          type: Boolean,
+        },
 
         /**
          * Remove grid headers when it is autoconfigured.
          * @attr {boolean} no-head
          */
-        noHead: Boolean,
+        noHead: {
+          type: Boolean,
+        },
 
         /**
          * A comma-separated list of fields to include in the generated grid and the generated editor.
@@ -203,7 +209,9 @@ export const CrudMixin = (superClass) =>
          *
          * Default is undefined meaning that all properties in the object should be mapped to fields.
          */
-        include: String,
+        include: {
+          type: String,
+        },
 
         /**
          * A comma-separated list of fields to be excluded from the generated grid and the generated editor.
@@ -212,7 +220,9 @@ export const CrudMixin = (superClass) =>
          *
          * Default is to exclude all private fields (those properties starting with underscore)
          */
-        exclude: String,
+        exclude: {
+          type: String,
+        },
 
         /**
          * Reflects the opened status of the editor.

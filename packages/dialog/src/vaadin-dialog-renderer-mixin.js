@@ -33,7 +33,9 @@ export const DialogRendererMixin = (superClass) =>
          * When `headerTitle` is set, the attribute `has-title` is set on the dialog.
          * @attr {string} header-title
          */
-        headerTitle: String,
+        headerTitle: {
+          type: String,
+        },
 
         /**
          * Custom function for rendering the dialog header.

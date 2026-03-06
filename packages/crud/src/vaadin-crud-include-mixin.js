@@ -27,6 +27,7 @@ export const IncludedMixin = (superClass) =>
          * @type {string | RegExp}
          */
         exclude: {
+          type: String,
           value: '^_',
           observer: '__onExcludeChange',
           sync: true,
@@ -40,6 +41,7 @@ export const IncludedMixin = (superClass) =>
          * @type {string | !Array<string> | undefined}
          */
         include: {
+          type: String,
           observer: '__onIncludeChange',
           sync: true,
         },

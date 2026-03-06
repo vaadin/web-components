@@ -132,7 +132,9 @@ export const DatePickerMixin = (subclass) =>
          * The same date formats as for the `value` property are supported.
          * @attr {string} initial-position
          */
-        initialPosition: String,
+        initialPosition: {
+          type: String,
+        },
 
         /**
          * Set true to open the date selector overlay.
