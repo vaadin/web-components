@@ -118,7 +118,6 @@ export const DatePickerMixin = (subclass) =>
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
-         *
          */
         value: {
           type: String,
@@ -189,8 +188,6 @@ export const DatePickerMixin = (subclass) =>
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
-         *
-         * @type {string | undefined}
          */
         min: {
           type: String,
@@ -203,8 +200,6 @@ export const DatePickerMixin = (subclass) =>
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
-         *
-         * @type {string | undefined}
          */
         max: {
           type: String,

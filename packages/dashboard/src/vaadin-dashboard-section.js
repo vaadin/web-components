@@ -117,7 +117,6 @@ class DashboardSection extends DashboardItemMixin(
        * The title of the section
        *
        * @attr {string} section-title
-       * @type {string | null | undefined}
        */
       sectionTitle: {
         type: String,

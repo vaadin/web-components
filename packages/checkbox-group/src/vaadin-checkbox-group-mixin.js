@@ -26,8 +26,6 @@ export const CheckboxGroupMixin = (superclass) =>
          *
          * The array is immutable so toggling checkboxes always results in
          * creating a new array.
-         *
-         * @type {!Array<!string>}
          */
         value: {
           type: Array,

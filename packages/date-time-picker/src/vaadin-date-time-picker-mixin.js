@@ -82,8 +82,6 @@ export const DateTimePickerMixin = (superClass) =>
          * - Minute precision `"YYYY-MM-DDThh:mm"`
          * - Second precision `"YYYY-MM-DDThh:mm:ss"`
          * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
-         *
-         * @type {string | undefined}
          */
         min: {
           type: String,
@@ -98,8 +96,6 @@ export const DateTimePickerMixin = (superClass) =>
          * - Minute precision `"YYYY-MM-DDThh:mm"`
          * - Second precision `"YYYY-MM-DDThh:mm:ss"`
          * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
-         *
-         * @type {string | undefined}
          */
         max: {
           type: String,

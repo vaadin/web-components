@@ -45,7 +45,6 @@ export const LoginMixin = (superClass) =>
         /**
          * If set, a synchronous POST call will be fired to the path defined.
          * The `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.
-         * @type {string | null}
          */
         action: {
           type: String,

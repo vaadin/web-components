@@ -112,7 +112,6 @@ export const CrudMixin = (superClass) =>
 
         /**
          * An array containing the items which will be stamped to the column template instances.
-         * @type {Array<unknown> | undefined}
          */
         items: {
           type: Array,
@@ -123,7 +122,6 @@ export const CrudMixin = (superClass) =>
 
         /**
          * The item being edited in the dialog.
-         * @type {unknown}
          */
         editedItem: {
           type: Object,
