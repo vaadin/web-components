@@ -284,13 +284,18 @@ function classPrivacyPlugin() {
 }
 
 function copyMissingItems(target, source, key) {
-  const existing = new Set((target[key] || []).map((item) => item.name));
+  const existingMap = new Map((target[key] || []).map((item) => [item.name, item]));
   let changed = false;
   for (const item of source[key] || []) {
-    if (!existing.has(item.name)) {
+    const existing = existingMap.get(item.name);
+    if (!existing) {
       target[key] ||= [];
       target[key].push({ ...item });
-      existing.add(item.name);
+      existingMap.set(item.name, item);
+      changed = true;
+    } else if (!existing.type?.text && item.type?.text) {
+      // Fill in missing type from parent
+      existing.type = { ...item.type };
       changed = true;
     }
   }
