@@ -4,6 +4,7 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
+  aTimeout,
   enterKeyDown,
   escKeyDown,
   fire,
@@ -18,7 +19,7 @@ import '../src/vaadin-context-menu.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
+import { activateItem, getMenuItems, getSubMenu, openMenu, pointerMove } from './helpers.js';
 
 describe('items', () => {
   let rootMenu, subMenu, target, rootOverlay, subOverlay1;
@@ -728,6 +729,150 @@ describe('items', () => {
       await nextRender();
 
       expect(getMenuItems(rootMenu)[1].hasAttribute('focused')).to.be.true;
+    });
+  });
+
+  (isTouch ? describe.skip : describe)('safe triangle', () => {
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        beforeEach(async () => {
+          if (dir === 'rtl') {
+            document.documentElement.setAttribute('dir', 'rtl');
+            await nextFrame();
+            subMenu.close();
+            rootMenu.close();
+            await nextRender();
+            await openMenu(target);
+            await openMenu(getMenuItems(rootMenu)[0]);
+          }
+        });
+
+        it('should keep submenu open when pointer moves toward it', async () => {
+          const parentItem = getMenuItems(rootMenu)[0];
+          const parentRect = parentItem.getBoundingClientRect();
+          const currentSubMenu = getSubMenu(rootMenu);
+          const subMenuOverlay = currentSubMenu._overlayElement;
+          const subMenuRect = subMenuOverlay.getBoundingClientRect();
+
+          if (dir === 'rtl') {
+            expect(subMenuRect.right).to.be.at.most(parentRect.left + 1);
+          }
+
+          const startX = parentRect.left + parentRect.width / 2;
+          const startY = parentRect.top + parentRect.height / 2;
+          pointerMove(startX, startY);
+          await aTimeout(20);
+
+          const targetX = subMenuRect.left + subMenuRect.width / 2;
+          const targetY = subMenuRect.top + subMenuRect.height / 2;
+          pointerMove((startX + targetX) / 2, (startY + targetY) / 2);
+          await aTimeout(20);
+
+          activateItem(getMenuItems(rootMenu)[3]);
+
+          expect(currentSubMenu.opened).to.be.true;
+          expect(getMenuItems(currentSubMenu)[0].textContent).to.equal('foo-0-0');
+        });
+      });
+    });
+
+    it('should switch submenu when pointer moves away from it', async () => {
+      const parentItem = getMenuItems(rootMenu)[0];
+      const parentRect = parentItem.getBoundingClientRect();
+
+      // Start from the center of the parent item
+      const startX = parentRect.left + parentRect.width / 2;
+      const startY = parentRect.top + parentRect.height / 2;
+
+      // Simulate pointer movement away from the submenu (moving left)
+      pointerMove(startX, startY);
+
+      await aTimeout(20);
+
+      // Move away (to the left, opposite of submenu)
+      pointerMove(startX - 50, startY);
+
+      await aTimeout(20);
+
+      // Move away again to exceed the threshold
+      pointerMove(startX - 100, startY);
+
+      await aTimeout(20);
+
+      // Now hover over the other parent item — should switch
+      activateItem(getMenuItems(rootMenu)[3]);
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-3-0');
+    });
+
+    it('should switch submenu after fallback timeout when pointer stops moving', async () => {
+      const parentItem = getMenuItems(rootMenu)[0];
+      const parentRect = parentItem.getBoundingClientRect();
+      const subMenuOverlay = subMenu._overlayElement;
+      const subMenuRect = subMenuOverlay.getBoundingClientRect();
+
+      // Start from the center of the parent item
+      const startX = parentRect.left + parentRect.width / 2;
+      const startY = parentRect.top + parentRect.height / 2;
+      pointerMove(startX, startY);
+
+      await aTimeout(20);
+
+      // Move diagonally toward the submenu (inside the safe triangle)
+      const targetX = subMenuRect.left + subMenuRect.width / 2;
+      const targetY = subMenuRect.top + subMenuRect.height / 2;
+      const midX = (startX + targetX) / 2;
+      const midY = (startY + targetY) / 2;
+      pointerMove(midX, midY);
+
+      await aTimeout(20);
+
+      // Hover a sibling item — deferred by safe triangle
+      const siblingItem = getMenuItems(rootMenu)[3];
+      activateItem(siblingItem);
+
+      // Submenu should still be open (safe triangle active)
+      expect(subMenu.opened).to.be.true;
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-0-0');
+
+      // Wait for fallback timeout (400ms) to expire
+      await aTimeout(450);
+
+      // The pending switch should have executed
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-3-0');
+    });
+
+    it('should deactivate when submenu closes', async () => {
+      const safeTriangle = rootMenu.__safeTriangle;
+      expect(safeTriangle).to.exist;
+
+      // Track pointer movement so shouldKeepOpen() would return true if still active
+      const parentRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
+      const subMenuRect = subMenu._overlayElement.getBoundingClientRect();
+      pointerMove(parentRect.left + parentRect.width / 2, parentRect.top + parentRect.height / 2);
+      await aTimeout(20);
+      pointerMove(subMenuRect.left + subMenuRect.width / 2, subMenuRect.top + subMenuRect.height / 2);
+      await aTimeout(20);
+
+      // Verify safe triangle is active before closing
+      expect(safeTriangle.shouldKeepOpen()).to.be.true;
+
+      subMenu.close();
+      await nextRender();
+      expect(safeTriangle.shouldKeepOpen()).to.be.false;
+    });
+
+    it('should set safe-triangle-active attribute on list-box when active', () => {
+      const listBox = rootMenu._listBox;
+      expect(listBox.hasAttribute('safe-triangle-active')).to.be.true;
+    });
+
+    it('should remove safe-triangle-active attribute when deactivated', async () => {
+      const listBox = rootMenu._listBox;
+      expect(listBox.hasAttribute('safe-triangle-active')).to.be.true;
+
+      subMenu.close();
+      await nextRender();
+      expect(listBox.hasAttribute('safe-triangle-active')).to.be.false;
     });
   });
 });
