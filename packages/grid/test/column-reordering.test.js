@@ -470,6 +470,66 @@ describe('reordering simple grid', () => {
       });
     });
 
+    describe('hidden columns', () => {
+      beforeEach(async () => {
+        grid = fixtureSync(`
+          <vaadin-grid column-reordering-allowed>
+            <vaadin-grid-column id="col1" header="Col1"></vaadin-grid-column>
+            <vaadin-grid-column id="col2" header="Col2" hidden></vaadin-grid-column>
+            <vaadin-grid-column id="col3" header="Col3"></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+
+        grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+          col.renderer = (root, column) => {
+            root.textContent = column.id;
+          };
+        });
+
+        grid.items = [{ name: 'foo' }];
+        flushGrid(grid);
+        await aTimeout(0);
+
+        headerContent = [getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1)];
+      });
+
+      it('should reorder columns correctly when a hidden column exists between them', () => {
+        // Initial visual order: Col1, Col3 (Col2 is hidden)
+        expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.equal('Col1');
+        expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.equal('Col3');
+
+        // Drag Col1 over Col3
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        flushGrid(grid);
+
+        // Visual order should now be: Col3, Col1
+        expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.equal('Col3');
+        expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.equal('Col1');
+
+        // Body cells should also be in the new visual order
+        const firstBodyCell = getContainerCell(grid.$.items, 0, 0);
+        const secondBodyCell = getContainerCell(grid.$.items, 0, 1);
+        expect(firstBodyCell._content.textContent).to.equal('col3');
+        expect(secondBodyCell._content.textContent).to.equal('col1');
+      });
+
+      it('should reorder correctly when a column is shown after reorder', async () => {
+        // Drag Col1 over Col3
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        flushGrid(grid);
+
+        // Show the hidden column
+        grid.querySelector('#col2').hidden = false;
+        flushGrid(grid);
+        await aTimeout(0);
+
+        // Visual order should be: Col3, Col2, Col1
+        expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.equal('Col3');
+        expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.equal('Col2');
+        expect(getVisualHeaderCellContent(grid, 0, 2).innerText).to.equal('Col1');
+      });
+    });
+
     describe('tab navigation', () => {
       beforeEach(async () => {
         grid = fixtureSync(`
