@@ -5,7 +5,7 @@
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { iterateChildren, updateColumnOrders } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, iterateChildren, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -419,10 +419,12 @@ export const ColumnReorderingMixin = (superClass) =>
 
       // Reorder cells in all rows (header, footer, body, sizer)
       [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
-        const cells = [...row.children];
+        const cells = getBodyRowCells(row);
         const secondColFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
         cells.filter((cell) => firstColumn.contains(cell._column)).forEach((cell) => secondColFirstCell.before(cell));
-        row.__cells = Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+        // row.__cells are out of sync with the actual cell order after the move, and must be updated
+        delete row.__cells;
+        row.__cells = getBodyRowCells(row);
       });
 
       this._debounceUpdateFrozenColumn();
