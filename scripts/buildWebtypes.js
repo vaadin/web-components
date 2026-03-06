@@ -210,7 +210,7 @@ function createLitElementDefinition(packageJson, elementDeclaration) {
   const propertyBindings = publicProperties
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((prop) => {
-      const prefix = getTypeText(prop.type).includes('boolean') ? '?' : '.';
+      const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
       return toLitAttribute(`${prefix}${prop.name}`, prop.description);
     });
 
