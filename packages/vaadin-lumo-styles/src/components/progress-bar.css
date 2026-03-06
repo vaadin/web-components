@@ -7,7 +7,7 @@
   :host {
     display: block;
     width: 100%; /* prevent collapsing inside non-stretching column flex */
-    height: calc(var(--lumo-size-l) / 10);
+    height: round(var(--lumo-size-l) / 10, 1px);
     margin: var(--lumo-space-s) 0;
   }
 
