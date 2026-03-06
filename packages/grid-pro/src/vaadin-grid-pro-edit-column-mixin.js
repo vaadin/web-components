@@ -57,7 +57,6 @@ export const GridProEditColumnMixin = (superClass) =>
          *
          * Editor type is set to `custom` when `editModeRenderer` is set.
          * @attr {text|checkbox|select|custom} editor-type
-         * @type {!GridProEditorType}
          */
         editorType: {
           type: String,

@@ -97,7 +97,6 @@ export const ColumnBaseMixin = (superClass) =>
          * Aligns the columns cell content horizontally.
          * Supported values: "start", "center" and "end".
          * @attr {start|center|end} text-align
-         * @type {GridColumnTextAlign | null | undefined}
          */
         textAlign: {
           type: String,

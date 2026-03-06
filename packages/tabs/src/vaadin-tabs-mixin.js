@@ -18,7 +18,6 @@ export const TabsMixin = (superClass) =>
       return {
         /**
          * Set tabs disposition. Possible values are `horizontal|vertical`
-         * @type {!TabsOrientation}
          */
         orientation: {
           value: 'horizontal',

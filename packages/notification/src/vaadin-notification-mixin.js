@@ -147,7 +147,6 @@ export const NotificationMixin = (superClass) =>
         /**
          * Alignment of the notification in the viewport
          * Valid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`
-         * @type {!NotificationPosition}
          */
         position: {
           type: String,
