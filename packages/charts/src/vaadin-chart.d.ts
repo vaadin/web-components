@@ -129,7 +129,7 @@ export * from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} series-hide - Fired when the series is hidden after chart generation time.
  * @fires {CustomEvent} series-legend-item-click - Fired when the legend item belonging to the series is clicked.
  * @fires {CustomEvent} series-mouse-out - Fired when the mouse leaves the graph.
- * @fires {CustomEvent} series-mouse-enter - Fired when the mouse enters the graph.
+ * @fires {CustomEvent} series-mouse-over - Fired when the mouse enters the graph.
  * @fires {CustomEvent} series-show - Fired when the series is shown after chart generation time.
  * @fires {CustomEvent} point-click - Fired when the point is clicked.
  * @fires {CustomEvent} point-legend-item-click - Fired when the legend item belonging to the point is clicked.
