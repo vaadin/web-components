@@ -6,6 +6,14 @@ const inheritanceDenyList = ['PolylitMixin', 'DirMixin'];
 // Attribute types that can't be set via HTML attributes
 const ignoredAttributeTypes = ['object', 'unknown', 'Array'];
 
+// Members incorrectly picked up by CEM from assignments to sub-object properties
+// (e.g., `this._controller.slotName = 'sr-label'` misinterpreted as a class field)
+const ignoredMembers = ['slotName', 'id'];
+
+// Events incorrectly picked up by CEM from dynamic dispatchEvent calls
+// (e.g., `new CustomEvent(eventName, ...)` where eventName is a variable)
+const ignoredEvents = ['eventName'];
+
 const ignoredStaticMembers = [
   'is',
   'cvdlName',
@@ -238,6 +246,7 @@ export default {
               declaration.members = declaration.members
                 .filter((member) => member.privacy !== 'private' && member.privacy !== 'protected')
                 .filter((member) => !member.name.startsWith('_'))
+                .filter((member) => !ignoredMembers.includes(member.name))
                 .filter((member) => !(member.static && ignoredStaticMembers.includes(member.name)))
                 .map((member) => {
                   if (member.kind === 'field' && member.attribute) {
@@ -272,6 +281,7 @@ export default {
               declaration.events = declaration.events
                 .filter((member) => !inheritanceDenyList.includes(member.inheritedFrom?.name))
                 .filter((member) => !(member.type?.text === 'CustomEvent' && !member.name))
+                .filter((member) => !ignoredEvents.includes(member.name))
                 .sort(sortName);
             }
           }
