@@ -3,12 +3,12 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { IronListAdapter } from './virtualizer-iron-list-adapter.js';
+import { TanStackAdapter } from './virtualizer-tanstack-adapter.js';
 
 export class Virtualizer {
   /**
    * @typedef {Object} VirtualizerConfig
-   * @property {Function} createElements Function that returns the given number of new elements
+   * @property {Function} createElement Function that returns the given number of new elements
    * @property {Function} updateElement Function that updates the element at a specific index
    * @property {HTMLElement} scrollTarget Reference to the scrolling element
    * @property {HTMLElement} scrollContainer Reference to a wrapper for the item elements (or a slot) inside the scrollTarget
@@ -17,7 +17,7 @@ export class Virtualizer {
    * @param {VirtualizerConfig} config Configuration for the virtualizer
    */
   constructor(config) {
-    this.__adapter = new IronListAdapter(config);
+    this.__adapter = new TanStackAdapter(config);
   }
 
   /**
