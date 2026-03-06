@@ -3,6 +3,9 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+
 globalThis.process ||= { env: {} };
 
 import {
@@ -14,9 +17,11 @@ import {
 
 export class TanStackAdapter {
   #virtualizer;
+  #resizeObserver;
+  #renderDebouncer;
 
-  constructor({ createElement, updateElement, scrollTarget, scrollContainer, elementsContainer }) {
-    this.createElement = createElement;
+  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer }) {
+    this.createElements = createElements;
     this.updateElement = updateElement;
     this.scrollTarget = scrollTarget;
     this.scrollContainer = scrollContainer;
@@ -25,14 +30,22 @@ export class TanStackAdapter {
     this.#virtualizer = new TanStackVirtualizer({
       count: 0,
       getScrollElement: () => this.scrollTarget,
-      estimateSize: () => 30,
+      estimateSize: () => 20,
       measureElement,
       observeElementOffset,
       observeElementRect,
       onChange: () => this.#render(),
       scrollToFn() {},
     });
-    this.#render();
+
+    this.#resizeObserver = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const { index } = entry.target.dataset;
+        if (index !== undefined) {
+          this.#virtualizer.resizeItem(index, entry.contentRect.height);
+        }
+      });
+    });
   }
 
   get size() {
@@ -41,8 +54,6 @@ export class TanStackAdapter {
 
   set size(size) {
     this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: size });
-    this.#virtualizer._willUpdate();
-    this.#render();
   }
 
   get adjustedFirstVisibleIndex() {
@@ -55,34 +66,46 @@ export class TanStackAdapter {
 
   scrollToIndex(index) {}
 
-  hostConnected() {}
+  hostConnected() {
+    this.#virtualizer._willUpdate();
+  }
 
   update() {
-    [...this.elementsContainer.children].forEach((element) => {
-      if (element.hidden) {
-        return;
+    this.#physicalElements.forEach((element) => {
+      if (!element.hidden) {
+        this.updateElement(element, element.dataset.index);
       }
-
-      this.updateElement(element, element.dataset.index);
     });
   }
 
   flush() {
-    this.#virtualizer._willUpdate();
-    this.#render();
+    this.#renderDebouncer?.flush();
   }
 
   #render() {
-    const virtualItems = this.#virtualizer.getVirtualItems();
+    this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => {
+      this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
 
-    const addedElements = [];
-    for (let i = 0; i < virtualItems.length - this.elementsContainer.children.length; i++) {
-      const element = this.createElement();
-      this.elementsContainer.appendChild(element);
-      addedElements.push(element);
+      this.#createPhysicalElementsIfNeeded();
+      this.#updatePhysicalElements();
+    });
+  }
+
+  #createPhysicalElementsIfNeeded() {
+    const count = this.#virtualItems.length - this.#physicalElements.length;
+    if (count > 0) {
+      this.createElements(count).forEach((element) => {
+        this.elementsContainer.appendChild(element);
+      });
     }
+  }
 
-    [...this.elementsContainer.children].forEach((element, elementIndex) => {
+  #updatePhysicalElements() {
+    const virtualItems = this.#virtualItems;
+
+    this.#physicalElements.forEach((element, elementIndex) => {
+      this.#resizeObserver.unobserve(element);
+
       const virtualItem = virtualItems[elementIndex];
       if (!virtualItem) {
         element.hidden = true;
@@ -96,21 +119,18 @@ export class TanStackAdapter {
       element.style.left = '0';
       element.style.transform = `translateY(${virtualItem.start}px)`;
       element.dataset.index = virtualItem.index;
+
+      this.updateElement(element, virtualItem.index);
+
+      this.#resizeObserver.observe(element);
     });
+  }
 
-    this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
+  get #virtualItems() {
+    return this.#virtualizer.getVirtualItems();
+  }
 
-    this.update();
-
-    [...this.elementsContainer.children].forEach((element) => {
-      if (element.__lastMeasureKey !== element.key) {
-        this.#virtualizer.measureElement(element);
-        element.__lastMeasureKey = element.key;
-      }
-    });
-
-    // [...this.elementsContainer.children].forEach((element) => {
-    //   ;
-    // });
+  get #physicalElements() {
+    return [...this.elementsContainer.children];
   }
 }
