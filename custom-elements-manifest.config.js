@@ -143,6 +143,78 @@ function mixesPlugin() {
 }
 
 /**
+ * Finds the class node from a top-level AST node, supporting both
+ * class declarations and mixin patterns (arrow function with class expression).
+ *
+ * NOTE: Cannot use `extractMixinNodes` here because it does not handle
+ * two-argument mixin patterns like `I18nMixin(defaultI18n, superClass)`.
+ */
+function findClassNode(node, ts) {
+  if (ts.isClassDeclaration(node)) return node;
+  if (!ts.isVariableStatement(node)) return undefined;
+
+  const decl = node.declarationList.declarations[0];
+  const init = decl?.initializer;
+  if (!init || !ts.isArrowFunction(init)) return undefined;
+
+  // Arrow function body is the class expression
+  const body = init.body;
+  if (ts.isClassExpression(body)) return body;
+
+  // Or the body is a block with a return statement
+  if (ts.isBlock(body)) {
+    const ret = body.statements.find(ts.isReturnStatement);
+    if (ret?.expression && ts.isClassExpression(ret.expression)) return ret.expression;
+  }
+  return undefined;
+}
+
+// Map of declaration name → Map of member name → type text.
+// Populated during analyzePhase, applied during packageLinkPhase.
+const typeOverrides = new Map();
+
+/**
+ * CEM plugin that collects @type JSDoc overrides from getter declarations.
+ * The CEM analyzer keeps the inherited member type (e.g., `Object` from I18nMixin)
+ * even when a subclass overrides the getter with a more specific `@type` JSDoc tag
+ * (e.g., `@type {!AppLayoutI18n}`). Overrides are applied later in packageLinkPhase
+ * by `applyTypeOverrides`.
+ */
+function typeOverridePlugin() {
+  return {
+    analyzePhase({ ts, node, moduleDoc }) {
+      const classNode = findClassNode(node, ts);
+      if (!classNode) return;
+
+      for (const member of classNode.members || []) {
+        if (!ts.isGetAccessorDeclaration(member) || isStaticMember(member)) continue;
+
+        const propName = member.name?.text;
+        if (!propName) continue;
+
+        // Extract @type from JSDoc on the getter
+        const typeTag = (member.jsDoc || [])
+          .flatMap((doc) => doc.tags || [])
+          .find((tag) => tag.tagName?.text === 'type');
+
+        if (!typeTag?.typeExpression) continue;
+
+        const typeText = typeTag.typeExpression.type.getText().replace(/^!/u, '');
+
+        // Store the override keyed by declaration name
+        for (const declaration of moduleDoc.declarations || []) {
+          if (!declaration.members?.some((m) => m.name === propName)) continue;
+          if (!typeOverrides.has(declaration.name)) {
+            typeOverrides.set(declaration.name, new Map());
+          }
+          typeOverrides.get(declaration.name).set(propName, typeText);
+        }
+      }
+    },
+  };
+}
+
+/**
  * CEM plugin that marks `readOnly: true` properties as `readonly` in custom-elements.json
  * to filter them out of Lit property bindings when generating web-types-lit.json files.
  */
@@ -248,18 +320,56 @@ function copyMissingFromParents(decl, allDeclarations) {
 }
 
 /**
+ * BFS through a declaration's own overrides, then its mixin/superclass chain,
+ * applying the closest (most specific) @type override for each member.
+ */
+function applyClosestOverrides(decl, allDeclarations) {
+  const visited = new Set();
+  const applied = new Set();
+  const queue = [{ name: decl.name }, ...(decl.mixins || [])];
+  if (decl.superclass?.name) queue.push(decl.superclass);
+
+  while (queue.length > 0) {
+    const ref = queue.shift();
+    if (visited.has(ref.name)) continue;
+    visited.add(ref.name);
+
+    const overrides = typeOverrides.get(ref.name);
+    if (overrides) {
+      for (const [memberName, typeText] of overrides) {
+        if (applied.has(memberName)) continue;
+        const member = (decl.members || []).find((m) => m.name === memberName);
+        if (!member) continue;
+        member.type = { text: typeText };
+        applied.add(memberName);
+      }
+    }
+
+    const parentDecl = allDeclarations.get(ref.name);
+    if (!parentDecl) continue;
+    for (const m of parentDecl.mixins || []) queue.push(m);
+    if (parentDecl.superclass?.name) queue.push(parentDecl.superclass);
+  }
+}
+
+/**
+ * Apply collected @type JSDoc overrides to declaration members.
+ * The CEM analyzer's own inheritance resolution overwrites types set
+ * during analyzePhase, so we re-apply them here after all resolution.
+ */
+function applyTypeOverrides(allDeclarations) {
+  for (const decl of allDeclarations.values()) {
+    applyClosestOverrides(decl, allDeclarations);
+  }
+}
+
+/**
  * Copy missing members and attributes from mixin/superclass declarations
  * to class declarations. Runs multiple passes to handle multi-level
  * inheritance chains (e.g., EmailField → TextField → FieldMixin → LabelMixin).
  */
-function resolveInheritedMembers(manifest) {
-  const allDeclarations = new Map();
-  const classDeclarations = manifest.modules.flatMap((mod) =>
-    (mod.declarations || []).filter((decl) => {
-      allDeclarations.set(decl.name, decl);
-      return decl.kind === 'class';
-    }),
-  );
+function resolveInheritedMembers(allDeclarations) {
+  const classDeclarations = [...allDeclarations.values()].filter((d) => d.kind === 'class');
 
   let changed = true;
   while (changed) {
@@ -277,13 +387,24 @@ export default {
   plugins: [
     classPrivacyPlugin(),
     mixesPlugin(),
+    typeOverridePlugin(),
     readonlyPlugin(),
     {
       packageLinkPhase({ customElementsManifest }) {
+        const allDeclarations = new Map();
+        for (const mod of customElementsManifest.modules) {
+          for (const decl of mod.declarations || []) {
+            allDeclarations.set(decl.name, decl);
+          }
+        }
+
         // Resolve missing inherited members from mixins and superclasses.
-        // The analyzer only follows inheritedFrom one level deep, so members
-        // inherited through 2+ levels are dropped from class declarations.
-        resolveInheritedMembers(customElementsManifest);
+        resolveInheritedMembers(allDeclarations);
+
+        // Re-apply @type JSDoc overrides collected during analyzePhase.
+        // The CEM analyzer's inheritance resolution overwrites specific types
+        // (e.g., AppLayoutI18n) with generic ones from base mixins (e.g., Object).
+        applyTypeOverrides(allDeclarations);
 
         for (const definition of customElementsManifest.modules) {
           // Filter out class declarations marked as @private or @protected
