@@ -41,7 +41,6 @@ export const DragAndDropMixin = (superClass) =>
          * - `on-top-or-between`: The drop event can happen either on top of or between Grid rows.
          * - `on-grid`: The drop event will not happen on any specific row, it will show the drop target outline around the whole grid.
          * @attr {between|on-top|on-top-or-between|on-grid} drop-mode
-         * @type {GridDropMode | null | undefined}
          */
         dropMode: {
           type: String,

@@ -22,7 +22,6 @@ export const GridSorterMixin = (superClass) =>
          * How to sort the data.
          * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
          * descending direction, or `null` for not sorting the data.
-         * @type {GridSorterDirection | undefined}
          */
         direction: {
           type: String,

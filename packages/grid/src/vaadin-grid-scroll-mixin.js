@@ -55,7 +55,6 @@ export const ScrollMixin = (superClass) =>
          * and thus not rendered.
          *
          * @attr {eager|lazy} column-rendering
-         * @type {!ColumnRendering}
          */
         columnRendering: {
           type: String,

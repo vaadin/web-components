@@ -138,7 +138,6 @@ export const CrudMixin = (superClass) =>
          *   - `bottom` - form will open below the grid
          *   - `aside` - form will open on the grid side (_right_, if lft and _left_ if rtl)
          * @attr {bottom|aside} editor-position
-         * @type {!CrudEditorPosition}
          */
         editorPosition: {
           type: String,

@@ -31,7 +31,6 @@ export const AppLayoutMixin = (superclass) =>
          * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
          * - If `primary-section="drawer"` is set, then the drawer will move the navbar, taking the full available height.
          * @attr {navbar|drawer} primary-section
-         * @type {!PrimarySection}
          */
         primarySection: {
           type: String,

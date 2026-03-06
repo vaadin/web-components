@@ -147,7 +147,6 @@ export const UploadMixin = (superClass) =>
 
         /**
          * HTTP Method used to send the files. Only POST and PUT are allowed.
-         * @type {!UploadMethod}
          */
         method: {
           type: String,

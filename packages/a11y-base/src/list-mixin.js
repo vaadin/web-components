@@ -46,7 +46,6 @@ export const ListMixin = (superClass) =>
          * Define how items are disposed in the dom.
          * Possible values are: `horizontal|vertical`.
          * It also changes navigation keys from left/right to up/down.
-         * @type {!ListOrientation}
          */
         orientation: {
           type: String,
