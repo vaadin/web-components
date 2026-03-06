@@ -80,6 +80,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * |`--vaadin-dialog-min-width`             |
  * |`--vaadin-dialog-padding`               |
  * |`--vaadin-dialog-shadow`                |
+ * |`--vaadin-dialog-text-color`            |
  * |`--vaadin-dialog-title-color`           |
  * |`--vaadin-dialog-title-font-size`       |
  * |`--vaadin-dialog-title-font-weight`     |

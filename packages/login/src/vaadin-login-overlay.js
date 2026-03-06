@@ -59,6 +59,7 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * | `--vaadin-login-overlay-description-font-size`   |
  * | `--vaadin-login-overlay-description-font-weight` |
  * | `--vaadin-login-overlay-description-line-height` |
+ * | `--vaadin-login-overlay-text-color`              |
  * | `--vaadin-login-overlay-title-color`             |
  * | `--vaadin-login-overlay-title-font-size`         |
  * | `--vaadin-login-overlay-title-font-weight`       |

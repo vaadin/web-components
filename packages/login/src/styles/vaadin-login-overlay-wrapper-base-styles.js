@@ -9,6 +9,7 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-st
 
 const loginOverlayWrapper = css`
   [part='overlay'] {
+    color: var(--vaadin-login-overlay-text-color, var(--vaadin-overlay-text-color, var(--vaadin-text-color)));
     background: var(
       --vaadin-login-overlay-background,
       var(--vaadin-overlay-background, var(--vaadin-background-color))
