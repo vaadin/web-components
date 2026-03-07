@@ -30,7 +30,8 @@ export class TanStackAdapter {
     this.#virtualizer = new TanStackVirtualizer({
       count: 0,
       getScrollElement: () => this.scrollTarget,
-      estimateSize: () => 20,
+      estimateSize: () => 33.5,
+      overscan: 6,
       measureElement,
       observeElementOffset,
       observeElementRect,
@@ -39,6 +40,7 @@ export class TanStackAdapter {
     });
 
     this.#resizeObserver = new ResizeObserver((entries) => {
+      // console.warn(entries);
       entries.forEach((entry) => {
         const { index } = entry.target.dataset;
         if (index !== undefined) {
@@ -71,10 +73,8 @@ export class TanStackAdapter {
   }
 
   update() {
-    this.#physicalElements.forEach((element) => {
-      if (!element.hidden) {
-        this.updateElement(element, element.dataset.index);
-      }
+    [...this.elementsContainer.children].forEach((element) => {
+      this.updateElement(element, parseInt(element.dataset.index));
     });
   }
 
@@ -87,43 +87,89 @@ export class TanStackAdapter {
       this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
 
       this.#createPhysicalElementsIfNeeded();
-      this.#updatePhysicalElements();
+      this.#renderPhysicalElements();
     });
   }
 
   #createPhysicalElementsIfNeeded() {
-    const count = this.#virtualItems.length - this.#physicalElements.length;
-    if (count > 0) {
-      this.createElements(count).forEach((element) => {
+    const missingCount = this.#virtualItems.length - this.elementsContainer.children.length;
+    if (missingCount > 0) {
+      // this.#physicalElementsPool.push(...this.createElements(missingCount));
+      this.createElements(missingCount).forEach((element) => {
         this.elementsContainer.appendChild(element);
       });
     }
   }
 
-  #updatePhysicalElements() {
+  #renderPhysicalElements() {
     const virtualItems = this.#virtualItems;
+    const physicalElements = this.#physicalElements;
 
-    this.#physicalElements.forEach((element, elementIndex) => {
-      this.#resizeObserver.unobserve(element);
+    const virtualItemKeyMap = new Map(virtualItems.map((item) => [item.key, item]));
+    const physicalElementKeyMap = new Map(physicalElements.map((el) => [el.key, el]));
 
-      const virtualItem = virtualItems[elementIndex];
+    const sharedKeys = virtualItems.filter(({ key }) => physicalElementKeyMap.has(key)).map(({ key }) => key);
+    const sharedKeySet = new Set(sharedKeys);
+
+    const sortedVirtualItems = [
+      ...sharedKeys.map((key) => virtualItemKeyMap.get(key)),
+      ...virtualItems.filter((item) => !sharedKeySet.has(item.key)),
+    ];
+
+    const sortedPhysicalElements = [
+      ...sharedKeys.map((key) => physicalElementKeyMap.get(key)),
+      ...physicalElements.filter((el) => !sharedKeySet.has(el.key)),
+    ];
+
+    sortedPhysicalElements.forEach((el, index) => {
+      const virtualItem = sortedVirtualItems[index];
       if (!virtualItem) {
-        element.hidden = true;
+        el.hidden = true;
         return;
       }
 
-      element.key = virtualItem.key;
-      element.hidden = false;
-      element.style.position = 'absolute';
-      element.style.top = '0';
-      element.style.left = '0';
-      element.style.transform = `translateY(${virtualItem.start}px)`;
-      element.dataset.index = virtualItem.index;
+      el.hidden = false;
+      el.style.position = 'absolute';
+      el.style.top = '0';
+      el.style.left = '0';
+      el.style.transform = `translateY(${virtualItem.start}px)`;
 
-      this.updateElement(element, virtualItem.index);
+      if (virtualItem.key !== el.key) {
+        this.updateElement(el, virtualItem.index);
+      }
 
-      this.#resizeObserver.observe(element);
+      el.key = virtualItem.key;
+      el.dataset.index = virtualItem.index;
     });
+
+    // let virtualItem = virtualItemKeyMap.get(el.__virtualKey);
+    // if (!virtualItem) {
+    //   console.log([...virtualItemKeyMap.values()]);
+    //   virtualItem = [...virtualItemKeyMap.values()][0];
+    // }
+
+    // if (!virtualItem) {
+    //   console.log('hidden');
+    //   el.hidden = true;
+    //   el.__virtualKey = null;
+    //   return;
+    // }
+
+    // el.hidden = false;
+
+    // if (virtualItem.index !== el.__virtualKey) {
+    //   // console.log(el.__virtualKey, virtualItem.index);
+    //   this.#resizeObserver.unobserve(el);
+    //   this.updateel(el, virtualItem.index);
+    // }
+
+    // el.dataset.index = virtualItem.index;
+    // el.__virtualKey = virtualItem.index;
+
+    // virtualItemKeyMap.delete(virtualItem.index);
+
+    // this.#resizeObserver.observe(el);
+    // }
   }
 
   get #virtualItems() {
