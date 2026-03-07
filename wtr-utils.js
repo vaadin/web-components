@@ -1,6 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
-import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
 import { globSync } from 'glob';
@@ -11,6 +10,16 @@ import path from 'node:path';
 import { cssImportPlugin, enforceThemePlugin } from './web-dev-server.config.js';
 
 dotenv.config();
+
+// Lazily load SauceLabs launcher only when credentials are available
+let createSauceLabsLauncher;
+if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
+  try {
+    ({ createSauceLabsLauncher } = await import('@web/test-runner-saucelabs'));
+  } catch {
+    console.warn('@web/test-runner-saucelabs not available, using Playwright launcher.');
+  }
+}
 
 const argv = minimist(process.argv.slice(2));
 
@@ -274,18 +283,53 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  const sauceLabsLauncher = createSauceLabsLauncher(
-    {
-      user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
-    },
-    {
-      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
-      recordScreenshots: false,
-      recordVideo: false,
-    },
-  );
+  // Use SauceLabs only when credentials are available and --local is not set
+  const useSauceLabs = !hasLocalParam && createSauceLabsLauncher;
+
+  let browser;
+  if (hasLocalParam) {
+    // Local mode: use system Chrome, screenshots go to local-baseline/
+    browser = playwrightLauncher({
+      product: 'chromium',
+      launchOptions: {
+        channel: 'chrome',
+        headless: true,
+        ignoreDefaultArgs: ['--hide-scrollbars'],
+      },
+    });
+  } else if (useSauceLabs) {
+    // Legacy SauceLabs mode: when credentials are present
+    const sauceLabsLauncher = createSauceLabsLauncher(
+      {
+        user: process.env.SAUCE_USERNAME,
+        key: process.env.SAUCE_ACCESS_KEY,
+      },
+      {
+        name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
+        build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+        recordScreenshots: false,
+        recordVideo: false,
+      },
+    );
+    browser = sauceLabsLauncher({
+      browserName: 'chrome',
+      platformName: 'Windows 10',
+      browserVersion,
+      'wdio:enforceWebDriverClassic': true,
+    });
+  } else {
+    // Default: Playwright with bundled Chromium (for Docker and CI)
+    browser = playwrightLauncher({
+      product: 'chromium',
+      launchOptions: {
+        headless: true,
+        ignoreDefaultArgs: ['--hide-scrollbars'],
+      },
+    });
+  }
+
+  // Only use 'local-' prefix for --local mode
+  const screenshotPrefix = hasLocalParam ? 'local-' : '';
 
   return {
     concurrency: 1,
@@ -295,34 +339,19 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         timeout: '20000', // Default 2000
       },
     },
-    browsers: [
-      hasLocalParam
-        ? playwrightLauncher({
-            product: 'chromium',
-            launchOptions: {
-              channel: 'chrome',
-              headless: true,
-            },
-          })
-        : sauceLabsLauncher({
-            browserName: 'chrome',
-            platformName: 'Windows 10',
-            browserVersion,
-            'wdio:enforceWebDriverClassic': true,
-          }),
-    ],
+    browsers: [browser],
     plugins: [
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
-          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}baseline`);
+          return getScreenshotFileName(args, `${screenshotPrefix}baseline`);
         },
         getDiffName(args) {
-          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`, true);
+          return getScreenshotFileName(args, `${screenshotPrefix}failed`, true);
         },
         getFailedName(args) {
-          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`);
+          return getScreenshotFileName(args, `${screenshotPrefix}failed`);
         },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',

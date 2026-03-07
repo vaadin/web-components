@@ -10,6 +10,7 @@ permissions:
 
 env:
   _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
   base:
@@ -17,6 +18,9 @@ jobs:
     name: Base
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-jammy
+      options: --ipc=host
 
     steps:
       - uses: actions/checkout@v6
@@ -24,25 +28,19 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
         uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:base
+          command: yarn test:playwright:base
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -50,11 +48,15 @@ jobs:
           name: base-screenshots
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
+
   lumo:
     environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Lumo
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-jammy
+      options: --ipc=host
 
     steps:
       - uses: actions/checkout@v6
@@ -62,25 +64,19 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
         uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:lumo
+          command: yarn test:playwright:lumo
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -95,6 +91,9 @@ jobs:
     name: Aura
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-jammy
+      options: --ipc=host
 
     steps:
       - uses: actions/checkout@v6
@@ -102,36 +101,27 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests (default)
         uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:aura
+          command: yarn test:playwright:aura
 
       - name: Visual tests (dark)
         uses: nick-fields/retry@v3
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:aura:dark
+          command: yarn test:playwright:aura:dark
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
