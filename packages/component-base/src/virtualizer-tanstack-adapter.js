@@ -17,6 +17,7 @@ import {
 
 export class TanStackAdapter {
   #virtualizer;
+  #averageSize = 60;
   #resizeObserver;
   #renderDebouncer;
 
@@ -30,23 +31,32 @@ export class TanStackAdapter {
     this.#virtualizer = new TanStackVirtualizer({
       count: 0,
       getScrollElement: () => this.scrollTarget,
-      estimateSize: () => 33.5,
+      estimateSize: () => this.#averageSize,
       overscan: 6,
       measureElement,
       observeElementOffset,
       observeElementRect,
-      onChange: () => this.#render(),
+      onChange: (instance, sync) => {
+        this.#render();
+
+        if (sync) {
+          this.flush();
+        }
+      },
       scrollToFn() {},
     });
 
     this.#resizeObserver = new ResizeObserver((entries) => {
-      // console.warn(entries);
-      entries.forEach((entry) => {
-        const { index } = entry.target.dataset;
-        if (index !== undefined) {
-          this.#virtualizer.resizeItem(index, entry.contentRect.height);
+      entries.forEach(({ target, contentRect }) => {
+        if (target.hidden) {
+          return;
         }
+
+        const index = parseInt(target.dataset.index);
+        this.#virtualizer.resizeItem(index, contentRect.height);
       });
+
+      this.#recalculateAverageSize();
     });
   }
 
@@ -56,6 +66,7 @@ export class TanStackAdapter {
 
   set size(size) {
     this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: size });
+    this.flush();
   }
 
   get adjustedFirstVisibleIndex() {
@@ -72,14 +83,23 @@ export class TanStackAdapter {
     this.#virtualizer._willUpdate();
   }
 
-  update() {
-    [...this.elementsContainer.children].forEach((element) => {
-      this.updateElement(element, parseInt(element.dataset.index));
+  update(startIndex = 0, endIndex = this.size - 1) {
+    this.#physicalElements.forEach((element) => {
+      const index = parseInt(element.dataset.index);
+      if (!element.hidden && index >= startIndex && index <= endIndex) {
+        this.updateElement(element, index);
+      }
     });
   }
 
   flush() {
     this.#renderDebouncer?.flush();
+  }
+
+  #recalculateAverageSize() {
+    const sizes = this.#virtualItems.map((item) => item.size);
+    const averageSize = sizes.reduce((a, b) => a + b, 0) / sizes.length;
+    this.#averageSize = averageSize;
   }
 
   #render() {
@@ -94,7 +114,6 @@ export class TanStackAdapter {
   #createPhysicalElementsIfNeeded() {
     const missingCount = this.#virtualItems.length - this.elementsContainer.children.length;
     if (missingCount > 0) {
-      // this.#physicalElementsPool.push(...this.createElements(missingCount));
       this.createElements(missingCount).forEach((element) => {
         this.elementsContainer.appendChild(element);
       });
@@ -134,42 +153,16 @@ export class TanStackAdapter {
       el.style.left = '0';
       el.style.transform = `translateY(${virtualItem.start}px)`;
 
-      if (virtualItem.key !== el.key) {
+      if (virtualItem.index !== parseInt(el.dataset.index)) {
+        this.#resizeObserver.unobserve(el);
         this.updateElement(el, virtualItem.index);
       }
 
       el.key = virtualItem.key;
       el.dataset.index = virtualItem.index;
+
+      this.#resizeObserver.observe(el);
     });
-
-    // let virtualItem = virtualItemKeyMap.get(el.__virtualKey);
-    // if (!virtualItem) {
-    //   console.log([...virtualItemKeyMap.values()]);
-    //   virtualItem = [...virtualItemKeyMap.values()][0];
-    // }
-
-    // if (!virtualItem) {
-    //   console.log('hidden');
-    //   el.hidden = true;
-    //   el.__virtualKey = null;
-    //   return;
-    // }
-
-    // el.hidden = false;
-
-    // if (virtualItem.index !== el.__virtualKey) {
-    //   // console.log(el.__virtualKey, virtualItem.index);
-    //   this.#resizeObserver.unobserve(el);
-    //   this.updateel(el, virtualItem.index);
-    // }
-
-    // el.dataset.index = virtualItem.index;
-    // el.__virtualKey = virtualItem.index;
-
-    // virtualItemKeyMap.delete(virtualItem.index);
-
-    // this.#resizeObserver.observe(el);
-    // }
   }
 
   get #virtualItems() {
