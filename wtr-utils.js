@@ -11,16 +11,6 @@ import { cssImportPlugin, enforceThemePlugin } from './web-dev-server.config.js'
 
 dotenv.config();
 
-// Lazily load SauceLabs launcher only when credentials are available
-let createSauceLabsLauncher;
-if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
-  try {
-    ({ createSauceLabsLauncher } = await import('@web/test-runner-saucelabs'));
-  } catch {
-    console.warn('@web/test-runner-saucelabs not available, using Playwright launcher.');
-  }
-}
-
 const argv = minimist(process.argv.slice(2));
 
 const HIDDEN_WARNINGS = [
@@ -270,7 +260,7 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme, browserVersion) => {
+const createVisualTestsConfig = (theme) => {
   let visualPackages = [];
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
@@ -283,50 +273,15 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  // Use SauceLabs only when credentials are available and --local is not set
-  const useSauceLabs = !hasLocalParam && createSauceLabsLauncher;
-
-  let browser;
-  if (hasLocalParam) {
-    // Local mode: use system Chrome, screenshots go to local-baseline/
-    browser = playwrightLauncher({
-      product: 'chromium',
-      launchOptions: {
-        channel: 'chrome',
-        headless: true,
-        ignoreDefaultArgs: ['--hide-scrollbars'],
-      },
-    });
-  } else if (useSauceLabs) {
-    // Legacy SauceLabs mode: when credentials are present
-    const sauceLabsLauncher = createSauceLabsLauncher(
-      {
-        user: process.env.SAUCE_USERNAME,
-        key: process.env.SAUCE_ACCESS_KEY,
-      },
-      {
-        name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
-        build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
-        recordScreenshots: false,
-        recordVideo: false,
-      },
-    );
-    browser = sauceLabsLauncher({
-      browserName: 'chrome',
-      platformName: 'Windows 10',
-      browserVersion,
-      'wdio:enforceWebDriverClassic': true,
-    });
-  } else {
-    // Default: Playwright with bundled Chromium (for Docker and CI)
-    browser = playwrightLauncher({
-      product: 'chromium',
-      launchOptions: {
-        headless: true,
-        ignoreDefaultArgs: ['--hide-scrollbars'],
-      },
-    });
-  }
+  const browser = playwrightLauncher({
+    product: 'chromium',
+    launchOptions: {
+      // Local mode uses system Chrome for quick testing
+      ...(hasLocalParam && { channel: 'chrome' }),
+      headless: true,
+      ignoreDefaultArgs: ['--hide-scrollbars'],
+    },
+  });
 
   // Only use 'local-' prefix for --local mode
   const screenshotPrefix = hasLocalParam ? 'local-' : '';

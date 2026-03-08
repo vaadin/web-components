@@ -6,7 +6,7 @@ custom-elements.json
 yarn-error.log
 .env
 
-# Failed screenshots from Sauce Labs visual test runs
+# Failed screenshots from visual test runs
 packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/**/*/failed
 
