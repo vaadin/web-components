@@ -57,6 +57,7 @@ export class TanStackAdapter {
       });
 
       this.#recalculateAverageSize();
+      this.flush();
     });
   }
 
@@ -114,8 +115,12 @@ export class TanStackAdapter {
   #createPhysicalElementsIfNeeded() {
     const missingCount = this.#virtualItems.length - this.elementsContainer.children.length;
     if (missingCount > 0) {
-      this.createElements(missingCount).forEach((element) => {
-        this.elementsContainer.appendChild(element);
+      this.createElements(missingCount).forEach((el) => {
+        el.hidden = true;
+        el.style.position = 'absolute';
+        el.style.top = '0';
+        el.style.left = '0';
+        this.elementsContainer.appendChild(el);
       });
     }
   }
@@ -143,25 +148,26 @@ export class TanStackAdapter {
     sortedPhysicalElements.forEach((el, index) => {
       const virtualItem = sortedVirtualItems[index];
       if (!virtualItem) {
+        el.key = null;
         el.hidden = true;
+        el.dataset.index = null;
+        this.#resizeObserver.unobserve(el);
         return;
       }
 
+      const oldIndex = parseInt(el.dataset.index);
+      const newIndex = virtualItem.index;
+
       el.hidden = false;
-      el.style.position = 'absolute';
-      el.style.top = '0';
-      el.style.left = '0';
+      el.key = virtualItem.key;
+      el.dataset.index = newIndex;
       el.style.transform = `translateY(${virtualItem.start}px)`;
 
-      if (virtualItem.index !== parseInt(el.dataset.index)) {
+      if (oldIndex !== newIndex) {
         this.#resizeObserver.unobserve(el);
-        this.updateElement(el, virtualItem.index);
+        this.updateElement(el, newIndex);
+        this.#resizeObserver.observe(el);
       }
-
-      el.key = virtualItem.key;
-      el.dataset.index = virtualItem.index;
-
-      this.#resizeObserver.observe(el);
     });
   }
 
