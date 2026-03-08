@@ -76,7 +76,7 @@ export class OverflowController {
         });
       });
 
-      this.__updateOverflow();
+      // this.__updateOverflow();
     });
 
     this.__childObserver.observe(host, { childList: true });
