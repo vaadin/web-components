@@ -22,6 +22,8 @@
       import '@vaadin/button';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
       import '@vaadin/side-nav';
       import '@vaadin/tabs';
 
@@ -67,8 +69,11 @@
           accentColors.forEach((color, i) => {
             section.querySelectorAll(`:scope > :nth-child(${i + 1}) vaadin-badge`).forEach((badge) => {
               badge.classList.toggle('aura-accent-' + color.toLowerCase(), e.target.checked);
-              badge.textContent = e.target.checked ? color : 'Accent';
+              badge.lastChild.textContent = e.target.checked ? color : 'Accent';
             });
+          });
+          section.querySelectorAll(`:scope > :nth-child(${accentColors.length + 1}) vaadin-badge`).forEach((badge) => {
+            badge.classList.toggle('aura-accent-color', e.target.checked);
           });
         });
       });
@@ -246,7 +251,10 @@
     <section class="section generate-variations">
       <vaadin-button>
         Button
-        <vaadin-badge class="aura-accent-color" slot="suffix">Accent</vaadin-badge>
+        <vaadin-badge slot="suffix">
+          <vaadin-icon icon="vaadin:check" slot="icon"></vaadin-icon>
+          Accent
+        </vaadin-badge>
       </vaadin-button>
     </section>
 
@@ -254,11 +262,17 @@
       <vaadin-tabs>
         <vaadin-tab>
           Tab
-          <vaadin-badge class="aura-accent-color">Accent</vaadin-badge>
+          <vaadin-badge>
+            <vaadin-icon icon="vaadin:check" slot="icon"></vaadin-icon>
+            Accent
+          </vaadin-badge>
         </vaadin-tab>
         <vaadin-tab>
           Tab
-          <vaadin-badge class="aura-accent-color">Accent</vaadin-badge>
+          <vaadin-badge>
+            <vaadin-icon icon="vaadin:check" slot="icon"></vaadin-icon>
+            Accent
+          </vaadin-badge>
         </vaadin-tab>
       </vaadin-tabs>
     </section>
@@ -267,11 +281,17 @@
       <vaadin-side-nav>
         <vaadin-side-nav-item path="">
           Nav Item
-          <vaadin-badge class="aura-accent-color" slot="suffix">Accent</vaadin-badge>
+          <vaadin-badge slot="suffix">
+            <vaadin-icon icon="vaadin:check" slot="icon"></vaadin-icon>
+            Accent
+          </vaadin-badge>
         </vaadin-side-nav-item>
         <vaadin-side-nav-item path="foo">
           Nav Item
-          <vaadin-badge class="aura-accent-color" slot="suffix">Accent</vaadin-badge>
+          <vaadin-badge slot="suffix">
+            <vaadin-icon icon="vaadin:check" slot="icon"></vaadin-icon>
+            Accent
+          </vaadin-badge>
         </vaadin-side-nav-item>
       </vaadin-side-nav>
     </section>
