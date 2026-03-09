@@ -35,4 +35,9 @@
     margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
     width: calc(var(--_media-width) + var(--vaadin-card-border-width) * 2);
   }
+
+  :host([theme~='elevated'][theme~='horizontal'][theme~='cover-media'])
+    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+    height: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
+  }
 }

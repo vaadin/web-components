@@ -31,6 +31,10 @@ vaadin-card[theme~='cover-media'] [slot='media']:is(img, video, svg, vaadin-icon
   width: calc(var(--_media-width) + var(--vaadin-card-border-width) * 2);
 }
 
+vaadin-card[theme~='cover-media'][theme~='horizontal'] [slot='media']:is(img, video, svg, vaadin-icon) {
+  height: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
+}
+
 vaadin-card[theme~='elevated'] {
   --aura-surface-opacity: 0.7;
   --aura-surface-level: 3;
