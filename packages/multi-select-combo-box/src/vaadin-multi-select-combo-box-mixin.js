@@ -873,6 +873,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
+    __getWrapperWidth() {
+      return this._inputField.$.wrapper.clientWidth;
+    }
+
+    /** @private */
     __getOverflowWidth() {
       const chip = this._overflow;
 
@@ -905,13 +910,68 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         chip.remove();
       });
 
-      const items = [...this.selectedItems];
+      if (this.selectedItems.length === 0) {
+        this._overflowItems = [];
+        return;
+      }
 
-      // Detect available remaining width for chips
-      const totalWidth = this._inputField.$.wrapper.clientWidth;
+      // When auto expanding vertically, create all chips without overflow
+      if (this.autoExpandVertically) {
+        this.selectedItems.forEach((item) => {
+          this.appendChild(this.__createChip(item));
+        });
+        this._overflowItems = [];
+        return;
+      }
+
       const inputWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
 
-      let remainingWidth = totalWidth - inputWidth;
+      if (this.autoExpandHorizontally) {
+        this._overflowItems = this.__updateChipsHorizontalExpand(this.selectedItems, inputWidth);
+      } else {
+        this._overflowItems = this.__updateChipsDefault(this.selectedItems, inputWidth);
+      }
+    }
+
+    /** @private */
+    __updateChipsHorizontalExpand(items, inputWidth) {
+      // Add all chips to make the field fully expand
+      const chips = items.map((item) => {
+        const chip = this.__createChip(item);
+        this.appendChild(chip);
+        return chip;
+      });
+
+      if (this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth) {
+        return [];
+      }
+
+      // Remove chips from the end until there is enough width for the input element to fit,
+      // keeping at least one chip visible
+      const overflowWidth = this.__getOverflowWidth();
+      let visibleCount = chips.length;
+
+      while (visibleCount > 1) {
+        visibleCount -= 1;
+        chips[visibleCount].remove();
+
+        if (this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth + overflowWidth) {
+          break;
+        }
+      }
+
+      if (visibleCount === 1) {
+        const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
+        const remainingWidth = this.__getWrapperWidth() - inputWidth - overflowWidth;
+        chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
+      }
+
+      return items.slice(visibleCount);
+    }
+
+    /** @private */
+    __updateChipsDefault(items, inputWidth) {
+      let remainingWidth = this.__getWrapperWidth() - inputWidth;
 
       if (items.length > 1) {
         remainingWidth -= this.__getOverflowWidth();
@@ -919,68 +979,25 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
-      if (this.autoExpandHorizontally) {
-        const chips = [];
-
-        // First, add all chips to make the field fully expand
-        for (let i = items.length - 1, refNode = null; i >= 0; i--) {
-          const chip = this.__createChip(items[i]);
-          this.insertBefore(chip, refNode);
-          refNode = chip;
-          chips.unshift(chip);
-        }
-
-        const overflowItems = [];
-        const availableWidth = this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth;
-
-        // When auto expanding vertically, no need to measure width
-        if (!this.autoExpandVertically && availableWidth < inputWidth) {
-          // Always show at least last item as a chip
-          while (chips.length > 1) {
-            const lastChip = chips.pop();
-            lastChip.remove();
-            overflowItems.unshift(items.pop());
-
-            // Remove chips until there is enough width for the input element to fit
-            const neededWidth = overflowItems.length > 0 ? inputWidth + this.__getOverflowWidth() : inputWidth;
-            if (this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth >= neededWidth) {
-              break;
-            }
-          }
-
-          if (chips.length === 1) {
-            chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
-          }
-        }
-
-        this._overflowItems = overflowItems;
-        return;
-      }
-
-      // Add chips until remaining width is exceeded
+      // Add chips from the end until remaining width is exceeded
       for (let i = items.length - 1, refNode = null; i >= 0; i--) {
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
 
-        // When auto expanding vertically, no need to measure remaining width
-        if (!this.autoExpandVertically) {
-          if (this.$.chips.clientWidth > remainingWidth) {
-            // If there is no more space for chips, or if there is at least one
-            // chip already shown, collapse all remaining chips to the overflow
-            if (remainingWidth < chipMinWidth || refNode !== null) {
-              chip.remove();
-              break;
-            }
+        if (this.$.chips.clientWidth > remainingWidth) {
+          // If there is no more space for chips, or if there is at least one
+          // chip already shown, collapse all remaining chips to the overflow
+          if (remainingWidth < chipMinWidth || refNode !== null) {
+            chip.remove();
+            return items.slice(0, i + 1);
           }
-
-          chip.style.maxWidth = `${remainingWidth}px`;
         }
 
-        items.pop();
+        chip.style.maxWidth = `${remainingWidth}px`;
         refNode = chip;
       }
 
-      this._overflowItems = items;
+      return [];
     }
 
     /** @private */
