@@ -5,14 +5,13 @@
   --vaadin-tabs-gap: 2px;
   --vaadin-tabs-border-radius: calc(var(--vaadin-tab-border-radius) + var(--vaadin-tabs-padding));
   --vaadin-tabs-padding: 3px;
-  --vaadin-tabs-border-width: 1px;
 }
 
 vaadin-tabs {
   contain: paint;
   --aura-surface-level: -0.5;
   --aura-surface-opacity: 0.3;
-  background: var(--vaadin-tabs-background, var(--aura-surface-color));
+  background: var(--vaadin-tabs-background, var(--vaadin-background-container));
 }
 
 vaadin-tabs::part(tabs) {
@@ -82,7 +81,7 @@ vaadin-tab:not([disabled], [selected]):hover {
 vaadin-tab[selected] {
   --aura-surface-level: 5;
   --aura-surface-opacity: 0.8;
-  --vaadin-tab-background: var(--aura-accent-surface);
+  --vaadin-tab-background: var(--aura-surface-color);
   --vaadin-tab-text-color: var(--aura-accent-text-color);
   box-shadow:
     0 0 0 1px light-dark(hsl(0deg, 100%, 0%, 0.02), transparent),
