@@ -16,7 +16,9 @@ export const GridSorterMixin = (superClass) =>
         /**
          * JS Path of the property in the item used for sorting the data.
          */
-        path: String,
+        path: {
+          type: String,
+        },
 
         /**
          * How to sort the data.
