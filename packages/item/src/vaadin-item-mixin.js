@@ -57,15 +57,13 @@ export const ItemMixin = (superClass) =>
     }
 
     /**
-     * @return {string}
+     * Submittable string value. The default value is the trimmed text content of the element.
+     * @type {string}
      */
     get value() {
       return this._value !== undefined ? this._value : this.textContent.trim();
     }
 
-    /**
-     * @param {string} value
-     */
     set value(value) {
       this._value = value;
     }
