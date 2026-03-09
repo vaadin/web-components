@@ -423,8 +423,9 @@ export const ColumnReorderingMixin = (superClass) =>
         const secondColFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
         cells.filter((cell) => firstColumn.contains(cell._column)).forEach((cell) => secondColFirstCell.before(cell));
         // row.__cells are out of sync with the actual cell order after the move, and must be updated
-        delete row.__cells;
-        row.__cells = getBodyRowCells(row);
+        if (row.__cells) {
+          row.__cells = row.__cells.toSorted((a, b) => a._column._order - b._column._order);
+        }
       });
 
       this._debounceUpdateFrozenColumn();
