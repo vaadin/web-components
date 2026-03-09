@@ -1007,10 +1007,87 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     const items = [...this.selectedItems];
 
-    // Detect available remaining width for chips
-    const totalWidth = this._inputField.$.wrapper.clientWidth;
+    if (items.length === 0) {
+      this._overflowItems = [];
+      return;
+    }
+
+    // When auto expanding vertically, create all chips without overflow
+    if (this.autoExpandVertically) {
+      for (let i = items.length - 1, refNode = null; i >= 0; i--) {
+        const chip = this.__createChip(items[i]);
+        this.$.chips.insertBefore(chip, refNode);
+        refNode = chip;
+      }
+      this._overflowItems = [];
+      return;
+    }
+
     const inputWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
 
+    if (this.autoExpandHorizontally) {
+      this._overflowItems = this.__updateChipsHorizontalExpand(items, inputWidth);
+    } else {
+      this._overflowItems = this.__updateChipsDefault(items, inputWidth);
+    }
+  }
+
+  /** @private */
+  __renderAllChips(items) {
+    const chips = [];
+    for (let i = items.length - 1, refNode = null; i >= 0; i--) {
+      const chip = this.__createChip(items[i]);
+      this.$.chips.insertBefore(chip, refNode);
+      refNode = chip;
+      chips.unshift(chip);
+    }
+
+    const allChipsFit =
+      this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth >=
+      parseInt(getComputedStyle(this.inputElement).flexBasis);
+
+    return { chips, allChipsFit };
+  }
+
+  /** @private */
+  __updateChipsHorizontalExpand(items, inputWidth) {
+    const { chips, allChipsFit } = this.__renderAllChips(items);
+
+    if (allChipsFit) {
+      return [];
+    }
+
+    const overflowItems = [];
+
+    // Always show at least last item as a chip
+    while (chips.length > 1) {
+      const lastChip = chips.pop();
+      lastChip.remove();
+      overflowItems.unshift(items.pop());
+
+      // Remove chips until there is enough width for the input element to fit
+      const neededWidth = overflowItems.length > 0 ? inputWidth + this.__getOverflowWidth() : inputWidth;
+      if (this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth >= neededWidth) {
+        break;
+      }
+    }
+
+    if (chips.length === 1) {
+      const totalWidth = this._inputField.$.wrapper.clientWidth;
+      let remainingWidth = totalWidth - inputWidth;
+      if (items.length > 1) {
+        remainingWidth -= this.__getOverflowWidth();
+      }
+      const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
+      chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
+    }
+
+    return overflowItems;
+  }
+
+  /** @private */
+  __updateChipsDefault(items, inputWidth) {
+    const totalWidth = this._inputField.$.wrapper.clientWidth;
     let remainingWidth = totalWidth - inputWidth;
 
     if (items.length > 1) {
@@ -1019,51 +1096,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
-    if (this.autoExpandHorizontally) {
-      const chips = [];
-
-      // First, add all chips to make the field fully expand
-      for (let i = items.length - 1, refNode = null; i >= 0; i--) {
-        const chip = this.__createChip(items[i]);
-        this.$.chips.insertBefore(chip, refNode);
-        refNode = chip;
-        chips.unshift(chip);
-      }
-
-      const overflowItems = [];
-      const availableWidth = this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth;
-
-      // When auto expanding vertically, no need to measure width
-      if (!this.autoExpandVertically && availableWidth < inputWidth) {
-        // Always show at least last item as a chip
-        while (chips.length > 1) {
-          const lastChip = chips.pop();
-          lastChip.remove();
-          overflowItems.unshift(items.pop());
-
-          // Remove chips until there is enough width for the input element to fit
-          const neededWidth = overflowItems.length > 0 ? inputWidth + this.__getOverflowWidth() : inputWidth;
-          if (this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth >= neededWidth) {
-            break;
-          }
-        }
-
-        if (chips.length === 1) {
-          chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
-        }
-      }
-
-      this._overflowItems = overflowItems;
-      return;
-    }
-
     // Add chips until remaining width is exceeded
     for (let i = items.length - 1, refNode = null; i >= 0; i--) {
       const chip = this.__createChip(items[i]);
       this.$.chips.insertBefore(chip, refNode);
 
-      // When auto expanding vertically, no need to measure remaining width
-      if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {
+      if (this.$.chips.clientWidth > remainingWidth) {
         // Always show at least last selected item as a chip
         if (refNode === null) {
           chip.style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
@@ -1077,7 +1115,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       refNode = chip;
     }
 
-    this._overflowItems = items;
+    return items;
   }
 
   /** @private */
