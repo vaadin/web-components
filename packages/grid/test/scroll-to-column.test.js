@@ -54,12 +54,11 @@ describe('scroll to column', () => {
       return false;
     }
 
-    const scrollLeft = grid.$.table.scrollLeft;
-    const clientWidth = grid.$.table.clientWidth;
-
-    return (
-      headerCell.offsetLeft + headerCell.offsetWidth >= scrollLeft && headerCell.offsetLeft <= scrollLeft + clientWidth
-    );
+    const bounds = headerCell.getBoundingClientRect();
+    const centerX = bounds.left + bounds.width / 2;
+    const centerY = bounds.top + bounds.height / 2;
+    const cellContent = document.elementFromPoint(centerX, centerY);
+    return headerCell.querySelector('slot').assignedElements().includes(cellContent);
   }
 
   describe('by index', () => {
@@ -216,14 +215,16 @@ describe('scroll to column', () => {
     });
 
     it('should not scroll for frozen column (always visible)', () => {
+      grid.scrollToColumn(9);
+      expect(isColumnInViewport(columns[9])).to.be.true;
+
       const initialScrollLeft = grid.$.table.scrollLeft;
       grid.scrollToColumn(columns[0]);
       expect(grid.$.table.scrollLeft).to.equal(initialScrollLeft);
     });
 
-    it('should scroll non-frozen column into view', async () => {
+    it('should scroll non-frozen column into view', () => {
       grid.scrollToColumn(9);
-      await nextFrame();
       expect(isColumnInViewport(columns[9])).to.be.true;
 
       // Scroll back to first non-frozen
