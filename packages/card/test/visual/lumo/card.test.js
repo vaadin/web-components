@@ -209,6 +209,18 @@ describe('card', () => {
         };
       });
     });
+
+    it('horizontal-elevated-cover-media', async () => {
+      element = fixtureSync(complexCard, div);
+      element.setAttribute('theme', 'horizontal elevated cover-media');
+      element.style.setProperty('width', '400px');
+      await new Promise((resolve) => {
+        element.querySelector('img').onload = async () => {
+          await visualDiff(div, 'theme-horizontal-elevated-media-cover');
+          resolve();
+        };
+      });
+    });
   });
 
   describe('custom properties', () => {
