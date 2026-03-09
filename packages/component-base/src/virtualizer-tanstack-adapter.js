@@ -113,13 +113,14 @@ export class TanStackAdapter {
   }
 
   #createPhysicalElementsIfNeeded() {
-    const missingCount = this.#virtualItems.length - this.elementsContainer.children.length;
+    const missingCount = this.#virtualItems.length - this.#physicalElements.length;
     if (missingCount > 0) {
       this.createElements(missingCount).forEach((el) => {
         el.hidden = true;
         el.style.position = 'absolute';
         el.style.top = '0';
         el.style.left = '0';
+
         this.elementsContainer.appendChild(el);
       });
     }
