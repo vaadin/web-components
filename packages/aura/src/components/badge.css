@@ -11,11 +11,10 @@ vaadin-badge:is([theme~='filled'], [theme~='dot']) {
   color: var(--aura-accent-contrast-color);
 }
 
-/* Special case for filled badges within filled variants */
-/* TODO is there a way to solve this without explicitly listing the special cases? */
-:is(vaadin-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'],
-vaadin-tabs[theme~='filled'] > vaadin-tab[selected],
-vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
+/* Inside filled component variants, increase the opacity of default badge variants so that they retain their color */
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle)[theme~='primary'] > *,
+vaadin-tabs[theme~='filled'] > vaadin-tab[selected] > :not([slot='tooltip']),
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current] > :not([slot='children']):not([slot='tooltip']),
 :is(
     vaadin-combo-box-item,
     vaadin-context-menu-item,
@@ -23,21 +22,37 @@ vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current],
     vaadin-menu-bar-item,
     vaadin-multi-select-combo-box-item,
     vaadin-select-item[role]
-  )[theme~='filled']:not([disabled], [aria-disabled='true']):hover {
-  > vaadin-badge[theme~='filled']:not(
-      .aura-accent-red,
-      .aura-accent-orange,
-      .aura-accent-yellow,
-      .aura-accent-green,
-      .aura-accent-blue,
-      .aura-accent-purple,
-      [theme~='info'],
-      [theme~='success'],
-      [theme~='warning'],
-      [theme~='error']
-    ) {
-    border-color: transparent;
-    background: var(--aura-accent-contrast-color);
-    color: var(--aura-accent-color);
+  )[theme~='filled']:not([disabled], [aria-disabled='true']):hover
+  > vaadin-badge {
+  --vaadin-icon-color: currentColor;
+  --aura-surface-opacity: 1;
+  --aura-surface-level: 3;
+
+  /* Badges that are not explicitly colored (i.e. default/inherited accent color and neutral accent color) inherit their color from the parent container */
+  &:not(
+    .aura-accent-color,
+    .aura-accent-red,
+    .aura-accent-orange,
+    .aura-accent-yellow,
+    .aura-accent-green,
+    .aura-accent-blue,
+    .aura-accent-purple,
+    [theme~='info'],
+    [theme~='success'],
+    [theme~='warning'],
+    [theme~='error']
+  ) {
+    --aura-surface-opacity: 0.5;
+    --aura-surface-level: 1;
+    --aura-accent-text-color: currentColor;
+    --aura-accent-border-color: color-mix(in srgb, currentColor 30%, transparent);
+    --aura-accent-surface: color-mix(in srgb, currentColor 10%, transparent);
+
+    /* Invert the colors of filled, non-explicitly colored badges */
+    &[theme~='filled'] {
+      background: var(--aura-accent-contrast-color);
+      color: var(--aura-accent-color);
+      border-color: transparent;
+    }
   }
 }
