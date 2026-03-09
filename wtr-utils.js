@@ -43,7 +43,6 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
-const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
 const hasAllParam = process.argv.includes('--all');
@@ -276,15 +275,10 @@ const createVisualTestsConfig = (theme) => {
   const browser = playwrightLauncher({
     product: 'chromium',
     launchOptions: {
-      // Local mode uses system Chrome for quick testing
-      ...(hasLocalParam && { channel: 'chrome' }),
       headless: true,
       ignoreDefaultArgs: ['--hide-scrollbars'],
     },
   });
-
-  // Only use 'local-' prefix for --local mode
-  const screenshotPrefix = hasLocalParam ? 'local-' : '';
 
   return {
     concurrency: 1,
@@ -300,13 +294,13 @@ const createVisualTestsConfig = (theme) => {
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
-          return getScreenshotFileName(args, `${screenshotPrefix}baseline`);
+          return getScreenshotFileName(args, 'baseline');
         },
         getDiffName(args) {
-          return getScreenshotFileName(args, `${screenshotPrefix}failed`, true);
+          return getScreenshotFileName(args, 'failed', true);
         },
         getFailedName(args) {
-          return getScreenshotFileName(args, `${screenshotPrefix}failed`);
+          return getScreenshotFileName(args, 'failed');
         },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',
