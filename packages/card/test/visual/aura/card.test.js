@@ -88,4 +88,14 @@ describe('card', () => {
     element = mediaFixture(false, 'cover-media');
     await visualDiff(div, 'cover-media-icon');
   });
+
+  it('cover-media-elevated-horizontal', async () => {
+    element = mediaFixture(true, 'cover-media elevated horizontal');
+    await new Promise((resolve) => {
+      element.querySelector('img').onload = async () => {
+        await visualDiff(div, 'cover-media-elevated-horizontal');
+        resolve();
+      };
+    });
+  });
 });

@@ -229,6 +229,14 @@ export const cardStyles = css`
     height: 100%;
   }
 
+  :host([theme~='cover-media']) {
+    --_media-width: calc(100% + var(--_padding) * 2);
+  }
+
+  :host([theme~='horizontal'][theme~='cover-media']) {
+    --_media-width: calc(100% + var(--_padding));
+  }
+
   :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     border-radius: inherit;
     border-end-end-radius: 0;
@@ -236,7 +244,7 @@ export const cardStyles = css`
     margin-inline: calc(var(--_padding) * -1);
     margin-top: calc(var(--_padding) * -1);
     max-width: none;
-    width: calc(100% + var(--_padding) * 2);
+    width: var(--_media-width);
   }
 
   :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
@@ -245,7 +253,6 @@ export const cardStyles = css`
     border-start-end-radius: 0;
     height: calc(100% + var(--_padding) * 2);
     margin-inline-end: 0;
-    width: calc(100% + var(--_padding));
   }
 
   /* Scroller in content */
