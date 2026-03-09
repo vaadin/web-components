@@ -491,7 +491,7 @@ export const GridMixin = (superClass) =>
 
       columns
         .filter((column) => !column.hidden)
-        .sort((a, b) => a._order - b._order)
+        .toSorted((a, b) => a._order - b._order)
         .forEach((column, index, cols) => {
           let cell;
 
