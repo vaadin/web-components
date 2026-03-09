@@ -28,7 +28,7 @@ vaadin-card[theme~='cover-media'] [slot='media']:is(img, video, svg, vaadin-icon
   /* TODO relies on internal API - should refactor base styles to support this (background-clip: padding-box) */
   margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
   margin-top: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
-  width: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
+  width: calc(var(--_media-width) + var(--vaadin-card-border-width) * 2);
 }
 
 vaadin-card[theme~='elevated'] {
