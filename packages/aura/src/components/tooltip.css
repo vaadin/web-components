@@ -8,5 +8,6 @@
 }
 
 :is(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
+  background: var(--vaadin-tooltip-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
   box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
 }

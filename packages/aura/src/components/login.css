@@ -26,6 +26,10 @@ vaadin-login-overlay {
 
   &::part(overlay) {
     --aura-surface-level: 2;
+    background: var(--vaadin-login-overlay-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+    box-shadow:
+      var(--aura-overlay-outline-shadow),
+      var(--vaadin-login-overlay-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
   }
 
   &::part(brand) {
