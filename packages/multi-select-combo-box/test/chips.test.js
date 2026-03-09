@@ -501,6 +501,109 @@ describe('chips', () => {
     });
   });
 
+  describe('collapseChips', () => {
+    let overflow;
+
+    beforeEach(async () => {
+      comboBox.collapseChips = true;
+      comboBox.style.width = '250px';
+      await nextResize(comboBox);
+      overflow = getChips(comboBox)[0];
+    });
+
+    it('should show all chips when they all fit', async () => {
+      comboBox.selectedItems = ['apple'];
+      await nextRender();
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(2);
+      expect(getChipContent(chips[1])).to.equal('apple');
+      expect(overflow.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should collapse all chips to overflow when they do not fit', async () => {
+      comboBox.selectedItems = ['apple', 'banana', 'orange'];
+      await nextRender();
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(1);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+      expect(overflow.label).to.equal('3');
+      expect(overflow.getAttribute('title')).to.equal('apple, banana, orange');
+    });
+
+    it('should collapse chips when setting collapseChips to true', async () => {
+      comboBox.collapseChips = false;
+      comboBox.selectedItems = ['apple', 'banana', 'orange'];
+      await nextRender();
+      // Default mode: at least one chip visible + overflow
+      expect(getChips(comboBox).length).to.equal(2);
+
+      comboBox.collapseChips = true;
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(1);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should revert to default overflow when setting collapseChips to false', async () => {
+      comboBox.selectedItems = ['apple', 'banana', 'orange'];
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(1);
+
+      comboBox.collapseChips = false;
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(2);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should show chips when component is resized wider', async () => {
+      comboBox.selectedItems = ['apple', 'banana', 'orange'];
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(1);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+
+      comboBox.style.width = '400px';
+      await nextResize(comboBox);
+      expect(getChips(comboBox).length).to.equal(4);
+      expect(overflow.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should collapse chips when component is resized narrower', async () => {
+      comboBox.style.width = '400px';
+      await nextResize(comboBox);
+      comboBox.selectedItems = ['apple', 'banana', 'orange'];
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(4);
+
+      comboBox.style.width = '250px';
+      await nextResize(comboBox);
+      expect(getChips(comboBox).length).to.equal(1);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should collapse single item that does not fit', async () => {
+      comboBox.style.width = '100px';
+      await nextResize(comboBox);
+      comboBox.selectedItems = ['orange'];
+      await nextRender();
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(1);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+      expect(overflow.label).to.equal('1');
+    });
+
+    it('should expand field and collapse when used with autoExpandHorizontally', async () => {
+      comboBox.autoExpandHorizontally = true;
+      comboBox.style.width = '';
+      comboBox.style.maxWidth = '300px';
+      await nextResize(comboBox);
+      comboBox.selectedItems = ['apple', 'banana', 'lemon', 'orange'];
+      await nextRender();
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(1);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+      expect(overflow.label).to.equal('4');
+    });
+  });
+
   describe('autoExpandHorizontally', () => {
     let overflow;
 

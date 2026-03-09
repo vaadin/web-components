@@ -73,6 +73,14 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   autoExpandVertically: boolean;
 
   /**
+   * Set to true to collapse all selected items chips into the overflow
+   * chip when they don't all fit, instead of showing as many as possible.
+   * Has no effect when `autoExpandVertically` is true.
+   * @attr {boolean} collapse-chips
+   */
+  collapseChips: boolean;
+
+  /**
    * When true, the user can input a value that is not present in the items list.
    * @attr {boolean} allow-custom-value
    */

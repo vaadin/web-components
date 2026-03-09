@@ -70,6 +70,20 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /**
+         * Set to true to collapse all selected items chips into the overflow
+         * chip when they don't all fit, instead of showing as many as possible.
+         * Has no effect when `autoExpandVertically` is true.
+         * @attr {boolean} collapse-chips
+         */
+        collapseChips: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          observer: '_collapseChipsChanged',
+          sync: true,
+        },
+
+        /**
          * A full set of items to filter the visible options from.
          * The items can be of either `String` or `Object` type.
          */
@@ -587,6 +601,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    _collapseChipsChanged(collapse, oldCollapse) {
+      if (collapse || oldCollapse) {
+        this.__updateChips();
+      }
+    }
+
     /**
      * Implement two-way binding for the `filteredItems` property
      * that can be set on the internal combo-box element.
@@ -874,7 +895,9 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       const inputWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
 
-      if (this.autoExpandHorizontally) {
+      if (this.collapseChips) {
+        this._overflowItems = this.__updateChipsCollapsed(this.selectedItems, inputWidth);
+      } else if (this.autoExpandHorizontally) {
         this._overflowItems = this.__updateChipsHorizontalExpand(this.selectedItems, inputWidth);
       } else {
         this._overflowItems = this.__updateChipsDefault(this.selectedItems, inputWidth);
@@ -882,15 +905,35 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __updateChipsHorizontalExpand(items, inputWidth) {
-      // Add all chips to make the field fully expand
+    __renderAllChips(items, inputWidth) {
       const chips = items.map((item) => {
         const chip = this.__createChip(item);
         this.appendChild(chip);
         return chip;
       });
 
-      if (this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth) {
+      const allChipsFit = this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth;
+      return { chips, allChipsFit };
+    }
+
+    /** @private */
+    __updateChipsCollapsed(items, inputWidth) {
+      const { chips, allChipsFit } = this.__renderAllChips(items, inputWidth);
+
+      if (allChipsFit) {
+        return [];
+      }
+
+      // Not enough space: remove all chips, collapse everything to overflow
+      chips.forEach((chip) => chip.remove());
+      return items.slice();
+    }
+
+    /** @private */
+    __updateChipsHorizontalExpand(items, inputWidth) {
+      const { chips, allChipsFit } = this.__renderAllChips(items, inputWidth);
+
+      if (allChipsFit) {
         return [];
       }
 

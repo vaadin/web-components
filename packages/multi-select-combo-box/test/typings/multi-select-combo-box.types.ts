@@ -108,6 +108,7 @@ assertType<boolean>(narrowedComboBox.required);
 assertType<string>(narrowedComboBox.overlayClass);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
+assertType<boolean>(narrowedComboBox.collapseChips);
 
 // Mixins
 assertType<ControllerMixinClass>(narrowedComboBox);
