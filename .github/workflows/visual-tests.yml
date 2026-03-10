@@ -29,9 +29,6 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -70,9 +67,6 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
-
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -113,9 +107,6 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
-
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Cache node_modules
         uses: actions/cache@v4
