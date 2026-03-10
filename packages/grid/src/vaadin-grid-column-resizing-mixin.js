@@ -96,12 +96,9 @@ export const ColumnResizingMixin = (superClass) =>
           column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
-        const targetCellIndex = columnRowCells.indexOf(targetCell);
-        columnRowCells.forEach((cell, index) => {
-          if (index < targetCellIndex) {
-            cell._column.width = `${cell.offsetWidth}px`;
-            cell._column.flexGrow = 0;
-          }
+        columnRowCells.slice(0, columnRowCells.indexOf(targetCell)).forEach((cell) => {
+          cell._column.width = `${cell.offsetWidth}px`;
+          cell._column.flexGrow = 0;
         });
 
         const cellFrozenToEnd = this._frozenToEndCells[0];
