@@ -39,6 +39,10 @@
     --_lumo-button-text-color: var(--vaadin-button-text-color, var(--lumo-primary-text-color));
     --_lumo-button-primary-background: var(--vaadin-button-primary-background, var(--lumo-primary-color));
     --_lumo-button-primary-text-color: var(--vaadin-button-primary-text-color, var(--lumo-primary-contrast-color));
+    /* Allow controlling these from the host (inherited by the inner container */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   :host([hidden]) {
@@ -47,9 +51,9 @@
 
   .vaadin-button-container {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: inherit;
+    justify-content: inherit;
+    text-align: inherit;
     width: 100%;
     height: 100%;
     min-height: inherit;
