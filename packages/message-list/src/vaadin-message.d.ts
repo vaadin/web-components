@@ -47,6 +47,34 @@ export type MessageEventMap = HTMLElementEventMap & {
  * `focus-ring` | Set when the message is focused using the keyboard.
  * `focused`    | Set when the message is focused.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :------------------------------------------- |
+ * `--vaadin-message-attachment-background`     |
+ * `--vaadin-message-attachment-border-color`   |
+ * `--vaadin-message-attachment-border-radius`  |
+ * `--vaadin-message-attachment-border-width`   |
+ * `--vaadin-message-attachment-font-size`      |
+ * `--vaadin-message-attachment-font-weight`    |
+ * `--vaadin-message-attachment-gap`            |
+ * `--vaadin-message-attachment-line-height`    |
+ * `--vaadin-message-attachment-padding`        |
+ * `--vaadin-message-attachment-text-color`     |
+ * `--vaadin-message-font-size`                 |
+ * `--vaadin-message-font-weight`               |
+ * `--vaadin-message-gap`                       |
+ * `--vaadin-message-header-line-height`        |
+ * `--vaadin-message-line-height`               |
+ * `--vaadin-message-name-color`                |
+ * `--vaadin-message-name-font-size`            |
+ * `--vaadin-message-name-font-weight`          |
+ * `--vaadin-message-padding`                   |
+ * `--vaadin-message-text-color`                |
+ * `--vaadin-message-time-color`                |
+ * `--vaadin-message-time-font-size`            |
+ * `--vaadin-message-time-font-weight`          |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
