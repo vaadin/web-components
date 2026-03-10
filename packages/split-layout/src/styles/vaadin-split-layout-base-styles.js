@@ -26,6 +26,10 @@ export const splitLayoutStyles = css`
     min-height: 0;
   }
 
+  ::slotted(:not(vaadin-split-layout)) {
+    overflow: clip;
+  }
+
   [part='splitter'] {
     --_splitter-size: var(--vaadin-split-layout-splitter-size, 8px);
     --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, 8px);
