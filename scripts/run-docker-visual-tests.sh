@@ -51,4 +51,4 @@ docker run --rm --ipc=host \
   -w /work \
   -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
   "$IMAGE" \
-  /bin/bash -c "yarn --frozen-lockfile --no-progress --non-interactive && yarn ${YARN_SCRIPT} ${EXTRA_ARGS}"
+  /bin/bash -c "git config --global --add safe.directory /work && yarn --frozen-lockfile --no-progress --non-interactive && yarn ${YARN_SCRIPT} ${EXTRA_ARGS}"
