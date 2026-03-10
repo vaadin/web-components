@@ -7,6 +7,10 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const textAreaStyles = css`
+  :host {
+    height: auto;
+  }
+
   [part='input-field'] {
     overflow: auto;
     scroll-padding: var(
