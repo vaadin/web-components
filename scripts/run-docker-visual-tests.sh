@@ -5,6 +5,7 @@ set -e
 #
 # Usage:
 #   ./scripts/run-docker-visual-tests.sh <yarn-script> [extra-args...]
+#   ./scripts/run-docker-visual-tests.sh --clean
 #
 # Examples:
 #   ./scripts/run-docker-visual-tests.sh test:playwright:lumo
@@ -13,16 +14,27 @@ set -e
 #   ./scripts/run-docker-visual-tests.sh test:playwright:aura:dark
 #   ./scripts/run-docker-visual-tests.sh update:playwright:lumo
 #   ./scripts/run-docker-visual-tests.sh update:playwright:lumo --group button
+#   ./scripts/run-docker-visual-tests.sh --clean                # Remove cached node_modules volume
 
 IMAGE=$(grep 'VISUAL_TESTS_DOCKER_IMAGE:' "$(dirname "$0")/../.github/workflows/visual-tests.yml" | head -1 | sed 's/.*VISUAL_TESTS_DOCKER_IMAGE: *//')
 
+NODE_MODULES_VOLUME="vaadin-web-components-node-modules"
+
+if [ "$1" = "--clean" ]; then
+  echo "Removing cached node_modules volume (${NODE_MODULES_VOLUME})..."
+  docker volume rm "$NODE_MODULES_VOLUME" 2>/dev/null && echo "Done." || echo "Volume not found (nothing to clean)."
+  exit 0
+fi
+
 if [ -z "$1" ]; then
   echo "Usage: $0 <yarn-script> [extra-args...]"
+  echo "       $0 --clean"
   echo ""
   echo "Examples:"
   echo "  $0 test:playwright:lumo"
   echo "  $0 test:playwright:lumo --group button"
   echo "  $0 update:playwright:lumo"
+  echo "  $0 --clean                # Remove cached node_modules volume"
   exit 1
 fi
 
@@ -31,12 +43,6 @@ shift
 
 echo "Running visual tests in Docker (${IMAGE})..."
 echo "  Script: yarn ${YARN_SCRIPT} $*"
-
-# Use a named volume for node_modules so that:
-# 1. Linux-native dependencies are installed separately from the host (macOS/Windows)
-# 2. The volume persists between runs, making subsequent installs fast
-# 3. We avoid exhausting Docker Desktop disk space from duplicate node_modules
-NODE_MODULES_VOLUME="vaadin-web-components-node-modules"
 
 # Run Docker:
 # - --rm: Remove container after exit
