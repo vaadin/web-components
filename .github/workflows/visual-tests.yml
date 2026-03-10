@@ -32,6 +32,12 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
@@ -67,6 +73,12 @@ jobs:
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -104,6 +116,12 @@ jobs:
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
