@@ -3,7 +3,6 @@
   --vaadin-button-shadow: var(--aura-shadow-xs);
 }
 
-vaadin-message::part(attachment),
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
   transition: scale 180ms;
   position: relative;
@@ -15,7 +14,6 @@ vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
   opacity: 0.6;
 }
 
-vaadin-message::part(attachment),
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(
   :not([theme~='tertiary'])
 ) {
@@ -25,13 +23,11 @@ vaadin-message::part(attachment),
 }
 
 /* prettier-ignore */
-vaadin-message::part(attachment),
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not([theme~='primary'], [theme~='tertiary']) {
   background: var(--vaadin-button-background, var(--_background));
   border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
 }
 
-vaadin-message::part(attachment),
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(
   :not([theme~='primary'])
 ) {
@@ -79,7 +75,6 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
-vaadin-message::part(attachment)::before,
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(
     [disabled]
   )::before {
@@ -96,7 +91,6 @@ vaadin-message::part(attachment)::before,
 }
 
 @supports (color: hsl(0 0 0)) {
-  vaadin-message::part(attachment)::before,
   :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(
       [disabled]
     )::before {
@@ -106,7 +100,6 @@ vaadin-message::part(attachment)::before,
 
 @media (any-hover: hover) {
   /* prettier-ignore */
-  vaadin-message::part(attachment):hover:not(:active)::before,
   :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):hover:not([disabled], [active])::before {
     opacity: 0.03;
   }
@@ -119,21 +112,18 @@ vaadin-message::part(attachment)::before,
 
 @media (min-resolution: 2x) {
   /* prettier-ignore */
-  vaadin-message::part(attachment):active,
   :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button[first-visible][last-visible], vaadin-drawer-toggle)[active]:not([disabled], [aria-disabled='true']) {
     scale: 0.98;
     transition-duration: 50ms;
   }
 }
 
-vaadin-message::part(attachment):active,
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[active]:not(
     [disabled]
   ) {
   box-shadow: none;
 }
 
-vaadin-message::part(attachment):active::before,
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[active]:not(
     [disabled]
   )::before {
