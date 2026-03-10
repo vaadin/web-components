@@ -97,6 +97,7 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * unparsable => unparsable | unparsable-change
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.

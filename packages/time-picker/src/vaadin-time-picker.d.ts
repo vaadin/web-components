@@ -37,12 +37,19 @@ export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type TimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
+/**
+ * Fired when the user commits an unparsable value change and there is no change event.
+ */
+export type TimePickerUnparsableChangeEvent = CustomEvent;
+
 export interface TimePickerCustomEventMap {
   'invalid-changed': TimePickerInvalidChangedEvent;
 
   'opened-changed': TimePickerOpenedChangedEvent;
 
   'value-changed': TimePickerValueChangedEvent;
+
+  'unparsable-change': TimePickerUnparsableChangeEvent;
 
   validated: TimePickerValidatedEvent;
 }
@@ -130,6 +137,7 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  * unparsable => unparsable | unparsable-change
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
