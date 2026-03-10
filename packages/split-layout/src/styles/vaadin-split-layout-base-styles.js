@@ -22,9 +22,12 @@ export const splitLayoutStyles = css`
 
   ::slotted(*) {
     flex: 1 1 auto;
-    overflow: clip;
     min-width: 0;
     min-height: 0;
+  }
+
+  ::slotted(:not(vaadin-split-layout)) {
+    overflow: clip;
   }
 
   [part='splitter'] {
