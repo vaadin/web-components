@@ -206,6 +206,8 @@ export const ScrollMixin = (superClass) =>
       }
 
       this._scrollHorizontallyToCell(column._headerCell);
+      // Update cell position synchronously
+      this.__updateHorizontalScrollPosition();
       // Synchronously update cells when using lazy column rendering
       this.__updateColumnsBodyContentHidden();
     }
