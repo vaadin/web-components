@@ -174,6 +174,8 @@ export const ColumnAutoWidthMixin = (superClass) =>
         col.width = `${this.__getDistributedWidth(col)}px`;
       });
 
+      this.__updateCSSGridTemplateColumns();
+
       // Clear the column-width cache to avoid a memory leak
       this.__intrinsicWidthCache.clear();
     }
@@ -197,35 +199,36 @@ export const ColumnAutoWidthMixin = (superClass) =>
      * @private
      */
     __setVisibleCellContentAutoWidth(col, autoWidth) {
-      col._allCells
-        .filter((cell) => {
-          if (this.$.items.contains(cell)) {
-            return this.__viewportRowsCache.includes(cell.parentElement);
-          }
-          return true;
-        })
-        .forEach((cell) => {
-          cell.__measuringAutoWidth = autoWidth;
+      col.__measuringAutoWidth = autoWidth;
+      // col._allCells
+      //   .filter((cell) => {
+      //     if (this.$.items.contains(cell)) {
+      //       return this.__viewportRowsCache.includes(cell.parentElement);
+      //     }
+      //     return true;
+      //   })
+      //   .forEach((cell) => {
+      //     cell.__measuringAutoWidth = autoWidth;
 
-          if (cell.__measuringAutoWidth) {
-            // Store the original inline width of the cell to restore it later
-            cell.__originalWidth = cell.style.width;
-            // Prepare the cell for having its intrinsic width measured
-            cell.style.width = 'auto';
-            cell.style.position = 'absolute';
-          } else {
-            // Restore the original width
-            cell.style.width = cell.__originalWidth;
-            delete cell.__originalWidth;
-            cell.style.position = '';
-          }
-        });
+      //     if (cell.__measuringAutoWidth) {
+      //       // Store the original inline width of the cell to restore it later
+      //       cell.__originalWidth = cell.style.width;
+      //       // Prepare the cell for having its intrinsic width measured
+      //       cell.style.width = 'auto';
+      //       cell.style.position = 'absolute';
+      //     } else {
+      //       // Restore the original width
+      //       cell.style.width = cell.__originalWidth;
+      //       delete cell.__originalWidth;
+      //       cell.style.position = '';
+      //     }
+      //   });
 
-      if (autoWidth) {
-        this.$.scroller.setAttribute('measuring-auto-width', '');
-      } else {
-        this.$.scroller.removeAttribute('measuring-auto-width');
-      }
+      // if (autoWidth) {
+      //   this.$.scroller.setAttribute('measuring-auto-width', '');
+      // } else {
+      //   this.$.scroller.removeAttribute('measuring-auto-width');
+      // }
     }
 
     /**
@@ -238,7 +241,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
       // Note: _allCells only contains cells which are currently rendered in DOM
       return col._allCells.reduce((width, cell) => {
         // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-        return cell.__measuringAutoWidth ? Math.max(width, cell.offsetWidth + 1) : width;
+        return Math.max(width, cell.offsetWidth + 1);
       }, 0);
     }
 
@@ -250,14 +253,20 @@ export const ColumnAutoWidthMixin = (superClass) =>
     __calculateAndCacheIntrinsicWidths(cols) {
       // Make all the columns use auto width at once before measuring to
       // avoid reflows in between the measurements
-      cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, true));
+      cols.forEach((col) => {
+        col.__measuringAutoWidth = true;
+      });
+      this.__updateCSSGridTemplateColumns();
+
       // Measure and cache
       cols.forEach((col) => {
         const width = this.__getAutoWidthCellsMaxWidth(col);
         this.__intrinsicWidthCache.set(col, width);
       });
       // Reset the columns to use 100% width
-      cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, false));
+      cols.forEach((col) => {
+        col.__measuringAutoWidth = false;
+      });
     }
 
     /**

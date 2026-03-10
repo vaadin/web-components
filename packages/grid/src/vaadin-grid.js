@@ -297,7 +297,7 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           tabindex="0"
           aria-label="${ifDefined(this.accessibleName)}"
         >
-          <caption id="sizer" part="row"></caption>
+          <caption id="sizer" part="row" class="row"></caption>
           <thead id="header" role="rowgroup"></thead>
           <tbody id="items" role="rowgroup"></tbody>
           <tbody id="emptystatebody">

@@ -367,14 +367,14 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _flexGrowChanged(flexGrow) {
+    _flexGrowChanged(_flexGrow) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('flexGrow');
       }
 
-      this._allCells.forEach((cell) => {
-        cell.style.flexGrow = flexGrow;
-      });
+      if (this._grid && this._grid.__updateCSSGridTemplateColumns) {
+        // this._grid.__updateCSSGridTemplateColumns();
+      }
     }
 
     /** @private */
@@ -385,14 +385,14 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _widthChanged(width) {
+    _widthChanged(_width) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('width');
       }
 
-      this._allCells.forEach((cell) => {
-        cell.style.width = width;
-      });
+      if (this._grid && this._grid.__updateCSSGridTemplateColumns) {
+        // this._grid.__updateCSSGridTemplateColumns();
+      }
     }
 
     /** @private */

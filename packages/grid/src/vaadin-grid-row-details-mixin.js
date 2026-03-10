@@ -157,9 +157,9 @@ export const RowDetailsMixin = (superClass) =>
     /** @private */
     __updateDetailsRowPadding(row, cell) {
       if (cell.hidden) {
-        row.style.removeProperty('padding-bottom');
+        row.style.removeProperty('--_details-cell-height');
       } else {
-        row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
+        row.style.setProperty('--_details-cell-height', `${cell.offsetHeight}px`);
       }
     }
 

@@ -69,7 +69,7 @@ export const gridStyles = css`
     flex-grow: 1;
     flex-shrink: 0;
     display: block;
-    position: sticky;
+    /* position: sticky; */
     width: 100%;
     left: 0;
     min-height: 1px;
@@ -94,7 +94,7 @@ export const gridStyles = css`
   #header,
   #footer {
     display: block;
-    position: sticky;
+    /* position: sticky; */
     left: 0;
     width: 100%;
     z-index: 2;
@@ -126,11 +126,18 @@ export const gridStyles = css`
   }
 
   .row {
-    display: flex;
+    display: grid;
+    grid-template-columns: var(--_template-columns);
+    grid-template-rows: min-content;
     width: 100%;
     box-sizing: border-box;
     margin: 0;
     position: relative;
+  }
+
+  .details-opened-row {
+    grid-template-rows: min-content var(--_details-cell-height, 0px);
+    row-gap: var(--_row-border-width);
   }
 
   .row:not(:focus-within) {
@@ -152,6 +159,8 @@ export const gridStyles = css`
   .cell {
     padding: 0;
     box-sizing: border-box;
+    grid-row-start: 1;
+    grid-column-end: span var(--_colspan, 1);
   }
 
   .cell:where(:not(.details-cell)) {
@@ -377,8 +386,8 @@ export const gridStyles = css`
 
   .details-cell {
     position: absolute;
-    bottom: 0;
-    width: 100%;
+    inset-inline: 0;
+    grid-row-start: 2;
   }
 
   ::slotted(vaadin-grid-cell-content) {
@@ -405,7 +414,7 @@ export const gridStyles = css`
 
   #emptystatebody {
     display: flex;
-    position: sticky;
+    /* position: sticky; */
     inset: 0;
     flex: 1;
     overflow: hidden;
@@ -662,8 +671,9 @@ export const gridStyles = css`
 
   /* Sizer styles */
   #sizer {
-    display: flex;
     visibility: hidden;
+    border: none !important;
+    grid-template-rows: none !important;
   }
 
   #sizer .details-cell,

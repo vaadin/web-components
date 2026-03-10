@@ -452,6 +452,7 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __updateHorizontalScrollPosition() {
+      return;
       if (!this._columnTree) {
         return;
       }
