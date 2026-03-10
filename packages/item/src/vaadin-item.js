@@ -60,6 +60,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @prop {string} label - String that can be set to visually represent the selected item in `vaadin-select`.
  * @customElement vaadin-item
  * @extends HTMLElement
  * @mixes ItemMixin
