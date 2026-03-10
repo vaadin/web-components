@@ -861,32 +861,43 @@ export class IronListAdapter {
       const threshold = OFFSET_ADJUST_MIN_THRESHOLD;
       const maxShift = 100;
 
-      const fvi = this.adjustedFirstVisibleIndex;
-      const fviOffsetBefore = this.__getIndexScrollOffset(fvi);
+      // Lazily capture scroll state before the first offset change,
+      // so it can be restored afterwards.
+      let fvi, fviOffsetBefore;
+      const captureScrollState = () => {
+        fvi = this.adjustedFirstVisibleIndex;
+        fviOffsetBefore = this.__getIndexScrollOffset(fvi);
+      };
 
       // Near start
       if (this._scrollTop === 0) {
-        this._vidxOffset = 0;
-        if (oldOffset !== this._vidxOffset) {
+        if (oldOffset !== 0) {
+          captureScrollState();
+          this._vidxOffset = 0;
           super.scrollToIndex(0);
         }
       } else if (this.firstVisibleIndex < threshold && this._vidxOffset > 0) {
+        captureScrollState();
         this._vidxOffset -= Math.min(this._vidxOffset, maxShift);
         super.scrollToIndex(this.firstVisibleIndex + (oldOffset - this._vidxOffset));
       }
 
       // Near end
       if (this._scrollTop >= this._maxScrollTop && this._maxScrollTop > 0) {
-        this._vidxOffset = maxOffset;
-        if (oldOffset !== this._vidxOffset) {
+        if (oldOffset !== maxOffset) {
+          captureScrollState();
+          this._vidxOffset = maxOffset;
           super.scrollToIndex(this._virtualCount - 1);
         }
       } else if (this.firstVisibleIndex > this._virtualCount - threshold && this._vidxOffset < maxOffset) {
+        captureScrollState();
         this._vidxOffset += Math.min(maxOffset - this._vidxOffset, maxShift);
         super.scrollToIndex(this.firstVisibleIndex - (this._vidxOffset - oldOffset));
       }
 
-      this.__restoreScrollOffset(fvi, fviOffsetBefore);
+      if (fvi !== undefined) {
+        this.__restoreScrollOffset(fvi, fviOffsetBefore);
+      }
     }
   }
 }
