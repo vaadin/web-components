@@ -28,10 +28,9 @@ fi
 
 YARN_SCRIPT="$1"
 shift
-EXTRA_ARGS="$*"
 
 echo "Running visual tests in Docker (${IMAGE})..."
-echo "  Script: yarn ${YARN_SCRIPT} ${EXTRA_ARGS}"
+echo "  Script: yarn ${YARN_SCRIPT} $*"
 
 # Use a named volume for node_modules so that:
 # 1. Linux-native dependencies are installed separately from the host (macOS/Windows)
@@ -51,4 +50,4 @@ docker run --rm --ipc=host \
   -w /work \
   -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
   "$IMAGE" \
-  /bin/bash -c "git config --global --add safe.directory /work && yarn --frozen-lockfile --no-progress --non-interactive && yarn ${YARN_SCRIPT} ${EXTRA_ARGS}"
+  /bin/bash -c 'git config --global --add safe.directory /work && yarn --frozen-lockfile --no-progress --non-interactive && yarn "$@"' -- "$YARN_SCRIPT" "$@"
