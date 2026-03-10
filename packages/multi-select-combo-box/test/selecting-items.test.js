@@ -485,6 +485,63 @@ describe('selecting items', () => {
     });
   });
 
+  describe('pasteHandler', () => {
+    const firePasteEvent = (input, text) => {
+      const event = new Event('paste', { bubbles: true, cancelable: true, composed: true });
+      event.clipboardData = { getData: () => text };
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    beforeEach(() => {
+      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    });
+
+    it('should preserve default paste behavior when pasteHandler is not set', () => {
+      const event = firePasteEvent(inputElement, 'apple, banana');
+      expect(event.defaultPrevented).to.be.false;
+    });
+
+    it('should prevent default and clear input when pasteHandler is set', () => {
+      comboBox.pasteHandler = sinon.spy();
+      const event = firePasteEvent(inputElement, 'apple, banana');
+      expect(event.defaultPrevented).to.be.true;
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should call handler with raw pasted text', () => {
+      const spy = sinon.spy();
+      comboBox.pasteHandler = spy;
+      firePasteEvent(inputElement, 'apple,banana');
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0]).to.equal('apple,banana');
+    });
+
+    it('should not call handler when readonly', () => {
+      comboBox.readonly = true;
+      const spy = sinon.spy();
+      comboBox.pasteHandler = spy;
+      firePasteEvent(inputElement, 'apple,banana');
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not call handler when disabled', () => {
+      comboBox.disabled = true;
+      const spy = sinon.spy();
+      comboBox.pasteHandler = spy;
+      firePasteEvent(inputElement, 'apple,banana');
+      expect(spy.called).to.be.false;
+    });
+
+    it('should clear filter after paste', async () => {
+      comboBox.pasteHandler = sinon.spy();
+      await sendKeys({ type: 'ap' });
+      firePasteEvent(inputElement, 'apple,banana');
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+  });
+
   describe('keep filter', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];

@@ -201,6 +201,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * A callback function that is invoked when text is pasted into the
+         * input field. When set, paste events are intercepted and the raw
+         * pasted text is passed to this function. The component clears the
+         * input and filter after calling the handler.
+         */
+        pasteHandler: {
+          type: Function,
+        },
+
         /** @private */
         _inputField: {
           type: Object,
@@ -1041,6 +1051,32 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     _onChange(event) {
       event.stopPropagation();
+    }
+
+    /**
+     * Override method from `InputControlMixin` to intercept paste
+     * events when `pasteHandler` is set.
+     *
+     * @param {ClipboardEvent} e
+     * @protected
+     * @override
+     */
+    _onPaste(e) {
+      if (typeof this.pasteHandler !== 'function') {
+        super._onPaste(e);
+        return;
+      }
+
+      if (this.readonly || this.disabled) {
+        return;
+      }
+
+      e.preventDefault();
+
+      const pastedText = e.clipboardData.getData('text');
+      this.pasteHandler(pastedText);
+
+      this.__clearInternalValue(true);
     }
 
     /**

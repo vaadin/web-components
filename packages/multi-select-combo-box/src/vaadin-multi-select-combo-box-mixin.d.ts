@@ -154,6 +154,14 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   renderer: MultiSelectComboBoxRenderer<TItem> | null | undefined;
 
   /**
+   * A callback function that is invoked when text is pasted into the
+   * input field. When set, paste events are intercepted and the raw
+   * pasted text is passed to this function. The component clears the
+   * input and filter after calling the handler.
+   */
+  pasteHandler: ((pastedText: string) => void) | null | undefined;
+
+  /**
    * The list of selected items.
    * Note: modifying the selected items creates a new array each time.
    */
