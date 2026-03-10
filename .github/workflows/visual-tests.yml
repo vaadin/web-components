@@ -1,6 +1,6 @@
 name: Visual tests
 
-on: 
+on:
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches: [main]
@@ -10,6 +10,7 @@ permissions:
 
 env:
   _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+  VISUAL_TESTS_DOCKER_IMAGE: mcr.microsoft.com/playwright:v1.56.0-jammy
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-jammy
+      image: ${{ env.VISUAL_TESTS_DOCKER_IMAGE }}
       options: --ipc=host
 
     steps:
@@ -55,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-jammy
+      image: ${{ env.VISUAL_TESTS_DOCKER_IMAGE }}
       options: --ipc=host
 
     steps:
@@ -92,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-jammy
+      image: ${{ env.VISUAL_TESTS_DOCKER_IMAGE }}
       options: --ipc=host
 
     steps:

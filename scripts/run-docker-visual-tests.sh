@@ -14,8 +14,7 @@ set -e
 #   ./scripts/run-docker-visual-tests.sh update:playwright:lumo
 #   ./scripts/run-docker-visual-tests.sh update:playwright:lumo --group button
 
-PLAYWRIGHT_VERSION="1.56.0"
-IMAGE="mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-jammy"
+IMAGE=$(grep 'VISUAL_TESTS_DOCKER_IMAGE:' "$(dirname "$0")/../.github/workflows/visual-tests.yml" | head -1 | sed 's/.*VISUAL_TESTS_DOCKER_IMAGE: *//')
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <yarn-script> [extra-args...]"
@@ -31,7 +30,7 @@ YARN_SCRIPT="$1"
 shift
 EXTRA_ARGS="$*"
 
-echo "Running visual tests in Docker (Playwright v${PLAYWRIGHT_VERSION})..."
+echo "Running visual tests in Docker (${IMAGE})..."
 echo "  Script: yarn ${YARN_SCRIPT} ${EXTRA_ARGS}"
 
 # Use a named volume for node_modules so that:
