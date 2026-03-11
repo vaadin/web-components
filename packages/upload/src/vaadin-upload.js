@@ -89,6 +89,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
+ * @fires {CustomEvent} file-remove - Fired when a file is removed from the list.
  * @fires {CustomEvent} files-changed - Fired when the `files` property changes.
  * @fires {CustomEvent} max-files-reached-changed - Fired when the `maxFilesReached` property changes.
  * @fires {CustomEvent} upload-before - Fired before the XHR is opened.
