@@ -4,16 +4,13 @@ set -e
 # Run visual tests inside a Docker container
 #
 # Usage:
-#   ./scripts/run-docker-visual-tests.sh <yarn-script> [extra-args...]
+#   ./scripts/run-docker-visual-tests.sh <yarn-args...>
 #   ./scripts/run-docker-visual-tests.sh --clean
 #
 # Examples:
-#   ./scripts/run-docker-visual-tests.sh test:playwright:lumo
-#   ./scripts/run-docker-visual-tests.sh test:playwright:lumo --group button
-#   ./scripts/run-docker-visual-tests.sh test:playwright:aura --all
-#   ./scripts/run-docker-visual-tests.sh test:playwright:aura:dark
-#   ./scripts/run-docker-visual-tests.sh update:playwright:lumo
-#   ./scripts/run-docker-visual-tests.sh update:playwright:lumo --group button
+#   ./scripts/run-docker-visual-tests.sh test --config web-test-runner-lumo.config.js
+#   ./scripts/run-docker-visual-tests.sh test --config web-test-runner-lumo.config.js --group button
+#   ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark
 #   ./scripts/run-docker-visual-tests.sh --clean                # Remove cached node_modules volume
 
 IMAGE=$(grep 'VISUAL_TESTS_DOCKER_IMAGE:' "$(dirname "$0")/../.github/workflows/visual-tests.yml" | head -1 | sed 's/.*VISUAL_TESTS_DOCKER_IMAGE: *//')
@@ -27,22 +24,18 @@ if [ "$1" = "--clean" ]; then
 fi
 
 if [ -z "$1" ]; then
-  echo "Usage: $0 <yarn-script> [extra-args...]"
+  echo "Usage: $0 <yarn-args...>"
   echo "       $0 --clean"
   echo ""
   echo "Examples:"
-  echo "  $0 test:playwright:lumo"
-  echo "  $0 test:playwright:lumo --group button"
-  echo "  $0 update:playwright:lumo"
+  echo "  $0 test --config web-test-runner-lumo.config.js"
+  echo "  $0 test --config web-test-runner-lumo.config.js --group button"
   echo "  $0 --clean                # Remove cached node_modules volume"
   exit 1
 fi
 
-YARN_SCRIPT="$1"
-shift
-
 echo "Running visual tests in Docker (${IMAGE})..."
-echo "  Script: yarn ${YARN_SCRIPT} $*"
+echo "  Command: yarn $*"
 
 # Run Docker:
 # - --rm: Remove container after exit
@@ -55,5 +48,6 @@ docker run --rm --ipc=host \
   -v "${NODE_MODULES_VOLUME}":/work/node_modules \
   -w /work \
   -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
+  -e TEST_ENV \
   "$IMAGE" \
-  /bin/bash -c 'git config --global safe.directory /work && yarn --frozen-lockfile --no-progress --non-interactive && yarn "$@"' -- "$YARN_SCRIPT" "$@"
+  /bin/bash -c 'git config --global safe.directory /work && yarn --frozen-lockfile --no-progress --non-interactive && yarn "$@"' -- "$@"

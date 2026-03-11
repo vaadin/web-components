@@ -44,7 +44,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:playwright:base
+          command: yarn test --config web-test-runner-base.config.js
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -83,7 +83,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:playwright:lumo
+          command: yarn test --config web-test-runner-lumo.config.js
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -123,7 +123,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:playwright:aura
+          command: yarn test --config web-test-runner-aura.config.js
 
       - name: Visual tests (dark)
         uses: nick-fields/retry@v3
@@ -131,7 +131,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test:playwright:aura:dark
+          command: yarn test --config web-test-runner-aura.config.js --dark
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
