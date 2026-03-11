@@ -278,6 +278,20 @@ describe('basic features', () => {
         expect(spy.called).to.be.false;
       });
 
+      it('should select content on toggle button click after dropdown close', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        input.focus();
+
+        comboBox.open();
+        comboBox.close();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.$.toggleButton.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
       it('should not select content on host click when autoselect is false', () => {
         comboBox.items = ['foo', 'bar'];
         comboBox.value = 'foo';

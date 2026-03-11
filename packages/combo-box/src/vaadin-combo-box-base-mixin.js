@@ -384,6 +384,14 @@ export const ComboBoxBaseMixin = (superClass) =>
      * @protected
      */
     _onHostClick(event) {
+      if (!this.autoOpenDisabled) {
+        event.preventDefault();
+        this.open();
+      }
+    }
+
+    /** @private */
+    _onClick(event) {
       // Select the input text on click when autoselect is enabled and a pending
       // autoselect was set by a dropdown close. This handles the case where the
       // overlay mousedown listener prevents blur on outside click, so the input
@@ -394,14 +402,6 @@ export const ComboBoxBaseMixin = (superClass) =>
       }
       this._autoselectPending = false;
 
-      if (!this.autoOpenDisabled) {
-        event.preventDefault();
-        this.open();
-      }
-    }
-
-    /** @private */
-    _onClick(event) {
       if (this._isClearButton(event)) {
         this._onClearButtonClick(event);
       } else if (event.composedPath().includes(this._toggleElement)) {
