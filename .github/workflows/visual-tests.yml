@@ -28,6 +28,9 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
+      - name: Fetch origin/main
+        run: git fetch origin main
+
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
@@ -66,6 +69,9 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
+
+      - name: Fetch origin/main
+        run: git fetch origin main
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -106,6 +112,9 @@ jobs:
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
+
+      - name: Fetch origin/main
+        run: git fetch origin main
 
       - name: Cache node_modules
         uses: actions/cache@v4
