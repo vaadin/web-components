@@ -13,7 +13,7 @@ set -e
 #   ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark
 #   ./scripts/run-docker-visual-tests.sh --clean                # Remove cached node_modules volume
 
-IMAGE=$(grep 'VISUAL_TESTS_DOCKER_IMAGE:' "$(dirname "$0")/../.github/workflows/visual-tests.yml" | head -1 | sed 's/.*VISUAL_TESTS_DOCKER_IMAGE: *//')
+IMAGE="mcr.microsoft.com/playwright:v1.56.0-noble"
 
 NODE_MODULES_VOLUME="vaadin-web-components-node-modules"
 

@@ -10,7 +10,6 @@ permissions:
 
 env:
   _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-  VISUAL_TESTS_DOCKER_IMAGE: mcr.microsoft.com/playwright:v1.56.0-noble
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
@@ -20,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: ${{ env.VISUAL_TESTS_DOCKER_IMAGE }}
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
       options: --ipc=host
 
     steps:
@@ -59,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: ${{ env.VISUAL_TESTS_DOCKER_IMAGE }}
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
       options: --ipc=host
 
     steps:
@@ -99,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: ${{ env.VISUAL_TESTS_DOCKER_IMAGE }}
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
       options: --ipc=host
 
     steps:
