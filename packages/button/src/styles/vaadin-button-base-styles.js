@@ -34,6 +34,7 @@ export const buttonStyles = css`
       var(--vaadin-button-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
     touch-action: manipulation;
+    outline: 2px solid blue;
   }
 
   :host([hidden]) {
