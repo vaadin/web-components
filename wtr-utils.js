@@ -272,11 +272,21 @@ const createVisualTestsConfig = (theme) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
+  const viewportWidth = 1024;
+  const viewportHeight = 768;
   const browser = playwrightLauncher({
     product: 'chromium',
     launchOptions: {
       headless: true,
       ignoreDefaultArgs: ['--hide-scrollbars'],
+    },
+    async createPage({ context }) {
+      const page = await context.newPage();
+      // Override setViewportSize to use our dimensions instead of the
+      // 800x600 default hardcoded in @web/test-runner-playwright.
+      const originalSetViewportSize = page.setViewportSize.bind(page);
+      page.setViewportSize = (_size) => originalSetViewportSize({ width: viewportWidth, height: viewportHeight });
+      return page;
     },
   });
 
