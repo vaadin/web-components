@@ -56,8 +56,12 @@ class CrudEditColumn extends GridColumn {
         value: 0,
       },
 
-      /** The arial-label for the edit button */
-      ariaLabel: String,
+      /**
+       * The arial-label for the edit button
+       */
+      ariaLabel: {
+        type: String,
+      },
     };
   }
 

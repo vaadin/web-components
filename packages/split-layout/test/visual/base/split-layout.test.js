@@ -38,6 +38,36 @@ describe('split-layout', () => {
     });
   });
 
+  describe('overflow', () => {
+    it('horizontal', async () => {
+      element = fixtureSync(`
+        <vaadin-split-layout style="width: 300px; height: 100px">
+          <div>
+            <div style="min-width: 400px; height: 50px; background: #ddd"></div>
+          </div>
+          <div></div>
+        </vaadin-split-layout>
+      `);
+      // Shrink primary panel smaller than its content
+      element.querySelector('div[slot="primary"], div:first-child').style.flex = '1 1 80px';
+      await visualDiff(element, 'overflow-horizontal');
+    });
+
+    it('vertical', async () => {
+      element = fixtureSync(`
+        <vaadin-split-layout orientation="vertical" style="width: 200px; height: 200px">
+          <div>
+            <div style="min-height: 400px; background: #ddd"></div>
+          </div>
+          <div></div>
+        </vaadin-split-layout>
+      `);
+      // Shrink primary panel smaller than its content
+      element.querySelector('div[slot="primary"], div:first-child').style.flex = '1 1 60px';
+      await visualDiff(element, 'overflow-vertical');
+    });
+  });
+
   describe('nested', () => {
     beforeEach(() => {
       element = fixtureSync(`

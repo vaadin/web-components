@@ -45,6 +45,8 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} submit - Fired when a new message is submitted, either by clicking the "send" button, or pressing the Enter key.
+ *
  * @customElement vaadin-message-input
  * @extends HTMLElement
  * @mixes MessageInputMixin

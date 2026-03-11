@@ -38,10 +38,9 @@ vaadin-side-nav-item:not([disabled], [current])::part(content):active {
 
 vaadin-side-nav-item[current]::part(content) {
   transition: none;
-  --_accent-border: color-mix(in srgb, var(--aura-accent-color) 10%, var(--vaadin-border-color-secondary) 50%);
-  --vaadin-side-nav-item-background: var(--aura-accent-surface) padding-box;
+  --vaadin-side-nav-item-background: var(--aura-surface-color) padding-box;
   --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
-  --vaadin-side-nav-item-border-color: var(--aura-accent-border-color);
+  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-secondary);
 }
 
 vaadin-side-nav::part(toggle-button),

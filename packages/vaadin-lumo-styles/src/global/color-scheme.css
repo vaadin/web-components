@@ -12,6 +12,13 @@
 
 :host([theme~='dark']),
 [theme~='dark'] {
+  color-scheme: dark;
+
+  /* Dark fallbacks for backwards compatibility: ensures users who only overrode
+     the light value of a variable still get a proper dark value. Without these,
+     a light-only override (e.g. html { --lumo-base-color: pink }) would apply
+     to both modes since color.css uses light-dark() on :where(:root). */
+
   /* Base (background) */
   --lumo-base-color: hsl(214, 35%, 21%);
 
@@ -95,7 +102,32 @@
   --vaadin-user-color-5: #66fffa;
   --vaadin-user-color-6: #e6ff66;
 
+  /* Re-set registered <color> properties so they recompute in dark context.
+     These are registered via CSS.registerProperty() in component-base/style-props.js
+     and their values get resolved at definition time, so they won't update
+     by just changing color-scheme on a subtree. */
+  --vaadin-text-color: var(--lumo-body-text-color);
+  --vaadin-text-color-secondary: var(--lumo-secondary-text-color);
+  --vaadin-text-color-disabled: var(--lumo-disabled-text-color);
+  --vaadin-border-color: var(--lumo-contrast-30pct);
+  --vaadin-border-color-secondary: var(--lumo-contrast-10pct);
+  --vaadin-background-color: var(--lumo-base-color);
+
   color: var(--lumo-body-text-color);
   background-color: var(--lumo-base-color);
-  color-scheme: dark;
+}
+
+:host([theme~='light-dark']),
+[theme~='light-dark'] {
+  color: var(--lumo-body-text-color);
+  background-color: var(--lumo-base-color);
+  color-scheme: light dark;
+
+  /* Re-set registered <color> properties so they recompute based on system preference */
+  --vaadin-text-color: var(--lumo-body-text-color);
+  --vaadin-text-color-secondary: var(--lumo-secondary-text-color);
+  --vaadin-text-color-disabled: var(--lumo-disabled-text-color);
+  --vaadin-border-color: var(--lumo-contrast-30pct);
+  --vaadin-border-color-secondary: var(--lumo-contrast-10pct);
+  --vaadin-background-color: var(--lumo-base-color);
 }

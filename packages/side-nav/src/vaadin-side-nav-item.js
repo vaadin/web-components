@@ -48,7 +48,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * <vaadin-side-nav-item>
  *   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
  *   Item
- *   <span theme="badge primary" slot="suffix">Suffix</span>
+ *   <vaadin-badge slot="suffix">Suffix</vaadin-badge>
  * </vaadin-side-nav-item>
  * ```
  *

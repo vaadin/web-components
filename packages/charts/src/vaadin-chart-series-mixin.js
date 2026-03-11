@@ -84,7 +84,6 @@ export const ChartSeriesMixin = (superClass) =>
          *  - `shown`: markers are always visible
          *  - `hidden`: markers are always hidden
          *  - `auto`: markers are visible for widespread data and hidden, when data is dense *(default)*
-         * @type {ChartSeriesMarkers | undefined}
          */
         markers: {
           type: String,

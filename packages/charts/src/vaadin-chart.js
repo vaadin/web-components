@@ -141,7 +141,7 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} point-mouse-out - Fired when the mouse leaves the area close to the point.
  * @fires {CustomEvent} point-mouse-over - Fired when the mouse enters the area close to the point.
  * @fires {CustomEvent} point-remove - Fired when the point is removed from the series.
- * @fires {CustomEvent} point-select -Fired when the point is selected either programmatically or by clicking on the point.
+ * @fires {CustomEvent} point-select - Fired when the point is selected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-unselect - Fired when the point is unselected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-update - Fired when the point is updated programmatically through `.updateConfiguration()` method.
  * @fires {CustomEvent} point-drag-start - Fired when starting to drag a point.

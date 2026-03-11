@@ -13,7 +13,7 @@
     "@types/sinon": "^21.0.0",
     "@types/sinon-chai": "^4.0.0",
     "chai": "^6.2.1",
-    "sinon": "^21.0.0",
+    "sinon": "^21.0.2",
     "sinon-chai": "^4.0.1"
   }
 }

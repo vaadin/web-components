@@ -12,10 +12,7 @@ snapshots["vaadin-side-nav-item item default"] =
   >
   </vaadin-icon>
   Item
-  <span
-    slot="suffix"
-    theme="badge primary"
-  >
+  <span slot="suffix">
     2
   </span>
   <vaadin-side-nav-item
@@ -46,10 +43,7 @@ snapshots["vaadin-side-nav-item item expanded"] =
   >
   </vaadin-icon>
   Item
-  <span
-    slot="suffix"
-    theme="badge primary"
-  >
+  <span slot="suffix">
     2
   </span>
   <vaadin-side-nav-item
@@ -81,10 +75,7 @@ snapshots["vaadin-side-nav-item item disabled"] =
   >
   </vaadin-icon>
   Item
-  <span
-    slot="suffix"
-    theme="badge primary"
-  >
+  <span slot="suffix">
     2
   </span>
   <vaadin-side-nav-item
@@ -120,10 +111,7 @@ snapshots["vaadin-side-nav-item item current"] =
   >
   </vaadin-icon>
   Item
-  <span
-    slot="suffix"
-    theme="badge primary"
-  >
+  <span slot="suffix">
     2
   </span>
   <vaadin-side-nav-item
@@ -153,10 +141,7 @@ snapshots["vaadin-side-nav-item item path"] =
   >
   </vaadin-icon>
   Item
-  <span
-    slot="suffix"
-    theme="badge primary"
-  >
+  <span slot="suffix">
     2
   </span>
   <vaadin-side-nav-item

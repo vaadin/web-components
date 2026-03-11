@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card</title>
     <script type="module" src="./common.js"></script>
-
     <script type="module">
-      import '@vaadin/card';
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.badgeComponent = true;
+    </script>
+    <script type="module">
       import '@vaadin/avatar';
+      import '@vaadin/badge';
       import '@vaadin/button';
+      import '@vaadin/card';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
       import '@vaadin/icon';
@@ -325,7 +330,7 @@
           <h2>Lapland</h2>
         </div>
         <vaadin-avatar slot="header-prefix" abbr="L"></vaadin-avatar>
-        <span slot="header-suffix" theme="badge success">Arctic</span>
+        <vaadin-badge slot="header-suffix" theme="success">Arctic</vaadin-badge>
         <div slot="title">Lapland</div>
         <div slot="subtitle">The Exotic North</div>
         <vaadin-button slot="footer">Book Vacation</vaadin-button>

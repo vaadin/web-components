@@ -10,11 +10,9 @@ A web component for displaying badges with various theme variants.
 
 ```html
 <vaadin-badge>Badge</vaadin-badge>
-<vaadin-badge theme="primary">Primary</vaadin-badge>
 <vaadin-badge theme="success">Success</vaadin-badge>
 <vaadin-badge theme="error">Error</vaadin-badge>
 <vaadin-badge theme="warning">Warning</vaadin-badge>
-<vaadin-badge theme="contrast">Contrast</vaadin-badge>
 ```
 
 ## Installation
