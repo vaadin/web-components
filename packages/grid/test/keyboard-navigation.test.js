@@ -19,11 +19,13 @@ import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   attributeRenderer,
+  dragAndDropOver,
   flushGrid,
   getBodyCell,
   getCell,
   getCellContent,
   getContainerCell,
+  getContainerCellContent,
   getFirstVisibleItem,
   getFocusedCellIndex,
   getFocusedRowIndex,
@@ -2330,5 +2332,45 @@ describe('empty state', () => {
     tab();
 
     expect(spy.called).to.be.false;
+  });
+});
+
+describe('keyboard navigation after column reordering', () => {
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid style="width: 400px; height: 200px;" column-reordering-allowed>
+        <vaadin-grid-column id="column-0" header="Col 0"></vaadin-grid-column>
+        <vaadin-grid-column id="column-1" header="Col 1"></vaadin-grid-column>
+        <vaadin-grid-column id="column-2" header="Col 2"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+
+    grid.querySelector('#column-0').renderer = indexItemRenderer;
+    grid.querySelector('#column-1').renderer = indexItemRenderer;
+    grid.querySelector('#column-2').renderer = indexItemRenderer;
+
+    grid.items = ['foo', 'bar'];
+    flushGrid(grid);
+
+    header = grid.$.header;
+    body = grid.$.items;
+  });
+
+  it('should focus the correct cell after column reorder', () => {
+    // Get header cell contents for the first two columns
+    const firstHeaderCellContent = getContainerCellContent(header, 0, 0);
+    const secondHeaderCellContent = getContainerCellContent(header, 0, 1);
+
+    // Reorder: drag first column to the second column position (swap them)
+    dragAndDropOver(firstHeaderCellContent, secondHeaderCellContent);
+
+    // Focus cell in third column
+    focusWithMouse(getRowCell(0, 2));
+    // Press left arrow twice to move focus to the first column
+    left();
+    left();
+
+    // Expect focus to move to the first visual column cell
+    expect(getFocusedCellIndex(grid)).to.equal(0);
   });
 });

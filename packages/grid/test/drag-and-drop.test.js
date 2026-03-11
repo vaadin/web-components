@@ -4,7 +4,15 @@ import { aTimeout, fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadi
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
+import {
+  dragAndDropOver,
+  flushGrid,
+  getBodyCellContent,
+  getFirstCell,
+  getHeaderCellContent,
+  getRowBodyCells,
+  getRows,
+} from './helpers.js';
 
 describe('drag and drop', () => {
   let grid, dragData;
@@ -371,15 +379,15 @@ describe('drag and drop', () => {
 
       it('should auto generate data transfer text data in order', () => {
         grid.selectedItems = grid.items;
-        const columns = grid.querySelectorAll('vaadin-grid-column');
-        grid._swapColumnOrders(columns[0], columns[1]);
+        grid.columnReorderingAllowed = true;
+        dragAndDropOver(getHeaderCellContent(grid, 0, 0), getHeaderCellContent(grid, 0, 1));
+
         fireDragStart();
         fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         const textData = event.detail.dragData.find((d) => d.type === 'text').data;
         expect(textData).to.eql('bar\tfoo\nqux\tbaz');
-        grid._swapColumnOrders(columns[0], columns[1]);
       });
 
       it('should generate custom data transfer text data', () => {

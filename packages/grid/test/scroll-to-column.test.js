@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import '../src/vaadin-grid-column-group.js';
-import { flushGrid, infiniteDataProvider } from './helpers.js';
+import { dragAndDropOver, flushGrid, getHeaderCellContent, infiniteDataProvider } from './helpers.js';
 
 describe('scroll to column', () => {
   let grid;
@@ -191,12 +191,11 @@ describe('scroll to column', () => {
     });
 
     it('should respect visual column order', () => {
-      // Swap column 0 and column 4 orders
-      const order0 = columns[0]._order;
-      const order4 = columns[4]._order;
-      columns[0]._order = order4;
-      columns[4]._order = order0;
-      flushGrid(grid);
+      // Temporarily expand grid so column 4 is visible for drag target
+      grid.style.width = '1000px';
+      // Drag column 0 over column 4 to swap them
+      dragAndDropOver(getHeaderCellContent(grid, 0, 0), getHeaderCellContent(grid, 0, 4));
+      grid.style.width = '200px';
 
       // Now visual index 4 should be columns[0]
       expect(isColumnInViewport(columns[0])).to.be.false;

@@ -3,7 +3,7 @@ import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextResize, oneEvent } fro
 import Sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
-import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
+import { dragAndDropOver, dragStart, fire, flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
 
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
@@ -635,6 +635,66 @@ import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
 
         // Expect the focused element to be the same cell
         expect(getFocusableCellText()).to.equal(focusedCellText);
+      });
+    });
+
+    describe(`column reordering - ${dir}`, () => {
+      beforeEach(() => {
+        grid.columnReorderingAllowed = true;
+      });
+
+      it('should render a non-visible column after swapping it with a visible one', async () => {
+        // Swap columns 1 and 2
+        dragAndDropOver(getHeaderCellContent(grid, 0, 1), getHeaderCellContent(grid, 0, 2));
+
+        const lastColumnIndex = columns.length - 1;
+
+        // Verify the non-visible column is not rendered
+        expectBodyCellNotRendered(lastColumnIndex);
+
+        // Start dragging the first column header
+        const sourceContent = getHeaderCellContent(grid, 0, 0);
+        dragStart(sourceContent);
+
+        // Scroll to the end
+        await scrollHorizontally(grid.$.table.scrollWidth);
+
+        // Expect the first column to be not rendered after scrolling to the end
+        expect(isColumnInViewport(columns[0])).to.be.false;
+
+        // Fire track over the target column header cell
+        const targetHeaderCell = columns[lastColumnIndex]._headerCell;
+        const targetRect = targetHeaderCell.getBoundingClientRect();
+        fire(
+          'track',
+          {
+            x: Math.round(targetRect.left + targetRect.width / 2),
+            y: Math.round(targetRect.top + targetRect.height / 2),
+            state: 'track',
+          },
+          { node: sourceContent, bubbles: true },
+        );
+
+        // End the drag
+        fire('track', { x: 0, y: 0, state: 'end' }, { node: sourceContent, bubbles: true });
+
+        // After the column reordering, expect the first column to be rendered as it's now in the viewport
+        expect(isColumnInViewport(columns[0])).to.be.true;
+      });
+
+      it('should not have first-column-cell parts after swapping last columns at scroll end', async () => {
+        // Scroll to the end
+        await scrollHorizontally(grid.$.table.scrollWidth);
+
+        // Swap the two last columns
+        dragAndDropOver(
+          getHeaderCellContent(grid, 0, columns.length - 1),
+          getHeaderCellContent(grid, 0, columns.length - 2),
+        );
+
+        // Verify no visible cell has the first-column-cell part
+        const firstColumnCells = grid.shadowRoot.querySelectorAll('tr:not([hidden]) td[part~="first-column-cell"]');
+        expect(firstColumnCells).to.be.empty;
       });
     });
   });
