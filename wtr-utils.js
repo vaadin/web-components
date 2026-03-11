@@ -1,6 +1,5 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
-import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
 import { globSync } from 'glob';
@@ -44,7 +43,6 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
-const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
 const hasAllParam = process.argv.includes('--all');
@@ -261,7 +259,7 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme, browserVersion) => {
+const createVisualTestsConfig = (theme) => {
   let visualPackages = [];
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
@@ -274,18 +272,23 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  const sauceLabsLauncher = createSauceLabsLauncher(
-    {
-      user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
+  const viewportWidth = 1024;
+  const viewportHeight = 768;
+  const browser = playwrightLauncher({
+    product: 'chromium',
+    launchOptions: {
+      headless: true,
+      ignoreDefaultArgs: ['--hide-scrollbars'],
     },
-    {
-      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
-      recordScreenshots: false,
-      recordVideo: false,
+    async createPage({ context }) {
+      const page = await context.newPage();
+      // Override setViewportSize to use our dimensions instead of the
+      // 800x600 default hardcoded in @web/test-runner-playwright.
+      const originalSetViewportSize = page.setViewportSize.bind(page);
+      page.setViewportSize = (_size) => originalSetViewportSize({ width: viewportWidth, height: viewportHeight });
+      return page;
     },
-  );
+  });
 
   return {
     concurrency: 1,
@@ -295,34 +298,19 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         timeout: '20000', // Default 2000
       },
     },
-    browsers: [
-      hasLocalParam
-        ? playwrightLauncher({
-            product: 'chromium',
-            launchOptions: {
-              channel: 'chrome',
-              headless: true,
-            },
-          })
-        : sauceLabsLauncher({
-            browserName: 'chrome',
-            platformName: 'Windows 10',
-            browserVersion,
-            'wdio:enforceWebDriverClassic': true,
-          }),
-    ],
+    browsers: [browser],
     plugins: [
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
-          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}baseline`);
+          return getScreenshotFileName(args, 'baseline');
         },
         getDiffName(args) {
-          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`, true);
+          return getScreenshotFileName(args, 'failed', true);
         },
         getFailedName(args) {
-          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`);
+          return getScreenshotFileName(args, 'failed');
         },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',

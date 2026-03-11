@@ -146,7 +146,7 @@ describe('multi-select-combo-box', () => {
     it('auto expand long chip', async () => {
       element.style.maxWidth = '300px';
       const items = [...element.items];
-      items[0] = 'Super long item that does not fit into input';
+      items[0] = `Super long item that does not fit into the component's input`;
       element.items = element.selectedItems = [items[0]];
       await visualDiff(div, 'auto-expand-long-chip');
     });
@@ -155,7 +155,7 @@ describe('multi-select-combo-box', () => {
       element.style.maxWidth = '300px';
       element.clearButtonVisible = true;
       const items = [...element.items];
-      items[0] = 'Super long item that does not fit into input';
+      items[0] = `Super long item that does not fit into the component's input`;
       element.items = element.selectedItems = [items[0]];
       await visualDiff(div, 'auto-expand-long-chip-clear-button');
     });

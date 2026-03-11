@@ -13,7 +13,7 @@ describe('app-layout', () => {
 
     element = fixtureSync(
       `
-        <vaadin-app-layout>
+        <vaadin-app-layout style="--vaadin-app-layout-transition-duration: 0s">
           <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
           <h2 slot="navbar">App Name</h2>
           <section slot="drawer">Drawer content</section>

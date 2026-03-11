@@ -116,10 +116,6 @@ Are you looking for an example project to get started? Visit [start.vaadin.com](
 
 For help and support questions, please use [Vaadin Forum](https://vaadin.com/forum/).
 
-## Big Thanks
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
-
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

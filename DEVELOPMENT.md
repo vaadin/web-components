@@ -128,7 +128,7 @@ yarn test --coverage
 
 ### Visual tests
 
-To run the visual tests, please make sure that the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are defined.
+Visual tests run inside a Docker container using Playwright to ensure consistent screenshots across environments. Make sure Docker is installed and running.
 
 Run tests for base styles:
 
