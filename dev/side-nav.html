@@ -7,6 +7,12 @@
     <title>Side Nav</title>
     <script type="module" src="./common.js"></script>
     <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.badgeComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/badge';
       import '@vaadin/icon';
       import '@vaadin/icons';
       import '@vaadin/side-nav';
@@ -98,12 +104,12 @@
 
       <vaadin-side-nav-item path="/dev/side-nav.html">
         Side Nav
-        <span theme="badge" slot="suffix" aria-label="(2 new items)">1</span>
+        <vaadin-badge slot="suffix" number="1" theme="number-only">new items</vaadin-badge>
       </vaadin-side-nav-item>
 
       <vaadin-side-nav-item path="/dev" expanded>
         Dev pages
-        <span theme="badge" slot="suffix" aria-label="(2 new items)">99+</span>
+        <vaadin-badge slot="suffix" number="99" theme="number-only">new items</vaadin-badge>
 
         <vaadin-side-nav-item path="/dev/grid.html" slot="children">Grid</vaadin-side-nav-item>
         <vaadin-side-nav-item path="/dev/select.html" slot="children">Select</vaadin-side-nav-item>
@@ -120,7 +126,7 @@
           <vaadin-side-nav-item path="/dev/form-layout.html" slot="children"> Form Layout </vaadin-side-nav-item>
           <vaadin-side-nav-item path="/dev/master-detail-layout.html" slot="children">
             Master-Detail Layout
-            <span theme="badge" slot="suffix" aria-label="(2 new items)">2</span>
+             <vaadin-badge slot="suffix" number="2" theme="number-only">new items</vaadin-badge>
           </vaadin-side-nav-item>
           <vaadin-side-nav-item path="/dev/split-layout.html" slot="children"> Split Layout </vaadin-side-nav-item>
           <vaadin-side-nav-item path="/dev/horizontal-layout.html" slot="children">
