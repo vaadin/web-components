@@ -7,15 +7,15 @@ A visual content container.
 [![npm version](https://badgen.net/npm/v/@vaadin/card)](https://www.npmjs.com/package/@vaadin/card)
 
 ```html
-<vaadin-card class="flex flex-col overflow-hidden">
+<vaadin-card theme="cover-media">
   <img
+    slot="media"
     src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-    alt="">
-  <div class="flex flex-col items-start p-m">
-    <h3>Card Title</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-    <span theme="badge">Label</span>
-  </div>
+    alt=""
+  />
+  <h3 slot="title">Card Title</h3>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+  <vaadin-badge>Label</vaadin-badge>
 </vaadin-card>
 ```
 
