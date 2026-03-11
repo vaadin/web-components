@@ -10,7 +10,6 @@ permissions:
 
 env:
   _HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
 jobs:
   base:
@@ -18,9 +17,6 @@ jobs:
     name: Base
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
-    container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
-      options: --ipc=host
 
     steps:
       - uses: actions/checkout@v6
@@ -28,16 +24,11 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Fetch origin/main
-        run: |
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-          git fetch origin main
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          node-version: '24'
+          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -48,7 +39,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test --config web-test-runner-base.config.js
+          command: yarn test:base
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -56,15 +47,11 @@ jobs:
           name: base-screenshots
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
-
   lumo:
     environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Lumo
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
-    container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
-      options: --ipc=host
 
     steps:
       - uses: actions/checkout@v6
@@ -72,16 +59,11 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Fetch origin/main
-        run: |
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-          git fetch origin main
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          node-version: '24'
+          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -92,7 +74,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test --config web-test-runner-lumo.config.js
+          command: yarn test:lumo
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -107,9 +89,6 @@ jobs:
     name: Aura
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
-    container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
-      options: --ipc=host
 
     steps:
       - uses: actions/checkout@v6
@@ -117,16 +96,11 @@ jobs:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
 
-      - name: Fetch origin/main
-        run: |
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-          git fetch origin main
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          node-version: '24'
+          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -137,7 +111,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test --config web-test-runner-aura.config.js
+          command: yarn test:aura
 
       - name: Visual tests (dark)
         uses: nick-fields/retry@v3
@@ -145,7 +119,7 @@ jobs:
           timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
-          command: yarn test --config web-test-runner-aura.config.js --dark
+          command: yarn test:aura:dark
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
