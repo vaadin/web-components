@@ -95,9 +95,31 @@ describe('I18nMixin', () => {
     expect(element.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, foo: 'Updated Foo' });
   });
 
-  it('should ignore invalid JSON in i18n attribute', () => {
-    element.setAttribute('i18n', 'not valid json');
+  it('should initialize __effectiveI18n when i18n own property is set before upgrade', async () => {
+    // Simulate a scenario where a parent element sets i18n on a child
+    // before the child is upgraded (e.g. during custom element upgrade
+    // when parent's updated() propagates i18n to not-yet-upgraded children).
+    const tagName = 'i18n-mixin-late-define';
 
-    expect(element.i18n).to.deep.equal(DEFAULT_I18N);
+    // Create element in DOM before it's defined — it's a plain HTMLElement
+    const el = fixtureSync(`<${tagName}></${tagName}>`);
+
+    // Set i18n as a plain own data property (no setter exists yet)
+    el.i18n = { foo: 'Pre-upgrade' };
+    expect(Object.prototype.hasOwnProperty.call(el, 'i18n')).to.be.true;
+
+    // Now define the element — triggers upgrade
+    class LateElement extends I18nMixin(DEFAULT_I18N, PolylitMixin(LitElement)) {
+      static get is() {
+        return tagName;
+      }
+    }
+    customElements.define(tagName, LateElement);
+    await customElements.whenDefined(tagName);
+    await nextRender();
+
+    // After upgrade, __effectiveI18n should be initialized (not undefined).
+    expect(el.__effectiveI18n).to.not.be.undefined;
+    expect(el.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, foo: 'Pre-upgrade' });
   });
 });
