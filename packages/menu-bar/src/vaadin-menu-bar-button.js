@@ -39,6 +39,21 @@ class MenuBarButton extends Button {
   }
 
   /**
+   * Override to preserve the `active` attribute while the button's
+   * sub-menu is expanded, so that the pressed visual state remains.
+   *
+   * @param {boolean} active
+   * @protected
+   * @override
+   */
+  _setActive(active) {
+    if (!active && this.hasAttribute('expanded')) {
+      return;
+    }
+    super._setActive(active);
+  }
+
+  /**
    * Override method inherited from `ButtonMixin` to allow keyboard navigation with
    * arrow keys in the menu bar when the button is focusable in the disabled state.
    *
