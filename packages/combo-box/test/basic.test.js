@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
 import { getViewportItems, setInputValue } from './helpers.js';
@@ -184,6 +184,111 @@ describe('basic features', () => {
         comboBox.autoselect = true;
         input.focus();
         expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should select content on host click after dropdown close', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        input.focus();
+
+        comboBox.open();
+        comboBox.close();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not select content on second host click after dropdown close', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        input.focus();
+
+        comboBox.open();
+        comboBox.close();
+
+        comboBox.click();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should select content on host click after Escape close', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        input.focus();
+
+        comboBox.open();
+        escKeyDown(input);
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should select content on host click after outside click close', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        input.focus();
+
+        comboBox.open();
+        outsideClick();
+        // Focus again to match browser behavior
+        input.focus();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should select content on host click after dropdown close when autoOpenDisabled', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        comboBox.autoOpenDisabled = true;
+        input.focus();
+
+        comboBox.open();
+        comboBox.close();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not select content on second host click when autoOpenDisabled', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        comboBox.autoOpenDisabled = true;
+        input.focus();
+
+        comboBox.open();
+        comboBox.close();
+
+        comboBox.click();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not select content on host click when autoselect is false', () => {
+        comboBox.items = ['foo', 'bar'];
+        comboBox.value = 'foo';
+        input.focus();
+
+        comboBox.open();
+        comboBox.close();
+
+        const spy = sinon.spy(input, 'select');
+        comboBox.click();
+        expect(spy.called).to.be.false;
       });
     });
   });
