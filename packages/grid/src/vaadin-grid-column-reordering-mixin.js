@@ -420,8 +420,9 @@ export const ColumnReorderingMixin = (superClass) =>
       // Reorder cells in all rows (header, footer, body, sizer)
       [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
         const cells = getBodyRowCells(row);
-        const secondColFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
-        cells.filter((cell) => firstColumn.contains(cell._column)).forEach((cell) => secondColFirstCell.before(cell));
+        const firstColumnCells = cells.filter((cell) => firstColumn.contains(cell._column));
+        const secondColumnFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
+        firstColumnCells.forEach((cell) => secondColumnFirstCell.before(cell));
         // row.__cells are out of sync with the actual cell order after the move, and must be updated
         if (row.__cells) {
           row.__cells = row.__cells.toSorted((a, b) => a._column._order - b._column._order);
