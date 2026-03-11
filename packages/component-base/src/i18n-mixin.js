@@ -41,6 +41,12 @@ export const I18nMixin = (defaultI18n, superClass) =>
   class I18nMixinClass extends superClass {
     static get properties() {
       return {
+        // Even though the property is overridden by a custom getter/setter, it needs to be declared here to initialize
+        // __effectiveI18n properly if the i18n property is set before upgrading the element.
+        i18n: {
+          type: Object,
+        },
+
         /** @private */
         __effectiveI18n: {
           type: Object,
@@ -49,26 +55,10 @@ export const I18nMixin = (defaultI18n, superClass) =>
       };
     }
 
-    static get observedAttributes() {
-      return [...super.observedAttributes, 'i18n'];
-    }
-
     constructor() {
       super();
 
       this.i18n = deepMerge({}, defaultI18n);
-    }
-
-    /** @protected */
-    attributeChangedCallback(name, oldValue, newValue) {
-      super.attributeChangedCallback(name, oldValue, newValue);
-      if (name === 'i18n') {
-        try {
-          this.i18n = JSON.parse(newValue);
-        } catch (_) {
-          // Invalid JSON, ignore
-        }
-      }
     }
 
     /**
