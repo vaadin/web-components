@@ -227,6 +227,7 @@ export interface DashboardI18n {
  *
  * @fires {CustomEvent} dashboard-item-moved - Fired when an item was moved
  * @fires {CustomEvent} dashboard-item-resized - Fired when an item was resized
+ * @fires {CustomEvent} dashboard-item-before-remove - Fired before an item is removed. Calling preventDefault() on the event will cancel the removal.
  * @fires {CustomEvent} dashboard-item-removed - Fired when an item was removed
  * @fires {CustomEvent} dashboard-item-selected-changed - Fired when an item selected state changed
  * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed

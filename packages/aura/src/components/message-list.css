@@ -1,17 +1,23 @@
+:where(:root),
+:where(:host) {
+  --vaadin-message-attachment-font-weight: var(--aura-font-weight-medium);
+  --vaadin-message-attachment-border-width: 1px;
+}
+
 vaadin-message::part(attachment) {
-  padding: 0 var(--vaadin-padding-xs) 0 0;
-  overflow: hidden;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--vaadin-button-border-color, var(--aura-accent-border-color));
-  min-height: var(--_prefix-area-size);
-  border-radius: var(--vaadin-radius-m);
+  --aura-surface-level: 4;
+  background: var(--vaadin-message-attachment-background, var(--aura-surface-color) padding-box);
 }
 
-vaadin-message::part(attachment-image) {
-  padding: 0;
+vaadin-message::part(attachment):hover {
+  --aura-surface-opacity: 0.7;
 }
 
-vaadin-message::part(attachment-preview) {
-  object-fit: cover;
+vaadin-message::part(attachment):active {
+  --aura-surface-opacity: 0.4;
+}
+
+vaadin-message::part(attachment-icon) {
+  background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  color: var(--aura-accent-color);
 }

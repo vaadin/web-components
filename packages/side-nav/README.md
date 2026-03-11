@@ -13,7 +13,7 @@ A web component for navigation menus.
   <vaadin-side-nav-item path="/dashboard">
     <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
     Dashboard
-    <span theme="badge primary" slot="suffix" aria-label="(2 new items)">2</span>
+    <vaadin-badge slot="suffix" number="2" theme="number-only">new items</vaadin-badge>
   </vaadin-side-nav-item>
 
   <vaadin-side-nav-item>

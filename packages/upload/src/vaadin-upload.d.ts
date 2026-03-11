@@ -78,6 +78,11 @@ export type UploadRetryEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFi
 export type UploadAbortEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
+ * Fired when a file is removed from the list.
+ */
+export type UploadFileRemoveEvent = UploadEvent<{ file: UploadFile }>;
+
+/**
  * Fired when the XHR has been opened but not sent yet. Useful for appending
  * data keys to the FormData object, for changing some parameters like
  * headers, etc. If the event is defaultPrevented, `vaadin-upload` will not
@@ -93,6 +98,8 @@ export type UploadRequestEvent = UploadEvent<{
 
 export interface UploadCustomEventMap {
   'file-reject': UploadFileRejectEvent;
+
+  'file-remove': UploadFileRemoveEvent;
 
   'files-changed': UploadFilesChangedEvent;
 
@@ -191,6 +198,7 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
+ * @fires {CustomEvent} file-remove - Fired when a file is removed from the list.
  * @fires {CustomEvent} files-changed - Fired when the `files` property changes.
  * @fires {CustomEvent} max-files-reached-changed - Fired when the `maxFilesReached` property changes.
  * @fires {CustomEvent} upload-before - Fired before the XHR is opened.
