@@ -39,7 +39,7 @@ echo "  Command: yarn $*"
 
 # Run Docker:
 # - --rm: Remove container after exit
-# - -i: Enables input when --watch mode
+# - -i: Enables input in --watch mode
 # - -t: Enables colored and interactive output in --watch mode
 # - --ipc=host: Recommended for Chromium to avoid shared memory crashes
 # - -v $(pwd):/work: Mount repository source into container
