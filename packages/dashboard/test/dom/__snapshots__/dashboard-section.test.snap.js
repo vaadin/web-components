@@ -16,7 +16,7 @@ snapshots["vaadin-dashboard-section shadow"] =
   <vaadin-dashboard-button
     aria-label="Move Backward"
     id="move-backward"
-    part="move-backward-button"
+    part="button move-backward-button"
     role="button"
     tabindex="0"
     theme="primary icon"
@@ -28,7 +28,7 @@ snapshots["vaadin-dashboard-section shadow"] =
   <vaadin-dashboard-button
     aria-label="Apply"
     id="move-apply"
-    part="move-apply-button"
+    part="button move-apply-button"
     role="button"
     tabindex="0"
     theme="primary icon large"
@@ -40,7 +40,7 @@ snapshots["vaadin-dashboard-section shadow"] =
   <vaadin-dashboard-button
     aria-label="Move Forward"
     id="move-forward"
-    part="move-forward-button"
+    part="button move-forward-button"
     role="button"
     tabindex="0"
     theme="primary icon"
@@ -70,7 +70,7 @@ snapshots["vaadin-dashboard-section shadow"] =
       class="drag-handle"
       draggable="true"
       id="drag-handle"
-      part="move-button"
+      part="button move-button"
       role="button"
       tabindex="-1"
       theme="icon tertiary"
@@ -90,7 +90,7 @@ snapshots["vaadin-dashboard-section shadow"] =
     <vaadin-dashboard-button
       aria-label="Remove"
       id="remove-button"
-      part="remove-button"
+      part="button remove-button"
       role="button"
       tabindex="-1"
       theme="icon tertiary"

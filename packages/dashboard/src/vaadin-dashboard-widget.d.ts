@@ -48,6 +48,7 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  * `header`                      | The header of the widget
  * `title`                       | The title of the widget
  * `content`                     | The content of the widget
+ * `button`                      | The button
  * `move-button`                 | The move button
  * `remove-button`               | The remove button
  * `resize-button`               | The resize button

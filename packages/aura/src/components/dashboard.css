@@ -112,17 +112,7 @@ vaadin-dashboard-section {
 }
 
 @media (any-hover: hover) {
-  :is(vaadin-dashboard-widget, vaadin-dashboard-section) {
-    &::part(move-button):hover,
-    &::part(remove-button):hover,
-    &::part(resize-button):hover,
-    &::part(move-forward-button):hover,
-    &::part(move-backward-button):hover,
-    &::part(resize-shrink-height-button):hover,
-    &::part(resize-grow-height-button):hover,
-    &::part(resize-shrink-width-button):hover,
-    &::part(resize-grow-width-button):hover {
-      color: var(--vaadin-text-color);
-    }
+  :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(button):hover {
+    color: var(--vaadin-text-color);
   }
 }
