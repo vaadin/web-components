@@ -17,7 +17,6 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
