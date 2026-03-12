@@ -314,10 +314,12 @@ export const ComboBoxBaseMixin = (superClass) =>
           }
         }
       } else {
-        // When the dropdown closes, the input remains focused. Mark that the next
-        // host click should re-trigger autoselect, since the normal focus event
-        // won't fire again.
-        this.__autoselectPending = true;
+        if (this.autoselect) {
+          // When the dropdown closes, the input remains focused. Mark that the next
+          // host click should re-trigger autoselect, since the normal focus event
+          // won't fire again.
+          this.__autoselectPending = true;
+        }
 
         this._onClosed();
       }
