@@ -66,14 +66,14 @@
   }
 
   /* Common styles for non-mode edit buttons */
-  [part='move-button'],
-  [part='resize-button'],
-  [part='remove-button'] {
+  [part~='move-button'],
+  [part~='resize-button'],
+  [part~='remove-button'] {
     color: var(--_icon-color);
     padding-inline: 0;
   }
 
-  :where([part='move-button'], [part='resize-button'], [part='remove-button']):hover {
+  :where([part~='move-button'], [part~='resize-button'], [part~='remove-button']):hover {
     --_icon-color: var(--lumo-primary-text-color);
   }
 

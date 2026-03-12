@@ -97,7 +97,7 @@ export const DashboardItemMixin = (superClass) =>
         id="drag-handle"
         draggable="true"
         class="drag-handle"
-        part="move-button"
+        part="button move-button"
         theme="icon tertiary"
         aria-label="${this.__i18n.move}"
         title="${this.__i18n.move}"
@@ -114,7 +114,7 @@ export const DashboardItemMixin = (superClass) =>
         aria-label="${this.__i18n.remove}"
         title="${this.__i18n.remove}"
         id="remove-button"
-        part="remove-button"
+        part="button remove-button"
         theme="icon tertiary"
         tabindex="${this.__selected ? 0 : -1}"
         @click="${() => fireRemove(this)}"
@@ -156,7 +156,7 @@ export const DashboardItemMixin = (superClass) =>
         aria-label="${this.__i18n.resize}"
         title="${this.__i18n.resize}"
         id="resize-handle"
-        part="resize-button"
+        part="button resize-button"
         class="resize-handle"
         theme="icon tertiary"
         tabindex="${this.__selected ? 0 : -1}"
@@ -180,7 +180,7 @@ export const DashboardItemMixin = (superClass) =>
           title="${this.__i18n.moveBackward}"
           @click="${() => fireMove(this, -1)}"
           id="move-backward"
-          part="move-backward-button"
+          part="button move-backward-button"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -190,7 +190,7 @@ export const DashboardItemMixin = (superClass) =>
           title="${this.__i18n.moveApply}"
           @click="${() => this.__exitMode(true)}"
           id="move-apply"
-          part="move-apply-button"
+          part="button move-apply-button"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -200,7 +200,7 @@ export const DashboardItemMixin = (superClass) =>
           title="${this.__i18n.moveForward}"
           @click="${() => fireMove(this, 1)}"
           id="move-forward"
-          part="move-forward-button"
+          part="button move-forward-button"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -233,7 +233,7 @@ export const DashboardItemMixin = (superClass) =>
           title="${this.__i18n.resizeApply}"
           @click="${() => this.__exitMode(true)}"
           id="resize-apply"
-          part="resize-apply-button"
+          part="button resize-apply-button"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -244,7 +244,7 @@ export const DashboardItemMixin = (superClass) =>
           @click="${() => fireResize(this, -1, 0)}"
           .hidden="${!canShrinkWidth}"
           id="resize-shrink-width"
-          part="resize-shrink-width-button"
+          part="button resize-shrink-width-button"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -255,7 +255,7 @@ export const DashboardItemMixin = (superClass) =>
           @click="${() => fireResize(this, 1, 0)}"
           .hidden="${!canGrowWidth}"
           id="resize-grow-width"
-          part="resize-grow-width-button"
+          part="button resize-grow-width-button"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -265,7 +265,7 @@ export const DashboardItemMixin = (superClass) =>
           title="${this.__i18n.resizeShrinkHeight}"
           @click="${() => fireResize(this, 0, -1)}"
           id="resize-shrink-height"
-          part="resize-shrink-height-button"
+          part="button resize-shrink-height-button"
           .hidden="${!hasMinRowHeight || !canShrinkHeight}"
         >
           <div class="icon"></div>
@@ -276,7 +276,7 @@ export const DashboardItemMixin = (superClass) =>
           title="${this.__i18n.resizeGrowHeight}"
           @click="${() => fireResize(this, 0, 1)}"
           id="resize-grow-height"
-          part="resize-grow-height-button"
+          part="button resize-grow-height-button"
           .hidden="${!hasMinRowHeight}"
         >
           <div class="icon"></div>
