@@ -7,7 +7,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { cssImportPlugin, enforceThemePlugin } from './web-dev-server.config.js';
+import { cssImportPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -316,13 +316,8 @@ const createVisualTestsConfig = (theme) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
-
-      // Used by all themes
-      enforceThemePlugin(theme),
-
-      // Lumo / Aura CSS
-      ['lumo', 'aura'].includes(theme) && cssImportPlugin(),
-    ].filter(Boolean),
+      cssImportPlugin(),
+    ],
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
     filterBrowserLogs,
