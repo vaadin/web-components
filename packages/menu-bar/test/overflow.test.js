@@ -29,16 +29,16 @@ function makeComponent(id) {
 describe('overflow', () => {
   beforeEach(() => {
     fixtureSync(`
-    <style>
-      vaadin-menu-bar-button {
-        width: ${BUTTON_WIDTH}px;
-      }
+      <style>
+        vaadin-menu-bar-button {
+          width: ${BUTTON_WIDTH}px;
+        }
 
-      vaadin-menu-bar[theme="big"] vaadin-menu-bar-button {
-        width: 100px;
-      }
-    </style>
-  `);
+        vaadin-menu-bar[theme="big"] vaadin-menu-bar-button {
+          width: 100px;
+        }
+      </style>
+    `);
   });
 
   describe('overflow button', () => {
