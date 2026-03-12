@@ -12,7 +12,7 @@ describe('overlay position', () => {
   // resizing the iframe, but moving the combo-box using styles and firing
   // window.onresize event is equivalent.
   function moveComboBox(left, top, width) {
-    comboBox.style.position = 'fixed';
+    comboBox.style.position = 'relative';
     comboBox.style.width = `${width}px`;
     comboBox.style.top = `${top}px`;
     comboBox.style.left = `${left}px`;

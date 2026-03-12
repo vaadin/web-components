@@ -25,6 +25,7 @@ export const field = css`
         'helper' auto
       )
       'error' auto / 100%;
+    height: fit-content;
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
