@@ -17,7 +17,6 @@ const assertVisible = (elem) => {
   expect(style.position).to.not.equal('absolute');
 };
 
-// Approximation of a menu-bar button width used in the tests.
 const BUTTON_WIDTH = 60;
 
 function makeComponent(id) {
@@ -31,6 +30,10 @@ describe('overflow', () => {
   beforeEach(() => {
     fixtureSync(`
     <style>
+      vaadin-menu-bar-button {
+        width: ${BUTTON_WIDTH}px;
+      }
+
       vaadin-menu-bar[theme="big"] vaadin-menu-bar-button {
         width: 100px;
       }
@@ -79,9 +82,8 @@ describe('overflow', () => {
       menu.style.width = `${BUTTON_WIDTH * 4.5}px`;
       await nextResize(menu);
       assertVisible(buttons[2]);
-      assertVisible(buttons[3]);
-      expect(overflow.item.children.length).to.equal(1);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
+      expect(overflow.item.children.length).to.equal(2);
+      expect(overflow.item.children[0]).to.deep.equal(menu.items[3]);
     });
 
     it('should show buttons and update overflow items when width increased in RTL', async () => {
@@ -89,13 +91,12 @@ describe('overflow', () => {
       menu.style.width = `${BUTTON_WIDTH * 4.5}px`;
       await nextResize(menu);
       assertVisible(buttons[2]);
-      assertVisible(buttons[3]);
-      expect(overflow.item.children.length).to.equal(1);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[4]);
+      expect(overflow.item.children.length).to.equal(2);
+      expect(overflow.item.children[0]).to.deep.equal(menu.items[3]);
     });
 
     it('should hide buttons and update overflow items when width decreased', async () => {
-      menu.style.width = `${BUTTON_WIDTH * 1.5}px`;
+      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
       await nextResize(menu);
       assertHidden(buttons[1]);
       expect(overflow.item.children.length).to.equal(4);
@@ -107,7 +108,7 @@ describe('overflow', () => {
 
     it('should hide buttons and update overflow items when width decreased in RTL', async () => {
       menu.setAttribute('dir', 'rtl');
-      menu.style.width = `${BUTTON_WIDTH * 1.5}px`;
+      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
       await nextResize(menu);
       assertHidden(buttons[1]);
       expect(overflow.item.children.length).to.equal(4);
@@ -173,7 +174,7 @@ describe('overflow', () => {
       expect(buttons[0].getAttribute('tabindex')).to.equal('-1');
       expect(buttons[1].getAttribute('tabindex')).to.equal('0');
 
-      menu.style.width = `${BUTTON_WIDTH * 1.5}px`;
+      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
       await nextResize(menu);
 
       expect(buttons[0].getAttribute('tabindex')).to.equal('0');
@@ -240,7 +241,7 @@ describe('overflow', () => {
     });
 
     it('should not set when one button and overflow are only visible', async () => {
-      menu.style.width = `${BUTTON_WIDTH * 1.5}px`;
+      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
       await nextResize(menu);
       assertVisible(buttons[0]);
       assertHidden(buttons[1]);
@@ -260,7 +261,7 @@ describe('overflow', () => {
       menu.style.width = `${BUTTON_WIDTH * 0.5}px`;
       await nextResize(menu);
 
-      menu.style.width = `${BUTTON_WIDTH * 2}px`;
+      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
       await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.false;
     });
@@ -393,7 +394,7 @@ describe('overflow', () => {
         assertHidden(buttons[2]);
         assertHidden(buttons[3]);
 
-        container.style.maxWidth = `${BUTTON_WIDTH * 5}px`;
+        container.style.maxWidth = `${BUTTON_WIDTH * 6}px`;
         await nextResize(menu);
 
         assertVisible(buttons[2]);
