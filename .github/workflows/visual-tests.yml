@@ -3,7 +3,6 @@ name: Visual tests
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [main, 25.1]
 
 permissions:
   contents: read
