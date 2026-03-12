@@ -179,11 +179,3 @@ vaadin-upload[theme~='no-border'] {
     border: 1px solid var(--vaadin-border-color-secondary);
   }
 }
-
-@media (any-hover: hover) {
-  vaadin-upload-file::part(start-button):hover,
-  vaadin-upload-file::part(remove-button):hover,
-  vaadin-upload-file::part(retry-button):hover {
-    --vaadin-upload-file-button-text-color: var(--vaadin-text-color);
-  }
-}

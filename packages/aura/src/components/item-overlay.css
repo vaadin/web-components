@@ -47,30 +47,6 @@ vaadin-select-item:where([role]) {
     gap: var(--vaadin-item-gap);
   }
 
-  @media (any-hover: hover) {
-    &:not([disabled], [aria-disabled='true']):hover {
-      background: var(--_highlight-color);
-
-      &[theme~='filled'] {
-        background: var(--aura-accent-color);
-        color: var(--aura-accent-contrast-color);
-        --vaadin-text-color: var(--aura-accent-contrast-color);
-        --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
-        --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
-        --vaadin-icon-color: var(--aura-accent-contrast-color);
-        --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
-      }
-    }
-  }
-
-  &:active {
-    background: var(--_highlight-color);
-  }
-
-  &[aria-expanded='true']:not(:hover) {
-    background: var(--vaadin-background-container-strong);
-  }
-
   &:where(
     [theme~='danger'],
     .aura-accent-color,

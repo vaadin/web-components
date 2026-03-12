@@ -63,13 +63,6 @@ vaadin-radio-button:not([disabled])::part(radio)::before {
     background-color 100ms;
 }
 
-@media (any-hover: hover) {
-  vaadin-checkbox:hover:not([readonly], [disabled], [active])::part(checkbox)::before,
-  vaadin-radio-button:hover:not([disabled], [active])::part(radio)::before {
-    opacity: 0.04;
-  }
-}
-
 vaadin-checkbox[active]:not([readonly], [disabled])::part(checkbox)::before,
 vaadin-radio-button[active]:not([disabled])::part(radio)::before {
   opacity: 0.1;

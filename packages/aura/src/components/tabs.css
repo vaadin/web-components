@@ -74,10 +74,6 @@ vaadin-tab {
   border: var(--vaadin-tab-border-width, 1px) solid var(--vaadin-tab-border-color, transparent);
 }
 
-vaadin-tab:not([disabled], [selected]):hover {
-  --vaadin-tab-text-color: var(--vaadin-text-color);
-}
-
 vaadin-tab[selected] {
   --aura-surface-level: 5;
   --aura-surface-opacity: 0.8;

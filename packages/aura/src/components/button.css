@@ -98,18 +98,6 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   }
 }
 
-@media (any-hover: hover) {
-  /* prettier-ignore */
-  :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):hover:not([disabled], [active])::before {
-    opacity: 0.03;
-  }
-
-  /* prettier-ignore */
-  :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary']:hover:not([disabled], [active])::before {
-    opacity: 0.12;
-  }
-}
-
 @media (min-resolution: 2x) {
   /* prettier-ignore */
   :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button[first-visible][last-visible], vaadin-drawer-toggle)[active]:not([disabled], [aria-disabled='true']) {

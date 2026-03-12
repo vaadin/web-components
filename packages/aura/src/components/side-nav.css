@@ -22,20 +22,6 @@ vaadin-side-nav-item::part(content) {
   transition: color 80ms;
 }
 
-vaadin-side-nav-item:not([disabled], [current])::part(content):active {
-  --vaadin-side-nav-item-background: var(--vaadin-background-container);
-}
-
-@media (any-hover: hover) {
-  vaadin-side-nav::part(label):hover {
-    --vaadin-side-nav-label-color: var(--vaadin-text-color);
-  }
-
-  vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
-    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
-  }
-}
-
 vaadin-side-nav-item[current]::part(content) {
   transition: none;
   --vaadin-side-nav-item-background: var(--aura-surface-color) padding-box;

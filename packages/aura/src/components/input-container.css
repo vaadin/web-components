@@ -34,13 +34,3 @@ vaadin-message-input:not([readonly], [disabled]) {
 ::part(clear-button) {
   --vaadin-icon-visual-size: 75%;
 }
-
-:not([readonly], [disabled])::part(field-button):active {
-  color: var(--vaadin-text-color);
-}
-
-@media (any-hover: hover) {
-  :not([readonly], [disabled])::part(field-button):hover {
-    color: var(--vaadin-text-color);
-  }
-}

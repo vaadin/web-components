@@ -58,15 +58,3 @@ vaadin-rich-text-editor:focus-within::part(toolbar-button-pressed) {
   --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
   border-color: var(--vaadin-text-color-disabled);
 }
-
-vaadin-rich-text-editor::part(toolbar-button):active {
-  scale: 0.95;
-  transition-duration: 80ms, 80ms, 50ms;
-}
-
-@media (any-hover: hover) {
-  vaadin-rich-text-editor::part(toolbar-button):hover {
-    --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container);
-    --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
-  }
-}

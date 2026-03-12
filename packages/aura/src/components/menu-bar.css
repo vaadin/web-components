@@ -2,13 +2,6 @@ vaadin-menu-bar:not([has-single-button]) vaadin-menu-bar-button:not([first-visib
   clip-path: inset(-10px -10px -10px max(-10px, var(--vaadin-menu-bar-gap, 0px) * -1 + 0.8px));
 }
 
-@media (any-hover: hover) {
-  /* Increase specificity to reset hover styles */
-  vaadin-menu-bar-button > vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
-    background: transparent;
-  }
-}
-
 vaadin-menu-bar-button[slot='overflow'] {
   font-family: system-ui, sans-serif;
   font-weight: 600;
