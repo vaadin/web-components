@@ -300,7 +300,6 @@ const createVisualTestsConfig = (theme) => {
     },
     browsers: [browser],
     plugins: [
-      cssImportPlugin(),
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
         baseDir: 'packages',
@@ -317,6 +316,7 @@ const createVisualTestsConfig = (theme) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
+      cssImportPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
