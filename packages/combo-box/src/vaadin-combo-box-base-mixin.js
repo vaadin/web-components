@@ -317,7 +317,7 @@ export const ComboBoxBaseMixin = (superClass) =>
         // When the dropdown closes, the input remains focused. Mark that the next
         // host click should re-trigger autoselect, since the normal focus event
         // won't fire again.
-        this._autoselectPending = true;
+        this.__autoselectPending = true;
 
         this._onClosed();
       }
@@ -397,7 +397,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       // overlay mousedown listener prevents blur on outside click, so the input
       // never loses focus and subsequent clicks don't trigger the focus event
       // where autoselect is normally handled.
-      if (this.autoselect && this.inputElement && this._autoselectPending) {
+      if (this.autoselect && this.inputElement && this.__autoselectPending) {
         // Skip if the user has already made a partial text selection
         // (e.g. by click-dragging).
         const isTextManuallySelected = this.inputElement.selectionStart !== this.inputElement.selectionEnd;
@@ -405,7 +405,7 @@ export const ComboBoxBaseMixin = (superClass) =>
           this.inputElement.select();
         }
       }
-      this._autoselectPending = false;
+      this.__autoselectPending = false;
 
       if (this._isClearButton(event)) {
         this._onClearButtonClick(event);
@@ -737,7 +737,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       super._setFocused(focused);
 
       if (!focused) {
-        this._autoselectPending = false;
+        this.__autoselectPending = false;
       }
 
       if (!focused && !this.readonly && !this._closeOnBlurIsPrevented) {
