@@ -25,6 +25,17 @@
     "color-function-notation": "legacy",
     "custom-property-empty-line-before": ["never", { "ignore": ["after-custom-property"] }],
     "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
-    "no-duplicate-selectors": true
+    "no-duplicate-selectors": true,
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [
+          "-webkit-backdrop-filter",
+          "-webkit-mask-image",
+          "-webkit-text-size-adjust",
+          "-webkit-user-select"
+        ]
+      }
+    ]
   }
 }

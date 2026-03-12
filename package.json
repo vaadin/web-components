@@ -69,7 +69,7 @@
     "prettier": "^3.7.4",
     "prettier-plugin-package": "^2.0.0",
     "replace-in-file": "^8.3.0",
-    "stylelint": "^16.23.0",
+    "stylelint": "^17.4.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
     "typescript": "^5.9.3"
