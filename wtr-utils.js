@@ -317,7 +317,7 @@ const createVisualTestsConfig = (theme) => {
         update: process.env.TEST_ENV === 'update',
       }),
       cssImportPlugin(),
-    ].filter(Boolean),
+    ],
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
     filterBrowserLogs,
