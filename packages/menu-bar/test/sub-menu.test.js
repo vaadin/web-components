@@ -473,6 +473,39 @@ describe('sub-menu', () => {
       expect(buttons[0].hasAttribute('expanded')).to.be.false;
     });
   });
+
+  describe('active attribute', () => {
+    it('should preserve active attribute on button while sub-menu is open on Enter', async () => {
+      enter(buttons[0]);
+      await nextRender();
+      expect(subMenu.opened).to.be.true;
+      expect(buttons[0].hasAttribute('active')).to.be.true;
+    });
+
+    it('should preserve active attribute on button while sub-menu is open on Space', async () => {
+      space(buttons[0]);
+      await nextRender();
+      expect(subMenu.opened).to.be.true;
+      expect(buttons[0].hasAttribute('active')).to.be.true;
+    });
+
+    it('should preserve active attribute on button while sub-menu is open on click', async () => {
+      buttons[0].click();
+      await nextRender();
+      expect(subMenu.opened).to.be.true;
+      expect(buttons[0].hasAttribute('active')).to.be.true;
+    });
+
+    it('should remove active attribute when sub-menu is closed', async () => {
+      buttons[0].click();
+      await nextRender();
+      expect(buttons[0].hasAttribute('active')).to.be.true;
+
+      buttons[0].click();
+      await nextRender();
+      expect(buttons[0].hasAttribute('active')).to.be.false;
+    });
+  });
 });
 
 describe('open on hover', () => {
