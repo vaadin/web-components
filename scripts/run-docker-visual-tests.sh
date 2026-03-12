@@ -39,11 +39,15 @@ echo "  Command: yarn $*"
 
 # Run Docker:
 # - --rm: Remove container after exit
+# - -i: Enables input when --watch mode
+# - -t: Enables colored and interactive output in --watch mode
 # - --ipc=host: Recommended for Chromium to avoid shared memory crashes
 # - -v $(pwd):/work: Mount repository source into container
 # - -v $VOL:/work/node_modules: Use a named volume for node_modules (overlays host's)
 # - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1: Use pre-installed browsers from the image
 docker run --rm --ipc=host \
+  -i \
+  -t \
   -v "$(pwd)":/work \
   -v "${NODE_MODULES_VOLUME}":/work/node_modules \
   -w /work \
