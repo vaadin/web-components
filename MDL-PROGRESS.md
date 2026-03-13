@@ -32,51 +32,49 @@
 - [x] `overflow.test.js` — layout resize, property-driven overflow detection, masterSize: 100% (9 tests)
 - [x] `drawer-mode.test.js` — sticky positioning, detail width, backdrop, adding/removing detail (5 tests)
 
-## Step 4: Stack mode
+## Step 4: Detail overlay mode API (#11346)
 
-- [ ] Stack CSS: absolute positioning, inset: 0, full-size override on all parts
-- [ ] Port and adapt: `stack-mode.test.js` — horizontal tests
+- [ ] Add `detailOverlayMode` property (replaces `forceOverlay`/`stackOverlay`/`containment`)
+- [ ] Values: `drawer` (default), `drawer-viewport`, `full`, `full-viewport`
+- [ ] `drawer`: detail as sticky side-panel, layout containment (current drawer mode)
+- [ ] `full`: detail covers entire layout (absolute positioning, inset: 0)
+- [ ] `drawer-viewport` / `full-viewport`: `position: fixed`, safe-area-inset padding
+- [ ] Port and adapt: `full-mode.test.js` — horizontal tests
+- [ ] Port and adapt: viewport containment tests
 
-## Step 5: Overlay API (`forceOverlay`, `stackOverlay`, `containment`)
-
-- [ ] Decide on API: `forceOverlay`/`stackOverlay` vs `masterSize: 100%` approach
-- [ ] Add `containment` property (`layout` vs `viewport`)
-- [ ] CSS: `position: fixed` for viewport containment, safe-area-inset padding
-- [ ] Port and adapt: overlay/containment tests
-
-## Step 6: Vertical orientation
+## Step 5: Vertical orientation
 
 - [ ] Add `orientation` property
 - [ ] `grid-template-rows` + `minmax()` for vertical
 - [ ] Overflow detection using `gridTemplateRows`
-- [ ] Vertical drawer/stack/containment CSS
-- [ ] Port and adapt: vertical tests from `drawer-mode.test.js` and `stack-mode.test.js`
+- [ ] Vertical drawer/full/containment CSS
+- [ ] Port and adapt: vertical tests from `drawer-mode.test.js` and `full-mode.test.js`
 
-## Step 7: Accessibility + events
+## Step 6: Accessibility + events
 
 - [ ] Inert master in overlay modes, dialog role, aria-modal
 - [ ] Escape key handling, backdrop click event
 - [ ] Port: `aria.test.js`, `events.test.js`
 
-## Step 8: View transitions
+## Step 7: View transitions
 
 - [ ] Add `noAnimation` property
 - [ ] Copy `_setDetail()`, `_startTransition()`, `_finishTransition()` from existing
 - [ ] Copy transition base styles
 - [ ] Port and adapt: `view-transitions.test.js`
 
-## Step 9: Nested MDL scenario
+## Step 8: Nested MDL scenario
 
 - [ ] Verify nested layouts work without glitches (primary motivation for grid rewrite)
-- [ ] Port nested test from `stack-mode.test.js`
+- [ ] Port nested test from `full-mode.test.js`
 
-## Step 10: TypeScript definitions + type tests
+## Step 9: TypeScript definitions + type tests
 
 - [ ] Add `.d.ts` entry point (`vaadin-master-detail-layout.d.ts`)
 - [ ] Write `.d.ts` files for component and styles
 - [ ] Port and adapt: `typings/master-detail-layout.types.ts`
 
-## Step 11: Merge back
+## Step 10: Merge back
 
 - [ ] Replace `packages/master-detail-layout/src/` with `packages/mdl/src/`
 - [ ] Replace tests
