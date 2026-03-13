@@ -168,7 +168,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const { gridTemplateColumns } = getComputedStyle(this);
     const columns = gridTemplateColumns.split(' ').map(parseFloat);
     const totalWidth = columns.reduce((a, b) => a + b, 0);
-    this.toggleAttribute('overflow', totalWidth > this.offsetWidth);
+    this.toggleAttribute('overflow', Math.round(totalWidth) > this.offsetWidth);
   }
 }
 
