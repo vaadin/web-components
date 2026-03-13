@@ -117,13 +117,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   connectedCallback() {
     super.connectedCallback();
 
-    this.__resizeObserver = new ResizeObserver(() => {
-      const { gridTemplateColumns } = getComputedStyle(this);
-
-      const [masterSizePx, detailSizePx] = gridTemplateColumns.split(' ').map(parseFloat);
-      const totalWidth = parseFloat(masterSizePx + detailSizePx).toFixed(2);
-      this.toggleAttribute('overflow', totalWidth > this.offsetWidth);
-    });
+    this.__resizeObserver = new ResizeObserver(() => this.__detectOverflow());
     this.__resizeObserver.observe(this);
   }
 
@@ -131,16 +125,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   __onDetailSlotChange(e) {
     const children = e.target.assignedNodes();
     this._hasDetail = children.length > 0;
+    this.__detectOverflow();
   }
 
   /** @private */
   __masterSizeChanged(size, oldSize) {
     this.__updateStyleProperty('master-size', size, oldSize);
+    this.__detectOverflow();
   }
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
+    this.__detectOverflow();
   }
 
   /** @private */
@@ -152,6 +149,18 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     this.toggleAttribute(`has-${prop}`, !!size);
+  }
+
+  /**
+   * Reads resolved CSS grid column widths and toggles the `overflow`
+   * attribute when the sum of column minimums exceeds the host width.
+   * @private
+   */
+  __detectOverflow() {
+    const { gridTemplateColumns } = getComputedStyle(this);
+    const columns = gridTemplateColumns.split(' ').map(parseFloat);
+    const totalWidth = columns.reduce((a, b) => a + b, 0);
+    this.toggleAttribute('overflow', totalWidth > this.offsetWidth);
   }
 }
 
