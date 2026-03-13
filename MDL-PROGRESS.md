@@ -24,23 +24,24 @@
 
 - [x] ResizeObserver reading computed `gridTemplateColumns`
 - [x] `overflow` attribute toggled when columns exceed host width
+- [x] `__detectOverflow()` extracted, called from ResizeObserver + property observers + slotchange
 - [x] Drawer CSS: sticky detail, backdrop display, detail background/shadow
 - [x] No-detail handling: `--_detail-col: ''` collapses the column
-- [ ] Add `forceOverlay`, `stackOverlay` properties
-- [ ] `__detectLayoutMode()` -> `__setOverlayMode()` flow
-- [ ] Drawer CSS: `margin-inline-start: 50px`
-- [ ] Port and adapt: `drawer-mode.test.js` — horizontal tests (split<->drawer transitions, detail width, forceOverlay, adding/removing details)
+- [x] `overflow.test.js` — container resize + property-driven overflow detection (8 tests)
+- [x] `__detectLayoutMode()` not needed — CSS grid + `__detectOverflow()` replaces it
+- [ ] Port and adapt: `drawer-mode.test.js` — horizontal tests (split<->drawer transitions, detail width, adding/removing details)
 
 ## Step 4: Stack mode
 
 - [ ] Stack CSS: absolute positioning, inset: 0, full-size override on all parts
-- [ ] Port and adapt: `stack-mode.test.js` — horizontal tests (drawer<->stack switch, forceOverlay+stackOverlay, no overflow in stack)
+- [ ] Port and adapt: `stack-mode.test.js` — horizontal tests
 
-## Step 5: Containment (layout vs viewport)
+## Step 5: Overlay API (`forceOverlay`, `stackOverlay`, `containment`)
 
-- [ ] Add `containment` property
+- [ ] Decide on API: `forceOverlay`/`stackOverlay` vs `masterSize: 100%` approach
+- [ ] Add `containment` property (`layout` vs `viewport`)
 - [ ] CSS: `position: fixed` for viewport containment, safe-area-inset padding
-- [ ] Port and adapt: containment tests from `drawer-mode.test.js`
+- [ ] Port and adapt: overlay/containment tests
 
 ## Step 6: Vertical orientation
 
