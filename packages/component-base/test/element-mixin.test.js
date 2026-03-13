@@ -40,9 +40,11 @@ describe('ElementMixin', () => {
 
     before(() => {
       ElementFoo = defineCE('element-foo');
+      flush();
     });
 
     it('should store the class entry in registrations once instance created', () => {
+      expect(window.Vaadin.registrations.length).to.equal(0);
       document.createElement(ElementFoo.is);
       flush();
       expect(window.Vaadin.registrations).to.be.instanceOf(Array);
