@@ -471,6 +471,13 @@ export const MenuBarMixin = (superClass) =>
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
 
+      // Prevent the container from shrinking while buttons are being hidden.
+      // The host has min-width: 0 so it can shrink inside flex/grid layouts.
+      // Without this lock, hiding a button reduces the host width, which
+      // shrinks the container (width: 100%), shifting all button positions
+      // and causing a cascading collapse where every button appears to overflow.
+      container.style.minWidth = `${container.offsetWidth}px`;
+
       if (container.offsetWidth < container.scrollWidth) {
         this._hasOverflow = true;
 
@@ -501,6 +508,8 @@ export const MenuBarMixin = (superClass) =>
         const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
         this.__updateOverflow(items);
       }
+
+      container.style.minWidth = '';
     }
 
     /** @private */

@@ -8,6 +8,7 @@ import { css } from 'lit';
 export const menuBarStyles = css`
   :host {
     display: block;
+    min-width: 0;
   }
 
   :host([hidden]) {
