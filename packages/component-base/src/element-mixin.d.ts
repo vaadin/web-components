@@ -18,6 +18,4 @@ export declare function ElementMixin<T extends Constructor<HTMLElement>>(
 export declare class ElementMixinClass {
   static is: string;
   static version: string;
-
-  protected static finalize(): void;
 }
