@@ -8,19 +8,12 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
-<<<<<<< Updated upstream
-    --_master-max-size: var(--_master-size, 0);
-    --_detail-max-size: var(--_detail-size, 0);
-    --_master-col: minmax(var(--_master-size, 0), var(--_master-max-size));
-    --_detail-col: minmax(var(--_detail-size, 0), var(--_detail-max-size));
-=======
     --_master-size: 400px;
     --_detail-size: min-content;
     --_master-max-size: var(--_master-size);
     --_detail-max-size: var(--_detail-size);
     --_master-col: minmax(var(--_master-size), var(--_master-max-size));
     --_detail-col: minmax(var(--_detail-size), var(--_detail-max-size));
->>>>>>> Stashed changes
 
     display: grid;
     box-sizing: border-box;
@@ -62,8 +55,6 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
   }
 
-<<<<<<< Updated upstream
-=======
   :host([overflow]) [part~='detail'] {
     position: sticky;
     z-index: 2;
@@ -82,7 +73,6 @@ export const masterDetailLayoutStyles = css`
     --_detail-col: '';
   }
 
->>>>>>> Stashed changes
   :host(:not([has-detail])) [part~='detail'] {
     display: none;
   }
