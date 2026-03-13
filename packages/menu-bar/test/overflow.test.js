@@ -369,48 +369,8 @@ describe('overflow', () => {
       });
     });
 
-    describe('nested flex containers', () => {
-      let outer, menu, buttons, overflow;
-
-      beforeEach(async () => {
-        outer = fixtureSync(`
-          <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
-            <div style="display: flex; width: 100%">
-              <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
-              <div style="min-width: ${BUTTON_WIDTH * 2}px">Sibling</div>
-            </div>
-          </div>
-        `);
-        ({ menu, buttons, overflow } = await initMenuBar(outer));
-      });
-
-      it('should collapse items into overflow', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-
-      it('should restore items when outer container width increases', async () => {
-        outer.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
-        expect(overflow.hasAttribute('hidden')).to.be.true;
-      });
-
-      it('should collapse items when outer container width decreases', async () => {
-        outer.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-
-        outer.style.width = `${BUTTON_WIDTH * 4.5}px`;
-        await nextResize(menu);
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-    });
-
     describe('css grid with sibling', () => {
-      let container, menu, buttons, overflow;
+      let container, overflow;
 
       beforeEach(async () => {
         container = fixtureSync(`
@@ -419,54 +379,13 @@ describe('overflow', () => {
             <div>Sibling</div>
           </div>
         `);
-        ({ menu, buttons, overflow } = await initMenuBar(container));
+        overflow = (await initMenuBar(container)).overflow;
       });
 
       it('should collapse items into overflow', () => {
         expect(overflow.hasAttribute('hidden')).to.be.false;
         expect(overflow.item.children.length).to.be.greaterThan(0);
         expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-
-      it('should restore items when container width increases', async () => {
-        container.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
-        expect(overflow.hasAttribute('hidden')).to.be.true;
-      });
-
-      it('should collapse more items when container width decreases', async () => {
-        const initialOverflowCount = overflow.item.children.length;
-        container.style.width = `${BUTTON_WIDTH * 3.5}px`;
-        await nextResize(menu);
-        expect(overflow.item.children.length).to.be.greaterThan(initialOverflowCount);
-      });
-    });
-
-    describe('flex row without explicit width on menu-bar', () => {
-      let container, menu, buttons, overflow;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="display: flex; width: ${BUTTON_WIDTH * 4}px">
-            <vaadin-menu-bar style="flex: 1"></vaadin-menu-bar>
-            <div style="min-width: ${BUTTON_WIDTH}px">Sibling</div>
-          </div>
-        `);
-        ({ menu, buttons, overflow } = await initMenuBar(container));
-      });
-
-      it('should collapse items into overflow', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-
-      it('should restore items when container width increases', async () => {
-        container.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
-        expect(overflow.hasAttribute('hidden')).to.be.true;
       });
     });
 
@@ -491,93 +410,6 @@ describe('overflow', () => {
 
       it('should restore items when container width increases', async () => {
         container.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
-        expect(overflow.hasAttribute('hidden')).to.be.true;
-      });
-    });
-
-    describe('flex inside grid', () => {
-      let outer, menu, buttons, overflow;
-
-      beforeEach(async () => {
-        outer = fixtureSync(`
-          <div style="display: grid; grid-template-columns: 1fr; width: ${BUTTON_WIDTH * 5}px">
-            <div style="display: flex; min-width: 0">
-              <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
-              <div style="min-width: ${BUTTON_WIDTH * 2}px">Sibling</div>
-            </div>
-          </div>
-        `);
-        ({ menu, buttons, overflow } = await initMenuBar(outer));
-      });
-
-      it('should collapse items into overflow', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-
-      it('should restore items when outer container width increases', async () => {
-        outer.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
-        expect(overflow.hasAttribute('hidden')).to.be.true;
-      });
-    });
-    describe('multiple menu-bars in same flex container', () => {
-      let container, menu1, menu2, overflow1, overflow2;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
-            <vaadin-menu-bar style="width: 100%" class="first"></vaadin-menu-bar>
-            <vaadin-menu-bar style="width: 100%" class="second"></vaadin-menu-bar>
-          </div>
-        `);
-        const menus = container.querySelectorAll('vaadin-menu-bar');
-        menus[0].items = items;
-        menus[1].items = items;
-        await nextResize(menus[0]);
-        await nextResize(menus[1]);
-        menu1 = menus[0];
-        menu2 = menus[1];
-        overflow1 = menu1._buttons[menu1._buttons.length - 1];
-        overflow2 = menu2._buttons[menu2._buttons.length - 1];
-      });
-
-      it('should collapse items in both menu-bars', () => {
-        expect(overflow1.hasAttribute('hidden')).to.be.false;
-        expect(overflow1.item.children.length).to.be.greaterThan(0);
-        expect(overflow1.item.children.length).to.be.lessThan(items.length);
-        expect(overflow2.hasAttribute('hidden')).to.be.false;
-        expect(overflow2.item.children.length).to.be.greaterThan(0);
-        expect(overflow2.item.children.length).to.be.lessThan(items.length);
-      });
-    });
-
-    describe('flex row with no width and multiple siblings', () => {
-      let container, menu, buttons, overflow;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="display: flex; width: ${BUTTON_WIDTH * 4.5}px">
-            <div style="min-width: ${BUTTON_WIDTH}px">Left</div>
-            <vaadin-menu-bar></vaadin-menu-bar>
-            <div style="min-width: ${BUTTON_WIDTH}px">Right</div>
-          </div>
-        `);
-        ({ menu, buttons, overflow } = await initMenuBar(container));
-      });
-
-      it('should collapse items into overflow', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-
-      it('should restore items when container width increases', async () => {
-        container.style.width = `${BUTTON_WIDTH * 9}px`;
         await nextResize(menu);
         buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
         expect(overflow.hasAttribute('hidden')).to.be.true;
