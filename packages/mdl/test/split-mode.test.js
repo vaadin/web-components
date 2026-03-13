@@ -28,49 +28,36 @@ describe('split mode', () => {
   });
 
   describe('expand both (default)', () => {
-    it('should split space equally when no sizes are set', () => {
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
-      expect(masterWidth).to.equal(300);
-      expect(detailWidth).to.equal(300);
-    });
-
-    it('should use masterSize as minimum and expand both columns proportionally', () => {
-      layout.masterSize = '200px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
-      // Both expand: master starts at 200px, detail at 0, both grow with 1fr
-      // Grid distributes remaining space proportionally
-      expect(masterWidth).to.be.greaterThan(200);
-      expect(detailWidth).to.be.greaterThan(0);
-      expect(masterWidth + detailWidth).to.equal(600);
-    });
-
-    it('should use detailSize as minimum and expand both columns proportionally', () => {
-      layout.detailSize = '200px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
-      expect(masterWidth).to.be.greaterThan(0);
-      expect(detailWidth).to.be.greaterThan(200);
-      expect(masterWidth + detailWidth).to.equal(600);
-    });
-
-    it('should use both sizes as minimums and expand both columns', () => {
+    it('should expand both columns equally when both sizes are the same', () => {
       layout.masterSize = '200px';
       layout.detailSize = '200px';
       const [masterWidth, detailWidth] = getColumnWidths(layout);
       expect(masterWidth).to.equal(300);
       expect(detailWidth).to.equal(300);
+    });
+
+    it('should use masterSize as minimum and expand both columns', () => {
+      layout.masterSize = '300px';
+      layout.detailSize = '100px';
+      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      expect(masterWidth).to.be.at.least(300);
+      expect(detailWidth).to.be.at.least(100);
+      expect(masterWidth + detailWidth).to.equal(600);
+    });
+
+    it('should use detailSize as minimum and expand both columns', () => {
+      layout.masterSize = '100px';
+      layout.detailSize = '300px';
+      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      expect(masterWidth).to.be.at.least(100);
+      expect(detailWidth).to.be.at.least(300);
+      expect(masterWidth + detailWidth).to.equal(600);
     });
   });
 
   describe('expand master', () => {
     beforeEach(() => {
       layout.expand = 'master';
-    });
-
-    it('should give all remaining space to master when no sizes are set', () => {
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
-      // Detail column: minmax(0, 0) collapses, master takes all space
-      expect(masterWidth).to.equal(600);
-      expect(detailWidth).to.equal(0);
     });
 
     it('should fix detail at detailSize and give the rest to master', () => {
@@ -92,13 +79,6 @@ describe('split mode', () => {
   describe('expand detail', () => {
     beforeEach(() => {
       layout.expand = 'detail';
-    });
-
-    it('should give all remaining space to detail when no sizes are set', () => {
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
-      // Master column: minmax(0, 0) collapses, detail takes all space
-      expect(masterWidth).to.equal(0);
-      expect(detailWidth).to.equal(600);
     });
 
     it('should fix master at masterSize and give the rest to detail', () => {

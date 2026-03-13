@@ -8,7 +8,8 @@
 - [x] Render template: backdrop + master slot + detail slot
 - [x] Property observers setting CSS custom properties + `has-*-size` attributes
 - [x] `has-detail` detection via slotchange
-- [x] Base styles: `display: grid; overflow: clip; grid-template-columns: minmax()`
+- [x] Base styles: `display: grid; overflow: hidden; grid-template-columns: minmax()`
+- [x] CSS defaults: `--_master-size: 400px`, `--_detail-size: min-content`
 - [x] `expand` attribute CSS rules (both/master/detail)
 - [x] Unit tests: custom element definition, has-detail, expand (`yarn test --group mdl` — 7 tests)
 - [x] Snapshot tests: host (default, masterSize, detailSize, both) + shadow (`yarn test:snapshots --group mdl` — 5 tests)
@@ -17,15 +18,17 @@
 
 ## Step 2: Split mode layout tests (horizontal only) — DONE
 
-- [x] Added fallback values (`0`) for unset `--_master-size`/`--_detail-size` CSS custom properties
-- [x] `split-mode.test.js` — expand both, expand master, expand detail, height, no detail (12 tests)
+- [x] `split-mode.test.js` — expand both, expand master, expand detail (7 tests)
 
-## Step 3: Overflow detection + drawer mode
+## Step 3: Overflow detection + drawer mode — IN PROGRESS
 
+- [x] ResizeObserver reading computed `gridTemplateColumns`
+- [x] `overflow` attribute toggled when columns exceed host width
+- [x] Drawer CSS: sticky detail, backdrop display, detail background/shadow
+- [x] No-detail handling: `--_detail-col: ''` collapses the column
 - [ ] Add `forceOverlay`, `stackOverlay` properties
-- [ ] ResizeObserver reading computed `gridTemplateColumns`
-- [ ] `__detectLayoutMode()` -> `__detectHorizontalMode()` -> `__setOverlayMode()`
-- [ ] Drawer CSS: sticky detail, backdrop display, detail size in drawer, `margin-inline-start: 50px`
+- [ ] `__detectLayoutMode()` -> `__setOverlayMode()` flow
+- [ ] Drawer CSS: `margin-inline-start: 50px`
 - [ ] Port and adapt: `drawer-mode.test.js` — horizontal tests (split<->drawer transitions, detail width, forceOverlay, adding/removing details)
 
 ## Step 4: Stack mode
