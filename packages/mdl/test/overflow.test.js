@@ -20,19 +20,19 @@ describe('overflow detection', () => {
     await nextResize(layout);
   });
 
-  describe('container resize', () => {
-    it('should not set overflow when columns fit within the container', () => {
+  describe('layout resize', () => {
+    it('should not set overflow when columns fit within the layout', () => {
       expect(layout.hasAttribute('overflow')).to.be.false;
     });
 
-    it('should set overflow when container shrinks below column minimums', async () => {
+    it('should set overflow when layout size is decreased below column minimums', async () => {
       layout.style.width = '400px';
       await nextResize(layout);
 
       expect(layout.hasAttribute('overflow')).to.be.true;
     });
 
-    it('should remove overflow when container grows to fit columns', async () => {
+    it('should remove overflow when layout size is increased to fit columns', async () => {
       layout.style.width = '400px';
       await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
@@ -70,6 +70,11 @@ describe('overflow detection', () => {
 
       layout.detailSize = '100px';
       expect(layout.hasAttribute('overflow')).to.be.false;
+    });
+
+    it('should set overflow when masterSize is set to 100%', () => {
+      layout.masterSize = '100%';
+      expect(layout.hasAttribute('overflow')).to.be.true;
     });
 
     it('should not set overflow when detail is removed', async () => {

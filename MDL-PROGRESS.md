@@ -20,16 +20,17 @@
 
 - [x] `split-mode.test.js` — expand both, expand master, expand detail (7 tests)
 
-## Step 3: Overflow detection + drawer mode — IN PROGRESS
+## Step 3: Overflow detection + drawer mode — DONE
 
 - [x] ResizeObserver reading computed `gridTemplateColumns`
 - [x] `overflow` attribute toggled when columns exceed host width
 - [x] `__detectOverflow()` extracted, called from ResizeObserver + property observers + slotchange
+- [x] `disconnectedCallback` to disconnect ResizeObserver
 - [x] Drawer CSS: sticky detail, backdrop display, detail background/shadow
 - [x] No-detail handling: `--_detail-col: ''` collapses the column
-- [x] `overflow.test.js` — container resize + property-driven overflow detection (8 tests)
 - [x] `__detectLayoutMode()` not needed — CSS grid + `__detectOverflow()` replaces it
-- [ ] Port and adapt: `drawer-mode.test.js` — horizontal tests (split<->drawer transitions, detail width, adding/removing details)
+- [x] `overflow.test.js` — layout resize, property-driven overflow detection, masterSize: 100% (9 tests)
+- [x] `drawer-mode.test.js` — sticky positioning, detail width, backdrop, adding/removing detail (5 tests)
 
 ## Step 4: Stack mode
 

@@ -114,11 +114,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     `;
   }
 
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
     this.__resizeObserver = new ResizeObserver(() => this.__detectOverflow());
     this.__resizeObserver.observe(this);
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.__resizeObserver.disconnect();
   }
 
   /** @private */
