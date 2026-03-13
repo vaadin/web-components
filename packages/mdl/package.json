@@ -1,0 +1,30 @@
+{
+  "name": "@vaadin/mdl",
+  "version": "25.2.0-alpha0",
+  "private": true,
+  "description": "Temporary package for master-detail-layout CSS grid rewrite.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/mdl"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "main": "vaadin-master-detail-layout.js",
+  "module": "vaadin-master-detail-layout.js",
+  "type": "module",
+  "dependencies": {
+    "@vaadin/a11y-base": "25.2.0-alpha0",
+    "@vaadin/component-base": "25.2.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "25.2.0-alpha0",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/aura": "25.2.0-alpha0",
+    "@vaadin/chai-plugins": "25.2.0-alpha0",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/vaadin-lumo-styles": "25.2.0-alpha0",
+    "sinon": "^21.0.2"
+  }
+}

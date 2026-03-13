@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master-Detail Layout 2.0</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+      window.Vaadin.featureFlags.badgeComponent = true;
+    </script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-master-detail-layout master-size="400px" detail-size="min-content" expand="master">
+      <div>
+        <vaadin-grid item-id-path="name">
+          <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+          <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
+          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+        </vaadin-grid>
+      </div>
+      <div slot="detail"> Detail Content </div>
+    </vaadin-master-detail-layout>
+
+    <script type="module">
+      import '@vaadin/grid/all-imports.js';
+      import '@vaadin/mdl';
+
+      const grid = document.querySelector('vaadin-grid');
+
+      grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+        // Let's have 100 root-level items and 5 items on every child level
+        const levelSize = parentItem ? 5 : 100;
+
+        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+          const indexInLevel = page * pageSize + i;
+
+          return {
+            name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+            children: true,
+          };
+        });
+
+        cb(pageItems, levelSize);
+      };
+
+    </script>
+  </body>
+</html>

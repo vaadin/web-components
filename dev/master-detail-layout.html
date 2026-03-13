@@ -6,183 +6,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Master-Detail Layout</title>
     <script type="module" src="./common.js"></script>
+  </head>
 
+  <body>
     <style>
       html,
       body {
         height: 100%;
-        padding: 0;
         margin: 0;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      mdl-view {
+        display: block;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: hidden;
+      }
+
+      body > mdl-view > vaadin-master-detail-layout {
+        border: 1px solid lightgray;
+        resize: both;
+      }
+
+      .master {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 1.5rem;
+        overflow: auto;
+      }
+
+      .master > header {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+      }
+
+      .master > header > h3 {
+        flex: auto;
+      }
+
+      .close-btn,
+      .replace-btn {
+        visibility: hidden;
+        position: absolute;
+      }
+
+      .detail .close-btn,
+      .detail .replace-btn {
+        visibility: visible;
+        position: relative;
+      }
+
+      .static-detail {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 1.5rem;
+        overflow: auto;
       }
     </style>
-  </head>
 
-  <body>
-    <script type="module">
-      import '@vaadin/grid/all-imports';
+    <mdl-view></mdl-view>
 
-      const grid = document.querySelector('vaadin-grid');
-
-      grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-        // Let's have 100 root-level items and 5 items on every child level
-        const levelSize = parentItem ? 5 : 100;
-
-        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
-          const indexInLevel = page * pageSize + i;
-
-          return {
-            name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
-            children: true,
-          };
-        });
-
-        cb(pageItems, levelSize);
-      };
-    </script>
-
-    <master-detail-layout master-size="400px" detail-size="min-content" expand="master">
-      <div slot="master">
-        <vaadin-grid item-id-path="name">
-          <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
-          <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-        </vaadin-grid>
+    <template id="static-detail">
+      <div class="static-detail">
+        <vaadin-button>Close</vaadin-button><br />
+        <vaadin-text-field label="First Name"></vaadin-text-field>
+        <vaadin-text-field label="Last Name"></vaadin-text-field>
+        <vaadin-text-field label="Email"></vaadin-text-field>
+        <vaadin-select label="Country"></vaadin-select>
       </div>
-      <div slot="detail"> Detail Content </div>
-    </master-detail-layout>
+    </template>
 
     <script type="module">
-      import '@vaadin/component-base/src/styles/style-props.js';
-      import { css, html, LitElement, render } from 'lit';
-      import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
-      class MasterDetailLayout extends PolylitMixin(LitElement) {
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/select';
+      import '@vaadin/text-field';
+      import '@vaadin/radio-group';
+      import '@vaadin/icon';
+      import '@vaadin/master-detail-layout';
+      import '@vaadin/tooltip';
+      import '@vaadin/vaadin-lumo-styles/icons';
+      import { html, LitElement, render } from 'lit';
+
+      window.mdlCount = 1;
+
+      // prettier-ignore
+      const lorem = html`Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi suscipit rem, non temporibus
+      laboriosam maiores distinctio numquam, dolorum ducimus dolores sequi reprehenderit iste consectetur adipisci
+      delectus aperiam voluptatibus! Vitae, adipisci.`;
+
+      class MDLView extends LitElement {
         static get is() {
-          return 'master-detail-layout';
+          return 'mdl-view';
         }
 
-        static get properties() {
-          return {
-            masterSize: {
-              type: String,
-              sync: true,
-              observer: '__masterSizeChanged',
-            },
+        createRenderRoot() {
+          return this;
+        }
 
-            detailSize: {
-              type: String,
-              sync: true,
-              observer: '__detailSizeChanged',
-            },
+        createDetail() {
+          const temp = document.createElement('div');
+          render(html`<mdl-view class="detail"></mdl-view>`, temp, { host: this });
+          return temp.firstElementChild;
+        }
 
-            expand: {
-              type: String,
-              sync: true,
-              reflectToAttribute: true,
-            },
+        firstUpdated() {
+          this._mdl = this.querySelector('vaadin-master-detail-layout');
+          this._parentMdl = this.closest('vaadin-master-detail-layout');
+        }
+
+        openDetail() {
+          window.mdlCount++;
+          this._mdl._setDetail(this.createDetail());
+        }
+
+        openStaticDetail() {
+          const detail = document.querySelector('#static-detail').content.firstElementChild.cloneNode(true);
+          detail.querySelector('vaadin-button').onclick = () => {
+            detail.closest('vaadin-master-detail-layout')._setDetail(null);
           };
+          this._mdl._setDetail(detail);
         }
 
-        static get styles() {
-          return css`
-            :host {
-              --_master-max-size: var(--_master-size);
-              --_detail-max-size: var(--_detail-size);
-              --_master-col: minmax(var(--_master-size), var(--_master-max-size));
-              --_detail-col: minmax(var(--_detail-size), var(--_detail-max-size));
-
-              display: grid;
-              overflow: clip;
-              position: relative;
-              height: 100%;
-              grid-template-columns: var(--_master-col) var(--_detail-col);
-            }
-
-            :host(:not([expand])) {
-              --_master-max-size: 1fr;
-              --_detail-max-size: 1fr;
-            }
-
-            :host([expand='master']) {
-              --_master-max-size: 1fr;
-            }
-
-            :host([expand='detail']) {
-              --_detail-max-size: 1fr;
-            }
-
-            [part~='backdrop'] {
-              position: absolute;
-              inset: 0;
-              z-index: 1;
-              display: none;
-              background: rgba(0, 0, 0, 0.2);
-            }
-
-            :host([overflow]) [part~='detail'] {
-              position: sticky;
-              z-index: 2;
-              inset-block: 0;
-              inset-inline-end: 0;
-              width: var(--_detail-size);
-              background: var(--vaadin-background-color);
-              box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
-            }
-
-            :host([overflow]) [part~='backdrop'] {
-              display: block;
-            }
-          `;
+        closeDetail() {
+          this._mdl._setDetail(null);
         }
 
-        connectedCallback() {
-          super.connectedCallback();
+        closeParentDetail() {
+          this._parentMdl._setDetail(null);
+        }
 
-          // this.__detailSlot = this.shadowRoot.querySelector('slot[name="detail"]');
-          // const isDetailVisible = this.__detailSlot.assignedNodes().some((element) => element.checkVisibility());
-
-          this.__hostResizeObserver = new ResizeObserver(() => {
-            const { gridTemplateColumns } = getComputedStyle(this);
-
-            const [masterSizePx, detailSizePx] = gridTemplateColumns.split(' ').map(parseFloat);
-            const totalWidth = parseFloat(masterSizePx + detailSizePx).toFixed(2);
-            this.toggleAttribute('overflow', totalWidth > this.offsetWidth);
-          });
-          this.__hostResizeObserver.observe(this);
-
-          // this.__detailResizeObserver = new ResizeObserver((entries) => {
-          //   this.toggleAttribute(
-          //     'has-detail',
-          //     entries.some(({ target }) => target.checkVisibility()),
-          //   );
-          // });
-          // this.__detailResizeObserver.observe(detailElement);
+        replaceDetail() {
+          window.mdlCount++;
+          const detail = this.createDetail();
+          const prop = this._parentMdl.orientation == 'vertical' ? 'height' : 'width';
+          if (this.style.getPropertyValue(prop) != '500px') {
+            detail.style.setProperty(prop, '500px');
+          } else {
+            detail.style.setProperty(prop, '300px');
+          }
+          this._parentMdl._setDetail(detail);
         }
 
         render() {
           return html`
-            <div part="backdrop"></div>
-            <div part="master">
-              <slot name="master"></slot>
-            </div>
-            <div part="detail">
-              <slot name="detail"></slot>
-            </div>
+            <vaadin-master-detail-layout @backdrop-click=${this.closeDetail}>
+              <div class="master">
+                <header>
+                  <vaadin-button
+                    aria-label="close detail view"
+                    class="close-btn"
+                    theme="tertiary contrast icon"
+                    @click=${this.closeParentDetail}
+                  >
+                    <vaadin-icon icon="lumo:arrow-left"></vaadin-icon>
+                  </vaadin-button>
+                  <h3>View ${window.mdlCount}</h3>
+                  <vaadin-button
+                    aria-label="replace detail view"
+                    class="replace-btn"
+                    theme="tertiary icon"
+                    @click=${this.replaceDetail}
+                  >
+                    <vaadin-icon icon="lumo:reload">
+                      <vaadin-tooltip
+                        slot="tooltip"
+                        text="Replace with another detail view with different size"
+                      ></vaadin-tooltip>
+                    </vaadin-icon>
+                  </vaadin-button>
+                </header>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="orientation"
+                  label="Orientation"
+                  theme="vertical"
+                  value="horizontal"
+                >
+                  <vaadin-radio-button value="horizontal" label="Horizontal"></vaadin-radio-button>
+                  <vaadin-radio-button value="vertical" label="Vertical"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="containment"
+                  label="Containment"
+                  theme="vertical"
+                  value="layout"
+                >
+                  <vaadin-radio-button value="layout" label="Layout"></vaadin-radio-button>
+                  <vaadin-radio-button value="viewport" label="Viewport"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <br />
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="masterSize"
+                  label="Master Size"
+                  theme="vertical"
+                  value="auto"
+                >
+                  <vaadin-radio-button value="auto" label="Auto"></vaadin-radio-button>
+                  <vaadin-radio-button value="250px" label="250px"></vaadin-radio-button>
+                  <vaadin-radio-button value="30%" label="30%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="masterMinSize"
+                  label="Master Min Size"
+                  theme="vertical"
+                  value="none"
+                >
+                  <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
+                  <vaadin-radio-button value="250px" label="250px"></vaadin-radio-button>
+                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <br />
+                <vaadin-button @click=${this.openStaticDetail}>Open Static Detail</vaadin-button>
+                <vaadin-button @click=${this.openDetail}>Open Nested Test View</vaadin-button>
+                <br />
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="detailSize"
+                  label="Detail Size"
+                  theme="vertical"
+                  value="auto"
+                >
+                  <vaadin-radio-button value="auto" label="Auto"></vaadin-radio-button>
+                  <vaadin-radio-button value="300px" label="300px"></vaadin-radio-button>
+                  <vaadin-radio-button value="70%" label="70%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="detailMinSize"
+                  label="Detail Min Size"
+                  theme="vertical"
+                  value="none"
+                >
+                  <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
+                  <vaadin-radio-button value="400px" label="400px"></vaadin-radio-button>
+                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <p>${lorem}</p>
+              </div>
+            </vaadin-master-detail-layout>
           `;
         }
 
-        __masterSizeChanged(masterSize) {
-          this.style.setProperty('--_master-size', masterSize);
-        }
-
-        __detailSizeChanged(detailSize) {
-          this.style.setProperty('--_detail-size', detailSize);
+        _configChange(e) {
+          this._mdl[e.currentTarget.className] = e.target.value.match(/auto|none/) ? null : e.target.value;
         }
       }
 
-      customElements.define(MasterDetailLayout.is, MasterDetailLayout);
+      customElements.define(MDLView.is, MDLView);
     </script>
   </body>
 </html>
