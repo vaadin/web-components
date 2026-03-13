@@ -23,7 +23,7 @@
   </head>
 
   <body>
-    <vaadin-master-detail-layout master-size="400px" detail-size="min-content" expand="master">
+    <vaadin-master-detail-layout master-size="400px" detail-size="min-content">
       <div>
         <vaadin-grid item-id-path="name">
           <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
@@ -33,12 +33,19 @@
           <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
         </vaadin-grid>
       </div>
-      <div slot="detail"> Detail Content </div>
+      <div slot="detail" style="padding: var(--vaadin-gap-m);">
+        <vaadin-form-layout auto-responsive>
+          <vaadin-text-field label="First name"></vaadin-text-field>
+          <vaadin-text-field label="Last name"></vaadin-text-field>
+        </vaadin-form-layout>
+      </div>
     </vaadin-master-detail-layout>
 
     <script type="module">
       import '@vaadin/grid/all-imports.js';
       import '@vaadin/mdl';
+      import '@vaadin/form-layout';
+      import '@vaadin/text-field';
 
       const grid = document.querySelector('vaadin-grid');
 

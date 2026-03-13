@@ -8,17 +8,26 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
+<<<<<<< Updated upstream
     --_master-max-size: var(--_master-size, 0);
     --_detail-max-size: var(--_detail-size, 0);
     --_master-col: minmax(var(--_master-size, 0), var(--_master-max-size));
     --_detail-col: minmax(var(--_detail-size, 0), var(--_detail-max-size));
+=======
+    --_master-size: 400px;
+    --_detail-size: min-content;
+    --_master-max-size: var(--_master-size);
+    --_detail-max-size: var(--_detail-size);
+    --_master-col: minmax(var(--_master-size), var(--_master-max-size));
+    --_detail-col: minmax(var(--_detail-size), var(--_detail-max-size));
+>>>>>>> Stashed changes
 
     display: grid;
     box-sizing: border-box;
     height: 100%;
     position: relative;
     z-index: 0;
-    overflow: clip;
+    overflow: hidden;
     grid-template-columns: var(--_master-col) var(--_detail-col);
   }
 
@@ -53,6 +62,27 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
   }
 
+<<<<<<< Updated upstream
+=======
+  :host([overflow]) [part~='detail'] {
+    position: sticky;
+    z-index: 2;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: min(100%, var(--_detail-size));
+    background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
+    box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
+  }
+
+  :host([overflow]) [part~='backdrop'] {
+    display: block;
+  }
+
+  :host(:not([has-detail])) {
+    --_detail-col: '';
+  }
+
+>>>>>>> Stashed changes
   :host(:not([has-detail])) [part~='detail'] {
     display: none;
   }

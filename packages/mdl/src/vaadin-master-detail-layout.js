@@ -114,6 +114,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     `;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.__resizeObserver = new ResizeObserver(() => {
+      const { gridTemplateColumns } = getComputedStyle(this);
+
+      const [masterSizePx, detailSizePx] = gridTemplateColumns.split(' ').map(parseFloat);
+      const totalWidth = parseFloat(masterSizePx + detailSizePx).toFixed(2);
+      this.toggleAttribute('overflow', totalWidth > this.offsetWidth);
+    });
+    this.__resizeObserver.observe(this);
+  }
+
   /** @private */
   __onDetailSlotChange(e) {
     const children = e.target.assignedNodes();
