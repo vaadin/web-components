@@ -38,9 +38,7 @@ const registered = new Set();
 export const ElementMixin = (superClass) =>
   class VaadinElementMixin extends DirMixin(superClass) {
     /** @protected */
-    static finalize() {
-      super.finalize();
-
+    static _ensureRegistrations() {
       const { is } = this;
 
       // Registers a class prototype for telemetry purposes.
@@ -66,5 +64,7 @@ export const ElementMixin = (superClass) =>
           'Vaadin components require the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.',
         );
       }
+
+      this.constructor._ensureRegistrations();
     }
   };
