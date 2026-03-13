@@ -15,10 +15,10 @@
 - [x] Dev page: `dev/mdl.html` using `@vaadin/mdl` package
 - [x] Restored `dev/master-detail-layout.html` to main branch state
 
-## Step 2: Split mode layout tests (horizontal only)
+## Step 2: Split mode layout tests (horizontal only) — DONE
 
-- [ ] Port and adapt size property tests for all expand modes (measure actual computed column widths)
-- [ ] No overlay/drawer/stack yet — just split layout
+- [x] Added fallback values (`0`) for unset `--_master-size`/`--_detail-size` CSS custom properties
+- [x] `split-mode.test.js` — expand both, expand master, expand detail, height, no detail (12 tests)
 
 ## Step 3: Overflow detection + drawer mode
 

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
 
 window.Vaadin ||= {};
@@ -7,7 +7,7 @@ window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('vaadin-master-detail-layout', () => {
-  let layout;
+  let layout, master, detail;
 
   beforeEach(async () => {
     layout = fixtureSync(`
@@ -16,7 +16,9 @@ describe('vaadin-master-detail-layout', () => {
         <div slot="detail">Detail</div>
       </vaadin-master-detail-layout>
     `);
-    await nextFrame();
+    await nextRender();
+    master = layout.shadowRoot.querySelector('[part="master"]');
+    detail = layout.shadowRoot.querySelector('[part="detail"]');
   });
 
   describe('custom element definition', () => {
@@ -33,7 +35,7 @@ describe('vaadin-master-detail-layout', () => {
     });
   });
 
-  describe('has-detail', () => {
+  describe('detail', () => {
     it('should set has-detail when detail content is provided', () => {
       expect(layout.hasAttribute('has-detail')).to.be.true;
     });
@@ -42,6 +44,12 @@ describe('vaadin-master-detail-layout', () => {
       layout.querySelector('[slot="detail"]').remove();
       await nextFrame();
       expect(layout.hasAttribute('has-detail')).to.be.false;
+    });
+
+    it('should hide detail part when no detail content is provided', async () => {
+      layout.querySelector('[slot="detail"]').remove();
+      await nextRender();
+      expect(getComputedStyle(detail).display).to.equal('none');
     });
   });
 
@@ -53,6 +61,14 @@ describe('vaadin-master-detail-layout', () => {
     it('should reflect expand property to attribute', () => {
       layout.expand = 'master';
       expect(layout.getAttribute('expand')).to.equal('master');
+    });
+  });
+
+  describe('height', () => {
+    it('should expand to full height of the parent', () => {
+      layout.parentElement.style.height = '500px';
+      expect(parseFloat(getComputedStyle(master).height)).to.equal(500);
+      expect(parseFloat(getComputedStyle(detail).height)).to.equal(500);
     });
   });
 });
