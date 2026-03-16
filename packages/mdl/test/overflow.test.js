@@ -82,6 +82,17 @@ describe('overflow detection', () => {
       expect(layout.hasAttribute('overflow')).to.be.true;
     });
 
+    it('should remove overflow when masterSize decreases to fit while preserve-master-width is set', async () => {
+      // Recreate with overflow from the start (triggers preserve-master-width)
+      layout.style.width = '400px';
+      await nextResize(layout);
+      expect(layout.hasAttribute('overflow')).to.be.true;
+
+      layout.masterSize = '50px';
+      await nextResize(layout);
+      expect(layout.hasAttribute('overflow')).to.be.false;
+    });
+
     it('should not set overflow when detail is removed', async () => {
       layout.style.width = '400px';
       await nextResize(layout);

@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -133,11 +135,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   __masterSizeChanged(size, oldSize) {
     this.__updateStyleProperty('master-size', size, oldSize);
+    this.__scheduleResize();
   }
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
+    this.__scheduleResize();
   }
 
   /** @private */
@@ -163,8 +167,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
+  __scheduleResize() {
+    this.__resizeDebouncer = Debouncer.debounce(this.__resizeDebouncer, timeOut, () => this.__onResize());
+  }
+
+  /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => setTimeout(() => this.__onResize()));
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__scheduleResize());
     this.__resizeObserver.disconnect();
 
     const children = this.querySelectorAll('[slot="detail"], :not([slot])');

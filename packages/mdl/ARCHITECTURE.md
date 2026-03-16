@@ -59,11 +59,12 @@ All DOM/style reads happen first, then all writes. No forced reflows from write-
 
 The `>=` check in `__checkOverflow()` ensures correct results even when column widths are read with stale CSS state (before attributes are updated).
 
-### ResizeObserver pattern
+### ResizeObserver + Debouncer pattern
 
 - **Observes**: host element + slotted light DOM children (NOT shadow DOM parts)
 - **NOT observing shadow DOM parts** avoids the ResizeObserver loop depth issue (parts are at the same DOM depth as the host; slotted children are deeper)
-- **`setTimeout`** wraps the callback to prevent the loop error when attribute changes cause CSS changes that resize observed slotted children
+- **`Debouncer` with `timeOut`** (`@vaadin/component-base`) defers `__onResize()` to a new macrotask, preventing the loop error. Both ResizeObserver and property observers call `__scheduleResize()` which uses the same debouncer — ensures single execution per cycle
+- **Property observers call `__scheduleResize()`** because size changes with `preserve-master-width` active may not resize any observed element (master stays at full host width)
 - **Slotchange debouncing**: `queueMicrotask` batches multiple slot changes into a single `__initResizeObserver()` call
 
 ## Overlay Modes
