@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
 
@@ -83,17 +84,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         reflectToAttribute: true,
         sync: true,
       },
-
-      /**
-       * When true, the component has the detail content provided.
-       * @protected
-       */
-      _hasDetail: {
-        type: Boolean,
-        attribute: 'has-detail',
-        reflectToAttribute: true,
-        sync: true,
-      },
     };
   }
 
@@ -109,7 +99,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         <slot></slot>
       </div>
       <div id="detail" part="detail">
-        <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+        <slot name="detail"></slot>
       </div>
     `;
   }
@@ -118,34 +108,38 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   connectedCallback() {
     super.connectedCallback();
 
-    this.__resizeObserver = new ResizeObserver(() => this.__detectOverflow());
+    this.__resizeObserver = new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.observe(this);
+
+    this.__masterSlot = this.shadowRoot.querySelector('slot:not([name])');
+    this.__masterSlotObserver = new SlotObserver(this.__masterSlot, ({ addedNodes, removedNodes }) => {
+      removedNodes.forEach((node) => this.__resizeObserver.unobserve(node));
+      addedNodes.forEach((node) => this.__resizeObserver.observe(node));
+    });
+
+    this.__detailSlot = this.shadowRoot.querySelector('slot[name="detail"]');
+    this.__detailSlotObserver = new SlotObserver(this.__detailSlot, ({ addedNodes, removedNodes }) => {
+      removedNodes.forEach((node) => this.__resizeObserver.unobserve(node));
+      addedNodes.forEach((node) => this.__resizeObserver.observe(node));
+    });
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-
     this.__resizeObserver.disconnect();
-  }
-
-  /** @private */
-  __onDetailSlotChange(e) {
-    const children = e.target.assignedNodes();
-    this._hasDetail = children.length > 0;
-    this.__detectOverflow();
+    this.__masterSlotObserver.disconnect();
+    this.__detailSlotObserver.disconnect();
   }
 
   /** @private */
   __masterSizeChanged(size, oldSize) {
     this.__updateStyleProperty('master-size', size, oldSize);
-    this.__detectOverflow();
   }
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
-    this.__detectOverflow();
   }
 
   /** @private */
@@ -160,15 +154,46 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /**
-   * Reads resolved CSS grid column widths and toggles the `overflow`
-   * attribute when the sum of column minimums exceeds the host width.
+   * Called by the ResizeObserver whenever the host element is resized.
+   * Updates `has-detail` and `overflow` attributes, and locks/unlocks
+   * the master column width to prevent content from shrinking during
+   * CSS grid reflow when the detail panel appears or disappears.
    * @private
    */
-  __detectOverflow() {
+  __onResize() {
+    const hasDetail = this.__computeDetailVisibility();
+    const [masterWidth, detailWidth] = this.__computeColumnWidths();
+    const hasOverflow = hasDetail && masterWidth + detailWidth > this.offsetWidth;
+
+    if (!this.hasAttribute('has-detail') && hasDetail) {
+      // Lock the master column width when the detail panel becomes visible.
+      // This prevents the master content from shrinking when the CSS grid
+      // allocates space for the detail column in response to the `has-detail`
+      // attribute while the master area is configured to expand.
+      this.style.setProperty('--_master-column', `clamp(${this.masterSize}, 100%, ${masterWidth}px)`);
+    }
+    if (this.hasAttribute('has-detail') && !hasDetail) {
+      // Unlock the master column width when the detail panel becomes hidden.
+      this.style.removeProperty('--_master-column');
+    }
+    if (this.hasAttribute('overflow') && !hasOverflow) {
+      // Unlock the master column width when overflow is no longer present.
+      this.style.removeProperty('--_master-column');
+    }
+
+    this.toggleAttribute('has-detail', hasDetail);
+    this.toggleAttribute('overflow', hasOverflow);
+  }
+
+  /** @private */
+  __computeDetailVisibility() {
+    return [...this.__detailSlot.assignedNodes()].some((node) => node.checkVisibility());
+  }
+
+  /** @private */
+  __computeColumnWidths() {
     const { gridTemplateColumns } = getComputedStyle(this);
-    const columns = gridTemplateColumns.split(' ').map(parseFloat);
-    const totalWidth = columns.reduce((a, b) => a + b, 0);
-    this.toggleAttribute('overflow', Math.round(totalWidth) > this.offsetWidth);
+    return gridTemplateColumns.split(' ').map(parseFloat);
   }
 }
 

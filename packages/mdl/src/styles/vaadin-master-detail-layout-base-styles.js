@@ -8,12 +8,8 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
-    --_master-size: 400px;
-    --_detail-size: min-content;
-    --_master-max-size: var(--_master-size);
-    --_detail-max-size: var(--_detail-size);
-    --_master-col: minmax(var(--_master-size), var(--_master-max-size));
-    --_detail-col: minmax(var(--_detail-size), var(--_detail-max-size));
+    --_master-column: var(--_master-size);
+    --_detail-column: var(--_detail-size);
 
     display: grid;
     box-sizing: border-box;
@@ -21,7 +17,7 @@ export const masterDetailLayoutStyles = css`
     position: relative;
     z-index: 0;
     overflow: hidden;
-    grid-template-columns: var(--_master-col) var(--_detail-col);
+    grid-template-columns: var(--_master-column) var(--_detail-column);
   }
 
   :host([hidden]) {
@@ -29,16 +25,16 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([expand='both']) {
-    --_master-max-size: 1fr;
-    --_detail-max-size: 1fr;
+    --_master-column: minmax(var(--_master-size), 1fr);
+    --_detail-column: minmax(var(--_detail-size), 1fr);
   }
 
   :host([expand='master']) {
-    --_master-max-size: 1fr;
+    --_master-column: minmax(var(--_master-size), 1fr);
   }
 
   :host([expand='detail']) {
-    --_detail-max-size: 1fr;
+    --_detail-column: minmax(var(--_detail-size), 1fr);
   }
 
   [part~='backdrop'] {
@@ -56,7 +52,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([overflow]) [part~='detail'] {
-    position: sticky;
+    position: absolute;
     z-index: 2;
     inset-block: 0;
     inset-inline-end: 0;
@@ -70,10 +66,6 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host(:not([has-detail])) {
-    --_detail-col: '';
-  }
-
-  :host(:not([has-detail])) [part~='detail'] {
-    display: none;
+    --_detail-column: 0;
   }
 `;
