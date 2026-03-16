@@ -6,6 +6,7 @@
 @media lumo_components_menu-bar {
   :host {
     display: block;
+    min-width: 0;
   }
 
   :host([hidden]) {
