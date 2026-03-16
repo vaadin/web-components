@@ -74,6 +74,18 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
+       * Size (in CSS length units) for the detail content when it's rendered in an overlay.
+       * Defaults to the value of `detailSize`.
+       *
+       * @attr {string} detail-overlay-size
+       */
+      detailOverlaySize: {
+        type: String,
+        sync: true,
+        observer: '__detailOverlaySizeChanged',
+      },
+
+      /**
        * Controls which column(s) expand to fill available space.
        * Possible values: `'master'`, `'detail'`, `'both'`.
        * Defaults to `'both'`.
@@ -140,6 +152,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
+  }
+
+  /** @private */
+  __detailOverlaySizeChanged(size, oldSize) {
+    this.__updateStyleProperty('detail-overlay-size', size, oldSize);
   }
 
   /** @private */

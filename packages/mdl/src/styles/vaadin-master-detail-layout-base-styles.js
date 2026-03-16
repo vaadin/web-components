@@ -56,7 +56,7 @@ export const masterDetailLayoutStyles = css`
     z-index: 2;
     inset-block: 0;
     inset-inline-end: 0;
-    width: min(100%, var(--_detail-size));
+    width: var(--_detail-overlay-size, var(--_detail-size));
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
   }
