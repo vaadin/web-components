@@ -20,24 +20,24 @@
 
 ## Step 3: Overflow detection + drawer mode — DONE
 
-- [x] ResizeObserver on host + parts + slotted children via `__initResizeObserver()`
+- [x] ResizeObserver on host + slotted children via `__initResizeObserver()`
 - [x] `overflow` attribute toggled when columns exceed host width
-- [x] `__onResize()` computes both `has-detail` and `overflow`
+- [x] `__onResize()` computes `has-detail`, `overflow`, and `preserve-master-width`
 - [x] `disconnectedCallback` to disconnect ResizeObserver
-- [x] `position: absolute` for detail in all overlay modes
-- [x] Drawer CSS: `inset-inline-end: 0`, detail width from `--_detail-size`
-- [x] No-detail handling: `--_detail-column: 0` (after expand rules for correct cascade)
+- [x] `position: absolute` for detail in all overlay modes, `grid-column: none` in overflow
+- [x] 4-column grid with named lines: `[master-start] size extra [detail-start] size extra [detail-end]`
+- [x] `preserve-master-width` attribute prevents master jump on detail open
+- [x] `setTimeout` in ResizeObserver to avoid loop from attribute-driven CSS changes
+- [x] Fix: `__onResize()` updates `has-detail` before reading column widths; `hasOverflow` gated on `hasDetail`
 - [x] `overflow.test.js` — layout resize, async property-driven overflow detection (9 tests)
-- [x] ResizeObserver observes host + slotted children only (not shadow DOM parts) to avoid loop error
 
 ## Step 4: Detail overlay mode API (#11346) — DONE
 
 - [x] `detailOverlayMode` property: `drawer`, `drawer-viewport`, `full`, `full-viewport`
-- [x] Drawer: `width: var(--_detail-overlay-size, var(--_detail-size)); inset-inline-end: 0`
+- [x] Drawer: `width: var(--_detail-size); inset-inline-end: 0`
 - [x] Full: `inset-inline: 0` (detail covers entire layout)
 - [x] Viewport: `position: fixed` via `$='viewport'` CSS selector
 - [x] CSS uses `^='drawer'`/`^='full'`/`$='viewport'` prefix/suffix selectors
-- [x] Fix: `__onResize()` updates `has-detail` before reading column widths (stale `--_detail-column` fix)
 - [x] `detail-overlay-mode.test.js` — drawer (5 tests) + full (9 tests)
 
 ## Step 5: Vertical orientation

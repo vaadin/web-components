@@ -46,13 +46,12 @@ describe('vaadin-master-detail-layout', () => {
       expect(layout.hasAttribute('has-detail')).to.be.false;
     });
 
-    it('should collapse detail column when no detail content is provided', async () => {
+    it('should expand master to fill the layout when detail is removed', async () => {
       layout.masterSize = '200px';
       layout.detailSize = '200px';
       layout.querySelector('[slot="detail"]').remove();
       await nextResize(layout);
-      // Detail column collapses to 0 when has-detail is removed
-      expect(parseFloat(getComputedStyle(detail).width)).to.equal(0);
+      expect(master.offsetWidth).to.equal(layout.offsetWidth);
     });
   });
 

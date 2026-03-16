@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
 
 window.Vaadin ||= {};
@@ -7,11 +7,12 @@ window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 /**
- * Returns resolved grid column widths in pixels.
+ * Returns master and detail part widths in pixels.
  */
-function getColumnWidths(layout) {
-  const { gridTemplateColumns } = getComputedStyle(layout);
-  return gridTemplateColumns.split(' ').map(parseFloat);
+function getPartWidths(layout) {
+  const master = layout.shadowRoot.querySelector('[part="master"]');
+  const detail = layout.shadowRoot.querySelector('[part="detail"]');
+  return [master.offsetWidth, detail.offsetWidth];
 }
 
 describe('split mode', () => {
@@ -25,30 +26,34 @@ describe('split mode', () => {
       </vaadin-master-detail-layout>
     `);
     await nextRender();
+    await nextResize(layout);
   });
 
   describe('expand both (default)', () => {
-    it('should expand both columns equally when both sizes are the same', () => {
+    it('should expand both columns equally when both sizes are the same', async () => {
       layout.masterSize = '200px';
       layout.detailSize = '200px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.equal(300);
       expect(detailWidth).to.equal(300);
     });
 
-    it('should use masterSize as minimum and expand both columns', () => {
+    it('should use masterSize as minimum and expand both columns', async () => {
       layout.masterSize = '300px';
       layout.detailSize = '100px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.be.at.least(300);
       expect(detailWidth).to.be.at.least(100);
       expect(masterWidth + detailWidth).to.equal(600);
     });
 
-    it('should use detailSize as minimum and expand both columns', () => {
+    it('should use detailSize as minimum and expand both columns', async () => {
       layout.masterSize = '100px';
       layout.detailSize = '300px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.be.at.least(100);
       expect(detailWidth).to.be.at.least(300);
       expect(masterWidth + detailWidth).to.equal(600);
@@ -60,18 +65,20 @@ describe('split mode', () => {
       layout.expand = 'master';
     });
 
-    it('should fix detail at detailSize and expand master to fill the rest', () => {
+    it('should fix detail at detailSize and expand master to fill the rest', async () => {
       layout.masterSize = '100px';
       layout.detailSize = '200px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.equal(400);
       expect(detailWidth).to.equal(200);
     });
 
-    it('should use masterSize as minimum for the expanding master column', () => {
+    it('should use masterSize as minimum for the expanding master column', async () => {
       layout.masterSize = '400px';
       layout.detailSize = '100px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.equal(500);
       expect(detailWidth).to.equal(100);
     });
@@ -82,18 +89,20 @@ describe('split mode', () => {
       layout.expand = 'detail';
     });
 
-    it('should fix master at masterSize and expand detail to fill the rest', () => {
+    it('should fix master at masterSize and expand detail to fill the rest', async () => {
       layout.masterSize = '200px';
       layout.detailSize = '100px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.equal(200);
       expect(detailWidth).to.equal(400);
     });
 
-    it('should use detailSize as minimum for the expanding detail column', () => {
+    it('should use detailSize as minimum for the expanding detail column', async () => {
       layout.masterSize = '100px';
       layout.detailSize = '400px';
-      const [masterWidth, detailWidth] = getColumnWidths(layout);
+      await nextResize(layout);
+      const [masterWidth, detailWidth] = getPartWidths(layout);
       expect(masterWidth).to.equal(100);
       expect(detailWidth).to.equal(500);
     });

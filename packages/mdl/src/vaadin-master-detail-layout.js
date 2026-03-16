@@ -164,7 +164,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => setTimeout(() => this.__onResize()));
     this.__resizeObserver.disconnect();
 
     const children = this.querySelectorAll('[slot="detail"], :not([slot])');
@@ -179,18 +179,26 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    // Read
+    const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = this.__checkDetailVisibility();
-    const hasOverflow = this.__checkOverflow();
 
-    // Write
-    if (!this.hasAttribute('has-detail') && hasDetail && hasOverflow) {
-      this.setAttribute('preserve-master-width', '');
-    } else if (!hasDetail || !hasOverflow) {
+    // Update has-detail before reading column widths, as it affects
+    // the preserve-master-width CSS rule which changes column definitions.
+    this.toggleAttribute('has-detail', hasDetail);
+    if (!hasDetail) {
       this.removeAttribute('preserve-master-width');
     }
 
-    this.toggleAttribute('has-detail', hasDetail);
+    const hasOverflow = hasDetail && this.__checkOverflow();
+
+    // Set preserve-master-width when detail first appears with overflow
+    // to prevent master width from jumping.
+    if (!hadDetail && hasDetail && hasOverflow) {
+      this.setAttribute('preserve-master-width', '');
+    } else if (!hasOverflow) {
+      this.removeAttribute('preserve-master-width');
+    }
+
     this.toggleAttribute('overflow', hasOverflow);
   }
 
