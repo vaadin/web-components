@@ -55,13 +55,13 @@ The 4th column (detail extra) is ignored — it's 0 in overflow scenarios.
 
 1. Save previous `has-detail` state (`hadDetail`)
 2. Compute current detail visibility via `checkVisibility()`
-3. **Update `has-detail` attribute FIRST** — it affects `preserve-master-width` CSS rule which changes column widths
-4. Clear `preserve-master-width` if no detail
-5. Read column widths and check overflow (now reads accurate CSS state)
+3. **Update `has-detail` attribute** — it affects `preserve-master-width` CSS rule which changes column widths
+4. **Clear `preserve-master-width`** — its `calc(100% - size)` inflates the master extra track, distorting overflow measurement
+5. Read column widths and check overflow (now reads natural CSS state)
 6. Set `preserve-master-width` if detail first appeared with overflow
 7. Set `overflow` attribute
 
-**Why ordering matters**: `has-detail` and `preserve-master-width` affect `--_master-column` via CSS. Reading column widths before updating these attributes gives stale values, causing incorrect overflow detection.
+**Why ordering matters**: Both `has-detail` and `preserve-master-width` affect `--_master-column` via CSS. They must be updated/cleared before reading column widths, otherwise the overflow check sees inflated values and produces incorrect results.
 
 ## Overlay Modes
 
@@ -104,8 +104,8 @@ Prevents the master from jumping when the detail overlay first appears.
 ```
 
 **Lifecycle**:
-- Set when: detail first appears (`!hadDetail && hasDetail`) with overflow
-- Cleared when: detail removed OR overflow resolved
+- Cleared unconditionally before reading column widths in `__onResize()` — `calc(100% - size)` inflates the master extra track, which would distort the overflow measurement
+- Set after overflow check only when detail first appears (`!hadDetail && hasDetail`) with overflow
 
 ## Test Patterns
 
