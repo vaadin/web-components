@@ -110,10 +110,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     return html`
       <div part="backdrop"></div>
       <div id="master" part="master">
-        <slot @slotchange="${() => this.__initResizeObserver()}"></slot>
+        <slot @slotchange="${this.__onSlotChange}"></slot>
       </div>
       <div id="detail" part="detail">
-        <slot name="detail" @slotchange="${() => this.__initResizeObserver()}"></slot>
+        <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
       </div>
     `;
   }
@@ -152,6 +152,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
+  __onSlotChange() {
+    if (!this.__initPending) {
+      this.__initPending = true;
+      queueMicrotask(() => {
+        this.__initPending = false;
+        this.__initResizeObserver();
+      });
+    }
+  }
+
+  /** @private */
   __initResizeObserver() {
     this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
@@ -174,7 +185,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this.toggleAttribute('has-detail', hasDetail);
 
     const [masterWidth, detailWidth] = this.__computeColumnWidths();
-    const hasOverflow = hasDetail && masterWidth + detailWidth > this.offsetWidth;
+    const hasOverflow = hasDetail && Math.round(masterWidth + detailWidth) > this.offsetWidth;
     this.toggleAttribute('overflow', hasOverflow);
   }
 

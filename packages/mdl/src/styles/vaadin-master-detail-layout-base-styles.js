@@ -68,7 +68,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([overflow][detail-overlay-mode^='drawer']) [part~='detail'] {
-    width: var(--_detail-overlay-size, var(--_detail-size));
+    width: var(--_detail-size);
     inset-inline-end: 0;
   }
 
