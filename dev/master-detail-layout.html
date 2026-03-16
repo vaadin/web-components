@@ -197,13 +197,20 @@
                 </vaadin-radio-group>
                 <vaadin-radio-group
                   @change=${this._configChange}
-                  class="containment"
-                  label="Containment"
+                  class="detailOverlayMode"
+                  label="Detail Overlay Mode"
                   theme="vertical"
-                  value="layout"
+                  value="drawer"
                 >
-                  <vaadin-radio-button value="layout" label="Layout"></vaadin-radio-button>
-                  <vaadin-radio-button value="viewport" label="Viewport"></vaadin-radio-button>
+                  <vaadin-radio-button value="drawer" label="Drawer"></vaadin-radio-button>
+                  <vaadin-radio-button value="drawer-viewport" label="Drawer Viewport"></vaadin-radio-button>
+                  <vaadin-radio-button value="full" label="Full"></vaadin-radio-button>
+                  <vaadin-radio-button value="full-viewport" label="Full Viewport"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group @change=${this._configChange} class="expand" label="Expand" theme="vertical" value="both">
+                  <vaadin-radio-button value="both" label="Both"></vaadin-radio-button>
+                  <vaadin-radio-button value="master" label="Master"></vaadin-radio-button>
+                  <vaadin-radio-button value="detail" label="Detail"></vaadin-radio-button>
                 </vaadin-radio-group>
                 <br />
                 <vaadin-radio-group
@@ -219,21 +226,6 @@
                 </vaadin-radio-group>
                 <vaadin-radio-group
                   @change=${this._configChange}
-                  class="masterMinSize"
-                  label="Master Min Size"
-                  theme="vertical"
-                  value="none"
-                >
-                  <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
-                  <vaadin-radio-button value="250px" label="250px"></vaadin-radio-button>
-                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
-                </vaadin-radio-group>
-                <br />
-                <vaadin-button @click=${this.openStaticDetail}>Open Static Detail</vaadin-button>
-                <vaadin-button @click=${this.openDetail}>Open Nested Test View</vaadin-button>
-                <br />
-                <vaadin-radio-group
-                  @change=${this._configChange}
                   class="detailSize"
                   label="Detail Size"
                   theme="vertical"
@@ -243,17 +235,9 @@
                   <vaadin-radio-button value="300px" label="300px"></vaadin-radio-button>
                   <vaadin-radio-button value="70%" label="70%"></vaadin-radio-button>
                 </vaadin-radio-group>
-                <vaadin-radio-group
-                  @change=${this._configChange}
-                  class="detailMinSize"
-                  label="Detail Min Size"
-                  theme="vertical"
-                  value="none"
-                >
-                  <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
-                  <vaadin-radio-button value="400px" label="400px"></vaadin-radio-button>
-                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
-                </vaadin-radio-group>
+                <br />
+                <vaadin-button @click=${this.openStaticDetail}>Open Static Detail</vaadin-button>
+                <vaadin-button @click=${this.openDetail}>Open Nested Test View</vaadin-button>
                 <p>${lorem}</p>
               </div>
             </vaadin-master-detail-layout>
@@ -261,7 +245,14 @@
         }
 
         _configChange(e) {
-          this._mdl[e.currentTarget.className] = e.target.value.match(/auto|none/) ? null : e.target.value;
+          const prop = e.currentTarget.className;
+          const value = e.target.value;
+          // Size properties use null for "auto", other properties always have a value
+          if (prop === 'masterSize' || prop === 'detailSize') {
+            this._mdl[prop] = value === 'auto' ? null : value;
+          } else {
+            this._mdl[prop] = value;
+          }
         }
       }
 

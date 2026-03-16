@@ -44,8 +44,8 @@ export const masterDetailLayoutTransitionStyles = css`
       view-transition-name: vaadin-mdl-backdrop;
     }
 
-    vaadin-master-detail-layout[transition]:not([transition='replace']):not([drawer], [stack])::part(detail),
-    vaadin-master-detail-layout[transition]:is([drawer], [stack])::part(_detail-internal) {
+    vaadin-master-detail-layout[transition]:not([transition='replace']):not([has-detail][overflow])::part(detail),
+    vaadin-master-detail-layout[transition][has-detail][overflow]::part(detail) {
       view-transition-name: vaadin-mdl-detail;
     }
 
@@ -68,7 +68,9 @@ export const masterDetailLayoutTransitionStyles = css`
       }
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][stack][has-detail]::part(master) {
+    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full']::part(
+        master
+      ) {
       translate: calc(var(--_vaadin-mdl-stack-master-offset) * var(--_vaadin-mdl-dir-multiplier) * -1);
       opacity: 0;
     }
@@ -77,11 +79,15 @@ export const masterDetailLayoutTransitionStyles = css`
       view-transition-name: vaadin-mdl-master;
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='add']::part(master) {
+    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full'][transition='add']::part(
+        master
+      ) {
       view-transition-class: stack-add;
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='remove']::part(master) {
+    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full'][transition='remove']::part(
+        master
+      ) {
       view-transition-class: stack-remove;
     }
 
@@ -123,8 +129,8 @@ export const masterDetailLayoutTransitionStyles = css`
     }
 
     /* prettier-ignore */
-    vaadin-master-detail-layout[orientation='vertical']:not([drawer], [stack])[transition]:not([transition='replace'])::part(detail),
-    vaadin-master-detail-layout[orientation='vertical']:is([drawer], [stack])[transition]::part(_detail-internal) {
+    vaadin-master-detail-layout[orientation='vertical']:not([has-detail][overflow])[transition]:not([transition='replace'])::part(detail),
+    vaadin-master-detail-layout[orientation='vertical'][has-detail][overflow][transition]::part(detail) {
       view-transition-name: vaadin-mdl-detail;
       view-transition-class: vertical;
     }

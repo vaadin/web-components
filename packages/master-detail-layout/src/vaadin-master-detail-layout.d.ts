@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -33,13 +32,13 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------| -----------
- * `containment`  | Set to `layout` or `viewport` depending on the containment.
- * `orientation`  | Set to `horizontal` or `vertical` depending on the orientation.
- * `has-detail`   | Set when the detail content is provided.
- * `drawer`       | Set when the layout is using the drawer mode.
- * `stack`        | Set when the layout is using the stack mode.
+ * Attribute             | Description
+ * ----------------------|----------------------
+ * `expand`              | Set to `master`, `detail`, or `both`.
+ * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
+ * `has-detail`          | Set when the detail content is provided and visible.
+ * `overflow`            | Set when columns don't fit and the detail is shown as an overlay.
+ * `detail-overlay-mode` | Set to `drawer`, `drawer-viewport`, `full`, or `full-viewport`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -53,94 +52,48 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  */
-declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
+declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
-   * Fixed size (in CSS length units) to be set on the detail area.
-   * When specified, it prevents the detail area from growing or
-   * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the details are shown as an overlay:
-   * either as drawer or stack, depending on the `stackOverlay` property.
-   *
-   * @attr {string} detail-size
-   */
-  detailSize: string | null | undefined;
-
-  /**
-   * Minimum size (in CSS length units) to be set on the detail area.
-   * When specified, it prevents the detail area from shrinking below
-   * this size. If there is not enough space to show master and detail
-   * areas next to each other, the details are shown as an overlay:
-   * either as drawer or stack, depending on the `stackOverlay` property.
-   *
-   * @attr {string} detail-min-size
-   */
-  detailMinSize: string | null | undefined;
-
-  /**
-   * Fixed size (in CSS length units) to be set on the master area.
-   * When specified, it prevents the master area from growing or
-   * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the details are shown as an overlay:
-   * either as drawer or stack, depending on the `stackOverlay` property.
+   * Size (in CSS length units) for the master column.
+   * Used as the basis for the master column in the CSS grid layout.
    *
    * @attr {string} master-size
    */
   masterSize: string | null | undefined;
 
   /**
-   * Minimum size (in CSS length units) to be set on the master area.
-   * When specified, it prevents the master area from shrinking below
-   * this size. If there is not enough space to show master and detail
-   * areas next to each other, the details are shown as an overlay:
-   * either as drawer or stack, depending on the `stackOverlay` property.
+   * Size (in CSS length units) for the detail column.
+   * Used as the basis for the detail column in the CSS grid layout.
    *
-   * @attr {string} master-min-size
+   * @attr {string} detail-size
    */
-  masterMinSize: string | null | undefined;
+  detailSize: string | null | undefined;
 
   /**
-   * Define how master and detail areas are shown next to each other,
-   * and the way how size and min-size properties are applied to them.
-   * Possible values are: `horizontal` or `vertical`.
-   * Defaults to horizontal.
+   * Controls the overlay mode for the detail panel.
+   * Possible values: `'drawer'`, `'drawer-viewport'`, `'full'`, `'full-viewport'`.
+   * Defaults to `'drawer'`.
+   *
+   * @attr {string} detail-overlay-mode
+   */
+  detailOverlayMode: 'drawer' | 'drawer-viewport' | 'full' | 'full-viewport';
+
+  /**
+   * Controls which column(s) expand to fill available space.
+   * Possible values: `'master'`, `'detail'`, `'both'`.
+   * Defaults to `'both'`.
+   */
+  expand: 'master' | 'detail' | 'both';
+
+  /**
+   * Controls the layout orientation.
+   * Possible values: `'horizontal'`, `'vertical'`.
+   * Defaults to `'horizontal'`.
    */
   orientation: 'horizontal' | 'vertical';
-
-  /**
-   * When specified, forces the details to be shown as an overlay
-   * (either as drawer or stack), even if there is enough space for
-   * master and detail to be shown next to each other using the default
-   * (split) mode.
-   *
-   * In order to enforce the stack mode, use this property together with
-   * `stackOverlay` property and set both to `true`.
-   *
-   * @attr {boolean} force-overlay
-   */
-  forceOverlay: boolean;
-
-  /**
-   * Defines the containment of the detail area when the layout is in
-   * overlay mode. When set to `layout`, the overlay is confined to the
-   * layout. When set to `viewport`, the overlay is confined to the
-   * browser's viewport. Defaults to `layout`.
-   */
-  containment: 'layout' | 'viewport';
-
-  /**
-   * When true, the layout in the overlay mode is rendered as a stack,
-   * making detail area fully cover the master area. Otherwise, it is
-   * rendered as a drawer and has a visual backdrop.
-   *
-   * In order to enforce the stack mode, use this property together with
-   * `forceOverlay` property and set both to `true`.
-   *
-   * @attr {string} stack-threshold
-   */
-  stackOverlay: boolean;
 
   /**
    * When true, the layout does not use animated transitions for the detail area.

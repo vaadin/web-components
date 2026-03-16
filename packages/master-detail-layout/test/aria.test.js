@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+import { onceResized } from './helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -13,65 +14,56 @@ describe('ARIA', () => {
 
   beforeEach(async () => {
     layout = fixtureSync(`
-      <vaadin-master-detail-layout>
+      <vaadin-master-detail-layout master-size="300px" detail-size="300px" style="width: 400px;">
         <master-content></master-content>
         <detail-content slot="detail"></detail-content>
       </vaadin-master-detail-layout>
     `);
-    await nextRender();
+    await onceResized(layout);
     master = layout.shadowRoot.querySelector('[part="master"]');
     detail = layout.shadowRoot.querySelector('[part="detail"]');
   });
 
-  it('should set role to dialog on the detail part in the drawer mode', () => {
-    layout.forceOverlay = true;
+  it('should set role to dialog on the detail part in drawer overlay mode', () => {
+    expect(layout.hasAttribute('overflow')).to.be.true;
     expect(detail.getAttribute('role')).to.equal('dialog');
+  });
 
-    layout.forceOverlay = false;
+  it('should remove role when overflow is resolved', async () => {
+    layout.style.width = '800px';
+    await onceResized(layout);
     expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set role to dialog on the detail part in the stack mode', () => {
-    layout.forceOverlay = true;
-    layout.stackOverlay = true;
+  it('should set role to dialog on the detail part in full overlay mode', async () => {
+    layout.detailOverlayMode = 'full';
+    await onceResized(layout);
     expect(detail.getAttribute('role')).to.equal('dialog');
-
-    layout.forceOverlay = false;
-
-    expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set aria-model on the detail part with the viewport containment', () => {
-    layout.forceOverlay = true;
-    layout.containment = 'viewport';
+  it('should set aria-modal on the detail part with viewport overlay mode', async () => {
+    layout.detailOverlayMode = 'drawer-viewport';
+    await onceResized(layout);
     expect(detail.getAttribute('aria-modal')).to.equal('true');
+  });
 
-    layout.containment = 'layout';
+  it('should not set aria-modal with layout-contained overlay mode', () => {
     expect(detail.hasAttribute('aria-modal')).to.be.false;
   });
 
-  it('should set inert on the master part with the layout containment', () => {
-    layout.forceOverlay = true;
-    layout.containment = 'layout';
+  it('should set inert on the master part with layout-contained overlay', () => {
     expect(master.hasAttribute('inert')).to.be.true;
+  });
 
-    layout.containment = 'viewport';
+  it('should not set inert on the master part with viewport overlay mode', async () => {
+    layout.detailOverlayMode = 'drawer-viewport';
+    await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
   });
 
-  it('should not set inert on the master part with the detail removed', async () => {
-    layout.forceOverlay = true;
-    layout.containment = 'layout';
-
-    const detailContent = layout.querySelector('[slot="detail"]');
-    detailContent.remove();
-    await nextRender();
-
+  it('should not set inert on the master part when detail is removed', async () => {
+    layout.querySelector('[slot="detail"]').remove();
+    await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
-
-    layout.appendChild(detailContent);
-    await nextRender();
-
-    expect(master.hasAttribute('inert')).to.be.true;
   });
 });
