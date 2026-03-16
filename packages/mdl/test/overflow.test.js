@@ -46,13 +46,13 @@ describe('overflow detection', () => {
   describe('property changes', () => {
     it('should set overflow when masterSize increases beyond available space', async () => {
       layout.masterSize = '600px';
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
     });
 
     it('should set overflow when detailSize increases beyond available space', async () => {
       layout.detailSize = '600px';
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
     });
 
@@ -62,7 +62,7 @@ describe('overflow detection', () => {
       expect(layout.hasAttribute('overflow')).to.be.true;
 
       layout.masterSize = '100px';
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.false;
     });
 
@@ -72,13 +72,13 @@ describe('overflow detection', () => {
       expect(layout.hasAttribute('overflow')).to.be.true;
 
       layout.detailSize = '100px';
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.false;
     });
 
     it('should set overflow when masterSize is set to 100%', async () => {
       layout.masterSize = '100%';
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
     });
 
@@ -88,7 +88,7 @@ describe('overflow detection', () => {
       expect(layout.hasAttribute('overflow')).to.be.true;
 
       layout.querySelector('[slot="detail"]').remove();
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('overflow')).to.be.false;
     });
   });

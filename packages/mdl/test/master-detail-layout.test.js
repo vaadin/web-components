@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
 
 window.Vaadin ||= {};
@@ -42,7 +42,7 @@ describe('vaadin-master-detail-layout', () => {
 
     it('should remove has-detail when detail is removed', async () => {
       layout.querySelector('[slot="detail"]').remove();
-      await nextRender();
+      await nextResize(layout);
       expect(layout.hasAttribute('has-detail')).to.be.false;
     });
 
@@ -50,7 +50,7 @@ describe('vaadin-master-detail-layout', () => {
       layout.masterSize = '200px';
       layout.detailSize = '200px';
       layout.querySelector('[slot="detail"]').remove();
-      await nextRender();
+      await nextResize(layout);
       // Detail column collapses to 0 when has-detail is removed
       expect(parseFloat(getComputedStyle(detail).width)).to.equal(0);
     });

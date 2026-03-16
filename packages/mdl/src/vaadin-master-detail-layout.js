@@ -153,7 +153,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => setTimeout(() => this.__onResize()));
     this.__resizeObserver.disconnect();
 
     const children = this.querySelectorAll('[slot="detail"], :not([slot])');
@@ -168,11 +168,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    const [masterWidth, detailWidth] = this.__computeColumnWidths();
+    // Update has-detail first — it controls --_detail-column CSS variable,
+    // which affects grid column widths read below.
     const hasDetail = this.__computeDetailVisibility();
-    const hasOverflow = hasDetail && masterWidth + detailWidth > this.offsetWidth;
-
     this.toggleAttribute('has-detail', hasDetail);
+
+    const [masterWidth, detailWidth] = this.__computeColumnWidths();
+    const hasOverflow = hasDetail && masterWidth + detailWidth > this.offsetWidth;
     this.toggleAttribute('overflow', hasOverflow);
   }
 

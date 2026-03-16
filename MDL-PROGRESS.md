@@ -28,7 +28,7 @@
 - [x] Drawer CSS: `inset-inline-end: 0`, detail width from `--_detail-size`
 - [x] No-detail handling: `--_detail-column: 0` (after expand rules for correct cascade)
 - [x] `overflow.test.js` — layout resize, async property-driven overflow detection (9 tests)
-- [x] `drawer-mode.test.js` — absolute positioning, detail width, backdrop, adding/removing detail (4 tests)
+- [x] `setTimeout` in ResizeObserver callback to prevent loop error in full mode
 
 ## Step 4: Detail overlay mode API (#11346) — DONE
 
@@ -37,6 +37,8 @@
 - [x] Full: `inset-inline: 0` (detail covers entire layout)
 - [x] Viewport: `position: fixed` via `$='viewport'` CSS selector
 - [x] CSS uses `^='drawer'`/`^='full'`/`$='viewport'` prefix/suffix selectors
+- [x] Fix: `__onResize()` updates `has-detail` before reading column widths (stale `--_detail-column` fix)
+- [x] `detail-overlay-mode.test.js` — drawer (5 tests) + full (9 tests)
 
 ## Step 5: Vertical orientation
 
