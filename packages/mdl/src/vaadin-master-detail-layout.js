@@ -85,6 +85,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
+       * Defines the containment of the detail area when the layout is in
+       * overlay mode. When set to `layout`, the overlay is confined to the
+       * layout. When set to `viewport`, the overlay is confined to the
+       * browser's viewport. Defaults to `layout`.
+       */
+      containment: {
+        type: String,
+        value: 'layout',
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
        * Controls which column(s) expand to fill available space.
        * Possible values: `'master'`, `'detail'`, `'both'`.
        * Defaults to `'both'`.

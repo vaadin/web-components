@@ -24,17 +24,9 @@ export const masterDetailLayoutStyles = css`
     display: none !important;
   }
 
-  :host([expand='both']) {
-    --_master-column: minmax(var(--_master-size), 1fr);
-    --_detail-column: minmax(var(--_detail-size), 1fr);
-  }
-
-  :host([expand='master']) {
-    --_master-column: minmax(var(--_master-size), 1fr);
-  }
-
-  :host([expand='detail']) {
-    --_detail-column: minmax(var(--_detail-size), 1fr);
+  [part~='master'],
+  [part~='detail'] {
+    box-sizing: border-box;
   }
 
   [part~='backdrop'] {
@@ -46,9 +38,21 @@ export const masterDetailLayoutStyles = css`
     forced-color-adjust: none;
   }
 
-  [part~='master'],
-  [part~='detail'] {
-    box-sizing: border-box;
+  :host(:not([has-detail])) {
+    --_detail-column: 0;
+  }
+
+  :host([expand='both']) {
+    --_master-column: minmax(var(--_master-size), 1fr);
+    --_detail-column: minmax(var(--_detail-size), 1fr);
+  }
+
+  :host([expand='master']) {
+    --_master-column: minmax(var(--_master-size), 1fr);
+  }
+
+  :host([expand='detail']) {
+    --_detail-column: minmax(var(--_detail-size), 1fr);
   }
 
   :host([overflow]) [part~='detail'] {
@@ -65,7 +69,8 @@ export const masterDetailLayoutStyles = css`
     display: block;
   }
 
-  :host(:not([has-detail])) {
-    --_detail-column: 0;
+  :host([overflow][containment='viewport']) [part~='detail'],
+  :host([overflow][containment='viewport']) [part~='backdrop'] {
+    position: fixed;
   }
 `;
