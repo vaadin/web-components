@@ -107,10 +107,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     return html`
       <div part="backdrop"></div>
       <div id="master" part="master">
-        <slot></slot>
+        <slot @slotchange="${() => this.__initResizeObserver()}"></slot>
       </div>
       <div id="detail" part="detail">
-        <slot name="detail"></slot>
+        <slot name="detail" @slotchange="${() => this.__initResizeObserver()}"></slot>
       </div>
     `;
   }
@@ -118,10 +118,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    this.__resizeObserver = new ResizeObserver(() => this.__onResize());
-    this.__resizeObserver.observe(this);
-    this.__resizeObserver.observe(this.$.master);
-    this.__resizeObserver.observe(this.$.detail);
+    this.__initResizeObserver();
   }
 
   /** @protected */
@@ -154,6 +151,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     this.toggleAttribute(`has-${prop}`, !!size);
+  }
+
+  /** @private */
+  __initResizeObserver() {
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver.disconnect();
+
+    const children = this.querySelectorAll('[slot="detail"], :not([slot])');
+    [this, this.$.master, this.$.detail, ...children].forEach((node) => {
+      this.__resizeObserver.observe(node);
+    });
   }
 
   /**
