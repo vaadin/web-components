@@ -38,7 +38,7 @@
 - [x] Full: `inset-inline: 0` (detail covers entire layout)
 - [x] Viewport: `position: fixed` via `$='viewport'` CSS selector
 - [x] CSS uses `^='drawer'`/`^='full'`/`$='viewport'` prefix/suffix selectors
-- [x] `detail-overlay-mode.test.js` — drawer (5 tests) + full (9 tests)
+- [x] `detail-overlay-mode.test.js` — drawer (5) + full (9) + drawer-viewport (4) + full-viewport (5)
 
 ## Step 5: Vertical orientation
 

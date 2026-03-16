@@ -133,4 +133,90 @@ describe('detail overlay mode', () => {
       expect(detail.offsetWidth).to.equal(layout.offsetWidth);
     });
   });
+
+  describe('drawer-viewport', () => {
+    let layout, detail, backdrop;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-master-detail-layout
+          master-size="300px"
+          detail-size="300px"
+          detail-overlay-mode="drawer-viewport"
+          style="width: 400px;"
+        >
+          <div>Master</div>
+          <div slot="detail">Detail</div>
+        </vaadin-master-detail-layout>
+      `);
+      await nextRender();
+      await nextResize(layout);
+      detail = layout.shadowRoot.querySelector('[part="detail"]');
+      backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+    });
+
+    it('should use fixed positioning for detail and backdrop', () => {
+      expect(getComputedStyle(detail).position).to.equal('fixed');
+      expect(getComputedStyle(backdrop).position).to.equal('fixed');
+    });
+
+    it('should set detail width to detailSize', () => {
+      expect(getComputedStyle(detail).width).to.equal('300px');
+    });
+
+    it('should align detail to the inline end', () => {
+      expect(getComputedStyle(detail).insetInlineEnd).to.equal('0px');
+    });
+
+    it('should show backdrop', () => {
+      expect(getComputedStyle(backdrop).display).to.equal('block');
+    });
+  });
+
+  describe('full-viewport', () => {
+    let layout, detail, backdrop;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-master-detail-layout
+          master-size="300px"
+          detail-size="300px"
+          detail-overlay-mode="full-viewport"
+          style="width: 400px;"
+        >
+          <div>Master</div>
+          <div slot="detail">Detail</div>
+        </vaadin-master-detail-layout>
+      `);
+      await nextRender();
+      await nextResize(layout);
+      detail = layout.shadowRoot.querySelector('[part="detail"]');
+      backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+    });
+
+    it('should use fixed positioning for detail and backdrop', () => {
+      expect(getComputedStyle(detail).position).to.equal('fixed');
+      expect(getComputedStyle(backdrop).position).to.equal('fixed');
+    });
+
+    it('should cover the full viewport width using inset-inline', () => {
+      const detailStyle = getComputedStyle(detail);
+      expect(detailStyle.insetInlineStart).to.equal('0px');
+      expect(detailStyle.insetInlineEnd).to.equal('0px');
+    });
+
+    it('should cover the full viewport height using inset-block', () => {
+      const detailStyle = getComputedStyle(detail);
+      expect(detailStyle.insetBlockStart).to.equal('0px');
+      expect(detailStyle.insetBlockEnd).to.equal('0px');
+    });
+
+    it('should show backdrop', () => {
+      expect(getComputedStyle(backdrop).display).to.equal('block');
+    });
+
+    it('should make detail as wide as the viewport', () => {
+      expect(detail.offsetWidth).to.equal(window.innerWidth);
+    });
+  });
 });
