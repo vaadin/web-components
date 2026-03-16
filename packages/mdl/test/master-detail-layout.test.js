@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
+import { onceResized } from './helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -16,7 +17,7 @@ describe('vaadin-master-detail-layout', () => {
         <div slot="detail">Detail</div>
       </vaadin-master-detail-layout>
     `);
-    await nextRender();
+    await onceResized(layout);
     master = layout.shadowRoot.querySelector('[part="master"]');
     detail = layout.shadowRoot.querySelector('[part="detail"]');
   });
@@ -42,7 +43,7 @@ describe('vaadin-master-detail-layout', () => {
 
     it('should remove has-detail when detail is removed', async () => {
       layout.querySelector('[slot="detail"]').remove();
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('has-detail')).to.be.false;
     });
 
@@ -50,7 +51,7 @@ describe('vaadin-master-detail-layout', () => {
       layout.masterSize = '200px';
       layout.detailSize = '200px';
       layout.querySelector('[slot="detail"]').remove();
-      await nextResize(layout);
+      await onceResized(layout);
       expect(master.offsetWidth).to.equal(layout.offsetWidth);
     });
   });

@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
+import { onceResized } from './helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -17,8 +18,7 @@ describe('detail overlay mode', () => {
           <div slot="detail">Detail</div>
         </vaadin-master-detail-layout>
       `);
-      await nextRender();
-      await nextResize(layout);
+      await onceResized(layout);
       detail = layout.shadowRoot.querySelector('[part="detail"]');
       backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
     });
@@ -35,7 +35,7 @@ describe('detail overlay mode', () => {
 
     it('should update detail width when detailSize changes in drawer mode', async () => {
       layout.detailSize = '600px';
-      await nextRender();
+      await onceResized(layout);
       expect(getComputedStyle(detail).width).to.equal('600px');
     });
 
@@ -47,11 +47,11 @@ describe('detail overlay mode', () => {
     it('should switch to drawer mode when detail is added to a narrow layout', async () => {
       const detailContent = layout.querySelector('[slot="detail"]');
       detailContent.remove();
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('overflow')).to.be.false;
 
       layout.appendChild(detailContent);
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
@@ -72,8 +72,7 @@ describe('detail overlay mode', () => {
           <div slot="detail">Detail</div>
         </vaadin-master-detail-layout>
       `);
-      await nextRender();
-      await nextResize(layout);
+      await onceResized(layout);
       detail = layout.shadowRoot.querySelector('[part="detail"]');
       backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
     });
@@ -104,7 +103,7 @@ describe('detail overlay mode', () => {
 
     it('should switch back to split mode when layout size is increased', async () => {
       layout.style.width = '800px';
-      await nextResize(layout);
+      await onceResized(layout);
 
       expect(layout.hasAttribute('overflow')).to.be.false;
       expect(getComputedStyle(detail).position).to.not.equal('absolute');
@@ -112,11 +111,11 @@ describe('detail overlay mode', () => {
 
     it('should switch to full mode when layout size is decreased', async () => {
       layout.style.width = '800px';
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('overflow')).to.be.false;
 
       layout.style.width = '400px';
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
       expect(detail.offsetWidth).to.equal(400);
     });
@@ -124,11 +123,11 @@ describe('detail overlay mode', () => {
     it('should switch to full mode when detail is added to a narrow layout', async () => {
       const detailContent = layout.querySelector('[slot="detail"]');
       detailContent.remove();
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('overflow')).to.be.false;
 
       layout.appendChild(detailContent);
-      await nextResize(layout);
+      await onceResized(layout);
       expect(layout.hasAttribute('overflow')).to.be.true;
       expect(detail.offsetWidth).to.equal(layout.offsetWidth);
     });
@@ -149,8 +148,7 @@ describe('detail overlay mode', () => {
           <div slot="detail">Detail</div>
         </vaadin-master-detail-layout>
       `);
-      await nextRender();
-      await nextResize(layout);
+      await onceResized(layout);
       detail = layout.shadowRoot.querySelector('[part="detail"]');
       backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
     });
@@ -188,8 +186,7 @@ describe('detail overlay mode', () => {
           <div slot="detail">Detail</div>
         </vaadin-master-detail-layout>
       `);
-      await nextRender();
-      await nextResize(layout);
+      await onceResized(layout);
       detail = layout.shadowRoot.querySelector('[part="detail"]');
       backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
     });

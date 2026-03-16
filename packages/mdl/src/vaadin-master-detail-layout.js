@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
-import { timeOut } from '@vaadin/component-base/src/async.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -168,7 +168,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __scheduleResize() {
-    this.__resizeDebouncer = Debouncer.debounce(this.__resizeDebouncer, timeOut, () => this.__onResize());
+    this.__resizeDebouncer = Debouncer.debounce(this.__resizeDebouncer, animationFrame, () => this.__onResize());
   }
 
   /** @private */

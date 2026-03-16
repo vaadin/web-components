@@ -63,7 +63,7 @@ The `>=` check in `__checkOverflow()` ensures correct results even when column w
 
 - **Observes**: host element + slotted light DOM children (NOT shadow DOM parts)
 - **NOT observing shadow DOM parts** avoids the ResizeObserver loop depth issue (parts are at the same DOM depth as the host; slotted children are deeper)
-- **`Debouncer` with `timeOut`** (`@vaadin/component-base`) defers `__onResize()` to a new macrotask, preventing the loop error. Both ResizeObserver and property observers call `__scheduleResize()` which uses the same debouncer — ensures single execution per cycle
+- **`Debouncer` with `animationFrame`** (`@vaadin/component-base`) defers `__onResize()` to the next rAF, preventing the ResizeObserver loop error. Both ResizeObserver and property observers call `__scheduleResize()` which uses the same debouncer — ensures single execution per cycle
 - **Property observers call `__scheduleResize()`** because size changes with `preserve-master-width` active may not resize any observed element (master stays at full host width)
 - **Slotchange debouncing**: `queueMicrotask` batches multiple slot changes into a single `__initResizeObserver()` call
 
@@ -114,15 +114,15 @@ Prevents the master from jumping when the detail overlay first appears.
 
 ## Test Patterns
 
-- **Async overflow detection**: All overflow assertions after property/DOM changes need `await nextResize(layout)` because detection is async (ResizeObserver + setTimeout)
+- **`onceResized(layout)`** helper (`test/helpers.js`): wraps `nextResize(layout)` + `nextRender()`. Waits for both the ResizeObserver cycle AND the subsequent rAF-debounced `__onResize()`. Use after any change that triggers overflow recalculation.
 - **Split mode sizing**: Use `getPartWidths()` (measuring part elements) instead of parsing `gridTemplateColumns` (which now has 4 columns with named lines)
-- **`nextResize(layout)`** works even when the host doesn't resize — creates a new observer whose initial observation always fires, with setTimeout aligning after the component's setTimeout
 - **Feature flag**: All test files must set `window.Vaadin.featureFlags.masterDetailLayoutComponent = true` before importing the component
 
 ## Files
 
 - `packages/mdl/src/vaadin-master-detail-layout.js` — component class
 - `packages/mdl/src/styles/vaadin-master-detail-layout-base-styles.js` — CSS
+- `packages/mdl/test/helpers.js` — `onceResized()` test helper
 - `packages/mdl/test/split-mode.test.js` — column sizing (7 tests)
 - `packages/mdl/test/overflow.test.js` — overflow detection (9 tests)
 - `packages/mdl/test/detail-overlay-mode.test.js` — drawer/full/viewport (23 tests)
