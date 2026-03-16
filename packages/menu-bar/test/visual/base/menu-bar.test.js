@@ -159,6 +159,24 @@ describe('menu-bar', () => {
           await visualDiff(div, `${dir}-end-aligned-overflow-button`);
         });
       });
+
+      describe('overflow in flex layout', () => {
+        beforeEach(async () => {
+          div = fixtureSync(`
+            <div style="display: flex; width: 300px; padding: 10px">
+              <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
+              <div style="min-width: 120px">Sibling</div>
+            </div>
+          `);
+          element = div.querySelector('vaadin-menu-bar');
+          element.items = [{ text: 'Home' }, { text: 'Reports' }, { text: 'Dashboard' }, { text: 'Help' }];
+          await nextResize(element);
+        });
+
+        it('overflow in flex layout', async () => {
+          await visualDiff(div, `${dir}-overflow-flex-layout`);
+        });
+      });
     });
   });
 });
