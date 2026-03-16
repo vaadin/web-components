@@ -27,10 +27,11 @@ import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-b
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------| -----------
- * `expand`       | Set to `master`, `detail`, or `both` depending on the expand mode.
- * `has-detail`   | Set when the detail content is provided.
+ * Attribute             | Description
+ * ----------------------|----------------------
+ * `expand`              | Set to `master`, `detail`, or `both` depending on the expand mode.
+ * `has-detail`          | Set when the detail content is provided.
+ * `detail-overlay-mode` | Set to `drawer`, `drawer-viewport`, `full`, or `full-viewport` depending on the overlay mode.
  *
  * @customElement vaadin-master-detail-layout
  * @extends HTMLElement
@@ -73,26 +74,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
-       * Size (in CSS length units) for the detail content when it's rendered in an overlay.
-       * Defaults to the value of `detailSize`.
+       * Controls the overlay mode for the detail panel.
+       * Possible values: `'drawer'`, `'drawer-viewport'`, `'full'`, `'full-viewport'`.
+       * Defaults to `'drawer'`.
        *
-       * @attr {string} detail-overlay-size
+       * @attr {string} detail-overlay-mode
        */
-      detailOverlaySize: {
+      detailOverlayMode: {
         type: String,
-        sync: true,
-        observer: '__detailOverlaySizeChanged',
-      },
-
-      /**
-       * Defines the containment of the detail area when the layout is in
-       * overlay mode. When set to `layout`, the overlay is confined to the
-       * layout. When set to `viewport`, the overlay is confined to the
-       * browser's viewport. Defaults to `layout`.
-       */
-      containment: {
-        type: String,
-        value: 'layout',
+        value: 'drawer',
         reflectToAttribute: true,
         sync: true,
       },
@@ -151,11 +141,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  __detailOverlaySizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-overlay-size', size, oldSize);
-  }
-
-  /** @private */
   __updateStyleProperty(prop, size, oldSize) {
     if (size) {
       this.style.setProperty(`--_${prop}`, size);
@@ -179,31 +164,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /**
    * Called by the ResizeObserver whenever the host element is resized.
-   * Updates `has-detail` and `overflow` attributes, and locks/unlocks
-   * the master column width to prevent content from shrinking during
-   * CSS grid reflow when the detail panel appears or disappears.
+   * Updates `has-detail` and `overflow` attributes.
    * @private
    */
   __onResize() {
     const [masterWidth, detailWidth] = this.__computeColumnWidths();
     const hasDetail = this.__computeDetailVisibility();
     const hasOverflow = hasDetail && masterWidth + detailWidth > this.offsetWidth;
-
-    if (!this.hasAttribute('has-detail') && hasDetail) {
-      // Lock the master column width when the detail panel becomes visible.
-      // This prevents the master content from shrinking when the CSS grid
-      // allocates space for the detail column in response to the `has-detail`
-      // attribute while the master area is configured to expand.
-      this.style.setProperty('--_master-column', `clamp(var(--_master-size), 100%, ${masterWidth}px)`);
-    }
-    if (this.hasAttribute('has-detail') && !hasDetail) {
-      // Unlock the master column width when the detail panel becomes hidden.
-      this.style.removeProperty('--_master-column');
-    }
-    if (this.hasAttribute('overflow') && !hasOverflow) {
-      // Unlock the master column width when overflow is no longer present.
-      this.style.removeProperty('--_master-column');
-    }
 
     this.toggleAttribute('has-detail', hasDetail);
     this.toggleAttribute('overflow', hasOverflow);

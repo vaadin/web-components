@@ -59,8 +59,6 @@ export const masterDetailLayoutStyles = css`
     position: absolute;
     z-index: 2;
     inset-block: 0;
-    inset-inline-end: 0;
-    width: var(--_detail-overlay-size, var(--_detail-size));
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
   }
@@ -69,8 +67,17 @@ export const masterDetailLayoutStyles = css`
     display: block;
   }
 
-  :host([overflow][containment='viewport']) [part~='detail'],
-  :host([overflow][containment='viewport']) [part~='backdrop'] {
+  :host([overflow][detail-overlay-mode^='drawer']) [part~='detail'] {
+    width: var(--_detail-overlay-size, var(--_detail-size));
+    inset-inline-end: 0;
+  }
+
+  :host([overflow][detail-overlay-mode^='full']) [part~='detail'] {
+    inset-inline: 0;
+  }
+
+  :host([overflow][detail-overlay-mode$='viewport']) [part~='detail'],
+  :host([overflow][detail-overlay-mode$='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 `;
