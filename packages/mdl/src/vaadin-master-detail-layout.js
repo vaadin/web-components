@@ -153,11 +153,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => setTimeout(() => this.__onResize()));
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
     const children = this.querySelectorAll('[slot="detail"], :not([slot])');
-    [this, this.$.master, this.$.detail, ...children].forEach((node) => {
+    [this, ...children].forEach((node) => {
       this.__resizeObserver.observe(node);
     });
   }

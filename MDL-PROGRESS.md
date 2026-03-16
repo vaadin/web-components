@@ -28,7 +28,7 @@
 - [x] Drawer CSS: `inset-inline-end: 0`, detail width from `--_detail-size`
 - [x] No-detail handling: `--_detail-column: 0` (after expand rules for correct cascade)
 - [x] `overflow.test.js` — layout resize, async property-driven overflow detection (9 tests)
-- [x] `setTimeout` in ResizeObserver callback to prevent loop error in full mode
+- [x] ResizeObserver observes host + slotted children only (not shadow DOM parts) to avoid loop error
 
 ## Step 4: Detail overlay mode API (#11346) — DONE
 
