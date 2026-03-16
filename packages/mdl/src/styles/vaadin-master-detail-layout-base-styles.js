@@ -8,8 +8,8 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
-    --_master-column: var(--_master-size);
-    --_detail-column: var(--_detail-size);
+    --_master-column: var(--_master-size) 0;
+    --_detail-column: var(--_detail-size) 0;
 
     display: grid;
     box-sizing: border-box;
@@ -17,7 +17,7 @@ export const masterDetailLayoutStyles = css`
     position: relative;
     z-index: 0;
     overflow: hidden;
-    grid-template-columns: var(--_master-column) var(--_detail-column);
+    grid-template-columns: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
   }
 
   :host([hidden]) {
@@ -29,6 +29,14 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
   }
 
+  [part~='master'] {
+    grid-column: master-start / detail-start;
+  }
+
+  [part~='detail'] {
+    grid-column: detail-start / detail-end;
+  }
+
   [part~='backdrop'] {
     position: absolute;
     inset: 0;
@@ -38,46 +46,45 @@ export const masterDetailLayoutStyles = css`
     forced-color-adjust: none;
   }
 
-  :host([expand='both']) {
-    --_master-column: minmax(var(--_master-size), 1fr);
-    --_detail-column: minmax(var(--_detail-size), 1fr);
-  }
-
+  :host([expand='both']),
   :host([expand='master']) {
-    --_master-column: minmax(var(--_master-size), 1fr);
+    --_master-column: var(--_master-size) 1fr;
   }
 
+  :host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
+  :host([expand='master']:is(:not([has-detail]), [preserve-master-width])) {
+    --_master-column: var(--_master-size) calc(100% - var(--_master-size));
+  }
+
+  :host([expand='both']),
   :host([expand='detail']) {
-    --_detail-column: minmax(var(--_detail-size), 1fr);
+    --_detail-column: var(--_detail-size) 1fr;
   }
 
-  :host(:not([has-detail])) {
-    --_detail-column: 0;
-  }
-
-  :host([overflow]) [part~='detail'] {
+  :host([has-detail][overflow]) [part~='detail'] {
     position: absolute;
     z-index: 2;
     inset-block: 0;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
+    grid-column: none;
   }
 
-  :host([overflow]) [part~='backdrop'] {
+  :host([has-detail][overflow]) [part~='backdrop'] {
     display: block;
   }
 
-  :host([overflow][detail-overlay-mode^='drawer']) [part~='detail'] {
+  :host([has-detail][overflow][detail-overlay-mode^='drawer']) [part~='detail'] {
     width: var(--_detail-size);
     inset-inline-end: 0;
   }
 
-  :host([overflow][detail-overlay-mode^='full']) [part~='detail'] {
+  :host([has-detail][overflow][detail-overlay-mode^='full']) [part~='detail'] {
     inset-inline: 0;
   }
 
-  :host([overflow][detail-overlay-mode$='viewport']) [part~='detail'],
-  :host([overflow][detail-overlay-mode$='viewport']) [part~='backdrop'] {
+  :host([has-detail][overflow][detail-overlay-mode$='viewport']) [part~='detail'],
+  :host([has-detail][overflow][detail-overlay-mode$='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 `;

@@ -179,25 +179,47 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    // Update has-detail first — it controls --_detail-column CSS variable,
-    // which affects grid column widths read below.
-    const hasDetail = this.__computeDetailVisibility();
-    this.toggleAttribute('has-detail', hasDetail);
+    // Read
+    const hasDetail = this.__checkDetailVisibility();
+    const hasOverflow = this.__checkOverflow();
 
-    const [masterWidth, detailWidth] = this.__computeColumnWidths();
-    const hasOverflow = hasDetail && Math.round(masterWidth + detailWidth) > this.offsetWidth;
+    // Write
+    if (!this.hasAttribute('has-detail') && hasDetail && hasOverflow) {
+      this.setAttribute('preserve-master-width', '');
+    } else if (!hasDetail || !hasOverflow) {
+      this.removeAttribute('preserve-master-width');
+    }
+
+    this.toggleAttribute('has-detail', hasDetail);
     this.toggleAttribute('overflow', hasOverflow);
   }
 
   /** @private */
-  __computeDetailVisibility() {
+  __checkDetailVisibility() {
     return [...this.querySelectorAll('[slot="detail"]')].some((node) => node.checkVisibility());
   }
 
   /** @private */
-  __computeColumnWidths() {
+  __checkOverflow() {
+    const [masterWidth, masterExtraSpace, detailWidth] = this.__getComputedColumnWidths();
+    if (masterWidth + masterExtraSpace + detailWidth <= this.offsetWidth) {
+      return false;
+    }
+    if (masterExtraSpace > detailWidth) {
+      return false;
+    }
+    return true;
+  }
+
+  /** @private */
+  __getComputedColumnWidths() {
     const { gridTemplateColumns } = getComputedStyle(this);
-    return gridTemplateColumns.split(' ').map(parseFloat);
+    return gridTemplateColumns
+      .replace(/\[[^\]]+\]/gu, '')
+      .replace(/\s+/gu, ' ')
+      .trim()
+      .split(' ')
+      .map(parseFloat);
   }
 }
 
