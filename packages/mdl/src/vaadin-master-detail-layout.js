@@ -7,7 +7,6 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
 
@@ -119,29 +118,16 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-
     this.__resizeObserver = new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.observe(this);
-
-    this.__masterSlot = this.shadowRoot.querySelector('slot:not([name])');
-    this.__masterSlotObserver = new SlotObserver(this.__masterSlot, ({ addedNodes, removedNodes }) => {
-      removedNodes.forEach((node) => this.__resizeObserver.unobserve(node));
-      addedNodes.forEach((node) => this.__resizeObserver.observe(node));
-    });
-
-    this.__detailSlot = this.shadowRoot.querySelector('slot[name="detail"]');
-    this.__detailSlotObserver = new SlotObserver(this.__detailSlot, ({ addedNodes, removedNodes }) => {
-      removedNodes.forEach((node) => this.__resizeObserver.unobserve(node));
-      addedNodes.forEach((node) => this.__resizeObserver.observe(node));
-    });
+    this.__resizeObserver.observe(this.$.master);
+    this.__resizeObserver.observe(this.$.detail);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
-    this.__masterSlotObserver.disconnect();
-    this.__detailSlotObserver.disconnect();
   }
 
   /** @private */
@@ -178,8 +164,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    const hasDetail = this.__computeDetailVisibility();
     const [masterWidth, detailWidth] = this.__computeColumnWidths();
+    const hasDetail = this.__computeDetailVisibility();
     const hasOverflow = hasDetail && masterWidth + detailWidth > this.offsetWidth;
 
     if (!this.hasAttribute('has-detail') && hasDetail) {
@@ -187,7 +173,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       // This prevents the master content from shrinking when the CSS grid
       // allocates space for the detail column in response to the `has-detail`
       // attribute while the master area is configured to expand.
-      this.style.setProperty('--_master-column', `clamp(${this.masterSize}, 100%, ${masterWidth}px)`);
+      this.style.setProperty('--_master-column', `clamp(var(--_master-size), 100%, ${masterWidth}px)`);
     }
     if (this.hasAttribute('has-detail') && !hasDetail) {
       // Unlock the master column width when the detail panel becomes hidden.
@@ -204,7 +190,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __computeDetailVisibility() {
-    return [...this.__detailSlot.assignedNodes()].some((node) => node.checkVisibility());
+    return [...this.querySelectorAll('[slot="detail"]')].some((node) => node.checkVisibility());
   }
 
   /** @private */
