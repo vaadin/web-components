@@ -337,6 +337,125 @@ describe('overflow', () => {
     });
   });
 
+  describe('layout combinations', () => {
+    const items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+
+    async function initMenuBar(container) {
+      const menu = container.querySelector('vaadin-menu-bar');
+      menu.items = items;
+      await nextResize(menu);
+      const buttons = menu._buttons;
+      const overflow = buttons[buttons.length - 1];
+      return { menu, buttons, overflow };
+    }
+
+    describe('flex row with sibling', () => {
+      let container, overflow;
+
+      beforeEach(async () => {
+        container = fixtureSync(`
+          <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+            <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
+            <div style="min-width: ${BUTTON_WIDTH * 2}px">Sibling</div>
+          </div>
+        `);
+        overflow = (await initMenuBar(container)).overflow;
+      });
+
+      it('should collapse items into overflow when sibling takes space', () => {
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+        expect(overflow.item.children.length).to.be.greaterThan(0);
+        expect(overflow.item.children.length).to.be.lessThan(items.length);
+      });
+    });
+
+    describe('css grid with sibling', () => {
+      let container, overflow;
+
+      beforeEach(async () => {
+        container = fixtureSync(`
+          <div style="display: grid; grid-template-columns: 1fr ${BUTTON_WIDTH * 2}px; width: ${BUTTON_WIDTH * 5}px">
+            <vaadin-menu-bar></vaadin-menu-bar>
+            <div>Sibling</div>
+          </div>
+        `);
+        overflow = (await initMenuBar(container)).overflow;
+      });
+
+      it('should collapse items into overflow', () => {
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+        expect(overflow.item.children.length).to.be.greaterThan(0);
+        expect(overflow.item.children.length).to.be.lessThan(items.length);
+      });
+    });
+
+    describe('flex row-reverse with no width on menu-bar', () => {
+      let container, menu, buttons, overflow;
+
+      beforeEach(async () => {
+        container = fixtureSync(`
+          <div style="display: flex; flex-direction: row-reverse; width: ${BUTTON_WIDTH * 5}px">
+            <div style="min-width: ${BUTTON_WIDTH * 2}px">Sibling</div>
+            <vaadin-menu-bar></vaadin-menu-bar>
+          </div>
+        `);
+        ({ menu, buttons, overflow } = await initMenuBar(container));
+      });
+
+      it('should collapse items into overflow', () => {
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+        expect(overflow.item.children.length).to.be.greaterThan(0);
+        expect(overflow.item.children.length).to.be.lessThan(items.length);
+      });
+
+      it('should restore items when container width increases', async () => {
+        container.style.width = `${BUTTON_WIDTH * 8}px`;
+        await nextResize(menu);
+        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
+        expect(overflow.hasAttribute('hidden')).to.be.true;
+      });
+    });
+
+    describe('gradual collapse in flex container', () => {
+      let container, menu, buttons, overflow;
+
+      beforeEach(async () => {
+        // Reproduces the layout from https://github.com/vaadin/web-components/issues/11269:
+        // a flex container with a menu-bar (no explicit width) and a sibling.
+        // Without the containerWidth snapshot fix, hiding a button causes
+        // the host to shrink (min-width: 0), which shrinks the container,
+        // causing cascading collapse where ALL items end up in overflow.
+        container = fixtureSync(`
+          <div style="display: flex; width: ${BUTTON_WIDTH * 3.5}px">
+            <vaadin-menu-bar></vaadin-menu-bar>
+            <button>Sibling</button>
+          </div>
+        `);
+        menu = container.querySelector('vaadin-menu-bar');
+        menu.items = [
+          { text: 'Item 1' },
+          { text: 'Item 2' },
+          { text: 'Item 3' },
+          { text: 'Item 4' },
+          { text: 'Item 5' },
+          { text: 'Item 6' },
+        ];
+        await nextResize(menu);
+        buttons = menu._buttons;
+        overflow = buttons.at(-1);
+      });
+
+      it('should not collapse all items at once', () => {
+        const visibleButtons = buttons.filter(
+          (btn) => btn !== overflow && getComputedStyle(btn).visibility !== 'hidden',
+        );
+        expect(visibleButtons.length).to.be.greaterThan(0);
+        expect(overflow.item.children.length).to.be.greaterThan(0);
+        expect(overflow.item.children.length).to.be.lessThan(menu.items.length);
+      });
+    });
+  });
+
   describe('parent resize', () => {
     let container, text, menu, buttons;
 
