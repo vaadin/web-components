@@ -55,18 +55,33 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
   }
 
+  /* Shared overlay styles (drawer + full) */
+
   :host([overflow]) [part~='detail'] {
-    position: sticky;
     z-index: 2;
-    inset-block: 0;
-    inset-inline-end: 0;
-    width: min(100%, var(--_detail-size));
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
   }
 
   :host([overflow]) [part~='backdrop'] {
     display: block;
+  }
+
+  /* Drawer mode (default): sticky side-panel */
+
+  :host([overflow][detail-overlay-mode='drawer']) [part~='detail'] {
+    position: sticky;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: min(100%, var(--_detail-size));
+  }
+
+  /* Full mode: detail covers the entire layout */
+
+  :host([overflow][detail-overlay-mode='full']) [part~='detail'] {
+    margin-inline-start: calc(-1 * var(--_master-col-width, 0px));
+    width: var(--_host-width, 100%);
+    height: 100%;
   }
 
   :host(:not([has-detail])) {

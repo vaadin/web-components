@@ -30,17 +30,19 @@
 - [x] No-detail handling: `--_detail-col: ''` collapses the column
 - [x] `__detectLayoutMode()` not needed — CSS grid + `__detectOverflow()` replaces it
 - [x] `overflow.test.js` — layout resize, property-driven overflow detection, masterSize: 100% (9 tests)
-- [x] `drawer-mode.test.js` — sticky positioning, detail width, backdrop, adding/removing detail (5 tests)
 
-## Step 4: Detail overlay mode API (#11346)
+## Step 4: Detail overlay mode API (#11346) — DONE (drawer + full)
 
-- [ ] Add `detailOverlayMode` property (replaces `forceOverlay`/`stackOverlay`/`containment`)
-- [ ] Values: `drawer` (default), `drawer-viewport`, `full`, `full-viewport`
-- [ ] `drawer`: detail as sticky side-panel, layout containment (current drawer mode)
-- [ ] `full`: detail covers entire layout (absolute positioning, inset: 0)
-- [ ] `drawer-viewport` / `full-viewport`: `position: fixed`, safe-area-inset padding
-- [ ] Port and adapt: `full-mode.test.js` — horizontal tests
-- [ ] Port and adapt: viewport containment tests
+- [x] Add `detailOverlayMode` property (`drawer` default, `full`)
+- [x] Shared overlay styles (z-index, background, shadow, backdrop) via `:host([overflow])`
+- [x] `drawer`: sticky side-panel (existing behavior, keyed off `[detail-overlay-mode='drawer']`)
+- [x] `full`: negative margin + explicit width to cover layout, `height: 100%`
+- [x] `--_master-col-width` / `--_host-width` CSS custom properties set from `__detectOverflow()`
+- [x] Temporary overflow attribute removal in full mode for accurate grid measurement (prevents oscillation)
+- [x] `setTimeout` in ResizeObserver callback (matches `form-layout` pattern)
+- [x] `detail-overlay-mode.test.js` — drawer (4 tests) + full (11 tests)
+- [x] Updated DOM snapshots for new `detail-overlay-mode` attribute
+- [ ] `drawer-viewport` / `full-viewport`: `position: fixed`, safe-area-inset padding (deferred)
 
 ## Step 5: Vertical orientation
 

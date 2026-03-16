@@ -85,6 +85,23 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
+       * Controls the visual style of the detail overlay when the layout
+       * overflows (i.e., when both columns don't fit side by side).
+       *
+       * Possible values:
+       * - `'drawer'` (default): detail as a sticky side-panel with backdrop
+       * - `'full'`: detail covers the entire layout area
+       *
+       * @attr {string} detail-overlay-mode
+       */
+      detailOverlayMode: {
+        type: String,
+        value: 'drawer',
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
        * When true, the component has the detail content provided.
        * @protected
        */
@@ -118,7 +135,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   connectedCallback() {
     super.connectedCallback();
 
-    this.__resizeObserver = new ResizeObserver(() => this.__detectOverflow());
+    this.__resizeObserver = new ResizeObserver(() => setTimeout(() => this.__detectOverflow()));
     this.__resizeObserver.observe(this);
   }
 
@@ -165,10 +182,26 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __detectOverflow() {
+    // In full mode with overflow, the detail's CSS (negative margin, explicit
+    // width) changes its contribution to grid track sizing. Temporarily remove
+    // overflow to measure "natural" column widths and avoid oscillation.
+    if (this.detailOverlayMode === 'full' && this.hasAttribute('overflow')) {
+      this.removeAttribute('overflow');
+    }
+
     const { gridTemplateColumns } = getComputedStyle(this);
     const columns = gridTemplateColumns.split(' ').map(parseFloat);
     const totalWidth = columns.reduce((a, b) => a + b, 0);
-    this.toggleAttribute('overflow', Math.round(totalWidth) > this.offsetWidth);
+    const hasOverflow = Math.round(totalWidth) > this.offsetWidth;
+    this.toggleAttribute('overflow', hasOverflow);
+
+    if (hasOverflow && columns.length >= 2) {
+      this.style.setProperty('--_master-col-width', `${columns[0]}px`);
+      this.style.setProperty('--_host-width', `${this.offsetWidth}px`);
+    } else {
+      this.style.removeProperty('--_master-col-width');
+      this.style.removeProperty('--_host-width');
+    }
   }
 }
 
