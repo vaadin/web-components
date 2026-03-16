@@ -2,13 +2,17 @@
 export const snapshots = {};
 
 snapshots["vaadin-master-detail-layout host default"] = 
-`<vaadin-master-detail-layout expand="both">
+`<vaadin-master-detail-layout
+  detail-overlay-mode="drawer"
+  expand="both"
+>
 </vaadin-master-detail-layout>
 `;
 /* end snapshot vaadin-master-detail-layout host default */
 
 snapshots["vaadin-master-detail-layout host masterSize"] = 
 `<vaadin-master-detail-layout
+  detail-overlay-mode="drawer"
   expand="both"
   has-master-size=""
   style="--_master-size: 300px;"
@@ -19,6 +23,7 @@ snapshots["vaadin-master-detail-layout host masterSize"] =
 
 snapshots["vaadin-master-detail-layout host detailSize"] = 
 `<vaadin-master-detail-layout
+  detail-overlay-mode="drawer"
   expand="both"
   has-detail-size=""
   style="--_detail-size: 400px;"
@@ -29,6 +34,7 @@ snapshots["vaadin-master-detail-layout host detailSize"] =
 
 snapshots["vaadin-master-detail-layout host masterSize and detailSize"] = 
 `<vaadin-master-detail-layout
+  detail-overlay-mode="drawer"
   expand="both"
   has-detail-size=""
   has-master-size=""

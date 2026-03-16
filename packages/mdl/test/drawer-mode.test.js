@@ -23,9 +23,9 @@ describe('drawer mode', () => {
     backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
   });
 
-  it('should use sticky positioning and show backdrop in drawer mode', () => {
+  it('should use absolute positioning and show backdrop in drawer mode', () => {
     expect(layout.hasAttribute('overflow')).to.be.true;
-    expect(getComputedStyle(detail).position).to.equal('sticky');
+    expect(getComputedStyle(detail).position).to.equal('absolute');
     expect(getComputedStyle(backdrop).display).to.equal('block');
   });
 
@@ -33,8 +33,9 @@ describe('drawer mode', () => {
     expect(getComputedStyle(detail).width).to.equal('300px');
   });
 
-  it('should update detail width when detailSize changes in drawer mode', () => {
+  it('should update detail width when detailSize changes in drawer mode', async () => {
     layout.detailSize = '600px';
+    await nextRender();
     expect(getComputedStyle(detail).width).to.equal('600px');
   });
 
@@ -47,6 +48,6 @@ describe('drawer mode', () => {
     layout.appendChild(detailContent);
     await nextRender();
     expect(layout.hasAttribute('overflow')).to.be.true;
-    expect(getComputedStyle(detail).position).to.equal('sticky');
+    expect(getComputedStyle(detail).position).to.equal('absolute');
   });
 });

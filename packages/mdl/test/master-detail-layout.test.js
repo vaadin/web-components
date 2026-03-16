@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
 
 window.Vaadin ||= {};
@@ -42,14 +42,17 @@ describe('vaadin-master-detail-layout', () => {
 
     it('should remove has-detail when detail is removed', async () => {
       layout.querySelector('[slot="detail"]').remove();
-      await nextFrame();
+      await nextRender();
       expect(layout.hasAttribute('has-detail')).to.be.false;
     });
 
-    it('should hide detail part when no detail content is provided', async () => {
+    it('should collapse detail column when no detail content is provided', async () => {
+      layout.masterSize = '200px';
+      layout.detailSize = '200px';
       layout.querySelector('[slot="detail"]').remove();
       await nextRender();
-      expect(getComputedStyle(detail).display).to.equal('none');
+      // Detail column collapses to 0 when has-detail is removed
+      expect(parseFloat(getComputedStyle(detail).width)).to.equal(0);
     });
   });
 
@@ -66,6 +69,8 @@ describe('vaadin-master-detail-layout', () => {
 
   describe('height', () => {
     it('should expand to full height of the parent', () => {
+      layout.masterSize = '200px';
+      layout.detailSize = '200px';
       layout.parentElement.style.height = '500px';
       expect(parseFloat(getComputedStyle(master).height)).to.equal(500);
       expect(parseFloat(getComputedStyle(detail).height)).to.equal(500);

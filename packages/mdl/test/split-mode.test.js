@@ -60,7 +60,8 @@ describe('split mode', () => {
       layout.expand = 'master';
     });
 
-    it('should fix detail at detailSize and give the rest to master', () => {
+    it('should fix detail at detailSize and expand master to fill the rest', () => {
+      layout.masterSize = '100px';
       layout.detailSize = '200px';
       const [masterWidth, detailWidth] = getColumnWidths(layout);
       expect(masterWidth).to.equal(400);
@@ -81,8 +82,9 @@ describe('split mode', () => {
       layout.expand = 'detail';
     });
 
-    it('should fix master at masterSize and give the rest to detail', () => {
+    it('should fix master at masterSize and expand detail to fill the rest', () => {
       layout.masterSize = '200px';
+      layout.detailSize = '100px';
       const [masterWidth, detailWidth] = getColumnWidths(layout);
       expect(masterWidth).to.equal(200);
       expect(detailWidth).to.equal(400);

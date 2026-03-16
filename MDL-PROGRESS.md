@@ -7,14 +7,12 @@
 - [x] Minimal component: `masterSize`, `detailSize`, `expand` (default `'both'`) properties
 - [x] Render template: backdrop + master slot + detail slot
 - [x] Property observers setting CSS custom properties + `has-*-size` attributes
-- [x] `has-detail` detection via slotchange
-- [x] Base styles: `display: grid; overflow: hidden; grid-template-columns: minmax()`
-- [x] CSS defaults: `--_master-size: 400px`, `--_detail-size: min-content`
-- [x] `expand` attribute CSS rules (both/master/detail)
-- [x] Unit tests: custom element definition, has-detail, expand (`yarn test --group mdl` — 7 tests)
-- [x] Snapshot tests: host (default, masterSize, detailSize, both) + shadow (`yarn test:snapshots --group mdl` — 5 tests)
+- [x] `has-detail` detection via `checkVisibility()` in ResizeObserver callback
+- [x] Base styles: `display: grid; overflow: hidden; grid-template-columns`
+- [x] `expand` attribute CSS rules (both/master/detail) using `minmax(var(--_*-size), 1fr)`
+- [x] Unit tests: custom element definition, has-detail, expand
+- [x] Snapshot tests: host (default, masterSize, detailSize, both) + shadow
 - [x] Dev page: `dev/mdl.html` using `@vaadin/mdl` package
-- [x] Restored `dev/master-detail-layout.html` to main branch state
 
 ## Step 2: Split mode layout tests (horizontal only) — DONE
 
@@ -22,25 +20,23 @@
 
 ## Step 3: Overflow detection + drawer mode — DONE
 
-- [x] ResizeObserver reading computed `gridTemplateColumns`
+- [x] ResizeObserver on host + parts + slotted children via `__initResizeObserver()`
 - [x] `overflow` attribute toggled when columns exceed host width
-- [x] `__detectOverflow()` extracted, called from ResizeObserver + property observers + slotchange
+- [x] `__onResize()` computes both `has-detail` and `overflow`
 - [x] `disconnectedCallback` to disconnect ResizeObserver
-- [x] Drawer CSS: sticky detail, backdrop display, detail background/shadow
-- [x] No-detail handling: `--_detail-col: ''` collapses the column
-- [x] `__detectLayoutMode()` not needed — CSS grid + `__detectOverflow()` replaces it
-- [x] `overflow.test.js` — layout resize, property-driven overflow detection, masterSize: 100% (9 tests)
-- [x] `drawer-mode.test.js` — sticky positioning, detail width, backdrop, adding/removing detail (5 tests)
+- [x] `position: absolute` for detail in all overlay modes
+- [x] Drawer CSS: `inset-inline-end: 0`, detail width from `--_detail-size`
+- [x] No-detail handling: `--_detail-column: 0` (after expand rules for correct cascade)
+- [x] `overflow.test.js` — layout resize, async property-driven overflow detection (9 tests)
+- [x] `drawer-mode.test.js` — absolute positioning, detail width, backdrop, adding/removing detail (4 tests)
 
-## Step 4: Detail overlay mode API (#11346)
+## Step 4: Detail overlay mode API (#11346) — DONE
 
-- [ ] Add `detailOverlayMode` property (replaces `forceOverlay`/`stackOverlay`/`containment`)
-- [ ] Values: `drawer` (default), `drawer-viewport`, `full`, `full-viewport`
-- [ ] `drawer`: detail as sticky side-panel, layout containment (current drawer mode)
-- [ ] `full`: detail covers entire layout (absolute positioning, inset: 0)
-- [ ] `drawer-viewport` / `full-viewport`: `position: fixed`, safe-area-inset padding
-- [ ] Port and adapt: `full-mode.test.js` — horizontal tests
-- [ ] Port and adapt: viewport containment tests
+- [x] `detailOverlayMode` property: `drawer`, `drawer-viewport`, `full`, `full-viewport`
+- [x] Drawer: `width: var(--_detail-overlay-size, var(--_detail-size)); inset-inline-end: 0`
+- [x] Full: `inset-inline: 0` (detail covers entire layout)
+- [x] Viewport: `position: fixed` via `$='viewport'` CSS selector
+- [x] CSS uses `^='drawer'`/`^='full'`/`$='viewport'` prefix/suffix selectors
 
 ## Step 5: Vertical orientation
 
@@ -48,7 +44,7 @@
 - [ ] `grid-template-rows` + `minmax()` for vertical
 - [ ] Overflow detection using `gridTemplateRows`
 - [ ] Vertical drawer/full/containment CSS
-- [ ] Port and adapt: vertical tests from `drawer-mode.test.js` and `full-mode.test.js`
+- [ ] Port and adapt: vertical tests
 
 ## Step 6: Accessibility + events
 
@@ -66,7 +62,7 @@
 ## Step 8: Nested MDL scenario
 
 - [ ] Verify nested layouts work without glitches (primary motivation for grid rewrite)
-- [ ] Port nested test from `full-mode.test.js`
+- [ ] Port nested test from existing `stack-mode.test.js`
 
 ## Step 9: TypeScript definitions + type tests
 

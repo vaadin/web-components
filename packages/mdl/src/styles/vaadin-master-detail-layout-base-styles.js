@@ -38,10 +38,6 @@ export const masterDetailLayoutStyles = css`
     forced-color-adjust: none;
   }
 
-  :host(:not([has-detail])) {
-    --_detail-column: 0;
-  }
-
   :host([expand='both']) {
     --_master-column: minmax(var(--_master-size), 1fr);
     --_detail-column: minmax(var(--_detail-size), 1fr);
@@ -53,6 +49,10 @@ export const masterDetailLayoutStyles = css`
 
   :host([expand='detail']) {
     --_detail-column: minmax(var(--_detail-size), 1fr);
+  }
+
+  :host(:not([has-detail])) {
+    --_detail-column: 0;
   }
 
   :host([overflow]) [part~='detail'] {
