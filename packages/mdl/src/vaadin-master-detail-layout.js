@@ -181,23 +181,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   __onResize() {
     const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = this.__checkDetailVisibility();
-
-    // Update has-detail and clear preserve-master-width before reading
-    // column widths. Both affect CSS column definitions: has-detail controls
-    // the preserve-master-width CSS rule, and preserve-master-width itself
-    // inflates the master extra track via calc(100% - size), which would
-    // distort the overflow measurement.
-    this.toggleAttribute('has-detail', hasDetail);
-    this.removeAttribute('preserve-master-width');
-
     const hasOverflow = hasDetail && this.__checkOverflow();
 
     // Set preserve-master-width when detail first appears with overflow
     // to prevent master width from jumping.
     if (!hadDetail && hasDetail && hasOverflow) {
       this.setAttribute('preserve-master-width', '');
+    } else if (!hasDetail || !hasOverflow) {
+      this.removeAttribute('preserve-master-width');
     }
 
+    this.toggleAttribute('has-detail', hasDetail);
     this.toggleAttribute('overflow', hasOverflow);
   }
 
@@ -212,7 +206,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     if (masterWidth + masterExtraSpace + detailWidth <= this.offsetWidth) {
       return false;
     }
-    if (masterExtraSpace > detailWidth) {
+    if (masterExtraSpace >= detailWidth) {
       return false;
     }
     return true;

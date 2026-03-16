@@ -28,7 +28,8 @@
 - [x] 4-column grid with named lines: `[master-start] size extra [detail-start] size extra [detail-end]`
 - [x] `preserve-master-width` attribute prevents master jump on detail open
 - [x] `setTimeout` in ResizeObserver to avoid loop from attribute-driven CSS changes
-- [x] Fix: `__onResize()` updates `has-detail` before reading column widths; `hasOverflow` gated on `hasDetail`
+- [x] Fix: `__onResize()` read-then-write pattern (no forced reflows); `hasOverflow` gated on `hasDetail`
+- [x] Fix: `>=` instead of `>` in extra space check — handles `calc(100% - size)` inflation at boundary
 - [x] `overflow.test.js` — layout resize, async property-driven overflow detection (9 tests)
 
 ## Step 4: Detail overlay mode API (#11346) — DONE
