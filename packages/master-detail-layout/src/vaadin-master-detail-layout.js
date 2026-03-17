@@ -13,6 +13,14 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
 import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-base-styles.js';
 
+function parseTrackSizes(gridTemplate) {
+  return gridTemplate
+    .replace(/\[[^\]]+\]/gu, '')
+    .replace(/\s+/gu, ' ')
+    .trim()
+    .split(' ')
+    .map(parseFloat);
+}
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
@@ -279,26 +287,20 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   /** @private */
   __checkOverflow() {
     const isVertical = this.orientation === 'vertical';
-    const [masterSize, masterExtra, detailSize] = this.__getComputedTrackSizes(isVertical);
-    const hostSize = isVertical ? this.offsetHeight : this.offsetWidth;
-    if (Math.round(masterSize + masterExtra + detailSize) <= hostSize) {
+    const computedStyle = getComputedStyle(this);
+
+    const hostSize = parseFloat(computedStyle[isVertical ? 'height' : 'width']);
+    const [masterSize, masterExtra, detailSize] = parseTrackSizes(
+      computedStyle[isVertical ? 'gridTemplateRows' : 'gridTemplateColumns'],
+    );
+
+    if (Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)) {
       return false;
     }
-    if (masterExtra >= detailSize) {
+    if (Math.floor(masterExtra) >= Math.floor(detailSize)) {
       return false;
     }
     return true;
-  }
-
-  /** @private */
-  __getComputedTrackSizes(vertical) {
-    const prop = vertical ? 'gridTemplateRows' : 'gridTemplateColumns';
-    return getComputedStyle(this)
-      [prop].replace(/\[[^\]]+\]/gu, '')
-      .replace(/\s+/gu, ' ')
-      .trim()
-      .split(' ')
-      .map(parseFloat);
   }
 
   /** @private */
