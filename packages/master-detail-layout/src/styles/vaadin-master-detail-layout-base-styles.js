@@ -8,8 +8,8 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
-    --_master-column: var(--_master-size) 0;
-    --_detail-column: var(--_detail-size) 0;
+    --_master-column: var(--_master-size, 1fr) 0;
+    --_detail-column: var(--_detail-size, 1fr) 0;
 
     display: grid;
     box-sizing: border-box;
@@ -63,17 +63,17 @@ export const masterDetailLayoutStyles = css`
 
   :host([expand='both']),
   :host([expand='master']) {
-    --_master-column: var(--_master-size) 1fr;
+    --_master-column: var(--_master-size, 0) 1fr;
   }
 
-  :host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
-  :host([expand='master']:is(:not([has-detail]), [preserve-master-width])) {
-    --_master-column: var(--_master-size) calc(100% - var(--_master-size));
+  :host([expand='both'][has-master-size]:is(:not([has-detail]), [preserve-master-width])),
+  :host([expand='master'][has-master-size]:is(:not([has-detail]), [preserve-master-width])) {
+    --_master-column: var(--_master-size, 0) calc(100% - var(--_master-size, 0));
   }
 
   :host([expand='both']),
   :host([expand='detail']) {
-    --_detail-column: var(--_detail-size) 1fr;
+    --_detail-column: var(--_detail-size, 0) 1fr;
   }
 
   /* Split mode borders */
@@ -109,7 +109,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([overflow]:not([orientation='vertical'])[detail-overlay-mode^='drawer']) [part~='detail'] {
-    width: var(--_detail-size);
+    width: var(--_detail-size, min-content);
     inset-inline-end: 0;
   }
 
@@ -126,7 +126,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([overflow][orientation='vertical'][detail-overlay-mode^='drawer']) [part~='detail'] {
-    height: var(--_detail-size);
+    height: var(--_detail-size, min-content);
     inset-block-end: 0;
   }
 

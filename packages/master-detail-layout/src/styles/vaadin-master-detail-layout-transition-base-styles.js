@@ -44,7 +44,7 @@ export const masterDetailLayoutTransitionStyles = css`
       view-transition-name: vaadin-mdl-backdrop;
     }
 
-    vaadin-master-detail-layout[transition]:not([transition='replace']):not([has-detail][overflow])::part(detail),
+    vaadin-master-detail-layout[transition][has-detail]:not([transition='replace']):not([overflow])::part(detail),
     vaadin-master-detail-layout[transition][has-detail][overflow]::part(detail) {
       view-transition-name: vaadin-mdl-detail;
     }
@@ -129,7 +129,7 @@ export const masterDetailLayoutTransitionStyles = css`
     }
 
     /* prettier-ignore */
-    vaadin-master-detail-layout[orientation='vertical']:not([has-detail][overflow])[transition]:not([transition='replace'])::part(detail),
+    vaadin-master-detail-layout[orientation='vertical'][has-detail]:not([overflow])[transition]:not([transition='replace'])::part(detail),
     vaadin-master-detail-layout[orientation='vertical'][has-detail][overflow][transition]::part(detail) {
       view-transition-name: vaadin-mdl-detail;
       view-transition-class: vertical;
