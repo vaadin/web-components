@@ -117,9 +117,10 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /**
-       * Controls the containment of the overlay detail panel.
-       * Possible values: `'layout'`, `'viewport'`.
-       * Defaults to `'layout'`.
+       * Defines the containment of the detail area when the layout is in
+       * overlay mode. When set to `layout`, the overlay is confined to the
+       * layout. When set to `viewport`, the overlay is confined to the
+       * browser's viewport. Defaults to `layout`.
        *
        * @attr {string} overlay-containment
        */
