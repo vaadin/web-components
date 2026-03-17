@@ -218,7 +218,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
     this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
-    const children = this.querySelectorAll('[slot="detail"], :not([slot])');
+    const children = this.querySelectorAll(':scope > [slot="detail"], :scope >:not([slot])');
     [this, this.$.master, this.$.detail, ...children].forEach((node) => {
       this.__resizeObserver.observe(node);
     });

@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import { onceResized } from './helpers.js';
 
@@ -64,6 +65,61 @@ describe('vaadin-master-detail-layout', () => {
     it('should reflect expand property to attribute', () => {
       layout.expand = 'master';
       expect(layout.getAttribute('expand')).to.equal('master');
+    });
+  });
+
+  describe('resize observer', () => {
+    let onResizeSpy;
+
+    beforeEach(() => {
+      onResizeSpy = sinon.spy(layout, '__onResize');
+    });
+
+    it('should trigger observer when layout is resized', async () => {
+      layout.style.height = '100px';
+      await onceResized(layout);
+      expect(onResizeSpy).to.be.calledOnce;
+    });
+
+    it('should trigger observer when master part is resized', async () => {
+      layout.$.master.style.height = '100px';
+      await onceResized(layout);
+      expect(onResizeSpy).to.be.calledOnce;
+    });
+
+    it('should trigger observer when detail part is resized', async () => {
+      layout.$.detail.style.height = '100px';
+      await onceResized(layout);
+      expect(onResizeSpy).to.be.calledOnce;
+    });
+
+    it('should trigger observer when a direct child is resized', async () => {
+      for (const child of layout.children) {
+        child.style.height = '100px';
+        await onceResized(layout);
+        expect(onResizeSpy).to.be.calledOnce;
+        onResizeSpy.resetHistory();
+      }
+    });
+
+    it('should not trigger observer when a nested layout child is resized', async () => {
+      const nestedLayout = fixtureSync(
+        `
+          <vaadin-master-detail-layout style="height: 200px;">
+            <div>Nested Master</div>
+            <div slot="detail">Nested Detail</div>
+          </vaadin-master-detail-layout>
+        `,
+      );
+      layout.appendChild(nestedLayout);
+      await onceResized(layout);
+      onResizeSpy.resetHistory();
+
+      [...nestedLayout.children].forEach((child) => {
+        child.style.height = '100px';
+      });
+      await onceResized(layout);
+      expect(onResizeSpy).to.be.not.called;
     });
   });
 
