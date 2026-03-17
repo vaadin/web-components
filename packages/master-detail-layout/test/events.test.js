@@ -60,6 +60,19 @@ describe('events', () => {
         focusable = detail.shadowRoot.querySelector('input');
       });
 
+      it('should fire detail-escape-press event on pressing Escape in split mode', async () => {
+        layout.style.width = '800px';
+        await onceResized(layout);
+
+        const spy = sinon.spy();
+        layout.addEventListener('detail-escape-press', spy);
+
+        focusable.focus();
+        await sendKeys({ press: 'Escape' });
+
+        expect(spy).to.be.calledOnce;
+      });
+
       it('should fire detail-escape-press event on pressing Escape in overlay mode', async () => {
         const spy = sinon.spy();
         layout.addEventListener('detail-escape-press', spy);
