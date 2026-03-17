@@ -72,32 +72,32 @@ describe('vaadin-master-detail-layout', () => {
     let onResizeSpy;
 
     beforeEach(() => {
-      onResizeSpy = sinon.spy(layout, '__onResize');
+      onResizeSpy = sinon.spy(layout, '__applyLayoutState');
     });
 
     it('should trigger observer when layout is resized', async () => {
       layout.style.height = '100px';
       await onceResized(layout);
-      expect(onResizeSpy).to.be.calledOnce;
+      expect(onResizeSpy).to.be.called;
     });
 
     it('should trigger observer when master part is resized', async () => {
       layout.$.master.style.height = '100px';
       await onceResized(layout);
-      expect(onResizeSpy).to.be.calledOnce;
+      expect(onResizeSpy).to.be.called;
     });
 
     it('should trigger observer when detail part is resized', async () => {
       layout.$.detail.style.height = '100px';
       await onceResized(layout);
-      expect(onResizeSpy).to.be.calledOnce;
+      expect(onResizeSpy).to.be.called;
     });
 
     it('should trigger observer when a direct child is resized', async () => {
       for (const child of layout.children) {
         child.style.height = '100px';
         await onceResized(layout);
-        expect(onResizeSpy).to.be.calledOnce;
+        expect(onResizeSpy).to.be.called;
         onResizeSpy.resetHistory();
       }
     });

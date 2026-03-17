@@ -49,20 +49,22 @@ When `masterSize`/`detailSize` are not set, the grid template becomes invalid an
 
 The `>=` (not `>`) is intentional: when `preserve-master-width` or `:not([has-detail])` is active, CSS `calc(100% - masterSize)` inflates the master extra track. With this inflation, `masterExtra >= detailSize` is equivalent to `hostSize >= masterSize + detailSize` — the correct no-overflow check. Strict `>` would miss the boundary case where they're equal.
 
-### `__onResize()` pattern
+### Read/write separation
 
-Reads happen synchronously, writes are deferred to `requestAnimationFrame`:
+Layout detection is split into two methods to avoid forced reflows:
 
-1. **Read** (sync): save previous `has-detail`, compute detail visibility via `checkVisibility()`, check overflow, find first focusable element in detail
-2. **Write** (rAF): set/clear `preserve-master-width`, toggle `has-detail` and `overflow`, call `requestUpdate()` for ARIA, focus detail if it just appeared in overlay
-
-Accepts a `sync` parameter to write immediately (used by `_finishTransition()` so the view transition snapshot captures the correct overlay state).
+- **`__computeLayoutState()`** — pure reads: `checkVisibility()`, `getComputedStyle()`, `getFocusableElements()`. Called in the ResizeObserver callback where layout is already computed — no forced reflow.
+- **`__applyLayoutState(state)`** — pure writes: toggles `has-detail`, `overflow`, `preserve-master-width`; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
 
 ### ResizeObserver
 
 - **Observes**: host + shadow DOM parts (`master`, `detail`) + direct slotted children (`:scope >` prevents observing nested descendants)
-- **No debouncer**: `__onResize()` is called directly from ResizeObserver; the rAF inside `__onResize()` naturally batches writes
+- ResizeObserver callback: calls `__computeLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__applyLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
+
+### View transitions
+
+`_finishTransition()` uses `queueMicrotask` to call both `__computeLayoutState()` + `__applyLayoutState()` synchronously. The microtask runs before the Promise resolution propagates to `startViewTransition`, ensuring the "new" snapshot captures the correct overlay state (backdrop, absolute positioning). The `getComputedStyle` read in the microtask does cause a forced reflow, but this is unavoidable for correct transition snapshots.
 
 ## Overlay Modes
 
@@ -98,11 +100,11 @@ Set when detail first appears with overflow, cleared when detail is removed or o
 
 ## View Transitions
 
-Uses the CSS View Transitions API:
+Uses the CSS View Transitions API (`document.startViewTransition`):
 
 - `_setDetail(element, skipTransition)` — adds/replaces/removes detail with animation
 - `_startTransition(transitionType, updateCallback)` — starts a named transition
-- `_finishTransition()` — calls `__onResize(true)` synchronously to set overlay state before the browser takes the "new" snapshot, then resolves the transition
+- `_finishTransition()` — calls `__computeLayoutState()` + `__applyLayoutState()` via `queueMicrotask` (see read/write separation above)
 - `noAnimation` property disables transitions
 - Styles injected via `SlotStylesMixin`
 

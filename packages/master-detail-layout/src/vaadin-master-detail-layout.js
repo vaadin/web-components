@@ -225,43 +225,53 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /**
-   * Called by the ResizeObserver whenever the host element is resized.
-   * Updates `has-detail` and `overflow` attributes.
+   * Called by the ResizeObserver. Reads layout state synchronously (no forced
+   * reflow since layout is already computed), then defers writes to rAF.
+   * Cancels any pending rAF so the write phase always uses the latest state.
    * @private
    */
-  __onResize(sync) {
+  __onResize() {
+    const state = this.__computeLayoutState();
+    cancelAnimationFrame(this.__resizeRaf);
+    this.__resizeRaf = requestAnimationFrame(() => this.__applyLayoutState(state));
+  }
+
+  /**
+   * Reads DOM/style state needed for layout detection. Safe to call in
+   * ResizeObserver callback where layout is already computed (no forced reflow).
+   * @private
+   */
+  __computeLayoutState() {
     const detailContent = this.querySelector('[slot="detail"]');
     const hadDetail = this.hasAttribute('has-detail');
-    const hasDetail = detailContent && detailContent.checkVisibility();
+    const hasDetail = detailContent != null && detailContent.checkVisibility();
     const hasOverflow = hasDetail && this.__checkOverflow();
-    const detailFirstFocusable = hasDetail ? getFocusableElements(detailContent)[0] : null;
+    const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
+    return { hadDetail, hasDetail, hasOverflow, focusTarget };
+  }
 
-    const writeDOM = () => {
-      // Set preserve-master-width when detail first appears with overflow
-      // to prevent master width from jumping.
-      if (!hadDetail && hasDetail && hasOverflow) {
-        this.setAttribute('preserve-master-width', '');
-      } else if (!hasDetail || !hasOverflow) {
-        this.removeAttribute('preserve-master-width');
-      }
+  /**
+   * Applies layout state to DOM attributes. Pure writes, no reads.
+   * @private
+   */
+  __applyLayoutState({ hadDetail, hasDetail, hasOverflow, focusTarget }) {
+    // Set preserve-master-width when detail first appears with overflow
+    // to prevent master width from jumping.
+    if (!hadDetail && hasDetail && hasOverflow) {
+      this.setAttribute('preserve-master-width', '');
+    } else if (!hasDetail || !hasOverflow) {
+      this.removeAttribute('preserve-master-width');
+    }
 
-      this.toggleAttribute('has-detail', hasDetail);
-      this.toggleAttribute('overflow', hasOverflow);
+    this.toggleAttribute('has-detail', hasDetail);
+    this.toggleAttribute('overflow', hasOverflow);
 
-      // Re-render to update ARIA attributes (role, aria-modal, inert)
-      // which depend on has-detail and overflow state.
-      this.requestUpdate();
+    // Re-render to update ARIA attributes (role, aria-modal, inert)
+    // which depend on has-detail and overflow state.
+    this.requestUpdate();
 
-      // Focus first focusable element when detail appears in overlay mode
-      if (!hadDetail && hasDetail && hasOverflow && detailFirstFocusable) {
-        detailFirstFocusable.focus();
-      }
-    };
-
-    if (sync) {
-      writeDOM();
-    } else {
-      requestAnimationFrame(writeDOM);
+    if (focusTarget) {
+      focusTarget.focus();
     }
   }
 
@@ -399,11 +409,13 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * @protected
    */
   async _finishTransition() {
-    // Synchronously detect layout mode before resolving the transition,
-    // so the browser's "new" snapshot includes the correct overlay state
-    // (backdrop visible, detail absolutely positioned). Without this,
-    // the snapshot captures the detail in the grid with no backdrop.
-    this.__onResize(true);
+    // Detect layout mode before resolving the transition, so the browser's
+    // "new" snapshot includes the correct overlay state. The microtask runs
+    // before the Promise resolution propagates to startViewTransition.
+    queueMicrotask(() => {
+      const state = this.__computeLayoutState();
+      this.__applyLayoutState(state);
+    });
 
     if (!this.__transition) {
       return Promise.resolve();
