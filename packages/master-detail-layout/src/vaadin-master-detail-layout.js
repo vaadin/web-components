@@ -21,6 +21,7 @@ function parseTrackSizes(gridTemplate) {
     .split(' ')
     .map(parseFloat);
 }
+
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
