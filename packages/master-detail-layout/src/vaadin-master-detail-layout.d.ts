@@ -82,6 +82,14 @@ declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMi
   overlaySize: string | null | undefined;
 
   /**
+   * Define how master and detail areas are shown next to each other,
+   * and the way how size and min-size properties are applied to them.
+   * Possible values are: `horizontal` or `vertical`.
+   * Defaults to horizontal.
+   */
+  orientation: 'horizontal' | 'vertical';
+
+  /**
    * Defines the containment of the detail area when the layout is in
    * overlay mode. When set to `layout`, the overlay is confined to the
    * layout. When set to `viewport`, the overlay is confined to the
@@ -97,13 +105,6 @@ declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMi
    * Defaults to `'both'`.
    */
   expand: 'master' | 'detail' | 'both';
-
-  /**
-   * Controls the layout orientation.
-   * Possible values: `'horizontal'`, `'vertical'`.
-   * Defaults to `'horizontal'`.
-   */
-  orientation: 'horizontal' | 'vertical';
 
   /**
    * When true, the layout does not use animated transitions for the detail area.

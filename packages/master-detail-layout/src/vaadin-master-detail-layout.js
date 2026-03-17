@@ -117,6 +117,19 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /**
+       * Define how master and detail areas are shown next to each other,
+       * and the way how size and min-size properties are applied to them.
+       * Possible values are: `horizontal` or `vertical`.
+       * Defaults to horizontal.
+       */
+      orientation: {
+        type: String,
+        value: 'horizontal',
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
        * Defines the containment of the detail area when the layout is in
        * overlay mode. When set to `layout`, the overlay is confined to the
        * layout. When set to `viewport`, the overlay is confined to the
@@ -139,18 +152,6 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       expand: {
         type: String,
         value: 'both',
-        reflectToAttribute: true,
-        sync: true,
-      },
-
-      /**
-       * Controls the layout orientation.
-       * Possible values: `'horizontal'`, `'vertical'`.
-       * Defaults to `'horizontal'`.
-       */
-      orientation: {
-        type: String,
-        value: 'horizontal',
         reflectToAttribute: true,
         sync: true,
       },
