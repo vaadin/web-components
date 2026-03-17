@@ -44,7 +44,7 @@ When `masterSize`/`detailSize` are not set, the grid template becomes invalid an
 
 **No overflow** when either:
 
-- `masterSize + masterExtra + detailSize <= hostSize` (tracks fit)
+- `Math.round(masterSize + masterExtra + detailSize) <= hostSize` (tracks fit; rounding prevents false overflow from sub-pixel track sizes vs integer `offsetWidth`)
 - `masterExtra >= detailSize` (master's extra space can absorb the detail)
 
 The `>=` (not `>`) is intentional: when `preserve-master-width` or `:not([has-detail])` is active, CSS `calc(100% - masterSize)` inflates the master extra track. With this inflation, `masterExtra >= detailSize` is equivalent to `hostSize >= masterSize + detailSize` — the correct no-overflow check. Strict `>` would miss the boundary case where they're equal.
@@ -58,7 +58,7 @@ Reads happen synchronously, writes are deferred to `requestAnimationFrame`:
 
 ### ResizeObserver
 
-- **Observes**: host + shadow DOM parts (`master`, `detail`) + slotted light DOM children
+- **Observes**: host + shadow DOM parts (`master`, `detail`) + direct slotted children (`:scope >` prevents observing nested descendants)
 - **No debouncer**: `__onResize()` is called directly from ResizeObserver; the rAF inside `__onResize()` naturally batches writes
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
 
