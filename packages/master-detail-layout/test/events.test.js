@@ -37,14 +37,14 @@ describe('events', () => {
         await resetMouse();
       });
 
-      it('should fire backdrop-click event on backdrop click in drawer mode', async () => {
+      it('should fire backdrop-click event on backdrop click in overlay mode', async () => {
         const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
         const bounds = backdrop.getBoundingClientRect();
         await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
         expect(spy).to.be.calledOnce;
       });
 
-      it('should not fire backdrop-click event on detail content click in drawer mode', async () => {
+      it('should not fire backdrop-click event on detail content click in overlay mode', async () => {
         const detail = layout.querySelector('[slot="detail"]');
         const bounds = detail.getBoundingClientRect();
         await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });

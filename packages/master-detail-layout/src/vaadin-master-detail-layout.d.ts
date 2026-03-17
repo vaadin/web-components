@@ -26,7 +26,7 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * Part name      | Description
  * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the drawer mode
+ * `backdrop`     | Backdrop covering the master area in the overlay mode
  * `master`       | The master area
  * `detail`       | The detail area
  *

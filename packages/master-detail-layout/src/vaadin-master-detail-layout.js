@@ -33,7 +33,7 @@ function parseTrackSizes(gridTemplate) {
  *
  * Part name      | Description
  * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the drawer mode
+ * `backdrop`     | Backdrop covering the master area in the overlay mode
  * `master`       | The master area
  * `detail`       | The detail area
  *
@@ -59,7 +59,7 @@ function parseTrackSizes(gridTemplate) {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  *
  * @customElement vaadin-master-detail-layout
@@ -454,7 +454,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
 
   /**
    * @event backdrop-click
-   * Fired when the user clicks the backdrop in the drawer mode.
+   * Fired when the user clicks the backdrop in the overlay mode.
    */
 
   /**

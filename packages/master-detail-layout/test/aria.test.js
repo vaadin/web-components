@@ -24,7 +24,7 @@ describe('ARIA', () => {
     detail = layout.shadowRoot.querySelector('[part="detail"]');
   });
 
-  it('should set role to dialog on the detail part in drawer overlay mode', () => {
+  it('should set role to dialog on the detail part in overlay mode', () => {
     expect(layout.hasAttribute('overflow')).to.be.true;
     expect(detail.getAttribute('role')).to.equal('dialog');
   });
