@@ -80,18 +80,6 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   static get properties() {
     return {
       /**
-       * Size (in CSS length units) for the master column.
-       * Used as the basis for the master column in the CSS grid layout.
-       *
-       * @attr {string} master-size
-       */
-      masterSize: {
-        type: String,
-        sync: true,
-        observer: '__masterSizeChanged',
-      },
-
-      /**
        * Size (in CSS length units) for the detail column.
        * Used as the basis for the detail column in the CSS grid layout.
        *
@@ -101,6 +89,18 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
         type: String,
         sync: true,
         observer: '__detailSizeChanged',
+      },
+
+      /**
+       * Size (in CSS length units) for the master column.
+       * Used as the basis for the master column in the CSS grid layout.
+       *
+       * @attr {string} master-size
+       */
+      masterSize: {
+        type: String,
+        sync: true,
+        observer: '__masterSizeChanged',
       },
 
       /**
