@@ -24,44 +24,44 @@ describe('ARIA', () => {
     detail = layout.shadowRoot.querySelector('[part="detail"]');
   });
 
-  it('should set role to dialog on the detail part in overlay mode', () => {
+  it('should set role="dialog" on detail in overlay mode', () => {
     expect(layout.hasAttribute('overflow')).to.be.true;
     expect(detail.getAttribute('role')).to.equal('dialog');
   });
 
-  it('should remove role when overflow is resolved', async () => {
+  it('should remove role="dialog" when switching from overlay to split mode', async () => {
     layout.style.width = '800px';
     await onceResized(layout);
     expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set role to dialog on the detail part with overlaySize 100%', async () => {
+  it('should set role="dialog" on detail in overlay mode with overlaySize 100%', async () => {
     layout.overlaySize = '100%';
     await onceResized(layout);
     expect(detail.getAttribute('role')).to.equal('dialog');
   });
 
-  it('should set aria-modal on the detail part with viewport overlay containment', async () => {
+  it('should set aria-modal on detail with viewport containment', async () => {
     layout.overlayContainment = 'viewport';
     await onceResized(layout);
     expect(detail.getAttribute('aria-modal')).to.equal('true');
   });
 
-  it('should not set aria-modal with layout-contained overlay mode', () => {
+  it('should not set aria-modal on detail with layout containment', () => {
     expect(detail.hasAttribute('aria-modal')).to.be.false;
   });
 
-  it('should set inert on the master part with layout-contained overlay', () => {
+  it('should set inert on master with layout containment', () => {
     expect(master.hasAttribute('inert')).to.be.true;
   });
 
-  it('should not set inert on the master part with viewport overlay containment', async () => {
+  it('should not set inert on master with viewport containment', async () => {
     layout.overlayContainment = 'viewport';
     await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
   });
 
-  it('should not set inert on the master part when detail is removed', async () => {
+  it('should not set inert on master when detail is removed', async () => {
     layout.querySelector('[slot="detail"]').remove();
     await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
