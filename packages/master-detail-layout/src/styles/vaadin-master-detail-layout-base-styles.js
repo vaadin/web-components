@@ -18,10 +18,11 @@ export const masterDetailLayoutStyles = css`
     z-index: 0;
     overflow: hidden;
     grid-template-columns: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
+    grid-template-rows: 100%;
   }
 
   :host([orientation='vertical']) {
-    grid-template-columns: none;
+    grid-template-columns: 100%;
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
   }
 
