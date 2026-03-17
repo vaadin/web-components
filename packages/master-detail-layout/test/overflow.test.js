@@ -85,6 +85,31 @@ describe('overflow detection', () => {
     });
   });
 
+  describe('sub-pixel rounding', () => {
+    let layout;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-master-detail-layout master-size="300px" detail-size="300px" style="width: 600.4px;">
+          <div>Master</div>
+          <div slot="detail">Detail</div>
+        </vaadin-master-detail-layout>
+      `);
+      await onceResized(layout);
+    });
+
+    it('should not report overflow when track sizes sum exceeds host offsetWidth only due to sub-pixel rounding', async () => {
+      // The host has a fractional width (600.4px), so offsetWidth rounds down to 600.
+      // With expand="both", the grid tracks are: 300px 1fr 300px 1fr.
+      // The 1fr tracks split the remaining ~0.4px, making the first three tracks
+      // sum to ~600.2px which exceeds offsetWidth (600) without Math.round().
+      // Wait for a second resize cycle since the rAF write may trigger another
+      // ResizeObserver callback.
+      await onceResized(layout);
+      expect(layout.hasAttribute('overflow')).to.be.false;
+    });
+  });
+
   describe('vertical', () => {
     let layout;
 

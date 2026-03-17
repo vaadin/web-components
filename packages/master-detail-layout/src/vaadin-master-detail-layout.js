@@ -264,7 +264,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
     const isVertical = this.orientation === 'vertical';
     const [masterSize, masterExtra, detailSize] = this.__getComputedTrackSizes(isVertical);
     const hostSize = isVertical ? this.offsetHeight : this.offsetWidth;
-    if (masterSize + masterExtra + detailSize <= hostSize) {
+    if (Math.round(masterSize + masterExtra + detailSize) <= hostSize) {
       return false;
     }
     if (masterExtra >= detailSize) {
