@@ -78,8 +78,8 @@ When `overflow` AND `has-detail` are both set, the detail becomes an overlay:
 
 ### Overlay positioning
 
-| Orientation | Default                                           | `overlayContainment='viewport'` |
-| ----------- | ------------------------------------------------- | ------------------------------- |
+| Orientation | Default                                              | `overlayContainment='viewport'` |
+| ----------- | ---------------------------------------------------- | ------------------------------- |
 | Horizontal  | `width: overlaySize/detailSize; inset-inline-end: 0` | `position: fixed`               |
 | Vertical    | `height: overlaySize/detailSize; inset-block-end: 0` | `position: fixed`               |
 
