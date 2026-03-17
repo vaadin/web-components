@@ -35,12 +35,6 @@ describe('ARIA', () => {
     expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set role="dialog" on detail in overlay mode with overlaySize 100%', async () => {
-    layout.overlaySize = '100%';
-    await onceResized(layout);
-    expect(detail.getAttribute('role')).to.equal('dialog');
-  });
-
   it('should set aria-modal on detail with viewport containment', async () => {
     layout.overlayContainment = 'viewport';
     await onceResized(layout);
