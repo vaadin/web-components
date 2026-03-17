@@ -185,6 +185,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   disconnectedCallback() {
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
+    cancelAnimationFrame(this.__resizeRaf);
   }
 
   /** @private */
