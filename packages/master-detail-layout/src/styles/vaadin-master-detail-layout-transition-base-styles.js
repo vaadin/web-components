@@ -68,9 +68,8 @@ export const masterDetailLayoutTransitionStyles = css`
       }
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full']::part(
-        master
-      ) {
+    /* prettier-ignore */
+    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full']::part(master) {
       translate: calc(var(--_vaadin-mdl-stack-master-offset) * var(--_vaadin-mdl-dir-multiplier) * -1);
       opacity: 0;
     }
@@ -79,15 +78,13 @@ export const masterDetailLayoutTransitionStyles = css`
       view-transition-name: vaadin-mdl-master;
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full'][transition='add']::part(
-        master
-      ) {
+    /* prettier-ignore */
+    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full'][transition='add']::part(master) {
       view-transition-class: stack-add;
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full'][transition='remove']::part(
-        master
-      ) {
+    /* prettier-ignore */
+    vaadin-master-detail-layout[orientation='horizontal'][has-detail][overflow][detail-overlay-mode^='full'][transition='remove']::part(master) {
       view-transition-class: stack-remove;
     }
 
