@@ -229,14 +229,14 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * Updates `has-detail` and `overflow` attributes.
    * @private
    */
-  __onResize() {
+  __onResize(sync) {
     const detailContent = this.querySelector('[slot="detail"]');
     const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = detailContent && detailContent.checkVisibility();
     const hasOverflow = hasDetail && this.__checkOverflow();
     const detailFirstFocusable = hasDetail ? getFocusableElements(detailContent)[0] : null;
 
-    requestAnimationFrame(() => {
+    const writeDOM = () => {
       // Set preserve-master-width when detail first appears with overflow
       // to prevent master width from jumping.
       if (!hadDetail && hasDetail && hasOverflow) {
@@ -256,7 +256,13 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       if (!hadDetail && hasDetail && hasOverflow && detailFirstFocusable) {
         detailFirstFocusable.focus();
       }
-    });
+    };
+
+    if (sync) {
+      writeDOM();
+    } else {
+      requestAnimationFrame(writeDOM);
+    }
   }
 
   /** @private */
@@ -393,6 +399,12 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * @protected
    */
   async _finishTransition() {
+    // Synchronously detect layout mode before resolving the transition,
+    // so the browser's "new" snapshot includes the correct overlay state
+    // (backdrop visible, detail absolutely positioned). Without this,
+    // the snapshot captures the detail in the grid with no backdrop.
+    this.__onResize(true);
+
     if (!this.__transition) {
       return Promise.resolve();
     }

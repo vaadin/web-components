@@ -56,6 +56,8 @@ Reads happen synchronously, writes are deferred to `requestAnimationFrame`:
 1. **Read** (sync): save previous `has-detail`, compute detail visibility via `checkVisibility()`, check overflow, find first focusable element in detail
 2. **Write** (rAF): set/clear `preserve-master-width`, toggle `has-detail` and `overflow`, call `requestUpdate()` for ARIA, focus detail if it just appeared in overlay
 
+Accepts a `sync` parameter to write immediately (used by `_finishTransition()` so the view transition snapshot captures the correct overlay state).
+
 ### ResizeObserver
 
 - **Observes**: host + shadow DOM parts (`master`, `detail`) + direct slotted children (`:scope >` prevents observing nested descendants)
@@ -100,7 +102,7 @@ Uses the CSS View Transitions API:
 
 - `_setDetail(element, skipTransition)` — adds/replaces/removes detail with animation
 - `_startTransition(transitionType, updateCallback)` — starts a named transition
-- `_finishTransition()` — resolves the transition
+- `_finishTransition()` — calls `__onResize(true)` synchronously to set overlay state before the browser takes the "new" snapshot, then resolves the transition
 - `noAnimation` property disables transitions
 - Styles injected via `SlotStylesMixin`
 
