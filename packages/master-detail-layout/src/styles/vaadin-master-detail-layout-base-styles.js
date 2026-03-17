@@ -90,7 +90,7 @@ export const masterDetailLayoutStyles = css`
 
   /* Shared overlay styles */
 
-  :host([has-detail][overflow]) [part~='detail'] {
+  :host([overflow]) [part~='detail'] {
     position: absolute;
     z-index: 2;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
@@ -98,53 +98,53 @@ export const masterDetailLayoutStyles = css`
     grid-column: none;
   }
 
-  :host([has-detail][overflow]) [part~='backdrop'] {
+  :host([overflow]) [part~='backdrop'] {
     display: block;
   }
 
   /* Horizontal overlay (default) */
 
-  :host([has-detail][overflow]:not([orientation='vertical'])) [part~='detail'] {
+  :host([overflow]:not([orientation='vertical'])) [part~='detail'] {
     inset-block: 0;
   }
 
-  :host([has-detail][overflow]:not([orientation='vertical'])[detail-overlay-mode^='drawer']) [part~='detail'] {
+  :host([overflow]:not([orientation='vertical'])[detail-overlay-mode^='drawer']) [part~='detail'] {
     width: var(--_detail-size);
     inset-inline-end: 0;
   }
 
-  :host([has-detail][overflow]:not([orientation='vertical'])[detail-overlay-mode^='full']) [part~='detail'] {
+  :host([overflow]:not([orientation='vertical'])[detail-overlay-mode^='full']) [part~='detail'] {
     inset-inline: 0;
   }
 
   /* Vertical overlay */
 
-  :host([has-detail][overflow][orientation='vertical']) [part~='detail'] {
+  :host([overflow][orientation='vertical']) [part~='detail'] {
     grid-column: auto;
     grid-row: none;
     inset-inline: 0;
   }
 
-  :host([has-detail][overflow][orientation='vertical'][detail-overlay-mode^='drawer']) [part~='detail'] {
+  :host([overflow][orientation='vertical'][detail-overlay-mode^='drawer']) [part~='detail'] {
     height: var(--_detail-size);
     inset-block-end: 0;
   }
 
-  :host([has-detail][overflow][orientation='vertical'][detail-overlay-mode^='full']) [part~='detail'] {
+  :host([overflow][orientation='vertical'][detail-overlay-mode^='full']) [part~='detail'] {
     inset-block: 0;
   }
 
   /* Viewport containment (both orientations) */
 
-  :host([has-detail][overflow][detail-overlay-mode$='viewport']) [part~='detail'],
-  :host([has-detail][overflow][detail-overlay-mode$='viewport']) [part~='backdrop'] {
+  :host([overflow][detail-overlay-mode$='viewport']) [part~='detail'],
+  :host([overflow][detail-overlay-mode$='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 
   /* Forced colors */
 
   @media (forced-colors: active) {
-    :host([has-detail][overflow]) [part~='detail'] {
+    :host([overflow]) [part~='detail'] {
       outline: 3px solid !important;
     }
 
