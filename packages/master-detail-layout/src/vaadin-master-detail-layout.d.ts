@@ -57,16 +57,20 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  */
 declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
-   * Size (in CSS length units) for the detail area.
-   * Used as the basis for the detail area in the CSS grid layout.
+   * Size (in CSS length units) to be set on the detail area in
+   * the CSS grid layout. If there is not enough space to show
+   * master and detail areas next to each other, the detail area
+   * is shown as an overlay.
    *
    * @attr {string} detail-size
    */
   detailSize: string | null | undefined;
 
   /**
-   * Size (in CSS length units) for the master area.
-   * Used as the basis for the master area in the CSS grid layout.
+   * Size (in CSS length units) to be set on the master area in
+   * the CSS grid layout. If there is not enough space to show
+   * master and detail areas next to each other, the detail area
+   * is shown as an overlay.
    *
    * @attr {string} master-size
    */
