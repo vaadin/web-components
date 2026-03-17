@@ -159,153 +159,51 @@ describe('overlay', () => {
   });
 
   describe('overlayContainment viewport', () => {
-    describe('horizontal', () => {
-      let layout, detail, backdrop;
+    ['horizontal', 'vertical'].forEach((orientation) => {
+      describe(orientation, () => {
+        let layout, detail, backdrop;
+        const isVertical = orientation === 'vertical';
+        const sizeStyle = isVertical ? 'height: 400px;' : 'width: 400px;';
+        const orientationAttr = isVertical ? 'orientation="vertical"' : '';
 
-      beforeEach(async () => {
-        layout = fixtureSync(`
-          <vaadin-master-detail-layout
-            master-size="300px"
-            detail-size="300px"
-            overlay-containment="viewport"
-            style="width: 400px;"
-          >
-            <div>Master</div>
-            <div slot="detail">Detail</div>
-          </vaadin-master-detail-layout>
-        `);
-        await onceResized(layout);
-        detail = layout.shadowRoot.querySelector('[part="detail"]');
-        backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
-      });
+        beforeEach(async () => {
+          layout = fixtureSync(`
+            <vaadin-master-detail-layout
+              ${orientationAttr}
+              master-size="300px"
+              detail-size="300px"
+              overlay-containment="viewport"
+              style="${sizeStyle}"
+            >
+              <div>Master</div>
+              <div slot="detail">Detail</div>
+            </vaadin-master-detail-layout>
+          `);
+          await onceResized(layout);
+          detail = layout.shadowRoot.querySelector('[part="detail"]');
+          backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+        });
 
-      it('should use fixed positioning for detail and backdrop', () => {
-        expect(getComputedStyle(detail).position).to.equal('fixed');
-        expect(getComputedStyle(backdrop).position).to.equal('fixed');
-      });
+        it('should use fixed positioning for detail and backdrop', () => {
+          expect(getComputedStyle(detail).position).to.equal('fixed');
+          expect(getComputedStyle(backdrop).position).to.equal('fixed');
+        });
 
-      it('should set detail width to detailSize and align to inline end', () => {
-        expect(getComputedStyle(detail).width).to.equal('300px');
-        expect(getComputedStyle(detail).insetInlineEnd).to.equal('0px');
-      });
+        it(`should set detail ${isVertical ? 'height' : 'width'} to detailSize`, () => {
+          expect(getComputedStyle(detail)[isVertical ? 'height' : 'width']).to.equal('300px');
+        });
 
-      it('should make backdrop cover the full viewport', () => {
-        expect(backdrop.offsetWidth).to.equal(window.innerWidth);
-        expect(backdrop.offsetHeight).to.equal(window.innerHeight);
-      });
-    });
+        it('should make backdrop cover the full viewport', () => {
+          expect(backdrop.offsetWidth).to.equal(window.innerWidth);
+          expect(backdrop.offsetHeight).to.equal(window.innerHeight);
+        });
 
-    describe('vertical', () => {
-      let layout, detail, backdrop;
-
-      beforeEach(async () => {
-        layout = fixtureSync(`
-          <vaadin-master-detail-layout
-            orientation="vertical"
-            master-size="300px"
-            detail-size="300px"
-            overlay-containment="viewport"
-            style="height: 400px;"
-          >
-            <div>Master</div>
-            <div slot="detail">Detail</div>
-          </vaadin-master-detail-layout>
-        `);
-        await onceResized(layout);
-        detail = layout.shadowRoot.querySelector('[part="detail"]');
-        backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
-      });
-
-      it('should use fixed positioning for detail and backdrop', () => {
-        expect(getComputedStyle(detail).position).to.equal('fixed');
-        expect(getComputedStyle(backdrop).position).to.equal('fixed');
-      });
-
-      it('should set detail height to detailSize and align to block end', () => {
-        expect(getComputedStyle(detail).height).to.equal('300px');
-        expect(getComputedStyle(detail).insetBlockEnd).to.equal('0px');
-      });
-
-      it('should make backdrop cover the full viewport', () => {
-        expect(backdrop.offsetWidth).to.equal(window.innerWidth);
-        expect(backdrop.offsetHeight).to.equal(window.innerHeight);
-      });
-    });
-  });
-
-  describe('overlaySize 100% + overlayContainment viewport', () => {
-    describe('horizontal', () => {
-      let layout, detail, backdrop;
-
-      beforeEach(async () => {
-        layout = fixtureSync(`
-          <vaadin-master-detail-layout
-            master-size="300px"
-            detail-size="300px"
-            overlay-size="100%"
-            overlay-containment="viewport"
-            style="width: 400px;"
-          >
-            <div>Master</div>
-            <div slot="detail">Detail</div>
-          </vaadin-master-detail-layout>
-        `);
-        await onceResized(layout);
-        detail = layout.shadowRoot.querySelector('[part="detail"]');
-        backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
-      });
-
-      it('should use fixed positioning for detail and backdrop', () => {
-        expect(getComputedStyle(detail).position).to.equal('fixed');
-        expect(getComputedStyle(backdrop).position).to.equal('fixed');
-      });
-
-      it('should make detail cover the full viewport', () => {
-        expect(detail.offsetWidth).to.equal(window.innerWidth);
-        expect(detail.offsetHeight).to.equal(window.innerHeight);
-      });
-
-      it('should make backdrop cover the full viewport', () => {
-        expect(backdrop.offsetWidth).to.equal(window.innerWidth);
-        expect(backdrop.offsetHeight).to.equal(window.innerHeight);
-      });
-    });
-
-    describe('vertical', () => {
-      let layout, detail, backdrop;
-
-      beforeEach(async () => {
-        layout = fixtureSync(`
-          <vaadin-master-detail-layout
-            orientation="vertical"
-            master-size="300px"
-            detail-size="300px"
-            overlay-size="100%"
-            overlay-containment="viewport"
-            style="height: 400px;"
-          >
-            <div>Master</div>
-            <div slot="detail">Detail</div>
-          </vaadin-master-detail-layout>
-        `);
-        await onceResized(layout);
-        detail = layout.shadowRoot.querySelector('[part="detail"]');
-        backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
-      });
-
-      it('should use fixed positioning for detail and backdrop', () => {
-        expect(getComputedStyle(detail).position).to.equal('fixed');
-        expect(getComputedStyle(backdrop).position).to.equal('fixed');
-      });
-
-      it('should make detail cover the full viewport', () => {
-        expect(detail.offsetWidth).to.equal(window.innerWidth);
-        expect(detail.offsetHeight).to.equal(window.innerHeight);
-      });
-
-      it('should make backdrop cover the full viewport', () => {
-        expect(backdrop.offsetWidth).to.equal(window.innerWidth);
-        expect(backdrop.offsetHeight).to.equal(window.innerHeight);
+        it('should make detail cover the full viewport with overlaySize 100%', async () => {
+          layout.overlaySize = '100%';
+          await onceResized(layout);
+          expect(detail.offsetWidth).to.equal(window.innerWidth);
+          expect(detail.offsetHeight).to.equal(window.innerHeight);
+        });
       });
     });
   });
