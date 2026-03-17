@@ -21,13 +21,13 @@ export const masterDetailLayoutStyles = css`
     grid-template-rows: 100%;
   }
 
+  :host([hidden]) {
+    display: none !important;
+  }
+
   :host([orientation='vertical']) {
     grid-template-columns: 100%;
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
-  }
-
-  :host([hidden]) {
-    display: none !important;
   }
 
   [part~='master'],
