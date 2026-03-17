@@ -80,8 +80,8 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   static get properties() {
     return {
       /**
-       * Size (in CSS length units) for the detail column.
-       * Used as the basis for the detail column in the CSS grid layout.
+       * Size (in CSS length units) for the detail area.
+       * Used as the basis for the detail area in the CSS grid layout.
        *
        * @attr {string} detail-size
        */
@@ -92,8 +92,8 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /**
-       * Size (in CSS length units) for the master column.
-       * Used as the basis for the master column in the CSS grid layout.
+       * Size (in CSS length units) for the master area.
+       * Used as the basis for the master area in the CSS grid layout.
        *
        * @attr {string} master-size
        */
@@ -104,9 +104,9 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /**
-       * Size (in CSS length units) for the overlay detail panel.
-       * When not set, the detail panel uses `detailSize` in overlay mode.
-       * Set to `100%` to make the detail cover the full layout.
+       * Size (in CSS length units) for the detail area when shown as an
+       * overlay. When not set, falls back to `detailSize`. Set to `100%`
+       * to make the detail cover the full layout.
        *
        * @attr {string} overlay-size
        */
