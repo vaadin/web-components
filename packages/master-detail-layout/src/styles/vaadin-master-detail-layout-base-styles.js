@@ -77,8 +77,6 @@ export const masterDetailLayoutStyles = css`
     --_detail-column: var(--_detail-size, 0) 1fr;
   }
 
-  /* Split mode borders */
-
   :host([orientation='horizontal'][has-detail]:not([overflow])) [part~='detail'] {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
@@ -88,8 +86,6 @@ export const masterDetailLayoutStyles = css`
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
-
-  /* Shared overlay styles */
 
   :host([overflow]) [part~='detail'] {
     position: absolute;
@@ -103,46 +99,24 @@ export const masterDetailLayoutStyles = css`
     display: block;
   }
 
-  /* Horizontal overlay (default) */
-
   :host([overflow]:not([orientation='vertical'])) [part~='detail'] {
     inset-block: 0;
-  }
-
-  :host([overflow]:not([orientation='vertical'])[detail-overlay-mode^='drawer']) [part~='detail'] {
-    width: var(--_detail-size, min-content);
+    width: var(--_overlay-size, var(--_detail-size, min-content));
     inset-inline-end: 0;
   }
-
-  :host([overflow]:not([orientation='vertical'])[detail-overlay-mode^='full']) [part~='detail'] {
-    inset-inline: 0;
-  }
-
-  /* Vertical overlay */
 
   :host([overflow][orientation='vertical']) [part~='detail'] {
     grid-column: auto;
     grid-row: none;
     inset-inline: 0;
-  }
-
-  :host([overflow][orientation='vertical'][detail-overlay-mode^='drawer']) [part~='detail'] {
-    height: var(--_detail-size, min-content);
+    height: var(--_overlay-size, var(--_detail-size, min-content));
     inset-block-end: 0;
   }
 
-  :host([overflow][orientation='vertical'][detail-overlay-mode^='full']) [part~='detail'] {
-    inset-block: 0;
-  }
-
-  /* Viewport containment (both orientations) */
-
-  :host([overflow][detail-overlay-mode$='viewport']) [part~='detail'],
-  :host([overflow][detail-overlay-mode$='viewport']) [part~='backdrop'] {
+  :host([overflow][overlay-containment='viewport']) [part~='detail'],
+  :host([overflow][overlay-containment='viewport']) [part~='backdrop'] {
     position: fixed;
   }
-
-  /* Forced colors */
 
   @media (forced-colors: active) {
     :host([overflow]) [part~='detail'] {

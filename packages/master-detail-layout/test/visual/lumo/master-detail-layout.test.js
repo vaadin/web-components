@@ -45,7 +45,7 @@ describe('master-detail-layout', () => {
         });
 
         it('viewport', async () => {
-          element.detailOverlayMode = 'drawer-viewport';
+          element.overlayContainment = 'viewport';
           await onceResized(element);
           await visualDiff(document.body, `${dir}-overlay-viewport`);
         });

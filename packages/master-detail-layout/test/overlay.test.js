@@ -7,8 +7,8 @@ window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
-describe('detail overlay mode', () => {
-  describe('drawer', () => {
+describe('overlay', () => {
+  describe('default (no overlaySize)', () => {
     describe('horizontal', () => {
       let layout, detail, backdrop;
 
@@ -40,7 +40,7 @@ describe('detail overlay mode', () => {
         expect(s.insetBlockEnd).to.equal('0px');
       });
 
-      it('should switch to drawer when detail is added to a narrow layout', async () => {
+      it('should switch to overlay when detail is added to a narrow layout', async () => {
         const detailContent = layout.querySelector('[slot="detail"]');
         detailContent.remove();
         await onceResized(layout);
@@ -85,7 +85,7 @@ describe('detail overlay mode', () => {
     });
   });
 
-  describe('full', () => {
+  describe('overlaySize 100%', () => {
     describe('horizontal', () => {
       let layout, detail, backdrop;
 
@@ -94,7 +94,7 @@ describe('detail overlay mode', () => {
           <vaadin-master-detail-layout
             master-size="300px"
             detail-size="300px"
-            detail-overlay-mode="full"
+            overlay-size="100%"
             style="width: 400px;"
           >
             <div>Master</div>
@@ -110,14 +110,6 @@ describe('detail overlay mode', () => {
         expect(getComputedStyle(backdrop).display).to.equal('block');
       });
 
-      it('should cover the full layout using inset', () => {
-        const s = getComputedStyle(detail);
-        expect(s.insetInlineStart).to.equal('0px');
-        expect(s.insetInlineEnd).to.equal('0px');
-        expect(s.insetBlockStart).to.equal('0px');
-        expect(s.insetBlockEnd).to.equal('0px');
-      });
-
       it('should make detail as wide as the layout', () => {
         expect(detail.offsetWidth).to.equal(layout.offsetWidth);
       });
@@ -128,7 +120,7 @@ describe('detail overlay mode', () => {
         expect(layout.hasAttribute('overflow')).to.be.false;
       });
 
-      it('should switch to full mode when detail is added to a narrow layout', async () => {
+      it('should switch to overlay when detail is added to a narrow layout', async () => {
         const detailContent = layout.querySelector('[slot="detail"]');
         detailContent.remove();
         await onceResized(layout);
@@ -149,7 +141,7 @@ describe('detail overlay mode', () => {
             orientation="vertical"
             master-size="300px"
             detail-size="300px"
-            detail-overlay-mode="full"
+            overlay-size="100%"
             style="height: 400px;"
           >
             <div>Master</div>
@@ -160,21 +152,13 @@ describe('detail overlay mode', () => {
         detail = layout.shadowRoot.querySelector('[part="detail"]');
       });
 
-      it('should cover the full layout using inset', () => {
-        const s = getComputedStyle(detail);
-        expect(s.insetBlockStart).to.equal('0px');
-        expect(s.insetBlockEnd).to.equal('0px');
-        expect(s.insetInlineStart).to.equal('0px');
-        expect(s.insetInlineEnd).to.equal('0px');
-      });
-
       it('should make detail as tall as the layout', () => {
         expect(detail.offsetHeight).to.equal(layout.offsetHeight);
       });
     });
   });
 
-  describe('drawer-viewport', () => {
+  describe('overlayContainment viewport', () => {
     describe('horizontal', () => {
       let layout, detail, backdrop;
 
@@ -183,7 +167,7 @@ describe('detail overlay mode', () => {
           <vaadin-master-detail-layout
             master-size="300px"
             detail-size="300px"
-            detail-overlay-mode="drawer-viewport"
+            overlay-containment="viewport"
             style="width: 400px;"
           >
             <div>Master</div>
@@ -220,7 +204,7 @@ describe('detail overlay mode', () => {
             orientation="vertical"
             master-size="300px"
             detail-size="300px"
-            detail-overlay-mode="drawer-viewport"
+            overlay-containment="viewport"
             style="height: 400px;"
           >
             <div>Master</div>
@@ -249,7 +233,7 @@ describe('detail overlay mode', () => {
     });
   });
 
-  describe('full-viewport', () => {
+  describe('overlaySize 100% + overlayContainment viewport', () => {
     describe('horizontal', () => {
       let layout, detail, backdrop;
 
@@ -258,7 +242,8 @@ describe('detail overlay mode', () => {
           <vaadin-master-detail-layout
             master-size="300px"
             detail-size="300px"
-            detail-overlay-mode="full-viewport"
+            overlay-size="100%"
+            overlay-containment="viewport"
             style="width: 400px;"
           >
             <div>Master</div>
@@ -295,7 +280,8 @@ describe('detail overlay mode', () => {
             orientation="vertical"
             master-size="300px"
             detail-size="300px"
-            detail-overlay-mode="full-viewport"
+            overlay-size="100%"
+            overlay-containment="viewport"
             style="height: 400px;"
           >
             <div>Master</div>

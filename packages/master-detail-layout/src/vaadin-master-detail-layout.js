@@ -45,7 +45,7 @@ function parseTrackSizes(gridTemplate) {
  * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`          | Set when the detail content is provided and visible.
  * `overflow`            | Set when columns don't fit and the detail is shown as an overlay.
- * `detail-overlay-mode` | Set to `drawer`, `drawer-viewport`, `full`, or `full-viewport`.
+ * `overlay-containment` | Set to `layout` or `viewport`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -104,15 +104,28 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /**
-       * Controls the overlay mode for the detail panel.
-       * Possible values: `'drawer'`, `'drawer-viewport'`, `'full'`, `'full-viewport'`.
-       * Defaults to `'drawer'`.
+       * Size (in CSS length units) for the overlay detail panel.
+       * When not set, the detail panel uses `detailSize` in overlay mode.
+       * Set to `100%` to make the detail cover the full layout.
        *
-       * @attr {string} detail-overlay-mode
+       * @attr {string} overlay-size
        */
-      detailOverlayMode: {
+      overlaySize: {
         type: String,
-        value: 'drawer',
+        sync: true,
+        observer: '__overlaySizeChanged',
+      },
+
+      /**
+       * Controls the containment of the overlay detail panel.
+       * Possible values: `'layout'`, `'viewport'`.
+       * Defaults to `'layout'`.
+       *
+       * @attr {string} overlay-containment
+       */
+      overlayContainment: {
+        type: String,
+        value: 'layout',
         reflectToAttribute: true,
         sync: true,
       },
@@ -164,7 +177,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   /** @protected */
   render() {
     const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overflow');
-    const isViewport = isOverlay && this.detailOverlayMode && this.detailOverlayMode.endsWith('viewport');
+    const isViewport = isOverlay && this.overlayContainment === 'viewport';
     const isLayoutContained = isOverlay && !isViewport;
 
     return html`
@@ -205,6 +218,11 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
+  }
+
+  /** @private */
+  __overlaySizeChanged(size, oldSize) {
+    this.__updateStyleProperty('overlay-size', size, oldSize);
   }
 
   /** @private */

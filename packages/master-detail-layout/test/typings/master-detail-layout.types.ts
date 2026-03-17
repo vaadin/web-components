@@ -13,7 +13,8 @@ assertType<ThemableMixinClass>(layout);
 // Properties
 assertType<string | null | undefined>(layout.detailSize);
 assertType<string | null | undefined>(layout.masterSize);
-assertType<'drawer' | 'drawer-viewport' | 'full' | 'full-viewport'>(layout.detailOverlayMode);
+assertType<string | null | undefined>(layout.overlaySize);
+assertType<'layout' | 'viewport'>(layout.overlayContainment);
 assertType<'master' | 'detail' | 'both'>(layout.expand);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
 assertType<boolean>(layout.noAnimation);

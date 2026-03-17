@@ -38,7 +38,7 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`          | Set when the detail content is provided and visible.
  * `overflow`            | Set when columns don't fit and the detail is shown as an overlay.
- * `detail-overlay-mode` | Set to `drawer`, `drawer-viewport`, `full`, or `full-viewport`.
+ * `overlay-containment` | Set to `layout` or `viewport`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -73,13 +73,22 @@ declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMi
   detailSize: string | null | undefined;
 
   /**
-   * Controls the overlay mode for the detail panel.
-   * Possible values: `'drawer'`, `'drawer-viewport'`, `'full'`, `'full-viewport'`.
-   * Defaults to `'drawer'`.
+   * Size (in CSS length units) for the overlay detail panel.
+   * When not set, the detail panel uses `detailSize` in overlay mode.
+   * Set to `100%` to make the detail cover the full layout.
    *
-   * @attr {string} detail-overlay-mode
+   * @attr {string} overlay-size
    */
-  detailOverlayMode: 'drawer' | 'drawer-viewport' | 'full' | 'full-viewport';
+  overlaySize: string | null | undefined;
+
+  /**
+   * Controls the containment of the overlay detail panel.
+   * Possible values: `'layout'`, `'viewport'`.
+   * Defaults to `'layout'`.
+   *
+   * @attr {string} overlay-containment
+   */
+  overlayContainment: 'layout' | 'viewport';
 
   /**
    * Controls which column(s) expand to fill available space.

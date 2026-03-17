@@ -14,13 +14,13 @@ vaadin-master-detail-layout[has-detail][overflow]::part(detail) {
     var(--aura-shadow-m);
 }
 
-vaadin-master-detail-layout[has-detail][overflow][detail-overlay-mode$='viewport']::part(detail) {
+vaadin-master-detail-layout[has-detail][overflow][overlay-containment='viewport']::part(detail) {
   box-shadow: var(--aura-overlay-shadow);
 }
 
 /* TODO could be a built-in variant */
 vaadin-master-detail-layout[theme~='inset-drawer'][has-detail][overflow]::part(detail),
-vaadin-master-detail-layout[has-detail][overflow][detail-overlay-mode$='viewport']::part(detail) {
+vaadin-master-detail-layout[has-detail][overflow][overlay-containment='viewport']::part(detail) {
   margin: calc(var(--aura-app-layout-inset) / 2);
   border-radius: var(--_app-layout-radius);
 }

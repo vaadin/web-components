@@ -1,11 +1,10 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
-
 snapshots["vaadin-master-detail-layout host default"] = 
 `<vaadin-master-detail-layout
-  detail-overlay-mode="drawer"
   expand="both"
   orientation="horizontal"
+  overlay-containment="layout"
 >
 </vaadin-master-detail-layout>
 `;
@@ -13,10 +12,10 @@ snapshots["vaadin-master-detail-layout host default"] =
 
 snapshots["vaadin-master-detail-layout host masterSize"] = 
 `<vaadin-master-detail-layout
-  detail-overlay-mode="drawer"
   expand="both"
   has-master-size=""
   orientation="horizontal"
+  overlay-containment="layout"
   style="--_master-size: 300px;"
 >
 </vaadin-master-detail-layout>
@@ -25,10 +24,10 @@ snapshots["vaadin-master-detail-layout host masterSize"] =
 
 snapshots["vaadin-master-detail-layout host detailSize"] = 
 `<vaadin-master-detail-layout
-  detail-overlay-mode="drawer"
   expand="both"
   has-detail-size=""
   orientation="horizontal"
+  overlay-containment="layout"
   style="--_detail-size: 400px;"
 >
 </vaadin-master-detail-layout>
@@ -37,11 +36,11 @@ snapshots["vaadin-master-detail-layout host detailSize"] =
 
 snapshots["vaadin-master-detail-layout host masterSize and detailSize"] = 
 `<vaadin-master-detail-layout
-  detail-overlay-mode="drawer"
   expand="both"
   has-detail-size=""
   has-master-size=""
   orientation="horizontal"
+  overlay-containment="layout"
   style="--_master-size: 300px; --_detail-size: 400px;"
 >
 </vaadin-master-detail-layout>

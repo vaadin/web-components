@@ -35,14 +35,14 @@ describe('ARIA', () => {
     expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set role to dialog on the detail part in full overlay mode', async () => {
-    layout.detailOverlayMode = 'full';
+  it('should set role to dialog on the detail part with overlaySize 100%', async () => {
+    layout.overlaySize = '100%';
     await onceResized(layout);
     expect(detail.getAttribute('role')).to.equal('dialog');
   });
 
-  it('should set aria-modal on the detail part with viewport overlay mode', async () => {
-    layout.detailOverlayMode = 'drawer-viewport';
+  it('should set aria-modal on the detail part with viewport overlay containment', async () => {
+    layout.overlayContainment = 'viewport';
     await onceResized(layout);
     expect(detail.getAttribute('aria-modal')).to.equal('true');
   });
@@ -55,8 +55,8 @@ describe('ARIA', () => {
     expect(master.hasAttribute('inert')).to.be.true;
   });
 
-  it('should not set inert on the master part with viewport overlay mode', async () => {
-    layout.detailOverlayMode = 'drawer-viewport';
+  it('should not set inert on the master part with viewport overlay containment', async () => {
+    layout.overlayContainment = 'viewport';
     await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
   });

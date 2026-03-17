@@ -69,7 +69,7 @@ describe('master-detail-layout', () => {
         });
 
         it('viewport', async () => {
-          mdl.detailOverlayMode = 'drawer-viewport';
+          mdl.overlayContainment = 'viewport';
           await onceResized(mdl);
           await visualDiff(document.body, `${dir}-overlay-viewport`);
         });

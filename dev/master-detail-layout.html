@@ -197,15 +197,24 @@
                 </vaadin-radio-group>
                 <vaadin-radio-group
                   @change=${this._configChange}
-                  class="detailOverlayMode"
-                  label="Detail Overlay Mode"
+                  class="overlaySize"
+                  label="Overlay Size"
                   theme="vertical"
-                  value="drawer"
+                  value="auto"
                 >
-                  <vaadin-radio-button value="drawer" label="Drawer"></vaadin-radio-button>
-                  <vaadin-radio-button value="drawer-viewport" label="Drawer Viewport"></vaadin-radio-button>
-                  <vaadin-radio-button value="full" label="Full"></vaadin-radio-button>
-                  <vaadin-radio-button value="full-viewport" label="Full Viewport"></vaadin-radio-button>
+                  <vaadin-radio-button value="auto" label="Auto"></vaadin-radio-button>
+                  <vaadin-radio-button value="300px" label="300px"></vaadin-radio-button>
+                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="overlayContainment"
+                  label="Overlay Containment"
+                  theme="vertical"
+                  value="layout"
+                >
+                  <vaadin-radio-button value="layout" label="Layout"></vaadin-radio-button>
+                  <vaadin-radio-button value="viewport" label="Viewport"></vaadin-radio-button>
                 </vaadin-radio-group>
                 <vaadin-radio-group @change=${this._configChange} class="expand" label="Expand" theme="vertical" value="both">
                   <vaadin-radio-button value="both" label="Both"></vaadin-radio-button>
@@ -248,7 +257,7 @@
           const prop = e.currentTarget.className;
           const value = e.target.value;
           // Size properties use null for "auto", other properties always have a value
-          if (prop === 'masterSize' || prop === 'detailSize') {
+          if (prop === 'masterSize' || prop === 'detailSize' || prop === 'overlaySize') {
             this._mdl[prop] = value === 'auto' ? null : value;
           } else {
             this._mdl[prop] = value;

@@ -72,15 +72,18 @@ When `overflow` AND `has-detail` are both set, the detail becomes an overlay:
 
 - `position: absolute; grid-column: none` removes detail from grid flow
 - Backdrop becomes visible
-- `detailOverlayMode` controls style via `^=`/`$=` CSS selectors (`drawer`/`full`/`*-viewport`)
+- `overlaySize` (CSS custom property `--_overlay-size`) controls overlay dimensions; falls back to `--_detail-size`
+- `overlayContainment` (`layout`/`viewport`) controls positioning: `absolute` vs `fixed`
 - ARIA: `role="dialog"` on detail, `inert` on master (layout containment), `aria-modal` (viewport containment)
 
 ### Overlay positioning
 
-| Orientation | Drawer                                   | Full       | \*-viewport       |
-| ----------- | ---------------------------------------- | ---------- | ----------------- |
-| Horizontal  | `width: detailSize; inset-inline-end: 0` | `inset: 0` | `position: fixed` |
-| Vertical    | `height: detailSize; inset-block-end: 0` | `inset: 0` | `position: fixed` |
+| Orientation | Default                                           | `overlayContainment='viewport'` |
+| ----------- | ------------------------------------------------- | ------------------------------- |
+| Horizontal  | `width: overlaySize/detailSize; inset-inline-end: 0` | `position: fixed`               |
+| Vertical    | `height: overlaySize/detailSize; inset-block-end: 0` | `position: fixed`               |
+
+Setting `overlaySize` to `100%` makes the detail cover the full layout (replaces old "full" mode).
 
 ## preserve-master-width
 
