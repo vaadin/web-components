@@ -168,11 +168,9 @@ describe('View transitions', () => {
     let runUpdateCallback;
     let updateCallbackResolved;
     let finishedPromise;
-    let scheduleResizeSpy;
 
     beforeEach(() => {
       startViewTransitionSpy = sinon.spy();
-      scheduleResizeSpy = sinon.spy(layout, '__scheduleResize');
       document.startViewTransition = (callback) => {
         updateCallbackResolved = false;
         startViewTransitionSpy();
@@ -187,10 +185,6 @@ describe('View transitions', () => {
           finished: finishedPromise,
         };
       };
-    });
-
-    afterEach(() => {
-      scheduleResizeSpy.restore();
     });
 
     it('should allow starting manual transitions', async () => {
@@ -212,8 +206,6 @@ describe('View transitions', () => {
 
       // Finish transition
       await layout._finishTransition();
-      expect(scheduleResizeSpy.calledOnce).to.be.true;
-      await aTimeout(0);
       expect(updateCallbackResolved).to.be.true;
       expect(layout.hasAttribute('transition')).to.be.false;
     });

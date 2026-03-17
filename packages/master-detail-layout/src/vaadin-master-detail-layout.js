@@ -5,8 +5,6 @@
  */
 import { html, LitElement, nothing } from 'lit';
 import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -192,13 +190,11 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   /** @private */
   __masterSizeChanged(size, oldSize) {
     this.__updateStyleProperty('master-size', size, oldSize);
-    this.__scheduleResize();
   }
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
-    this.__scheduleResize();
   }
 
   /** @private */
@@ -214,27 +210,16 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
 
   /** @private */
   __onSlotChange() {
-    if (!this.__initPending) {
-      this.__initPending = true;
-      queueMicrotask(() => {
-        this.__initPending = false;
-        this.__initResizeObserver();
-      });
-    }
-  }
-
-  /** @private */
-  __scheduleResize() {
-    this.__resizeDebouncer = Debouncer.debounce(this.__resizeDebouncer, animationFrame, () => this.__onResize());
+    this.__initResizeObserver();
   }
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__scheduleResize());
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
     const children = this.querySelectorAll('[slot="detail"], :not([slot])');
-    [this, ...children].forEach((node) => {
+    [this, this.$.master, this.$.detail, ...children].forEach((node) => {
       this.__resizeObserver.observe(node);
     });
   }
@@ -245,40 +230,33 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * @private
    */
   __onResize() {
+    const detailContent = this.querySelector('[slot="detail"]');
     const hadDetail = this.hasAttribute('has-detail');
-    const hasDetail = this.__checkDetailVisibility();
+    const hasDetail = detailContent && detailContent.checkVisibility();
     const hasOverflow = hasDetail && this.__checkOverflow();
+    const detailFirstFocusable = hasDetail ? getFocusableElements(detailContent)[0] : null;
 
-    // Set preserve-master-width when detail first appears with overflow
-    // to prevent master width from jumping.
-    if (!hadDetail && hasDetail && hasOverflow) {
-      this.setAttribute('preserve-master-width', '');
-    } else if (!hasDetail || !hasOverflow) {
-      this.removeAttribute('preserve-master-width');
-    }
-
-    this.toggleAttribute('has-detail', hasDetail);
-    this.toggleAttribute('overflow', hasOverflow);
-
-    // Re-render to update ARIA attributes (role, aria-modal, inert)
-    // which depend on has-detail and overflow state.
-    this.requestUpdate();
-
-    // Focus first focusable element when detail appears in overlay mode
-    if (!hadDetail && hasDetail && hasOverflow) {
-      const detailContent = this.querySelector('[slot="detail"]');
-      if (detailContent) {
-        const focusables = getFocusableElements(detailContent);
-        if (focusables.length > 0) {
-          focusables[0].focus();
-        }
+    requestAnimationFrame(() => {
+      // Set preserve-master-width when detail first appears with overflow
+      // to prevent master width from jumping.
+      if (!hadDetail && hasDetail && hasOverflow) {
+        this.setAttribute('preserve-master-width', '');
+      } else if (!hasDetail || !hasOverflow) {
+        this.removeAttribute('preserve-master-width');
       }
-    }
-  }
 
-  /** @private */
-  __checkDetailVisibility() {
-    return [...this.querySelectorAll('[slot="detail"]')].some((node) => node.checkVisibility());
+      this.toggleAttribute('has-detail', hasDetail);
+      this.toggleAttribute('overflow', hasOverflow);
+
+      // Re-render to update ARIA attributes (role, aria-modal, inert)
+      // which depend on has-detail and overflow state.
+      this.requestUpdate();
+
+      // Focus first focusable element when detail appears in overlay mode
+      if (!hadDetail && hasDetail && hasOverflow && detailFirstFocusable) {
+        detailFirstFocusable.focus();
+      }
+    });
   }
 
   /** @private */
@@ -415,11 +393,6 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * @protected
    */
   async _finishTransition() {
-    // Detect new layout mode after DOM has been updated.
-    // The detection is wrapped in queueMicroTask in order to allow custom Lit elements to render before measurement.
-    // https://github.com/vaadin/web-components/issues/8969
-    queueMicrotask(() => this.__scheduleResize());
-
     if (!this.__transition) {
       return Promise.resolve();
     }

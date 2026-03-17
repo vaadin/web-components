@@ -51,17 +51,16 @@ The `>=` (not `>`) is intentional: when `preserve-master-width` or `:not([has-de
 
 ### `__onResize()` pattern
 
-All DOM/style reads happen first, then all writes (no forced reflows):
+Reads happen synchronously, writes are deferred to `requestAnimationFrame`:
 
-1. **Read**: save previous `has-detail`, compute detail visibility, check overflow
-2. **Write**: set/clear `preserve-master-width`, toggle `has-detail` and `overflow`, call `requestUpdate()` for ARIA, focus detail if it just appeared in overlay
+1. **Read** (sync): save previous `has-detail`, compute detail visibility via `checkVisibility()`, check overflow, find first focusable element in detail
+2. **Write** (rAF): set/clear `preserve-master-width`, toggle `has-detail` and `overflow`, call `requestUpdate()` for ARIA, focus detail if it just appeared in overlay
 
-### ResizeObserver + Debouncer
+### ResizeObserver
 
-- **Observes**: host + slotted light DOM children (NOT shadow DOM parts — avoids ResizeObserver loop at same DOM depth)
-- **`Debouncer(animationFrame)`** defers `__onResize()` to the next rAF. Both ResizeObserver and property observers use the same debouncer via `__scheduleResize()`
-- **Property observers call `__scheduleResize()`** because size changes with `preserve-master-width` may not resize any observed element
-- **Slotchange debouncing**: `queueMicrotask` batches multiple slot changes into one `__initResizeObserver()` call
+- **Observes**: host + shadow DOM parts (`master`, `detail`) + slotted light DOM children
+- **No debouncer**: `__onResize()` is called directly from ResizeObserver; the rAF inside `__onResize()` naturally batches writes
+- **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
 
 ## Overlay Modes
 
@@ -101,13 +100,13 @@ Uses the CSS View Transitions API:
 
 - `_setDetail(element, skipTransition)` — adds/replaces/removes detail with animation
 - `_startTransition(transitionType, updateCallback)` — starts a named transition
-- `_finishTransition()` — resolves the transition, calls `__scheduleResize()`
+- `_finishTransition()` — resolves the transition
 - `noAnimation` property disables transitions
 - Styles injected via `SlotStylesMixin`
 
 ## Test Patterns
 
-- **`onceResized(layout)`** (`test/helpers.js`): `nextResize()` + `nextRender()` — waits for ResizeObserver + rAF-debounced `__onResize()`
+- **`onceResized(layout)`** (`test/helpers.js`): `nextResize()` + `nextRender()` — waits for ResizeObserver + rAF write phase in `__onResize()`
 - **Split mode sizing**: measure part elements directly (not `gridTemplateColumns` which has 4 columns)
 - **Vertical tests**: integrated into each test file under `describe('vertical')` suites
 - **Feature flag**: `window.Vaadin.featureFlags.masterDetailLayoutComponent = true` required before import
