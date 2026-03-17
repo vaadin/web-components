@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import '../../src/vaadin-master-detail-layout.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
-import '../../src/vaadin-master-detail-layout.js';
 
 describe('vaadin-master-detail-layout', () => {
   let layout;
