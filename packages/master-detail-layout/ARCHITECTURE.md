@@ -62,9 +62,17 @@ Layout detection is split into two methods to avoid forced reflows:
 - ResizeObserver callback: calls `__computeLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__applyLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
 
-### View transitions
+### CSS transitions
 
-`_finishTransition()` uses `queueMicrotask` to call both `__computeLayoutState()` + `__applyLayoutState()` synchronously. The microtask runs before the Promise resolution propagates to `startViewTransition`, ensuring the "new" snapshot captures the correct overlay state (backdrop, absolute positioning). The `getComputedStyle` read in the microtask does cause a forced reflow, but this is unavoidable for correct transition snapshots.
+Overlay detail panel uses CSS transitions on `translate` for interruptible slide animations. The `[has-detail]` attribute drives the translate value: default is off-screen, `[has-detail]` sets `translate: none`. The `[transition]` attribute on the host tracks the transition type but doesn't drive the animation itself.
+
+- **Add/replace**: DOM updated immediately, `_finishTransition()` forces reflow then sets `has-detail` → CSS transition slides detail in
+- **Remove**: `[transition='remove']` CSS overrides translate back to off-screen → CSS transition slides detail out → element removed after `transitionend`
+- **Replace**: old content moved to `#detail-outgoing` shadow container, slides out while new content slides in simultaneously
+- **Interruptible**: changing `has-detail` mid-transition causes the browser to reverse from the current position
+- RTL support via `--_mdl-dir-multiplier` CSS variable with `:host([dir='rtl'])`
+- Duration defaults to `0s`, enabled to `400ms` via `@media (prefers-reduced-motion: no-preference)` + `:host(:not([no-animation]))`
+- `_finishTransition()` forces reflow via `getComputedStyle()` to establish "before" translate value, then `__applyLayoutState()` sets `has-detail` to trigger the CSS transition
 
 ## Overlay Modes
 
@@ -103,15 +111,16 @@ Prevents the master from jumping when the detail overlay first appears.
 
 Set when detail first appears with overflow, cleared when detail is removed or overflow resolves.
 
-## View Transitions
+## CSS Transitions
 
-Uses the CSS View Transitions API (`document.startViewTransition`):
+Uses CSS transitions on `translate` for interruptible overlay animations (follows app-layout drawer pattern):
 
-- `_setDetail(element, skipTransition)` — adds/replaces/removes detail with animation
-- `_startTransition(transitionType, updateCallback)` — starts a named transition
-- `_finishTransition()` — calls `__computeLayoutState()` + `__applyLayoutState()` via `queueMicrotask` (see read/write separation above)
-- `noAnimation` property disables transitions
-- Styles injected via `SlotStylesMixin`
+- `_setDetail(element, skipTransition)` — adds/replaces/removes detail with transition
+- `_startTransition(transitionType, updateCallback)` — manages transition lifecycle, sets `[transition]` attribute
+- `_finishTransition()` — forced reflow via `getComputedStyle()` + `__applyLayoutState()` to trigger CSS transition
+- `noAnimation` property (reflected to attribute) disables transitions via CSS `:host([no-animation])`
+- `#detail-outgoing` shadow DOM container for simultaneous replace transitions
+- Transitions defined in shadow DOM CSS (works inside shadow roots, unlike View Transitions)
 
 ## Test Patterns
 

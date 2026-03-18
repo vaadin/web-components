@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export interface MasterDetailLayoutCustomEventMap {
@@ -55,7 +54,7 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  */
-declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * Size (in CSS length units) to be set on the detail area in
    * the CSS grid layout. If there is not enough space to show

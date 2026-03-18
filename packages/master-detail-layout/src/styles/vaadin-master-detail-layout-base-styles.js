@@ -12,6 +12,9 @@ export const masterDetailLayoutStyles = css`
     --_detail-size: 15em;
     --_master-column: var(--_master-size) 0;
     --_detail-column: var(--_detail-size) 0;
+    --_mdl-transition-duration: 0s;
+    --_mdl-easing: cubic-bezier(0.78, 0, 0.22, 1);
+    --_mdl-dir-multiplier: 1;
 
     display: grid;
     box-sizing: border-box;
@@ -25,6 +28,10 @@ export const masterDetailLayoutStyles = css`
 
   :host([hidden]) {
     display: none !important;
+  }
+
+  :host([dir='rtl']) {
+    --_mdl-dir-multiplier: -1;
   }
 
   :host([orientation='vertical']) {
@@ -96,6 +103,16 @@ export const masterDetailLayoutStyles = css`
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
     grid-column: none;
+    translate: calc((100% + 30px) * var(--_mdl-dir-multiplier));
+    visibility: hidden;
+    transition:
+      translate var(--_mdl-transition-duration) var(--_mdl-easing),
+      visibility var(--_mdl-transition-duration);
+  }
+
+  :host([overflow][has-detail]) [part~='detail']:not([part~='detail-outgoing']) {
+    translate: none;
+    visibility: visible;
   }
 
   :host([overflow]) [part~='backdrop'] {
@@ -114,6 +131,11 @@ export const masterDetailLayoutStyles = css`
     inset-inline: 0;
     height: var(--_overlay-size, var(--_detail-size, min-content));
     inset-block-end: 0;
+    translate: 0 calc(100% + 30px);
+  }
+
+  :host([overflow][orientation='vertical'][has-detail]) [part~='detail']:not([part~='detail-outgoing']) {
+    translate: none;
   }
 
   :host([overflow][overlay-containment='viewport']) [part~='detail'],
@@ -128,6 +150,31 @@ export const masterDetailLayoutStyles = css`
 
     [part~='detail'] {
       background: Canvas !important;
+    }
+  }
+
+  /* Remove transition: override translate back to off-screen while has-detail is still set */
+  :host([overflow][transition='remove']:not([orientation='vertical'])) [part~='detail'] {
+    translate: calc((100% + 30px) * var(--_mdl-dir-multiplier));
+    visibility: hidden;
+  }
+
+  :host([overflow][transition='remove'][orientation='vertical']) [part~='detail'] {
+    translate: 0 calc(100% + 30px);
+    visibility: hidden;
+  }
+
+  /* Outgoing detail container for replace transitions */
+  [part~='detail-outgoing']:not([hidden]) {
+    transition:
+      translate var(--_mdl-transition-duration) var(--_mdl-easing),
+      visibility var(--_mdl-transition-duration);
+  }
+
+  /* Enable transitions when motion is allowed */
+  @media (prefers-reduced-motion: no-preference) {
+    :host(:not([no-animation])) {
+      --_mdl-transition-duration: 400ms;
     }
   }
 `;
