@@ -9,7 +9,7 @@ class AuraNumberControl extends AuraControl {
     return ['property', 'min', 'max', 'step', 'label'];
   }
 
-  #root;
+  #labelEl;
   #input;
   #output;
   #resetBtn;
@@ -22,42 +22,14 @@ class AuraNumberControl extends AuraControl {
 
   constructor() {
     super();
-    const shadow = this.shadowRoot;
-    shadow.innerHTML = `
-      <style>
-        .control {
-          gap: .2rem;
-        }
-
-        .row {
-          display: flex;
-          align-items: center;
-          gap: .75rem;
-        }
-
-        input[type="range"] {
-          flex: 1;
-        }
-
-        output {
-          min-width: 2ch;
-          text-align: right;
-          font-variant-numeric: tabular-nums;
-        }
-      </style>
-      <div class="control" part="control">
-        <label id="lbl" for="slider">Numeric value</label>
-        <div class="row">
-          <input id="slider" type="range" />
-          <output id="val" for="slider">0</output>
-          <vaadin-button id="reset" aria-label="reset"></vaadin-button>
-        </div>
-      </div>
-    `;
-    this.#root = shadow;
-    this.#input = shadow.getElementById('slider');
-    this.#output = shadow.getElementById('val');
-    this.#resetBtn = shadow.getElementById('reset');
+    this.initControl({
+      label: 'Numeric value',
+      content: '<input type="range" /><output>0</output>',
+    });
+    this.#labelEl = this.labelElement;
+    this.#input = this.querySelector('input[type="range"]');
+    this.#output = this.querySelector('output');
+    this.#resetBtn = this.resetButton;
   }
 
   attributeChangedCallback(name, _old, val) {
@@ -78,7 +50,7 @@ class AuraNumberControl extends AuraControl {
         this.#default = this.#toNumber(val, -1);
         break;
       case 'label':
-        this.#root.getElementById('lbl').textContent = val || 'Numeric value';
+        this.#labelEl.textContent = val || 'Numeric value';
         break;
       default:
         break;
@@ -94,9 +66,9 @@ class AuraNumberControl extends AuraControl {
     if (this.hasAttribute('step')) this.#step = this.#toNumber(this.getAttribute('step'), this.#step);
     if (this.hasAttribute('default')) this.#default = this.#toNumber(this.getAttribute('default'), this.#default);
     if (this.hasAttribute('label')) {
-      this.#root.getElementById('lbl').textContent = this.getAttribute('label');
+      this.#labelEl.textContent = this.getAttribute('label');
     } else {
-      this.#root.getElementById('lbl').textContent = this.#prop;
+      this.#labelEl.textContent = this.#prop;
     }
 
     this.#configureAndInit();

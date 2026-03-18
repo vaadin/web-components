@@ -181,7 +181,7 @@ function initView(view) {
           <vaadin-icon src="./assets/lucide-icons/messages-square.svg" slot="media"></vaadin-icon>
           <div slot="title">New Message from Olivia</div>
           <div>The AI chat UI is evolving with the integration of components…</div>
-          <vaadin-button slot="footer" @click="${close}">Show</vaadin-button>
+          <vaadin-button slot="footer" @click="${close}" theme="primary">Show</vaadin-button>
           <vaadin-button slot="footer" @click="${close}">Dismiss</vaadin-button>
         </vaadin-card>
       `,
@@ -430,16 +430,11 @@ customElements.define(
                   </div>
 
                   <div class="aura-surface component tall column">
-                    <vaadin-side-nav theme="filled" class="aura-accent-color">
+                    <vaadin-side-nav theme="filled">
                       <vaadin-side-nav-item path="">
                         <vaadin-icon src="./assets/lucide-icons/home.svg" slot="prefix"></vaadin-icon>
                         <span>Components</span>
-                        <vaadin-badge
-                          class="aura-accent-color"
-                          slot="suffix"
-                          number="2"
-                          aria-label="(2 new items)"
-                        ></vaadin-badge>
+                        <vaadin-badge slot="suffix" number="2" aria-label="(2 new items)"></vaadin-badge>
                       </vaadin-side-nav-item>
                       <vaadin-side-nav-item>
                         <vaadin-icon src="./assets/lucide-icons/chart-column-big.svg" slot="prefix"></vaadin-icon>
@@ -481,7 +476,7 @@ customElements.define(
 
                   <div class="aura-surface component wide">
                     <vaadin-tabs>
-                      <vaadin-tab>Details<vaadin-badge class="aura-accent-color" number="2"></vaadin-badge></vaadin-tab>
+                      <vaadin-tab>Details<vaadin-badge number="2"></vaadin-badge></vaadin-tab>
                       <vaadin-tab>Preferences</vaadin-tab>
                       <vaadin-tab>Settings</vaadin-tab>
                     </vaadin-tabs>
