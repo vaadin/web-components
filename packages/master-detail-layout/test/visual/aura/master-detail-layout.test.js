@@ -1,7 +1,8 @@
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-master-detail-layout.js';
+import { onceResized } from '../../helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -20,20 +21,23 @@ describe('master-detail-layout', () => {
       </div>
     `);
     mdl = element.querySelector('vaadin-master-detail-layout');
-    await nextRender();
+    await onceResized(mdl);
   });
 
   describe('split', () => {
     it('basic', async () => {
+      mdl.masterSize = '300px';
+      mdl.detailSize = '300px';
+      await onceResized(mdl);
       await visualDiff(element, 'split');
     });
   });
 
   describe('drawer', () => {
-    beforeEach(() => {
-      mdl.masterSize = '600px';
+    beforeEach(async () => {
+      mdl.masterSize = '100%';
       mdl.detailSize = '300px';
-      mdl.forceOverlay = true;
+      await onceResized(mdl);
     });
 
     it('basic', async () => {
@@ -41,7 +45,8 @@ describe('master-detail-layout', () => {
     });
 
     it('viewport', async () => {
-      mdl.containment = 'viewport';
+      mdl.overlayContainment = 'viewport';
+      await onceResized(mdl);
       await visualDiff(document.body, 'drawer-viewport');
     });
 

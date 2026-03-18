@@ -1,9 +1,10 @@
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/master-detail-layout.css';
 import '../../../vaadin-master-detail-layout.js';
+import { onceResized } from '../../helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -19,7 +20,7 @@ describe('master-detail-layout', () => {
         <div slot="detail">Detail content</div>
       </vaadin-master-detail-layout>
     `);
-    await nextRender();
+    await onceResized(element);
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -33,10 +34,10 @@ describe('master-detail-layout', () => {
       });
 
       describe('overlay', () => {
-        beforeEach(() => {
-          element.masterSize = '600px';
+        beforeEach(async () => {
+          element.masterSize = '100%';
           element.detailSize = '300px';
-          element.forceOverlay = true;
+          await onceResized(element);
         });
 
         it('basic', async () => {
@@ -44,12 +45,14 @@ describe('master-detail-layout', () => {
         });
 
         it('viewport', async () => {
-          element.containment = 'viewport';
+          element.overlayContainment = 'viewport';
+          await onceResized(element);
           await visualDiff(document.body, `${dir}-overlay-viewport`);
         });
 
         it('no detail', async () => {
           element.querySelector('[slot="detail"').remove();
+          await onceResized(element);
           await visualDiff(document.body, `${dir}-overlay-no-detail`);
         });
 

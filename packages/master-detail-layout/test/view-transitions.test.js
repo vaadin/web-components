@@ -168,11 +168,9 @@ describe('View transitions', () => {
     let runUpdateCallback;
     let updateCallbackResolved;
     let finishedPromise;
-    let detectLayoutModeSpy;
 
     beforeEach(() => {
       startViewTransitionSpy = sinon.spy();
-      detectLayoutModeSpy = sinon.spy(layout, '__detectLayoutMode');
       document.startViewTransition = (callback) => {
         updateCallbackResolved = false;
         startViewTransitionSpy();
@@ -187,10 +185,6 @@ describe('View transitions', () => {
           finished: finishedPromise,
         };
       };
-    });
-
-    afterEach(() => {
-      detectLayoutModeSpy.restore();
     });
 
     it('should allow starting manual transitions', async () => {
@@ -212,8 +206,6 @@ describe('View transitions', () => {
 
       // Finish transition
       await layout._finishTransition();
-      expect(detectLayoutModeSpy.calledOnce).to.be.true;
-      await aTimeout(0);
       expect(updateCallbackResolved).to.be.true;
       expect(layout.hasAttribute('transition')).to.be.false;
     });

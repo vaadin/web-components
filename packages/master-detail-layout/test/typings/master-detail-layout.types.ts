@@ -12,12 +12,11 @@ assertType<ThemableMixinClass>(layout);
 
 // Properties
 assertType<string | null | undefined>(layout.detailSize);
-assertType<string | null | undefined>(layout.detailMinSize);
 assertType<string | null | undefined>(layout.masterSize);
-assertType<string | null | undefined>(layout.masterMinSize);
+assertType<string | null | undefined>(layout.overlaySize);
+assertType<'layout' | 'viewport'>(layout.overlayContainment);
+assertType<'master' | 'detail' | 'both'>(layout.expand);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
-assertType<boolean>(layout.forceOverlay);
-assertType<boolean>(layout.stackOverlay);
 assertType<boolean>(layout.noAnimation);
 
 // Events

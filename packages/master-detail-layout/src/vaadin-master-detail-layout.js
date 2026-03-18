@@ -8,11 +8,19 @@ import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
 import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-base-styles.js';
+
+function parseTrackSizes(gridTemplate) {
+  return gridTemplate
+    .replace(/\[[^\]]+\]/gu, '')
+    .replace(/\s+/gu, ' ')
+    .trim()
+    .split(' ')
+    .map(parseFloat);
+}
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -25,19 +33,19 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  *
  * Part name      | Description
  * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the drawer mode
+ * `backdrop`     | Backdrop covering the master area in the overlay mode
  * `master`       | The master area
  * `detail`       | The detail area
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------| -----------
- * `containment`  | Set to `layout` or `viewport` depending on the containment.
- * `orientation`  | Set to `horizontal` or `vertical` depending on the orientation.
- * `has-detail`   | Set when the detail content is provided.
- * `drawer`       | Set when the layout is using the drawer mode.
- * `stack`        | Set when the layout is using the stack mode.
+ * Attribute             | Description
+ * ----------------------|----------------------
+ * `expand`              | Set to `master`, `detail`, or `both`.
+ * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
+ * `has-detail`          | Set when the detail content is provided and visible.
+ * `overflow`            | Set when columns don't fit and the detail is shown as an overlay.
+ * `overlay-containment` | Set to `layout` or `viewport`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -51,17 +59,16 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  *
  * @customElement vaadin-master-detail-layout
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
- * @mixes ResizeMixin
  * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -73,11 +80,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   static get properties() {
     return {
       /**
-       * Fixed size (in CSS length units) to be set on the detail area.
-       * When specified, it prevents the detail area from growing or
-       * shrinking. If there is not enough space to show master and detail
-       * areas next to each other, the details are shown as an overlay:
-       * either as drawer or stack, depending on the `stackOverlay` property.
+       * Size (in CSS length units) to be set on the detail area in
+       * the CSS grid layout. If there is not enough space to show
+       * master and detail areas next to each other, the detail area
+       * is shown as an overlay. Defaults to 15em.
        *
        * @attr {string} detail-size
        */
@@ -88,26 +94,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       },
 
       /**
-       * Minimum size (in CSS length units) to be set on the detail area.
-       * When specified, it prevents the detail area from shrinking below
-       * this size. If there is not enough space to show master and detail
-       * areas next to each other, the details are shown as an overlay:
-       * either as drawer or stack, depending on the `stackOverlay` property.
-       *
-       * @attr {string} detail-min-size
-       */
-      detailMinSize: {
-        type: String,
-        sync: true,
-        observer: '__detailMinSizeChanged',
-      },
-
-      /**
-       * Fixed size (in CSS length units) to be set on the master area.
-       * When specified, it prevents the master area from growing or
-       * shrinking. If there is not enough space to show master and detail
-       * areas next to each other, the details are shown as an overlay:
-       * either as drawer or stack, depending on the `stackOverlay` property.
+       * Size (in CSS length units) to be set on the master area in
+       * the CSS grid layout. If there is not enough space to show
+       * master and detail areas next to each other, the detail area
+       * is shown as an overlay. Defaults to 30em.
        *
        * @attr {string} master-size
        */
@@ -118,18 +108,16 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       },
 
       /**
-       * Minimum size (in CSS length units) to be set on the master area.
-       * When specified, it prevents the master area from shrinking below
-       * this size. If there is not enough space to show master and detail
-       * areas next to each other, the details are shown as an overlay:
-       * either as drawer or stack, depending on the `stackOverlay` property.
+       * Size (in CSS length units) for the detail area when shown as an
+       * overlay. When not set, falls back to `detailSize`. Set to `100%`
+       * to make the detail cover the full layout.
        *
-       * @attr {string} master-min-size
+       * @attr {string} overlay-size
        */
-      masterMinSize: {
+      overlaySize: {
         type: String,
         sync: true,
-        observer: '__masterMinSizeChanged',
+        observer: '__overlaySizeChanged',
       },
 
       /**
@@ -142,25 +130,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         type: String,
         value: 'horizontal',
         reflectToAttribute: true,
-        observer: '__orientationChanged',
-        sync: true,
-      },
-
-      /**
-       * When specified, forces the details to be shown as an overlay
-       * (either as drawer or stack), even if there is enough space for
-       * master and detail to be shown next to each other using the default
-       * (split) mode.
-       *
-       * In order to enforce the stack mode, use this property together with
-       * `stackOverlay` property and set both to `true`.
-       *
-       * @attr {boolean} force-overlay
-       */
-      forceOverlay: {
-        type: Boolean,
-        value: false,
-        observer: '__forceOverlayChanged',
         sync: true,
       },
 
@@ -169,8 +138,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
        * overlay mode. When set to `layout`, the overlay is confined to the
        * layout. When set to `viewport`, the overlay is confined to the
        * browser's viewport. Defaults to `layout`.
+       *
+       * @attr {string} overlay-containment
        */
-      containment: {
+      overlayContainment: {
         type: String,
         value: 'layout',
         reflectToAttribute: true,
@@ -178,19 +149,14 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       },
 
       /**
-       * When true, the layout in the overlay mode is rendered as a stack,
-       * making detail area fully cover the master area. Otherwise, it is
-       * rendered as a drawer and has a visual backdrop.
-       *
-       * In order to enforce the stack mode, use this property together with
-       * `forceOverlay` property and set both to `true`.
-       *
-       * @attr {string} stack-threshold
+       * Controls which column(s) expand to fill available space.
+       * Possible values: `'master'`, `'detail'`, `'both'`.
+       * Defaults to `'both'`.
        */
-      stackOverlay: {
-        type: Boolean,
-        value: false,
-        observer: '__stackOverlayChanged',
+      expand: {
+        type: String,
+        value: 'both',
+        reflectToAttribute: true,
         sync: true,
       },
 
@@ -203,39 +169,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         type: Boolean,
         value: false,
       },
-
-      /**
-       * When true, the component uses the drawer mode. This property is read-only.
-       * @protected
-       */
-      _drawer: {
-        type: Boolean,
-        attribute: 'drawer',
-        reflectToAttribute: true,
-        sync: true,
-      },
-
-      /**
-       * When true, the component uses the stack mode. This property is read-only.
-       * @protected
-       */
-      _stack: {
-        type: Boolean,
-        attribute: 'stack',
-        reflectToAttribute: true,
-        sync: true,
-      },
-
-      /**
-       * When true, the component has the detail content provided.
-       * @protected
-       */
-      _hasDetail: {
-        type: Boolean,
-        attribute: 'has-detail',
-        reflectToAttribute: true,
-        sync: true,
-      },
     };
   }
 
@@ -243,51 +176,155 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     return true;
   }
 
-  /** @override */
+  /** @return {!Array<!CSSResult>} */
   get slotStyles() {
     return [masterDetailLayoutTransitionStyles];
   }
 
   /** @protected */
   render() {
+    const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overflow');
+    const isViewport = isOverlay && this.overlayContainment === 'viewport';
+    const isLayoutContained = isOverlay && !isViewport;
+
     return html`
       <div part="backdrop" @click="${this.__onBackdropClick}"></div>
-      <div
-        id="master"
-        part="master"
-        ?inert="${this._hasDetail && (this._stack || (this._drawer && this.containment === 'layout'))}"
-      >
-        <slot></slot>
+      <div id="master" part="master" ?inert="${isLayoutContained}">
+        <slot @slotchange="${this.__onSlotChange}"></slot>
       </div>
-      <div part="_detail-internal">
-        <div
-          id="detail"
-          part="detail"
-          role="${this._drawer || this._stack ? 'dialog' : nothing}"
-          aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
-          @keydown="${this.__onDetailKeydown}"
-        >
-          <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
-        </div>
+      <div
+        id="detail"
+        part="detail"
+        role="${isOverlay ? 'dialog' : nothing}"
+        aria-modal="${isViewport ? 'true' : nothing}"
+        @keydown="${this.__onDetailKeydown}"
+      >
+        <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
       </div>
     `;
   }
 
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    this.__initResizeObserver();
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.__resizeObserver.disconnect();
+    cancelAnimationFrame(this.__resizeRaf);
+  }
+
   /** @private */
-  __onDetailSlotChange(e) {
-    const children = e.target.assignedNodes();
+  __masterSizeChanged(size, oldSize) {
+    this.__updateStyleProperty('master-size', size, oldSize);
+  }
 
-    this._hasDetail = children.length > 0;
-    this.__detectLayoutMode();
+  /** @private */
+  __detailSizeChanged(size, oldSize) {
+    this.__updateStyleProperty('detail-size', size, oldSize);
+  }
 
-    // Move focus to the detail area when it is added to the DOM,
-    // in case if the layout is using drawer or stack mode.
-    if ((this._drawer || this._stack) && children.length > 0) {
-      const focusables = getFocusableElements(children[0]);
-      if (focusables.length) {
-        focusables[0].focus();
-      }
+  /** @private */
+  __overlaySizeChanged(size, oldSize) {
+    this.__updateStyleProperty('overlay-size', size, oldSize);
+  }
+
+  /** @private */
+  __updateStyleProperty(prop, size, oldSize) {
+    if (size) {
+      this.style.setProperty(`--_${prop}`, size);
+    } else if (oldSize) {
+      this.style.removeProperty(`--_${prop}`);
     }
+  }
+
+  /** @private */
+  __onSlotChange() {
+    this.__initResizeObserver();
+  }
+
+  /** @private */
+  __initResizeObserver() {
+    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver.disconnect();
+
+    const children = this.querySelectorAll(':scope > [slot="detail"], :scope >:not([slot])');
+    [this, this.$.master, this.$.detail, ...children].forEach((node) => {
+      this.__resizeObserver.observe(node);
+    });
+  }
+
+  /**
+   * Called by the ResizeObserver. Reads layout state synchronously (no forced
+   * reflow since layout is already computed), then defers writes to rAF.
+   * Cancels any pending rAF so the write phase always uses the latest state.
+   * @private
+   */
+  __onResize() {
+    const state = this.__computeLayoutState();
+    cancelAnimationFrame(this.__resizeRaf);
+    this.__resizeRaf = requestAnimationFrame(() => this.__applyLayoutState(state));
+  }
+
+  /**
+   * Reads DOM/style state needed for layout detection. Safe to call in
+   * ResizeObserver callback where layout is already computed (no forced reflow).
+   * @private
+   */
+  __computeLayoutState() {
+    const detailContent = this.querySelector('[slot="detail"]');
+    const hadDetail = this.hasAttribute('has-detail');
+    const hasDetail = detailContent != null && detailContent.checkVisibility();
+    const hasOverflow = hasDetail && this.__checkOverflow();
+    const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
+    return { hadDetail, hasDetail, hasOverflow, focusTarget };
+  }
+
+  /**
+   * Applies layout state to DOM attributes. Pure writes, no reads.
+   * @private
+   */
+  __applyLayoutState({ hadDetail, hasDetail, hasOverflow, focusTarget }) {
+    // Set preserve-master-width when detail first appears with overflow
+    // to prevent master width from jumping.
+    if (!hadDetail && hasDetail && hasOverflow) {
+      this.setAttribute('preserve-master-width', '');
+    } else if (!hasDetail || !hasOverflow) {
+      this.removeAttribute('preserve-master-width');
+    }
+
+    this.toggleAttribute('has-detail', hasDetail);
+    this.toggleAttribute('overflow', hasOverflow);
+
+    // Re-render to update ARIA attributes (role, aria-modal, inert)
+    // which depend on has-detail and overflow state.
+    this.requestUpdate();
+
+    if (focusTarget) {
+      focusTarget.focus();
+    }
+  }
+
+  /** @private */
+  __checkOverflow() {
+    const isVertical = this.orientation === 'vertical';
+    const computedStyle = getComputedStyle(this);
+
+    const hostSize = parseFloat(computedStyle[isVertical ? 'height' : 'width']);
+    const [masterSize, masterExtra, detailSize] = parseTrackSizes(
+      computedStyle[isVertical ? 'gridTemplateRows' : 'gridTemplateColumns'],
+    );
+
+    if (Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)) {
+      return false;
+    }
+    if (Math.floor(masterExtra) >= Math.floor(detailSize)) {
+      return false;
+    }
+    return true;
   }
 
   /** @private */
@@ -301,136 +338,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       // Prevent firing on parent layout when using nested layouts
       event.preventDefault();
       this.dispatchEvent(new CustomEvent('detail-escape-press'));
-    }
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _onResize() {
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __detailSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __detailMinSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-min-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __masterSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __masterMinSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-min-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __orientationChanged(orientation, oldOrientation) {
-    if (orientation || oldOrientation) {
-      this.__detectLayoutMode();
-    }
-  }
-
-  /** @private */
-  __forceOverlayChanged(forceOverlay, oldForceOverlay) {
-    if (forceOverlay || oldForceOverlay) {
-      this.__detectLayoutMode();
-    }
-  }
-
-  /** @private */
-  __stackOverlayChanged(stackOverlay, oldStackOverlay) {
-    if (stackOverlay || oldStackOverlay) {
-      this.__detectLayoutMode();
-    }
-  }
-
-  /** @private */
-  __updateStyleProperty(prop, size, oldSize) {
-    if (size) {
-      this.style.setProperty(`--_${prop}`, size);
-    } else if (oldSize) {
-      this.style.removeProperty(`--_${prop}`);
-    }
-
-    this.toggleAttribute(`has-${prop}`, !!size);
-  }
-
-  /** @private */
-  __setOverlayMode(value) {
-    if (this.stackOverlay) {
-      this._stack = value;
-    } else {
-      this._drawer = value;
-    }
-  }
-
-  /** @private */
-  __detectLayoutMode() {
-    this._drawer = false;
-    this._stack = false;
-
-    if (this.forceOverlay) {
-      this.__setOverlayMode(true);
-      return;
-    }
-
-    if (!this._hasDetail) {
-      return;
-    }
-
-    if (this.orientation === 'vertical') {
-      this.__detectVerticalMode();
-    } else {
-      this.__detectHorizontalMode();
-    }
-  }
-
-  /** @private */
-  __detectHorizontalMode() {
-    const detailWidth = this.$.detail.offsetWidth;
-
-    // Detect minimum width needed by master content. Use max-width to ensure
-    // the layout can switch back to split mode once there is enough space.
-    // If there is master  size or min-size set, use that instead to force the
-    // overlay mode by setting `masterSize` / `masterMinSize` to 100%/
-    this.$.master.style.maxWidth = this.masterSize || this.masterMinSize || 'min-content';
-    const masterWidth = this.$.master.offsetWidth;
-    this.$.master.style.maxWidth = '';
-
-    // If the combined minimum size of both the master and the detail content
-    // exceeds the size of the layout, the layout changes to the overlay mode.
-    this.__setOverlayMode(this.offsetWidth < masterWidth + detailWidth);
-
-    // Toggling the overlay resizes master content, which can cause document
-    // scroll bar to appear or disappear, and trigger another resize of the
-    // layout which can affect previous measurements and end up in horizontal
-    // scroll. Check if that is the case and if so, preserve the overlay mode.
-    if (this.offsetWidth < this.scrollWidth) {
-      this.__setOverlayMode(true);
-    }
-  }
-
-  /** @private */
-  __detectVerticalMode() {
-    const masterHeight = this.$.master.clientHeight;
-
-    // If the combined minimum size of both the master and the detail content
-    // exceeds the available height, the layout changes to the overlay mode.
-    if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
-      this.__setOverlayMode(true);
     }
   }
 
@@ -529,10 +436,13 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * @protected
    */
   async _finishTransition() {
-    // Detect new layout mode after DOM has been updated.
-    // The detection is wrapped in queueMicroTask in order to allow custom Lit elements to render before measurement.
-    // https://github.com/vaadin/web-components/issues/8969
-    queueMicrotask(() => this.__detectLayoutMode());
+    // Detect layout mode before resolving the transition, so the browser's
+    // "new" snapshot includes the correct overlay state. The microtask runs
+    // before the Promise resolution propagates to startViewTransition.
+    queueMicrotask(() => {
+      const state = this.__computeLayoutState();
+      this.__applyLayoutState(state);
+    });
 
     if (!this.__transition) {
       return Promise.resolve();
@@ -547,7 +457,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   /**
    * @event backdrop-click
-   * Fired when the user clicks the backdrop in the drawer mode.
+   * Fired when the user clicks the backdrop in the overlay mode.
    */
 
   /**

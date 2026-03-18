@@ -1,10 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+import { onceResized } from './helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -16,20 +17,18 @@ describe('events', () => {
   describe('default', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout>
+        <vaadin-master-detail-layout master-size="300px" detail-size="300px" style="width: 400px;">
           <master-content></master-content>
           <detail-content slot="detail"></detail-content>
         </vaadin-master-detail-layout>
       `);
-      await nextRender();
+      await onceResized(layout);
     });
 
     describe('backdrop click', () => {
       let spy;
 
       beforeEach(() => {
-        layout.forceOverlay = true;
-
         spy = sinon.spy();
         layout.addEventListener('backdrop-click', spy);
       });
@@ -38,14 +37,14 @@ describe('events', () => {
         await resetMouse();
       });
 
-      it('should fire backdrop-click event on backdrop click in drawer mode', async () => {
+      it('should fire backdrop-click event on backdrop click in overlay mode', async () => {
         const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
         const bounds = backdrop.getBoundingClientRect();
         await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
         expect(spy).to.be.calledOnce;
       });
 
-      it('should not fire backdrop-click event on detail content click in drawer mode', async () => {
+      it('should not fire backdrop-click event on detail content click in overlay mode', async () => {
         const detail = layout.querySelector('[slot="detail"]');
         const bounds = detail.getBoundingClientRect();
         await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
@@ -62,17 +61,8 @@ describe('events', () => {
       });
 
       it('should fire detail-escape-press event on pressing Escape in split mode', async () => {
-        const spy = sinon.spy();
-        layout.addEventListener('detail-escape-press', spy);
-
-        focusable.focus();
-        await sendKeys({ press: 'Escape' });
-
-        expect(spy).to.be.calledOnce;
-      });
-
-      it('should fire detail-escape-press event on pressing Escape in drawer mode', async () => {
-        layout.forceOverlay = true;
+        layout.style.width = '800px';
+        await onceResized(layout);
 
         const spy = sinon.spy();
         layout.addEventListener('detail-escape-press', spy);
@@ -83,10 +73,7 @@ describe('events', () => {
         expect(spy).to.be.calledOnce;
       });
 
-      it('should fire detail-escape-press event on pressing Escape in stack mode', async () => {
-        layout.forceOverlay = true;
-        layout.stackOverlay = true;
-
+      it('should fire detail-escape-press event on pressing Escape in overlay mode', async () => {
         const spy = sinon.spy();
         layout.addEventListener('detail-escape-press', spy);
 
@@ -133,7 +120,7 @@ describe('events', () => {
           </vaadin-master-detail-layout>
         </vaadin-master-detail-layout>
       `);
-      await nextRender();
+      await onceResized(layout);
       nested = layout.querySelector('[slot="detail"]');
     });
 
