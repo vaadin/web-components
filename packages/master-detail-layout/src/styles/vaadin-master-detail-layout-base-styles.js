@@ -37,10 +37,6 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
   }
 
-  ::slotted(*) {
-    height: 100%;
-  }
-
   [part~='master'] {
     grid-column: master-start / detail-start;
   }
