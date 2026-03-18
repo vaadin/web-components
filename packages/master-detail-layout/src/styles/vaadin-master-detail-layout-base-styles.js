@@ -12,6 +12,10 @@ export const masterDetailLayoutStyles = css`
     --_detail-size: 15em;
     --_master-column: var(--_master-size) 0;
     --_detail-column: var(--_detail-size) 0;
+    --_transition-duration: 0s;
+    --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
+    --_rtl-multiplier: 1;
+    --_detail-offscreen: calc((100% + 30px) * var(--_rtl-multiplier));
 
     display: grid;
     box-sizing: border-box;
@@ -27,13 +31,18 @@ export const masterDetailLayoutStyles = css`
     display: none !important;
   }
 
+  :host([dir='rtl']) {
+    --_rtl-multiplier: -1;
+  }
+
   :host([orientation='vertical']) {
+    --_detail-offscreen: 0 calc(100% + 30px);
+
     grid-template-columns: 100%;
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
   }
 
-  #master,
-  #detail {
+  :is(#master, #detail, #outgoing) {
     box-sizing: border-box;
   }
 
@@ -41,7 +50,7 @@ export const masterDetailLayoutStyles = css`
     grid-column: master-start / detail-start;
   }
 
-  #detail {
+  :is(#detail, #outgoing) {
     grid-column: detail-start / detail-end;
   }
 
@@ -50,7 +59,7 @@ export const masterDetailLayoutStyles = css`
     grid-row: master-start / detail-start;
   }
 
-  :host([orientation='vertical']) #detail {
+  :host([orientation='vertical']) :is(#detail, #outgoing) {
     grid-column: auto;
     grid-row: detail-start / detail-end;
   }
@@ -89,7 +98,38 @@ export const masterDetailLayoutStyles = css`
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
-  :host([overflow]) #detail {
+  /* Detail transition: off-screen by default, on-screen when has-detail */
+  #detail {
+    translate: var(--_detail-offscreen);
+  }
+
+  :host([has-detail]) #detail {
+    translate: none;
+  }
+
+  /* During replace, both detail elements must overlap in the same grid
+     cell. Without explicit placement on the non-positioned axis, the
+     second element is auto-placed into an implicit track. In split mode,
+     the outgoing cross-fades out and needs an opaque background so
+     transparent areas don't reveal the incoming prematurely. In overlay
+     mode, the [overflow] rule already provides the background. */
+  :host(:not([overflow])[transition='replace']) #outgoing {
+    background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
+  }
+
+  :host(:not([orientation='vertical'])[transition='replace']) :is(#detail, #outgoing) {
+    grid-row: 1 / -1;
+  }
+
+  :host([orientation='vertical'][transition='replace']) :is(#detail, #outgoing) {
+    grid-column: 1 / -1;
+  }
+
+  #outgoing:not([hidden]) {
+    z-index: 1;
+  }
+
+  :host([overflow]) :is(#detail, #outgoing) {
     position: absolute;
     z-index: 2;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
@@ -101,13 +141,13 @@ export const masterDetailLayoutStyles = css`
     display: block;
   }
 
-  :host([overflow]:not([orientation='vertical'])) #detail {
+  :host([overflow]:not([orientation='vertical'])) :is(#detail, #outgoing) {
     inset-block: 0;
     width: var(--_overlay-size, var(--_detail-size, min-content));
     inset-inline-end: 0;
   }
 
-  :host([overflow][orientation='vertical']) #detail {
+  :host([overflow][orientation='vertical']) :is(#detail, #outgoing) {
     grid-column: auto;
     grid-row: none;
     inset-inline: 0;
@@ -115,18 +155,25 @@ export const masterDetailLayoutStyles = css`
     inset-block-end: 0;
   }
 
-  :host([overflow][overlay-containment='viewport']) #detail,
+  :host([overflow][overlay-containment='viewport']) :is(#detail, #outgoing),
   :host([overflow][overlay-containment='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 
   @media (forced-colors: active) {
-    :host([overflow]) #detail {
+    :host([overflow]) :is(#detail, #outgoing) {
       outline: 3px solid !important;
     }
 
-    #detail {
+    :is(#detail, #outgoing) {
       background: Canvas !important;
+    }
+  }
+
+  /* Enable transitions when motion is allowed */
+  @media (prefers-reduced-motion: no-preference) {
+    :host(:not([no-animation])) {
+      --_transition-duration: 400ms;
     }
   }
 `;
