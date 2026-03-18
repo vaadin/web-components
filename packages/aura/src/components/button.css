@@ -39,25 +39,23 @@ Increase padding, but only for buttons that don't have an icon in the default sl
 Buttons that place an icon in the default slot are assumed to be icon-only buttons.
 */
 /* prettier-ignore */
-:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(:has(> :is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
-  --vaadin-button-padding: round(var(--vaadin-padding-s) / 1.4, 1px)
-    max(var(--vaadin-padding-m), round(var(--vaadin-radius-m) / 1.5, 1px));
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-crud-edit):not(:has(> :is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar):not([slot]))) {
+  --vaadin-button-padding: var(--vaadin-padding-block-container)
+    var(--vaadin-padding-m);
 }
 
 /* Decrease padding when an icon is placed in the prefix or suffix slot */
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button):has(
   > [slot='prefix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)
-),
-vaadin-drawer-toggle:empty {
-  padding-inline-start: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
+) {
+  padding-inline-start: var(--vaadin-padding-s);
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button):has(
   > [slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)
 ),
-vaadin-drawer-toggle:empty,
 vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
-  padding-inline-end: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 1.75, 1px));
+  padding-inline-end: var(--vaadin-padding-s);
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(
