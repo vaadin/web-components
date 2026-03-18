@@ -66,6 +66,15 @@ describe('vaadin-master-detail-layout', () => {
       await onceResized(layout);
       expect(master.offsetWidth).to.equal(layout.offsetWidth);
     });
+
+    it('should expand master to fill the layout when detail is removed with expand detail', async () => {
+      layout.expand = 'detail';
+      layout.masterSize = '200px';
+      layout.detailSize = '200px';
+      layout.querySelector('[slot="detail"]').remove();
+      await onceResized(layout);
+      expect(master.offsetWidth).to.equal(layout.offsetWidth);
+    });
   });
 
   describe('expand', () => {

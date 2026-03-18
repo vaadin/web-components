@@ -91,11 +91,12 @@ Prevents the master from jumping when the detail overlay first appears.
 
 **Problem**: When detail appears with overflow, the detail becomes absolute (out of grid flow). The master's `1fr` extra track expands since the detail's `1fr` is gone, causing a visual jump.
 
-**Solution**: Replace `1fr` with `calc(100% - masterSize)` to keep the master at full host width. Same rule applies when `has-detail` is not set.
+**Solution**: Replace `1fr` with `calc(100% - masterSize)` to keep the master at full host width. Same rule applies when `has-detail` is not set. For `expand='detail'`, the same compensation is applied when no detail is present to prevent the detail tracks from reserving space.
 
 ```css
 :host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
-:host([expand='master']:is(:not([has-detail]), [preserve-master-width])) {
+:host([expand='master']:is(:not([has-detail]), [preserve-master-width])),
+:host([expand='detail']:not([has-detail])) {
   --_master-column: var(--_master-size) calc(100% - var(--_master-size));
 }
 ```

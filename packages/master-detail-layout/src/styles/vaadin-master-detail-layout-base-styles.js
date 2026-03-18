@@ -70,7 +70,8 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
-  :host([expand='master']:is(:not([has-detail]), [preserve-master-width])) {
+  :host([expand='master']:is(:not([has-detail]), [preserve-master-width])),
+  :host([expand='detail']:not([has-detail])) {
     --_master-column: var(--_master-size) calc(100% - var(--_master-size));
   }
 
