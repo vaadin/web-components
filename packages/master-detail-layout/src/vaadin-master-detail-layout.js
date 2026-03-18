@@ -161,7 +161,8 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /**
-       * When true, disables view transitions.
+       * When true, the layout does not use animated transitions for the detail area.
+       *
        * @attr {boolean} no-animation
        */
       noAnimation: {
