@@ -83,7 +83,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
        * Size (in CSS length units) to be set on the detail area in
        * the CSS grid layout. If there is not enough space to show
        * master and detail areas next to each other, the detail area
-       * is shown as an overlay.
+       * is shown as an overlay. Defaults to 15em.
        *
        * @attr {string} detail-size
        */
@@ -97,7 +97,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
        * Size (in CSS length units) to be set on the master area in
        * the CSS grid layout. If there is not enough space to show
        * master and detail areas next to each other, the detail area
-       * is shown as an overlay.
+       * is shown as an overlay. Defaults to 30em.
        *
        * @attr {string} master-size
        */
@@ -238,8 +238,6 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
     } else if (oldSize) {
       this.style.removeProperty(`--_${prop}`);
     }
-
-    this.toggleAttribute(`has-${prop}`, !!size);
   }
 
   /** @private */

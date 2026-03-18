@@ -12,7 +12,7 @@ CSS custom properties:
 
 - `--_master-column: var(--_master-size) 0` — default: fixed size + 0 extra
 - `--_detail-column: var(--_detail-size) 0` — default: fixed size + 0 extra
-- `--_master-size` / `--_detail-size` — set from JS when `masterSize`/`detailSize` properties change
+- `--_master-size` / `--_detail-size` — default to `30em` / `15em` in `:host`; overridden from JS when `masterSize`/`detailSize` properties are set
 
 Parts use **named grid lines** for placement:
 
@@ -34,9 +34,9 @@ The `expand` attribute controls which extra track(s) become `1fr`:
 
 In vertical mode, `grid-template-rows` replaces `grid-template-columns` using the same named lines and variables. Parts switch from `grid-column` to `grid-row` placement.
 
-### No sizes set
+### Default sizes
 
-When `masterSize`/`detailSize` are not set, the grid template becomes invalid and falls back to auto implicit columns. **Both sizes must be explicitly set for reliable layout.**
+`--_master-size` and `--_detail-size` default to `30em` and `15em` respectively in `:host`. When `masterSize`/`detailSize` properties are set, JS overrides these CSS custom properties. When cleared, JS removes the inline style and the defaults apply again.
 
 ## Overflow Detection
 

@@ -13,7 +13,6 @@ snapshots["vaadin-master-detail-layout host default"] =
 snapshots["vaadin-master-detail-layout host masterSize"] = 
 `<vaadin-master-detail-layout
   expand="both"
-  has-master-size=""
   orientation="horizontal"
   overlay-containment="layout"
   style="--_master-size: 300px;"
@@ -25,7 +24,6 @@ snapshots["vaadin-master-detail-layout host masterSize"] =
 snapshots["vaadin-master-detail-layout host detailSize"] = 
 `<vaadin-master-detail-layout
   expand="both"
-  has-detail-size=""
   orientation="horizontal"
   overlay-containment="layout"
   style="--_detail-size: 400px;"
@@ -37,8 +35,6 @@ snapshots["vaadin-master-detail-layout host detailSize"] =
 snapshots["vaadin-master-detail-layout host masterSize and detailSize"] = 
 `<vaadin-master-detail-layout
   expand="both"
-  has-detail-size=""
-  has-master-size=""
   orientation="horizontal"
   overlay-containment="layout"
   style="--_master-size: 300px; --_detail-size: 400px;"
