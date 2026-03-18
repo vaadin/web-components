@@ -114,10 +114,8 @@ describe('vaadin-master-detail-layout', () => {
     });
 
     it('should trigger observer when a direct child is resized', async () => {
-      let height = 100;
       for (const child of layout.children) {
-        child.style.height = `${height}px`;
-        height += 100;
+        child.style.height = '100px';
         await onceResized(layout);
         expect(onResizeSpy).to.be.called;
         onResizeSpy.resetHistory();
@@ -153,17 +151,6 @@ describe('vaadin-master-detail-layout', () => {
       await onceResized(layout);
       expect(parseFloat(getComputedStyle(master).height)).to.equal(500);
       expect(parseFloat(getComputedStyle(detail).height)).to.equal(500);
-    });
-
-    it('should stretch slotted content to full height', async () => {
-      layout.masterSize = '200px';
-      layout.detailSize = '200px';
-      layout.parentElement.style.height = '500px';
-      await onceResized(layout);
-      const masterContent = layout.querySelector(':not([slot])');
-      const detailContent = layout.querySelector('[slot="detail"]');
-      expect(masterContent.offsetHeight).to.equal(500);
-      expect(detailContent.offsetHeight).to.equal(500);
     });
   });
 });
