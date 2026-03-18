@@ -12,6 +12,10 @@ export const masterDetailLayoutStyles = css`
     --_detail-size: 15em;
     --_master-column: var(--_master-size) 0;
     --_detail-column: var(--_detail-size) 0;
+    --_mdl-transition-duration: 0s;
+    --_mdl-easing: cubic-bezier(0.78, 0, 0.22, 1);
+    --_mdl-dir-multiplier: 1;
+    --_mdl-detail-offscreen: calc((100% + 30px) * var(--_mdl-dir-multiplier));
 
     display: grid;
     box-sizing: border-box;
@@ -27,7 +31,13 @@ export const masterDetailLayoutStyles = css`
     display: none !important;
   }
 
+  :host([dir='rtl']) {
+    --_mdl-dir-multiplier: -1;
+  }
+
   :host([orientation='vertical']) {
+    --_mdl-detail-offscreen: 0 calc(100% + 30px);
+
     grid-template-columns: 100%;
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
   }
@@ -90,6 +100,20 @@ export const masterDetailLayoutStyles = css`
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
+  /* Detail: off-screen by default, on-screen when has-detail */
+  [part~='detail']:not([part~='detail-outgoing']) {
+    translate: var(--_mdl-detail-offscreen);
+  }
+
+  :host([has-detail]) [part~='detail']:not([part~='detail-outgoing']) {
+    translate: none;
+  }
+
+  /* Enable CSS transitions only during _startTransition */
+  :host([transition]) [part~='detail'] {
+    transition: translate var(--_mdl-transition-duration) var(--_mdl-easing);
+  }
+
   :host([overflow]) [part~='detail'] {
     position: absolute;
     z-index: 2;
@@ -128,6 +152,25 @@ export const masterDetailLayoutStyles = css`
 
     [part~='detail'] {
       background: Canvas !important;
+    }
+  }
+
+  /* Remove: override translate back to off-screen while has-detail is still set */
+  :host([transition='remove']) [part~='detail']:not([part~='detail-outgoing']) {
+    translate: var(--_mdl-detail-offscreen);
+  }
+
+  /* Outgoing detail container for replace transitions */
+  [part~='detail-outgoing']:not([hidden]) {
+    transition:
+      translate var(--_mdl-transition-duration) var(--_mdl-easing),
+      visibility var(--_mdl-transition-duration);
+  }
+
+  /* Enable transitions when motion is allowed */
+  @media (prefers-reduced-motion: no-preference) {
+    :host(:not([no-animation])) {
+      --_mdl-transition-duration: 400ms;
     }
   }
 `;

@@ -8,10 +8,8 @@ import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
-import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-base-styles.js';
 
 function parseTrackSizes(gridTemplate) {
   return gridTemplate
@@ -66,9 +64,8 @@ function parseTrackSizes(gridTemplate) {
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
- * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -168,17 +165,13 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       noAnimation: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
       },
     };
   }
 
   static get experimental() {
     return true;
-  }
-
-  /** @return {!Array<!CSSResult>} */
-  get slotStyles() {
-    return [masterDetailLayoutTransitionStyles];
   }
 
   /** @protected */
@@ -201,6 +194,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       >
         <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
       </div>
+      <div id="detail-outgoing" part="detail detail-outgoing" inert hidden></div>
     `;
   }
 
@@ -304,7 +298,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
     this.requestUpdate();
 
     if (focusTarget) {
-      focusTarget.focus();
+      focusTarget.focus({ preventScroll: true });
     }
   }
 
@@ -342,15 +336,14 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /**
-   * Sets the detail element to be displayed in the detail area and starts a
-   * view transition that animates adding, replacing or removing the detail
-   * area. During the view transition, the element is added to the DOM and
-   * assigned to the `detail` slot. Any previous detail element is removed.
-   * When passing null as the element, the current detail element is removed.
+   * Sets the detail element to be displayed in the detail area and starts an
+   * animated transition for adding, replacing or removing the detail area.
+   * The element is added to the DOM and assigned to the `detail` slot. Any
+   * previous detail element is removed. When passing null as the element,
+   * the current detail element is removed.
    *
-   * If the browser does not support view transitions, the respective updates
-   * are applied immediately without starting a transition. The transition can
-   * also be skipped using the `skipTransition` parameter.
+   * The transition can be skipped using the `skipTransition` parameter or
+   * the `noAnimation` property.
    *
    * @param element the new detail element, or null to remove the current detail
    * @param skipTransition whether to skip the transition
@@ -374,8 +367,12 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       }
     };
 
-    if (skipTransition) {
+    if (skipTransition || this.noAnimation) {
       updateSlot();
+      queueMicrotask(() => {
+        const state = this.__computeLayoutState();
+        this.__applyLayoutState(state);
+      });
       return Promise.resolve();
     }
 
@@ -390,17 +387,20 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /**
-   * Starts a view transition that animates adding, replacing or removing the
-   * detail area. Once the transition is ready and the browser has taken a
-   * snapshot of the current layout, the provided update callback is called.
-   * The callback should update the DOM, which can happen asynchronously.
-   * Once the DOM is updated, the caller must call `_finishTransition`,
-   * which results in the browser taking a snapshot of the new layout and
-   * animating the transition.
+   * Starts a CSS transition for adding, replacing or removing the detail
+   * area. The `[transition]` attribute is set on the host, and CSS
+   * transitions on `translate` animate the detail panel.
    *
-   * If the browser does not support view transitions, or the `noAnimation`
-   * property is set, the update callback is called immediately without
-   * starting a transition.
+   * For 'remove' transitions, the DOM update is deferred until the
+   * transition completes. For 'add'/'replace', the DOM is updated
+   * immediately and the transition plays on the new content.
+   *
+   * CSS transitions are interruptible: starting a new transition while
+   * one is in progress causes the browser to reverse from the current
+   * position.
+   *
+   * If the `noAnimation` property is set, the update callback is called
+   * immediately without starting a transition.
    *
    * @param transitionType
    * @param updateCallback
@@ -408,51 +408,182 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * @protected
    */
   _startTransition(transitionType, updateCallback) {
-    const useTransition = typeof document.startViewTransition === 'function' && !this.noAnimation;
-    if (!useTransition) {
+    if (this.noAnimation) {
       updateCallback();
       return Promise.resolve();
     }
 
-    this.setAttribute('transition', transitionType);
-    this.__transition = document.startViewTransition(() => {
-      // Return a promise that can be resolved once the DOM is updated
-      return new Promise((resolve) => {
-        this.__resolveUpdateCallback = resolve;
-        // Notify the caller that the transition is ready, so that they can
-        // update the DOM
-        updateCallback();
-      });
+    // If a previous transition is pending, resolve it and invalidate its listeners
+    if (this.__transitionResolve) {
+      this.__transitionResolve();
+      this.__transitionResolve = null;
+    }
+    this.__transitionVersion = (this.__transitionVersion || 0) + 1;
+    this.__clearOutgoing();
+
+    // For 'replace': snapshot old content into outgoing container before DOM update
+    if (transitionType === 'replace') {
+      this.__snapshotOutgoing();
+    }
+
+    if (transitionType === 'remove') {
+      // For remove: enable the CSS transition FIRST (via 'pending'), force
+      // a reflow to capture the current translate:none as the "before" state,
+      // THEN set transition='remove' which changes translate to off-screen.
+      // This two-step is needed because the CSS spec says no transitions
+      // start if the previous transition property was 'none'.
+      this.setAttribute('transition', 'pending');
+      this.$.detail.getBoundingClientRect();
+      this.setAttribute('transition', 'remove');
+      this.__pendingRemoveCallback = updateCallback;
+    } else {
+      // For add/replace: set the transition type (enables CSS transition),
+      // then update DOM immediately so the new element is in the slot.
+      this.setAttribute('transition', transitionType);
+      updateCallback();
+    }
+
+    // For 'replace', start the outgoing slide after the reflow
+    if (transitionType === 'replace') {
+      this.__startOutgoingSlide();
+    }
+
+    // Listen for the transition to complete
+    this.__awaitTransition(transitionType);
+
+    return new Promise((resolve) => {
+      this.__transitionResolve = resolve;
     });
-    return this.__transition.finished;
   }
 
   /**
-   * Finishes the current view transition, if any. This method should be called
-   * after the DOM has been updated to finish the transition and animate the
-   * change in the layout.
+   * Finishes the current transition by detecting and applying the layout
+   * state. The forced reflow via `getComputedStyle()` establishes the
+   * "before" translate value, then `__applyLayoutState()` sets `has-detail`
+   * which changes translate — triggering the CSS transition.
    *
-   * @returns {Promise<void>}
    * @protected
    */
-  async _finishTransition() {
-    // Detect layout mode before resolving the transition, so the browser's
-    // "new" snapshot includes the correct overlay state. The microtask runs
-    // before the Promise resolution propagates to startViewTransition.
-    queueMicrotask(() => {
-      const state = this.__computeLayoutState();
-      this.__applyLayoutState(state);
-    });
+  _finishTransition() {
+    // The forced reflow in __computeLayoutState establishes the "before"
+    // translate value (off-screen, since has-detail isn't set yet for add).
+    // Then __applyLayoutState sets has-detail → translate:none, and the
+    // CSS transition (enabled by [transition] attr) animates the change.
+    const state = this.__computeLayoutState();
+    this.__applyLayoutState(state);
+  }
 
-    if (!this.__transition) {
-      return Promise.resolve();
+  /**
+   * Listens for the `transitionend` event on the detail element to
+   * clean up after the transition completes.
+   * @private
+   */
+  __awaitTransition(transitionType) {
+    this.__transitionVersion = (this.__transitionVersion || 0) + 1;
+    const version = this.__transitionVersion;
+    const target = this.$.detail;
+
+    const handler = (event) => {
+      if (event.target !== target || event.propertyName !== 'translate') {
+        return;
+      }
+      target.removeEventListener('transitionend', handler);
+      if (this.__transitionVersion === version) {
+        this.__onTransitionEnd(transitionType);
+      }
+    };
+    target.addEventListener('transitionend', handler);
+
+    // Fallback: if no CSS transition plays (e.g., not in overlay mode,
+    // or duration is 0), resolve immediately via getAnimations() check.
+    // Use double-rAF so the check runs AFTER the rendering cycle creates
+    // CSS Transitions (transitions are created during the rendering
+    // pipeline's style recalc, not during JS-triggered forced reflows).
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (this.__transitionVersion !== version) {
+          return;
+        }
+        const animations = target.getAnimations();
+        if (animations.length === 0) {
+          target.removeEventListener('transitionend', handler);
+          this.__onTransitionEnd(transitionType);
+        }
+      });
+    });
+  }
+
+  /**
+   * Called when the detail's CSS transition completes.
+   * @private
+   */
+  __onTransitionEnd(transitionType) {
+    if (transitionType === 'remove' && this.__pendingRemoveCallback) {
+      // Now safe to remove the detail element — slide-out is done
+      this.__pendingRemoveCallback();
+      this.__pendingRemoveCallback = null;
     }
-    // Resolve the update callback to finish the transition
-    this.__resolveUpdateCallback();
-    await this.__transition.finished;
+
     this.removeAttribute('transition');
-    this.__transition = null;
-    this.__resolveUpdateCallback = null;
+    this.__clearOutgoing();
+
+    if (this.__transitionResolve) {
+      this.__transitionResolve();
+      this.__transitionResolve = null;
+    }
+  }
+
+  /**
+   * Moves the current detail content into the outgoing container so it
+   * can slide out while the new content slides in.
+   * @private
+   */
+  __snapshotOutgoing() {
+    const outgoing = this.$['detail-outgoing'];
+    const currentDetail = this.querySelector('[slot="detail"]');
+    if (!currentDetail || !outgoing) {
+      return;
+    }
+    // Move old element into shadow DOM outgoing container
+    currentDetail.removeAttribute('slot');
+    outgoing.appendChild(currentDetail);
+    // Position it on-screen (matching current detail position)
+    outgoing.style.translate = 'none';
+    outgoing.style.visibility = 'visible';
+    outgoing.removeAttribute('hidden');
+  }
+
+  /**
+   * Triggers the slide-out transition on the outgoing container.
+   * @private
+   */
+  __startOutgoingSlide() {
+    const outgoing = this.$['detail-outgoing'];
+    if (!outgoing || outgoing.hidden) {
+      return;
+    }
+    // Force reflow so the browser captures the on-screen position
+    getComputedStyle(outgoing).getPropertyValue('translate');
+    // Remove inline styles — CSS defaults (off-screen translate) kick in → transition plays
+    outgoing.style.translate = '';
+    outgoing.style.visibility = '';
+  }
+
+  /**
+   * Clears the outgoing container after the replace transition completes.
+   * @private
+   */
+  __clearOutgoing() {
+    const outgoing = this.$['detail-outgoing'];
+    if (!outgoing) {
+      return;
+    }
+    // Move any children back before removing (in case they need cleanup)
+    while (outgoing.firstChild) {
+      outgoing.firstChild.remove();
+    }
+    outgoing.removeAttribute('style');
+    outgoing.setAttribute('hidden', '');
   }
 
   /**

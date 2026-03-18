@@ -62,9 +62,22 @@ Layout detection is split into two methods to avoid forced reflows:
 - ResizeObserver callback: calls `__computeLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__applyLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
 
-### View transitions
+### CSS transitions
 
-`_finishTransition()` uses `queueMicrotask` to call both `__computeLayoutState()` + `__applyLayoutState()` synchronously. The microtask runs before the Promise resolution propagates to `startViewTransition`, ensuring the "new" snapshot captures the correct overlay state (backdrop, absolute positioning). The `getComputedStyle` read in the microtask does cause a forced reflow, but this is unavoidable for correct transition snapshots.
+Detail panel slide animations use CSS transitions on `translate`. The `--_mdl-detail-offscreen` custom property holds the off-screen translate value (horizontal or vertical). CSS rules apply regardless of overflow mode:
+
+- Default: `translate: var(--_mdl-detail-offscreen)` — off-screen
+- `:host([has-detail])` overrides to `translate: none` — on-screen
+- `:host([transition])` enables the CSS `transition` property (gated so initial render doesn't animate)
+- `:host([transition='remove'])` forces translate back to off-screen while `has-detail` is still set
+
+**Add**: `[transition='add']` set (enables transition) → `_finishTransition()` reflow captures off-screen state → `__applyLayoutState()` sets `has-detail` → translate changes → CSS transition plays.
+
+**Remove**: uses a two-step approach because the CSS spec requires the transition property to be active BEFORE the translate change. `[transition='pending']` enables the transition → forced reflow captures `translate:none` → `[transition='remove']` changes translate to off-screen → CSS transition plays. After `transitionend`, the element is removed.
+
+**Replace incoming**: CSS transitions cannot animate within a single frame (the "before" off-screen state was never rendered). The Web Animations branch handles this with `element.animate()`.
+
+**Replace outgoing**: old content moved to `#detail-outgoing` slot, slides out via CSS transition on the outgoing container.
 
 ## Overlay Modes
 
@@ -103,15 +116,17 @@ Prevents the master from jumping when the detail overlay first appears.
 
 Set when detail first appears with overflow, cleared when detail is removed or overflow resolves.
 
-## View Transitions
+## Detail Transitions
 
-Uses the CSS View Transitions API (`document.startViewTransition`):
+Uses CSS transitions on `translate` for interruptible slide animations:
 
-- `_setDetail(element, skipTransition)` — adds/replaces/removes detail with animation
-- `_startTransition(transitionType, updateCallback)` — starts a named transition
-- `_finishTransition()` — calls `__computeLayoutState()` + `__applyLayoutState()` via `queueMicrotask` (see read/write separation above)
-- `noAnimation` property disables transitions
-- Styles injected via `SlotStylesMixin`
+- `_setDetail(element, skipTransition)` — adds/replaces/removes detail with transition
+- `_startTransition(transitionType, updateCallback)` — manages transition lifecycle, sets `[transition]` attribute (with `'pending'` → reflow → `'remove'` two-step for remove)
+- `_finishTransition()` — forced reflow via `getComputedStyle()` + `__applyLayoutState()` to trigger CSS transition
+- `noAnimation` property (reflected to attribute) disables transitions via CSS `:host([no-animation])`
+- `#detail-outgoing` shadow DOM container for replace transitions (old content slides out)
+- `--_mdl-detail-offscreen` CSS custom property centralizes the off-screen translate value
+- Transitions defined in shadow DOM CSS (works inside shadow roots, unlike View Transitions)
 
 ## Test Patterns
 
