@@ -100,17 +100,17 @@ The components below are licensed under [Vaadin Commercial License and Service T
 
 - Chrome (evergreen)
 - Firefox (evergreen)
-- Safari 15 or newer
+- Safari 17 or newer
 - Edge (Chromium, evergreen)
 
 **Mobile:**
 
 - Chrome (evergreen) for Android (4.4 or newer)
-- Safari for iOS (15 or newer)
+- Safari for iOS (17 or newer)
 
 ## Examples
 
-Are you looking for an example project to get started? Visit [start.vaadin.com](https://start.vaadin.com/?preset=fusion) to create a Vaadin app.
+Are you looking for an example project to get started? Visit [start.vaadin.com](https://start.vaadin.com) to create a Vaadin app.
 
 ## Questions
 
