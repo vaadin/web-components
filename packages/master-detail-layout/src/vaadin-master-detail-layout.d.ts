@@ -60,7 +60,7 @@ declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMi
    * Size (in CSS length units) to be set on the detail area in
    * the CSS grid layout. If there is not enough space to show
    * master and detail areas next to each other, the detail area
-   * is shown as an overlay. When not set, falls back to 15rem.
+   * is shown as an overlay. Defaults to 15em.
    *
    * @attr {string} detail-size
    */
@@ -70,7 +70,7 @@ declare class MasterDetailLayout extends SlotStylesMixin(ThemableMixin(ElementMi
    * Size (in CSS length units) to be set on the master area in
    * the CSS grid layout. If there is not enough space to show
    * master and detail areas next to each other, the detail area
-   * is shown as an overlay. When not set, falls back to 30rem.
+   * is shown as an overlay. Defaults to 30em.
    *
    * @attr {string} master-size
    */
