@@ -44,7 +44,7 @@ In vertical mode, `grid-template-rows` replaces `grid-template-columns` using th
 
 **No overflow** when either:
 
-- `Math.round(masterSize + masterExtra + detailSize) <= hostSize` (tracks fit; rounding prevents false overflow from sub-pixel track sizes vs integer `offsetWidth`)
+- `Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)` (tracks fit; flooring prevents false overflow from sub-pixel track sizes)
 - `masterExtra >= detailSize` (master's extra space can absorb the detail)
 
 The `>=` (not `>`) is intentional: when `preserve-master-width` or `:not([has-detail])` is active, CSS `calc(100% - masterSize)` inflates the master extra track. With this inflation, `masterExtra >= detailSize` is equivalent to `hostSize >= masterSize + detailSize` — the correct no-overflow check. Strict `>` would miss the boundary case where they're equal.
@@ -94,7 +94,8 @@ Prevents the master from jumping when the detail overlay first appears.
 **Solution**: Replace `1fr` with `calc(100% - masterSize)` to keep the master at full host width. Same rule applies when `has-detail` is not set.
 
 ```css
-:host([expand='both']:is(:not([has-detail]), [preserve-master-width])) {
+:host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
+:host([expand='master']:is(:not([has-detail]), [preserve-master-width])) {
   --_master-column: var(--_master-size) calc(100% - var(--_master-size));
 }
 ```
