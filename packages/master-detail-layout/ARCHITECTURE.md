@@ -38,6 +38,10 @@ In vertical mode, `grid-template-rows` replaces `grid-template-columns` using th
 
 `--_master-size` and `--_detail-size` default to `30em` and `15em` respectively in `:host`. When `masterSize`/`detailSize` properties are set, JS overrides these CSS custom properties. When cleared, JS removes the inline style and the defaults apply again.
 
+## Slotted Content Stretching
+
+`::slotted(*) { height: 100% }` makes all slotted content stretch to fill the cross-axis by default. In horizontal mode, children fill the full height; in vertical mode, block elements already fill width naturally. This low-specificity rule is easily overridden by explicit height on slotted elements.
+
 ## Overflow Detection
 
 `__checkOverflow()` reads the first 3 of the 4 computed track sizes: `[masterSize, masterExtra, detailSize]`. The 4th (detail extra) is 0 in overflow scenarios.
