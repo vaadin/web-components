@@ -19,7 +19,7 @@
   --vaadin-gap-xl: round(var(--aura-base-size) * 1.5 * 1px, 1px);
 
   --vaadin-padding-block-container: round(var(--vaadin-padding-s) / 1.4, 1px);
-  --vaadin-padding-inline-container: max(var(--vaadin-padding-s), round(var(--vaadin-radius-m) / 2, 1px));
+  --vaadin-padding-inline-container: var(--vaadin-padding-s);
 
   --vaadin-padding-xs: round(var(--aura-base-size) * 0.25 * 1px, 1px);
   --vaadin-padding-s: round(var(--aura-base-size) * 0.5 * 1px, 1px);
