@@ -393,7 +393,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-color-7 {
     fill: var(--_color-7);
-    color: var(--_color-7-label);
+    stroke: var(--_color-7);
   }
 
   :where([styled-mode]) .highcharts-color-8 {
