@@ -148,6 +148,26 @@ describe('vaadin-scroller', () => {
     });
   });
 
+  describe('explicit height in flex container', () => {
+    let container;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="display: flex; flex-direction: column; height: 500px;">
+          <vaadin-scroller style="height: 200px;">
+            <div>Content</div>
+          </vaadin-scroller>
+        </div>
+      `);
+      scroller = container.querySelector('vaadin-scroller');
+      await nextRender();
+    });
+
+    it('should respect explicit height when inside a flex container', () => {
+      expect(scroller.offsetHeight).to.equal(200);
+    });
+  });
+
   describe('full height content', () => {
     let container;
 
