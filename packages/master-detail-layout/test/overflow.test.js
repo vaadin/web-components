@@ -59,7 +59,7 @@ describe('overflow detection', () => {
         expect(layout.hasAttribute('overflow')).to.be.false;
       });
 
-      it('should remove overflow when masterSize decreases to fit while preserve-master-width is set', async () => {
+      it('should remove overflow when masterSize decreases to fit while keep-detail-column-offscreen is set', async () => {
         layout.style.width = '400px';
         await onceResized(layout);
 

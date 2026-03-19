@@ -288,12 +288,12 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
    * @private
    */
   __applyLayoutState({ hadDetail, hasDetail, hasOverflow, focusTarget }) {
-    // Set preserve-master-width when detail first appears with overflow
+    // Set keep-detail-column-offscreen when detail first appears with overflow
     // to prevent master width from jumping.
     if (!hadDetail && hasDetail && hasOverflow) {
-      this.setAttribute('preserve-master-width', '');
+      this.setAttribute('keep-detail-column-offscreen', '');
     } else if (!hasDetail || !hasOverflow) {
-      this.removeAttribute('preserve-master-width');
+      this.removeAttribute('keep-detail-column-offscreen');
     }
 
     this.toggleAttribute('has-detail', hasDetail);

@@ -47,14 +47,14 @@ In vertical mode, `grid-template-rows` replaces `grid-template-columns` using th
 - `Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)` (tracks fit; flooring prevents false overflow from sub-pixel track sizes)
 - `masterExtra >= detailSize` (master's extra space can absorb the detail)
 
-The `>=` (not `>`) is intentional: when `preserve-master-width` or `:not([has-detail])` is active, CSS `calc(100% - masterSize)` inflates the master extra track. With this inflation, `masterExtra >= detailSize` is equivalent to `hostSize >= masterSize + detailSize` — the correct no-overflow check. Strict `>` would miss the boundary case where they're equal.
+The `>=` (not `>`) is intentional: when `keep-detail-column-offscreen` or `:not([has-detail])` is active, CSS `calc(100% - masterSize)` inflates the master extra track. With this inflation, `masterExtra >= detailSize` is equivalent to `hostSize >= masterSize + detailSize` — the correct no-overflow check. Strict `>` would miss the boundary case where they're equal.
 
 ### Read/write separation
 
 Layout detection is split into two methods to avoid forced reflows:
 
 - **`__computeLayoutState()`** — pure reads: `checkVisibility()`, `getComputedStyle()`, `getFocusableElements()`. Called in the ResizeObserver callback where layout is already computed — no forced reflow.
-- **`__applyLayoutState(state)`** — pure writes: toggles `has-detail`, `overflow`, `preserve-master-width`; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
+- **`__applyLayoutState(state)`** — pure writes: toggles `has-detail`, `overflow`, `keep-detail-column-offscreen`; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
 
 ### ResizeObserver
 
@@ -85,18 +85,15 @@ When `overflow` AND `has-detail` are both set, the detail becomes an overlay:
 
 Setting `overlaySize` to `100%` makes the detail cover the full layout (replaces old "full" mode).
 
-## preserve-master-width
+## keep-detail-column-offscreen
 
 Prevents the master from jumping when the detail overlay first appears.
 
-**Problem**: When detail appears with overflow, the detail becomes absolute (out of grid flow). The master's `1fr` extra track expands since the detail's `1fr` is gone, causing a visual jump.
-
-**Solution**: Replace `1fr` with `calc(100% - masterSize)` to keep the master at full host width. Same rule applies when `has-detail` is not set. For `expand='detail'`, the same compensation is applied when no detail is present to prevent the detail tracks from reserving space.
+When no detail is present, master's extra track is set to `calc(100% - masterSize)`, pushing the detail column offscreen. This ensures that when a detail element appears, it starts offscreen and is then either moved into an overlay (if overflow, so no blink occurs and master area size is preserved) or revealed by removing the `calc()` override (if no overflow). The `keep-detail-column-offscreen` attribute keeps the same override active when detail first appears with overflow, until the overlay takes effect.
 
 ```css
-:host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
-:host([expand='master']:is(:not([has-detail]), [preserve-master-width])),
-:host([expand='detail']:not([has-detail])) {
+:host(:not([has-detail])),
+:host([keep-detail-column-offscreen]) {
   --_master-column: var(--_master-size) calc(100% - var(--_master-size));
 }
 ```

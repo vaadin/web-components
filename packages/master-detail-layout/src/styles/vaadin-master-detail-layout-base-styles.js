@@ -69,9 +69,8 @@ export const masterDetailLayoutStyles = css`
     --_master-column: var(--_master-size) 1fr;
   }
 
-  :host([expand='both']:is(:not([has-detail]), [preserve-master-width])),
-  :host([expand='master']:is(:not([has-detail]), [preserve-master-width])),
-  :host([expand='detail']:not([has-detail])) {
+  :host(:not([has-detail])),
+  :host([keep-detail-column-offscreen]) {
     --_master-column: var(--_master-size) calc(100% - var(--_master-size));
   }
 
