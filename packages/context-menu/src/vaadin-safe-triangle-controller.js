@@ -26,15 +26,11 @@ const FALLBACK_TIMEOUT_MS = 400;
  * - Only active for pointer/mouse input; ignored for touch and pen
  */
 export class SafeTriangleController {
-  #hasLastPosition = false;
-
   #lastX = 0;
 
   #lastY = 0;
 
   #invalidCount = 0;
-
-  #active = false;
 
   #lastMoveTime = 0;
 
@@ -54,21 +50,20 @@ export class SafeTriangleController {
       return;
     }
 
-    const now = performance.now();
-    if (now - this.#lastMoveTime < THROTTLE_MS) {
+    if (event.timeStamp - this.#lastMoveTime < THROTTLE_MS) {
       return;
     }
-    this.#lastMoveTime = now;
 
     const x = event.clientX;
     const y = event.clientY;
 
-    if (!this.#hasLastPosition) {
-      this.#hasLastPosition = true;
+    if (this.#lastMoveTime === 0) {
+      this.#lastMoveTime = event.timeStamp;
       this.#lastX = x;
       this.#lastY = y;
       return;
     }
+    this.#lastMoveTime = event.timeStamp;
 
     if (!this.#submenuElement) {
       this.#lastX = x;
@@ -139,11 +134,11 @@ export class SafeTriangleController {
    */
   activate(submenuOverlay, parentItem, parentContainer) {
     this.#cancelPendingSwitch();
+    const wasActive = this.#submenuElement !== null;
     this.#submenuElement = submenuOverlay;
     this.#parentItemElement = parentItem;
     this.#invalidCount = 0;
     this.#lastMoveTime = 0;
-    this.#hasLastPosition = false;
     this.#lastX = 0;
     this.#lastY = 0;
 
@@ -155,8 +150,7 @@ export class SafeTriangleController {
       parentContainer.setAttribute('safe-triangle-active', '');
     }
 
-    if (!this.#active) {
-      this.#active = true;
+    if (!wasActive) {
       document.addEventListener('pointermove', this.#onPointerMove);
     }
   }
@@ -170,8 +164,7 @@ export class SafeTriangleController {
       this.#parentContainer.removeAttribute('safe-triangle-active');
       this.#parentContainer = null;
     }
-    if (this.#active) {
-      this.#active = false;
+    if (this.#submenuElement) {
       document.removeEventListener('pointermove', this.#onPointerMove);
     }
     this.#submenuElement = null;
@@ -187,7 +180,7 @@ export class SafeTriangleController {
    * @return {boolean}
    */
   shouldKeepOpen() {
-    if (!this.#active || !this.#submenuElement) {
+    if (!this.#submenuElement) {
       return false;
     }
     // Only block switches if we've actually tracked pointer movement.
@@ -215,18 +208,15 @@ export class SafeTriangleController {
   }
 
   #cancelPendingSwitch() {
-    this.#pendingSwitch = null;
-    if (this.#pendingTimeout) {
-      clearTimeout(this.#pendingTimeout);
-      this.#pendingTimeout = null;
-    }
-  }
-
-  #executePendingSwitch() {
     const callback = this.#pendingSwitch;
     this.#pendingSwitch = null;
     clearTimeout(this.#pendingTimeout);
     this.#pendingTimeout = null;
+    return callback;
+  }
+
+  #executePendingSwitch() {
+    const callback = this.#cancelPendingSwitch();
     if (callback) {
       callback();
     }

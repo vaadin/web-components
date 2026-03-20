@@ -17,7 +17,7 @@ export class SafeTriangleController {
    * Activate the safe triangle tracking for the given submenu overlay.
    * Should be called when a submenu opens.
    */
-  activate(submenuOverlay: HTMLElement, parentItem: HTMLElement): void;
+  activate(submenuOverlay: HTMLElement, parentItem: HTMLElement, parentContainer?: HTMLElement): void;
 
   /**
    * Deactivate the safe triangle tracking.

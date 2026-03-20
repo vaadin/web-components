@@ -285,6 +285,11 @@ export const MenuBarMixin = (superClass) =>
 
           menu.addEventListener('item-selected', this.__onItemSelected.bind(this));
           menu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
+          menu.addEventListener('opened-changed', (e) => {
+            if (!e.detail.value && this.__safeTriangle) {
+              this.__safeTriangle.deactivate();
+            }
+          });
 
           const overlay = menu._overlayElement;
           overlay._contentRoot.addEventListener('keydown', this.__boundOnContextMenuKeydown);
@@ -1059,9 +1064,6 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __onEscapeClose() {
       this.__deactivateButton(true);
-      if (this.__safeTriangle) {
-        this.__safeTriangle.deactivate();
-      }
     }
 
     /** @private */
@@ -1086,10 +1088,6 @@ export const MenuBarMixin = (superClass) =>
       this.__deactivateButton(restoreFocus);
       if (this._subMenu.opened) {
         this._subMenu.close();
-      }
-      // Deactivate safe triangle tracking when submenu closes
-      if (this.__safeTriangle) {
-        this.__safeTriangle.deactivate();
       }
     }
 
