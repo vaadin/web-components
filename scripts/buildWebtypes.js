@@ -133,7 +133,12 @@ function isWritablePrimitiveAttribute(attribute) {
  */
 function getPublicWritableProperties(elementDeclaration) {
   const members = elementDeclaration.members || [];
-  return members.filter((member) => member.kind === 'field' && member.privacy === 'public' && !member.readonly);
+  // Members without explicit privacy are treated as public (private/protected
+  // are already filtered out by the CEM config).
+  return members.filter(
+    (member) =>
+      member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected' && !member.readonly,
+  );
 }
 
 function createPlainElementDefinition(packageJson, elementDeclaration) {
