@@ -93,6 +93,25 @@ export class TypeContext {
     return this.checker.typeToString(type);
   }
 
+  private isExported(statement: ts.Statement): boolean {
+    return (
+      'modifiers' in statement &&
+      Array.isArray(statement.modifiers) &&
+      statement.modifiers.some((mod: ts.Modifier) => mod.kind === ts.SyntaxKind.ExportKeyword)
+    );
+  }
+
+  private isNamedDeclaration(
+    statement: ts.Statement,
+  ): statement is ts.ClassDeclaration | ts.InterfaceDeclaration | ts.TypeAliasDeclaration {
+    return (
+      (ts.isClassDeclaration(statement) ||
+        ts.isInterfaceDeclaration(statement) ||
+        ts.isTypeAliasDeclaration(statement)) &&
+      !!statement.name
+    );
+  }
+
   private findDeclaration(typeName: string): RelatedTypeDeclaration | undefined {
     // Only consider declaration files in monorepo packages
     const relatedSourceFiles = this.program
@@ -100,39 +119,24 @@ export class TypeContext {
       .filter((file) => file.fileName.includes(`/packages/`))
       .filter((file) => file.isDeclarationFile);
 
+    const typeNameLower = typeName.toLowerCase();
+    let caseInsensitiveMatch: RelatedTypeDeclaration | undefined;
+
     for (const sourceFile of relatedSourceFiles) {
       for (const statement of sourceFile.statements) {
-        // Check for exported class
-        if (
-          ts.isClassDeclaration(statement) &&
-          statement.name &&
-          statement.name.text === typeName &&
-          statement.modifiers &&
-          statement.modifiers.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)
-        ) {
+        if (!this.isNamedDeclaration(statement) || !this.isExported(statement)) continue;
+
+        if (statement.name!.text === typeName) {
           return statement;
         }
-        // Check for exported interface
-        if (
-          ts.isInterfaceDeclaration(statement) &&
-          statement.name.text === typeName &&
-          statement.modifiers &&
-          statement.modifiers.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)
-        ) {
-          return statement;
-        }
-        // Check for exported type alias
-        if (
-          ts.isTypeAliasDeclaration(statement) &&
-          statement.name.text === typeName &&
-          statement.modifiers &&
-          statement.modifiers.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)
-        ) {
-          return statement;
+
+        // Track case-insensitive match as fallback (e.g., GridDragstartEvent → GridDragStartEvent)
+        if (!caseInsensitiveMatch && statement.name!.text.toLowerCase() === typeNameLower) {
+          caseInsensitiveMatch = statement;
         }
       }
     }
-    return undefined;
+    return caseInsensitiveMatch;
   }
 
   findRelatedTypes(typeString: string): RelatedTypeInfo[] {
@@ -186,7 +190,8 @@ export class TypeContext {
       }
     });
 
-    return Array.from(this.relatedTypes.values().filter((type) => typeNames.includes(type.name)));
+    const typeNamesLower = new Set(typeNames.map((t) => t.toLowerCase()));
+    return Array.from(this.relatedTypes.values().filter((type) => typeNamesLower.has(type.name.toLowerCase())));
   }
 
   findEventType(eventName: string): RelatedTypeInfo | undefined {
