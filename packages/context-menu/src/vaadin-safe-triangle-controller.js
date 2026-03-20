@@ -71,48 +71,13 @@ export class SafeTriangleController {
       return;
     }
 
-    const submenuRect = this.#submenuElement.$.overlay.getBoundingClientRect();
-
-    // Skip if submenu is not visible
-    if (submenuRect.width === 0 || submenuRect.height === 0) {
-      this.#lastX = x;
-      this.#lastY = y;
-      return;
-    }
-
-    // Determine submenu direction from actual position, not RTL flag
-    const parentRect = this.#parentItemElement.getBoundingClientRect();
-    const submenuIsRight = submenuRect.left >= parentRect.left;
-
     const dx = x - this.#lastX;
+    const dy = y - this.#lastY;
 
-    // Early exit: moving horizontally away from the submenu
-    if ((submenuIsRight && dx < -1) || (!submenuIsRight && dx > 1)) {
-      this.#invalidCount += 1;
+    if (this.#isPointerAimedAtSubmenu(dx, dy)) {
+      this.#invalidCount = 0;
     } else {
-      // Compute the near edge corners of the submenu
-      const nearX = submenuIsRight ? submenuRect.left : submenuRect.right;
-      const topY = submenuRect.top;
-      const bottomY = submenuRect.bottom;
-
-      // Angle from previous cursor position to the two submenu corners
-      const thetaTop = Math.atan2(topY - this.#lastY, nearX - this.#lastX);
-      const thetaBottom = Math.atan2(bottomY - this.#lastY, nearX - this.#lastX);
-
-      // Angle of cursor movement vector
-      const dy = y - this.#lastY;
-      const thetaPointer = Math.atan2(dy, dx);
-
-      // Determine the angular bounds (top and bottom may swap depending on direction)
-      const minAngle = Math.min(thetaTop, thetaBottom);
-      const maxAngle = Math.max(thetaTop, thetaBottom);
-
-      if (thetaPointer >= minAngle - TOLERANCE_RAD && thetaPointer <= maxAngle + TOLERANCE_RAD) {
-        // Cursor is aimed at the submenu
-        this.#invalidCount = 0;
-      } else {
-        this.#invalidCount += 1;
-      }
+      this.#invalidCount += 1;
     }
 
     this.#lastX = x;
@@ -205,6 +170,40 @@ export class SafeTriangleController {
     this.#pendingTimeout = setTimeout(() => {
       this.#executePendingSwitch();
     }, FALLBACK_TIMEOUT_MS);
+  }
+
+  #isPointerAimedAtSubmenu(dx, dy) {
+    const submenuRect = this.#submenuElement.$.overlay.getBoundingClientRect();
+
+    // Skip if submenu is not visible
+    if (submenuRect.width === 0 || submenuRect.height === 0) {
+      return false;
+    }
+
+    // Determine submenu direction from actual position, not RTL flag
+    const parentRect = this.#parentItemElement.getBoundingClientRect();
+    const submenuIsRight = submenuRect.left >= parentRect.left;
+
+    // Early exit: moving horizontally away from the submenu
+    if ((submenuIsRight && dx < -1) || (!submenuIsRight && dx > 1)) {
+      return false;
+    }
+
+    // Compute the near edge corners of the submenu
+    const nearX = submenuIsRight ? submenuRect.left : submenuRect.right;
+
+    // Angle from previous cursor position to the two submenu corners
+    const thetaTop = Math.atan2(submenuRect.top - this.#lastY, nearX - this.#lastX);
+    const thetaBottom = Math.atan2(submenuRect.bottom - this.#lastY, nearX - this.#lastX);
+
+    // Angle of cursor movement vector
+    const thetaPointer = Math.atan2(dy, dx);
+
+    // Determine the angular bounds (top and bottom may swap depending on direction)
+    const minAngle = Math.min(thetaTop, thetaBottom);
+    const maxAngle = Math.max(thetaTop, thetaBottom);
+
+    return thetaPointer >= minAngle - TOLERANCE_RAD && thetaPointer <= maxAngle + TOLERANCE_RAD;
   }
 
   #cancelPendingSwitch() {
