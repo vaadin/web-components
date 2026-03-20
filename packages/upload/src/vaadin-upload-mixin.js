@@ -411,7 +411,8 @@ export const UploadMixin = (superClass) =>
      *     error: {
      *       serverUnavailable: 'Upload failed, please try again later',
      *       unexpectedServerError: 'Upload failed due to server error',
-     *       forbidden: 'Upload forbidden'
+     *       forbidden: 'Upload forbidden',
+     *       fileTooLarge: 'File is too large'
      *     }
      *   },
      *   file: {
