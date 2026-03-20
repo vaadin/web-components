@@ -43,9 +43,8 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * because the `label-position` attribute is triggered automatically by the parent
  * `<vaadin-form-layout>`, depending on its width and responsive behavior.
  *
- * **Deprecation note:** The `label-position` attribute is deprecated since 24.7 and
- * will be removed in Vaadin 25, when a new approach for setting the label position
- * will be introduced.
+ * **Deprecation note:** The `label-position` attribute is deprecated and will be removed
+ * in Vaadin 26. Use `labelsAside` property on the form-layout instead.
  *
  * ### Input Width
  *
@@ -62,23 +61,23 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *
  * ### Styling
  *
- * The `label-position` host attribute can be used to target the label on top state:
+ * The `label-position` attribute can be used to target the label on top state:
  *
  * ```css
- * :host([label-position="top"]) {
+ * vaadin-form-item[label-position="top"] {
  *   padding-top: 0.5rem;
  * }
  * ```
  *
- * **Deprecation note:** The `label-position` attribute is deprecated since 24.7 and
- * will be removed in Vaadin 25, when a new approach to styling the form-item
- * based on the label position will be introduced.
+ * **Deprecation note:** The `label-position` attribute is deprecated and will be removed
+ * in Vaadin 26. Use `labelsAside` property on the form-layout instead.
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ---|---
- * label | The label slot container
+ * Part name            | Description
+ * ---------------------|-------------
+ * `label`              | The slotted label element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
