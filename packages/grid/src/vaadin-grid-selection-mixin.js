@@ -111,7 +111,14 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __selectedItemsChanged() {
-      this.requestContentUpdate();
+      this._getRenderedRows().forEach((row) => {
+        if (
+          row.hasAttribute('selected') !== this._isSelected(row._item) ||
+          row.hasAttribute('nonselectable') !== !this.__isItemSelectable(row._item)
+        ) {
+          this.__updateRow(row);
+        }
+      });
     }
 
     /** @private */
