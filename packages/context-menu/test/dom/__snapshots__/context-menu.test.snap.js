@@ -77,6 +77,7 @@ snapshots["context-menu items nested"] =
     <vaadin-context-menu-list-box
       aria-orientation="vertical"
       role="menu"
+      safe-triangle-active=""
     >
       <vaadin-context-menu-item
         aria-haspopup="false"
