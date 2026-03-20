@@ -45,6 +45,13 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * `overlay`   | The overflow avatar menu overlay
  * `content`   | The overflow avatar menu overlay content
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                |
+ * :----------------------------------|
+ * | `--vaadin-avatar-group-gap`      |
+ * | `--vaadin-avatar-group-overlap`  |
+ *
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.
  *
