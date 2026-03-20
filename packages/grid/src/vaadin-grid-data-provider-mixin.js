@@ -398,22 +398,6 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /**
-     * @param {!GridItem} item
-     * @param {!Array<!GridItem>} array
-     * @return {number}
-     * @protected
-     */
-    _getItemIndexInArray(item, array) {
-      let result = -1;
-      array.forEach((i, idx) => {
-        if (this._itemsEqual(i, item)) {
-          result = idx;
-        }
-      });
-      return result;
-    }
-
-    /**
      * Scroll to a specific row index in the virtual list. Note that the row index is
      * not always the same for any particular item. For example, sorting or filtering
      * items can affect the row index related to an item.

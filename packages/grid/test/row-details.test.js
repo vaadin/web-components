@@ -318,7 +318,7 @@ describe('row details', () => {
     it('should only invoke the body renderer for the opened row', () => {
       openRowDetails(1);
 
-      expect(renderer.calledOnce).to.be.true;
+      expect(renderer).to.be.calledOnce;
       expect(renderer.firstCall.args[2].index).to.equal(1);
       expect(renderer.firstCall.args[2].detailsOpened).to.be.true;
     });
@@ -329,7 +329,7 @@ describe('row details', () => {
 
       closeRowDetails(1);
 
-      expect(renderer.calledOnce).to.be.true;
+      expect(renderer).to.be.calledOnce;
       expect(renderer.firstCall.args[2].index).to.equal(1);
       expect(renderer.firstCall.args[2].detailsOpened).to.be.false;
     });
@@ -340,7 +340,7 @@ describe('row details', () => {
 
       openRowDetails(2);
 
-      expect(renderer.calledOnce).to.be.true;
+      expect(renderer).to.be.calledOnce;
       expect(renderer.firstCall.args[2].index).to.equal(2);
       expect(renderer.firstCall.args[2].detailsOpened).to.be.true;
     });
@@ -352,7 +352,7 @@ describe('row details', () => {
       grid.detailsOpenedItems = [grid._dataProviderController.rootCache.items[2]];
       flushGrid(grid);
 
-      expect(renderer.calledTwice).to.be.true;
+      expect(renderer).to.be.calledTwice;
       const renderedIndexes = renderer.getCalls().map((call) => call.args[2].index);
       expect(renderedIndexes).to.include(0);
       expect(renderedIndexes).to.include(2);
@@ -365,7 +365,7 @@ describe('row details', () => {
       grid.detailsOpenedItems = [...grid.detailsOpenedItems];
       flushGrid(grid);
 
-      expect(renderer.called).to.be.false;
+      expect(renderer).to.not.be.called;
     });
   });
 
