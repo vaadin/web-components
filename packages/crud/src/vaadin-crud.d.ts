@@ -153,12 +153,27 @@ export * from './vaadin-crud-mixin.js';
  * `footer`   | The footer of the dialog
  * `content`  | The wrapper for the form
  *
- * The following custom properties are available:
+ * The following custom CSS properties are available for styling:
  *
- * Custom Property | Description | Default
- * ----------------|----------------
- * --vaadin-crud-editor-max-height | max height of editor when opened on the bottom | 40%
- * --vaadin-crud-editor-max-width | max width of editor when opened on the side | 40%
+ * Custom CSS property                    |
+ * :--------------------------------------|
+ * | `--vaadin-crud-background`           |
+ * | `--vaadin-crud-border-color`         |
+ * | `--vaadin-crud-border-radius`        |
+ * | `--vaadin-crud-border-width`         |
+ * | `--vaadin-crud-editor-max-height`    |
+ * | `--vaadin-crud-editor-max-width`     |
+ * | `--vaadin-crud-footer-background`    |
+ * | `--vaadin-crud-footer-gap`           |
+ * | `--vaadin-crud-footer-padding`       |
+ * | `--vaadin-crud-form-padding`         |
+ * | `--vaadin-crud-header-color`         |
+ * | `--vaadin-crud-header-font-size`     |
+ * | `--vaadin-crud-header-font-weight`   |
+ * | `--vaadin-crud-header-line-height`   |
+ * | `--vaadin-crud-header-padding`       |
+ * | `--vaadin-crud-toolbar-background`   |
+ * | `--vaadin-crud-toolbar-padding`      |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
