@@ -191,13 +191,19 @@ export class TypeContext {
 
   findEventType(eventName: string): RelatedTypeInfo | undefined {
     // kebab-case to upper camel case conversion
-    let typeName = eventName
+    const pascalName = eventName
       .split('-')
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join('');
-    typeName = `${this.elementSchema.name}${typeName}Event`;
 
-    return this.findRelatedTypes(typeName)[0];
+    // Try with element name prefix first (e.g., "opened-changed" on AccordionPanel → AccordionPanelOpenedChangedEvent)
+    const prefixedName = `${this.elementSchema.name}${pascalName}Event`;
+    const prefixed = this.findRelatedTypes(prefixedName)[0];
+    if (prefixed) return prefixed;
+
+    // Try without prefix (e.g., "dashboard-item-moved" on Dashboard → DashboardItemMovedEvent)
+    const unprefixedName = `${pascalName}Event`;
+    return this.findRelatedTypes(unprefixedName)[0];
   }
 
   getRelatedTypes(): RelatedTypeInfo[] {
