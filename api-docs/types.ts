@@ -201,6 +201,13 @@ export class TypeContext {
     const prefixed = this.findRelatedTypes(prefixedName)[0];
     if (prefixed) return prefixed;
 
+    // Try with superclass prefix (e.g., "active-item-changed" on GridPro → GridActiveItemChangedEvent)
+    if (this.elementSchema.superclass) {
+      const superPrefixedName = `${this.elementSchema.superclass}${pascalName}Event`;
+      const superPrefixed = this.findRelatedTypes(superPrefixedName)[0];
+      if (superPrefixed) return superPrefixed;
+    }
+
     // Try without prefix (e.g., "dashboard-item-moved" on Dashboard → DashboardItemMovedEvent)
     const unprefixedName = `${pascalName}Event`;
     return this.findRelatedTypes(unprefixedName)[0];
