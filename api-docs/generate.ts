@@ -6,11 +6,7 @@ function sortByName(items: any[]) {
   return items.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-function filterPublicApi(items: any[]) {
-  return sortByName(items.filter((item) => item.privacy === 'public'));
-}
-
-function sanitizeDescription(description: string) {
+function sanitizeDescription(description: string = '') {
   // Fix links to other elements
   description = description.replace(/#\/elements\//gu, '/elements/');
   // Fix links to properties (e.g. #property-dataProvider to #dataprovider)
@@ -51,11 +47,11 @@ function renderElement(element: any) {
   }
 
   // Properties
-  const publicProperties = filterPublicApi(element.properties);
-  if (publicProperties.length > 0) {
+  const properties = sortByName(element.properties);
+  if (properties.length > 0) {
     mdContent += `## Properties\n\n`;
 
-    publicProperties.forEach((prop: any) => {
+    properties.forEach((prop: any) => {
       const propertyType = typeContext.getMemberType(prop.name);
       mdContent += `### ${prop.name}\n\n`;
       mdContent += `**Type:** \`${propertyType}\`\n\n`;
@@ -65,11 +61,11 @@ function renderElement(element: any) {
   }
 
   // Methods
-  const publicMethods = filterPublicApi(element.methods);
-  if (publicMethods.length > 0) {
+  const methods = sortByName(element.methods);
+  if (methods.length > 0) {
     mdContent += `## Methods\n\n`;
 
-    publicMethods.forEach((method: any) => {
+    methods.forEach((method: any) => {
       const methodType = typeContext.getMemberType(method.name);
       mdContent += `### ${method.name}\n\n`;
       mdContent += `**Type:** \`${methodType}\`\n\n`;
@@ -78,11 +74,11 @@ function renderElement(element: any) {
   }
 
   // Static methods
-  const publicStaticMethods = filterPublicApi(element.staticMethods);
-  if (publicStaticMethods.length > 0) {
+  const staticMethods = sortByName(element.staticMethods);
+  if (staticMethods.length > 0) {
     mdContent += `## Static Methods\n\n`;
 
-    publicStaticMethods.forEach((method: any) => {
+    staticMethods.forEach((method: any) => {
       const methodType = typeContext.getMemberType(method.name);
       mdContent += `### ${method.name}\n\n`;
       mdContent += `**Type:** \`${methodType}\`\n\n`;
@@ -128,10 +124,10 @@ function generate() {
   }
 
   const absoluteSchemaPath = resolve(schemaFilePath);
-  let schema;
+  let manifest;
   try {
     const schemaFileContent = readFileSync(absoluteSchemaPath, 'utf-8');
-    schema = JSON.parse(schemaFileContent);
+    manifest = JSON.parse(schemaFileContent);
   } catch (error) {
     console.error(`Error reading or parsing schema file ${absoluteSchemaPath}:`, error);
     process.exit(1);
@@ -147,8 +143,28 @@ function generate() {
     }
   }
 
-  const publicElements = filterPublicApi(schema.elements);
-  publicElements.forEach((element: any) => {
+  // Extract public elements from CEM modules
+  const elements: any[] = [];
+  for (const mod of manifest.modules) {
+    for (const decl of mod.declarations || []) {
+      if (!decl.tagName || !decl.customElement) continue;
+
+      const members = decl.members || [];
+      elements.push({
+        name: decl.name,
+        tagname: decl.tagName,
+        description: decl.description || '',
+        path: mod.path,
+        properties: members.filter((m: any) => m.kind === 'field'),
+        methods: members.filter((m: any) => m.kind === 'method' && !m.static),
+        staticMethods: members.filter((m: any) => m.kind === 'method' && m.static),
+        events: decl.events || [],
+        privacy: 'public',
+      });
+    }
+  }
+
+  sortByName(elements).forEach((element: any) => {
     const docFile = join(docsPath, `${element.tagname}.md`);
     const mdContent = renderElement(element);
 
