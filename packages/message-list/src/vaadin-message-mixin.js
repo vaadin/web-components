@@ -58,22 +58,7 @@ export const MessageMixin = (superClass) =>
 
         /**
          * A color index to be used to render the color of the avatar.
-         * With no `userColorIndex` set, the basic avatar color will be used.
-         * By setting a userColorIndex, the component will check if there exists a CSS variable defining the color, and uses it if there is one.
-         * If now CSS variable is found for the color index, the property for the color will not be set.
          *
-         * Example:
-         * CSS:
-         * ```css
-         * html {
-         *   --vaadin-user-color-1: red;
-         * }
-         * ```
-         *
-         * JavaScript:
-         * ```js
-         * message.userColorIndex = 1;
-         * ```
          * @attr {number} user-color-index
          */
         userColorIndex: {
