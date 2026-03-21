@@ -70,6 +70,9 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
       [part='content'] {
         display: none;
+        padding: var(--_vaadin-details-content-padding);
+        padding-top: var(--_vaadin-details-content-padding-top);
+        margin-inline-start: var(--_vaadin-details-content-margin-inline-start);
       }
 
       :host([opened]) [part='content'] {

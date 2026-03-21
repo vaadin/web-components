@@ -10,8 +10,8 @@
   color: var(--vaadin-button-text-color, var(--aura-accent-text-color));
 }
 
-vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
-  opacity: 0.6;
+vaadin-drawer-toggle[theme~='tertiary'] {
+  --_vaadin-button-icon-opacity: 0.6;
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(
@@ -69,8 +69,8 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-shadow: var(--aura-shadow-s);
 }
 
-:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[disabled][theme~='primary']::part(label) {
-  color: color-mix(in srgb, currentColor 50%, transparent);
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[disabled][theme~='primary'] {
+  --_vaadin-button-label-color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(

@@ -86,6 +86,8 @@ export const appLayoutStyles = css`
     z-index: 1;
     gap: var(--vaadin-app-layout-navbar-gap, var(--vaadin-gap-s));
     background: var(--vaadin-app-layout-navbar-background, var(--vaadin-background-container));
+    -webkit-backdrop-filter: var(--_vaadin-app-layout-navbar-backdrop-filter);
+    backdrop-filter: var(--_vaadin-app-layout-navbar-backdrop-filter);
   }
 
   :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part~='navbar'] {
@@ -120,13 +122,20 @@ export const appLayoutStyles = css`
     max-width: 90%;
     width: var(--_vaadin-app-layout-drawer-width);
     box-sizing: border-box;
-    padding-block: var(--safe-area-inset-top) var(--safe-area-inset-bottom);
+    padding-block: var(
+      --_vaadin-app-layout-drawer-padding-block,
+      var(--safe-area-inset-top) var(--safe-area-inset-bottom)
+    );
+    padding-top: var(--_vaadin-app-layout-drawer-padding-top);
+    padding-inline: var(--_vaadin-app-layout-drawer-padding-inline);
     outline: none;
     /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
     visibility: hidden;
     display: flex;
     flex-direction: column;
     background: var(--vaadin-app-layout-drawer-background, transparent);
+    -webkit-backdrop-filter: var(--_vaadin-app-layout-drawer-backdrop-filter);
+    backdrop-filter: var(--_vaadin-app-layout-drawer-backdrop-filter);
   }
 
   [part='drawer']:dir(ltr) {

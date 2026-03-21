@@ -104,6 +104,7 @@ export const crudStyles = css`
     flex-direction: column;
     height: 100%;
     z-index: 1;
+    background: var(--_vaadin-crud-editor-background);
   }
 
   [part='editor']:focus-visible {

@@ -7,7 +7,7 @@
   --vaadin-tooltip-border-radius: var(--vaadin-radius-s);
 }
 
-:is(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
-  background: var(--vaadin-tooltip-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
-  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
+:is(vaadin-tooltip, vaadin-slider-bubble) {
+  --vaadin-tooltip-background: var(--vaadin-overlay-background, var(--aura-surface-color));
+  --vaadin-tooltip-shadow: var(--aura-overlay-outline-shadow), var(--aura-shadow-s);
 }

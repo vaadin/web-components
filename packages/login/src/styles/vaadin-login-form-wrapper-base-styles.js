@@ -47,6 +47,13 @@ export const loginFormWrapperStyles = css`
     gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-s));
     grid-template-columns: auto 1fr;
     line-height: var(--vaadin-login-form-error-line-height, inherit);
+    border-radius: var(--_vaadin-login-form-error-message-border-radius);
+    padding: var(--_vaadin-login-form-error-message-padding);
+    background: var(--_vaadin-login-form-error-message-background);
+  }
+
+  [part='error-message-title'] {
+    font-weight: var(--_vaadin-login-form-error-message-title-font-weight);
   }
 
   [part='error-message']::before {

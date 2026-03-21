@@ -35,6 +35,9 @@ export const tabsStyles = css`
     display: flex;
     flex-direction: column;
     gap: var(--vaadin-tabs-gap, var(--vaadin-gap-s));
+    padding: var(--_vaadin-tabs-tabs-padding);
+    margin: var(--_vaadin-tabs-tabs-margin);
+    mask-image: var(--_vaadin-tabs-tabs-mask-image);
   }
 
   :host([orientation='horizontal']) [part='tabs'] {
@@ -54,9 +57,17 @@ export const tabsStyles = css`
     opacity: 0;
     cursor: var(--vaadin-clickable-cursor);
     box-sizing: border-box;
-    height: 100%;
-    padding: var(--vaadin-tab-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container));
-    background: var(--vaadin-background-color);
+    height: var(--_vaadin-tabs-button-height, 100%);
+    padding: var(
+      --_vaadin-tabs-button-padding,
+      var(--vaadin-tab-padding, var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container))
+    );
+    background: var(--_vaadin-tabs-button-background, var(--vaadin-background-color));
+    border: var(--_vaadin-tabs-button-border);
+    border-radius: var(--_vaadin-tabs-button-border-radius);
+    align-self: var(--_vaadin-tabs-button-align-self);
+    box-shadow: var(--_vaadin-tabs-button-box-shadow);
+    transition: var(--_vaadin-tabs-button-transition);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,8 +75,12 @@ export const tabsStyles = css`
     touch-action: manipulation;
   }
 
+  [part='back-button'] {
+    inset-inline-start: var(--_vaadin-tabs-back-button-inset-inline-start);
+  }
+
   [part='forward-button'] {
-    inset-inline-end: 0;
+    inset-inline-end: var(--_vaadin-tabs-forward-button-inset-inline-end, 0);
   }
 
   :host([overflow~='start']) [part='back-button'],

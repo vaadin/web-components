@@ -34,6 +34,8 @@ export const progressBarStyles = css`
     height: 100%;
     width: calc(var(--vaadin-progress-value) * 100%);
     background: var(--vaadin-progress-bar-value-background, var(--vaadin-border-color));
+    box-shadow: var(--_vaadin-progress-bar-value-box-shadow);
+    scale: var(--_vaadin-progress-bar-value-scale);
     border-radius: calc(
       var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m)) - var(
           --vaadin-progress-bar-border-width,

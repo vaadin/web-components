@@ -31,11 +31,29 @@ const sideNavItem = css`
     cursor: var(--vaadin-clickable-cursor);
     touch-action: manipulation;
     contain: layout;
+    transition: var(--_vaadin-side-nav-item-content-transition);
+    outline-offset: var(--_vaadin-side-nav-item-content-outline-offset);
   }
 
   :host([current]) [part='content'] {
     --vaadin-side-nav-item-background: var(--vaadin-background-container);
     --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+  }
+
+  :host(:not([disabled], [current])) [part='content']:active {
+    --vaadin-side-nav-item-background: var(
+      --_vaadin-side-nav-item-active-background,
+      var(--vaadin-side-nav-item-background, transparent)
+    );
+  }
+
+  @media (any-hover: hover) {
+    :host(:not([disabled], [current])) [part='content']:hover {
+      --vaadin-side-nav-item-text-color: var(
+        --_vaadin-side-nav-item-hover-text-color,
+        var(--vaadin-side-nav-item-text-color, var(--vaadin-text-color-secondary))
+      );
+    }
   }
 
   :host([disabled]) {

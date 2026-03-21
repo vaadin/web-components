@@ -102,7 +102,8 @@ export const messageStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--vaadin-background-container-strong);
+    background: var(--_vaadin-message-attachment-icon-background, var(--vaadin-background-container-strong));
+    color: var(--_vaadin-message-attachment-icon-color);
     padding: var(--vaadin-message-attachment-padding, var(--vaadin-padding-s));
     contain: content;
 

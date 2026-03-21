@@ -44,8 +44,6 @@
 
 vaadin-popover,
 vaadin-slider-bubble {
-  &::part(arrow) {
-    background: var(--aura-surface-color-solid);
-    margin: 1px;
-  }
+  --_vaadin-overlay-arrow-background: var(--aura-surface-color-solid);
+  --_vaadin-overlay-arrow-margin: 1px;
 }

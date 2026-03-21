@@ -11,22 +11,19 @@ vaadin-dashboard-widget {
   --aura-surface-opacity: 0.5;
   background: var(--vaadin-dashboard-widget-background, var(--aura-surface-color) padding-box);
   border-radius: calc(var(--vaadin-dashboard-widget-border-radius) - var(--vaadin-dashboard-widget-border-width, 1px));
+  --_vaadin-dashboard-widget-content-transition: 200ms;
+  --_vaadin-dashboard-widget-content-transition-property: filter, opacity;
 
   &::before {
     inset: calc(var(--vaadin-dashboard-widget-border-width, 1px) * -1);
     border-radius: var(--vaadin-dashboard-widget-border-radius);
   }
 
-  &::part(content) {
-    transition: 200ms;
-    transition-property: filter, opacity;
-  }
-
-  &:is([resize-mode], [move-mode])::part(content) {
-    opacity: 0.75;
-    filter: blur(10px);
-    clip-path: inset(0);
-    transition-duration: 50ms;
+  &:is([resize-mode], [move-mode]) {
+    --_vaadin-dashboard-widget-content-opacity: 0.75;
+    --_vaadin-dashboard-widget-content-filter: blur(10px);
+    --_vaadin-dashboard-widget-content-clip-path: inset(0);
+    --_vaadin-dashboard-widget-content-transition: 50ms;
   }
 
   &[theme~='outlined'] {
@@ -59,60 +56,27 @@ vaadin-dashboard-section {
 }
 
 :is(vaadin-dashboard-widget, vaadin-dashboard-section) {
-  &::part(move-forward-button),
-  &::part(move-backward-button),
-  &::part(resize-shrink-height-button),
-  &::part(resize-grow-height-button),
-  &::part(resize-shrink-width-button),
-  &::part(resize-grow-width-button) {
-    background: var(--aura-surface-color) padding-box;
-    color: var(--vaadin-text-color-secondary);
-    border: 1px solid var(--vaadin-border-color);
-    transition: 120ms color;
-    outline-offset: -1px;
-  }
-
-  &::part(resize-shrink-height-button),
-  &::part(resize-grow-height-button) {
-    margin-top: 0;
-    border-bottom: 0;
-  }
-
-  &::part(move-forward-button),
-  &::part(resize-shrink-width-button),
-  &::part(resize-grow-width-button) {
-    margin-inline-start: 0;
-    border-inline-end: 0;
-  }
-
-  &::part(move-backward-button) {
-    margin-inline-end: 0;
-    border-inline-start: 0;
-  }
-
-  &::part(move-apply-button),
-  &::part(resize-apply-button) {
-    background: var(--aura-accent-color);
-    color: var(--aura-accent-contrast-color);
-    box-shadow: 0 0 0 3px var(--aura-surface-color);
-    outline-offset: 2px;
-  }
-
-  &::part(move-button),
-  &::part(remove-button),
-  &::part(resize-button) {
-    color: var(--vaadin-text-color-disabled);
-    transition: 120ms color;
-    outline-offset: -2px;
-  }
+  --_vaadin-dashboard-dir-button-background: var(--aura-surface-color) padding-box;
+  --_vaadin-dashboard-dir-button-color: var(--vaadin-text-color-secondary);
+  --_vaadin-dashboard-dir-button-border: 1px solid var(--vaadin-border-color);
+  --_vaadin-dashboard-dir-button-transition: 120ms color;
+  --_vaadin-dashboard-dir-button-outline-offset: -1px;
+  --_vaadin-dashboard-height-button-margin-top: 0;
+  --_vaadin-dashboard-height-button-border-bottom: 0;
+  --_vaadin-dashboard-forward-button-margin-inline-start: 0;
+  --_vaadin-dashboard-forward-button-border-inline-end: 0;
+  --_vaadin-dashboard-backward-button-margin-inline-end: 0;
+  --_vaadin-dashboard-backward-button-border-inline-start: 0;
+  --_vaadin-dashboard-apply-button-background: var(--aura-accent-color);
+  --_vaadin-dashboard-apply-button-color: var(--aura-accent-contrast-color);
+  --_vaadin-dashboard-apply-button-box-shadow: 0 0 0 3px var(--aura-surface-color);
+  --_vaadin-dashboard-apply-button-outline-offset: 2px;
+  --_vaadin-dashboard-action-button-color: var(--vaadin-text-color-disabled);
+  --_vaadin-dashboard-action-button-transition: 120ms color;
+  --_vaadin-dashboard-action-button-outline-offset: -2px;
+  --_vaadin-dashboard-button-hover-color: var(--vaadin-text-color);
 
   &[editable] {
     --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
-  }
-}
-
-@media (any-hover: hover) {
-  :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(button):hover {
-    color: var(--vaadin-text-color);
   }
 }

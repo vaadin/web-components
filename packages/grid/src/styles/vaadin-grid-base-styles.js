@@ -438,6 +438,12 @@ export const gridStyles = css`
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
+  [part='empty-state'] {
+    display: var(--_vaadin-grid-empty-state-display);
+    align-items: var(--_vaadin-grid-empty-state-align-items);
+    justify-content: var(--_vaadin-grid-empty-state-justify-content);
+  }
+
   /* Reordering styles */
   :host([reordering]) ::slotted(vaadin-grid-cell-content),
   :host([reordering]) .resize-handle,

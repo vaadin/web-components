@@ -26,12 +26,15 @@ vaadin-select-item:where([role]) {
     oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
     oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
   );
+  --_vaadin-item-checkmark-color: var(--aura-accent-text-color);
+  --_vaadin-item-checkmark-icon-visual-size: 75%;
+  --_vaadin-item-content-padding-inline: var(--vaadin-gap-xs);
+  --_vaadin-item-content-gap: var(--vaadin-item-gap);
   padding-inline-start: max(0px, var(--vaadin-padding-inline-container) - var(--aura-item-overlay-padding-inline));
   gap: 0;
 
   &::part(checkmark) {
-    color: var(--vaadin-item-checkmark-color, var(--aura-accent-text-color));
-    --vaadin-icon-visual-size: 75%;
+    color: var(--vaadin-item-checkmark-color, var(--_vaadin-item-checkmark-color));
   }
 
   &[aria-haspopup='true'] {
@@ -40,31 +43,6 @@ vaadin-select-item:where([role]) {
     &::after {
       --vaadin-icon-visual-size: 90%;
     }
-  }
-
-  &::part(content) {
-    padding-inline: var(--vaadin-gap-xs);
-    gap: var(--vaadin-item-gap);
-  }
-
-  @media (any-hover: hover) {
-    &:not([disabled], [aria-disabled='true']):hover {
-      background: var(--_highlight-color);
-
-      &[theme~='filled'] {
-        background: var(--aura-accent-color);
-        color: var(--aura-accent-contrast-color);
-        --vaadin-text-color: var(--aura-accent-contrast-color);
-        --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
-        --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
-        --vaadin-icon-color: var(--aura-accent-contrast-color);
-        --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
-      }
-    }
-  }
-
-  &:active {
-    background: var(--_highlight-color);
   }
 
   &[aria-expanded='true']:not(:hover) {

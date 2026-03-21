@@ -33,6 +33,15 @@ const loginOverlayWrapper = css`
     display: flex;
     flex-direction: column;
     padding: var(--vaadin-login-overlay-brand-padding, var(--vaadin-padding-l));
+    text-align: var(--_vaadin-login-overlay-brand-text-align);
+    padding-bottom: var(
+      --_vaadin-login-overlay-brand-padding-bottom,
+      var(--vaadin-login-overlay-brand-padding, var(--vaadin-padding-l))
+    );
+  }
+
+  [part='form-title'] {
+    display: var(--_vaadin-login-overlay-form-title-display);
   }
 
   ::slotted([slot='title']) {

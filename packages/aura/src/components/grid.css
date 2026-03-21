@@ -5,14 +5,14 @@
     var(--aura-background-color) padding-box;
 }
 
-:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro)::part(empty-state) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro) {
+  --_vaadin-grid-empty-state-display: flex;
+  --_vaadin-grid-empty-state-align-items: center;
+  --_vaadin-grid-empty-state-justify-content: center;
 }
 
-vaadin-grid-sorter::part(indicators) {
-  transition: color 120ms;
+vaadin-grid-sorter {
+  --_vaadin-grid-sorter-indicators-transition: color 120ms;
 }
 
 :is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='column-borders'] {

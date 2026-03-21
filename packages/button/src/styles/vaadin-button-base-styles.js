@@ -48,6 +48,11 @@ export const buttonStyles = css`
 
   [part='label'] {
     display: inline-flex;
+    color: var(--_vaadin-button-label-color);
+  }
+
+  [part='icon'] {
+    opacity: var(--_vaadin-button-icon-opacity);
   }
 
   :host(:is([focus-ring], :focus-visible)) {

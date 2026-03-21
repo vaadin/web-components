@@ -38,6 +38,7 @@ export const sharedStyles = css`
   [part='toggle-button'] {
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-s));
     color: var(--vaadin-text-color-secondary);
+    --vaadin-icon-visual-size: var(--_vaadin-side-nav-toggle-button-icon-visual-size, 100%);
   }
 
   [part='toggle-button']::before {

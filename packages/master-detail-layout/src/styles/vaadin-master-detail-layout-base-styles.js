@@ -43,6 +43,12 @@ export const masterDetailLayoutStyles = css`
 
   [part~='detail'] {
     grid-column: detail-start / detail-end;
+    border-start-end-radius: var(--_vaadin-mdl-detail-border-start-end-radius);
+    border-end-end-radius: var(--_vaadin-mdl-detail-border-end-end-radius);
+    -webkit-backdrop-filter: var(--_vaadin-mdl-detail-backdrop-filter);
+    backdrop-filter: var(--_vaadin-mdl-detail-backdrop-filter);
+    margin: var(--_vaadin-mdl-detail-margin);
+    border-radius: var(--_vaadin-mdl-detail-border-radius);
   }
 
   :host([orientation='vertical']) [part~='master'] {

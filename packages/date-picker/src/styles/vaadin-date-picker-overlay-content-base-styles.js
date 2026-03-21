@@ -99,6 +99,7 @@ export const overlayContentStyles = css`
     grid-area: toolbar;
     justify-content: space-between;
     padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding-s));
+    background: var(--_vaadin-date-picker-toolbar-background);
   }
 
   :host([fullscreen]) [part='toolbar'] {

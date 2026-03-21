@@ -5,73 +5,78 @@
   --vaadin-radio-button-size: round(1lh - 2px, 2px);
 }
 
-vaadin-checkbox::part(checkbox),
-vaadin-radio-button::part(radio) {
-  transition: background-color 100ms;
-}
-
-vaadin-checkbox:not([disabled], [readonly])::part(checkbox) {
-  background: var(--vaadin-checkbox-background, var(--aura-surface-color));
-}
-
-vaadin-radio-button:not([disabled], [readonly])::part(radio) {
-  background: var(--vaadin-radio-button-background, var(--aura-surface-color));
-}
-
-vaadin-checkbox:not([readonly], [disabled])::part(checkbox),
-vaadin-radio-button:not([disabled])::part(radio) {
-  --aura-surface-level: 4;
-  box-shadow: var(--aura-shadow-xs);
-  --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
-  background-image: linear-gradient(
+vaadin-checkbox {
+  --_vaadin-checkable-transition: background-color 100ms;
+  --_vaadin-checkable-box-shadow: var(--aura-shadow-xs);
+  --_vaadin-checkable-background-image: linear-gradient(
     light-dark(transparent, var(--_shade)),
     transparent 33%,
     transparent 66%,
     light-dark(var(--_shade), transparent)
   );
+  --_vaadin-checkable-unchecked-background-clip: padding-box;
+  --_vaadin-checkable-before-content: '';
+  --_vaadin-checkable-before-position: absolute;
+  --_vaadin-checkable-before-inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+  --_vaadin-checkable-before-border-radius: inherit;
+  --_vaadin-checkable-before-background-color: currentColor;
+  --_vaadin-checkable-before-opacity: 0;
+  --_vaadin-checkable-before-transition: opacity 100ms, background-color 100ms;
+  --_vaadin-checkable-hover-before-opacity: 0.04;
+  --_vaadin-checkable-active-before-opacity: 0.1;
+  --_vaadin-checkable-active-before-background: #000;
 }
 
-vaadin-checkbox:not([checked], [indeterminate])::part(checkbox),
-vaadin-radio-button:not([checked])::part(radio) {
-  background-clip: padding-box;
+vaadin-checkbox:not([disabled], [readonly]) {
+  --vaadin-checkbox-background: var(--aura-surface-color);
 }
 
-vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
+vaadin-checkbox:not([readonly], [disabled])::part(checkbox) {
+  --aura-surface-level: 4;
+  --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
+}
+
+vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled]) {
   --vaadin-checkbox-background: var(--aura-accent-color);
   --vaadin-checkbox-marker-color: var(--aura-accent-contrast-color);
   --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
-  box-shadow: var(--aura-shadow-s);
+  --_vaadin-checkable-box-shadow: var(--aura-shadow-s);
 }
 
-vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
+vaadin-radio-button {
+  --_vaadin-checkable-transition: background-color 100ms;
+  --_vaadin-checkable-box-shadow: var(--aura-shadow-xs);
+  --_vaadin-checkable-background-image: linear-gradient(
+    light-dark(transparent, var(--_shade)),
+    transparent 33%,
+    transparent 66%,
+    light-dark(var(--_shade), transparent)
+  );
+  --_vaadin-checkable-unchecked-background-clip: padding-box;
+  --_vaadin-checkable-before-content: '';
+  --_vaadin-checkable-before-position: absolute;
+  --_vaadin-checkable-before-inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+  --_vaadin-checkable-before-border-radius: inherit;
+  --_vaadin-checkable-before-background-color: currentColor;
+  --_vaadin-checkable-before-opacity: 0;
+  --_vaadin-checkable-before-transition: opacity 100ms, background-color 100ms;
+  --_vaadin-checkable-hover-before-opacity: 0.04;
+  --_vaadin-checkable-active-before-opacity: 0.1;
+  --_vaadin-checkable-active-before-background: #000;
+}
+
+vaadin-radio-button:not([disabled], [readonly]) {
+  --vaadin-radio-button-background: var(--aura-surface-color);
+}
+
+vaadin-radio-button:not([disabled])::part(radio) {
+  --aura-surface-level: 4;
+  --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
+}
+
+vaadin-radio-button[checked]:not([readonly], [disabled]) {
   --vaadin-radio-button-background: var(--aura-accent-color);
   --vaadin-radio-button-marker-color: var(--aura-accent-contrast-color);
   --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
-  box-shadow: var(--aura-shadow-s);
-}
-
-vaadin-checkbox:not([readonly], [disabled])::part(checkbox)::before,
-vaadin-radio-button:not([disabled])::part(radio)::before {
-  content: '';
-  position: absolute;
-  inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
-  border-radius: inherit;
-  background-color: currentColor;
-  opacity: 0;
-  transition:
-    opacity 100ms,
-    background-color 100ms;
-}
-
-@media (any-hover: hover) {
-  vaadin-checkbox:hover:not([readonly], [disabled], [active])::part(checkbox)::before,
-  vaadin-radio-button:hover:not([disabled], [active])::part(radio)::before {
-    opacity: 0.04;
-  }
-}
-
-vaadin-checkbox[active]:not([readonly], [disabled])::part(checkbox)::before,
-vaadin-radio-button[active]:not([disabled])::part(radio)::before {
-  opacity: 0.1;
-  background: #000;
+  --_vaadin-checkable-box-shadow: var(--aura-shadow-s);
 }

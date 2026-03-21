@@ -102,6 +102,34 @@ export const checkable = (part, propName = part) => css`
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: var(--_vaadin-checkable-transition);
+    box-shadow: var(--_vaadin-checkable-box-shadow);
+    background-image: var(--_vaadin-checkable-background-image);
+  }
+
+  :host(:not([checked], [indeterminate])) [part='${unsafeCSS(part)}'] {
+    background-clip: var(--_vaadin-checkable-unchecked-background-clip);
+  }
+
+  [part='${unsafeCSS(part)}']::before {
+    content: var(--_vaadin-checkable-before-content, none);
+    position: var(--_vaadin-checkable-before-position);
+    inset: var(--_vaadin-checkable-before-inset);
+    border-radius: var(--_vaadin-checkable-before-border-radius);
+    background-color: var(--_vaadin-checkable-before-background-color);
+    opacity: var(--_vaadin-checkable-before-opacity);
+    transition: var(--_vaadin-checkable-before-transition);
+  }
+
+  @media (any-hover: hover) {
+    :host(:hover:not([readonly], [disabled], [active])) [part='${unsafeCSS(part)}']::before {
+      opacity: var(--_vaadin-checkable-hover-before-opacity, var(--_vaadin-checkable-before-opacity));
+    }
+  }
+
+  :host([active]:not([readonly], [disabled])) [part='${unsafeCSS(part)}']::before {
+    opacity: var(--_vaadin-checkable-active-before-opacity, var(--_vaadin-checkable-before-opacity));
+    background: var(--_vaadin-checkable-active-before-background, var(--_vaadin-checkable-before-background-color));
   }
 
   :host(:is([checked], [indeterminate])) {

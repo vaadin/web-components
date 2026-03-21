@@ -94,7 +94,8 @@ const popoverOverlay = css`
   :host([theme~='arrow']) [part='arrow'] {
     display: block;
     position: absolute;
-    background: inherit;
+    background: var(--_vaadin-overlay-arrow-background, inherit);
+    margin: var(--_vaadin-overlay-arrow-margin);
     border: inherit;
     border-start-start-radius: var(--vaadin-popover-arrow-border-radius, 0);
     outline: inherit;

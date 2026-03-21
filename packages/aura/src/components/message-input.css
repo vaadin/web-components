@@ -1,9 +1,6 @@
-vaadin-message-input > vaadin-text-area::part(input-field) {
-  background: var(--vaadin-input-field-background, transparent);
-}
-
-vaadin-message-input:not([readonly], [disabled]) > vaadin-text-area::part(input-field) {
-  box-shadow: none;
+vaadin-message-input > vaadin-text-area {
+  --vaadin-input-field-background: transparent;
+  --aura-shadow-xs: none;
 }
 
 vaadin-message-input[theme~='icon-button'] > vaadin-message-input-button {

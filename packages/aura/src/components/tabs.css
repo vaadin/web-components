@@ -12,27 +12,34 @@ vaadin-tabs {
   --aura-surface-level: -0.5;
   --aura-surface-opacity: 0.3;
   background: var(--vaadin-tabs-background, var(--vaadin-background-container));
-}
-
-vaadin-tabs::part(tabs) {
-  padding: 3px;
-  margin: -3px;
+  --_vaadin-tabs-tabs-padding: 3px;
+  --_vaadin-tabs-tabs-margin: -3px;
   --_mask-fade-start: 0.5lh;
   --_mask-fade-size: 2lh;
-  mask-image: linear-gradient(
+  --_vaadin-tabs-tabs-mask-image: linear-gradient(
     var(--_mask-dir, to right),
     var(--_mask-start, black) var(--_mask-fade-start),
     black var(--_mask-fade-size),
     black calc(100% - var(--_mask-fade-size)),
     var(--_mask-end, black) calc(100% - var(--_mask-fade-start))
   );
+  --_vaadin-tabs-button-background: var(--aura-background-color) padding-box;
+  --_vaadin-tabs-button-border: 1px solid var(--vaadin-border-color-secondary);
+  --_vaadin-tabs-button-border-radius: var(--vaadin-radius-m);
+  --_vaadin-tabs-button-padding: var(--vaadin-padding-xs);
+  --_vaadin-tabs-button-height: auto;
+  --_vaadin-tabs-button-align-self: center;
+  --_vaadin-tabs-button-box-shadow: var(--aura-shadow-s);
+  --_vaadin-tabs-button-transition: opacity 120ms;
+  --_vaadin-tabs-back-button-inset-inline-start: 5px;
+  --_vaadin-tabs-forward-button-inset-inline-end: 5px;
 }
 
-vaadin-tabs[dir='rtl']::part(tabs) {
+vaadin-tabs[dir='rtl'] {
   --_mask-dir: to left;
 }
 
-vaadin-tabs[orientation='vertical']::part(tabs) {
+vaadin-tabs[orientation='vertical'] {
   --_mask-dir: to bottom;
   --_mask-fade-start: 0px;
   --_mask-fade-size: 0.5lh;
@@ -46,36 +53,12 @@ vaadin-tabs[overflow~='end'] {
   --_mask-end: transparent;
 }
 
-vaadin-tabs::part(back-button),
-vaadin-tabs::part(forward-button) {
-  background: var(--aura-background-color) padding-box;
-  border: 1px solid var(--vaadin-border-color-secondary);
-  border-radius: var(--vaadin-radius-m);
-  padding: var(--vaadin-padding-xs);
-  height: auto;
-  align-self: center;
-  box-shadow: var(--aura-shadow-s);
-  transition: opacity 120ms;
-}
-
-vaadin-tabs::part(back-button) {
-  inset-inline-start: 5px;
-}
-
-vaadin-tabs::part(forward-button) {
-  inset-inline-end: 5px;
-}
-
 vaadin-tab {
   transition:
     color 120ms,
     border-color 120ms,
     background-color 120ms;
   border: var(--vaadin-tab-border-width, 1px) solid var(--vaadin-tab-border-color, transparent);
-}
-
-vaadin-tab:not([disabled], [selected]):hover {
-  --vaadin-tab-text-color: var(--vaadin-text-color);
 }
 
 vaadin-tab[selected] {

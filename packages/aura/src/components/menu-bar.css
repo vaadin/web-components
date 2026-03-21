@@ -2,27 +2,17 @@ vaadin-menu-bar:not([has-single-button]) vaadin-menu-bar-button:not([first-visib
   clip-path: inset(-10px -10px -10px max(-10px, var(--vaadin-menu-bar-gap, 0px) * -1 + 0.8px));
 }
 
-@media (any-hover: hover) {
-  /* Increase specificity to reset hover styles */
-  vaadin-menu-bar-button > vaadin-menu-bar-item:not([disabled]):not([tabindex]):hover {
-    background: transparent;
-  }
-}
-
 vaadin-menu-bar-button[slot='overflow'] {
   font-family: system-ui, sans-serif;
   font-weight: 600;
 }
 
-vaadin-menu-bar-button[aria-haspopup='true']::part(suffix)::after {
-  --vaadin-icon-visual-size: 90%;
+vaadin-menu-bar-button[aria-haspopup='true'] {
+  --_vaadin-menu-bar-suffix-after-icon-visual-size: 90%;
 }
 
 vaadin-menu-bar-button > vaadin-menu-bar-item {
   padding-inline: 0;
-}
-
-vaadin-menu-bar-button > vaadin-menu-bar-item::part(content) {
-  padding-inline: 0;
-  gap: var(--vaadin-button-gap, var(--vaadin-gap-s));
+  --_vaadin-menu-bar-item-content-padding-inline: 0;
+  --_vaadin-menu-bar-item-content-gap: var(--vaadin-button-gap, var(--vaadin-gap-s));
 }

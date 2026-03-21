@@ -176,6 +176,14 @@ class RangeSlider extends FieldMixin(
           border-inline-start: none;
         }
 
+        :host([start-active]:not([readonly], [disabled])) [part~='thumb-start']::before {
+          opacity: var(--_vaadin-slider-thumb-active-before-opacity, var(--_vaadin-slider-thumb-before-opacity));
+        }
+
+        :host([end-active]:not([readonly], [disabled])) [part~='thumb-end']::before {
+          opacity: var(--_vaadin-slider-thumb-active-before-opacity, var(--_vaadin-slider-thumb-before-opacity));
+        }
+
         ::slotted(input:last-of-type) {
           clip-path: inset(
             0 0 0

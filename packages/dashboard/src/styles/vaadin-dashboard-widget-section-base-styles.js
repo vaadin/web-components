@@ -123,6 +123,44 @@ export const dashboardWidgetAndSectionStyles = css`
     --icon: var(--_vaadin-icon-cross);
   }
 
+  /* Direction buttons (move/resize forward/backward/shrink/grow) */
+  [part~='move-forward-button'],
+  [part~='move-backward-button'],
+  [part~='resize-shrink-height-button'],
+  [part~='resize-grow-height-button'],
+  [part~='resize-shrink-width-button'],
+  [part~='resize-grow-width-button'] {
+    background: var(--_vaadin-dashboard-dir-button-background);
+    color: var(--_vaadin-dashboard-dir-button-color);
+    border: var(--_vaadin-dashboard-dir-button-border);
+    transition: var(--_vaadin-dashboard-dir-button-transition);
+    outline-offset: var(--_vaadin-dashboard-dir-button-outline-offset);
+  }
+
+  /* Apply buttons */
+  [part~='move-apply-button'],
+  [part~='resize-apply-button'] {
+    background: var(--_vaadin-dashboard-apply-button-background);
+    color: var(--_vaadin-dashboard-apply-button-color);
+    box-shadow: var(--_vaadin-dashboard-apply-button-box-shadow);
+    outline-offset: var(--_vaadin-dashboard-apply-button-outline-offset);
+  }
+
+  /* Action buttons (move, remove, resize) */
+  [part~='move-button'],
+  [part~='remove-button'],
+  [part~='resize-button'] {
+    color: var(--_vaadin-dashboard-action-button-color);
+    transition: var(--_vaadin-dashboard-action-button-transition);
+    outline-offset: var(--_vaadin-dashboard-action-button-outline-offset);
+  }
+
+  @media (any-hover: hover) {
+    vaadin-dashboard-button:hover {
+      color: var(--_vaadin-dashboard-button-hover-color);
+    }
+  }
+
   /* Move-mode buttons */
   [part~='move-backward-button'],
   [part~='move-forward-button'],
@@ -135,12 +173,16 @@ export const dashboardWidgetAndSectionStyles = css`
     inset-inline-start: 0;
     transform: translateY(-50%);
     --icon: var(--_vaadin-icon-chevron-down);
+    margin-inline-end: var(--_vaadin-dashboard-backward-button-margin-inline-end);
+    border-inline-start: var(--_vaadin-dashboard-backward-button-border-inline-start);
   }
 
   [part~='move-forward-button'] {
     inset-inline-end: 0;
     transform: translateY(-50%);
     --icon: var(--_vaadin-icon-chevron-down);
+    margin-inline-start: var(--_vaadin-dashboard-forward-button-margin-inline-start);
+    border-inline-end: var(--_vaadin-dashboard-forward-button-border-inline-end);
   }
 
   [part~='move-apply-button'] {
@@ -188,6 +230,8 @@ export const dashboardWidgetAndSectionStyles = css`
   [part~='resize-shrink-width-button'] {
     inset-inline-end: 0;
     top: 50%;
+    margin-inline-start: var(--_vaadin-dashboard-forward-button-margin-inline-start);
+    border-inline-end: var(--_vaadin-dashboard-forward-button-border-inline-end);
   }
 
   :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'] {
@@ -205,6 +249,8 @@ export const dashboardWidgetAndSectionStyles = css`
   [part~='resize-grow-width-button'] {
     inset-inline-start: 100%;
     top: 50%;
+    margin-inline-start: var(--_vaadin-dashboard-forward-button-margin-inline-start);
+    border-inline-end: var(--_vaadin-dashboard-forward-button-border-inline-end);
   }
 
   :host(:not([dir='rtl'])) [part~='resize-grow-width-button'] {
@@ -252,6 +298,8 @@ export const dashboardWidgetAndSectionStyles = css`
   [part~='resize-shrink-height-button'] {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    margin-top: var(--_vaadin-dashboard-height-button-margin-top);
+    border-bottom: var(--_vaadin-dashboard-height-button-border-bottom);
   }
 
   [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {

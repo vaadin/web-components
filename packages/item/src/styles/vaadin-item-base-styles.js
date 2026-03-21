@@ -38,6 +38,7 @@ export const itemStyles = css`
     color: var(--vaadin-item-checkmark-color, inherit);
     display: var(--vaadin-item-checkmark-display, none);
     visibility: hidden;
+    --vaadin-icon-visual-size: var(--_vaadin-item-checkmark-icon-visual-size, 100%);
   }
 
   [part='checkmark']::before {
@@ -57,7 +58,8 @@ export const itemStyles = css`
     flex: 1;
     display: flex;
     align-items: center;
-    column-gap: inherit;
+    column-gap: var(--_vaadin-item-content-gap, var(--_vaadin-menu-bar-item-content-gap, inherit));
+    padding-inline: var(--_vaadin-item-content-padding-inline, var(--_vaadin-menu-bar-item-content-padding-inline));
     justify-content: var(--vaadin-item-text-align, start);
   }
 

@@ -11,34 +11,24 @@
   --vaadin-login-overlay-description-color: var(--vaadin-text-color-secondary);
 }
 
-vaadin-login-form::part(error-message) {
-  border-radius: var(--vaadin-radius-m);
-  padding: var(--vaadin-padding-m);
-  background: color-mix(in srgb, var(--aura-red) 10%, transparent);
-}
-
-vaadin-login-form::part(error-message-title) {
-  font-weight: var(--aura-font-weight-semibold);
+vaadin-login-form {
+  --_vaadin-login-form-error-message-border-radius: var(--vaadin-radius-m);
+  --_vaadin-login-form-error-message-padding: var(--vaadin-padding-m);
+  --_vaadin-login-form-error-message-background: color-mix(in srgb, var(--aura-red) 10%, transparent);
+  --_vaadin-login-form-error-message-title-font-weight: var(--aura-font-weight-semibold);
 }
 
 vaadin-login-overlay {
   --vaadin-overlay-backdrop-background: var(--aura-app-background);
+  --vaadin-login-overlay-background: var(--vaadin-overlay-background, var(--aura-surface-color));
+  --vaadin-login-overlay-shadow:
+    var(--aura-overlay-outline-shadow), var(--vaadin-overlay-shadow, var(--aura-overlay-shadow));
+  --_vaadin-login-overlay-brand-text-align: center;
+  --_vaadin-login-overlay-brand-padding-bottom: 0;
+  --_vaadin-login-overlay-form-title-display: none;
 
   &::part(overlay) {
     --aura-surface-level: 2;
-    background: var(--vaadin-login-overlay-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
-    box-shadow:
-      var(--aura-overlay-outline-shadow),
-      var(--vaadin-login-overlay-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
-  }
-
-  &::part(brand) {
-    text-align: center;
-    padding-bottom: 0;
-  }
-
-  &::part(form-title) {
-    display: none;
   }
 
   [slot='title'] {

@@ -1,12 +1,7 @@
-vaadin-confirm-dialog::part(footer) {
-  width: fit-content;
-  margin-inline-start: auto;
-}
-
-vaadin-confirm-dialog::part(cancel-button),
-vaadin-confirm-dialog::part(reject-button),
-vaadin-confirm-dialog::part(confirm-button) {
-  flex: 1;
+vaadin-confirm-dialog {
+  --_vaadin-confirm-dialog-footer-width: fit-content;
+  --_vaadin-confirm-dialog-footer-margin-inline-start: auto;
+  --_vaadin-confirm-dialog-action-button-flex: 1;
 }
 
 vaadin-confirm-dialog > :is([slot='cancel-button'], [slot='reject-button'], [slot='confirm-button']) {

@@ -1,34 +1,38 @@
+vaadin-master-detail-layout {
+  --vaadin-master-detail-layout-detail-background: var(--aura-surface-color) padding-box;
+  --_vaadin-mdl-detail-border-start-end-radius: var(--_app-layout-radius);
+  --_vaadin-mdl-detail-border-end-end-radius: var(--_app-layout-radius);
+}
+
 vaadin-master-detail-layout::part(detail) {
   --aura-surface-level: 2;
-  background: var(--aura-surface-color) padding-box;
+}
+
+vaadin-master-detail-layout[overflow] {
+  --vaadin-master-detail-layout-detail-shadow:
+    inset 1px 0 0 0 var(--aura-overlay-inner-outline-color), -1px 0 0 0 var(--aura-overlay-outline-color),
+    var(--aura-shadow-m);
+  --_vaadin-mdl-detail-backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
 vaadin-master-detail-layout[overflow]::part(detail) {
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-  background: var(--aura-surface-color) padding-box;
-  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
-  backdrop-filter: var(--aura-overlay-backdrop-filter);
-  box-shadow:
-    inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
-    -1px 0 0 0 var(--aura-overlay-outline-color),
-    var(--aura-shadow-m);
 }
 
-vaadin-master-detail-layout[overflow][overlay-containment='viewport']::part(detail) {
-  box-shadow: var(--aura-overlay-shadow);
+vaadin-master-detail-layout[overflow][overlay-containment='viewport'] {
+  --vaadin-master-detail-layout-detail-shadow: var(--aura-overlay-shadow);
 }
 
 /* TODO could be a built-in variant */
-vaadin-master-detail-layout[theme~='inset-drawer'][overflow]::part(detail),
-vaadin-master-detail-layout[overflow][overlay-containment='viewport']::part(detail) {
-  margin: calc(var(--aura-app-layout-inset) / 2);
-  border-radius: var(--_app-layout-radius);
+vaadin-master-detail-layout[theme~='inset-drawer'][overflow],
+vaadin-master-detail-layout[overflow][overlay-containment='viewport'] {
+  --_vaadin-mdl-detail-margin: calc(var(--aura-app-layout-inset) / 2);
+  --_vaadin-mdl-detail-border-radius: var(--_app-layout-radius);
 }
 
-vaadin-master-detail-layout > vaadin-master-detail-layout,
-vaadin-master-detail-layout:not([overflow])::part(detail) {
-  border-start-end-radius: var(--_app-layout-radius);
-  border-end-end-radius: var(--_app-layout-radius);
+vaadin-master-detail-layout:not([overflow]) {
+  --_vaadin-mdl-detail-border-start-end-radius: var(--_app-layout-radius);
+  --_vaadin-mdl-detail-border-end-end-radius: var(--_app-layout-radius);
 }
 
 /* TODO these end up affecting all MDLs, not just the one directly inside the App Layout */

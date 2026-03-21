@@ -22,6 +22,7 @@ export const notificationCardStyles = css`
       var(--vaadin-notification-border-color, var(--vaadin-border-color-secondary));
     box-shadow: var(--vaadin-notification-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     border-radius: var(--vaadin-notification-border-radius, var(--vaadin-radius-l));
+    view-transition-name: var(--_vaadin-notification-overlay-view-transition-name);
     cursor: default;
   }
 

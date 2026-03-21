@@ -62,9 +62,22 @@ export const uploadFileStyles = [
       mask-repeat: no-repeat;
     }
 
+    [part='done-icon'] {
+      --vaadin-icon-visual-size: var(--_vaadin-upload-file-done-icon-visual-size);
+      background: var(--_vaadin-upload-file-done-icon-background);
+    }
+
     [part='done-icon']::before {
-      background: var(--vaadin-upload-file-done-color, currentColor);
+      background: var(
+        --_vaadin-upload-file-done-icon-before-background,
+        var(--vaadin-upload-file-done-color, currentColor)
+      );
       mask-image: var(--_vaadin-icon-checkmark);
+    }
+
+    [part='warning-icon'] {
+      --vaadin-icon-visual-size: var(--_vaadin-upload-file-done-icon-visual-size);
+      background: var(--_vaadin-upload-file-done-icon-background);
     }
 
     [part='warning-icon']::before {
@@ -94,6 +107,14 @@ export const uploadFileStyles = [
       font-size: var(--vaadin-upload-file-status-font-size, inherit);
       font-weight: var(--vaadin-upload-file-status-font-weight, inherit);
       line-height: var(--vaadin-upload-file-status-line-height, inherit);
+      max-height: var(--_vaadin-upload-file-status-max-height);
+      display: var(--_vaadin-upload-file-status-display);
+      -webkit-line-clamp: var(--_vaadin-upload-file-status-line-clamp);
+      -webkit-box-orient: var(--_vaadin-upload-file-status-box-orient);
+      overflow: var(--_vaadin-upload-file-status-overflow);
+      height: var(--_vaadin-upload-file-status-height);
+      visibility: var(--_vaadin-upload-file-status-visibility);
+      transition: var(--_vaadin-upload-file-status-transition);
     }
 
     [part='error'] {
@@ -106,7 +127,7 @@ export const uploadFileStyles = [
     [part='commands'] {
       display: flex;
       align-items: center;
-      gap: var(--vaadin-gap-xs);
+      gap: var(--_vaadin-upload-file-commands-gap, var(--vaadin-gap-xs));
       height: var(--vaadin-icon-size, 1lh);
       align-self: center;
     }
@@ -122,6 +143,13 @@ export const uploadFileStyles = [
       font: inherit;
       /* Ensure minimum click target (WCAG) */
       padding: var(--vaadin-upload-file-button-padding, max(0px, (24px - var(--vaadin-icon-size, 1lh)) / 2));
+      outline-offset: var(--_vaadin-upload-file-button-outline-offset);
+    }
+
+    @media (any-hover: hover) {
+      button:hover {
+        --vaadin-upload-file-button-text-color: var(--_vaadin-upload-file-hover-button-text-color);
+      }
     }
 
     button:focus-visible {
@@ -220,6 +248,10 @@ export const uploadFileStyles = [
       & [part='commands'] {
         padding: var(--vaadin-upload-padding, var(--vaadin-padding-s));
         padding-inline-start: 0;
+
+        & button {
+          --vaadin-icon-visual-size: var(--_vaadin-upload-file-thumbnails-button-icon-visual-size);
+        }
       }
 
       & [part='status'] {

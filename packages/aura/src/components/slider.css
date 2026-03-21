@@ -23,33 +23,30 @@
       )
     )
     border-box;
+  --_vaadin-slider-track-fill-margin-inline-end: -1px;
+  --vaadin-slider-thumb-background: linear-gradient(
+      light-dark(transparent, var(--vaadin-border-color-secondary)),
+      transparent 33%,
+      transparent 66%,
+      light-dark(var(--vaadin-border-color-secondary), transparent)
+    )
+    var(--aura-surface-color-solid) border-box;
+  --vaadin-slider-thumb-border-color: oklch(1 0 0 / 0.1);
+  --_vaadin-slider-thumb-position: relative;
+  --_vaadin-slider-thumb-outline-offset: -1px;
+  --_vaadin-slider-thumb-box-shadow:
+    0 0 0 1px light-dark(var(--vaadin-border-color), oklch(0 0 0 / 0.1)), var(--_thumb-shadow, var(--aura-shadow-s));
+  --_vaadin-slider-thumb-before-content: '';
+  --_vaadin-slider-thumb-before-position: absolute;
+  --_vaadin-slider-thumb-before-inset: -1px;
+  --_vaadin-slider-thumb-before-border-radius: inherit;
+  --_vaadin-slider-thumb-before-background-color: #000;
+  --_vaadin-slider-thumb-before-opacity: 0;
+  --_vaadin-slider-thumb-before-transition: opacity 100ms, background-color 100ms;
+  --_vaadin-slider-thumb-active-before-opacity: 0.1;
 
   &:dir(rtl) {
     --_bg-dir: -90deg;
-  }
-
-  &::part(track-fill) {
-    margin-inline-end: -1px;
-  }
-
-  &::part(thumb) {
-    position: relative;
-    background: var(
-        --vaadin-slider-thumb-background,
-        linear-gradient(
-            light-dark(transparent, var(--vaadin-border-color-secondary)),
-            transparent 33%,
-            transparent 66%,
-            light-dark(var(--vaadin-border-color-secondary), transparent)
-          )
-          var(--aura-surface-color-solid)
-      )
-      border-box;
-    border-color: var(--vaadin-slider-thumb-border-color, oklch(1 0 0 / 0.1));
-    outline-offset: -1px;
-    box-shadow:
-      0 0 0 1px light-dark(var(--vaadin-border-color), oklch(0 0 0 / 0.1)),
-      var(--_thumb-shadow, var(--aura-shadow-s));
   }
 
   &[readonly] {
@@ -71,31 +68,10 @@
       )
       var(--vaadin-background-color);
     --vaadin-slider-thumb-border-color: var(--vaadin-border-color-secondary);
-
-    &::part(thumb) {
-      box-shadow: none;
-    }
-  }
-
-  &::part(thumb)::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background-color: #000;
-    opacity: 0;
-    transition:
-      opacity 100ms,
-      background-color 100ms;
+    --_vaadin-slider-thumb-box-shadow: none;
   }
 }
 
-vaadin-range-slider::part(track-fill) {
-  margin-inline-start: calc(var(--vaadin-slider-thumb-width) - 1px);
-}
-
-vaadin-slider[active]:not([readonly], [disabled])::part(thumb)::before,
-vaadin-range-slider[start-active]:not([readonly], [disabled])::part(thumb-start)::before,
-vaadin-range-slider[end-active]:not([readonly], [disabled])::part(thumb-end)::before {
-  opacity: 0.1;
+vaadin-range-slider {
+  --_vaadin-slider-track-fill-margin-inline-start: calc(var(--vaadin-slider-thumb-width) - 1px);
 }

@@ -13,9 +13,12 @@
   --vaadin-date-picker-year-scroller-width: calc(var(--aura-font-size-m) * 3.5);
 }
 
-vaadin-date-picker-month-scroller,
-vaadin-date-picker-overlay-content::part(toolbar) {
+vaadin-date-picker-month-scroller {
   background: var(--aura-surface-color);
+}
+
+vaadin-date-picker-overlay-content {
+  --_vaadin-date-picker-toolbar-background: var(--aura-surface-color);
 }
 
 vaadin-date-picker-year-scroller::before {
@@ -24,21 +27,28 @@ vaadin-date-picker-year-scroller::before {
   background: var(--aura-surface-color-solid) padding-box;
 }
 
-vaadin-date-picker-year::part(year-number) {
-  font-size: var(--aura-font-size-s);
-  font-weight: var(--aura-font-weight-medium);
+vaadin-date-picker-year {
+  --_vaadin-date-picker-year-number-font-size: var(--aura-font-size-s);
+  --_vaadin-date-picker-year-number-font-weight: var(--aura-font-weight-medium);
+  --_vaadin-date-picker-year-separator-text-align: center;
+  --_vaadin-date-picker-year-separator-translate: 0 -50%;
+  --_vaadin-date-picker-year-separator-height: 8px;
+  --_vaadin-date-picker-year-separator-line-height: 0;
+  --_vaadin-date-picker-year-separator-before-content: '';
+  --_vaadin-date-picker-year-separator-before-display: inline-block;
+  --_vaadin-date-picker-year-separator-before-width: 3px;
+  --_vaadin-date-picker-year-separator-before-height: 3px;
+  --_vaadin-date-picker-year-separator-before-border-radius: 50%;
+  --_vaadin-date-picker-year-separator-before-background: var(--vaadin-text-color-disabled);
 }
 
-vaadin-date-picker-year[current]::part(year-number) {
-  font-weight: var(--aura-font-weight-semibold);
+vaadin-date-picker-year[current] {
+  --_vaadin-date-picker-year-number-font-weight: var(--aura-font-weight-semibold);
 }
 
 vaadin-date-picker-year[selected] {
   position: relative;
-}
-
-vaadin-date-picker-year[selected]::part(year-number) {
-  color: var(--aura-accent-text-color);
+  --_vaadin-date-picker-year-number-color: var(--aura-accent-text-color);
 }
 
 vaadin-date-picker-year[selected]::after {
@@ -51,20 +61,4 @@ vaadin-date-picker-year[selected]::after {
   top: -0.5lh;
   inset-inline: 3px;
   opacity: 0.1;
-}
-
-vaadin-date-picker-year::part(year-separator) {
-  text-align: center;
-  translate: 0 -50%;
-  height: 8px;
-  line-height: 0;
-}
-
-vaadin-date-picker-year::part(year-separator)::before {
-  content: '';
-  display: inline-block;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--vaadin-text-color-disabled);
 }

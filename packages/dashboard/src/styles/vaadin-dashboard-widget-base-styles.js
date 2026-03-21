@@ -48,6 +48,11 @@ const widgetStyles = css`
     flex: 1;
     overflow: hidden;
     min-height: 1em;
+    transition: var(--_vaadin-dashboard-widget-content-transition);
+    transition-property: var(--_vaadin-dashboard-widget-content-transition-property);
+    opacity: var(--_vaadin-dashboard-widget-content-opacity);
+    filter: var(--_vaadin-dashboard-widget-content-filter);
+    clip-path: var(--_vaadin-dashboard-widget-content-clip-path);
   }
 
   [part~='resize-button'] {

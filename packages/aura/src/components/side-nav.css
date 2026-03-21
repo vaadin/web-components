@@ -11,53 +11,42 @@ vaadin-side-nav + vaadin-side-nav {
   margin-top: var(--vaadin-gap-l);
 }
 
-vaadin-side-nav::part(label) {
-  gap: var(--vaadin-gap-xs);
-  transition: color 80ms;
+vaadin-side-nav {
+  --_vaadin-side-nav-label-gap: var(--vaadin-gap-xs);
+  --_vaadin-side-nav-label-transition: color 80ms;
+  --_vaadin-side-nav-toggle-button-icon-visual-size: 0.9lh;
+  --_vaadin-side-nav-label-hover-color: var(--vaadin-text-color);
+}
+
+vaadin-side-nav-item {
+  --_vaadin-side-nav-item-content-transition: color 80ms;
+  --_vaadin-side-nav-toggle-button-icon-visual-size: 0.9lh;
+  --_vaadin-side-nav-item-hover-text-color: var(--vaadin-text-color);
+  --_vaadin-side-nav-item-active-background: var(--vaadin-background-container);
 }
 
 vaadin-side-nav-item::part(content) {
   --aura-surface-level: 4;
   --aura-surface-opacity: 0.5;
-  transition: color 80ms;
 }
 
-vaadin-side-nav-item:not([disabled], [current])::part(content):active {
-  --vaadin-side-nav-item-background: var(--vaadin-background-container);
-}
-
-@media (any-hover: hover) {
-  vaadin-side-nav::part(label):hover {
-    --vaadin-side-nav-label-color: var(--vaadin-text-color);
-  }
-
-  vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
-    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
-  }
-}
-
-vaadin-side-nav-item[current]::part(content) {
-  transition: none;
+vaadin-side-nav-item[current] {
+  --_vaadin-side-nav-item-content-transition: none;
   --vaadin-side-nav-item-background: var(--aura-surface-color) padding-box;
   --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
   --vaadin-side-nav-item-border-color: var(--vaadin-border-color-secondary);
 }
 
-vaadin-side-nav::part(toggle-button),
-vaadin-side-nav-item::part(toggle-button) {
-  --vaadin-icon-visual-size: 0.9lh;
-}
-
 /* Filled variant */
 
-vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current]::part(content) {
+vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current] {
   --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
   --vaadin-side-nav-item-text-color: var(--aura-accent-contrast-color);
   --vaadin-text-color: var(--vaadin-side-nav-item-text-color);
   --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
   --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
   --vaadin-icon-color: var(--aura-accent-contrast-color);
-  outline-offset: 2px;
+  --_vaadin-side-nav-item-content-outline-offset: 2px;
 }
 
 vaadin-side-nav-item:not([current]) > vaadin-icon[slot='prefix'] {

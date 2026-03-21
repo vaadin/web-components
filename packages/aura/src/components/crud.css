@@ -8,8 +8,8 @@ vaadin-crud-edit {
   --vaadin-icon-visual-size: 0.75lh;
 }
 
-vaadin-crud::part(editor) {
-  background: var(--aura-surface-color);
+vaadin-crud {
+  --_vaadin-crud-editor-background: var(--aura-surface-color);
 }
 
 vaadin-crud vaadin-confirm-dialog {

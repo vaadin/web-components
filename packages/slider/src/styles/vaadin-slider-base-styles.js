@@ -83,6 +83,8 @@ export const sliderStyles = css`
     background: var(--vaadin-slider-fill-background, var(--vaadin-text-color));
     box-shadow: inset 0 0 0 var(--vaadin-slider-fill-border-width, 1px)
       var(--vaadin-slider-fill-border-color, transparent);
+    margin-inline: var(--_vaadin-slider-track-fill-margin-inline-start)
+      var(--_vaadin-slider-track-fill-margin-inline-end);
   }
 
   [part~='thumb'] {
@@ -95,6 +97,23 @@ export const sliderStyles = css`
     border: var(--vaadin-slider-thumb-border-width, 1px) solid
       var(--vaadin-slider-thumb-border-color, var(--vaadin-text-color));
     border-radius: var(--vaadin-slider-thumb-border-radius, var(--vaadin-radius-l));
+    position: var(--_vaadin-slider-thumb-position);
+    outline-offset: var(--_vaadin-slider-thumb-outline-offset);
+    box-shadow: var(--_vaadin-slider-thumb-box-shadow);
+  }
+
+  [part~='thumb']::before {
+    content: var(--_vaadin-slider-thumb-before-content, none);
+    position: var(--_vaadin-slider-thumb-before-position);
+    inset: var(--_vaadin-slider-thumb-before-inset);
+    border-radius: var(--_vaadin-slider-thumb-before-border-radius);
+    background-color: var(--_vaadin-slider-thumb-before-background-color);
+    opacity: var(--_vaadin-slider-thumb-before-opacity);
+    transition: var(--_vaadin-slider-thumb-before-transition);
+  }
+
+  :host([active]:not([readonly], [disabled])) [part~='thumb']::before {
+    opacity: var(--_vaadin-slider-thumb-active-before-opacity, var(--_vaadin-slider-thumb-before-opacity));
   }
 
   :host([readonly]) [part='track-fill'] {

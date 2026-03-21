@@ -18,7 +18,7 @@ const sideNav = css`
     display: flex;
     align-items: center;
     justify-content: start;
-    gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
+    gap: var(--_vaadin-side-nav-label-gap, var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s)));
     padding: var(
       --vaadin-side-nav-item-padding,
       var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
@@ -28,9 +28,19 @@ const sideNav = css`
     color: var(--vaadin-side-nav-label-color, var(--vaadin-text-color-secondary));
     line-height: var(--vaadin-side-nav-label-line-height, inherit);
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
+    transition: var(--_vaadin-side-nav-label-transition);
     touch-action: manipulation;
     min-width: 0;
     max-width: 100%;
+  }
+
+  @media (any-hover: hover) {
+    [part='label']:hover {
+      --vaadin-side-nav-label-color: var(
+        --_vaadin-side-nav-label-hover-color,
+        var(--vaadin-side-nav-label-color, var(--vaadin-text-color-secondary))
+      );
+    }
   }
 
   ::slotted([slot='label']) {

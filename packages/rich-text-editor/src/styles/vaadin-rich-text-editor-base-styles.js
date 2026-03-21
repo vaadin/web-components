@@ -400,10 +400,24 @@ const toolbar = css`
     flex-wrap: wrap;
     gap: var(--vaadin-rich-text-editor-toolbar-gap, var(--vaadin-gap-s));
     padding: var(--vaadin-rich-text-editor-toolbar-padding, var(--vaadin-padding-s));
+    contain: var(--_vaadin-rte-toolbar-contain);
+    border-bottom: var(--_vaadin-rte-toolbar-border-bottom);
   }
 
   [part~='toolbar-group'] {
     display: flex;
+    gap: var(--_vaadin-rte-toolbar-group-gap);
+    align-items: var(--_vaadin-rte-toolbar-group-align-items);
+    position: relative;
+  }
+
+  [part~='toolbar-group']::before {
+    content: var(--_vaadin-rte-toolbar-group-before-content, none);
+    position: var(--_vaadin-rte-toolbar-group-before-position);
+    width: var(--_vaadin-rte-toolbar-group-before-width);
+    height: var(--_vaadin-rte-toolbar-group-before-height);
+    background: var(--_vaadin-rte-toolbar-group-before-background);
+    translate: var(--_vaadin-rte-toolbar-group-before-translate);
   }
 
   [part~='toolbar-button'] {
@@ -411,7 +425,10 @@ const toolbar = css`
     border: var(--vaadin-rich-text-editor-toolbar-button-border-width, 1px) solid
       var(--vaadin-rich-text-editor-toolbar-button-border-color, transparent);
     border-radius: var(--vaadin-rich-text-editor-toolbar-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color));
+    color: var(
+      --_vaadin-rte-toolbar-button-color,
+      var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color))
+    );
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
     font: inherit;
@@ -419,7 +436,37 @@ const toolbar = css`
       --vaadin-rich-text-editor-toolbar-button-padding,
       var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
     );
-    position: relative;
+    position: var(--_vaadin-rte-toolbar-button-position, relative);
+    transition: var(--_vaadin-rte-toolbar-button-transition);
+    outline-offset: var(--_vaadin-rte-toolbar-button-outline-offset);
+  }
+
+  [part~='toolbar-button']:active {
+    scale: var(--_vaadin-rte-toolbar-button-active-scale);
+    transition-duration: var(--_vaadin-rte-toolbar-button-active-transition-duration);
+  }
+
+  [part~='toolbar-button-pressed'] {
+    --vaadin-rich-text-editor-toolbar-button-background: var(
+      --_vaadin-rte-toolbar-button-pressed-background,
+      var(--vaadin-background-container-strong)
+    );
+  }
+
+  :host(:focus-within) [part~='toolbar-button-pressed'] {
+    --vaadin-rich-text-editor-toolbar-button-background: var(
+      --_vaadin-rte-toolbar-button-focus-pressed-background,
+      var(--vaadin-background-container-strong)
+    );
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--_vaadin-rte-toolbar-button-focus-pressed-color);
+    border-color: var(--_vaadin-rte-toolbar-button-focus-pressed-border-color, transparent);
+  }
+
+  @media (any-hover: hover) {
+    [part~='toolbar-button']:hover {
+      --vaadin-rich-text-editor-toolbar-button-background: var(--_vaadin-rte-toolbar-button-hover-background);
+      --vaadin-rich-text-editor-toolbar-button-text-color: var(--_vaadin-rte-toolbar-button-hover-color);
+    }
   }
 
   [part~='toolbar-button']::before {

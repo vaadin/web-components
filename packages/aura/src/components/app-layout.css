@@ -22,13 +22,16 @@ vaadin-app-layout {
   padding-bottom: var(--aura-app-layout-inset);
   padding-inline-end: var(--aura-app-layout-inset);
   padding-top: max(var(--aura-app-layout-inset), var(--_vaadin-app-layout-navbar-offset-size));
+  --_vaadin-app-layout-navbar-backdrop-filter: blur(20px);
+}
+
+vaadin-app-layout[overlay] {
+  --vaadin-app-layout-drawer-background: var(--aura-surface-color);
+  --_vaadin-app-layout-drawer-backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
 vaadin-app-layout[overlay]::part(drawer) {
-  background: var(--vaadin-app-layout-drawer-background, var(--aura-surface-color));
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
-  backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
 vaadin-app-layout:is([overlay], :not([drawer-opened])),
@@ -36,19 +39,13 @@ vaadin-app-layout:not([has-drawer]) {
   padding-inline-start: var(--aura-app-layout-inset);
 }
 
-vaadin-app-layout::part(navbar) {
-  background: var(--vaadin-app-layout-navbar-background, transparent);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+vaadin-app-layout:not([overlay]) {
+  --_vaadin-app-layout-drawer-padding-block: var(--aura-app-layout-inset);
+  --_vaadin-app-layout-drawer-padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
 }
 
-vaadin-app-layout:not([overlay])::part(drawer) {
-  padding-block: var(--aura-app-layout-inset);
-  padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
-}
-
-vaadin-app-layout[has-navbar]::part(drawer) {
-  padding-top: var(--safe-area-inset-top);
+vaadin-app-layout[has-navbar] {
+  --_vaadin-app-layout-drawer-padding-top: var(--safe-area-inset-top);
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {

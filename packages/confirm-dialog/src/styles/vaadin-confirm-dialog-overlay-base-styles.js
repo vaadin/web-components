@@ -34,6 +34,21 @@ const confirmDialogOverlay = css`
   [part='content'] {
     flex: 1;
   }
+
+  [part='message'] {
+    color: var(--_vaadin-confirm-dialog-message-color);
+  }
+
+  [part='footer'] {
+    width: var(--_vaadin-confirm-dialog-footer-width);
+    margin-inline-start: var(--_vaadin-confirm-dialog-footer-margin-inline-start);
+  }
+
+  [part='cancel-button'],
+  [part='reject-button'],
+  [part='confirm-button'] {
+    flex: var(--_vaadin-confirm-dialog-action-button-flex);
+  }
 `;
 
 export const confirmDialogOverlayStyles = [overlayStyles, dialogOverlayBase, confirmDialogOverlay];

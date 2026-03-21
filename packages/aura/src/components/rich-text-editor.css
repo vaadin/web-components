@@ -14,59 +14,30 @@ vaadin-rich-text-editor {
   --aura-surface-level: 4;
   --aura-surface-opacity: 0.7 !important;
   box-shadow: var(--aura-shadow-xs);
+  --_vaadin-rte-toolbar-contain: paint;
+  --_vaadin-rte-toolbar-border-bottom: 1px solid var(--vaadin-border-color-secondary);
+  --_vaadin-rte-toolbar-group-gap: 1px;
+  --_vaadin-rte-toolbar-group-align-items: center;
+  --_vaadin-rte-toolbar-group-before-content: '';
+  --_vaadin-rte-toolbar-group-before-position: absolute;
+  --_vaadin-rte-toolbar-group-before-width: 1px;
+  --_vaadin-rte-toolbar-group-before-height: 1lh;
+  --_vaadin-rte-toolbar-group-before-background: var(--vaadin-border-color-secondary);
+  --_vaadin-rte-toolbar-group-before-translate: calc(var(--vaadin-gap-m) / -2);
+  --_vaadin-rte-toolbar-button-transition: color 80ms, background-color 80ms, scale 180ms;
+  --_vaadin-rte-toolbar-button-outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  --_vaadin-rte-toolbar-button-position: relative;
+  --_vaadin-rte-toolbar-button-color: var(--vaadin-text-color-secondary);
+  --_vaadin-rte-toolbar-button-active-scale: 0.95;
+  --_vaadin-rte-toolbar-button-active-transition-duration: 80ms, 80ms, 50ms;
+  --_vaadin-rte-toolbar-button-hover-background: var(--vaadin-background-container);
+  --_vaadin-rte-toolbar-button-hover-color: var(--vaadin-text-color);
+  --_vaadin-rte-toolbar-button-pressed-background: transparent;
+  --_vaadin-rte-toolbar-button-focus-pressed-background: var(--vaadin-background-container-strong) padding-box;
+  --_vaadin-rte-toolbar-button-focus-pressed-color: var(--vaadin-text-color);
+  --_vaadin-rte-toolbar-button-focus-pressed-border-color: var(--vaadin-text-color-disabled);
 
   &:not(:focus-within) {
     --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color-disabled);
-  }
-}
-
-vaadin-rich-text-editor::part(toolbar) {
-  contain: paint;
-  border-bottom: 1px solid var(--vaadin-border-color-secondary);
-}
-
-vaadin-rich-text-editor::part(toolbar-group) {
-  gap: 1px;
-  align-items: center;
-}
-
-vaadin-rich-text-editor::part(toolbar-group)::before {
-  content: '';
-  position: absolute;
-  width: 1px;
-  height: 1lh;
-  background: var(--vaadin-border-color-secondary);
-  translate: calc(var(--vaadin-gap-m) / -2);
-}
-
-vaadin-rich-text-editor::part(toolbar-button) {
-  transition:
-    color 80ms,
-    background-color 80ms,
-    scale 180ms;
-  outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
-  position: relative;
-  color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-text-color-secondary));
-}
-
-vaadin-rich-text-editor::part(toolbar-button-pressed) {
-  --vaadin-rich-text-editor-toolbar-button-background: transparent;
-}
-
-vaadin-rich-text-editor:focus-within::part(toolbar-button-pressed) {
-  --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container-strong) padding-box;
-  --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
-  border-color: var(--vaadin-text-color-disabled);
-}
-
-vaadin-rich-text-editor::part(toolbar-button):active {
-  scale: 0.95;
-  transition-duration: 80ms, 80ms, 50ms;
-}
-
-@media (any-hover: hover) {
-  vaadin-rich-text-editor::part(toolbar-button):hover {
-    --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container);
-    --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
   }
 }

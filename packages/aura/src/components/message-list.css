@@ -4,20 +4,12 @@
   --vaadin-message-attachment-border-width: 1px;
 }
 
+vaadin-message {
+  --vaadin-message-attachment-background: var(--aura-surface-color) padding-box;
+  --_vaadin-message-attachment-icon-background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  --_vaadin-message-attachment-icon-color: var(--aura-accent-color);
+}
+
 vaadin-message::part(attachment) {
   --aura-surface-level: 4;
-  background: var(--vaadin-message-attachment-background, var(--aura-surface-color) padding-box);
-}
-
-vaadin-message::part(attachment):hover {
-  --aura-surface-opacity: 0.7;
-}
-
-vaadin-message::part(attachment):active {
-  --aura-surface-opacity: 0.4;
-}
-
-vaadin-message::part(attachment-icon) {
-  background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
-  color: var(--aura-accent-color);
 }

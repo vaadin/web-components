@@ -65,7 +65,8 @@ const sliderBubbleOverlay = css`
   [part='arrow'] {
     display: block;
     position: absolute;
-    background: inherit;
+    background: var(--_vaadin-overlay-arrow-background, inherit);
+    margin: var(--_vaadin-overlay-arrow-margin);
     border: inherit;
     border-start-start-radius: var(--vaadin-slider-bubble-arrow-border-radius, 0);
     inset-inline-start: 50%;

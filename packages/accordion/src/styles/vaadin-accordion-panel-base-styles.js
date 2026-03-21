@@ -16,6 +16,9 @@ export const accordionPanel = css`
 
   [part='content'] {
     box-sizing: border-box;
+    padding: var(--_vaadin-details-content-padding);
+    padding-top: var(--_vaadin-details-content-padding-top);
+    margin-inline-start: var(--_vaadin-details-content-margin-inline-start);
   }
 
   :host(:not([opened])) [part='content'] {

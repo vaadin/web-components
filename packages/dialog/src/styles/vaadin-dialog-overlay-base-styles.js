@@ -40,6 +40,7 @@ export const dialogOverlayBase = css`
     min-width: min(var(--vaadin-dialog-min-width, 4em), 100%);
     max-width: min(var(--vaadin-dialog-max-width, 100%), 100%);
     max-height: 100%;
+    view-transition-name: var(--_vaadin-dialog-overlay-view-transition-name);
   }
 
   [part='header'],

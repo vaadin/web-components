@@ -23,22 +23,16 @@
 vaadin-upload {
   --_divider-offset-start: calc(var(--vaadin-padding-s) + var(--vaadin-icon-size, 1lh) + var(--vaadin-gap-s));
   --_divider-offset-end: var(--vaadin-padding-s);
-}
-
-vaadin-upload::part(primary-buttons) {
-  flex-wrap: wrap;
-  gap: var(--vaadin-gap-s) var(--vaadin-gap-m);
+  --_vaadin-upload-primary-buttons-flex-wrap: wrap;
+  --_vaadin-upload-primary-buttons-gap: var(--vaadin-gap-s) var(--vaadin-gap-m);
+  --_vaadin-upload-drop-label-flex: 100;
+  --_vaadin-upload-drop-label-padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+  --_vaadin-upload-drop-label-min-width: fit-content;
+  --_vaadin-upload-drop-label-margin-inline-start: calc(var(--vaadin-upload-padding) * -1);
 }
 
 vaadin-upload:not([nodrop]) vaadin-button[slot='add-button'] {
   flex: 1;
-}
-
-vaadin-upload::part(drop-label) {
-  flex: 100;
-  padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
-  min-width: fit-content;
-  margin-inline-start: calc(var(--vaadin-upload-padding) * -1);
 }
 
 vaadin-upload[dragover-valid] {
@@ -64,36 +58,25 @@ vaadin-upload-file {
   --vaadin-icon-visual-size: 0.75lh;
   border-radius: var(--vaadin-upload-file-border-radius, var(--vaadin-radius-m));
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
-
-  &:not([complete], [error])::part(done-icon)::before {
-    background: var(--vaadin-border-color-secondary);
-  }
-
-  &::part(start-button),
-  &::part(remove-button),
-  &::part(retry-button) {
-    color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color-secondary));
-    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
-  }
+  --_vaadin-upload-file-done-icon-before-background: var(--vaadin-border-color-secondary);
+  --_vaadin-upload-file-button-outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  --_vaadin-upload-file-status-max-height: 2lh;
+  --_vaadin-upload-file-status-display: -webkit-box;
+  --_vaadin-upload-file-status-line-clamp: 2;
+  --_vaadin-upload-file-status-box-orient: vertical;
+  --_vaadin-upload-file-status-overflow: hidden;
+  --_vaadin-upload-file-hover-button-text-color: var(--vaadin-text-color);
 
   vaadin-progress-bar {
     --vaadin-progress-bar-height: var(--vaadin-gap-xs);
     margin-top: var(--vaadin-gap-xs);
   }
 
-  &:not([error])::part(status) {
-    max-height: 2lh;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  &[complete]::part(status) {
-    height: 1lh; /* ensure some height to transition from */
-    visibility: hidden;
-    transition: 200ms max-height;
-    max-height: 0;
+  &[complete] {
+    --_vaadin-upload-file-status-height: 1lh;
+    --_vaadin-upload-file-status-visibility: hidden;
+    --_vaadin-upload-file-status-transition: 200ms max-height;
+    --_vaadin-upload-file-status-max-height: 0;
   }
 
   &[complete] vaadin-progress-bar {
@@ -111,6 +94,10 @@ vaadin-upload-file[theme~='thumbnails'] {
   --vaadin-spinner-size: 1em;
   background: var(--aura-surface-color) padding-box;
   border: 1px solid light-dark(var(--vaadin-border-color-secondary), transparent);
+  --_vaadin-upload-file-done-icon-visual-size: 1lh;
+  --_vaadin-upload-file-done-icon-background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  --_vaadin-upload-file-commands-gap: 0;
+  --_vaadin-upload-file-thumbnails-button-icon-visual-size: 0.8lh;
 
   &::before {
     content: '';
@@ -119,22 +106,6 @@ vaadin-upload-file[theme~='thumbnails'] {
     border-radius: inherit;
     border: 1px solid light-dark(transparent, var(--vaadin-border-color-secondary));
     pointer-events: none;
-  }
-
-  &::part(done-icon),
-  &::part(warning-icon) {
-    --vaadin-icon-visual-size: 1lh;
-    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
-  }
-
-  &::part(commands) {
-    gap: 0;
-  }
-
-  &::part(start-button),
-  &::part(retry-button),
-  &::part(remove-button) {
-    --vaadin-icon-visual-size: 0.8lh;
   }
 
   &[error] {
@@ -177,13 +148,5 @@ vaadin-upload[theme~='no-border'] {
   vaadin-upload-file {
     background: var(--aura-surface-color) padding-box;
     border: 1px solid var(--vaadin-border-color-secondary);
-  }
-}
-
-@media (any-hover: hover) {
-  vaadin-upload-file::part(start-button):hover,
-  vaadin-upload-file::part(remove-button):hover,
-  vaadin-upload-file::part(retry-button):hover {
-    --vaadin-upload-file-button-text-color: var(--vaadin-text-color);
   }
 }

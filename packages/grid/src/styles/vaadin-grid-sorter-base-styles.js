@@ -29,6 +29,7 @@ export const gridSorterStyles = css`
     flex: none;
     height: 1lh;
     color: var(--vaadin-text-color-disabled);
+    transition: var(--_vaadin-grid-sorter-indicators-transition);
   }
 
   [part='order'] {
