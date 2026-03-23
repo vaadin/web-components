@@ -10,9 +10,10 @@ const ignoredAttributeTypes = ['object', 'unknown', 'Array'];
 // (e.g., `this._controller.slotName = 'sr-label'` misinterpreted as a class field)
 const ignoredMembers = ['slotName', 'id'];
 
-// Events incorrectly picked up by CEM from dynamic dispatchEvent calls
-// (e.g., `new CustomEvent(eventName, ...)` where eventName is a variable)
-const ignoredEvents = ['eventName'];
+// Events to exclude from CEM output:
+// - eventName: false positive from dynamic dispatchEvent calls (e.g., `new CustomEvent(eventName, ...)`)
+// - focus, blur: native events picked up by CEM without @fires annotations, not part of the public API
+const ignoredEvents = ['eventName', 'focus', 'blur'];
 
 const ignoredStaticMembers = [
   'is',
