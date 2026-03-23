@@ -551,7 +551,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const start = from || (slideIn ? offscreen : 'none');
     const end = slideIn ? 'none' : offscreen;
 
-    return this.__animate(element, [{ translate: start }, { translate: end }], { duration, easing });
+    const opacityStart = this.hasAttribute('overflow') ? 1 : slideIn ? 0 : 1;
+    const opacityEnd = this.hasAttribute('overflow') ? 1 : slideIn ? 1 : 0;
+
+    return this.__animate(
+      element,
+      [
+        { translate: start, opacity: opacityStart },
+        { translate: end, opacity: opacityEnd },
+      ],
+      { duration, easing },
+    );
   }
 
   /**
