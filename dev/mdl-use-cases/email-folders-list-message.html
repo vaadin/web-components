@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email — Folders - List - Message</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
+    <link rel="stylesheet" href="./common.css" />
+    <style>
+      /* Folder pane */
+      .folder-pane {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .folder-pane h2 {
+        margin: 0;
+        padding: 16px;
+        font-size: 1.1rem;
+        border-bottom: 1px solid var(--vaadin-border-color-secondary);
+      }
+
+      .folder-pane vaadin-grid {
+        flex: 1;
+        min-height: 0;
+        border: none;
+        border-radius: 0;
+      }
+
+      .folder-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 0;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .folder-count {
+        margin-left: auto;
+        color: var(--vaadin-text-color-secondary);
+        font-size: 0.8rem;
+      }
+
+      /* Master pane header */
+      .master-pane-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+        border-bottom: 1px solid var(--vaadin-border-color-secondary);
+      }
+
+      .master-pane-header h2 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .back-btn {
+        display: none;
+        cursor: pointer;
+        background: none;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 4px 12px;
+        font-size: 0.85rem;
+      }
+
+      #outerLayout[overflow] .back-btn {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <vaadin-master-detail-layout
+      id="outerLayout"
+      master-size="200px"
+      detail-size="30rem"
+      expand="detail"
+      overlay-size="100%"
+      no-animation
+    >
+      <div class="folder-pane">
+        <h2>Mail</h2>
+        <vaadin-grid id="folderGrid" theme="no-border no-row-borders"></vaadin-grid>
+      </div>
+
+      <vaadin-master-detail-layout
+        id="innerLayout"
+        master-size="400px"
+        detail-size="30rem"
+        expand="detail"
+        overlay-size="100%"
+        no-animation
+      >
+        <div class="master-pane">
+          <div class="master-pane-header">
+            <button class="back-btn" id="backBtn">&larr; Back</button>
+            <h2 id="folderTitle">Inbox</h2>
+          </div>
+          <vaadin-grid id="emailGrid" theme="no-border no-row-borders"></vaadin-grid>
+        </div>
+        <div class="detail-placeholder" slot="detail-placeholder">Select a message to read</div>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+
+    <script type="module">
+      import '@vaadin/grid/all-imports.js';
+      import '@vaadin/master-detail-layout';
+      import { emails } from './common.js';
+
+      const folders = [
+        { name: 'Inbox', icon: '📥', count: 5 },
+        { name: 'Sent', icon: '📤', count: 12 },
+        { name: 'Archived', icon: '📦', count: 34 },
+      ];
+
+      const outerLayout = document.getElementById('outerLayout');
+      const innerLayout = document.getElementById('innerLayout');
+      const folderGrid = document.getElementById('folderGrid');
+      const emailGrid = document.getElementById('emailGrid');
+      const folderTitle = document.getElementById('folderTitle');
+
+      // Folder grid
+      folderGrid.items = folders;
+
+      const folderColumn = document.createElement('vaadin-grid-column');
+      folderColumn.flexGrow = 1;
+      folderColumn.renderer = (root, _column, model) => {
+        const folder = model.item;
+        root.innerHTML = `
+          <div class="folder-cell">
+            <span>${folder.icon}</span>
+            <span>${folder.name}</span>
+            <span class="folder-count">${folder.count}</span>
+          </div>
+        `;
+      };
+      folderGrid.appendChild(folderColumn);
+
+      // Back button
+      document.getElementById('backBtn').addEventListener('click', () => {
+        closeEmailDetail();
+        outerLayout._setDetail(null);
+        folderGrid.activeItem = null;
+        folderGrid.selectedItems = [];
+      });
+
+      // Select Inbox by default
+      folderGrid.selectedItems = [folders[0]];
+      outerLayout._setDetail(innerLayout, true);
+
+      folderGrid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        if (!item) return;
+        folderGrid.selectedItems = [item];
+        folderTitle.textContent = item.name;
+        closeEmailDetail();
+        outerLayout._setDetail(innerLayout);
+      });
+
+      // Email grid
+      emails.sort((a, b) => new Date(b.date) - new Date(a.date));
+      emailGrid.items = emails;
+
+      const emailColumn = document.createElement('vaadin-grid-column');
+      emailColumn.flexGrow = 1;
+      emailColumn.renderer = (root, _column, model) => {
+        const email = model.item;
+        const d = new Date(email.date);
+        const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        root.innerHTML = `
+          <div class="email-cell">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span class="email-from">${email.from}</span>
+              <span class="email-date">${dateStr}</span>
+            </div>
+            <div class="email-subject">${email.subject}</div>
+            <div class="email-preview">${email.preview}</div>
+          </div>
+        `;
+      };
+      emailGrid.appendChild(emailColumn);
+
+      // Email detail
+      function createDetailElement(email) {
+        const d = new Date(email.date);
+        const dateStr = d.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+        });
+
+        const detail = document.createElement('div');
+        detail.classList.add('detail-pane');
+        detail.innerHTML = `
+          <div class="detail-header">
+            <button class="close-btn" id="closeBtn">Close</button>
+            <div class="detail-subject">${email.subject}</div>
+          </div>
+          <div class="detail-meta">
+            <div><strong>From:</strong> ${email.from} &lt;${email.fromEmail}&gt;</div>
+            <div><strong>To:</strong> ${email.to} &lt;${email.toEmail}&gt;</div>
+            <div><strong>Date:</strong> ${dateStr}</div>
+          </div>
+          <div class="detail-body">${email.body}</div>
+        `;
+
+        detail.querySelector('#closeBtn').addEventListener('click', closeEmailDetail);
+        return detail;
+      }
+
+      function closeEmailDetail() {
+        innerLayout._setDetail(null);
+        emailGrid.activeItem = null;
+        emailGrid.selectedItems = [];
+      }
+
+      emailGrid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        if (!item) return;
+        emailGrid.selectedItems = [item];
+        innerLayout._setDetail(createDetailElement(item));
+      });
+
+      innerLayout.addEventListener('backdrop-click', closeEmailDetail);
+      innerLayout.addEventListener('detail-escape-press', closeEmailDetail);
+
+      function closeFolderDetail() {
+        closeEmailDetail();
+        outerLayout._setDetail(null);
+        folderGrid.activeItem = null;
+        folderGrid.selectedItems = [];
+      }
+      outerLayout.addEventListener('backdrop-click', closeFolderDetail);
+      outerLayout.addEventListener('detail-escape-press', closeFolderDetail);
+    </script>
+  </body>
+</html>

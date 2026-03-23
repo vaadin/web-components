@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email — List - Message</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
+    <link rel="stylesheet" href="./common.css" />
+    <style>
+      .master-pane h2 {
+        margin: 0;
+        padding: 16px;
+        font-size: 1.1rem;
+        border-bottom: 1px solid var(--vaadin-border-color-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <vaadin-master-detail-layout
+      id="layout"
+      master-size="400px"
+      detail-size="30rem"
+      expand="detail"
+      overlay-size="100%"
+      no-animation
+    >
+      <div class="master-pane">
+        <h2>Inbox</h2>
+        <vaadin-grid id="emailGrid" theme="no-border no-row-borders"></vaadin-grid>
+      </div>
+      <div class="detail-placeholder" slot="detail-placeholder">Select a message to read</div>
+    </vaadin-master-detail-layout>
+
+    <script type="module">
+      import '@vaadin/grid/all-imports.js';
+      import '@vaadin/master-detail-layout';
+      import { emails } from './common.js';
+
+      const layout = document.getElementById('layout');
+      const grid = document.getElementById('emailGrid');
+
+      emails.sort((a, b) => new Date(b.date) - new Date(a.date));
+      grid.items = emails;
+
+      const column = document.createElement('vaadin-grid-column');
+      column.flexGrow = 1;
+      column.renderer = (root, _column, model) => {
+        const email = model.item;
+        const d = new Date(email.date);
+        const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        root.innerHTML = `
+          <div class="email-cell">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span class="email-from">${email.from}</span>
+              <span class="email-date">${dateStr}</span>
+            </div>
+            <div class="email-subject">${email.subject}</div>
+            <div class="email-preview">${email.preview}</div>
+          </div>
+        `;
+      };
+      grid.appendChild(column);
+
+      function createDetailElement(email) {
+        const d = new Date(email.date);
+        const dateStr = d.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+        });
+
+        const detail = document.createElement('div');
+        detail.classList.add('detail-pane');
+        detail.innerHTML = `
+          <div class="detail-header">
+            <button class="close-btn" id="closeBtn">Close</button>
+            <div class="detail-subject">${email.subject}</div>
+          </div>
+          <div class="detail-meta">
+            <div><strong>From:</strong> ${email.from} &lt;${email.fromEmail}&gt;</div>
+            <div><strong>To:</strong> ${email.to} &lt;${email.toEmail}&gt;</div>
+            <div><strong>Date:</strong> ${dateStr}</div>
+          </div>
+          <div class="detail-body">${email.body}</div>
+        `;
+
+        detail.querySelector('#closeBtn').addEventListener('click', closeDetail);
+        return detail;
+      }
+
+      function closeDetail() {
+        layout._setDetail(null);
+        grid.activeItem = null;
+        grid.selectedItems = [];
+      }
+
+      grid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        if (!item) return;
+        grid.selectedItems = [item];
+        layout._setDetail(createDetailElement(item));
+      });
+
+      layout.addEventListener('backdrop-click', closeDetail);
+      layout.addEventListener('detail-escape-press', closeDetail);
+    </script>
+  </body>
+</html>

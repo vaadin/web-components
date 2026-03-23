@@ -1,0 +1,109 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+}
+
+.master-pane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.master-pane vaadin-grid {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.detail-pane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
+  flex-shrink: 0;
+}
+
+.detail-header .close-btn {
+  cursor: pointer;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+}
+
+.detail-subject {
+  font-size: 1.2rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-meta {
+  padding: 16px;
+  color: var(--vaadin-text-color-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
+}
+
+.detail-body {
+  padding: 16px 24px;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.detail-body p {
+  margin: 0 0 1em;
+}
+
+.detail-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--vaadin-text-color-secondary);
+}
+
+.email-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.email-from {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.email-subject {
+  font-size: 0.85rem;
+}
+
+.email-preview {
+  font-size: 0.8rem;
+  color: var(--vaadin-text-color-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email-date {
+  font-size: 0.75rem;
+  color: var(--vaadin-text-color-secondary);
+}
