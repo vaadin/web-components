@@ -8,10 +8,8 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
-    --_master-size: 30em;
-    --_detail-size: 15em;
-    --_master-column: var(--_master-size) 0;
-    --_detail-column: var(--_detail-size) 0;
+    --_master-size: min(10rem, 100%);
+    --_detail-size: var(--_detail-cached-size, min-content);
     --_transition-duration: 0s;
     --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
     --_rtl-multiplier: 1;
@@ -22,8 +20,11 @@ export const masterDetailLayoutStyles = css`
     height: 100%;
     position: relative;
     z-index: 0;
-    overflow: hidden;
-    grid-template-columns: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
+    overflow: clip;
+    grid-template-columns:
+      [master-start] var(--_master-size) var(--_master-extra, 0px)
+      [detail-start] var(--_detail-size) var(--_detail-extra, 0px)
+      [detail-end];
     grid-template-rows: 100%;
   }
 
@@ -39,7 +40,10 @@ export const masterDetailLayoutStyles = css`
     --_detail-offscreen: 0 30px;
 
     grid-template-columns: 100%;
-    grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
+    grid-template-rows:
+      [master-start] var(--_master-size) var(--_master-extra, 0px)
+      [detail-start] var(--_detail-size) var(--_detail-extra, 0px)
+      [detail-end];
   }
 
   :is(#master, #detail, #detail-placeholder, #outgoing) {
@@ -86,18 +90,25 @@ export const masterDetailLayoutStyles = css`
 
   :host([expand='both']),
   :host([expand='master']) {
-    --_master-column: var(--_master-size) 1fr;
+    --_master-extra: 1fr;
   }
+
+  :host([expand='both'][has-detail]),
+  :host([expand='detail'][has-detail]) {
+    --_detail-extra: 1fr;
+  }
+
+  :host([recalculating-detail-size][has-detail]) {
+    --_master-extra: 0px;
+    --_detail-extra: 0px;
+  }
+
+  :host(:not([has-detail])),
+  :host([has-detail-placeholder][overlay]),
 
   :host([keep-detail-column-offscreen]),
-  :host([has-detail-placeholder][overlay]),
-  :host(:not([has-detail-placeholder], [has-detail])) {
-    --_master-column: var(--_master-size) calc(100% - var(--_master-size));
-  }
-
-  :host([expand='both']),
-  :host([expand='detail']) {
-    --_detail-column: var(--_detail-size) 1fr;
+  :host([keep-detail-column-offscreen][recalculating-detail-size]) {
+    --_master-extra: calc(100% - var(--_master-size));
   }
 
   :host([orientation='horizontal']) #detail-placeholder,
@@ -150,13 +161,13 @@ export const masterDetailLayoutStyles = css`
   :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
     inset-block: 0;
     inset-inline-end: 0;
-    width: var(--_overlay-size, var(--_detail-size, min-content));
+    width: var(--_overlay-size, var(--_detail-size));
   }
 
   :host([has-detail][overlay][orientation='vertical']) :is(#detail, #outgoing) {
     inset-inline: 0;
     inset-block-end: 0;
-    height: var(--_overlay-size, var(--_detail-size, min-content));
+    height: var(--_overlay-size, var(--_detail-size));
   }
 
   :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing, #backdrop) {

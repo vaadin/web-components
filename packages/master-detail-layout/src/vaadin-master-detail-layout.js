@@ -20,6 +20,18 @@ function parseTrackSizes(gridTemplate) {
     .map(parseFloat);
 }
 
+function detectOverflow(hostSize, trackSizes) {
+  const [masterSize, masterExtra, detailSize] = trackSizes;
+
+  if (Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)) {
+    return false;
+  }
+  if (Math.floor(masterExtra) >= Math.floor(detailSize)) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
@@ -105,9 +117,14 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     return {
       /**
        * Size (in CSS length units) to be set on the detail area in
-       * the CSS grid layout. If there is not enough space to show
+       * the CSS grid layout. When there is not enough space to show
        * master and detail areas next to each other, the detail area
-       * is shown as an overlay. Defaults to 15em.
+       * is shown as an overlay.
+       * <p>
+       * If not specified, the size is determined automatically by measuring
+       * the detail content in a `min-content` CSS grid column when it first
+       * becomes visible, and then caching the result. To recalculate the cached
+       * size, use the `recalculateDetailSize` method.
        *
        * @attr {string} detail-size
        */
@@ -200,6 +217,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         type: Boolean,
         sync: true,
       },
+
+      /** @private */
+      __detailCachedSize: {
+        type: String,
+        observer: '__detailCachedSizeChanged',
+        sync: true,
+      },
     };
   }
 
@@ -258,11 +282,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
+    this.__detailCachedSize = null;
   }
 
   /** @private */
   __overlaySizeChanged(size, oldSize) {
     this.__updateStyleProperty('overlay-size', size, oldSize);
+  }
+
+  /** @private */
+  __detailCachedSizeChanged(size, oldSize) {
+    this.__updateStyleProperty('detail-cached-size', size, oldSize);
   }
 
   /** @private */
@@ -297,9 +327,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    const state = this.__computeLayoutState();
+    const state = this.__readLayoutState();
     cancelAnimationFrame(this.__resizeRaf);
-    this.__resizeRaf = requestAnimationFrame(() => this.__applyLayoutState(state));
+    this.__resizeRaf = requestAnimationFrame(() => this.__writeLayoutState(state));
   }
 
   /**
@@ -307,26 +337,55 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * ResizeObserver callback where layout is already computed (no forced reflow).
    * @private
    */
-  __computeLayoutState() {
-    const detailContent = this.querySelector(':scope > [slot="detail"]');
+  __readLayoutState() {
+    const isVertical = this.orientation === 'vertical';
+
+    const detailContent = this.querySelector('[slot="detail"]');
     const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
 
     const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = detailContent != null && detailContent.checkVisibility();
     const hasDetailPlaceholder = !!detailPlaceholder;
-    const hasOverflow = (hasDetail || hasDetailPlaceholder) && this.__checkOverflow();
 
+    const computedStyle = getComputedStyle(this);
+    const hostSizeProp = isVertical ? 'height' : 'width';
+    const hostSize = parseFloat(computedStyle[hostSizeProp]);
+
+    const trackSizesProp = isVertical ? 'gridTemplateRows' : 'gridTemplateColumns';
+    const trackSizes = parseTrackSizes(computedStyle[trackSizesProp]);
+
+    const hasOverflow = (hasDetail || hasDetailPlaceholder) && detectOverflow(hostSize, trackSizes);
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
-    return { hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget };
+
+    return {
+      hadDetail,
+      hasDetail,
+      hasOverflow,
+      focusTarget,
+      hostSize,
+      trackSizes,
+    };
   }
 
   /**
    * Applies layout state to DOM attributes. Pure writes, no reads.
    * @private
    */
-  __applyLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget }) {
-    // Set keep-detail-column-offscreen when detail first appears with overlay
-    // to prevent master width from jumping.
+  __writeLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget, trackSizes }) {
+    const [_masterSize, _masterExtra, detailSize] = trackSizes;
+
+    // If no detailSize is explicitily set, cache the intrinsic size (min-content) of
+    // the slotted detail content to use as a fallback for the detail column size
+    // while the detail content is rendered in an overlay.
+    if (!this.detailSize && !this.__detailCachedSize && hasDetail && detailSize > 0) {
+      this.__detailCachedSize = `${Math.ceil(detailSize)}px`;
+    } else {
+      this.__detailCachedSize = null;
+    }
+
+    // Force the detail column offscreen when it first appears and overflow
+    // is already detected. This prevents unnecessary master column shrinking,
+    // as the detail content is rendered in an overlay anyway.
     if (!hadDetail && hasDetail && hasOverflow) {
       this.setAttribute('keep-detail-column-offscreen', '');
     } else if (!hasDetail || !hasOverflow) {
@@ -346,23 +405,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
   }
 
-  /** @private */
-  __checkOverflow() {
-    const isVertical = this.orientation === 'vertical';
-    const computedStyle = getComputedStyle(this);
+  recalculateDetailSize() {
+    this.__detailCachedSize = null;
+    this.removeAttribute('overflow');
+    this.toggleAttribute('recalculating-detail-size', true);
 
-    const hostSize = parseFloat(computedStyle[isVertical ? 'height' : 'width']);
-    const [masterSize, masterExtra, detailSize] = parseTrackSizes(
-      computedStyle[isVertical ? 'gridTemplateRows' : 'gridTemplateColumns'],
-    );
+    const { focusTarget, ...state } = this.__readLayoutState();
+    this.__writeLayoutState(state);
 
-    if (Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)) {
-      return false;
-    }
-    if (Math.floor(masterExtra) >= Math.floor(detailSize)) {
-      return false;
-    }
-    return true;
+    this.toggleAttribute('recalculating-detail-size', false);
   }
 
   /** @private */
@@ -414,8 +465,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     if (skipTransition || this.noAnimation) {
       updateSlot();
       queueMicrotask(() => {
-        const state = this.__computeLayoutState();
-        this.__applyLayoutState(state);
+        const state = this.__readLayoutState();
+        this.__writeLayoutState(state);
       });
       return Promise.resolve();
     }
@@ -561,8 +612,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @protected
    */
   _finishTransition() {
-    const state = this.__computeLayoutState();
-    this.__applyLayoutState(state);
+    const state = this.__readLayoutState();
+    this.__writeLayoutState(state);
   }
 
   /**
