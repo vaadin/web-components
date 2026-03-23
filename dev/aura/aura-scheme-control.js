@@ -17,77 +17,13 @@ class AuraSchemeControl extends AuraControl {
 
   constructor() {
     super();
-    const shadow = this.shadowRoot;
-    shadow.innerHTML = `
-      <style>
-        .control {
-          gap: .4rem;
-        }
-
-        .segmented {
-          display: inline-grid;
-          grid-auto-flow: column;
-          gap: 0;
-          border: 1px solid var(--vaadin-border-color);
-          border-radius: var(--vaadin-radius-m);
-          background: var(--aura-surface-color) padding-box;
-          overflow: hidden;
-        }
-
-        .segmented input {
-          position: absolute;
-          opacity: 0;
-          pointer-events: none;
-        }
-
-        .segmented label {
-          padding: var(--vaadin-padding-xs) var(--vaadin-padding-m);
-          cursor: pointer;
-          user-select: none;
-          display: inline-block;
-          border-right: 1px solid var(--vaadin-border-color-secondary);
-        }
-
-        .segmented label:last-of-type {
-          border-right: none;
-        }
-
-        /* Selected state */
-        .segmented input:checked + label {
-          background: var(--vaadin-background-container);
-          color: var(--vaadin-text-color);
-          background-clip: padding-box;
-          font-weight: 600;
-        }
-
-        .row {
-          display: flex;
-          align-items: center;
-          gap: .75rem;
-          flex-wrap: wrap;
-        }
-
-        .sr-only {
-          position: absolute;
-          left: -9999px;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-        }
-      </style>
-      <div class="control">
-        <label class="header" id="hdr">Color scheme</label>
-        <div class="row">
-          <div class="segmented" role="radiogroup" aria-labelledby="hdr" id="group">
-            <!-- Radios will be populated in connectedCallback -->
-          </div>
-          <vaadin-button id="reset" type="button" aria-label="reset"></vaadin-button>
-        </div>
-      </div>
-    `;
-    this.#group = shadow.getElementById('group');
-    this.#reset = shadow.getElementById('reset');
-    this.#labelEl = shadow.getElementById('hdr');
+    this.initControl({
+      label: 'Color scheme',
+      content: '<div class="segmented" role="radiogroup"></div>',
+    });
+    this.#group = this.querySelector('[role="radiogroup"]');
+    this.#reset = this.resetButton;
+    this.#labelEl = this.labelElement;
   }
 
   attributeChangedCallback(name, _old, val) {
@@ -108,7 +44,7 @@ class AuraSchemeControl extends AuraControl {
 
     this.#group.addEventListener('change', (e) => {
       const target = e.target;
-      if (target && target.name === 'aura-scheme') {
+      if (target && target.name === this.#prop) {
         const value = target.value;
         this.#apply(value); // sets var + persists + event
       }
@@ -127,19 +63,15 @@ class AuraSchemeControl extends AuraControl {
   #renderRadios() {
     // Clear and rebuild radios (Light / Dark / Auto)
     this.#group.innerHTML = '';
-    const ids = ['light', 'dark', 'auto'];
     const labels = ['Light', 'Dark', 'Auto'];
     this.#values.forEach((val, idx) => {
-      const id = `opt-${ids[idx]}-${Math.random().toString(36).slice(2, 8)}`;
       const input = document.createElement('input');
       input.type = 'radio';
-      input.id = id;
-      input.name = 'aura-scheme';
+      input.name = this.#prop;
       input.value = val; // "light", "dark", "light dark"
       const label = document.createElement('label');
-      label.htmlFor = id;
       label.textContent = labels[idx];
-      this.#group.appendChild(input);
+      label.appendChild(input);
       this.#group.appendChild(label);
     });
   }
@@ -208,7 +140,7 @@ class AuraSchemeControl extends AuraControl {
 
   #select(value) {
     // Set the correct radio as checked
-    const inputs = this.#group.querySelectorAll('input[name="aura-scheme"]');
+    const inputs = this.#group.querySelectorAll(`input[name="${this.#prop}"]`);
     inputs.forEach((i) => {
       i.checked = i.value === value;
     });

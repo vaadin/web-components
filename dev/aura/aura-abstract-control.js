@@ -1,43 +1,124 @@
 export class AuraControl extends HTMLElement {
+  _labelEl;
+  _rowEl;
+  _resetBtn;
+  _lockBtn;
+
   constructor() {
     super();
 
-    this.attachShadow({ mode: 'open' });
+    this.style.display = 'contents';
+    this.classList.add('aura-theme-control');
 
-    const css = new CSSStyleSheet();
-    css.replaceSync(`
-      :host {
-        display: block;
-        --icon-rotate-ccw: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>');
+    queueMicrotask(() => {
+      this.#restoreLockState();
+      this.#syncAllLockButtons();
+    });
+
+    this.addEventListener('click', (event) => {
+      const lockButton = event
+        .composedPath()
+        .find((node) => node instanceof HTMLElement && node.classList?.contains('lock'));
+
+      if (!lockButton || !this.contains(lockButton)) {
+        return;
       }
 
-      .control {
-        display: grid;
-      }
+      event.preventDefault();
+      this.toggleLock();
+    });
+  }
 
-      label {
-        color: var(--vaadin-text-color);
-        font-weight: var(--aura-font-weight-medium);
-      }
+  initControl({ label = '', content = '', controlPart } = {}) {
+    const partAttr = controlPart ? ` part="${controlPart}"` : '';
+    this.innerHTML = `
+      <div class="control"${partAttr}>
+        <div class="row">
+          <label></label>
+          <vaadin-button class="reset" aria-label="reset" theme="tertiary"></vaadin-button>
+          <vaadin-button class="lock" aria-label="Lock shuffle" theme="tertiary"></vaadin-button>
+        </div>
+        <div class="row">
+          ${content}
+        </div>
+      </div>
+    `;
 
-      #reset {
-        background: transparent;
-        border: 0;
-        gap: 0;
-      }
+    this._labelEl = this.querySelector('label');
+    this._rowEl = this.querySelector('.row');
+    this._resetBtn = this.querySelector('.reset');
+    this._lockBtn = this.querySelector('.lock');
 
-      #reset:not(:hover, :focus-visible) {
-        opacity: 0.6;
-      }
+    this.setControlLabel(label);
+    this.#syncAllLockButtons();
+  }
 
-      #reset::before {
-        content: "";
-        width: 1lh;
-        height: 1lh;
-        mask-image: var(--icon-rotate-ccw);
-        background: currentColor;
+  setControlLabel(value) {
+    if (this._labelEl) {
+      this._labelEl.textContent = value || '';
+    }
+  }
+
+  get labelElement() {
+    return this._labelEl;
+  }
+
+  get rowElement() {
+    return this._rowEl;
+  }
+
+  get resetButton() {
+    return this._resetBtn;
+  }
+
+  get lockButton() {
+    return this._lockBtn;
+  }
+
+  get isLocked() {
+    return this.hasAttribute('data-locked');
+  }
+
+  set isLocked(value) {
+    this.#setLocked(Boolean(value));
+  }
+
+  toggleLock() {
+    this.#setLocked(!this.isLocked);
+  }
+
+  #syncLockButton(button) {
+    button.setAttribute('aria-label', this.isLocked ? 'Unlock shuffle' : 'Lock shuffle');
+    button.setAttribute('title', this.isLocked ? 'Unlock shuffle' : 'Lock shuffle');
+    button.setAttribute('aria-pressed', String(this.isLocked));
+  }
+
+  #syncAllLockButtons() {
+    this.querySelectorAll('.lock').forEach((button) => {
+      if (button instanceof HTMLElement) {
+        this.#syncLockButton(button);
       }
-    `);
-    this.shadowRoot.adoptedStyleSheets.push(css);
+    });
+  }
+
+  #setLocked(locked, { persist = true } = {}) {
+    this.toggleAttribute('data-locked', locked);
+    this.#syncAllLockButtons();
+
+    if (persist) {
+      localStorage.setItem(this.#lockStorageKey(), locked ? '1' : '0');
+    }
+  }
+
+  #restoreLockState() {
+    const stored = localStorage.getItem(this.#lockStorageKey());
+    if (stored === '1') {
+      this.#setLocked(true, { persist: false });
+    }
+  }
+
+  #lockStorageKey() {
+    const identity = this.getAttribute('property') || this.id || this.localName;
+    return `aura-lock:${this.localName}:${identity}`;
   }
 }

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
     <link rel="stylesheet" href="./aura/aura-extras.css" />
+    <link rel="stylesheet" href="./aura/aura-control.css" />
     <script type="module">
       window.Vaadin ||= {};
       window.Vaadin.featureFlags ||= {};
@@ -152,15 +153,15 @@
 
       <footer slot="drawer" class="aura-view-footer">
         <vaadin-button theme="tertiary">
-          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh" slot="prefix" tabindex="-1"></vaadin-avatar>
+          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh" slot="prefix" theme="filled"></vaadin-avatar>
           <span>John Smith</span>
         </vaadin-button>
-        <aura-theme-editor></aura-theme-editor>
       </footer>
 
       <main style="height: 100%">
         <dashboard-view></dashboard-view>
       </main>
     </vaadin-app-layout>
+    <aura-theme-editor></aura-theme-editor>
   </body>
 </html>
