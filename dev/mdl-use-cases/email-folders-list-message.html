@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Email — Folders - List - Message</title>
     <script type="module" src="../common.js"></script>
+    <link rel="stylesheet" href="./common.css" />
     <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, sans-serif;
-      }
-
       /* Folder pane */
       .folder-pane {
         display: flex;
@@ -50,13 +43,7 @@
         font-size: 0.8rem;
       }
 
-      /* Master pane */
-      .master-pane {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-
+      /* Master pane header */
       .master-pane-header {
         display: flex;
         align-items: center;
@@ -82,104 +69,6 @@
 
       #outerLayout[overflow] .back-btn {
         display: block;
-      }
-
-      .master-pane vaadin-grid {
-        flex: 1;
-        min-height: 0;
-        border: none;
-        border-radius: 0;
-      }
-
-      /* Detail pane */
-      .detail-pane {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        overflow: auto;
-      }
-
-      .detail-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 16px;
-        border-bottom: 1px solid var(--vaadin-border-color-secondary);
-        flex-shrink: 0;
-      }
-
-      .detail-header .close-btn {
-        cursor: pointer;
-        background: none;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        padding: 4px 12px;
-        font-size: 0.85rem;
-      }
-
-      .detail-subject {
-        font-size: 1.2rem;
-        font-weight: 600;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .detail-meta {
-        padding: 16px;
-        color: var(--vaadin-text-color-secondary);
-        font-size: 0.9rem;
-        line-height: 1.6;
-        border-bottom: 1px solid var(--vaadin-border-color-secondary);
-      }
-
-      .detail-body {
-        padding: 16px 24px;
-        line-height: 1.7;
-        font-size: 0.95rem;
-      }
-
-      .detail-body p {
-        margin: 0 0 1em;
-      }
-
-      .detail-placeholder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        color: var(--vaadin-text-color-secondary);
-      }
-
-      /* Email cell */
-      .email-cell {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        padding: 8px 0;
-        cursor: pointer;
-      }
-
-      .email-from {
-        font-weight: 600;
-        font-size: 0.9rem;
-      }
-
-      .email-subject {
-        font-size: 0.85rem;
-      }
-
-      .email-preview {
-        font-size: 0.8rem;
-        color: var(--vaadin-text-color-secondary);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .email-date {
-        font-size: 0.75rem;
-        color: var(--vaadin-text-color-secondary);
       }
     </style>
   </head>
@@ -344,7 +233,7 @@
         const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         root.innerHTML = `
           <div class="email-cell">
-            <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
               <span class="email-from">${email.from}</span>
               <span class="email-date">${dateStr}</span>
             </div>
