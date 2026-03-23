@@ -36,7 +36,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([orientation='vertical']) {
-    --_detail-offscreen: 0 calc(100% + 30px);
+    --_detail-offscreen: 0 30px;
 
     grid-template-columns: 100%;
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
@@ -121,6 +121,10 @@ export const masterDetailLayoutStyles = css`
 
   :host([overflow]) {
     --_detail-offscreen: calc((100% + 30px) * var(--_rtl-multiplier));
+  }
+
+  :host([overflow][orientation='vertical']) {
+    --_detail-offscreen: 0 calc(100% + 30px);
   }
 
   :host([overflow]) :is(#detail, #outgoing) {
