@@ -32,25 +32,25 @@ export const masterDetailLayoutStyles = css`
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
   }
 
-  [part~='master'],
-  [part~='detail'] {
+  #master,
+  #detail {
     box-sizing: border-box;
   }
 
-  [part~='master'] {
+  #master {
     grid-column: master-start / detail-start;
   }
 
-  [part~='detail'] {
+  #detail {
     grid-column: detail-start / detail-end;
   }
 
-  :host([orientation='vertical']) [part~='master'] {
+  :host([orientation='vertical']) #master {
     grid-column: auto;
     grid-row: master-start / detail-start;
   }
 
-  :host([orientation='vertical']) [part~='detail'] {
+  :host([orientation='vertical']) #detail {
     grid-column: auto;
     grid-row: detail-start / detail-end;
   }
@@ -79,17 +79,17 @@ export const masterDetailLayoutStyles = css`
     --_detail-column: var(--_detail-size) 1fr;
   }
 
-  :host([orientation='horizontal'][has-detail]:not([overflow])) [part~='detail'] {
+  :host([orientation='horizontal'][has-detail]:not([overflow])) #detail {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
-  :host([orientation='vertical'][has-detail]:not([overflow])) [part~='detail'] {
+  :host([orientation='vertical'][has-detail]:not([overflow])) #detail {
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
-  :host([overflow]) [part~='detail'] {
+  :host([overflow]) #detail {
     position: absolute;
     z-index: 2;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
@@ -101,13 +101,13 @@ export const masterDetailLayoutStyles = css`
     display: block;
   }
 
-  :host([overflow]:not([orientation='vertical'])) [part~='detail'] {
+  :host([overflow]:not([orientation='vertical'])) #detail {
     inset-block: 0;
     width: var(--_overlay-size, var(--_detail-size, min-content));
     inset-inline-end: 0;
   }
 
-  :host([overflow][orientation='vertical']) [part~='detail'] {
+  :host([overflow][orientation='vertical']) #detail {
     grid-column: auto;
     grid-row: none;
     inset-inline: 0;
@@ -115,17 +115,17 @@ export const masterDetailLayoutStyles = css`
     inset-block-end: 0;
   }
 
-  :host([overflow][overlay-containment='viewport']) [part~='detail'],
+  :host([overflow][overlay-containment='viewport']) #detail,
   :host([overflow][overlay-containment='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 
   @media (forced-colors: active) {
-    :host([overflow]) [part~='detail'] {
+    :host([overflow]) #detail {
       outline: 3px solid !important;
     }
 
-    [part~='detail'] {
+    #detail {
       background: Canvas !important;
     }
   }
