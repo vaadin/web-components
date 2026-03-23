@@ -70,6 +70,49 @@ describe('selection', () => {
       });
     });
 
+    it('should only re-render the affected row when selecting an item', () => {
+      const rendererSpy = sinon.spy();
+      grid.children[0].renderer = rendererSpy;
+      flushGrid(grid);
+      rendererSpy.resetHistory();
+
+      grid.selectItem(cachedItems[1]);
+
+      // Only the newly selected row should be re-rendered
+      expect(rendererSpy).to.be.calledOnce;
+      expect(rendererSpy.firstCall.args[2].item).to.equal(cachedItems[1]);
+      expect(rendererSpy.firstCall.args[2].selected).to.be.true;
+    });
+
+    it('should only re-render the affected row when deselecting an item', () => {
+      const rendererSpy = sinon.spy();
+      grid.children[0].renderer = rendererSpy;
+      flushGrid(grid);
+      rendererSpy.resetHistory();
+
+      grid.deselectItem(cachedItems[0]);
+
+      // Only the previously selected row should be re-rendered
+      expect(rendererSpy).to.be.calledOnce;
+      expect(rendererSpy.firstCall.args[2].item).to.equal(cachedItems[0]);
+      expect(rendererSpy.firstCall.args[2].selected).to.be.false;
+    });
+
+    it('should only re-render affected rows when replacing selectedItems', () => {
+      const rendererSpy = sinon.spy();
+      grid.children[0].renderer = rendererSpy;
+      flushGrid(grid);
+      rendererSpy.resetHistory();
+
+      // Replace selection: deselect item 0, select item 1
+      grid.selectedItems = [cachedItems[1]];
+
+      expect(rendererSpy).to.be.calledTwice;
+      const renderedItems = rendererSpy.getCalls().map((call) => call.args[2].item);
+      expect(renderedItems).to.include(cachedItems[0]);
+      expect(renderedItems).to.include(cachedItems[1]);
+    });
+
     it('should not update selected attribute for hidden rows', () => {
       grid.size = 0;
       grid.selectedItems = [];
