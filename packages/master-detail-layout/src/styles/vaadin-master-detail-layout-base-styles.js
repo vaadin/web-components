@@ -176,8 +176,12 @@ export const masterDetailLayoutStyles = css`
 
   /* Enable transitions when motion is allowed */
   @media (prefers-reduced-motion: no-preference) {
-    :host(:not([no-animation])) {
-      --_transition-duration: 400ms;
+    :host(:not([no-animation], [transition='replace'])) {
+      --_transition-duration: 200ms;
+    }
+
+    :host([overflow]:not([no-animation])) {
+      --_transition-duration: 300ms;
     }
   }
 `;
