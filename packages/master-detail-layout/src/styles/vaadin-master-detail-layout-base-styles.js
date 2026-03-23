@@ -107,16 +107,6 @@ export const masterDetailLayoutStyles = css`
     translate: none;
   }
 
-  /* During replace, both detail elements must overlap in the same grid
-     cell. Without explicit placement on the non-positioned axis, the
-     second element is auto-placed into an implicit track. In split mode,
-     the outgoing cross-fades out and needs an opaque background so
-     transparent areas don't reveal the incoming prematurely. In overlay
-     mode, the [overflow] rule already provides the background. */
-  :host(:not([overflow])[transition='replace']) #outgoing {
-    background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
-  }
-
   :host(:not([orientation='vertical'])[transition='replace']) :is(#detail, #outgoing) {
     grid-row: 1 / -1;
   }
