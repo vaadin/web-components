@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { enter, esc, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, enter, esc, fixtureSync, focusin, focusout, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-grid-pro.js';
@@ -568,6 +568,78 @@ describe('edit column', () => {
           expect(grid.shadowRoot.activeElement).to.equal(target);
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
+      });
+    });
+
+    describe('lazy column rendering', () => {
+      let grid;
+
+      const UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT = 100;
+
+      async function scrollHorizontally(delta) {
+        grid.$.table.scrollLeft += delta;
+        await oneEvent(grid.$.table, 'scroll');
+        await aTimeout(UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT);
+      }
+
+      beforeEach(() => {
+        grid = fixtureSync(`<vaadin-grid-pro style="width: 400px;"></vaadin-grid-pro>`);
+
+        const columns = [];
+        for (let i = 0; i < 8; i++) {
+          const column = document.createElement('vaadin-grid-pro-edit-column');
+          column.path = `col${i}`;
+          column.header = `Col ${i}`;
+          column.width = '100px';
+          column.flexGrow = 0;
+          columns.push(column);
+          grid.appendChild(column);
+        }
+
+        grid.items = [
+          { col0: 'a0', col1: 'a1', col2: 'a2', col3: 'a3', col4: 'a4', col5: 'a5', col6: 'a6', col7: 'a7' },
+          { col0: 'b0', col1: 'b1', col2: 'b2', col3: 'b3', col4: 'b4', col5: 'b5', col6: 'b6', col7: 'b7' },
+        ];
+
+        // Make odd-indexed columns conditionally editable
+        columns.forEach((column, i) => {
+          column.isCellEditable = () => i % 2 === 1;
+        });
+
+        grid.columnRendering = 'lazy';
+        flushGrid(grid);
+      });
+
+      it('should mark initially visible cells as non-editable based on isCellEditable', () => {
+        const cells = getRowCells(getRows(grid.$.items)[0]);
+
+        const cell0 = cells[0];
+        const target0 = cell0._focusButton || cell0;
+
+        expect(target0.getAttribute('part')).to.be.null;
+
+        const cell1 = cells[1];
+        const target1 = cell1._focusButton || cell1;
+
+        expect(target1.getAttribute('part')).to.include('editable-cell');
+      });
+
+      it('should mark lazily rendered cells as non-editable based on isCellEditable after scrolling', async () => {
+        // Scroll far enough to reveal the last columns
+        await scrollHorizontally(400);
+
+        const cells = getRowCells(getRows(grid.$.items)[0]);
+
+        const cell6 = cells[cells.length - 2];
+        const target6 = cell6._focusButton || cell6;
+
+        expect(target6.getAttribute('part')).to.be.null;
+
+        const cell7 = cells[cells.length - 1];
+        const target7 = cell7._focusButton || cell7;
+
+        expect(cell7.getAttribute('part')).to.include('last-column-cell');
+        expect(target7.getAttribute('part')).to.include('editable-cell');
       });
     });
   });

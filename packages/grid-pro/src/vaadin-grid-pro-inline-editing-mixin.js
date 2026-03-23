@@ -573,7 +573,7 @@ export const InlineEditingMixin = (superClass) =>
         return true;
       }
       // Otherwise, check isCellEditable function
-      const model = this.__getRowModel(cell.parentElement);
+      const model = this.__getRowModel(cell.__parentRow);
       return column.isCellEditable(model);
     }
 
