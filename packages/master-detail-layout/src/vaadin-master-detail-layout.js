@@ -417,7 +417,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return Promise.resolve();
     }
 
-    // Capture mid-flight state before cancel (see __captureDetailState)
+    // Capture mid-flight state before cancelling active animations
     const interrupted = this.__captureDetailState();
 
     this.__endTransition();
@@ -507,8 +507,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     if (!this.__activeAnimations || this.__activeAnimations.length === 0) {
       return null;
     }
-    const cs = getComputedStyle(this.$.detail);
-    return { translate: cs.translate, opacity: cs.opacity };
+    const { translate, opacity } = getComputedStyle(this.$.detail);
+    return { translate, opacity };
   }
 
   /**
@@ -547,13 +547,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const defaultTranslate = slideIn ? offscreen : 'none';
-    const defaultOpacity = overlay ? 1 : slideIn ? 0 : 1;
+    const defaultOpacity = !overlay && slideIn ? 0 : 1;
 
     const start = interrupted ? interrupted.translate : defaultTranslate;
     const end = slideIn ? 'none' : offscreen;
 
     const opacityStart = interrupted ? Number(interrupted.opacity) : defaultOpacity;
-    const opacityEnd = overlay ? 1 : slideIn ? 1 : 0;
+    const opacityEnd = !overlay && !slideIn ? 0 : 1;
 
     return this.__animate(
       element,
