@@ -69,6 +69,43 @@ export declare class UploadFileListMixinClass {
    * To change the default localization, replace this with an object
    * that provides all properties, or just the individual properties
    * you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   * ```js
+   * {
+   *   file: {
+   *     retry: 'Retry',
+   *     start: 'Start',
+   *     remove: 'Remove'
+   *   },
+   *   error: {
+   *     tooManyFiles: 'Too Many Files.',
+   *     fileIsTooBig: 'File is Too Big.',
+   *     incorrectFileType: 'Incorrect File Type.'
+   *   },
+   *   uploading: {
+   *     status: {
+   *       connecting: 'Connecting...',
+   *       stalled: 'Stalled',
+   *       processing: 'Processing File...',
+   *       held: 'Queued'
+   *     },
+   *     remainingTime: {
+   *       prefix: 'remaining time: ',
+   *       unknown: 'unknown remaining time'
+   *     },
+   *     error: {
+   *       serverUnavailable: 'Upload failed, please try again later',
+   *       unexpectedServerError: 'Upload failed due to server error',
+   *       forbidden: 'Upload forbidden',
+   *       fileTooLarge: 'File is too large'
+   *     }
+   *   },
+   *   units: {
+   *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+   *   }
+   * }
+   * ```
    */
   i18n: UploadFileListI18n;
 }

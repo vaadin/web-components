@@ -86,6 +86,58 @@ export const UploadFileListMixin = (superClass) =>
       return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
     }
 
+    /**
+     * The object used to localize this component.
+     * To change the default localization, replace this with an object
+     * that provides all properties, or just the individual properties
+     * you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```js
+     * {
+     *   file: {
+     *     retry: 'Retry',
+     *     start: 'Start',
+     *     remove: 'Remove'
+     *   },
+     *   error: {
+     *     tooManyFiles: 'Too Many Files.',
+     *     fileIsTooBig: 'File is Too Big.',
+     *     incorrectFileType: 'Incorrect File Type.'
+     *   },
+     *   uploading: {
+     *     status: {
+     *       connecting: 'Connecting...',
+     *       stalled: 'Stalled',
+     *       processing: 'Processing File...',
+     *       held: 'Queued'
+     *     },
+     *     remainingTime: {
+     *       prefix: 'remaining time: ',
+     *       unknown: 'unknown remaining time'
+     *     },
+     *     error: {
+     *       serverUnavailable: 'Upload failed, please try again later',
+     *       unexpectedServerError: 'Upload failed due to server error',
+     *       forbidden: 'Upload forbidden',
+     *       fileTooLarge: 'File is too large'
+     *     }
+     *   },
+     *   units: {
+     *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+     *   }
+     * }
+     * ```
+     * @type {!UploadFileListI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
+    }
+
     constructor() {
       super();
       this.__onManagerFilesChanged = this.__onManagerFilesChanged.bind(this);
