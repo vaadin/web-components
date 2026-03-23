@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Email — Folders - List - Message</title>
     <script type="module" src="../common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
     <link rel="stylesheet" href="./common.css" />
     <style>
       /* Folder pane */
@@ -106,11 +111,7 @@
     </vaadin-master-detail-layout>
 
     <script type="module">
-      window.Vaadin ||= {};
-      window.Vaadin.featureFlags ||= {};
-      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
-      import '@vaadin/grid/all-imports';
+      import '@vaadin/grid/all-imports.js';
       import '@vaadin/master-detail-layout';
       import { emails } from './common.js';
 
