@@ -8,10 +8,8 @@ import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
-import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-base-styles.js';
 
 function parseTrackSizes(gridTemplate) {
   return gridTemplate
@@ -66,9 +64,8 @@ function parseTrackSizes(gridTemplate) {
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
- * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -168,17 +165,19 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       noAnimation: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
+      },
+
+      /** @private */
+      __replacing: {
+        type: Boolean,
+        sync: true,
       },
     };
   }
 
   static get experimental() {
     return true;
-  }
-
-  /** @return {!Array<!CSSResult>} */
-  get slotStyles() {
-    return [masterDetailLayoutTransitionStyles];
   }
 
   /** @protected */
@@ -191,6 +190,9 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       <div part="backdrop" @click="${this.__onBackdropClick}"></div>
       <div id="master" part="master" ?inert="${isLayoutContained}">
         <slot @slotchange="${this.__onSlotChange}"></slot>
+      </div>
+      <div id="outgoing" inert ?hidden="${!this.__replacing}">
+        <slot name="detail-outgoing"></slot>
       </div>
       <div
         id="detail"
@@ -304,7 +306,7 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
     this.requestUpdate();
 
     if (focusTarget) {
-      focusTarget.focus();
+      focusTarget.focus({ preventScroll: true });
     }
   }
 
@@ -342,19 +344,18 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /**
-   * Sets the detail element to be displayed in the detail area and starts a
-   * view transition that animates adding, replacing or removing the detail
-   * area. During the view transition, the element is added to the DOM and
-   * assigned to the `detail` slot. Any previous detail element is removed.
-   * When passing null as the element, the current detail element is removed.
+   * Sets the detail element to be displayed in the detail area and starts an
+   * animated transition for adding, replacing or removing the detail area.
+   * The element is added to the DOM and assigned to the `detail` slot. Any
+   * previous detail element is removed. When passing null as the element,
+   * the current detail element is removed.
    *
-   * If the browser does not support view transitions, the respective updates
-   * are applied immediately without starting a transition. The transition can
-   * also be skipped using the `skipTransition` parameter.
+   * The transition can be skipped using the `skipTransition` parameter or
+   * the `noAnimation` property.
    *
    * @param element the new detail element, or null to remove the current detail
    * @param skipTransition whether to skip the transition
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    * @protected
    */
   _setDetail(element, skipTransition) {
@@ -374,8 +375,12 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
       }
     };
 
-    if (skipTransition) {
+    if (skipTransition || this.noAnimation) {
       updateSlot();
+      queueMicrotask(() => {
+        const state = this.__computeLayoutState();
+        this.__applyLayoutState(state);
+      });
       return Promise.resolve();
     }
 
@@ -390,69 +395,236 @@ class MasterDetailLayout extends SlotStylesMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /**
-   * Starts a view transition that animates adding, replacing or removing the
-   * detail area. Once the transition is ready and the browser has taken a
-   * snapshot of the current layout, the provided update callback is called.
-   * The callback should update the DOM, which can happen asynchronously.
-   * Once the DOM is updated, the caller must call `_finishTransition`,
-   * which results in the browser taking a snapshot of the new layout and
-   * animating the transition.
+   * Starts an animated transition for adding, replacing or removing the
+   * detail area using the Web Animations API.
    *
-   * If the browser does not support view transitions, or the `noAnimation`
-   * property is set, the update callback is called immediately without
-   * starting a transition.
+   * For 'remove', the DOM update is deferred until the slide-out completes.
+   * For 'add'/'replace', the DOM is updated immediately and the slide-in
+   * plays on the new content.
+   *
+   * Animations are interruptible: starting a new transition cancels any
+   * in-progress animation and the new animation picks up from the
+   * interrupted position (see `__captureDetailState`).
    *
    * @param transitionType
    * @param updateCallback
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    * @protected
    */
   _startTransition(transitionType, updateCallback) {
-    const useTransition = typeof document.startViewTransition === 'function' && !this.noAnimation;
-    if (!useTransition) {
+    if (this.noAnimation) {
       updateCallback();
       return Promise.resolve();
     }
 
+    // Capture mid-flight state before cancelling active animations
+    const interrupted = this.__captureDetailState();
+
+    this.__endTransition();
+
+    if (transitionType === 'replace') {
+      this.__snapshotOutgoing();
+    }
+
     this.setAttribute('transition', transitionType);
-    this.__transition = document.startViewTransition(() => {
-      // Return a promise that can be resolved once the DOM is updated
-      return new Promise((resolve) => {
-        this.__resolveUpdateCallback = resolve;
-        // Notify the caller that the transition is ready, so that they can
-        // update the DOM
-        updateCallback();
-      });
-    });
-    return this.__transition.finished;
+
+    if (transitionType !== 'remove') {
+      updateCallback();
+    }
+
+    const opts = this.__getAnimationParams();
+    opts.interrupted = interrupted;
+    opts.overlay = this.hasAttribute('overflow');
+
+    return this.__animateTransition(transitionType, opts, updateCallback);
   }
 
   /**
-   * Finishes the current view transition, if any. This method should be called
-   * after the DOM has been updated to finish the transition and animate the
-   * change in the layout.
+   * Creates slide animation(s) for the given transition type and returns
+   * a promise that resolves when the primary animation completes.
+   * A version counter prevents stale callbacks from executing after
+   * a newer transition has started.
    *
-   * @returns {Promise<void>}
+   * @param {string} transitionType
+   * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
+   * @param {Function} updateCallback
+   * @return {Promise<void>}
+   * @private
+   */
+  __animateTransition(transitionType, opts, updateCallback) {
+    const version = (this.__transitionVersion = (this.__transitionVersion || 0) + 1);
+
+    return new Promise((resolve) => {
+      this.__transitionResolve = resolve;
+
+      const onFinish = (callback) => {
+        if (this.__transitionVersion === version) {
+          if (callback) {
+            callback();
+          }
+          this.__endTransition();
+        }
+      };
+
+      if (transitionType === 'remove') {
+        this.__slide(this.$.detail, false, opts).then(() => onFinish(updateCallback));
+      } else if (transitionType === 'replace') {
+        // Outgoing slides out on top (z-index), revealing incoming underneath.
+        // In overlay mode, the incoming also slides in simultaneously.
+        this.__slide(this.$.outgoing, false, opts).then(() => onFinish());
+        if (opts.overlay) {
+          this.__slide(this.$.detail, true, { ...opts, interrupted: null });
+        }
+      } else {
+        this.__slide(this.$.detail, true, opts).then(() => onFinish());
+      }
+    });
+  }
+
+  /**
+   * Finishes the current transition by detecting and applying the layout
+   * state. This method should be called after the DOM has been updated.
+   *
    * @protected
    */
-  async _finishTransition() {
-    // Detect layout mode before resolving the transition, so the browser's
-    // "new" snapshot includes the correct overlay state. The microtask runs
-    // before the Promise resolution propagates to startViewTransition.
-    queueMicrotask(() => {
-      const state = this.__computeLayoutState();
-      this.__applyLayoutState(state);
-    });
+  _finishTransition() {
+    const state = this.__computeLayoutState();
+    this.__applyLayoutState(state);
+  }
 
-    if (!this.__transition) {
+  /**
+   * Captures the detail panel's current animated state (translate and
+   * opacity). Must be called BEFORE `animation.cancel()`, because
+   * cancel removes the animation effect and the element reverts to
+   * its CSS resting state.
+   *
+   * Returns null when there is no active animation.
+   *
+   * @return {{ translate: string, opacity: string } | null}
+   * @private
+   */
+  __captureDetailState() {
+    if (!this.__activeAnimations || this.__activeAnimations.length === 0) {
+      return null;
+    }
+    const { translate, opacity } = getComputedStyle(this.$.detail);
+    return { translate, opacity };
+  }
+
+  /**
+   * Reads animation parameters from CSS custom properties. Called once
+   * per transition so that animating stays free of layout reads.
+   *
+   * @return {{ offscreen: string, duration: number, easing: string }}
+   * @private
+   */
+  __getAnimationParams() {
+    const cs = getComputedStyle(this);
+    const offscreen = cs.getPropertyValue('--_detail-offscreen').trim();
+    const durationStr = cs.getPropertyValue('--_transition-duration').trim();
+    const duration = durationStr.endsWith('ms') ? parseFloat(durationStr) : parseFloat(durationStr) * 1000;
+    const easing = cs.getPropertyValue('--_transition-easing').trim();
+    return { offscreen, duration, easing };
+  }
+
+  /**
+   * Creates a slide animation on the element's `translate` property
+   * using the Web Animations API. Returns a promise that resolves when
+   * the animation finishes, or immediately if the duration is 0.
+   *
+   * @param {HTMLElement} element - The element to animate
+   * @param {boolean} slideIn - If true, slide in (off-screen → on-screen);
+   *   otherwise slide out (on-screen → off-screen)
+   * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
+   *   Animation parameters. `interrupted` overrides the default starting
+   *   keyframe for interrupted animations (captured mid-flight before cancel).
+   * @return {Promise<void>}
+   * @private
+   */
+  __slide(element, slideIn, { offscreen, duration, easing, interrupted, overlay }) {
+    if (!offscreen || duration <= 0) {
       return Promise.resolve();
     }
-    // Resolve the update callback to finish the transition
-    this.__resolveUpdateCallback();
-    await this.__transition.finished;
+
+    const defaultTranslate = slideIn ? offscreen : 'none';
+    const defaultOpacity = !overlay && slideIn ? 0 : 1;
+
+    const start = interrupted ? interrupted.translate : defaultTranslate;
+    const end = slideIn ? 'none' : offscreen;
+
+    const opacityStart = interrupted ? Number(interrupted.opacity) : defaultOpacity;
+    const opacityEnd = !overlay && !slideIn ? 0 : 1;
+
+    return this.__animate(
+      element,
+      [
+        { translate: start, opacity: opacityStart },
+        { translate: end, opacity: opacityEnd },
+      ],
+      { duration, easing },
+    );
+  }
+
+  /**
+   * Runs a Web Animation on the given element, tracks it for cancellation,
+   * and returns a promise that resolves when finished (or swallows the
+   * rejection if cancelled).
+   *
+   * @param {HTMLElement} element
+   * @param {Keyframe[]} keyframes
+   * @param {KeyframeAnimationOptions} options
+   * @return {Promise<void>}
+   * @private
+   */
+  __animate(element, keyframes, options) {
+    const animation = element.animate(keyframes, options);
+
+    this.__activeAnimations = this.__activeAnimations || [];
+    this.__activeAnimations.push(animation);
+
+    return animation.finished.catch(() => {});
+  }
+
+  /**
+   * Cancels in-progress animations, cleans up state, and resolves the
+   * pending transition promise.
+   * @private
+   */
+  __endTransition() {
+    if (this.__activeAnimations) {
+      this.__activeAnimations.forEach((a) => a.cancel());
+      this.__activeAnimations = null;
+    }
     this.removeAttribute('transition');
-    this.__transition = null;
-    this.__resolveUpdateCallback = null;
+    this.__clearOutgoing();
+    if (this.__transitionResolve) {
+      this.__transitionResolve();
+      this.__transitionResolve = null;
+    }
+  }
+
+  /**
+   * Moves the current detail content to the outgoing slot so it can
+   * slide out while the new content slides in. Keeps the element in
+   * light DOM so light DOM styles continue to apply.
+   * @private
+   */
+  __snapshotOutgoing() {
+    const currentDetail = this.querySelector('[slot="detail"]');
+    if (!currentDetail) {
+      return;
+    }
+    currentDetail.setAttribute('slot', 'detail-outgoing');
+    this.__replacing = true;
+  }
+
+  /**
+   * Clears the outgoing container after the replace transition completes.
+   * @private
+   */
+  __clearOutgoing() {
+    this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
+    this.__replacing = false;
   }
 
   /**

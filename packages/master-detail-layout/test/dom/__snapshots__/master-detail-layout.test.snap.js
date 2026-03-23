@@ -54,6 +54,14 @@ snapshots["vaadin-master-detail-layout shadow default"] =
   </slot>
 </div>
 <div
+  hidden=""
+  id="outgoing"
+  inert=""
+>
+  <slot name="detail-outgoing">
+  </slot>
+</div>
+<div
   id="detail"
   part="detail"
 >

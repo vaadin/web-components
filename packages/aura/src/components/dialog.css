@@ -17,18 +17,8 @@ vaadin-confirm-dialog::part(overlay) {
     var(--vaadin-dialog-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
   --aura-surface-level: 2;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-
-  /* TODO probably should be in base styles */
-  /* Keeps dialogs on top of MDL view transitions */
-  view-transition-name: vaadin-dialog;
 }
 
 vaadin-confirm-dialog::part(message) {
   color: var(--vaadin-text-color-secondary);
-}
-
-/* TODO probably should be in base styles */
-::view-transition-group(vaadin-dialog) {
-  border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
-  z-index: 1;
 }

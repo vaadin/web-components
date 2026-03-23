@@ -62,10 +62,6 @@ Layout detection is split into two methods to avoid forced reflows:
 - ResizeObserver callback: calls `__computeLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__applyLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
 
-### View transitions
-
-`_finishTransition()` uses `queueMicrotask` to call both `__computeLayoutState()` + `__applyLayoutState()` synchronously. The microtask runs before the Promise resolution propagates to `startViewTransition`, ensuring the "new" snapshot captures the correct overlay state (backdrop, absolute positioning). The `getComputedStyle` read in the microtask does cause a forced reflow, but this is unavoidable for correct transition snapshots.
-
 ## Overlay Modes
 
 When `overflow` AND `has-detail` are both set, the detail becomes an overlay:
@@ -100,15 +96,49 @@ When no detail is present, master's extra track is set to `calc(100% - masterSiz
 
 Set when detail first appears with overflow, cleared when detail is removed or overflow resolves.
 
-## View Transitions
+## Detail Animations
 
-Uses the CSS View Transitions API (`document.startViewTransition`):
+Detail panel transitions use the Web Animations API (`element.animate()`) on `translate` and `opacity`. This works inside shadow roots (unlike the View Transitions API).
 
-- `_setDetail(element, skipTransition)` — adds/replaces/removes detail with animation
-- `_startTransition(transitionType, updateCallback)` — starts a named transition
-- `_finishTransition()` — calls `__computeLayoutState()` + `__applyLayoutState()` via `queueMicrotask` (see read/write separation above)
-- `noAnimation` property disables transitions
-- Styles injected via `SlotStylesMixin`
+### CSS custom properties
+
+Animation parameters are driven by CSS custom properties, read once per transition to avoid repeated layout reads:
+
+- `--_detail-offscreen` — off-screen translate value. Defaults to `30px` (subtle slide in split mode), overridden to `calc((100% + 30px))` in overlay mode (full panel slide). Vertical orientation uses the Y axis.
+- `--_transition-duration` — defaults to `0s`, enabled via `@media (prefers-reduced-motion: no-preference)`: 200ms for split mode, 300ms for overlay mode. Replace transitions in split mode use 0ms (no slide, just instant swap).
+- `--_transition-easing` — cubic-bezier easing
+
+CSS handles resting states: `translate: var(--_detail-offscreen)` on `#detail` by default, overridden to `translate: none` by `:host([has-detail])`. RTL is supported via `--_rtl-multiplier`.
+
+### Transition types
+
+- **Add**: DOM is updated first (new element inserted, `has-detail` set), then the detail slides in from off-screen. In split mode, also fades from opacity 0 → 1.
+- **Remove**: the detail slides out to off-screen first (in split mode, also fades to opacity 0), then the DOM is updated (element removed, `has-detail` cleared) on `animation.finished`
+- **Replace** (overlay): old content is reassigned to `slot="detail-outgoing"` (stays in light DOM so styles continue to apply), then old slides out while new slides in simultaneously
+- **Replace** (split): old content moves to outgoing slot. The outgoing slides out with fade on top (`z-index: 1`), revealing the incoming at full opacity underneath.
+
+The `noAnimation` property (reflected as `no-animation` attribute) skips all animations. Animations are also disabled when `--_transition-duration` resolves to `0s`.
+
+### Transition flow
+
+1. **Capture interrupted state** — read the detail panel's current `translate` and `opacity` via `getComputedStyle()` _before_ cancelling any in-progress animation (see "Smooth interruption" below)
+2. **Cancel previous** — cancel in-progress animations, clean up state, resolve the pending promise
+3. **Snapshot outgoing** — reassign old content to the outgoing slot (replace only)
+4. **DOM update** — run the update callback, apply layout state (add/replace only; remove defers this to step 6)
+5. **Animate** — create Web Animations on `translate` and `opacity`
+6. **Finish** — on `animation.finished`, clean up the `transition` attribute and resolve the promise. For remove, the deferred DOM update runs here
+
+A version counter guards step 6: if a newer transition has started since step 5, the stale finish callback is ignored.
+
+### Smooth interruption
+
+`animation.cancel()` removes the animation effect and the element reverts to its CSS resting state — causing a visual jump. To avoid this, the current `translate` and `opacity` values are read via `getComputedStyle()` _before_ cancelling. These captured mid-flight values become the starting keyframe of the new animation, so the panel changes direction and opacity smoothly from where it actually is.
+
+For `replace` interruptions, the captured state is applied to the outgoing element (since the interrupted content moves from the detail slot to the outgoing slot).
+
+### Outgoing container
+
+The `#outgoing` shadow DOM element with `<slot name="detail-outgoing">` enables replace animations. Old content is moved to this slot (light DOM reassignment preserves user styles), animated out, then removed on completion. The outgoing has `z-index: 1` to paint on top of the incoming during the transition.
 
 ## Test Patterns
 

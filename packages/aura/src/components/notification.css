@@ -13,10 +13,6 @@ vaadin-notification-card::part(overlay) {
   --aura-surface-level: 3.5;
   background: var(--vaadin-notification-background, var(--aura-surface-color));
   box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-notification-shadow, var(--aura-overlay-shadow));
-
-  /* TODO probably should be in base styles */
-  /* Keeps notifications on top of MDL view transitions */
-  view-transition-name: vaadin-notification;
 }
 
 vaadin-notification-card:is(
@@ -42,21 +38,6 @@ vaadin-notification-card:is(
     inset 0 0 0 1px light-dark(transparent, var(--aura-accent-border-color)),
     0 0 0 1px light-dark(var(--aura-accent-border-color), transparent),
     var(--vaadin-notification-shadow, var(--aura-shadow-m));
-}
-
-::view-transition-group(vaadin-notification) {
-  /* Keep on top of MDL view-transition elements */
-  z-index: 1;
-  /* The backdrop-filter from vaadin-notification-card::part(overlay) is copied here, so we need to clip it with the same border radius */
-  border-radius: var(--vaadin-notification-border-radius, var(--vaadin-radius-l));
-}
-
-/* In Safari, the backdrop-filter is copied to transition-group pseudo element but also retained in the new/old pseudo elements */
-/* Removing it from the transition-group makes it look better */
-@supports (background: -webkit-named-image(i)) {
-  ::view-transition-group(vaadin-notification) {
-    backdrop-filter: none;
-  }
 }
 
 vaadin-notification-card vaadin-card {
