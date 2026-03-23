@@ -15,7 +15,7 @@ export const masterDetailLayoutStyles = css`
     --_transition-duration: 0s;
     --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
     --_rtl-multiplier: 1;
-    --_detail-offscreen: calc((100% + 30px) * var(--_rtl-multiplier));
+    --_detail-offscreen: calc(30px * var(--_rtl-multiplier));
 
     display: grid;
     box-sizing: border-box;
@@ -127,6 +127,10 @@ export const masterDetailLayoutStyles = css`
 
   #outgoing:not([hidden]) {
     z-index: 1;
+  }
+
+  :host([overflow]) {
+    --_detail-offscreen: calc((100% + 30px) * var(--_rtl-multiplier));
   }
 
   :host([overflow]) :is(#detail, #outgoing) {
