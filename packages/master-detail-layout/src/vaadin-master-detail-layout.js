@@ -417,8 +417,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return Promise.resolve();
     }
 
-    // Capture mid-flight position before cancel (see __captureDetailTranslate)
-    const interruptedTranslate = this.__captureDetailTranslate();
+    // Capture mid-flight state before cancel (see __captureDetailState)
+    const interrupted = this.__captureDetailState();
 
     this.__endTransition();
 
@@ -433,7 +433,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const opts = this.__getAnimationParams();
-    opts.from = interruptedTranslate;
+    opts.interrupted = interrupted;
+    opts.overlay = this.hasAttribute('overflow');
 
     return this.__animateTransition(transitionType, opts, updateCallback);
   }
@@ -468,13 +469,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       if (transitionType === 'remove') {
         this.__slide(this.$.detail, false, opts).then(() => onFinish(updateCallback));
       } else if (transitionType === 'replace') {
-        if (this.hasAttribute('overflow')) {
-          // Overlay: slide both simultaneously
-          this.__slide(this.$.detail, true, { ...opts, from: null }).then(() => onFinish());
-          this.__slide(this.$.outgoing, false, opts);
-        } else {
-          // Split: cross-fade (outgoing fades out on top, revealing incoming)
-          this.__crossFade(opts).then(() => onFinish());
+        // Outgoing slides out on top (z-index), revealing incoming underneath.
+        // In overlay mode, the incoming also slides in simultaneously.
+        this.__slide(this.$.outgoing, false, opts).then(() => onFinish());
+        if (opts.overlay) {
+          this.__slide(this.$.detail, true, { ...opts, interrupted: null });
         }
       } else {
         this.__slide(this.$.detail, true, opts).then(() => onFinish());
@@ -494,23 +493,22 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /**
-   * Captures the detail panel's current animated translate value.
-   * Must be called BEFORE `animation.cancel()`, because cancel removes
-   * the animation effect and the element reverts to its CSS resting state.
+   * Captures the detail panel's current animated state (translate and
+   * opacity). Must be called BEFORE `animation.cancel()`, because
+   * cancel removes the animation effect and the element reverts to
+   * its CSS resting state.
    *
-   * Returns null when there is no active animation or the panel is at
-   * `translate: none` (fully visible — no mid-flight position to preserve).
+   * Returns null when there is no active animation.
    *
-   * @return {string|null}
+   * @return {{ translate: string, opacity: string } | null}
    * @private
    */
-  __captureDetailTranslate() {
+  __captureDetailState() {
     if (!this.__activeAnimations || this.__activeAnimations.length === 0) {
       return null;
     }
-    const translate = getComputedStyle(this.$.detail).translate;
-    // 'none' means fully visible — the default keyframes already handle this
-    return translate === 'none' ? null : translate;
+    const cs = getComputedStyle(this.$.detail);
+    return { translate: cs.translate, opacity: cs.opacity };
   }
 
   /**
@@ -537,22 +535,25 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @param {HTMLElement} element - The element to animate
    * @param {boolean} slideIn - If true, slide in (off-screen → on-screen);
    *   otherwise slide out (on-screen → off-screen)
-   * @param {{ offscreen: string, duration: number, easing: string, from?: string }} opts
-   *   Animation parameters. `from` overrides the default starting keyframe
-   *   for interrupted animations (captured mid-flight before cancel).
+   * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
+   *   Animation parameters. `interrupted` overrides the default starting
+   *   keyframe for interrupted animations (captured mid-flight before cancel).
    * @return {Promise<void>}
    * @private
    */
-  __slide(element, slideIn, { offscreen, duration, easing, from }) {
+  __slide(element, slideIn, { offscreen, duration, easing, interrupted, overlay }) {
     if (!offscreen || duration <= 0) {
       return Promise.resolve();
     }
 
-    const start = from || (slideIn ? offscreen : 'none');
+    const defaultTranslate = slideIn ? offscreen : 'none';
+    const defaultOpacity = overlay ? 1 : slideIn ? 0 : 1;
+
+    const start = interrupted ? interrupted.translate : defaultTranslate;
     const end = slideIn ? 'none' : offscreen;
 
-    const opacityStart = this.hasAttribute('overflow') ? 1 : slideIn ? 0 : 1;
-    const opacityEnd = this.hasAttribute('overflow') ? 1 : slideIn ? 1 : 0;
+    const opacityStart = interrupted ? Number(interrupted.opacity) : defaultOpacity;
+    const opacityEnd = overlay ? 1 : slideIn ? 1 : 0;
 
     return this.__animate(
       element,
@@ -562,24 +563,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       ],
       { duration, easing },
     );
-  }
-
-  /**
-   * Cross-fades the outgoing detail out. Used for replace transitions
-   * in split mode where a slide would look out of place. The incoming
-   * detail sits at full opacity underneath and is revealed as the
-   * outgoing fades.
-   *
-   * @param {{ duration: number, easing: string }} opts
-   * @return {Promise<void>}
-   * @private
-   */
-  __crossFade({ duration, easing }) {
-    if (duration <= 0) {
-      return Promise.resolve();
-    }
-
-    return this.__animate(this.$.outgoing, [{ opacity: 1 }, { opacity: 0 }], { duration, easing });
   }
 
   /**
