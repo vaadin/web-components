@@ -404,7 +404,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    *
    * Animations are interruptible: starting a new transition cancels any
    * in-progress animation and the new animation picks up from the
-   * interrupted position (see `__captureDetailTranslate`).
+   * interrupted position (see `__captureDetailState`).
    *
    * @param transitionType
    * @param updateCallback
@@ -446,7 +446,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * a newer transition has started.
    *
    * @param {string} transitionType
-   * @param {{ offscreen: string, duration: number, easing: string, from?: string }} opts
+   * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
    * @param {Function} updateCallback
    * @return {Promise<void>}
    * @private
