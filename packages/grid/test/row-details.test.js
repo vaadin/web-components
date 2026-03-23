@@ -172,34 +172,6 @@ describe('row details', () => {
       grid.closeItemDetails({ value: 'foo0' });
       expect(cells[1].hidden).to.be.true;
     });
-
-    it('should invoke the body renderer when opening details', () => {
-      grid.renderer = sinon.spy();
-
-      openRowDetails(0);
-
-      grid.renderer.args.forEach(([_root, _owner, model], index) => {
-        if (index === 0) {
-          expect(model.detailsOpened).to.be.true;
-        } else {
-          expect(model.detailsOpened).to.be.false;
-        }
-      });
-    });
-
-    it('should invoke the body renderer when closing details', () => {
-      grid.renderer = sinon.spy();
-
-      openRowDetails(0);
-
-      grid.renderer.resetHistory();
-
-      closeRowDetails(0);
-
-      grid.renderer.args.forEach(([_root, _owner, model]) => {
-        expect(model.detailsOpened).to.be.false;
-      });
-    });
   });
 
   describe('repeat', () => {
@@ -319,6 +291,81 @@ describe('row details', () => {
       grid.clearCache();
 
       expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
+    });
+  });
+
+  describe('selective row update', () => {
+    let renderer;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 50px; height: 400px" size="100">
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.rowDetailsRenderer = simpleDetailsRenderer;
+      renderer = sinon.spy(indexRenderer);
+      grid.querySelector('vaadin-grid-column').renderer = renderer;
+
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
+      bodyRows = getRows(grid.$.items);
+      await nextFrame();
+
+      renderer.resetHistory();
+    });
+
+    it('should only invoke the body renderer for the opened row', () => {
+      openRowDetails(1);
+
+      expect(renderer).to.be.calledOnce;
+      expect(renderer.firstCall.args[2].index).to.equal(1);
+      expect(renderer.firstCall.args[2].detailsOpened).to.be.true;
+    });
+
+    it('should only invoke the body renderer for the closed row', () => {
+      openRowDetails(1);
+      renderer.resetHistory();
+
+      closeRowDetails(1);
+
+      expect(renderer).to.be.calledOnce;
+      expect(renderer.firstCall.args[2].index).to.equal(1);
+      expect(renderer.firstCall.args[2].detailsOpened).to.be.false;
+    });
+
+    it('should only invoke the body renderer for the newly opened row', () => {
+      openRowDetails(0);
+      renderer.resetHistory();
+
+      openRowDetails(2);
+
+      expect(renderer).to.be.calledOnce;
+      expect(renderer.firstCall.args[2].index).to.equal(2);
+      expect(renderer.firstCall.args[2].detailsOpened).to.be.true;
+    });
+
+    it('should only invoke the body renderer for affected rows when replacing detailsOpenedItems', () => {
+      openRowDetails(0);
+      renderer.resetHistory();
+
+      grid.detailsOpenedItems = [grid._dataProviderController.rootCache.items[2]];
+      flushGrid(grid);
+
+      expect(renderer).to.be.calledTwice;
+      const renderedIndexes = renderer.getCalls().map((call) => call.args[2].index);
+      expect(renderedIndexes).to.include(0);
+      expect(renderedIndexes).to.include(2);
+    });
+
+    it('should not invoke the body renderer when detailsOpenedItems is set to the same value', () => {
+      openRowDetails(1);
+      renderer.resetHistory();
+
+      grid.detailsOpenedItems = [...grid.detailsOpenedItems];
+      flushGrid(grid);
+
+      expect(renderer).to.not.be.called;
     });
   });
 

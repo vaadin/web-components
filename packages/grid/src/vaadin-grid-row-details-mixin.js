@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, updatePart } from './vaadin-grid-helpers.js';
+import { updatePart } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -50,6 +50,15 @@ export const RowDetailsMixin = (superClass) =>
         _detailsCells: {
           type: Array,
         },
+
+        /**
+         * Set of opened details item ids
+         * @private
+         */
+        __detailsOpenedKeys: {
+          type: Object,
+          computed: '__computeDetailsOpenedKeys(itemIdPath, detailsOpenedItems)',
+        },
       };
     }
 
@@ -79,9 +88,14 @@ export const RowDetailsMixin = (superClass) =>
 
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
-        iterateChildren(this.$.items, (row) => {
+        this._getRenderedRows().forEach((row) => {
           if (!row.querySelector('[part~=details-cell]')) {
             this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
+            this.__updateRow(row);
+            return;
+          }
+
+          if (row.hasAttribute('details-opened')) {
             this.__updateRow(row);
           }
         });
@@ -90,15 +104,8 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @private */
     _detailsOpenedItemsChanged(_detailsOpenedItems, rowDetailsRenderer) {
-      iterateChildren(this.$.items, (row) => {
-        // Re-renders the row to possibly close the previously opened details.
-        if (row.hasAttribute('details-opened')) {
-          this.__updateRow(row);
-          return;
-        }
-
-        // Re-renders the row to open the details when a row details renderer is provided.
-        if (rowDetailsRenderer && this._isDetailsOpened(row._item)) {
+      this._getRenderedRows().forEach((row) => {
+        if (row.hasAttribute('details-opened') !== !!(rowDetailsRenderer && this._isDetailsOpened(row._item))) {
           this.__updateRow(row);
         }
       });
@@ -165,7 +172,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeights() {
-      iterateChildren(this.$.items, (row) => {
+      this._getRenderedRows().forEach((row) => {
         this._updateDetailsCellHeight(row);
       });
     }
@@ -176,7 +183,17 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _isDetailsOpened(item) {
-      return this.detailsOpenedItems && this._getItemIndexInArray(item, this.detailsOpenedItems) !== -1;
+      return this.__detailsOpenedKeys && this.__detailsOpenedKeys.has(this.getItemId(item));
+    }
+
+    /** @private */
+    __computeDetailsOpenedKeys(_itemIdPath, detailsOpenedItems) {
+      const items = detailsOpenedItems || [];
+      const keys = new Set();
+      items.forEach((item) => {
+        keys.add(this.getItemId(item));
+      });
+      return keys;
     }
 
     /**
