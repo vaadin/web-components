@@ -5,7 +5,7 @@ import './aura-segmented-control.js';
 import './aura-theme-scheme-control.js';
 import '@vaadin/dialog';
 import '@vaadin/text-area';
-import { toHexColor } from './aura-color-control.js';
+import { toHex } from './aura-color-utils.js';
 
 const FONT_FAMILY_IMPORTS = {
   Inter: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap',
@@ -190,7 +190,7 @@ function buildExportCssCode(editorRoot) {
       const value = style.getPropertyValue(prop).trim();
       if (value) {
         const shouldConvertColor = prop.includes('color') && prop !== 'color-scheme';
-        const exportedValue = shouldConvertColor ? toHexColor(value) || value : value;
+        const exportedValue = shouldConvertColor ? toHex(value) || value : value;
         lines.push(`  ${prop}: ${exportedValue};`);
       }
     });

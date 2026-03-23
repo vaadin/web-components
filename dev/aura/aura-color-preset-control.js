@@ -1,5 +1,6 @@
 import '@vaadin/select';
 import { AuraControl } from './aura-abstract-control.js';
+import { resolveVarColor, toComparableColor } from './aura-color-utils.js';
 
 class AuraColorPresetControl extends AuraControl {
   static get is() {
@@ -15,7 +16,6 @@ class AuraColorPresetControl extends AuraControl {
   #labelEl;
   #resetBtn;
   #presets = [];
-  #probe;
 
   constructor() {
     super();
@@ -276,7 +276,7 @@ class AuraColorPresetControl extends AuraControl {
 
   #matchPreset(value) {
     const targetToken = this.#normalizeToken(value);
-    const targetColor = this.#toComparableColor(value);
+    const targetColor = toComparableColor(value);
 
     for (const preset of this.#presets) {
       if (preset.isDefault) {
@@ -288,13 +288,13 @@ class AuraColorPresetControl extends AuraControl {
         return preset;
       }
 
-      const presetComparable = this.#toComparableColor(preset.value);
+      const presetComparable = toComparableColor(preset.value);
       if (targetColor && presetComparable && targetColor === presetComparable) {
         return preset;
       }
 
       if (targetColor && !presetComparable) {
-        const resolved = this.#resolveVarColor(preset.value);
+        const resolved = resolveVarColor(preset.value);
         if (resolved && resolved === targetColor) {
           return preset;
         }
@@ -326,28 +326,12 @@ class AuraColorPresetControl extends AuraControl {
       return null;
     }
 
-    const resolved = this.#resolveVarColor(rawValue);
+    const resolved = resolveVarColor(rawValue);
     if (resolved) {
       return resolved;
     }
 
-    return this.#toComparableColor(rawValue);
-  }
-
-  #resolveVarColor(rawValue) {
-    const varMatch = String(rawValue || '')
-      .trim()
-      .match(/^var\(\s*(--[^\s,)]+)\s*\)$/u);
-    if (!varMatch) {
-      return null;
-    }
-
-    const resolved = getComputedStyle(document.documentElement).getPropertyValue(varMatch[1]).trim();
-    if (!resolved) {
-      return null;
-    }
-
-    return this.#toComparableColor(resolved);
+    return toComparableColor(rawValue);
   }
 
   #normalizeToken(value) {
@@ -361,38 +345,6 @@ class AuraColorPresetControl extends AuraControl {
     }
 
     return token.replace(/\s+/gu, '');
-  }
-
-  #toComparableColor(value) {
-    const source = String(value || '').trim();
-    if (!source || /^var\(/u.test(source)) {
-      return null;
-    }
-
-    const probe = this.#getColorProbe();
-    probe.style.color = '';
-    probe.style.color = source;
-    if (!probe.style.color) {
-      return null;
-    }
-
-    return getComputedStyle(probe).color.replace(/\s+/gu, '');
-  }
-
-  #getColorProbe() {
-    if (this.#probe?.isConnected) {
-      return this.#probe;
-    }
-
-    const probe = document.createElement('span');
-    probe.style.position = 'fixed';
-    probe.style.top = '-9999px';
-    probe.style.left = '-9999px';
-    probe.style.pointerEvents = 'none';
-    probe.style.opacity = '0';
-    document.body.appendChild(probe);
-    this.#probe = probe;
-    return probe;
   }
 }
 
