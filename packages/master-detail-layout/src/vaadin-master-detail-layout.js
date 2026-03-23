@@ -203,6 +203,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       >
         <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
       </div>
+      <div id="detail-placeholder" part="detail-placeholder">
+        <slot name="detail-placeholder" @slotchange="${this.__onSlotChange}"></slot>
+      </div>
     `;
   }
 
@@ -277,19 +280,23 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __computeLayoutState() {
-    const detailContent = this.querySelector('[slot="detail"]');
+    const detailContent = this.querySelector(':scope > [slot="detail"]');
+    const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
+
     const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = detailContent != null && detailContent.checkVisibility();
-    const hasOverflow = hasDetail && this.__checkOverflow();
+    const hasDetailPlaceholder = !!detailPlaceholder;
+    const hasOverflow = (hasDetail || hasDetailPlaceholder) && this.__checkOverflow();
+
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
-    return { hadDetail, hasDetail, hasOverflow, focusTarget };
+    return { hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget };
   }
 
   /**
    * Applies layout state to DOM attributes. Pure writes, no reads.
    * @private
    */
-  __applyLayoutState({ hadDetail, hasDetail, hasOverflow, focusTarget }) {
+  __applyLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget }) {
     // Set keep-detail-column-offscreen when detail first appears with overlay
     // to prevent master width from jumping.
     if (!hadDetail && hasDetail && hasOverflow) {
@@ -298,8 +305,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       this.removeAttribute('keep-detail-column-offscreen');
     }
 
-    this.toggleAttribute('has-detail', hasDetail);
     this.toggleAttribute('overlay', hasOverflow);
+    this.toggleAttribute('has-detail', hasDetail);
+    this.toggleAttribute('has-detail-placeholder', hasDetailPlaceholder);
 
     // Re-render to update ARIA attributes (role, aria-modal, inert)
     // which depend on has-detail and overlay state.
