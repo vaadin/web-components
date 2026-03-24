@@ -421,9 +421,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     const hasDetail = !!currentDetail;
     const hasDetailPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
+    const hasOverflow = this.hasAttribute('overlay');
 
     let transitionType;
-    if ((hasDetail && element) || hasDetailPlaceholder) {
+    if ((hasDetail && element) || (hasDetailPlaceholder && !hasOverflow)) {
       transitionType = 'replace';
     } else if (hasDetail) {
       transitionType = 'remove';

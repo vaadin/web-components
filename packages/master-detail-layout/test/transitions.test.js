@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
-import { nextFrames } from './helpers.js';
+import { nextFrames, onceResized } from './helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -344,10 +344,13 @@ describe('Transitions', () => {
     let placeholder;
 
     beforeEach(async () => {
+      layout.masterSize = '300px';
+      layout.detailSize = '300px';
+      layout.style.width = '800px';
       placeholder = document.createElement('div');
       placeholder.setAttribute('slot', 'detail-placeholder');
       layout.appendChild(placeholder);
-      await nextFrames();
+      await onceResized(layout);
     });
 
     it('should use replace transition when adding detail', async () => {
@@ -367,6 +370,34 @@ describe('Transitions', () => {
       const promise = layout._setDetail(null);
 
       expect(layout.getAttribute('transition')).to.equal('replace');
+
+      await promise;
+      expect(layout.hasAttribute('transition')).to.be.false;
+    });
+
+    it('should use add transition when adding detail and overflow is set', async () => {
+      layout.style.width = '200px';
+      await onceResized(layout);
+
+      const detail = document.createElement('detail-content');
+      const promise = layout._setDetail(detail);
+
+      expect(layout.getAttribute('transition')).to.equal('add');
+
+      await promise;
+      expect(layout.hasAttribute('transition')).to.be.false;
+    });
+
+    it('should use remove transition when removing detail and overflow is set', async () => {
+      const detail = document.createElement('detail-content');
+      await layout._setDetail(detail);
+
+      layout.style.width = '200px';
+      await onceResized(layout);
+
+      const promise = layout._setDetail(null);
+
+      expect(layout.getAttribute('transition')).to.equal('remove');
 
       await promise;
       expect(layout.hasAttribute('transition')).to.be.false;
