@@ -247,6 +247,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
     cancelAnimationFrame(this.__resizeRaf);
+    this.__endTransition();
   }
 
   /** @private */
@@ -419,18 +420,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return Promise.resolve();
     }
 
-    const hasDetail = !!currentDetail;
-    const hasDetailPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
-    const hasOverflow = this.hasAttribute('overlay');
-
-    let transitionType;
-    if ((hasDetail && element) || (hasDetailPlaceholder && !hasOverflow)) {
-      transitionType = 'replace';
-    } else if (hasDetail) {
-      transitionType = 'remove';
-    } else {
-      transitionType = 'add';
-    }
+    const transitionType = this.__getTransitionType(currentDetail, element);
 
     return this._startTransition(transitionType, () => {
       // Update the DOM
@@ -438,6 +428,34 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       // Finish the transition
       this._finishTransition();
     });
+  }
+
+  /**
+   * Determines the transition type for a detail change.
+   *
+   * Returns 'replace' in two cases:
+   * - Swapping one detail for another (standard replace).
+   * - Swapping between placeholder and detail in split mode,
+   *   so the swap appears instant (replace has 0ms duration in split).
+   *   In overlay mode, placeholder doesn't participate in transitions,
+   *   so standard 'add'/'remove' are used instead.
+   *
+   * @param {Element | null} currentDetail
+   * @param {Element | null} newDetail
+   * @return {string}
+   * @private
+   */
+  __getTransitionType(currentDetail, newDetail) {
+    if (currentDetail && newDetail) {
+      return 'replace';
+    }
+
+    const hasPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
+    if (hasPlaceholder && !this.hasAttribute('overlay')) {
+      return 'replace';
+    }
+
+    return currentDetail ? 'remove' : 'add';
   }
 
   /**
