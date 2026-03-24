@@ -44,11 +44,11 @@ describe('overlay', () => {
         const detailContent = layout.querySelector('[slot="detail"]');
         detailContent.remove();
         await onceResized(layout);
-        expect(layout.hasAttribute('overflow')).to.be.false;
+        expect(layout.hasAttribute('overlay')).to.be.false;
 
         layout.appendChild(detailContent);
         await onceResized(layout);
-        expect(layout.hasAttribute('overflow')).to.be.true;
+        expect(layout.hasAttribute('overlay')).to.be.true;
         expect(getComputedStyle(detail).position).to.equal('absolute');
       });
     });
@@ -117,7 +117,7 @@ describe('overlay', () => {
       it('should switch back to split mode when layout grows', async () => {
         layout.style.width = '800px';
         await onceResized(layout);
-        expect(layout.hasAttribute('overflow')).to.be.false;
+        expect(layout.hasAttribute('overlay')).to.be.false;
       });
 
       it('should switch to overlay when detail is added to a narrow layout', async () => {
@@ -127,7 +127,7 @@ describe('overlay', () => {
 
         layout.appendChild(detailContent);
         await onceResized(layout);
-        expect(layout.hasAttribute('overflow')).to.be.true;
+        expect(layout.hasAttribute('overlay')).to.be.true;
         expect(detail.offsetWidth).to.equal(layout.offsetWidth);
       });
     });

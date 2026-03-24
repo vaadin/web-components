@@ -54,7 +54,7 @@ The `>=` (not `>`) is intentional: when `keep-detail-column-offscreen` or `:not(
 Layout detection is split into two methods to avoid forced reflows:
 
 - **`__computeLayoutState()`** — pure reads: `checkVisibility()`, `getComputedStyle()`, `getFocusableElements()`. Called in the ResizeObserver callback where layout is already computed — no forced reflow.
-- **`__applyLayoutState(state)`** — pure writes: toggles `has-detail`, `overflow`, `keep-detail-column-offscreen`; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
+- **`__applyLayoutState(state)`** — pure writes: toggles `has-detail`, `overlay`, `keep-detail-column-offscreen`; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
 
 ### ResizeObserver
 
@@ -64,7 +64,7 @@ Layout detection is split into two methods to avoid forced reflows:
 
 ## Overlay Modes
 
-When `overflow` AND `has-detail` are both set, the detail becomes an overlay:
+When `overlay` AND `has-detail` are both set, the detail becomes an overlay:
 
 - `position: absolute; grid-column: none` removes detail from grid flow
 - Backdrop becomes visible
@@ -85,7 +85,7 @@ Setting `overlaySize` to `100%` makes the detail cover the full layout (replaces
 
 Prevents the master from jumping when the detail overlay first appears.
 
-When no detail is present, master's extra track is set to `calc(100% - masterSize)`, pushing the detail column offscreen. This ensures that when a detail element appears, it starts offscreen and is then either moved into an overlay (if overflow, so no blink occurs and master area size is preserved) or revealed by removing the `calc()` override (if no overflow). The `keep-detail-column-offscreen` attribute keeps the same override active when detail first appears with overflow, until the overlay takes effect.
+When no detail is present, master's extra track is set to `calc(100% - masterSize)`, pushing the detail column offscreen. This ensures that when a detail element appears, it starts offscreen and is then either moved into an overlay (if `overlay` is set, so no blink occurs and master area size is preserved) or revealed by removing the `calc()` override (if no overlay). The `keep-detail-column-offscreen` attribute keeps the same override active when detail first appears with overlay, until the overlay takes effect.
 
 ```css
 :host(:not([has-detail])),
@@ -94,7 +94,7 @@ When no detail is present, master's extra track is set to `calc(100% - masterSiz
 }
 ```
 
-Set when detail first appears with overflow, cleared when detail is removed or overflow resolves.
+Set when detail first appears with overlay, cleared when detail is removed or overlay resolves.
 
 ## Detail Animations
 
