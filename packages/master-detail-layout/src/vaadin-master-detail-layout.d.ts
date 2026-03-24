@@ -32,13 +32,14 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * The following state attributes are available for styling:
  *
- * Attribute             | Description
- * ----------------------|----------------------
- * `expand`              | Set to `master`, `detail`, or `both`.
- * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
- * `has-detail`          | Set when the detail content is provided and visible.
- * `overlay`             | Set when columns don't fit and the detail is shown as an overlay.
- * `overlay-containment` | Set to `layout` or `viewport`.
+ * Attribute                  | Description
+ * --------------------------|----------------------
+ * `expand`                  | Set to `master`, `detail`, or `both`.
+ * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
+ * `has-detail`              | Set when the detail content is provided and visible.
+ * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
+ * `overlay`                 | Set when columns don't fit and the detail is shown as an overlay.
+ * `overlay-containment`     | Set to `layout` or `viewport`.
  *
  * The following custom CSS properties are available for styling:
  *

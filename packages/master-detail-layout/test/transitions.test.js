@@ -340,6 +340,39 @@ describe('Transitions', () => {
     });
   });
 
+  describe('detail placeholder', () => {
+    let placeholder;
+
+    beforeEach(async () => {
+      placeholder = document.createElement('div');
+      placeholder.setAttribute('slot', 'detail-placeholder');
+      layout.appendChild(placeholder);
+      await nextFrames();
+    });
+
+    it('should use replace transition when adding detail', async () => {
+      const detail = document.createElement('detail-content');
+      const promise = layout._setDetail(detail);
+
+      expect(layout.getAttribute('transition')).to.equal('replace');
+
+      await promise;
+      expect(layout.hasAttribute('transition')).to.be.false;
+    });
+
+    it('should use replace transition when removing detail', async () => {
+      const detail = document.createElement('detail-content');
+      await layout._setDetail(detail);
+
+      const promise = layout._setDetail(null);
+
+      expect(layout.getAttribute('transition')).to.equal('replace');
+
+      await promise;
+      expect(layout.hasAttribute('transition')).to.be.false;
+    });
+  });
+
   describe('replace transition', () => {
     it('should move old content to outgoing container during replace', async () => {
       // Add initial detail
