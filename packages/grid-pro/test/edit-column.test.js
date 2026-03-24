@@ -581,6 +581,15 @@ describe('edit column', () => {
         await aTimeout(UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT);
       }
 
+      function getCellByColumnPath(columnPath) {
+        const row = getRows(grid.$.items)[0];
+        const cells = getRowCells(row);
+        const cell = cells.find((c) => c._column.path === columnPath);
+        expect(cell, `Could not find cell for column with path ${columnPath}`).to.be.ok;
+
+        return cell;
+      }
+
       beforeEach(() => {
         grid = fixtureSync(`<vaadin-grid-pro style="width: 400px;"></vaadin-grid-pro>`);
 
@@ -626,6 +635,25 @@ describe('edit column', () => {
 
         expect(hasEditablePart(0, cells.length - 2)).to.be.false;
         expect(hasEditablePart(0, cells.length - 1)).to.be.true;
+      });
+
+      it('should navigate through editable cells with Tab', async () => {
+        let cell = getCellByColumnPath('col1');
+        cell.focus();
+        await sendKeys({ press: 'Enter' });
+        expect(getCellEditor(cell)).to.be.ok;
+
+        await sendKeys({ press: 'Tab' });
+        cell = getCellByColumnPath('col3');
+        expect(getCellEditor(cell)).to.be.ok;
+
+        await sendKeys({ press: 'Tab' });
+        cell = getCellByColumnPath('col5');
+        expect(getCellEditor(cell)).to.be.ok;
+
+        await sendKeys({ press: 'Tab' });
+        cell = getCellByColumnPath('col7');
+        expect(getCellEditor(cell)).to.be.ok;
       });
     });
   });
