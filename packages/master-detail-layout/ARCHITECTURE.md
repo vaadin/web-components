@@ -81,15 +81,30 @@ When `overlay` AND `has-detail` are both set, the detail becomes an overlay:
 
 Setting `overlaySize` to `100%` makes the detail cover the full layout (replaces old "full" mode).
 
+## Detail Placeholder
+
+The `detail-placeholder` slot shows content in the detail area when no detail is open (e.g. "Select an item"). It occupies the same grid tracks as the detail and receives the same border styling.
+
+Visible only when a placeholder element is slotted, no detail is present, and there is no overlay:
+
+```css
+:host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
+  display: block;
+}
+```
+
+The placeholder is included in overflow detection — without it, a layout with only a placeholder would never check for overflow and the offscreen trick below would not apply. When the placeholder is present with overlay, the master extra track is inflated to keep the master full-width (same rule as `keep-detail-column-offscreen`).
+
 ## keep-detail-column-offscreen
 
 Prevents the master from jumping when the detail overlay first appears.
 
-When no detail is present, master's extra track is set to `calc(100% - masterSize)`, pushing the detail column offscreen. This ensures that when a detail element appears, it starts offscreen and is then either moved into an overlay (if `overlay` is set, so no blink occurs and master area size is preserved) or revealed by removing the `calc()` override (if no overlay). The `keep-detail-column-offscreen` attribute keeps the same override active when detail first appears with overlay, until the overlay takes effect.
+When neither detail nor placeholder is present, master's extra track is set to `calc(100% - masterSize)`, pushing the detail column offscreen. This ensures that when a detail element appears, it starts offscreen and is then either moved into an overlay (if `overlay` is set, so no blink occurs and master area size is preserved) or revealed by removing the `calc()` override (if no overlay). The `keep-detail-column-offscreen` attribute keeps the same override active when detail first appears with overlay, until the overlay takes effect.
 
 ```css
-:host(:not([has-detail])),
-:host([keep-detail-column-offscreen]) {
+:host([keep-detail-column-offscreen]),
+:host([has-detail-placeholder][overlay]),
+:host(:not([has-detail-placeholder], [has-detail])) {
   --_master-column: var(--_master-size) calc(100% - var(--_master-size));
 }
 ```
