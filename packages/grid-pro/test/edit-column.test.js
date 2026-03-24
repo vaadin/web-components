@@ -10,6 +10,7 @@ import {
   dblclick,
   flatMap,
   flushGrid,
+  getCellContent,
   getCellEditor,
   getContainerCell,
   getRowCells,
@@ -572,8 +573,6 @@ describe('edit column', () => {
     });
 
     describe('lazy column rendering', () => {
-      let grid;
-
       const UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT = 100;
 
       async function scrollHorizontally(delta) {
@@ -611,17 +610,8 @@ describe('edit column', () => {
       });
 
       it('should mark initially visible cells as non-editable based on isCellEditable', () => {
-        const cells = getRowCells(getRows(grid.$.items)[0]);
-
-        const cell0 = cells[0];
-        const target0 = cell0._focusButton || cell0;
-
-        expect(target0.getAttribute('part')).to.be.null;
-
-        const cell1 = cells[1];
-        const target1 = cell1._focusButton || cell1;
-
-        expect(target1.getAttribute('part')).to.include('editable-cell');
+        expect(hasEditablePart(0, 0)).to.be.false;
+        expect(hasEditablePart(0, 1)).to.be.true;
       });
 
       it('should mark lazily rendered cells as non-editable based on isCellEditable after scrolling', async () => {
@@ -630,16 +620,12 @@ describe('edit column', () => {
 
         const cells = getRowCells(getRows(grid.$.items)[0]);
 
-        const cell6 = cells[cells.length - 2];
-        const target6 = cell6._focusButton || cell6;
+        // Verify we are testing correct cells
+        expect(getCellContent(cells[cells.length - 2]).textContent).to.equal('a6');
+        expect(getCellContent(cells[cells.length - 1]).textContent).to.equal('a7');
 
-        expect(target6.getAttribute('part')).to.be.null;
-
-        const cell7 = cells[cells.length - 1];
-        const target7 = cell7._focusButton || cell7;
-
-        expect(cell7.getAttribute('part')).to.include('last-column-cell');
-        expect(target7.getAttribute('part')).to.include('editable-cell');
+        expect(hasEditablePart(0, cells.length - 2)).to.be.false;
+        expect(hasEditablePart(0, cells.length - 1)).to.be.true;
       });
     });
   });
