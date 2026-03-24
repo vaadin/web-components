@@ -29,11 +29,12 @@ function parseTrackSizes(gridTemplate) {
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name      | Description
- * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the overlay mode
- * `master`       | The master area
- * `detail`       | The detail area
+ * Part name             | Description
+ * ----------------------|----------------------
+ * `backdrop`            | Backdrop covering the master area in the overlay mode
+ * `master`              | The master area
+ * `detail`              | The detail area
+ * `detail-placeholder`  | The detail placeholder area
  *
  * The following state attributes are available for styling:
  *
@@ -393,7 +394,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const hasDetail = !!currentDetail;
-    const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
+    const hasDetailPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
+
+    let transitionType;
+    if ((hasDetail && element) || hasDetailPlaceholder) {
+      transitionType = 'replace';
+    } else if (hasDetail) {
+      transitionType = 'remove';
+    } else {
+      transitionType = 'add';
+    }
+
     return this._startTransition(transitionType, () => {
       // Update the DOM
       updateSlot();

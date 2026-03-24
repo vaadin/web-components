@@ -23,11 +23,12 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name      | Description
- * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the overlay mode
- * `master`       | The master area
- * `detail`       | The detail area
+ * Part name             | Description
+ * ----------------------|----------------------
+ * `backdrop`            | Backdrop covering the master area in the overlay mode
+ * `master`              | The master area
+ * `detail`              | The detail area
+ * `detail-placeholder`  | The detail placeholder area
  *
  * The following state attributes are available for styling:
  *
