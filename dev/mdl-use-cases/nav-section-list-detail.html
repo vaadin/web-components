@@ -50,12 +50,11 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        padding: 16px;
         box-sizing: border-box;
       }
 
-      .section-nav h4 {
-        margin: 0 0 16px;
+      .section-nav .nav-list {
+        padding: 8px;
       }
 
       /* Pane header (levels 3 & 4) */
@@ -186,7 +185,10 @@
         overlay-size="100%"
       >
         <div class="section-nav">
-          <h4>Manage</h4>
+          <div class="pane-header">
+            <button class="back-btn" id="sectionBackBtn">&larr;</button>
+            <h4>Manage</h4>
+          </div>
           <ul class="nav-list" id="sectionNav">
             <li data-key="users" aria-current="page">Users <vaadin-badge number="5"></vaadin-badge></li>
           </ul>
@@ -298,6 +300,15 @@
           sectionLayout._setDetail(null);
           appLayout._setDetail(null);
         }
+      });
+
+      // Section back button → close section, go back to app nav
+      document.getElementById('sectionBackBtn').addEventListener('click', () => {
+        closeUserDetail();
+        setNavCurrent('sectionNav', null);
+        setNavCurrent('appNav', null);
+        sectionLayout._setDetail(null);
+        appLayout._setDetail(null);
       });
 
       // Section nav clicks
