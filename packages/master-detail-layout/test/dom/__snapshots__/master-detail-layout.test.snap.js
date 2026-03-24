@@ -173,7 +173,7 @@ snapshots["vaadin-master-detail-layout overflow with detail"] =
   keep-detail-column-offscreen=""
   master-size="300px"
   orientation="horizontal"
-  overflow=""
+  overlay=""
   overlay-containment="layout"
   style="width: 400px; --_master-size: 300px; --_detail-size: 300px;"
 >
@@ -194,7 +194,7 @@ snapshots["vaadin-master-detail-layout overflow with detail placeholder"] =
   has-detail-placeholder=""
   master-size="300px"
   orientation="horizontal"
-  overflow=""
+  overlay=""
   overlay-containment="layout"
   style="width: 400px; --_master-size: 300px; --_detail-size: 300px;"
 >
