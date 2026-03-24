@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/integer-field",
-  "version": "25.1.0-rc1",
+  "version": "25.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -34,15 +34,15 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.1.0-rc1",
-    "@vaadin/number-field": "25.1.0-rc1"
+    "@vaadin/component-base": "~25.1.0",
+    "@vaadin/number-field": "~25.1.0"
   },
   "devDependencies": {
-    "@vaadin/aura": "25.1.0-rc1",
-    "@vaadin/chai-plugins": "25.1.0-rc1",
-    "@vaadin/test-runner-commands": "25.1.0-rc1",
+    "@vaadin/aura": "~25.1.0",
+    "@vaadin/chai-plugins": "~25.1.0",
+    "@vaadin/test-runner-commands": "~25.1.0",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.1.0-rc1",
+    "@vaadin/vaadin-lumo-styles": "~25.1.0",
     "sinon": "^21.0.2"
   },
   "customElements": "custom-elements.json",
