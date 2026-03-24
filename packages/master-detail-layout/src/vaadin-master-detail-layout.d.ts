@@ -19,6 +19,31 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
  * overlaid on top of, the master area, depending on configuration and viewport size.
  *
+ * ### Slots
+ *
+ * The component has two main content areas: the master area (default slot)
+ * and the detail area (`detail` slot). When the detail doesn't fit next to
+ * the master, it is shown as an overlay on top of the master area:
+ *
+ * ```html
+ * <vaadin-master-detail-layout>
+ *   <div>Master content</div>
+ *   <div slot="detail">Detail content</div>
+ * </vaadin-master-detail-layout>
+ * ```
+ *
+ * The component also supports a `detail-placeholder` slot for content shown
+ * in the detail area when no detail is selected. Unlike the `detail` slot,
+ * the placeholder is simply hidden when it doesn't fit next to the master area,
+ * rather than shown as an overlay:
+ *
+ * ```html
+ * <vaadin-master-detail-layout>
+ *   <div>Master content</div>
+ *   <div slot="detail-placeholder">Select an item</div>
+ * </vaadin-master-detail-layout>
+ * ```
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
