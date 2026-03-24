@@ -137,6 +137,18 @@
           this._mdl._setDetail(detail);
         }
 
+        _togglePlaceholder(e) {
+          const existing = this._mdl.querySelector('[slot="detail-placeholder"]');
+          if (e.target.checked) {
+            const placeholder = document.createElement('div');
+            placeholder.setAttribute('slot', 'detail-placeholder');
+            placeholder.textContent = 'Select an item to see the details';
+            this._mdl.appendChild(placeholder);
+          } else if (existing) {
+            existing.remove();
+          }
+        }
+
         closeDetail() {
           this._mdl._setDetail(null);
         }
@@ -245,6 +257,7 @@
                   <vaadin-radio-button value="70%" label="70%"></vaadin-radio-button>
                 </vaadin-radio-group>
                 <br />
+                <vaadin-checkbox @change=${this._togglePlaceholder} label="Detail Placeholder"></vaadin-checkbox>
                 <vaadin-button @click=${this.openStaticDetail}>Open Static Detail</vaadin-button>
                 <vaadin-button @click=${this.openDetail}>Open Nested Test View</vaadin-button>
                 <p>${lorem}</p>

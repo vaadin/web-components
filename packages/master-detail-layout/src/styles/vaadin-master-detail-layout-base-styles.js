@@ -42,25 +42,35 @@ export const masterDetailLayoutStyles = css`
     grid-template-rows: [master-start] var(--_master-column) [detail-start] var(--_detail-column) [detail-end];
   }
 
-  :is(#master, #detail, #outgoing) {
+  :is(#master, #detail, #detail-placeholder, #outgoing) {
     box-sizing: border-box;
+  }
+
+  #detail-placeholder {
+    display: none;
+  }
+
+  :host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
+    display: block;
   }
 
   #master {
     grid-column: master-start / detail-start;
+    grid-row: 1;
   }
 
-  :is(#detail, #outgoing) {
+  :is(#detail, #detail-placeholder, #outgoing) {
     grid-column: detail-start / detail-end;
+    grid-row: 1;
   }
 
   :host([orientation='vertical']) #master {
-    grid-column: auto;
+    grid-column: 1;
     grid-row: master-start / detail-start;
   }
 
-  :host([orientation='vertical']) :is(#detail, #outgoing) {
-    grid-column: auto;
+  :host([orientation='vertical']) :is(#detail, #detail-placeholder, #outgoing) {
+    grid-column: 1;
     grid-row: detail-start / detail-end;
   }
 
@@ -78,8 +88,9 @@ export const masterDetailLayoutStyles = css`
     --_master-column: var(--_master-size) 1fr;
   }
 
-  :host(:not([has-detail])),
-  :host([keep-detail-column-offscreen]) {
+  :host([keep-detail-column-offscreen]),
+  :host([has-detail-placeholder][overlay]),
+  :host(:not([has-detail-placeholder], [has-detail])) {
     --_master-column: var(--_master-size) calc(100% - var(--_master-size));
   }
 
@@ -88,11 +99,13 @@ export const masterDetailLayoutStyles = css`
     --_detail-column: var(--_detail-size) 1fr;
   }
 
+  :host([orientation='horizontal']) #detail-placeholder,
   :host([orientation='horizontal'][has-detail]:not([overlay])) #detail {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
+  :host([orientation='vertical']) #detail-placeholder,
   :host([orientation='vertical'][has-detail]:not([overlay])) #detail {
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
@@ -127,43 +140,42 @@ export const masterDetailLayoutStyles = css`
     --_detail-offscreen: 0 calc(100% + 30px);
   }
 
-  :host([overlay]) :is(#detail, #outgoing) {
+  :host([has-detail][overlay]) :is(#detail, #outgoing) {
     position: absolute;
     z-index: 2;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
     grid-column: none;
+    grid-row: none;
   }
 
-  :host([overlay]) [part~='backdrop'] {
+  :host([has-detail][overlay]) [part~='backdrop'] {
     display: block;
   }
 
-  :host([overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
+  :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
     inset-block: 0;
-    width: var(--_overlay-size, var(--_detail-size, min-content));
     inset-inline-end: 0;
+    width: var(--_overlay-size, var(--_detail-size, min-content));
   }
 
-  :host([overlay][orientation='vertical']) :is(#detail, #outgoing) {
-    grid-column: auto;
-    grid-row: none;
+  :host([has-detail][overlay][orientation='vertical']) :is(#detail, #outgoing) {
     inset-inline: 0;
-    height: var(--_overlay-size, var(--_detail-size, min-content));
     inset-block-end: 0;
+    height: var(--_overlay-size, var(--_detail-size, min-content));
   }
 
-  :host([overlay][overlay-containment='viewport']) :is(#detail, #outgoing),
-  :host([overlay][overlay-containment='viewport']) [part~='backdrop'] {
+  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing),
+  :host([has-detail][overlay][overlay-containment='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 
   @media (forced-colors: active) {
-    :host([overlay]) :is(#detail, #outgoing) {
+    :host([has-detail][overlay]) :is(#detail, #outgoing) {
       outline: 3px solid !important;
     }
 
-    :is(#detail, #outgoing) {
+    :is(#detail, #detail-placeholder, #outgoing) {
       background: Canvas !important;
     }
   }

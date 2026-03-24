@@ -25,25 +25,52 @@ function parseTrackSizes(gridTemplate) {
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
  * overlaid on top of, the master area, depending on configuration and viewport size.
  *
+ * ### Slots
+ *
+ * The component has two main content areas: the master area (default slot)
+ * and the detail area (`detail` slot). When the detail doesn't fit next to
+ * the master, it is shown as an overlay on top of the master area:
+ *
+ * ```html
+ * <vaadin-master-detail-layout>
+ *   <div>Master content</div>
+ *   <div slot="detail">Detail content</div>
+ * </vaadin-master-detail-layout>
+ * ```
+ *
+ * The component also supports a `detail-placeholder` slot for content shown
+ * in the detail area when no detail is selected. Unlike the `detail` slot,
+ * the placeholder is simply hidden when it doesn't fit next to the master area,
+ * rather than shown as an overlay:
+ *
+ * ```html
+ * <vaadin-master-detail-layout>
+ *   <div>Master content</div>
+ *   <div slot="detail-placeholder">Select an item</div>
+ * </vaadin-master-detail-layout>
+ * ```
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name      | Description
- * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the overlay mode
- * `master`       | The master area
- * `detail`       | The detail area
+ * Part name             | Description
+ * ----------------------|----------------------
+ * `backdrop`            | Backdrop covering the master area in the overlay mode
+ * `master`              | The master area
+ * `detail`              | The detail area
+ * `detail-placeholder`  | The detail placeholder area
  *
  * The following state attributes are available for styling:
  *
- * Attribute             | Description
- * ----------------------|----------------------
- * `expand`              | Set to `master`, `detail`, or `both`.
- * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
- * `has-detail`          | Set when the detail content is provided and visible.
- * `overlay`             | Set when columns don't fit and the detail is shown as an overlay.
- * `overlay-containment` | Set to `layout` or `viewport`.
+ * Attribute                  | Description
+ * --------------------------|----------------------
+ * `expand`                  | Set to `master`, `detail`, or `both`.
+ * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
+ * `has-detail`              | Set when the detail content is provided and visible.
+ * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
+ * `overlay`                 | Set when columns don't fit and the detail is shown as an overlay.
+ * `overlay-containment`     | Set to `layout` or `viewport`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -203,6 +230,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       >
         <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
       </div>
+      <div id="detail-placeholder" part="detail-placeholder">
+        <slot name="detail-placeholder" @slotchange="${this.__onSlotChange}"></slot>
+      </div>
     `;
   }
 
@@ -277,19 +307,23 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __computeLayoutState() {
-    const detailContent = this.querySelector('[slot="detail"]');
+    const detailContent = this.querySelector(':scope > [slot="detail"]');
+    const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
+
     const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = detailContent != null && detailContent.checkVisibility();
-    const hasOverflow = hasDetail && this.__checkOverflow();
+    const hasDetailPlaceholder = !!detailPlaceholder;
+    const hasOverflow = (hasDetail || hasDetailPlaceholder) && this.__checkOverflow();
+
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
-    return { hadDetail, hasDetail, hasOverflow, focusTarget };
+    return { hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget };
   }
 
   /**
    * Applies layout state to DOM attributes. Pure writes, no reads.
    * @private
    */
-  __applyLayoutState({ hadDetail, hasDetail, hasOverflow, focusTarget }) {
+  __applyLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget }) {
     // Set keep-detail-column-offscreen when detail first appears with overlay
     // to prevent master width from jumping.
     if (!hadDetail && hasDetail && hasOverflow) {
@@ -298,8 +332,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       this.removeAttribute('keep-detail-column-offscreen');
     }
 
-    this.toggleAttribute('has-detail', hasDetail);
     this.toggleAttribute('overlay', hasOverflow);
+    this.toggleAttribute('has-detail', hasDetail);
+    this.toggleAttribute('has-detail-placeholder', hasDetailPlaceholder);
 
     // Re-render to update ARIA attributes (role, aria-modal, inert)
     // which depend on has-detail and overlay state.
@@ -385,7 +420,18 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const hasDetail = !!currentDetail;
-    const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
+    const hasDetailPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
+    const hasOverflow = this.hasAttribute('overlay');
+
+    let transitionType;
+    if ((hasDetail && element) || (hasDetailPlaceholder && !hasOverflow)) {
+      transitionType = 'replace';
+    } else if (hasDetail) {
+      transitionType = 'remove';
+    } else {
+      transitionType = 'add';
+    }
+
     return this._startTransition(transitionType, () => {
       // Update the DOM
       updateSlot();
