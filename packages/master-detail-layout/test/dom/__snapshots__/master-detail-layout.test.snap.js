@@ -149,7 +149,7 @@ snapshots["vaadin-master-detail-layout shadow default"] =
 `;
 /* end snapshot vaadin-master-detail-layout shadow default */
 
-snapshots["vaadin-master-detail-layout overflow default"] = 
+snapshots["vaadin-master-detail-layout overlay mode default"] = 
 `<vaadin-master-detail-layout
   detail-size="300px"
   expand="both"
@@ -163,9 +163,9 @@ snapshots["vaadin-master-detail-layout overflow default"] =
   </div>
 </vaadin-master-detail-layout>
 `;
-/* end snapshot vaadin-master-detail-layout overflow default */
+/* end snapshot vaadin-master-detail-layout overlay mode default */
 
-snapshots["vaadin-master-detail-layout overflow with detail"] = 
+snapshots["vaadin-master-detail-layout overlay mode with detail"] = 
 `<vaadin-master-detail-layout
   detail-size="300px"
   expand="both"
@@ -185,9 +185,9 @@ snapshots["vaadin-master-detail-layout overflow with detail"] =
   </div>
 </vaadin-master-detail-layout>
 `;
-/* end snapshot vaadin-master-detail-layout overflow with detail */
+/* end snapshot vaadin-master-detail-layout overlay mode with detail */
 
-snapshots["vaadin-master-detail-layout overflow with detail placeholder"] = 
+snapshots["vaadin-master-detail-layout overlay mode with detail placeholder"] = 
 `<vaadin-master-detail-layout
   detail-size="300px"
   expand="both"
@@ -206,5 +206,5 @@ snapshots["vaadin-master-detail-layout overflow with detail placeholder"] =
   </div>
 </vaadin-master-detail-layout>
 `;
-/* end snapshot vaadin-master-detail-layout overflow with detail placeholder */
+/* end snapshot vaadin-master-detail-layout overlay mode with detail placeholder */
 

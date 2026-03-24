@@ -375,7 +375,7 @@ describe('Transitions', () => {
       expect(layout.hasAttribute('transition')).to.be.false;
     });
 
-    it('should use add transition when adding detail and overflow is set', async () => {
+    it('should use add transition when adding detail in overlay mode', async () => {
       layout.style.width = '200px';
       await onceResized(layout);
 
@@ -388,7 +388,7 @@ describe('Transitions', () => {
       expect(layout.hasAttribute('transition')).to.be.false;
     });
 
-    it('should use remove transition when removing detail and overflow is set', async () => {
+    it('should use remove transition when removing detail in overlay mode', async () => {
       const detail = document.createElement('detail-content');
       await layout._setDetail(detail);
 

@@ -66,7 +66,7 @@ describe('vaadin-master-detail-layout', () => {
     });
   });
 
-  describe('overflow', () => {
+  describe('overlay mode', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-master-detail-layout master-size="300px" detail-size="300px" style="width: 400px;">
