@@ -25,7 +25,7 @@ describe('ARIA', () => {
   });
 
   it('should set role="dialog" on detail in overlay mode', () => {
-    expect(layout.hasAttribute('overflow')).to.be.true;
+    expect(layout.hasAttribute('overlay')).to.be.true;
     expect(detail.getAttribute('role')).to.equal('dialog');
   });
 

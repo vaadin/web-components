@@ -288,8 +288,8 @@ describe('Transitions', () => {
       const midValue = parseFloat(midTranslate);
       expect(midValue).to.be.greaterThan(0);
 
-      // Set overflow so replace uses slide (not cross-fade)
-      layout.setAttribute('overflow', '');
+      // Set overlay so replace uses slide (not cross-fade)
+      layout.setAttribute('overlay', '');
 
       // Interrupt with replace — outgoing should start from captured position
       const replaceCallback = sinon.spy();

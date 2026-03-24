@@ -88,12 +88,12 @@ export const masterDetailLayoutStyles = css`
     --_detail-column: var(--_detail-size) 1fr;
   }
 
-  :host([orientation='horizontal'][has-detail]:not([overflow])) #detail {
+  :host([orientation='horizontal'][has-detail]:not([overlay])) #detail {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
-  :host([orientation='vertical'][has-detail]:not([overflow])) #detail {
+  :host([orientation='vertical'][has-detail]:not([overlay])) #detail {
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
@@ -119,15 +119,15 @@ export const masterDetailLayoutStyles = css`
     z-index: 1;
   }
 
-  :host([overflow]) {
+  :host([overlay]) {
     --_detail-offscreen: calc((100% + 30px) * var(--_rtl-multiplier));
   }
 
-  :host([overflow][orientation='vertical']) {
+  :host([overlay][orientation='vertical']) {
     --_detail-offscreen: 0 calc(100% + 30px);
   }
 
-  :host([overflow]) :is(#detail, #outgoing) {
+  :host([overlay]) :is(#detail, #outgoing) {
     position: absolute;
     z-index: 2;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
@@ -135,17 +135,17 @@ export const masterDetailLayoutStyles = css`
     grid-column: none;
   }
 
-  :host([overflow]) [part~='backdrop'] {
+  :host([overlay]) [part~='backdrop'] {
     display: block;
   }
 
-  :host([overflow]:not([orientation='vertical'])) :is(#detail, #outgoing) {
+  :host([overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
     inset-block: 0;
     width: var(--_overlay-size, var(--_detail-size, min-content));
     inset-inline-end: 0;
   }
 
-  :host([overflow][orientation='vertical']) :is(#detail, #outgoing) {
+  :host([overlay][orientation='vertical']) :is(#detail, #outgoing) {
     grid-column: auto;
     grid-row: none;
     inset-inline: 0;
@@ -153,13 +153,13 @@ export const masterDetailLayoutStyles = css`
     inset-block-end: 0;
   }
 
-  :host([overflow][overlay-containment='viewport']) :is(#detail, #outgoing),
-  :host([overflow][overlay-containment='viewport']) [part~='backdrop'] {
+  :host([overlay][overlay-containment='viewport']) :is(#detail, #outgoing),
+  :host([overlay][overlay-containment='viewport']) [part~='backdrop'] {
     position: fixed;
   }
 
   @media (forced-colors: active) {
-    :host([overflow]) :is(#detail, #outgoing) {
+    :host([overlay]) :is(#detail, #outgoing) {
       outline: 3px solid !important;
     }
 
@@ -174,7 +174,7 @@ export const masterDetailLayoutStyles = css`
       --_transition-duration: 200ms;
     }
 
-    :host([overflow]:not([no-animation])) {
+    :host([overlay]:not([no-animation])) {
       --_transition-duration: 300ms;
     }
   }

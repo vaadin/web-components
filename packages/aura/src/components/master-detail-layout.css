@@ -3,7 +3,7 @@ vaadin-master-detail-layout::part(detail) {
   background: var(--aura-surface-color) padding-box;
 }
 
-vaadin-master-detail-layout[overflow]::part(detail) {
+vaadin-master-detail-layout[overlay]::part(detail) {
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   background: var(--aura-surface-color) padding-box;
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
@@ -14,19 +14,19 @@ vaadin-master-detail-layout[overflow]::part(detail) {
     var(--aura-shadow-m);
 }
 
-vaadin-master-detail-layout[overflow][overlay-containment='viewport']::part(detail) {
+vaadin-master-detail-layout[overlay][overlay-containment='viewport']::part(detail) {
   box-shadow: var(--aura-overlay-shadow);
 }
 
 /* TODO could be a built-in variant */
-vaadin-master-detail-layout[theme~='inset-drawer'][overflow]::part(detail),
-vaadin-master-detail-layout[overflow][overlay-containment='viewport']::part(detail) {
+vaadin-master-detail-layout[theme~='inset-drawer'][overlay]::part(detail),
+vaadin-master-detail-layout[overlay][overlay-containment='viewport']::part(detail) {
   margin: calc(var(--aura-app-layout-inset) / 2);
   border-radius: var(--_app-layout-radius);
 }
 
 vaadin-master-detail-layout > vaadin-master-detail-layout,
-vaadin-master-detail-layout:not([overflow])::part(detail) {
+vaadin-master-detail-layout:not([overlay])::part(detail) {
   border-start-end-radius: var(--_app-layout-radius);
   border-end-end-radius: var(--_app-layout-radius);
 }

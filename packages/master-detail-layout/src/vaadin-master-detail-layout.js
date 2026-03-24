@@ -42,7 +42,7 @@ function parseTrackSizes(gridTemplate) {
  * `expand`              | Set to `master`, `detail`, or `both`.
  * `orientation`         | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`          | Set when the detail content is provided and visible.
- * `overflow`            | Set when columns don't fit and the detail is shown as an overlay.
+ * `overlay`             | Set when columns don't fit and the detail is shown as an overlay.
  * `overlay-containment` | Set to `layout` or `viewport`.
  *
  * The following custom CSS properties are available for styling:
@@ -182,7 +182,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @protected */
   render() {
-    const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overflow');
+    const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overlay');
     const isViewport = isOverlay && this.overlayContainment === 'viewport';
     const isLayoutContained = isOverlay && !isViewport;
 
@@ -290,7 +290,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __applyLayoutState({ hadDetail, hasDetail, hasOverflow, focusTarget }) {
-    // Set keep-detail-column-offscreen when detail first appears with overflow
+    // Set keep-detail-column-offscreen when detail first appears with overlay
     // to prevent master width from jumping.
     if (!hadDetail && hasDetail && hasOverflow) {
       this.setAttribute('keep-detail-column-offscreen', '');
@@ -299,10 +299,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     this.toggleAttribute('has-detail', hasDetail);
-    this.toggleAttribute('overflow', hasOverflow);
+    this.toggleAttribute('overlay', hasOverflow);
 
     // Re-render to update ARIA attributes (role, aria-modal, inert)
-    // which depend on has-detail and overflow state.
+    // which depend on has-detail and overlay state.
     this.requestUpdate();
 
     if (focusTarget) {
@@ -434,7 +434,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     const opts = this.__getAnimationParams();
     opts.interrupted = interrupted;
-    opts.overlay = this.hasAttribute('overflow');
+    opts.overlay = this.hasAttribute('overlay');
 
     return this.__animateTransition(transitionType, opts, updateCallback);
   }
