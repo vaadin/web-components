@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nav → Section → List → Detail</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.badgeComponent = true;
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
+    <link rel="stylesheet" href="./common.css" />
+    <style>
+      /* App nav (level 1) */
+      .app-nav {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      .app-nav h4 {
+        margin: 0 0 16px;
+      }
+
+      /* Nav list shared styles */
+      .nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-list li {
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 0.9rem;
+      }
+
+      .nav-list li[aria-current] {
+        background: var(--vaadin-background-container);
+        font-weight: 600;
+      }
+
+      /* Section nav (level 2) */
+      .section-nav {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      .section-nav h4 {
+        margin: 0 0 16px;
+      }
+
+      /* Pane header (levels 3 & 4) */
+      .pane-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--vaadin-border-color-secondary);
+      }
+
+      .pane-header h4 {
+        margin: 0;
+        flex: 1;
+      }
+
+      .back-btn {
+        cursor: pointer;
+        background: none;
+        border: 1px solid var(--vaadin-border-color-secondary);
+        border-radius: 6px;
+        padding: 4px 12px;
+        font-size: 0.85rem;
+      }
+
+      /* User list (level 3) */
+      .user-list-pane {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .user-list-pane vaadin-grid {
+        flex: 1;
+        min-height: 0;
+        border: none;
+        border-radius: 0;
+      }
+
+      .user-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 4px 0;
+        cursor: pointer;
+      }
+
+      .user-cell .name {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .user-cell .email {
+        font-size: 0.8rem;
+        color: var(--vaadin-text-color-secondary);
+      }
+
+      /* User detail (level 4) */
+      .user-detail-master {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .user-detail-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .user-detail-header h4 {
+        margin: 0;
+        flex: 1;
+      }
+
+      .user-profile {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-size: 0.9rem;
+      }
+
+      .user-profile dt {
+        font-size: 0.8rem;
+        color: var(--vaadin-text-color-secondary);
+        margin: 0;
+      }
+
+      .user-profile dd {
+        margin: 2px 0 0;
+      }
+
+      .user-detail-form {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Level 1: App nav -->
+    <vaadin-master-detail-layout
+      id="appLayout"
+      master-size="180px"
+      detail-size="30rem"
+      expand="detail"
+      overlay-size="100%"
+    >
+      <div class="app-nav">
+        <h4>MDL</h4>
+        <ul class="nav-list" id="appNav">
+          <li data-key="home">Home</li>
+          <li data-key="manage" aria-current="page">Manage</li>
+        </ul>
+      </div>
+
+      <!-- Level 2: Section nav -->
+      <vaadin-master-detail-layout
+        id="sectionLayout"
+        master-size="180px"
+        detail-size="30rem"
+        expand="detail"
+        overlay-size="100%"
+      >
+        <div class="section-nav">
+          <h4>Manage</h4>
+          <ul class="nav-list" id="sectionNav">
+            <li data-key="users" aria-current="page">Users <vaadin-badge number="5"></vaadin-badge></li>
+          </ul>
+        </div>
+
+        <!-- Level 3: User list -->
+        <vaadin-master-detail-layout
+          id="listLayout"
+          master-size="300px"
+          detail-size="25rem"
+          expand="detail"
+          overlay-size="100%"
+        >
+          <div class="user-list-pane">
+            <div class="pane-header">
+              <button class="back-btn" id="listBackBtn">&larr;</button>
+              <h4>Users</h4>
+            </div>
+            <vaadin-grid id="userGrid" theme="no-border no-row-borders"></vaadin-grid>
+          </div>
+
+          <!-- Level 4: User detail -->
+          <vaadin-master-detail-layout
+            id="detailLayout"
+            orientation="vertical"
+            master-size="300px"
+            expand="detail"
+            overlay-size="100%"
+          >
+            <div class="user-detail-master">
+              <div class="user-detail-header">
+                <button class="back-btn" id="detailBackBtn">&larr;</button>
+                <h4 id="detailUserName"></h4>
+                <vaadin-button id="editBtn" theme="tertiary">Edit</vaadin-button>
+              </div>
+              <dl class="user-profile" id="userProfile"></dl>
+            </div>
+          </vaadin-master-detail-layout>
+        </vaadin-master-detail-layout>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/email-field';
+      import '@vaadin/grid/all-imports.js';
+      import '@vaadin/master-detail-layout';
+      import '@vaadin/text-field';
+
+      const users = [
+        { name: 'Scot Schmeler', email: 'aleen.wiza@hotmail.com' },
+        { name: 'See Gulgowski PhD', email: 'booker.kunze@gmail.com' },
+        { name: 'Cherri Bernier', email: 'camellia.lang@gmail.com' },
+        { name: 'Bryant Schaden', email: 'eleanora.franecki@hotmail.com' },
+        { name: 'Alvin Ratke', email: 'johanne.cormier@gmail.com' },
+      ];
+
+      // Elements
+      const appLayout = document.getElementById('appLayout');
+      const sectionLayout = document.getElementById('sectionLayout');
+      const listLayout = document.getElementById('listLayout');
+      const detailLayout = document.getElementById('detailLayout');
+      const userGrid = document.getElementById('userGrid');
+      const detailUserName = document.getElementById('detailUserName');
+
+      // User grid setup
+      userGrid.items = users;
+
+      const column = document.createElement('vaadin-grid-column');
+      column.flexGrow = 1;
+      column.renderer = (root, _column, model) => {
+        const user = model.item;
+        root.innerHTML = `
+          <div class="user-cell">
+            <span class="name">${user.name}</span>
+            <span class="email">${user.email}</span>
+          </div>
+        `;
+      };
+      userGrid.appendChild(column);
+
+      function setNavCurrent(containerId, activeKey) {
+        document.querySelectorAll(`#${containerId} > li`).forEach((el) => {
+          if (el.dataset.key === activeKey) {
+            el.setAttribute('aria-current', 'page');
+          } else {
+            el.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      // Initialize: show pre-selected details
+      appLayout._setDetail(sectionLayout, true);
+      sectionLayout._setDetail(listLayout, true);
+
+      // App nav clicks
+      document.getElementById('appNav').addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+
+        setNavCurrent('appNav', li.dataset.key);
+
+        if (li.dataset.key === 'manage') {
+          appLayout._setDetail(sectionLayout);
+          setNavCurrent('sectionNav', 'users');
+        } else {
+          closeUserDetail();
+          setNavCurrent('sectionNav', null);
+          sectionLayout._setDetail(null);
+          appLayout._setDetail(null);
+        }
+      });
+
+      // Section nav clicks
+      document.getElementById('sectionNav').addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li) return;
+
+        setNavCurrent('sectionNav', li.dataset.key);
+
+        if (li.dataset.key === 'users') {
+          sectionLayout._setDetail(listLayout);
+        }
+      });
+
+      // List back button → close list, go back to section level
+      document.getElementById('listBackBtn').addEventListener('click', () => {
+        closeUserDetail();
+        setNavCurrent('sectionNav', null);
+        sectionLayout._setDetail(null);
+      });
+
+      const userProfile = document.getElementById('userProfile');
+      let selectedUser = null;
+
+      // Show read-only user profile in level 4 master
+      function showUserProfile(user) {
+        userProfile.innerHTML = `
+          <div><dt>Name</dt><dd>${user.name}</dd></div>
+          <div><dt>Email</dt><dd>${user.email}</dd></div>
+        `;
+      }
+
+      // Create editable form for level 4 detail
+      function createUserForm(user) {
+        const form = document.createElement('div');
+        form.classList.add('user-detail-form');
+        form.innerHTML = `
+          <vaadin-text-field label="Name" value="${user.name}"></vaadin-text-field>
+          <vaadin-email-field label="Email" value="${user.email}"></vaadin-email-field>
+          <vaadin-button theme="primary">Save</vaadin-button>
+        `;
+        form.querySelector('vaadin-button').addEventListener('click', () => {
+          detailLayout._setDetail(null);
+        });
+        return form;
+      }
+
+      // Grid row click → show user detail (level 4 master with profile)
+      userGrid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        if (!item) return;
+        selectedUser = item;
+        userGrid.selectedItems = [item];
+        detailUserName.textContent = item.name;
+        showUserProfile(item);
+        detailLayout._setDetail(null);
+        listLayout._setDetail(detailLayout);
+      });
+
+      // Edit button → open form in level 4 detail
+      document.getElementById('editBtn').addEventListener('click', () => {
+        if (selectedUser) {
+          detailLayout._setDetail(createUserForm(selectedUser));
+        }
+      });
+
+      // Detail back button → close entire user detail, go back to list
+      document.getElementById('detailBackBtn').addEventListener('click', closeUserDetail);
+
+      function closeUserDetail() {
+        detailLayout._setDetail(null);
+        listLayout._setDetail(null);
+        userGrid.activeItem = null;
+        userGrid.selectedItems = [];
+        selectedUser = null;
+      }
+
+      // Backdrop and escape handlers
+      function closeApp() {
+        closeUserDetail();
+        setNavCurrent('sectionNav', null);
+        setNavCurrent('appNav', null);
+        sectionLayout._setDetail(null);
+        appLayout._setDetail(null);
+      }
+      appLayout.addEventListener('backdrop-click', closeApp);
+      appLayout.addEventListener('detail-escape-press', closeApp);
+
+      function closeSection() {
+        closeUserDetail();
+        setNavCurrent('sectionNav', null);
+        sectionLayout._setDetail(null);
+      }
+      sectionLayout.addEventListener('backdrop-click', closeSection);
+      sectionLayout.addEventListener('detail-escape-press', closeSection);
+
+      listLayout.addEventListener('backdrop-click', closeUserDetail);
+      listLayout.addEventListener('detail-escape-press', closeUserDetail);
+
+      function closeEditForm() {
+        detailLayout._setDetail(null);
+      }
+      detailLayout.addEventListener('backdrop-click', closeEditForm);
+      detailLayout.addEventListener('detail-escape-press', closeEditForm);
+    </script>
+  </body>
+</html>
