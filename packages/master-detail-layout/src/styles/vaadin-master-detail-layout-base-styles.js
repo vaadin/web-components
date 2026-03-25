@@ -74,11 +74,12 @@ export const masterDetailLayoutStyles = css`
     grid-row: detail-start / detail-end;
   }
 
-  [part~='backdrop'] {
+  #backdrop {
     position: absolute;
     inset: 0;
     z-index: 1;
-    display: none;
+    opacity: 0;
+    pointer-events: none;
     background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
     forced-color-adjust: none;
   }
@@ -141,8 +142,9 @@ export const masterDetailLayoutStyles = css`
     grid-row: none;
   }
 
-  :host([has-detail][overlay]) [part~='backdrop'] {
-    display: block;
+  :host([has-detail][overlay]) #backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
@@ -157,8 +159,7 @@ export const masterDetailLayoutStyles = css`
     height: var(--_overlay-size, var(--_detail-size, min-content));
   }
 
-  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing),
-  :host([has-detail][overlay][overlay-containment='viewport']) [part~='backdrop'] {
+  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing, #backdrop) {
     position: fixed;
   }
 

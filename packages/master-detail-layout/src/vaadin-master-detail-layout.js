@@ -214,7 +214,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const isLayoutContained = isOverlay && !isViewport;
 
     return html`
-      <div part="backdrop" @click="${this.__onBackdropClick}"></div>
+      <div id="backdrop" part="backdrop" @click="${this.__onBackdropClick}"></div>
       <div id="master" part="master" ?inert="${isLayoutContained}">
         <slot @slotchange="${this.__onSlotChange}"></slot>
       </div>
@@ -541,6 +541,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         }
       } else {
         this.__slide(this.$.detail, true, opts).then(() => onFinish());
+      }
+
+      // Fade backdrop in/out for overlay add/remove (not replace — backdrop stays visible)
+      if (opts.overlay && transitionType !== 'replace') {
+        const fadeIn = transitionType !== 'remove';
+        this.__animate(this.$.backdrop, [{ opacity: fadeIn ? 0 : 1 }, { opacity: fadeIn ? 1 : 0 }], {
+          duration: opts.duration,
+          easing: 'linear',
+        });
       }
     });
   }
