@@ -78,13 +78,8 @@ describe('vaadin-master-detail-layout', () => {
   });
 
   describe('expand', () => {
-    it('should be set to both by default', () => {
-      expect(layout.expand).to.equal('both');
-    });
-
-    it('should reflect expand property to attribute', () => {
-      layout.expand = 'master';
-      expect(layout.getAttribute('expand')).to.equal('master');
+    it('should be set to master by default', () => {
+      expect(layout.expand).to.equal('master');
     });
   });
 
