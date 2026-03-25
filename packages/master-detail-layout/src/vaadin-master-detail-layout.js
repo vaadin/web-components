@@ -175,11 +175,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       /**
        * Controls which column(s) expand to fill available space.
        * Possible values: `'master'`, `'detail'`, `'both'`.
-       * Defaults to `'both'`.
+       * Defaults to `'master'`.
        */
       expand: {
         type: String,
-        value: 'both',
+        value: 'master',
         reflectToAttribute: true,
         sync: true,
       },

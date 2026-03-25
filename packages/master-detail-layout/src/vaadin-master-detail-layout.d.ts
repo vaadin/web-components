@@ -132,7 +132,7 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   /**
    * Controls which column(s) expand to fill available space.
    * Possible values: `'master'`, `'detail'`, `'both'`.
-   * Defaults to `'both'`.
+   * Defaults to `'master'`.
    */
   expand: 'master' | 'detail' | 'both';
 

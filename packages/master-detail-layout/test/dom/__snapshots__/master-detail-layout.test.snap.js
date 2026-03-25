@@ -3,7 +3,7 @@ export const snapshots = {};
 
 snapshots["vaadin-master-detail-layout host default"] = 
 `<vaadin-master-detail-layout
-  expand="both"
+  expand="master"
   orientation="horizontal"
   overlay-containment="layout"
 >
@@ -22,7 +22,7 @@ snapshots["vaadin-master-detail-layout host default"] =
 
 snapshots["vaadin-master-detail-layout host masterSize"] = 
 `<vaadin-master-detail-layout
-  expand="both"
+  expand="master"
   orientation="horizontal"
   overlay-containment="layout"
   style="--_master-size: 300px;"
@@ -42,7 +42,7 @@ snapshots["vaadin-master-detail-layout host masterSize"] =
 
 snapshots["vaadin-master-detail-layout host detailSize"] = 
 `<vaadin-master-detail-layout
-  expand="both"
+  expand="master"
   orientation="horizontal"
   overlay-containment="layout"
   style="--_detail-size: 400px;"
@@ -62,7 +62,7 @@ snapshots["vaadin-master-detail-layout host detailSize"] =
 
 snapshots["vaadin-master-detail-layout host masterSize and detailSize"] = 
 `<vaadin-master-detail-layout
-  expand="both"
+  expand="master"
   orientation="horizontal"
   overlay-containment="layout"
   style="--_master-size: 300px; --_detail-size: 400px;"
@@ -82,7 +82,7 @@ snapshots["vaadin-master-detail-layout host masterSize and detailSize"] =
 
 snapshots["vaadin-master-detail-layout host no detail"] = 
 `<vaadin-master-detail-layout
-  expand="both"
+  expand="master"
   has-detail-placeholder=""
   orientation="horizontal"
   overlay-containment="layout"
@@ -99,7 +99,7 @@ snapshots["vaadin-master-detail-layout host no detail"] =
 
 snapshots["vaadin-master-detail-layout host no detail placeholder"] = 
 `<vaadin-master-detail-layout
-  expand="both"
+  expand="master"
   has-detail=""
   orientation="horizontal"
   overlay-containment="layout"
@@ -152,7 +152,7 @@ snapshots["vaadin-master-detail-layout shadow default"] =
 snapshots["vaadin-master-detail-layout overlay mode default"] = 
 `<vaadin-master-detail-layout
   detail-size="300px"
-  expand="both"
+  expand="master"
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
@@ -168,7 +168,7 @@ snapshots["vaadin-master-detail-layout overlay mode default"] =
 snapshots["vaadin-master-detail-layout overlay mode with detail"] = 
 `<vaadin-master-detail-layout
   detail-size="300px"
-  expand="both"
+  expand="master"
   has-detail=""
   keep-detail-column-offscreen=""
   master-size="300px"
@@ -190,7 +190,7 @@ snapshots["vaadin-master-detail-layout overlay mode with detail"] =
 snapshots["vaadin-master-detail-layout overlay mode with detail placeholder"] = 
 `<vaadin-master-detail-layout
   detail-size="300px"
-  expand="both"
+  expand="master"
   has-detail-placeholder=""
   master-size="300px"
   orientation="horizontal"
