@@ -58,6 +58,18 @@ describe('master-detail-layout', () => {
             await visualDiff(div, `${dir}-split-default`);
           });
 
+          it('expand both', async () => {
+            mdl.expand = 'both';
+            await onceResized(mdl);
+            await visualDiff(div, `${dir}-split-expand-both`);
+          });
+
+          it('expand detail', async () => {
+            mdl.expand = 'detail';
+            await onceResized(mdl);
+            await visualDiff(div, `${dir}-split-expand-detail`);
+          });
+
           it('dark', async () => {
             document.documentElement.style.setProperty('color-scheme', 'dark');
             await visualDiff(div, `${dir}-split-dark`);
@@ -80,6 +92,12 @@ describe('master-detail-layout', () => {
             mdl.overlayContainment = 'viewport';
             await onceResized(mdl);
             await visualDiff(document.body, `${dir}-overlay-viewport`);
+          });
+
+          it('overlay size', async () => {
+            mdl.overlaySize = '100%';
+            await onceResized(mdl);
+            await visualDiff(div, `${dir}-overlay-size`);
           });
 
           it('dark', async () => {
@@ -107,7 +125,6 @@ describe('master-detail-layout', () => {
     });
 
     it('default', async () => {
-      div.style.width = '800px';
       await onceResized(mdl);
       await visualDiff(div, 'detail-placeholder');
     });
@@ -116,6 +133,18 @@ describe('master-detail-layout', () => {
       div.style.width = '400px';
       await onceResized(mdl);
       await visualDiff(div, 'detail-placeholder-overflow');
+    });
+
+    it('expand both', async () => {
+      mdl.expand = 'both';
+      await onceResized(mdl);
+      await visualDiff(div, `detail-placeholder-expand-both`);
+    });
+
+    it('expand detail', async () => {
+      mdl.expand = 'detail';
+      await onceResized(mdl);
+      await visualDiff(div, `detail-placeholder-expand-detail`);
     });
   });
 });
