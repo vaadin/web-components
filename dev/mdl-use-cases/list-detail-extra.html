@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List → Detail → Extra</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+    </script>
+    <link rel="stylesheet" href="./common.css" />
+    <style>
+      .detail-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: auto;
+      }
+
+      .detail-content .detail-body {
+        flex: initial;
+      }
+
+      .extra-pane {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .extra-body {
+        flex: 1;
+        padding: 16px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Outer MDL: List | Inner MDL -->
+    <vaadin-master-detail-layout
+      id="outerLayout"
+      master-size="300px"
+      detail-size="500px"
+      expand="detail"
+      overlay-size="100%"
+    >
+      <div class="master-pane">
+        <h3>Products</h3>
+        <vaadin-grid id="productGrid" theme="no-border no-row-borders"></vaadin-grid>
+      </div>
+      <div class="detail-placeholder" slot="detail-placeholder">Select a product</div>
+
+      <!-- Inner MDL: Detail | Extra (fixed) -->
+      <vaadin-master-detail-layout
+        id="innerLayout"
+        master-size="300px"
+        detail-size="200px"
+        expand="master"
+        overlay-size="100%"
+      >
+        <div class="detail-content" id="detailPane">
+          <div class="pane-header">
+            <button class="back-btn" id="backBtn">&larr;</button>
+            <h3 id="detailTitle"></h3>
+          </div>
+          <div class="detail-body" id="detailBody"></div>
+          <div style="padding: 0 16px 16px">
+            <vaadin-button id="specsBtn" theme="tertiary">Detailed specifications &rarr;</vaadin-button>
+          </div>
+        </div>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/grid/all-imports.js';
+      import '@vaadin/master-detail-layout';
+
+      const products = [
+        {
+          name: 'Standing Desk',
+          price: '$549',
+          category: 'Furniture',
+          sku: 'DESK-ERG-001',
+          weight: '32 kg',
+          dims: '160 × 80 × 75 cm',
+          description:
+            '<p>Height-adjustable standing desk with dual-motor lift system. Memory presets for up to 4 positions. Anti-collision technology and cable management tray included.</p><p>Bamboo desktop with rounded edges and built-in wireless charging pad.</p>',
+        },
+        {
+          name: 'Keyboard',
+          price: '$179',
+          category: 'Peripherals',
+          sku: 'KB-MECH-042',
+          weight: '0.9 kg',
+          dims: '35 × 13 × 4 cm',
+          description:
+            '<p>Hot-swappable mechanical keyboard with Cherry MX Brown switches. Per-key RGB backlighting with 16.8 million colors.</p><p>Aircraft-grade aluminum frame with PBT double-shot keycaps. USB-C and Bluetooth 5.2 connectivity.</p>',
+        },
+        {
+          name: 'Monitor',
+          price: '$899',
+          category: 'Displays',
+          sku: 'MON-UW4K-007',
+          weight: '8.5 kg',
+          dims: '90 × 40 × 55 cm',
+          description:
+            '<p>34-inch curved ultrawide monitor with 5120 × 2160 resolution. Nano-IPS panel with 98% DCI-P3 color coverage.</p><p>Built-in KVM switch, USB-C hub with 90W power delivery, and adjustable ergonomic stand.</p>',
+        },
+        {
+          name: 'Headphones',
+          price: '$349',
+          category: 'Audio',
+          sku: 'HP-ANC-015',
+          weight: '0.25 kg',
+          dims: '18 × 17 × 8 cm',
+          description:
+            '<p>Over-ear headphones with adaptive noise cancellation and spatial audio. 30-hour battery life with quick charge — 5 minutes for 3 hours of playback.</p><p>Multi-point Bluetooth for connecting two devices simultaneously. Foldable design with premium carrying case.</p>',
+        },
+        {
+          name: 'Webcam Pro',
+          price: '$199',
+          category: 'Peripherals',
+          sku: 'CAM-PRO-023',
+          weight: '0.15 kg',
+          dims: '10 × 4 × 4 cm',
+          description:
+            '<p>4K webcam with auto-framing and background blur. Sony STARVIS sensor for excellent low-light performance.</p><p>Dual omnidirectional microphones with noise reduction. Universal mount for monitors and tripods.</p>',
+        },
+      ];
+
+      const outerLayout = document.getElementById('outerLayout');
+      const innerLayout = document.getElementById('innerLayout');
+      const productGrid = document.getElementById('productGrid');
+      const detailTitle = document.getElementById('detailTitle');
+      const detailBody = document.getElementById('detailBody');
+
+      // Grid setup
+      productGrid.items = products;
+
+      const column = document.createElement('vaadin-grid-column');
+      column.flexGrow = 1;
+      column.renderer = (root, _column, model) => {
+        const product = model.item;
+        root.innerHTML = `
+          <div class="grid-cell">
+            <span class="primary">${product.name}</span>
+            <span class="secondary">${product.price}</span>
+          </div>
+        `;
+      };
+      productGrid.appendChild(column);
+
+      let selectedProduct = null;
+
+      // Create extra pane for a product
+      function createExtraPane(product) {
+        const el = document.createElement('div');
+        el.classList.add('extra-pane');
+        el.innerHTML = `
+          <div class="pane-header">
+            <button class="back-btn" id="extraBackBtn">&larr;</button>
+            <h3>Specs</h3>
+          </div>
+          <div class="extra-body">
+            <dl class="props-list">
+              <div><dt>Category</dt><dd>${product.category}</dd></div>
+              <div><dt>SKU</dt><dd>${product.sku}</dd></div>
+              <div><dt>Price</dt><dd>${product.price}</dd></div>
+              <div><dt>Weight</dt><dd>${product.weight}</dd></div>
+              <div><dt>Dimensions</dt><dd>${product.dims}</dd></div>
+            </dl>
+          </div>
+        `;
+        el.querySelector('#extraBackBtn').addEventListener('click', () => {
+          innerLayout._setDetail(null);
+        });
+        return el;
+      }
+
+      // Grid selection → show detail (without extra)
+      productGrid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        if (!item) return;
+        selectedProduct = item;
+        productGrid.selectedItems = [item];
+
+        detailTitle.textContent = item.name;
+        detailBody.innerHTML = item.description;
+
+        innerLayout._setDetail(null);
+        outerLayout._setDetail(innerLayout);
+      });
+
+      // Specs button → open extra pane
+      document.getElementById('specsBtn').addEventListener('click', () => {
+        if (selectedProduct) {
+          innerLayout._setDetail(createExtraPane(selectedProduct));
+        }
+      });
+
+      // Back button → close detail entirely
+      document.getElementById('backBtn').addEventListener('click', closeDetail);
+
+      function closeDetail() {
+        innerLayout._setDetail(null);
+        outerLayout._setDetail(null);
+        productGrid.activeItem = null;
+        productGrid.selectedItems = [];
+        selectedProduct = null;
+      }
+
+      // Backdrop and escape handlers
+      outerLayout.addEventListener('backdrop-click', closeDetail);
+      outerLayout.addEventListener('detail-escape-press', closeDetail);
+
+      innerLayout.addEventListener('backdrop-click', () => innerLayout._setDetail(null));
+      innerLayout.addEventListener('detail-escape-press', () => innerLayout._setDetail(null));
+    </script>
+  </body>
+</html>

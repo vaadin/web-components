@@ -12,27 +12,6 @@
     </script>
     <link rel="stylesheet" href="./common.css" />
     <style>
-      /* Folder pane */
-      .folder-pane {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-
-      .folder-pane h2 {
-        margin: 0;
-        padding: 16px;
-        font-size: 1.1rem;
-        border-bottom: 1px solid var(--vaadin-border-color-secondary);
-      }
-
-      .folder-pane vaadin-grid {
-        flex: 1;
-        min-height: 0;
-        border: none;
-        border-radius: 0;
-      }
-
       .folder-cell {
         display: flex;
         align-items: center;
@@ -48,28 +27,8 @@
         font-size: 0.8rem;
       }
 
-      /* Master pane header */
-      .master-pane-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 16px;
-        border-bottom: 1px solid var(--vaadin-border-color-secondary);
-      }
-
-      .master-pane-header h2 {
-        margin: 0;
-        font-size: 1.1rem;
-      }
-
-      .back-btn {
+      .master-pane .back-btn {
         display: none;
-        cursor: pointer;
-        background: none;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        padding: 4px 12px;
-        font-size: 0.85rem;
       }
 
       #outerLayout[overflow] .back-btn {
@@ -86,7 +45,7 @@
       overlay-size="100%"
       no-animation
     >
-      <div class="folder-pane">
+      <div class="master-pane">
         <h2>Mail</h2>
         <vaadin-grid id="folderGrid" theme="no-border no-row-borders"></vaadin-grid>
       </div>
@@ -100,7 +59,7 @@
         no-animation
       >
         <div class="master-pane">
-          <div class="master-pane-header">
+          <div class="pane-header">
             <button class="back-btn" id="backBtn">&larr; Back</button>
             <h2 id="folderTitle">Inbox</h2>
           </div>
@@ -203,8 +162,8 @@
         const detail = document.createElement('div');
         detail.classList.add('detail-pane');
         detail.innerHTML = `
-          <div class="detail-header">
-            <button class="close-btn" id="closeBtn">Close</button>
+          <div class="pane-header">
+            <button class="back-btn" id="closeBtn">Close</button>
             <div class="detail-subject">${email.subject}</div>
           </div>
           <div class="detail-meta">

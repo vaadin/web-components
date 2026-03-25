@@ -6,10 +6,21 @@ body {
   font-family: system-ui, sans-serif;
 }
 
+/* Reusable pane with a grid filling the remaining space */
 .master-pane {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.master-pane > :is(h2, h3, h4) {
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
+}
+
+.master-pane > h2 {
+  font-size: 1.1rem;
 }
 
 .master-pane vaadin-grid {
@@ -19,29 +30,40 @@ body {
   border-radius: 0;
 }
 
+/* Pane header with back/close button + heading */
+.pane-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--vaadin-border-color-secondary);
+  flex-shrink: 0;
+}
+
+.pane-header :is(h2, h3, h4) {
+  margin: 0;
+  flex: 1;
+}
+
+.pane-header h2 {
+  font-size: 1.1rem;
+}
+
+/* Back / close button used in pane headers */
+.back-btn {
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--vaadin-border-color-secondary);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+}
+
 .detail-pane {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: auto;
-}
-
-.detail-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-bottom: 1px solid var(--vaadin-border-color-secondary);
-  flex-shrink: 0;
-}
-
-.detail-header .close-btn {
-  cursor: pointer;
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-size: 0.85rem;
 }
 
 .detail-subject {
@@ -61,9 +83,11 @@ body {
 }
 
 .detail-body {
-  padding: 16px 24px;
-  line-height: 1.7;
-  font-size: 0.95rem;
+  flex: 1;
+  padding: 16px;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  overflow: auto;
 }
 
 .detail-body p {
@@ -78,6 +102,45 @@ body {
   color: var(--vaadin-text-color-secondary);
 }
 
+/* Grid cell: flex column with primary + secondary text */
+.grid-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.grid-cell .primary {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.grid-cell .secondary {
+  font-size: 0.8rem;
+  color: var(--vaadin-text-color-secondary);
+}
+
+/* Definition list for key-value pairs */
+.props-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.props-list dt {
+  font-size: 0.8rem;
+  color: var(--vaadin-text-color-secondary);
+  margin: 0;
+}
+
+.props-list dd {
+  margin: 2px 0 0;
+}
+
+/* Email-specific cell (wider padding) */
 .email-cell {
   display: flex;
   flex-direction: column;
