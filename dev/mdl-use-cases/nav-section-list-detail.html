@@ -57,61 +57,6 @@
         padding: 8px;
       }
 
-      /* Pane header (levels 3 & 4) */
-      .pane-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--vaadin-border-color-secondary);
-      }
-
-      .pane-header h4 {
-        margin: 0;
-        flex: 1;
-      }
-
-      .back-btn {
-        cursor: pointer;
-        background: none;
-        border: 1px solid var(--vaadin-border-color-secondary);
-        border-radius: 6px;
-        padding: 4px 12px;
-        font-size: 0.85rem;
-      }
-
-      /* User list (level 3) */
-      .user-list-pane {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-
-      .user-list-pane vaadin-grid {
-        flex: 1;
-        min-height: 0;
-        border: none;
-        border-radius: 0;
-      }
-
-      .user-cell {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        padding: 4px 0;
-        cursor: pointer;
-      }
-
-      .user-cell .name {
-        font-weight: 600;
-        font-size: 0.9rem;
-      }
-
-      .user-cell .email {
-        font-size: 0.8rem;
-        color: var(--vaadin-text-color-secondary);
-      }
-
       /* User detail (level 4) */
       .user-detail-master {
         padding: 12px 16px;
@@ -129,23 +74,6 @@
       .user-detail-header h4 {
         margin: 0;
         flex: 1;
-      }
-
-      .user-profile {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        font-size: 0.9rem;
-      }
-
-      .user-profile dt {
-        font-size: 0.8rem;
-        color: var(--vaadin-text-color-secondary);
-        margin: 0;
-      }
-
-      .user-profile dd {
-        margin: 2px 0 0;
       }
 
       .user-detail-form {
@@ -202,7 +130,7 @@
           expand="detail"
           overlay-size="100%"
         >
-          <div class="user-list-pane">
+          <div class="master-pane">
             <div class="pane-header">
               <button class="back-btn" id="listBackBtn">&larr;</button>
               <h4>Users</h4>
@@ -224,7 +152,7 @@
                 <h4 id="detailUserName"></h4>
                 <vaadin-button id="editBtn" theme="tertiary">Edit</vaadin-button>
               </div>
-              <dl class="user-profile" id="userProfile"></dl>
+              <dl class="props-list" id="userProfile"></dl>
             </div>
           </vaadin-master-detail-layout>
         </vaadin-master-detail-layout>
@@ -262,9 +190,9 @@
       column.renderer = (root, _column, model) => {
         const user = model.item;
         root.innerHTML = `
-          <div class="user-cell">
-            <span class="name">${user.name}</span>
-            <span class="email">${user.email}</span>
+          <div class="grid-cell">
+            <span class="primary">${user.name}</span>
+            <span class="secondary">${user.email}</span>
           </div>
         `;
       };

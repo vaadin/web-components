@@ -11,14 +11,6 @@
       window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
     </script>
     <link rel="stylesheet" href="./common.css" />
-    <style>
-      .master-pane h2 {
-        margin: 0;
-        padding: 16px;
-        font-size: 1.1rem;
-        border-bottom: 1px solid var(--vaadin-border-color-secondary);
-      }
-    </style>
   </head>
   <body>
     <vaadin-master-detail-layout
@@ -80,8 +72,8 @@
         const detail = document.createElement('div');
         detail.classList.add('detail-pane');
         detail.innerHTML = `
-          <div class="detail-header">
-            <button class="close-btn" id="closeBtn">Close</button>
+          <div class="pane-header">
+            <button class="back-btn" id="closeBtn">Close</button>
             <div class="detail-subject">${email.subject}</div>
           </div>
           <div class="detail-meta">

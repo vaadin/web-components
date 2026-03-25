@@ -57,7 +57,7 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * The following state attributes are available for styling:
  *
- * Attribute                  | Description
+ * Attribute                 | Description
  * --------------------------|----------------------
  * `expand`                  | Set to `master`, `detail`, or `both`.
  * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
