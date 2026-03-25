@@ -542,6 +542,16 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       } else {
         this.__slide(this.$.detail, true, opts).then(() => onFinish());
       }
+
+      // Fade backdrop in/out for overlay add/remove (not replace — backdrop stays visible)
+      if (opts.overlay && transitionType !== 'replace') {
+        const fadeIn = transitionType !== 'remove';
+        this.__animate(
+          this.shadowRoot.querySelector('[part~="backdrop"]'),
+          [{ opacity: fadeIn ? 0 : 1 }, { opacity: fadeIn ? 1 : 0 }],
+          { duration: opts.duration, easing: 'linear' },
+        );
+      }
     });
   }
 

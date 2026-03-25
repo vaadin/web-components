@@ -78,7 +78,8 @@ export const masterDetailLayoutStyles = css`
     position: absolute;
     inset: 0;
     z-index: 1;
-    display: none;
+    opacity: 0;
+    pointer-events: none;
     background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
     forced-color-adjust: none;
   }
@@ -142,7 +143,8 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([has-detail][overlay]) [part~='backdrop'] {
-    display: block;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
