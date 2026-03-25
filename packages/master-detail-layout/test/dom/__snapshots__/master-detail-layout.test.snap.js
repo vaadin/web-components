@@ -115,7 +115,10 @@ snapshots["vaadin-master-detail-layout host no detail placeholder"] =
 /* end snapshot vaadin-master-detail-layout host no detail placeholder */
 
 snapshots["vaadin-master-detail-layout shadow default"] = 
-`<div part="backdrop">
+`<div
+  id="backdrop"
+  part="backdrop"
+>
 </div>
 <div
   id="master"

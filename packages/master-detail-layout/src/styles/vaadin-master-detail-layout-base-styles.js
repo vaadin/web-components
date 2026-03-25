@@ -74,7 +74,7 @@ export const masterDetailLayoutStyles = css`
     grid-row: detail-start / detail-end;
   }
 
-  [part~='backdrop'] {
+  #backdrop {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -142,7 +142,7 @@ export const masterDetailLayoutStyles = css`
     grid-row: none;
   }
 
-  :host([has-detail][overlay]) [part~='backdrop'] {
+  :host([has-detail][overlay]) #backdrop {
     opacity: 1;
     pointer-events: auto;
   }
@@ -159,8 +159,7 @@ export const masterDetailLayoutStyles = css`
     height: var(--_overlay-size, var(--_detail-size, min-content));
   }
 
-  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing),
-  :host([has-detail][overlay][overlay-containment='viewport']) [part~='backdrop'] {
+  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing, #backdrop) {
     position: fixed;
   }
 
