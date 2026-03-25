@@ -360,6 +360,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     return {
       hadDetail,
       hasDetail,
+      hasDetailPlaceholder,
       hasOverflow,
       focusTarget,
       hostSize,
@@ -379,7 +380,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // while the detail content is rendered in an overlay.
     if (!this.detailSize && !this.__detailCachedSize && hasDetail && detailSize > 0) {
       this.__detailCachedSize = `${Math.ceil(detailSize)}px`;
-    } else {
+    } else if (hadDetail && !hasDetail) {
       this.__detailCachedSize = null;
     }
 
@@ -407,7 +408,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   recalculateDetailSize() {
     this.__detailCachedSize = null;
-    this.removeAttribute('overflow');
+    this.removeAttribute('overlay');
     this.toggleAttribute('recalculating-detail-size', true);
 
     const { focusTarget, ...state } = this.__readLayoutState();
@@ -612,8 +613,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @protected
    */
   _finishTransition() {
-    const state = this.__readLayoutState();
-    this.__writeLayoutState(state);
+    queueMicrotask(() => {
+      const state = this.__readLayoutState();
+      this.__writeLayoutState(state);
+    });
   }
 
   /**

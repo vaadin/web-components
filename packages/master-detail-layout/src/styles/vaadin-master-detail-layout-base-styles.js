@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
   :host {
-    --_master-size: min(10rem, 100%);
+    --_master-size: 30rem;
     --_detail-size: var(--_detail-cached-size, min-content);
     --_transition-duration: 0s;
     --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
@@ -105,20 +105,19 @@ export const masterDetailLayoutStyles = css`
 
   :host(:not([has-detail])),
   :host([has-detail-placeholder][overlay]),
-
   :host([keep-detail-column-offscreen]),
   :host([keep-detail-column-offscreen][recalculating-detail-size]) {
     --_master-extra: calc(100% - var(--_master-size));
   }
 
   :host([orientation='horizontal']) #detail-placeholder,
-  :host([orientation='horizontal'][has-detail]:not([overlay])) #detail {
+  :host([orientation='horizontal']:not([overlay])) #detail {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
   :host([orientation='vertical']) #detail-placeholder,
-  :host([orientation='vertical'][has-detail]:not([overlay])) #detail {
+  :host([orientation='vertical']:not([overlay])) #detail {
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
