@@ -325,6 +325,19 @@ export const InlineEditingMixin = (superClass) =>
       this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
 
+    /**
+     * Override method from ScrollMixin to stop editing if the edited cell
+     * is scrolled out of the view and removed from the DOM.
+     * @private
+     */
+    __updateColumnsBodyContentHidden() {
+      super.__updateColumnsBodyContentHidden();
+
+      if (this.__edited && !this.__edited.cell.isConnected) {
+        this._stopEdit(true, false);
+      }
+    }
+
     /** @private */
     __shouldIgnoreFocusOut(event) {
       const edited = this.__edited;
@@ -357,9 +370,11 @@ export const InlineEditingMixin = (superClass) =>
       // Cancel debouncer enqueued on focusout
       this._cancelStopEdit();
 
-      this._scrollHorizontallyToCell(cell);
+      // Scroll column into view synchronously, which also triggers lazy column
+      // rendering to ensure cells for that column are in the DOM.
+      this.scrollToColumn(column);
 
-      const model = this.__getRowModel(cell.parentElement);
+      const model = this.__getRowModel(cell.__parentRow);
       this.__edited = { cell, column, model };
       column._startCellEdit(cell, model);
 
@@ -505,7 +520,7 @@ export const InlineEditingMixin = (superClass) =>
           // Stop looking if the next cell is editable
           const nextRow = this._getRowByIndex(nextIndex);
           // eslint-disable-next-line @typescript-eslint/no-loop-func
-          nextCell = nextRow && Array.from(nextRow.children).find((cell) => cell._column === nextColumn);
+          nextCell = nextRow && Array.from(nextRow.__cells).find((cell) => cell._column === nextColumn);
           if (nextCell && this._isCellEditable(nextCell)) {
             break;
           }
@@ -537,7 +552,7 @@ export const InlineEditingMixin = (superClass) =>
         if (!this._isCellEditable(cell)) {
           // Cell is no longer editable, cancel edit
           this._stopEdit(true, true);
-        } else if (cell.parentNode === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
+        } else if (cell.__parentRow === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
           // Edited item identity has changed, stop edit
           this._stopEdit();
         }
@@ -573,7 +588,7 @@ export const InlineEditingMixin = (superClass) =>
         return true;
       }
       // Otherwise, check isCellEditable function
-      const model = this.__getRowModel(cell.parentElement);
+      const model = this.__getRowModel(cell.__parentRow);
       return column.isCellEditable(model);
     }
 
