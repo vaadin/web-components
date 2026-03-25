@@ -120,14 +120,6 @@ export const masterDetailLayoutStyles = css`
     translate: none;
   }
 
-  :host(:not([orientation='vertical'])[transition='replace']) :is(#detail, #outgoing) {
-    grid-row: 1 / -1;
-  }
-
-  :host([orientation='vertical'][transition='replace']) :is(#detail, #outgoing) {
-    grid-column: 1 / -1;
-  }
-
   #outgoing:not([hidden]) {
     z-index: 1;
   }
