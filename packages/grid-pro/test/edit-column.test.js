@@ -1,6 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, enter, esc, fixtureSync, focusin, focusout, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  enter,
+  esc,
+  fixtureSync,
+  focusin,
+  focusout,
+  isFirefox,
+  nextFrame,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-grid-pro.js';
@@ -637,7 +647,8 @@ describe('edit column', () => {
         expect(hasEditablePart(0, cells.length - 1)).to.be.true;
       });
 
-      it('should navigate through editable cells with Tab', async () => {
+      // Focus button mode that is active on MacOS causes issues with Tab key navigation in Firefox when run with Playwright
+      (isFirefox && isMac ? it.skip : it)('should navigate through editable cells with Tab', async () => {
         let cell = getCellByColumnPath('col1');
         cell.focus();
         await sendKeys({ press: 'Enter' });
@@ -653,6 +664,25 @@ describe('edit column', () => {
 
         await sendKeys({ press: 'Tab' });
         cell = getCellByColumnPath('col7');
+        expect(getCellEditor(cell)).to.be.ok;
+      });
+
+      it('should edit cell again after it was temporarily removed due to scrolling', async () => {
+        const cell = getCellByColumnPath('col1');
+        cell.focus();
+        await sendKeys({ press: 'Enter' });
+        expect(getCellEditor(cell)).to.be.ok;
+
+        await scrollHorizontally(500);
+
+        expect(cell.isConnected).to.be.false;
+
+        await scrollHorizontally(-500);
+
+        expect(getCellEditor(cell)).to.not.be.ok;
+
+        cell.focus();
+        await sendKeys({ press: 'Enter' });
         expect(getCellEditor(cell)).to.be.ok;
       });
     });

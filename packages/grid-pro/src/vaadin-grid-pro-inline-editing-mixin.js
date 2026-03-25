@@ -325,6 +325,19 @@ export const InlineEditingMixin = (superClass) =>
       this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
 
+    /**
+     * Override method from ScrollMixin to stop editing if the edited cell
+     * is scrolled out of the view and removed from the DOM.
+     * @private
+     */
+    __updateColumnsBodyContentHidden() {
+      super.__updateColumnsBodyContentHidden();
+
+      if (this.__edited && !this.__edited.cell.isConnected) {
+        this._stopEdit(true, false);
+      }
+    }
+
     /** @private */
     __shouldIgnoreFocusOut(event) {
       const edited = this.__edited;
@@ -539,7 +552,7 @@ export const InlineEditingMixin = (superClass) =>
         if (!this._isCellEditable(cell)) {
           // Cell is no longer editable, cancel edit
           this._stopEdit(true, true);
-        } else if (cell.parentNode === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
+        } else if (cell.__parentRow === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
           // Edited item identity has changed, stop edit
           this._stopEdit();
         }
