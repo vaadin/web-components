@@ -372,7 +372,9 @@ export const InlineEditingMixin = (superClass) =>
 
       // Scroll column into view synchronously, which also triggers lazy column
       // rendering to ensure cells for that column are in the DOM.
-      this.scrollToColumn(column);
+      this._scrollHorizontallyToCell(column._headerCell);
+      this.__updateHorizontalScrollPosition();
+      this.__updateColumnsBodyContentHidden();
 
       const model = this.__getRowModel(cell.__parentRow);
       this.__edited = { cell, column, model };
