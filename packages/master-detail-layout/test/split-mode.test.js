@@ -29,8 +29,11 @@ describe('split mode', () => {
     });
 
     describe('expand both', () => {
-      it('should expand both columns equally when both sizes are the same', async () => {
+      beforeEach(() => {
         layout.expand = 'both';
+      });
+
+      it('should expand both columns equally when both sizes are the same', async () => {
         layout.masterSize = '200px';
         layout.detailSize = '200px';
         await onceResized(layout);
@@ -40,7 +43,6 @@ describe('split mode', () => {
       });
 
       it('should use masterSize as minimum and expand both columns', async () => {
-        layout.expand = 'both';
         layout.masterSize = '300px';
         layout.detailSize = '100px';
         await onceResized(layout);
@@ -51,7 +53,6 @@ describe('split mode', () => {
       });
 
       it('should use detailSize as minimum and expand both columns', async () => {
-        layout.expand = 'both';
         layout.masterSize = '100px';
         layout.detailSize = '300px';
         await onceResized(layout);
@@ -74,8 +75,11 @@ describe('split mode', () => {
     });
 
     describe('expand detail', () => {
-      it('should fix master and expand detail to fill the rest', async () => {
+      beforeEach(() => {
         layout.expand = 'detail';
+      });
+
+      it('should fix master and expand detail to fill the rest', async () => {
         layout.masterSize = '200px';
         layout.detailSize = '100px';
         await onceResized(layout);
@@ -100,8 +104,11 @@ describe('split mode', () => {
     });
 
     describe('expand both', () => {
-      it('should expand both rows equally when both sizes are the same', async () => {
+      beforeEach(() => {
         layout.expand = 'both';
+      });
+
+      it('should expand both rows equally when both sizes are the same', async () => {
         layout.masterSize = '200px';
         layout.detailSize = '200px';
         await onceResized(layout);
@@ -123,8 +130,11 @@ describe('split mode', () => {
     });
 
     describe('expand detail', () => {
-      it('should fix master and expand detail to fill the rest', async () => {
+      beforeEach(() => {
         layout.expand = 'detail';
+      });
+
+      it('should fix master and expand detail to fill the rest', async () => {
         layout.masterSize = '200px';
         layout.detailSize = '100px';
         await onceResized(layout);
