@@ -49,7 +49,7 @@ export const EventContextMixin = (superClass) =>
       }
 
       if (context.section === 'body' || context.section === 'details') {
-        Object.assign(context, this.__getRowModel(cell.parentElement));
+        Object.assign(context, this.__getRowModel(cell.__parentRow));
       }
 
       return context;
