@@ -189,7 +189,7 @@ describe('resizing', () => {
 
     it('should shrink horizontally inside a row flexbox with another child', () => {
       component.style.flexDirection = 'row';
-      grid.after(fixtureSync('<div style="height: 100%; width: 100px;"></div>'));
+      grid.after(fixtureSync('<div style="height: 100%; width: 100px; flex-shrink: 0;"></div>'));
 
       expect(grid.getBoundingClientRect().width).to.be.equal(component.offsetWidth - 100);
     });

@@ -13,7 +13,7 @@ export const gridStyles = css`
     max-width: 100%;
     height: 400px;
     min-height: var(--_grid-min-height, 0);
-    flex: 1 1 auto;
+    width: 100%;
     align-self: stretch;
     position: relative;
     box-sizing: border-box;
@@ -49,9 +49,7 @@ export const gridStyles = css`
     height: auto;
     align-self: flex-start;
     min-height: auto;
-    flex-grow: 0;
     flex-shrink: 0;
-    width: 100%;
   }
 
   #scroller {

@@ -214,9 +214,9 @@ describe('basic features', () => {
     });
   });
 
-  it('should have flex: 1 1 auto style', () => {
+  it('should have default flex style', () => {
     expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-shrink'))).to.equal(1);
-    expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-grow'))).to.equal(1);
+    expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-grow'))).to.equal(0);
     expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('auto');
   });
 
