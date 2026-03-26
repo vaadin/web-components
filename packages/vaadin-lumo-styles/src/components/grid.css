@@ -256,7 +256,6 @@
 
   :host([reordering]) {
     user-select: none;
-    user-select: none;
   }
 
   /* Resizing styles */
@@ -295,7 +294,6 @@
 
   #scroller[column-resizing],
   #scroller[range-selecting] {
-    user-select: none;
     user-select: none;
   }
 
