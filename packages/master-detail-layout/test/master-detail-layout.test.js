@@ -75,6 +75,50 @@ describe('vaadin-master-detail-layout', () => {
       await onceResized(layout);
       expect(master.offsetWidth).to.equal(layout.offsetWidth);
     });
+
+    describe('display: contents wrapper', () => {
+      it('should set has-detail when detail uses display: contents with visible children', async () => {
+        layout.querySelector('[slot="detail"]').remove();
+        await onceResized(layout);
+        expect(layout.hasAttribute('has-detail')).to.be.false;
+
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('slot', 'detail');
+        wrapper.style.display = 'contents';
+        wrapper.innerHTML = '<div>Detail inside contents wrapper</div>';
+        layout.appendChild(wrapper);
+        await onceResized(layout);
+
+        expect(layout.hasAttribute('has-detail')).to.be.true;
+      });
+
+      it('should not set has-detail when detail uses display: contents with no children', async () => {
+        layout.querySelector('[slot="detail"]').remove();
+        await onceResized(layout);
+
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('slot', 'detail');
+        wrapper.style.display = 'contents';
+        layout.appendChild(wrapper);
+        await onceResized(layout);
+
+        expect(layout.hasAttribute('has-detail')).to.be.false;
+      });
+
+      it('should not set has-detail when detail uses display: contents with hidden children', async () => {
+        layout.querySelector('[slot="detail"]').remove();
+        await onceResized(layout);
+
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('slot', 'detail');
+        wrapper.style.display = 'contents';
+        wrapper.innerHTML = '<div hidden>Hidden detail</div>';
+        layout.appendChild(wrapper);
+        await onceResized(layout);
+
+        expect(layout.hasAttribute('has-detail')).to.be.false;
+      });
+    });
   });
 
   describe('expand', () => {

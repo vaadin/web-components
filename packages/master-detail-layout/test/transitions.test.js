@@ -404,6 +404,77 @@ describe('Transitions', () => {
     });
   });
 
+  describe('external detail management', () => {
+    it('should not remove externally managed detail elements on _setDetail', async () => {
+      // Simulate a framework wrapper: element slotted to "detail" but NOT via _setDetail
+      const externalWrapper = document.createElement('div');
+      externalWrapper.setAttribute('slot', 'detail');
+      externalWrapper.style.display = 'contents';
+      layout.appendChild(externalWrapper);
+      await onceResized(layout);
+
+      // Use _setDetail to add a managed element
+      const managedDetail = document.createElement('detail-content');
+      await layout._setDetail(managedDetail);
+
+      // The externally managed wrapper should still be in the DOM
+      expect(externalWrapper.isConnected).to.be.true;
+      // The managed detail should also be in the DOM
+      expect(managedDetail.isConnected).to.be.true;
+    });
+
+    it('should remove only managed elements when replacing via _setDetail', async () => {
+      // Add a managed detail
+      const detail1 = document.createElement('detail-content');
+      await layout._setDetail(detail1);
+
+      // Replace with another managed detail
+      const detail2 = document.createElement('detail-content');
+      await layout._setDetail(detail2);
+
+      // Old managed element should be removed
+      expect(detail1.isConnected).to.be.false;
+      // New managed element should be present
+      expect(detail2.isConnected).to.be.true;
+    });
+
+    it('should re-slot externally managed outgoing elements to detail-hidden', async () => {
+      // Set up a framework-style wrapper in the detail slot
+      const externalWrapper = document.createElement('div');
+      externalWrapper.setAttribute('slot', 'detail');
+      externalWrapper.style.display = 'contents';
+      externalWrapper.innerHTML = '<div>Content</div>';
+      layout.appendChild(externalWrapper);
+      await onceResized(layout);
+
+      // Simulate a replace transition: move wrapper to outgoing, then clear
+      externalWrapper.setAttribute('slot', 'detail-outgoing');
+      layout.__replacing = true;
+
+      // Trigger __clearOutgoing indirectly via __endTransition
+      layout.__clearOutgoing();
+
+      // External element should be re-slotted to detail-hidden, not removed
+      expect(externalWrapper.isConnected).to.be.true;
+      expect(externalWrapper.getAttribute('slot')).to.equal('detail-hidden');
+    });
+
+    it('should remove managed outgoing elements on clear', async () => {
+      // Add a managed detail via _setDetail
+      const managedDetail = document.createElement('detail-content');
+      await layout._setDetail(managedDetail);
+
+      // Simulate outgoing: move to outgoing slot
+      managedDetail.setAttribute('slot', 'detail-outgoing');
+      layout.__replacing = true;
+
+      layout.__clearOutgoing();
+
+      // Managed element should be removed from DOM
+      expect(managedDetail.isConnected).to.be.false;
+    });
+  });
+
   describe('replace transition', () => {
     it('should move old content to outgoing container during replace', async () => {
       // Add initial detail

@@ -236,6 +236,12 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     `;
   }
 
+  constructor() {
+    super();
+    /** @type {WeakSet<Element>} Elements added to the DOM by `_setDetail()` */
+    this.__managedDetails = new WeakSet();
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -312,12 +318,37 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
 
     const hadDetail = this.hasAttribute('has-detail');
-    const hasDetail = detailContent != null && detailContent.checkVisibility();
+    const hasDetail = detailContent != null && this.__isDetailVisible(detailContent);
     const hasDetailPlaceholder = !!detailPlaceholder;
     const hasOverflow = (hasDetail || hasDetailPlaceholder) && this.__checkOverflow();
 
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
     return { hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget };
+  }
+
+  /**
+   * Checks whether a detail element is visible. Handles `display: contents`
+   * elements (used by framework wrappers like React) which don't generate a
+   * CSS box and therefore return `false` from `checkVisibility()`.
+   *
+   * Note: dynamically adding children to a `display: contents` wrapper does
+   * not trigger the ResizeObserver (no box to observe). Framework wrappers
+   * must call `_startTransition`/`_setDetail` directly to manage transitions.
+   *
+   * @param {Element} element
+   * @return {boolean}
+   * @private
+   */
+  __isDetailVisible(element) {
+    if (element.checkVisibility()) {
+      return true;
+    }
+    // display:contents elements have no box, so checkVisibility returns false.
+    // Treat them as visible when they contain at least one visible child.
+    if (getComputedStyle(element).display === 'contents') {
+      return [...element.children].some((child) => child.checkVisibility());
+    }
+    return false;
   }
 
   /**
@@ -402,11 +433,16 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const updateSlot = () => {
-      // Remove old content
-      this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
+      // Remove old content (only elements owned by _setDetail)
+      this.querySelectorAll('[slot="detail"]').forEach((oldElement) => {
+        if (this.__managedDetails.has(oldElement)) {
+          oldElement.remove();
+        }
+      });
       // Add new content
       if (element) {
         element.setAttribute('slot', 'detail');
+        this.__managedDetails.add(element);
         this.appendChild(element);
       }
     };
@@ -693,10 +729,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /**
    * Clears the outgoing container after the replace transition completes.
+   * Elements owned by `_setDetail` (tracked in `__managedDetails`) are removed.
+   * Externally managed elements (e.g. framework wrappers) are re-slotted to
+   * a hidden slot so the framework retains DOM ownership.
    * @private
    */
   __clearOutgoing() {
-    this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
+    this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => {
+      if (this.__managedDetails.has(el)) {
+        el.remove();
+      } else {
+        el.setAttribute('slot', 'detail-hidden');
+      }
+    });
     this.__replacing = false;
   }
 
