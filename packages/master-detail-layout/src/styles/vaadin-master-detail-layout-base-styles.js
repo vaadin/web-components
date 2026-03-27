@@ -9,7 +9,11 @@ import { css } from 'lit';
 export const masterDetailLayoutStyles = css`
   :host {
     --_master-size: 30rem;
-    --_detail-size: var(--_detail-cached-size, min-content);
+    --_master-extra: 0px;
+    --_detail-size: var(--_detail-cached-size);
+    --_detail-extra: 0px;
+    --_detail-cached-size: min-content;
+
     --_transition-duration: 0s;
     --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
     --_rtl-multiplier: 1;
@@ -22,8 +26,8 @@ export const masterDetailLayoutStyles = css`
     z-index: 0;
     overflow: clip;
     grid-template-columns:
-      [master-start] var(--_master-size) var(--_master-extra, 0px)
-      [detail-start] var(--_detail-size) var(--_detail-extra, 0px)
+      [master-start] var(--_master-size) var(--_master-extra)
+      [detail-start] var(--_detail-size) var(--_detail-extra)
       [detail-end];
     grid-template-rows: 100%;
   }
@@ -41,8 +45,8 @@ export const masterDetailLayoutStyles = css`
 
     grid-template-columns: 100%;
     grid-template-rows:
-      [master-start] var(--_master-size) var(--_master-extra, 0px)
-      [detail-start] var(--_detail-size) var(--_detail-extra, 0px)
+      [master-start] var(--_master-size) var(--_master-extra)
+      [detail-start] var(--_detail-size) var(--_detail-extra)
       [detail-end];
   }
 
@@ -93,17 +97,17 @@ export const masterDetailLayoutStyles = css`
     --_master-extra: 1fr;
   }
 
-  :host([expand='both'][has-detail]),
-  :host([expand='detail'][has-detail]) {
+  :host([expand='both']:is([has-detail], [has-detail-placeholder])),
+  :host([expand='detail']:is([has-detail], [has-detail-placeholder])) {
     --_detail-extra: 1fr;
   }
 
-  :host([recalculating-detail-size][has-detail]) {
+  :host([recalculating-detail-size]:is([has-detail], [has-detail-placeholder])) {
     --_master-extra: 0px;
     --_detail-extra: 0px;
   }
 
-  :host(:not([has-detail])),
+  :host(:not([has-detail], [has-detail-placeholder])),
   :host([has-detail-placeholder][overlay]),
   :host([keep-detail-column-offscreen]),
   :host([keep-detail-column-offscreen][recalculating-detail-size]) {
@@ -125,10 +129,12 @@ export const masterDetailLayoutStyles = css`
   /* Detail transition: off-screen by default, on-screen when has-detail */
   #detail {
     translate: var(--_detail-offscreen);
+    visibility: hidden;
   }
 
   :host([has-detail]) #detail {
     translate: none;
+    visibility: visible;
   }
 
   #outgoing:not([hidden]) {
@@ -161,12 +167,14 @@ export const masterDetailLayoutStyles = css`
     inset-block: 0;
     inset-inline-end: 0;
     width: var(--_overlay-size, var(--_detail-size));
+    max-width: 100%;
   }
 
   :host([has-detail][overlay][orientation='vertical']) :is(#detail, #outgoing) {
     inset-inline: 0;
     inset-block-end: 0;
     height: var(--_overlay-size, var(--_detail-size));
+    max-height: 100%;
   }
 
   :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing, #backdrop) {

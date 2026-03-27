@@ -124,7 +124,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
        * If not specified, the size is determined automatically by measuring
        * the detail content in a `min-content` CSS grid column when it first
        * becomes visible, and then caching the result. To recalculate the cached
-       * size, use the `recalculateDetailSize` method.
+       * size, use the `recalculateLayout` method.
        *
        * @attr {string} detail-size
        */
@@ -277,12 +277,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   __masterSizeChanged(size, oldSize) {
     this.__updateStyleProperty('master-size', size, oldSize);
+
+    if (oldSize != null) {
+      this.recalculateLayout();
+    }
   }
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
     this.__updateStyleProperty('detail-size', size, oldSize);
-    this.__detailCachedSize = null;
+
+    if (oldSize != null) {
+      this.recalculateLayout();
+    }
   }
 
   /** @private */
@@ -340,7 +347,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   __readLayoutState() {
     const isVertical = this.orientation === 'vertical';
 
-    const detailContent = this.querySelector('[slot="detail"]');
+    const detailContent = this.querySelector(':scope > [slot="detail"]');
     const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
 
     const hadDetail = this.hasAttribute('has-detail');
@@ -378,7 +385,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // If no detailSize is explicitily set, cache the intrinsic size (min-content) of
     // the slotted detail content to use as a fallback for the detail column size
     // while the detail content is rendered in an overlay.
-    if (!this.detailSize && !this.__detailCachedSize && hasDetail && detailSize > 0) {
+    if (this.__isDetailAutoSized && !this.__detailCachedSize && hasDetail && detailSize > 0) {
       this.__detailCachedSize = `${Math.ceil(detailSize)}px`;
     } else if (hadDetail && !hasDetail) {
       this.__detailCachedSize = null;
@@ -406,15 +413,42 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
   }
 
-  recalculateDetailSize() {
-    this.__detailCachedSize = null;
-    this.removeAttribute('overlay');
-    this.toggleAttribute('recalculating-detail-size', true);
+  recalculateLayout() {
+    const invalidatedLayouts = [...this.__ancestorLayouts.filter((layout) => layout.__isDetailAutoSized), this];
 
-    const { focusTarget, ...state } = this.__readLayoutState();
-    this.__writeLayoutState(state);
+    // Write
+    invalidatedLayouts.forEach((layout) => {
+      layout.__detailCachedSize = null;
 
-    this.toggleAttribute('recalculating-detail-size', false);
+      if (layout.__isDetailAutoSized) {
+        layout.removeAttribute('overlay');
+        layout.toggleAttribute('recalculating-detail-size', true);
+      }
+    });
+
+    // Read/Write
+    invalidatedLayouts.forEach((layout) => {
+      const state = layout.__readLayoutState();
+      layout.__writeLayoutState(state);
+    });
+
+    // Write
+    invalidatedLayouts.forEach((layout) => {
+      if (layout.__isDetailAutoSized) {
+        layout.toggleAttribute('recalculating-detail-size', false);
+      }
+    });
+  }
+
+  /** @private */
+  get __isDetailAutoSized() {
+    return this.detailSize == null;
+  }
+
+  /** @private */
+  get __ancestorLayouts() {
+    const parent = this.parentElement.closest(this.constructor.is);
+    return parent ? [...parent.__ancestorLayouts, parent] : [];
   }
 
   /** @private */
@@ -465,10 +499,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     if (skipTransition || this.noAnimation) {
       updateSlot();
-      queueMicrotask(() => {
-        const state = this.__readLayoutState();
-        this.__writeLayoutState(state);
-      });
+      queueMicrotask(() => this.recalculateLayout());
       return Promise.resolve();
     }
 
@@ -613,10 +644,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @protected
    */
   _finishTransition() {
-    queueMicrotask(() => {
-      const state = this.__readLayoutState();
-      this.__writeLayoutState(state);
-    });
+    queueMicrotask(() => this.recalculateLayout());
   }
 
   /**
