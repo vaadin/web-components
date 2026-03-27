@@ -103,6 +103,7 @@ snapshots["vaadin-master-detail-layout host no detail placeholder"] =
   has-detail=""
   orientation="horizontal"
   overlay-containment="layout"
+  style="--_detail-cached-size: 49px;"
 >
   <div>
     Master content

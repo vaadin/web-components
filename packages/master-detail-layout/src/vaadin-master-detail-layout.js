@@ -123,8 +123,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
        * <p>
        * If not specified, the size is determined automatically by measuring
        * the detail content in a `min-content` CSS grid column when it first
-       * becomes visible, and then caching the result. To recalculate the cached
-       * size, use the `recalculateLayout` method.
+       * becomes visible, and then caching the resulting intrinsic size. To
+       * recalculate the cached intrinsic size, use the `recalculateLayout`
+       * method.
        *
        * @attr {string} detail-size
        */
@@ -413,6 +414,19 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
   }
 
+  /**
+   * When `detailSize` is not explicitly set, re-measures the cached intrinsic size of
+   * the detail content by placing it in a min-content CSS grid column, then repeats
+   * this process for ancestor master-detail layouts without an explicit `detailSize`,
+   * if any, so that their detail areas also adapt.
+   *
+   * Call this method after changing the detail content in a way that affects its intrinsic
+   * size — for example, when opening a detail in a nested master-detail layout that was
+   * not previously visible.
+   *
+   * NOTE: This method can be expensive in large layouts as it triggers consecutive
+   * synchronous DOM reads and writes.
+   */
   recalculateLayout() {
     const invalidatedLayouts = [...this.__ancestorLayouts.filter((layout) => layout.__isDetailAutoSized), this];
 

@@ -147,4 +147,59 @@ describe('master-detail-layout', () => {
       await visualDiff(div, `detail-placeholder-expand-detail`);
     });
   });
+
+  describe('auto detail size', () => {
+    let mdl1, mdl2;
+
+    function openDetail(layout) {
+      layout._setDetail(layout.querySelector(':scope > [slot="hidden"]'));
+    }
+
+    beforeEach(async () => {
+      mdl = fixtureSync(
+        `
+          <vaadin-master-detail-layout master-size="300px" no-animation style="height: 400px; border: 1px solid lightgray;">
+            <div>Master 0</div>
+            <vaadin-master-detail-layout master-size="250px" no-animation slot="hidden">
+              <div>Master 1</div>
+              <vaadin-master-detail-layout master-size="200px" no-animation slot="hidden">
+                <div>Master 2</div>
+                <div slot="hidden" style="min-width: 100px">Detail 2</div>
+              </vaadin-master-detail-layout>
+            </vaadin-master-detail-layout>
+          </vaadin-master-detail-layout>
+        `,
+        div,
+      );
+
+      mdl1 = mdl.querySelector(':scope > vaadin-master-detail-layout');
+      mdl2 = mdl1.querySelector(':scope > vaadin-master-detail-layout');
+      await onceResized(mdl);
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'auto-detail-size-default');
+    });
+
+    it('detail opened (depth 0)', async () => {
+      openDetail(mdl);
+      await onceResized(mdl);
+      await visualDiff(div, 'auto-detail-size-detail-opened-depth-0');
+    });
+
+    it('detail opened (depth 1)', async () => {
+      openDetail(mdl);
+      openDetail(mdl1);
+      await onceResized(mdl);
+      await visualDiff(div, 'auto-detail-size-detail-opened-depth-1');
+    });
+
+    it('detail opened (depth 2)', async () => {
+      openDetail(mdl);
+      openDetail(mdl1);
+      openDetail(mdl2);
+      await onceResized(mdl);
+      await visualDiff(div, 'auto-detail-size-detail-opened-depth-2');
+    });
+  });
 });
