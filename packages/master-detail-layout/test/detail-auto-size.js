@@ -8,7 +8,7 @@ window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
-describe('auto detail size', () => {
+describe('detail auto size', () => {
   let layout;
 
   beforeEach(async () => {

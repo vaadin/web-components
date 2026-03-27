@@ -386,9 +386,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // If no detailSize is explicitily set, cache the intrinsic size (min-content) of
     // the slotted detail content to use as a fallback for the detail column size
     // while the detail content is rendered in an overlay.
-    if (this.__isDetailAutoSized && !this.__detailCachedSize && hasDetail && detailSize > 0) {
-      this.__detailCachedSize = `${Math.ceil(detailSize)}px`;
-    } else if (hadDetail && !hasDetail) {
+    if ((hasDetail || hasDetailPlaceholder) && this.__isDetailAutoSized && detailSize > 0) {
+      this.__detailCachedSize = this.__detailCachedSize || `${Math.ceil(detailSize)}px`;
+    } else {
       this.__detailCachedSize = null;
     }
 

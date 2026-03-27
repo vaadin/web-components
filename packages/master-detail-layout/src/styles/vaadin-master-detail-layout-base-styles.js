@@ -32,7 +32,8 @@ export const masterDetailLayoutStyles = css`
     grid-template-rows: 100%;
   }
 
-  :host([hidden]) {
+  :host([hidden]),
+  ::slotted([hidden]) {
     display: none !important;
   }
 
@@ -55,11 +56,11 @@ export const masterDetailLayoutStyles = css`
   }
 
   #detail-placeholder {
-    display: none;
+    visibility: hidden;
   }
 
   :host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
-    display: block;
+    visibility: visible;
   }
 
   #master {

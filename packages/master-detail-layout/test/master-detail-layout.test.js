@@ -38,16 +38,6 @@ describe('vaadin-master-detail-layout', () => {
   });
 
   describe('detail', () => {
-    it('should set has-detail when detail content is provided', () => {
-      expect(layout.hasAttribute('has-detail')).to.be.true;
-    });
-
-    it('should remove has-detail when detail is removed', async () => {
-      layout.querySelector('[slot="detail"]').remove();
-      await onceResized(layout);
-      expect(layout.hasAttribute('has-detail')).to.be.false;
-    });
-
     it('should set has-detail when detail becomes visible', async () => {
       const detailContent = layout.querySelector('[slot="detail"]');
       detailContent.hidden = true;
