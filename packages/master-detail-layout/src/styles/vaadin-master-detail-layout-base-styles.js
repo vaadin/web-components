@@ -97,6 +97,13 @@ export const masterDetailLayoutStyles = css`
     --_master-extra: 1fr;
   }
 
+  :host(:not([has-detail], [has-detail-placeholder])),
+  :host([has-detail-placeholder][overlay]),
+  :host([keep-detail-column-offscreen]),
+  :host([keep-detail-column-offscreen][recalculating-detail-size]) {
+    --_master-extra: calc(100% - var(--_master-size));
+  }
+
   :host([expand='both']:is([has-detail], [has-detail-placeholder])),
   :host([expand='detail']:is([has-detail], [has-detail-placeholder])) {
     --_detail-extra: 1fr;
@@ -105,13 +112,6 @@ export const masterDetailLayoutStyles = css`
   :host([recalculating-detail-size]:is([has-detail], [has-detail-placeholder])) {
     --_master-extra: 0px;
     --_detail-extra: 0px;
-  }
-
-  :host(:not([has-detail], [has-detail-placeholder])),
-  :host([has-detail-placeholder][overlay]),
-  :host([keep-detail-column-offscreen]),
-  :host([keep-detail-column-offscreen][recalculating-detail-size]) {
-    --_master-extra: calc(100% - var(--_master-size));
   }
 
   :host([orientation='horizontal']) #detail-placeholder,
