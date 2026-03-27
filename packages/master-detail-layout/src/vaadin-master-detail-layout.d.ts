@@ -143,6 +143,21 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
    */
   noAnimation: boolean;
 
+  /**
+   * When `detailSize` is not explicitly set, re-measures the cached intrinsic size of
+   * the detail content by placing it in a min-content CSS grid column, then repeats
+   * this process for ancestor master-detail layouts without an explicit `detailSize`,
+   * if present, so that their detail areas also adapt.
+   *
+   * Call this method after changing the detail content in a way that affects its intrinsic
+   * size — for example, when opening a detail in a nested master-detail layout that was
+   * not previously visible.
+   *
+   * NOTE: This method can be expensive in large layouts as it triggers consecutive
+   * synchronous DOM reads and writes.
+   */
+  recalculateLayout(): void;
+
   addEventListener<K extends keyof MasterDetailLayoutEventMap>(
     type: K,
     listener: (this: MasterDetailLayout, ev: MasterDetailLayoutEventMap[K]) => void,
