@@ -650,7 +650,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __animate(element, keyframes, options) {
-    const animation = element.animate(keyframes, options);
+    const animation = element.animate(keyframes, { ...options, fill: 'forwards' });
 
     this.__activeAnimations = this.__activeAnimations || [];
     this.__activeAnimations.push(animation);
@@ -670,6 +670,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
     this.removeAttribute('transition');
     this.__clearOutgoing();
+    // Cancel any pending ResizeObserver rAF that captured stale state
+    // during the animation — _finishTransition already applied the
+    // correct post-transition state synchronously.
+    cancelAnimationFrame(this.__resizeRaf);
     if (this.__transitionResolve) {
       this.__transitionResolve();
       this.__transitionResolve = null;
