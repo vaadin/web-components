@@ -149,7 +149,7 @@ describe('master-detail-layout', () => {
   });
 
   describe('auto detail size', () => {
-    let mdl1, mdl2;
+    let layouts;
 
     function openDetail(layout) {
       layout._setDetail(layout.querySelector(':scope > [slot="hidden"]'));
@@ -172,8 +172,7 @@ describe('master-detail-layout', () => {
         div,
       );
 
-      mdl1 = mdl.querySelector(':scope > vaadin-master-detail-layout');
-      mdl2 = mdl1.querySelector(':scope > vaadin-master-detail-layout');
+      layouts = [...div.querySelectorAll('vaadin-master-detail-layout')];
       await onceResized(mdl);
     });
 
@@ -181,25 +180,27 @@ describe('master-detail-layout', () => {
       await visualDiff(div, 'auto-detail-size-default');
     });
 
-    it('detail opened (depth 0)', async () => {
-      openDetail(mdl);
-      await onceResized(mdl);
-      await visualDiff(div, 'auto-detail-size-detail-opened-depth-0');
+    [0, 1, 2].forEach((depth) => {
+      it(`detail opened (depth ${depth})`, async () => {
+        layouts.slice(0, depth + 1).forEach(openDetail);
+        await onceResized(mdl);
+        await visualDiff(div, `auto-detail-size-detail-opened-depth-${depth}`);
+      });
     });
 
-    it('detail opened (depth 1)', async () => {
-      openDetail(mdl);
-      openDetail(mdl1);
-      await onceResized(mdl);
-      await visualDiff(div, 'auto-detail-size-detail-opened-depth-1');
-    });
+    describe('overflow', () => {
+      beforeEach(async () => {
+        layouts.forEach(openDetail);
+        await onceResized(mdl);
+      });
 
-    it('detail opened (depth 2)', async () => {
-      openDetail(mdl);
-      openDetail(mdl1);
-      openDetail(mdl2);
-      await onceResized(mdl);
-      await visualDiff(div, 'auto-detail-size-detail-opened-depth-2');
+      ['600px', '400px', '200px'].forEach((width, depth) => {
+        it(`depth ${depth}`, async () => {
+          div.style.width = width;
+          await onceResized(mdl);
+          await visualDiff(div, `auto-detail-size-overflow-depth-${depth}`);
+        });
+      });
     });
   });
 });
