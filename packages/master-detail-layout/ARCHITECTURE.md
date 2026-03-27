@@ -10,9 +10,11 @@ The grid uses **4 column tracks** with named lines. Each logical column (master,
 
 CSS custom properties:
 
-- `--_master-column: var(--_master-size) 0` — default: fixed size + 0 extra
-- `--_detail-column: var(--_detail-size) 0` — default: fixed size + 0 extra
-- `--_master-size` / `--_detail-size` — default to `30em` / `15em` in `:host`; overridden from JS when `masterSize`/`detailSize` properties are set
+- `--_master-size` — defaults to `30rem`; overridden from JS when `masterSize` is set
+- `--_master-extra` — defaults to `0px`; set to `1fr` by expand modes
+- `--_detail-size` — resolves to `var(--_detail-cached-size)`, which defaults to `min-content` (auto-sized) or is set from JS when `detailSize` is provided
+- `--_detail-extra` — defaults to `0px`; set to `1fr` by expand modes
+- `--_detail-cached-size` — the cached intrinsic size of the detail content (see Auto Detail Size)
 
 Parts use **named grid lines** for placement:
 
@@ -23,12 +25,12 @@ Parts use **named grid lines** for placement:
 
 The `expand` attribute controls which extra track(s) become `1fr`:
 
-| `expand` | `--_master-column` | `--_detail-column` |
-| -------- | ------------------ | ------------------ |
-| (none)   | `size 0`           | `size 0`           |
-| `both`   | `size 1fr`         | `size 1fr`         |
-| `master` | `size 1fr`         | `size 0`           |
-| `detail` | `size 0`           | `size 1fr`         |
+| `expand` | `--_master-extra` | `--_detail-extra` |
+| -------- | ----------------- | ----------------- |
+| (none)   | `0px`             | `0px`             |
+| `both`   | `1fr`             | `1fr`             |
+| `master` | `1fr`             | `0px`             |
+| `detail` | `0px`             | `1fr`             |
 
 ### Vertical orientation
 
@@ -36,7 +38,7 @@ In vertical mode, `grid-template-rows` replaces `grid-template-columns` using th
 
 ### Default sizes
 
-`--_master-size` and `--_detail-size` default to `30em` and `15em` respectively in `:host`. When `masterSize`/`detailSize` properties are set, JS overrides these CSS custom properties. When cleared, JS removes the inline style and the defaults apply again.
+`--_master-size` defaults to `30rem`. `--_detail-size` resolves to `var(--_detail-cached-size)`, which defaults to `min-content` for auto-sizing. When `masterSize`/`detailSize` properties are set, JS overrides these CSS custom properties. When cleared, JS removes the inline style and the defaults apply again.
 
 ## Overflow Detection
 
@@ -53,14 +55,28 @@ The `>=` (not `>`) is intentional: when `keep-detail-column-offscreen` or `:not(
 
 Layout detection is split into two methods to avoid forced reflows:
 
-- **`__computeLayoutState()`** — pure reads: `checkVisibility()`, `getComputedStyle()`, `getFocusableElements()`. Called in the ResizeObserver callback where layout is already computed — no forced reflow.
-- **`__writeLayoutState(state)`** — pure writes: toggles `has-detail`, `overlay`, `keep-detail-column-offscreen`; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
+- **`__readLayoutState()`** — pure reads: `checkVisibility()`, `getComputedStyle()`, `getFocusableElements()`. Called in the ResizeObserver callback where layout is already computed — no forced reflow. Also returns `hostSize` and `trackSizes` for overflow detection and auto-size caching.
+- **`__writeLayoutState(state)`** — pure writes: toggles `has-detail`, `overlay`, `keep-detail-column-offscreen`; caches intrinsic detail size; calls `requestUpdate()` for ARIA; focuses detail. No DOM/style reads.
 
 ### ResizeObserver
 
 - **Observes**: host + shadow DOM parts (`master`, `detail`) + direct slotted children (`:scope >` prevents observing nested descendants)
-- ResizeObserver callback: calls `__computeLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__writeLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
+- ResizeObserver callback: calls `__readLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__writeLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
+
+## Auto Detail Size
+
+When `detailSize` is not explicitly set, the detail column size is determined automatically from the detail content's intrinsic size using `min-content`.
+
+### How it works
+
+The detail column uses `--_detail-size: var(--_detail-cached-size)` with `--_detail-cached-size` defaulting to `min-content`. On first render the browser sizes the column to the content's intrinsic width. The write phase then caches that measurement as a fixed pixel value in `--_detail-cached-size`, keeping the column stable across overlay transitions and re-renders. The cache is cleared when the detail is removed so the next detail is measured fresh.
+
+### `recalculateLayout()`
+
+Re-measures the intrinsic size by clearing the cache and temporarily placing the detail back into a `min-content` grid column (via the `recalculating-detail-size` attribute, which also disables `1fr` expansion to avoid distorting the measurement). Propagates to ancestor auto-sized layouts so nested layouts re-measure correctly.
+
+Called when `masterSize`/`detailSize` change after initial render and after detail transitions. The property observers skip the call on the initial set (`oldSize != null` guard) to avoid a redundant synchronous recalculation — the ResizeObserver handles the first measurement.
 
 ## Overlay Modes
 
