@@ -43,6 +43,7 @@ export const crudStyles = css`
   ::slotted(vaadin-crud-grid) {
     border-end-start-radius: 0;
     border-end-end-radius: 0;
+    flex: 1 1 auto;
   }
 
   :host([hidden]),

@@ -135,6 +135,10 @@
     pointer-events: none;
   }
 
+  ::slotted(vaadin-crud-grid) {
+    flex: 1 1 auto;
+  }
+
   :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
     box-shadow: var(--lumo-box-shadow-m);
   }
