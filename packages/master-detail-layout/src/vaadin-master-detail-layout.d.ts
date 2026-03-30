@@ -84,9 +84,15 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
 declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * Size (in CSS length units) to be set on the detail area in
-   * the CSS grid layout. If there is not enough space to show
+   * the CSS grid layout. When there is not enough space to show
    * master and detail areas next to each other, the detail area
-   * is shown as an overlay. Defaults to 15em.
+   * is shown as an overlay.
+   * <p>
+   * If not specified, the size is determined automatically by measuring
+   * the detail content in a `min-content` CSS grid column when it first
+   * becomes visible, and then caching the resulting intrinsic size. To
+   * recalculate the cached intrinsic size, use the `recalculateLayout`
+   * method.
    *
    * @attr {string} detail-size
    */
