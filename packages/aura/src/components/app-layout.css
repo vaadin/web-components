@@ -19,7 +19,7 @@
 
 vaadin-app-layout {
   --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
-  padding-bottom: var(--aura-app-layout-inset);
+  padding-bottom: max(var(--_vaadin-app-layout-navbar-offset-size-bottom), var(--aura-app-layout-inset));
   padding-inline-end: var(--aura-app-layout-inset);
   padding-top: max(var(--aura-app-layout-inset), var(--_vaadin-app-layout-navbar-offset-size));
 }
