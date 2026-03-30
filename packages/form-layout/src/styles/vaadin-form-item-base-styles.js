@@ -28,13 +28,26 @@ export const formItemStyles = css`
   }
 
   [part='label'] {
+    box-sizing: border-box;
     color: var(--vaadin-form-item-label-color, var(--vaadin-text-color));
     flex: 0 0 auto;
     font-size: var(--vaadin-form-item-label-font-size, inherit);
     font-weight: var(--vaadin-form-item-label-font-weight, 500);
     line-height: var(--vaadin-form-item-label-line-height, inherit);
+    position: relative;
     width: var(--_form-item-labels-aside, var(--_label-width, 8em));
     word-break: break-word;
+  }
+
+  :host([required]) [part='label'] {
+    padding-inline-end: 1em;
+  }
+
+  [part='required-indicator'] {
+    display: inline-block;
+    position: absolute;
+    width: 1em;
+    text-align: center;
   }
 
   #spacing {

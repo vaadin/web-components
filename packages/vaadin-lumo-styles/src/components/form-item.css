@@ -24,9 +24,6 @@
       --vaadin-input-field-required-indicator-color,
       var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
     );
-    position: relative;
-    width: 1em;
-    text-align: center;
   }
 
   :host([required]) [part='required-indicator']::after {
