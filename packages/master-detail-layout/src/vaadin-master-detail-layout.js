@@ -465,7 +465,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   get __ancestorLayouts() {
-    const parent = this.parentElement.closest(this.constructor.is);
+    const parent = this.parentElement && this.parentElement.closest(this.constructor.is);
     return parent ? [...parent.__ancestorLayouts, parent] : [];
   }
 
