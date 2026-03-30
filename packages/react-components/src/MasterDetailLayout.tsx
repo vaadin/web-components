@@ -10,8 +10,8 @@ type MasterProps = React.PropsWithChildren<{}>;
 type DetailProps = React.PropsWithChildren<{}>;
 
 type MasterDetailLayoutElementWithInternalAPI = MasterDetailLayoutElement & {
-  _startTransition: (transitionType: 'add' | 'remove' | 'replace', callback: () => void) => void;
-  _finishTransition: () => Promise<void>;
+  _startTransition: (transitionType: 'add' | 'remove' | 'replace', callback: () => void) => Promise<void>;
+  _finishTransition: () => void;
 };
 
 function Master({ children }: MasterProps) {
@@ -72,31 +72,45 @@ function Detail({ children }: DetailProps) {
     }
 
     if (state === 'idle') {
-      // No transition in progress
-      // Just update slot name
+      // No transition in progress — just update slot name
       const hasChildren = currentDetailsRef.current!.childElementCount > 0;
       currentDetailsRef.current!.setAttribute('slot', hasChildren ? 'detail' : 'detail-hidden');
     } else if (state === 'starting') {
-      // Transition is starting and old and (invisible) new details are rendered
-      // Determine the transition type based on old and new detail contents
+      // Transition is starting and old and (invisible) new details are rendered.
+      // Determine the transition type based on old and new detail contents.
       const hasCurrentDetails = currentDetailsRef.current!.childElementCount > 0;
       const hasNextDetails = nextDetailsRef.current!.childElementCount > 0;
       const transitionType = hasCurrentDetails && hasNextDetails ? 'replace' : hasCurrentDetails ? 'remove' : 'add';
-      // Start transition to capture old DOM state
+
+      // _startTransition calls the callback synchronously for add/replace.
+      // The callback MUST perform synchronous DOM mutations (slot assignment +
+      // _finishTransition) because the WC reads DOM state immediately after.
+      // React state updates are async, so we manipulate the DOM directly in
+      // the callback, then sync React state afterwards.
       layout._startTransition(transitionType, () => {
-        // Once old DOM state is captured, render with new details only
-        setState('ready');
+        if (transitionType === 'replace' && currentDetailsRef.current) {
+          // For replace, _startTransition moved the current div to the
+          // detail-outgoing slot for the outgoing animation. Clone it so the
+          // WC can animate the clone out, then hide the React-managed original
+          // so the WC's post-animation cleanup won't remove it from the DOM.
+          const clone = currentDetailsRef.current.cloneNode(true) as HTMLElement;
+          clone.setAttribute('slot', 'detail-outgoing');
+          layout.appendChild(clone);
+          currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
+        } else if (currentDetailsRef.current) {
+          currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
+        }
+        if (nextDetailsRef.current) {
+          nextDetailsRef.current.style.display = '';
+          const hasNext = nextDetailsRef.current.childElementCount > 0;
+          nextDetailsRef.current.setAttribute('slot', hasNext ? 'detail' : 'detail-hidden');
+        }
+        // Recompute layout state synchronously with the new DOM
+        layout._finishTransition();
+      }).then(() => {
+        // Animation finished — sync React state to match DOM reality
         setCurrentChildren(children);
         currentDetailsKey.current = nextDetailsKey;
-      });
-    } else if (state === 'ready') {
-      // Transition is ready and new details are rendered
-      // Update slot name to either show or hide the new details
-      const hasChildren = currentDetailsRef.current!.childElementCount > 0;
-      currentDetailsRef.current!.setAttribute('slot', hasChildren ? 'detail' : 'detail-hidden');
-      // Finish transition to animate to new DOM state
-      layout._finishTransition().then(() => {
-        // Transition is finished, reset state
         setState('idle');
       });
     }
@@ -115,11 +129,11 @@ function Detail({ children }: DetailProps) {
 
   return (
     <>
-      <div ref={currentDetailsRef} key={currentDetailsKey.current} style={{ display: 'contents' }}>
+      <div ref={currentDetailsRef} key={currentDetailsKey.current} style={{ height: '100%' }}>
         {currentChildren}
       </div>
       {state === 'starting' && (
-        <div ref={nextDetailsRef} key={nextDetailsKey} style={{ display: 'none' }}>
+        <div ref={nextDetailsRef} key={nextDetailsKey} style={{ display: 'none', height: '100%' }}>
           {children}
         </div>
       )}

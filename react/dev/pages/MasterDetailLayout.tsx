@@ -1,182 +1,141 @@
 import React, { useState } from 'react';
 import { MasterDetailLayout } from '../../packages/react-components/src/MasterDetailLayout.js';
-import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
+import { Button } from '../../packages/react-components/src/Button.js';
+import { RadioButton } from '../../packages/react-components/src/RadioButton.js';
+import { RadioGroup } from '../../packages/react-components/src/RadioGroup.js';
+import { TextField } from '../../packages/react-components/src/TextField.js';
 import './master-detail-layout-styles.css';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
-function MasterContent() {
-  const masterContentStyle = {
-    height: '100%',
-    overflow: 'auto',
-  };
+const lorem =
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi suscipit rem, non temporibus laboriosam maiores distinctio numquam, dolorum ducimus dolores sequi reprehenderit iste consectetur adipisci delectus aperiam voluptatibus! Vitae, adipisci.';
 
-  const listStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    padding: '0.5rem',
-    gridGap: '0.25rem',
-  };
-
-  const itemStyle = {
-    padding: '1rem',
-    border: 'solid 1px #e2e2e2',
-  };
-
-  const headingStyle = {
-    margin: '0 0 0.25rem',
-  };
-
+function DetailContent({ id, onClose, onReplace }: { id: number; onClose: () => void; onReplace: () => void }) {
   return (
-    <div style={masterContentStyle}>
-      <div style={listStyle}>
-        <div style={itemStyle}>
-          <h3 style={headingStyle}>Lorem</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur et quisquam obcaecati!</p>
-        </div>
-        <div style={itemStyle}>
-          <h3 style={headingStyle}>Lorem</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur et quisquam obcaecati!</p>
-        </div>
-        <div style={itemStyle}>
-          <h3 style={headingStyle}>Lorem</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur et quisquam obcaecati!</p>
-        </div>
-        <div style={itemStyle}>
-          <h3 style={headingStyle}>Lorem</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur et quisquam obcaecati!</p>
-        </div>
-        <div style={itemStyle}>
-          <h3 style={headingStyle}>Lorem</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur et quisquam obcaecati!</p>
-        </div>
-        <div style={itemStyle}>
-          <h3 style={headingStyle}>Lorem</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur et quisquam obcaecati!</p>
-        </div>
+    <div style={{ boxSizing: 'border-box', height: '100%', padding: '1.5rem', overflow: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em', marginBottom: '1em' }}>
+        <Button onClick={onClose}>Close</Button>
+        <Button onClick={onReplace}>Replace</Button>
+        <span>Detail #{id}</span>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '1em' }}>
+        <TextField label="First Name" />
+        <TextField label="Last Name" />
+        <TextField label="Email" />
       </div>
     </div>
   );
-}
-
-interface DetailContentProps {
-  value?: string;
-  style?: React.CSSProperties;
-}
-
-function DetailContent({ style, value }: DetailContentProps) {
-  const formStyle = {
-    display: 'flex',
-    flexWrap: 'wrap' as any,
-    padding: '0.5rem',
-    gap: '0.5rem',
-  };
-
-  const inputStyle = {
-    width: '8rem',
-  };
-
-  const fields = Array(12).fill(null);
-
-  return (
-    <div style={style}>
-      <div style={formStyle}>
-        {fields.map((_, index) => (
-          <div className="field" key={index}>
-            <input type="text" style={inputStyle} value={value} readOnly />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function EmptyDetail() {
-  return null;
 }
 
 export default function () {
-  const [detailSize, setDetailSize] = useState(false);
-  const [detailMinSize, setDetailMinSize] = useState(false);
-  const [masterSize, setMasterSize] = useState(false);
-  const [masterMinSize, setMasterMinSize] = useState(false);
-  const [containmentViewport, setContainmentViewport] = useState(false);
-  const [vertical, setVertical] = useState(false);
-  const [maxWidth, setMaxWidth] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(false);
-  const [forceOverlay, setForceOverlay] = useState(false);
-  const [detailContent, setDetailContent] = useState<React.ReactNode>(<DetailContent />);
-  const [updateCount, setUpdateCount] = useState(0);
+  const [orientation, setOrientation] = useState('horizontal');
+  const [overlayContainment, setOverlayContainment] = useState('layout');
+  const [expand, setExpand] = useState('both');
+  const [masterSize, setMasterSize] = useState('auto');
+  const [detailSize, setDetailSize] = useState('auto');
+  const [overlaySize, setOverlaySize] = useState('auto');
+  const [detailId, setDetailId] = useState(0);
+  const detailOpen = detailId > 0;
 
-  const layoutStyle: React.CSSProperties = {
-    ...(maxWidth ? { maxWidth: '800px' } : {}),
-    ...(maxHeight ? { maxHeight: '600px' } : {}),
-  };
+  const openDetail = () => setDetailId((id) => id + 1);
+  const closeDetail = () => setDetailId(0);
 
-  const setSmallDetail = () => {
-    setUpdateCount(updateCount + 1);
-    setDetailContent(<DetailContent style={{ width: '200px' }} key="small" value={updateCount.toString()} />);
-  };
-
-  const setLargeDetail = () => {
-    setUpdateCount(updateCount + 1);
-    setDetailContent(<DetailContent style={{ width: '600px' }} key="large" value={updateCount.toString()} />);
-  };
-
-  const setEmptyDetail = () => {
-    setDetailContent(<EmptyDetail />);
-  };
-
-  const clearDetail = () => {
-    setDetailContent(null);
-  };
+  const sizeOrUndefined = (value: string) => (value === 'auto' ? undefined : value);
 
   return (
-    <>
-      <p>
-        <Checkbox label="Set detail size" checked={detailSize} onChange={() => setDetailSize(!detailSize)} />
-        <Checkbox
-          label="Set detail min-size"
-          checked={detailMinSize}
-          onChange={() => setDetailMinSize(!detailMinSize)}
-        />
-        <Checkbox label="Set master size" checked={masterSize} onChange={() => setMasterSize(!masterSize)} />
-        <Checkbox
-          label="Set master min-size"
-          checked={masterMinSize}
-          onChange={() => setMasterMinSize(!masterMinSize)}
-        />
-        <Checkbox
-          label="Use viewport containment"
-          checked={containmentViewport}
-          onChange={() => setContainmentViewport(!containmentViewport)}
-        />
-        <Checkbox label="Use vertical orientation" checked={vertical} onChange={() => setVertical(!vertical)} />
-        <Checkbox label="Use max-width on the host" checked={maxWidth} onChange={() => setMaxWidth(!maxWidth)} />
-        <Checkbox label="Use max-height on the host" checked={maxHeight} onChange={() => setMaxHeight(!maxHeight)} />
-        <Checkbox label="Force overlay" checked={forceOverlay} onChange={() => setForceOverlay(!forceOverlay)} />
-        <button onClick={setSmallDetail}>Set small detail</button>
-        <button onClick={setLargeDetail}>Set large detail</button>
-        <button onClick={setEmptyDetail}>Set empty detail</button>
-        <button onClick={clearDetail}>Clear detail</button>
-      </p>
+    <div style={{ height: '100%', maxWidth: '100%', maxHeight: '100%', overflow: 'hidden', padding: '10px' }}>
       <MasterDetailLayout
-        style={layoutStyle}
-        detailSize={detailSize ? '300px' : undefined}
-        detailMinSize={detailMinSize ? '300px' : undefined}
-        masterSize={masterSize ? '300px' : undefined}
-        masterMinSize={masterMinSize ? '300px' : undefined}
-        containment={containmentViewport ? 'viewport' : 'layout'}
-        orientation={vertical ? 'vertical' : 'horizontal'}
-        forceOverlay={forceOverlay}
+        style={{ border: '1px solid lightgray', resize: 'both' }}
+        orientation={orientation as 'horizontal' | 'vertical'}
+        overlayContainment={overlayContainment as 'layout' | 'viewport'}
+        expand={expand as 'master' | 'detail' | 'both'}
+        masterSize={sizeOrUndefined(masterSize)}
+        detailSize={sizeOrUndefined(detailSize)}
+        overlaySize={sizeOrUndefined(overlaySize)}
+        onBackdropClick={closeDetail}
       >
         <MasterDetailLayout.Master>
-          <MasterContent />
+          <div style={{ boxSizing: 'border-box', height: '100%', padding: '1.5rem', overflow: 'auto' }}>
+            <RadioGroup
+              label="Orientation"
+              theme="vertical"
+              value={orientation}
+              onValueChanged={(e) => setOrientation(e.detail.value)}
+            >
+              <RadioButton value="horizontal" label="Horizontal" />
+              <RadioButton value="vertical" label="Vertical" />
+            </RadioGroup>
+
+            <RadioGroup
+              label="Overlay Size"
+              theme="vertical"
+              value={overlaySize}
+              onValueChanged={(e) => setOverlaySize(e.detail.value)}
+            >
+              <RadioButton value="auto" label="Auto" />
+              <RadioButton value="300px" label="300px" />
+              <RadioButton value="100%" label="100%" />
+            </RadioGroup>
+
+            <RadioGroup
+              label="Overlay Containment"
+              theme="vertical"
+              value={overlayContainment}
+              onValueChanged={(e) => setOverlayContainment(e.detail.value)}
+            >
+              <RadioButton value="layout" label="Layout" />
+              <RadioButton value="viewport" label="Viewport" />
+            </RadioGroup>
+
+            <RadioGroup
+              label="Expand"
+              theme="vertical"
+              value={expand}
+              onValueChanged={(e) => setExpand(e.detail.value)}
+            >
+              <RadioButton value="both" label="Both" />
+              <RadioButton value="master" label="Master" />
+              <RadioButton value="detail" label="Detail" />
+            </RadioGroup>
+
+            <br />
+
+            <RadioGroup
+              label="Master Size"
+              theme="vertical"
+              value={masterSize}
+              onValueChanged={(e) => setMasterSize(e.detail.value)}
+            >
+              <RadioButton value="auto" label="Auto" />
+              <RadioButton value="250px" label="250px" />
+              <RadioButton value="30%" label="30%" />
+            </RadioGroup>
+
+            <RadioGroup
+              label="Detail Size"
+              theme="vertical"
+              value={detailSize}
+              onValueChanged={(e) => setDetailSize(e.detail.value)}
+            >
+              <RadioButton value="auto" label="Auto" />
+              <RadioButton value="300px" label="300px" />
+              <RadioButton value="70%" label="70%" />
+            </RadioGroup>
+
+            <br />
+
+            <Button onClick={openDetail}>Open Detail</Button>
+
+            <p>{lorem}</p>
+          </div>
         </MasterDetailLayout.Master>
-        <MasterDetailLayout.Detail> {detailContent}</MasterDetailLayout.Detail>
+        <MasterDetailLayout.Detail>
+          {detailOpen && <DetailContent key={detailId} id={detailId} onClose={closeDetail} onReplace={openDetail} />}
+        </MasterDetailLayout.Detail>
       </MasterDetailLayout>
-    </>
+    </div>
   );
 }
