@@ -428,6 +428,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * synchronous DOM reads and writes.
    */
   recalculateLayout() {
+    // Cancel any pending ResizeObserver rAF to prevent it from potentially
+    // overriding the layout state with stale measurements.
+    cancelAnimationFrame(this.__resizeRaf);
+
     const invalidatedLayouts = [...this.__ancestorLayouts.filter((layout) => layout.__isDetailAutoSized), this];
 
     // Write
@@ -658,7 +662,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @protected
    */
   _finishTransition() {
-    queueMicrotask(() => this.recalculateLayout());
+    this.recalculateLayout();
   }
 
   /**
@@ -766,10 +770,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
     this.removeAttribute('transition');
     this.__clearOutgoing();
-    // Cancel any pending ResizeObserver rAF that captured stale state
-    // during the animation — _finishTransition already applied the
-    // correct post-transition state synchronously.
-    cancelAnimationFrame(this.__resizeRaf);
     if (this.__transitionResolve) {
       this.__transitionResolve();
       this.__transitionResolve = null;
