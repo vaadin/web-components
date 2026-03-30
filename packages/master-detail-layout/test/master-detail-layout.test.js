@@ -128,13 +128,6 @@ describe('vaadin-master-detail-layout', () => {
     });
   });
 
-  describe('recalculateLayout', () => {
-    it('should not throw when called on a disconnected element', () => {
-      layout.parentElement.removeChild(layout);
-      expect(() => layout.recalculateLayout()).to.not.throw();
-    });
-  });
-
   describe('height', () => {
     it('should expand to full height of the parent', async () => {
       layout.masterSize = '200px';

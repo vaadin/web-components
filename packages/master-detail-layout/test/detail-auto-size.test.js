@@ -47,5 +47,10 @@ describe('detail auto size', () => {
       layout.detailSize = '300px';
       expect(spy).to.be.calledOnce;
     });
+
+    it('should not throw when called on a disconnected element', () => {
+      layout.parentElement.removeChild(layout);
+      expect(() => layout.recalculateLayout()).to.not.throw();
+    });
   });
 });
