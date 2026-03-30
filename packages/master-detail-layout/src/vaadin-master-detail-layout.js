@@ -297,9 +297,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    const state = this.__computeLayoutState();
+    const state = this.__readLayoutState();
     cancelAnimationFrame(this.__resizeRaf);
-    this.__resizeRaf = requestAnimationFrame(() => this.__applyLayoutState(state));
+    this.__resizeRaf = requestAnimationFrame(() => this.__writeLayoutState(state));
   }
 
   /**
@@ -307,7 +307,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * ResizeObserver callback where layout is already computed (no forced reflow).
    * @private
    */
-  __computeLayoutState() {
+  __readLayoutState() {
     const detailContent = this.querySelector(':scope > [slot="detail"]');
     const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
 
@@ -324,7 +324,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * Applies layout state to DOM attributes. Pure writes, no reads.
    * @private
    */
-  __applyLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget }) {
+  __writeLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget }) {
     // Set keep-detail-column-offscreen when detail first appears with overlay
     // to prevent master width from jumping.
     if (!hadDetail && hasDetail && hasOverflow) {
@@ -414,8 +414,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     if (skipTransition || this.noAnimation) {
       updateSlot();
       queueMicrotask(() => {
-        const state = this.__computeLayoutState();
-        this.__applyLayoutState(state);
+        const state = this.__readLayoutState();
+        this.__writeLayoutState(state);
       });
       return Promise.resolve();
     }
@@ -561,8 +561,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @protected
    */
   _finishTransition() {
-    const state = this.__computeLayoutState();
-    this.__applyLayoutState(state);
+    const state = this.__readLayoutState();
+    this.__writeLayoutState(state);
   }
 
   /**
