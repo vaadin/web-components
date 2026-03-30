@@ -56,40 +56,6 @@ snapshots["vaadin-master-detail-layout host masterSize and detailSize"] =
 `;
 /* end snapshot vaadin-master-detail-layout host masterSize and detailSize */
 
-snapshots["vaadin-master-detail-layout host no detail"] = 
-`<vaadin-master-detail-layout
-  expand="master"
-  has-detail-placeholder=""
-  orientation="horizontal"
-  overlay-containment="layout"
->
-  <div>
-    Master content
-  </div>
-  <div slot="detail-placeholder">
-    Detail placeholder
-  </div>
-</vaadin-master-detail-layout>
-`;
-/* end snapshot vaadin-master-detail-layout host no detail */
-
-snapshots["vaadin-master-detail-layout host no detail placeholder"] = 
-`<vaadin-master-detail-layout
-  expand="master"
-  has-detail=""
-  orientation="horizontal"
-  overlay-containment="layout"
->
-  <div>
-    Master content
-  </div>
-  <div slot="detail">
-    Detail content
-  </div>
-</vaadin-master-detail-layout>
-`;
-/* end snapshot vaadin-master-detail-layout host no detail placeholder */
-
 snapshots["vaadin-master-detail-layout shadow default"] = 
 `<div
   id="backdrop"
@@ -127,65 +93,6 @@ snapshots["vaadin-master-detail-layout shadow default"] =
 </div>
 `;
 /* end snapshot vaadin-master-detail-layout shadow default */
-
-snapshots["vaadin-master-detail-layout overlay mode default"] = 
-`<vaadin-master-detail-layout
-  detail-size="300px"
-  expand="master"
-  master-size="300px"
-  orientation="horizontal"
-  overlay-containment="layout"
-  style="width: 400px; --_master-size: 300px; --_detail-size: 300px;"
->
-  <div>
-    Master content
-  </div>
-</vaadin-master-detail-layout>
-`;
-/* end snapshot vaadin-master-detail-layout overlay mode default */
-
-snapshots["vaadin-master-detail-layout overlay mode with detail"] = 
-`<vaadin-master-detail-layout
-  detail-size="300px"
-  expand="master"
-  has-detail=""
-  keep-detail-column-offscreen=""
-  master-size="300px"
-  orientation="horizontal"
-  overlay=""
-  overlay-containment="layout"
-  style="width: 400px; --_master-size: 300px; --_detail-size: 300px;"
->
-  <div>
-    Master content
-  </div>
-  <div slot="detail">
-    Detail content
-  </div>
-</vaadin-master-detail-layout>
-`;
-/* end snapshot vaadin-master-detail-layout overlay mode with detail */
-
-snapshots["vaadin-master-detail-layout overlay mode with detail placeholder"] = 
-`<vaadin-master-detail-layout
-  detail-size="300px"
-  expand="master"
-  has-detail-placeholder=""
-  master-size="300px"
-  orientation="horizontal"
-  overlay=""
-  overlay-containment="layout"
-  style="width: 400px; --_master-size: 300px; --_detail-size: 300px;"
->
-  <div>
-    Master content
-  </div>
-  <div slot="detail-placeholder">
-    Detail placeholder
-  </div>
-</vaadin-master-detail-layout>
-`;
-/* end snapshot vaadin-master-detail-layout overlay mode with detail placeholder */
 
 snapshots["vaadin-master-detail-layout detail default"] = 
 `<vaadin-master-detail-layout
