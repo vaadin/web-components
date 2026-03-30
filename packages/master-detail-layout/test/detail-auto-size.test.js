@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import { onceResized } from './helpers.js';
@@ -61,21 +61,39 @@ describe('detail auto size', () => {
       return layout.style.getPropertyValue('--_detail-cached-size');
     }
 
+    const shadowElement = defineCE(
+      class extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: 'open' });
+          this.shadowRoot.appendChild(this.querySelector('template').content);
+        }
+      },
+    );
+
     beforeEach(async () => {
       outer = fixtureSync(`
         <vaadin-master-detail-layout style="width: 1200px;" master-size="100px" expand="both">
           <div>Outer Master</div>
+
           <vaadin-master-detail-layout slot="detail" master-size="100px">
             <div>Middle Master</div>
-            <vaadin-master-detail-layout slot="detail" master-size="100px">
-              <div>Inner Master</div>
-              <div slot="detail" style="width: 100px;">Inner Detail</div>
-            </vaadin-master-detail-layout>
+
+            <${shadowElement} slot="detail">
+              <template>
+                <vaadin-master-detail-layout master-size="100px">
+                  <div>Inner Master</div>
+
+                  <div slot="detail" style="width: 100px;">Inner Detail</div>
+                </vaadin-master-detail-layout>
+              </template>
+            </${shadowElement}>
           </vaadin-master-detail-layout>
         </vaadin-master-detail-layout>
       `);
       middle = outer.querySelector('vaadin-master-detail-layout');
-      inner = middle.querySelector('vaadin-master-detail-layout');
+      inner = middle.querySelector('[slot="detail"]').shadowRoot.querySelector('vaadin-master-detail-layout');
+
       await onceResized(outer);
       await onceResized(middle);
       await onceResized(inner);
@@ -100,24 +118,22 @@ describe('detail auto size', () => {
       it('should update cached sizes on ancestors after detail content changes', () => {
         inner.querySelector('[slot="detail"]').style.width = '200px';
         inner.recalculateLayout();
-
         expect(getCachedSize(inner)).to.equal('201px');
         expect(getCachedSize(middle)).to.equal('302px');
         expect(getCachedSize(outer)).to.equal('403px');
       });
 
       it('should toggle overlay on ancestors when detail content outgrows or fits available space', () => {
-        // Outer: 100px master + 303px detail = 403px, host is 1200px → no overlay
-        expect(outer.hasAttribute('overlay')).to.be.false;
-
         // Grow inner detail so outer needs 100px + 1103px = 1203px > 1200px
         inner.querySelector('[slot="detail"]').style.width = '1000px';
         inner.recalculateLayout();
+        expect(middle.hasAttribute('overlay')).to.be.true;
         expect(outer.hasAttribute('overlay')).to.be.true;
 
         // Shrink back so outer needs 100px + 303px = 403px < 1200px
         inner.querySelector('[slot="detail"]').style.width = '100px';
         inner.recalculateLayout();
+        expect(middle.hasAttribute('overlay')).to.be.false;
         expect(outer.hasAttribute('overlay')).to.be.false;
       });
     });

@@ -6,6 +6,7 @@
 import { html, LitElement, nothing } from 'lit';
 import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -465,7 +466,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   get __ancestorLayouts() {
-    const parent = this.parentElement && this.parentElement.closest(this.constructor.is);
+    const parent = getClosestElement(this.constructor.is, this.parentNode);
     return parent ? [...parent.__ancestorLayouts, parent] : [];
   }
 

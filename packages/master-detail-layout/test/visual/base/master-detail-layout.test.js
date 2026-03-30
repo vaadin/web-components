@@ -148,59 +148,77 @@ describe('master-detail-layout', () => {
     });
   });
 
-  describe('detail auto size', () => {
-    let layouts;
+  describe('nested layouts', () => {
+    let outer, inner;
 
     function openDetail(layout) {
-      return layout._setDetail(layout.querySelector(':scope > [slot="detail-hidden"]'));
+      // Set detail content and skip animation
+      return layout._setDetail(layout.querySelector(':scope > [slot="detail-hidden"]'), true);
     }
 
     beforeEach(async () => {
-      mdl = fixtureSync(
+      outer = fixtureSync(
         `
-          <vaadin-master-detail-layout expand="detail" master-size="300px" no-animation style="max-width: calc(300px + 250px + 200px + 100px + 1px * 3); height: 400px; border: 1px solid lightgray;">
-            <div>Master 0</div>
-            <vaadin-master-detail-layout expand="detail" master-size="250px" no-animation slot="detail-hidden">
-              <div>Master 1</div>
-              <vaadin-master-detail-layout expand="detail" master-size="200px" no-animation slot="detail-hidden">
-                <div>Master 2</div>
-                <div slot="detail-hidden" style="min-width: 100px">Detail 2</div>
-              </vaadin-master-detail-layout>
+          <vaadin-master-detail-layout master-size="300px" style="height: 400px; border: 1px solid lightgray;">
+            <div>
+              Outer Master
+            </div>
+            <vaadin-master-detail-layout master-size="200px" slot="detail-hidden">
+              <div>
+                Inner Master
+              </div>
+              <div slot="detail-hidden" style="min-width: 100px">
+                Inner Detail
+              </div>
             </vaadin-master-detail-layout>
           </vaadin-master-detail-layout>
         `,
         div,
       );
-
-      layouts = [...div.querySelectorAll('vaadin-master-detail-layout')];
+      inner = outer.querySelector('vaadin-master-detail-layout');
       await onceResized(div);
     });
 
     it('default', async () => {
-      await visualDiff(div, `detail-auto-size`);
+      await visualDiff(div, `nested-layouts`);
     });
 
-    [0, 1, 2].forEach((depth) => {
-      it(`opened (depth ${depth})`, async () => {
-        for (const layout of layouts.slice(0, depth + 1)) {
-          await openDetail(layout);
-        }
+    describe('outer opened', () => {
+      beforeEach(async () => {
+        await openDetail(outer);
+      });
+
+      it('default', async () => {
+        await visualDiff(div, `nested-layouts-outer-opened`);
+      });
+
+      it('overflow', async () => {
+        div.style.width = '400px';
         await onceResized(div);
-        await visualDiff(div, `detail-auto-size-opened-${depth}`);
+        await visualDiff(div, `nested-layouts-outer-opened-overflow`);
       });
     });
 
-    ['600px', '400px', '200px'].forEach((width, depth) => {
-      it(`overflow (depth ${depth})`, async () => {
-        div.style.width = width;
-        await onceResized(div);
+    describe('inner opened', () => {
+      beforeEach(async () => {
+        await openDetail(outer);
+        await openDetail(inner);
+      });
 
-        for (const layout of layouts) {
-          await openDetail(layout);
-        }
+      it('default', async () => {
+        await visualDiff(div, `nested-layouts-inner-opened`);
+      });
 
+      it('outer overflow', async () => {
+        div.style.width = '400px';
         await onceResized(div);
-        await visualDiff(div, `detail-auto-size-overflow-${depth}`);
+        await visualDiff(div, `nested-layouts-inner-opened-outer-overflow`);
+      });
+
+      it('inner overflow', async () => {
+        div.style.width = '200px';
+        await onceResized(div);
+        await visualDiff(div, `nested-layouts-inner-opened-inner-overflow`);
       });
     });
   });
