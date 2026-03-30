@@ -152,17 +152,17 @@ describe('master-detail-layout', () => {
     let layouts;
 
     function openDetail(layout) {
-      layout._setDetail(layout.querySelector(':scope > [slot="detail-hidden"]'));
+      return layout._setDetail(layout.querySelector(':scope > [slot="detail-hidden"]'));
     }
 
     beforeEach(async () => {
       mdl = fixtureSync(
         `
-          <vaadin-master-detail-layout master-size="300px" no-animation style="height: 400px; border: 1px solid lightgray;">
+          <vaadin-master-detail-layout expand="detail" master-size="300px" no-animation style="max-width: calc(300px + 250px + 200px + 100px + 1px * 3); height: 400px; border: 1px solid lightgray;">
             <div>Master 0</div>
-            <vaadin-master-detail-layout master-size="250px" no-animation slot="detail-hidden">
+            <vaadin-master-detail-layout expand="detail" master-size="250px" no-animation slot="detail-hidden">
               <div>Master 1</div>
-              <vaadin-master-detail-layout master-size="200px" no-animation slot="detail-hidden">
+              <vaadin-master-detail-layout expand="detail" master-size="200px" no-animation slot="detail-hidden">
                 <div>Master 2</div>
                 <div slot="detail-hidden" style="min-width: 100px">Detail 2</div>
               </vaadin-master-detail-layout>
@@ -173,27 +173,34 @@ describe('master-detail-layout', () => {
       );
 
       layouts = [...div.querySelectorAll('vaadin-master-detail-layout')];
-      await onceResized(mdl);
+      await onceResized(div);
     });
 
     it('default', async () => {
-      await visualDiff(div, 'detail-auto-size-default');
+      await visualDiff(div, `detail-auto-size`);
     });
 
     [0, 1, 2].forEach((depth) => {
       it(`opened (depth ${depth})`, async () => {
-        layouts.slice(0, depth + 1).forEach(openDetail);
-        await onceResized(mdl);
-        await visualDiff(div, `detail-auto-size-opened-depth-${depth}`);
+        for (const layout of layouts.slice(0, depth + 1)) {
+          await openDetail(layout);
+        }
+        await onceResized(div);
+        await visualDiff(div, `detail-auto-size-opened-${depth}`);
       });
     });
 
     ['600px', '400px', '200px'].forEach((width, depth) => {
       it(`overflow (depth ${depth})`, async () => {
-        layouts.forEach(openDetail);
         div.style.width = width;
-        await onceResized(mdl);
-        await visualDiff(div, `detail-auto-size-overflow-depth-${depth}`);
+        await onceResized(div);
+
+        for (const layout of layouts) {
+          await openDetail(layout);
+        }
+
+        await onceResized(div);
+        await visualDiff(div, `detail-auto-size-overflow-${depth}`);
       });
     });
   });
