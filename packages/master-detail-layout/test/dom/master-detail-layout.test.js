@@ -58,7 +58,7 @@ describe('vaadin-master-detail-layout', () => {
   describe('detail', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="300px">
+        <vaadin-master-detail-layout master-size="300px" detail-size="300px">
           <div>Master content</div>
           <div slot="detail">Detail content</div>
         </vaadin-master-detail-layout>
@@ -72,7 +72,6 @@ describe('vaadin-master-detail-layout', () => {
 
     it('overflow', async () => {
       layout.style.width = '400px';
-      layout.detailSize = '300px';
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });
@@ -93,7 +92,7 @@ describe('vaadin-master-detail-layout', () => {
   describe('detail placeholder', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="300px">
+        <vaadin-master-detail-layout master-size="300px" detail-size="300px">
           <div>Master content</div>
           <div slot="detail-placeholder">Detail placeholder content</div>
         </vaadin-master-detail-layout>
@@ -107,7 +106,6 @@ describe('vaadin-master-detail-layout', () => {
 
     it('overflow', async () => {
       layout.style.width = '400px';
-      layout.detailSize = '300px';
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });

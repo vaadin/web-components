@@ -96,12 +96,13 @@ snapshots["vaadin-master-detail-layout shadow default"] =
 
 snapshots["vaadin-master-detail-layout detail default"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   has-detail=""
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
-  style="--_master-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px;"
 >
   <div>
     Master content
@@ -115,13 +116,14 @@ snapshots["vaadin-master-detail-layout detail default"] =
 
 snapshots["vaadin-master-detail-layout detail overflow"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   has-detail=""
   master-size="300px"
   orientation="horizontal"
   overlay=""
   overlay-containment="layout"
-  style="--_master-size: 300px; width: 400px; --_detail-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px; width: 400px;"
 >
   <div>
     Master content
@@ -135,11 +137,12 @@ snapshots["vaadin-master-detail-layout detail overflow"] =
 
 snapshots["vaadin-master-detail-layout detail hidden"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
-  style="--_master-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px;"
 >
   <div>
     Master content
@@ -156,11 +159,12 @@ snapshots["vaadin-master-detail-layout detail hidden"] =
 
 snapshots["vaadin-master-detail-layout detail removed"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
-  style="--_master-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px;"
 >
   <div>
     Master content
@@ -171,12 +175,13 @@ snapshots["vaadin-master-detail-layout detail removed"] =
 
 snapshots["vaadin-master-detail-layout detail placeholder default"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   has-detail-placeholder=""
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
-  style="--_master-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px;"
 >
   <div>
     Master content
@@ -190,13 +195,14 @@ snapshots["vaadin-master-detail-layout detail placeholder default"] =
 
 snapshots["vaadin-master-detail-layout detail placeholder overflow"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   has-detail-placeholder=""
   master-size="300px"
   orientation="horizontal"
   overlay=""
   overlay-containment="layout"
-  style="--_master-size: 300px; width: 400px; --_detail-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px; width: 400px;"
 >
   <div>
     Master content
@@ -210,11 +216,12 @@ snapshots["vaadin-master-detail-layout detail placeholder overflow"] =
 
 snapshots["vaadin-master-detail-layout detail placeholder removed"] = 
 `<vaadin-master-detail-layout
+  detail-size="300px"
   expand="master"
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
-  style="--_master-size: 300px;"
+  style="--_master-size: 300px; --_detail-size: 300px;"
 >
   <div>
     Master content
