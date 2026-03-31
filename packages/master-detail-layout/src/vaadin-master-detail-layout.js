@@ -663,7 +663,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @protected
    */
   _finishTransition() {
-    this.recalculateLayout();
+    queueMicrotask(() => this.recalculateLayout());
   }
 
   /**

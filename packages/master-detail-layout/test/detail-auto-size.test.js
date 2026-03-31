@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
+import { css, html, LitElement } from 'lit';
 import { onceResized } from './helpers.js';
 
 window.Vaadin ||= {};
@@ -10,6 +11,10 @@ window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('detail auto size', () => {
   let layout;
+
+  function getCachedSize(layout) {
+    return layout.style.getPropertyValue('--_detail-cached-size');
+  }
 
   describe('basic', () => {
     beforeEach(async () => {
@@ -54,12 +59,51 @@ describe('detail auto size', () => {
     });
   });
 
+  describe('Lit element detail', () => {
+    const detailElementTag = defineCE(
+      class extends LitElement {
+        static get styles() {
+          return css`
+            :host {
+              display: block;
+            }
+
+            div {
+              width: 200px;
+            }
+          `;
+        }
+
+        render() {
+          return html`<div>Detail</div>`;
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-master-detail-layout master-size="100px">
+          <div>Master</div>
+        </vaadin-master-detail-layout>
+      `);
+      await onceResized(layout);
+    });
+
+    it('should measure correct detail size for a Lit element set via _setDetail', async () => {
+      await layout._setDetail(document.createElement(detailElementTag));
+      await onceResized(layout);
+      expect(getCachedSize(layout)).to.equal('201px');
+    });
+
+    it('should measure correct detail size for a Lit element set via _setDetail without transition', async () => {
+      await layout._setDetail(document.createElement(detailElementTag), true);
+      await onceResized(layout);
+      expect(getCachedSize(layout)).to.equal('201px');
+    });
+  });
+
   describe('nested layouts', () => {
     let outer, middle, inner;
-
-    function getCachedSize(layout) {
-      return layout.style.getPropertyValue('--_detail-cached-size');
-    }
 
     const shadowElement = defineCE(
       class extends HTMLElement {
