@@ -58,7 +58,7 @@ describe('vaadin-master-detail-layout', () => {
   describe('detail', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="300px" detail-size="300px">
+        <vaadin-master-detail-layout master-size="300px">
           <div>Master content</div>
           <div slot="detail">Detail content</div>
         </vaadin-master-detail-layout>
@@ -92,7 +92,7 @@ describe('vaadin-master-detail-layout', () => {
   describe('detail placeholder', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="300px" detail-size="300px">
+        <vaadin-master-detail-layout master-size="300px">
           <div>Master content</div>
           <div slot="detail-placeholder">Detail placeholder content</div>
         </vaadin-master-detail-layout>

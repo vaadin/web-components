@@ -147,4 +147,79 @@ describe('master-detail-layout', () => {
       await visualDiff(div, `detail-placeholder-expand-detail`);
     });
   });
+
+  describe('nested layouts', () => {
+    let outer, inner;
+
+    function openDetail(layout) {
+      // Set detail content and skip animation
+      return layout._setDetail(layout.querySelector(':scope > [slot="detail-hidden"]'), true);
+    }
+
+    beforeEach(async () => {
+      outer = fixtureSync(
+        `
+          <vaadin-master-detail-layout master-size="300px" style="height: 400px; border: 1px solid lightgray;">
+            <div>
+              Outer Master
+            </div>
+            <vaadin-master-detail-layout master-size="200px" slot="detail-hidden">
+              <div>
+                Inner Master
+              </div>
+              <div slot="detail-hidden" style="min-width: 100px">
+                Inner Detail
+              </div>
+            </vaadin-master-detail-layout>
+          </vaadin-master-detail-layout>
+        `,
+        div,
+      );
+      inner = outer.querySelector('vaadin-master-detail-layout');
+      await onceResized(div);
+    });
+
+    it('default', async () => {
+      await visualDiff(div, `nested-layouts`);
+    });
+
+    describe('outer opened', () => {
+      beforeEach(async () => {
+        await openDetail(outer);
+      });
+
+      it('default', async () => {
+        await visualDiff(div, `nested-layouts-outer-opened`);
+      });
+
+      it('overflow', async () => {
+        div.style.width = '400px';
+        await onceResized(div);
+        await visualDiff(div, `nested-layouts-outer-opened-overflow`);
+      });
+    });
+
+    describe('inner opened', () => {
+      beforeEach(async () => {
+        await openDetail(outer);
+        await openDetail(inner);
+      });
+
+      it('default', async () => {
+        await visualDiff(div, `nested-layouts-inner-opened`);
+      });
+
+      it('outer overflow', async () => {
+        div.style.width = '400px';
+        await onceResized(div);
+        await visualDiff(div, `nested-layouts-inner-opened-outer-overflow`);
+      });
+
+      it('inner overflow', async () => {
+        div.style.width = '200px';
+        await onceResized(div);
+        await visualDiff(div, `nested-layouts-inner-opened-inner-overflow`);
+      });
+    });
+  });
 });

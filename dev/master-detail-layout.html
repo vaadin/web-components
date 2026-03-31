@@ -72,11 +72,13 @@
 
     <template id="static-detail">
       <div class="static-detail">
-        <vaadin-button>Close</vaadin-button><br />
-        <vaadin-text-field label="First Name"></vaadin-text-field>
-        <vaadin-text-field label="Last Name"></vaadin-text-field>
-        <vaadin-text-field label="Email"></vaadin-text-field>
-        <vaadin-select label="Country"></vaadin-select>
+        <vaadin-form-layout auto-responsive max-columns="3" auto-rows>
+          <vaadin-text-field label="First Name"></vaadin-text-field>
+          <vaadin-text-field label="Last Name"></vaadin-text-field>
+          <vaadin-text-field label="Email"></vaadin-text-field>
+          <vaadin-select label="Country"></vaadin-select>
+        </vaadin-form-layout>
+        <vaadin-button>Close</vaadin-button>
       </div>
     </template>
 
@@ -94,6 +96,7 @@
       import '@vaadin/icon';
       import '@vaadin/master-detail-layout';
       import '@vaadin/tooltip';
+      import '@vaadin/form-layout';
       import '@vaadin/vaadin-lumo-styles/icons';
       import { html, LitElement, render } from 'lit';
 
@@ -155,6 +158,10 @@
 
         closeParentDetail() {
           this._parentMdl._setDetail(null);
+        }
+
+        recalculateLayout() {
+          this._mdl.recalculateLayout();
         }
 
         replaceDetail() {
@@ -228,7 +235,13 @@
                   <vaadin-radio-button value="layout" label="Layout"></vaadin-radio-button>
                   <vaadin-radio-button value="viewport" label="Viewport"></vaadin-radio-button>
                 </vaadin-radio-group>
-                <vaadin-radio-group @change=${this._configChange} class="expand" label="Expand" theme="vertical" value="both">
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="expand"
+                  label="Expand"
+                  theme="vertical"
+                  value="master"
+                >
                   <vaadin-radio-button value="both" label="Both"></vaadin-radio-button>
                   <vaadin-radio-button value="master" label="Master"></vaadin-radio-button>
                   <vaadin-radio-button value="detail" label="Detail"></vaadin-radio-button>
@@ -260,6 +273,7 @@
                 <vaadin-checkbox @change=${this._togglePlaceholder} label="Detail Placeholder"></vaadin-checkbox>
                 <vaadin-button @click=${this.openStaticDetail}>Open Static Detail</vaadin-button>
                 <vaadin-button @click=${this.openDetail}>Open Nested Test View</vaadin-button>
+                <vaadin-button @click=${this.recalculateLayout}>Recalculate Layout</vaadin-button>
                 <p>${lorem}</p>
               </div>
             </vaadin-master-detail-layout>
