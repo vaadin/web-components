@@ -45,7 +45,7 @@ describe('dom-utils', () => {
   });
 
   describe('getClosestElement', () => {
-    let element;
+    let element, node;
 
     const tag = defineCE(
       class ShadowElement extends HTMLElement {
@@ -65,26 +65,30 @@ describe('dom-utils', () => {
 
     it('should return the closest element matching the selector within the shadow root', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      const node = element.shadowRoot.querySelector('.child');
+      node = element.shadowRoot.querySelector('.child');
       const expected = element.shadowRoot.querySelector('.parent-2');
       expect(getClosestElement('.parent', node)).to.equal(expected);
     });
 
     it('should return the closest element matching the selector across the shadow root', () => {
       element = fixtureSync(`<div class="wrapper"><${tag}></${tag}></div>`);
-      const node = element.querySelector(tag).shadowRoot.querySelector('.parent');
+
+      node = element.querySelector(tag).shadowRoot;
+      expect(getClosestElement('.wrapper', node)).to.equal(element);
+
+      node = element.querySelector(tag).shadowRoot.querySelector('.parent');
       expect(getClosestElement('.wrapper', node)).to.equal(element);
     });
 
     it('should return null when no closest element is found', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      const node = element.shadowRoot.querySelector('.child');
+      node = element.shadowRoot.querySelector('.child');
       expect(getClosestElement('.not-existing-class', node)).to.be.null;
     });
 
     it('should return the passed element if it matches the selector', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      const node = element.shadowRoot.querySelector('.child');
+      node = element.shadowRoot.querySelector('.child');
       expect(getClosestElement('.child', node)).to.equal(node);
     });
   });
