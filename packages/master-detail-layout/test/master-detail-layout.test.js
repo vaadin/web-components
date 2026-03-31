@@ -87,7 +87,7 @@ describe('vaadin-master-detail-layout', () => {
     let onResizeSpy;
 
     beforeEach(() => {
-      onResizeSpy = sinon.spy(layout, '__applyLayoutState');
+      onResizeSpy = sinon.spy(layout, '__writeLayoutState');
     });
 
     it('should trigger observer when layout is resized', async () => {
