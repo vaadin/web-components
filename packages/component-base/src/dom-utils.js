@@ -74,7 +74,7 @@ export function getClosestElement(selector, node) {
     return null;
   }
 
-  return node.closest(selector) || getClosestElement(selector, node.getRootNode().host);
+  return node.closest?.(selector) || getClosestElement(selector, node.getRootNode().host);
 }
 
 /**
