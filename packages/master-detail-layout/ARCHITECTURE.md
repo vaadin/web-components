@@ -42,7 +42,7 @@ In vertical mode, `grid-template-rows` replaces `grid-template-columns` using th
 
 ## Overflow Detection
 
-`__checkOverflow()` reads the first 3 of the 4 computed track sizes: `[masterSize, masterExtra, detailSize]`. The 4th (detail extra) is 0 in overflow scenarios.
+The `detectOverflow()` helper reads the first 3 of the 4 computed track sizes: `[masterSize, masterExtra, detailSize]`. The 4th (detail extra) is 0 in overflow scenarios.
 
 **No overflow** when either:
 
@@ -64,6 +64,10 @@ Layout detection is split into two methods to avoid forced reflows:
 - ResizeObserver callback: calls `__readLayoutState()` (read), cancels any pending rAF via `cancelAnimationFrame`, then defers `__writeLayoutState()` (write) via `requestAnimationFrame`. Cancelling ensures the write phase always uses the latest state when multiple callbacks fire per frame.
 - **Property observers** (`masterSize`/`detailSize`) only update CSS custom properties — ResizeObserver picks up the resulting size changes automatically
 
+### Stale rAF safety
+
+The only code paths that modify layout attributes (`has-detail`, `overlay`, etc.) are `__writeLayoutState` (called by the rAF itself or by `recalculateLayout`) and `recalculateLayout` (which always starts with `cancelAnimationFrame`). A pending rAF that isn't cancelled simply re-applies the same state it read — an idempotent no-op. The `cancelAnimationFrame` in `recalculateLayout` prevents stale rAFs from overwriting freshly computed state after transitions or property changes.
+
 ## Auto Detail Size
 
 When `detailSize` is not explicitly set, the detail column size is determined automatically from the detail content's intrinsic size using `min-content`.
@@ -83,7 +87,7 @@ Called when `masterSize`/`detailSize` change after initial render and after deta
 When `overlay` AND `has-detail` are both set, the detail becomes an overlay:
 
 - `position: absolute; grid-column: none` removes detail from grid flow
-- Backdrop becomes visible
+- Backdrop becomes visible (`opacity: 1`, `pointer-events: auto`)
 - `overlaySize` (CSS custom property `--_overlay-size`) controls overlay dimensions; falls back to `--_detail-size`
 - `overlayContainment` (`layout`/`viewport`) controls positioning: `absolute` vs `fixed`
 - ARIA: `role="dialog"` on detail, `inert` on master (layout containment), `aria-modal` (viewport containment)
@@ -101,11 +105,15 @@ Setting `overlaySize` to `100%` makes the detail cover the full layout (replaces
 
 The `detail-placeholder` slot shows content in the detail area when no detail is open (e.g. "Select an item"). It occupies the same grid tracks as the detail and receives the same border styling.
 
-Visible only when a placeholder element is slotted, no detail is present, and there is no overlay:
+Visible only when a placeholder element is slotted, no detail is present, and there is no overlay. Uses `visibility: hidden/visible` (not `display: none/block`) so it always participates in grid sizing:
 
 ```css
+#detail-placeholder {
+  visibility: hidden;
+}
+
 :host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
-  display: block;
+  visibility: visible;
 }
 ```
 
@@ -121,7 +129,7 @@ When neither detail nor placeholder is present, master's extra track is set to `
 :host([keep-detail-column-offscreen]),
 :host([has-detail-placeholder][overlay]),
 :host(:not([has-detail-placeholder], [has-detail])) {
-  --_master-column: var(--_master-size) calc(100% - var(--_master-size));
+  --_master-extra: calc(100% - var(--_master-size));
 }
 ```
 
@@ -129,7 +137,7 @@ Set when detail first appears with overlay, cleared when detail is removed or ov
 
 ## Detail Animations
 
-Detail panel transitions use the Web Animations API (`element.animate()`) on `translate` and `opacity`. This works inside shadow roots (unlike the View Transitions API).
+Detail panel transitions use the Web Animations API (`element.animate()`) on `translate` and `opacity`. This works inside shadow roots (unlike the View Transitions API). The host uses `overflow: clip` (not `overflow: hidden`) to clip offscreen content without creating a scroll container.
 
 ### CSS custom properties
 
@@ -139,27 +147,40 @@ Animation parameters are driven by CSS custom properties, read once per transiti
 - `--_transition-duration` — defaults to `0s`, enabled via `@media (prefers-reduced-motion: no-preference)`: 200ms for split mode, 300ms for overlay mode. Replace transitions in split mode use 0ms (no slide, just instant swap).
 - `--_transition-easing` — cubic-bezier easing
 
-CSS handles resting states: `translate: var(--_detail-offscreen)` on `#detail` by default, overridden to `translate: none` by `:host([has-detail])`. RTL is supported via `--_rtl-multiplier`.
+CSS handles resting states via `translate` and `visibility` on `#detail`: offscreen and hidden by default, on-screen and visible when `has-detail` is set. RTL is supported via `--_rtl-multiplier`.
 
 ### Transition types
 
 - **Add**: DOM is updated first (new element inserted, `has-detail` set), then the detail slides in from off-screen. In split mode, also fades from opacity 0 → 1.
-- **Remove**: the detail slides out to off-screen first (in split mode, also fades to opacity 0), then the DOM is updated (element removed, `has-detail` cleared) on `animation.finished`
+- **Remove**: the detail slides out to off-screen first (in split mode, also fades to opacity 0), then the DOM is updated (element removed, `has-detail` cleared) on `animation.finished`. The `fill: 'forwards'` on the animation keeps the detail offscreen between animation end and the deferred layout recalculation (see below).
 - **Replace** (overlay): old content is reassigned to `slot="detail-outgoing"` (stays in light DOM so styles continue to apply), then old slides out while new slides in simultaneously
 - **Replace** (split): old content moves to outgoing slot. The outgoing slides out with fade on top (`z-index: 1`), revealing the incoming at full opacity underneath.
 
 The `noAnimation` property (reflected as `no-animation` attribute) skips all animations. Animations are also disabled when `--_transition-duration` resolves to `0s`.
+
+### Backdrop fade
+
+The backdrop uses `opacity: 0/1` + `pointer-events: none/auto` (not `display: none/block`) so it can be animated. A linear opacity fade runs in parallel with the detail slide for overlay add/remove transitions. During replace, the backdrop stays visible (no fade).
 
 ### Transition flow
 
 1. **Capture interrupted state** — read the detail panel's current `translate` and `opacity` via `getComputedStyle()` _before_ cancelling any in-progress animation (see "Smooth interruption" below)
 2. **Cancel previous** — cancel in-progress animations, clean up state, resolve the pending promise
 3. **Snapshot outgoing** — reassign old content to the outgoing slot (replace only)
-4. **DOM update** — run the update callback, apply layout state (add/replace only; remove defers this to step 6)
-5. **Animate** — create Web Animations on `translate` and `opacity`
-6. **Finish** — on `animation.finished`, clean up the `transition` attribute and resolve the promise. For remove, the deferred DOM update runs here
+4. **DOM update** — run the update callback (add/replace only; remove defers this to step 6). The callback calls `_finishTransition()` which defers layout recalculation to a microtask via `queueMicrotask(() => recalculateLayout())`.
+5. **Animate** — create Web Animations on `translate` and `opacity` with `fill: 'forwards'`
+6. **Finish** — on `animation.finished`, run the deferred callback (remove only), then `__endTransition()` cancels animations (removing the fill effect) and resolves the promise. The microtask from `_finishTransition` runs before the next paint, applying the correct post-transition layout state.
 
 A version counter guards step 6: if a newer transition has started since step 5, the stale finish callback is ignored.
+
+### `fill: 'forwards'` and async layout recalculation
+
+All animations use `fill: 'forwards'` to keep the final keyframe applied after the animation finishes. This bridges the gap between animation end and the microtask-deferred `recalculateLayout()`:
+
+- Without fill: animation ends → CSS resting state takes over (e.g., `translate: none` from `has-detail`) → visual flash
+- With fill: animation ends → fill holds the final position → `__endTransition()` cancels the animation (removes fill) → but the deferred `recalculateLayout` microtask has already run, clearing `has-detail` so CSS resting state is also offscreen → no flash
+
+The microtask deferral in `_finishTransition` is intentional: it ensures `recalculateLayout()` reads clean computed styles without `fill: 'forwards'` interference (since `__endTransition` cancels animations before the microtask runs).
 
 ### Smooth interruption
 
