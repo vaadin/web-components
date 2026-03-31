@@ -17,6 +17,8 @@ describe('detail auto size', () => {
   }
 
   describe('basic', () => {
+    let spy;
+
     beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-master-detail-layout>
@@ -25,6 +27,7 @@ describe('detail auto size', () => {
         </vaadin-master-detail-layout>
       `);
       await onceResized(layout);
+      spy = sinon.spy(layout, 'recalculateLayout');
     });
 
     it('should not be called when masterSize and detailSize are provided initially', async () => {
@@ -34,22 +37,37 @@ describe('detail auto size', () => {
           <div slot="detail">Detail</div>
         </vaadin-master-detail-layout>
       `);
-      const spy = sinon.spy(newLayout, 'recalculateLayout');
+      const newSpy = sinon.spy(newLayout, 'recalculateLayout');
       await onceResized(newLayout);
-      expect(spy).to.not.be.called;
+      expect(newSpy).to.not.be.called;
     });
 
     it('should be called when masterSize is changed after initial render', () => {
-      const spy = sinon.spy(layout, 'recalculateLayout');
       layout.masterSize = '200px';
       layout.masterSize = '300px';
       expect(spy).to.be.calledOnce;
     });
 
     it('should be called when detailSize is changed after initial render', () => {
-      const spy = sinon.spy(layout, 'recalculateLayout');
       layout.detailSize = '200px';
       layout.detailSize = '300px';
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not be called when orientation is provided initially', async () => {
+      const newLayout = fixtureSync(`
+        <vaadin-master-detail-layout orientation="vertical">
+          <div>Master</div>
+          <div slot="detail">Detail</div>
+        </vaadin-master-detail-layout>
+      `);
+      const newSpy = sinon.spy(newLayout, 'recalculateLayout');
+      await onceResized(newLayout);
+      expect(newSpy).to.not.be.called;
+    });
+
+    it('should be called when orientation is changed after initial render', () => {
+      layout.orientation = 'vertical';
       expect(spy).to.be.calledOnce;
     });
 

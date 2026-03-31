@@ -174,6 +174,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         value: 'horizontal',
         reflectToAttribute: true,
         sync: true,
+        observer: '__orientationChanged',
       },
 
       /**
@@ -290,6 +291,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this.__updateStyleProperty('detail-size', size, oldSize);
 
     if (oldSize != null) {
+      this.recalculateLayout();
+    }
+  }
+
+  /** @private */
+  __orientationChanged(_orientation, oldOrientation) {
+    if (oldOrientation != null) {
       this.recalculateLayout();
     }
   }
