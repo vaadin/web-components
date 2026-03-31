@@ -128,7 +128,7 @@ describe('detail auto size', () => {
         constructor() {
           super();
           this.attachShadow({ mode: 'open' });
-          this.shadowRoot.appendChild(this.querySelector('template').content);
+          this.shadowRoot.appendChild(this.querySelector('template').content.cloneNode(true));
         }
       },
     );
