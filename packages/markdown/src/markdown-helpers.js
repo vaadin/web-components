@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+import { parse } from 'marked';
 
 /**
  * Synchronizes the attributes of a target element with those of a source element.
@@ -79,7 +79,7 @@ function synchronizeNodes(targetNode, sourceNode) {
  */
 export function renderMarkdownToElement(element, markdown) {
   const template = document.createElement('template');
-  template.innerHTML = DOMPurify.sanitize(marked.parse(markdown || ''), {
+  template.innerHTML = DOMPurify.sanitize(parse(markdown || ''), {
     CUSTOM_ELEMENT_HANDLING: {
       tagNameCheck: (_tagName) => true,
     },
