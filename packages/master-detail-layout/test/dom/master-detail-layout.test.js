@@ -72,7 +72,6 @@ describe('vaadin-master-detail-layout', () => {
 
     it('overflow', async () => {
       layout.style.width = '400px';
-      layout.detailSize = '300px';
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });
@@ -107,7 +106,6 @@ describe('vaadin-master-detail-layout', () => {
 
     it('overflow', async () => {
       layout.style.width = '400px';
-      layout.detailSize = '300px';
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });

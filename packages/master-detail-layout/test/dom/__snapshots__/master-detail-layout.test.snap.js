@@ -113,15 +113,14 @@ snapshots["vaadin-master-detail-layout detail default"] =
 `;
 /* end snapshot vaadin-master-detail-layout detail default */
 
-snapshots["vaadin-master-detail-layout detail overflow"] =
+snapshots["vaadin-master-detail-layout detail overflow"] = 
 `<vaadin-master-detail-layout
   expand="master"
   has-detail=""
   master-size="300px"
   orientation="horizontal"
-  overlay=""
   overlay-containment="layout"
-  style="--_master-size: 300px; --_detail-size: 300px; --_detail-cached-size: 49px; width: 400px;"
+  style="--_master-size: 300px; --_detail-cached-size: 49px; width: 400px;"
 >
   <div>
     Master content
@@ -188,14 +187,14 @@ snapshots["vaadin-master-detail-layout detail placeholder default"] =
 `;
 /* end snapshot vaadin-master-detail-layout detail placeholder default */
 
-snapshots["vaadin-master-detail-layout detail placeholder overflow"] =
+snapshots["vaadin-master-detail-layout detail placeholder overflow"] = 
 `<vaadin-master-detail-layout
   expand="master"
   has-detail-placeholder=""
   master-size="300px"
   orientation="horizontal"
   overlay-containment="layout"
-  style="--_master-size: 300px; --_detail-size: 300px; --_detail-cached-size: 76px; width: 400px;"
+  style="--_master-size: 300px; --_detail-cached-size: 76px; width: 400px;"
 >
   <div>
     Master content
