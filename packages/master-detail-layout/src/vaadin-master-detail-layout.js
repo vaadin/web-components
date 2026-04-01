@@ -602,66 +602,77 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     this.setAttribute('transition', transitionType);
 
-    if (transitionType !== 'remove') {
-      updateCallback();
-    }
-
-    const opts = this.__getAnimationParams();
-    opts.interrupted = interrupted;
-    opts.overlay = this.hasAttribute('overlay');
-
-    return this.__animateTransition(transitionType, opts, updateCallback);
-  }
-
-  /**
-   * Creates slide animation(s) for the given transition type and returns
-   * a promise that resolves when the primary animation completes.
-   * A version counter prevents stale callbacks from executing after
-   * a newer transition has started.
-   *
-   * @param {string} transitionType
-   * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
-   * @param {Function} updateCallback
-   * @return {Promise<void>}
-   * @private
-   */
-  __animateTransition(transitionType, opts, updateCallback) {
     const version = (this.__transitionVersion = (this.__transitionVersion || 0) + 1);
 
     return new Promise((resolve) => {
       this.__transitionResolve = resolve;
 
-      const onFinish = (callback) => {
-        if (this.__transitionVersion === version) {
-          if (callback) {
-            callback();
-          }
-          this.__endTransition();
+      const startAnimations = () => {
+        // Bail if a newer transition has started since this one was scheduled
+        if (this.__transitionVersion !== version) {
+          return;
         }
+        const opts = this.__getAnimationParams();
+        opts.interrupted = interrupted;
+        opts.overlay = this.hasAttribute('overlay');
+        this.__runAnimations(transitionType, opts, updateCallback, version);
       };
 
       if (transitionType === 'remove') {
-        this.__slide(this.$.detail, false, opts).then(() => onFinish(updateCallback));
-      } else if (transitionType === 'replace') {
-        // Outgoing slides out on top (z-index), revealing incoming underneath.
-        // In overlay mode, the incoming also slides in simultaneously.
-        this.__slide(this.$.outgoing, false, opts).then(() => onFinish());
-        if (opts.overlay) {
-          this.__slide(this.$.detail, true, { ...opts, interrupted: null });
-        }
+        // Remove: animate first, DOM update deferred to onFinish
+        startAnimations();
       } else {
-        this.__slide(this.$.detail, true, opts).then(() => onFinish());
-      }
-
-      // Fade backdrop in/out for overlay add/remove (not replace — backdrop stays visible)
-      if (opts.overlay && transitionType !== 'replace') {
-        const fadeIn = transitionType !== 'remove';
-        this.__animate(this.$.backdrop, [{ opacity: fadeIn ? 0 : 1 }, { opacity: fadeIn ? 1 : 0 }], {
-          duration: opts.duration,
-          easing: 'linear',
-        });
+        // Add/Replace: update DOM first, then defer animation start to
+        // a microtask so Lit elements render and _finishTransition's
+        // recalculateLayout runs before animation params are read.
+        updateCallback();
+        queueMicrotask(startAnimations);
       }
     });
+  }
+
+  /**
+   * Creates slide animation(s) for the given transition type.
+   * Called from `_startTransition` — either synchronously (remove)
+   * or from a deferred microtask (add/replace).
+   *
+   * @param {string} transitionType
+   * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
+   * @param {Function} updateCallback
+   * @param {number} version
+   * @private
+   */
+  __runAnimations(transitionType, opts, updateCallback, version) {
+    const onFinish = (callback) => {
+      if (this.__transitionVersion === version) {
+        if (callback) {
+          callback();
+        }
+        this.__endTransition();
+      }
+    };
+
+    if (transitionType === 'remove') {
+      this.__slide(this.$.detail, false, opts).then(() => onFinish(updateCallback));
+    } else if (transitionType === 'replace') {
+      // Outgoing slides out on top (z-index), revealing incoming underneath.
+      // In overlay mode, the incoming also slides in simultaneously.
+      this.__slide(this.$.outgoing, false, opts).then(() => onFinish());
+      if (opts.overlay) {
+        this.__slide(this.$.detail, true, { ...opts, interrupted: null });
+      }
+    } else {
+      this.__slide(this.$.detail, true, opts).then(() => onFinish());
+    }
+
+    // Fade backdrop in/out for overlay add/remove (not replace — backdrop stays visible)
+    if (opts.overlay && transitionType !== 'replace') {
+      const fadeIn = transitionType !== 'remove';
+      this.__animate(this.$.backdrop, [{ opacity: fadeIn ? 0 : 1 }, { opacity: fadeIn ? 1 : 0 }], {
+        duration: opts.duration,
+        easing: 'linear',
+      });
+    }
   }
 
   /**

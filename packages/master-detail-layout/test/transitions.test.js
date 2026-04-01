@@ -295,6 +295,9 @@ describe('Transitions', () => {
       const replaceCallback = sinon.spy();
       layout._startTransition('replace', replaceCallback);
 
+      // Wait for deferred animation start (add/replace defer to microtask)
+      await nextFrames();
+
       // Verify the outgoing animation was created with the interrupted
       // position as its starting keyframe (check keyframes directly rather
       // than getComputedStyle, which returns 'none' on hidden elements).

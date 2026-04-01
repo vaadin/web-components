@@ -168,7 +168,7 @@ The backdrop uses `opacity: 0/1` + `pointer-events: none/auto` (not `display: no
 2. **Cancel previous** — cancel in-progress animations, clean up state, resolve the pending promise
 3. **Snapshot outgoing** — reassign old content to the outgoing slot (replace only)
 4. **DOM update** — run the update callback (add/replace only; remove defers this to step 6). The callback calls `_finishTransition()` which defers layout recalculation to a microtask via `queueMicrotask(() => recalculateLayout())`.
-5. **Animate** — create Web Animations on `translate` and `opacity` with `fill: 'forwards'`
+5. **Animate** — for add/replace, deferred to a microtask so steps 2-4 of `recalculateLayout` complete first (see below). Read animation params from CSS custom properties and `[overlay]` attribute. Create Web Animations on `translate` and `opacity` with `fill: 'forwards'`. For remove, starts immediately (overlay is already set, content already rendered).
 6. **Finish** — on `animation.finished`, run the deferred callback (remove only), then `__endTransition()` cancels animations (removing the fill effect) and resolves the promise. The microtask from `_finishTransition` runs before the next paint, applying the correct post-transition layout state.
 
 A version counter guards step 6: if a newer transition has started since step 5, the stale finish callback is ignored.
@@ -180,7 +180,7 @@ All animations use `fill: 'forwards'` to keep the final keyframe applied after t
 - Without fill: animation ends → CSS resting state takes over (e.g., `translate: none` from `has-detail`) → visual flash
 - With fill: animation ends → fill holds the final position → `__endTransition()` cancels the animation (removes fill) → but the deferred `recalculateLayout` microtask has already run, clearing `has-detail` so CSS resting state is also offscreen → no flash
 
-The microtask deferral in `_finishTransition` is intentional: it ensures `recalculateLayout()` reads clean computed styles without `fill: 'forwards'` interference (since `__endTransition` cancels animations before the microtask runs).
+The microtask deferral in `_finishTransition` is intentional: it allows Lit elements to render before `recalculateLayout()` measures their intrinsic size for auto-sizing. For add/replace, animation start is also deferred to a subsequent microtask so that `recalculateLayout` runs first — ensuring the `[overlay]` attribute and CSS custom properties (e.g., `--_detail-offscreen`) reflect the correct layout state when animation params are read.
 
 ### Smooth interruption
 
