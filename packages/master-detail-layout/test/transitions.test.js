@@ -432,5 +432,47 @@ describe('Transitions', () => {
       expect(outgoing.hasAttribute('hidden')).to.be.true;
       expect(layout.querySelector('[slot="detail-outgoing"]')).to.be.null;
     });
+
+    it('should preserve outgoing width when replacing with a differently sized detail', async () => {
+      let detailContent, replacePromise;
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '200px';
+      await layout._setDetail(detailContent);
+      await onceResized(layout);
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '400px';
+      replacePromise = layout._setDetail(detailContent);
+      expect(layout.$.outgoing.style.width).to.equal('201px'); // 1px border
+      await replacePromise;
+      expect(layout.$.outgoing.style.width).to.equal('');
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '200px';
+      replacePromise = layout._setDetail(detailContent);
+      expect(layout.$.outgoing.style.width).to.equal('401px'); // 1px border
+      await replacePromise;
+      expect(layout.$.outgoing.style.width).to.equal('');
+    });
+
+    it('should adjust detail size after replacing with a differently sized detail', async () => {
+      let detailContent;
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '200px';
+      await layout._setDetail(detailContent);
+      expect(layout.$.detail.offsetWidth).to.be.equal(201); // 1px border
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '400px';
+      await layout._setDetail(detailContent);
+      expect(layout.$.detail.offsetWidth).to.be.equal(401); // 1px border
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '200px';
+      await layout._setDetail(detailContent);
+      expect(layout.$.detail.offsetWidth).to.be.equal(201); // 1px border
+    });
   });
 });

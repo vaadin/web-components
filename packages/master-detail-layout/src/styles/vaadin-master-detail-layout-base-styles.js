@@ -56,11 +56,14 @@ export const masterDetailLayoutStyles = css`
   }
 
   #detail-placeholder {
-    visibility: hidden;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
   }
 
   :host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
-    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   #master {
@@ -86,7 +89,7 @@ export const masterDetailLayoutStyles = css`
   #backdrop {
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     opacity: 0;
     pointer-events: none;
     background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.2));
@@ -125,19 +128,21 @@ export const masterDetailLayoutStyles = css`
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
+  #outgoing {
+    position: absolute;
+    z-index: 3;
+  }
+
   /* Detail transition: off-screen by default, on-screen when has-detail */
   #detail {
     translate: var(--_detail-offscreen);
-    visibility: hidden;
+    opacity: 0;
+    z-index: 4;
   }
 
   :host([has-detail]) #detail {
     translate: none;
-    visibility: visible;
-  }
-
-  #outgoing:not([hidden]) {
-    z-index: 1;
+    opacity: 1;
   }
 
   :host([overlay]) {
@@ -150,7 +155,6 @@ export const masterDetailLayoutStyles = css`
 
   :host([has-detail][overlay]) :is(#detail, #outgoing) {
     position: absolute;
-    z-index: 2;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
     grid-column: none;

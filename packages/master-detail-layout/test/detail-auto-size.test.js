@@ -183,6 +183,12 @@ describe('detail auto size', () => {
         expect(getCachedSize(inner)).to.equal('201px');
         expect(getCachedSize(middle)).to.equal('302px');
         expect(getCachedSize(outer)).to.equal('403px');
+
+        inner.querySelector('[slot="detail"]').style.width = '100px';
+        inner.recalculateLayout();
+        expect(getCachedSize(inner)).to.equal('101px');
+        expect(getCachedSize(middle)).to.equal('202px');
+        expect(getCachedSize(outer)).to.equal('303px');
       });
 
       it('should toggle overlay on ancestors when detail content outgrows or fits available space', () => {
