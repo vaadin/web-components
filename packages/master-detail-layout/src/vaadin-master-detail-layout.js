@@ -572,23 +572,25 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * Starts an animated transition for adding, replacing or removing the
    * detail area using the Web Animations API.
    *
-   * For 'remove', the DOM update is deferred until the slide-out completes.
-   * For 'add'/'replace', the DOM is updated immediately and the slide-in
-   * plays on the new content.
+   * For 'add'/'replace': DOM is updated immediately, then animation
+   * starts after a microtask (so Lit elements render and layout is
+   * recalculated before animation params are read).
    *
-   * Animations are interruptible: starting a new transition cancels any
-   * in-progress animation and the new animation picks up from the
-   * interrupted position (see `__captureDetailState`).
+   * For 'remove': animation plays first, then DOM is updated after
+   * the slide-out completes.
+   *
+   * Interruptible: a new transition cancels any in-progress animation
+   * and picks up from the interrupted position.
    *
    * @param transitionType
    * @param updateCallback
    * @return {Promise<void>}
    * @protected
    */
-  _startTransition(transitionType, updateCallback) {
+  async _startTransition(transitionType, updateCallback) {
     if (this.noAnimation) {
       updateCallback();
-      return Promise.resolve();
+      return;
     }
 
     // Capture mid-flight state before cancelling active animations
@@ -604,65 +606,53 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     const version = (this.__transitionVersion = (this.__transitionVersion || 0) + 1);
 
-    return new Promise((resolve) => {
-      this.__transitionResolve = resolve;
+    if (transitionType !== 'remove') {
+      // Add/Replace: update DOM, wait for Lit rendering + recalculateLayout
+      updateCallback();
+      await Promise.resolve();
+      if (this.__transitionVersion !== version) return;
+    }
 
-      const startAnimations = () => {
-        // Bail if a newer transition has started since this one was scheduled
-        if (this.__transitionVersion !== version) {
-          return;
-        }
-        const opts = this.__getAnimationParams();
-        opts.interrupted = interrupted;
-        opts.overlay = this.hasAttribute('overlay');
-        this.__runAnimations(transitionType, opts, updateCallback, version);
-      };
+    const opts = this.__getAnimationParams();
+    opts.interrupted = interrupted;
+    opts.overlay = this.hasAttribute('overlay');
 
-      if (transitionType === 'remove') {
-        // Remove: animate first, DOM update deferred to onFinish
-        startAnimations();
-      } else {
-        // Add/Replace: update DOM first, then defer animation start to
-        // a microtask so Lit elements render and _finishTransition's
-        // recalculateLayout runs before animation params are read.
-        updateCallback();
-        queueMicrotask(startAnimations);
-      }
-    });
+    // Run animations and wait for the detail slide to finish
+    await this.__runAnimations(transitionType, opts);
+    if (this.__transitionVersion !== version) return;
+
+    if (transitionType === 'remove') {
+      // Remove: deferred DOM update after slide-out completes
+      updateCallback();
+      await Promise.resolve();
+    }
+
+    this.__endTransition();
   }
 
   /**
-   * Creates slide animation(s) for the given transition type.
-   * Called from `_startTransition` — either synchronously (remove)
-   * or from a deferred microtask (add/replace).
+   * Starts slide animation(s) for the given transition type and returns
+   * a promise that resolves when the detail slide completes.
    *
    * @param {string} transitionType
    * @param {{ offscreen: string, duration: number, easing: string, interrupted?: { translate: string, opacity: string }, overlay?: boolean }} opts
-   * @param {Function} updateCallback
-   * @param {number} version
+   * @return {Promise<void>}
    * @private
    */
-  __runAnimations(transitionType, opts, updateCallback, version) {
-    const onFinish = (callback) => {
-      if (this.__transitionVersion === version) {
-        if (callback) {
-          callback();
-        }
-        this.__endTransition();
-      }
-    };
+  __runAnimations(transitionType, opts) {
+    let slide;
 
     if (transitionType === 'remove') {
-      this.__slide(this.$.detail, false, opts).then(() => onFinish(updateCallback));
+      slide = this.__slide(this.$.detail, false, opts);
     } else if (transitionType === 'replace') {
       // Outgoing slides out on top (z-index), revealing incoming underneath.
       // In overlay mode, the incoming also slides in simultaneously.
-      this.__slide(this.$.outgoing, false, opts).then(() => onFinish());
+      slide = this.__slide(this.$.outgoing, false, opts);
       if (opts.overlay) {
         this.__slide(this.$.detail, true, { ...opts, interrupted: null });
       }
     } else {
-      this.__slide(this.$.detail, true, opts).then(() => onFinish());
+      slide = this.__slide(this.$.detail, true, opts);
     }
 
     // Fade backdrop in/out for overlay add/remove (not replace — backdrop stays visible)
@@ -673,6 +663,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         easing: 'linear',
       });
     }
+
+    return slide;
   }
 
   /**
@@ -790,10 +782,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
     this.removeAttribute('transition');
     this.__clearOutgoing();
-    if (this.__transitionResolve) {
-      this.__transitionResolve();
-      this.__transitionResolve = null;
-    }
   }
 
   /**
