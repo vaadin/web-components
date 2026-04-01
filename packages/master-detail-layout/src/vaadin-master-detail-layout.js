@@ -797,6 +797,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return;
     }
     currentDetail.setAttribute('slot', 'detail-outgoing');
+    this.$.outgoing.style.width = this.__detailCachedSize;
     this.__replacing = true;
   }
 
@@ -806,6 +807,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    */
   __clearOutgoing() {
     this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
+    this.$.outgoing.style.width = '';
     this.__replacing = false;
   }
 
