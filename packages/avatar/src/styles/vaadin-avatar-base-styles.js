@@ -12,7 +12,6 @@ export const avatarStyles = css`
     display: inline-block;
     flex: none;
     border-radius: 50%;
-    cursor: default;
     color: var(--vaadin-avatar-text-color, var(--vaadin-text-color-secondary));
     overflow: hidden;
     --_size: var(--vaadin-avatar-size, calc(1lh + var(--vaadin-padding-block-container) * 2));
