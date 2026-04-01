@@ -1,4 +1,4 @@
-import type { type ComboBoxElement, type ComboBoxItemModel } from '../generated/ComboBox.js';
+import type { ComboBoxElement, ComboBoxItemModel } from '../generated/ComboBox.js';
 import type { ReactModelRendererProps } from './useModelRenderer.js';
 
 export type ComboBoxReactRendererProps<TItem> = ReactModelRendererProps<
