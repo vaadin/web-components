@@ -48,6 +48,8 @@ const widgetStyles = css`
     flex: 1;
     overflow: hidden;
     min-height: 1em;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
   }
 
   [part~='resize-button'] {
