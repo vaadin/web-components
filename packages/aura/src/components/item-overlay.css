@@ -15,7 +15,7 @@ vaadin-avatar-group-menu-item,
 vaadin-combo-box-item,
 vaadin-context-menu-item,
 vaadin-time-picker-item,
-vaadin-item,
+vaadin-item:where([role]),
 vaadin-menu-bar-item,
 vaadin-multi-select-combo-box-item,
 vaadin-select-item:where([role]) {
