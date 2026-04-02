@@ -515,7 +515,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const updateSlot = async () => {
-      if (oldDetail) {
+      if (oldDetail && oldDetail.slot === 'detail') {
         oldDetail.remove();
       }
 
@@ -572,38 +572,55 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  async __addTransition(params, updateSlot) {
+  async __addTransition({ duration, easing, offscreen }, updateSlot) {
     await updateSlot();
 
-    const animations = [this.__slide(this.$.detail, true, params).finished];
-
-    if (this.hasAttribute('overlay')) {
-      animations.push(
+    const animations = [
+      this.$.detail.animate(
+        [
+          { translate: offscreen, opacity: 0 },
+          { translate: 'none', opacity: 1 },
+        ],
+        { duration, easing },
+      ),
+      this.hasAttribute('overlay') &&
         this.$.backdrop.animate(
-          { opacity: [0, 1] },
           {
-            duration: params.duration,
-            easing: 'linear',
+            opacity: [0, 1],
           },
-        ).finished,
-      );
-    }
+          { duration, easing: 'linear' },
+        ),
+    ];
 
-    await Promise.all(animations);
+    await Promise.all(animations.filter(Boolean).map((animation) => animation.finished));
   }
 
   /** @private */
-  async __replaceTransition(params, updateSlot) {
+  async __replaceTransition({ duration, easing, offscreen }, updateSlot) {
     try {
       this.__snapshotOutgoing();
 
       await updateSlot();
 
       if (this.hasAttribute('overlay')) {
-        await Promise.all([
-          this.__slide(this.$.detail, true, params).finished,
-          this.__slide(this.$.outgoing, false, params).finished,
-        ]);
+        const animations = [
+          this.$.detail.animate(
+            [
+              { translate: offscreen, opacity: 0 },
+              { translate: 'none', opacity: 1 },
+            ],
+            { duration, easing },
+          ),
+          this.$.outgoing.animate(
+            [
+              { translate: 'none', opacity: 1 },
+              { translate: offscreen, opacity: 0 },
+            ],
+            { duration, easing },
+          ),
+        ];
+
+        await Promise.all(animations.map((animation) => animation.finished));
       }
     } finally {
       this.__clearOutgoing();
@@ -611,22 +628,25 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  async __removeTransition(params, updateSlot) {
-    const animations = [this.__slide(this.$.detail, false, params).finished];
-
-    if (this.hasAttribute('overlay')) {
-      animations.push(
+  async __removeTransition({ duration, easing, offscreen }, updateSlot) {
+    const animations = [
+      this.$.detail.animate(
+        [
+          { translate: 'none', opacity: 1 },
+          { translate: offscreen, opacity: 0 },
+        ],
+        { duration, easing },
+      ),
+      this.hasAttribute('overlay') &&
         this.$.backdrop.animate(
-          { opacity: [1, 0] },
           {
-            duration: params.duration,
-            easing: 'linear',
+            opacity: [1, 0],
           },
-        ).finished,
-      );
-    }
+          { duration, easing: 'linear' },
+        ),
+    ];
 
-    await Promise.all(animations);
+    await Promise.all(animations.filter(Boolean).map((animation) => animation.finished));
     await updateSlot();
   }
 
@@ -650,36 +670,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const duration = durationStr.endsWith('ms') ? parseFloat(durationStr) : parseFloat(durationStr) * 1000;
     const easing = cs.getPropertyValue('--_transition-easing').trim();
     return { offscreen, duration, easing };
-  }
-
-  /**
-   * Creates a slide animation on the element's `translate` property
-   * using the Web Animations API. Returns a promise that resolves when
-   * the animation finishes, or immediately if the duration is 0.
-   *
-   * @param {HTMLElement} element - The element to animate
-   * @param {boolean} slideIn - If true, slide in (off-screen → on-screen);
-   *   otherwise slide out (on-screen → off-screen)
-   * @param {{ offscreen: string, duration: number, easing: string, overlay?: boolean }} opts
-   *   Animation parameters.
-   * @return {Promise<void>}
-   * @private
-   */
-  __slide(element, slideIn, { offscreen, duration, easing }) {
-    if (!offscreen || duration <= 0) {
-      return Promise.resolve();
-    }
-
-    const defaultTranslate = slideIn ? offscreen : 'none';
-    const defaultOpacity = slideIn ? 0 : 1;
-
-    const start = defaultTranslate;
-    const end = slideIn ? 'none' : offscreen;
-
-    const opacityStart = defaultOpacity;
-    const opacityEnd = !slideIn ? 0 : 1;
-
-    return element.animate({ translate: [start, end], opacity: [opacityStart, opacityEnd] }, { duration, easing });
   }
 
   /**
