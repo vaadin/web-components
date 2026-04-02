@@ -579,10 +579,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     if (this.hasAttribute('overlay')) {
       animations.push(
-        this.$.backdrop.animate([{ opacity: 0 }, { opacity: 1 }], {
-          duration: params.duration,
-          easing: 'linear',
-        }).finished,
+        this.$.backdrop.animate(
+          { opacity: [0, 1] },
+          {
+            duration: params.duration,
+            easing: 'linear',
+          },
+        ).finished,
       );
     }
 
@@ -613,10 +616,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     if (this.hasAttribute('overlay')) {
       animations.push(
-        this.$.backdrop.animate([{ opacity: 1 }, { opacity: 0 }], {
-          duration: params.duration,
-          easing: 'linear',
-        }).finished,
+        this.$.backdrop.animate(
+          { opacity: [1, 0] },
+          {
+            duration: params.duration,
+            easing: 'linear',
+          },
+        ).finished,
       );
     }
 
@@ -673,13 +679,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const opacityStart = defaultOpacity;
     const opacityEnd = !slideIn ? 0 : 1;
 
-    return element.animate(
-      [
-        { translate: start, opacity: opacityStart },
-        { translate: end, opacity: opacityEnd },
-      ],
-      { duration, easing },
-    );
+    return element.animate({ translate: [start, end], opacity: [opacityStart, opacityEnd] }, { duration, easing });
   }
 
   /**
