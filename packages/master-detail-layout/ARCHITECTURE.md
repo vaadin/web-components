@@ -147,14 +147,14 @@ Animation parameters are driven by CSS custom properties, read once per transiti
 - `--_transition-duration` — defaults to `0s`, enabled via `@media (prefers-reduced-motion: no-preference)`: 200ms for split mode, 300ms for overlay mode. Replace transitions in split mode use 0ms (no slide, just instant swap).
 - `--_transition-easing` — cubic-bezier easing
 
-CSS handles resting states via `translate` and `visibility` on `#detail`: offscreen and hidden by default, on-screen and visible when `has-detail` is set. RTL is supported via `--_rtl-multiplier`.
+CSS handles resting states via `translate` and `opacity` on `#detail`: offscreen and transparent by default, on-screen and opaque when `has-detail` is set. RTL is supported via `--_rtl-multiplier`.
 
 ### Transition types
 
 - **Add**: DOM is updated first (new element inserted, `has-detail` set), then the detail slides in from off-screen. In split mode, also fades from opacity 0 → 1.
 - **Remove**: the detail slides out to off-screen first (in split mode, also fades to opacity 0), then the DOM is updated (element removed, `has-detail` cleared) on `animation.finished`. The `fill: 'forwards'` on the animation keeps the detail offscreen between animation end and the deferred layout recalculation (see below).
 - **Replace** (overlay): old content is reassigned to `slot="detail-outgoing"` (stays in light DOM so styles continue to apply), then old slides out while new slides in simultaneously
-- **Replace** (split): old content moves to outgoing slot. The outgoing slides out with fade on top (`z-index: 1`), revealing the incoming at full opacity underneath.
+- **Replace** (split): 0ms duration (instant swap). Old content moves to outgoing slot, new content appears immediately.
 
 The `noAnimation` property (reflected as `no-animation` attribute) skips all animations. Animations are also disabled when `--_transition-duration` resolves to `0s`.
 
@@ -196,9 +196,20 @@ All animations use `fill: 'forwards'` to keep the final keyframe applied after t
 
 For `replace` interruptions, the captured state is applied to the outgoing element (since the interrupted content moves from the detail slot to the outgoing slot).
 
+### Z-index layering
+
+```
+z-index: 1 — #detail-placeholder
+z-index: 2 — #backdrop
+z-index: 3 — #outgoing (always position: absolute)
+z-index: 4 — #detail
+```
+
+`#detail` above `#outgoing` is correct: split-mode replace has 0ms duration (no frames painted, z-order irrelevant), and overlay-mode replace has the incoming sliding over the outgoing.
+
 ### Outgoing container
 
-The `#outgoing` shadow DOM element with `<slot name="detail-outgoing">` enables replace animations. Old content is moved to this slot (light DOM reassignment preserves user styles), animated out, then removed on completion. The outgoing has `z-index: 1` to paint on top of the incoming during the transition.
+The `#outgoing` shadow DOM element with `<slot name="detail-outgoing">` enables replace animations. Old content is moved to this slot (light DOM reassignment preserves user styles), animated out, then removed on completion. During replace, the outgoing width is frozen to `__detailCachedSize` so it retains the previous detail's dimensions even when the new detail has a different intrinsic size.
 
 ## Test Patterns
 
