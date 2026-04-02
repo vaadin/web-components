@@ -34,6 +34,7 @@ const widgetStyles = css`
     border-style: solid;
     border-radius: inherit;
     pointer-events: none;
+    z-index: 1;
   }
 
   :host([hidden]) {
