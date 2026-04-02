@@ -11,27 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
-
-function parseTrackSizes(gridTemplate) {
-  return gridTemplate
-    .replace(/\[[^\]]+\]/gu, '')
-    .replace(/\s+/gu, ' ')
-    .trim()
-    .split(' ')
-    .map(parseFloat);
-}
-
-function detectOverflow(hostSize, trackSizes) {
-  const [masterSize, masterExtra, detailSize] = trackSizes;
-
-  if (Math.floor(masterSize + masterExtra + detailSize) <= Math.floor(hostSize)) {
-    return false;
-  }
-  if (Math.floor(masterExtra) >= Math.floor(detailSize)) {
-    return false;
-  }
-  return true;
-}
+import { animateIn, animateOut, detectOverflow, parseTrackSizes } from './vaadin-master-detail-layout-helpers.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -274,7 +254,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
     cancelAnimationFrame(this.__resizeRaf);
-    this.__cancelActiveAnimations();
+    this.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
   }
 
   /** @private */
@@ -543,8 +523,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @protected */
   async _startTransition(transitionType, updateSlot) {
-    this.__cancelActiveAnimations();
-
     try {
       this.setAttribute('transition', transitionType);
 
@@ -559,13 +537,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
           await this.__replaceTransition(updateSlot);
           break;
       }
+
+      this.removeAttribute('transition');
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') {
         return; // Animation was cancelled
       }
       throw e;
-    } finally {
-      this.removeAttribute('transition');
     }
   }
 
@@ -573,27 +551,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   async __addTransition(updateSlot) {
     await updateSlot();
 
-    const { offscreen, duration, easing } = this.__getAnimationParams();
+    await Promise.all([
+      animateIn(this.$.detail, ['fade', 'slide']),
 
-    const animations = [
-      this.$.detail.animate(
-        [
-          { translate: offscreen, opacity: 0 },
-          { translate: 'none', opacity: 1 },
-        ],
-        { duration, easing, fill: 'forwards' },
-      ),
-
+      // prettier-ignore
       this.hasAttribute('overlay') &&
-        this.$.backdrop.animate(
-          {
-            opacity: [0, 1],
-          },
-          { duration, easing: 'linear' },
-        ),
-    ];
-
-    await Promise.all(animations.filter(Boolean).map((animation) => animation.finished));
+        animateIn(this.$.backdrop, ['fade']),
+    ]);
   }
 
   /** @private */
@@ -603,28 +567,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       await updateSlot();
 
-      const { offscreen, duration, easing } = this.__getAnimationParams();
-
-      if (this.hasAttribute('overlay')) {
-        const animations = [
-          this.$.detail.animate(
-            [
-              { translate: offscreen, opacity: 0 },
-              { translate: 'none', opacity: 1 },
-            ],
-            { duration, easing, fill: 'forwards' },
-          ),
-          this.$.outgoing.animate(
-            [
-              { translate: 'none', opacity: 1 },
-              { translate: offscreen, opacity: 0 },
-            ],
-            { duration, easing, fill: 'forwards' },
-          ),
-        ];
-
-        await Promise.all(animations.map((animation) => animation.finished));
-      }
+      // prettier-ignore
+      await Promise.all([
+        animateIn(this.$.detail, ['fade', 'slide']),
+        animateOut(this.$.outgoing, ['fade', 'slide'])
+      ]);
     } finally {
       this.__clearOutgoing();
     }
@@ -632,50 +579,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   async __removeTransition(updateSlot) {
-    const { offscreen, duration, easing } = this.__getAnimationParams();
+    await Promise.all([
+      animateOut(this.$.detail, ['fade', 'slide']),
 
-    const animations = [
-      this.$.detail.animate(
-        [
-          { translate: 'none', opacity: 1 },
-          { translate: offscreen, opacity: 0 },
-        ],
-        { duration, easing, fill: 'forwards' },
-      ),
-
+      // prettier-ignore
       this.hasAttribute('overlay') &&
-        this.$.backdrop.animate(
-          {
-            opacity: [1, 0],
-          },
-          { duration, easing: 'linear', fill: 'forwards' },
-        ),
-    ];
+        animateOut(this.$.backdrop, ['fade']),
+    ]);
 
-    await Promise.all(animations.filter(Boolean).map((animation) => animation.finished));
     await updateSlot();
-  }
-
-  __cancelActiveAnimations() {
-    this.getAnimations({ subtree: true })
-      .filter((animation) => animation.playState === 'running')
-      .forEach((animation) => animation.cancel());
-  }
-
-  /**
-   * Reads animation parameters from CSS custom properties. Called once
-   * per transition so that animating stays free of layout reads.
-   *
-   * @return {{ offscreen: string, duration: number, easing: string }}
-   * @private
-   */
-  __getAnimationParams() {
-    const cs = getComputedStyle(this);
-    const offscreen = cs.getPropertyValue('--_detail-offscreen').trim();
-    const durationStr = cs.getPropertyValue('--_transition-duration').trim();
-    const duration = durationStr.endsWith('ms') ? parseFloat(durationStr) : parseFloat(durationStr) * 1000;
-    const easing = cs.getPropertyValue('--_transition-easing').trim();
-    return { offscreen, duration, easing };
   }
 
   /**

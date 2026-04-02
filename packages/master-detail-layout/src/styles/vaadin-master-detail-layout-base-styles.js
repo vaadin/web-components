@@ -162,8 +162,8 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([has-detail][overlay]) #backdrop {
-    opacity: 1;
     pointer-events: auto;
+    opacity: 1;
   }
 
   :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
