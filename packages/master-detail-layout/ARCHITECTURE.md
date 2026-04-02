@@ -162,25 +162,33 @@ The `noAnimation` property (reflected as `no-animation` attribute) skips all ani
 
 The backdrop uses `opacity: 0/1` + `pointer-events: none/auto` (not `display: none/block`) so it can be animated. A linear opacity fade runs in parallel with the detail slide for overlay add/remove transitions. During replace, the backdrop stays visible (no fade).
 
-### Transition flow
+### Transition flow (`_startTransition`)
 
-1. **Capture interrupted state** — read the detail panel's current `translate` and `opacity` via `getComputedStyle()` _before_ cancelling any in-progress animation (see "Smooth interruption" below)
-2. **Cancel previous** — cancel in-progress animations, clean up state, resolve the pending promise
-3. **Snapshot outgoing** — reassign old content to the outgoing slot (replace only)
-4. **DOM update** — run the update callback (add/replace only; remove defers this to step 6). The callback calls `_finishTransition()` which defers layout recalculation to a microtask via `queueMicrotask(() => recalculateLayout())`.
-5. **Animate** — create Web Animations on `translate` and `opacity` with `fill: 'forwards'`
-6. **Finish** — on `animation.finished`, run the deferred callback (remove only), then `__endTransition()` cancels animations (removing the fill effect) and resolves the promise. The microtask from `_finishTransition` runs before the next paint, applying the correct post-transition layout state.
+`_startTransition` is an async method. Each `await` is a yield point where interruption is possible — a version counter is checked after each `await` to bail if a newer transition has started.
 
-A version counter guards step 6: if a newer transition has started since step 5, the stale finish callback is ignored.
+**Add/Replace flow:**
+1. Capture interrupted state, cancel previous, snapshot outgoing (replace only)
+2. Run update callback — DOM changes + `_finishTransition()` (queues `recalculateLayout` microtask)
+3. `await` microtask — Lit elements render, `recalculateLayout` sets `overlay`/`has-detail`
+4. Read animation params from CSS, start animations with `fill: 'forwards'`
+5. `await` animation completion
+6. `__endTransition()` — cancel animations (removes fill), clean up
 
-### `fill: 'forwards'` and async layout recalculation
+**Remove flow:**
+1. Capture interrupted state, cancel previous
+2. Read animation params, start slide-out animation with `fill: 'forwards'`
+3. `await` animation completion
+4. Run update callback — DOM changes + `_finishTransition()` (queues `recalculateLayout` microtask)
+5. `await` microtask — `recalculateLayout` clears `has-detail`
+6. `__endTransition()` — cancel animations (removes fill), clean up
 
-All animations use `fill: 'forwards'` to keep the final keyframe applied after the animation finishes. This bridges the gap between animation end and the microtask-deferred `recalculateLayout()`:
+### `fill: 'forwards'`
 
-- Without fill: animation ends → CSS resting state takes over (e.g., `translate: none` from `has-detail`) → visual flash
-- With fill: animation ends → fill holds the final position → `__endTransition()` cancels the animation (removes fill) → but the deferred `recalculateLayout` microtask has already run, clearing `has-detail` so CSS resting state is also offscreen → no flash
+All animations use `fill: 'forwards'` to keep the final keyframe applied after the animation finishes. For remove, this bridges the gap between animation end (step 3) and layout recalculation (step 5) — without fill, the CSS resting state (`translate: none` from `has-detail`) would flash for one frame. The fill is cleaned up by `__endTransition()` in step 6, after `has-detail` is already cleared.
 
-The microtask deferral in `_finishTransition` is intentional: it ensures `recalculateLayout()` reads clean computed styles without `fill: 'forwards'` interference (since `__endTransition` cancels animations before the microtask runs).
+### `_finishTransition` and microtask deferral
+
+`_finishTransition()` defers `recalculateLayout()` to a microtask so Lit elements can render before their intrinsic size is measured for auto-sizing. The `await Promise.resolve()` in `_startTransition` waits for this microtask to complete before reading animation params.
 
 ### Smooth interruption
 
