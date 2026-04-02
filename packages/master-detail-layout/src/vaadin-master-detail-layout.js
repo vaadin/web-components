@@ -543,8 +543,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @protected */
   async _startTransition(transitionType, updateSlot) {
-    const params = this.__getAnimationParams();
-
     this.__cancelActiveAnimations();
 
     try {
@@ -552,13 +550,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       switch (transitionType) {
         case 'add':
-          await this.__addTransition(params, updateSlot);
+          await this.__addTransition(updateSlot);
           break;
         case 'remove':
-          await this.__removeTransition(params, updateSlot);
+          await this.__removeTransition(updateSlot);
           break;
         default:
-          await this.__replaceTransition(params, updateSlot);
+          await this.__replaceTransition(updateSlot);
           break;
       }
     } catch (e) {
@@ -572,8 +570,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  async __addTransition({ duration, easing, offscreen }, updateSlot) {
+  async __addTransition(updateSlot) {
     await updateSlot();
+
+    const { offscreen, duration, easing } = this.__getAnimationParams();
 
     const animations = [
       this.$.detail.animate(
@@ -581,8 +581,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
           { translate: offscreen, opacity: 0 },
           { translate: 'none', opacity: 1 },
         ],
-        { duration, easing },
+        { duration, easing, fill: 'forwards' },
       ),
+
       this.hasAttribute('overlay') &&
         this.$.backdrop.animate(
           {
@@ -596,11 +597,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  async __replaceTransition({ duration, easing, offscreen }, updateSlot) {
+  async __replaceTransition(updateSlot) {
     try {
       this.__snapshotOutgoing();
 
       await updateSlot();
+
+      const { offscreen, duration, easing } = this.__getAnimationParams();
 
       if (this.hasAttribute('overlay')) {
         const animations = [
@@ -609,14 +612,14 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
               { translate: offscreen, opacity: 0 },
               { translate: 'none', opacity: 1 },
             ],
-            { duration, easing },
+            { duration, easing, fill: 'forwards' },
           ),
           this.$.outgoing.animate(
             [
               { translate: 'none', opacity: 1 },
               { translate: offscreen, opacity: 0 },
             ],
-            { duration, easing },
+            { duration, easing, fill: 'forwards' },
           ),
         ];
 
@@ -628,21 +631,24 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  async __removeTransition({ duration, easing, offscreen }, updateSlot) {
+  async __removeTransition(updateSlot) {
+    const { offscreen, duration, easing } = this.__getAnimationParams();
+
     const animations = [
       this.$.detail.animate(
         [
           { translate: 'none', opacity: 1 },
           { translate: offscreen, opacity: 0 },
         ],
-        { duration, easing },
+        { duration, easing, fill: 'forwards' },
       ),
+
       this.hasAttribute('overlay') &&
         this.$.backdrop.animate(
           {
             opacity: [1, 0],
           },
-          { duration, easing: 'linear' },
+          { duration, easing: 'linear', fill: 'forwards' },
         ),
     ];
 
@@ -651,8 +657,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   __cancelActiveAnimations() {
-    this.getAnimations()
-      .filter((animation) => !animation.finished)
+    this.getAnimations({ subtree: true })
+      .filter((animation) => animation.playState === 'running')
       .forEach((animation) => animation.cancel());
   }
 
