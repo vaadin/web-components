@@ -645,7 +645,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     if (transitionType === 'remove') {
       slide = this.__slide(this.$.detail, false, opts);
     } else if (transitionType === 'replace') {
-      // Outgoing slides out on top (z-index), revealing incoming underneath.
+      // Outgoing slides out while incoming is revealed underneath.
       // In overlay mode, the incoming also slides in simultaneously.
       slide = this.__slide(this.$.outgoing, false, opts);
       if (opts.overlay) {
@@ -771,8 +771,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /**
-   * Cancels in-progress animations, cleans up state, and resolves the
-   * pending transition promise.
+   * Cancels in-progress animations and cleans up transition state.
    * @private
    */
   __endTransition() {
@@ -796,6 +795,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return;
     }
     currentDetail.setAttribute('slot', 'detail-outgoing');
+    this.$.outgoing.style.width = this.__detailCachedSize;
     this.__replacing = true;
   }
 
@@ -805,6 +805,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    */
   __clearOutgoing() {
     this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
+    this.$.outgoing.style.width = '';
     this.__replacing = false;
   }
 
