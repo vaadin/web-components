@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/card",
-  "version": "25.2.0-alpha4",
+  "version": "25.2.0-alpha5",
   "publishConfig": {
     "access": "public"
   },
@@ -34,20 +34,20 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.2.0-alpha4",
-    "@vaadin/vaadin-themable-mixin": "25.2.0-alpha4",
+    "@vaadin/component-base": "25.2.0-alpha5",
+    "@vaadin/vaadin-themable-mixin": "25.2.0-alpha5",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/aura": "25.2.0-alpha4",
-    "@vaadin/avatar": "25.2.0-alpha4",
-    "@vaadin/button": "25.2.0-alpha4",
-    "@vaadin/chai-plugins": "25.2.0-alpha4",
-    "@vaadin/icon": "25.2.0-alpha4",
-    "@vaadin/icons": "25.2.0-alpha4",
-    "@vaadin/test-runner-commands": "25.2.0-alpha4",
+    "@vaadin/aura": "25.2.0-alpha5",
+    "@vaadin/avatar": "25.2.0-alpha5",
+    "@vaadin/button": "25.2.0-alpha5",
+    "@vaadin/chai-plugins": "25.2.0-alpha5",
+    "@vaadin/icon": "25.2.0-alpha5",
+    "@vaadin/icons": "25.2.0-alpha5",
+    "@vaadin/test-runner-commands": "25.2.0-alpha5",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/vaadin-lumo-styles": "25.2.0-alpha4",
+    "@vaadin/vaadin-lumo-styles": "25.2.0-alpha5",
     "sinon": "^21.0.2"
   },
   "customElements": "custom-elements.json",
