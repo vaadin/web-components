@@ -32,7 +32,7 @@ describe('Dialog', () => {
   }
 
   it('should use children if no renderer property set', async () => {
-    render(
+    await render(
       <Dialog opened header={<>Title</>} footer={<>Footer</>}>
         FooBar
       </Dialog>,
@@ -42,7 +42,7 @@ describe('Dialog', () => {
   });
 
   it('should use renderer prop if it is set', async () => {
-    render(
+    await render(
       <Dialog
         opened
         headerRenderer={() => <>Title</>}
@@ -55,7 +55,7 @@ describe('Dialog', () => {
   });
 
   it('should use children as renderer prop', async () => {
-    render(
+    await render(
       <Dialog opened headerRenderer={() => <>Title</>} footerRenderer={() => <>Footer</>}>
         {() => <>FooBar</>}
       </Dialog>,
@@ -77,7 +77,7 @@ describe('Dialog', () => {
       );
     }
 
-    render(<TestDialog />);
+    await render(<TestDialog />);
     await nextRender();
 
     const warn = sinon.stub(console, 'error');

@@ -32,7 +32,7 @@ async function openRootItemSubMenu(rootMenuItem: EventTarget) {
 
 describe('MenuBar', () => {
   it('should render the given text as an item', async () => {
-    const { container } = render(<MenuBar items={[{ text: 'foo' }]} />);
+    const { container } = await render(<MenuBar items={[{ text: 'foo' }]} />);
 
     const menuBar = container.querySelector<HTMLDivElement>('vaadin-menu-bar')!;
     await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));
@@ -43,7 +43,7 @@ describe('MenuBar', () => {
   });
 
   it('should render the given ReactElement as an item', async () => {
-    const { container } = render(<MenuBar items={[{ component: <span>foo</span> }]} />);
+    const { container } = await render(<MenuBar items={[{ component: <span>foo</span> }]} />);
 
     const menuBar = container.querySelector<HTMLDivElement>('vaadin-menu-bar')!;
     await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));
@@ -53,7 +53,7 @@ describe('MenuBar', () => {
   });
 
   it('should render the given ReactElement in a hierarchical menu as an item', async () => {
-    const { container } = render(
+    const { container } = await render(
       <MenuBar items={[{ text: 'parent', children: [{ component: <span>foo</span> }] }]}></MenuBar>,
     );
 
@@ -71,7 +71,7 @@ describe('MenuBar', () => {
     const items = [{ text: 'foo' }, { component: <b>bar</b> }];
 
     const spy = sinon.spy();
-    const { container } = render(<MenuBar items={items} onItemSelected={spy}></MenuBar>);
+    const { container } = await render(<MenuBar items={items} onItemSelected={spy}></MenuBar>);
 
     const menuBar = container.querySelector<MenuBarElement>('vaadin-menu-bar')!;
     await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));

@@ -21,6 +21,6 @@
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src", "scripts", "test", "dev", "types", "vite.config.ts", "vitest.workspace.ts"],
+  "include": ["src", "scripts", "test", "dev", "types", "vite.config.ts", "vitest.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

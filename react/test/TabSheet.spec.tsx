@@ -20,7 +20,7 @@ async function until(predicate: () => boolean) {
 
 describe('TabSheet', () => {
   it('should render two tabs', async () => {
-    render(
+    await render(
       <TabSheet>
         <TabSheetTab label="Tab 1">Content 1</TabSheetTab>
         <TabSheetTab label="Tab 2">Content 2</TabSheetTab>
@@ -38,7 +38,7 @@ describe('TabSheet', () => {
   });
 
   it('should have the second tab selected', async () => {
-    render(
+    await render(
       <TabSheet selected={1}>
         <TabSheetTab label="Tab 1">Content 1</TabSheetTab>
         <TabSheetTab label="Tab 2">Content 2</TabSheetTab>
@@ -52,7 +52,7 @@ describe('TabSheet', () => {
   });
 
   it('should have the second tab disabled', async () => {
-    render(
+    await render(
       <TabSheet>
         <TabSheetTab label="Tab 1">Content 1</TabSheetTab>
         <TabSheetTab label="Tab 2" disabled>
@@ -68,7 +68,7 @@ describe('TabSheet', () => {
   });
 
   it('should pass props to the tab', async () => {
-    render(
+    await render(
       <TabSheet>
         <TabSheetTab label="Tab 1" aria-label="tab">
           Content 1
@@ -81,7 +81,7 @@ describe('TabSheet', () => {
   });
 
   it('should support custom id for tab', async () => {
-    render(
+    await render(
       <TabSheet>
         <TabSheetTab label="Tab 1" id="foo">
           Content 1
@@ -112,7 +112,7 @@ describe('TabSheet', () => {
       );
     }
 
-    render(<Test />);
+    await render(<Test />);
     const addTabButton = document.querySelector('button')!;
     getTabSheet().selected = 1;
     addTabButton.click();
@@ -128,7 +128,7 @@ describe('TabSheet', () => {
   });
 
   it('should render prefix and suffix', async () => {
-    render(
+    await render(
       <TabSheet>
         <div slot="prefix">PREFIX</div>
         <div slot="suffix">SUFFIX</div>
@@ -143,7 +143,7 @@ describe('TabSheet', () => {
   });
 
   it('should expand content element to full size', async () => {
-    render(
+    await render(
       <TabSheet style={{ height: '500px', width: '600px' }} theme="no-padding">
         <TabSheetTab style={{ height: '50px' }} label="Tab">
           <div style={{ height: '100%' }} id="content-div"></div>

@@ -14,13 +14,13 @@ describe('SideNav', () => {
     booleanProperties.forEach((property) => {
       describe(property, () => {
         it(`should be true in the element if ${property} prop is true`, async () => {
-          render(<SideNav {...{ [property]: true }} />);
+          await render(<SideNav {...{ [property]: true }} />);
           const sideNav = await findByQuerySelector('vaadin-side-nav');
           expect(sideNav[property]).to.be.ok;
         });
 
         it(`should be false in the element if ${property} prop is false`, async () => {
-          render(<SideNav {...{ [property]: false }} />);
+          await render(<SideNav {...{ [property]: false }} />);
           const sideNav = await findByQuerySelector('vaadin-side-nav');
           expect(sideNav[property]).not.to.be.ok;
         });

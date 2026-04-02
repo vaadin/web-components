@@ -3,8 +3,8 @@ import { render } from 'vitest-browser-react';
 import { Markdown } from '../packages/react-components/src/Markdown.js';
 
 describe('Markdown', () => {
-  it('should render child markdown', () => {
-    render(<Markdown># Foobar</Markdown>);
+  it('should render child markdown', async () => {
+    await render(<Markdown># Foobar</Markdown>);
 
     const markdown = document.querySelector('vaadin-markdown')!;
     expect(markdown).to.exist;
@@ -12,8 +12,8 @@ describe('Markdown', () => {
     expect(markdown.querySelector('h1')).to.have.text('Foobar');
   });
 
-  it('should render child string markdown', () => {
-    render(<Markdown>{'# Foobar'}</Markdown>);
+  it('should render child string markdown', async () => {
+    await render(<Markdown>{'# Foobar'}</Markdown>);
 
     const markdown = document.querySelector('vaadin-markdown')!;
     expect(markdown).to.exist;

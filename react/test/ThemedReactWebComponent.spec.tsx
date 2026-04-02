@@ -3,8 +3,8 @@ import { render } from 'vitest-browser-react';
 import { Accordion } from '../packages/react-components/src/Accordion.js';
 
 describe('ThemedReactWebComponent', () => {
-  it('should add a "theme" attribute', () => {
-    const { container } = render(<Accordion theme="primary"></Accordion>);
+  it('should add a "theme" attribute', async () => {
+    const { container } = await render(<Accordion theme="primary"></Accordion>);
     const element = container.querySelector('vaadin-accordion');
     expect(element).not.to.be.undefined;
 

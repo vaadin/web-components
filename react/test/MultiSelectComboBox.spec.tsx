@@ -6,7 +6,7 @@ import sinon from 'sinon';
 describe('MultiSelectComboBox', () => {
   const overlayTag = 'vaadin-multi-select-combo-box-overlay';
 
-  it('should render correctly', () => {
+  it('should render correctly', async () => {
     type Item = Readonly<{ value: string; index: number }>;
 
     const items: Item[] = [
@@ -16,7 +16,7 @@ describe('MultiSelectComboBox', () => {
 
     const selectedItemsChangedSpy = sinon.spy();
 
-    const { container } = render(
+    const { container } = await render(
       <MultiSelectComboBox<Item>
         items={items}
         opened

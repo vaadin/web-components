@@ -21,12 +21,12 @@ describe('VirtualList', () => {
   }
 
   it('should use renderer prop if it is set', async () => {
-    render(<VirtualList items={items} renderer={Renderer} />);
+    await render(<VirtualList items={items} renderer={Renderer} />);
     assert();
   });
 
   it('should use children render function as a renderer prop', async () => {
-    render(<VirtualList items={items}>{Renderer}</VirtualList>);
+    await render(<VirtualList items={items}>{Renderer}</VirtualList>);
     assert();
   });
 });

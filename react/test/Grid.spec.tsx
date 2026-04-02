@@ -78,7 +78,7 @@ describe('Grid', () => {
 
   describe('GridColumn', () => {
     it('should render correctly', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridColumnGroup headerRenderer={HeaderGroupRenderer} footerRenderer={FooterGroupRenderer}>
             <GridColumn<Item> headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer}>
@@ -165,7 +165,7 @@ describe('Grid', () => {
         }
 
         const error = sinon.stub(console, 'error');
-        render(<GridWithAutoWidthColumns></GridWithAutoWidthColumns>);
+        await render(<GridWithAutoWidthColumns></GridWithAutoWidthColumns>);
 
         const grid = await findByQuerySelector('vaadin-grid');
         const columns = Array.from(grid.children).filter((c): c is GridColumnElement => c.localName.includes('column'));
@@ -181,7 +181,7 @@ describe('Grid', () => {
     });
 
     it(`should consider custom renderer content with column auto-width: GridColumnGroup`, async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridColumnGroup header={<button style={{ width: '300px' }}>header</button>}>
             <GridColumn autoWidth flexGrow={0} />
@@ -203,7 +203,7 @@ describe('Grid', () => {
     });
 
     it('should support setting header and footer components', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridColumnGroup header={<i>Group Header</i>} footer={<i>Group Footer</i>}>
             <GridColumn<Item> path="name" header={<b>Name</b>} footer={<b>Name Footer</b>} />
@@ -227,7 +227,7 @@ describe('Grid', () => {
 
   describe('GridFilterColumn', () => {
     it('should render correctly', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridFilterColumn<Item> footerRenderer={DefaultFooterRenderer}>{DefaultBodyRenderer}</GridFilterColumn>
         </Grid>,
@@ -246,7 +246,7 @@ describe('Grid', () => {
     });
 
     it('should support setting footer component', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridFilterColumn<Item> path="name" footer={<i>Name Footer</i>} />
         </Grid>,
@@ -265,7 +265,7 @@ describe('Grid', () => {
 
   describe('GridSelectionColumn', () => {
     it('should render correctly', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridSelectionColumn<Item> headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer}>
             {DefaultBodyRenderer}
@@ -287,7 +287,7 @@ describe('Grid', () => {
     });
 
     it('should support setting header and footer component', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridSelectionColumn header={<i>Header</i>} footer={<i>Footer</i>}>
             {DefaultBodyRenderer}
@@ -309,7 +309,7 @@ describe('Grid', () => {
 
   describe('GridSortColumn', () => {
     it('should render correctly', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridSortColumn<Item> footerRenderer={DefaultFooterRenderer}>{DefaultBodyRenderer}</GridSortColumn>
         </Grid>,
@@ -328,7 +328,7 @@ describe('Grid', () => {
     });
 
     it('should support setting footer component', async () => {
-      render(
+      await render(
         <Grid<Item> items={items}>
           <GridSortColumn<Item> path="name" footer={<i>Name Footer</i>}></GridSortColumn>
         </Grid>,
@@ -347,7 +347,7 @@ describe('Grid', () => {
 
   describe('GridProEditColumn', () => {
     it('should render correctly', async () => {
-      render(
+      await render(
         <GridPro<Item> items={items}>
           <GridProEditColumn<Item> headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer}>
             {DefaultBodyRenderer}
@@ -369,7 +369,7 @@ describe('Grid', () => {
     });
 
     it('should support setting header and footer components', async () => {
-      render(
+      await render(
         <GridPro<Item> items={items}>
           <GridProEditColumn<Item> path="name" header={<b>Name</b>} footer={<b>Name Footer</b>} />
         </GridPro>,
@@ -395,12 +395,12 @@ describe('Grid', () => {
         element.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         items = [{ name: 'name-0' }];
       });
 
       it('should toggle edit mode on double click', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item> path="name" />
           </GridPro>,
@@ -428,7 +428,7 @@ describe('Grid', () => {
       });
 
       it('should update the content', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item> path="name" />
           </GridPro>,
@@ -469,12 +469,12 @@ describe('Grid', () => {
         element.blur();
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         items = Array.from(new Array(1)).map((_, i) => ({ name: `name-${i}` }));
       });
 
       it('should render a custom editor', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item>
               path="name"
@@ -497,7 +497,7 @@ describe('Grid', () => {
       });
 
       it('should support using column child as the renderer function', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item> path="name" editModeRenderer={() => <input className="editor" />}>
               {({ item }) => <span className="content">{item.name}</span>}
@@ -518,7 +518,7 @@ describe('Grid', () => {
       });
 
       it('should toggle edit mode on double click', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item> path="name" editModeRenderer={() => <input className="editor" />}>
               {({ item }) => <span className="content">{item.name}</span>}
@@ -545,7 +545,7 @@ describe('Grid', () => {
       });
 
       it('should have updated content', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item>
               path="name"
@@ -570,7 +570,7 @@ describe('Grid', () => {
       });
 
       it('should toggle edit mode on double click without a custom editor', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item>
               path="name"
@@ -601,7 +601,7 @@ describe('Grid', () => {
       });
 
       it('should update the content without a custom editor', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item>
               path="name"
@@ -627,7 +627,7 @@ describe('Grid', () => {
       });
 
       it('should toggle edit mode on double click without a custom renderer', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item> path="name" editModeRenderer={() => <input className="editor" />} />
           </GridPro>,
@@ -652,7 +652,7 @@ describe('Grid', () => {
       });
 
       it('should update the content without a custom renderer', async () => {
-        render(
+        await render(
           <GridPro<GridProItem> items={items}>
             <GridProEditColumn<Item> path="name" editModeRenderer={() => <input className="editor" />} />
           </GridPro>,
@@ -689,7 +689,7 @@ describe('Grid', () => {
           );
         }
 
-        render(<DynamicTemplatesGridPro />);
+        await render(<DynamicTemplatesGridPro />);
         const warn = sinon.stub(console, 'error');
 
         // Click the button
@@ -735,7 +735,7 @@ describe('Grid', () => {
     };
 
     it('should render correctly', async () => {
-      render(
+      await render(
         <Grid<TreeItem> dataProvider={dataProvider}>
           <GridTreeColumn path="name" headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer} />
           <GridColumn path="name"></GridColumn>
@@ -755,7 +755,7 @@ describe('Grid', () => {
     });
 
     it('should support setting header and footer components', async () => {
-      render(
+      await render(
         <Grid<TreeItem> dataProvider={dataProvider}>
           <GridTreeColumn path="name" header={<b>Name</b>} footer={<b>Name Footer</b>} />
           <GridColumn path="name"></GridColumn>

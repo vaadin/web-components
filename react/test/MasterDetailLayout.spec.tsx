@@ -29,8 +29,8 @@ describe('MasterDetailLayout', () => {
     });
   }
 
-  beforeEach(() => {
-    result = render(<MasterDetailLayout></MasterDetailLayout>);
+  beforeEach(async () => {
+    result = await render(<MasterDetailLayout></MasterDetailLayout>);
     startTransitionSpy = sinon.spy();
     finishTransitionSpy = sinon.spy();
 
@@ -48,8 +48,8 @@ describe('MasterDetailLayout', () => {
     };
   });
 
-  it('should render master and detail content', () => {
-    result.rerender(
+  it('should render master and detail content', async () => {
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Master>
           <div>Master content</div>
@@ -70,7 +70,7 @@ describe('MasterDetailLayout', () => {
 
   it('should toggle visibility of details area when child component type changes', async () => {
     // Render without detail content
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail />
       </MasterDetailLayout>,
@@ -79,7 +79,7 @@ describe('MasterDetailLayout', () => {
     await assertDetailsHidden();
 
     // Render with detail content
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <div>Detail content</div>
@@ -94,7 +94,7 @@ describe('MasterDetailLayout', () => {
       return null;
     }
 
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <EmptyComponent />
@@ -105,7 +105,7 @@ describe('MasterDetailLayout', () => {
     await assertDetailsHidden();
 
     // Render with text node
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>Just a text node</MasterDetailLayout.Detail>
       </MasterDetailLayout>,
@@ -120,7 +120,7 @@ describe('MasterDetailLayout', () => {
     }
 
     // Render with empty wrapper
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <Wrapper />
@@ -131,7 +131,7 @@ describe('MasterDetailLayout', () => {
     await assertDetailsHidden();
 
     // Render wrapper with content
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <Wrapper>
@@ -154,7 +154,7 @@ describe('MasterDetailLayout', () => {
     }
 
     // Render initial view - no transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <ViewA />
@@ -167,7 +167,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Render same view - no transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <ViewA />
@@ -179,7 +179,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Render different view - transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <ViewB />
@@ -192,7 +192,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Render same view - no transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <ViewB />
@@ -204,7 +204,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Render without view - transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail />
       </MasterDetailLayout>,
@@ -215,7 +215,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Render with text node - no transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>Just a text node</MasterDetailLayout.Detail>
       </MasterDetailLayout>,
@@ -235,14 +235,14 @@ describe('MasterDetailLayout', () => {
     }
 
     // Start with empty detail
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail />
       </MasterDetailLayout>,
     );
 
     // Add detail
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <ViewA />
@@ -256,7 +256,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Replace detail
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <ViewB />
@@ -270,7 +270,7 @@ describe('MasterDetailLayout', () => {
     startTransitionSpy.resetHistory();
 
     // Remove detail
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail />
       </MasterDetailLayout>,
@@ -283,14 +283,14 @@ describe('MasterDetailLayout', () => {
 
   it('should properly start and finish transitions', async () => {
     // Start without content
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail />
       </MasterDetailLayout>,
     );
 
     // Change detail content to trigger transition
-    result.rerender(
+    await result.rerender(
       <MasterDetailLayout>
         <MasterDetailLayout.Detail>
           <div>New Content</div>
@@ -305,44 +305,39 @@ describe('MasterDetailLayout', () => {
   });
 
   describe('Child validation', () => {
-    it('should throw an error for invalid child component type', () => {
-      const renderWithInvalidChild = () => {
+    it('should throw an error for invalid child component type', async () => {
+      await expect(
         render(
           <MasterDetailLayout>
             <div>Unexpected div</div>
             <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
           </MasterDetailLayout>,
-        );
-      };
-      expect(renderWithInvalidChild).to.throw(
+        ),
+      ).to.be.rejectedWith(
         'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
       );
 
       const CustomComponent = () => <div>Custom</div>;
-      const renderWithInvalidCustomComponent = () => {
+      await expect(
         render(
           <MasterDetailLayout>
             <CustomComponent />
             <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
           </MasterDetailLayout>,
-        );
-      };
-      expect(renderWithInvalidCustomComponent).to.throw(
+        ),
+      ).to.be.rejectedWith(
         'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
       );
     });
 
-    it('should not throw an error when using null, undefined, or text nodes', () => {
-      const renderWithNull = () => {
-        render(
-          <MasterDetailLayout>
-            {null}
-            {undefined}
-            Just a text node
-          </MasterDetailLayout>,
-        );
-      };
-      expect(renderWithNull).to.not.throw();
+    it('should not throw an error when using null, undefined, or text nodes', async () => {
+      await render(
+        <MasterDetailLayout>
+          {null}
+          {undefined}
+          Just a text node
+        </MasterDetailLayout>,
+      );
     });
   });
 });

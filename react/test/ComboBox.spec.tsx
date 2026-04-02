@@ -4,7 +4,7 @@ import { ComboBox } from '../packages/react-components/src/ComboBox.js';
 import sinon from 'sinon';
 
 describe('ComboBox', () => {
-  it('should render correctly', () => {
+  it('should render correctly', async () => {
     type Item = Readonly<{ value: string; index: number }>;
 
     const items: Item[] = [
@@ -14,7 +14,7 @@ describe('ComboBox', () => {
 
     const selectedItemsChangedSpy = sinon.spy();
 
-    const { container } = render(
+    const { container } = await render(
       <ComboBox<Item>
         items={items}
         opened

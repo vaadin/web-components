@@ -44,20 +44,20 @@ describe('Select', () => {
 
   let user: ReturnType<UserEvent['setup']>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     user = userEvent.setup();
   });
 
   it('should use items if no renderer property set', async () => {
-    render(<Select items={items} value="bar" />);
+    await render(<Select items={items} value="bar" />);
     await assert(user);
   });
 
   it('should correctly render the value if default value changed', async () => {
-    const { rerender } = render(<Select renderer={Renderer} value="bar" />);
+    const { rerender } = await render(<Select renderer={Renderer} value="bar" />);
     await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
 
-    rerender(<Select renderer={Renderer} value="foo" />);
+    await rerender(<Select renderer={Renderer} value="foo" />);
     await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Foo');
   });
 
@@ -73,28 +73,28 @@ describe('Select', () => {
     }
 
     it('should use renderer prop if it is set', async () => {
-      render(<Select renderer={Renderer} value="bar" />);
+      await render(<Select renderer={Renderer} value="bar" />);
       await assert(user);
     });
 
     it('should use children render function as a renderer prop', async () => {
-      render(<Select value="bar">{Renderer}</Select>);
+      await render(<Select value="bar">{Renderer}</Select>);
       await assert(user);
     });
 
     it('should correctly render the value if renderer prop is changed', async () => {
-      render(<Select renderer={Renderer} value="bar" />);
+      await render(<Select renderer={Renderer} value="bar" />);
       await findByQuerySelector('vaadin-select-value-button');
 
-      render(<Select renderer={NewRenderer} value="bar" />);
+      await render(<Select renderer={NewRenderer} value="bar" />);
 
       await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
     });
 
     it('should correctly render the value if children prop is changed', async () => {
-      render(<Select value="bar">{Renderer}</Select>);
+      await render(<Select value="bar">{Renderer}</Select>);
       await findByQuerySelector('vaadin-select-value-button');
-      render(<Select value="bar">{NewRenderer}</Select>);
+      await render(<Select value="bar">{NewRenderer}</Select>);
 
       await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
     });
@@ -102,7 +102,7 @@ describe('Select', () => {
 
   describe('slot', () => {
     it('should render the element with slot if renderer prop is set', async () => {
-      render(
+      await render(
         <Select renderer={Renderer}>
           <div slot="prefix">Value:</div>
         </Select>,
@@ -112,7 +112,7 @@ describe('Select', () => {
     });
 
     it('should render the element with slot if items prop is set', async () => {
-      render(
+      await render(
         <Select items={items}>
           <div slot="prefix">Value:</div>
         </Select>,
@@ -122,7 +122,7 @@ describe('Select', () => {
     });
 
     it('should render the element with slot if children render function is set', async () => {
-      render(
+      await render(
         <Select>
           {Renderer}
           <div slot="prefix">Value:</div>
@@ -133,7 +133,7 @@ describe('Select', () => {
     });
 
     it('should render the element with slot if children component is set', async () => {
-      render(
+      await render(
         <Select>
           <ListBox>
             <Item value="foo">Foo</Item>
@@ -158,13 +158,13 @@ describe('Select', () => {
     booleanProperties.forEach((property) => {
       describe(property, () => {
         it(`should be true in the element if ${property} prop is true`, async () => {
-          render(<Select items={[{ label: 'foo', value: 'foo' }]} {...{ [property]: true }} />);
+          await render(<Select items={[{ label: 'foo', value: 'foo' }]} {...{ [property]: true }} />);
           const select = await findByQuerySelector('vaadin-select');
           expect(select[property]).to.be.ok;
         });
 
         it(`should be false in the element if ${property} prop is false`, async () => {
-          render(<Select items={[{ label: 'foo', value: 'foo' }]} {...{ [property]: false }} />);
+          await render(<Select items={[{ label: 'foo', value: 'foo' }]} {...{ [property]: false }} />);
           const select = await findByQuerySelector('vaadin-select');
           expect(select[property]).not.to.be.ok;
         });

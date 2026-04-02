@@ -20,8 +20,8 @@ describe('Notification', () => {
 
   afterEach(catcher);
 
-  it('should use children if no renderer property set', () => {
-    render(
+  it('should use children if no renderer property set', async () => {
+    await render(
       <Notification ref={ref} opened>
         FooBar
       </Notification>,
@@ -29,13 +29,13 @@ describe('Notification', () => {
     assert();
   });
 
-  it('should use renderer prop if it is set', () => {
-    render(<Notification ref={ref} opened renderer={Renderer} />);
+  it('should use renderer prop if it is set', async () => {
+    await render(<Notification ref={ref} opened renderer={Renderer} />);
     assert();
   });
 
-  it('should use children render function as a renderer prop', () => {
-    render(
+  it('should use children render function as a renderer prop', async () => {
+    await render(
       <Notification ref={ref} opened>
         {Renderer}
       </Notification>,
@@ -44,7 +44,7 @@ describe('Notification', () => {
   });
 
   describe('show()', () => {
-    it('should render correctly', () => {
+    it('should render correctly', async () => {
       ref.current = Notification.show('FooBar');
       assert();
     });

@@ -67,7 +67,7 @@ describe('ContextMenu', () => {
   }
 
   it('should use children if no renderer property set', async () => {
-    const { container } = render(
+    const { container } = await render(
       <ContextMenu items={items}>
         <div id="actor">Foo</div>
       </ContextMenu>,
@@ -77,7 +77,7 @@ describe('ContextMenu', () => {
   });
 
   it('should use renderer property if set', async () => {
-    const { container } = render(
+    const { container } = await render(
       <ContextMenu renderer={Renderer}>
         <div id="actor">Bar</div>
       </ContextMenu>,
@@ -87,7 +87,7 @@ describe('ContextMenu', () => {
   });
 
   it('should render the given text as an item', async () => {
-    const { container } = render(
+    const { container } = await render(
       <ContextMenu items={[{ text: 'foo' }]}>
         <div id="target">target</div>
       </ContextMenu>,
@@ -102,7 +102,7 @@ describe('ContextMenu', () => {
   });
 
   it('should render the given ReactElement as an item', async () => {
-    const { container } = render(
+    const { container } = await render(
       <ContextMenu items={[{ component: <span>foo</span> }]}>
         <div id="target">target</div>
       </ContextMenu>,
@@ -116,7 +116,7 @@ describe('ContextMenu', () => {
   });
 
   it('should render the given ReactElement in a hierarchical menu as an item', async () => {
-    const { container } = render(
+    const { container } = await render(
       <ContextMenu items={[{ text: 'parent', children: [{ component: <span>foo</span> }] }]}>
         <div id="target">target</div>
       </ContextMenu>,
@@ -137,7 +137,7 @@ describe('ContextMenu', () => {
 
     const spy = sinon.spy();
 
-    const { container } = render(
+    const { container } = await render(
       <ContextMenu items={items} onItemSelected={spy}>
         <div id="target">target</div>
       </ContextMenu>,

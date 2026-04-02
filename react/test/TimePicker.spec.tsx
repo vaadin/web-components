@@ -3,9 +3,9 @@ import { render } from 'vitest-browser-react';
 import { TimePicker } from '../packages/react-components/src/TimePicker.js';
 
 describe('TimePicker', () => {
-  it('should apply "value" the last', () => {
+  it('should apply "value" the last', async () => {
     const value = '15:20:08';
-    const { container } = render(<TimePicker label="Foo" value={value} step={1} />);
+    const { container } = await render(<TimePicker label="Foo" value={value} step={1} />);
 
     const element = container.querySelector('vaadin-time-picker');
     expect(element).to.exist;
