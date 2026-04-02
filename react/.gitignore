@@ -33,3 +33,7 @@ node_modules
 /packages/**/*.js
 /packages/**/*.js.map
 !/*.config.js
+
+# Claude Code
+.claude/*.local.*
+CLAUDE.local.md
