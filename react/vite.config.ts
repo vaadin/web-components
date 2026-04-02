@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import type { PackageJson } from 'type-fest';
 import { defineConfig } from 'vite';
 import devPagesPlugin from './dev/dev-pages-plugin';
+// import localWebComponentsPlugin from './dev/local-web-components-plugin';
 
 const root = new URL(import.meta.url);
 
@@ -16,6 +17,10 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-  plugins: [react(), devPagesPlugin()],
+  plugins: [
+    react(),
+    devPagesPlugin(),
+    // localWebComponentsPlugin('/path/to/web-components'),
+  ],
   root: process.cwd(),
 });
