@@ -20,6 +20,7 @@ describe('Transitions', () => {
       </vaadin-master-detail-layout>
     `);
     await nextRender();
+    layout.style.setProperty('--_transition-duration', '10ms');
   });
 
   describe('setDetail', () => {
@@ -204,37 +205,23 @@ describe('Transitions', () => {
 
     it('should start remove animation from current position when interrupting add', async () => {
       const detail = layout.shadowRoot.querySelector('#detail');
-      const addCallback = () => {
-        layout.setAttribute('has-detail', '');
-      };
 
       // Start add transition (slides in: 200px → none)
-      const addPromise = layout._startTransition('add', addCallback);
-
-      // Wait a bit for the animation to progress
+      layout._startTransition('add', () => layout.setAttribute('has-detail', ''));
+      await Promise.resolve();
+      await detail.getAnimations()?.[0].ready;
       await nextFrames(2);
 
       // The detail should be mid-animation, not at either endpoint
-      const midTranslate = getComputedStyle(detail).translate;
-      // It should be somewhere between 0px and 200px (not yet at 'none')
-      const midValue = parseFloat(midTranslate);
-      expect(midValue).to.be.greaterThan(0);
-      expect(midValue).to.be.lessThan(200);
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.greaterThan(0);
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.lessThan(200);
 
       // Interrupt with remove — should start from the captured mid-position
-      const removeCallback = sinon.spy();
-      const removePromise = layout._startTransition('remove', removeCallback);
+      layout._startTransition('remove', sinon.spy());
+      await detail.getAnimations()?.[0].ready;
 
-      // Verify the animation starts from near the interrupted position,
-      // not from 'none' (0) or the full offscreen (200px)
-      await nextFrames();
-      const afterInterruptTranslate = getComputedStyle(detail).translate;
-      const afterInterruptValue = parseFloat(afterInterruptTranslate);
       // Should be near the mid-point, not at 0 (which would mean it jumped to fully visible)
-      expect(afterInterruptValue).to.be.greaterThan(0);
-
-      await addPromise;
-      await removePromise;
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.greaterThan(0);
     });
 
     it('should start add animation from current position when interrupting remove', async () => {
@@ -242,70 +229,47 @@ describe('Transitions', () => {
       layout.setAttribute('has-detail', '');
 
       // Start remove transition (slides out: none → 200px)
-      const removeCallback = sinon.spy();
-      const removePromise = layout._startTransition('remove', removeCallback);
-
-      // Wait for animation to progress
+      layout._startTransition('remove', sinon.spy());
+      await detail.getAnimations()?.[0].ready;
       await nextFrames(2);
 
       // The detail should be mid-animation
-      const midTranslate = getComputedStyle(detail).translate;
-      const midValue = parseFloat(midTranslate);
-      expect(midValue).to.be.greaterThan(0);
-      expect(midValue).to.be.lessThan(200);
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.greaterThan(0);
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.lessThan(200);
 
-      // Interrupt with add — should start from the captured mid-position
-      const addCallback = sinon.spy();
-      const addPromise = layout._startTransition('add', addCallback);
+      // Interrupt with add transition
+      layout._startTransition('add', sinon.spy());
+      await detail.getAnimations()?.[0].ready;
 
-      // Verify the animation starts from near the interrupted position
-      await nextFrames();
-      const afterInterruptTranslate = getComputedStyle(detail).translate;
-      const afterInterruptValue = parseFloat(afterInterruptTranslate);
-      // Should be near the mid-point, not at 200px (full offscreen)
-      expect(afterInterruptValue).to.be.lessThan(200);
-
-      await removePromise;
-      await addPromise;
+      // Verify the add animation starts from near the interrupted position
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.lessThan(200);
     });
 
     it('should apply interrupted position to outgoing element during replace', async () => {
       const detail = layout.shadowRoot.querySelector('#detail');
       const outgoing = layout.shadowRoot.querySelector('#outgoing');
 
-      const addCallback = () => {
-        layout.setAttribute('has-detail', '');
-      };
-
       // Start add transition (slides in: 200px → none)
-      const addPromise = layout._startTransition('add', addCallback);
-
-      // Wait for animation to progress
+      layout._startTransition('add', () => layout.setAttribute('has-detail', ''));
+      await Promise.resolve();
+      await detail.getAnimations()?.[0].ready;
       await nextFrames(2);
 
       // Capture mid-point
-      const midTranslate = getComputedStyle(detail).translate;
-      const midValue = parseFloat(midTranslate);
-      expect(midValue).to.be.greaterThan(0);
+      expect(parseFloat(getComputedStyle(detail).translate)).to.be.greaterThan(0);
 
       // Set overlay so replace uses slide (not cross-fade)
       layout.setAttribute('overlay', '');
 
       // Interrupt with replace — outgoing should start from captured position
-      const replaceCallback = sinon.spy();
-      layout._startTransition('replace', replaceCallback);
-
-      // Wait for deferred animation start (add/replace defer to microtask)
-      await nextFrames();
+      layout._startTransition('replace', sinon.spy());
+      await Promise.resolve();
+      await outgoing.getAnimations()?.[0].ready;
 
       // Verify the outgoing element starts animating from near the interrupted
       // position, not from 'none' (0) or the full offscreen (200px)
-      const outgoingTranslate = getComputedStyle(outgoing).translate;
-      const outgoingValue = parseFloat(outgoingTranslate);
-      expect(outgoingValue).to.be.greaterThan(0);
-      expect(outgoingValue).to.be.lessThan(200);
-
-      await addPromise;
+      expect(parseFloat(getComputedStyle(outgoing).translate)).to.be.greaterThan(0);
+      expect(parseFloat(getComputedStyle(outgoing).translate)).to.be.lessThan(200);
     });
 
     it('should handle interruption when no animation is running', async () => {

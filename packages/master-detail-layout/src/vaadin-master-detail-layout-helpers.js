@@ -30,10 +30,10 @@ function getAnimationParams(element) {
  * @param {HTMLElement} element
  * @return {Animation | undefined}
  */
-function getCurrentAnimation(element) {
+export function getCurrentAnimation(element) {
   return element
     .getAnimations()
-    .find((animation) => animation.id === ANIMATION_ID && animation.playState === 'running');
+    .find((animation) => animation.id === ANIMATION_ID && animation.playState !== 'finished');
 }
 
 /**
@@ -67,6 +67,11 @@ function animate(element, direction, effects, progress) {
     return Promise.resolve();
   }
 
+  const oldAnimation = getCurrentAnimation(element);
+  if (oldAnimation) {
+    oldAnimation.cancel();
+  }
+
   const keyframes = {};
   if (effects.includes('fade')) {
     keyframes.opacity = [0, 1];
@@ -75,17 +80,10 @@ function animate(element, direction, effects, progress) {
     keyframes.translate = [offset, 0];
   }
 
-  const oldAnimation = getCurrentAnimation(element);
   const newAnimation = element.animate(keyframes, { id: ANIMATION_ID, easing, duration });
-
   newAnimation.pause();
+  newAnimation.currentTime = duration * progress;
   newAnimation.playbackRate = direction === 'in' ? 1 : -1;
-
-  if (oldAnimation) {
-    oldAnimation.cancel();
-    newAnimation.currentTime = duration * progress;
-  }
-
   newAnimation.play();
   return newAnimation.finished;
 }
