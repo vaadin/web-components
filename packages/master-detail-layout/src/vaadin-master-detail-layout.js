@@ -11,7 +11,14 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
-import { animateIn, animateOut, detectOverflow, parseTrackSizes } from './vaadin-master-detail-layout-helpers.js';
+import {
+  animateIn,
+  animateOut,
+  cancelAnimations,
+  detectOverflow,
+  getCurrentAnimationProgress,
+  parseTrackSizes,
+} from './vaadin-master-detail-layout-helpers.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -254,7 +261,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
     cancelAnimationFrame(this.__resizeRaf);
-    this.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
+    cancelAnimations(this);
   }
 
   /** @private */
@@ -512,12 +519,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return updateSlot();
     }
 
-    if (!oldDetail && newDetail) {
+    const hasPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
+    const useReplace = (oldDetail && newDetail) || (hasPlaceholder && !this.hasAttribute('overlay'));
+
+    if (useReplace) {
+      return this._startTransition('replace', updateSlot);
+    } else if (!oldDetail && newDetail) {
       return this._startTransition('add', updateSlot);
     } else if (oldDetail && !newDetail) {
       return this._startTransition('remove', updateSlot);
-    } else if (oldDetail && newDetail) {
-      return this._startTransition('replace', updateSlot);
     }
   }
 
@@ -551,12 +561,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   async __addTransition(updateSlot) {
     await updateSlot();
 
+    const progress = getCurrentAnimationProgress(this.$.detail);
     await Promise.all([
-      animateIn(this.$.detail, ['fade', 'slide']),
-
-      // prettier-ignore
-      this.hasAttribute('overlay') &&
-        animateIn(this.$.backdrop, ['fade']),
+      animateIn(this.$.detail, ['fade', 'slide'], progress),
+      animateIn(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
     ]);
   }
 
@@ -567,10 +575,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       await updateSlot();
 
-      // prettier-ignore
+      const progress = getCurrentAnimationProgress(this.$.detail);
       await Promise.all([
-        animateIn(this.$.detail, ['fade', 'slide']),
-        animateOut(this.$.outgoing, ['fade', 'slide'])
+        animateIn(this.$.detail, ['fade', 'slide'], progress),
+        animateOut(this.$.outgoing, ['fade', 'slide'], progress),
       ]);
     } finally {
       this.__clearOutgoing();
@@ -579,12 +587,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   async __removeTransition(updateSlot) {
+    const progress = getCurrentAnimationProgress(this.$.detail);
     await Promise.all([
-      animateOut(this.$.detail, ['fade', 'slide']),
-
-      // prettier-ignore
-      this.hasAttribute('overlay') &&
-        animateOut(this.$.backdrop, ['fade']),
+      animateOut(this.$.detail, ['fade', 'slide'], progress),
+      animateOut(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
     ]);
 
     await updateSlot();

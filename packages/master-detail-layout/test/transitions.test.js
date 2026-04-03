@@ -198,7 +198,7 @@ describe('Transitions', () => {
 
     beforeEach(() => {
       layout.style.setProperty('--_transition-duration', `${DURATION}ms`);
-      layout.style.setProperty('--_detail-offscreen', '200px');
+      layout.style.setProperty('--_transition-offset', '200px');
       layout.style.setProperty('--_transition-easing', 'linear');
     });
 
@@ -298,14 +298,12 @@ describe('Transitions', () => {
       // Wait for deferred animation start (add/replace defer to microtask)
       await nextFrames();
 
-      // Verify the outgoing animation was created with the interrupted
-      // position as its starting keyframe (check keyframes directly rather
-      // than getComputedStyle, which returns 'none' on hidden elements).
-      const outgoingAnims = outgoing.getAnimations();
-      expect(outgoingAnims).to.have.length(1);
-      const startTranslate = parseFloat(outgoingAnims[0].effect.getKeyframes()[0].translate);
-      expect(startTranslate).to.be.greaterThan(0);
-      expect(startTranslate).to.be.lessThan(200);
+      // Verify the outgoing element starts animating from near the interrupted
+      // position, not from 'none' (0) or the full offscreen (200px)
+      const outgoingTranslate = getComputedStyle(outgoing).translate;
+      const outgoingValue = parseFloat(outgoingTranslate);
+      expect(outgoingValue).to.be.greaterThan(0);
+      expect(outgoingValue).to.be.lessThan(200);
 
       await addPromise;
     });

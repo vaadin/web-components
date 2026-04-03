@@ -4,90 +4,127 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-const ANIMATION_ID_PREFIX = 'vaadin-master-detail-layout';
+const ANIMATION_ID = 'vaadin-master-detail-layout';
 
 /**
- * Reads CSS custom properties and computed styles from the element
- * that are needed to construct animation keyframes.
+ * Reads CSS custom properties from the element that control
+ * animation keyframes and timing.
  *
  * @param {HTMLElement} element
- * @return {{ offscreen: string, duration: number, easing: string, opacity: string, translate: string }}
+ * @return {{ offset: string, easing: string, duration: number }}
  */
 function getAnimationParams(element) {
-  const cs = getComputedStyle(element);
-  const offscreen = cs.getPropertyValue('--_detail-offscreen').trim();
-  const durationStr = cs.getPropertyValue('--_transition-duration').trim();
+  const computedStyle = getComputedStyle(element);
+  const offset = computedStyle.getPropertyValue('--_transition-offset');
+  const easing = computedStyle.getPropertyValue('--_transition-easing');
+  const durationStr = computedStyle.getPropertyValue('--_transition-duration');
   const duration = durationStr.endsWith('ms') ? parseFloat(durationStr) : parseFloat(durationStr) * 1000;
-  const easing = cs.getPropertyValue('--_transition-easing').trim();
-  return { offscreen, duration, easing, opacity: cs.opacity, translate: cs.translate };
+  return { offset, easing, duration };
 }
 
 /**
- * Runs a Web Animations API animation on the element. If an animation
- * from a previous call is already running on the same element, it is
- * cancelled and the new animation continues from the current visual state.
- * If the exact same animation is already running, rejects with an AbortError.
+ * Returns the currently running master-detail-layout animation on the
+ * element, if any. Matches by the shared animation ID and `'running'`
+ * play state.
  *
- * @param {HTMLElement} element - the element to animate
- * @param {1 | -1} direction - 1 for "in" (enter), -1 for "out" (exit)
- * @param {string[]} effects - list of effect names to apply (`'fade'`, `'slide'`)
- * @return {Promise<Animation>} resolves when the animation finishes
+ * @param {HTMLElement} element
+ * @return {Animation | undefined}
  */
-function animate(element, direction, effects) {
-  const id = `${ANIMATION_ID_PREFIX}-${direction}-${effects.join('-')}`;
+function getCurrentAnimation(element) {
+  return element
+    .getAnimations()
+    .find((animation) => animation.id === ANIMATION_ID && animation.playState === 'running');
+}
 
-  const currentAnimation = element.getAnimations().find((animation) => {
-    return animation.id.startsWith(ANIMATION_ID_PREFIX) && animation.playState === 'running';
-  });
-  if (currentAnimation && currentAnimation.id === id) {
-    return Promise.reject(new DOMException('', 'AbortError'));
+/**
+ * Returns the overall progress (0–1) of the current animation on the
+ * element. Uses `overallProgress`, which accounts for playback direction
+ * (a reverse animation at 25% reports 0.75). Returns 0 when no
+ * animation is running.
+ *
+ * @param {HTMLElement} element
+ * @return {number}
+ */
+export function getCurrentAnimationProgress(element) {
+  const animation = getCurrentAnimation(element);
+  return animation ? animation.overallProgress : 0;
+}
+
+/**
+ * Animates the element using the Web Animations API. Cancels any
+ * previous animation and resumes from the given progress for a
+ * smooth handoff. No-op when CSS params are missing or progress is 1.
+ *
+ * @param {HTMLElement} element
+ * @param {'in' | 'out'} direction
+ * @param {Array<'fade' | 'slide'>} effects
+ * @param {number} progress starting progress (0–1) for interrupted resumption
+ * @return {Promise<void>} resolves when the animation finishes
+ */
+function animate(element, direction, effects, progress) {
+  const { offset, easing, duration } = getAnimationParams(element);
+  if (!offset || !duration || progress === 1) {
+    return Promise.resolve();
   }
-
-  const { offscreen, duration, easing, opacity, translate } = getAnimationParams(element);
 
   const keyframes = {};
   if (effects.includes('fade')) {
-    if (direction > 0) {
-      keyframes.opacity = [currentAnimation ? opacity : 0, 1];
-    } else {
-      keyframes.opacity = [currentAnimation ? opacity : 1, 0];
-    }
+    keyframes.opacity = [0, 1];
   }
   if (effects.includes('slide')) {
-    if (direction > 0) {
-      keyframes.translate = [currentAnimation ? translate : offscreen, 'none'];
-    } else {
-      keyframes.translate = [currentAnimation ? translate : 'none', offscreen];
-    }
+    keyframes.translate = [offset, 0];
   }
 
-  if (currentAnimation) {
-    currentAnimation.cancel();
+  const oldAnimation = getCurrentAnimation(element);
+  const newAnimation = element.animate(keyframes, { id: ANIMATION_ID, easing, duration });
+
+  newAnimation.pause();
+  newAnimation.playbackRate = direction === 'in' ? 1 : -1;
+
+  if (oldAnimation) {
+    oldAnimation.cancel();
+    newAnimation.currentTime = duration * progress;
   }
 
-  return element.animate(keyframes, { id, easing, duration }).finished;
+  newAnimation.play();
+  return newAnimation.finished;
 }
 
 /**
  * Runs an enter animation on the element.
  *
  * @param {HTMLElement} element
- * @param {string[]} effects - list of effect names to apply (`'fade'`, `'slide'`)
- * @return {Promise<Animation>}
+ * @param {Array<'fade' | 'slide'>} effects
+ * @param {number} progress starting progress (0–1) for interrupted resumption
+ * @return {Promise<void>} resolves when the animation finishes
  */
-export function animateIn(element, effects) {
-  return animate(element, 1, effects);
+export function animateIn(element, effects, progress) {
+  return animate(element, 'in', effects, progress);
 }
 
 /**
  * Runs an exit animation on the element.
  *
  * @param {HTMLElement} element
- * @param {string[]} effects - list of effect names to apply (`'fade'`, `'slide'`)
- * @return {Promise<Animation>}
+ * @param {Array<'fade' | 'slide'>} effects
+ * @param {number} progress starting progress (0–1) for interrupted resumption
+ * @return {Promise<void>} resolves when the animation finishes
  */
-export function animateOut(element, effects) {
-  return animate(element, -1, effects);
+export function animateOut(element, effects, progress) {
+  return animate(element, 'out', effects, progress);
+}
+
+/**
+ * Cancels all running animations on the element that match the shared animation ID.
+ *
+ * @param {HTMLElement} element
+ */
+export function cancelAnimations(element) {
+  element.getAnimations({ subtree: true }).forEach((animation) => {
+    if (animation.id === ANIMATION_ID) {
+      animation.cancel();
+    }
+  });
 }
 
 /**
@@ -95,7 +132,7 @@ export function animateOut(element, effects) {
  * into an array of track sizes in pixels. Line names (e.g. `[name]`)
  * are stripped before parsing.
  *
- * @param {string} gridTemplate - computed grid template string (e.g. `"200px [gap] 10px 400px"`)
+ * @param {string} gridTemplate computed grid template string (e.g. `"200px [gap] 10px 400px"`)
  * @return {number[]} track sizes in pixels
  */
 export function parseTrackSizes(gridTemplate) {
@@ -115,8 +152,8 @@ export function parseTrackSizes(gridTemplate) {
  * master's extra space (flexible portion) is large enough to absorb
  * the detail column.
  *
- * @param {number} hostSize - the host element's width or height in pixels
- * @param {number[]} trackSizes - `[masterSize, masterExtra, detailSize]` in pixels
+ * @param {number} hostSize the host element's width or height in pixels
+ * @param {number[]} trackSizes [masterSize, masterExtra, detailSize] in pixels
  * @return {boolean} `true` if the detail overflows and should be overlaid
  */
 export function detectOverflow(hostSize, trackSizes) {

@@ -143,7 +143,7 @@ Detail panel transitions use the Web Animations API (`element.animate()`) on `tr
 
 Animation parameters are driven by CSS custom properties, read once per transition to avoid repeated layout reads:
 
-- `--_detail-offscreen` — off-screen translate value. Defaults to `30px` (subtle slide in split mode), overridden to `calc((100% + 30px))` in overlay mode (full panel slide). Vertical orientation uses the Y axis.
+- `--_transition-offset` — off-screen translate value. Defaults to `30px` (subtle slide in split mode), overridden to `calc((100% + 30px))` in overlay mode (full panel slide). Vertical orientation uses the Y axis.
 - `--_transition-duration` — defaults to `0s`, enabled via `@media (prefers-reduced-motion: no-preference)`: 200ms for split mode, 300ms for overlay mode. Replace transitions in split mode use 0ms (no slide, just instant swap).
 - `--_transition-easing` — cubic-bezier easing
 

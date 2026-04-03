@@ -14,10 +14,10 @@ export const masterDetailLayoutStyles = css`
     --_detail-extra: 0px;
     --_detail-cached-size: min-content;
 
+    --_rtl-multiplier: 1;
     --_transition-duration: 0s;
     --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
-    --_rtl-multiplier: 1;
-    --_detail-offscreen: calc(30px * var(--_rtl-multiplier));
+    --_transition-offset: calc(30px * var(--_rtl-multiplier));
 
     display: grid;
     box-sizing: border-box;
@@ -42,7 +42,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([orientation='vertical']) {
-    --_detail-offscreen: 0 30px;
+    --_transition-offset: 0 30px;
 
     grid-template-columns: 100%;
     grid-template-rows:
@@ -135,7 +135,7 @@ export const masterDetailLayoutStyles = css`
 
   /* Detail transition: off-screen by default, on-screen when has-detail */
   #detail {
-    translate: var(--_detail-offscreen);
+    translate: var(--_transition-offset);
     opacity: 0;
     z-index: 4;
   }
@@ -146,11 +146,11 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([overlay]) {
-    --_detail-offscreen: calc((100% + 30px) * var(--_rtl-multiplier));
+    --_transition-offset: calc((100% + 30px) * var(--_rtl-multiplier));
   }
 
   :host([overlay][orientation='vertical']) {
-    --_detail-offscreen: 0 calc(100% + 30px);
+    --_transition-offset: 0 calc(100% + 30px);
   }
 
   :host([has-detail][overlay]) :is(#detail, #outgoing) {
@@ -162,8 +162,8 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([has-detail][overlay]) #backdrop {
-    pointer-events: auto;
     opacity: 1;
+    pointer-events: auto;
   }
 
   :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
