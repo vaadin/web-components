@@ -6,6 +6,13 @@
 
 const ANIMATION_ID_PREFIX = 'vaadin-master-detail-layout';
 
+/**
+ * Reads CSS custom properties and computed styles from the element
+ * that are needed to construct animation keyframes.
+ *
+ * @param {HTMLElement} element
+ * @return {{ offscreen: string, duration: number, easing: string, opacity: string, translate: string }}
+ */
 function getAnimationParams(element) {
   const cs = getComputedStyle(element);
   const offscreen = cs.getPropertyValue('--_detail-offscreen').trim();
@@ -15,6 +22,17 @@ function getAnimationParams(element) {
   return { offscreen, duration, easing, opacity: cs.opacity, translate: cs.translate };
 }
 
+/**
+ * Runs a Web Animations API animation on the element. If an animation
+ * from a previous call is already running on the same element, it is
+ * cancelled and the new animation continues from the current visual state.
+ * If the exact same animation is already running, rejects with an AbortError.
+ *
+ * @param {HTMLElement} element - the element to animate
+ * @param {1 | -1} direction - 1 for "in" (enter), -1 for "out" (exit)
+ * @param {string[]} effects - list of effect names to apply (`'fade'`, `'slide'`)
+ * @return {Promise<Animation>} resolves when the animation finishes
+ */
 function animate(element, direction, effects) {
   const id = `${ANIMATION_ID_PREFIX}-${direction}-${effects.join('-')}`;
 
@@ -50,14 +68,36 @@ function animate(element, direction, effects) {
   return element.animate(keyframes, { id, easing, duration }).finished;
 }
 
+/**
+ * Runs an enter animation on the element.
+ *
+ * @param {HTMLElement} element
+ * @param {string[]} effects - list of effect names to apply (`'fade'`, `'slide'`)
+ * @return {Promise<Animation>}
+ */
 export function animateIn(element, effects) {
   return animate(element, 1, effects);
 }
 
+/**
+ * Runs an exit animation on the element.
+ *
+ * @param {HTMLElement} element
+ * @param {string[]} effects - list of effect names to apply (`'fade'`, `'slide'`)
+ * @return {Promise<Animation>}
+ */
 export function animateOut(element, effects) {
   return animate(element, -1, effects);
 }
 
+/**
+ * Parses a computed `gridTemplateColumns` / `gridTemplateRows` value
+ * into an array of track sizes in pixels. Line names (e.g. `[name]`)
+ * are stripped before parsing.
+ *
+ * @param {string} gridTemplate - computed grid template string (e.g. `"200px [gap] 10px 400px"`)
+ * @return {number[]} track sizes in pixels
+ */
 export function parseTrackSizes(gridTemplate) {
   return gridTemplate
     .replace(/\[[^\]]+\]/gu, '')
@@ -67,6 +107,18 @@ export function parseTrackSizes(gridTemplate) {
     .map(parseFloat);
 }
 
+/**
+ * Determines whether the detail area overflows the host element,
+ * meaning it should be shown as an overlay instead of side-by-side.
+ *
+ * Returns `false` when all tracks fit within the host, or when the
+ * master's extra space (flexible portion) is large enough to absorb
+ * the detail column.
+ *
+ * @param {number} hostSize - the host element's width or height in pixels
+ * @param {number[]} trackSizes - `[masterSize, masterExtra, detailSize]` in pixels
+ * @return {boolean} `true` if the detail overflows and should be overlaid
+ */
 export function detectOverflow(hostSize, trackSizes) {
   const [masterSize, masterExtra, detailSize] = trackSizes;
 
