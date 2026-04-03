@@ -3,22 +3,21 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import {
+  elementScroll,
+  measureElement,
+  observeElementOffset,
+  observeElementRect,
+  Virtualizer,
+} from '@tanstack/virtual-core';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 globalThis.process ||= { env: {} };
 
-import {
-  measureElement,
-  observeElementOffset,
-  observeElementRect,
-  Virtualizer as TanStackVirtualizer,
-} from '@tanstack/virtual-core';
-
 export class TanStackAdapter {
   #virtualizer;
-  #averageSize = 60;
-  #resizeObserver;
+  #averageSize = 100;
   #renderDebouncer;
 
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer }) {
@@ -28,36 +27,26 @@ export class TanStackAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
 
-    this.#virtualizer = new TanStackVirtualizer({
+    this.#virtualizer = new Virtualizer({
       count: 0,
-      getScrollElement: () => this.scrollTarget,
-      estimateSize: () => this.#averageSize,
       overscan: 6,
       measureElement,
-      observeElementOffset,
       observeElementRect,
-      onChange: (instance, sync) => {
+      observeElementOffset,
+      scrollToFn: elementScroll,
+      onChange: (_instance, sync) => {
         this.#render();
 
         if (sync) {
           this.flush();
         }
       },
-      scrollToFn() {},
-    });
-
-    this.#resizeObserver = new ResizeObserver((entries) => {
-      entries.forEach(({ target, contentRect }) => {
-        if (target.hidden) {
-          return;
-        }
-
-        const index = parseInt(target.dataset.index);
-        this.#virtualizer.resizeItem(index, contentRect.height);
-      });
-
-      this.#recalculateAverageSize();
-      this.flush();
+      estimateSize: () => {
+        return this.#averageSize;
+      },
+      getScrollElement: () => {
+        return this.scrollTarget;
+      },
     });
   }
 
@@ -67,6 +56,7 @@ export class TanStackAdapter {
 
   set size(size) {
     this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: size });
+    this.#render();
     this.flush();
   }
 
@@ -78,7 +68,10 @@ export class TanStackAdapter {
     return this.#virtualizer.getVirtualIndexes().at(-1);
   }
 
-  scrollToIndex(index) {}
+  scrollToIndex(index) {
+    this.#virtualizer.scrollToIndex(index, { align: 'start' });
+    this.flush();
+  }
 
   hostConnected() {
     this.#virtualizer._willUpdate();
@@ -97,16 +90,9 @@ export class TanStackAdapter {
     this.#renderDebouncer?.flush();
   }
 
-  #recalculateAverageSize() {
-    const sizes = this.#virtualItems.map((item) => item.size);
-    const averageSize = sizes.reduce((a, b) => a + b, 0) / sizes.length;
-    this.#averageSize = averageSize;
-  }
-
   #render() {
     this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => {
       this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
-
       this.#createPhysicalElementsIfNeeded();
       this.#renderPhysicalElements();
     });
@@ -120,7 +106,6 @@ export class TanStackAdapter {
         el.style.position = 'absolute';
         el.style.top = '0';
         el.style.left = '0';
-
         this.elementsContainer.appendChild(el);
       });
     }
@@ -146,13 +131,14 @@ export class TanStackAdapter {
       ...physicalElements.filter((el) => !sharedKeySet.has(el.key)),
     ];
 
+    const updatedPhysicalElements = [];
+
     sortedPhysicalElements.forEach((el, index) => {
       const virtualItem = sortedVirtualItems[index];
       if (!virtualItem) {
         el.key = null;
         el.hidden = true;
         el.dataset.index = null;
-        this.#resizeObserver.unobserve(el);
         return;
       }
 
@@ -162,13 +148,16 @@ export class TanStackAdapter {
       el.hidden = false;
       el.key = virtualItem.key;
       el.dataset.index = newIndex;
-      el.style.transform = `translateY(${virtualItem.start}px)`;
+      el.style.translate = `0px ${virtualItem.start}px`;
 
       if (oldIndex !== newIndex) {
-        this.#resizeObserver.unobserve(el);
         this.updateElement(el, newIndex);
-        this.#resizeObserver.observe(el);
+        updatedPhysicalElements.push(el);
       }
+    });
+
+    updatedPhysicalElements.forEach((el) => {
+      this.#virtualizer.measureElement(el);
     });
   }
 
