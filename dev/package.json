@@ -57,6 +57,7 @@
     "@vaadin/text-area": "25.2.0-alpha5",
     "@vaadin/text-field": "25.2.0-alpha5",
     "@vaadin/time-picker": "25.2.0-alpha5",
+    "@vaadin/toggle-switch": "25.2.0-alpha5",
     "@vaadin/tooltip": "25.2.0-alpha5",
     "@vaadin/vertical-layout": "25.2.0-alpha5",
     "@vaadin/virtual-list": "25.2.0-alpha5"

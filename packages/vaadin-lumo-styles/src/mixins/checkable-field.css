@@ -17,7 +17,8 @@
   }
 
   .vaadin-checkbox-container,
-  .vaadin-radio-button-container {
+  .vaadin-radio-button-container,
+  .vaadin-toggle-switch-container {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: baseline;
@@ -25,6 +26,7 @@
 
   [part='checkbox'],
   [part='radio'],
+  [part='switch'],
   [part='label'],
   ::slotted(input),
   ::slotted(label) {
@@ -33,13 +35,15 @@
 
   [part='checkbox'],
   [part='radio'],
+  [part='switch'],
   ::slotted(input) {
     grid-column: 1;
   }
 
-  /* Control container (checkbox, radio button) */
+  /* Control container (checkbox, radio button, toggle switch) */
   [part='checkbox'],
-  [part='radio'] {
+  [part='radio'],
+  [part='switch'] {
     width: var(--_input-size, 1em);
     height: var(--_input-size, 1em);
     --_input-border-width: var(--vaadin-input-field-border-width, 0);
@@ -48,7 +52,8 @@
   }
 
   [part='checkbox']::before,
-  [part='radio']::before {
+  [part='radio']::before,
+  [part='switch']::before {
     display: block;
     content: '\202F';
     line-height: var(--_input-size, 1em);
