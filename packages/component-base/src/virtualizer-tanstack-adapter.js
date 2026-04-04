@@ -15,9 +15,28 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 globalThis.process ||= { env: {} };
 
+function matchElementsToItemsByKey(elements, items) {
+  const itemByKey = new Map(items.map((item) => [item.key, item]));
+  const elementByKey = new Map(elements.map((el) => [el.key, el]));
+
+  const sharedKeySet = new Set(itemByKey.keys()).intersection(new Set(elementByKey.keys()));
+  const sharedKeys = [...sharedKeySet];
+
+  const sortedItems = [
+    ...sharedKeys.map((key) => itemByKey.get(key)),
+    ...items.filter((item) => !sharedKeySet.has(item.key)),
+  ];
+  const sortedElements = [
+    ...sharedKeys.map((key) => elementByKey.get(key)),
+    ...elements.filter((el) => !sharedKeySet.has(el.key)),
+  ];
+
+  return sortedElements.map((el, index) => [el, sortedItems[index]]);
+}
+
 export class TanStackAdapter {
   #virtualizer;
-  #averageSize = 100;
+  #averageSize;
   #renderDebouncer;
 
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer }) {
@@ -42,7 +61,7 @@ export class TanStackAdapter {
         }
       },
       estimateSize: () => {
-        return this.#averageSize;
+        return this.#averageSize ?? 60;
       },
       getScrollElement: () => {
         return this.scrollTarget;
@@ -79,8 +98,12 @@ export class TanStackAdapter {
 
   update(startIndex = 0, endIndex = this.size - 1) {
     this.#physicalElements.forEach((element) => {
+      if (element.hidden) {
+        return;
+      }
+
       const index = parseInt(element.dataset.index);
-      if (!element.hidden && index >= startIndex && index <= endIndex) {
+      if (startIndex <= index && index <= endIndex) {
         this.updateElement(element, index);
       }
     });
@@ -103,39 +126,19 @@ export class TanStackAdapter {
     if (missingCount > 0) {
       this.createElements(missingCount).forEach((el) => {
         el.hidden = true;
-        el.style.position = 'absolute';
         el.style.top = '0';
         el.style.left = '0';
+        el.style.position = 'absolute';
         this.elementsContainer.appendChild(el);
       });
     }
   }
 
   #renderPhysicalElements() {
-    const virtualItems = this.#virtualItems;
-    const physicalElements = this.#physicalElements;
-
-    const virtualItemKeyMap = new Map(virtualItems.map((item) => [item.key, item]));
-    const physicalElementKeyMap = new Map(physicalElements.map((el) => [el.key, el]));
-
-    const sharedKeys = virtualItems.filter(({ key }) => physicalElementKeyMap.has(key)).map(({ key }) => key);
-    const sharedKeySet = new Set(sharedKeys);
-
-    const sortedVirtualItems = [
-      ...sharedKeys.map((key) => virtualItemKeyMap.get(key)),
-      ...virtualItems.filter((item) => !sharedKeySet.has(item.key)),
-    ];
-
-    const sortedPhysicalElements = [
-      ...sharedKeys.map((key) => physicalElementKeyMap.get(key)),
-      ...physicalElements.filter((el) => !sharedKeySet.has(el.key)),
-    ];
-
     const updatedPhysicalElements = [];
 
-    sortedPhysicalElements.forEach((el, index) => {
-      const virtualItem = sortedVirtualItems[index];
-      if (!virtualItem) {
+    matchElementsToItemsByKey(this.#physicalElements, this.#virtualItems).forEach(([el, item]) => {
+      if (!item) {
         el.key = null;
         el.hidden = true;
         el.dataset.index = null;
@@ -143,12 +146,12 @@ export class TanStackAdapter {
       }
 
       const oldIndex = parseInt(el.dataset.index);
-      const newIndex = virtualItem.index;
+      const newIndex = item.index;
 
       el.hidden = false;
-      el.key = virtualItem.key;
+      el.key = item.key;
       el.dataset.index = newIndex;
-      el.style.translate = `0px ${virtualItem.start}px`;
+      el.style.translate = `0px ${item.start}px`;
 
       if (oldIndex !== newIndex) {
         this.updateElement(el, newIndex);
@@ -159,6 +162,13 @@ export class TanStackAdapter {
     updatedPhysicalElements.forEach((el) => {
       this.#virtualizer.measureElement(el);
     });
+
+    this.#updateAverageSize();
+  }
+
+  #updateAverageSize() {
+    const sizes = this.#virtualItems.map((item) => this.#measurementsCache[item.index].size);
+    this.#averageSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
   }
 
   get #virtualItems() {
@@ -167,5 +177,9 @@ export class TanStackAdapter {
 
   get #physicalElements() {
     return [...this.elementsContainer.children];
+  }
+
+  get #measurementsCache() {
+    return this.#virtualizer.measurementsCache;
   }
 }
