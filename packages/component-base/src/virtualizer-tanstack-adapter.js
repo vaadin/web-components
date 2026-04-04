@@ -10,12 +10,12 @@ import {
   observeElementRect,
   Virtualizer,
 } from '@tanstack/virtual-core';
-import { microTask } from '@vaadin/component-base/src/async.js';
+import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 globalThis.process ||= { env: {} };
 
-function matchElementsToItemsByKey(elements, items) {
+function mapElementsToItems(elements, items) {
   const itemByKey = new Map(items.map((item) => [item.key, item]));
   const elementByKey = new Map(elements.map((el) => [el.key, el]));
 
@@ -38,13 +38,15 @@ export class TanStackAdapter {
   #virtualizer;
   #averageSize;
   #renderDebouncer;
+  #reorderElementsDebouncer;
 
-  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer }) {
+  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.createElements = createElements;
     this.updateElement = updateElement;
     this.scrollTarget = scrollTarget;
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
+    this.reorderElements = reorderElements;
 
     this.#virtualizer = new Virtualizer({
       count: 0,
@@ -54,10 +56,10 @@ export class TanStackAdapter {
       observeElementOffset,
       scrollToFn: elementScroll,
       onChange: (_instance, sync) => {
-        this.#render();
-
         if (sync) {
-          this.flush();
+          this.#render();
+        } else {
+          this.#scheduleRender();
         }
       },
       estimateSize: () => {
@@ -76,7 +78,6 @@ export class TanStackAdapter {
   set size(size) {
     this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: size });
     this.#render();
-    this.flush();
   }
 
   get adjustedFirstVisibleIndex() {
@@ -89,7 +90,7 @@ export class TanStackAdapter {
 
   scrollToIndex(index) {
     this.#virtualizer.scrollToIndex(index, { align: 'start' });
-    this.flush();
+    this.#render();
   }
 
   hostConnected() {
@@ -97,7 +98,7 @@ export class TanStackAdapter {
   }
 
   update(startIndex = 0, endIndex = this.size - 1) {
-    this.#physicalElements.forEach((element) => {
+    this.#elements.forEach((element) => {
       if (element.hidden) {
         return;
       }
@@ -111,18 +112,23 @@ export class TanStackAdapter {
 
   flush() {
     this.#renderDebouncer?.flush();
+    this.#reorderElementsDebouncer?.flush();
+  }
+
+  #scheduleRender() {
+    this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => this.#render());
   }
 
   #render() {
-    this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => {
-      this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
-      this.#createPhysicalElementsIfNeeded();
-      this.#renderPhysicalElements();
-    });
+    this.#renderDebouncer?.cancel();
+    this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
+    this.#createElementsIfNeeded();
+    this.#renderElements();
+    this.#scheduleReorderElements();
   }
 
-  #createPhysicalElementsIfNeeded() {
-    const missingCount = this.#virtualItems.length - this.#physicalElements.length;
+  #createElementsIfNeeded() {
+    const missingCount = this.#virtualItems.length - this.#elements.length;
     if (missingCount > 0) {
       this.createElements(missingCount).forEach((el) => {
         el.hidden = true;
@@ -134,10 +140,10 @@ export class TanStackAdapter {
     }
   }
 
-  #renderPhysicalElements() {
-    const updatedPhysicalElements = [];
+  #renderElements() {
+    const updatedElements = [];
 
-    matchElementsToItemsByKey(this.#physicalElements, this.#virtualItems).forEach(([el, item]) => {
+    mapElementsToItems(this.#elements, this.#virtualItems).forEach(([el, item]) => {
       if (!item) {
         el.key = null;
         el.hidden = true;
@@ -155,11 +161,11 @@ export class TanStackAdapter {
 
       if (oldIndex !== newIndex) {
         this.updateElement(el, newIndex);
-        updatedPhysicalElements.push(el);
+        updatedElements.push(el);
       }
     });
 
-    updatedPhysicalElements.forEach((el) => {
+    updatedElements.forEach((el) => {
       this.#virtualizer.measureElement(el);
     });
 
@@ -167,19 +173,63 @@ export class TanStackAdapter {
   }
 
   #updateAverageSize() {
-    const sizes = this.#virtualItems.map((item) => this.#measurementsCache[item.index].size);
+    const sizes = this.#virtualItems.map((item) => {
+      const { size } = this.#virtualizer.measurementsCache[item.index];
+      return size;
+    });
+
     this.#averageSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
+  }
+
+  #scheduleReorderElements() {
+    if (!this.reorderElements) {
+      return;
+    }
+
+    this.#reorderElementsDebouncer = Debouncer.debounce(this.#reorderElementsDebouncer, timeOut.after(500), () => {
+      this.#reorderElements();
+    });
+  }
+
+  #reorderElements() {
+    // Remove hidden elements from the DOM
+    // TODO: Do we need this?
+    this.#elements.forEach((el) => {
+      if (el.hidden) {
+        el.remove();
+      }
+    });
+
+    const sortedElements = this.#elements.toSorted((a, b) => parseInt(a.dataset.index) - parseInt(b.dataset.index));
+
+    // Use the focused element as the anchor to avoid losing focus, or the first element otherwise.
+    const anchorIndex = Math.max(
+      0,
+      sortedElements.findIndex((el) => el.matches(':focus-within')),
+    );
+
+    // Place elements after the anchor into correct DOM order, going forward.
+    // Each element is moved to right after its predecessor if not already there.
+    for (let i = anchorIndex + 1; i < sortedElements.length; i++) {
+      if (sortedElements[i - 1].nextElementSibling !== sortedElements[i]) {
+        sortedElements[i - 1].after(sortedElements[i]);
+      }
+    }
+
+    // Place elements before the anchor into correct DOM order, going backward.
+    // Each element is moved to right before its successor if not already there.
+    for (let i = anchorIndex - 1; i >= 0; i--) {
+      if (sortedElements[i + 1].previousElementSibling !== sortedElements[i]) {
+        sortedElements[i + 1].before(sortedElements[i]);
+      }
+    }
   }
 
   get #virtualItems() {
     return this.#virtualizer.getVirtualItems();
   }
 
-  get #physicalElements() {
+  get #elements() {
     return [...this.elementsContainer.children];
-  }
-
-  get #measurementsCache() {
-    return this.#virtualizer.measurementsCache;
   }
 }
