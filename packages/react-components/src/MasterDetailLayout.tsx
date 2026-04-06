@@ -87,7 +87,7 @@ function Detail({ children }: DetailProps) {
       // _finishTransition) because the WC reads DOM state immediately after.
       // React state updates are async, so we manipulate the DOM directly in
       // the callback, then sync React state afterwards.
-      layout._startTransition(transitionType, () => {
+      layout._startTransition(transitionType, async () => {
         if (transitionType === 'replace' && currentDetailsRef.current) {
           // For replace, _startTransition moved the current div to the
           // detail-outgoing slot for the outgoing animation. Clone it so the
@@ -105,8 +105,12 @@ function Detail({ children }: DetailProps) {
           const hasNext = nextDetailsRef.current.childElementCount > 0;
           nextDetailsRef.current.setAttribute('slot', hasNext ? 'detail' : 'detail-hidden');
         }
-        // Recompute layout state synchronously with the new DOM
-        layout._finishTransition();
+
+        // Wait for Lit elements to render
+        await Promise.resolve();
+
+        // Recompute layout state with the new DOM
+        layout.recalculateLayout();
       }).then(() => {
         // Animation finished — sync React state to match DOM reality
         setCurrentChildren(children);
