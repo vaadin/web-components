@@ -151,50 +151,36 @@ CSS handles resting states via `translate` and `opacity` on `#detail`: offscreen
 
 ### Transition types
 
-- **Add**: DOM is updated first (new element inserted, `has-detail` set), then the detail slides in from off-screen. In split mode, also fades from opacity 0 → 1.
-- **Remove**: the detail slides out to off-screen first (in split mode, also fades to opacity 0), then the DOM is updated (element removed, `has-detail` cleared) on `animation.finished`. The `fill: 'forwards'` on the animation keeps the detail offscreen between animation end and the deferred layout recalculation (see below).
-- **Replace** (overlay): old content is reassigned to `slot="detail-outgoing"` (stays in light DOM so styles continue to apply), then old slides out while new slides in simultaneously
+- **Add**: DOM is updated first (new element inserted, `has-detail` set), then the detail fades and slides in from off-screen.
+- **Remove**: the detail fades and slides out to off-screen first, then the DOM is updated (element removed, `has-detail` cleared) on `animation.finished`.
+- **Replace** (overlay): old content is reassigned to `slot="detail-outgoing"` (stays in light DOM so styles continue to apply), then old fades/slides out while new fades/slides in simultaneously.
 - **Replace** (split): 0ms duration (instant swap). Old content moves to outgoing slot, new content appears immediately.
 
 The `noAnimation` property (reflected as `no-animation` attribute) skips all animations. Animations are also disabled when `--_transition-duration` resolves to `0s`.
 
 ### Backdrop fade
 
-The backdrop uses `opacity: 0/1` + `pointer-events: none/auto` (not `display: none/block`) so it can be animated. A linear opacity fade runs in parallel with the detail slide for overlay add/remove transitions. During replace, the backdrop stays visible (no fade).
+The backdrop uses `opacity: 0/1` + `pointer-events: none/auto` (not `display: none/block`) so it can be animated. A linear opacity fade (via `--_transition-easing: linear` on `#backdrop`) runs in parallel with the detail slide for overlay add/remove transitions. During replace, the backdrop stays visible (no fade).
 
-### Transition flow (`_startTransition`)
+### Transition flow
 
-`_startTransition` is an async method. Each `await` is a yield point where interruption is possible — a version counter is checked after each `await` to bail if a newer transition has started.
+The transition orchestrator is an `async` method. Each transition type has its own handler with a linear top-to-bottom flow:
 
-**Add/Replace flow:**
-1. Capture interrupted state, cancel previous, snapshot outgoing (replace only)
-2. Run update callback — DOM changes + `_finishTransition()` (queues `recalculateLayout` microtask)
-3. `await` microtask — Lit elements render, `recalculateLayout` sets `overlay`/`has-detail`
-4. Read animation params from CSS, start animations with `fill: 'forwards'`
-5. `await` animation completion
-6. `__endTransition()` — cancel animations (removes fill), clean up
+**Add:** update DOM → `await` microtask (Lit renders, layout recalculated) → animate detail in + backdrop fade in
 
-**Remove flow:**
-1. Capture interrupted state, cancel previous
-2. Read animation params, start slide-out animation with `fill: 'forwards'`
-3. `await` animation completion
-4. Run update callback — DOM changes + `_finishTransition()` (queues `recalculateLayout` microtask)
-5. `await` microtask — `recalculateLayout` clears `has-detail`
-6. `__endTransition()` — cancel animations (removes fill), clean up
+**Remove:** animate detail out + backdrop fade out → update DOM → `await` microtask (layout recalculated)
 
-### `fill: 'forwards'`
+**Replace:** snapshot outgoing → update DOM → `await` microtask (Lit renders, layout recalculated) → animate new detail in + old detail out simultaneously → clean up outgoing
 
-All animations use `fill: 'forwards'` to keep the final keyframe applied after the animation finishes. For remove, this bridges the gap between animation end (step 3) and layout recalculation (step 5) — without fill, the CSS resting state (`translate: none` from `has-detail`) would flash for one frame. The fill is cleaned up by `__endTransition()` in step 6, after `has-detail` is already cleared.
+The `transition` attribute is set at the start and cleared when the handler completes (or when interrupted). Cancelled animations throw `AbortError`, which is caught and silently ignored.
 
-### `_finishTransition` and microtask deferral
+### DOM update and layout recalculation
 
-`_finishTransition()` defers `recalculateLayout()` to a microtask so Lit elements can render before their intrinsic size is measured for auto-sizing. The `await Promise.resolve()` in `_startTransition` waits for this microtask to complete before reading animation params.
+The DOM update callback is `async` — it modifies the slot content, then yields a microtask (`await Promise.resolve()`) so Lit elements can render before `recalculateLayout()` measures their intrinsic size. This ensures the `[overlay]` attribute and CSS custom properties reflect the correct layout state before animation parameters are read.
 
 ### Smooth interruption
 
-`animation.cancel()` removes the animation effect and the element reverts to its CSS resting state — causing a visual jump. To avoid this, the current `translate` and `opacity` values are read via `getComputedStyle()` _before_ cancelling. These captured mid-flight values become the starting keyframe of the new animation, so the panel changes direction and opacity smoothly from where it actually is.
-
-For `replace` interruptions, the captured state is applied to the outgoing element (since the interrupted content moves from the detail slot to the outgoing slot).
+Each animation is tagged with a shared ID. When a new transition starts, the running animation is found via `getAnimations()` and its progress (0–1) is computed from `currentTime / duration`. The old animation is cancelled and the new one starts from the captured progress, using `playbackRate: -1` for reverse. This provides smooth direction changes without needing to read `getComputedStyle` or manage explicit keyframe captures.
 
 ### Z-index layering
 
