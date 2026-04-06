@@ -38,8 +38,7 @@ export function getCurrentAnimation(element) {
 
 /**
  * Returns the overall progress (0–1) of the current animation on the
- * element. Uses `overallProgress`, which accounts for playback direction
- * (a reverse animation at 25% reports 0.75). Returns 0 when no
+ * element, computed as `currentTime / duration`. Returns 0 when no
  * animation is running.
  *
  * @param {HTMLElement} element
@@ -47,7 +46,14 @@ export function getCurrentAnimation(element) {
  */
 export function getCurrentAnimationProgress(element) {
   const animation = getCurrentAnimation(element);
-  return animation ? animation.overallProgress : 0;
+  if (!animation) {
+    return 0;
+  }
+  const currentTime = animation.currentTime;
+  if (currentTime == null) {
+    return 0;
+  }
+  return currentTime / animation.effect.getTiming().duration;
 }
 
 /**
