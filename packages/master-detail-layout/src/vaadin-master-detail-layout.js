@@ -520,9 +520,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const hasPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
-    const useReplace = (oldDetail && newDetail) || (hasPlaceholder && !this.hasAttribute('overlay'));
-
-    if (useReplace) {
+    if ((oldDetail && newDetail) || (hasPlaceholder && !this.hasAttribute('overlay'))) {
       return this._startTransition('replace', updateSlot);
     } else if (!oldDetail && newDetail) {
       return this._startTransition('add', updateSlot);
@@ -533,6 +531,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @protected */
   async _startTransition(transitionType, updateSlot) {
+    if (this.noAnimation) {
+      return updateSlot();
+    }
+
     try {
       this.setAttribute('transition', transitionType);
 

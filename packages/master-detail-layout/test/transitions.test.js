@@ -169,8 +169,9 @@ describe('Transitions', () => {
       const result = layout._startTransition('add', updateCallback);
 
       expect(result).to.be.instanceOf(Promise);
-      expect(updateCallback.calledOnce).to.be.true;
+      expect(layout.hasAttribute('transition')).to.be.false;
 
+      expect(updateCallback.calledOnce).to.be.true;
       await result;
       expect(layout.hasAttribute('transition')).to.be.false;
     });
