@@ -494,7 +494,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @return {Promise<void>}
    * @protected
    */
-  _setDetail(newDetail, skipTransition) {
+  async _setDetail(newDetail, skipTransition) {
     // Don't start a transition if detail didn't change
     const oldDetail = this.querySelector('[slot="detail"]');
     if (oldDetail === (newDetail || null)) {
@@ -516,23 +516,25 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     };
 
     if (skipTransition || this.noAnimation) {
-      return updateSlot();
+      await updateSlot();
+      return;
     }
 
     const hasPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
     if ((oldDetail && newDetail) || (hasPlaceholder && !this.hasAttribute('overlay'))) {
-      return this._startTransition('replace', updateSlot);
+      await this._startTransition('replace', updateSlot);
     } else if (!oldDetail && newDetail) {
-      return this._startTransition('add', updateSlot);
+      await this._startTransition('add', updateSlot);
     } else if (oldDetail && !newDetail) {
-      return this._startTransition('remove', updateSlot);
+      await this._startTransition('remove', updateSlot);
     }
   }
 
   /** @protected */
   async _startTransition(transitionType, updateSlot) {
     if (this.noAnimation) {
-      return updateSlot();
+      await updateSlot();
+      return;
     }
 
     try {
