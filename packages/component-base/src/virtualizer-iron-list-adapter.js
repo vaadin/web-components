@@ -78,8 +78,6 @@ export class IronListAdapter {
     });
     attachObserver.observe(this.scrollTarget);
 
-    this._scrollLineHeight = this._getScrollLineHeight();
-
     this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
     this.elementsContainer.addEventListener('focusin', () => {
       this.scrollTarget.dispatchEvent(
@@ -462,10 +460,6 @@ export class IronListAdapter {
     this._isRTL = Boolean(styles.direction === 'rtl');
     this._viewportWidth = this.elementsContainer.offsetWidth;
     this._viewportHeight = this.scrollTarget.offsetHeight;
-    this._scrollPageHeight = this._viewportHeight - this._scrollLineHeight;
-    if (this.grid) {
-      this._updateGridMetrics();
-    }
   }
 
   /** @private */
@@ -778,20 +772,6 @@ export class IronListAdapter {
       return Math.max(0, maxItemHeight - bufferZoneHeight);
     }
     return 0;
-  }
-
-  /**
-   * @returns {Number|undefined} - The browser's default font-size in pixels
-   * @private
-   */
-  _getScrollLineHeight() {
-    const el = document.createElement('div');
-    el.style.fontSize = 'initial';
-    el.style.display = 'none';
-    document.body.appendChild(el);
-    const fontSize = window.getComputedStyle(el).fontSize;
-    document.body.removeChild(el);
-    return fontSize ? window.parseInt(fontSize) : undefined;
   }
 
   __getVisibleElements() {
