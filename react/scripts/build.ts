@@ -16,7 +16,7 @@ const fixImports: Plugin = {
     });
 
     // TODO: remove when https://github.com/evanw/esbuild/issues/1433 is resolved
-    build.onLoad({ filter: /src[\/\\][A-Za-z_-]+\.tsx?$/u }, async ({ path }) => {
+    build.onLoad({ filter: /src[\/\\][A-Za-z_-]+\.tsx?$/ }, async ({ path }) => {
       const result = basename(path, extname(path));
       const [contents, generatedContents] = await Promise.all([
         readFile(path, 'utf8'),
@@ -32,7 +32,7 @@ const fixImports: Plugin = {
     });
 
     // TODO: remove when https://github.com/evanw/esbuild/issues/1433 is resolved
-    build.onLoad({ filter: /src[\/\\]generated[\/\\][A-Za-z_-]+\.ts$/u }, async ({ path }) => {
+    build.onLoad({ filter: /src[\/\\]generated[\/\\][A-Za-z_-]+\.ts$/ }, async ({ path }) => {
       return {
         contents: (await readFile(path, 'utf8'))
           .split('\n')

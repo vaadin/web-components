@@ -26,9 +26,6 @@
   },
   "author": "Vaadin Ltd.",
   "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)",
-  "overrides": {
-    "esbuild": "$esbuild"
-  },
   "devDependencies": {
     "@testing-library/user-event": "^14.5.2",
     "@types/chai-as-promised": "^8.0.1",
@@ -42,7 +39,7 @@
     "chai-as-promised": "^8.0.1",
     "chai-dom": "^1.12.0",
     "concurrently": "^9.1.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.27.0",
     "glob": "^10.4.5",
     "json-schema-to-typescript": "^14.0.5",
     "lint-staged": "^15.2.10",
