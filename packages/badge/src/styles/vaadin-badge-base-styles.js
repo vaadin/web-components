@@ -35,6 +35,11 @@ export const badgeStyles = css`
     display: none !important;
   }
 
+  [part='content'] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   :host(:not([has-icon])) [part='icon'],
   :host(:not([has-content])) [part='content'],
   :host(:not([has-number])) [part='number'] {

@@ -26,6 +26,12 @@ describe('badge', () => {
     await visualDiff(div, 'basic');
   });
 
+  it('overflow', async () => {
+    element.style.maxWidth = '70px';
+    element.textContent = 'Very long badge text';
+    await visualDiff(div, 'overflow');
+  });
+
   describe('number', () => {
     beforeEach(() => {
       element.number = 3;
