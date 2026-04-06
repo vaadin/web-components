@@ -87,8 +87,8 @@
 vaadin-app-layout:is([drawer-opened]:not([overlay]), :has(> [slot='navbar'] vaadin-drawer-toggle))
   :is(.aura-view > header, .aura-view-header)
   vaadin-drawer-toggle:not([theme~='permanent']),
-vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'].aura-view > header mdl-back-button,
-vaadin-master-detail-layout:not([drawer], [stack]) [slot='detail'] .aura-view > header mdl-back-button {
+vaadin-master-detail-layout:not([overlay]) [slot='detail'].aura-view > header mdl-back-button,
+vaadin-master-detail-layout:not([overlay]) [slot='detail'] .aura-view > header mdl-back-button {
   display: none;
 
   & + :is(h1, h2, h3, h4, h5, h6, .aura-view-heading) {
