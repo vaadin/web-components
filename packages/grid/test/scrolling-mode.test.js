@@ -7,7 +7,7 @@ import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
 describe('scrolling mode', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px;" size="1000">
         <vaadin-grid-column></vaadin-grid-column>
@@ -18,6 +18,7 @@ describe('scrolling mode', () => {
     };
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
+    await nextFrame();
   });
 
   it('should not throw on table wheel', () => {

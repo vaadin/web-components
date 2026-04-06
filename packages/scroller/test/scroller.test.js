@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-scroller.js';
 
 describe('vaadin-scroller', () => {
@@ -98,6 +98,7 @@ describe('vaadin-scroller', () => {
         scroller.appendChild(div);
 
         await nextRender();
+        await nextResize(scroller);
       });
 
       it('should set overflow attribute to "end" when scroll is at the beginning', () => {
@@ -128,6 +129,7 @@ describe('vaadin-scroller', () => {
       div.innerHTML = '<div style="font-size: 1.25em;">Long<br>text<br>that<br>has<br>many<br>lines</div>';
       scroller.appendChild(div);
 
+      await nextResize(scroller);
       await nextRender();
     });
 

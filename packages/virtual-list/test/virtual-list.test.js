@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-virtual-list.js';
 
 describe('virtual-list', () => {
@@ -7,6 +7,7 @@ describe('virtual-list', () => {
 
   beforeEach(async () => {
     list = fixtureSync(`<vaadin-virtual-list></vaadin-virtual-list>`);
+    await nextResize(list);
     await nextFrame();
   });
 
@@ -54,6 +55,7 @@ describe('virtual-list', () => {
         el.textContent = model.item.value;
       };
 
+      await nextResize(list);
       await nextFrame();
     });
 

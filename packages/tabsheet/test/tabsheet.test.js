@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-tabsheet.js';
 
@@ -306,6 +306,7 @@ describe('tabsheet', () => {
       tabsheet.style.maxHeight = `${tabsheet.offsetHeight - 10}px`;
       scrollTarget = tabsheet.shadowRoot.querySelector('[part~="content"]');
 
+      await nextResize(tabsheet);
       await nextFrame();
     });
 
