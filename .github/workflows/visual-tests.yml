@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
       options: --ipc=host
 
     steps:
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
       options: --ipc=host
 
     steps:
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
       options: --ipc=host
 
     steps:
