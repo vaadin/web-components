@@ -3,8 +3,6 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { animationFrame } from './async.js';
-import { Debouncer } from './debounce.js';
 
 /**
  * A controller that detects if content inside the element overflows its scrolling viewport,
@@ -48,12 +46,7 @@ export class OverflowController {
   observe() {
     const { host } = this;
 
-    this.__resizeObserver = new ResizeObserver(() => {
-      this.__debounceOverflow = Debouncer.debounce(this.__debounceOverflow, animationFrame, () => {
-        this.__updateOverflow();
-      });
-    });
-
+    this.__resizeObserver = new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.observe(host);
 
     // Observe initial children
@@ -74,26 +67,43 @@ export class OverflowController {
             this.__resizeObserver.unobserve(node);
           }
         });
-      });
 
-      this.__updateOverflow();
+        if (addedNodes.length === 0 && removedNodes.length > 0) {
+          this.__updateState({ sync: true });
+        }
+      });
     });
 
     this.__childObserver.observe(host, { childList: true });
 
     // Update overflow attribute on scroll
     this.scrollTarget.addEventListener('scroll', this.__boundOnScroll);
+  }
 
-    this.__updateOverflow();
+  /** @private */
+  __onResize() {
+    this.__updateState({ sync: false });
   }
 
   /** @private */
   __onScroll() {
-    this.__updateOverflow();
+    this.__updateState({ sync: true });
   }
 
   /** @private */
-  __updateOverflow() {
+  __updateState({ sync }) {
+    cancelAnimationFrame(this.__resizeRaf);
+
+    const state = this.__readState();
+    if (sync) {
+      this.__writeState(state);
+    } else {
+      this.__resizeRaf = requestAnimationFrame(() => this.__writeState(state));
+    }
+  }
+
+  /** @private */
+  __readState() {
     const target = this.scrollTarget;
 
     let overflow = '';
@@ -115,10 +125,14 @@ export class OverflowController {
       overflow += ' end';
     }
 
-    overflow = overflow.trim();
-    if (overflow.length > 0 && this.host.getAttribute('overflow') !== overflow) {
+    return { overflow: overflow.trim() };
+  }
+
+  /** @private */
+  __writeState({ overflow }) {
+    if (overflow) {
       this.host.setAttribute('overflow', overflow);
-    } else if (overflow.length === 0 && this.host.hasAttribute('overflow')) {
+    } else {
       this.host.removeAttribute('overflow');
     }
   }
