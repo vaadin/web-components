@@ -8,14 +8,18 @@ export * from './generated/MasterDetailLayout.js';
 
 type MasterProps = React.PropsWithChildren<{}>;
 type DetailProps = React.PropsWithChildren<{}>;
+type DetailPlaceholderProps = React.PropsWithChildren<{}>;
 
 type MasterDetailLayoutElementWithInternalAPI = MasterDetailLayoutElement & {
   _startTransition: (transitionType: 'add' | 'remove' | 'replace', callback: () => void) => Promise<void>;
-  _finishTransition: () => void;
 };
 
 function Master({ children }: MasterProps) {
   return children;
+}
+
+function DetailPlaceholder({ children }: DetailPlaceholderProps) {
+  return <div slot="detail-placeholder" style={{ height: '100%' }}>{children}</div>;
 }
 
 /**
@@ -82,11 +86,8 @@ function Detail({ children }: DetailProps) {
       const hasNextDetails = nextDetailsRef.current!.childElementCount > 0;
       const transitionType = hasCurrentDetails && hasNextDetails ? 'replace' : hasCurrentDetails ? 'remove' : 'add';
 
-      // _startTransition calls the callback synchronously for add/replace.
-      // The callback MUST perform synchronous DOM mutations (slot assignment +
-      // _finishTransition) because the WC reads DOM state immediately after.
-      // React state updates are async, so we manipulate the DOM directly in
-      // the callback, then sync React state afterwards.
+      // _startTransition calls the callback synchronously for add/replace,
+      // and asynchronously for remove.
       layout._startTransition(transitionType, async () => {
         if (transitionType === 'replace' && currentDetailsRef.current) {
           // For replace, _startTransition moved the current div to the
@@ -149,9 +150,9 @@ function validateChildren(children: React.ReactNode) {
   React.Children.forEach(children, (child) => {
     // Ignore non-React elements
     // We especially want to ignore text nodes to allow for whitespace resulting from formatting
-    if (React.isValidElement(child) && child.type !== Master && child.type !== Detail) {
+    if (React.isValidElement(child) && child.type !== Master && child.type !== Detail && child.type !== DetailPlaceholder) {
       throw new Error(
-        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
       );
     }
   });
@@ -168,11 +169,14 @@ const MasterDetailLayoutWithValidation: React.FC<React.ComponentProps<typeof _Ma
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
  * overlaid on top of, the master area, depending on configuration and viewport size.
  *
- * Content for each area should be wrapped into to the respective
- * `MasterDetailLayout.Master` and `MasterDetailLayout.Detail` wrapper components.
+ * Content for each area should be wrapped into the respective
+ * `MasterDetailLayout.Master`, `MasterDetailLayout.Detail`, and optionally
+ * `MasterDetailLayout.DetailPlaceholder` wrapper components.
  * Using any other component as a child will throw an error. To ensure that view
  * transitions are run properly, details content should be rendered conditionally
- * into the `MasterDetailLayout.Detail` component.
+ * into the `MasterDetailLayout.Detail` component. The `DetailPlaceholder` is shown
+ * in the detail area when no detail is selected, and is hidden when the viewport
+ * is too narrow (unlike detail, it does not become an overlay).
  *
  * @example
  * ```tsx
@@ -191,9 +195,11 @@ const MasterDetailLayoutWithValidation: React.FC<React.ComponentProps<typeof _Ma
 const MasterDetailLayout = MasterDetailLayoutWithValidation as typeof MasterDetailLayoutWithValidation & {
   Master: React.FC<MasterProps>;
   Detail: React.FC<DetailProps>;
+  DetailPlaceholder: React.FC<DetailPlaceholderProps>;
 };
 
 MasterDetailLayout.Master = Master;
 MasterDetailLayout.Detail = Detail;
+MasterDetailLayout.DetailPlaceholder = DetailPlaceholder;
 
 export { MasterDetailLayout };

@@ -323,6 +323,35 @@ describe('MasterDetailLayout', () => {
     expect(getComputedStyle(layout).getPropertyValue('--_detail-cached-size')).to.equal('201px'); // 1px border
   });
 
+  it('should render detail placeholder content', async () => {
+    await result.rerender(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>
+          <div>Master content</div>
+        </MasterDetailLayout.Master>
+        <MasterDetailLayout.DetailPlaceholder>
+          <div>Select an item</div>
+        </MasterDetailLayout.DetailPlaceholder>
+      </MasterDetailLayout>,
+    );
+
+    await vi.waitFor(() => {
+      const placeholder = layout!.querySelector('[slot="detail-placeholder"]');
+      expect(placeholder).to.exist;
+      expect(placeholder).to.have.text('Select an item');
+    });
+  });
+
+  it('should not throw an error when using DetailPlaceholder', async () => {
+    await render(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+        <MasterDetailLayout.Detail />
+        <MasterDetailLayout.DetailPlaceholder>Placeholder</MasterDetailLayout.DetailPlaceholder>
+      </MasterDetailLayout>,
+    );
+  });
+
   describe('Child validation', () => {
     it('should throw an error for invalid child component type', async () => {
       await expect(
@@ -333,7 +362,7 @@ describe('MasterDetailLayout', () => {
           </MasterDetailLayout>,
         ),
       ).to.be.rejectedWith(
-        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
       );
 
       const CustomComponent = () => <div>Custom</div>;
@@ -345,7 +374,7 @@ describe('MasterDetailLayout', () => {
           </MasterDetailLayout>,
         ),
       ).to.be.rejectedWith(
-        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
       );
     });
 
