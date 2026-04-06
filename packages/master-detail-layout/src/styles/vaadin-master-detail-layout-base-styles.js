@@ -87,6 +87,8 @@ export const masterDetailLayoutStyles = css`
   }
 
   #backdrop {
+    --_transition-easing: linear;
+
     position: absolute;
     inset: 0;
     z-index: 2;
