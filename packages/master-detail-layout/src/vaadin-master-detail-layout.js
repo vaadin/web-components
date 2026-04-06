@@ -530,7 +530,25 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
   }
 
-  /** @protected */
+  /**
+   * Starts an animated transition for adding, replacing or removing the
+   * detail area using the Web Animations API.
+   *
+   * For 'add'/'replace': DOM is updated immediately, then animation
+   * starts after a microtask (so Lit elements render and layout is
+   * recalculated before animation params are read).
+   *
+   * For 'remove': animation plays first, then DOM is updated after
+   * the slide-out completes.
+   *
+   * Interruptible: a new transition cancels any in-progress animation
+   * and picks up from the interrupted position.
+   *
+   * @param transitionType
+   * @param updateSlot
+   * @return {Promise<void>}
+   * @protected
+   */
   async _startTransition(transitionType, updateSlot) {
     if (this.noAnimation) {
       await updateSlot();
