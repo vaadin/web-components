@@ -93,13 +93,8 @@ vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth
     padding-left: var(--safe-area-inset-left);
   }
 
-  &[stack]::part(detail) {
-    padding-left: var(--safe-area-inset-left);
-    padding-right: var(--safe-area-inset-right);
-  }
-
   & > vaadin-master-detail-layout,
-  &:not([drawer])::part(detail) {
+  &:not([overlay])::part(detail) {
     border-start-end-radius: var(--_app-layout-radius);
     border-end-end-radius: var(--_app-layout-radius);
   }
@@ -108,7 +103,7 @@ vaadin-app-layout > vaadin-master-detail-layout:nth-child(1 of :not([slot])):nth
     border-radius: calc(var(--_app-layout-radius) - var(--aura-app-layout-border-width));
   }
 
-  &:is([drawer][has-detail]) {
+  &:is([overlay][has-detail]) {
     border-color: light-dark(var(--vaadin-border-color), var(--vaadin-border-color-secondary));
   }
 }
