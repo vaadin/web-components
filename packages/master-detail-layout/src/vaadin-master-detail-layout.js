@@ -498,7 +498,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // Don't start a transition if detail didn't change
     const oldDetail = this.querySelector('[slot="detail"]');
     if (oldDetail === (newDetail || null)) {
-      return Promise.resolve();
+      return;
     }
 
     const updateSlot = async () => {
@@ -511,7 +511,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         this.appendChild(newDetail);
       }
 
+      // Wait for Lit elements to render
       await Promise.resolve();
+
       this.recalculateLayout();
     };
 
