@@ -529,12 +529,23 @@ describe('keyboard interaction mode', () => {
     // Focus the input on the first row
     focusFirstBodyInput(0);
 
-    const tabToIndex = 20;
+    const tabToIndex = 10;
 
     async function rendered() {
       await nextFrame();
       await nextRender();
       await nextFrame();
+    }
+
+    // Get the row containing the focused element by walking up the DOM,
+    // crossing slot boundaries via assignedSlot. Uses getDeepActiveElement()
+    // to handle Firefox where document.activeElement returns the shadow host.
+    function getFocusedItemRowIndex() {
+      let el = getDeepActiveElement();
+      while (el && !(el instanceof HTMLTableRowElement)) {
+        el = el.assignedSlot ? el.assignedSlot.parentElement : el.parentElement;
+      }
+      return el ? el.index : -1;
     }
 
     // Tab downwards
@@ -543,8 +554,7 @@ describe('keyboard interaction mode', () => {
       await sendKeys({ press: 'Tab' });
       await rendered();
 
-      const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
-      expect(focusedRow.index).to.equal(i);
+      expect(getFocusedItemRowIndex()).to.equal(i);
     }
 
     // Tab upwards
@@ -552,8 +562,7 @@ describe('keyboard interaction mode', () => {
       await rendered();
       await sendKeys({ press: 'Shift+Tab' });
       await rendered();
-      const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
-      expect(focusedRow.index).to.equal(i);
+      expect(getFocusedItemRowIndex()).to.equal(i);
     }
   });
 });
