@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement, nothing } from 'lit';
-import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getFocusableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -406,7 +406,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this.requestUpdate();
 
     if (focusTarget) {
-      focusTarget.focus({ preventScroll: true });
+      focusTarget.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
     }
   }
 

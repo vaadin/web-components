@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, keyDownOn, mousedown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import { onceResized } from './helpers.js';
@@ -114,6 +114,52 @@ describe('vaadin-master-detail-layout', () => {
       });
       await onceResized(layout);
       expect(onResizeSpy).to.be.not.called;
+    });
+  });
+
+  describe('focus', () => {
+    let detailContent, button;
+
+    beforeEach(async () => {
+      layout.masterSize = '300px';
+      layout.detailSize = '300px';
+      layout.style.width = '400px';
+
+      detailContent = layout.querySelector('[slot="detail"]');
+      button = document.createElement('button');
+      button.textContent = 'Focusable';
+      detailContent.appendChild(button);
+
+      // Remove detail to start without it
+      detailContent.remove();
+      await onceResized(layout);
+    });
+
+    it('should focus detail content with preventScroll when detail opens as overlay', async () => {
+      const spy = sinon.spy(button, 'focus');
+      layout.appendChild(detailContent);
+      await onceResized(layout);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.equal({ preventScroll: true, focusVisible: false });
+    });
+
+    it('should focus detail content with focusVisible when keyboard is active', async () => {
+      const spy = sinon.spy(button, 'focus');
+      keyDownOn(document.body, 9);
+      layout.appendChild(detailContent);
+      await onceResized(layout);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.equal({ preventScroll: true, focusVisible: true });
+    });
+
+    it('should focus detail content without focusVisible when mouse is active', async () => {
+      const spy = sinon.spy(button, 'focus');
+      keyDownOn(document.body, 9);
+      mousedown(document.body);
+      layout.appendChild(detailContent);
+      await onceResized(layout);
+      expect(spy).to.be.calledOnce;
+      expect(spy.firstCall.args[0]).to.deep.equal({ preventScroll: true, focusVisible: false });
     });
   });
 
