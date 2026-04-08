@@ -115,12 +115,12 @@ Parts in addition to the ones defined in the shadow DOM
 
 **`<vaadin-breadcrumb-item>`** — Individual breadcrumb item
 
+Has `role="listitem"`
+
 Shadow DOM renders
 ```html
-  <li part="item">
     <slot name="prefix"></slot>
-    <a part="link" href="..."><slot></slot></a>  <!-- or <span> if no href -->
-  </li>
+    <a part="link" href="..."><slot></slot></a><!-- or <span> if no href -->
 ```
 
 The separator is added as a pseudo element
