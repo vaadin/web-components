@@ -117,6 +117,67 @@ describe('vaadin-breadcrumb', () => {
       const nav = element.shadowRoot!.querySelector('nav');
       expect(nav).to.be.null;
     });
+
+    it('should have an overflow button with part="overflow"', () => {
+      const overflow = element.shadowRoot!.querySelector('[part="overflow"]');
+      expect(overflow).to.be.ok;
+    });
+
+    it('should have the overflow button hidden by default', () => {
+      const overflow = element.shadowRoot!.querySelector('[part="overflow"]');
+      expect(overflow!.hidden).to.be.true;
+    });
+
+    it('should have a popover element', () => {
+      const popover = element.shadowRoot!.querySelector('vaadin-popover');
+      expect(popover).to.be.ok;
+    });
+  });
+
+  describe('overflow', () => {
+    beforeEach(async () => {
+      const wrapper = fixtureSync('<div style="width: 300px"></div>') as HTMLDivElement;
+      wrapper.innerHTML = `
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/widgets">Widgets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/widgets/sprockets">Sprockets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `;
+      element = wrapper.querySelector('vaadin-breadcrumb') as Breadcrumb;
+      await nextRender();
+      // Wait for ResizeObserver callback
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    it('should show overflow button when items do not fit', () => {
+      const overflow = element.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      expect(overflow.hidden).to.be.false;
+    });
+
+    it('should hide some items when overflow is active', () => {
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      const hiddenItems = [...items].filter((item) => item.hasAttribute('hidden'));
+      expect(hiddenItems.length).to.be.greaterThan(0);
+    });
+
+    it('should always show the current page (last item)', () => {
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      const lastItem = items[items.length - 1];
+      expect(lastItem.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should show all items when there is enough space', async () => {
+      (element.parentElement as HTMLElement).style.width = '800px';
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      const hiddenItems = [...items].filter((item) => item.hasAttribute('hidden'));
+      expect(hiddenItems.length).to.equal(0);
+      const overflow = element.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      expect(overflow.hidden).to.be.true;
+    });
   });
 });
 

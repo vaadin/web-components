@@ -15,6 +15,8 @@ export const breadcrumbItemStyles = css`
     font: inherit;
     color: inherit;
     line-height: inherit;
+    white-space: nowrap;
+    min-width: 0;
   }
 
   :host([hidden]) {
@@ -39,6 +41,10 @@ export const breadcrumbItemStyles = css`
     font: inherit;
     border-radius: var(--vaadin-radius-s, 0.25em);
     outline: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   a[part='link'] {
