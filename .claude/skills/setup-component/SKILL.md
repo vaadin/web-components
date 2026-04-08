@@ -99,3 +99,5 @@ Run `yarn install` to link the new package in the workspace.
 - **README warning**: The README.md must include a warning: `> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting \`window.Vaadin.featureFlags.{camelName}Component = true\`.`
 - **Dev page**: The dev page must enable the feature flag between `common.js` and the component import, matching `dev/badge.html` exactly: first `<script type="module" src="./common.js"></script>`, then `<script>window.Vaadin ??= {}; window.Vaadin.featureFlags ??= {}; window.Vaadin.featureFlags.{camelName}Component = true;</script>`, then the component import.
 - **Test files**: ALL test files (unit, DOM snapshot, visual base/lumo/aura) must enable the feature flag after imports, matching `packages/badge/test/badge.test.ts`: `window.Vaadin ??= {}; window.Vaadin.featureFlags ??= {}; window.Vaadin.featureFlags.{camelName}Component = true;`
+
+When done, create a commit.
