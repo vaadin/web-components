@@ -78,6 +78,7 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  * `navbar-top`     | Container for the top navigation bar
  * `navbar-bottom`  | Container for the bottom navigation bar
  * `drawer`         | Container for the drawer area
+ * `content`        | Container for the content area
  *
  * The following state attributes are available for styling:
  *
@@ -140,8 +141,8 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  *
  * To use the "content scrolling", in case of the content of the page relies on a pre-defined height (for instance,
  * it has a `height:100%`), then the developer can set `height: 100%` to both `html` and `body`.
- * That will make the `[content]` element of app layout scrollable.
- * On this case, the toolbars on mobile device won't collapse.
+ * That will make the content element of app layout scrollable.
+ * In that case, the toolbars on mobile device won't collapse.
  *
  * @fires {CustomEvent} drawer-opened-changed - Fired when the `drawerOpened` property changes.
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
