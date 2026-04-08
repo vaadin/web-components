@@ -1,4 +1,5 @@
 :is(vaadin-breadcrumb) {
   font-family: var(--aura-font-family);
   font-size: var(--aura-font-size-m);
+  --vaadin-breadcrumb-separator-gap: 0.25em;
 }
