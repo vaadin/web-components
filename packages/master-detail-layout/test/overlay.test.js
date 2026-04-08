@@ -158,6 +158,41 @@ describe('overlay', () => {
     });
   });
 
+  describe('with detail-placeholder', () => {
+    let layout;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-master-detail-layout master-size="300px" detail-size="300px">
+          <div>Master</div>
+          <div slot="detail">Detail</div>
+          <div slot="detail-placeholder">Placeholder</div>
+        </vaadin-master-detail-layout>
+      `);
+      await onceResized(layout);
+    });
+
+    it('should not expand master when resized to overlay with detail', async () => {
+      layout.style.width = '400px';
+      await onceResized(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('has-detail')).to.be.true;
+      expect(layout.hasAttribute('has-detail-placeholder')).to.be.true;
+      expect(layout.$.master.offsetWidth).to.equal(300);
+    });
+
+    it('should expand master after removing detail in overlay mode', async () => {
+      layout.style.width = '400px';
+      await onceResized(layout);
+
+      layout.querySelector('[slot="detail"]').remove();
+      await onceResized(layout);
+      expect(layout.hasAttribute('has-detail')).to.be.false;
+      expect(layout.$.master.offsetWidth).to.equal(400);
+    });
+  });
+
   describe('overlayContainment viewport', () => {
     ['horizontal', 'vertical'].forEach((orientation) => {
       describe(orientation, () => {
