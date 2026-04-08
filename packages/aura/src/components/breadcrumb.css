@@ -1,0 +1,8 @@
+:is(vaadin-breadcrumb) {
+  font-family: var(--aura-font-family);
+  color: var(--vaadin-breadcrumb-text-color, var(--aura-accent-text-color));
+}
+
+:is(vaadin-breadcrumb):where([disabled]) {
+  opacity: 0.5;
+}
