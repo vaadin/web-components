@@ -124,15 +124,19 @@ export const BreadcrumbMixin = (superClass) =>
       overflowLi.style.removeProperty('order');
       this.__overflowItems = [];
 
-      // Measure the natural (unshrunk) width of all items.
-      // Temporarily prevent shrinking to get true widths.
+      // Measure the natural (unshrunk) total width of all items.
+      const availableWidth = list.clientWidth;
+      const gap = parseFloat(getComputedStyle(list).gap) || 0;
+
+      // Temporarily prevent shrinking to get true natural widths
       items.forEach((item) => {
         item.style.flexShrink = '0';
+        item.style.minWidth = 'auto';
       });
-      const naturalWidth = list.scrollWidth;
-      const availableWidth = list.clientWidth;
+      const naturalWidth = this.__sumNaturalWidths(items, gap);
       items.forEach((item) => {
         item.style.removeProperty('flex-shrink');
+        item.style.removeProperty('min-width');
       });
 
       // Check if overflow is needed
@@ -180,16 +184,23 @@ export const BreadcrumbMixin = (superClass) =>
         overflowLi.hidden = false;
         this.__overflowItems = hiddenIndices.map((i) => items[i]);
 
-        // Measure again with this collapse level (prevent shrinking to check)
-        items.forEach((item) => {
-          if (!hiddenIndices.includes(items.indexOf(item))) {
-            item.style.flexShrink = '0';
-          }
+        // Measure whether this collapse level fits using natural widths
+        const visibleItems = items.filter((_, idx) => !hiddenIndices.includes(idx));
+        visibleItems.forEach((item) => {
+          item.style.flexShrink = '0';
+          item.style.minWidth = 'auto';
         });
-        const fits = list.scrollWidth <= list.clientWidth;
-        items.forEach((item) => {
+        overflowLi.style.flexShrink = '0';
+        const visibleCount = visibleItems.length + 1; // +1 for overflow button
+        const overflowWidth = overflowLi.getBoundingClientRect().width;
+        const visibleWidths = visibleItems.reduce((sum, item) => sum + item.getBoundingClientRect().width, 0);
+        const totalNeeded = visibleWidths + overflowWidth + gap * (visibleCount - 1);
+        const fits = totalNeeded <= availableWidth;
+        visibleItems.forEach((item) => {
           item.style.removeProperty('flex-shrink');
+          item.style.removeProperty('min-width');
         });
+        overflowLi.style.removeProperty('flex-shrink');
 
         if (fits) {
           break;
@@ -200,12 +211,17 @@ export const BreadcrumbMixin = (superClass) =>
     }
 
     /**
-     * Builds progressive collapse levels.
+     * Builds progressive collapse levels, hiding one item at a time.
+     *
+     * Priority order (highest = hidden last): current > parent > root > rest.
+     * Among "rest" items (between root and parent), items closer to current
+     * have higher priority — so we hide from root-side first.
      *
      * For items [0, 1, 2, 3, 4]:
-     * Level 1: hide [1, 2]       → show root(0), ..., parent(3), current(4)
-     * Level 2: hide [1, 2, 3]    → show root(0), ..., current(4)
-     * Level 3: hide [0, 1, 2, 3] → show ..., current(4)
+     * Level 1: hide [1]          → root(0), ..., Widgets(2), parent(3), current(4)
+     * Level 2: hide [1, 2]       → root(0), ..., parent(3), current(4)
+     * Level 3: hide [1, 2, 3]    → root(0), ..., current(4)
+     * Level 4: hide [0, 1, 2, 3] → ..., current(4)
      *
      * @private
      * @param {Array<Element>} items
@@ -225,33 +241,22 @@ export const BreadcrumbMixin = (superClass) =>
       const levels = [];
       const lastIndex = count - 1;
 
-      // Start by hiding items between root and parent of current
-      // i.e., indices 1 to lastIndex-2
-      const middleIndices = [];
-      for (let i = 1; i <= lastIndex - 2; i++) {
-        middleIndices.push(i);
+      // Progressively hide middle items one at a time, starting from index 1
+      // (closest to root = lowest priority among middle items)
+      const hidden = [];
+      for (let i = 1; i <= lastIndex - 2; i += 1) {
+        hidden.push(i);
+        levels.push([...hidden]);
       }
 
-      if (middleIndices.length > 0) {
-        // Level: keep root, parent, current
-        levels.push([...middleIndices]);
-      }
-
-      // Level: keep root, current (hide parent too)
+      // Next: also hide the parent (second-to-last)
       if (lastIndex >= 2) {
-        const hideUpToParent = [];
-        for (let i = 1; i <= lastIndex - 1; i++) {
-          hideUpToParent.push(i);
-        }
-        levels.push(hideUpToParent);
+        hidden.push(lastIndex - 1);
+        levels.push([...hidden]);
       }
 
-      // Level: hide everything except current (including root)
-      const hideAll = [];
-      for (let i = 0; i <= lastIndex - 1; i++) {
-        hideAll.push(i);
-      }
-      levels.push(hideAll);
+      // Finally: hide root too (everything except current)
+      levels.push([...Array(lastIndex).keys()]);
 
       return levels;
     }
@@ -344,6 +349,19 @@ export const BreadcrumbMixin = (superClass) =>
           item.removeAttribute('aria-current');
         }
       });
+    }
+
+    /**
+     * Sum the natural widths of items plus gaps.
+     * Uses getBoundingClientRect for accurate sub-pixel measurement.
+     * @private
+     * @param {Array<Element>} items
+     * @param {number} gap
+     * @return {number}
+     */
+    __sumNaturalWidths(items, gap) {
+      const total = items.reduce((sum, item) => sum + item.getBoundingClientRect().width, 0);
+      return total + gap * Math.max(0, items.length - 1);
     }
 
     /**
