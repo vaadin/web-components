@@ -49,7 +49,7 @@ For example:
 5. `Turbo Sprocket` - in this and narrower cases, clicking on the active view shows the popover
 6. If there is not enough space for `Turbo Sprocket`, it is truncated
 
-There is never a case where an item between two hidden items would be shown, e.g. `Home / ... / Widgets / Turbo Sprocket` is not possible as `Sprockets` is hidden and thus `Widgets` is also hidden.
+There is never a case where an item (other than the root) before a hidden item would be shown, e.g. `Home / ... / Widgets / Turbo Sprocket` is not possible as `Sprockets` is hidden and thus `Widgets` is also hidden.
 
 ### 4. With Icons (Prefix Slot)
 
