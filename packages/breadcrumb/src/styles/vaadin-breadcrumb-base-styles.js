@@ -3,16 +3,11 @@
  * Copyright (c) 2025 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const breadcrumbStyles = css`
   :host {
     display: block;
-    box-sizing: border-box;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
   }
 
   :host([hidden]) {
@@ -23,7 +18,7 @@ export const breadcrumbStyles = css`
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    gap: var(--vaadin-breadcrumb-separator-gap, var(--vaadin-gap-xs, 0.25em));
+    gap: var(--vaadin-breadcrumb-separator-gap);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -33,15 +28,15 @@ export const breadcrumbStyles = css`
   [part='overflow'] {
     display: inline-flex;
     align-items: center;
-    gap: var(--vaadin-breadcrumb-separator-gap, var(--vaadin-gap-xs, 0.25em));
+    gap: var(--vaadin-breadcrumb-separator-gap);
     flex: none;
     list-style: none;
   }
 
   [part='overflow']::after {
     content: var(--vaadin-breadcrumb-separator-symbol, '/');
-    color: var(--vaadin-breadcrumb-separator-color, var(--vaadin-text-color-secondary, #6b7280));
-    font-size: var(--vaadin-breadcrumb-separator-size, inherit);
+    color: var(--vaadin-breadcrumb-separator-color);
+    font-size: var(--vaadin-breadcrumb-separator-size);
     flex: none;
     user-select: none;
     pointer-events: none;
@@ -54,15 +49,10 @@ export const breadcrumbStyles = css`
   [part='overflow'] button {
     all: unset;
     cursor: var(--vaadin-clickable-cursor, pointer);
-    font: inherit;
-    color: inherit;
-    padding: 0 0.125em;
-    border-radius: var(--vaadin-radius-s, 0.25em);
-    letter-spacing: 0.1em;
   }
 
   [part='overflow'] button:focus-visible {
-    outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, #1e90ff);
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 2px;
   }
 `;

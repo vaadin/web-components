@@ -43,11 +43,8 @@
   [part='overflow'] button {
     all: unset;
     cursor: var(--lumo-clickable-cursor, default);
-    font: inherit;
     color: var(--lumo-primary-text-color);
-    padding: 0 0.125em;
     border-radius: var(--lumo-border-radius-s);
-    letter-spacing: 0.1em;
   }
 
   [part='overflow'] button:hover {
