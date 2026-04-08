@@ -9,4 +9,14 @@
     font-size: var(--lumo-font-size-m);
     color: var(--lumo-secondary-text-color);
   }
+
+  [part='list'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vaadin-breadcrumb-separator-gap, var(--lumo-space-xs));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 }
