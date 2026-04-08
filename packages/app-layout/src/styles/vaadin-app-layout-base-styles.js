@@ -21,14 +21,14 @@ export const appLayoutStyles = css`
     padding-bottom: max(var(--vaadin-app-layout-navbar-offset-bottom), var(--safe-area-inset-bottom));
   }
 
-  :host(:dir(ltr)) [content] {
-    padding-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
-    padding-right: var(--safe-area-inset-right);
+  :host(:dir(ltr)) [part~='content'] {
+    margin-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
+    margin-right: var(--safe-area-inset-right);
   }
 
-  :host(:dir(rtl)) [content] {
-    padding-left: var(--safe-area-inset-left);
-    padding-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
+  :host(:dir(rtl)) [part~='content'] {
+    margin-left: var(--safe-area-inset-left);
+    margin-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
   }
 
   :host([hidden]),
@@ -50,11 +50,11 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-drawer-offset-left: 0px;
   }
 
-  :host(:not([no-scroll])) [content] {
+  :host(:not([no-scroll])) [part~='content'] {
     overflow: auto;
   }
 
-  [content] {
+  [part~='content'] {
     height: 100%;
     transition: inherit;
   }
@@ -138,11 +138,11 @@ export const appLayoutStyles = css`
   }
 
   :host([has-navbar]:not([overlay])) [part='drawer'],
-  :host([has-navbar]) [content] {
+  :host([has-navbar]) [part~='content'] {
     --safe-area-inset-top: 0px;
   }
 
-  :host([has-drawer]:not([overlay])[drawer-opened]) [content] {
+  :host([has-drawer]:not([overlay])[drawer-opened]) [part~='content'] {
     &:dir(ltr) {
       --safe-area-inset-left: 0px;
     }

@@ -57,7 +57,7 @@ vaadin-app-layout > vaadin-scroller[slot='drawer'] {
   scrollbar-width: thin;
 }
 
-vaadin-app-layout > :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])) {
+vaadin-app-layout:has(> :nth-child(1 of :not([slot])):nth-last-child(1 of :not([slot])))::part(content) {
   color-scheme: var(--aura-content-color-scheme);
   color: var(--vaadin-text-color);
   background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);

@@ -151,7 +151,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       <div part="drawer" id="drawer">
         <slot name="drawer" id="drawerSlot" @slotchange="${this.__onDrawerSlotChange}"></slot>
       </div>
-      <div content>
+      <div content part="content">
         <slot></slot>
       </div>
       <div part="navbar navbar-bottom" id="navbarBottom" hidden>

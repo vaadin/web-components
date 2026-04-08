@@ -36,11 +36,11 @@
     --vaadin-app-layout-navbar-offset-left: 0;
   }
 
-  :host(:not([no-scroll])) [content] {
+  :host(:not([no-scroll])) [part~='content'] {
     overflow: auto;
   }
 
-  [content] {
+  [part~='content'] {
     height: 100%;
   }
 
