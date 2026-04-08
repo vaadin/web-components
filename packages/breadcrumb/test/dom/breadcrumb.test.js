@@ -3,6 +3,10 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumb.js';
 import '../../src/vaadin-breadcrumb-item.js';
 
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
+
 describe('vaadin-breadcrumb', () => {
   let element;
 

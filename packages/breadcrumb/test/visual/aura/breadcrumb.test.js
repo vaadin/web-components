@@ -3,6 +3,9 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-breadcrumb.js';
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
 
 describe('breadcrumb', () => {
   let div, element;

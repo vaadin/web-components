@@ -5,6 +5,9 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/breadcrumb.css';
 import '@vaadin/vaadin-lumo-styles/components/breadcrumb-item.css';
 import '../../../vaadin-breadcrumb.js';
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
 
 describe('breadcrumb', () => {
   let div, element;

@@ -4,6 +4,10 @@ import '../vaadin-breadcrumb.js';
 import type { Breadcrumb } from '../vaadin-breadcrumb.js';
 import type { BreadcrumbItem } from '../vaadin-breadcrumb.js';
 
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.breadcrumbComponent = true;
+
 describe('vaadin-breadcrumb', () => {
   let element: Breadcrumb;
 
