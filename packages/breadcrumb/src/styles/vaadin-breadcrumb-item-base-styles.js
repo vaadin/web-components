@@ -11,6 +11,11 @@ export const breadcrumbItemStyles = css`
     align-items: center;
     gap: var(--vaadin-breadcrumb-separator-gap);
     white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  :host(:last-child) {
+    flex-shrink: 1;
     min-width: 0;
   }
 
@@ -32,7 +37,6 @@ export const breadcrumbItemStyles = css`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0;
   }
 
   a[part='link'] {
