@@ -1,0 +1,12 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/breadcrumb-item.css';
+
+:root,
+:host {
+  --_lumo-vaadin-breadcrumb-item-inject: 1;
+  --_lumo-vaadin-breadcrumb-item-inject-modules: lumo_components_breadcrumb-item;
+}

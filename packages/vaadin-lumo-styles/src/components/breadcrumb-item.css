@@ -1,0 +1,117 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_breadcrumb-item {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    min-width: 0;
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-xs);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  :host([hidden]),
+  :host([overflow-hidden]) {
+    display: none !important;
+  }
+
+  [part='item'] {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  [part='link'] {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--lumo-space-xs);
+    text-decoration: none;
+    color: var(--lumo-primary-text-color);
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: var(--lumo-border-radius-s);
+    transition: color 140ms;
+  }
+
+  a[part='link'] {
+    cursor: var(--lumo-clickable-cursor, default);
+  }
+
+  :host([last]) [part='link'] {
+    color: var(--lumo-body-text-color);
+    font-weight: 500;
+  }
+
+  :host([disabled]) [part='link'] {
+    color: var(--lumo-disabled-text-color);
+    pointer-events: none;
+  }
+
+  a[part='link']:focus-visible {
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: none;
+  }
+
+  @media (any-hover: hover) {
+    a[part='link']:hover {
+      color: var(--lumo-primary-color);
+    }
+  }
+
+  [part='separator'] {
+    display: inline-block;
+    flex-shrink: 0;
+    font-family: 'lumo-icons';
+    font-size: var(--lumo-font-size-s);
+    color: var(--lumo-contrast-40pct);
+    padding-inline: var(--lumo-space-xs);
+  }
+
+  [part='separator']::before {
+    content: var(--lumo-icons-angle-right);
+  }
+
+  :host([last]) [part='separator'] {
+    display: none;
+  }
+
+  slot[name='prefix']::slotted(*) {
+    flex-shrink: 0;
+  }
+
+  slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    padding: 0.1em;
+    color: var(--lumo-contrast-60pct);
+  }
+
+  :host([last]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: inherit;
+  }
+
+  @media (forced-colors: active) {
+    a[part='link'] {
+      color: LinkText;
+    }
+
+    :host([last]) [part='link'] {
+      color: CanvasText;
+    }
+
+    :host([disabled]) [part='link'] {
+      color: GrayText !important;
+    }
+
+    [part='separator'] {
+      color: CanvasText;
+    }
+  }
+}

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumb</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/breadcrumb';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+    </script>
+    <style>
+      .resize-container {
+        border: 1px dashed #ccc;
+        padding: 8px;
+        resize: horizontal;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="section">
+      <h3 class="heading">Basic Breadcrumb</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item href="/products/widgets">Widgets</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Sprocket</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Two Items (No Overflow)</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Products</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Single Item (Current Page Only)</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Long Trail (Responsive Overflow)</h3>
+      <p>Resize the container to see overflow behavior:</p>
+      <div class="resize-container" style="width: 100%;">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/electronics">Electronics</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/electronics/computers">Computers</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/electronics/computers/laptops">Laptops</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>MacBook Pro 16"</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Narrow Container (Forced Overflow)</h3>
+      <div class="resize-container" style="width: 300px;">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/widgets">Widgets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/widgets/sprockets">Sprockets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">With Icons (Prefix Slot)</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item href="/">
+          <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
+          Home
+        </vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Widgets</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Disabled Item</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item href="/products" disabled>Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Widgets</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Data-Driven (Items Property)</h3>
+      <vaadin-breadcrumb id="items-breadcrumb"></vaadin-breadcrumb>
+      <script type="module">
+        const bc = document.querySelector('#items-breadcrumb');
+        bc.items = [
+          { text: 'Home', href: '/' },
+          { text: 'Products', href: '/products' },
+          { text: 'Widgets', href: '/products/widgets' },
+          { text: 'Sprocket' },
+        ];
+      </script>
+    </div>
+
+    <div class="section" dir="rtl">
+      <h3 class="heading">RTL Support</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item href="/">الرئيسية</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item href="/products">المنتجات</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>الأدوات</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <theme-switcher></theme-switcher>
+  </body>
+</html>
