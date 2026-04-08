@@ -7,6 +7,7 @@ snapshots["vaadin-breadcrumb host default"] =
     has-path=""
     path="/"
     role="listitem"
+    style=""
   >
     Home
   </vaadin-breadcrumb-item>
@@ -14,12 +15,14 @@ snapshots["vaadin-breadcrumb host default"] =
     has-path=""
     path="/products"
     role="listitem"
+    style=""
   >
     Products
   </vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item
     aria-current="page"
     role="listitem"
+    style=""
   >
     Current Page
   </vaadin-breadcrumb-item>
@@ -31,7 +34,31 @@ snapshots["vaadin-breadcrumb shadow default"] =
 `<ol part="list">
   <slot>
   </slot>
+  <li
+    hidden=""
+    part="overflow"
+    role="listitem"
+  >
+    <button
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      aria-label="Show hidden breadcrumb items"
+      id="overflow-btn"
+    >
+      …
+    </button>
+  </li>
 </ol>
+<vaadin-popover
+  for="overflow-btn"
+  id="vaadin-popover-1"
+  modeless=""
+  position="bottom-start"
+  role="dialog"
+  tabindex="0"
+  trigger="click"
+>
+</vaadin-popover>
 `;
 /* end snapshot vaadin-breadcrumb shadow default */
 

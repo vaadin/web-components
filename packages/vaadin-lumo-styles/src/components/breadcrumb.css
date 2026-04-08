@@ -12,11 +12,50 @@
 
   [part='list'] {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: var(--vaadin-breadcrumb-separator-gap, var(--lumo-space-xs));
     list-style: none;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+  }
+
+  [part='overflow'] {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vaadin-breadcrumb-separator-gap, var(--lumo-space-xs));
+    flex: none;
+    list-style: none;
+  }
+
+  [part='overflow']::after {
+    content: var(--vaadin-breadcrumb-separator-symbol, var(--lumo-icons-angle-right));
+    font-family: 'lumo-icons';
+    font-size: var(--vaadin-breadcrumb-separator-size, var(--lumo-font-size-s));
+    color: var(--vaadin-breadcrumb-separator-color, var(--lumo-tertiary-text-color));
+  }
+
+  [part='overflow'][hidden] {
+    display: none !important;
+  }
+
+  [part='overflow'] button {
+    all: unset;
+    cursor: var(--lumo-clickable-cursor, default);
+    font: inherit;
+    color: var(--lumo-primary-text-color);
+    padding: 0 0.125em;
+    border-radius: var(--lumo-border-radius-s);
+    letter-spacing: 0.1em;
+  }
+
+  [part='overflow'] button:hover {
+    color: var(--lumo-primary-color);
+  }
+
+  [part='overflow'] button:focus-visible {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+    outline-offset: 2px;
   }
 }

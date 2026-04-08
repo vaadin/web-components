@@ -4,13 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * A mixin providing common breadcrumb functionality.
  */
 export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<BreadcrumbMixinClass> & T;
+): Constructor<BreadcrumbMixinClass> & Constructor<ResizeMixinClass> & T;
 
 export declare class BreadcrumbMixinClass {
   /**
