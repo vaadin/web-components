@@ -111,39 +111,39 @@
     </div>
 
     <div class="section">
-      <h3 class="heading">Invariant: Current item never collapses</h3>
-      <p>Even at 80px, the current item "Turbo Sprocket" must remain visible:</p>
-      <div class="resize-container" style="width: 80px;">
+      <h3 class="heading">Collapse Sequence (resize to test each step)</h3>
+      <p>Expected: Home/Prod/Comp/Lap/MacBook → Home/.../Comp/Lap/MacBook → Home/.../Lap/MacBook → Home/.../MacBook → .../MacBook → MacBook → ...</p>
+      <div class="resize-container" style="width: 100%;">
         <vaadin-breadcrumb>
           <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
           <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
-          <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/computers">Computers</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/computers/laptops">Laptops</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>MacBook Pro 16</vaadin-breadcrumb-item>
         </vaadin-breadcrumb>
       </div>
     </div>
 
     <div class="section">
-      <h3 class="heading">Invariant: Ellipsis never before first visible item</h3>
-      <p>At 400px, root "Home" is visible — ellipsis must appear AFTER it (Home / ... / Current), not before (... / Home / Current):</p>
-      <div class="resize-container" style="width: 400px;">
+      <h3 class="heading">Current item alone (no ellipsis)</h3>
+      <p>At 130px, only current fits — shown without ellipsis for max space:</p>
+      <div class="resize-container" style="width: 130px;">
         <vaadin-breadcrumb>
           <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
           <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
-          <vaadin-breadcrumb-item href="/products/electronics">Electronics</vaadin-breadcrumb-item>
-          <vaadin-breadcrumb-item href="/products/electronics/computers">Computers</vaadin-breadcrumb-item>
-          <vaadin-breadcrumb-item>Laptops</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>MacBook Pro 16</vaadin-breadcrumb-item>
         </vaadin-breadcrumb>
       </div>
     </div>
 
     <div class="section">
-      <h3 class="heading">Invariant: No intermediate shown while current is hidden</h3>
-      <p>Must never see "... / Bar" when "Baz" is the current page. Resize to verify:</p>
-      <div class="resize-container" style="width: 120px;">
+      <h3 class="heading">Only ellipsis (current too wide)</h3>
+      <p>At 40px, even current doesn't fit — only ellipsis shown:</p>
+      <div class="resize-container" style="width: 40px;">
         <vaadin-breadcrumb>
-          <vaadin-breadcrumb-item href="/foo">Foo</vaadin-breadcrumb-item>
-          <vaadin-breadcrumb-item href="/foo/bar">Bar</vaadin-breadcrumb-item>
-          <vaadin-breadcrumb-item>Baz</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>MacBook Pro 16</vaadin-breadcrumb-item>
         </vaadin-breadcrumb>
       </div>
     </div>

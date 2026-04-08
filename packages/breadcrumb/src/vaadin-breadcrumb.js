@@ -279,12 +279,12 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
   /**
    * Priority-based overflow algorithm.
    *
-   * Visibility priority (highest to lowest):
-   * 1. Current item (last) — always visible
-   * 2. Root (first)
-   * 3. Parent (second-to-last)
-   * 4. Grandparent (third-to-last)
-   * 5. Remaining ancestors, closest-to-current outward
+   * Collapse order (first to hide → last to hide):
+   * 1. Items closest to root (after root) are hidden first
+   * 2. Then items closer to current (grandparent, parent)
+   * 3. Then root
+   * 4. Then ellipsis itself (when only current remains and fits alone)
+   * 5. Finally current item text is truncated via CSS text-overflow
    *
    * @private
    */
@@ -303,6 +303,7 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
 
     // Remove overflow state and show all items synchronously via attributes
     this.removeAttribute('has-overflow');
+    this.removeAttribute('overflow-only');
     items.forEach((item) => {
       item.removeAttribute('overflow-hidden');
     });
@@ -355,41 +356,91 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
     // Build priority order
     const priorityOrder = this.__getPriorityOrder(items);
 
-    // The current item (last) is always visible — never collapse it.
     const currentItem = items[items.length - 1];
+    const currentItemWidth = itemWidths.get(currentItem);
 
-    // Greedily add items in priority order.
-    // Current item is always first in priority and always added.
-    const visibleSet = new Set();
-    let usedWidth = overflowWidth; // Reserve space for overflow button
+    // Check if only the current item fits without ellipsis
+    // (all others hidden, no ellipsis needed)
+    if (currentItemWidth <= availableWidth && items.length > 1) {
+      // Try fitting current alone (no ellipsis = more room)
+      // Then try adding more items with ellipsis
 
-    for (const item of priorityOrder) {
-      const itemWidth = itemWidths.get(item);
-      if (item === currentItem) {
-        // Current item is always visible regardless of width
-        visibleSet.add(item);
-        usedWidth += itemWidth;
-      } else if (usedWidth + itemWidth <= availableWidth) {
-        visibleSet.add(item);
-        usedWidth += itemWidth;
+      // First: try with ellipsis + current + other items in priority order
+      const visibleSet = new Set();
+      let usedWidth = overflowWidth;
+
+      for (const item of priorityOrder) {
+        const itemWidth = itemWidths.get(item);
+        if (item === currentItem) {
+          // Current item always added
+          visibleSet.add(item);
+          usedWidth += itemWidth;
+        } else if (usedWidth + itemWidth <= availableWidth) {
+          visibleSet.add(item);
+          usedWidth += itemWidth;
+        }
       }
-    }
 
-    // If all items fit (shouldn't happen but safeguard), show all
-    if (visibleSet.size === items.length) {
-      this.removeAttribute('has-overflow');
+      // If all items fit, show all (no overflow)
+      if (visibleSet.size === items.length) {
+        this.removeAttribute('has-overflow');
+        items.forEach((item) => {
+          item.removeAttribute('overflow-hidden');
+          item.style.order = '';
+        });
+        this.__overflowItems = [];
+        this.__updatingOverflow = false;
+        return;
+      }
+
+      // If only current fits (no room for any other item even with ellipsis),
+      // show current alone without ellipsis for maximum space
+      if (visibleSet.size === 1) {
+        this.removeAttribute('has-overflow');
+        items.forEach((item) => {
+          if (item === currentItem) {
+            item.removeAttribute('overflow-hidden');
+          } else {
+            item.setAttribute('overflow-hidden', '');
+          }
+          item.style.order = '';
+        });
+        this.__overflowItems = [];
+        this.__updatingOverflow = false;
+        return;
+      }
+
+      // Normal overflow: some items visible, some hidden behind ellipsis
+      this.__applyOverflow(items, visibleSet);
+    } else if (currentItemWidth > availableWidth) {
+      // Current item doesn't even fit alone — show only ellipsis
+      // which opens a popover with all items
+      this.setAttribute('overflow-only', '');
       items.forEach((item) => {
-        item.removeAttribute('overflow-hidden');
+        item.setAttribute('overflow-hidden', '');
+        item.style.order = '';
       });
+
+      this.__overflowItems = items.map((item) => ({
+        text: item.textContent.trim(),
+        href: item.href,
+      }));
+
+      this.__updatingOverflow = false;
+      this.requestUpdate();
+    } else {
+      // Single item — just show it
+      this.removeAttribute('has-overflow');
       this.__overflowItems = [];
       this.__updatingOverflow = false;
-      return;
     }
+  }
 
-    // Apply visibility via direct attribute manipulation for synchronous effect.
-    // Also manage CSS order so the ellipsis appears in the correct position:
-    // - When root is visible: root appears before ellipsis (order: -1)
-    // - Ellipsis always appears after the first visible item, never before it
+  /**
+   * Apply overflow visibility and ellipsis positioning.
+   * @private
+   */
+  __applyOverflow(items, visibleSet) {
     const rootIsVisible = visibleSet.has(items[0]);
 
     items.forEach((item) => {
@@ -398,7 +449,6 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
       } else {
         item.setAttribute('overflow-hidden', '');
       }
-      // Reset order
       item.style.order = '';
     });
 

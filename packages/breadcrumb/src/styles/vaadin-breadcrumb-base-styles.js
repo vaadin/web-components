@@ -61,6 +61,10 @@ export const breadcrumbStyles = css`
     padding-inline: var(--vaadin-breadcrumb-separator-gap, var(--vaadin-padding-xs, 6px));
   }
 
+  :host([overflow-only]) [part='overflow']::after {
+    display: none;
+  }
+
   [part='overflow']:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;

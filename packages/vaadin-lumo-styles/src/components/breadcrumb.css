@@ -65,6 +65,10 @@
     padding-inline: var(--lumo-space-xs);
   }
 
+  :host([overflow-only]) [part='overflow']::after {
+    display: none;
+  }
+
   [part='overflow']:focus-visible {
     box-shadow: 0 0 0 2px var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     outline: none;

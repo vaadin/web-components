@@ -251,28 +251,32 @@ Add automatic overflow handling based on available width, with a priority-based 
 
 #### Priority-Based Visibility Algorithm
 
-When the component's available width cannot fit all items, items are hidden into an overflow popover. The visibility priority (highest to lowest) is:
+When the component's available width cannot fit all items, items are progressively collapsed. The collapse order (first hidden → last hidden) is:
 
-1. **Current item** (last item) — always visible
-2. **Root** (first item) — shown if space allows
-3. **Parent** (second-to-last item) — shown if space allows
-4. **Grandparent** (third-to-last) — shown if space allows
-5. **Remaining ancestors** — filled in from closest-to-current outward, if space allows
+1. Items closest to root (after root) are hidden first, working toward current
+2. Then items closer to current (grandparent, parent)
+3. Then root
+4. Then the ellipsis itself is removed (when only current remains and fits alone)
+5. Finally, if even the current item text doesn't fit, only the ellipsis is shown (all items in popover)
 
-Hidden items are replaced by a single ellipsis button (`...`) in their position within the trail. The ellipsis opens a `<vaadin-popover>` listing the hidden items in hierarchical order (root to current).
+Hidden items are replaced by a single ellipsis button (`...`) positioned after the root (or at the start when root is hidden). The ellipsis opens a `<vaadin-popover>` listing the hidden items in hierarchical order (root to current).
 
 Example with 5 items as width decreases:
 ```
-Full:      Home / Products / Widgets / Sprockets / Turbo Sprocket
-Step 1:    Home / ... / Sprockets / Turbo Sprocket        (Products, Widgets hidden)
-Step 2:    Home / ... / Turbo Sprocket                    (Sprockets also hidden)
-Step 3:    ... / Turbo Sprocket                            (only current visible)
+Full:      Home / Products / Computers / Laptops / MacBook Pro 16
+Step 1:    Home / ... / Computers / Laptops / MacBook Pro 16   (Products hidden)
+Step 2:    Home / ... / Laptops / MacBook Pro 16               (Computers hidden)
+Step 3:    Home / ... / MacBook Pro 16                         (Laptops hidden)
+Step 4:    ... / MacBook Pro 16                                (Home hidden)
+Step 5:    MacBook Pro 16                                      (all hidden, no ellipsis)
+Step 6:    ...                                                 (current too wide, only ellipsis)
 ```
 
 **Invariants:**
-- The current item (last) must **never** be collapsed — it is always visible regardless of available width.
+- The current item (last) must always take priority over all other items. You should never see an intermediate item visible while the current item is hidden. For example, with items `Foo / Bar / Baz`, the result `... / Bar` (showing an intermediate but not the last item) must never occur.
 - The ellipsis (`...`) must **never** appear before the first visible item. It always appears after the root (first item) or replaces the root position when the root itself is hidden. In other words, the visual order is always: `[Root /] [... /] [visible items] / Current` — never `... / Root / ...`.
-- The current item (last) must always take priority over intermediate items. You should never see an intermediate item visible while the current item is hidden. For example, with items `Foo / Bar / Baz`, the result `... / Bar` (showing an intermediate but not the last item) must never occur.
+- When only the current item fits, the ellipsis is removed to give maximum space to the current item's text.
+- When even the current item alone doesn't fit, only the ellipsis button is shown (clicking it opens the popover with all items).
 
 #### Behavior
 
@@ -286,15 +290,14 @@ Step 3:    ... / Turbo Sprocket                            (only current visible
 
 #### Tests
 
-**Visibility & priority:**
+**Collapse sequence:**
 - All items visible when enough space
-- Items hidden in correct priority order as container shrinks
-- Current item always remains visible even at minimum width
-- Current item never collapses, even when container is extremely narrow
-- An intermediate item is never shown while the current item is hidden
-- Root shown before parent when space is limited
-- Parent shown before grandparent
-- Items restored in priority order as container grows
+- Items closest to root (after root) are hidden first as container shrinks
+- Root stays visible longer than parent
+- Current item is never hidden while any intermediate item is visible
+- When only current remains and fits: ellipsis is removed, current shown alone
+- When current doesn't fit alone: only ellipsis is shown (all items in popover)
+- Items restored in reverse collapse order as container grows
 - Correct behavior when items are added/removed dynamically
 
 **Ellipsis positioning:**
