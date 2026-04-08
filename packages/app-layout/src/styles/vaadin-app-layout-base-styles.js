@@ -21,14 +21,14 @@ export const appLayoutStyles = css`
     padding-bottom: max(var(--vaadin-app-layout-navbar-offset-bottom), var(--safe-area-inset-bottom));
   }
 
-  :host(:dir(ltr)) [part~='content'] {
-    margin-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
-    margin-right: var(--safe-area-inset-right);
+  :host(:dir(ltr)) {
+    padding-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
+    padding-right: var(--safe-area-inset-right);
   }
 
-  :host(:dir(rtl)) [part~='content'] {
-    margin-left: var(--safe-area-inset-left);
-    margin-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
+  :host(:dir(rtl)) {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
   }
 
   :host([hidden]),
@@ -137,12 +137,12 @@ export const appLayoutStyles = css`
     padding-right: var(--safe-area-inset-right);
   }
 
-  :host([has-navbar]:not([overlay])) [part='drawer'],
-  :host([has-navbar]) [part~='content'] {
+  :host([has-navbar]),
+  :host([has-navbar]:not([overlay])) [part='drawer'] {
     --safe-area-inset-top: 0px;
   }
 
-  :host([has-drawer]:not([overlay])[drawer-opened]) [part~='content'] {
+  :host([has-drawer]:not([overlay])[drawer-opened]) {
     &:dir(ltr) {
       --safe-area-inset-left: 0px;
     }
@@ -209,6 +209,7 @@ export const appLayoutStyles = css`
   }
 
   /* If a vaadin-scroller is used in the drawer, allow it to take all remaining space and contain scrolling */
+
   [part='drawer'] ::slotted(vaadin-scroller) {
     flex: 1;
     overscroll-behavior: contain;
