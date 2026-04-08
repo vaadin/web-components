@@ -22,7 +22,7 @@
     cursor: var(--lumo-clickable-cursor, default);
   }
 
-  a[part='link']:hover {
+  :host(:not([disabled])) a[part='link']:hover {
     color: var(--lumo-primary-color);
     text-decoration: underline;
   }

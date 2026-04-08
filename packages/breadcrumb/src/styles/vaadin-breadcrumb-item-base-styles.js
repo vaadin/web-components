@@ -45,7 +45,7 @@ export const breadcrumbItemStyles = css`
     cursor: var(--vaadin-clickable-cursor, pointer);
   }
 
-  a[part='link']:hover {
+  :host(:not([disabled])) a[part='link']:hover {
     text-decoration: underline;
   }
 
