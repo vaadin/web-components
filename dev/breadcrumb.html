@@ -13,6 +13,8 @@
     </script>
     <script type="module">
       import '@vaadin/breadcrumb';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
     </script>
 
     <style>
@@ -73,6 +75,16 @@
         { text: 'Sprocket' },
       ];
     </script>
+
+    <h3>With Icons (Prefix Slot)</h3>
+    <vaadin-breadcrumb>
+      <vaadin-breadcrumb-item path="/">
+        <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
+        Home
+      </vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+      <vaadin-breadcrumb-item>Widgets</vaadin-breadcrumb-item>
+    </vaadin-breadcrumb>
 
     <h3>Responsive Overflow (300px)</h3>
     <div style="width: 300px; border: 1px dashed #ccc; padding: 4px">
