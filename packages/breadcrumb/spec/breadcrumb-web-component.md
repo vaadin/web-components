@@ -6,9 +6,9 @@
 
 ```html
 <vaadin-breadcrumb>
-  <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item href="/products/widgets">Widgets</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products/widgets">Widgets</vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item>Sprocket</vaadin-breadcrumb-item>
 </vaadin-breadcrumb>
 ```
@@ -19,10 +19,10 @@
 <vaadin-breadcrumb></vaadin-breadcrumb>
 <script>
   document.querySelector('vaadin-breadcrumb').items = [
-    { text: 'Home', href: '/' },
-    { text: 'Products', href: '/products' },
-    { text: 'Widgets', href: '/products/widgets' },
-    { text: 'Sprocket' }  // current page — no href
+    { text: 'Home', path: '/' },
+    { text: 'Products', path: '/products' },
+    { text: 'Widgets', path: '/products/widgets' },
+    { text: 'Sprocket' }  // current page — no path
   ];
 </script>
 ```
@@ -33,10 +33,10 @@ The component automatically manages overflow based on available width. Item visi
 
 ```html
 <vaadin-breadcrumb>
-  <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item href="/products/widgets">Widgets</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item href="/products/widgets/sprockets">Sprockets</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products/widgets">Widgets</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products/widgets/sprockets">Sprockets</vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
 </vaadin-breadcrumb>
 ```
@@ -55,11 +55,11 @@ There is never a case where an item (other than the root) before a hidden item w
 
 ```html
 <vaadin-breadcrumb>
-  <vaadin-breadcrumb-item href="/">
+  <vaadin-breadcrumb-item path="/">
     <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
     Home
   </vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item>Widgets</vaadin-breadcrumb-item>
 </vaadin-breadcrumb>
 ```
@@ -68,9 +68,12 @@ There is never a case where an item (other than the root) before a hidden item w
 ### Key Design Decisions
 
 1. **Slotted children as primary API** — web-component-native, composable, works with any framework. Also support `items` property for data-driven usage.
-2. **Auto `aria-current="page"`** on the last item when it has no `href`.
+2. **Auto `aria-current="page"`** on the last item when it has no `path`.
 3. **Priority-based responsive overflow** — always driven by available width via `ResizeMixin`. Items shown in priority order: current, parent, root, then remaining ancestors. No manual `maxItems` configuration needed.
 4. **Popover for hidden overflow items** — not just expand-in-place, but a dropdown menu.
+5. **`role="navigation"` on host** instead of `<nav>` in shadow DOM — follows the same pattern as `vaadin-side-nav` for cross-component consistency.
+6. **`path` property** on items instead of `href` — consistent with `vaadin-side-nav-item`. The component renders an `<a href="...">` internally, mapping `path` to the anchor's `href`.
+7. **No default `label` value** — left undefined by default to avoid baked-in English text and align with how other Vaadin components handle i18n.
 
 ---
 
@@ -80,15 +83,17 @@ There is never a case where an item (other than the root) before a hidden item w
 
 **`<vaadin-breadcrumb>`** — Container element
 
+Has `role="navigation"` set on the host element (following the same pattern as `vaadin-side-nav`). The `aria-label` is set on the host element.
+
 Shadow DOM renders: 
 ```html
-<nav aria-label="Breadcrumb"><ol part="list"><slot></slot></ol></nav>
+<ol part="list"><slot></slot></ol>
 ```
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
-| `items` | `Array<{text: string, href?: string, disabled?: boolean}>` | `undefined` | No | Data-driven items (alternative to slotted children) |
-| `label` | `string` | `'Breadcrumb'` | No | `aria-label` for the `<nav>` element |
+| `items` | `Array<{text: string, path?: string, disabled?: boolean}>` | `undefined` | No | Data-driven items (alternative to slotted children) |
+| `label` | `string` | `undefined` | No | `aria-label` for the navigation landmark |
 
 | Slot | Description |
 |---|---|
@@ -120,14 +125,14 @@ Has `role="listitem"`
 Shadow DOM renders
 ```html
     <slot name="prefix"></slot>
-    <a part="link" href="..."><slot></slot></a><!-- or <span> if no href -->
+    <a part="link" href="..."><slot></slot></a><!-- or <span> if no path -->
 ```
 
 The separator is added as a pseudo element
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
-| `href` | `string` | `undefined` | Yes | Navigation target; if absent, item is current page |
+| `path` | `string` | `undefined` | Yes | Navigation target (consistent with `vaadin-side-nav-item`); if absent, item is current page |
 | `disabled` | `boolean` | `false` | Yes | Disables navigation |
 
 | Slot | Description |
