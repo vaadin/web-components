@@ -13,6 +13,7 @@ assertType<BreadcrumbMixinClass>(breadcrumb);
 
 // Properties
 assertType<string | undefined>(breadcrumb.label);
+assertType<Array<{ text: string; path?: string; disabled?: boolean }> | undefined>(breadcrumb.items);
 
 const item = document.createElement('vaadin-breadcrumb-item');
 

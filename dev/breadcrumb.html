@@ -59,6 +59,17 @@
       <vaadin-breadcrumb-item>Turbo Sprocket Pro Max</vaadin-breadcrumb-item>
     </vaadin-breadcrumb>
 
+    <h3>Data-Driven (items property)</h3>
+    <vaadin-breadcrumb id="items-breadcrumb"></vaadin-breadcrumb>
+    <script type="module">
+      document.querySelector('#items-breadcrumb').items = [
+        { text: 'Home', path: '/' },
+        { text: 'Products', path: '/products' },
+        { text: 'Widgets', path: '/products/widgets' },
+        { text: 'Sprocket' },
+      ];
+    </script>
+
     <h3>Responsive Overflow (300px)</h3>
     <div style="width: 300px; border: 1px dashed #ccc; padding: 4px">
       <vaadin-breadcrumb>

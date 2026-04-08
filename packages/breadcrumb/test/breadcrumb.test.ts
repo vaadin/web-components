@@ -92,6 +92,72 @@ describe('vaadin-breadcrumb', () => {
     });
   });
 
+  describe('items property', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>');
+      await nextRender();
+    });
+
+    it('should generate breadcrumb-item elements from items array', async () => {
+      element.items = [{ text: 'Home', path: '/' }, { text: 'Products', path: '/products' }, { text: 'Current' }];
+      await nextUpdate(element);
+      await nextRender();
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items.length).to.equal(3);
+      expect(items[0].textContent!.trim()).to.equal('Home');
+      expect(items[0].path).to.equal('/');
+      expect(items[1].textContent!.trim()).to.equal('Products');
+      expect(items[1].path).to.equal('/products');
+      expect(items[2].textContent!.trim()).to.equal('Current');
+      expect(items[2].path).to.be.undefined;
+    });
+
+    it('should set disabled on generated items', async () => {
+      element.items = [
+        { text: 'Home', path: '/' },
+        { text: 'Disabled', path: '/x', disabled: true },
+        { text: 'Current' },
+      ];
+      await nextUpdate(element);
+      await nextRender();
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items[1].disabled).to.be.true;
+    });
+
+    it('should set aria-current on the last generated item without path', async () => {
+      element.items = [{ text: 'Home', path: '/' }, { text: 'Current' }];
+      await nextUpdate(element);
+      await nextRender();
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items[1].getAttribute('aria-current')).to.equal('page');
+    });
+
+    it('should remove generated items when items is set to undefined', async () => {
+      element.items = [{ text: 'Home', path: '/' }, { text: 'Current' }];
+      await nextUpdate(element);
+      await nextRender();
+      expect(element.querySelectorAll('vaadin-breadcrumb-item').length).to.equal(2);
+
+      element.items = undefined as any;
+      await nextUpdate(element);
+      expect(element.querySelectorAll('vaadin-breadcrumb-item').length).to.equal(0);
+    });
+
+    it('should replace generated items when items is updated', async () => {
+      element.items = [{ text: 'A' }, { text: 'B' }];
+      await nextUpdate(element);
+      await nextRender();
+      expect(element.querySelectorAll('vaadin-breadcrumb-item').length).to.equal(2);
+
+      element.items = [{ text: 'X' }, { text: 'Y' }, { text: 'Z' }];
+      await nextUpdate(element);
+      await nextRender();
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items.length).to.equal(3);
+      expect(items[0].textContent!.trim()).to.equal('X');
+    });
+  });
+
   describe('shadow DOM structure', () => {
     beforeEach(async () => {
       element = fixtureSync(`
