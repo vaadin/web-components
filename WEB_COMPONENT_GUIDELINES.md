@@ -782,6 +782,13 @@ export const {componentName}Styles = css`
     opacity: 0.5;
   }
 
+  /* Important: Disabled state must suppress hover/active styles.
+     pointer-events: none on inner elements does NOT prevent :hover on the host.
+     Always guard hover and active rules with :host(:not([disabled])). */
+  :host(:not([disabled]):hover) {
+    /* hover styles here */
+  }
+
   /* Theme variants */
   :host([theme~='primary']) {
     --vaadin-{name}-background: var(--vaadin-text-color);
@@ -812,6 +819,7 @@ export const {componentName}Styles = css`
 
 - Use attributes for state: `disabled`, `focused`, `focus-ring`, `has-value`, `invalid`
 - Always document state attributes
+- **Disabled state must suppress hover and active styles.** Note that `pointer-events: none` on inner elements does not prevent the `:hover` pseudo-class from matching the host element. Always guard hover/active rules with `:host(:not([disabled]))` — e.g. `:host(:not([disabled])) a:hover { text-decoration: underline; }`
 
 ---
 
