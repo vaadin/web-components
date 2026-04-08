@@ -28,17 +28,6 @@ hr {
   max-height: 1px;
 }
 
-/* TODO re-evaluate MDL API, how to achieve this */
-/* .dashboard-section::part(master) {
-  flex-basis: 15em;
-  flex-grow: 0.1;
-}
-
-.dashboard-section::part(detail) {
-  flex-basis: 85em;
-  flex-grow: 2;
-} */
-
 /* Considering these as built-in variants, but perhaps they should be another component like https://github.com/vaadin/web-components/issues/7958 */
 vaadin-card[theme~='no-frame'] {
   --vaadin-card-padding: 0px;
