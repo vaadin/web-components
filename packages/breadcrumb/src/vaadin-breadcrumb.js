@@ -17,8 +17,8 @@ import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
  *
  * ```html
  * <vaadin-breadcrumb>
- *   <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
- *   <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+ *   <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+ *   <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
  *   <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
  * </vaadin-breadcrumb>
  * ```
@@ -65,11 +65,9 @@ class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(PolylitMixin
   /** @protected */
   render() {
     return html`
-      <nav aria-label="${this.label}">
-        <ol part="list">
-          <slot></slot>
-        </ol>
-      </nav>
+      <ol part="list">
+        <slot></slot>
+      </ol>
     `;
   }
 }
