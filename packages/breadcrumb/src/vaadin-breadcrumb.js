@@ -60,6 +60,10 @@ class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(PolylitMixin
     return 'vaadin-breadcrumb';
   }
 
+  static get experimental() {
+    return true;
+  }
+
   static get styles() {
     return breadcrumbStyles;
   }

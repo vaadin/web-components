@@ -95,3 +95,6 @@ Run `yarn install` to link the new package in the workspace.
 - Do NOT implement any component-specific logic — this is just scaffolding
 - Do NOT run tests or the dev server — just create the files and run yarn install
 - Copy the LICENSE file content from `packages/button/LICENSE`
+- **Feature flag**: The main element class MUST include `static get experimental() { return true; }`. This makes the component require `window.Vaadin.featureFlags.{camelName}Component = true` before it can be used. See `packages/badge/src/vaadin-badge.js` for the pattern. The feature flag name is auto-generated from the tag name by `defineCustomElement()` in `@vaadin/component-base/src/define.js`.
+- **README warning**: The README.md must include a warning: `> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting \`window.Vaadin.featureFlags.{camelName}Component = true\`.`
+- **Dev page**: The dev page must enable the feature flag between `common.js` and the component import, matching `dev/badge.html` exactly: first `<script type="module" src="./common.js"></script>`, then `<script>window.Vaadin ??= {}; window.Vaadin.featureFlags ??= {}; window.Vaadin.featureFlags.{camelName}Component = true;</script>`, then the component import.
