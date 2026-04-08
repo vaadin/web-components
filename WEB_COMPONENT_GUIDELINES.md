@@ -721,7 +721,19 @@ class MyComponent extends ... {
 
 ### 1. Base Styles File (`src/styles/vaadin-{name}-base-styles.js`)
 
-Component base styles using Lit's `css` template:
+Base styles should contain the **minimum CSS necessary for the component to function**. They are not about visual appearance — that belongs in the theme files (Lumo/Aura). Base styles should only include:
+
+- Layout properties needed for the component to work (`display`, `flex`, `overflow`, etc.)
+- The `:host([hidden])` rule
+- `--vaadin-{component}-*` custom property **assignments** for themes to consume (without fallback values, unless a fallback is strictly necessary for the component to function without a theme)
+- Structural CSS that every theme would need (e.g., `list-style: none` for list-based components)
+
+**Do NOT include in base styles:**
+
+- Properties that inherit by default (`font`, `color`, `line-height`, etc.) — these don't need to be set to `inherit`
+- `border-radius` on elements with no border/background
+- Visual styling like colors, backgrounds, font-weight, shadows — that's theme work
+- Fallback values on `--vaadin-` custom properties unless the component must work without any theme loaded
 
 ```javascript
 /**
@@ -734,76 +746,33 @@ import { css } from 'lit';
 
 export const {componentName}Styles = css`
   :host {
-    /* Layout */
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-
-    /* Sizing */
-    padding: var(--vaadin-{name}-padding, var(--vaadin-padding-m));
-    gap: var(--vaadin-{name}-gap, var(--vaadin-gap-s));
-
-    /* Typography */
-    font-family: var(--vaadin-{name}-font-family, inherit);
-    font-size: var(--vaadin-{name}-font-size, inherit);
-    font-weight: var(--vaadin-{name}-font-weight, 500);
-    line-height: var(--vaadin-{name}-line-height, inherit);
-
-    /* Colors */
-    color: var(--vaadin-{name}-text-color, var(--vaadin-text-color));
-    background: var(--vaadin-{name}-background, var(--vaadin-background-container));
-
-    /* Border */
-    border: var(--vaadin-{name}-border-width, 1px) solid
-      var(--vaadin-{name}-border-color, var(--vaadin-border-color-secondary));
-    border-radius: var(--vaadin-{name}-border-radius, var(--vaadin-radius-m));
-
-    /* Interaction */
-    cursor: var(--vaadin-clickable-cursor);
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
   }
 
   :host([hidden]) {
     display: none !important;
-  }
-
-  /* State: focused */
-  :host(:is([focus-ring], :focus-visible)) {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 1px;
-  }
-
-  /* State: disabled */
-  :host([disabled]) {
-    pointer-events: none;
-    cursor: var(--vaadin-disabled-cursor);
-    opacity: 0.5;
-  }
-
-  /* Important: Disabled state must suppress hover/active styles.
-     pointer-events: none on inner elements does NOT prevent :hover on the host.
-     Always guard hover and active rules with :host(:not([disabled])). */
-  :host(:not([disabled]):hover) {
-    /* hover styles here */
-  }
-
-  /* Theme variants */
-  :host([theme~='primary']) {
-    --vaadin-{name}-background: var(--vaadin-text-color);
-    --vaadin-{name}-text-color: var(--vaadin-background-color);
-    --vaadin-{name}-border-color: transparent;
   }
 `;
 ```
 
 ### 2. Styling Best Practices
 
+**Minimal CSS:**
+
+- Only write CSS that changes something. Do not set properties to their default or inherited values.
+- Do not write `font: inherit`, `color: inherit`, or `line-height: inherit` — these inherit by default in shadow DOM.
+- Do not write `border-radius` on elements that have no border or background.
+- Do not write `outline: none` unless you are replacing the outline with a custom focus indicator.
+- Every CSS rule should have a clear reason for existing. If removing it changes nothing, remove it.
+
 **CSS Custom Properties Naming:**
 
 - Use `--vaadin-{component}-{property}` pattern
-- Provide fallbacks to shared design tokens: `var(--vaadin-{component}-color, var(--vaadin-text-color))`
+- In **base styles**: define `--vaadin-` properties without fallbacks — e.g. `padding: var(--vaadin-{name}-padding)`. Themes set the values.
+- In **theme styles**: provide concrete values or fallbacks to theme tokens — e.g. `--vaadin-{name}-padding: var(--lumo-space-m)`.
+- Only add a fallback in base styles when the component must work without any theme loaded.
 - Common token categories:
   - Colors: `--vaadin-text-color`, `--vaadin-background-color`
   - Spacing: `--vaadin-padding-{size}`, `--vaadin-gap-{size}`
@@ -2107,11 +2076,10 @@ Use this checklist when creating a new component:
 
 - [ ] Base styles file created in `packages/{component-name}/src/styles/vaadin-{name}-base-styles.js`
 - [ ] Base styles TypeScript definition created in `src/styles/vaadin-{name}-base-styles.d.ts`
-- [ ] Base styles use CSS custom properties with fallbacks
-- [ ] All custom properties have fallbacks to design tokens
-- [ ] Forced colors mode styles added
+- [ ] Base styles contain only the minimum CSS needed for the component to function
+- [ ] No redundant CSS (no `inherit` for inherited properties, no `border-radius` without borders, etc.)
+- [ ] `--vaadin-` custom properties defined without fallbacks (themes provide values)
 - [ ] State selectors use attributes (`:host([disabled])`)
-- [ ] Shadow parts styled
 - [ ] Base styles imported in component via `static get styles()`
 
 ### Theming
