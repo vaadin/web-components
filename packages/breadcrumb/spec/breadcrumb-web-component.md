@@ -120,9 +120,10 @@ Shadow DOM renders
   <li part="item">
     <slot name="prefix"></slot>
     <a part="link" href="..."><slot></slot></a>  <!-- or <span> if no href -->
-    <span part="separator" aria-hidden="true"></span>
   </li>
 ```
+
+The separator is added as a pseudo element
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
