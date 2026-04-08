@@ -15,9 +15,9 @@ const ANIMATION_ID = 'vaadin-master-detail-layout';
  */
 function getAnimationParams(element) {
   const computedStyle = getComputedStyle(element);
-  const offset = computedStyle.getPropertyValue('--_transition-offset');
-  const easing = computedStyle.getPropertyValue('--_transition-easing');
-  const durationStr = computedStyle.getPropertyValue('--_transition-duration');
+  const offset = computedStyle.getPropertyValue('--_transition-offset').trim();
+  const easing = computedStyle.getPropertyValue('--_transition-easing').trim();
+  const durationStr = computedStyle.getPropertyValue('--_transition-duration').trim();
   const duration = durationStr.endsWith('ms') ? parseFloat(durationStr) : parseFloat(durationStr) * 1000;
   return { offset, easing, duration };
 }

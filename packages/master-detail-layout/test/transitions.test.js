@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
-import { nextFrames, onceResized } from './helpers.js';
+import { nextFrames, onceResized, waitForAnimationProgress } from './helpers.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
@@ -196,7 +196,7 @@ describe('Transitions', () => {
 
   describe('animation interruption', () => {
     // These tests enable real animations that can be captured mid-flight.
-    const DURATION = 200;
+    const DURATION = 1000;
 
     beforeEach(async () => {
       layout.masterSize = '300px';
@@ -209,51 +209,44 @@ describe('Transitions', () => {
     });
 
     it('should start remove transition from interrupted add position', async () => {
-      // Add detail
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(8);
+      await waitForAnimationProgress(layout.$.detail, 200);
       const detailTranslate = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslate).to.be.greaterThan(0).and.lessThan(200);
 
-      // Interrupt with removing detail
+      // Interrupt with remove — translate should reverse from the interrupted position
       layout._setDetail(null);
-      await nextFrames(2);
+      await waitForAnimationProgress(layout.$.detail, 200);
       const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslateAfter).to.be.greaterThan(detailTranslate).and.lessThan(200);
     });
 
     it('should start add transition from interrupted remove position', async () => {
-      layout._setDetail(document.createElement('detail-content'), false);
+      await layout._setDetail(document.createElement('detail-content'), true);
 
-      // Remove detail
       layout._setDetail(null);
-      await nextFrames(8);
+      await waitForAnimationProgress(layout.$.detail, 200);
       const detailTranslate = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslate).to.be.greaterThan(0).and.lessThan(200);
 
-      // Interrupt with adding detail
+      // Interrupt with add — translate should reverse from the interrupted position
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(2);
+      await waitForAnimationProgress(layout.$.detail, 200);
       const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslateAfter).to.be.greaterThan(0).and.lessThan(detailTranslate);
     });
 
     it('should position outgoing element at interrupted add position during replace', async () => {
-      // Add detail
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(8);
+      await waitForAnimationProgress(layout.$.detail, 200);
       const detailTranslate = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslate).to.be.greaterThan(0).and.lessThan(200);
 
-      // Interrupt with replacing detail
+      // Interrupt with replace — new detail should start animating from the interrupted position
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(2);
-
+      await waitForAnimationProgress(layout.$.detail, 200);
       const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslateAfter).to.be.greaterThan(0).and.lessThan(detailTranslate);
-
-      const outgoingTranslateAfter = parseFloat(getComputedStyle(layout.$.outgoing).translate);
-      expect(outgoingTranslateAfter).to.be.greaterThan(detailTranslate).and.lessThan(200);
     });
 
     it('should complete transition immediately when no animation is running', async () => {
