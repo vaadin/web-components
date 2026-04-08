@@ -14,7 +14,8 @@ export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
 
 export declare class BreadcrumbMixinClass {
   /**
-   * Accessible label for the breadcrumb navigation.
+   * Accessible label for the breadcrumb navigation landmark.
+   * Applied as `aria-label` on the host element.
    */
-  label: string;
+  label: string | undefined;
 }

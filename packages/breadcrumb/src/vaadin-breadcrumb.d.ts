@@ -12,7 +12,7 @@ import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
  *
  * ```html
  * <vaadin-breadcrumb>
- *   <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+ *   <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
  *   <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
  * </vaadin-breadcrumb>
  * ```

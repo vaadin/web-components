@@ -17,7 +17,7 @@ import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-style
  * `<vaadin-breadcrumb-item>` is a navigation item used within `<vaadin-breadcrumb>`.
  *
  * ```html
- * <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+ * <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
  * ```
  *
  * ### Customization
@@ -40,7 +40,7 @@ import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-style
  * Attribute    | Description
  * -------------|-------------
  * `disabled`   | Set when the element is disabled
- * `has-href`   | Set when the element has an href
+ * `has-path`   | Set when the element has a path
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -58,10 +58,11 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
   static get properties() {
     return {
       /**
-       * Navigation target URL. If absent, the item represents the current page.
-       * @attr {string} href
+       * Navigation target. If absent, the item represents the current page.
+       * Consistent with `vaadin-side-nav-item`.
+       * @attr {string} path
        */
-      href: {
+      path: {
         type: String,
         reflect: true,
       },
@@ -85,23 +86,23 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
   updated(props) {
     super.updated(props);
 
-    if (props.has('href')) {
-      if (this.href != null) {
-        this.setAttribute('has-href', '');
+    if (props.has('path')) {
+      if (this.path != null) {
+        this.setAttribute('has-path', '');
       } else {
-        this.removeAttribute('has-href');
+        this.removeAttribute('has-path');
       }
     }
   }
 
   /** @protected */
   render() {
-    if (this.href != null) {
+    if (this.path != null) {
       return html`
         <slot name="prefix"></slot>
         <a
           part="link"
-          href="${ifDefined(this.disabled ? undefined : this.href)}"
+          href="${ifDefined(this.disabled ? undefined : this.path)}"
           aria-disabled="${this.disabled ? 'true' : 'false'}"
           @click="${this.__onClick}"
         >

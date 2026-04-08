@@ -14,12 +14,11 @@ export const BreadcrumbMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * Accessible label for the breadcrumb navigation.
-         * Applied as `aria-label` on the internal `<nav>` element.
+         * Accessible label for the breadcrumb navigation landmark.
+         * Applied as `aria-label` on the host element.
          */
         label: {
           type: String,
-          value: 'Breadcrumb',
         },
       };
     }
@@ -28,9 +27,8 @@ export const BreadcrumbMixin = (superClass) =>
     firstUpdated() {
       super.firstUpdated();
 
-      // Use presentation role on the host since <nav> is in shadow DOM
       if (!this.hasAttribute('role')) {
-        this.setAttribute('role', 'presentation');
+        this.setAttribute('role', 'navigation');
       }
 
       // Observe slot changes to update aria-current on last item
@@ -47,21 +45,22 @@ export const BreadcrumbMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('label')) {
-        const nav = this.shadowRoot.querySelector('nav');
-        if (nav) {
-          nav.setAttribute('aria-label', this.label || '');
+        if (this.label) {
+          this.setAttribute('aria-label', this.label);
+        } else {
+          this.removeAttribute('aria-label');
         }
       }
     }
 
     /**
-     * Sets `aria-current="page"` on the last breadcrumb item if it has no href.
+     * Sets `aria-current="page"` on the last breadcrumb item if it has no path.
      * @private
      */
     __updateAriaCurrent() {
       const items = this.__getItems();
       items.forEach((item, index) => {
-        if (index === items.length - 1 && item.href == null) {
+        if (index === items.length - 1 && item.path == null) {
           item.setAttribute('aria-current', 'page');
         } else {
           item.removeAttribute('aria-current');

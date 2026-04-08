@@ -19,10 +19,6 @@ export const breadcrumbStyles = css`
     display: none !important;
   }
 
-  nav {
-    display: block;
-  }
-
   [part='list'] {
     display: flex;
     flex-wrap: wrap;

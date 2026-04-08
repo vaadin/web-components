@@ -11,15 +11,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `<vaadin-breadcrumb-item>` is a navigation item used within `<vaadin-breadcrumb>`.
  *
  * ```html
- * <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+ * <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
  * ```
  */
 declare class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
-   * Navigation target URL. If absent, the item represents the current page.
-   * @attr {string} href
+   * Navigation target. If absent, the item represents the current page.
+   * Consistent with `vaadin-side-nav-item`.
+   * @attr {string} path
    */
-  href: string | null | undefined;
+  path: string | null | undefined;
 
   addEventListener<K extends keyof HTMLElementEventMap>(
     type: K,

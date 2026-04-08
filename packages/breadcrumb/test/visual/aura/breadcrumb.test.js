@@ -1,5 +1,5 @@
-import { resetMouse, sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { resetMouse } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-breadcrumb.js';
@@ -7,30 +7,56 @@ import '../../../vaadin-breadcrumb.js';
 describe('breadcrumb', () => {
   let div, element;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
-    element = fixtureSync('<vaadin-breadcrumb>Label</vaadin-breadcrumb>', div);
+    element = fixtureSync(
+      `<vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>`,
+      div,
+    );
+    await nextRender();
   });
 
   afterEach(async () => {
     await resetMouse();
   });
 
-  describe('basic', () => {
-    it('basic', async () => {
-      await visualDiff(div, 'basic');
-    });
+  it('basic', async () => {
+    await visualDiff(div, 'basic');
+  });
 
-    it('disabled', async () => {
-      element.disabled = true;
-      await visualDiff(div, 'disabled');
-    });
+  it('two-items', async () => {
+    fixtureSync(
+      `<vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Products</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>`,
+      div,
+    );
+    await nextRender();
+    await visualDiff(div, 'two-items');
+  });
 
-    it('focus-ring', async () => {
-      await sendKeys({ press: 'Tab' });
-      await visualDiff(div, 'focus-ring');
-    });
+  it('single-item', async () => {
+    fixtureSync(
+      `<vaadin-breadcrumb>
+        <vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>`,
+      div,
+    );
+    await nextRender();
+    await visualDiff(div, 'single-item');
+  });
+
+  it('disabled-item', async () => {
+    const items = element.querySelectorAll('vaadin-breadcrumb-item');
+    items[1].disabled = true;
+    await nextRender();
+    await visualDiff(div, 'disabled-item');
   });
 });
