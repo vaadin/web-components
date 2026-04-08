@@ -11,25 +11,11 @@ import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
  * `<vaadin-breadcrumb>` is a web component for displaying breadcrumb navigation.
  *
  * ```html
- * <vaadin-breadcrumb>Example</vaadin-breadcrumb>
+ * <vaadin-breadcrumb>
+ *   <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+ *   <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+ * </vaadin-breadcrumb>
  * ```
- *
- * ### Styling
- *
- * The following shadow DOM parts are available for styling:
- *
- * Part name | Description
- * ----------|-------------
- * `label`   | The label element
- *
- * The following state attributes are available for styling:
- *
- * Attribute    | Description
- * -------------|-------------
- * `disabled`   | Set when the element is disabled
- * `focused`    | Set when the element is focused
- *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof HTMLElementEventMap>(

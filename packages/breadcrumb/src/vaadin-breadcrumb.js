@@ -16,7 +16,11 @@ import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
  * `<vaadin-breadcrumb>` is a web component for displaying breadcrumb navigation.
  *
  * ```html
- * <vaadin-breadcrumb>Example</vaadin-breadcrumb>
+ * <vaadin-breadcrumb>
+ *   <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+ *   <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+ *   <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+ * </vaadin-breadcrumb>
  * ```
  *
  * ### Styling
@@ -25,15 +29,21 @@ import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
  *
  * Part name | Description
  * ----------|-------------
- * `label`   | The label element
+ * `list`    | The ordered list element wrapping the items
  *
  * The following state attributes are available for styling:
  *
  * Attribute    | Description
  * -------------|-------------
- * `disabled`   | Set when the element is disabled
- * `focused`    | Set when the element is focused
- * `focus-ring` | Set when the element is keyboard focused
+ *
+ * The following custom CSS properties are available:
+ *
+ * Custom property                          | Description                | Default
+ * ----------------------------------------|----------------------------|---------
+ * `--vaadin-breadcrumb-separator-symbol`   | Separator character/icon   | `/`
+ * `--vaadin-breadcrumb-separator-color`    | Separator color            | secondary text
+ * `--vaadin-breadcrumb-separator-size`     | Separator font size        | inherit
+ * `--vaadin-breadcrumb-separator-gap`      | Space around separator     | xs
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -55,11 +65,11 @@ class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(PolylitMixin
   /** @protected */
   render() {
     return html`
-      <div class="vaadin-breadcrumb-container">
-        <span part="label">
+      <nav aria-label="${this.label}">
+        <ol part="list">
           <slot></slot>
-        </span>
-      </div>
+        </ol>
+      </nav>
     `;
   }
 }

@@ -1,0 +1,52 @@
+/**
+ * @license
+ * Copyright (c) 2025 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_breadcrumb-item {
+  :host {
+    gap: var(--vaadin-breadcrumb-separator-gap, var(--lumo-space-xs));
+    font-size: var(--lumo-font-size-m);
+  }
+
+  :host(:not(:last-child))::after {
+    content: var(--vaadin-breadcrumb-separator-symbol, var(--lumo-icons-angle-right));
+    font-family: 'lumo-icons';
+    font-size: var(--vaadin-breadcrumb-separator-size, var(--lumo-font-size-s));
+    color: var(--vaadin-breadcrumb-separator-color, var(--lumo-tertiary-text-color));
+  }
+
+  a[part='link'] {
+    color: var(--lumo-primary-text-color);
+    border-radius: var(--lumo-border-radius-s);
+    cursor: var(--lumo-clickable-cursor, default);
+  }
+
+  a[part='link']:hover {
+    color: var(--lumo-primary-color);
+    text-decoration: underline;
+  }
+
+  a[part='link']:focus-visible {
+    outline: 2px solid var(--lumo-primary-color-50pct);
+    outline-offset: 2px;
+  }
+
+  :host(:last-child) [part='link'] {
+    color: var(--lumo-body-text-color);
+    font-weight: 500;
+  }
+
+  :host([disabled]) [part='link'] {
+    color: var(--lumo-disabled-text-color);
+  }
+
+  slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    padding: 0.1em;
+    color: var(--lumo-contrast-60pct);
+  }
+
+  :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--lumo-disabled-text-color);
+  }
+}
