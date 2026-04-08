@@ -269,6 +269,10 @@ Step 2:    ... / Sprockets / Turbo Sprocket                (Home also hidden)
 Step 3:    ... / Turbo Sprocket                            (only current visible)
 ```
 
+**Invariants:**
+- The current item (last) must **never** be collapsed — it is always visible regardless of available width.
+- The ellipsis (`...`) must **never** appear before the first visible item. It always appears after the root (first item) or replaces the root position when the root itself is hidden. In other words, the visual order is always: `[Root /] [... /] [visible items] / Current` — never `... / Root / ...`.
+
 #### Behavior
 
 - Uses `ResizeMixin` to measure available width and recalculate visible items on resize
@@ -281,18 +285,35 @@ Step 3:    ... / Turbo Sprocket                            (only current visible
 
 #### Tests
 
+**Visibility & priority:**
 - All items visible when enough space
 - Items hidden in correct priority order as container shrinks
 - Current item always remains visible even at minimum width
+- Current item never collapses, even when container is extremely narrow
 - Parent shown before root when space is limited
 - Root shown before grandparent
-- Ellipsis button renders when items are hidden
-- Ellipsis button opens popover with hidden items in hierarchical order
-- Popover keyboard navigation
-- Focus management (return to ellipsis on close)
-- ARIA attributes on ellipsis button
 - Items restored in priority order as container grows
 - Correct behavior when items are added/removed dynamically
+
+**Ellipsis positioning:**
+- Ellipsis button renders when items are hidden
+- Ellipsis never appears before the first visible item (no `... / Home / ...`)
+- When root is visible: ellipsis appears between root and next visible item (`Home / ... / Current`)
+- When root is hidden: ellipsis appears at the start (`... / Parent / Current`)
+- Only one ellipsis button is ever rendered, regardless of how many items are hidden
+- With only 2 items, no ellipsis is ever shown (current + parent always fit or one is the other)
+
+**Popover:**
+- Ellipsis button opens popover with hidden items in hierarchical order (root-to-current)
+- Popover keyboard navigation (ArrowDown, ArrowUp cycle through items)
+- Escape closes popover and returns focus to ellipsis button
+- Enter/Space on ellipsis opens popover
+- Clicking a popover item navigates to its href
+
+**Accessibility:**
+- ARIA attributes on ellipsis button (`aria-haspopup`, `aria-expanded`, `aria-label`)
+- Popover items have `role="menuitem"`
+- Focus management (return to ellipsis on close, first item focused on open)
 
 ---
 
