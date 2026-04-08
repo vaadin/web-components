@@ -5,21 +5,8 @@
  */
 @media lumo_components_breadcrumb {
   :host {
-    padding: var(--vaadin-breadcrumb-padding, var(--lumo-space-m));
-    gap: var(--vaadin-breadcrumb-gap, var(--lumo-space-s));
     font-family: var(--lumo-font-family);
-    font-size: var(--vaadin-breadcrumb-font-size, var(--lumo-font-size-m));
-    font-weight: var(--vaadin-breadcrumb-font-weight, 500);
-    color: var(--vaadin-breadcrumb-text-color, var(--lumo-body-text-color));
-    background: var(--vaadin-breadcrumb-background, transparent);
-    border-radius: var(--vaadin-breadcrumb-border-radius, var(--lumo-border-radius-m));
-  }
-
-  :host([focus-ring]) {
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
-  }
-
-  :host([disabled]) {
-    color: var(--lumo-disabled-text-color);
+    font-size: var(--lumo-font-size-m);
+    color: var(--lumo-secondary-text-color);
   }
 }

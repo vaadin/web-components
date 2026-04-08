@@ -1,0 +1,18 @@
+vaadin-breadcrumb-item::part(link) {
+  color: var(--aura-accent-text-color);
+}
+
+vaadin-breadcrumb-item:last-child::part(link) {
+  color: var(--vaadin-text-color);
+  font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-breadcrumb-item[disabled]::part(link) {
+  color: var(--vaadin-text-color-disabled);
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumb-item[has-href]:not([disabled])::part(link):hover {
+    text-decoration: underline;
+  }
+}
