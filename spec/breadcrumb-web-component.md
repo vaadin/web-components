@@ -254,8 +254,8 @@ Add automatic overflow handling based on available width, with a priority-based 
 When the component's available width cannot fit all items, items are hidden into an overflow popover. The visibility priority (highest to lowest) is:
 
 1. **Current item** (last item) — always visible
-2. **Parent** (second-to-last item) — shown if space allows
-3. **Root** (first item) — shown if space allows
+2. **Root** (first item) — shown if space allows
+3. **Parent** (second-to-last item) — shown if space allows
 4. **Grandparent** (third-to-last) — shown if space allows
 5. **Remaining ancestors** — filled in from closest-to-current outward, if space allows
 
@@ -265,7 +265,7 @@ Example with 5 items as width decreases:
 ```
 Full:      Home / Products / Widgets / Sprockets / Turbo Sprocket
 Step 1:    Home / ... / Sprockets / Turbo Sprocket        (Products, Widgets hidden)
-Step 2:    ... / Sprockets / Turbo Sprocket                (Home also hidden)
+Step 2:    Home / ... / Turbo Sprocket                    (Sprockets also hidden)
 Step 3:    ... / Turbo Sprocket                            (only current visible)
 ```
 
@@ -292,8 +292,8 @@ Step 3:    ... / Turbo Sprocket                            (only current visible
 - Current item always remains visible even at minimum width
 - Current item never collapses, even when container is extremely narrow
 - An intermediate item is never shown while the current item is hidden
-- Parent shown before root when space is limited
-- Root shown before grandparent
+- Root shown before parent when space is limited
+- Parent shown before grandparent
 - Items restored in priority order as container grows
 - Correct behavior when items are added/removed dynamically
 

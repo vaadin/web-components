@@ -281,8 +281,8 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
    *
    * Visibility priority (highest to lowest):
    * 1. Current item (last) — always visible
-   * 2. Parent (second-to-last)
-   * 3. Root (first)
+   * 2. Root (first)
+   * 3. Parent (second-to-last)
    * 4. Grandparent (third-to-last)
    * 5. Remaining ancestors, closest-to-current outward
    *
@@ -449,14 +449,14 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
     // 1. Current (last item) — highest priority
     priority.push(items[last]);
 
-    // 2. Parent (second-to-last)
+    // 2. Root (first item)
     if (last >= 1) {
-      priority.push(items[last - 1]);
+      priority.push(items[0]);
     }
 
-    // 3. Root (first item)
+    // 3. Parent (second-to-last)
     if (last >= 2) {
-      priority.push(items[0]);
+      priority.push(items[last - 1]);
     }
 
     // 4. Remaining: from closest-to-current outward
