@@ -6,6 +6,8 @@ A breadcrumb navigation component.
 
 [![npm version](https://badgen.net/npm/v/@vaadin/breadcrumb)](https://www.npmjs.com/package/@vaadin/breadcrumb)
 
+> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.breadcrumbComponent = true`.
+
 ```html
 <vaadin-breadcrumb>Example</vaadin-breadcrumb>
 ```

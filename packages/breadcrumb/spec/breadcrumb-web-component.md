@@ -1,5 +1,8 @@
 # Vaadin Breadcrumb Web Component
 
+> ⚠️ This component is experimental. Enable the feature flag before importing:
+> `window.Vaadin.featureFlags.breadcrumbComponent = true`
+
 ## Usage Examples
 
 ### 1. Basic Navigation
