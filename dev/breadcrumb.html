@@ -110,6 +110,44 @@
       </script>
     </div>
 
+    <div class="section">
+      <h3 class="heading">Invariant: Current item never collapses</h3>
+      <p>Even at 80px, the current item "Turbo Sprocket" must remain visible:</p>
+      <div class="resize-container" style="width: 80px;">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Invariant: Ellipsis never before first visible item</h3>
+      <p>At 400px, root "Home" is visible — ellipsis must appear AFTER it (Home / ... / Current), not before (... / Home / Current):</p>
+      <div class="resize-container" style="width: 400px;">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item href="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/electronics">Electronics</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/products/electronics/computers">Computers</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Laptops</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="heading">Invariant: No intermediate shown while current is hidden</h3>
+      <p>Must never see "... / Bar" when "Baz" is the current page. Resize to verify:</p>
+      <div class="resize-container" style="width: 120px;">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item href="/foo">Foo</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item href="/foo/bar">Bar</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Baz</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
     <div class="section" dir="rtl">
       <h3 class="heading">RTL Support</h3>
       <vaadin-breadcrumb>

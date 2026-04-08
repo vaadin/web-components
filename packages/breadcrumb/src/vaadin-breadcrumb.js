@@ -355,13 +355,21 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
     // Build priority order
     const priorityOrder = this.__getPriorityOrder(items);
 
-    // Greedily add items in priority order
+    // The current item (last) is always visible — never collapse it.
+    const currentItem = items[items.length - 1];
+
+    // Greedily add items in priority order.
+    // Current item is always first in priority and always added.
     const visibleSet = new Set();
     let usedWidth = overflowWidth; // Reserve space for overflow button
 
     for (const item of priorityOrder) {
       const itemWidth = itemWidths.get(item);
-      if (usedWidth + itemWidth <= availableWidth) {
+      if (item === currentItem) {
+        // Current item is always visible regardless of width
+        visibleSet.add(item);
+        usedWidth += itemWidth;
+      } else if (usedWidth + itemWidth <= availableWidth) {
         visibleSet.add(item);
         usedWidth += itemWidth;
       }
@@ -378,18 +386,30 @@ class Breadcrumb extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
       return;
     }
 
-    // Apply visibility via direct attribute manipulation for synchronous effect
+    // Apply visibility via direct attribute manipulation for synchronous effect.
+    // Also manage CSS order so the ellipsis appears in the correct position:
+    // - When root is visible: root appears before ellipsis (order: -1)
+    // - Ellipsis always appears after the first visible item, never before it
+    const rootIsVisible = visibleSet.has(items[0]);
+
     items.forEach((item) => {
       if (visibleSet.has(item)) {
         item.removeAttribute('overflow-hidden');
       } else {
         item.setAttribute('overflow-hidden', '');
       }
+      // Reset order
+      item.style.order = '';
     });
+
+    if (rootIsVisible && items.length > 1) {
+      // Place root before the overflow button using CSS order
+      items[0].style.order = '-1';
+    }
 
     // Build overflow items list in DOM order (hierarchical)
     this.__overflowItems = items
-      .filter((item) => item.overflowHidden)
+      .filter((item) => item.hasAttribute('overflow-hidden'))
       .map((item) => ({
         text: item.textContent.trim(),
         href: item.href,
