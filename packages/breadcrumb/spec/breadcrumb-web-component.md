@@ -46,8 +46,8 @@ For example:
 2. `Home / ... / Sprockets / Turbo Sprocket`
 3. `Home / ... / Turbo Sprocket`
 4. `... / Turbo Sprocket`
-5. `Turbo Sprocket` - in this and narrower cases, clicking on the active view shows the popover
-6. If there is not enough space for `Turbo Sprocket`, it is truncated
+
+If there is not enough space for `... / Turbo Sprocket`, it is truncated
 
 There is never a case where an item (other than the root) before a hidden item would be shown, e.g. `Home / ... / Widgets / Turbo Sprocket` is not possible as `Sprockets` is hidden and thus `Widgets` is also hidden.
 
