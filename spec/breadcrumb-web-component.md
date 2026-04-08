@@ -272,6 +272,7 @@ Step 3:    ... / Turbo Sprocket                            (only current visible
 **Invariants:**
 - The current item (last) must **never** be collapsed — it is always visible regardless of available width.
 - The ellipsis (`...`) must **never** appear before the first visible item. It always appears after the root (first item) or replaces the root position when the root itself is hidden. In other words, the visual order is always: `[Root /] [... /] [visible items] / Current` — never `... / Root / ...`.
+- The current item (last) must always take priority over intermediate items. You should never see an intermediate item visible while the current item is hidden. For example, with items `Foo / Bar / Baz`, the result `... / Bar` (showing an intermediate but not the last item) must never occur.
 
 #### Behavior
 
@@ -290,6 +291,7 @@ Step 3:    ... / Turbo Sprocket                            (only current visible
 - Items hidden in correct priority order as container shrinks
 - Current item always remains visible even at minimum width
 - Current item never collapses, even when container is extremely narrow
+- An intermediate item is never shown while the current item is hidden
 - Parent shown before root when space is limited
 - Root shown before grandparent
 - Items restored in priority order as container grows
