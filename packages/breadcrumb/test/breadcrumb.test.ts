@@ -171,12 +171,59 @@ describe('vaadin-breadcrumb', () => {
 
     it('should show all items when there is enough space', async () => {
       (element.parentElement as HTMLElement).style.width = '800px';
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
       const items = element.querySelectorAll('vaadin-breadcrumb-item');
       const hiddenItems = [...items].filter((item) => item.hasAttribute('hidden'));
       expect(hiddenItems.length).to.equal(0);
       const overflow = element.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
       expect(overflow.hidden).to.be.true;
+    });
+
+    it('should collapse items progressively one at a time', async () => {
+      // Use items with longer labels to make the width differences significant
+      const wrapper = element.parentElement as HTMLElement;
+      wrapper.innerHTML = `
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/b">Category One</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/c">Category Two</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/d">Parent Page</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `;
+      element = wrapper.querySelector('vaadin-breadcrumb') as Breadcrumb;
+      await nextRender();
+
+      // First, expand to find the natural width and verify all visible
+      wrapper.style.width = '800px';
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
+      const items = element.querySelectorAll('vaadin-breadcrumb-item');
+      expect([...items].filter((i) => i.hasAttribute('hidden')).length).to.equal(0);
+
+      // Now shrink progressively and track the collapse sequence.
+      // The first item to be hidden should always be "Category One" (index 1),
+      // then "Category Two" (index 2), never both at the same time.
+      let firstHidden: string | null = null;
+      for (let width = 700; width >= 100; width -= 10) {
+        wrapper.style.width = `${width}px`;
+
+        await new Promise((resolve) => {
+          setTimeout(resolve, 50);
+        });
+        const hidden = [...items].filter((i) => i.hasAttribute('hidden'));
+        if (hidden.length > 0 && !firstHidden) {
+          firstHidden = hidden[0].textContent!.trim();
+          // When overflow first triggers, only 1 middle item should be hidden
+          expect(hidden.length).to.equal(1);
+          break;
+        }
+      }
+
+      expect(firstHidden).to.equal('Category One');
     });
   });
 });
