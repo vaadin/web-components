@@ -29,7 +29,7 @@
 
 ### 3. Responsive Overflow
 
-The component automatically manages overflow based on available width. Items are shown in priority order: current page first, then parent, then root, then remaining ancestors. Hidden items are accessible via an overflow popover.
+The component automatically manages overflow based on available width. Item visibility is based on priority order: current page highest priority, then parent, then root, then remaining ancestors. Hidden items are accessible via an overflow popover.
 
 ```html
 <vaadin-breadcrumb>
