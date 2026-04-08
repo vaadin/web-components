@@ -6,6 +6,12 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
+export interface BreadcrumbItemData {
+  text: string;
+  path?: string;
+  disabled?: boolean;
+}
+
 /**
  * A mixin providing common breadcrumb functionality.
  */
@@ -19,4 +25,11 @@ export declare class BreadcrumbMixinClass {
    * Applied as `aria-label` on the host element.
    */
   label: string | undefined;
+
+  /**
+   * Data-driven items as an alternative to slotted children.
+   * Each item is an object with `text` (required), `path` (optional),
+   * and `disabled` (optional) properties.
+   */
+  items: BreadcrumbItemData[] | undefined;
 }

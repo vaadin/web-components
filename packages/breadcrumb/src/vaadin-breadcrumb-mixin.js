@@ -3,6 +3,7 @@
  * Copyright (c) 2025 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-breadcrumb-item.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
@@ -21,6 +22,20 @@ export const BreadcrumbMixin = (superClass) =>
          */
         label: {
           type: String,
+        },
+
+        /**
+         * Data-driven items as an alternative to slotted children.
+         * Each item is an object with `text` (required), `path` (optional),
+         * and `disabled` (optional) properties.
+         *
+         * When set, generates `<vaadin-breadcrumb-item>` elements as light DOM children.
+         * Setting to `null` or `undefined` removes the generated items.
+         *
+         * @type {Array<{text: string, path?: string, disabled?: boolean}> | undefined}
+         */
+        items: {
+          type: Array,
         },
       };
     }
@@ -69,6 +84,10 @@ export const BreadcrumbMixin = (superClass) =>
         } else {
           this.removeAttribute('aria-label');
         }
+      }
+
+      if (props.has('items')) {
+        this.__renderItems();
       }
     }
 
@@ -334,6 +353,36 @@ export const BreadcrumbMixin = (superClass) =>
           overflowBtn.setAttribute('aria-expanded', String(popover.opened));
         }
       }
+    }
+
+    /**
+     * Generates breadcrumb-item elements from the items array.
+     * Removes previously generated items and creates new ones.
+     * @private
+     */
+    __renderItems() {
+      // Remove previously generated items
+      this.querySelectorAll('vaadin-breadcrumb-item[data-generated]').forEach((el) => el.remove());
+
+      if (!this.items || !Array.isArray(this.items)) {
+        return;
+      }
+
+      this.items.forEach((itemData) => {
+        const el = document.createElement('vaadin-breadcrumb-item');
+        el.setAttribute('data-generated', '');
+        el.textContent = itemData.text || '';
+
+        if (itemData.path != null) {
+          el.path = itemData.path;
+        }
+
+        if (itemData.disabled) {
+          el.disabled = true;
+        }
+
+        this.appendChild(el);
+      });
     }
 
     /**
