@@ -55,4 +55,42 @@ describe('breadcrumb', () => {
     await nextRender();
     await visualDiff(div, 'disabled-item');
   });
+
+  describe('overflow', () => {
+    it('partial collapse', async () => {
+      div.style.width = '300px';
+      div.style.display = 'block';
+      div.innerHTML = `
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/widgets">Widgets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/widgets/sprockets">Sprockets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>`;
+      await nextRender();
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
+      await visualDiff(div, 'overflow-partial');
+    });
+
+    it('full collapse', async () => {
+      div.style.width = '180px';
+      div.style.display = 'block';
+      div.innerHTML = `
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/widgets">Widgets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/widgets/sprockets">Sprockets</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Turbo Sprocket</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>`;
+      await nextRender();
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
+      await visualDiff(div, 'overflow-full');
+    });
+  });
 });
