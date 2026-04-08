@@ -33,24 +33,20 @@ describe('breadcrumb', () => {
   });
 
   it('two-items', async () => {
-    fixtureSync(
-      `<vaadin-breadcrumb>
+    div.innerHTML = `
+      <vaadin-breadcrumb>
         <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
         <vaadin-breadcrumb-item>Products</vaadin-breadcrumb-item>
-      </vaadin-breadcrumb>`,
-      div,
-    );
+      </vaadin-breadcrumb>`;
     await nextRender();
     await visualDiff(div, 'two-items');
   });
 
   it('single-item', async () => {
-    fixtureSync(
-      `<vaadin-breadcrumb>
+    div.innerHTML = `
+      <vaadin-breadcrumb>
         <vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>
-      </vaadin-breadcrumb>`,
-      div,
-    );
+      </vaadin-breadcrumb>`;
     await nextRender();
     await visualDiff(div, 'single-item');
   });
