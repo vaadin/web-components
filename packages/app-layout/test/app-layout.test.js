@@ -311,14 +311,13 @@ describe('vaadin-app-layout', () => {
         drawerContent.style.width = '200px';
         await nextResize(layout);
         await nextRender();
-        const content = layout.shadowRoot.querySelector('[content]');
-        const initialOffset = parseInt(getComputedStyle(content).getPropertyValue('padding-left'));
+        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-left'));
         expect(initialOffset).to.equal(200);
         // Decrease drawer content size and measure decrease
         drawerContent.style.width = '100px';
         await nextResize(layout);
         await nextRender();
-        const updatedOffset = parseInt(getComputedStyle(content).getPropertyValue('padding-left'));
+        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-left'));
         expect(updatedOffset).to.equal(100);
       });
     });
