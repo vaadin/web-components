@@ -113,7 +113,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host([keep-detail-column-offscreen]),
-  :host([has-detail-placeholder][overlay]),
+  :host([has-detail-placeholder][overlay]:not([has-detail])),
   :host(:not([has-detail-placeholder], [has-detail])) {
     --_master-extra: calc(100% - var(--_master-size));
   }
