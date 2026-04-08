@@ -23,6 +23,7 @@ export const breadcrumbStyles = css`
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    gap: var(--vaadin-breadcrumb-separator-gap, var(--vaadin-gap-xs, 0.25em));
     list-style: none;
     margin: 0;
     padding: 0;
