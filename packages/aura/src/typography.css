@@ -141,3 +141,7 @@
   font-size: var(--aura-font-size-s);
   line-height: var(--aura-line-height-s);
 }
+
+:where(b, strong) {
+  font-weight: var(--aura-font-weight-semibold);
+}
