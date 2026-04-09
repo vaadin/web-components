@@ -55,6 +55,16 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
   }
 
+  #master {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :host([has-master]) #master {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   #detail-placeholder {
     z-index: 1;
     opacity: 0;
