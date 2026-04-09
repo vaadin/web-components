@@ -16,114 +16,103 @@ The breadcrumb is fully determined by the URL structure.
 
 ---
 
-## 2. Multiple Paths, Primary Path Shown
+## 2. Multiple Paths, Canonical Path Always Shown
 
-A product appears under both its category and a promotional page. When navigating to the product directly by URL, a predefined primary path is shown.
+A product can be reached from its category or from a promotional page, but the breadcrumb always shows the product's canonical category path — not the path the user took.
 
 **Routes:**
-- `/electronics/laptops/thinkpad-x1` — primary path
-- `/deals/black-friday/thinkpad-x1` — alternative path (same product page)
+- `/electronics/laptops/thinkpad-x1` — canonical path
+- `/deals/black-friday/thinkpad-x1` — promotional path (same product page)
 
-**Navigated via category:**
-`Home > Electronics > Laptops > ThinkPad X1 Carbon`
+**Navigated via category:** `Home > Electronics > Laptops > ThinkPad X1 Carbon`
 
-**Navigated via deals page:**
-`Home > Deals > Black Friday > ThinkPad X1 Carbon`
+**Navigated via deals page:** `Home > Electronics > Laptops > ThinkPad X1 Carbon`
 
-**Opened directly via URL `/electronics/laptops/thinkpad-x1`:**
-`Home > Electronics > Laptops > ThinkPad X1 Carbon`
+**Opened directly via URL:** `Home > Electronics > Laptops > ThinkPad X1 Carbon`
 
-The application defines Electronics > Laptops as the canonical parent for this product.
+The breadcrumb always shows the canonical location. The entry path doesn't matter.
 
 ---
 
-## 3. Multiple Paths, Direct Entry Shows No Ancestors
+## 3. Multiple Paths, No Canonical — Only Current Page on Direct Entry
 
-An employee can be reached from both the department page and the project page. When opened directly by URL, no breadcrumb trail is shown — only the current page.
+An employee page can be reached from either a department listing or a project listing. There is no single canonical path, so when the page is opened directly by URL, only the current page is shown.
 
 **Routes:**
 - `/departments/engineering` — Engineering
-- `/departments/engineering/jane-doe` — Jane Doe (via department)
+- `/departments/engineering/people/123` — Jane Doe (via department)
 - `/projects/alpha` — Project Alpha
-- `/projects/alpha/jane-doe` — Jane Doe (via project)
+- `/projects/alpha/people/123` — Jane Doe (via project)
 
-**Navigated from department:**
-`Departments > Engineering > Jane Doe`
+**Navigated from department:** `Engineering > Jane Doe`
 
-**Navigated from project:**
-`Projects > Project Alpha > Jane Doe`
+**Navigated from project:** `Project Alpha > Jane Doe`
 
-**Opened directly via URL `/departments/engineering/jane-doe`:**
-`Jane Doe`
+**Opened directly via URL `/departments/engineering/people/123`:** `Jane Doe`
 
-The breadcrumb only reflects how the user arrived. Without navigation history, there is no trail to show.
+Without navigation context and without a canonical path, only the current page name is shown.
 
 ---
 
-## 4. Deep Nested Relationships with Static Prefix
+## 4. Deep Navigation with Static Prefix
 
-An HR tool where you can navigate from one employee to their direct reports. Opening a deeply nested employee directly by URL shows only the static organizational prefix, not the chain of managers.
+An HR tool where you can drill from one employee to their direct reports. The department part of the path is fixed structure; the employee chain is dynamic navigation. When a deep page is opened directly by URL, only the fixed structure and the current page are shown.
 
 **Routes:**
 - `/departments/engineering` — Engineering
-- `/departments/engineering/alice` — Alice (VP)
-- `/departments/engineering/alice/bob` — Bob (reports to Alice)
-- `/departments/engineering/alice/bob/carol` — Carol (reports to Bob)
+- `/departments/engineering/people/alice` — Alice
+- `/departments/engineering/people/alice/bob` — Bob (reports to Alice)
+- `/departments/engineering/people/alice/bob/carol` — Carol (reports to Bob)
 
-**Navigated through the chain:**
-`Departments > Engineering > Alice > Bob > Carol`
+**Navigated through the chain:** `Engineering > Alice > Bob > Carol`
 
-**Carol opened directly via URL:**
-`Departments > Engineering > Carol`
+**Carol opened directly via URL:** `Engineering > Carol`
 
-The static prefix (`Departments > Engineering`) is always shown. The dynamic manager chain (`Alice > Bob`) is dropped because it represents navigation history, not fixed structure.
+`Engineering` is always shown (fixed structure). The intermediate managers (`Alice > Bob`) are dropped because they are navigation context, not fixed hierarchy.
 
 ---
 
 ## 5. Breadcrumb Scoped to a Section
 
-A department management section of an application. The breadcrumb starts at the department level because the section doesn't need to show higher-level navigation.
+An application has a department management section with its own breadcrumb. The breadcrumb starts at the section root, not at the application root.
 
 **Routes:**
 - `/departments/engineering` — Engineering (section root)
 - `/departments/engineering/frontend` — Frontend team
 - `/departments/engineering/frontend/alice` — Alice
 
-**Breadcrumb in the department section:**
-`Engineering > Frontend > Alice`
+**Breadcrumb:** `Engineering > Frontend > Alice`
 
-`Departments` is not shown because this breadcrumb operates within the department section.
+The application-level prefix (`Departments`) is not part of this section's breadcrumb.
 
 ---
 
-## 6. Breadcrumb Scoped to a High-Level View
+## 6. Breadcrumb Showing Only Top Levels
 
-An executive dashboard that shows organizational navigation but not individual employee views.
+A navigation sidebar shows breadcrumbs for the top-level structure only. Deeper views within a department are not reflected.
 
 **Routes:**
 - `/departments` — Departments
 - `/departments/engineering` — Engineering
 - `/departments/engineering/frontend` — Frontend team
-- `/departments/engineering/frontend/alice` — Alice
 
-**Breadcrumb in the dashboard:**
-`Departments > Engineering`
+**User is viewing the Frontend team page. Breadcrumb:** `Departments > Engineering`
 
-The deeper routes (teams, employees) are not relevant at this abstraction level.
+`Frontend` is not shown because this breadcrumb only tracks the top two levels of the hierarchy.
 
 ---
 
-## 7. Technical Routes Omitted
+## 7. Technical Route Segments Omitted
 
-Some URL segments exist for technical reasons (grouping, layout) and don't represent meaningful pages. These are skipped in the breadcrumb.
+Some URL segments exist for routing/layout reasons and don't represent pages a user would navigate to. These are skipped in the breadcrumb.
 
 **Routes:**
-- `/app` — Home
-- `/app/settings/account/profile` — Profile settings
-- `/app/settings/account/security` — Security settings
+- `/` — Home
+- `/settings/general` — General Settings
+- `/settings/notifications` — Notification Settings
 
-`/app/settings` is a layout route with no content of its own. `/app/settings/account` is a redirect to `/app/settings/account/profile`.
+`/settings` is a layout wrapper that renders an inner navigation sidebar. It has no page of its own — visiting `/settings` redirects to `/settings/general`.
 
-**Breadcrumb:** `Home > Profile`
+**Breadcrumb on the General Settings page:** `Home > General Settings`
 
-Both `settings` and `account` are omitted because they have no standalone content.
+`Settings` is omitted because it's not a standalone page.
