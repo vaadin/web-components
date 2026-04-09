@@ -32,7 +32,10 @@
   );
   --aura-app-background: var(--aura-background-color);
 
-  --vaadin-focus-ring-color: var(--aura-accent-color);
+  --vaadin-focus-ring-color: light-dark(
+    oklch(from var(--aura-accent-color-light) min(l, 0.62) c h),
+    oklch(from var(--aura-accent-color-dark) max(l, 0.62) c h)
+  );
   --vaadin-user-color: var(--aura-blue);
   color: var(--vaadin-text-color);
   background: var(--aura-app-background);
