@@ -10,6 +10,7 @@ export const splitLayoutStyles = css`
   :host {
     display: flex;
     contain: layout;
+    min-height: 0;
   }
 
   :host([hidden]) {
