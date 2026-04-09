@@ -39,17 +39,22 @@ The application defines Electronics > Laptops as the canonical parent for this p
 
 ## 3. Multiple Paths, Direct Entry Shows No Ancestors
 
-An employee belongs to both a department and a project. When opened directly by URL, no breadcrumb trail is shown — only the current page.
+An employee can be reached from both the department page and the project page. When opened directly by URL, no breadcrumb trail is shown — only the current page.
 
 **Routes:**
-- `/departments/engineering/jane-doe`
-- `/projects/alpha/jane-doe`
+- `/departments/engineering` — Engineering
+- `/departments/engineering/jane-doe` — Jane Doe (via department)
+- `/projects/alpha` — Project Alpha
+- `/projects/alpha/jane-doe` — Jane Doe (via project)
 
-**Navigated from department:** `Org > Engineering > Jane Doe`
+**Navigated from department:**
+`Departments > Engineering > Jane Doe`
 
-**Navigated from project:** `Org > Project Alpha > Jane Doe`
+**Navigated from project:**
+`Projects > Project Alpha > Jane Doe`
 
-**Opened directly via URL `/departments/engineering/jane-doe`:** `Jane Doe`
+**Opened directly via URL `/departments/engineering/jane-doe`:**
+`Jane Doe`
 
 The breadcrumb only reflects how the user arrived. Without navigation history, there is no trail to show.
 
@@ -57,19 +62,21 @@ The breadcrumb only reflects how the user arrived. Without navigation history, t
 
 ## 4. Deep Nested Relationships with Static Prefix
 
-An HR tool where employees report to other employees. Opening a deeply nested employee directly by URL shows only the static organizational prefix, not the chain of managers.
+An HR tool where you can navigate from one employee to their direct reports. Opening a deeply nested employee directly by URL shows only the static organizational prefix, not the chain of managers.
 
 **Routes:**
-- `/org/engineering` — Engineering department
-- `/org/engineering/employee/alice` — Alice (VP)
-- `/org/engineering/employee/alice/employee/bob` — Bob (reports to Alice)
-- `/org/engineering/employee/alice/employee/bob/employee/carol` — Carol (reports to Bob)
+- `/departments/engineering` — Engineering
+- `/departments/engineering/alice` — Alice (VP)
+- `/departments/engineering/alice/bob` — Bob (reports to Alice)
+- `/departments/engineering/alice/bob/carol` — Carol (reports to Bob)
 
-**Navigated through the chain:** `Org > Engineering > Alice > Bob > Carol`
+**Navigated through the chain:**
+`Departments > Engineering > Alice > Bob > Carol`
 
-**Carol opened directly via URL:** `Org > Engineering > Carol`
+**Carol opened directly via URL:**
+`Departments > Engineering > Carol`
 
-The static prefix (`Org > Engineering`) is always shown. The dynamic manager chain (`Alice > Bob`) is dropped because it represents navigation history, not fixed structure.
+The static prefix (`Departments > Engineering`) is always shown. The dynamic manager chain (`Alice > Bob`) is dropped because it represents navigation history, not fixed structure.
 
 ---
 
@@ -77,14 +84,15 @@ The static prefix (`Org > Engineering`) is always shown. The dynamic manager cha
 
 A department management section of an application. The breadcrumb starts at the department level because the section doesn't need to show higher-level navigation.
 
-**Application routes:**
-- `/org/engineering` — Engineering (section root)
-- `/org/engineering/teams/frontend` — Frontend team
-- `/org/engineering/teams/frontend/alice` — Alice
+**Routes:**
+- `/departments/engineering` — Engineering (section root)
+- `/departments/engineering/frontend` — Frontend team
+- `/departments/engineering/frontend/alice` — Alice
 
-**Breadcrumb in the department section:** `Engineering > Frontend > Alice`
+**Breadcrumb in the department section:**
+`Engineering > Frontend > Alice`
 
-`Org` is not shown because this breadcrumb operates within the department section. The section root is Engineering.
+`Departments` is not shown because this breadcrumb operates within the department section.
 
 ---
 
@@ -92,15 +100,16 @@ A department management section of an application. The breadcrumb starts at the 
 
 An executive dashboard that shows organizational navigation but not individual employee views.
 
-**Application routes:**
-- `/org` — Organization
-- `/org/engineering` — Engineering
-- `/org/engineering/teams/frontend` — Frontend team
-- `/org/engineering/teams/frontend/alice` — Alice
+**Routes:**
+- `/departments` — Departments
+- `/departments/engineering` — Engineering
+- `/departments/engineering/frontend` — Frontend team
+- `/departments/engineering/frontend/alice` — Alice
 
-**Breadcrumb in the dashboard:** `Org > Engineering`
+**Breadcrumb in the dashboard:**
+`Departments > Engineering`
 
-The deeper routes (teams, employees) are not relevant at this abstraction level. The breadcrumb only shows the levels the dashboard cares about.
+The deeper routes (teams, employees) are not relevant at this abstraction level.
 
 ---
 
@@ -108,7 +117,7 @@ The deeper routes (teams, employees) are not relevant at this abstraction level.
 
 Some URL segments exist for technical reasons (grouping, layout) and don't represent meaningful pages. These are skipped in the breadcrumb.
 
-**Application routes:**
+**Routes:**
 - `/app` — Home
 - `/app/settings/account/profile` — Profile settings
 - `/app/settings/account/security` — Security settings
