@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
@@ -70,6 +71,8 @@ describe('popover', () => {
   describe('focus', () => {
     beforeEach(async () => {
       element.modal = true;
+      // Activate keyboard mode so that focus-ring is shown on the overlay
+      await sendKeys({ press: 'Tab' });
       target.click();
       await nextRender();
     });
