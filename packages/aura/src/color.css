@@ -53,7 +53,7 @@
 
 :where(:root),
 :where(:host),
-vaadin-app-layout > :not([slot]),
+vaadin-app-layout::part(content),
 vaadin-avatar,
 vaadin-badge,
 vaadin-button,
