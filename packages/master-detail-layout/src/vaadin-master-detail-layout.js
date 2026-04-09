@@ -344,9 +344,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   __readLayoutState() {
     const isVertical = this.orientation === 'vertical';
 
+    const masterContent = this.querySelector(':scope > :is([slot=""], :not([slot]))');
     const detailContent = this.querySelector(':scope > [slot="detail"]');
     const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
 
+    const hasMaster = !!masterContent;
     const hadDetail = this.hasAttribute('has-detail');
     const hasDetail = detailContent != null && detailContent.checkVisibility();
     const hasDetailPlaceholder = !!detailPlaceholder;
@@ -362,6 +364,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
 
     return {
+      hasMaster,
       hadDetail,
       hasDetail,
       hasDetailPlaceholder,
@@ -376,7 +379,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * Applies layout state to DOM attributes. Pure writes, no reads.
    * @private
    */
-  __writeLayoutState({ hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget, trackSizes }) {
+  __writeLayoutState({ hasMaster, hadDetail, hasDetail, hasDetailPlaceholder, hasOverflow, focusTarget, trackSizes }) {
     const [_masterSize, _masterExtra, detailSize] = trackSizes;
 
     // If no detailSize is explicitily set, cache the intrinsic size (min-content) of
@@ -398,6 +401,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     this.toggleAttribute('overlay', hasOverflow);
+    this.toggleAttribute('has-master', hasMaster);
     this.toggleAttribute('has-detail', hasDetail);
     this.toggleAttribute('has-detail-placeholder', hasDetailPlaceholder);
 

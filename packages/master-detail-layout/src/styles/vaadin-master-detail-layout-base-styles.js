@@ -69,6 +69,13 @@ export const masterDetailLayoutStyles = css`
   #master {
     grid-column: master-start / detail-start;
     grid-row: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :host([has-master]) #master {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   :is(#detail, #detail-placeholder, #outgoing) {
