@@ -29,52 +29,59 @@ import '../../../vaadin-custom-field.js';
 
 describe('custom-field', () => {
   describe('basic', () => {
-    let element, inputs;
+    let div, element, inputs;
 
     beforeEach(() => {
-      element = fixtureSync(`
+      div = document.createElement('div');
+      div.style.display = 'inline-block';
+      div.style.padding = '10px';
+
+      element = fixtureSync(
+        `
         <vaadin-custom-field>
           <input type="text" />
           <input type="number" />
         </vaadin-custom-field>
-      `);
+      `,
+        div,
+      );
       inputs = element.querySelectorAll('input');
     });
 
     it('basic', async () => {
-      await visualDiff(element, 'basic-default');
+      await visualDiff(div, 'basic-default');
     });
 
     it('label', async () => {
       element.label = 'Home address';
-      await visualDiff(element, 'basic-label');
+      await visualDiff(div, 'basic-label');
     });
 
     it('value', async () => {
       element.label = 'Home address';
       inputs[0].value = 'Foo street';
       inputs[1].value = 42;
-      await visualDiff(element, 'basic-value');
+      await visualDiff(div, 'basic-value');
     });
 
     it('disabled', async () => {
       element.disabled = true;
       inputs[0].disabled = true;
       inputs[1].disabled = true;
-      await visualDiff(element, 'basic-disabled');
+      await visualDiff(div, 'basic-disabled');
     });
 
     it('required', async () => {
       element.label = 'Home address';
       element.required = true;
-      await visualDiff(element, 'basic-required');
+      await visualDiff(div, 'basic-required');
     });
 
     it('invalid', async () => {
       element.label = 'Home address';
       element.required = true;
       element.invalid = true;
-      await visualDiff(element, 'basic-invalid');
+      await visualDiff(div, 'basic-invalid');
     });
 
     it('error message', async () => {
@@ -82,7 +89,7 @@ describe('custom-field', () => {
       element.required = true;
       element.errorMessage = 'foo';
       element.invalid = true;
-      await visualDiff(element, 'basic-error-message');
+      await visualDiff(div, 'basic-error-message');
     });
 
     it('disabled required', async () => {
@@ -91,12 +98,12 @@ describe('custom-field', () => {
       element.disabled = true;
       inputs[0].disabled = true;
       inputs[1].disabled = true;
-      await visualDiff(element, 'basic-disabled-required');
+      await visualDiff(div, 'basic-disabled-required');
     });
 
     it('helper text', async () => {
       element.helperText = 'Helper text';
-      await visualDiff(element, 'basic-helper-text');
+      await visualDiff(div, 'basic-helper-text');
     });
 
     it('helper above field', async () => {
@@ -106,7 +113,7 @@ describe('custom-field', () => {
       element.validate();
       element.helperText = 'Helper text';
       element.setAttribute('theme', 'helper-above-field');
-      await visualDiff(element, 'helper-above-field');
+      await visualDiff(div, 'helper-above-field');
     });
 
     it('theme-whitespace', async () => {
@@ -114,7 +121,7 @@ describe('custom-field', () => {
       element.label = 'Label';
       inputs[0].style.display = 'block';
       inputs[1].style.display = 'none';
-      await visualDiff(element, 'whitespace-theme');
+      await visualDiff(div, 'whitespace-theme');
     });
   });
 
@@ -124,7 +131,7 @@ describe('custom-field', () => {
     describe('error message', () => {
       beforeEach(() => {
         wrapper = fixtureSync(`
-          <div>
+          <div style="padding: 10px">
             <vaadin-custom-field invalid error-message="Invalid">
               <vaadin-number-field value="1"></vaadin-number-field>
               <vaadin-password-field value="password"></vaadin-password-field>
@@ -143,7 +150,7 @@ describe('custom-field', () => {
     describe('label', () => {
       beforeEach(() => {
         wrapper = fixtureSync(`
-          <div>
+          <div style="padding: 10px">
             <vaadin-custom-field label="Custom field">
               <vaadin-select
                 value="+358"
@@ -169,7 +176,7 @@ describe('custom-field', () => {
     describe('label + error message', () => {
       beforeEach(() => {
         wrapper = fixtureSync(`
-          <div>
+          <div style="padding: 10px">
             <vaadin-custom-field label="Custom field" invalid error-message="Invalid">
               <vaadin-email-field value="user@example.com"></vaadin-email-field>
               <vaadin-date-picker value="1980-08-14" clear-button-visible></vaadin-date-picker>
@@ -188,7 +195,7 @@ describe('custom-field', () => {
     describe('label + helper text', () => {
       beforeEach(() => {
         wrapper = fixtureSync(`
-          <div>
+          <div style="padding: 10px">
             <vaadin-custom-field label="Custom field" helper-text="Helper">
               <vaadin-combo-box value="Combo item" allow-custom-value clear-button-visible></vaadin-combo-box>
               <vaadin-time-picker value="09:00"></vaadin-time-picker>
@@ -206,47 +213,51 @@ describe('custom-field', () => {
   });
 
   describe('form-layout', () => {
-    let layout;
+    let wrapper;
 
     describe('label + error message', () => {
       beforeEach(() => {
-        layout = fixtureSync(`
-          <vaadin-form-layout style="width: 60em">
-            <vaadin-text-field label="Text field" invalid error-message="Error"></vaadin-text-field>
-            <vaadin-custom-field label="Custom field" invalid error-message="Error">
-              <vaadin-text-field></vaadin-text-field>
-            </vaadin-custom-field>
-          </vaadin-form-layout>
+        wrapper = fixtureSync(`
+          <div style="padding: 10px">
+            <vaadin-form-layout style="width: 60em">
+              <vaadin-text-field label="Text field" invalid error-message="Error"></vaadin-text-field>
+              <vaadin-custom-field label="Custom field" invalid error-message="Error">
+                <vaadin-text-field></vaadin-text-field>
+              </vaadin-custom-field>
+            </vaadin-form-layout>
+          </div>
         `);
       });
 
       it('label in form layout', async () => {
-        await visualDiff(layout, 'form-layout-label-error-message');
+        await visualDiff(wrapper, 'form-layout-label-error-message');
       });
     });
 
     describe('form-item', () => {
       beforeEach(() => {
-        layout = fixtureSync(`
-          <vaadin-form-layout style="width: 60em">
-            <vaadin-form-item>
-              <label slot="label">Custom field with text area</label>
-              <vaadin-custom-field>
-                <vaadin-text-area
-                  value="Sed libero enim, sed faucibus turpis in eu? Euismod lacinia at quis risus sed vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam etiam erat velit, scelerisque in dictum!"
-                ></vaadin-text-area>
-              </vaadin-custom-field>
-            </vaadin-form-item>
-            <vaadin-form-item>
-              <label slot="label">Text field</label>
-              <vaadin-text-field></vaadin-text-field>
-            </vaadin-form-item>
-          </vaadin-form-layout>
+        wrapper = fixtureSync(`
+          <div style="padding: 10px">
+            <vaadin-form-layout style="width: 60em">
+              <vaadin-form-item>
+                <label slot="label">Custom field with text area</label>
+                <vaadin-custom-field>
+                  <vaadin-text-area
+                    value="Sed libero enim, sed faucibus turpis in eu? Euismod lacinia at quis risus sed vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam etiam erat velit, scelerisque in dictum!"
+                  ></vaadin-text-area>
+                </vaadin-custom-field>
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label">Text field</label>
+                <vaadin-text-field></vaadin-text-field>
+              </vaadin-form-item>
+            </vaadin-form-layout>
+          </div>
         `);
       });
 
       it('label in form layout', async () => {
-        await visualDiff(layout, 'form-layout-item-text-area');
+        await visualDiff(wrapper, 'form-layout-item-text-area');
       });
     });
   });
