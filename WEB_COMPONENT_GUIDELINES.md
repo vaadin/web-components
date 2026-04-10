@@ -17,8 +17,9 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 9. [Documentation](#documentation)
 10. [Accessibility](#accessibility)
 11. [Package Configuration](#package-configuration)
-12. [Common Patterns](#common-patterns)
-13. [Checklist](#checklist)
+12. [API Design](#api-design)
+13. [Common Patterns](#common-patterns)
+14. [Checklist](#checklist)
 
 ---
 
@@ -1984,6 +1985,126 @@ See https://vaadin.com/commercial-license-and-service-terms for the full license
 
 ---
 
+## API Design
+
+### Always offer a declarative API
+
+Every Vaadin web component MUST have a declarative HTML API — a way to
+use the component by writing plain HTML markup, with no JavaScript
+required to populate it. This is true even for components whose
+children are normally data-driven at runtime (menus, lists,
+breadcrumbs, trees, tabs, nav, crumb trails, etc.).
+
+**Why:**
+
+- Web components are HTML first. If a component cannot be used from
+  static HTML, it stops behaving like an HTML element.
+- Developers reading the DOM in devtools, writing quick demos, or
+  pasting examples into docs need a form they can see and edit as
+  markup.
+- Server-side rendering, static-site generation, and
+  search-engine-visible output all depend on the component having a
+  meaningful initial DOM.
+- Testing and snapshotting are dramatically simpler when the
+  component has a declarative form — tests can write HTML instead of
+  wiring up JavaScript before every assertion.
+- It forces the API to have a clean, serialisable shape: if every
+  field of a data item can be expressed as an attribute, slot, or
+  nested element, the data model is already well-defined.
+
+**What this means in practice:**
+
+- Child items should be real child elements (e.g.
+  `<vaadin-side-nav-item>`, `<vaadin-tab>`, `<vaadin-breadcrumb-item>`),
+  projectable via slots, and readable from static HTML.
+- Per-item configuration should be expressible as attributes or
+  slotted content on those child elements.
+- The component must render correctly when it is first parsed from
+  markup, before any script runs.
+
+**Example — declarative form is the baseline:**
+
+```html
+<vaadin-breadcrumb>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/electronics">Electronics</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/electronics/laptops">Laptops</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>ThinkPad X1 Carbon</vaadin-breadcrumb-item>
+</vaadin-breadcrumb>
+```
+
+This must work with no JavaScript beyond the component import.
+
+### Also offer a programmatic API when items are typically data-driven
+
+When the typical real-world use of a component involves dynamically
+computed children (menu entries derived from route tables, breadcrumb
+trails derived from navigation history, list rows from a data
+provider, etc.), the component MUST ALSO expose a programmatic API
+that accepts the same data — usually as an `items` array of plain
+objects.
+
+The two APIs are not alternatives; they coexist:
+
+- The declarative form is the canonical shape and is what appears in
+  documentation, examples, and tests by default.
+- The programmatic form is what applications actually use at runtime
+  when the content is not known at authoring time.
+- Both forms MUST produce the same rendering and fire the same
+  events; a developer should be able to switch between them without
+  changing the component's behavior.
+
+**Why both:**
+
+- Declarative alone forces apps to manipulate DOM imperatively
+  (creating child elements, setting attributes, appending) every time
+  the data changes — slow, error-prone, and awkward with frameworks.
+- Programmatic alone violates the "HTML first" principle and makes
+  the component unusable from static markup.
+- Offering both gives developers the ergonomics they need without
+  sacrificing the component's identity as an HTML element.
+
+**Example — same component, both APIs:**
+
+```html
+<!-- Declarative: canonical, works with no JS -->
+<vaadin-menu-bar>
+  <vaadin-menu-bar-item>File</vaadin-menu-bar-item>
+  <vaadin-menu-bar-item>Edit</vaadin-menu-bar-item>
+</vaadin-menu-bar>
+```
+
+```js
+// Programmatic: same component, equivalent behaviour
+document.querySelector('vaadin-menu-bar').items = [
+  { text: 'File' },
+  { text: 'Edit' },
+];
+```
+
+### Which form is primary?
+
+- **Rule of thumb:** if a component has any per-item state at all, it
+  needs a declarative API. If that per-item content is typically
+  computed at runtime in real applications, it also needs a
+  programmatic API.
+- **Exceptions:** a component whose children are purely internal
+  (e.g. the button inside a `<vaadin-button>`) does not need either
+  of these — it only has its own attributes and slots.
+- When both APIs exist, document the declarative form first in the
+  README and spec, then show the programmatic equivalent alongside.
+
+### Relationship to specs
+
+Spec files (`packages/{name}/spec/{name}-web-component.md`) MUST show
+both a declarative usage example and a programmatic usage example
+whenever both APIs exist. The "Key design decisions" section of the
+spec should explicitly state whether the component has a declarative
+API, a programmatic API, or both, and justify the choice against the
+use cases.
+
+---
+
 ## Common Patterns
 
 ### Pattern 1: Simple Interactive Component (Button-like)
@@ -2094,6 +2215,9 @@ Use this checklist when creating a new component:
 - [ ] Event types documented in JSDoc
 - [ ] Controllers initialized in `firstUpdated()`
 - [ ] `defineCustomElement()` called at end
+- [ ] Component has a declarative HTML API (works from static markup, no JS required to populate)
+- [ ] Component also has a programmatic API (e.g. `items` array) if its children are typically data-driven
+- [ ] Declarative and programmatic forms produce identical rendering and events
 
 ### Styling
 
