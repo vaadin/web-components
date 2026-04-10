@@ -58,7 +58,11 @@ Follow `USE_CASES_TEMPLATE.md` exactly. In short:
 - NO prescribed solutions — only the need
 - Include concrete examples (sample data, routes, content) when they make the scenario clearer
 
-Aim for breadth — capture as many distinct scenarios as you can find evidence for, from simple everyday uses to complex or niche enterprise scenarios. Group related use cases together.
+Keep the number of use cases SMALL. Only include use cases that are distinct from a component implementation perspective — that is, scenarios that would require the component to do or support something different from what the other listed use cases already cover. Two scenarios that look different on the surface but would be implemented identically (for example, "e-commerce category navigation" and "documentation site navigation" — both are just "show a hierarchical trail") are the SAME use case and must be merged into one. Do NOT repeat the same underlying use case for different industries, domains, or example data; that is noise.
+
+When deciding whether to include a use case, ask: "Would supporting this require the component to behave in a way that none of the use cases I've already written down cover?" If the answer is no, drop it or merge it into the existing one. Concrete examples from different domains can still be mentioned briefly inside a single use case to illustrate it, but they do not each deserve their own entry.
+
+Aim for breadth of distinct component behaviors — not breadth of example scenarios. Group related use cases together.
 
 ORDERING:
 
@@ -67,6 +71,9 @@ The FIRST use case in the document MUST be the single most common, most basic wa
 IMPORTANT GUIDELINES:
 
 - Be thorough in your research across all the sources listed above
+- Keep the final list of use cases SMALL — merge duplicates aggressively
+- Two scenarios that would be implemented identically by the component are the same use case, even if they come from different industries or domains
+- Do NOT pad the list with the same use case dressed up in different example data
 - The result is ONLY the use cases document — nothing else
 - Do NOT describe implementation, APIs, or technology choices
 - Do NOT write a specification — that is a separate skill
