@@ -2103,6 +2103,71 @@ spec should explicitly state whether the component has a declarative
 API, a programmatic API, or both, and justify the choice against the
 use cases.
 
+### Be router-agnostic
+
+Vaadin web components MUST NOT contain integration code for any
+specific client-side router (Vaadin Router, React Router, Vue Router,
+Angular Router, etc.). Components that render navigational links
+should assume that an SPA router, if one is present in the
+application, automatically intercepts link clicks and handles
+navigation — the component itself does not call into a router and
+does not need to know one exists.
+
+**What this means in practice:**
+
+- Render plain `<a href="...">` elements for navigation. Let the
+  browser activate the link by default; an SPA router (if any) will
+  intercept the click at the document level and convert it into a
+  client-side navigation.
+- Do NOT import any router package, do NOT call router APIs, and do
+  NOT special-case any specific router's behavior.
+- Do NOT try to detect whether a router is installed. The component
+  behaves the same either way: with no router, the browser performs a
+  full page load; with a router, the router takes over silently.
+- If the component needs to know which item represents the "current"
+  page (for highlighting, `aria-current`, etc.), expose a
+  router-neutral input — typically a `location` property or a
+  per-item `path`/`current` attribute — that the application updates
+  from whatever routing mechanism it uses. The component must not
+  read `window.location` and react to history events on its own as
+  its primary mechanism; the application drives it.
+- If the component needs to give the application a chance to
+  intercept activation (for example, to perform an unsaved-changes
+  check before navigating), expose a generic callback property or
+  fire a cancellable event. The hook must be described in
+  router-neutral terms ("called when an item is activated"), not in
+  terms of any specific router's API.
+
+**Why:**
+
+- Real applications use many different routers, and many use none at
+  all. Baking knowledge of one router into a component makes the
+  component unusable for everyone else.
+- Navigation concerns (history management, scroll restoration, code
+  splitting, guards, transitions) belong to the application layer.
+  A UI component should describe *what* the user is navigating to,
+  not *how* navigation happens.
+- A plain `<a href>` is the most accessible primitive available:
+  keyboard activation, middle-click, "open in new tab", "copy link
+  address", focus rings, and screen-reader link semantics all work
+  for free. Replacing it with a click handler breaks all of these.
+- Server-side rendering and search-engine crawlers see real `href`
+  attributes and can follow them without executing any JavaScript.
+
+**Examples of acceptable router-neutral hooks** (already used by
+existing components):
+
+- A `location` property whose value is opaque to the component and
+  only serves as a change trigger so the component can re-evaluate
+  which item is current.
+- An `onNavigate` callback that receives the activated item and can
+  return `false` to suppress the default link behavior.
+- A per-item attribute like `router-ignore` that forces a full page
+  load even when a router is present.
+
+None of these mention a specific router by name, and all of them
+work equally well with any router or with no router at all.
+
 ---
 
 ## Common Patterns
