@@ -13,6 +13,8 @@ Arguments: [ComponentName]
 
 TASK OVERVIEW:
 
+0. Check if `packages/component-name/spec/problem-statement.md` exists. If it does, read it to understand the core problem this component solves, its target audience, and how it differs from adjacent components or patterns. Use this to focus your research in the steps below — prioritize sources and scenarios that are directly relevant to the stated problem, and filter out scenarios that fall outside the component's defined scope. If the file does not exist, proceed without it.
+
 1. First, search through the issues in https://github.com/vaadin/web-components to find any issues mentioning the given component and use cases or needs stated there. Include closed issues as those can also have valuable information.
 
 Note that components can sometimes be called different things by different users.

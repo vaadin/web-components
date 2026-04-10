@@ -17,6 +17,8 @@ TASK OVERVIEW:
 
 1. Read the use cases file at `packages/component-name/spec/use-cases.md`. This is the primary source of truth for what the component must support. If the file does not exist, stop and tell the user to run the `create-component-use-cases` skill first.
 
+1b. Check if `packages/component-name/spec/developer-api.md` exists. If it does, read it. This document represents the ideal developer-facing API imagined from a pure usability perspective, without implementation constraints. Use it as an aspirational starting point: try to preserve the developer ergonomics it proposes while reconciling with the existing patterns you discover in step 2. In the "Key Design Decisions" section of your output, note any cases where you deviated from the developer API and explain why (e.g., consistency with an existing Vaadin component required a different property name, or an existing mixin already provides equivalent functionality in a different shape). Also check the "Components Worth Investigating" section for suggestions on which existing components are most relevant to study in step 2 — this can save time compared to scanning all of `packages/`. If the file does not exist, proceed without it.
+
 2. Study existing components in this repository to understand the house style and establish consistency. This is the single most important input for API design.
    - Look through `packages/` for components with similar shape (e.g. list-like, selection-like, navigation-like, overlay-like) and read their entry files, their mixins, their `.d.ts` files, and their specs if present.
    - Note how properties, attributes, events, slots, parts, and CSS custom properties are named and structured.
