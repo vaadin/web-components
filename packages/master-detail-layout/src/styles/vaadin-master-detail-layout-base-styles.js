@@ -140,6 +140,11 @@ export const masterDetailLayoutStyles = css`
   #detailOutgoing {
     position: absolute;
     z-index: 3;
+    display: none;
+  }
+
+  :host([transition='replace']) #detailOutgoing {
+    display: block;
   }
 
   /* Detail transition: off-screen by default, on-screen when has-detail */

@@ -203,12 +203,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /** @private */
-      __replacing: {
-        type: Boolean,
-        sync: true,
-      },
-
-      /** @private */
       __detailCachedSize: {
         type: String,
         observer: '__detailCachedSizeChanged',
@@ -232,7 +226,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       <div id="master" part="master" ?inert="${isLayoutContained}">
         <slot @slotchange="${this.__onSlotChange}"></slot>
       </div>
-      <div id="detailOutgoing" inert ?hidden="${!this.__replacing}">
+      <div id="detailOutgoing" inert>
         <slot name="detail-outgoing"></slot>
       </div>
       <div
@@ -599,8 +593,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   async __replaceTransition(updateSlot) {
+    const oldDetail = this.__slottedDetail;
+    if (oldDetail) {
+      oldDetail.slot = 'detail-outgoing';
+    }
+
     try {
-      this.__snapshotDetailOutgoing();
+      this.$.detailOutgoing.style.width = this.__detailCachedSize;
 
       await updateSlot();
 
@@ -610,7 +609,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
       ]);
     } finally {
-      this.__clearDetailOutgoing();
+      if (oldDetail) {
+        oldDetail.remove();
+      }
     }
   }
 
@@ -623,32 +624,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     ]);
 
     await updateSlot();
-  }
-
-  /**
-   * Moves the current detail content to the outgoing slot so it can
-   * slide out while the new content slides in. Keeps the element in
-   * light DOM so light DOM styles continue to apply.
-   * @private
-   */
-  __snapshotDetailOutgoing() {
-    const currentDetail = this.__slottedDetail;
-    if (!currentDetail) {
-      return;
-    }
-    currentDetail.setAttribute('slot', 'detail-outgoing');
-    this.$.detailOutgoing.style.width = this.__detailCachedSize;
-    this.__replacing = true;
-  }
-
-  /**
-   * Clears the outgoing container after the replace transition completes.
-   * @private
-   */
-  __clearDetailOutgoing() {
-    this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
-    this.$.detailOutgoing.style.width = '';
-    this.__replacing = false;
   }
 
   /** @private */

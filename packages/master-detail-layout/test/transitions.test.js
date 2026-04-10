@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
@@ -365,7 +365,7 @@ describe('Transitions', () => {
 
       // During replace, old content should be in the outgoing slot
       const detailOutgoing = layout.shadowRoot.querySelector('#detailOutgoing');
-      expect(detailOutgoing.hasAttribute('hidden')).to.be.false;
+      expect(detailOutgoing.checkVisibility()).to.be.true;
       expect(detail.getAttribute('slot')).to.equal('detail-outgoing');
 
       // New content should be in the detail slot
@@ -375,12 +375,30 @@ describe('Transitions', () => {
       await replacePromise;
 
       // After transition, outgoing should be cleared and old element removed
-      expect(detailOutgoing.hasAttribute('hidden')).to.be.true;
+      expect(detailOutgoing.checkVisibility()).to.be.false;
       expect(layout.querySelector('[slot="detail-outgoing"]')).to.be.null;
     });
 
+    it('should not remove new outgoing detail when replace interrupts replace', async () => {
+      const detail1 = document.createElement('detail-content');
+      await layout._setDetail(detail1);
+
+      const detail2 = document.createElement('detail-content');
+      // Start first replace but don't await
+      layout._setDetail(detail2);
+      await nextFrame();
+
+      const detail3 = document.createElement('detail-content');
+      // Interrupt with second replace — detail2 becomes the new outgoing
+      layout._setDetail(detail3);
+      await nextFrame();
+
+      expect(layout.contains(detail1)).to.be.false;
+      expect(layout.querySelector('[slot="detail-outgoing"]')).to.equal(detail2);
+    });
+
     it('should preserve outgoing width when replacing with a differently sized detail', async () => {
-      let detailContent, replacePromise;
+      let detailContent;
 
       detailContent = document.createElement('detail-content');
       detailContent.style.width = '200px';
@@ -389,17 +407,38 @@ describe('Transitions', () => {
 
       detailContent = document.createElement('detail-content');
       detailContent.style.width = '400px';
-      replacePromise = layout._setDetail(detailContent);
+      const replacePromise = layout._setDetail(detailContent);
+      await onceResized(layout);
       expect(layout.$.detailOutgoing.style.width).to.equal('201px'); // 1px border
       await replacePromise;
-      expect(layout.$.detailOutgoing.style.width).to.equal('');
 
       detailContent = document.createElement('detail-content');
       detailContent.style.width = '200px';
-      replacePromise = layout._setDetail(detailContent);
+      layout._setDetail(detailContent);
+      await onceResized(layout);
       expect(layout.$.detailOutgoing.style.width).to.equal('401px'); // 1px border
-      await replacePromise;
-      expect(layout.$.detailOutgoing.style.width).to.equal('');
+    });
+
+    it('should preserve outgoing width when replace interrupts replace', async () => {
+      let detailContent;
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '200px';
+      await layout._setDetail(detailContent);
+      await onceResized(layout);
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '400px';
+      // Start replace transition but don't await — interrupt with another replace
+      layout._setDetail(detailContent);
+      await onceResized(layout);
+      expect(layout.$.detailOutgoing.style.width).to.equal('201px'); // 1px border
+
+      detailContent = document.createElement('detail-content');
+      detailContent.style.width = '200px';
+      layout._setDetail(detailContent);
+      await onceResized(layout);
+      expect(layout.$.detailOutgoing.style.width).to.equal('401px'); // 1px border
     });
 
     it('should adjust detail size after replacing with a differently sized detail', async () => {
