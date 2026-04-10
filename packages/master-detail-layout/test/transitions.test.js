@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
@@ -386,12 +386,12 @@ describe('Transitions', () => {
       const detail2 = document.createElement('detail-content');
       // Start first replace but don't await
       layout._setDetail(detail2);
-      await nextFrame();
+      await aTimeout(0);
 
       const detail3 = document.createElement('detail-content');
       // Interrupt with second replace — detail2 becomes the new outgoing
       layout._setDetail(detail3);
-      await nextFrame();
+      await aTimeout(0);
 
       expect(layout.contains(detail1)).to.be.false;
       expect(layout.querySelector('[slot="detail-outgoing"]')).to.equal(detail2);
