@@ -72,47 +72,62 @@ An HR tool where you can drill from one employee to their direct reports. The de
 
 ---
 
-## 5. Breadcrumb Scoped to a Section
+## 5. Omitting Views from the Trail Start
 
-An application has a department management section with its own breadcrumb. The breadcrumb starts at the section root, not at the application root.
+The breadcrumb is relevant for only part of the application. Parent views preceding that part should be omitted from the trail. Applies to all the use cases above.
 
-**Routes:**
-- `/departments/engineering` — Engineering (section root)
-- `/departments/engineering/frontend` — Frontend team
-- `/departments/engineering/frontend/alice` — Alice
+In this example, the breadcrumb is used only within the Department level of the application:
 
-**Breadcrumb:** `Engineering > Frontend > Alice`
+**Full hierarchy:** `Org > Department > Employee`
 
-The application-level prefix (`Departments`) is not part of this section's breadcrumb.
+**Breadcrumb:** `Department > Employee`
 
----
-
-## 6. Breadcrumb Showing Only Top Levels
-
-A navigation sidebar shows breadcrumbs for the top-level structure only. Deeper views within a department are not reflected.
-
-**Routes:**
-- `/departments` — Departments
-- `/departments/engineering` — Engineering
-- `/departments/engineering/frontend` — Frontend team
-
-**User is viewing the Frontend team page. Breadcrumb:** `Departments > Engineering`
-
-`Frontend` is not shown because this breadcrumb only tracks the top two levels of the hierarchy.
+`Org` is omitted because this breadcrumb is scoped to the Department section of the application.
 
 ---
 
-## 7. Technical Route Segments Omitted
+## 6. Omitting Views from the Trail End
 
-Some URL segments exist for routing/layout reasons and don't represent pages a user would navigate to. These are skipped in the breadcrumb.
+A view is displayed side-by-side with its parent view, and the breadcrumb is rendered in the parent view. The children of that parent should be omitted from the trail. Applies to all the use cases above.
 
-**Routes:**
-- `/` — Home
-- `/settings/general` — General Settings
-- `/settings/notifications` — Notification Settings
+In this example, the breadcrumb is displayed in the Employees view. When the user opens an individual employee in a side panel, the current view is still conceptually the Employees list:
 
-`/settings` is a layout wrapper that renders an inner navigation sidebar. It has no page of its own — visiting `/settings` redirects to `/settings/general`.
+**Full hierarchy:** `Org > Department > Employees > Jane Doe`
 
-**Breadcrumb on the General Settings page:** `Home > General Settings`
+**Breadcrumb:** `Org > Department > Employees`
 
-`Settings` is omitted because it's not a standalone page.
+The selected employee (`Jane Doe`) is not in the trail because the breadcrumb belongs to the parent view.
+
+---
+
+## 7. Omitting Intermediate Views from the Trail
+
+Some views exist only for technical/structural reasons and are never displayed on their own. These should be omitted from the trail. Applies to all the use cases above.
+
+In this example, the `Employees` view is a layout wrapper that only exists to host employee sub-views — it has no content of its own:
+
+**Full hierarchy:** `Org > Department > Employees > Jane Doe`
+
+**Breadcrumb:** `Org > Department > Jane Doe`
+
+`Employees` is omitted because it cannot be displayed on its own.
+
+---
+
+## 8. Programmatic Customization
+
+The application directly controls the breadcrumb trail. It can show any sequence of items, independent of routes, hierarchy, or navigation history. This is the underlying mechanism that enables all the cases above.
+
+**Example:**
+
+```js
+breadcrumb.items = [
+  { text: 'Dashboard', path: '/dashboard' },
+  { text: 'Q4 Report', path: '/reports/q4-2025' },
+  { text: 'Revenue breakdown' },
+];
+```
+
+**Breadcrumb:** `Dashboard > Q4 Report > Revenue breakdown`
+
+The application decides what appears in the trail. The breadcrumb component renders whatever items it is given.
