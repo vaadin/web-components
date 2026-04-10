@@ -318,9 +318,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
-    const children = this.querySelectorAll(':scope > [slot="detail"], :scope >:not([slot])');
-    [this, this.$.master, this.$.detail, ...children].forEach((node) => {
-      this.__resizeObserver.observe(node);
+    [this, this.$.master, this.$.detail, this.__slottedMaster, this.__slottedDetail].forEach((node) => {
+      if (node) {
+        this.__resizeObserver.observe(node);
+      }
     });
   }
 
@@ -344,14 +345,14 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   __readLayoutState() {
     const isVertical = this.orientation === 'vertical';
 
-    const masterContent = this.querySelector(':scope > :is([slot=""], :not([slot]))');
-    const detailContent = this.querySelector(':scope > [slot="detail"]');
-    const detailPlaceholder = this.querySelector(':scope > [slot="detail-placeholder"]');
+    const slottedMaster = this.__slottedMaster;
+    const slottedDetail = this.__slottedDetail;
+    const slottedDetailPlaceholder = this.__slottedDetailPlaceholder;
 
-    const hasMaster = !!masterContent;
+    const hasMaster = !!slottedMaster;
     const hadDetail = this.hasAttribute('has-detail');
-    const hasDetail = detailContent != null && detailContent.checkVisibility();
-    const hasDetailPlaceholder = !!detailPlaceholder;
+    const hasDetail = slottedDetail != null && slottedDetail.checkVisibility();
+    const hasDetailPlaceholder = !!slottedDetailPlaceholder;
 
     const computedStyle = getComputedStyle(this);
     const hostSizeProp = isVertical ? 'height' : 'width';
@@ -361,7 +362,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const trackSizes = parseTrackSizes(computedStyle[trackSizesProp]);
 
     const hasOverflow = (hasDetail || hasDetailPlaceholder) && detectOverflow(hostSize, trackSizes);
-    const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(detailContent)[0] : null;
+    const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(slottedDetail)[0] : null;
 
     return {
       hasMaster,
@@ -500,7 +501,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    */
   async _setDetail(newDetail, skipTransition) {
     // Don't start a transition if detail didn't change
-    const oldDetail = this.querySelector('[slot="detail"]');
+    const oldDetail = this.__slottedDetail;
     if (oldDetail === (newDetail || null)) {
       return;
     }
@@ -526,7 +527,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       return;
     }
 
-    const hasPlaceholder = !!this.querySelector('[slot="detail-placeholder"]');
+    const hasPlaceholder = !!this.__slottedDetailPlaceholder;
     if ((oldDetail && newDetail) || (hasPlaceholder && !this.hasAttribute('overlay'))) {
       await this._startTransition('replace', updateSlot);
     } else if (!oldDetail && newDetail) {
@@ -631,7 +632,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __snapshotDetailOutgoing() {
-    const currentDetail = this.querySelector('[slot="detail"]');
+    const currentDetail = this.__slottedDetail;
     if (!currentDetail) {
       return;
     }
@@ -648,6 +649,21 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
     this.$.detailOutgoing.style.width = '';
     this.__replacing = false;
+  }
+
+  /** @private */
+  get __slottedMaster() {
+    return this.querySelector(':scope > :is([slot=""], :not([slot]))');
+  }
+
+  /** @private */
+  get __slottedDetail() {
+    return this.querySelector(':scope > [slot="detail"]');
+  }
+
+  /** @private */
+  get __slottedDetailPlaceholder() {
+    return this.querySelector(':scope > [slot="detail-placeholder"]');
   }
 
   /**
