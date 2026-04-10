@@ -252,8 +252,8 @@ describe('Transitions', () => {
       const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
       expect(detailTranslateAfter).to.be.greaterThan(0).and.lessThan(detailTranslate);
 
-      const outgoingTranslateAfter = parseFloat(getComputedStyle(layout.$.outgoing).translate);
-      expect(outgoingTranslateAfter).to.be.greaterThan(detailTranslate).and.lessThan(200);
+      const detailOutgoingTranslateAfter = parseFloat(getComputedStyle(layout.$.detailOutgoing).translate);
+      expect(detailOutgoingTranslateAfter).to.be.greaterThan(detailTranslate).and.lessThan(200);
     });
 
     it('should complete transition immediately when no animation is running', async () => {
@@ -364,8 +364,8 @@ describe('Transitions', () => {
       const replacePromise = layout._setDetail(newDetail);
 
       // During replace, old content should be in the outgoing slot
-      const outgoing = layout.shadowRoot.querySelector('#outgoing');
-      expect(outgoing.hasAttribute('hidden')).to.be.false;
+      const detailOutgoing = layout.shadowRoot.querySelector('#detailOutgoing');
+      expect(detailOutgoing.hasAttribute('hidden')).to.be.false;
       expect(detail.getAttribute('slot')).to.equal('detail-outgoing');
 
       // New content should be in the detail slot
@@ -375,7 +375,7 @@ describe('Transitions', () => {
       await replacePromise;
 
       // After transition, outgoing should be cleared and old element removed
-      expect(outgoing.hasAttribute('hidden')).to.be.true;
+      expect(detailOutgoing.hasAttribute('hidden')).to.be.true;
       expect(layout.querySelector('[slot="detail-outgoing"]')).to.be.null;
     });
 
@@ -390,16 +390,16 @@ describe('Transitions', () => {
       detailContent = document.createElement('detail-content');
       detailContent.style.width = '400px';
       replacePromise = layout._setDetail(detailContent);
-      expect(layout.$.outgoing.style.width).to.equal('201px'); // 1px border
+      expect(layout.$.detailOutgoing.style.width).to.equal('201px'); // 1px border
       await replacePromise;
-      expect(layout.$.outgoing.style.width).to.equal('');
+      expect(layout.$.detailOutgoing.style.width).to.equal('');
 
       detailContent = document.createElement('detail-content');
       detailContent.style.width = '200px';
       replacePromise = layout._setDetail(detailContent);
-      expect(layout.$.outgoing.style.width).to.equal('401px'); // 1px border
+      expect(layout.$.detailOutgoing.style.width).to.equal('401px'); // 1px border
       await replacePromise;
-      expect(layout.$.outgoing.style.width).to.equal('');
+      expect(layout.$.detailOutgoing.style.width).to.equal('');
     });
 
     it('should adjust detail size after replacing with a differently sized detail', async () => {

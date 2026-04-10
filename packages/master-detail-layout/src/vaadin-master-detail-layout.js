@@ -232,7 +232,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       <div id="master" part="master" ?inert="${isLayoutContained}">
         <slot @slotchange="${this.__onSlotChange}"></slot>
       </div>
-      <div id="outgoing" inert ?hidden="${!this.__replacing}">
+      <div id="detailOutgoing" inert ?hidden="${!this.__replacing}">
         <slot name="detail-outgoing"></slot>
       </div>
       <div
@@ -244,7 +244,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       >
         <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
       </div>
-      <div id="detail-placeholder" part="detail-placeholder">
+      <div id="detailPlaceholder" part="detail-placeholder">
         <slot name="detail-placeholder" @slotchange="${this.__onSlotChange}"></slot>
       </div>
     `;
@@ -599,17 +599,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   async __replaceTransition(updateSlot) {
     try {
-      this.__snapshotOutgoing();
+      this.__snapshotDetailOutgoing();
 
       await updateSlot();
 
       const progress = getCurrentAnimationProgress(this.$.detail);
       await Promise.all([
         animateIn(this.$.detail, ['fade', 'slide'], progress),
-        animateOut(this.$.outgoing, ['fade', 'slide'], progress),
+        animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
       ]);
     } finally {
-      this.__clearOutgoing();
+      this.__clearDetailOutgoing();
     }
   }
 
@@ -630,13 +630,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * light DOM so light DOM styles continue to apply.
    * @private
    */
-  __snapshotOutgoing() {
+  __snapshotDetailOutgoing() {
     const currentDetail = this.querySelector('[slot="detail"]');
     if (!currentDetail) {
       return;
     }
     currentDetail.setAttribute('slot', 'detail-outgoing');
-    this.$.outgoing.style.width = this.__detailCachedSize;
+    this.$.detailOutgoing.style.width = this.__detailCachedSize;
     this.__replacing = true;
   }
 
@@ -644,9 +644,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * Clears the outgoing container after the replace transition completes.
    * @private
    */
-  __clearOutgoing() {
+  __clearDetailOutgoing() {
     this.querySelectorAll('[slot="detail-outgoing"]').forEach((el) => el.remove());
-    this.$.outgoing.style.width = '';
+    this.$.detailOutgoing.style.width = '';
     this.__replacing = false;
   }
 
