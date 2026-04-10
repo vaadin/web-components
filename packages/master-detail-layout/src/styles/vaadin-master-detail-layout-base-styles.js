@@ -51,17 +51,17 @@ export const masterDetailLayoutStyles = css`
       [detail-end];
   }
 
-  :is(#master, #detail, #detail-placeholder, #outgoing) {
+  :is(#master, #detail, #detailPlaceholder, #detailOutgoing) {
     box-sizing: border-box;
   }
 
-  #detail-placeholder {
+  #detailPlaceholder {
     z-index: 1;
     opacity: 0;
     pointer-events: none;
   }
 
-  :host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
+  :host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
     opacity: 1;
     pointer-events: auto;
   }
@@ -78,7 +78,7 @@ export const masterDetailLayoutStyles = css`
     pointer-events: auto;
   }
 
-  :is(#detail, #detail-placeholder, #outgoing) {
+  :is(#detail, #detailPlaceholder, #detailOutgoing) {
     grid-column: detail-start / detail-end;
     grid-row: 1;
   }
@@ -88,7 +88,7 @@ export const masterDetailLayoutStyles = css`
     grid-row: master-start / detail-start;
   }
 
-  :host([orientation='vertical']) :is(#detail, #detail-placeholder, #outgoing) {
+  :host([orientation='vertical']) :is(#detail, #detailPlaceholder, #detailOutgoing) {
     grid-column: 1;
     grid-row: detail-start / detail-end;
   }
@@ -125,19 +125,19 @@ export const masterDetailLayoutStyles = css`
     --_master-extra: calc(100% - var(--_master-size));
   }
 
-  :host([orientation='horizontal']) #detail-placeholder,
+  :host([orientation='horizontal']) #detailPlaceholder,
   :host([orientation='horizontal']:not([overlay])) #detail {
     border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
-  :host([orientation='vertical']) #detail-placeholder,
+  :host([orientation='vertical']) #detailPlaceholder,
   :host([orientation='vertical']:not([overlay])) #detail {
     border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
       var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
   }
 
-  #outgoing {
+  #detailOutgoing {
     position: absolute;
     z-index: 3;
   }
@@ -162,7 +162,7 @@ export const masterDetailLayoutStyles = css`
     --_transition-offset: 0 calc(100% + 30px);
   }
 
-  :host([has-detail][overlay]) :is(#detail, #outgoing) {
+  :host([has-detail][overlay]) :is(#detail, #detailOutgoing) {
     position: absolute;
     background: var(--vaadin-master-detail-layout-detail-background, var(--vaadin-background-color));
     box-shadow: var(--vaadin-master-detail-layout-detail-shadow, 0 0 20px 0 rgba(0, 0, 0, 0.3));
@@ -175,30 +175,30 @@ export const masterDetailLayoutStyles = css`
     pointer-events: auto;
   }
 
-  :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #outgoing) {
+  :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #detailOutgoing) {
     inset-block: 0;
     inset-inline-end: 0;
     width: var(--_overlay-size, var(--_detail-size));
     max-width: 100%;
   }
 
-  :host([has-detail][overlay][orientation='vertical']) :is(#detail, #outgoing) {
+  :host([has-detail][overlay][orientation='vertical']) :is(#detail, #detailOutgoing) {
     inset-inline: 0;
     inset-block-end: 0;
     height: var(--_overlay-size, var(--_detail-size));
     max-height: 100%;
   }
 
-  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #outgoing, #backdrop) {
+  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #detailOutgoing, #backdrop) {
     position: fixed;
   }
 
   @media (forced-colors: active) {
-    :host([has-detail][overlay]) :is(#detail, #outgoing) {
+    :host([has-detail][overlay]) :is(#detail, #detailOutgoing) {
       outline: 3px solid !important;
     }
 
-    :is(#detail, #detail-placeholder, #outgoing) {
+    :is(#detail, #detailPlaceholder, #detailOutgoing) {
       background: Canvas !important;
     }
   }

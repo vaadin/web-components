@@ -108,11 +108,11 @@ The `detail-placeholder` slot shows content in the detail area when no detail is
 Visible only when a placeholder element is slotted, no detail is present, and there is no overlay. Uses `visibility: hidden/visible` (not `display: none/block`) so it always participates in grid sizing:
 
 ```css
-#detail-placeholder {
+#detailPlaceholder {
   visibility: hidden;
 }
 
-:host([has-detail-placeholder]:not([has-detail], [overlay])) #detail-placeholder {
+:host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
   visibility: visible;
 }
 ```
@@ -185,17 +185,17 @@ Each animation is tagged with a shared ID. When a new transition starts, the run
 ### Z-index layering
 
 ```
-z-index: 1 — #detail-placeholder
+z-index: 1 — #detailPlaceholder
 z-index: 2 — #backdrop
-z-index: 3 — #outgoing (always position: absolute)
+z-index: 3 — #detailOutgoing (always position: absolute)
 z-index: 4 — #detail
 ```
 
-`#detail` above `#outgoing` is correct: split-mode replace has 0ms duration (no frames painted, z-order irrelevant), and overlay-mode replace has the incoming sliding over the outgoing.
+`#detail` above `#detailOutgoing` is correct: split-mode replace has 0ms duration (no frames painted, z-order irrelevant), and overlay-mode replace has the incoming sliding over the outgoing.
 
-### Outgoing container
+### Detail outgoing container
 
-The `#outgoing` shadow DOM element with `<slot name="detail-outgoing">` enables replace animations. Old content is moved to this slot (light DOM reassignment preserves user styles), animated out, then removed on completion. During replace, the outgoing width is frozen to `__detailCachedSize` so it retains the previous detail's dimensions even when the new detail has a different intrinsic size.
+The `#detailOutgoing` shadow DOM element with `<slot name="detail-outgoing">` enables replace animations. Old content is moved to this slot (light DOM reassignment preserves user styles), animated out, then removed on completion. During replace, the outgoing width is frozen to `__detailCachedSize` so it retains the previous detail's dimensions even when the new detail has a different intrinsic size.
 
 ## Test Patterns
 

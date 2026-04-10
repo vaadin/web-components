@@ -75,7 +75,7 @@ snapshots["vaadin-master-detail-layout shadow default"] =
 </div>
 <div
   hidden=""
-  id="outgoing"
+  id="detailOutgoing"
   inert=""
 >
   <slot name="detail-outgoing">
@@ -89,7 +89,7 @@ snapshots["vaadin-master-detail-layout shadow default"] =
   </slot>
 </div>
 <div
-  id="detail-placeholder"
+  id="detailPlaceholder"
   part="detail-placeholder"
 >
   <slot name="detail-placeholder">
