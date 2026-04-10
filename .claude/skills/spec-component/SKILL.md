@@ -44,7 +44,7 @@ TASK OVERVIEW:
 
    Cross-reference the list of use cases against the resulting API — every use case should map to something in the spec, and every piece of API should be justified by at least one use case.
 
-6. Create the spec at `packages/component-name/spec/component-name-web-component.md` based on `SPEC_TEMPLATE.md`.
+6. Create the spec at `packages/component-name/spec/component-name-web-component.md` based on `SPEC_TEMPLATE.md`. The "usage examples" in the spec are more low level than the use cases in the use-cases document. They describe the features of the component so one usage example can cover many use cases. The usage examples should mention which use case they are needed for.
 
 API DESIGN PRINCIPLES:
 
