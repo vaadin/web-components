@@ -23,6 +23,9 @@ packages/**/theme/**/*.d.ts
 # VSCode user configuration folders
 .vscode
 
+# Dev container
+.devcontainer
+
 # IntelliJ project files
 .idea
 *.iml
