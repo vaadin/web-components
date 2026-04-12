@@ -843,6 +843,171 @@ describe('vaadin-breadcrumb', () => {
       });
     });
   });
+
+  describe('mobile mode', () => {
+    function getBackLink(bc: Breadcrumb): HTMLAnchorElement | null {
+      return bc.shadowRoot!.querySelector('[part="back-link"]');
+    }
+
+    function getBackArrow(bc: Breadcrumb): HTMLSpanElement | null {
+      return bc.shadowRoot!.querySelector('[part="back-arrow"]');
+    }
+
+    function getList(bc: Breadcrumb): HTMLElement | null {
+      return bc.shadowRoot!.querySelector('[part="list"]');
+    }
+
+    function getItemsSlot(bc: Breadcrumb): HTMLSlotElement | null {
+      return bc.shadowRoot!.querySelector('#items');
+    }
+
+    it('should set the [mobile] attribute when container is too narrow for minimum layout', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page Title That Is Very Long</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      expect(breadcrumb.hasAttribute('mobile')).to.be.true;
+    });
+
+    it('should render a back-link with the parent item path as href in mobile mode', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      expect(breadcrumb.hasAttribute('mobile')).to.be.true;
+
+      const backLink = getBackLink(breadcrumb);
+      expect(backLink).to.be.ok;
+      expect(backLink!.getAttribute('href')).to.equal('/products');
+    });
+
+    it('should display a back-arrow icon in the back-link', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      const backArrow = getBackArrow(breadcrumb);
+      expect(backArrow).to.be.ok;
+      expect(backArrow!.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should display the parent item label in the back-link', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      const backLink = getBackLink(breadcrumb);
+      expect(backLink).to.be.ok;
+      expect(backLink!.textContent).to.contain('Products');
+    });
+
+    it('should determine parent as the last item with a path that is not current', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      const backLink = getBackLink(breadcrumb);
+      expect(backLink).to.be.ok;
+      // The parent should be "Category" (last item with path that is not current)
+      expect(backLink!.getAttribute('href')).to.equal('/category');
+      expect(backLink!.textContent).to.contain('Category');
+    });
+
+    it('should not render the normal list in mobile mode', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      expect(breadcrumb.hasAttribute('mobile')).to.be.true;
+      const list = getList(breadcrumb);
+      expect(list).to.be.null;
+    });
+
+    it('should keep items accessible in a hidden slot during mobile mode', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      expect(breadcrumb.hasAttribute('mobile')).to.be.true;
+
+      // The items slot should still exist in a hidden container
+      const itemsSlot = getItemsSlot(breadcrumb);
+      expect(itemsSlot).to.be.ok;
+      const hiddenContainer = itemsSlot!.parentElement!;
+      expect(hiddenContainer.hasAttribute('hidden')).to.be.true;
+
+      // The light DOM items should still be accessible
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(items.length).to.equal(3);
+    });
+
+    it('should exit mobile mode and remove [mobile] attribute when resized wider', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(100);
+
+      expect(breadcrumb.hasAttribute('mobile')).to.be.true;
+
+      // Resize wider
+      breadcrumb.style.width = '800px';
+      await aTimeout(200);
+
+      expect(breadcrumb.hasAttribute('mobile')).to.be.false;
+      // The normal list should be back
+      const list = getList(breadcrumb);
+      expect(list).to.be.ok;
+    });
+  });
 });
 
 describe('vaadin-breadcrumb-item', () => {

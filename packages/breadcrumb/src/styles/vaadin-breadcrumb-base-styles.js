@@ -62,4 +62,20 @@ export const breadcrumbStyles = css`
     font: inherit;
     color: inherit;
   }
+
+  [part='back-link'] {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font: inherit;
+  }
+
+  [part='back-arrow'] {
+    display: inline-block;
+  }
+
+  [part='back-arrow']::before {
+    content: '\\2039';
+  }
 `;

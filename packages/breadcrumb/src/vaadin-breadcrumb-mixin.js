@@ -86,6 +86,18 @@ export const BreadcrumbMixin = (superClass) =>
           type: Object,
           attribute: false,
         },
+
+        /**
+         * Whether the component is in mobile mode (container too narrow for
+         * the minimum layout of first item + overflow button + last item).
+         *
+         * @type {boolean}
+         * @private
+         */
+        __mobile: {
+          type: Boolean,
+          attribute: false,
+        },
       };
     }
 
@@ -103,6 +115,9 @@ export const BreadcrumbMixin = (superClass) =>
 
       /** @type {boolean} @private */
       this.__overlayOpened = false;
+
+      /** @type {boolean} @private */
+      this.__mobile = false;
     }
 
     /**
@@ -118,6 +133,20 @@ export const BreadcrumbMixin = (superClass) =>
 
     /** @protected */
     render() {
+      if (this.__mobile) {
+        const parent = this.__getParentItem();
+        return html`
+          <a part="back-link" id="back-link" href="${ifDefined(parent ? parent.path : undefined)}">
+            <span part="back-arrow" aria-hidden="true"></span>
+            ${parent ? parent.textContent.trim() : ''}
+          </a>
+          <div hidden>
+            <slot id="items"></slot>
+            <slot name="separator" id="separator-slot"></slot>
+          </div>
+        `;
+      }
+
       return html`
         <div part="list" role="list" id="list">
           <slot id="items"></slot>
@@ -230,12 +259,13 @@ export const BreadcrumbMixin = (superClass) =>
         this.__updateOverflowSeparator();
       });
 
-      // Set up a ResizeObserver on the list container for overflow detection
-      const list = this.shadowRoot.querySelector('#list');
+      // Set up a ResizeObserver on the host element for overflow detection.
+      // We observe the host rather than the list so that resize events are
+      // detected even in mobile mode (where the list element is not rendered).
       this.__resizeObserver = new ResizeObserver(() => {
         this.__detectOverflow();
       });
-      this.__resizeObserver.observe(list);
+      this.__resizeObserver.observe(this);
 
       // Update the overflow button separator if there is already a custom separator
       this.__updateOverflowSeparator();
@@ -404,14 +434,51 @@ export const BreadcrumbMixin = (superClass) =>
     }
 
     /**
+     * Returns the parent item for the mobile back-link. The parent is the
+     * last item with a `path` that is not the current page.
+     *
+     * Queries light DOM children directly rather than relying on the slot
+     * controller, because in mobile mode the slot element may have changed.
+     *
+     * @return {HTMLElement | undefined}
+     * @private
+     */
+    __getParentItem() {
+      const items = Array.from(this.querySelectorAll('vaadin-breadcrumb-item'));
+      let parent;
+      for (const item of items) {
+        if (item.path != null && !item.current) {
+          parent = item;
+        }
+      }
+      return parent;
+    }
+
+    /**
      * Detects whether breadcrumb items overflow the list container and
      * collapses intermediate items as needed. Keeps the first item and
      * as many trailing items as fit, hiding intermediate items with the
      * `overflow-hidden` attribute.
      *
+     * When the container is too narrow to display even the first item,
+     * overflow button, and last item, the component switches to mobile mode.
+     *
      * @private
      */
     __detectOverflow() {
+      // In mobile mode, check if we should exit by comparing host width
+      // to the stored threshold. If the host is now wider, exit mobile mode.
+      // The re-render will trigger another __detectOverflow via the ResizeObserver
+      // that will re-evaluate overflow in normal mode.
+      if (this.__mobile) {
+        if (this.__mobileThreshold && this.clientWidth > this.__mobileThreshold) {
+          this.__mobile = false;
+          this.removeAttribute('mobile');
+          // The re-render triggers the ResizeObserver which calls __detectOverflow again
+        }
+        return;
+      }
+
       const list = this.shadowRoot && this.shadowRoot.querySelector('#list');
       const overflowContainer = this.__overflowContainer;
       if (!list || !overflowContainer) {
@@ -468,6 +535,18 @@ export const BreadcrumbMixin = (superClass) =>
       const hiddenItems = items.filter((item) => item.hasAttribute('overflow-hidden'));
       if (hiddenItems.length === 0) {
         overflowContainer.hidden = true;
+        return;
+      }
+
+      // Step 5: Check if even the minimum layout (first + overflow + last) overflows.
+      // If only the first item and last item are visible but it still overflows,
+      // switch to mobile mode.
+      const visibleItems = items.filter((item) => !item.hasAttribute('overflow-hidden'));
+      if (visibleItems.length <= 1 && list.scrollWidth > list.clientWidth) {
+        // Store the current width as the threshold for exiting mobile mode
+        this.__mobileThreshold = this.clientWidth;
+        this.__mobile = true;
+        this.setAttribute('mobile', '');
       }
     }
 
