@@ -7,7 +7,6 @@ const unitTestsConfig = createUnitTestsConfig({
     playwrightLauncher({
       product: 'chromium',
       launchOptions: {
-        channel: 'chrome',
         headless: true,
         ignoreDefaultArgs: ['--hide-scrollbars'],
       },
