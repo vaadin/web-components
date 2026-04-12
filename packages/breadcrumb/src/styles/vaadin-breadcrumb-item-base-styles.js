@@ -43,4 +43,8 @@ export const breadcrumbItemStyles = css`
   :host([current]) [part='link'] {
     pointer-events: none;
   }
+
+  :host([dir='rtl']) [part='separator'] {
+    scale: -1;
+  }
 `;

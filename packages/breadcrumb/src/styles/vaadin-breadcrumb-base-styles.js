@@ -54,6 +54,10 @@ export const breadcrumbStyles = css`
     align-items: center;
   }
 
+  :host([dir='rtl']) #overflow .separator {
+    scale: -1;
+  }
+
   [part='overflow-button'] {
     background: none;
     border: none;
@@ -77,5 +81,9 @@ export const breadcrumbStyles = css`
 
   [part='back-arrow']::before {
     content: '\\2039';
+  }
+
+  :host([dir='rtl']) [part='back-arrow'] {
+    scale: -1;
   }
 `;

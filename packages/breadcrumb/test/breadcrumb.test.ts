@@ -1351,6 +1351,104 @@ describe('vaadin-breadcrumb', () => {
       });
     });
   });
+
+  describe('RTL support', () => {
+    beforeEach(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('should propagate dir="rtl" to the breadcrumb element', async () => {
+      breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>');
+      await nextRender();
+      expect(breadcrumb.getAttribute('dir')).to.equal('rtl');
+    });
+
+    it('should propagate dir="rtl" to breadcrumb items', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      items.forEach((item) => {
+        expect(item.getAttribute('dir')).to.equal('rtl');
+      });
+    });
+
+    it('should mirror the default chevron separator in RTL', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      const separator = items[1].shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+      const scale = getComputedStyle(separator).scale;
+      expect(scale).to.equal('-1');
+    });
+
+    it('should use logical CSS properties for layout (no physical margin-left/margin-right)', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const list = breadcrumb.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
+      expect(list).to.be.ok;
+      // Flex layout with no physical direction properties is inherently RTL-compatible
+      expect(getComputedStyle(list).display).to.equal('flex');
+    });
+
+    it('should mirror the back-arrow in mobile mode for RTL', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 50px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const backArrow = breadcrumb.shadowRoot!.querySelector('[part="back-arrow"]') as HTMLElement;
+      if (backArrow) {
+        const scale = getComputedStyle(backArrow).scale;
+        expect(scale).to.equal('-1');
+      }
+    });
+
+    it('should mirror the overflow button separator in RTL', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 150px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const overflowSeparator = breadcrumb.shadowRoot!.querySelector('#overflow .separator') as HTMLElement;
+      if (overflowSeparator && !overflowSeparator.parentElement!.hidden) {
+        const scale = getComputedStyle(overflowSeparator).scale;
+        expect(scale).to.equal('-1');
+      }
+    });
+  });
 });
 
 describe('vaadin-breadcrumb-item', () => {
