@@ -1008,6 +1008,186 @@ describe('vaadin-breadcrumb', () => {
       expect(list).to.be.ok;
     });
   });
+
+  describe('onNavigate click handling', () => {
+    function clickItemLink(item: BreadcrumbItem, props: MouseEventInit = {}): MouseEvent {
+      const itemLink = item.shadowRoot!.querySelector('a')!;
+      const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true, ...props });
+      itemLink.dispatchEvent(event);
+      return event;
+    }
+
+    describe('item link clicks', () => {
+      beforeEach(async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb style="width: 500px;">
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+
+        breadcrumb.addEventListener('click', (e: MouseEvent) => {
+          const { defaultPrevented } = e;
+          // Prevent the tests from navigating away
+          e.preventDefault();
+          // Restore the defaultPrevented property
+          Object.defineProperty(e, 'defaultPrevented', { value: defaultPrevented });
+        });
+
+        breadcrumb.onNavigate = sinon.spy();
+
+        await nextRender();
+      });
+
+      it('should call the callback with { path, current, originalEvent } when clicking an item link', () => {
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        const clickEvent = clickItemLink(items[0]);
+
+        expect((breadcrumb.onNavigate as sinon.SinonSpy).calledOnce).to.be.true;
+        const callArgs = (breadcrumb.onNavigate as sinon.SinonSpy).firstCall.args[0];
+        expect(callArgs.path).to.equal('/home');
+        expect(callArgs.current).to.be.false;
+        expect(callArgs.originalEvent).to.equal(clickEvent);
+      });
+
+      it('should prevent default link navigation when onNavigate is set', () => {
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        const clickEvent = clickItemLink(items[0]);
+        expect(clickEvent.defaultPrevented).to.be.true;
+      });
+
+      it('should not prevent default when the callback returns false', () => {
+        breadcrumb.onNavigate = () => false;
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        const clickEvent = clickItemLink(items[0]);
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+
+      it('should pass through clicks with metaKey without calling the callback', () => {
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        const clickEvent = clickItemLink(items[0], { metaKey: true });
+        expect((breadcrumb.onNavigate as sinon.SinonSpy).called).to.be.false;
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+
+      it('should pass through clicks with shiftKey without calling the callback', () => {
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        const clickEvent = clickItemLink(items[0], { shiftKey: true });
+        expect((breadcrumb.onNavigate as sinon.SinonSpy).called).to.be.false;
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+
+      it('should pass through clicks on items with [router-ignore] attribute', async () => {
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        items[0].setAttribute('router-ignore', '');
+        await nextRender();
+
+        const clickEvent = clickItemLink(items[0]);
+        expect((breadcrumb.onNavigate as sinon.SinonSpy).called).to.be.false;
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+
+      it('should not intercept links when onNavigate is not set', () => {
+        breadcrumb.onNavigate = undefined;
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        const clickEvent = clickItemLink(items[0]);
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+    });
+
+    describe('overflow menu link clicks', () => {
+      function getOverflowButton(bc: Breadcrumb): HTMLButtonElement {
+        return bc.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLButtonElement;
+      }
+
+      function getOverlay(bc: Breadcrumb): HTMLElement {
+        return bc.shadowRoot!.querySelector('#overlay') as HTMLElement;
+      }
+
+      it('should call onNavigate when clicking an overflow menu link', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb style="width: 150px;">
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+
+        breadcrumb.addEventListener('click', (e: MouseEvent) => {
+          const { defaultPrevented } = e;
+          e.preventDefault();
+          Object.defineProperty(e, 'defaultPrevented', { value: defaultPrevented });
+        });
+
+        breadcrumb.onNavigate = sinon.spy();
+
+        await nextRender();
+        await aTimeout(50);
+
+        // Open the overlay
+        const button = getOverflowButton(breadcrumb);
+        button.click();
+        await nextRender();
+
+        const overlay = getOverlay(breadcrumb);
+        const link = overlay.querySelector('a[role="menuitem"]') as HTMLAnchorElement;
+        expect(link).to.be.ok;
+
+        // Click the overflow menu link
+        const clickEvent = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+        link.dispatchEvent(clickEvent);
+
+        expect((breadcrumb.onNavigate as sinon.SinonSpy).calledOnce).to.be.true;
+        const callArgs = (breadcrumb.onNavigate as sinon.SinonSpy).firstCall.args[0];
+        expect(callArgs.path).to.equal(link.getAttribute('href'));
+        expect(callArgs.current).to.be.false;
+        expect(callArgs.originalEvent).to.equal(clickEvent);
+      });
+    });
+
+    describe('mobile back-link clicks', () => {
+      function getBackLink(bc: Breadcrumb): HTMLAnchorElement | null {
+        return bc.shadowRoot!.querySelector('[part="back-link"]');
+      }
+
+      it('should call onNavigate when clicking the mobile back-link', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb style="width: 50px;">
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+
+        breadcrumb.addEventListener('click', (e: MouseEvent) => {
+          const { defaultPrevented } = e;
+          e.preventDefault();
+          Object.defineProperty(e, 'defaultPrevented', { value: defaultPrevented });
+        });
+
+        breadcrumb.onNavigate = sinon.spy();
+
+        await nextRender();
+        await aTimeout(100);
+
+        expect(breadcrumb.hasAttribute('mobile')).to.be.true;
+
+        const backLink = getBackLink(breadcrumb)!;
+        expect(backLink).to.be.ok;
+
+        const clickEvent = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+        backLink.dispatchEvent(clickEvent);
+
+        expect((breadcrumb.onNavigate as sinon.SinonSpy).calledOnce).to.be.true;
+        const callArgs = (breadcrumb.onNavigate as sinon.SinonSpy).firstCall.args[0];
+        expect(callArgs.path).to.equal('/products');
+        expect(callArgs.current).to.be.false;
+        expect(callArgs.originalEvent).to.equal(clickEvent);
+      });
+    });
+  });
 });
 
 describe('vaadin-breadcrumb-item', () => {

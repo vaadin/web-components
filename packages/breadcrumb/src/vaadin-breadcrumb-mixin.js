@@ -40,6 +40,31 @@ export const BreadcrumbMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * Callback function for router integration.
+         *
+         * When a breadcrumb item link is clicked, this function is called and the default click
+         * action is cancelled. This delegates the responsibility of navigation to the function's logic.
+         *
+         * The click event action is not cancelled in the following cases:
+         * - The click event has a modifier (e.g. `metaKey`, `shiftKey`)
+         * - The click event is on an external link
+         * - The click event is on an item with `[router-ignore]` attribute
+         * - The function explicitly returns `false`
+         *
+         * The function receives an object with the properties of the clicked breadcrumb item:
+         * - `path`: The path of the breadcrumb item.
+         * - `current`: A boolean indicating whether the breadcrumb item is currently selected.
+         * - `originalEvent`: The original DOM event that triggered the navigation.
+         *
+         * Also see the `location` property for updating the current breadcrumb item on route change.
+         *
+         * @type {function(Object): boolean | undefined}
+         */
+        onNavigate: {
+          attribute: false,
+        },
+
+        /**
          * A change to this property triggers an update of the current item in the breadcrumb.
          * While it typically corresponds to the browser's URL, the specific value assigned to
          * the property is irrelevant. The component has its own internal logic for determining
@@ -106,6 +131,8 @@ export const BreadcrumbMixin = (superClass) =>
 
       this._itemsController = new ItemsController(this);
       this.__boundUpdateCurrent = this.__updateCurrentItems.bind(this);
+
+      this.addEventListener('click', this.__onClick);
 
       /** @type {Element | undefined} @private */
       this.__customSeparatorNode = undefined;
@@ -800,6 +827,113 @@ export const BreadcrumbMixin = (superClass) =>
       if (this.__overlayOpened) {
         this.__overlayOpened = false;
         this.requestUpdate();
+      }
+    }
+
+    /**
+     * Handles click events on the breadcrumb. When `onNavigate` is set,
+     * intercepts link clicks, prevents default navigation, and calls the
+     * callback with `{ path, current, originalEvent }`.
+     *
+     * Clicks with modifier keys, external links, and items with `[router-ignore]`
+     * pass through without interception.
+     *
+     * @param {MouseEvent} e
+     * @private
+     */
+    __onClick(e) {
+      if (!this.onNavigate) {
+        return;
+      }
+
+      const hasModifier = e.metaKey || e.shiftKey;
+      if (hasModifier) {
+        // Allow default action for clicks with modifiers (e.g. open in new tab)
+        return;
+      }
+
+      const composedPath = e.composedPath();
+
+      // Check for a click on the mobile back-link
+      const backLink = this.shadowRoot && this.shadowRoot.querySelector('#back-link');
+      if (backLink && composedPath.includes(backLink)) {
+        const href = backLink.getAttribute('href');
+        if (!href || !href.startsWith('/')) {
+          // External link, pass through
+          const isRelative = href && new URL(href, window.location.origin).origin === window.location.origin;
+          if (!isRelative) {
+            return;
+          }
+        }
+
+        const result = this.onNavigate({
+          path: href,
+          current: false,
+          originalEvent: e,
+        });
+
+        if (result !== false) {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      // Check for a click on an overflow menu link
+      const overlay = this.__overlay;
+      if (overlay && composedPath.includes(overlay)) {
+        const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
+        if (!anchor) {
+          return;
+        }
+
+        const href = anchor.getAttribute('href');
+        const isRelative = anchor.href && anchor.href.startsWith(window.location.origin);
+        if (!isRelative) {
+          // External link, pass through
+          return;
+        }
+
+        const result = this.onNavigate({
+          path: href,
+          current: false,
+          originalEvent: e,
+        });
+
+        if (result !== false) {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      // Check for a click on a breadcrumb item's internal anchor
+      const item = composedPath.find((el) => el.localName && el.localName === 'vaadin-breadcrumb-item');
+      const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
+      if (!item || !anchor || !item.shadowRoot.contains(anchor)) {
+        // Not a click on a breadcrumb-item anchor
+        return;
+      }
+
+      const isRelative = anchor.href && anchor.href.startsWith(window.location.origin);
+      if (!isRelative) {
+        // Allow default action for external links
+        return;
+      }
+
+      if (item.hasAttribute('router-ignore')) {
+        // Allow default action when client-side routing is ignored
+        return;
+      }
+
+      // Call the onNavigate callback
+      const result = this.onNavigate({
+        path: item.path,
+        current: item.current,
+        originalEvent: e,
+      });
+
+      if (result !== false) {
+        // Cancel the default action if the callback didn't return false
+        e.preventDefault();
       }
     }
   };
