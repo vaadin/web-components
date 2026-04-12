@@ -5,7 +5,7 @@ description: Break a component specification into ordered, self-contained implem
 
 This skill takes a component's `spec.md` and produces an ordered list of implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.
 
-This is the final step in the spec-driven development pipeline. Steps 1–4 defined the problem, researched requirements, designed the developer API, and produced a full implementation specification. Step 5 (Figma design) is optional. This step translates the specification into an actionable implementation plan.
+This is the last planning step in the spec-driven development pipeline. The next step (`create-component-implementation`) uses these tasks to write actual code. Steps 1–4 defined the problem, researched requirements, designed the developer API, and produced a full implementation specification. Step 5 (Figma design) is optional. This step translates the specification into an actionable implementation plan.
 
 Arguments: [ComponentName]
 
