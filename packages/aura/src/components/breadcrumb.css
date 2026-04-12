@@ -1,0 +1,30 @@
+vaadin-breadcrumb {
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-m);
+  font-weight: var(--aura-font-weight-medium);
+  line-height: var(--aura-line-height-m);
+}
+
+vaadin-breadcrumb [part='overflow-button'] {
+  font-weight: var(--aura-font-weight-semibold);
+  border-radius: var(--vaadin-radius-s);
+  padding: 0 var(--vaadin-padding-xs);
+  transition: color 80ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumb [part='overflow-button']:hover {
+    color: var(--aura-accent-text-color);
+  }
+}
+
+vaadin-breadcrumb [part='back-link'] {
+  font-weight: var(--aura-font-weight-medium);
+  transition: color 80ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumb [part='back-link']:hover {
+    color: var(--aura-accent-text-color);
+  }
+}

@@ -1,0 +1,17 @@
+vaadin-breadcrumb-item {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+vaadin-breadcrumb-item [part='link'] {
+  transition: color 80ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumb-item:not([disabled], [current]) [part='link']:hover {
+    color: var(--aura-accent-text-color);
+  }
+}
+
+vaadin-breadcrumb-item[current] [part='link'] {
+  font-weight: var(--aura-font-weight-semibold);
+}

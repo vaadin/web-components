@@ -1,0 +1,26 @@
+vaadin-breadcrumb-overlay [part='content'] a,
+vaadin-breadcrumb-overlay [part='content'] span {
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-m);
+  font-weight: var(--aura-font-weight-medium);
+  line-height: var(--aura-line-height-m);
+  padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+  border-radius: var(--vaadin-radius-s);
+  transition: background 80ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumb-overlay [part='content'] a:hover {
+    background: light-dark(
+      oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
+      oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
+    );
+  }
+}
+
+vaadin-breadcrumb-overlay [part='content'] a:focus {
+  background: light-dark(
+    oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
+    oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
+  );
+}
