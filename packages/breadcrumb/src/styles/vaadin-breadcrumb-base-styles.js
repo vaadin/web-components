@@ -14,4 +14,12 @@ export const breadcrumbStyles = css`
   :host([hidden]) {
     display: none !important;
   }
+
+  [part='list'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
 `;
