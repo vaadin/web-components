@@ -5,6 +5,7 @@
  */
 import { html } from 'lit';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { location } from './location.js';
 
@@ -60,6 +61,9 @@ export const BreadcrumbMixin = (superClass) =>
 
       this._itemsController = new ItemsController(this);
       this.__boundUpdateCurrent = this.__updateCurrentItems.bind(this);
+
+      /** @type {Element | undefined} @private */
+      this.__customSeparatorNode = undefined;
     }
 
     /**
@@ -78,6 +82,9 @@ export const BreadcrumbMixin = (superClass) =>
       return html`
         <div part="list" role="list" id="list">
           <slot id="items"></slot>
+        </div>
+        <div hidden aria-hidden="true">
+          <slot name="separator" id="separator-slot"></slot>
         </div>
       `;
     }
@@ -111,6 +118,26 @@ export const BreadcrumbMixin = (superClass) =>
       }
 
       this.addController(this._itemsController);
+
+      // Listen for slotchange on the items slot to handle reorders.
+      // ItemsController handles additions and removals, but not moves.
+      // When items are reordered, we sync the controller's nodes and re-render.
+      const itemsSlot = this.shadowRoot.querySelector('#items');
+      itemsSlot.addEventListener('slotchange', () => {
+        const assigned = itemsSlot.assignedNodes({ flatten: true });
+        this._itemsController.nodes = assigned.filter(
+          (node) => node.nodeType === Node.ELEMENT_NODE && !node.hasAttribute('data-slot-ignore'),
+        );
+        this.requestUpdate();
+      });
+
+      // Observe the separator named slot for custom separator content
+      const separatorSlot = this.shadowRoot.querySelector('#separator-slot');
+      this.__separatorSlotObserver = new SlotObserver(separatorSlot, ({ currentNodes }) => {
+        const separatorNode = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE)[0];
+        this.__customSeparatorNode = separatorNode || undefined;
+        this.__distributeSeparators();
+      });
     }
 
     /**
@@ -124,8 +151,10 @@ export const BreadcrumbMixin = (superClass) =>
         this.__updateCurrentItems();
       }
 
-      // Re-evaluate current items whenever the slot content changes
+      // Re-evaluate current items and separators whenever the slot content changes
       this.__updateCurrentItems();
+      this.__updateFirstAttribute();
+      this.__distributeSeparators();
     }
 
     /**
@@ -167,5 +196,44 @@ export const BreadcrumbMixin = (superClass) =>
       items.forEach((item) => {
         item._setCurrent(item === lastMatch);
       });
+    }
+
+    /**
+     * Sets the `first` attribute on the first visible item so its separator
+     * is hidden. Removes the attribute from all other items.
+     *
+     * @private
+     */
+    __updateFirstAttribute() {
+      const items = this._items;
+      items.forEach((item, index) => {
+        if (index === 0) {
+          item.setAttribute('first', '');
+        } else {
+          item.removeAttribute('first');
+        }
+      });
+    }
+
+    /**
+     * Distributes custom separator clones to each breadcrumb item.
+     * When a custom separator element is present in the separator slot,
+     * clones it for each item and sets each item's `_customSeparator` property.
+     * When no custom separator is present, clears the property so items
+     * revert to their default chevron.
+     *
+     * @private
+     */
+    __distributeSeparators() {
+      const items = this._items;
+      if (this.__customSeparatorNode) {
+        items.forEach((item) => {
+          item._customSeparator = this.__customSeparatorNode.cloneNode(true);
+        });
+      } else {
+        items.forEach((item) => {
+          item._customSeparator = undefined;
+        });
+      }
     }
   };

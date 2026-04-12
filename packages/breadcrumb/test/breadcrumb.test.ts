@@ -47,6 +47,15 @@ describe('vaadin-breadcrumb', () => {
       const slot = list!.querySelector('slot');
       expect(slot).to.be.ok;
     });
+
+    it('should render a separator slot container with aria-hidden="true"', () => {
+      const separatorSlot = breadcrumb.shadowRoot!.querySelector('#separator-slot');
+      expect(separatorSlot).to.be.ok;
+      expect(separatorSlot!.getAttribute('name')).to.equal('separator');
+      const container = separatorSlot!.parentElement!;
+      expect(container.getAttribute('aria-hidden')).to.equal('true');
+      expect(container.hasAttribute('hidden')).to.be.true;
+    });
   });
 
   describe('accessibility', () => {
@@ -262,6 +271,123 @@ describe('vaadin-breadcrumb', () => {
         const remainingItems = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
         // /home doesn't match /products, so no item is current
         expect(remainingItems[0].current).to.be.false;
+      });
+    });
+  });
+
+  describe('separator distribution', () => {
+    describe('default separator', () => {
+      it('should use the default chevron when no custom separator is provided', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        items.forEach((item) => {
+          const separator = item.shadowRoot!.querySelector('#separator');
+          expect(separator).to.be.ok;
+          // Default chevron character (›)
+          expect(separator!.textContent!.trim()).to.equal('\u203A');
+        });
+      });
+    });
+
+    describe('custom separator', () => {
+      it('should distribute custom separator to each item when slotted', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+            <span slot="separator">/</span>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        items.forEach((item) => {
+          const separator = item.shadowRoot!.querySelector('#separator');
+          expect(separator).to.be.ok;
+          // Should contain the cloned custom separator, not the default chevron
+          const cloned = separator!.querySelector('span');
+          expect(cloned).to.be.ok;
+          expect(cloned!.textContent).to.equal('/');
+        });
+      });
+
+      it('should revert to default chevron when custom separator is removed', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <span slot="separator">/</span>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        // Verify custom separator is in use
+        items.forEach((item) => {
+          const separator = item.shadowRoot!.querySelector('#separator');
+          expect(separator!.querySelector('span')).to.be.ok;
+        });
+
+        // Remove the custom separator
+        const customSep = breadcrumb.querySelector('[slot="separator"]')!;
+        breadcrumb.removeChild(customSep);
+        await nextRender();
+
+        // Items should revert to the default chevron
+        items.forEach((item) => {
+          const separator = item.shadowRoot!.querySelector('#separator');
+          expect(separator!.textContent!.trim()).to.equal('\u203A');
+          expect(separator!.querySelector('span')).to.be.null;
+        });
+      });
+    });
+
+    describe('first attribute', () => {
+      it('should set the first attribute on the first item', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        expect(items[0].hasAttribute('first')).to.be.true;
+        expect(items[1].hasAttribute('first')).to.be.false;
+        expect(items[2].hasAttribute('first')).to.be.false;
+      });
+
+      it('should move the first attribute when items are reordered', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        expect(items[0].hasAttribute('first')).to.be.true;
+        expect(items[1].hasAttribute('first')).to.be.false;
+
+        // Move the first item to the end (reorder)
+        breadcrumb.appendChild(items[0]);
+        await nextRender();
+
+        const reorderedItems = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        expect(reorderedItems[0].hasAttribute('first')).to.be.true;
+        expect(reorderedItems[1].hasAttribute('first')).to.be.false;
       });
     });
   });
