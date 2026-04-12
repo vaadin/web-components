@@ -1,0 +1,114 @@
+---
+allowed-tools: Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),AskUserQuestion
+description: Break a component specification into ordered, self-contained implementation tasks
+---
+
+This skill takes a component's `spec.md` and produces an ordered list of implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.
+
+This is the final step in the spec-driven development pipeline. Steps 1–4 defined the problem, researched requirements, designed the developer API, and produced a full implementation specification. Step 5 (Figma design) is optional. This step translates the specification into an actionable implementation plan.
+
+Arguments: [ComponentName]
+
+TASK OVERVIEW:
+
+1. Read `packages/{component-name}/spec/spec.md`. This is the primary input — every task must trace back to content in the spec. If the file does not exist, stop and tell the user to run `create-component-spec` first.
+
+2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 9 — every requirement must be addressed by at least one task. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
+
+3. Read `packages/{component-name}/spec/developer-api.md`. The spec references this document by section number/name in Key Design Decisions and throughout the implementation details. Read it to understand the API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
+
+4. Check if `packages/{component-name}/spec/figma-design.md` exists. If present, read it and reference the Figma design in theme styling tasks as visual guidance. If absent, proceed without it — Figma designs are optional.
+
+5. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. The document defines file structure, naming conventions, mixin patterns, styling architecture, theming, testing, accessibility, and a Checklist. Use the Checklist section as the completeness reference — every checklist item must be covered by at least one task.
+
+6. Parse the spec into implementation units. For each element in the spec, extract:
+   - Mixin chain
+   - Shadow DOM structure
+   - Properties, slots, parts, events, CSS custom properties
+   - Internal behavior subsections
+   - Dependencies between behaviors (e.g., overflow depends on the list container, mobile mode depends on overflow)
+
+7. Break down into ordered tasks following the PHASE STRUCTURE below.
+
+8. Assign explicit dependencies to each task following the DEPENDENCY RULES below.
+
+9. Verify coverage:
+   - Every requirement number in `requirements.md` must appear in at least one task's Requirements line.
+   - Every element, property, slot, part, event, and CSS custom property in `spec.md` must be addressed by at least one task.
+   - Every item in the `WEB_COMPONENT_GUIDELINES.md` Checklist must be covered by at least one task.
+
+   If any item is not covered, add it to an existing task or create a new task for it.
+
+10. Read `TASKS_TEMPLATE.md` in this skill's directory. Write the tasks at `packages/{component-name}/spec/tasks.md`, following the template structure.
+
+PHASE STRUCTURE:
+
+Organize tasks into these phases, in order. Each phase builds on the previous one.
+
+**Phase 1 — Scaffolding.** One task that creates the package directory, `package.json`, `LICENSE`, `README.md`, root export files, root `.d.ts` files, source files with empty element classes (correct mixin chains, empty `render()`, `static get is()`, `static get styles()`), TypeScript definitions for source files, base styles files (structural CSS only), and the test directory structure. This task includes a basic smoke test: the element registers and renders without errors. The goal is a clean package that passes `yarn lint` and `yarn lint:types`.
+
+**Phase 2 — Core features.** One task per feature or tightly coupled feature group. Each task adds behavior to the component and includes unit tests that verify that behavior. Order tasks by dependency — properties before behaviors that depend on them, child element features before container features that observe children. Group tightly coupled behaviors into one task when they cannot function independently (e.g., a property and the rendering logic that uses it). Keep loosely related behaviors in separate tasks.
+
+**Phase 3 — Cross-cutting concerns.** Focused tasks for behaviors that span multiple elements:
+- Accessibility: ARIA roles, attributes, and live-region announcements across all elements. Include accessibility tests.
+- Keyboard navigation: Tab order, key handlers, focus management. Include keyboard interaction tests.
+- RTL support: Verify logical CSS properties, separator/icon mirroring. Include RTL-specific tests.
+
+These may be combined into fewer tasks when they are tightly coupled for the specific component.
+
+**Phase 4 — Styling.** Three tasks:
+1. Base styles completion — full state selectors (`:host([disabled])`, `:host([current])`, etc.), forced-colors mode, all CSS custom property hookups. Includes base visual tests.
+2. Lumo theme — public CSS file (`packages/vaadin-lumo-styles/components/{name}.css`), implementation CSS file (`packages/vaadin-lumo-styles/src/components/{name}.css`), token bindings, import registration. Includes Lumo visual tests. Reference `figma-design.md` for visual alignment if it exists.
+3. Aura theme — component CSS file (`packages/aura/src/components/{name}.css`), import in `packages/aura/aura.css`, token bindings. Includes Aura visual tests. Reference `figma-design.md` for visual alignment if it exists.
+
+**Phase 5 — Integration.** One task covering:
+- Dev page in `dev/{component-name}.html`
+- DOM snapshot tests
+- TypeScript type tests
+- Final validation: `yarn lint`, `yarn lint:types`, `yarn test --group {name}`, `yarn test:snapshots --group {name}`, `yarn test:base --group {name}`, `yarn test:lumo --group {name}`, `yarn test:aura --group {name}`
+
+TASK STRUCTURE:
+
+Every task (except scaffolding) follows a test-driven approach. Each task results in a self-contained, merge-ready branch.
+
+Tasks are pointers into the spec, not a second copy of it. The description says *what* to implement and which spec sections contain the details — the implementer reads the spec for the full picture. Do not repeat shadow DOM structures, property tables, mixin chains, or behavioral logic that the spec already defines.
+
+Each task in the output document must include:
+
+- **Title** — short, descriptive
+- **Spec sections** — which sections of `spec.md` the task addresses (by name). This is how the implementer finds the details.
+- **Requirements** — which requirement numbers from `requirements.md` the task covers
+- **Depends on** — prerequisite task numbers (see DEPENDENCY RULES)
+- **Description** — what to implement and test, in 2–4 sentences. Name the feature and the spec sections that define it. Do not restate the spec — point to it.
+- **Files** — every file to create or modify, with full paths from the repo root and (create) or (modify) annotation
+- **Tests** — behavioral assertions to verify the feature works. Describe the expected outcome, not implementation details. Keep assertions at the level of "what the user or developer observes."
+- **Acceptance criteria** — meta checks: all new tests pass, existing tests still pass, lint is clean, types compile
+
+DEPENDENCY RULES:
+
+Every task has a `Depends on:` field listing the task numbers it requires to be completed first. Use these rules to assign dependencies:
+
+- Task 1 (scaffolding) has no dependencies.
+- A task depends on the scaffolding task if it is the first task to touch that element.
+- A task depends on another task if it uses properties, slots, DOM structure, or behaviors introduced by that task.
+- A task depends on another task if its tests require functionality from that task.
+- Do not list transitive dependencies. If Task 3 depends on Task 2 and Task 2 depends on Task 1, Task 3 lists only Task 2 — not Task 1.
+- When two tasks have no dependency relationship, they can be implemented in parallel on separate branches.
+
+TASK GRANULARITY:
+
+- A task should be completable in a single focused session. If a task has more than 8–10 test assertions, consider splitting it.
+- A task must be testable after completion. The tests defined in the task must be runnable and passing after the task is done.
+- A task should touch at most 2–3 elements. If a feature spans all elements, keep it as one task only if the changes are uniform. Otherwise, split by element.
+- Group tightly coupled behaviors into one task when they cannot function independently. For example: a `path` property and the link rendering logic that uses it are one task because `path` is meaningless without the `<a>` element.
+- Keep loosely related behaviors in separate tasks, even if they are in the same spec section.
+
+IMPORTANT GUIDELINES:
+
+- Do not invent features or tasks that the spec does not support. Every task must trace to spec content.
+- Do not modify `spec.md`, `requirements.md`, `developer-api.md`, or `problem-statement.md`.
+- Do not produce implementation code. The output is a task plan, not source code.
+- If the spec is ambiguous about implementation order or dependencies, use AskUserQuestion to resolve the ambiguity before writing it into the tasks. Do not guess.
+- Include the experimental feature flag setup in the scaffolding task (referencing the pattern from `@vaadin/component-base/src/define.js`).
+- When the spec has a Reuse and Proposed Adjustments section, reference the specific shared modules to reuse in the relevant task descriptions. If the spec proposes modifications to existing shared modules, create explicit tasks for those modifications — they must be completed before the tasks that depend on them.
+- The output is ONLY the tasks file — nothing else.
