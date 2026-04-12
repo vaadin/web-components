@@ -1,0 +1,66 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_breadcrumb {
+  :host {
+    display: block;
+    font-family: var(--lumo-font-family);
+    font-size: var(--vaadin-breadcrumb-font-size, var(--lumo-font-size-s));
+    color: var(--vaadin-breadcrumb-text-color, var(--lumo-primary-text-color));
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  [part='list'] {
+    gap: var(--vaadin-breadcrumb-gap, var(--lumo-space-xs));
+  }
+
+  #overflow .separator {
+    color: var(--vaadin-breadcrumb-separator-color, var(--lumo-secondary-text-color));
+  }
+
+  [part='overflow-button'] {
+    font-family: var(--lumo-font-family);
+    font-size: inherit;
+    color: var(--lumo-primary-text-color);
+    border-radius: var(--lumo-border-radius-s);
+    cursor: var(--lumo-clickable-cursor);
+    padding: 0 var(--lumo-space-xs);
+  }
+
+  [part='overflow-button']:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--vaadin-focus-ring-width, 2px)
+      var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
+
+  @media (any-hover: hover) {
+    [part='overflow-button']:hover {
+      color: var(--lumo-body-text-color);
+    }
+  }
+
+  /* Mobile mode: back-link */
+  [part='back-link'] {
+    font-family: var(--lumo-font-family);
+    color: var(--lumo-primary-text-color);
+    border-radius: var(--lumo-border-radius-s);
+  }
+
+  [part='back-link']:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--vaadin-focus-ring-width, 2px)
+      var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
+
+  @media (any-hover: hover) {
+    [part='back-link']:hover {
+      color: var(--lumo-primary-color);
+    }
+  }
+}

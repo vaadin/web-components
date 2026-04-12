@@ -1,0 +1,36 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_breadcrumb-overlay {
+  [part='content'] {
+    padding: var(--lumo-space-xs);
+  }
+
+  [part='content'] a,
+  [part='content'] span {
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-s);
+    border-radius: var(--lumo-border-radius-s);
+    color: var(--lumo-body-text-color);
+  }
+
+  [part='content'] a:hover,
+  [part='content'] a:focus {
+    background: var(--lumo-contrast-5pct);
+    color: var(--lumo-body-text-color);
+  }
+
+  [part='content'] a:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--vaadin-focus-ring-width, 2px)
+      var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
+
+  [part='content'] span[aria-disabled='true'] {
+    color: var(--lumo-disabled-text-color);
+    opacity: 1;
+  }
+}
