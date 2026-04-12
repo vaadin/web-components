@@ -1,12 +1,12 @@
 # {ComponentName} Problem Statement
 
 <!--
-This file defines the core problem that the component solves. It is written BEFORE researching use cases, so that use-case research has a clear focus.
+This file defines the core problem that the component solves. It is written BEFORE researching requirements, so that requirements research has a clear focus.
 
 Keep it short — roughly half a page to one page. The value is in the structure (Problem / Differentiation / Examples), not in exhaustive detail.
 
 Do NOT include:
-- Use cases (those come in the next step)
+- Use cases (the next step captures those as requirements)
 - API design, properties, events, or implementation details
 - Framework-specific information
 -->

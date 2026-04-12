@@ -1,4 +1,4 @@
-# <ComponentName> Requirements
+# {ComponentName} Requirements
 
 <!--
 Behavioral requirements for the component, written from the perspective of an application end user. No implementation details, APIs, or technology choices.

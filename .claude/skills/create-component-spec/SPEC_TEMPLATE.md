@@ -90,12 +90,13 @@ Shadow DOM:
 ## Reuse and Proposed Adjustments to Existing Modules
 
 <!--
-Only include this section if the specification requires changes to code outside the new component's own package — e.g., extending a shared mixin, adding a hook to a controller, or renaming a pattern for cross-component consistency.
+Include this section if the specification reuses or requires changes to code outside the new component's own package — e.g., reusing a shared mixin as-is, extending a shared mixin, adding a hook to a controller, or renaming a pattern for cross-component consistency.
 
-For each adjustment:
-- Name the file, class or mixin, and the specific change.
+For each entry:
+- Name the file, class or mixin, and whether it is used as-is or needs modification.
+- If modification is needed, describe the specific change.
 - Explain why the new component needs it.
 - List other components that use the same code and could be affected.
 
-Omit this section entirely if no adjustments are needed.
+Omit this section entirely if no reuse or adjustments are needed.
 -->

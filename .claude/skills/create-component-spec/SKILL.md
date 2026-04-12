@@ -25,7 +25,7 @@ TASK OVERVIEW:
 
 7. Read `SPEC_TEMPLATE.md` in this skill's directory. Write the spec at `packages/{component-name}/spec/spec.md`, following the template structure.
 
-8. Verify coverage. Cross-reference the spec against `requirements.md` — every requirement must be addressed in the spec. Cross-reference against `developer-api.md` — every API feature is either preserved in the spec or has a documented deviation in Key Design Decisions.
+8. Verify coverage. Cross-reference the spec against `requirements.md` — every requirement must be addressed in the spec. Cross-reference against `developer-api.md` — every API feature is either present in the spec or has a documented deviation in Key Design Decisions.
 
 SOURCE CODE ANALYSIS:
 
@@ -41,12 +41,13 @@ When studying existing components in step 5, focus on:
 
 5. **CSS custom property conventions.** Search for how existing components expose theming hooks. Check whether similar properties follow a naming scheme.
 
-6. **Shadow DOM patterns.** Read the `render()` method of similar components to see how shadow DOM is structured, which parts are exposed, and how slots are used.
+6. **Shadow DOM patterns.** Study similar components to see how shadow DOM is structured, which parts are exposed, and how slots are used.
 
 REUSE AND PROPOSED ADJUSTMENTS:
 
-If the source code analysis reveals that an existing component, mixin, controller, or shared module can be reused — either directly or with modification — document this in the Reuse and Proposed Adjustments section of the spec. For each adjustment:
-- Name the file and the specific change or reuse needed.
+If the source code analysis reveals that an existing component, mixin, controller, or shared module can be reused — either directly or with modification — document this in the Reuse and Proposed Adjustments section of the spec. For each entry:
+- Name the file and whether it is used as-is or needs modification.
+- If modification is needed, describe the specific change.
 - Explain why the new component needs it.
 - List other components that use the same code and could be affected.
 
