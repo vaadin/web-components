@@ -44,7 +44,7 @@ class BreadcrumbOverlay extends OverlayMixin(
   render() {
     return html`
       <div part="overlay" id="overlay">
-        <div part="content" id="content">
+        <div part="content" id="content" role="menu">
           <slot></slot>
         </div>
       </div>

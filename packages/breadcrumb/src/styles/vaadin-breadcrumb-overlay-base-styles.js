@@ -11,4 +11,25 @@ export const breadcrumbOverlayStyles = css`
     display: flex;
     flex-direction: column;
   }
+
+  [part='content'] a,
+  [part='content'] span {
+    display: block;
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+  }
+
+  [part='content'] a:hover,
+  [part='content'] a:focus {
+    background: var(--vaadin-overlay-hover-background, rgba(0, 0, 0, 0.04));
+  }
+
+  [part='content'] span[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: default;
+  }
 `;

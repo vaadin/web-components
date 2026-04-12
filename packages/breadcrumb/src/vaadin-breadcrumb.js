@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { breadcrumbStyles } from './styles/vaadin-breadcrumb-base-styles.js';
+import { breadcrumbSlotStyles, breadcrumbStyles } from './styles/vaadin-breadcrumb-base-styles.js';
 import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
 
 /**
@@ -46,6 +46,11 @@ class Breadcrumb extends BreadcrumbMixin(
 
   static get experimental() {
     return 'breadcrumbComponent';
+  }
+
+  /** @protected */
+  get slotStyles() {
+    return [breadcrumbSlotStyles];
   }
 
   /** @protected */

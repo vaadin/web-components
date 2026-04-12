@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
@@ -66,6 +67,25 @@ export const BreadcrumbMixin = (superClass) =>
           type: Array,
           attribute: false,
         },
+
+        /**
+         * The object used to localize this component.
+         * To change the default localization, replace the entire `i18n` object with a
+         * custom one, providing all expected properties.
+         *
+         * The object has the following JSON structure and default values:
+         * ```
+         * {
+         *   overflow: 'Show more'
+         * }
+         * ```
+         *
+         * @type {{ overflow?: string }}
+         */
+        i18n: {
+          type: Object,
+          attribute: false,
+        },
       };
     }
 
@@ -77,6 +97,12 @@ export const BreadcrumbMixin = (superClass) =>
 
       /** @type {Element | undefined} @private */
       this.__customSeparatorNode = undefined;
+
+      /** @type {{ overflow?: string }} */
+      this.i18n = { overflow: 'Show more' };
+
+      /** @type {boolean} @private */
+      this.__overlayOpened = false;
     }
 
     /**
@@ -95,10 +121,33 @@ export const BreadcrumbMixin = (superClass) =>
       return html`
         <div part="list" role="list" id="list">
           <slot id="items"></slot>
+          <div id="overflow" role="listitem" hidden>
+            <span class="separator" aria-hidden="true"></span>
+            <button
+              part="overflow-button"
+              aria-haspopup="true"
+              aria-expanded="${this.__overlayOpened ? 'true' : 'false'}"
+              aria-label="${ifDefined(this.i18n && this.i18n.overflow ? this.i18n.overflow : undefined)}"
+              tabindex="0"
+              @click="${this.__onOverflowButtonClick}"
+              @keydown="${this.__onOverflowButtonKeydown}"
+            >
+              &hellip;
+            </button>
+          </div>
         </div>
         <div hidden aria-hidden="true">
           <slot name="separator" id="separator-slot"></slot>
         </div>
+        <vaadin-breadcrumb-overlay
+          id="overlay"
+          .positionTarget="${this.__overflowButton}"
+          .opened="${this.__overlayOpened}"
+          no-vertical-overlap
+          @vaadin-overlay-escape-press="${this.__onOverlayEscapePress}"
+          @vaadin-overlay-outside-press="${this.__onOverlayOutsidePress}"
+          @vaadin-overlay-close="${this.__onOverlayClose}"
+        ></vaadin-breadcrumb-overlay>
       `;
     }
 
@@ -116,6 +165,34 @@ export const BreadcrumbMixin = (superClass) =>
 
       window.removeEventListener('popstate', this.__boundUpdateCurrent);
       window.removeEventListener('vaadin-navigated', this.__boundUpdateCurrent);
+
+      if (this.__resizeObserver) {
+        this.__resizeObserver.disconnect();
+      }
+    }
+
+    /**
+     * @return {HTMLButtonElement | undefined}
+     * @private
+     */
+    get __overflowButton() {
+      return this.shadowRoot && this.shadowRoot.querySelector('[part="overflow-button"]');
+    }
+
+    /**
+     * @return {HTMLElement | undefined}
+     * @private
+     */
+    get __overflowContainer() {
+      return this.shadowRoot && this.shadowRoot.querySelector('#overflow');
+    }
+
+    /**
+     * @return {HTMLElement | undefined}
+     * @private
+     */
+    get __overlay() {
+      return this.shadowRoot && this.shadowRoot.querySelector('#overlay');
     }
 
     /** @protected */
@@ -150,7 +227,18 @@ export const BreadcrumbMixin = (superClass) =>
         const separatorNode = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE)[0];
         this.__customSeparatorNode = separatorNode || undefined;
         this.__distributeSeparators();
+        this.__updateOverflowSeparator();
       });
+
+      // Set up a ResizeObserver on the list container for overflow detection
+      const list = this.shadowRoot.querySelector('#list');
+      this.__resizeObserver = new ResizeObserver(() => {
+        this.__detectOverflow();
+      });
+      this.__resizeObserver.observe(list);
+
+      // Update the overflow button separator if there is already a custom separator
+      this.__updateOverflowSeparator();
     }
 
     /**
@@ -172,6 +260,7 @@ export const BreadcrumbMixin = (superClass) =>
       this.__updateCurrentItems();
       this.__updateFirstAttribute();
       this.__distributeSeparators();
+      this.__detectOverflow();
     }
 
     /**
@@ -285,6 +374,353 @@ export const BreadcrumbMixin = (superClass) =>
         items.forEach((item) => {
           item._customSeparator = undefined;
         });
+      }
+    }
+
+    /**
+     * Updates the overflow button's separator to match the custom separator
+     * (if any) or revert to the default chevron.
+     *
+     * @private
+     */
+    __updateOverflowSeparator() {
+      const overflowContainer = this.__overflowContainer;
+      if (!overflowContainer) {
+        return;
+      }
+      const separatorSpan = overflowContainer.querySelector('.separator');
+      if (!separatorSpan) {
+        return;
+      }
+
+      // Clear existing content
+      separatorSpan.textContent = '';
+
+      if (this.__customSeparatorNode) {
+        separatorSpan.appendChild(this.__customSeparatorNode.cloneNode(true));
+      } else {
+        separatorSpan.textContent = '\u203A';
+      }
+    }
+
+    /**
+     * Detects whether breadcrumb items overflow the list container and
+     * collapses intermediate items as needed. Keeps the first item and
+     * as many trailing items as fit, hiding intermediate items with the
+     * `overflow-hidden` attribute.
+     *
+     * @private
+     */
+    __detectOverflow() {
+      const list = this.shadowRoot && this.shadowRoot.querySelector('#list');
+      const overflowContainer = this.__overflowContainer;
+      if (!list || !overflowContainer) {
+        return;
+      }
+
+      const items = this._items;
+      if (items.length === 0) {
+        overflowContainer.hidden = true;
+        return;
+      }
+
+      // Step 1: Restore all items and hide the overflow button
+      items.forEach((item) => {
+        item.removeAttribute('overflow-hidden');
+      });
+      overflowContainer.hidden = true;
+
+      // Step 2: Check if items overflow the container
+      if (list.scrollWidth <= list.clientWidth) {
+        // No overflow, nothing to do
+        return;
+      }
+
+      // Step 3: Show the overflow button so its width is included in calculations
+      overflowContainer.hidden = false;
+
+      // Step 4: Hide items from second to second-to-last, then reveal trailing items
+      // until the container no longer overflows.
+      // Always keep the first item visible. Collapse from index 1 onward.
+      if (items.length <= 1) {
+        // Only one item, nothing to collapse
+        overflowContainer.hidden = true;
+        return;
+      }
+
+      // Hide all intermediate items (everything except the first)
+      for (let i = 1; i < items.length; i++) {
+        items[i].setAttribute('overflow-hidden', '');
+      }
+
+      // Reveal trailing items one by one (from the last toward the second)
+      for (let i = items.length - 1; i >= 1; i--) {
+        items[i].removeAttribute('overflow-hidden');
+
+        if (list.scrollWidth > list.clientWidth) {
+          // This item doesn't fit, hide it again
+          items[i].setAttribute('overflow-hidden', '');
+          break;
+        }
+      }
+
+      // If no items are hidden, hide the overflow button
+      const hiddenItems = items.filter((item) => item.hasAttribute('overflow-hidden'));
+      if (hiddenItems.length === 0) {
+        overflowContainer.hidden = true;
+      }
+    }
+
+    /**
+     * Handles click on the overflow button. Opens or closes the overlay.
+     *
+     * @param {Event} event
+     * @private
+     */
+    __onOverflowButtonClick(event) {
+      event.stopPropagation();
+      if (this.__overlayOpened) {
+        this.__closeOverlay();
+      } else {
+        this.__openOverlay();
+      }
+    }
+
+    /**
+     * Handles keydown on the overflow button.
+     *
+     * @param {KeyboardEvent} event
+     * @private
+     */
+    __onOverflowButtonKeydown(event) {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        if (!this.__overlayOpened) {
+          this.__openOverlay();
+          // Focus the first menu item after the overlay opens
+          requestAnimationFrame(() => {
+            this.__focusFirstOverlayItem();
+          });
+        }
+      }
+    }
+
+    /**
+     * Opens the overflow overlay and populates it with collapsed items.
+     *
+     * @private
+     */
+    __openOverlay() {
+      const overlay = this.__overlay;
+      if (!overlay) {
+        return;
+      }
+
+      const items = this._items;
+      const collapsedItems = items.filter((item) => item.hasAttribute('overflow-hidden'));
+
+      if (collapsedItems.length === 0) {
+        return;
+      }
+
+      // Build the overlay content
+      this.__renderOverlayContent(collapsedItems);
+
+      this.__overlayOpened = true;
+      this.requestUpdate();
+    }
+
+    /**
+     * Closes the overflow overlay.
+     *
+     * @private
+     */
+    __closeOverlay() {
+      this.__overlayOpened = false;
+      this.requestUpdate();
+
+      // Clear overlay content after closing
+      const overlay = this.__overlay;
+      if (overlay) {
+        // Remove menu items from the overlay
+        const content = overlay.querySelector('[role="menu"]') || overlay;
+        while (content.firstChild) {
+          content.removeChild(content.firstChild);
+        }
+      }
+    }
+
+    /**
+     * Renders the content of the overflow overlay with collapsed items.
+     *
+     * @param {HTMLElement[]} collapsedItems
+     * @private
+     */
+    __renderOverlayContent(collapsedItems) {
+      const overlay = this.__overlay;
+      if (!overlay) {
+        return;
+      }
+
+      // Clear existing content
+      while (overlay.firstChild) {
+        overlay.removeChild(overlay.firstChild);
+      }
+
+      collapsedItems.forEach((item) => {
+        const label = item.textContent.trim();
+        const path = item.path;
+        const isDisabled = item.disabled;
+
+        let menuEntry;
+        if (isDisabled || path == null) {
+          // Disabled items render as non-link elements
+          menuEntry = document.createElement('span');
+          menuEntry.setAttribute('role', 'menuitem');
+          if (isDisabled) {
+            menuEntry.setAttribute('aria-disabled', 'true');
+          }
+          menuEntry.setAttribute('tabindex', '-1');
+          menuEntry.textContent = label;
+        } else {
+          // Normal items render as links
+          menuEntry = document.createElement('a');
+          menuEntry.setAttribute('role', 'menuitem');
+          menuEntry.setAttribute('href', path);
+          menuEntry.setAttribute('tabindex', '-1');
+          menuEntry.textContent = label;
+          menuEntry.addEventListener('click', () => {
+            this.__closeOverlay();
+            // Return focus to overflow button
+            const btn = this.__overflowButton;
+            if (btn) {
+              btn.focus();
+            }
+          });
+        }
+
+        menuEntry.addEventListener('keydown', (e) => {
+          this.__onOverlayItemKeydown(e);
+        });
+
+        overlay.appendChild(menuEntry);
+      });
+    }
+
+    /**
+     * Handles keydown events within the overlay menu items.
+     *
+     * @param {KeyboardEvent} event
+     * @private
+     */
+    __onOverlayItemKeydown(event) {
+      const overlay = this.__overlay;
+      if (!overlay) {
+        return;
+      }
+
+      const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]'));
+      const currentIndex = menuItems.indexOf(event.target);
+
+      switch (event.key) {
+        case 'ArrowDown': {
+          event.preventDefault();
+          const nextIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
+          menuItems[nextIndex].focus();
+          break;
+        }
+        case 'ArrowUp': {
+          event.preventDefault();
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
+          menuItems[prevIndex].focus();
+          break;
+        }
+        case 'Escape':
+          event.preventDefault();
+          this.__closeOverlay();
+          // Return focus to overflow button
+          if (this.__overflowButton) {
+            this.__overflowButton.focus();
+          }
+          break;
+        case 'Home': {
+          event.preventDefault();
+          menuItems[0].focus();
+          break;
+        }
+        case 'End': {
+          event.preventDefault();
+          menuItems[menuItems.length - 1].focus();
+          break;
+        }
+        // Enter is handled natively for <a> elements, just close the overlay
+        case 'Enter':
+          this.__closeOverlay();
+          if (this.__overflowButton) {
+            this.__overflowButton.focus();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+
+    /**
+     * Focuses the first item in the overlay.
+     *
+     * @private
+     */
+    __focusFirstOverlayItem() {
+      const overlay = this.__overlay;
+      if (!overlay) {
+        return;
+      }
+      const firstItem = overlay.querySelector('[role="menuitem"]');
+      if (firstItem) {
+        firstItem.focus();
+      }
+    }
+
+    /**
+     * Handles the overlay escape press event.
+     *
+     * @param {Event} event
+     * @private
+     */
+    __onOverlayEscapePress(event) {
+      event.preventDefault();
+      this.__closeOverlay();
+      if (this.__overflowButton) {
+        this.__overflowButton.focus();
+      }
+    }
+
+    /**
+     * Handles the overlay outside press event (click outside).
+     *
+     * @param {Event} event
+     * @private
+     */
+    __onOverlayOutsidePress(event) {
+      // Check if the click was on the overflow button; if so, let the button handle it
+      const path = event.detail.sourceEvent.composedPath();
+      if (path.includes(this.__overflowButton)) {
+        event.preventDefault();
+        return;
+      }
+      this.__closeOverlay();
+    }
+
+    /**
+     * Handles the overlay close event. Ensures overlay state is synced.
+     *
+     * @param {Event} event
+     * @private
+     */
+    __onOverlayClose(_event) {
+      if (this.__overlayOpened) {
+        this.__overlayOpened = false;
+        this.requestUpdate();
       }
     }
   };

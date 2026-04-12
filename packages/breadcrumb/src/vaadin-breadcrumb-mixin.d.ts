@@ -18,6 +18,10 @@ export interface BreadcrumbItemDefinition {
   disabled?: boolean;
 }
 
+export interface BreadcrumbI18n {
+  overflow?: string;
+}
+
 export declare class BreadcrumbMixinClass {
   /**
    * A change to this property triggers an update of the current item in the breadcrumb.
@@ -38,4 +42,18 @@ export declare class BreadcrumbMixinClass {
    * generated items are removed.
    */
   items: BreadcrumbItemDefinition[] | null | undefined;
+
+  /**
+   * The object used to localize this component.
+   * To change the default localization, replace the entire `i18n` object with a
+   * custom one, providing all expected properties.
+   *
+   * The object has the following JSON structure and default values:
+   * ```
+   * {
+   *   overflow: 'Show more'
+   * }
+   * ```
+   */
+  i18n: BreadcrumbI18n;
 }
