@@ -26,6 +26,15 @@ export const breadcrumbItemStyles = css`
     white-space: nowrap;
   }
 
+  [part='separator'] {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :host([first]) [part='separator'] {
+    display: none;
+  }
+
   :host([disabled]) [part='link'] {
     pointer-events: none;
   }

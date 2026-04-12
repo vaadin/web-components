@@ -30,6 +30,7 @@ import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-style
  *
  * Part name   | Description
  * ------------|-------------
+ * `separator` | The separator region rendered before the item's link. Hidden on the first item.
  * `link`      | The `<a>` element. Non-interactive when `current`, `disabled`, or `path` is unset.
  *
  * The following state attributes are available for styling:
@@ -79,6 +80,18 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
         readOnly: true,
         reflectToAttribute: true,
       },
+
+      /**
+       * Custom separator DOM node set by the container. When set, replaces
+       * the default chevron character in the separator region.
+       *
+       * @type {Node | undefined}
+       * @protected
+       */
+      _customSeparator: {
+        type: Object,
+        attribute: false,
+      },
     };
   }
 
@@ -114,6 +127,7 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
   /** @protected */
   render() {
     return html`
+      <span part="separator" aria-hidden="true" id="separator">${this._customSeparator ? nothing : '\u203A'}</span>
       <a
         part="link"
         id="link"
@@ -131,12 +145,32 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
    * @protected
    * @override
    */
+  updated(changedProperties) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('_customSeparator')) {
+      this.__updateCustomSeparator();
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
   firstUpdated() {
     super.firstUpdated();
 
     // Set default role if not provided
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'listitem');
+    }
+  }
+
+  /** @private */
+  __updateCustomSeparator() {
+    const separator = this.shadowRoot.querySelector('#separator');
+    if (this._customSeparator) {
+      separator.appendChild(this._customSeparator);
     }
   }
 }

@@ -182,6 +182,67 @@ describe('vaadin-breadcrumb-item', () => {
     });
   });
 
+  describe('separator', () => {
+    let separator: HTMLSpanElement;
+
+    beforeEach(async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      separator = item.shadowRoot!.querySelector('span[part="separator"]')!;
+    });
+
+    it('should render a <span part="separator"> before the link', () => {
+      expect(separator).to.be.ok;
+      expect(separator.localName).to.equal('span');
+      // Separator should come before the link in the shadow DOM
+      const link = item.shadowRoot!.querySelector('a[part="link"]')!;
+      expect(separator.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING).to.be.ok;
+    });
+
+    it('should contain the default chevron character', () => {
+      expect(separator.textContent).to.equal('\u203A');
+    });
+
+    it('should have aria-hidden="true"', () => {
+      expect(separator.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should replace default chevron when _customSeparator is set with a DOM node', async () => {
+      const customNode = document.createElement('span');
+      customNode.textContent = '/';
+      (item as any)._customSeparator = customNode;
+      await nextRender();
+      expect(separator.contains(customNode)).to.be.true;
+      expect(separator.textContent).to.equal('/');
+    });
+
+    it('should restore default chevron when _customSeparator is cleared', async () => {
+      const customNode = document.createElement('span');
+      customNode.textContent = '/';
+      (item as any)._customSeparator = customNode;
+      await nextRender();
+      expect(separator.textContent).to.equal('/');
+      (item as any)._customSeparator = undefined;
+      await nextRender();
+      expect(separator.textContent).to.equal('\u203A');
+    });
+
+    it('should hide separator when the first attribute is set', async () => {
+      item.setAttribute('first', '');
+      await nextRender();
+      expect(getComputedStyle(separator).display).to.equal('none');
+    });
+
+    it('should show separator when the first attribute is removed', async () => {
+      item.setAttribute('first', '');
+      await nextRender();
+      expect(getComputedStyle(separator).display).to.equal('none');
+      item.removeAttribute('first');
+      await nextRender();
+      expect(getComputedStyle(separator).display).not.to.equal('none');
+    });
+  });
+
   describe('accessibility', () => {
     beforeEach(async () => {
       item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
