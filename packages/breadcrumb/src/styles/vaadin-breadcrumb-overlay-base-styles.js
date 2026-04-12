@@ -28,8 +28,30 @@ export const breadcrumbOverlayStyles = css`
     background: var(--vaadin-overlay-hover-background, rgba(0, 0, 0, 0.04));
   }
 
+  [part='content'] a:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: -1px;
+  }
+
   [part='content'] span[aria-disabled='true'] {
     opacity: 0.5;
     cursor: default;
+  }
+
+  @media (forced-colors: active) {
+    [part='content'] a {
+      color: LinkText;
+    }
+
+    [part='content'] a:hover,
+    [part='content'] a:focus {
+      background: Highlight;
+      color: HighlightText;
+    }
+
+    [part='content'] span[aria-disabled='true'] {
+      color: GrayText;
+      opacity: 1;
+    }
   }
 `;

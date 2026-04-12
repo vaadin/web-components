@@ -23,6 +23,8 @@ export const breadcrumbSlotStyles = css`
 export const breadcrumbStyles = css`
   :host {
     display: block;
+    font-size: var(--vaadin-breadcrumb-font-size, inherit);
+    color: var(--vaadin-breadcrumb-text-color, var(--vaadin-text-color));
   }
 
   :host([hidden]) {
@@ -35,6 +37,7 @@ export const breadcrumbStyles = css`
     align-items: center;
     margin: 0;
     padding: 0;
+    gap: var(--vaadin-breadcrumb-gap, var(--vaadin-gap-xs));
     overflow: hidden;
   }
 
@@ -52,6 +55,7 @@ export const breadcrumbStyles = css`
   #overflow .separator {
     display: inline-flex;
     align-items: center;
+    color: var(--vaadin-breadcrumb-separator-color, var(--vaadin-text-color-secondary));
   }
 
   :host([dir='rtl']) #overflow .separator {
@@ -61,18 +65,29 @@ export const breadcrumbStyles = css`
   [part='overflow-button'] {
     background: none;
     border: none;
-    cursor: pointer;
+    cursor: var(--vaadin-clickable-cursor);
     padding: 0;
     font: inherit;
     color: inherit;
   }
 
+  [part='overflow-button']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+  }
+
+  /* Mobile mode: back-link */
   [part='back-link'] {
     display: inline-flex;
     align-items: center;
-    text-decoration: none;
+    text-decoration: underline;
     color: inherit;
     font: inherit;
+  }
+
+  [part='back-link']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
   }
 
   [part='back-arrow'] {
@@ -85,5 +100,23 @@ export const breadcrumbStyles = css`
 
   :host([dir='rtl']) [part='back-arrow'] {
     scale: -1;
+  }
+
+  @media (forced-colors: active) {
+    #overflow .separator {
+      color: CanvasText;
+    }
+
+    [part='overflow-button']:focus-visible {
+      outline-color: Highlight;
+    }
+
+    [part='back-link'] {
+      color: LinkText;
+    }
+
+    [part='back-link']:focus-visible {
+      outline-color: Highlight;
+    }
   }
 `;
