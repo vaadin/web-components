@@ -9,6 +9,7 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-styles.js';
@@ -141,6 +142,12 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
     `;
   }
 
+  constructor() {
+    super();
+
+    this.__onResize = this.__onResize.bind(this);
+  }
+
   /**
    * @protected
    * @override
@@ -164,6 +171,24 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'listitem');
     }
+
+    // Set up truncation detection via ResizeObserver
+    const link = this.shadowRoot.querySelector('#link');
+    this.__resizeObserver = new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver.observe(link);
+
+    // Set up tooltip controller
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    if (this.__resizeObserver) {
+      this.__resizeObserver.disconnect();
+    }
   }
 
   /** @private */
@@ -171,6 +196,16 @@ class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(PolylitMix
     const separator = this.shadowRoot.querySelector('#separator');
     if (this._customSeparator) {
       separator.appendChild(this._customSeparator);
+    }
+  }
+
+  /** @private */
+  __onResize() {
+    const link = this.shadowRoot.querySelector('#link');
+    if (link.scrollWidth > link.clientWidth) {
+      link.setAttribute('title', this.textContent.trim());
+    } else {
+      link.removeAttribute('title');
     }
   }
 }

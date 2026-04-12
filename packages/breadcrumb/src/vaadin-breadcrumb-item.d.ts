@@ -17,6 +17,31 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *   <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
  * </vaadin-breadcrumb>
  * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name   | Description
+ * ------------|-------------
+ * `separator` | The separator region rendered before the item's link. Hidden on the first item.
+ * `link`      | The `<a>` element. Non-interactive when `current`, `disabled`, or `path` is unset.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute     | Description
+ * --------------|-------------
+ * `disabled`    | Set when the element is disabled.
+ * `current`     | Set when the element represents the current page.
+ * `has-tooltip` | Set when the element has a slotted tooltip.
+ *
+ * The following custom CSS properties are available:
+ *
+ * Custom CSS property                    | Description                                         | Default
+ * :--------------------------------------|:----------------------------------------------------|:-------
+ * `--vaadin-breadcrumb-item-max-width`   | Maximum width before text truncation with ellipsis. | `12em`
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**

@@ -24,6 +24,7 @@ export const breadcrumbItemStyles = css`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: var(--vaadin-breadcrumb-item-max-width, 12em);
   }
 
   [part='separator'] {

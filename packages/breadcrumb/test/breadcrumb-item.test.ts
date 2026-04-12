@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-breadcrumb-item.js';
 import type { BreadcrumbItem } from '../src/vaadin-breadcrumb-item.js';
 
@@ -251,6 +251,79 @@ describe('vaadin-breadcrumb-item', () => {
 
     it('should set role="listitem" on the host', () => {
       expect(item.getAttribute('role')).to.equal('listitem');
+    });
+  });
+
+  describe('truncation', () => {
+    beforeEach(async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      link = item.shadowRoot!.querySelector('a[part="link"]')!;
+    });
+
+    it('should have CSS text-overflow set to ellipsis on the link', () => {
+      expect(getComputedStyle(link).textOverflow).to.equal('ellipsis');
+    });
+
+    it('should have CSS overflow set to hidden on the link', () => {
+      expect(getComputedStyle(link).overflow).to.equal('hidden');
+    });
+
+    it('should have CSS white-space set to nowrap on the link', () => {
+      expect(getComputedStyle(link).whiteSpace).to.equal('nowrap');
+    });
+
+    it('should not have title when text fits within max width', async () => {
+      // Default short text "Home" should fit
+      await aTimeout(100);
+      expect(link.hasAttribute('title')).to.be.false;
+    });
+
+    it('should set title on the link when text is truncated', async () => {
+      const longText = 'This is a very long breadcrumb item text that should definitely exceed the max width';
+      item.textContent = longText;
+      await nextRender();
+      // Wait for ResizeObserver callback
+      await aTimeout(100);
+      expect(link.getAttribute('title')).to.equal(longText);
+    });
+
+    it('should remove title when text no longer truncated', async () => {
+      const longText = 'This is a very long breadcrumb item text that should definitely exceed the max width';
+      item.textContent = longText;
+      await nextRender();
+      await aTimeout(100);
+      expect(link.getAttribute('title')).to.equal(longText);
+
+      item.textContent = 'Short';
+      await nextRender();
+      await aTimeout(100);
+      expect(link.hasAttribute('title')).to.be.false;
+    });
+
+    it('should respect --vaadin-breadcrumb-item-max-width custom property', async () => {
+      item.style.setProperty('--vaadin-breadcrumb-item-max-width', '3em');
+      item.textContent = 'Medium length text';
+      await nextRender();
+      await aTimeout(100);
+      expect(link.getAttribute('title')).to.equal('Medium length text');
+    });
+  });
+
+  describe('tooltip', () => {
+    beforeEach(async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      link = item.shadowRoot!.querySelector('a[part="link"]')!;
+    });
+
+    it('should render a slot with name "tooltip"', () => {
+      const tooltipSlot = item.shadowRoot!.querySelector('slot[name="tooltip"]');
+      expect(tooltipSlot).to.be.ok;
+    });
+
+    it('should initialize TooltipController', () => {
+      expect((item as any)._tooltipController).to.be.ok;
     });
   });
 });
