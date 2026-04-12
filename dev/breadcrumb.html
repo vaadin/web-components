@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumb</title>
+    <script type="module" src="./common.js"></script>
+    <script>
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.breadcrumbComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/breadcrumb';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+
+      // Fake navigation: prevent actual navigation, log the event
+      document.querySelectorAll('vaadin-breadcrumb').forEach((bc) => {
+        bc.addEventListener('click', (e) => {
+          const link = e.composedPath().find((el) => el.localName === 'a');
+          if (link && link.hasAttribute('href')) {
+            e.preventDefault();
+          }
+        });
+      });
+
+      // Programmatic items example
+      const programmatic = document.querySelector('#programmatic');
+      programmatic.items = [
+        { label: 'Home', path: '/home' },
+        { label: 'Library', path: '/home/library' },
+        { label: 'Data', path: '/home/library/data' },
+        { label: 'Current Document' },
+      ];
+
+      // onNavigate callback example
+      const withCallback = document.querySelector('#with-callback');
+      const callbackOutput = document.querySelector('#callback-output');
+      withCallback.onNavigate = (event) => {
+        callbackOutput.textContent = `Navigated to: ${event.path} (current: ${event.current})`;
+      };
+    </script>
+    <style>
+      .example {
+        margin: 2rem 0;
+      }
+
+      .example h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+        color: #333;
+      }
+
+      .narrow {
+        width: 300px;
+        border: 1px dashed #ccc;
+        padding: 0.5rem;
+      }
+
+      .very-narrow {
+        width: 120px;
+        border: 1px dashed #ccc;
+        padding: 0.5rem;
+      }
+
+      #callback-output {
+        margin-top: 0.5rem;
+        font-family: monospace;
+        color: #666;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Breadcrumb</h2>
+
+    <div class="example">
+      <h3>Basic trail with current page</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/products/shoes">Shoes</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Running Sneakers</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="example">
+      <h3>No current page (all items have paths)</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/products/shoes">Shoes</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="example">
+      <h3>Custom separator (text)</h3>
+      <vaadin-breadcrumb>
+        <span slot="separator">/</span>
+        <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/docs">Documents</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Current File</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="example">
+      <h3>Custom separator (icon)</h3>
+      <vaadin-breadcrumb>
+        <vaadin-icon slot="separator" icon="vaadin:angle-right"></vaadin-icon>
+        <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/settings">Settings</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Profile</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="example">
+      <h3>Disabled items</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/archive" disabled>Archive</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/archive/2024">2024</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Report</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </div>
+
+    <div class="example">
+      <h3>Overflow (narrow container)</h3>
+      <div class="narrow">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products/electronics">Electronics</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products/electronics/phones">Phones</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products/electronics/phones/smartphones">Smartphones</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Galaxy S25</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Mobile mode (very narrow container)</h3>
+      <div class="very-narrow">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products/shoes">Shoes</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Sneakers</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Programmatic items (items property)</h3>
+      <vaadin-breadcrumb id="programmatic"></vaadin-breadcrumb>
+    </div>
+
+    <div class="example">
+      <h3>onNavigate callback</h3>
+      <vaadin-breadcrumb id="with-callback">
+        <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/home/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+      <div id="callback-output">Click a breadcrumb link to see the callback output</div>
+    </div>
+
+    <div class="example">
+      <h3>RTL</h3>
+      <div dir="rtl">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">الصفحة الرئيسية</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products">المنتجات</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/home/products/shoes">الأحذية</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>الحذاء الحالي</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </div>
+  </body>
+</html>
