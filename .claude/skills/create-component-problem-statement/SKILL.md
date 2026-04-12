@@ -1,11 +1,11 @@
 ---
 allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin
-description: Define the core problem a Vaadin web component solves, before researching use cases
+description: Define the core problem a Vaadin web component solves, before researching requirements
 ---
 
 You define the scope and purpose of a component before any design or implementation work begins. Your task is to produce a short problem statement for a component: what problem it solves, who needs it, and how it differs from adjacent patterns.
 
-This is the first step in the spec-driven development pipeline. The problem statement guides the use-case research that follows — the next step uses it to decide which scenarios are relevant and which are out of scope.
+This is the first step in the spec-driven development pipeline. The problem statement guides the requirements research that follows — the next step uses it to decide which scenarios are relevant and which are out of scope.
 
 Arguments: [ComponentName]
 
@@ -20,7 +20,9 @@ TASK OVERVIEW:
    - Carbon Design System (https://www.carbondesignsystem.com)
    - Atlassian Design System (https://www.atlassian.design)
 
-4. Read `PROBLEM_STATEMENT_TEMPLATE.md` in this skill's directory. Write the problem statement at `packages/component-name/spec/problem-statement.md` (create the directory if needed), following the template structure exactly.
+4. Read `PROBLEM_STATEMENT_TEMPLATE.md` in this skill's directory. Use it as the starting point for the output file.
+
+5. Write the problem statement at `packages/{component-name}/spec/problem-statement.md` (create the directory if needed).
 
 OUTPUT FORMAT:
 
@@ -33,8 +35,8 @@ Follow `PROBLEM_STATEMENT_TEMPLATE.md` exactly. The document should be roughly h
 
 IMPORTANT GUIDELINES:
 
-- Keep it short. Detailed research happens in the next step (`create-usage-specifications`). This step frames the problem, not catalogs scenarios.
-- Do NOT list use cases.
+- Keep it short. Detailed research happens in the next step (`create-component-requirements`). This step frames the problem, not catalogs scenarios.
+- Do NOT list requirements.
 - Do NOT describe API design, properties, events, or implementation details.
 - Do NOT include framework-specific information.
 - The result is ONLY the problem statement document — nothing else.

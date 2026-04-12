@@ -25,13 +25,13 @@ TASK OVERVIEW:
 
 4. Search https://github.com/vaadin-component-factory for add-ons related to the component.
 
-5. Search the Vaadin forums using WebSearch with query `site:vaadin.com/forum ComponentName`. Do NOT use WebFetch for the forum — it is a heavy web-application and WebFetch will return empty content.
+5. Search the Vaadin forums using WebSearch with query `site:vaadin.com/forum ComponentName`. Do NOT use WebFetch for the forum — it is a heavy web application and WebFetch will return empty content.
 
-6. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web-application and WebFetch will return empty content.
+6. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web application and WebFetch will return empty content.
 
 7. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on scenarios described in documentation, "when to use" guidance.
 
-8. Create the requirements document at `packages/{component-name}/spec/requirements.md` (create the directory if needed). Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly.
+8. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly.
 
 9. After drafting the core behavioral requirements, add requirements for uniformly-applicable behaviors as additional numbered items at the end of the list. Common categories include use by people with disabilities (low vision, color blindness, motor impairments, screen reader users), keyboard-only operation, use in right-to-left languages, behavior on small screens or narrow containers, and handling of long or dynamically changing text.
 
@@ -78,5 +78,5 @@ Before finalizing, check that:
 5. The first requirement is the simplest, most universal behavior.
 6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`.
 7. Concrete examples are included where they make requirements unambiguous.
-8. No requirement violates the problem statement's Differentiation section. Re-read the Differentiation entries and confirm each requirement stays within scope.
+8. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
 9. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
