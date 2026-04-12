@@ -18,7 +18,20 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * </vaadin-breadcrumb>
  * ```
  */
-declare class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
+declare class BreadcrumbItem extends DisabledMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+  /**
+   * The navigation target path. Maps to `href` on the internal `<a>` element.
+   * When `undefined`, the item is treated as non-interactive text.
+   */
+  path: string | null | undefined;
+
+  /**
+   * Whether this item represents the current page. Set by the container
+   * via `_setCurrent()`. When `true`, the link is non-interactive and
+   * receives `aria-current="page"`.
+   */
+  readonly current: boolean;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

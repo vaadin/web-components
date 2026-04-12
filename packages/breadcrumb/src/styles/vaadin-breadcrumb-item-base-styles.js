@@ -15,4 +15,22 @@ export const breadcrumbItemStyles = css`
   :host([hidden]) {
     display: none !important;
   }
+
+  [part='link'] {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :host([disabled]) [part='link'] {
+    pointer-events: none;
+  }
+
+  :host([current]) [part='link'] {
+    pointer-events: none;
+  }
 `;
