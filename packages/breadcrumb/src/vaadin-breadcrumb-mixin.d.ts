@@ -12,6 +12,12 @@ export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<BreadcrumbMixinClass> & T;
 
+export interface BreadcrumbItemDefinition {
+  label: string;
+  path?: string;
+  disabled?: boolean;
+}
+
 export declare class BreadcrumbMixinClass {
   /**
    * A change to this property triggers an update of the current item in the breadcrumb.
@@ -24,4 +30,12 @@ export declare class BreadcrumbMixinClass {
    * can update the current item.
    */
   location: unknown;
+
+  /**
+   * Programmatic item definition. When set to an array, generates
+   * `<vaadin-breadcrumb-item>` elements in light DOM, replacing any
+   * previously generated items. When set to `null` or `undefined`,
+   * generated items are removed.
+   */
+  items: BreadcrumbItemDefinition[] | null | undefined;
 }

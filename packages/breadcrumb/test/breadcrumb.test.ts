@@ -275,6 +275,127 @@ describe('vaadin-breadcrumb', () => {
     });
   });
 
+  describe('items property', () => {
+    beforeEach(async () => {
+      breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>');
+      await nextRender();
+    });
+
+    it('should generate breadcrumb-item children from items array', async () => {
+      breadcrumb.items = [
+        { label: 'Home', path: '/home' },
+        { label: 'Products', path: '/products' },
+        { label: 'Current' },
+      ];
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(items.length).to.equal(3);
+      expect(items[0].textContent).to.equal('Home');
+      expect(items[0].path).to.equal('/home');
+      expect(items[1].textContent).to.equal('Products');
+      expect(items[1].path).to.equal('/products');
+      expect(items[2].textContent).to.equal('Current');
+    });
+
+    it('should set data-breadcrumb-generated attribute on generated items', async () => {
+      breadcrumb.items = [{ label: 'Home', path: '/home' }, { label: 'Current' }];
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      items.forEach((item) => {
+        expect(item.hasAttribute('data-breadcrumb-generated')).to.be.true;
+      });
+    });
+
+    it('should set disabled attribute on items with disabled: true', async () => {
+      breadcrumb.items = [
+        { label: 'Home', path: '/home' },
+        { label: 'Disabled', path: '/disabled', disabled: true },
+        { label: 'Current' },
+      ];
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(items[0].disabled).to.be.false;
+      expect(items[1].disabled).to.be.true;
+      expect(items[2].disabled).to.be.false;
+    });
+
+    it('should not set path on items without a path', async () => {
+      breadcrumb.items = [{ label: 'Home', path: '/home' }, { label: 'Current' }];
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(items[0].path).to.equal('/home');
+      expect(items[1].path).to.be.undefined;
+    });
+
+    it('should replace previously generated items when items is set to a new array', async () => {
+      breadcrumb.items = [
+        { label: 'Home', path: '/home' },
+        { label: 'Old', path: '/old' },
+      ];
+      await nextRender();
+
+      breadcrumb.items = [{ label: 'Home', path: '/home' }, { label: 'New', path: '/new' }, { label: 'Current' }];
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(items.length).to.equal(3);
+      expect(items[1].textContent).to.equal('New');
+      expect(items[1].path).to.equal('/new');
+      expect(items[2].textContent).to.equal('Current');
+    });
+
+    it('should remove all generated items when items is set to null', async () => {
+      breadcrumb.items = [{ label: 'Home', path: '/home' }, { label: 'Current' }];
+      await nextRender();
+
+      expect(breadcrumb.querySelectorAll('vaadin-breadcrumb-item').length).to.equal(2);
+
+      breadcrumb.items = null;
+      await nextRender();
+
+      expect(breadcrumb.querySelectorAll('vaadin-breadcrumb-item').length).to.equal(0);
+    });
+
+    it('should only replace generated items, not declarative children', async () => {
+      // Start with declarative children
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      breadcrumb.items = [{ label: 'Products', path: '/products' }, { label: 'Current' }];
+      await nextRender();
+
+      const allItems = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(allItems.length).to.equal(3);
+      // The declarative child should still be there
+      expect(allItems[0].textContent!.trim()).to.equal('Home');
+      expect(allItems[0].hasAttribute('data-breadcrumb-generated')).to.be.false;
+      // The generated items follow
+      expect(allItems[1].textContent).to.equal('Products');
+      expect(allItems[1].hasAttribute('data-breadcrumb-generated')).to.be.true;
+      expect(allItems[2].textContent).to.equal('Current');
+      expect(allItems[2].hasAttribute('data-breadcrumb-generated')).to.be.true;
+
+      // Setting items to a new array only replaces generated items
+      breadcrumb.items = [{ label: 'About', path: '/about' }];
+      await nextRender();
+
+      const updatedItems = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(updatedItems.length).to.equal(2);
+      expect(updatedItems[0].textContent!.trim()).to.equal('Home');
+      expect(updatedItems[0].hasAttribute('data-breadcrumb-generated')).to.be.false;
+      expect(updatedItems[1].textContent).to.equal('About');
+      expect(updatedItems[1].hasAttribute('data-breadcrumb-generated')).to.be.true;
+    });
+  });
+
   describe('separator distribution', () => {
     describe('default separator', () => {
       it('should use the default chevron when no custom separator is provided', async () => {

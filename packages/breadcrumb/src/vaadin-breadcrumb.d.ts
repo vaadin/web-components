@@ -8,6 +8,8 @@ import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
 
+export { BreadcrumbItemDefinition } from './vaadin-breadcrumb-mixin.js';
+
 /**
  * `<vaadin-breadcrumb>` is a Web Component for displaying breadcrumb navigation.
  *

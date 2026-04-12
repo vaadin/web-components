@@ -53,6 +53,19 @@ export const BreadcrumbMixin = (superClass) =>
         location: {
           attribute: false,
         },
+
+        /**
+         * Programmatic item definition. When set to an array, generates
+         * `<vaadin-breadcrumb-item>` elements in light DOM, replacing any
+         * previously generated items. When set to `null` or `undefined`,
+         * generated items are removed.
+         *
+         * @type {Array<{label: string, path?: string, disabled?: boolean}> | null | undefined}
+         */
+        items: {
+          type: Array,
+          attribute: false,
+        },
       };
     }
 
@@ -147,6 +160,10 @@ export const BreadcrumbMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
+      if (props.has('items')) {
+        this.__generateItems();
+      }
+
       if (props.has('location')) {
         this.__updateCurrentItems();
       }
@@ -155,6 +172,40 @@ export const BreadcrumbMixin = (superClass) =>
       this.__updateCurrentItems();
       this.__updateFirstAttribute();
       this.__distributeSeparators();
+    }
+
+    /**
+     * Generates `<vaadin-breadcrumb-item>` elements from the `items` array.
+     * Previously generated items are removed before new ones are created.
+     * When `items` is null or undefined, all generated items are removed.
+     *
+     * @private
+     */
+    __generateItems() {
+      // Remove previously generated items
+      this.querySelectorAll('vaadin-breadcrumb-item[data-breadcrumb-generated]').forEach((item) => {
+        this.removeChild(item);
+      });
+
+      if (!this.items) {
+        return;
+      }
+
+      this.items.forEach((entry) => {
+        const item = document.createElement('vaadin-breadcrumb-item');
+        item.textContent = entry.label;
+        item.setAttribute('data-breadcrumb-generated', '');
+
+        if (entry.path != null) {
+          item.path = entry.path;
+        }
+
+        if (entry.disabled) {
+          item.disabled = true;
+        }
+
+        this.appendChild(item);
+      });
     }
 
     /**
