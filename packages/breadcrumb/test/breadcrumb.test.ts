@@ -71,6 +71,169 @@ describe('vaadin-breadcrumb', () => {
     it('should have aria-label="Breadcrumb"', () => {
       expect(breadcrumb.getAttribute('aria-label')).to.equal('Breadcrumb');
     });
+
+    it('should not overwrite a developer-provided aria-label', async () => {
+      const custom = fixtureSync('<vaadin-breadcrumb aria-label="Custom nav"></vaadin-breadcrumb>');
+      await nextRender();
+      expect(custom.getAttribute('aria-label')).to.equal('Custom nav');
+    });
+
+    it('should have role="list" on the list container', () => {
+      const list = breadcrumb.shadowRoot!.querySelector('[part="list"]');
+      expect(list).to.be.ok;
+      expect(list!.getAttribute('role')).to.equal('list');
+    });
+
+    it('should have role="listitem" on each item', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      items.forEach((item) => {
+        expect(item.getAttribute('role')).to.equal('listitem');
+      });
+    });
+
+    it('should set aria-current="page" on the link when item is current', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      const currentLink = items[1].shadowRoot!.querySelector('a[part="link"]')!;
+      expect(currentLink.getAttribute('aria-current')).to.equal('page');
+    });
+
+    it('should not have aria-current on the link when item is not current', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      const nonCurrentLink = items[0].shadowRoot!.querySelector('a[part="link"]')!;
+      expect(nonCurrentLink.hasAttribute('aria-current')).to.be.false;
+    });
+
+    it('should set aria-disabled="true" on the host when item is disabled', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/home" disabled>Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+      expect(items[0].getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('should have aria-haspopup="true" on the overflow button', () => {
+      const button = breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLElement;
+      expect(button.getAttribute('aria-haspopup')).to.equal('true');
+    });
+
+    it('should have aria-expanded="false" on the overflow button when overlay is closed', () => {
+      const button = breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLElement;
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should have aria-expanded="true" on the overflow button when overlay is open', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 150px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const button = breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLElement;
+      button.click();
+      await nextRender();
+
+      expect(button.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should set aria-expanded back to "false" on the overflow button when overlay is closed', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 150px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const button = breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLButtonElement;
+      button.click();
+      await nextRender();
+      expect(button.getAttribute('aria-expanded')).to.equal('true');
+
+      // Close the overlay by pressing Escape on a menu item
+      const overlay = breadcrumb.shadowRoot!.querySelector('#overlay') as HTMLElement;
+      const menuItem = overlay.querySelector('[role="menuitem"]') as HTMLElement;
+      menuItem.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true }));
+      await nextRender();
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should have role="menu" on the overflow overlay content', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 150px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const overlay = breadcrumb.shadowRoot!.querySelector('#overlay') as HTMLElement;
+      const menuContainer = overlay.shadowRoot!.querySelector('[role="menu"]');
+      expect(menuContainer).to.be.ok;
+    });
+
+    it('should have role="menuitem" on overflow menu entries', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="width: 150px;">
+          <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const button = breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLElement;
+      button.click();
+      await nextRender();
+
+      const overlay = breadcrumb.shadowRoot!.querySelector('#overlay') as HTMLElement;
+      const menuItems = overlay.querySelectorAll('[role="menuitem"]');
+      expect(menuItems.length).to.be.greaterThan(0);
+      menuItems.forEach((menuItem) => {
+        expect(menuItem.getAttribute('role')).to.equal('menuitem');
+      });
+    });
   });
 
   describe('current-item detection', () => {

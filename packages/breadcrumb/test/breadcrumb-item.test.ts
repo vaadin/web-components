@@ -247,10 +247,32 @@ describe('vaadin-breadcrumb-item', () => {
     beforeEach(async () => {
       item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
       await nextRender();
+      link = item.shadowRoot!.querySelector('a[part="link"]')!;
     });
 
     it('should set role="listitem" on the host', () => {
       expect(item.getAttribute('role')).to.equal('listitem');
+    });
+
+    it('should set aria-current="page" on the link when current is true', async () => {
+      (item as any)._setCurrent(true);
+      await nextRender();
+      expect(link.getAttribute('aria-current')).to.equal('page');
+    });
+
+    it('should not have aria-current on the link when current is false', () => {
+      expect(link.hasAttribute('aria-current')).to.be.false;
+    });
+
+    it('should set aria-disabled="true" on the host when disabled', async () => {
+      item.disabled = true;
+      await nextRender();
+      expect(item.getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('should have aria-hidden="true" on the separator', () => {
+      const separator = item.shadowRoot!.querySelector('[part="separator"]')!;
+      expect(separator.getAttribute('aria-hidden')).to.equal('true');
     });
   });
 
