@@ -1352,6 +1352,255 @@ describe('vaadin-breadcrumb', () => {
     });
   });
 
+  describe('keyboard navigation', () => {
+    function getOverflowButton(bc: Breadcrumb): HTMLButtonElement {
+      return bc.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLButtonElement;
+    }
+
+    function getOverlay(bc: Breadcrumb): HTMLElement {
+      return bc.shadowRoot!.querySelector('#overlay') as HTMLElement;
+    }
+
+    function getItemLink(item: BreadcrumbItem): HTMLAnchorElement {
+      return item.shadowRoot!.querySelector('a[part="link"]') as HTMLAnchorElement;
+    }
+
+    describe('tab order', () => {
+      it('should make interactive item links focusable via Tab (tabindex="0")', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        // Interactive items have tabindex="0"
+        expect(getItemLink(items[0]).getAttribute('tabindex')).to.equal('0');
+        expect(getItemLink(items[1]).getAttribute('tabindex')).to.equal('0');
+      });
+
+      it('should exclude current items from Tab order (no tabindex)', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        expect(getItemLink(items[1]).hasAttribute('tabindex')).to.be.false;
+      });
+
+      it('should exclude disabled items from Tab order (tabindex="-1")', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home" disabled>Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        expect(getItemLink(items[0]).getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should exclude items without path from Tab order (no tabindex)', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>No Path</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+
+        const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+        expect(getItemLink(items[1]).hasAttribute('tabindex')).to.be.false;
+      });
+
+      it('should make the overflow button reachable via Tab when visible', async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb style="width: 150px;">
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+        await aTimeout(50);
+
+        const button = getOverflowButton(breadcrumb);
+        expect(button.getAttribute('tabindex')).to.equal('0');
+        expect(button.parentElement!.hidden).to.be.false;
+      });
+    });
+
+    describe('overflow button keyboard', () => {
+      beforeEach(async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb style="width: 150px;">
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+        await aTimeout(50);
+      });
+
+      it('should open the dropdown menu when pressing Enter on the overflow button', async () => {
+        const button = getOverflowButton(breadcrumb);
+        button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, composed: true }));
+        await nextRender();
+
+        const overlay = getOverlay(breadcrumb);
+        expect((overlay as any).opened).to.be.true;
+      });
+
+      it('should open the dropdown menu when pressing Space on the overflow button', async () => {
+        const button = getOverflowButton(breadcrumb);
+        button.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true, composed: true }));
+        await nextRender();
+
+        const overlay = getOverlay(breadcrumb);
+        expect((overlay as any).opened).to.be.true;
+      });
+
+      it('should open the dropdown menu when pressing ArrowDown on the overflow button', async () => {
+        const button = getOverflowButton(breadcrumb);
+        button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, composed: true }));
+        await nextRender();
+
+        const overlay = getOverlay(breadcrumb);
+        expect((overlay as any).opened).to.be.true;
+      });
+
+      it('should focus the first menu item after opening with ArrowDown', async () => {
+        const button = getOverflowButton(breadcrumb);
+
+        // Spy on HTMLElement.prototype.focus to capture the call
+        const focusCalls: HTMLElement[] = [];
+        const origFocus = HTMLElement.prototype.focus;
+        HTMLElement.prototype.focus = function (...args) {
+          focusCalls.push(this);
+          return origFocus.apply(this, args);
+        };
+
+        button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, composed: true }));
+        await nextRender();
+        await aTimeout(50);
+
+        HTMLElement.prototype.focus = origFocus;
+
+        const overlay = getOverlay(breadcrumb);
+        const firstMenuItem = overlay.querySelector('[role="menuitem"]') as HTMLElement;
+        expect(focusCalls).to.include(firstMenuItem);
+      });
+    });
+
+    describe('dropdown menu keyboard', () => {
+      let overlay: HTMLElement;
+
+      function keydown(target: HTMLElement, key: string) {
+        target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, composed: true }));
+      }
+
+      beforeEach(async () => {
+        breadcrumb = fixtureSync(`
+          <vaadin-breadcrumb style="width: 150px;">
+            <vaadin-breadcrumb-item path="/home">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item path="/category">Category</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        `);
+        await nextRender();
+        await aTimeout(50);
+
+        // Open the overlay
+        const button = getOverflowButton(breadcrumb);
+        button.click();
+        await nextRender();
+
+        overlay = getOverlay(breadcrumb);
+      });
+
+      it('should move focus to the next menu item on Arrow Down', () => {
+        const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+        expect(menuItems.length).to.be.greaterThan(1);
+
+        // Focus the first item and advance once to position at index 1
+        menuItems[0].focus();
+        keydown(menuItems[0], 'ArrowDown');
+
+        // Spy on the next target and dispatch again
+        const focusSpy = sinon.spy(menuItems[1], 'focus');
+        keydown(menuItems[0], 'ArrowDown');
+        expect(focusSpy.calledOnce).to.be.true;
+      });
+
+      it('should move focus to the previous menu item on Arrow Up', () => {
+        const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+        expect(menuItems.length).to.be.greaterThan(1);
+
+        menuItems[1].focus();
+
+        const focusSpy = sinon.spy(menuItems[0], 'focus');
+        keydown(menuItems[1], 'ArrowUp');
+        expect(focusSpy.calledOnce).to.be.true;
+      });
+
+      it('should wrap focus from the last item to the first on Arrow Down', () => {
+        const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+        const lastItem = menuItems[menuItems.length - 1];
+        lastItem.focus();
+
+        const focusSpy = sinon.spy(menuItems[0], 'focus');
+        keydown(lastItem, 'ArrowDown');
+        expect(focusSpy.calledOnce).to.be.true;
+      });
+
+      it('should wrap focus from the first item to the last on Arrow Up', () => {
+        const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+        menuItems[0].focus();
+
+        const lastItem = menuItems[menuItems.length - 1];
+        const focusSpy = sinon.spy(lastItem, 'focus');
+        keydown(menuItems[0], 'ArrowUp');
+        expect(focusSpy.calledOnce).to.be.true;
+      });
+
+      it('should close the dropdown and return focus to the overflow button on Escape', async () => {
+        const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+        menuItems[0].focus();
+
+        keydown(menuItems[0], 'Escape');
+        await nextRender();
+
+        expect((overlay as any).opened).to.be.false;
+        const button = getOverflowButton(breadcrumb);
+        expect(breadcrumb.shadowRoot!.activeElement).to.equal(button);
+      });
+
+      it('should close the dropdown when pressing Enter on a focused menu item', async () => {
+        const menuItems = Array.from(overlay.querySelectorAll('[role="menuitem"]')) as HTMLElement[];
+        const link = menuItems.find((el) => el.tagName.toLowerCase() === 'a') as HTMLElement;
+        expect(link).to.be.ok;
+
+        link.focus();
+        keydown(link, 'Enter');
+        await nextRender();
+
+        expect((overlay as any).opened).to.be.false;
+      });
+    });
+  });
+
   describe('RTL support', () => {
     beforeEach(() => {
       document.documentElement.setAttribute('dir', 'rtl');
