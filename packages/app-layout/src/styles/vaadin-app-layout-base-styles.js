@@ -17,6 +17,7 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
     --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
+    --vaadin-app-layout-drawer-offset-left: 0px;
     padding-top: max(var(--vaadin-app-layout-navbar-offset-top), var(--safe-area-inset-top));
     padding-bottom: max(var(--vaadin-app-layout-navbar-offset-bottom), var(--safe-area-inset-bottom));
   }
@@ -137,19 +138,8 @@ export const appLayoutStyles = css`
     padding-right: var(--safe-area-inset-right);
   }
 
-  :host([has-navbar]),
   :host([has-navbar]:not([overlay])) [part='drawer'] {
     --safe-area-inset-top: 0px;
-  }
-
-  :host([has-drawer]:not([overlay])[drawer-opened]) {
-    &:dir(ltr) {
-      --safe-area-inset-left: 0px;
-    }
-
-    &:dir(rtl) {
-      --safe-area-inset-right: 0px;
-    }
   }
 
   :host([drawer-opened]) [part='drawer'] {
