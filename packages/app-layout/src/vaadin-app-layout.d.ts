@@ -141,7 +141,7 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  *
  * To use the "content scrolling", in case of the content of the page relies on a pre-defined height (for instance,
  * it has a `height:100%`), then the developer can set `height: 100%` to both `html` and `body`.
- * That will make the content element of app layout scrollable.
+ * That makes the content part of App Layout scrollable.
  * In that case, the toolbars on mobile device won't collapse.
  *
  * @fires {CustomEvent} drawer-opened-changed - Fired when the `drawerOpened` property changes.
