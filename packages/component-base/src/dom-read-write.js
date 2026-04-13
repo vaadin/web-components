@@ -20,13 +20,12 @@ function matchesFilter(entry, element, id) {
 }
 
 /**
- * Flushes pending DOM write callbacks, executing and removing them from the queue.
- * When called without arguments, flushes all pending writes. When called with
- * an element, only flushes writes for that element. The `id` option further
- * narrows the match to a specific write within the element.
+ * Flushes pending DOM read and write callbacks, executing and removing them
+ * from the queues. Reads are executed before writes. When called without
+ * arguments, flushes all pending tasks. When called with an element, only
+ * flushes tasks scheduled for that element.
  *
- * @param {HTMLElement} [element] - If provided, only flush writes scheduled for this element.
- * @param {{ id: string }} [options] - If provided, only flush writes with a matching id.
+ * @param {HTMLElement} [element] - If provided, only flush tasks scheduled for this element.
  */
 export function flush(element) {
   const readTasks = [];
@@ -52,10 +51,11 @@ export function flush(element) {
 }
 
 /**
- * Cancels pending DOM write callbacks, removing them from the queue without executing.
- * When called with an element, only cancels writes for that element.
+ * Cancels pending DOM read and write callbacks, removing them from the queues
+ * without executing. When called with an element, only cancels tasks scheduled
+ * for that element.
  *
- * @param {HTMLElement} [element] - If provided, only cancel writes scheduled for this element.
+ * @param {HTMLElement} [element] - If provided, only cancel tasks scheduled for this element.
  */
 export function cancel(element) {
   readTaskQueue = readTaskQueue.filter((entry) => !matchesFilter(entry, element));
@@ -63,11 +63,11 @@ export function cancel(element) {
 }
 
 /**
- * Schedules a DOM write callback to be executed in the next animation frame.
- * If a write with the same element and id already exists, it is replaced.
+ * Schedules DOM read and/or write callbacks for the given element. Reads are
+ * batched and executed before writes to avoid layout thrashing.
  *
- * @param {HTMLElement} element - The element associated with this write.
- * @param {{ read?: Function, write?: Function }} callbacks - The read and write callbacks to schedule.
+ * @param {HTMLElement} element - The element associated with these tasks.
+ * @param {{ read?: Function, write?: Function }} callbacks - The read and/or write callbacks to schedule.
  */
 export function schedule(element, { read, write }) {
   if (read) {
