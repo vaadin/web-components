@@ -6,7 +6,7 @@
 import { html, LitElement, nothing } from 'lit';
 import { getFocusableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import * as DOMTaskScheduler from '@vaadin/component-base/src/dom-task-scheduler.js';
+import * as DOMReadWrite from '@vaadin/component-base/src/dom-read-write.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -255,7 +255,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   disconnectedCallback() {
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
-    DOMTaskScheduler.cancelWrites(this);
+    DOMReadWrite.cancel(this);
     cancelAnimations(this);
   }
 
@@ -327,15 +327,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * @private
    */
   __onResize() {
-    const state = this.__readLayoutState();
+    let state;
 
-    DOMTaskScheduler.scheduleWrite(
-      this,
-      () => {
+    DOMReadWrite.schedule(this, {
+      read: () => {
+        state = this.__readLayoutState();
+      },
+
+      write: () => {
         this.__writeLayoutState(state);
       },
-      { id: 'onResize' },
-    );
+    });
   }
 
   /**
@@ -434,9 +436,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     // Cancel any previously scheduled DOM writes to prevent them from
     // potentially overriding the layout state with stale measurements.
-    invalidatedLayouts.forEach((layout) => {
-      DOMTaskScheduler.cancelWrites(layout, { id: 'onResize' });
-    });
+    invalidatedLayouts.forEach((layout) => DOMReadWrite.cancel(layout));
 
     // Write
     invalidatedLayouts.forEach((layout) => {

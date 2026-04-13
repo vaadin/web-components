@@ -1,9 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { cancelWrites, flushWrites, scheduleWrite } from '../src/dom-task-scheduler.js';
+import { cancel, flush, schedule } from '../src/dom-read-write.js';
 
-describe('dom-task-scheduler', () => {
+describe('dom-read-write', () => {
   let element;
 
   beforeEach(() => {
@@ -11,179 +11,181 @@ describe('dom-task-scheduler', () => {
   });
 
   afterEach(() => {
-    // Clean up any pending writes
-    cancelWrites();
+    // Clean up any pending tasks
+    cancel();
   });
 
-  describe('scheduleWrite', () => {
-    it('should execute callback on next animation frame', async () => {
-      const spy = sinon.spy();
-      scheduleWrite(element, spy);
-      expect(spy).to.not.be.called;
+  describe('schedule', () => {
+    it('should execute read and write callbacks on next microtask', async () => {
+      const readSpy = sinon.spy();
+      const writeSpy = sinon.spy();
+      schedule(element, { read: readSpy, write: writeSpy });
+      expect(readSpy).to.not.be.called;
+      expect(writeSpy).to.not.be.called;
 
       await nextFrame();
-      expect(spy).to.be.calledOnce;
+      expect(readSpy).to.be.calledOnce;
+      expect(writeSpy).to.be.calledOnce;
     });
 
-    it('should replace a previous write for the same element', async () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(element, spy2);
+    it('should execute read before write', async () => {
+      const calls = [];
+      schedule(element, {
+        read: () => calls.push('read'),
+        write: () => calls.push('write'),
+      });
 
       await nextFrame();
-      expect(spy1).to.not.be.called;
-      expect(spy2).to.be.calledOnce;
+      expect(calls).to.eql(['read', 'write']);
     });
 
-    it('should replace a previous write for the same element and id', async () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
-      scheduleWrite(element, spy1, { id: 'resize' });
-      scheduleWrite(element, spy2, { id: 'resize' });
+    it('should schedule only a read callback', async () => {
+      const readSpy = sinon.spy();
+      schedule(element, { read: readSpy });
 
       await nextFrame();
-      expect(spy1).to.not.be.called;
-      expect(spy2).to.be.calledOnce;
+      expect(readSpy).to.be.calledOnce;
     });
 
-    it('should keep writes with different ids for the same element', async () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
-      scheduleWrite(element, spy1, { id: 'resize' });
-      scheduleWrite(element, spy2, { id: 'scroll' });
+    it('should schedule only a write callback', async () => {
+      const writeSpy = sinon.spy();
+      schedule(element, { write: writeSpy });
 
       await nextFrame();
-      expect(spy1).to.be.calledOnce;
-      expect(spy2).to.be.calledOnce;
+      expect(writeSpy).to.be.calledOnce;
     });
 
-    it('should keep writes for different elements', async () => {
+    it('should keep tasks for different elements', async () => {
       const other = document.createElement('div');
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(other, spy2);
+      schedule(element, { write: spy1 });
+      schedule(other, { write: spy2 });
 
       await nextFrame();
       expect(spy1).to.be.calledOnce;
       expect(spy2).to.be.calledOnce;
     });
 
-    it('should execute callbacks in scheduling order', async () => {
+    it('should execute reads before writes across elements', async () => {
       const other = document.createElement('div');
       const calls = [];
-      scheduleWrite(element, () => calls.push('first'));
-      scheduleWrite(other, () => calls.push('second'));
+      schedule(element, {
+        read: () => calls.push('read-1'),
+        write: () => calls.push('write-1'),
+      });
+      schedule(other, {
+        read: () => calls.push('read-2'),
+        write: () => calls.push('write-2'),
+      });
 
       await nextFrame();
-      expect(calls).to.eql(['first', 'second']);
+      expect(calls).to.eql(['read-1', 'read-2', 'write-1', 'write-2']);
     });
   });
 
-  describe('flushWrites', () => {
-    it('should flush all pending writes when called without arguments', () => {
+  describe('flush', () => {
+    it('should flush all pending tasks when called without arguments', () => {
       const other = document.createElement('div');
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(other, spy2);
+      schedule(element, { write: spy1 });
+      schedule(other, { write: spy2 });
 
-      flushWrites();
+      flush();
       expect(spy1).to.be.calledOnce;
       expect(spy2).to.be.calledOnce;
     });
 
-    it('should flush only writes for the given element', () => {
+    it('should flush only tasks for the given element', () => {
       const other = document.createElement('div');
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(other, spy2);
+      schedule(element, { write: spy1 });
+      schedule(other, { write: spy2 });
 
-      flushWrites(element);
+      flush(element);
       expect(spy1).to.be.calledOnce;
       expect(spy2).to.not.be.called;
     });
 
-    it('should flush only writes matching the given element and id', () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
-      scheduleWrite(element, spy1, { id: 'resize' });
-      scheduleWrite(element, spy2, { id: 'scroll' });
-
-      flushWrites(element, { id: 'resize' });
-      expect(spy1).to.be.calledOnce;
-      expect(spy2).to.not.be.called;
-    });
-
-    it('should not execute flushed writes again on next frame', async () => {
+    it('should not execute flushed tasks again on next frame', async () => {
       const spy = sinon.spy();
-      scheduleWrite(element, spy);
+      schedule(element, { write: spy });
 
-      flushWrites(element);
+      flush(element);
       expect(spy).to.be.calledOnce;
 
       await nextFrame();
       expect(spy).to.be.calledOnce;
     });
 
-    it('should still execute remaining writes on next frame', async () => {
+    it('should still execute remaining tasks on next frame', async () => {
       const other = document.createElement('div');
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(other, spy2);
+      schedule(element, { write: spy1 });
+      schedule(other, { write: spy2 });
 
-      flushWrites(element);
+      flush(element);
       expect(spy1).to.be.calledOnce;
       expect(spy2).to.not.be.called;
 
       await nextFrame();
       expect(spy2).to.be.calledOnce;
     });
+
+    it('should execute read before write when flushing', () => {
+      const calls = [];
+      schedule(element, {
+        read: () => calls.push('read'),
+        write: () => calls.push('write'),
+      });
+
+      flush(element);
+      expect(calls).to.eql(['read', 'write']);
+    });
   });
 
-  describe('cancelWrites', () => {
-    it('should cancel all pending writes when called without arguments', async () => {
+  describe('cancel', () => {
+    it('should cancel all pending tasks when called without arguments', async () => {
       const other = document.createElement('div');
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(other, spy2);
+      schedule(element, { write: spy1 });
+      schedule(other, { write: spy2 });
 
-      cancelWrites();
+      cancel();
 
       await nextFrame();
       expect(spy1).to.not.be.called;
       expect(spy2).to.not.be.called;
     });
 
-    it('should cancel only writes for the given element', async () => {
+    it('should cancel only tasks for the given element', async () => {
       const other = document.createElement('div');
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
-      scheduleWrite(element, spy1);
-      scheduleWrite(other, spy2);
+      schedule(element, { write: spy1 });
+      schedule(other, { write: spy2 });
 
-      cancelWrites(element);
+      cancel(element);
 
       await nextFrame();
       expect(spy1).to.not.be.called;
       expect(spy2).to.be.calledOnce;
     });
 
-    it('should cancel only writes matching the given element and id', async () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
-      scheduleWrite(element, spy1, { id: 'resize' });
-      scheduleWrite(element, spy2, { id: 'scroll' });
+    it('should cancel both read and write for the given element', async () => {
+      const readSpy = sinon.spy();
+      const writeSpy = sinon.spy();
+      schedule(element, { read: readSpy, write: writeSpy });
 
-      cancelWrites(element, { id: 'resize' });
+      cancel(element);
 
       await nextFrame();
-      expect(spy1).to.not.be.called;
-      expect(spy2).to.be.calledOnce;
+      expect(readSpy).to.not.be.called;
+      expect(writeSpy).to.not.be.called;
     });
   });
 });

@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import * as DOMTaskScheduler from './dom-task-scheduler.js';
+import * as DOMReadWrite from './dom-read-write.js';
 
 /**
  * A controller that detects if content inside the element overflows its scrolling viewport,
@@ -93,14 +93,19 @@ export class OverflowController {
 
   /** @private */
   __updateState({ sync }) {
-    const state = this.__readState();
+    let state;
 
-    DOMTaskScheduler.scheduleWrite(this, () => {
-      this.__writeState(state);
+    DOMReadWrite.schedule(this, {
+      read: () => {
+        state = this.__readState();
+      },
+      write: () => {
+        this.__writeState(state);
+      },
     });
 
     if (sync) {
-      DOMTaskScheduler.flushWrites(this);
+      DOMReadWrite.flush(this);
     }
   }
 

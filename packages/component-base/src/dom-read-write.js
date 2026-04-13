@@ -3,7 +3,8 @@
  * Copyright (c) 2025 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-let writeQueue = [];
+let readTaskQueue = [];
+let writeTaskQueue = [];
 
 function matchesFilter(entry, element, id) {
   if (!element) {
@@ -27,32 +28,38 @@ function matchesFilter(entry, element, id) {
  * @param {HTMLElement} [element] - If provided, only flush writes scheduled for this element.
  * @param {{ id: string }} [options] - If provided, only flush writes with a matching id.
  */
-export function flushWrites(element, options = {}) {
-  const { id } = options;
+export function flush(element) {
+  const readTasks = [];
+  const writeTasks = [];
 
-  const entries = [];
-  writeQueue = writeQueue.filter((entry) => {
-    if (matchesFilter(entry, element, id)) {
-      entries.push(entry);
+  writeTaskQueue = writeTaskQueue.filter((entry) => {
+    if (matchesFilter(entry, element)) {
+      writeTasks.push(entry);
       return false;
     }
     return true;
   });
 
-  entries.forEach(({ callback }) => callback());
+  readTaskQueue = readTaskQueue.filter((entry) => {
+    if (matchesFilter(entry, element)) {
+      readTasks.push(entry);
+      return false;
+    }
+    return true;
+  });
+
+  [...readTasks, ...writeTasks].forEach(({ callback }) => callback());
 }
 
 /**
  * Cancels pending DOM write callbacks, removing them from the queue without executing.
- * When called with an element, only cancels writes for that element. The `id` option
- * further narrows the match to a specific write within the element.
+ * When called with an element, only cancels writes for that element.
  *
  * @param {HTMLElement} [element] - If provided, only cancel writes scheduled for this element.
- * @param {{ id: string }} [options] - If provided, only cancel writes with a matching id.
  */
-export function cancelWrites(element, options = {}) {
-  const { id } = options;
-  writeQueue = writeQueue.filter((entry) => !matchesFilter(entry, element, id));
+export function cancel(element) {
+  readTaskQueue = readTaskQueue.filter((entry) => !matchesFilter(entry, element));
+  writeTaskQueue = writeTaskQueue.filter((entry) => !matchesFilter(entry, element));
 }
 
 /**
@@ -60,16 +67,18 @@ export function cancelWrites(element, options = {}) {
  * If a write with the same element and id already exists, it is replaced.
  *
  * @param {HTMLElement} element - The element associated with this write.
- * @param {Function} callback - The callback to execute.
- * @param {{ id: string }} [options] - Optional id to deduplicate writes.
+ * @param {{ read?: Function, write?: Function }} callbacks - The read and write callbacks to schedule.
  */
-export function scheduleWrite(element, callback, options = {}) {
-  const { id } = options;
-  cancelWrites(element, { id });
+export function schedule(element, { read, write }) {
+  if (read) {
+    readTaskQueue.push({ element, callback: read });
+  }
 
-  writeQueue.push({ element, id, callback });
+  if (write) {
+    writeTaskQueue.push({ element, callback: write });
+  }
 
-  if (writeQueue.length <= 1) {
-    requestAnimationFrame(() => flushWrites());
+  if (readTaskQueue.length >= 1 || writeTaskQueue.length >= 1) {
+    setTimeout(() => flush());
   }
 }
