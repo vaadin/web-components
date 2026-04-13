@@ -248,6 +248,16 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   connectedCallback() {
     super.connectedCallback();
     this.__initResizeObserver();
+
+    if (!this.detailSize) {
+      this.__recalculateLayoutRaf = requestAnimationFrame(() => {
+        this.recalculateLayout();
+      });
+
+      this.__ancestorLayouts.forEach((layout) => {
+        cancelAnimationFrame(layout.__recalculateLayoutRaf);
+      });
+    }
   }
 
   /** @protected */
@@ -255,6 +265,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
     cancelAnimationFrame(this.__resizeRaf);
+    cancelAnimationFrame(this.__recalculateLayoutRaf);
     cancelAnimations(this);
   }
 
