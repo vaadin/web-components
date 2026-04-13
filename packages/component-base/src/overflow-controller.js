@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import * as DOMTaskScheduler from './dom-task-scheduler.js';
 
 /**
  * A controller that detects if content inside the element overflows its scrolling viewport,
@@ -92,13 +93,14 @@ export class OverflowController {
 
   /** @private */
   __updateState({ sync }) {
-    cancelAnimationFrame(this.__resizeRaf);
-
     const state = this.__readState();
-    if (sync) {
+
+    DOMTaskScheduler.scheduleWrite(this, () => {
       this.__writeState(state);
-    } else {
-      this.__resizeRaf = requestAnimationFrame(() => this.__writeState(state));
+    });
+
+    if (sync) {
+      DOMTaskScheduler.flushWrites(this);
     }
   }
 
