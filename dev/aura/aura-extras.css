@@ -16,7 +16,7 @@ vaadin-avatar[theme~='vaadin']::part(icon) {
 }
 
 vaadin-avatar[theme~='square'] {
-  border-radius: var(--vaadin-radius-m);
+  border-radius: min(40%, var(--vaadin-radius-m));
 }
 
 hr {
@@ -26,6 +26,14 @@ hr {
   background: var(--vaadin-border-color-secondary);
   min-height: 1px;
   max-height: 1px;
+}
+
+vaadin-grid[theme~='inset-columns']::part(first-column-cell) {
+  padding-inline-start: var(--vaadin-padding-m);
+}
+
+vaadin-grid[theme~='inset-columns']::part(last-column-cell) {
+  padding-inline-end: var(--vaadin-padding-m);
 }
 
 /* Considering these as built-in variants, but perhaps they should be another component like https://github.com/vaadin/web-components/issues/7958 */
@@ -44,4 +52,8 @@ vaadin-card[theme~='footer-end']::part(footer) {
   grid-row: 1 / span calc(var(--_header) + var(--_content));
   align-self: center;
   flex-direction: column;
+}
+
+vaadin-grid::part(active-nav-item) {
+  --vaadin-grid-row-highlight-background-color: var(--aura-accent-surface);
 }
