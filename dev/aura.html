@@ -21,6 +21,7 @@
       import './aura/aura-theme-editor.js';
       import './aura/components-view.js';
       import './aura/dashboard-view.js';
+      import './aura/grid-mdl-view.js';
       import '@vaadin/app-layout';
       import '@vaadin/app-layout/src/vaadin-drawer-toggle.js';
       import '@vaadin/badge';
@@ -86,6 +87,11 @@
             <vaadin-badge slot="suffix" number="2" aria-label="(2 new items)"></vaadin-badge>
           </vaadin-side-nav-item>
 
+          <vaadin-side-nav-item data-view-name="grid-mdl-view">
+            <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
+            Products
+          </vaadin-side-nav-item>
+
           <vaadin-side-nav-item>
             <vaadin-icon icon="vaadin:dollar" slot="prefix"></vaadin-icon>
             Revenue
@@ -94,11 +100,6 @@
           <vaadin-side-nav-item>
             <vaadin-icon icon="vaadin:line-chart" slot="prefix"></vaadin-icon>
             Engagement
-          </vaadin-side-nav-item>
-
-          <vaadin-side-nav-item>
-            <vaadin-icon src="./assets/lucide-icons/layers.svg" slot="prefix"></vaadin-icon>
-            Products
           </vaadin-side-nav-item>
 
           <vaadin-side-nav-item>
