@@ -249,12 +249,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     super.connectedCallback();
     this.__initResizeObserver();
 
-    if (!this.detailSize) {
+    const ancestorLayouts = this.__ancestorLayouts;
+    if (ancestorLayouts.length > 0) {
       this.__recalculateLayoutRaf = requestAnimationFrame(() => {
         this.recalculateLayout();
       });
 
-      this.__ancestorLayouts.forEach((layout) => {
+      ancestorLayouts.forEach((layout) => {
         cancelAnimationFrame(layout.__recalculateLayoutRaf);
       });
     }
@@ -434,7 +435,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * synchronous DOM reads and writes.
    */
   recalculateLayout() {
-    const invalidatedLayouts = [...this.__ancestorLayouts.filter((layout) => layout.__isDetailAutoSized), this];
+    const invalidatedLayouts = [...this.__ancestorLayouts, this];
 
     // Write
     invalidatedLayouts.forEach((layout) => {

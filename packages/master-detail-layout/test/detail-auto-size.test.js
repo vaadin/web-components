@@ -137,16 +137,7 @@ describe('detail auto size', () => {
       inner = middle.querySelector('[slot="detail"]').shadowRoot.querySelector('vaadin-master-detail-layout');
     });
 
-    it('should compute overlay state for all levels in a single animation frame', async () => {
-      outer.style.width = '200px';
-      await nextFrame();
-
-      expect(outer.hasAttribute('overlay')).to.be.true;
-      expect(middle.hasAttribute('overlay')).to.be.true;
-      expect(inner.hasAttribute('overlay')).to.be.true;
-    });
-
-    it('should compute detail sizes for all levels in a single animation frame', async () => {
+    it('should cache detail intrinsic size plus border at each level', async () => {
       await nextFrame();
 
       // Inner: 100px detail content + 1px border = 101px
@@ -179,7 +170,7 @@ describe('detail auto size', () => {
         expect(innerSpy).to.be.calledOnce;
       });
 
-      it('should update cached sizes on ancestors', () => {
+      it('should update cached sizes on ancestors after detail content changes', () => {
         inner.querySelector('[slot="detail"]').style.width = '200px';
         inner.recalculateLayout();
         expect(getCachedSize(inner)).to.equal('201px');
@@ -193,7 +184,7 @@ describe('detail auto size', () => {
         expect(getCachedSize(outer)).to.equal('303px');
       });
 
-      it('should update overlay state on ancestors', () => {
+      it('should toggle overlay on ancestors when detail content outgrows or fits available space', () => {
         // Grow inner detail so outer needs 100px + 1103px = 1203px > 1200px
         inner.querySelector('[slot="detail"]').style.width = '1000px';
         inner.recalculateLayout();

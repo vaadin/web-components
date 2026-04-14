@@ -231,3 +231,141 @@ snapshots["vaadin-master-detail-layout detail placeholder removed"] =
 `;
 /* end snapshot vaadin-master-detail-layout detail placeholder removed */
 
+snapshots["vaadin-master-detail-layout nested layouts default"] = 
+`<vaadin-master-detail-layout
+  expand="master"
+  has-detail=""
+  has-master=""
+  master-size="100px"
+  orientation="horizontal"
+  overlay-containment="layout"
+  style="--_master-size: 100px; --_detail-cached-size: 301px;"
+>
+  <div>
+    Master 0
+  </div>
+  <vaadin-master-detail-layout
+    detail-size="200px"
+    expand="master"
+    has-detail=""
+    has-master=""
+    master-size="100px"
+    orientation="horizontal"
+    overlay-containment="layout"
+    slot="detail"
+    style="--_master-size: 100px; --_detail-size: 200px;"
+  >
+    <div>
+      Master 1
+    </div>
+    <vaadin-master-detail-layout
+      expand="master"
+      has-detail=""
+      has-master=""
+      keep-detail-column-offscreen=""
+      master-size="100px"
+      orientation="horizontal"
+      overlay=""
+      overlay-containment="layout"
+      slot="detail"
+      style="--_master-size: 100px; --_detail-cached-size: 201px;"
+    >
+      <div>
+        Master 2
+      </div>
+      <vaadin-master-detail-layout
+        detail-size="100px"
+        expand="master"
+        has-detail=""
+        has-master=""
+        keep-detail-column-offscreen=""
+        master-size="100px"
+        orientation="horizontal"
+        overlay=""
+        overlay-containment="layout"
+        slot="detail"
+        style="--_master-size: 100px; --_detail-size: 100px;"
+      >
+        <div>
+          Master 3
+        </div>
+        <div slot="detail">
+          Detail
+        </div>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+  </vaadin-master-detail-layout>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout nested layouts default */
+
+snapshots["vaadin-master-detail-layout nested layouts overflow"] = 
+`<vaadin-master-detail-layout
+  expand="master"
+  has-detail=""
+  has-master=""
+  keep-detail-column-offscreen=""
+  master-size="100px"
+  orientation="horizontal"
+  overlay=""
+  overlay-containment="layout"
+  style="--_master-size: 100px; width: 200px; --_detail-cached-size: 301px;"
+>
+  <div>
+    Master 0
+  </div>
+  <vaadin-master-detail-layout
+    detail-size="200px"
+    expand="master"
+    has-detail=""
+    has-master=""
+    keep-detail-column-offscreen=""
+    master-size="100px"
+    orientation="horizontal"
+    overlay=""
+    overlay-containment="layout"
+    slot="detail"
+    style="--_master-size: 100px; --_detail-size: 200px;"
+  >
+    <div>
+      Master 1
+    </div>
+    <vaadin-master-detail-layout
+      expand="master"
+      has-detail=""
+      has-master=""
+      keep-detail-column-offscreen=""
+      master-size="100px"
+      orientation="horizontal"
+      overlay=""
+      overlay-containment="layout"
+      slot="detail"
+      style="--_master-size: 100px; --_detail-cached-size: 201px;"
+    >
+      <div>
+        Master 2
+      </div>
+      <vaadin-master-detail-layout
+        detail-size="100px"
+        expand="master"
+        has-detail=""
+        has-master=""
+        master-size="100px"
+        orientation="horizontal"
+        overlay-containment="layout"
+        slot="detail"
+        style="--_master-size: 100px; --_detail-size: 100px;"
+      >
+        <div>
+          Master 3
+        </div>
+        <div slot="detail">
+          Detail
+        </div>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+  </vaadin-master-detail-layout>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout nested layouts overflow */
+
