@@ -17,16 +17,17 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
     --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
+    --vaadin-app-layout-drawer-offset-left: 0px;
     padding-top: max(var(--vaadin-app-layout-navbar-offset-top), var(--safe-area-inset-top));
     padding-bottom: max(var(--vaadin-app-layout-navbar-offset-bottom), var(--safe-area-inset-bottom));
   }
 
-  :host(:dir(ltr)) [content] {
+  :host(:dir(ltr)) {
     padding-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
     padding-right: var(--safe-area-inset-right);
   }
 
-  :host(:dir(rtl)) [content] {
+  :host(:dir(rtl)) {
     padding-left: var(--safe-area-inset-left);
     padding-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
   }
@@ -50,11 +51,11 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-drawer-offset-left: 0px;
   }
 
-  :host(:not([no-scroll])) [content] {
+  :host(:not([no-scroll])) [part~='content'] {
     overflow: auto;
   }
 
-  [content] {
+  [part~='content'] {
     height: 100%;
     transition: inherit;
   }
@@ -137,19 +138,8 @@ export const appLayoutStyles = css`
     padding-right: var(--safe-area-inset-right);
   }
 
-  :host([has-navbar]:not([overlay])) [part='drawer'],
-  :host([has-navbar]) [content] {
+  :host([has-navbar]:not([overlay])) [part='drawer'] {
     --safe-area-inset-top: 0px;
-  }
-
-  :host([has-drawer]:not([overlay])[drawer-opened]) [content] {
-    &:dir(ltr) {
-      --safe-area-inset-left: 0px;
-    }
-
-    &:dir(rtl) {
-      --safe-area-inset-right: 0px;
-    }
   }
 
   :host([drawer-opened]) [part='drawer'] {
@@ -209,6 +199,7 @@ export const appLayoutStyles = css`
   }
 
   /* If a vaadin-scroller is used in the drawer, allow it to take all remaining space and contain scrolling */
+
   [part='drawer'] ::slotted(vaadin-scroller) {
     flex: 1;
     overscroll-behavior: contain;

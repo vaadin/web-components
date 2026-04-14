@@ -57,6 +57,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * `navbar-top`     | Container for the top navigation bar
  * `navbar-bottom`  | Container for the bottom navigation bar
  * `drawer`         | Container for the drawer area
+ * `content`        | Container for the content area
  *
  * The following state attributes are available for styling:
  *
@@ -119,8 +120,8 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  *
  * To use the "content scrolling", in case of the content of the page relies on a pre-defined height (for instance,
  * it has a `height:100%`), then the developer can set `height: 100%` to both `html` and `body`.
- * That will make the `[content]` element of app layout scrollable.
- * On this case, the toolbars on mobile device won't collapse.
+ * That makes the content part of App Layout scrollable.
+ * In that case, the toolbars on mobile device won't collapse.
  *
  * @fires {CustomEvent} drawer-opened-changed - Fired when the `drawerOpened` property changes.
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
@@ -151,7 +152,7 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       <div part="drawer" id="drawer">
         <slot name="drawer" id="drawerSlot" @slotchange="${this.__onDrawerSlotChange}"></slot>
       </div>
-      <div content>
+      <div part="content">
         <slot></slot>
       </div>
       <div part="navbar navbar-bottom" id="navbarBottom" hidden>
