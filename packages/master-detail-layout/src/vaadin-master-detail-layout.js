@@ -621,6 +621,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
       ]);
     } finally {
+      // Skip removal if the slot was reassigned during the transition.
+      // The React component does this to let React handle the removal.
       if (oldDetail && oldDetail.slot === 'detail-outgoing') {
         oldDetail.remove();
       }
