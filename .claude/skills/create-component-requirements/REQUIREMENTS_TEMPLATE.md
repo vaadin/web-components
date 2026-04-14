@@ -10,7 +10,7 @@ Each numbered requirement:
 - Is self-contained — no knowledge of the component API required
 - Is separated from the next requirement by a `---` horizontal rule
 
-Core behavioral requirements come first, ordered from most common to most specialized. Requirements for uniformly-applicable behaviors (use by people with disabilities, keyboard-only operation, right-to-left languages, small screens, long or dynamic content) come after.
+Every use case from the problem statement must be covered by at least one requirement. Core use case requirements come first, followed by variant use case requirements, then uniformly-applicable behaviors (use by people with disabilities, keyboard-only operation, right-to-left languages, small screens, long or dynamic content).
 
 Do NOT include:
 - Property, attribute, event, slot, or CSS names

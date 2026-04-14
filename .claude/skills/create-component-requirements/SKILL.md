@@ -1,9 +1,9 @@
 ---
-allowed-tools: Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(gh repo view:*),Bash(gh api:*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Web Search(*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec)
-description: Research real-world usage patterns for a Vaadin web component and produce a requirements.md
+allowed-tools: Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(gh repo view:*),Bash(gh api:*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://www.atlassian.design:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Web Search(*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec)
+description: Research behavioral requirements for a Vaadin web component's use cases and produce a requirements.md
 ---
 
-This skill researches how a given web component is used in real applications and produces a `requirements.md` document. The document lists the distinct behavioral requirements the component must support — each stated as a required behavior first, then illustrated with a concrete example from the perspective of an application end user.
+This skill takes the use cases from a component's problem statement and researches the behavioral requirements needed to support them, producing a `requirements.md` document. The document lists the distinct behavioral requirements the component must support — each stated as a required behavior first, then illustrated with a concrete example from the perspective of an application end user.
 
 The output contains NO implementation details, API shapes, property names, events, CSS, or framework-specific information — only user needs.
 
@@ -17,7 +17,12 @@ TOOL EXECUTION: When using `gh issue view` or `gh issue list`, always pass `--js
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/problem-statement.md` if it exists. Use its Differentiation section to filter out scenarios that belong to adjacent components. Use its Use Cases section as starting points for behavioral requirement research — every use case must be covered by at least one requirement. If the file does not exist, stop and instruct user to complete that step.
+1. Read `packages/{component-name}/spec/problem-statement.md`. If the file does not exist, stop and instruct the user to run the `create-component-problem-statement` skill first. Use the problem statement as follows:
+
+   - **Differentiation** — filter out scenarios that belong to adjacent components. This is a hard boundary for all subsequent steps.
+   - **Use Cases** — decompose each use case into the behavioral capabilities it implies. These behavioral threads become research targets for steps 2–7. Every use case must be covered by at least one requirement in the final document.
+
+Research guidance: Steps 2–7 search for real-world evidence and refinement of the behavioral threads identified in step 1. When evaluating an issue, forum post, or design system pattern, check whether it describes a behavior that supports one of the use cases. Behaviors that fall outside the Differentiation boundaries are out of scope. If research reveals an important behavior that no use case covers but appears to be within scope, flag it with AskUserQuestion before including it.
 
 2. Search https://github.com/vaadin/web-components issues (open and closed) that mention the component. Note that users may refer to the component by different names.
 
@@ -29,9 +34,9 @@ TASK OVERVIEW:
 
 6. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web application and WebFetch will return empty content.
 
-7. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on scenarios described in documentation, "when to use" guidance.
+7. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
 
-8. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly.
+8. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. Organize requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement), then uniformly-applicable behaviors.
 
 9. After drafting the core behavioral requirements, add requirements for uniformly-applicable behaviors as additional numbered items at the end of the list. Common categories include use by people with disabilities (low vision, color blindness, motor impairments, screen reader users), keyboard-only operation, use in right-to-left languages, behavior on small screens or narrow containers, and handling of long or dynamically changing text.
 
@@ -66,7 +71,7 @@ If two findings from research describe the exact same component behavior, keep o
 
 ORDERING:
 
-The first requirement must be the single most common, most basic behavior the component supports — the default scenario that the majority of applications need. Subsequent requirements progress from common to specialized, and from simple to complex. Requirements for uniformly-applicable behaviors (use by people with disabilities, keyboard-only users, right-to-left languages, small screens, etc.) come after the core behavioral requirements.
+The first requirement must be the single most common, most basic behavior the component supports — typically the primary behavior needed for the core use case. Requirements supporting the core use case come before requirements that only apply to variant use cases. Within each group, order from common to specialized and from simple to complex. Requirements for uniformly-applicable behaviors (use by people with disabilities, keyboard-only users, right-to-left languages, small screens, etc.) come after the core behavioral requirements.
 
 VERIFICATION:
 
@@ -80,4 +85,4 @@ Before finalizing, check that:
 7. Concrete examples are included where they make requirements unambiguous.
 8. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
 9. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
-10. Every use case in `problem-statement.md` (if the Use Cases section exists) is addressed by at least one requirement.
+10. Every use case in `problem-statement.md` is addressed by at least one requirement. For each use case, verify that the covering requirements are sufficient for the scenario to work end-to-end — a single loosely related requirement is not enough.
