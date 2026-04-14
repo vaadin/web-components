@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
+import { defineCE, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import { css, html, LitElement } from 'lit';
@@ -21,25 +21,17 @@ describe('detail auto size', () => {
 
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout>
+        <vaadin-master-detail-layout master-size="200px" detail-size="200px" orientation="horizontal">
           <div>Master</div>
           <div slot="detail">Detail</div>
         </vaadin-master-detail-layout>
       `);
-      await onceResized(layout);
       spy = sinon.spy(layout, 'recalculateLayout');
+      await onceResized(layout);
     });
 
-    it('should not be called when masterSize and detailSize are provided initially', async () => {
-      const newLayout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="200px" detail-size="200px">
-          <div>Master</div>
-          <div slot="detail">Detail</div>
-        </vaadin-master-detail-layout>
-      `);
-      const newSpy = sinon.spy(newLayout, 'recalculateLayout');
-      await onceResized(newLayout);
-      expect(newSpy).to.not.be.called;
+    it('should not be called when masterSize, detailSize and orientation are provided initially', () => {
+      expect(spy).to.not.be.called;
     });
 
     it('should be called when masterSize is changed after initial render', () => {
@@ -52,18 +44,6 @@ describe('detail auto size', () => {
       layout.detailSize = '200px';
       layout.detailSize = '300px';
       expect(spy).to.be.calledOnce;
-    });
-
-    it('should not be called when orientation is provided initially', async () => {
-      const newLayout = fixtureSync(`
-        <vaadin-master-detail-layout orientation="vertical">
-          <div>Master</div>
-          <div slot="detail">Detail</div>
-        </vaadin-master-detail-layout>
-      `);
-      const newSpy = sinon.spy(newLayout, 'recalculateLayout');
-      await onceResized(newLayout);
-      expect(newSpy).to.not.be.called;
     });
 
     it('should be called when orientation is changed after initial render', () => {
@@ -133,7 +113,7 @@ describe('detail auto size', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       outer = fixtureSync(`
         <vaadin-master-detail-layout style="width: 1200px;" master-size="100px" expand="both">
           <div>Outer Master</div>
@@ -155,13 +135,11 @@ describe('detail auto size', () => {
       `);
       middle = outer.querySelector('vaadin-master-detail-layout');
       inner = middle.querySelector('[slot="detail"]').shadowRoot.querySelector('vaadin-master-detail-layout');
-
-      await onceResized(outer);
-      await onceResized(middle);
-      await onceResized(inner);
     });
 
-    it('should cache detail intrinsic size plus border at each level', () => {
+    it('should cache detail intrinsic size plus border at each level', async () => {
+      await nextFrame();
+
       // Inner: 100px detail content + 1px border = 101px
       expect(getCachedSize(inner)).to.equal('101px');
       // Middle: inner layout min-content (100px master + 101px detail) + 1px border = 202px
@@ -172,11 +150,26 @@ describe('detail auto size', () => {
 
     it('should not cache detail size when detailSize is explicitly set', async () => {
       outer.detailSize = '300px';
-      await onceResized(outer);
+      await nextFrame();
       expect(getCachedSize(outer)).to.equal('');
     });
 
     describe('recalculateLayout', () => {
+      let outerSpy, middleSpy, innerSpy;
+
+      beforeEach(async () => {
+        outerSpy = sinon.spy(outer, 'recalculateLayout');
+        middleSpy = sinon.spy(middle, 'recalculateLayout');
+        innerSpy = sinon.spy(inner, 'recalculateLayout');
+        await nextFrame();
+      });
+
+      it('should be called on deepest layout during initialization', () => {
+        expect(outerSpy).to.not.be.called;
+        expect(middleSpy).to.not.be.called;
+        expect(innerSpy).to.be.calledOnce;
+      });
+
       it('should update cached sizes on ancestors after detail content changes', () => {
         inner.querySelector('[slot="detail"]').style.width = '200px';
         inner.recalculateLayout();

@@ -248,6 +248,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   connectedCallback() {
     super.connectedCallback();
     this.__initResizeObserver();
+
+    const ancestorLayouts = this.__ancestorLayouts;
+    if (ancestorLayouts.length > 0) {
+      ancestorLayouts.forEach((layout) => {
+        cancelAnimationFrame(layout.__initialRaf);
+      });
+
+      this.__initialRaf = requestAnimationFrame(() => {
+        this.recalculateLayout();
+      });
+    }
   }
 
   /** @protected */
@@ -255,6 +266,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     super.disconnectedCallback();
     this.__resizeObserver.disconnect();
     cancelAnimationFrame(this.__resizeRaf);
+    cancelAnimationFrame(this.__initialRaf);
     cancelAnimations(this);
   }
 
@@ -423,14 +435,14 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * synchronous DOM reads and writes.
    */
   recalculateLayout() {
-    // Cancel any pending ResizeObserver rAF to prevent it from potentially
-    // overriding the layout state with stale measurements.
-    cancelAnimationFrame(this.__resizeRaf);
-
-    const invalidatedLayouts = [...this.__ancestorLayouts.filter((layout) => layout.__isDetailAutoSized), this];
+    const invalidatedLayouts = [...this.__ancestorLayouts, this];
 
     // Write
     invalidatedLayouts.forEach((layout) => {
+      // Cancel any pending ResizeObserver rAF to prevent it from potentially
+      // overriding the layout state with stale measurements.
+      cancelAnimationFrame(layout.__resizeRaf);
+
       layout.__detailCachedSize = null;
 
       if (layout.__isDetailAutoSized) {
