@@ -120,18 +120,30 @@ describe('vaadin-master-detail-layout', () => {
   describe('nested layouts', () => {
     beforeEach(() => {
       layout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="100px">
+        <vaadin-master-detail-layout
+          master-size="100px"
+          overlay-size="100px"
+        >
           <div>Master 0</div>
-
-          <vaadin-master-detail-layout slot="detail" master-size="100px" detail-size="200px">
+          <vaadin-master-detail-layout
+            slot="detail"
+            master-size="100px"
+            detail-size="400px"
+            overlay-size="100px"
+          >
             <div>Master 1</div>
-
-            <vaadin-master-detail-layout slot="detail" master-size="100px">
+            <vaadin-master-detail-layout
+              slot="detail"
+              master-size="100px"
+              overlay-size="100px"
+            >
               <div>Master 2</div>
-
-              <vaadin-master-detail-layout slot="detail" master-size="100px" detail-size="100px">
+              <vaadin-master-detail-layout
+                slot="detail"
+                master-size="100px"
+                detail-size="100px"
+              >
                 <div>Master 3</div>
-
                 <div slot="detail">Detail</div>
               </vaadin-master-detail-layout>
             </vaadin-master-detail-layout>
