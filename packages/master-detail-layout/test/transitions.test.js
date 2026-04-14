@@ -176,6 +176,23 @@ describe('Transitions', () => {
       expect(layout.hasAttribute('transition')).to.be.false;
     });
 
+    // Reproduces how the React component handles transitions: it reassigns
+    // the outgoing detail's slot so that React can handle the removal.
+    it('should not remove outgoing detail when it is reassigned to different slot', async () => {
+      const detail = document.createElement('detail-content');
+      await layout._setDetail(detail);
+
+      await layout._startTransition('replace', () => {
+        const outgoing = layout.querySelector('[slot="detail-outgoing"]');
+        expect(outgoing).to.equal(detail);
+        outgoing.slot = 'detail-hidden';
+      });
+
+      // The element should still be in the DOM since its slot was changed
+      expect(detail.isConnected).to.be.true;
+      expect(detail.slot).to.equal('detail-hidden');
+    });
+
     it('should resolve previous transition when interrupted', async () => {
       const callback1 = sinon.spy();
       const callback2 = sinon.spy();
