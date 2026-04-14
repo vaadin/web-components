@@ -17,7 +17,7 @@ TOOL EXECUTION: When using `gh issue view` or `gh issue list`, always pass `--js
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/problem-statement.md` if it exists. Use it to focus research on scenarios within the component's defined scope and filter out scenarios that belong to adjacent components. If the file does not exist, stop and instruct user to complete that step.
+1. Read `packages/{component-name}/spec/problem-statement.md` if it exists. Use its Differentiation section to filter out scenarios that belong to adjacent components. Use its Use Cases section as starting points for behavioral requirement research — every use case must be covered by at least one requirement. If the file does not exist, stop and instruct user to complete that step.
 
 2. Search https://github.com/vaadin/web-components issues (open and closed) that mention the component. Note that users may refer to the component by different names.
 
@@ -80,3 +80,4 @@ Before finalizing, check that:
 7. Concrete examples are included where they make requirements unambiguous.
 8. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
 9. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
+10. Every use case in `problem-statement.md` (if the Use Cases section exists) is addressed by at least one requirement.
