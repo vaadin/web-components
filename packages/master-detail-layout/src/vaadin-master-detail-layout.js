@@ -434,14 +434,14 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * synchronous DOM reads and writes.
    */
   recalculateLayout() {
-    // Cancel any pending ResizeObserver rAF to prevent it from potentially
-    // overriding the layout state with stale measurements.
-    cancelAnimationFrame(this.__resizeRaf);
-
     const invalidatedLayouts = [...this.__ancestorLayouts.filter((layout) => layout.__isDetailAutoSized), this];
 
     // Write
     invalidatedLayouts.forEach((layout) => {
+      // Cancel any pending ResizeObserver rAF to prevent it from potentially
+      // overriding the layout state with stale measurements.
+      cancelAnimationFrame(layout.__resizeRaf);
+
       layout.__detailCachedSize = null;
 
       if (layout.__isDetailAutoSized) {
