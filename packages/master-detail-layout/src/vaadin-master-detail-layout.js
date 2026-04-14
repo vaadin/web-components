@@ -621,7 +621,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
       ]);
     } finally {
-      if (oldDetail) {
+      if (oldDetail && oldDetail.slot === 'detail-outgoing') {
         oldDetail.remove();
       }
     }
