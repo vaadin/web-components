@@ -7,17 +7,11 @@ import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
+  /* stylelint-disable no-duplicate-selectors */
   :host {
-    --_master-size: 30rem;
-    --_master-extra: 0px;
-    --_detail-size: var(--_detail-cached-size);
-    --_detail-extra: 0px;
-    --_detail-cached-size: min-content;
-
     --_rtl-multiplier: 1;
     --_transition-duration: 0s;
     --_transition-easing: cubic-bezier(0.78, 0, 0.22, 1);
-    --_transition-offset: calc(30px * var(--_rtl-multiplier));
 
     display: grid;
     box-sizing: border-box;
@@ -25,11 +19,18 @@ export const masterDetailLayoutStyles = css`
     position: relative;
     z-index: 0;
     overflow: clip;
-    grid-template-columns:
-      [master-start] var(--_master-size) var(--_master-extra)
-      [detail-start] var(--_detail-size) var(--_detail-extra)
-      [detail-end];
-    grid-template-rows: 100%;
+  }
+
+  :host([dir='rtl']) {
+    --_rtl-multiplier: -1;
+  }
+
+  :host([orientation='horizontal']) {
+    --_transition-offset: calc(30px * var(--_rtl-multiplier));
+  }
+
+  :host([orientation='vertical']) {
+    --_transition-offset: 0 30px;
   }
 
   :host([hidden]),
@@ -37,61 +38,87 @@ export const masterDetailLayoutStyles = css`
     display: none !important;
   }
 
-  :host([dir='rtl']) {
-    --_rtl-multiplier: -1;
+  /* CSS grid template */
+
+  :host {
+    --_master-size: 30rem;
+    --_master-extra: 0px;
+    --_detail-size: var(--_detail-cached-size);
+    --_detail-extra: 0px;
+    --_detail-cached-size: min-content;
+  }
+
+  :host([orientation='horizontal']) {
+    grid-template-columns:
+      [master-start] var(--_master-size) [master-extra-start] var(--_master-extra)
+      [detail-start] var(--_detail-size) [detail-extra-start] var(--_detail-extra) [detail-end];
+    grid-template-rows: 100%;
   }
 
   :host([orientation='vertical']) {
-    --_transition-offset: 0 30px;
-
     grid-template-columns: 100%;
     grid-template-rows:
-      [master-start] var(--_master-size) var(--_master-extra)
-      [detail-start] var(--_detail-size) var(--_detail-extra)
-      [detail-end];
+      [master-start] var(--_master-size) [master-extra-start] var(--_master-extra)
+      [detail-start] var(--_detail-size) [detail-extra-start] var(--_detail-extra) [detail-end];
   }
 
-  :is(#master, #detail, #detailPlaceholder, #detailOutgoing) {
-    box-sizing: border-box;
+  /* CSS grid placement */
+
+  :host {
+    --_master-area: master-start / detail-start;
+
+    /*
+      When the detail size isn't explicitly defined and the detail is set to expand,
+      the detail column template is 'min-content 1fr'. In this case, the detail area
+      should not span both columns initially (and when recalculating the detail size)
+      as spanning both would effectively collapse them into a single '1fr' column where
+      min-content resolves to 0, making it impossible to measure the detail's intrinsic
+      minimum width from JavaScript.
+    */
+    --_detail-area: detail-start / detail-extra-start;
   }
 
-  #detailPlaceholder {
-    z-index: 1;
-    opacity: 0;
-    pointer-events: none;
+  :host(:is([has-detail], [has-detail-placeholder]):not([recalculating-detail-size])) {
+    --_detail-area: detail-start / detail-end;
   }
 
-  :host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  #master {
-    grid-column: master-start / detail-start;
-    grid-row: 1;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  :host([has-master]) #master {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  :is(#detail, #detailPlaceholder, #detailOutgoing) {
-    grid-column: detail-start / detail-end;
+  :host([orientation='horizontal']) #master {
+    grid-column: var(--_master-area);
     grid-row: 1;
   }
 
   :host([orientation='vertical']) #master {
     grid-column: 1;
-    grid-row: master-start / detail-start;
+    grid-row: var(--_master-area);
+  }
+
+  :host([orientation='horizontal']) :is(#detail, #detailPlaceholder, #detailOutgoing) {
+    grid-column: var(--_detail-area);
+    grid-row: 1;
   }
 
   :host([orientation='vertical']) :is(#detail, #detailPlaceholder, #detailOutgoing) {
     grid-column: 1;
-    grid-row: detail-start / detail-end;
+    grid-row: var(--_detail-area);
   }
+
+  /* Expand */
+
+  :host(:is([expand='both'], [expand='master'])) {
+    --_master-extra: 1fr;
+  }
+
+  :host(:is([expand='both'], [expand='detail'])) {
+    --_detail-extra: 1fr;
+  }
+
+  :host([keep-detail-column-offscreen]),
+  :host([has-detail-placeholder][overlay]:not([has-detail])),
+  :host(:not([has-detail-placeholder], [has-detail])) {
+    --_master-extra: calc(100% - var(--_master-size));
+  }
+
+  /* Backdrop base styles */
 
   #backdrop {
     --_transition-easing: linear;
@@ -105,36 +132,30 @@ export const masterDetailLayoutStyles = css`
     forced-color-adjust: none;
   }
 
-  :host([expand='both']),
-  :host([expand='master']) {
-    --_master-extra: 1fr;
+  /* Master base styles */
+
+  #master {
+    opacity: 0;
+    pointer-events: none;
+    box-sizing: border-box;
   }
 
-  :host([expand='both']:is([has-detail], [has-detail-placeholder])),
-  :host([expand='detail']:is([has-detail], [has-detail-placeholder])) {
-    --_detail-extra: 1fr;
+  :host([has-master]) #master {
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  :host([recalculating-detail-size]:is([has-detail], [has-detail-placeholder])) {
-    --_detail-extra: 0px;
+  /* Detail base styles */
+
+  #detail {
+    translate: var(--_transition-offset);
+    opacity: 0;
+    z-index: 4;
   }
 
-  :host([keep-detail-column-offscreen]),
-  :host([has-detail-placeholder][overlay]:not([has-detail])),
-  :host(:not([has-detail-placeholder], [has-detail])) {
-    --_master-extra: calc(100% - var(--_master-size));
-  }
-
-  :host([orientation='horizontal']) #detailPlaceholder,
-  :host([orientation='horizontal']:not([overlay])) #detail {
-    border-inline-start: var(--vaadin-master-detail-layout-border-width, 1px) solid
-      var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
-  }
-
-  :host([orientation='vertical']) #detailPlaceholder,
-  :host([orientation='vertical']:not([overlay])) #detail {
-    border-top: var(--vaadin-master-detail-layout-border-width, 1px) solid
-      var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
+  :host([has-detail]) #detail {
+    translate: none;
+    opacity: 1;
   }
 
   #detailOutgoing {
@@ -147,24 +168,52 @@ export const masterDetailLayoutStyles = css`
     display: block;
   }
 
-  /* Detail transition: off-screen by default, on-screen when has-detail */
-  #detail {
-    translate: var(--_transition-offset);
+  #detailPlaceholder {
+    z-index: 1;
     opacity: 0;
-    z-index: 4;
+    pointer-events: none;
   }
 
-  :host([has-detail]) #detail {
-    translate: none;
+  :host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
     opacity: 1;
+    pointer-events: auto;
   }
 
-  :host([overlay]) {
+  :is(#detail, #detailPlaceholder, #detailOutgoing) {
+    box-sizing: border-box;
+  }
+
+  /* Detail borders */
+
+  #detail,
+  #detailPlaceholder {
+    border-color: var(--vaadin-master-detail-layout-border-color, var(--vaadin-border-color-secondary));
+    border-width: var(--vaadin-master-detail-layout-border-width, 1px);
+  }
+
+  :host([orientation='horizontal']) #detailPlaceholder,
+  :host([orientation='horizontal']:not([overlay])) #detail {
+    border-inline-start-style: solid;
+  }
+
+  :host([orientation='vertical']) #detailPlaceholder,
+  :host([orientation='vertical']:not([overlay])) #detail {
+    border-block-start-style: solid;
+  }
+
+  /* Overlay */
+
+  :host([overlay][orientation='horizontal']) {
     --_transition-offset: calc((100% + 30px) * var(--_rtl-multiplier));
   }
 
   :host([overlay][orientation='vertical']) {
     --_transition-offset: 0 calc(100% + 30px);
+  }
+
+  :host([has-detail][overlay]) #backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   :host([has-detail][overlay]) :is(#detail, #detailOutgoing) {
@@ -175,12 +224,7 @@ export const masterDetailLayoutStyles = css`
     grid-row: none;
   }
 
-  :host([has-detail][overlay]) #backdrop {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  :host([has-detail][overlay]:not([orientation='vertical'])) :is(#detail, #detailOutgoing) {
+  :host([has-detail][overlay][orientation='horizontal']) :is(#detail, #detailOutgoing) {
     inset-block: 0;
     inset-inline-end: 0;
     width: var(--_overlay-size, var(--_detail-size));
@@ -198,17 +242,8 @@ export const masterDetailLayoutStyles = css`
     position: fixed;
   }
 
-  @media (forced-colors: active) {
-    :host([has-detail][overlay]) :is(#detail, #detailOutgoing) {
-      outline: 3px solid !important;
-    }
+  /* Transitions */
 
-    :is(#detail, #detailPlaceholder, #detailOutgoing) {
-      background: Canvas !important;
-    }
-  }
-
-  /* Enable transitions when motion is allowed */
   @media (prefers-reduced-motion: no-preference) {
     :host(:not([no-animation], [transition='replace'])) {
       --_transition-duration: 200ms;
@@ -216,6 +251,18 @@ export const masterDetailLayoutStyles = css`
 
     :host([overlay]:not([no-animation])) {
       --_transition-duration: 300ms;
+    }
+  }
+
+  /* Forced colors */
+
+  @media (forced-colors: active) {
+    :host([has-detail][overlay]) :is(#detail, #detailOutgoing) {
+      outline: 3px solid !important;
+    }
+
+    :is(#detail, #detailPlaceholder, #detailOutgoing) {
+      background: Canvas !important;
     }
   }
 `;
