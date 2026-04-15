@@ -219,6 +219,18 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         reflectToAttribute: true,
       },
 
+      /**
+       * When true, the layout forces the detail area to be shown as an overlay.
+       *
+       * @attr {boolean} force-overlay
+       */
+      forceOverlay: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+      },
+
       /** @private */
       __detailCachedSize: {
         type: String,
@@ -375,7 +387,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const trackSizesProp = isVertical ? 'gridTemplateRows' : 'gridTemplateColumns';
     const trackSizes = parseTrackSizes(computedStyle[trackSizesProp]);
 
-    const hasOverflow = (hasDetail || hasDetailPlaceholder) && detectOverflow(hostSize, trackSizes);
+    const hasOverflow =
+      (hasDetail || hasDetailPlaceholder) && (this.forceOverlay || detectOverflow(hostSize, trackSizes));
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(slottedDetail)[0] : null;
 
     return {
