@@ -10,7 +10,7 @@ Yes. Items can include an icon with a text label, and items may also be icon-onl
 
 **Q: On small screens / narrow containers, how should the component adapt?**
 
-Simplify to a back-to-parent link. On very narrow widths the full trail is replaced by a single back-style link pointing to the immediate parent of the current page.
+The same collapse-and-overflow behavior covers every width, including mobile. Intermediate items collapse into an overflow control (an ellipsis menu) that lists the hidden ancestors; when that is still not enough, the current item's label truncates with an ellipsis. An overflow control occupies roughly the same footprint as a "back to parent" link would, so there is no dedicated mobile back-link mode — mobile users keep the same jump-to-any-ancestor capability as users on wider viewports.
 
 **Q: How should overly long trails (or long labels) be handled when they don't fit the available width?**
 
@@ -35,10 +35,6 @@ Yes. An ancestor level that has no dedicated page, or that the current user does
 **Q: Should an application be able to indicate that an item has sub-items, and let the user jump to a sibling at the same level?**
 
 No. The breadcrumb strictly displays the path from the root to the current page; switching among siblings is outside its scope.
-
-**Q: What triggers the mobile back-link mode versus the desktop collapse-and-overflow mode?**
-
-A container width threshold. When the breadcrumb's own allotted width falls below a fixed threshold, the component switches to the back-link presentation regardless of viewport size. Above that threshold the collapse-and-overflow behavior is used.
 
 **Q: Should the Flow wrapper integrate automatically with the application's router?**
 
@@ -158,15 +154,7 @@ For example, inside a narrow container the only visible item is the current page
 
 ---
 
-## 15. Switching to a compact back-link view on very narrow widths
-
-When the breadcrumb's allotted width falls below a fixed threshold, the component replaces the full trail with a single back-style link pointing to the immediate parent of the current page. This keeps orientation and upward navigation available in contexts — such as phone screens or tightly constrained side panels — where even the collapsed trail would consume too much width. When the current page is the root (no parent exists), the back link is not shown.
-
-For example, a product page nested under Home › Electronics › Laptops is viewed inside a 320-pixel mobile layout. Instead of the full trail, the breadcrumb shows a back arrow followed by "Laptops", letting the user return to the laptops category with one tap.
-
----
-
-## 16. Default navigation landmark label
+## 15. Default navigation landmark label
 
 The breadcrumb identifies itself to assistive technology as a navigation region, and the component provides a sensible default label so the landmark is immediately recognizable without any application configuration. The application can still override the label for localization or to match its voice. (This is the breadcrumb's component-specific default on top of the universal "every landmark has an accessible name" rule.)
 
@@ -174,7 +162,7 @@ For example, a screen reader user listing the navigation landmarks on a page hea
 
 ---
 
-## 17. Announcing the current page to assistive technology
+## 16. Announcing the current page to assistive technology
 
 The item representing the current page is programmatically marked as the user's current location, so assistive technology announces this state without relying on visual styling. This is distinct from the item simply having an accessible name — it communicates the "you are here" semantic that is specific to the breadcrumb pattern.
 
@@ -182,7 +170,7 @@ For example, as a screen reader user moves through the trail Home › Settings �
 
 ---
 
-## 18. Separators omitted from the accessibility tree
+## 17. Separators omitted from the accessibility tree
 
 Visual separators between items are presentational only and are not exposed to assistive technology, so users do not hear a redundant word (such as "greater than") between every link. This avoids the screen-reader noise that a naive rendering of a separator-heavy pattern would produce.
 
@@ -190,7 +178,7 @@ For example, a screen reader reads the trail as "Home, link; Settings, link; Not
 
 ---
 
-## 19. Directional separator mirrors in right-to-left layouts
+## 18. Directional separator mirrors in right-to-left layouts
 
 In right-to-left contexts, the default directional separator flips so that it continues to point from parent toward child in the reading direction. This is the breadcrumb-specific extension of the universal right-to-left rule: a chevron that remains literally "pointing right" in RTL would contradict the hierarchy it is meant to convey.
 
@@ -198,7 +186,7 @@ For example, in an Arabic-language application the trail reads from right to lef
 
 ---
 
-## 20. Automatic trail from the view hierarchy
+## 19. Automatic trail from the view hierarchy
 
 <!-- Applies to: flow -->
 
