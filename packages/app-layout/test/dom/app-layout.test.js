@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../../src/vaadin-app-layout.js';
 import '../../vaadin-drawer-toggle.js';
 
@@ -25,6 +25,7 @@ describe('vaadin-app-layout', () => {
       layout.appendChild(drawer);
       await nextResize(layout);
       await nextFrame();
+      await aTimeout(0);
       await expect(layout).dom.to.equalSnapshot();
     });
 
@@ -35,6 +36,7 @@ describe('vaadin-app-layout', () => {
       layout.appendChild(navbar);
       await nextResize(layout);
       await nextFrame();
+      await aTimeout(0);
       await expect(layout).dom.to.equalSnapshot();
     });
   });

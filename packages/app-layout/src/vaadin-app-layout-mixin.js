@@ -138,11 +138,10 @@ export const AppLayoutMixin = (superclass) =>
       super.connectedCallback();
 
       this.__resizeObserver = new ResizeObserver((entries) => this.__onResize(entries));
-      [this, this.$.navbarTop, this.$.navbarBottom, this.$.drawer].forEach((node) => {
-        if (node) {
-          this.__resizeObserver.observe(node);
-        }
-      });
+      this.__resizeObserver.observe(this);
+      this.__resizeObserver.observe(this.$.drawer);
+      this.__resizeObserver.observe(this.$.navbarTop);
+      this.__resizeObserver.observe(this.$.navbarBottom);
 
       this.addEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
       window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
