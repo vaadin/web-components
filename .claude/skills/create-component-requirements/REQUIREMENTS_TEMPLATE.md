@@ -11,6 +11,7 @@ The detailed numbered requirements follow. Each:
 - Follows with a concrete example that makes the requirement unambiguous
 - Is self-contained — no knowledge of the component API required
 - Is separated from the next requirement by a `---` horizontal rule
+- MAY carry an optional `Applies to: universal | web | flow` line to scope it to one variant. Omitted = `universal` (applies to both variants). Only add the line when the behavior is meaningful for just one variant.
 
 Every use case from the problem statement must be covered by at least one requirement. Core use case requirements come first, followed by variant use case requirements.
 
@@ -37,6 +38,8 @@ Questions posed to the user while producing this document, with the user's answe
 ---
 
 ## 1. <Behavior-focused title>
+
+<!-- Applies to: universal | web | flow (optional — default is universal; include only when the behavior is variant-specific) -->
 
 State the required behavior: what the component must do and when. Then give a concrete example to make it tangible.
 

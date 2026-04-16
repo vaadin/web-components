@@ -15,6 +15,8 @@ TASK OVERVIEW:
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 8 — every requirement must be addressed in the spec. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
+   **Variant filter.** A requirement may carry an optional `Applies to: universal | web | flow` line (default: `universal`). This skill produces the web component spec, so ignore any requirement tagged `Applies to: flow` — those are covered by `create-component-flow-spec`. Coverage verification in step 8 applies only to `universal` and `web` requirements.
+
 3. Read `packages/{component-name}/spec/problem-statement.md`. Use it as a scope boundary. If the file does not exist, stop and tell the user to run `create-component-problem-statement` first.
 
 4. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. This defines the mixin pattern, file structure, styling conventions, and implementation standards the spec must follow. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. Do not skip any section that is relevant to the component being specified.

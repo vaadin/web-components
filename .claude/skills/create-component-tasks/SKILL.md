@@ -15,6 +15,8 @@ TASK OVERVIEW:
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 9 — every requirement must be addressed by at least one task. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
+   **Variant filter.** A requirement may carry an optional `Applies to: universal | web | flow` line (default: `universal`). This skill produces web component implementation tasks, so ignore any requirement tagged `Applies to: flow` — those are covered by `create-component-flow-tasks`. Coverage verification in step 9 applies only to `universal` and `web` requirements.
+
 3. Read `packages/{component-name}/spec/developer-api.md`. The spec references this document by section number/name in Key Design Decisions and throughout the implementation details. Read it to understand the API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
 
 4. Check if `packages/{component-name}/spec/figma-design.md` exists. If present, read it and reference the Figma design in theme styling tasks as visual guidance. If absent, proceed without it — Figma designs are optional.

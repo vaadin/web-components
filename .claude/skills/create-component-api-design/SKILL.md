@@ -17,6 +17,8 @@ TASK OVERVIEW:
 
 1. Read the requirements file at `packages/{component-name}/spec/requirements.md`. This is the primary input — every code example must trace back to at least one requirement. If the file does not exist, stop and tell the user to run the `create-component-requirements` skill first.
 
+   **Variant filter.** A requirement may carry an optional `Applies to: universal | web | flow` line (default: `universal`). This skill designs the web component API, so ignore any requirement tagged `Applies to: flow` — those are covered by the Flow-variant pipeline (`create-component-flow-api-design`). Consider only `universal` and `web` requirements from here on.
+
 2. Read the problem statement at `packages/{component-name}/spec/problem-statement.md`. Use the Differentiation section to verify that code examples stay within the component's defined scope. If the file does not exist, stop and tell the user to run the `create-component-problem-statement` skill first.
 
 3. Read `API_DESIGN_TEMPLATE.md` in this skill's directory. Use it as the starting point for your output file.
