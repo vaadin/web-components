@@ -1,47 +1,5 @@
 # Breadcrumb Requirements
 
-## Discussion
-
-Questions posed to the user while producing this document, with the user's answers. These are the decisions that shaped the requirements below.
-
-**Q: Should breadcrumb items support icons (alongside or instead of text labels)?**
-
-Yes. Items can include an icon with a text label, and items may also be icon-only (no text) — a home icon for the root is a common example.
-
-**Q: On small screens / narrow containers, how should the component adapt?**
-
-The same collapse-and-overflow behavior covers every width, including mobile. Intermediate items collapse into an overflow control (an ellipsis menu) that lists the hidden ancestors; when that is still not enough, the current item's label truncates with an ellipsis. An overflow control occupies roughly the same footprint as a "back to parent" link would, so there is no dedicated mobile back-link mode — mobile users keep the same jump-to-any-ancestor capability as users on wider viewports.
-
-**Q: How should overly long trails (or long labels) be handled when they don't fit the available width?**
-
-Intermediate items collapse in order of ancestry, starting with the item closest to the root, until only the root and the current item remain. If further collapsing is still needed, the root item also collapses. The current item never collapses; if even it does not fit on its own, its label is truncated with an ellipsis. Other items' labels are not truncated — they either fit at their natural length or they are collapsed. Rationale: the items closest to the current page are the most valuable for orientation, and the root is the next most valuable reference point.
-
-**Q: Should the current page be part of the breadcrumb, and can it be omitted?**
-
-Included by default, but the application can configure the breadcrumb to end at the immediate parent instead (purely upward-navigation presentation).
-
-**Q: When intermediate items are collapsed due to insufficient width, how should the user access them?**
-
-An overflow control (e.g. an ellipsis) replaces the collapsed items. Activating it opens a menu listing all hidden ancestors in order; selecting one navigates to that level.
-
-**Q: Should the visual separator between items be customizable by the application?**
-
-Yes. Applications can change the separator character or icon to match their visual language.
-
-**Q: Should breadcrumb items be allowed to be non-clickable (informational only) even when they are not the current page?**
-
-Yes. An ancestor level that has no dedicated page, or that the current user does not have permission to access, can be shown as non-clickable text within the trail.
-
-**Q: Should an application be able to indicate that an item has sub-items, and let the user jump to a sibling at the same level?**
-
-No. The breadcrumb strictly displays the path from the root to the current page; switching among siblings is outside its scope.
-
-**Q: Should the Flow wrapper integrate automatically with the application's router?**
-
-Yes. In Flow, `add(new Breadcrumb())` with no items supplied should render the trail automatically from the current route's view hierarchy — deriving items, labels, paths, and the "current" marker from the registered routes and parent layouts of the active view. Manually supplied items remain available for full control. This decision shapes a Flow-only requirement (the web component has no access to a server-side view/route registry).
-
----
-
 ## 1. Displaying the ancestor trail
 
 The breadcrumb displays an ordered sequence of items representing the hierarchical path from the root to the current page, arranged from the most general ancestor to the most specific location.
@@ -193,3 +151,45 @@ For example, in an Arabic-language application the trail reads from right to lef
 When a breadcrumb is placed in a view without any explicit items supplied, it builds and updates its trail automatically from the application's view hierarchy — the chain of nested layouts and the current route that the Flow router has resolved. The simplest valid usage is an unconfigured breadcrumb added to a layout; each subsequent navigation rebuilds the trail to reflect the new route's ancestor chain, with the active route marked as the current item. When the developer supplies an explicit trail, the explicit trail takes precedence (supporting, for example, polyhierarchy per requirement 5) and the automatic mode is not used.
 
 For example, a Flow application has a top-level `OrganizationLayout` containing a `BillingLayout`, which hosts the route `InvoiceView` registered at `invoices/:invoiceId`. Placing a plain, unconfigured breadcrumb into the top-level layout renders the trail Organization › Billing › Invoice #4521 with no per-item configuration, deriving each item's label and target from the corresponding route or layout. When the user navigates from an invoice to the billing overview (a sibling route inside `BillingLayout`), the trail automatically updates to Organization › Billing, with "Billing" now marked as the current item.
+
+---
+
+## Discussion
+
+Questions posed to the user while producing this document, with the user's answers. These are the decisions that shaped the requirements above.
+
+**Q: Should breadcrumb items support icons (alongside or instead of text labels)?**
+
+Yes. Items can include an icon with a text label, and items may also be icon-only (no text) — a home icon for the root is a common example.
+
+**Q: On small screens / narrow containers, how should the component adapt?**
+
+The same collapse-and-overflow behavior covers every width, including mobile. Intermediate items collapse into an overflow control (an ellipsis menu) that lists the hidden ancestors; when that is still not enough, the current item's label truncates with an ellipsis. An overflow control occupies roughly the same footprint as a "back to parent" link would, so there is no dedicated mobile back-link mode — mobile users keep the same jump-to-any-ancestor capability as users on wider viewports.
+
+**Q: How should overly long trails (or long labels) be handled when they don't fit the available width?**
+
+Intermediate items collapse in order of ancestry, starting with the item closest to the root, until only the root and the current item remain. If further collapsing is still needed, the root item also collapses. The current item never collapses; if even it does not fit on its own, its label is truncated with an ellipsis. Other items' labels are not truncated — they either fit at their natural length or they are collapsed. Rationale: the items closest to the current page are the most valuable for orientation, and the root is the next most valuable reference point.
+
+**Q: Should the current page be part of the breadcrumb, and can it be omitted?**
+
+Included by default, but the application can configure the breadcrumb to end at the immediate parent instead (purely upward-navigation presentation).
+
+**Q: When intermediate items are collapsed due to insufficient width, how should the user access them?**
+
+An overflow control (e.g. an ellipsis) replaces the collapsed items. Activating it opens a menu listing all hidden ancestors in order; selecting one navigates to that level.
+
+**Q: Should the visual separator between items be customizable by the application?**
+
+Yes. Applications can change the separator character or icon to match their visual language.
+
+**Q: Should breadcrumb items be allowed to be non-clickable (informational only) even when they are not the current page?**
+
+Yes. An ancestor level that has no dedicated page, or that the current user does not have permission to access, can be shown as non-clickable text within the trail.
+
+**Q: Should an application be able to indicate that an item has sub-items, and let the user jump to a sibling at the same level?**
+
+No. The breadcrumb strictly displays the path from the root to the current page; switching among siblings is outside its scope.
+
+**Q: Should the Flow wrapper integrate automatically with the application's router?**
+
+Yes. In Flow, `add(new Breadcrumb())` with no items supplied should render the trail automatically from the current route's view hierarchy — deriving items, labels, paths, and the "current" marker from the registered routes and parent layouts of the active view. Manually supplied items remain available for full control. This decision shapes a Flow-only requirement (the web component has no access to a server-side view/route registry).

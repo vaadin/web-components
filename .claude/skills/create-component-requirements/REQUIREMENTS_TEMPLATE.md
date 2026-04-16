@@ -3,9 +3,7 @@
 <!--
 Behavioral requirements for the component, written from the perspective of an application end user. No implementation details, APIs, or technology choices.
 
-The document opens with a Discussion section: a log of the questions the skill posed to the user while this document was being produced, and the answers the user gave. The Discussion captures the decisions that shaped the requirements — it is context, not a summary of the requirements.
-
-The detailed numbered requirements follow. Each:
+The document opens directly with the detailed numbered requirements. Each:
 - Has a short, behavior-focused title
 - Opens with the required behavior: what the component must do and when
 - Follows with a concrete example that makes the requirement unambiguous
@@ -15,6 +13,8 @@ The detailed numbered requirements follow. Each:
 
 Every use case from the problem statement must be covered by at least one requirement. Core use case requirements come first, followed by variant use case requirements.
 
+The document closes with a Discussion section: a log of the questions the skill posed to the user while this document was being produced, and the answers the user gave. The Discussion captures the decisions that shaped the requirements — it is context, not a summary of the requirements.
+
 Do NOT include:
 - Property, attribute, event, slot, or CSS names
 - Framework-specific code
@@ -22,20 +22,6 @@ Do NOT include:
 - API design suggestions
 - Restatements of universal behavioural rules from DESIGN_GUIDELINES.md (accessible names, customisable labels, focus order matching visual order, RTL support, readable/tappable targets on small viewports). A requirement may touch these concerns only when the component adds a concrete default, a component-specific extension, or a specific interaction pattern that the universal rule does not pin down.
 -->
-
-## Discussion
-
-Questions posed to the user while producing this document, with the user's answers. Each entry captures a decision that shaped the requirements below. The Discussion is the audit trail of scope and behavior choices — not a summary of the detailed requirements.
-
-**Q: {Short, focused question — e.g. "Should items support icons?"}**
-
-{User's answer, paraphrased as the decision. Keep it short.}
-
-**Q: {Next question — e.g. "On mobile, should the component collapse the middle or simplify to a back link?"}**
-
-{User's answer.}
-
----
 
 ## 1. <Behavior-focused title>
 
@@ -54,3 +40,17 @@ State the required behavior: what the component must do and when. Then give a co
 ## 3. <Behavior-focused title>
 
 ...
+
+---
+
+## Discussion
+
+Questions posed to the user while producing this document, with the user's answers. Each entry captures a decision that shaped the requirements above. The Discussion is the audit trail of scope and behavior choices — not a summary of the detailed requirements.
+
+**Q: {Short, focused question — e.g. "Should items support icons?"}**
+
+{User's answer, paraphrased as the decision. Keep it short.}
+
+**Q: {Next question — e.g. "On mobile, should the component collapse the middle or simplify to a back link?"}**
+
+{User's answer.}

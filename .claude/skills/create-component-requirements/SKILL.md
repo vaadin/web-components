@@ -26,7 +26,7 @@ TASK OVERVIEW:
 
    Also ask the user **which variants are in scope** — web component only, Flow component only, or both (default: both). Record the answer in the Discussion section. This decides how variant tagging is used later in step 9.
 
-   Record every question and answer in a `## Discussion` section that will sit at the top of the output document. This becomes the audit trail of decisions that shaped the requirements. If a previous version of `requirements.md` exists at `packages/{component-name}/spec/requirements.md`, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
+   Record every question and answer in a `## Discussion` section that sits at the end of the output document (after all numbered requirements). This becomes the audit trail of decisions that shaped the requirements — informational, not part of the requirements themselves. If a previous version of `requirements.md` exists at `packages/{component-name}/spec/requirements.md`, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
 
 Research guidance: Steps 3–8 search for real-world evidence and refinement of the behavioral threads identified in steps 1 and 2 and the decisions recorded in the Discussion section. When evaluating an issue, forum post, or design system pattern, check whether it describes a behavior that supports one of the use cases or aligns with a recorded decision. Behaviors that fall outside the Differentiation boundaries are out of scope. If research reveals an important behavior that no use case or decision covers but appears to be within scope, flag it via AskUserQuestion before including it — and add the new Q&A to the Discussion section.
 
@@ -42,7 +42,7 @@ Research guidance: Steps 3–8 search for real-world evidence and refinement of 
 
 8. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
 
-9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document starts with the `## Discussion` section capturing the Q&A from step 2 (plus any additional questions posed during research). After the Discussion, write numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement).
+9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document opens directly with the numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement). The `## Discussion` section capturing the Q&A from step 2 (plus any additional questions posed during research) comes at the end of the document, after all numbered requirements.
 
    **Variant scoping.** Each requirement MAY carry an `Applies to: universal | web | flow` line. Default (omitted) is `universal`, meaning the behavior applies to both the web component and the Flow wrapper. Use `web` when the behavior only has meaning in the web component (e.g. a DOM-level interaction the Flow API does not expose). Use `flow` when the behavior only has meaning in the Flow wrapper (e.g. a server-side integration requirement, a Java-API-only ergonomic expectation, or a Flow-specific data-binding concern). Do NOT tag a requirement as variant-specific just because its wording happens to reference one API — tag it only when the behavior itself is absent from the other variant. The tag goes on its own line (or an HTML comment line) immediately under the requirement title.
 
@@ -97,9 +97,9 @@ Before finalizing, check that:
 3. Each requirement covers a single, specific behavior — not a bundle of loosely related behaviors.
 4. Requirements are ordered from most common to most specialized.
 5. The first requirement is the simplest, most universal behavior.
-6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`, including the Discussion section at the top.
+6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`, including the Discussion section at the end (after all numbered requirements).
 7. The Discussion section records every question posed to the user in step 2 (and any follow-up questions raised during research) together with the user's answer. It does not duplicate the detailed requirements.
-8. Every answer in the Discussion section is reflected in the detailed requirements below — a decision captured there must actually shape at least one requirement.
+8. Every answer in the Discussion section is reflected in the numbered requirements above — a decision captured there must actually shape at least one requirement.
 9. Concrete examples are included where they make requirements unambiguous.
 10. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
 11. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
