@@ -146,7 +146,7 @@ For example, in an Arabic-language application the trail reads from right to lef
 
 ## 19. Automatic trail from the view hierarchy
 
-<!-- Applies to: flow -->
+**Applies to:** flow
 
 When a breadcrumb is placed in a view without any explicit items supplied, it builds and updates its trail automatically from the application's view hierarchy — the chain of nested layouts and the current route that the Flow router has resolved. The simplest valid usage is an unconfigured breadcrumb added to a layout; each subsequent navigation rebuilds the trail to reflect the new route's ancestor chain, with the active route marked as the current item. When the developer supplies an explicit trail, the explicit trail takes precedence (supporting, for example, polyhierarchy per requirement 5) and the automatic mode is not used.
 

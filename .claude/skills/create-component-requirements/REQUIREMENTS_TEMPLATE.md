@@ -9,7 +9,7 @@ The document opens directly with the detailed numbered requirements. Each:
 - Follows with a concrete example that makes the requirement unambiguous
 - Is self-contained — no knowledge of the component API required
 - Is separated from the next requirement by a `---` horizontal rule
-- MAY carry an optional `Applies to: universal | web | flow` line to scope it to one variant. Omitted = `universal` (applies to both variants). Only add the line when the behavior is meaningful for just one variant.
+- MAY carry an optional visible `**Applies to:** universal | web | flow` line directly under the title to scope it to one variant. Omitted = `universal` (applies to both variants). Only add the line when the behavior is meaningful for just one variant. The line MUST be visible markdown (not an HTML comment) so readers can see the scope at a glance.
 
 Every use case from the problem statement must be covered by at least one requirement. Core use case requirements come first, followed by variant use case requirements.
 
@@ -25,7 +25,9 @@ Do NOT include:
 
 ## 1. <Behavior-focused title>
 
-<!-- Applies to: universal | web | flow (optional — default is universal; include only when the behavior is variant-specific) -->
+**Applies to:** flow
+
+<!-- Optional. Omit this line entirely for the default `universal` scope. Allowed values: `universal`, `web`, `flow`. The line above is shown as an example for a Flow-only requirement; remove it for universal requirements. -->
 
 State the required behavior: what the component must do and when. Then give a concrete example to make it tangible.
 

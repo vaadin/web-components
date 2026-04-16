@@ -15,7 +15,7 @@ TASK OVERVIEW:
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 8 — every requirement must be addressed in the spec. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
-   **Variant filter.** A requirement may carry an optional `Applies to: universal | web | flow` line (default: `universal`). This skill produces the web component spec, so ignore any requirement tagged `Applies to: flow` — those are covered by `create-component-flow-spec`. Coverage verification in step 8 applies only to `universal` and `web` requirements.
+   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). This skill produces the web component spec, so ignore any requirement tagged `**Applies to:** flow` — those are covered by `create-component-flow-spec`. Coverage verification in step 8 applies only to `universal` and `web` requirements.
 
 3. Read `packages/{component-name}/spec/problem-statement.md`. Use it as a scope boundary. If the file does not exist, stop and tell the user to run `create-component-problem-statement` first.
 

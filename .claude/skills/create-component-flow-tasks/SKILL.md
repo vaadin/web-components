@@ -15,7 +15,7 @@ TASK OVERVIEW:
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 8 — every universal/flow requirement must be addressed by at least one task. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
-   **Variant filter.** Ignore requirements tagged `Applies to: web` — those are covered by `create-component-tasks` for the web component pipeline. Coverage verification applies only to `universal` and `flow` requirements.
+   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). Ignore requirements tagged `**Applies to:** web` — those are covered by `create-component-tasks` for the web component pipeline. Coverage verification applies only to `universal` and `flow` requirements.
 
 3. Read `packages/{component-name}/spec/flow-developer-api.md`. The spec references this document throughout. Read it to understand the Java API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
 

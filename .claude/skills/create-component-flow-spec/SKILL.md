@@ -19,7 +19,7 @@ TASK OVERVIEW:
 
 4. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 10. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
-   **Variant filter.** Ignore requirements tagged `Applies to: web`. Only `universal` and `flow` requirements must be covered.
+   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). Ignore requirements tagged `**Applies to:** web`. Only `universal` and `flow` requirements must be covered.
 
 5. Read `packages/{component-name}/spec/problem-statement.md`. Use it as a scope boundary.
 

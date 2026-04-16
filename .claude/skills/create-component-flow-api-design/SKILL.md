@@ -17,7 +17,7 @@ TASK OVERVIEW:
 
 1. Read the requirements file at `packages/{component-name}/spec/requirements.md`. This is the primary input — every code example must trace back to at least one requirement. If the file does not exist, stop and tell the user to run the `create-component-requirements` skill first.
 
-   **Variant filter.** A requirement may carry an optional `Applies to: universal | web | flow` line (default: `universal`). This skill designs the Flow API, so ignore any requirement tagged `Applies to: web` — those are specific to the web component and have no Flow equivalent. Consider only `universal` and `flow` requirements from here on.
+   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). This skill designs the Flow API, so ignore any requirement tagged `**Applies to:** web` — those are specific to the web component and have no Flow equivalent. Consider only `universal` and `flow` requirements from here on.
 
 2. Read the web component developer API at `packages/{component-name}/spec/developer-api.md`. If the file does not exist, stop and tell the user to run the `create-component-api-design` skill first. This defines the web component API surface the Flow wrapper must expose. Every attribute, property, slot, event, and CSS custom property developers use from HTML/JS must be reachable from Java.
 
