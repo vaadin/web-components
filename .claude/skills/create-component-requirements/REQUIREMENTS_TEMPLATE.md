@@ -12,13 +12,14 @@ The detailed numbered requirements follow. Each:
 - Is self-contained — no knowledge of the component API required
 - Is separated from the next requirement by a `---` horizontal rule
 
-Every use case from the problem statement must be covered by at least one requirement. Core use case requirements come first, followed by variant use case requirements, then uniformly-applicable behaviors (use by people with disabilities, keyboard-only operation, right-to-left languages, small screens, long or dynamic content).
+Every use case from the problem statement must be covered by at least one requirement. Core use case requirements come first, followed by variant use case requirements.
 
 Do NOT include:
 - Property, attribute, event, slot, or CSS names
 - Framework-specific code
 - Implementation notes
 - API design suggestions
+- Restatements of universal behavioural rules from DESIGN_GUIDELINES.md (accessible names, customisable labels, focus order matching visual order, RTL support, readable/tappable targets on small viewports). A requirement may touch these concerns only when the component adds a concrete default, a component-specific extension, or a specific interaction pattern that the universal rule does not pin down.
 -->
 
 ## Discussion

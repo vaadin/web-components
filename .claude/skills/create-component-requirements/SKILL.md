@@ -40,9 +40,17 @@ Research guidance: Steps 3–8 search for real-world evidence and refinement of 
 
 8. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
 
-9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document starts with the `## Discussion` section capturing the Q&A from step 2 (plus any additional questions posed during research). After the Discussion, write numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement), then uniformly-applicable behaviors.
+9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document starts with the `## Discussion` section capturing the Q&A from step 2 (plus any additional questions posed during research). After the Discussion, write numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement).
 
-10. After drafting the core requirements, add requirements for uniformly-applicable behaviors as additional numbered items at the end of the list. Common categories include use by people with disabilities (low vision, color blindness, motor impairments, screen reader users), keyboard-only operation, use in right-to-left languages, behavior on small screens or narrow containers, and handling of long or dynamically changing text.
+10. Read `DESIGN_GUIDELINES.md` at the repository root — specifically the "Universal behavioural requirements" section. DO NOT write numbered requirements that restate those universal rules (accessible names, customisable labels, focus order matching visual order, right-to-left support, readable/tappable targets on small viewports). They are enforced globally and would drift if duplicated per component.
+
+    A component's `requirements.md` may mention a universal concern ONLY when the component adds something specific on top of the universal rule:
+
+    - A concrete default value the component introduces (e.g. the default text of a navigation landmark's label).
+    - A component-specific extension or override (e.g. a directional separator that flips in RTL, which goes beyond the generic "layout mirrors" rule).
+    - A specific interaction pattern the universal rule does not pin down (e.g. an overflow menu that additionally opens with arrow keys on top of standard Tab/Enter).
+
+    When such a component-specific requirement is included, state only the component-specific aspect. Do not re-derive the universal rule, and keep the requirement focused on the addition.
 
 OUTPUT:
 
@@ -75,7 +83,7 @@ If two findings from research describe the exact same component behavior, keep o
 
 ORDERING:
 
-The first requirement must be the single most common, most basic behavior the component supports — typically the primary behavior needed for the core use case. Requirements supporting the core use case come before requirements that only apply to variant use cases. Within each group, order from common to specialized and from simple to complex. Requirements for uniformly-applicable behaviors (use by people with disabilities, keyboard-only users, right-to-left languages, small screens, etc.) come after the core behavioral requirements.
+The first requirement must be the single most common, most basic behavior the component supports — typically the primary behavior needed for the core use case. Requirements supporting the core use case come before requirements that only apply to variant use cases. Within each group, order from common to specialized and from simple to complex. Component-specific defaults, extensions, or interaction patterns that extend a universal behavioural rule (see DESIGN_GUIDELINES.md) come after the purely functional requirements.
 
 VERIFICATION:
 
@@ -83,7 +91,7 @@ Before finalizing, check that:
 1. Every requirement states a required behavior, not an implementation detail or API shape.
 2. No two requirements describe identical component behavior.
 3. Each requirement covers a single, specific behavior — not a bundle of loosely related behaviors.
-4. Requirements are ordered from most common to most specialized, with uniformly-applicable behaviors at the end.
+4. Requirements are ordered from most common to most specialized.
 5. The first requirement is the simplest, most universal behavior.
 6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`, including the Discussion section at the top.
 7. The Discussion section records every question posed to the user in step 2 (and any follow-up questions raised during research) together with the user's answer. It does not duplicate the detailed requirements.
@@ -92,3 +100,5 @@ Before finalizing, check that:
 10. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
 11. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
 12. Every use case in `problem-statement.md` is addressed by at least one requirement. For each use case, verify that the covering requirements are sufficient for the scenario to work end-to-end — a single loosely related requirement is not enough.
+13. No requirement restates a universal behavioural rule from `DESIGN_GUIDELINES.md` (accessible names, customisable labels, focus order, RTL, tappable-on-small-screens). Requirements that touch those concerns must add a component-specific default, extension, or interaction pattern — otherwise remove them.
+14. Behaviours compose without ambiguity. For every pair of requirements whose conditions could both apply at the same time (e.g. "truncate long labels" and "collapse items when space is limited" both triggered by insufficient width; "keyboard shortcut X opens the menu" and "Tab moves focus through items" both firing on keyboard input), either the requirements already define the combined behaviour explicitly, or a new requirement is added that does. If the composition is genuinely an open design question, resolve it via AskUserQuestion before finalising.

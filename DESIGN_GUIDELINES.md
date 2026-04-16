@@ -194,3 +194,45 @@ This differentiation is the hard boundary that drives every later step:
 - Clear boundaries make the component's identity obvious, which in turn makes the API and documentation straightforward.
 
 If research surfaces a compelling behaviour that falls outside the drawn boundary, the correct move is to record it in the Differentiation section as "not this component" rather than stretch the scope to include it.
+
+---
+
+## Universal behavioural requirements
+
+Certain behaviours apply to EVERY Vaadin web component. These are enforced at the theme, mixin, and component-base level — they are not optional per component.
+
+**Individual components' `requirements.md` files MUST NOT restate these as per-component requirements.** Repeated requirements drift: if "must support RTL" appears in fifty `requirements.md` files, some will get the phrasing wrong, some will add subtle contradictions, and the canonical list becomes impossible to evolve. Keep these rules here, once, and let component specs focus on what is specific to the component.
+
+**A component's `requirements.md` may mention a universal concern only when the component genuinely adds something on top of the universal rule:**
+
+- A concrete default value that the component introduces (e.g. a navigation landmark whose default label is `"Breadcrumb"`).
+- A component-specific extension or override (e.g. a directional separator that flips in RTL).
+- A specific interaction pattern that the universal rule does not pin down (e.g. an overflow menu that additionally opens with arrow keys).
+
+When a component's requirement does mention a universal concern, it should state only the component-specific aspect and reference this section — not re-derive the universal rule.
+
+For the implementation side of these rules, see [WEB_COMPONENT_GUIDELINES.md → Accessibility](WEB_COMPONENT_GUIDELINES.md#accessibility).
+
+### Every interactive element has an accessible name
+
+Every focusable element, button, link, control and landmark region the component contributes to the page has an accessible name so assistive technology can identify it. When the name comes from visible text it is automatic; when it does not (icon-only buttons, landmarks, dismiss controls, overflow controls), the component exposes a way for the application to supply one.
+
+### Labels with defaults are customisable
+
+Any text the component renders itself — landmark labels, placeholder strings, internal button labels ("More", "Clear selection", "Open menu"), error messages, tooltip defaults — is customisable by the application so it can be localised and adapted to the application's voice. Defaults are sensible English fallbacks, never hard-coded strings the application cannot change.
+
+### Focus order follows visual order
+
+Keyboard tab order and screen-reader reading order match the visual placement of elements. In RTL contexts, focus order mirrors together with the layout — if the rightmost item is first visually, it is first in focus order. Components do not reorder focus independently of their rendering.
+
+### Right-to-left layout support
+
+Every component lays out and behaves correctly in right-to-left contexts. Content reads right to left, directional icons flip to remain directionally correct in the reading order, keyboard and focus order mirror together with the layout, and no application-side intervention is required to make RTL work.
+
+### Readable and tappable on small viewports
+
+Text size, line height, and interactive-target size remain readable and tappable on small viewports. Minimum interactive target sizes follow WCAG 2.2 target-size guidance and are enforced at the theme level. Individual components do not need to restate the target-size rule per interactive element.
+
+### Behaviours compose without ambiguity
+
+When two behaviours can both be triggered by the same condition (a narrow container triggering both "truncate the label" and "collapse the item", a keyboard event that could match both a component-specific shortcut and a browser default, etc.), the interaction between them must be defined — which takes priority, what happens first, whether they can both apply. Leaving the composition undefined is a spec gap, not a stylistic choice.
