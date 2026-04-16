@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
-  aTimeout,
   esc,
   fixtureSync,
   makeSoloTouchEvent,
@@ -75,7 +74,8 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(toggle);
-        await aTimeout(0);
+        await nextResize(layout);
+        await nextFrame();
         expect(toggle.getAttribute('slot')).to.equal('navbar');
       });
 
@@ -83,7 +83,8 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar');
         layout.appendChild(toggle);
-        await aTimeout(0);
+        await nextResize(layout);
+        await nextFrame();
         expect(toggle.offsetHeight).to.be.greaterThan(0);
       });
 
@@ -94,11 +95,13 @@ describe('vaadin-app-layout', () => {
         navbarContent.setAttribute('slot', 'navbar');
         layout.appendChild(navbarContent);
         await nextResize(layout);
+        await nextFrame();
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
         await nextResize(layout);
+        await nextFrame();
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(updatedOffset).to.equal(initialOffset + 100);
       });
@@ -113,7 +116,8 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(toggle);
-        await aTimeout(0);
+        await nextResize(layout);
+        await nextFrame();
         expect(toggle.getAttribute('slot')).to.equal('navbar-bottom');
       });
 
@@ -121,24 +125,9 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(toggle);
-        await aTimeout(0);
+        await nextResize(layout);
+        await nextFrame();
         expect(toggle.offsetHeight).to.be.greaterThan(0);
-      });
-
-      it('should not show empty navbar-bottom on resize', () => {
-        expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
-        window.dispatchEvent(new Event('resize'));
-        expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
-      });
-
-      it('should remove hidden attribute on non-empty navbar-bottom on resize', () => {
-        const header = document.createElement('h1');
-        header.textContent = 'Header';
-        header.setAttribute('slot', 'navbar touch-optimized');
-        layout.appendChild(header);
-        expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
-        window.dispatchEvent(new Event('resize'));
-        expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.false;
       });
 
       it('should update content offset when navbar height changes', async () => {
@@ -148,11 +137,16 @@ describe('vaadin-app-layout', () => {
         navbarContent.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(navbarContent);
         await nextResize(layout);
+        await nextFrame();
+        // Wait for second cycle after node is moved to navbar-bottom
+        await nextResize(layout.$.navbarBottom);
+        await nextFrame();
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
-        await nextResize(layout);
+        await nextResize(layout.$.navbarBottom);
+        await nextFrame();
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(updatedOffset).to.equal(initialOffset + 100);
       });
@@ -232,12 +226,14 @@ describe('vaadin-app-layout', () => {
         const section = layout.querySelector('[slot="drawer"]');
         const initialPadding = getComputedStyle(layout).paddingInlineStart;
         section.parentNode.removeChild(section);
+        await nextResize(layout);
         await nextFrame();
 
         expect(drawer.hasAttribute('hidden')).to.be.true;
         expect(getComputedStyle(layout).paddingInlineStart).to.be.equal('0px');
 
         layout.appendChild(section);
+        await nextResize(layout);
         await nextFrame();
 
         expect(drawer.hasAttribute('hidden')).to.be.false;
@@ -279,7 +275,7 @@ describe('vaadin-app-layout', () => {
 
         layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
 
-        const spy = sinon.spy(layout, '_updateOffsetSize');
+        const spy = sinon.spy(layout, '__setOffsetSize');
         toggle.click();
         await oneEvent(drawer, 'transitionend');
 
@@ -355,17 +351,17 @@ describe('vaadin-app-layout', () => {
         // Force it to desktop layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
         layout.drawerOpened = true;
-        layout._updateOverlayMode();
+        layout.__setOverlayMode(false);
 
         // Force it to mobile layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
-        layout._updateOverlayMode();
+        layout.__setOverlayMode(true);
 
         expect(layout.drawerOpened).to.be.false;
 
         // Force it to desktop layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
-        layout._updateOverlayMode();
+        layout.__setOverlayMode(false);
         expect(layout.drawerOpened).to.be.true;
       });
 
@@ -480,7 +476,7 @@ describe('vaadin-app-layout', () => {
 
           // Force it to desktop layout
           layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
-          layout._updateOverlayMode();
+          layout.__setOverlayMode(false);
           await nextRender();
 
           expect(drawer.hasAttribute('tabindex')).to.be.false;
