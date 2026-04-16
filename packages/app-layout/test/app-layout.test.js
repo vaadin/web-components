@@ -139,13 +139,13 @@ describe('vaadin-app-layout', () => {
         await nextResize(layout);
         await nextFrame();
         // Wait for second cycle after node is moved to navbar-bottom
-        await nextResize(layout.$.navbarBottom);
+        await nextResize(layout);
         await nextFrame();
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
-        await nextResize(layout.$.navbarBottom);
+        await nextResize(layout);
         await nextFrame();
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(updatedOffset).to.equal(initialOffset + 100);

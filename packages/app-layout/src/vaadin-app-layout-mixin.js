@@ -161,8 +161,7 @@ export const AppLayoutMixin = (superclass) =>
 
       this.$.drawer.addEventListener('transitionend', () => {
         this.__isDrawerAnimating = false;
-        this.__resizeObserver.unobserve(this.$.drawer);
-        this.__resizeObserver.observe(this.$.drawer);
+        this.__scheduleResize(this.$.drawer);
       });
     }
 
@@ -177,21 +176,22 @@ export const AppLayoutMixin = (superclass) =>
 
     /** @private */
     __onNavbarSlotChange() {
-      this.__resizeObserver.unobserve(this);
-      this.__resizeObserver.observe(this);
+      this.__scheduleResize(this.$.navbarTop);
+      this.__scheduleResize(this.$.navbarBottom);
       this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
     }
 
     /** @private */
     __onDrawerSlotChange() {
+      this.__scheduleResize(this.$.drawer);
       this.__updateDrawerSize();
-      this.__resizeObserver.unobserve(this);
-      this.__resizeObserver.observe(this);
       this.toggleAttribute('has-drawer', !!this.querySelector('[slot="drawer"]'));
     }
 
     /** @private */
     __onResize(entries) {
+      cancelAnimationFrame(this.__resizeRaf);
+
       const isHostResized = entries.some(({ target }) => target === this);
 
       const drawerRect = this.$.drawer.getBoundingClientRect();
@@ -203,7 +203,7 @@ export const AppLayoutMixin = (superclass) =>
 
       const isDrawerAnimating = this.__isDrawerAnimating;
 
-      requestAnimationFrame(() => {
+      this.__resizeRaf = requestAnimationFrame(() => {
         if (isHostResized) {
           this._blockAnimationUntilAfterNextRender();
           this.__setOverlayMode(overlayMode);
@@ -508,6 +508,18 @@ export const AppLayoutMixin = (superclass) =>
           this.removeAttribute('no-anim');
         });
       });
+    }
+
+    /**
+     * Forces the ResizeObserver to re-report the size of the given element,
+     * scheduling a new {@link __onResize} callback even if the size hasn't changed.
+     *
+     * @param {Element} element
+     * @private
+     */
+    __scheduleResize(element) {
+      this.__resizeObserver.unobserve(element);
+      this.__resizeObserver.observe(element);
     }
 
     /**
