@@ -115,3 +115,82 @@ Vaadin web components MUST NOT contain integration code for any specific client-
 - A per-item attribute like `router-ignore` that forces a full page load even when a router is present.
 
 None of these mention a specific router by name, and all of them work equally well with any router or with no router at all.
+
+---
+
+## Design for API ergonomics
+
+When shaping the developer-facing API, optimise for the common case and let complexity emerge on demand:
+
+- **Make common cases easy.** The most frequent requirement should require the least code. A developer using the component in its most basic form should not have to configure anything.
+- **Progressive disclosure.** Simple usage is simple; complex usage is possible. Additional power is opt-in through extra attributes, slots, or properties — never required for the basic case.
+- **Follow existing Vaadin conventions.** When the same concept already exists in another Vaadin component, match its naming, slot structure, event shape, and theming hooks. Consistency across the component set is more valuable than local cleverness.
+- **No bloat.** Every property, slot, attribute, event, part, and CSS custom property must trace back to at least one requirement. If no requirement needs it, do not add it.
+
+---
+
+## Consistency over novelty; completeness over minimalism
+
+These two principles work together when reconciling an ideal API with the realities of the existing codebase:
+
+- **Consistency over novelty.** If an existing Vaadin component solves a similar problem, match its naming, structure, and mixin usage. Deviate only when a requirement genuinely demands it — and document the deviation and its reason.
+- **Completeness over minimalism.** Every requirement must be covered by the API. Missing API is worse than extra API when a real requirement is at stake. The right move when a requirement needs a hook is to add the hook — not to defer or rely on application-side workarounds.
+
+These two rules create useful tension: consistency discourages inventing new API for its own sake, completeness discourages dropping API just to keep surface area small. Together they produce an API that is both familiar and sufficient.
+
+---
+
+## Composition over reimplementation
+
+If a requirement can be fulfilled by slotting an existing Vaadin component (e.g. a `<vaadin-icon>`, a `<vaadin-tooltip>`) or by reusing an existing mixin or controller (`FocusMixin`, `TabindexMixin`, `SlotController`, `TooltipController`, etc.), prefer that over writing new code.
+
+**Why:**
+
+- Shared primitives already carry the accessibility, keyboard, and theming work that a new implementation would have to redo from scratch.
+- Cross-component consistency benefits end users: the same tooltip in a button, a field, and a breadcrumb item behaves identically.
+- Bugs fixed in a shared mixin propagate to every consumer for free.
+
+**What this means in practice:**
+
+- Before designing a new behaviour, check whether an existing mixin, controller, or sub-component already does it.
+- If a shared module is *almost* right but needs an extension, design the extension for all consumers — not just the new component. Document the proposed change as a cross-cutting concern, not a private tweak.
+- Avoid reimplementing things like focus handling, overlay positioning, slot observation, or tooltip management inside a new component; route them through the shared primitive.
+
+---
+
+## Ship new components as experimental
+
+Every new component enters the library behind a feature flag and graduates to stable only after its API has been validated in practice.
+
+**What this means in practice:**
+
+- A new component's class declares `static experimental = true`, and the component is activated by the application via `window.Vaadin.featureFlags.{camelName}Component = true` before it is usable. The framework enforces this in `defineCustomElement`.
+- The README and spec state clearly that the component is experimental and that its API may change before it becomes stable.
+- Breaking changes to an experimental component's API do not require a deprecation cycle — the experimental label is the contract that says "not yet stable."
+- A component graduates out of experimental only after its API has been exercised by real applications and any necessary adjustments have been made.
+
+**Why:**
+
+- A component's ideal API is hard to know from specification alone; feedback from real usage surfaces issues that no amount of up-front design catches.
+- The feature flag makes it safe to publish early: applications that do not opt in are never affected by churn in an unstable API.
+- Shipping behind a flag gives Vaadin room to iterate without breaking existing consumers.
+
+---
+
+## Differentiation drives scope
+
+Every component's problem statement must explicitly name the adjacent components and patterns that it is NOT, and state what each of those does that this component does not handle — and vice versa.
+
+This differentiation is the hard boundary that drives every later step:
+
+- **Requirements research** accepts or rejects candidate requirements against it.
+- **API design** rejects code examples that describe behaviour belonging to an adjacent component.
+- **Specification** rejects features that blur the boundary.
+
+**Why this matters:**
+
+- Without explicit boundaries, a component tends to absorb adjacent responsibilities — a breadcrumb starts offering sibling navigation, a tab strip starts acting like a wizard, a side nav starts tracking the current page through history. Each addition seems small in isolation, but the cumulative effect is an overgrown component that does several jobs poorly instead of one job well.
+- A component that overlaps with another creates confusion at the application level: developers don't know which to pick, and the two tend to diverge in subtle behaviour.
+- Clear boundaries make the component's identity obvious, which in turn makes the API and documentation straightforward.
+
+If research surfaces a compelling behaviour that falls outside the drawn boundary, the correct move is to record it in the Differentiation section as "not this component" rather than stretch the scope to include it.
