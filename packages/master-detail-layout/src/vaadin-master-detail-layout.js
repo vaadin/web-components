@@ -272,7 +272,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __masterSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-size', size, oldSize);
+    this.style.setProperty('--_master-size', size);
 
     if (oldSize != null) {
       this.recalculateLayout();
@@ -281,7 +281,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-size', size, oldSize);
+    this.style.setProperty('--_detail-size', size);
 
     if (oldSize != null) {
       this.recalculateLayout();
@@ -296,22 +296,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  __overlaySizeChanged(size, oldSize) {
-    this.__updateStyleProperty('overlay-size', size, oldSize);
+  __overlaySizeChanged(size) {
+    this.style.setProperty('--_overlay-size', size);
   }
 
   /** @private */
-  __detailCachedSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-cached-size', size, oldSize);
-  }
-
-  /** @private */
-  __updateStyleProperty(prop, size, oldSize) {
-    if (size) {
-      this.style.setProperty(`--_${prop}`, size);
-    } else if (oldSize) {
-      this.style.removeProperty(`--_${prop}`);
-    }
+  __detailCachedSizeChanged(size) {
+    this.style.setProperty('--_detail-cached-size', size);
   }
 
   /** @private */
