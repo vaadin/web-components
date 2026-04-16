@@ -3,7 +3,9 @@
 <!--
 Behavioral requirements for the component, written from the perspective of an application end user. No implementation details, APIs, or technology choices.
 
-Each numbered requirement:
+The document opens with a Discussion section: a log of the questions the skill posed to the user while this document was being produced, and the answers the user gave. The Discussion captures the decisions that shaped the requirements — it is context, not a summary of the requirements.
+
+The detailed numbered requirements follow. Each:
 - Has a short, behavior-focused title
 - Opens with the required behavior: what the component must do and when
 - Follows with a concrete example that makes the requirement unambiguous
@@ -18,6 +20,20 @@ Do NOT include:
 - Implementation notes
 - API design suggestions
 -->
+
+## Discussion
+
+Questions posed to the user while producing this document, with the user's answers. Each entry captures a decision that shaped the requirements below. The Discussion is the audit trail of scope and behavior choices — not a summary of the detailed requirements.
+
+**Q: {Short, focused question — e.g. "Should items support icons?"}**
+
+{User's answer, paraphrased as the decision. Keep it short.}
+
+**Q: {Next question — e.g. "On mobile, should the component collapse the middle or simplify to a back link?"}**
+
+{User's answer.}
+
+---
 
 ## 1. <Behavior-focused title>
 

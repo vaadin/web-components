@@ -20,25 +20,29 @@ TASK OVERVIEW:
 1. Read `packages/{component-name}/spec/problem-statement.md`. If the file does not exist, stop and instruct the user to run the `create-component-problem-statement` skill first. Use the problem statement as follows:
 
    - **Differentiation** — filter out scenarios that belong to adjacent components. This is a hard boundary for all subsequent steps.
-   - **Use Cases** — decompose each use case into the behavioral capabilities it implies. These behavioral threads become research targets for steps 2–7. Every use case must be covered by at least one requirement in the final document.
+   - **Use Cases** — decompose each use case into the behavioral capabilities it implies. These behavioral threads become research targets for steps 3–8. Every use case must be covered by at least one requirement in the final document.
 
-Research guidance: Steps 2–7 search for real-world evidence and refinement of the behavioral threads identified in step 1. When evaluating an issue, forum post, or design system pattern, check whether it describes a behavior that supports one of the use cases. Behaviors that fall outside the Differentiation boundaries are out of scope. If research reveals an important behavior that no use case covers but appears to be within scope, flag it with AskUserQuestion before including it.
+2. **Identify open questions and ask the user.** Before doing deep external research, identify the scope and behavioral questions that the problem statement does not already resolve. Typical candidates: whether items should support icons, what happens on mobile (simplify to a back link vs. collapse the middle), whether the Flow API needs a specific integration hook, which edge cases should be in scope, how ambiguous patterns should be resolved. Use AskUserQuestion to pose each one as a focused question. Incorporate the user's answers before continuing. These answers steer the research in steps 3–8 and the detailed requirements in step 9.
 
-2. Search https://github.com/vaadin/web-components issues (open and closed) that mention the component. Note that users may refer to the component by different names.
+   Record every question and answer in a `## Discussion` section that will sit at the top of the output document. This becomes the audit trail of decisions that shaped the requirements. If a previous version of `requirements.md` exists at `packages/{component-name}/spec/requirements.md`, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
 
-3. Search https://github.com/vaadin/flow-components issues for the same component.
+Research guidance: Steps 3–8 search for real-world evidence and refinement of the behavioral threads identified in steps 1 and 2 and the decisions recorded in the Discussion section. When evaluating an issue, forum post, or design system pattern, check whether it describes a behavior that supports one of the use cases or aligns with a recorded decision. Behaviors that fall outside the Differentiation boundaries are out of scope. If research reveals an important behavior that no use case or decision covers but appears to be within scope, flag it via AskUserQuestion before including it — and add the new Q&A to the Discussion section.
 
-4. Search https://github.com/vaadin-component-factory for add-ons related to the component.
+3. Search https://github.com/vaadin/web-components issues (open and closed) that mention the component. Note that users may refer to the component by different names.
 
-5. Search the Vaadin forums using WebSearch with query `site:vaadin.com/forum ComponentName`. Do NOT use WebFetch for the forum — it is a heavy web application and WebFetch will return empty content.
+4. Search https://github.com/vaadin/flow-components issues for the same component.
 
-6. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web application and WebFetch will return empty content.
+5. Search https://github.com/vaadin-component-factory for add-ons related to the component.
 
-7. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
+6. Search the Vaadin forums using WebSearch with query `site:vaadin.com/forum ComponentName`. Do NOT use WebFetch for the forum — it is a heavy web application and WebFetch will return empty content.
 
-8. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. Organize requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement), then uniformly-applicable behaviors.
+7. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web application and WebFetch will return empty content.
 
-9. After drafting the core behavioral requirements, add requirements for uniformly-applicable behaviors as additional numbered items at the end of the list. Common categories include use by people with disabilities (low vision, color blindness, motor impairments, screen reader users), keyboard-only operation, use in right-to-left languages, behavior on small screens or narrow containers, and handling of long or dynamically changing text.
+8. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
+
+9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document starts with the `## Discussion` section capturing the Q&A from step 2 (plus any additional questions posed during research). After the Discussion, write numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement), then uniformly-applicable behaviors.
+
+10. After drafting the core requirements, add requirements for uniformly-applicable behaviors as additional numbered items at the end of the list. Common categories include use by people with disabilities (low vision, color blindness, motor impairments, screen reader users), keyboard-only operation, use in right-to-left languages, behavior on small screens or narrow containers, and handling of long or dynamically changing text.
 
 OUTPUT:
 
@@ -81,8 +85,10 @@ Before finalizing, check that:
 3. Each requirement covers a single, specific behavior — not a bundle of loosely related behaviors.
 4. Requirements are ordered from most common to most specialized, with uniformly-applicable behaviors at the end.
 5. The first requirement is the simplest, most universal behavior.
-6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`.
-7. Concrete examples are included where they make requirements unambiguous.
-8. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
-9. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
-10. Every use case in `problem-statement.md` is addressed by at least one requirement. For each use case, verify that the covering requirements are sufficient for the scenario to work end-to-end — a single loosely related requirement is not enough.
+6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`, including the Discussion section at the top.
+7. The Discussion section records every question posed to the user in step 2 (and any follow-up questions raised during research) together with the user's answer. It does not duplicate the detailed requirements.
+8. Every answer in the Discussion section is reflected in the detailed requirements below — a decision captured there must actually shape at least one requirement.
+9. Concrete examples are included where they make requirements unambiguous.
+10. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
+11. Writing is concise: no multi-paragraph narrative where one paragraph suffices.
+12. Every use case in `problem-statement.md` is addressed by at least one requirement. For each use case, verify that the covering requirements are sufficient for the scenario to work end-to-end — a single loosely related requirement is not enough.
