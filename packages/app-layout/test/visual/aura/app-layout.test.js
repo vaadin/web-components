@@ -1,3 +1,4 @@
+import { nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
@@ -35,13 +36,15 @@ describe('app-layout', () => {
 
   it('overlay', async () => {
     element.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
-    window.dispatchEvent(new Event('resize'));
+    await nextResize(element);
+    await nextFrame();
     await visualDiff(div, 'overlay');
   });
 
   it('overlay-opened', async () => {
     element.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
-    window.dispatchEvent(new Event('resize'));
+    await nextResize(element);
+    await nextFrame();
     element.drawerOpened = true;
     await visualDiff(div, 'overlay-opened');
   });

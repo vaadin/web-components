@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../../src/vaadin-app-layout.js';
 import '../../vaadin-drawer-toggle.js';
 
@@ -8,8 +8,10 @@ describe('vaadin-app-layout', () => {
   let layout;
 
   describe('host', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
+      await nextResize(layout);
+      await nextFrame();
     });
 
     it('default', async () => {
@@ -21,7 +23,8 @@ describe('vaadin-app-layout', () => {
       drawer.setAttribute('slot', 'drawer');
       drawer.textContent = 'Drawer Content';
       layout.appendChild(drawer);
-      await nextRender();
+      await nextResize(layout);
+      await nextFrame();
       await expect(layout).dom.to.equalSnapshot();
     });
 
@@ -30,7 +33,8 @@ describe('vaadin-app-layout', () => {
       navbar.setAttribute('slot', 'navbar');
       navbar.textContent = 'Navbar Content';
       layout.appendChild(navbar);
-      await nextRender();
+      await nextResize(layout);
+      await nextFrame();
       await expect(layout).dom.to.equalSnapshot();
     });
   });
@@ -48,7 +52,8 @@ describe('vaadin-app-layout', () => {
           <main>Page Content</main>
         </vaadin-app-layout>
       `);
-      await nextRender();
+      await nextResize(layout);
+      await nextFrame();
     });
 
     describe('desktop layout', () => {

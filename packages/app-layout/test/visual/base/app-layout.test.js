@@ -1,4 +1,4 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-app-layout.js';
 import '../../../src/vaadin-drawer-toggle.js';
@@ -45,14 +45,16 @@ describe('app-layout', () => {
       it('overlay', async () => {
         // See https://github.com/vaadin/vaadin-app-layout/issues/183
         element.style.setProperty('--vaadin-app-layout-drawer-overlay', ' true');
-        window.dispatchEvent(new Event('resize'));
+        await nextResize(element);
+        await nextFrame();
         await visualDiff(div, `${dir}-overlay`);
       });
 
       it('primary-drawer-overlay-opened', async () => {
         element.primarySection = 'drawer';
         element.style.setProperty('--vaadin-app-layout-drawer-overlay', ' true');
-        window.dispatchEvent(new Event('resize'));
+        await nextResize(element);
+        await nextFrame();
         element.drawerOpened = true;
         await visualDiff(div, `${dir}-primary-drawer-overlay-opened`);
       });
