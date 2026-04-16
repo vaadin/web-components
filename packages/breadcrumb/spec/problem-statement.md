@@ -15,7 +15,7 @@ End users of business web applications that organize content or workflows into m
 - **Enterprise administration** — IT administrators moving through hierarchically organized settings, organizational units, or resource trees.
 - **Data-heavy dashboards** — analysts navigating from a summary view down through progressively more detailed breakdowns.
 
-Breadcrumbs are most valuable when the hierarchy is three or more levels deep and when users frequently enter pages from outside the normal navigation flow (search results, direct links, notifications).
+Breadcrumbs are most valuable when the hierarchy is three or more levels deep and when users frequently enter pages from outside the normal navigation flow (search results, direct links, notifications). They are unnecessary for flat sites with only one or two levels of hierarchy, or for purely linear workflows where pages follow a fixed sequence.
 
 ## Differentiation
 
@@ -41,6 +41,6 @@ Progress indicators (e.g., multi-step wizards) show how far a user has advanced 
 
 2. **Orienting after arriving from an external entry point.** A user lands on a deeply nested page from a search result, a shared URL, or an in-app notification. They have no prior navigation context. The breadcrumb trail immediately reveals where this page sits in the hierarchy and lets the user explore upward to discover related content they would not have known about otherwise.
 
-3. **Navigating a deep hierarchy in limited screen space.** On a narrow viewport or within a space-constrained layout region, the full breadcrumb trail is too wide to display. The user still needs orientation and ancestor access, but the component must adapt — for example by collapsing intermediate levels — so that it remains usable without wrapping onto multiple lines or overflowing its container.
+3. **Navigating a deep hierarchy in limited screen space.** On a narrow viewport or within a space-constrained layout region, the full breadcrumb trail is too wide to display. The user still needs orientation and ancestor access, but the component must adapt — for example by collapsing intermediate levels or showing only the immediate parent — so that it remains usable without wrapping onto multiple lines or overflowing its container.
 
 4. **Navigating a hierarchy whose levels are generated dynamically.** In applications where the hierarchy is not statically defined — for example, a file system browser, a nested organizational chart, or a search-result drilldown — the breadcrumb trail must be built from data at runtime rather than hard-coded in markup. The user expects the same orientation and click-to-navigate behavior regardless of whether the hierarchy is static or data-driven.

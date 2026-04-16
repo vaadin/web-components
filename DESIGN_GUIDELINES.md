@@ -1,0 +1,117 @@
+# Component Design Guidelines
+
+This document captures high-level design principles for Vaadin web components. These guidelines inform feature design, API shape decisions, and spec authoring — before any implementation work begins.
+
+For implementation details, see [WEB_COMPONENT_GUIDELINES.md](WEB_COMPONENT_GUIDELINES.md).
+
+---
+
+## Always offer a declarative API
+
+Every Vaadin web component MUST have a declarative HTML API — a way to use the component by writing plain HTML markup, with no JavaScript required to populate it. This is true even for components whose children are normally data-driven at runtime (menus, lists, breadcrumbs, trees, tabs, nav, crumb trails, etc.).
+
+**Why:**
+
+- Web components are HTML first. If a component cannot be used from static HTML, it stops behaving like an HTML element.
+- Developers reading the DOM in devtools, writing quick demos, or pasting examples into docs need a form they can see and edit as markup.
+- Server-side rendering, static-site generation, and search-engine-visible output all depend on the component having a meaningful initial DOM.
+- Testing and snapshotting are dramatically simpler when the component has a declarative form — tests can write HTML instead of wiring up JavaScript before every assertion.
+- It forces the API to have a clean, serialisable shape: if every field of a data item can be expressed as an attribute, slot, or nested element, the data model is already well-defined.
+
+**What this means in practice:**
+
+- Child items should be real child elements (e.g. `<vaadin-side-nav-item>`, `<vaadin-tab>`, `<vaadin-breadcrumb-item>`), projectable via slots, and readable from static HTML.
+- Per-item configuration should be expressible as attributes or slotted content on those child elements.
+- The component must render correctly when it is first parsed from markup, before any script runs.
+
+**Example — declarative form is the baseline:**
+
+```html
+<vaadin-breadcrumb>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/electronics">Electronics</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/electronics/laptops">Laptops</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>ThinkPad X1 Carbon</vaadin-breadcrumb-item>
+</vaadin-breadcrumb>
+```
+
+This must work with no JavaScript beyond the component import.
+
+---
+
+## Also offer a programmatic API when items are typically data-driven
+
+When the typical real-world use of a component involves dynamically computed children (menu entries derived from route tables, breadcrumb trails derived from navigation history, list rows from a data provider, etc.), the component MUST ALSO expose a programmatic API that accepts the same data — usually as an `items` array of plain objects.
+
+The two APIs are not alternatives; they coexist:
+
+- The declarative form is the canonical shape and is what appears in documentation, examples, and tests by default.
+- The programmatic form is what applications actually use at runtime when the content is not known at authoring time.
+- Both forms MUST produce the same rendering and fire the same events; a developer should be able to switch between them without changing the component's behavior.
+
+**Why both:**
+
+- Declarative alone forces apps to manipulate DOM imperatively (creating child elements, setting attributes, appending) every time the data changes — slow, error-prone, and awkward with frameworks.
+- Programmatic alone violates the "HTML first" principle and makes the component unusable from static markup.
+- Offering both gives developers the ergonomics they need without sacrificing the component's identity as an HTML element.
+
+**Example — same component, both APIs:**
+
+```html
+<!-- Declarative: canonical, works with no JS -->
+<vaadin-menu-bar>
+  <vaadin-menu-bar-item>File</vaadin-menu-bar-item>
+  <vaadin-menu-bar-item>Edit</vaadin-menu-bar-item>
+</vaadin-menu-bar>
+```
+
+```js
+// Programmatic: same component, equivalent behaviour
+document.querySelector('vaadin-menu-bar').items = [
+  { text: 'File' },
+  { text: 'Edit' },
+];
+```
+
+---
+
+## Which form is primary?
+
+- **Rule of thumb:** if a component has any per-item state at all, it needs a declarative API. If that per-item content is typically computed at runtime in real applications, it also needs a programmatic API.
+- **Exceptions:** a component whose children are purely internal (e.g. the button inside a `<vaadin-button>`) does not need either of these — it only has its own attributes and slots.
+- When both APIs exist, document the declarative form first in the README and spec, then show the programmatic equivalent alongside.
+
+---
+
+## Relationship to specs
+
+Spec files (`packages/{name}/spec/spec.md`) and their companion `developer-api.md` MUST show both a declarative usage example and a programmatic usage example whenever both APIs exist. The "Key design decisions" section of the spec should explicitly state whether the component has a declarative API, a programmatic API, or both, and justify the choice against the use cases.
+
+---
+
+## Be router-agnostic
+
+Vaadin web components MUST NOT contain integration code for any specific client-side router (Vaadin Router, React Router, Vue Router, Angular Router, etc.). Components that render navigational links should assume that an SPA router, if one is present in the application, automatically intercepts link clicks and handles navigation — the component itself does not call into a router and does not need to know one exists.
+
+**What this means in practice:**
+
+- Render plain `<a href="...">` elements for navigation. Let the browser activate the link by default; an SPA router (if any) will intercept the click at the document level and convert it into a client-side navigation.
+- Do NOT import any router package, do NOT call router APIs, and do NOT special-case any specific router's behavior.
+- Do NOT try to detect whether a router is installed. The component behaves the same either way: with no router, the browser performs a full page load; with a router, the router takes over silently.
+- If the component needs to know which item represents the "current" page (for highlighting, `aria-current`, etc.), expose a router-neutral input — typically a `location` property or a per-item `path`/`current` attribute — that the application updates from whatever routing mechanism it uses. The component must not read `window.location` and react to history events on its own as its primary mechanism; the application drives it.
+- If the component needs to give the application a chance to intercept activation (for example, to perform an unsaved-changes check before navigating), expose a generic callback property or fire a cancellable event. The hook must be described in router-neutral terms ("called when an item is activated"), not in terms of any specific router's API.
+
+**Why:**
+
+- Real applications use many different routers, and many use none at all. Baking knowledge of one router into a component makes the component unusable for everyone else.
+- Navigation concerns (history management, scroll restoration, code splitting, guards, transitions) belong to the application layer. A UI component should describe *what* the user is navigating to, not *how* navigation happens.
+- A plain `<a href>` is the most accessible primitive available: keyboard activation, middle-click, "open in new tab", "copy link address", focus rings, and screen-reader link semantics all work for free. Replacing it with a click handler breaks all of these.
+- Server-side rendering and search-engine crawlers see real `href` attributes and can follow them without executing any JavaScript.
+
+**Examples of acceptable router-neutral hooks** (already used by existing components):
+
+- A `location` property whose value is opaque to the component and only serves as a change trigger so the component can re-evaluate which item is current.
+- An `onNavigate` callback that receives the activated item and can return `false` to suppress the default link behavior.
+- A per-item attribute like `router-ignore` that forces a full page load even when a router is present.
+
+None of these mention a specific router by name, and all of them work equally well with any router or with no router at all.
