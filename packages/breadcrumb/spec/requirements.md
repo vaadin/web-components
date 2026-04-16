@@ -40,6 +40,10 @@ No. The breadcrumb strictly displays the path from the root to the current page;
 
 A container width threshold. When the breadcrumb's own allotted width falls below a fixed threshold, the component switches to the back-link presentation regardless of viewport size. Above that threshold the collapse-and-overflow behavior is used.
 
+**Q: Should the Flow wrapper integrate automatically with the application's router?**
+
+Yes. In Flow, `add(new Breadcrumb())` with no items supplied should render the trail automatically from the current route's view hierarchy — deriving items, labels, paths, and the "current" marker from the registered routes and parent layouts of the active view. Manually supplied items remain available for full control. This decision shapes a Flow-only requirement (the web component has no access to a server-side view/route registry).
+
 ---
 
 ## 1. Displaying the ancestor trail
@@ -191,3 +195,13 @@ For example, a screen reader reads the trail as "Home, link; Settings, link; Not
 In right-to-left contexts, the default directional separator flips so that it continues to point from parent toward child in the reading direction. This is the breadcrumb-specific extension of the universal right-to-left rule: a chevron that remains literally "pointing right" in RTL would contradict the hierarchy it is meant to convey.
 
 For example, in an Arabic-language application the trail reads from right to left as الرئيسية ‹ المنتجات ‹ الإلكترونيات, with the chevron pointing leftward (toward the child item) to match the reading direction.
+
+---
+
+## 20. Automatic trail from the view hierarchy
+
+<!-- Applies to: flow -->
+
+When a breadcrumb is placed in a view without any explicit items supplied, it builds and updates its trail automatically from the application's view hierarchy — the chain of nested layouts and the current route that the Flow router has resolved. The simplest valid usage is an unconfigured breadcrumb added to a layout; each subsequent navigation rebuilds the trail to reflect the new route's ancestor chain, with the active route marked as the current item. When the developer supplies an explicit trail, the explicit trail takes precedence (supporting, for example, polyhierarchy per requirement 5) and the automatic mode is not used.
+
+For example, a Flow application has a top-level `OrganizationLayout` containing a `BillingLayout`, which hosts the route `InvoiceView` registered at `invoices/:invoiceId`. Placing a plain, unconfigured breadcrumb into the top-level layout renders the trail Organization › Billing › Invoice #4521 with no per-item configuration, deriving each item's label and target from the corresponding route or layout. When the user navigates from an invoice to the billing overview (a sibling route inside `BillingLayout`), the trail automatically updates to Organization › Billing, with "Billing" now marked as the current item.
