@@ -29,7 +29,7 @@
 
   [part='overflow-button'] {
     font-size: var(--lumo-font-size-m);
-    padding: var(--lumo-space-xs) var(--lumo-space-s);
+    padding: 0 var(--lumo-space-s);
     border-radius: var(--lumo-border-radius-m);
     color: var(--lumo-primary-text-color);
   }

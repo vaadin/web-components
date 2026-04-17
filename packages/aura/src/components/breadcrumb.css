@@ -31,7 +31,7 @@
 
 :is(vaadin-breadcrumb)::part(overflow-button) {
   font-size: var(--aura-font-size-m);
-  padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+  padding: 0 var(--vaadin-padding-s);
   border-radius: var(--vaadin-radius-m);
   color: var(--aura-accent-text-color);
   transition: color 80ms;
