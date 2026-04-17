@@ -95,7 +95,7 @@ export const breadcrumbStyles = css`
   }
 
   [part='overflow-dropdown'] {
-    position: absolute;
+    position: fixed;
     z-index: 1000;
     background: var(--vaadin-background-color, #fff);
     border: 1px solid var(--vaadin-border-color-secondary, #ccc);

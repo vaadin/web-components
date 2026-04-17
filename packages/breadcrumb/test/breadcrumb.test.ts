@@ -669,10 +669,26 @@ describe('breadcrumb', () => {
     it('should collapse items starting from the one closest to root', async () => {
       await renderBreadcrumb('200px', 5);
       const collapsed = getCollapsedItemLis();
-      expect(collapsed.length).to.be.greaterThan(0);
-      // First collapsed should be index 1 (closest intermediate to root)
-      const firstCollapsedIndex = parseInt(collapsed[0].getAttribute('data-index')!);
-      expect(firstCollapsedIndex).to.equal(1);
+      const collapsedIndices = collapsed.map((li) => parseInt(li.getAttribute('data-index')!));
+      expect(collapsedIndices.length).to.be.greaterThan(0);
+      // Item 1 (closest intermediate to root) must always be collapsed first
+      expect(collapsedIndices).to.include(1);
+      // Root (index 0) may only collapse after all intermediates are collapsed
+      if (collapsedIndices.includes(0)) {
+        expect(collapsedIndices).to.include(1);
+        expect(collapsedIndices).to.include(2);
+        expect(collapsedIndices).to.include(3);
+      }
+    });
+
+    it('should render the overflow button after the root item in the DOM', async () => {
+      await renderBreadcrumb('200px', 5);
+      const ol = breadcrumb.shadowRoot!.querySelector('ol')!;
+      const children = Array.from(ol.children);
+      const rootLiIndex = children.findIndex((el) => el.getAttribute('data-index') === '0');
+      const overflowLiIndex = children.findIndex((el) => el.hasAttribute('data-overflow'));
+      // Overflow button must come after root so layout is: Home › … › items › Current
+      expect(rootLiIndex).to.be.lessThan(overflowLiIndex);
     });
 
     it('should not collapse root until all intermediate items are collapsed', async () => {

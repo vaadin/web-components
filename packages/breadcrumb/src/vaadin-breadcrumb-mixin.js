@@ -456,14 +456,13 @@ export const BreadcrumbMixin = dedupeMixin(
           dropdown.appendChild(li);
         });
 
-        // Position the dropdown below the overflow button
+        // Position the dropdown below the overflow button using fixed positioning
+        // so it is not clipped by any ancestor overflow: hidden container.
         const overflowButton = this.shadowRoot.querySelector('[part="overflow-button"]');
         const rect = overflowButton.getBoundingClientRect();
-        const hostRect = this.getBoundingClientRect();
 
-        dropdown.style.position = 'absolute';
-        dropdown.style.top = `${rect.bottom - hostRect.top}px`;
-        dropdown.style.left = `${rect.left - hostRect.left}px`;
+        dropdown.style.top = `${rect.bottom}px`;
+        dropdown.style.left = `${rect.left}px`;
 
         // Add backdrop click handler
         this.__dropdownBackdropHandler = (e) => {
