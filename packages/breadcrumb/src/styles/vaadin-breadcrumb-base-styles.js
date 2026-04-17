@@ -9,7 +9,7 @@ import { css } from 'lit';
 export const breadcrumbStyles = css`
   :host {
     display: block;
-    overflow: hidden;
+    overflow-x: clip;
     position: relative;
   }
 
