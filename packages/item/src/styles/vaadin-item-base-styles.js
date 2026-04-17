@@ -27,7 +27,6 @@ export const itemStyles = css`
   :host([disabled]) {
     cursor: var(--vaadin-disabled-cursor);
     opacity: 0.5;
-    pointer-events: none;
   }
 
   :host([hidden]) {
