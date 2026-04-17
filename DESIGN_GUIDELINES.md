@@ -254,6 +254,18 @@ Every component lays out and behaves correctly in right-to-left contexts. Conten
 
 Text size, line height, and interactive-target size remain readable and tappable on small viewports. Minimum interactive target sizes follow WCAG 2.2 target-size guidance and are enforced at the theme level. Individual components do not need to restate the target-size rule per interactive element.
 
+### Property order independence
+
+A component must behave identically regardless of whether its properties are set before or after it is added to the DOM. Setting `disabled`, `value`, `items`, theme variants, or any other property on a disconnected element and then appending it to the document must produce the same result as appending first and setting properties afterwards. This is routinely tested and violations are treated as bugs.
+
+### Graceful behaviour before connection
+
+Calling action methods (`focus()`, `open()`, `scrollToIndex()`, etc.) on a component that is not yet in the DOM must silently do nothing — not throw, not queue the action for later. The caller is responsible for ensuring the component is connected before invoking actions that require a live DOM; the component is responsible for not exploding when they forget.
+
+### No thrown errors for bad input; warnings instead
+
+Components should not throw errors in response to application-provided values that are out of range, the wrong type after coercion, or otherwise unexpected. Instead, ignore the value or clamp it to the nearest valid state, and emit a `console.warn` so the developer sees the problem during development. Exceptions to this rule exist (e.g. `BindingActiveException` in Flow signal APIs), but the default posture is resilience: a single bad property value must not crash the entire page.
+
 ### Behaviours compose without ambiguity
 
 When two behaviours can both be triggered by the same condition (a narrow container triggering both "truncate the label" and "collapse the item", a keyboard event that could match both a component-specific shortcut and a browser default, etc.), the interaction between them must be defined — which takes priority, what happens first, whether they can both apply. Leaving the composition undefined is a spec gap, not a stylistic choice.
