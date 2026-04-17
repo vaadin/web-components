@@ -7,10 +7,18 @@ import { css } from 'lit';
 
 export const breadcrumbItemStyles = css`
   :host {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
   }
 
   :host([hidden]) {
     display: none !important;
+  }
+
+  [part='link'] {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
   }
 `;

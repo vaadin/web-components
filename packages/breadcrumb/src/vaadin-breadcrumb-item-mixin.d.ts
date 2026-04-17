@@ -9,4 +9,10 @@ export declare function BreadcrumbItemMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<BreadcrumbItemMixinClass> & T;
 
-export declare class BreadcrumbItemMixinClass {}
+export declare class BreadcrumbItemMixinClass {
+  /**
+   * The path (URL) for this breadcrumb item. When set, the item
+   * renders as a clickable link.
+   */
+  path: string | undefined;
+}
