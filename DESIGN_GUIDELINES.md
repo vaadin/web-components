@@ -118,6 +118,27 @@ None of these mention a specific router by name, and all of them work equally we
 
 ---
 
+## Name boolean attributes for the non-default state
+
+HTML boolean attributes work by presence/absence: the attribute present means `true`, the attribute absent means `false`. There is no way to set a boolean attribute to `false` — you can only remove it. This creates a hard naming constraint:
+
+**The attribute name MUST describe the non-default state** — the state that is activated when the attribute is added.
+
+**Examples that follow this rule:**
+
+- `disabled` — default is enabled (no attribute); adding `disabled` switches to the non-default state.
+- `readonly` — default is editable; adding `readonly` switches to the non-default state.
+- `required` — default is optional; adding `required` switches to the non-default state.
+- `hidden` — default is visible; adding `hidden` switches to the non-default state.
+
+**Why this matters:**
+
+- An `enabled` attribute would mean the default state (enabled) requires every element to carry `enabled` — and removing it would disable the element, which is backwards.
+
+**When introducing a new boolean property** on a web component, always ask: "what is the default?" and name the attribute for the opposite state. If the default is "collapsed", the attribute should be `expanded`. If the default is "open", the attribute should be `closed` (though for overlays the convention is `opened` since the default is closed).
+
+---
+
 ## Design for API ergonomics
 
 When shaping the developer-facing API, optimise for the common case and let complexity emerge on demand:
