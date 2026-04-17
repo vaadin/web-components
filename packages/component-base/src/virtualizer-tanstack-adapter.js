@@ -37,7 +37,7 @@ function mapElementsToItems(elements, items) {
 
 export class TanStackAdapter {
   #virtualizer;
-  #averageSize;
+  #estimatedSize;
   #renderDebouncer;
   #reorderElementsDebouncer;
 
@@ -48,6 +48,17 @@ export class TanStackAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
+
+    const scrollTargetComputedStyle = getComputedStyle(this.scrollTarget);
+    const scrollContainerComputedStyle = getComputedStyle(this.scrollContainer);
+
+    if (scrollTargetComputedStyle.overflow === 'visible') {
+      this.scrollTarget.style.overflow = 'auto';
+    }
+
+    if (scrollContainerComputedStyle.position === 'static') {
+      this.scrollContainer.style.position = 'relative';
+    }
 
     this.#virtualizer = new Virtualizer({
       count: 0,
@@ -64,7 +75,7 @@ export class TanStackAdapter {
         }
       },
       estimateSize: () => {
-        return this.#averageSize ?? 60;
+        return this.#estimatedSize ?? 60;
       },
       getScrollElement: () => {
         return this.scrollTarget;
@@ -91,7 +102,18 @@ export class TanStackAdapter {
 
   scrollToIndex(index) {
     this.#virtualizer.scrollToIndex(index, { align: 'start' });
-    this.#render();
+
+    // TanStack normally settles the scroll position asynchronously via rAF
+    // (scheduleScrollReconcile). Drive that loop synchronously: sync the
+    // scroll offset, render so newly visible items get measured, then let
+    // reconcileScroll recompute the target and re-scroll. Repeat until
+    // reconcileScroll clears scrollState.
+    while (this.#virtualizer.scrollState) {
+      this.#virtualizer.scrollOffset = this.scrollTarget.scrollTop;
+      this.#render();
+      this.flush();
+      this.#virtualizer.reconcileScroll();
+    }
   }
 
   hostConnected() {
@@ -170,16 +192,16 @@ export class TanStackAdapter {
       this.#virtualizer.measureElement(el);
     });
 
-    this.#updateAverageSize();
+    this.#updateEstimatedSize();
   }
 
-  #updateAverageSize() {
+  #updateEstimatedSize() {
     const sizes = this.#virtualItems.map((item) => {
       const { size } = this.#virtualizer.measurementsCache[item.index];
       return size;
     });
 
-    this.#averageSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
+    this.#estimatedSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
   }
 
   #scheduleReorderElements() {
