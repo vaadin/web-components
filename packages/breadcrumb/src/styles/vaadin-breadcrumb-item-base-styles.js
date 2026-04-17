@@ -57,6 +57,21 @@ export const breadcrumbItemStyles = css`
     white-space: nowrap;
   }
 
+  :host([overflow-truncated]) {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  :host([overflow-truncated]) [part='link'] {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  :host([overflow-truncated]) slot:not([name]) {
+    min-width: 0;
+  }
+
   @media (forced-colors: active) {
     :host {
       color: CanvasText !important;

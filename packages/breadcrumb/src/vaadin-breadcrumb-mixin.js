@@ -355,10 +355,11 @@ export const BreadcrumbMixin = dedupeMixin(
           li.classList.remove('current-truncated');
         });
 
-        // Remove title from current item
+        // Remove title and truncation attribute from current item
         const lastItem = this._items[count - 1];
         if (lastItem) {
           lastItem.removeAttribute('title');
+          lastItem.removeAttribute('overflow-truncated');
         }
 
         this.__collapsedIndices = [];
@@ -405,9 +406,10 @@ export const BreadcrumbMixin = dedupeMixin(
           const lastLi = itemLis[lastIndex];
           if (lastLi) {
             lastLi.classList.add('current-truncated');
-            // Set title for hover reveal
+            // Set title and overflow-truncated attribute for hover reveal and CSS truncation
             if (lastItem) {
               lastItem.setAttribute('title', lastItem.textContent.trim());
+              lastItem.setAttribute('overflow-truncated', '');
             }
           }
         }

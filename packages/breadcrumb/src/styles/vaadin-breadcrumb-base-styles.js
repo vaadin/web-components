@@ -48,6 +48,7 @@ export const breadcrumbStyles = css`
   li[data-overflow] {
     display: none;
     align-items: center;
+    flex-shrink: 0;
   }
 
   :host([overflow]) li[data-overflow] {
@@ -75,12 +76,8 @@ export const breadcrumbStyles = css`
   }
 
   li.current-truncated ::slotted(vaadin-breadcrumb-item) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     min-width: 0;
     max-width: 100%;
-    display: block;
   }
 
   [part='separator'],
