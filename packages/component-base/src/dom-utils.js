@@ -141,3 +141,40 @@ export function removeValueFromAttribute(element, attr, value) {
 export function isEmptyTextNode(node) {
   return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
 }
+
+/**
+ * Reorders the children of the given container in-place according to the
+ * given comparator. The currently focused child, if any, is used as an
+ * anchor to preserve focus and avoid scroll jumps while reordering.
+ *
+ * Each child is moved only if it's not already in the right position
+ * relative to its neighbors.
+ *
+ * @param {Element} container The container whose children should be reordered.
+ * @param {(a: Element, b: Element) => number} comparator The comparator defining the desired child order.
+ */
+export function reorderChildren(container, comparator) {
+  const children = [...container.children].toSorted(comparator);
+
+  // Use the focused element as the anchor to avoid losing focus, or the first element otherwise.
+  const anchorIndex = Math.max(
+    0,
+    children.findIndex((el) => el.matches(':focus-within')),
+  );
+
+  // Place elements after the anchor into correct DOM order, going forward.
+  // Each element is moved to right after its predecessor if not already there.
+  for (let i = anchorIndex + 1; i < children.length; i++) {
+    if (children[i - 1].nextElementSibling !== children[i]) {
+      children[i - 1].after(children[i]);
+    }
+  }
+
+  // Place elements before the anchor into correct DOM order, going backward.
+  // Each element is moved to right before its successor if not already there.
+  for (let i = anchorIndex - 1; i >= 0; i--) {
+    if (children[i + 1].previousElementSibling !== children[i]) {
+      children[i + 1].before(children[i]);
+    }
+  }
+}
