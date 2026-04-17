@@ -198,27 +198,7 @@ dev/
 - Include examples of all major variants and states
 - Add descriptive headings to organize examples
 - Dev pages are not part of the published package
-- For components with responsive/overflow behavior, use a CSS `resize: horizontal` container so the tester can drag to any width. Use `overflow: hidden` on the container to enable the resize handle:
-  ```html
-  <style>
-    .resizable {
-      width: 300px;
-      min-width: 80px;
-      max-width: 100%;
-      overflow: hidden;
-      resize: horizontal;
-      border: 1px dashed #ccc;
-      padding: 8px;
-      box-sizing: border-box;
-    }
-  </style>
-  ...
-  <h3>Responsive (drag right edge to resize)</h3>
-  <div class="resizable">
-    <vaadin-{name}>...</vaadin-{name}>
-  </div>
-  ```
-  Do not use a `<input type="range">` slider for this — the native resize handle is the established pattern in this repo.
+- For components with responsive/overflow behavior, wrap the example in a container with `resize: horizontal; overflow: hidden` so the tester can drag the right edge to any width. Do not use a range slider.
 
 ---
 

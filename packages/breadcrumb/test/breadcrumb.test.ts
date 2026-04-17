@@ -667,13 +667,32 @@ describe('breadcrumb', () => {
     });
 
     it('should collapse items starting from the one closest to root', async () => {
-      await renderBreadcrumb('300px', 5);
+      await renderBreadcrumb('200px', 5);
       const collapsed = getCollapsedItemLis();
-      if (collapsed.length > 0) {
-        // First collapsed should be index 1 (closest intermediate to root)
-        const firstCollapsedIndex = parseInt(collapsed[0].getAttribute('data-index')!);
-        expect(firstCollapsedIndex).to.equal(1);
+      expect(collapsed.length).to.be.greaterThan(0);
+      // First collapsed should be index 1 (closest intermediate to root)
+      const firstCollapsedIndex = parseInt(collapsed[0].getAttribute('data-index')!);
+      expect(firstCollapsedIndex).to.equal(1);
+    });
+
+    it('should not collapse root until all intermediate items are collapsed', async () => {
+      await renderBreadcrumb('200px', 5);
+      const collapsed = getCollapsedItemLis();
+      const collapsedIndices = collapsed.map((li) => parseInt(li.getAttribute('data-index')!));
+      // If root (index 0) is collapsed, all intermediates (1..count-2) must also be collapsed
+      if (collapsedIndices.includes(0)) {
+        expect(collapsedIndices).to.include(1);
+        expect(collapsedIndices).to.include(2);
+        expect(collapsedIndices).to.include(3);
       }
+    });
+
+    it('should never collapse the current item', async () => {
+      await renderBreadcrumb('100px', 5);
+      const collapsed = getCollapsedItemLis();
+      const collapsedIndices = collapsed.map((li) => parseInt(li.getAttribute('data-index')!));
+      // current item is last (index 4)
+      expect(collapsedIndices).to.not.include(4);
     });
 
     it('should show the overflow button when at least one item is collapsed', async () => {
@@ -704,19 +723,35 @@ describe('breadcrumb', () => {
 
     it('should list collapsed items in hierarchy order in the dropdown', async () => {
       await renderBreadcrumb('200px', 5);
+      const collapsed = getCollapsedItemLis();
+      const collapsedTexts = collapsed.map((li) => {
+        const slot = li.querySelector('slot') as HTMLSlotElement;
+        return slot.assignedElements()[0]?.textContent?.trim() ?? '';
+      });
+
       const button = getOverflowButton();
       button.click();
       await aTimeout(0);
 
       const dropdown = breadcrumb.shadowRoot!.querySelector('[part="overflow-dropdown"]');
       const links = Array.from(dropdown!.querySelectorAll('a'));
-      // Links should be in ascending order matching the original item order
-      const texts = links.map((a) => a.textContent!.trim());
-      // All collapsed items should appear in the same order they are in the breadcrumb
-      for (let i = 1; i < texts.length; i++) {
-        // Just check that they are in the right number
-        expect(texts[i]).to.be.ok;
-      }
+      const dropdownTexts = links.map((a) => a.textContent!.trim());
+
+      expect(dropdownTexts).to.deep.equal(collapsedTexts);
+    });
+
+    it('should close the dropdown when clicking outside', async () => {
+      await renderBreadcrumb('200px');
+      const button = getOverflowButton();
+      button.click();
+      await aTimeout(0);
+
+      expect(breadcrumb.shadowRoot!.querySelector('[part="overflow-dropdown"]')).to.be.ok;
+
+      document.body.click();
+      await aTimeout(0);
+
+      expect(breadcrumb.shadowRoot!.querySelector('[part="overflow-dropdown"]')).to.be.null;
     });
 
     it('should fire navigation when clicking an item in the overflow dropdown', async () => {
