@@ -15,6 +15,12 @@ export interface BreadcrumbItemData {
   current?: boolean;
 }
 
+export interface BreadcrumbNavigateDetail {
+  path: string;
+  current: boolean;
+  originalEvent: Event;
+}
+
 export declare class BreadcrumbMixinClass {
   /**
    * An array of item objects to render as breadcrumb items.
@@ -23,6 +29,20 @@ export declare class BreadcrumbMixinClass {
    * Setting to `null` or `undefined` clears programmatic items.
    */
   items: BreadcrumbItemData[] | null | undefined;
+
+  /**
+   * A callback function that is called when navigating to a breadcrumb item.
+   * Receives an object with `{ path, current, originalEvent }`.
+   * When set, the default link action is prevented unless the callback returns `false`.
+   * When not set, a `navigate` CustomEvent is dispatched instead.
+   */
+  onNavigate: ((detail: BreadcrumbNavigateDetail) => boolean | undefined) | null | undefined;
+
+  /**
+   * A change to this property triggers a `breadcrumb-location-changed` window event.
+   * The specific value is irrelevant; any change dispatches the event.
+   */
+  location: any;
 
   /**
    * The array of slotted breadcrumb items.

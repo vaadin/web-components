@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 
 // Enable experimental feature flag before importing elements
 window.Vaadin ??= {};
@@ -310,6 +311,112 @@ describe('breadcrumb', () => {
       // Current item should have aria-current
       const currentLink = items[1]!.shadowRoot!.querySelector('a');
       expect(currentLink!.getAttribute('aria-current')).to.equal('page');
+    });
+  });
+
+  describe('navigation', () => {
+    beforeEach(async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item current>Shoes</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+    });
+
+    function clickAnchor(anchor: HTMLAnchorElement, options: MouseEventInit = {}) {
+      return anchor.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, composed: true, cancelable: true, ...options }),
+      );
+    }
+
+    it('should fire navigate event when clicking an ancestor item with path', () => {
+      const spy = sinon.spy();
+      breadcrumb.addEventListener('navigate', spy);
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const anchor = items[0]!.shadowRoot!.querySelector('a')!;
+      clickAnchor(anchor);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.path).to.equal('/');
+      expect(spy.firstCall.args[0].detail.current).to.be.false;
+    });
+
+    it('should not fire navigate event for the current item', () => {
+      const spy = sinon.spy();
+      breadcrumb.addEventListener('navigate', spy);
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const anchor = items[2]!.shadowRoot!.querySelector('a')!;
+      clickAnchor(anchor);
+      expect(spy.called).to.be.false;
+    });
+
+    it('should call onNavigate callback with correct arguments when set', () => {
+      const callback = sinon.spy();
+      (breadcrumb as any).onNavigate = callback;
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const anchor = items[1]!.shadowRoot!.querySelector('a')!;
+      clickAnchor(anchor);
+      expect(callback.calledOnce).to.be.true;
+      const arg = callback.firstCall.args[0];
+      expect(arg.path).to.equal('/products');
+      expect(arg.current).to.be.false;
+      expect(arg.originalEvent).to.be.instanceOf(Event);
+    });
+
+    it('should prevent default link action when onNavigate is set', () => {
+      (breadcrumb as any).onNavigate = sinon.spy();
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const anchor = items[0]!.shadowRoot!.querySelector('a')!;
+      const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+      anchor.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should not prevent default link action when onNavigate returns false', () => {
+      let wasPreventedWhenCallbackRan = true;
+      (breadcrumb as any).onNavigate = (detail: any) => {
+        // Capture the state at callback time, then prevent navigation for test safety
+        wasPreventedWhenCallbackRan = detail.originalEvent.defaultPrevented;
+        detail.originalEvent.preventDefault();
+        return false;
+      };
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const anchor = items[0]!.shadowRoot!.querySelector('a')!;
+      const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+      anchor.dispatchEvent(event);
+      // At the time onNavigate was called, the event should not have been prevented
+      expect(wasPreventedWhenCallbackRan).to.be.false;
+    });
+
+    it('should not trigger onNavigate for modified clicks', () => {
+      const callback = sinon.spy();
+      (breadcrumb as any).onNavigate = callback;
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const anchor = items[0]!.shadowRoot!.querySelector('a')!;
+
+      // Use a capturing listener to prevent actual navigation while testing modifier behavior
+      const preventNav = (ev: Event) => ev.preventDefault();
+      document.addEventListener('click', preventNav, true);
+      try {
+        clickAnchor(anchor, { metaKey: true });
+        expect(callback.called).to.be.false;
+      } finally {
+        document.removeEventListener('click', preventNav, true);
+      }
+    });
+
+    it('should dispatch breadcrumb-location-changed window event when location changes', async () => {
+      const spy = sinon.spy();
+      window.addEventListener('breadcrumb-location-changed', spy);
+      try {
+        (breadcrumb as any).location = '/new-path';
+        await nextRender();
+        expect(spy.calledOnce).to.be.true;
+      } finally {
+        window.removeEventListener('breadcrumb-location-changed', spy);
+      }
     });
   });
 

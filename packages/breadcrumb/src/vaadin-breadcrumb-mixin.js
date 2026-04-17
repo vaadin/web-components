@@ -29,6 +29,29 @@ export const BreadcrumbMixin = dedupeMixin(
           },
 
           /**
+           * A callback function that is called when navigating to a breadcrumb item.
+           * Receives an object with `{ path, current, originalEvent }`.
+           * When set, the default link action is prevented unless the callback returns `false`.
+           * When not set, a `navigate` CustomEvent is dispatched instead.
+           *
+           * @type {function(Object): boolean | undefined}
+           */
+          onNavigate: {
+            attribute: false,
+          },
+
+          /**
+           * A change to this property triggers a `breadcrumb-location-changed` window event.
+           * The specific value is irrelevant; any change dispatches the event.
+           * Useful for notifying the breadcrumb about route changes in client-side routing.
+           *
+           * @type {any}
+           */
+          location: {
+            observer: '__locationChanged',
+          },
+
+          /**
            * Internal count of slotted items, used to trigger re-renders.
            * @type {number}
            * @protected
@@ -52,6 +75,8 @@ export const BreadcrumbMixin = dedupeMixin(
         this.__observingItems = false;
         /** @type {Array<Element>} @private */
         this.__programmaticItems = [];
+
+        this.addEventListener('click', (e) => this.__onClick(e));
       }
 
       /** @protected */
@@ -167,6 +192,64 @@ export const BreadcrumbMixin = dedupeMixin(
           this.__programmaticItems.push(el);
           this.appendChild(el);
         });
+      }
+
+      /** @private */
+      __locationChanged() {
+        window.dispatchEvent(new CustomEvent('breadcrumb-location-changed'));
+      }
+
+      /** @private */
+      __onClick(e) {
+        const hasModifier = e.metaKey || e.shiftKey || e.ctrlKey;
+        if (hasModifier) {
+          return;
+        }
+
+        const composedPath = e.composedPath();
+        const item = composedPath.find((el) => el.localName && el.localName === 'vaadin-breadcrumb-item');
+        const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
+        if (!item || !anchor || !item.shadowRoot.contains(anchor)) {
+          return;
+        }
+
+        // Skip current items (no navigation needed)
+        if (item.current) {
+          return;
+        }
+
+        // Skip items without a path
+        if (item.path == null) {
+          return;
+        }
+
+        // Skip external links
+        const isRelative = anchor.href && anchor.href.startsWith(location.origin);
+        if (!isRelative) {
+          return;
+        }
+
+        const detail = {
+          path: item.path,
+          current: item.current,
+          originalEvent: e,
+        };
+
+        if (this.onNavigate) {
+          const result = this.onNavigate(detail);
+          if (result !== false) {
+            e.preventDefault();
+          }
+        } else {
+          this.dispatchEvent(
+            new CustomEvent('navigate', {
+              detail,
+              bubbles: true,
+              composed: true,
+            }),
+          );
+          e.preventDefault();
+        }
       }
 
       /**
