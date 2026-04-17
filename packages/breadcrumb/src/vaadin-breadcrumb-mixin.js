@@ -17,6 +17,18 @@ export const BreadcrumbMixin = dedupeMixin(
       static get properties() {
         return {
           /**
+           * An array of item objects to render as breadcrumb items.
+           * Each object can have: `text` (string), `path` (string), `current` (boolean).
+           * When set, programmatic items are created in the light DOM.
+           * Setting to `null` or `undefined` clears programmatic items.
+           *
+           * @type {Array<{text: string, path?: string, current?: boolean}> | null | undefined}
+           */
+          items: {
+            type: Array,
+          },
+
+          /**
            * Internal count of slotted items, used to trigger re-renders.
            * @type {number}
            * @protected
@@ -38,6 +50,17 @@ export const BreadcrumbMixin = dedupeMixin(
         this.__separatorNode = null;
         /** @private */
         this.__observingItems = false;
+        /** @type {Array<Element>} @private */
+        this.__programmaticItems = [];
+      }
+
+      /** @protected */
+      updated(props) {
+        super.updated(props);
+
+        if (props.has('items')) {
+          this.__updateProgrammaticItems();
+        }
       }
 
       /** @protected */
@@ -115,6 +138,35 @@ export const BreadcrumbMixin = dedupeMixin(
         });
 
         this._itemCount = items.length;
+      }
+
+      /**
+       * Create or remove programmatic breadcrumb-item elements based on the `items` property.
+       * @private
+       */
+      __updateProgrammaticItems() {
+        // Remove old programmatic items
+        this.__programmaticItems.forEach((item) => item.remove());
+        this.__programmaticItems = [];
+
+        const items = this.items;
+        if (!items || !items.length) {
+          return;
+        }
+
+        // Create new items
+        items.forEach((itemData) => {
+          const el = document.createElement('vaadin-breadcrumb-item');
+          el.textContent = itemData.text || '';
+          if (itemData.path != null) {
+            el.setAttribute('path', itemData.path);
+          }
+          if (itemData.current) {
+            el.setAttribute('current', '');
+          }
+          this.__programmaticItems.push(el);
+          this.appendChild(el);
+        });
       }
 
       /**

@@ -9,7 +9,21 @@ export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<BreadcrumbMixinClass> & T;
 
+export interface BreadcrumbItemData {
+  text: string;
+  path?: string;
+  current?: boolean;
+}
+
 export declare class BreadcrumbMixinClass {
+  /**
+   * An array of item objects to render as breadcrumb items.
+   * Each object can have: `text` (string), `path` (string), `current` (boolean).
+   * When set, programmatic items are created in the light DOM.
+   * Setting to `null` or `undefined` clears programmatic items.
+   */
+  items: BreadcrumbItemData[] | null | undefined;
+
   /**
    * The array of slotted breadcrumb items.
    */

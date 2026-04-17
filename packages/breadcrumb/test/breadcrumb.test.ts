@@ -204,6 +204,115 @@ describe('breadcrumb', () => {
     });
   });
 
+  describe('items', () => {
+    beforeEach(async () => {
+      breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>');
+      await nextRender();
+    });
+
+    it('should create breadcrumb-item children from items array', async () => {
+      (breadcrumb as any).items = [
+        { text: 'Home', path: '/' },
+        { text: 'Products', path: '/products' },
+        { text: 'Shoes' },
+      ];
+      await nextRender();
+      await aTimeout(0);
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items.length).to.equal(3);
+      expect(items[0]!.textContent).to.equal('Home');
+      expect(items[0]!.getAttribute('path')).to.equal('/');
+      expect(items[1]!.textContent).to.equal('Products');
+      expect(items[1]!.getAttribute('path')).to.equal('/products');
+      expect(items[2]!.textContent).to.equal('Shoes');
+      expect(items[2]!.hasAttribute('path')).to.be.false;
+    });
+
+    it('should mark item with current: true as current', async () => {
+      (breadcrumb as any).items = [
+        { text: 'Home', path: '/' },
+        { text: 'Shoes', current: true },
+      ];
+      await nextRender();
+      await aTimeout(0);
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items[0]!.hasAttribute('current')).to.be.false;
+      expect(items[1]!.hasAttribute('current')).to.be.true;
+    });
+
+    it('should replace previous children when items changes', async () => {
+      (breadcrumb as any).items = [
+        { text: 'Home', path: '/' },
+        { text: 'Products', path: '/products' },
+      ];
+      await nextRender();
+      await aTimeout(0);
+
+      (breadcrumb as any).items = [{ text: 'Dashboard', path: '/dashboard' }];
+      await nextRender();
+      await aTimeout(0);
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items.length).to.equal(1);
+      expect(items[0]!.textContent).to.equal('Dashboard');
+      expect(items[0]!.getAttribute('path')).to.equal('/dashboard');
+    });
+
+    it('should clear programmatic items when set to null', async () => {
+      (breadcrumb as any).items = [
+        { text: 'Home', path: '/' },
+        { text: 'Products', path: '/products' },
+      ];
+      await nextRender();
+      await aTimeout(0);
+
+      (breadcrumb as any).items = null;
+      await nextRender();
+      await aTimeout(0);
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      expect(items.length).to.equal(0);
+    });
+
+    it('should render separators for programmatic items', async () => {
+      (breadcrumb as any).items = [
+        { text: 'Home', path: '/' },
+        { text: 'Products', path: '/products' },
+        { text: 'Shoes', current: true },
+      ];
+      await nextRender();
+      await aTimeout(0);
+
+      const separators = breadcrumb.shadowRoot!.querySelectorAll('[part="separator"]');
+      expect(separators.length).to.equal(2);
+    });
+
+    it('should function identically to declarative items', async () => {
+      (breadcrumb as any).items = [
+        { text: 'Home', path: '/' },
+        { text: 'Shoes', path: '/shoes', current: true },
+      ];
+      await nextRender();
+      await aTimeout(0);
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      // Items should be slotted correctly
+      expect(items[0]!.getAttribute('slot')).to.equal('item-0');
+      expect(items[1]!.getAttribute('slot')).to.equal('item-1');
+
+      // Shadow DOM should have correct structure
+      const ol = breadcrumb.shadowRoot!.querySelector('ol');
+      const lis = ol!.querySelectorAll('li');
+      expect(lis.length).to.equal(2);
+
+      // Current item should have aria-current
+      const currentLink = items[1]!.shadowRoot!.querySelector('a');
+      expect(currentLink!.getAttribute('aria-current')).to.equal('page');
+    });
+  });
+
   describe('shadow parts', () => {
     beforeEach(async () => {
       breadcrumb = fixtureSync(`
