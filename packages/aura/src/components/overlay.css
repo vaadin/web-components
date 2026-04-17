@@ -55,3 +55,11 @@ vaadin-slider-bubble {
     margin: 1px;
   }
 }
+
+[top-aligned]:not(vaadin-select)::part(overlay) {
+  margin-top: calc(var(--vaadin-focus-ring-width, 2px) + 1px);
+}
+
+[bottom-aligned]:not(vaadin-select)::part(overlay) {
+  margin-bottom: calc(var(--vaadin-focus-ring-width, 2px) + 1px);
+}
