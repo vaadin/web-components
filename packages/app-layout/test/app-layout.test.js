@@ -65,6 +65,20 @@ describe('vaadin-app-layout', () => {
       layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
     });
 
+    it('should toggle navbar container visibility when slot content changes', async () => {
+      const item = document.createElement('div');
+      item.setAttribute('slot', 'navbar');
+      layout.appendChild(item);
+      await nextResize(layout);
+      await nextFrame();
+      expect(layout.$.navbarTop.hasAttribute('hidden')).to.be.false;
+
+      item.remove();
+      await nextResize(layout);
+      await nextFrame();
+      expect(layout.$.navbarTop.hasAttribute('hidden')).to.be.true;
+    });
+
     describe('default', () => {
       beforeEach(() => {
         layout.style.setProperty('--vaadin-app-layout-touch-optimized', 'false');

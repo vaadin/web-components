@@ -192,13 +192,14 @@ export const AppLayoutMixin = (superclass) =>
       cancelAnimationFrame(this.__resizeRaf);
 
       const isHostResized = entries.some(({ target }) => target === this);
-
-      const drawerRect = this.$.drawer.getBoundingClientRect();
-      const navbarRect = this.$.navbarTop.getBoundingClientRect();
-      const navbarBottomRect = this.$.navbarBottom.getBoundingClientRect();
+      const isNavbarResized = entries.some(({ target }) => [this.$.navbarTop, this.$.navbarBottom].includes(target));
 
       const overlayMode = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
       const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
+
+      const drawerRect = this.$.drawer.getBoundingClientRect();
+      const navbarTopRect = this.$.navbarTop.getBoundingClientRect();
+      const navbarBottomRect = this.$.navbarBottom.getBoundingClientRect();
 
       const isDrawerAnimating = this.__isDrawerAnimating;
 
@@ -206,13 +207,16 @@ export const AppLayoutMixin = (superclass) =>
         if (isHostResized) {
           this._blockAnimationUntilAfterNextRender();
           this.__setOverlayMode(overlayMode);
+        }
+
+        if (isHostResized || isNavbarResized) {
           this.__setTouchOptimized(touchOptimized);
         }
 
         if (!isDrawerAnimating) {
           this.__setOffsetSize({
             drawerRect,
-            navbarRect,
+            navbarTopRect,
             navbarBottomRect,
           });
         }
@@ -321,9 +325,9 @@ export const AppLayoutMixin = (superclass) =>
     }
 
     /** @private */
-    __setOffsetSize({ drawerRect, navbarRect, navbarBottomRect }) {
+    __setOffsetSize({ drawerRect, navbarTopRect, navbarBottomRect }) {
       this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${drawerRect.width}px`);
-      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarRect.height}px`);
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarTopRect.height}px`);
       this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${navbarBottomRect.height}px`);
     }
 
