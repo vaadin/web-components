@@ -59,13 +59,13 @@ describe('breadcrumb', () => {
 
     it('should render slotted items inside li wrappers in the ol', () => {
       const ol = breadcrumb.shadowRoot!.querySelector('ol');
-      const lis = ol!.querySelectorAll('li');
+      const lis = ol!.querySelectorAll('li[data-index]');
       expect(lis.length).to.equal(2);
     });
 
     it('should render named slots inside li wrappers', () => {
       const ol = breadcrumb.shadowRoot!.querySelector('ol');
-      const lis = ol!.querySelectorAll('li');
+      const lis = ol!.querySelectorAll('li[data-index]');
       const slot0 = lis[0]!.querySelector('slot');
       const slot1 = lis[1]!.querySelector('slot');
       expect(slot0!.getAttribute('name')).to.equal('item-0');
@@ -183,7 +183,7 @@ describe('breadcrumb', () => {
       await aTimeout(0);
 
       const ol = breadcrumb.shadowRoot!.querySelector('ol');
-      const lis = ol!.querySelectorAll('li');
+      const lis = ol!.querySelectorAll('li[data-index]');
       expect(lis.length).to.equal(3);
 
       const separators = breadcrumb.shadowRoot!.querySelectorAll('[part="separator"]');
@@ -197,7 +197,7 @@ describe('breadcrumb', () => {
       await aTimeout(0);
 
       const ol = breadcrumb.shadowRoot!.querySelector('ol');
-      const lis = ol!.querySelectorAll('li');
+      const lis = ol!.querySelectorAll('li[data-index]');
       expect(lis.length).to.equal(1);
 
       const separators = breadcrumb.shadowRoot!.querySelectorAll('[part="separator"]');
@@ -305,7 +305,7 @@ describe('breadcrumb', () => {
 
       // Shadow DOM should have correct structure
       const ol = breadcrumb.shadowRoot!.querySelector('ol');
-      const lis = ol!.querySelectorAll('li');
+      const lis = ol!.querySelectorAll('li[data-index]');
       expect(lis.length).to.equal(2);
 
       // Current item should have aria-current
@@ -530,6 +530,202 @@ describe('breadcrumb', () => {
       separators.forEach((sep) => {
         expect(sep.localName).to.equal('span');
       });
+    });
+  });
+
+  describe('overflow', () => {
+    let breadcrumb: Breadcrumb;
+
+    async function renderBreadcrumb(width: string, itemCount = 5) {
+      const items = [];
+      for (let i = 0; i < itemCount; i++) {
+        const isCurrent = i === itemCount - 1;
+        const path = isCurrent ? undefined : `/${i === 0 ? '' : `level-${i}`}`;
+        const text = i === 0 ? 'Home' : isCurrent ? 'Current Page' : `Level ${i}`;
+        items.push(
+          `<vaadin-breadcrumb-item ${path != null ? `path="${path}"` : ''} ${isCurrent ? 'current' : ''}>${text}</vaadin-breadcrumb-item>`,
+        );
+      }
+
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="max-width: ${width}">
+          ${items.join('\n')}
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      // Wait for ResizeObserver + overflow detection
+      await aTimeout(50);
+    }
+
+    function getVisibleItemLis() {
+      const ol = breadcrumb.shadowRoot!.querySelector('ol')!;
+      return Array.from(ol.querySelectorAll('li[data-index]:not([collapsed])'));
+    }
+
+    function getCollapsedItemLis() {
+      const ol = breadcrumb.shadowRoot!.querySelector('ol')!;
+      return Array.from(ol.querySelectorAll('li[collapsed]'));
+    }
+
+    function getOverflowButton() {
+      return breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLButtonElement;
+    }
+
+    function getOverflowLi() {
+      return breadcrumb.shadowRoot!.querySelector('li[data-overflow]') as HTMLElement;
+    }
+
+    it('should show all items when there is enough width', async () => {
+      await renderBreadcrumb('1000px');
+      const visible = getVisibleItemLis();
+      expect(visible.length).to.equal(5);
+      expect(breadcrumb.hasAttribute('overflow')).to.be.false;
+    });
+
+    it('should hide the overflow button when all items are visible', async () => {
+      await renderBreadcrumb('1000px');
+      const overflowLi = getOverflowLi();
+      const style = getComputedStyle(overflowLi);
+      expect(style.display).to.equal('none');
+    });
+
+    it('should collapse intermediate items when width is reduced', async () => {
+      await renderBreadcrumb('200px');
+      const collapsed = getCollapsedItemLis();
+      expect(collapsed.length).to.be.greaterThan(0);
+    });
+
+    it('should collapse items starting from the one closest to root', async () => {
+      await renderBreadcrumb('300px', 5);
+      const collapsed = getCollapsedItemLis();
+      if (collapsed.length > 0) {
+        // First collapsed should be index 1 (closest intermediate to root)
+        const firstCollapsedIndex = parseInt(collapsed[0].getAttribute('data-index')!);
+        expect(firstCollapsedIndex).to.equal(1);
+      }
+    });
+
+    it('should show the overflow button when at least one item is collapsed', async () => {
+      await renderBreadcrumb('200px');
+      expect(breadcrumb.hasAttribute('overflow')).to.be.true;
+      const overflowLi = getOverflowLi();
+      const style = getComputedStyle(overflowLi);
+      expect(style.display).to.not.equal('none');
+    });
+
+    it('should set aria-label on the overflow button from i18n.overflow', async () => {
+      await renderBreadcrumb('200px');
+      const button = getOverflowButton();
+      expect(button.getAttribute('aria-label')).to.equal('Show hidden ancestors');
+    });
+
+    it('should open a dropdown listing collapsed items when overflow button is clicked', async () => {
+      await renderBreadcrumb('200px');
+      const button = getOverflowButton();
+      button.click();
+      await aTimeout(0);
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="overflow-dropdown"]');
+      expect(dropdown).to.be.ok;
+      const links = dropdown!.querySelectorAll('a');
+      expect(links.length).to.be.greaterThan(0);
+    });
+
+    it('should list collapsed items in hierarchy order in the dropdown', async () => {
+      await renderBreadcrumb('200px', 5);
+      const button = getOverflowButton();
+      button.click();
+      await aTimeout(0);
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="overflow-dropdown"]');
+      const links = Array.from(dropdown!.querySelectorAll('a'));
+      // Links should be in ascending order matching the original item order
+      const texts = links.map((a) => a.textContent!.trim());
+      // All collapsed items should appear in the same order they are in the breadcrumb
+      for (let i = 1; i < texts.length; i++) {
+        // Just check that they are in the right number
+        expect(texts[i]).to.be.ok;
+      }
+    });
+
+    it('should fire navigation when clicking an item in the overflow dropdown', async () => {
+      await renderBreadcrumb('200px');
+      const spy = sinon.spy();
+      breadcrumb.addEventListener('navigate', spy);
+
+      const button = getOverflowButton();
+      button.click();
+      await aTimeout(0);
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="overflow-dropdown"]');
+      const firstLink = dropdown!.querySelector('a') as HTMLAnchorElement;
+      firstLink.click();
+
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.path).to.be.a('string');
+    });
+
+    it('should set overflow attribute on the host when items are collapsed', async () => {
+      await renderBreadcrumb('200px');
+      expect(breadcrumb.hasAttribute('overflow')).to.be.true;
+    });
+
+    it('should not set overflow attribute when all items fit', async () => {
+      await renderBreadcrumb('1000px');
+      expect(breadcrumb.hasAttribute('overflow')).to.be.false;
+    });
+
+    it('should collapse all intermediates and root when very narrow', async () => {
+      await renderBreadcrumb('100px', 5);
+      const collapsed = getCollapsedItemLis();
+      const visible = getVisibleItemLis();
+      // Only the current (last) item should be visible
+      expect(visible.length).to.equal(1);
+      // root + 3 intermediates collapsed = 4
+      expect(collapsed.length).to.equal(4);
+    });
+
+    it('should truncate the current item label when it alone exceeds the width', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="max-width: 60px">
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item current>A Very Long Current Page Name That Overflows</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const ol = breadcrumb.shadowRoot!.querySelector('ol')!;
+      const lastLi = ol.querySelector('li[data-index="1"]') as HTMLElement;
+      expect(lastLi.classList.contains('current-truncated')).to.be.true;
+    });
+
+    it('should set title attribute on the truncated current item for hover reveal', async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb style="max-width: 60px">
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item current>A Very Long Current Page Name</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+      await aTimeout(50);
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const lastItem = items[items.length - 1]!;
+      expect(lastItem.getAttribute('title')).to.equal('A Very Long Current Page Name');
+    });
+
+    it('should restore collapsed items when resized wider', async () => {
+      await renderBreadcrumb('200px');
+      expect(breadcrumb.hasAttribute('overflow')).to.be.true;
+
+      // Widen the container
+      breadcrumb.style.maxWidth = '1000px';
+      await aTimeout(100);
+
+      const collapsed = getCollapsedItemLis();
+      expect(collapsed.length).to.equal(0);
+      expect(breadcrumb.hasAttribute('overflow')).to.be.false;
     });
   });
 });

@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 export interface BreadcrumbI18n {
   navigationLabel?: string;
@@ -13,7 +14,7 @@ export interface BreadcrumbI18n {
 
 export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<BreadcrumbMixinClass> & Constructor<I18nMixinClass<BreadcrumbI18n>> & T;
+): Constructor<BreadcrumbMixinClass> & Constructor<I18nMixinClass<BreadcrumbI18n>> & Constructor<ResizeMixinClass> & T;
 
 export interface BreadcrumbItemData {
   text: string;
