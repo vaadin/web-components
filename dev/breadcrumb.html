@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumb</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.breadcrumbComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/breadcrumb';
+
+      // Fake navigation: prevent actual navigation, log to console
+      document.querySelectorAll('vaadin-breadcrumb').forEach((bc) => {
+        bc.addEventListener('navigate', (e) => {
+          e.preventDefault();
+          console.log('Navigate:', e.detail.path);
+        });
+      });
+    </script>
+    <style>
+      section {
+        margin-bottom: 2rem;
+      }
+
+      h3 {
+        margin-bottom: 0.5rem;
+      }
+
+      .narrow {
+        width: 250px;
+        border: 1px dashed #ccc;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h3>Basic breadcrumb</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products/shoes" current>Shoes</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </section>
+
+    <section>
+      <h3>With icons</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/">
+          <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
+          Home
+        </vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">
+          <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
+          Products
+        </vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products/shoes" current>
+          <vaadin-icon icon="vaadin:records" slot="prefix"></vaadin-icon>
+          Shoes
+        </vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </section>
+
+    <section>
+      <h3>Without current item</h3>
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products/shoes">Shoes</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </section>
+
+    <section>
+      <h3>With custom separator</h3>
+      <vaadin-breadcrumb>
+        <span slot="separator">/</span>
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products/shoes" current>Shoes</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    </section>
+
+    <section>
+      <h3>Narrow width (overflow)</h3>
+      <div class="narrow">
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/shoes">Shoes</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/shoes/running">Running</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products/shoes/running/marathon" current>Marathon</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      </div>
+    </section>
+
+    <section>
+      <h3>Programmatic items</h3>
+      <vaadin-breadcrumb id="programmatic"></vaadin-breadcrumb>
+      <script type="module">
+        const bc = document.getElementById('programmatic');
+        bc.items = [
+          { text: 'Home', path: '/' },
+          { text: 'Products', path: '/products' },
+          { text: 'Electronics', path: '/products/electronics' },
+          { text: 'Laptops', current: true },
+        ];
+      </script>
+    </section>
+  </body>
+</html>
