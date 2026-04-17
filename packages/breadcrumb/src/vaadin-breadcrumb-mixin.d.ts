@@ -4,10 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+
+export interface BreadcrumbI18n {
+  navigationLabel?: string;
+  overflow?: string;
+}
 
 export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<BreadcrumbMixinClass> & T;
+): Constructor<BreadcrumbMixinClass> & Constructor<I18nMixinClass<BreadcrumbI18n>> & T;
 
 export interface BreadcrumbItemData {
   text: string;

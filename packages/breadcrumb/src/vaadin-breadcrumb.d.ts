@@ -5,7 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { BreadcrumbNavigateDetail } from './vaadin-breadcrumb-mixin.js';
+import type { BreadcrumbI18n, BreadcrumbNavigateDetail } from './vaadin-breadcrumb-mixin.js';
 import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
 
 export interface BreadcrumbCustomEventMap {
@@ -47,4 +47,4 @@ declare global {
   }
 }
 
-export { Breadcrumb };
+export { Breadcrumb, BreadcrumbI18n };

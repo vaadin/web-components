@@ -5,15 +5,20 @@
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { html, nothing } from 'lit';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 /**
  * A mixin providing common breadcrumb functionality.
  *
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const BreadcrumbMixin = dedupeMixin(
   (superClass) =>
-    class BreadcrumbMixinClass extends superClass {
+    class BreadcrumbMixinClass extends I18nMixin(
+      { navigationLabel: 'Breadcrumb', overflow: 'Show hidden ancestors' },
+      superClass,
+    ) {
       static get properties() {
         return {
           /**
@@ -103,7 +108,7 @@ export const BreadcrumbMixin = dedupeMixin(
       /** @protected */
       render() {
         return html`
-          <nav part="nav">
+          <nav part="nav" aria-label="${this.__effectiveI18n.navigationLabel}">
             <ol part="list">
               ${this.__renderItems()}
             </ol>

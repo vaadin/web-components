@@ -420,6 +420,46 @@ describe('breadcrumb', () => {
     });
   });
 
+  describe('i18n', () => {
+    beforeEach(async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Products</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+    });
+
+    it('should have default navigationLabel as "Breadcrumb"', () => {
+      expect((breadcrumb as any).i18n.navigationLabel).to.equal('Breadcrumb');
+    });
+
+    it('should have default overflow as "Show hidden ancestors"', () => {
+      expect((breadcrumb as any).i18n.overflow).to.equal('Show hidden ancestors');
+    });
+
+    it('should set aria-label on the nav element to "Breadcrumb" by default', () => {
+      const nav = breadcrumb.shadowRoot!.querySelector('nav');
+      expect(nav!.getAttribute('aria-label')).to.equal('Breadcrumb');
+    });
+
+    it('should update aria-label when i18n.navigationLabel is changed', async () => {
+      (breadcrumb as any).i18n = { navigationLabel: "Fil d'Ariane" };
+      await nextRender();
+      const nav = breadcrumb.shadowRoot!.querySelector('nav');
+      expect(nav!.getAttribute('aria-label')).to.equal("Fil d'Ariane");
+    });
+
+    it('should merge partial i18n updates with defaults', async () => {
+      (breadcrumb as any).i18n = { overflow: 'More items' };
+      await nextRender();
+      // The nav aria-label should still use the default navigationLabel
+      const nav = breadcrumb.shadowRoot!.querySelector('nav');
+      expect(nav!.getAttribute('aria-label')).to.equal('Breadcrumb');
+    });
+  });
+
   describe('shadow parts', () => {
     beforeEach(async () => {
       breadcrumb = fixtureSync(`
