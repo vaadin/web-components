@@ -10,7 +10,7 @@ snapshots["vaadin-dashboard-layout host"] =
 snapshots["vaadin-dashboard-layout shadow"] = 
 `<div
   id="grid"
-  style="width: 800px; --_col-count: 1;"
+  style="width: 800px; --_col-count: 2;"
 >
   <slot>
   </slot>
