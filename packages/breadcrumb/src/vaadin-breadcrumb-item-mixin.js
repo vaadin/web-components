@@ -27,6 +27,18 @@ export const BreadcrumbItemMixin = dedupeMixin(
             type: String,
             reflect: true,
           },
+
+          /**
+           * Whether this breadcrumb item represents the current page.
+           * When true, sets `aria-current="page"` on the anchor.
+           *
+           * @type {boolean}
+           */
+          current: {
+            type: Boolean,
+            reflect: true,
+            value: false,
+          },
         };
       }
 
@@ -45,7 +57,12 @@ export const BreadcrumbItemMixin = dedupeMixin(
       /** @protected */
       render() {
         return html`
-          <a part="link" href="${ifDefined(this.path)}" tabindex="${this.path == null ? '-1' : '0'}">
+          <a
+            part="link"
+            href="${ifDefined(this.path)}"
+            tabindex="${this.path == null ? '-1' : '0'}"
+            aria-current="${this.current ? 'page' : 'false'}"
+          >
             <slot name="prefix"></slot>
             <slot></slot>
           </a>

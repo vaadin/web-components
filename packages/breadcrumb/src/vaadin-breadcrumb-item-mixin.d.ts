@@ -15,4 +15,10 @@ export declare class BreadcrumbItemMixinClass {
    * renders as a clickable link.
    */
   path: string | undefined;
+
+  /**
+   * Whether this breadcrumb item represents the current page.
+   * When true, sets `aria-current="page"` on the anchor.
+   */
+  current: boolean;
 }

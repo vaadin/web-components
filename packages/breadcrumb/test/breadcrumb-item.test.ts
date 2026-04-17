@@ -72,6 +72,62 @@ describe('breadcrumb-item', () => {
     });
   });
 
+  describe('current', () => {
+    it('should default to false', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      expect(item.current).to.be.false;
+    });
+
+    it('should not have current attribute by default', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      expect(item.hasAttribute('current')).to.be.false;
+    });
+
+    it('should set aria-current to false on the anchor by default', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      const link = item.shadowRoot!.querySelector('a[part="link"]') as HTMLAnchorElement;
+      expect(link.getAttribute('aria-current')).to.equal('false');
+    });
+
+    it('should reflect current attribute on the host when set to true', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      item.current = true;
+      await nextRender();
+      expect(item.hasAttribute('current')).to.be.true;
+    });
+
+    it('should set aria-current to page on the anchor when current is true', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      item.current = true;
+      await nextRender();
+      const link = item.shadowRoot!.querySelector('a[part="link"]') as HTMLAnchorElement;
+      expect(link.getAttribute('aria-current')).to.equal('page');
+    });
+
+    it('should remove current attribute when set to false', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item current>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      expect(item.hasAttribute('current')).to.be.true;
+      item.current = false;
+      await nextRender();
+      expect(item.hasAttribute('current')).to.be.false;
+    });
+
+    it('should set aria-current to false on the anchor when current is false', async () => {
+      item = fixtureSync('<vaadin-breadcrumb-item current>Home</vaadin-breadcrumb-item>');
+      await nextRender();
+      item.current = false;
+      await nextRender();
+      const link = item.shadowRoot!.querySelector('a[part="link"]') as HTMLAnchorElement;
+      expect(link.getAttribute('aria-current')).to.equal('false');
+    });
+  });
+
   describe('slots', () => {
     it('should render slotted text content inside the anchor', async () => {
       item = fixtureSync('<vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>');
