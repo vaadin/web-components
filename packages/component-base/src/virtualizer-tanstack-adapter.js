@@ -12,6 +12,7 @@ import {
 } from '@tanstack/virtual-core';
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
 globalThis.process ||= { env: {} };
 
@@ -200,29 +201,9 @@ export class TanStackAdapter {
       }
     });
 
-    const sortedElements = this.#elements.toSorted((a, b) => parseInt(a.dataset.index) - parseInt(b.dataset.index));
-
-    // Use the focused element as the anchor to avoid losing focus, or the first element otherwise.
-    const anchorIndex = Math.max(
-      0,
-      sortedElements.findIndex((el) => el.matches(':focus-within')),
-    );
-
-    // Place elements after the anchor into correct DOM order, going forward.
-    // Each element is moved to right after its predecessor if not already there.
-    for (let i = anchorIndex + 1; i < sortedElements.length; i++) {
-      if (sortedElements[i - 1].nextElementSibling !== sortedElements[i]) {
-        sortedElements[i - 1].after(sortedElements[i]);
-      }
-    }
-
-    // Place elements before the anchor into correct DOM order, going backward.
-    // Each element is moved to right before its successor if not already there.
-    for (let i = anchorIndex - 1; i >= 0; i--) {
-      if (sortedElements[i + 1].previousElementSibling !== sortedElements[i]) {
-        sortedElements[i + 1].before(sortedElements[i]);
-      }
-    }
+    reorderChildren(this.elementsContainer, (a, b) => {
+      return parseInt(a.dataset.index) - parseInt(b.dataset.index);
+    });
   }
 
   get #virtualItems() {
