@@ -26,6 +26,10 @@ vaadin-message-input:not([readonly], [disabled]) {
   background-color: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container));
 }
 
+[disabled]::part(helper-text) {
+  opacity: 0.5;
+}
+
 ::part(field-button) {
   transition: color 100ms;
   --vaadin-icon-visual-size: 90%;
