@@ -64,7 +64,7 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   [part='title'] {
-    flex: 1;
+    flex: 1 1 auto;
     color: var(--vaadin-dashboard-widget-title-color, var(--vaadin-text-color));
     font-size: var(--vaadin-dashboard-widget-title-font-size, 1em);
     font-weight: var(--vaadin-dashboard-widget-title-font-weight, 500);
