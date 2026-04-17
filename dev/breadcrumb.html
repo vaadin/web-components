@@ -34,11 +34,6 @@
         margin-bottom: 0.5rem;
       }
 
-      .narrow {
-        width: 250px;
-        border: 1px dashed #ccc;
-        padding: 8px;
-      }
     </style>
   </head>
   <body>
@@ -90,8 +85,12 @@
     </section>
 
     <section>
-      <h3>Narrow width (overflow)</h3>
-      <div class="narrow">
+      <h3>Responsive (drag to resize)</h3>
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <input id="width-slider" type="range" min="80" max="600" value="300" style="width: 200px;">
+        <span id="width-label" style="font-size: 0.85em; color: #666;">300px</span>
+      </div>
+      <div id="resizable" style="width: 300px; border: 1px dashed #ccc; padding: 8px; box-sizing: border-box;">
         <vaadin-breadcrumb>
           <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
           <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
@@ -100,6 +99,15 @@
           <vaadin-breadcrumb-item path="/products/shoes/running/marathon" current>Marathon</vaadin-breadcrumb-item>
         </vaadin-breadcrumb>
       </div>
+      <script type="module">
+        const slider = document.getElementById('width-slider');
+        const label = document.getElementById('width-label');
+        const container = document.getElementById('resizable');
+        slider.addEventListener('input', () => {
+          container.style.width = slider.value + 'px';
+          label.textContent = slider.value + 'px';
+        });
+      </script>
     </section>
 
     <section>
