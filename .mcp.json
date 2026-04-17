@@ -4,6 +4,12 @@
       "type": "http",
       "url": "https://mcp.vaadin.com/docs"
     },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
     "figma": {
       "type": "http",
       "url": "https://mcp.figma.com/mcp"
