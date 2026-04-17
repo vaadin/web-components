@@ -460,6 +460,77 @@ describe('breadcrumb', () => {
     });
   });
 
+  describe('accessibility', () => {
+    beforeEach(async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item current>Shoes</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+    });
+
+    it('should have role="navigation" on the host element', () => {
+      expect(breadcrumb.getAttribute('role')).to.equal('navigation');
+    });
+
+    it('should not override a custom role on the host element', async () => {
+      const custom = fixtureSync('<vaadin-breadcrumb role="region"></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+      expect(custom.getAttribute('role')).to.equal('region');
+    });
+
+    it('should have aria-label on the nav element from i18n', () => {
+      const nav = breadcrumb.shadowRoot!.querySelector('nav');
+      expect(nav!.getAttribute('aria-label')).to.equal('Breadcrumb');
+    });
+
+    it('should have aria-hidden="true" on separators', () => {
+      const separators = breadcrumb.shadowRoot!.querySelectorAll('[part="separator"]');
+      separators.forEach((sep) => {
+        expect(sep.getAttribute('aria-hidden')).to.equal('true');
+      });
+    });
+
+    it('should have role="list" on the ol element', () => {
+      const ol = breadcrumb.shadowRoot!.querySelector('ol');
+      expect(ol!.getAttribute('role')).to.equal('list');
+    });
+
+    it('should have role="listitem" on each li wrapper', () => {
+      const ol = breadcrumb.shadowRoot!.querySelector('ol');
+      const lis = ol!.querySelectorAll('li[data-index]');
+      lis.forEach((li) => {
+        expect(li.getAttribute('role')).to.equal('listitem');
+      });
+    });
+
+    it('should have aria-label on the overflow button', async () => {
+      // Force overflow to make the button visible
+      breadcrumb.style.maxWidth = '100px';
+      await aTimeout(50);
+      const button = breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLButtonElement;
+      expect(button.getAttribute('aria-label')).to.equal('Show hidden ancestors');
+    });
+
+    it('should have aria-current="page" on the current item nested inside the list structure', () => {
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const currentItem = items[2]!;
+      // Verify the item is current
+      expect(currentItem.hasAttribute('current')).to.be.true;
+      // Verify aria-current is set on the anchor inside the item
+      const anchor = currentItem.shadowRoot!.querySelector('a');
+      expect(anchor!.getAttribute('aria-current')).to.equal('page');
+      // Verify the item is inside a li[role="listitem"] in the list
+      const slot = currentItem.getAttribute('slot');
+      const li = breadcrumb.shadowRoot!.querySelector(`li[data-index] slot[name="${slot}"]`)!.parentElement;
+      expect(li!.getAttribute('role')).to.equal('listitem');
+      expect(li!.closest('ol')!.getAttribute('role')).to.equal('list');
+    });
+  });
+
   describe('RTL', () => {
     beforeEach(async () => {
       breadcrumb = fixtureSync(`

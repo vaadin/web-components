@@ -101,6 +101,13 @@ export const BreadcrumbMixin = dedupeMixin(
       /** @protected */
       firstUpdated(props) {
         super.firstUpdated(props);
+
+        // By default, if the user hasn't provided a custom role,
+        // the role attribute is set to "navigation".
+        if (!this.hasAttribute('role')) {
+          this.setAttribute('role', 'navigation');
+        }
+
         // Set up a MutationObserver to watch for child additions/removals
         this.__childObserver = new MutationObserver(() => {
           this.__updateItems();
@@ -114,7 +121,7 @@ export const BreadcrumbMixin = dedupeMixin(
       render() {
         return html`
           <nav part="nav" aria-label="${this.__effectiveI18n.navigationLabel}">
-            <ol part="list">
+            <ol part="list" role="list">
               ${this.__renderOverflowButton()} ${this.__renderItems()}
             </ol>
           </nav>
@@ -130,7 +137,7 @@ export const BreadcrumbMixin = dedupeMixin(
        */
       __renderOverflowButton() {
         return html`
-          <li data-overflow>
+          <li data-overflow role="listitem">
             <button
               part="overflow-button"
               aria-label="${this.__effectiveI18n.overflow}"
@@ -156,7 +163,7 @@ export const BreadcrumbMixin = dedupeMixin(
           const isLast = i === count - 1;
           const isDefault = !this.__separatorNode;
           result.push(html`
-            <li data-index="${i}">
+            <li data-index="${i}" role="listitem">
               <slot name="item-${i}"></slot>${!isLast
                 ? html`<span part="separator" aria-hidden="true" ?default-separator="${isDefault}"
                     >${this.__getSeparatorContent()}</span
