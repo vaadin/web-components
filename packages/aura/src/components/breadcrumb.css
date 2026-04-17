@@ -1,0 +1,89 @@
+:where(:root),
+:where(:host) {
+  --vaadin-breadcrumb-gap: var(--vaadin-gap-xs);
+  --vaadin-breadcrumb-separator-color: var(--vaadin-text-color-disabled);
+  --vaadin-breadcrumb-item-text-color: var(--aura-accent-text-color);
+  --vaadin-breadcrumb-item-current-text-color: var(--vaadin-text-color);
+  --vaadin-breadcrumb-item-hover-text-color: var(--aura-accent-color);
+}
+
+:is(vaadin-breadcrumb) {
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-s);
+  line-height: var(--aura-line-height-s);
+}
+
+:is(vaadin-breadcrumb-item) {
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-s);
+  line-height: var(--aura-line-height-s);
+  transition: color 80ms;
+}
+
+:is(vaadin-breadcrumb-item[current]) {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+:is(vaadin-breadcrumb)::part(separator),
+:is(vaadin-breadcrumb)::part(overflow-separator) {
+  font-size: var(--aura-font-size-m);
+}
+
+:is(vaadin-breadcrumb)::part(overflow-button) {
+  font-size: var(--aura-font-size-m);
+  padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+  border-radius: var(--vaadin-radius-m);
+  color: var(--aura-accent-text-color);
+  transition: color 80ms;
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-breadcrumb)::part(overflow-button):hover {
+    color: var(--aura-accent-color);
+    background: var(--vaadin-background-container);
+  }
+}
+
+:is(vaadin-breadcrumb)::part(overflow-button):focus-visible {
+  outline: 2px solid var(--vaadin-focus-ring-color);
+  outline-offset: 2px;
+  border-radius: var(--vaadin-radius-m);
+}
+
+:is(vaadin-breadcrumb)::part(overflow-dropdown) {
+  font-family: var(--aura-font-family);
+  font-size: var(--aura-font-size-s);
+  color: var(--vaadin-text-color);
+  background: var(--aura-surface-color);
+  --aura-surface-level: 4;
+  --aura-surface-opacity: var(--aura-overlay-surface-opacity, 0.85);
+  border: none;
+  border-radius: var(--vaadin-radius-l);
+  box-shadow:
+    var(
+      --aura-overlay-outline-shadow,
+      inset 0 0 0 1px hsla(0deg, 0%, 100%, 5%),
+      0 0 0 1px light-dark(hsla(0, 0%, 0%, 0.06), hsla(0, 0%, 0%, 0.2))
+    ),
+    var(--aura-shadow-m);
+  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter, blur(20px) brightness(1.1) saturate(1.2));
+  backdrop-filter: var(--aura-overlay-backdrop-filter, blur(20px) brightness(1.1) saturate(1.2));
+  padding: var(--vaadin-padding-xs) 0;
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-breadcrumb-item:not([current]))::part(link):hover {
+    color: var(--aura-accent-color);
+  }
+}
+
+:is(vaadin-breadcrumb-item[has-path])::part(link) {
+  border-radius: var(--vaadin-radius-s);
+  transition: color 80ms;
+}
+
+:is(vaadin-breadcrumb-item[has-path])::part(link):focus-visible {
+  outline: 2px solid var(--vaadin-focus-ring-color);
+  outline-offset: 2px;
+  border-radius: var(--vaadin-radius-s);
+}
