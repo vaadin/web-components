@@ -35,7 +35,29 @@ TASK OVERVIEW:
 
    f. **Continue** to the next eligible task(s).
 
-6. After all tasks are complete, report a summary: which tasks were committed and total commit count inside `{FLOW}/`.
+6. **Register the component in the BOM.** Add entries for the new component to `{FLOW}/flow-components-bom/pom.xml` (in alphabetical order alongside existing components):
+   ```xml
+   <dependency>
+       <groupId>com.vaadin</groupId>
+       <artifactId>vaadin-{component-name}-flow</artifactId>
+       <version>${project.version}</version>
+   </dependency>
+   <dependency>
+       <groupId>com.vaadin</groupId>
+       <artifactId>vaadin-{component-name}-testbench</artifactId>
+       <version>${project.version}</version>
+   </dependency>
+   ```
+   Commit: `feat({component}-flow): register in flow-components-bom`.
+
+7. **Register the experimental feature flag** (if the component is experimental). Create three files modelled on `vaadin-badge-flow`:
+   - `{Component}FeatureFlagProvider.java` — implements `FeatureFlagProvider`, declares a `public static final Feature {COMPONENT}_COMPONENT` field
+   - `ExperimentalFeatureException.java` — thrown when the component is used without the flag enabled
+   - `src/main/resources/META-INF/services/com.vaadin.experimental.FeatureFlagProvider` — contains the fully-qualified provider class name
+   Also add an `onAttach` override to the main component class that calls a `checkFeatureFlag(UI)` helper (see `Badge.java` for the pattern).
+   Commit: `feat({component}-flow): register experimental feature flag`.
+
+8. After all tasks are complete, report a summary: which tasks were committed and total commit count inside `{FLOW}/`.
 
 SUBAGENT PROMPT STRUCTURE:
 

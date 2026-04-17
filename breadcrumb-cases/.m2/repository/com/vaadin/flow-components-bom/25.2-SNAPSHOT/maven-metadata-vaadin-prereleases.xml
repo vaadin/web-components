@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.vaadin</groupId>
+  <artifactId>flow-components-bom</artifactId>
+  <version>25.2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20260417.094344</timestamp>
+      <buildNumber>199</buildNumber>
+    </snapshot>
+    <lastUpdated>20260417094344</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>25.2-20260417.094344-199</value>
+        <updated>20260417094344</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

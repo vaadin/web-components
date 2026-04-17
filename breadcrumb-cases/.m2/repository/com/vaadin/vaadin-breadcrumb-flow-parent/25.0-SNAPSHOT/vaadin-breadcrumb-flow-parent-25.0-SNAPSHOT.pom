@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.vaadin</groupId>
+        <artifactId>vaadin-flow-components</artifactId>
+        <version>25.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>vaadin-breadcrumb-flow-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Vaadin Breadcrumb Parent</name>
+    <description>Vaadin Breadcrumb Parent</description>
+    <modules>
+        <module>vaadin-breadcrumb-flow</module>
+        <module>vaadin-breadcrumb-testbench</module>
+    </modules>
+    <dependencies/>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <property>
+                    <name>!release</name>
+                </property>
+            </activation>
+            <modules>
+                <module>vaadin-breadcrumb-flow-integration-tests</module>
+            </modules>
+        </profile>
+    </profiles>
+</project>

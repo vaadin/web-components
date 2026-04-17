@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.vaadin</groupId>
+  <artifactId>vaadin-breadcrumb-flow-parent</artifactId>
+  <versioning>
+    <lastUpdated>20260417152102</lastUpdated>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>25.2-SNAPSHOT</value>
+        <updated>20260417152102</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+  <version>25.2-SNAPSHOT</version>
+</metadata>

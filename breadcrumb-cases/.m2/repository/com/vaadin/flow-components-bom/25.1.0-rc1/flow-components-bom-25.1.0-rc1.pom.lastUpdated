@@ -1,0 +1,9 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Mar 19 10:12:34 EET 2026
+https\://maven.vaadin.com/vaadin-addons/.error=
+https\://maven.vaadin.com/vaadin-addons/.lastUpdated=1773907954533
+https\://maven.vaadin.com/vaadin-prereleases/.error=
+https\://maven.vaadin.com/vaadin-prereleases/.lastUpdated=1773907954728
+https\://repo.maven.apache.org/maven2/.lastUpdated=1773907954999
+https\://repo.spring.io/milestone/.error=
+https\://repo.spring.io/milestone/.lastUpdated=1773907954920
