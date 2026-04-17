@@ -14,7 +14,8 @@
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
     --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
-    padding-block: var(--vaadin-app-layout-navbar-offset-top) var(--vaadin-app-layout-navbar-offset-bottom);
+    padding-top: var(--vaadin-app-layout-navbar-offset-top);
+    padding-bottom: var(--vaadin-app-layout-navbar-offset-bottom);
     padding-inline-start: var(--vaadin-app-layout-navbar-offset-left);
   }
 
@@ -32,8 +33,8 @@
   }
 
   :host([overlay]) {
-    --vaadin-app-layout-drawer-offset-left: 0;
-    --vaadin-app-layout-navbar-offset-left: 0;
+    --vaadin-app-layout-drawer-offset-left: 0px;
+    --vaadin-app-layout-navbar-offset-left: 0px;
   }
 
   :host(:not([no-scroll])) [part~='content'] {
@@ -42,6 +43,19 @@
 
   [part~='content'] {
     height: 100%;
+    padding-top: max(0px, var(--safe-area-inset-top) - var(--vaadin-app-layout-navbar-offset-top));
+    padding-bottom: max(0px, var(--safe-area-inset-bottom) - var(--vaadin-app-layout-navbar-offset-bottom));
+    box-sizing: border-box;
+  }
+
+  :host(:dir(ltr)) [part~='content'] {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: var(--safe-area-inset-right);
+  }
+
+  :host(:dir(rtl)) [part~='content'] {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: var(--safe-area-inset-right);
   }
 
   @media (pointer: coarse) and (max-width: 800px) and (min-height: 500px) {
@@ -76,6 +90,7 @@
   [part~='navbar-bottom'] {
     top: auto;
     bottom: 0;
+    padding-top: 0;
     padding-bottom: var(--safe-area-inset-bottom);
     border-bottom: none;
     border-top: 1px solid var(--lumo-contrast-10pct);

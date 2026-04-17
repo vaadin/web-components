@@ -119,6 +119,13 @@ addGlobalStyles(
         --safe-area-inset-right: env(safe-area-inset-right, 0px);
         --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
         --safe-area-inset-left: env(safe-area-inset-left, 0px);
+        --safe-area-inset-inline-start: var(--safe-area-inset-left);
+        --safe-area-inset-inline-end: var(--safe-area-inset-right);
+
+        &:dir(rtl) {
+          --safe-area-inset-inline-start: var(--safe-area-inset-right);
+          --safe-area-inset-inline-end: var(--safe-area-inset-left);
+        }
       }
 
       @supports not (color: hsl(0 0 0)) {
