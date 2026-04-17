@@ -58,7 +58,7 @@ export const breadcrumbStyles = css`
     cursor: var(--vaadin-clickable-cursor);
     background: none;
     border: none;
-    padding: 0.25em 0.5em;
+    padding: 0 0.5em;
     font: inherit;
     color: var(--vaadin-breadcrumb-item-text-color, var(--vaadin-text-color-secondary));
     line-height: 1;
