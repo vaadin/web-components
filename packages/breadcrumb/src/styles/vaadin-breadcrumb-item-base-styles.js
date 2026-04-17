@@ -31,16 +31,16 @@ export const breadcrumbItemStyles = css`
     outline: none;
   }
 
-  :host([has-path]) [part='link'] {
+  :host([has-path]:not([current])) [part='link'] {
     cursor: var(--vaadin-clickable-cursor);
   }
 
-  :host([has-path]) [part='link']:hover {
+  :host([has-path]:not([current])) [part='link']:hover {
     color: var(--vaadin-breadcrumb-item-hover-text-color, var(--vaadin-text-color));
     text-decoration: underline;
   }
 
-  :host([has-path]) [part='link']:focus-visible {
+  :host([has-path]:not([current])) [part='link']:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 2px;
     border-radius: var(--vaadin-radius-s, 2px);

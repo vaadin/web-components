@@ -16,11 +16,12 @@
       import '@vaadin/icons';
       import '@vaadin/breadcrumb';
 
-      // Fake navigation: prevent actual navigation, log to console
+      // Fake navigation: prevent actual navigation, show path visibly
+      const status = document.getElementById('nav-status');
       document.querySelectorAll('vaadin-breadcrumb').forEach((bc) => {
         bc.addEventListener('navigate', (e) => {
           e.preventDefault();
-          console.log('Navigate:', e.detail.path);
+          status.textContent = `Navigated to: ${e.detail.path}`;
         });
       });
     </script>
@@ -41,6 +42,7 @@
     </style>
   </head>
   <body>
+    <p id="nav-status" style="font-style: italic; color: #666; min-height: 1.5em;"></p>
     <section>
       <h3>Basic breadcrumb</h3>
       <vaadin-breadcrumb>

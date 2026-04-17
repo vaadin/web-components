@@ -259,6 +259,7 @@ export const BreadcrumbMixin = dedupeMixin(
 
         // Skip current items (no navigation needed)
         if (item.current) {
+          e.preventDefault();
           return;
         }
 
