@@ -51,3 +51,13 @@ export function removeValueFromAttribute(element: HTMLElement, attr: string, val
  * Returns true if the given node is an empty text node, false otherwise.
  */
 export function isEmptyTextNode(node: Node): boolean;
+
+/**
+ * Reorders the children of the given container in-place according to the
+ * given comparator. The currently focused child, if any, is used as an
+ * anchor to preserve focus and avoid scroll jumps while reordering.
+ *
+ * Each child is moved only if it's not already in the right position
+ * relative to its neighbors.
+ */
+export function reorderElements(container: Element, comparator: (a: Element, b: Element) => number): void;
