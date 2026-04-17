@@ -128,10 +128,13 @@ export const BreadcrumbMixin = dedupeMixin(
         const result = [];
         for (let i = 0; i < count; i++) {
           const isLast = i === count - 1;
+          const isDefault = !this.__separatorNode;
           result.push(html`
             <li>
               <slot name="item-${i}"></slot>${!isLast
-                ? html`<span part="separator" aria-hidden="true">${this.__getSeparatorContent()}</span>`
+                ? html`<span part="separator" aria-hidden="true" ?default-separator="${isDefault}"
+                    >${this.__getSeparatorContent()}</span
+                  >`
                 : nothing}
             </li>
           `);

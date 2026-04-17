@@ -460,6 +460,47 @@ describe('breadcrumb', () => {
     });
   });
 
+  describe('RTL', () => {
+    beforeEach(async () => {
+      breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb dir="rtl">
+          <vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Products</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item>Shoes</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `);
+      await nextRender();
+    });
+
+    it('should flip the default separator in RTL mode', () => {
+      const separator = breadcrumb.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+      const transform = getComputedStyle(separator).transform;
+      // scaleX(-1) is represented as matrix(-1, 0, 0, 1, 0, 0)
+      expect(transform).to.equal('matrix(-1, 0, 0, 1, 0, 0)');
+    });
+
+    it('should render items right-to-left', () => {
+      const ol = breadcrumb.shadowRoot!.querySelector('ol') as HTMLElement;
+      const direction = getComputedStyle(ol).direction;
+      expect(direction).to.equal('rtl');
+    });
+
+    it('should not flip custom separators in RTL mode', async () => {
+      // Replace with a non-directional custom separator
+      const sep = document.createElement('span');
+      sep.setAttribute('slot', 'separator');
+      sep.textContent = '/';
+      breadcrumb.appendChild(sep);
+      await nextRender();
+      await aTimeout(0);
+
+      const separator = breadcrumb.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+      const transform = getComputedStyle(separator).transform;
+      // Custom separator should not be flipped — transform should be 'none' or not set
+      expect(transform).to.equal('none');
+    });
+  });
+
   describe('shadow parts', () => {
     beforeEach(async () => {
       breadcrumb = fixtureSync(`

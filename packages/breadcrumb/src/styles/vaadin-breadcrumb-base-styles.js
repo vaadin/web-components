@@ -31,4 +31,8 @@ export const breadcrumbStyles = css`
   [part='separator'] {
     user-select: none;
   }
+
+  :host([dir='rtl']) [part='separator'][default-separator] {
+    transform: scaleX(-1);
+  }
 `;
