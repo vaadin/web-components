@@ -13,4 +13,22 @@ export const breadcrumbStyles = css`
   :host([hidden]) {
     display: none !important;
   }
+
+  [part='list'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+  }
+
+  [part='separator'] {
+    user-select: none;
+  }
 `;

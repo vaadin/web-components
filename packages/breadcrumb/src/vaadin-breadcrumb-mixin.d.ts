@@ -9,4 +9,14 @@ export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<BreadcrumbMixinClass> & T;
 
-export declare class BreadcrumbMixinClass {}
+export declare class BreadcrumbMixinClass {
+  /**
+   * The array of slotted breadcrumb items.
+   */
+  protected _items: Element[];
+
+  /**
+   * The number of slotted items.
+   */
+  protected _itemCount: number;
+}
