@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
 export const breadcrumbStyles = css`
@@ -23,6 +24,7 @@ export const breadcrumbStyles = css`
     list-style: none;
     margin: 0;
     padding: 0;
+    gap: var(--vaadin-breadcrumb-gap, 0.25em);
   }
 
   li {
@@ -52,13 +54,23 @@ export const breadcrumbStyles = css`
   }
 
   [part='overflow-button'] {
-    cursor: pointer;
+    cursor: var(--vaadin-clickable-cursor);
     background: none;
     border: none;
     padding: 0.25em 0.5em;
     font: inherit;
-    color: inherit;
+    color: var(--vaadin-breadcrumb-item-text-color, var(--vaadin-text-color-secondary));
     line-height: 1;
+  }
+
+  [part='overflow-button']:hover {
+    color: var(--vaadin-breadcrumb-item-hover-text-color, var(--vaadin-text-color));
+  }
+
+  [part='overflow-button']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 2px;
+    border-radius: var(--vaadin-radius-s, 2px);
   }
 
   li.current-truncated ::slotted(vaadin-breadcrumb-item) {
@@ -74,6 +86,7 @@ export const breadcrumbStyles = css`
   [part='overflow-separator'] {
     user-select: none;
     flex-shrink: 0;
+    color: var(--vaadin-breadcrumb-separator-color, var(--vaadin-text-color-disabled));
   }
 
   :host([dir='rtl']) [part='separator'][default-separator],
@@ -84,9 +97,9 @@ export const breadcrumbStyles = css`
   [part='overflow-dropdown'] {
     position: absolute;
     z-index: 1000;
-    background: var(--lumo-base-color, #fff);
-    border: 1px solid var(--lumo-contrast-20pct, #ccc);
-    border-radius: 4px;
+    background: var(--vaadin-background-color, #fff);
+    border: 1px solid var(--vaadin-border-color-secondary, #ccc);
+    border-radius: var(--vaadin-radius-m, 4px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     padding: 0.25em 0;
     list-style: none;
@@ -97,12 +110,37 @@ export const breadcrumbStyles = css`
     display: block;
     padding: 0.5em 1em;
     text-decoration: none;
-    color: inherit;
+    color: var(--vaadin-breadcrumb-item-text-color, var(--vaadin-text-color-secondary));
     white-space: nowrap;
-    cursor: pointer;
+    cursor: var(--vaadin-clickable-cursor);
   }
 
   [part='overflow-dropdown'] a:hover {
-    background: var(--lumo-contrast-5pct, #f0f0f0);
+    color: var(--vaadin-breadcrumb-item-hover-text-color, var(--vaadin-text-color));
+    background: var(--vaadin-background-container, #f0f0f0);
+  }
+
+  @media (forced-colors: active) {
+    [part='separator'],
+    [part='overflow-separator'] {
+      color: GrayText !important;
+    }
+
+    [part='overflow-button'] {
+      color: LinkText !important;
+    }
+
+    [part='overflow-dropdown'] {
+      border-color: ButtonBorder !important;
+    }
+
+    [part='overflow-dropdown'] a {
+      color: LinkText !important;
+    }
+
+    [part='overflow-dropdown'] a:hover {
+      color: ActiveText !important;
+      background: Highlight !important;
+    }
   }
 `;
