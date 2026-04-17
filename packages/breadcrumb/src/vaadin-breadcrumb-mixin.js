@@ -122,7 +122,7 @@ export const BreadcrumbMixin = dedupeMixin(
         return html`
           <nav part="nav" aria-label="${this.__effectiveI18n.navigationLabel}">
             <ol part="list" role="list">
-              ${this.__renderOverflowButton()} ${this.__renderItems()}
+              ${this.__renderItems()}
             </ol>
           </nav>
           <div style="display: none !important;">
@@ -132,36 +132,18 @@ export const BreadcrumbMixin = dedupeMixin(
       }
 
       /**
-       * Render the overflow button `<li>`.
-       * @private
-       */
-      __renderOverflowButton() {
-        return html`
-          <li data-overflow role="listitem">
-            <button
-              part="overflow-button"
-              aria-label="${this.__effectiveI18n.overflow}"
-              @click="${this.__onOverflowButtonClick}"
-            >
-              &hellip;
-            </button>
-            <span part="overflow-separator" aria-hidden="true" ?default-separator="${!this.__separatorNode}"
-              >${this.__getSeparatorContent()}</span
-            >
-          </li>
-        `;
-      }
-
-      /**
        * Render the list items with separators between them.
+       * The overflow button is rendered after the root item (index 0) so that
+       * when intermediate items collapse it appears as: Home › … › X › Current,
+       * not … › Home › X › Current.
        * @private
        */
       __renderItems() {
         const count = this._itemCount;
+        const isDefault = !this.__separatorNode;
         const result = [];
         for (let i = 0; i < count; i++) {
           const isLast = i === count - 1;
-          const isDefault = !this.__separatorNode;
           result.push(html`
             <li data-index="${i}" role="listitem">
               <slot name="item-${i}"></slot>${!isLast
@@ -171,6 +153,22 @@ export const BreadcrumbMixin = dedupeMixin(
                 : nothing}
             </li>
           `);
+          if (i === 0) {
+            result.push(html`
+              <li data-overflow role="listitem">
+                <button
+                  part="overflow-button"
+                  aria-label="${this.__effectiveI18n.overflow}"
+                  @click="${this.__onOverflowButtonClick}"
+                >
+                  &hellip;
+                </button>
+                <span part="overflow-separator" aria-hidden="true" ?default-separator="${isDefault}"
+                  >${this.__getSeparatorContent()}</span
+                >
+              </li>
+            `);
+          }
         }
         return result;
       }
