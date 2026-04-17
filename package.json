@@ -92,8 +92,5 @@
     "packages/*",
     "api-docs",
     "dev"
-  ],
-  "dependencies": {
-    "@tanstack/virtual-core": "^3.13.6"
-  }
+  ]
 }
