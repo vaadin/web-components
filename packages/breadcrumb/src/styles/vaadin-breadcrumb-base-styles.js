@@ -87,7 +87,7 @@ export const breadcrumbStyles = css`
   [part='overflow-separator'] {
     user-select: none;
     flex-shrink: 0;
-    color: var(--vaadin-breadcrumb-separator-color, var(--vaadin-text-color-disabled));
+    color: var(--vaadin-breadcrumb-separator-color, var(--vaadin-text-color-secondary));
   }
 
   :host([dir='rtl']) [part='separator'][default-separator],
