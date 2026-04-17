@@ -31,6 +31,7 @@ export const breadcrumbStyles = css`
     display: flex;
     align-items: center;
     min-width: 0;
+    gap: var(--vaadin-breadcrumb-gap, 0.25em);
   }
 
   li[hidden] {
