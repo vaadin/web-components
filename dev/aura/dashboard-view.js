@@ -196,19 +196,16 @@ customElements.define(
               <div class="aura-view-header">
                 <vaadin-drawer-toggle theme="tertiary"></vaadin-drawer-toggle>
                 <h2>Dashboard</h2>
-                <vaadin-horizontal-layout theme="spacing">
-                  <vaadin-text-field aria-label="Search" placeholder="Search…">
+                <vaadin-horizontal-layout theme="spacing" style="min-width: 0;">
+                  <vaadin-text-field aria-label="Search" placeholder="Search…" style="flex: 1; min-width: 4em;">
                     <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
                   </vaadin-text-field>
                   <vaadin-button theme="tertiary" aria-label="Notifications">
                     <vaadin-tooltip slot="tooltip" text="Notifications"></vaadin-tooltip>
                     <vaadin-icon src="./assets/lucide-icons/bell.svg"></vaadin-icon>
-                    <vaadin-badge
-                      class="aura-accent-red"
-                      aria-label="Unread"
-                      theme="dot"
-                      style="position: absolute; inset-inline-end: 5px; width: 7px; height: 7px"
-                    ></vaadin-badge>
+                    <vaadin-badge class="aura-accent-red" theme="dot" style="position: absolute; inset-inline-end: 5px"
+                      >Unread notifications</vaadin-badge
+                    >
                   </vaadin-button>
                   <vaadin-button aria-label="New Dashboard">
                     <vaadin-tooltip slot="tooltip" text="New Dashboard"></vaadin-tooltip>
@@ -217,10 +214,10 @@ customElements.define(
                 </vaadin-horizontal-layout>
               </div>
 
-              <vaadin-scroller theme="overflow-indicator-top" style="--vaadin-scroller-padding-inline: 0px">
+              <vaadin-scroller theme="overflow-indicator-top">
                 <vaadin-horizontal-layout
                   theme="wrap spacing"
-                  style="padding-inline: var(--vaadin-padding-m); align-items: center"
+                  style="align-items: center; margin-bottom: var(--vaadin-gap-l);"
                 >
                   <vaadin-tabs selected="0">
                     <vaadin-tab>Overview</vaadin-tab>
@@ -231,15 +228,25 @@ customElements.define(
                     <vaadin-tab>Billing</vaadin-tab>
                   </vaadin-tabs>
 
-                  <vaadin-horizontal-layout slot="end" theme="spacing">
-                    <vaadin-date-picker aria-label="From" placeholder="From" theme="small"></vaadin-date-picker>
-                    <vaadin-date-picker aria-label="To" placeholder="To" theme="small"></vaadin-date-picker>
+                  <vaadin-horizontal-layout slot="end" theme="spacing" style="min-width: 0;">
+                    <vaadin-date-picker
+                      aria-label="From"
+                      placeholder="From"
+                      theme="small"
+                      style="flex: 1; min-width: 4em;"
+                    ></vaadin-date-picker>
+                    <vaadin-date-picker
+                      aria-label="To"
+                      placeholder="To"
+                      theme="small"
+                      style="flex: 1; min-width: 4em;"
+                    ></vaadin-date-picker>
                   </vaadin-horizontal-layout>
                 </vaadin-horizontal-layout>
 
                 <!-- Top cards with charts -->
                 <vaadin-dashboard-layout
-                  style="--vaadin-dashboard-gap: var(--vaadin-gap-l); --vaadin-dashboard-col-max-count: 3"
+                  style="--vaadin-dashboard-gap: var(--vaadin-gap-l); --vaadin-dashboard-col-max-count: 3; --vaadin-dashboard-padding: 0px; margin-bottom: var(--vaadin-padding-l);"
                 >
                   <!-- Revenue Overview -->
                   <vaadin-dashboard-widget widget-title="Revenue Overview" class="kpi">
@@ -402,8 +409,13 @@ customElements.define(
                       --vaadin-grid-background: transparent;
                     "
                   >
-                    <vaadin-horizontal-layout slot="header-content" theme="spacing">
-                      <vaadin-text-field placeholder="Search..." clear-button-visible theme="small">
+                    <vaadin-horizontal-layout slot="header-content" theme="spacing" style="min-width: 0;">
+                      <vaadin-text-field
+                        placeholder="Search..."
+                        clear-button-visible
+                        theme="small"
+                        style="flex: 1; min-width: 4em;"
+                      >
                         <vaadin-icon slot="prefix" icon="vaadin:search"></vaadin-icon>
                       </vaadin-text-field>
                       <vaadin-button theme="small">

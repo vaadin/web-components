@@ -253,7 +253,6 @@ customElements.define(
                 --vaadin-field-default-width: 100%;
                 align-items: stretch;
                 gap: var(--vaadin-gap-s);
-                padding-bottom: var(--vaadin-padding-l);
               }
 
               components-view .component {
