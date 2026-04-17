@@ -1,6 +1,8 @@
 # Web Component Creation Guidelines
 
-This document provides comprehensive, step-by-step guidelines for creating new web components in the Vaadin web-components monorepo. These guidelines are designed to be thorough enough for automatic component generation.
+This document provides step-by-step guidelines for **implementing** web components in the Vaadin web-components monorepo — file structure, mixin chains, styling, theming, testing, and packaging.
+
+For high-level design principles, see [DESIGN_GUIDELINES.md](DESIGN_GUIDELINES.md).
 
 ---
 
@@ -18,7 +20,7 @@ This document provides comprehensive, step-by-step guidelines for creating new w
 10. [Accessibility](#accessibility)
 11. [Package Configuration](#package-configuration)
 12. [Common Patterns](#common-patterns)
-13. [Checklist](#checklist)
+14. [Checklist](#checklist)
 
 ---
 
@@ -1784,6 +1786,16 @@ For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistic
 
 ## Accessibility
 
+This section covers the implementation mechanics that realise the universal behavioural requirements listed in [DESIGN_GUIDELINES.md → Universal behavioural requirements](DESIGN_GUIDELINES.md#universal-behavioural-requirements). The design side (which properties must exist, which labels must be customisable, what "works in RTL" means behaviourally) is authoritative in the design guidelines; this section describes how to build components that satisfy those rules.
+
+### 0. Cross-cutting rules
+
+- **Every focusable element, control, and landmark the component contributes to the page has an accessible name.** For icon-only controls, overflow triggers, and landmarks, expose a property (typically an `aria-label`-backed property or an explicit `accessibleName`/`label` property) so the application can supply one and localise it.
+- **Every label the component renders itself is reachable via a property.** Built-in fallback strings ("More", "Clear selection", landmark names, etc.) must be overridable so applications can translate them.
+- **Focus order and DOM order match visual order.** Achieve this by keeping DOM order aligned with rendering order; do not use `tabindex` values above `0` to reorder focus. In RTL layouts, the layout mirror flips the visual order — because DOM order drives tab order, focus automatically mirrors with it.
+- **Minimum interactive target size follows WCAG 2.2 target size.** The baseline comes from the theme (Lumo/Aura) — do not hard-code smaller sizes in component styles.
+- **RTL works without per-application intervention.** Use logical CSS properties (`margin-inline-start`, `padding-inline-end`, `inset-inline-start`, etc.) instead of physical ones. Directional icons use mirroring (CSS `transform: scaleX(-1)` or separate RTL glyphs) so they remain directionally meaningful when the layout flips.
+
 ### 1. ARIA Requirements
 
 **Role:**
@@ -2094,6 +2106,8 @@ Use this checklist when creating a new component:
 - [ ] Event types documented in JSDoc
 - [ ] Controllers initialized in `firstUpdated()`
 - [ ] `defineCustomElement()` called at end
+- [ ] Component has a declarative HTML API (see [DESIGN_GUIDELINES.md](DESIGN_GUIDELINES.md))
+- [ ] Component also has a programmatic API if its children are typically data-driven (see [DESIGN_GUIDELINES.md](DESIGN_GUIDELINES.md))
 
 ### Styling
 
