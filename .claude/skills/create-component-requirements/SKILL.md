@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(gh repo view:*),Bash(gh api:*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://www.atlassian.design:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Web Search(*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec)
+allowed-tools: Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(gh repo view:*),Bash(gh api:*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://www.atlassian.design:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Web Search(*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/requirements.md && git commit *),Bash(git diff packages/*/spec/requirements.md)
 description: Research behavioral requirements for a Vaadin web component's use cases and produce a requirements.md
 ---
 
@@ -107,3 +107,11 @@ Before finalizing, check that:
 13. No requirement restates a universal behavioural rule from `DESIGN_GUIDELINES.md` (accessible names, customisable labels, focus order, RTL, tappable-on-small-screens). Requirements that touch those concerns must add a component-specific default, extension, or interaction pattern — otherwise remove them.
 14. Behaviours compose without ambiguity. For every pair of requirements whose conditions could both apply at the same time (e.g. "truncate long labels" and "collapse items when space is limited" both triggered by insufficient width; "keyboard shortcut X opens the menu" and "Tab moves focus through items" both firing on keyboard input), either the requirements already define the combined behaviour explicitly, or a new requirement is added that does. If the composition is genuinely an open design question, resolve it via AskUserQuestion before finalising.
 15. Variant tagging is meaningful. For every requirement that carries an `Applies to: web` or `Applies to: flow` line, the behaviour genuinely does not exist on the other variant — not merely that the wording happens to reference one API. If in doubt, remove the tag (default `universal`). At least one requirement must carry the default `universal` scope; a component whose every requirement is single-variant is suspicious and should be checked with the user.
+
+COMMIT:
+
+After writing or updating the requirements document, commit it with a message following this pattern:
+```
+docs({component-name}): add behavioral requirements for {component-name} component
+```
+If updating an existing document, use "update" instead of "add". Use `git add packages/{component-name}/spec/requirements.md` — do not use `git add -A` or `git add .`.

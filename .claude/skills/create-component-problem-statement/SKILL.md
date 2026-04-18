@@ -1,5 +1,5 @@
 ---
-allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Fetch(chakra-ui.com:*),Fetch(shoelace.style),Fetch(https://radix-ui.com:*),Fetch(https://react-aria.adobe.com:*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec)
+allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Fetch(chakra-ui.com:*),Fetch(shoelace.style),Fetch(https://radix-ui.com:*),Fetch(https://react-aria.adobe.com:*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/problem-statement.md && git commit *),Bash(git diff packages/*/spec/problem-statement.md)
 description: Define the core problem and product-level use cases for a Vaadin web component, before researching requirements
 ---
 
@@ -41,6 +41,12 @@ TASK OVERVIEW:
 7. Read `PROBLEM_STATEMENT_TEMPLATE.md` in this skill's directory. Use it as the starting point for the output file.
 
 8. Write the problem statement at `packages/{component-name}/spec/problem-statement.md` (create the directory if needed).
+
+9. **Commit the result.** After writing the file, commit it with a message following this pattern:
+   ```
+   docs({component-name}): add problem statement for {component-name} component
+   ```
+   Use `git add packages/{component-name}/spec/problem-statement.md` — do not use `git add -A` or `git add .`.
 
 OUTPUT FORMAT:
 
