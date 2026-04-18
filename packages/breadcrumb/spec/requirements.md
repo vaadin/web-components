@@ -72,15 +72,7 @@ This is a component-specific default for the universal accessible-name rule: the
 
 ---
 
-## 10. Application can intercept item activation
-
-When a user activates a breadcrumb link, the application can intercept the activation to perform custom logic (such as an unsaved-changes confirmation) before navigation proceeds. If the application suppresses the activation, no navigation occurs.
-
-For example, in a form editor with unsaved changes, clicking a breadcrumb ancestor triggers a "Discard changes?" dialog. If the user cancels, they remain on the current page.
-
----
-
-## 11. Automatic breadcrumb trail from the route hierarchy
+## 10. Automatic breadcrumb trail from the route hierarchy
 
 **Applies to:** flow
 
@@ -90,7 +82,7 @@ For example, a developer adds a breadcrumb to the main layout. When the user nav
 
 ---
 
-## 12. Static parent override for non-hierarchical routes
+## 11. Static parent override for non-hierarchical routes
 
 **Applies to:** flow
 
@@ -100,7 +92,7 @@ For example, the "User Profile" view lives at "/user-profile" but the developer 
 
 ---
 
-## 13. Dynamic breadcrumb control for context-dependent trails
+## 12. Dynamic breadcrumb control for context-dependent trails
 
 **Applies to:** flow
 
@@ -136,4 +128,4 @@ No truncation for ancestor labels — only the last item (current page) gets tru
 
 **Q: How should the Flow breadcrumb integrate with routing?**
 
-The default case should be zero-configuration: adding a breadcrumb component automatically derives the trail from the route hierarchy based on URL path segments. Two override mechanisms exist: (1) a static parent annotation on a view class for when URLs are not hierarchically structured, and (2) a dynamic interface a view can implement to take full control of the trail based on runtime context (e.g., where the user navigated from). This shaped requirements 11, 12, and 13.
+The default case should be zero-configuration: adding a breadcrumb component automatically derives the trail from the route hierarchy based on URL path segments. Two override mechanisms exist: (1) a static parent annotation on a view class for when URLs are not hierarchically structured, and (2) a dynamic interface a view can implement to take full control of the trail based on runtime context (e.g., where the user navigated from). This shaped requirements 10, 11, and 12.

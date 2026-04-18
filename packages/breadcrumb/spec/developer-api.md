@@ -117,31 +117,3 @@ Covers requirement(s): 9
 
 **Why this shape:** A `label` attribute on the container sets the accessible name for the `<nav>` landmark, following the same pattern used by `vaadin-side-nav` which exposes a `label` attribute for its navigation landmark. The default is "Breadcrumb" — a sensible English fallback that works out of the box.
 
----
-
-## 6. Intercepting item activation
-
-Covers requirement(s): 10
-
-```html
-<vaadin-breadcrumb id="crumbs">
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/editor">Editor</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>Unsaved Document</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
-```
-
-```js
-document.querySelector('#crumbs').addEventListener('item-activate', (e) => {
-  if (hasUnsavedChanges) {
-    e.preventDefault();
-    showConfirmDialog().then((confirmed) => {
-      if (confirmed) {
-        window.location.href = e.detail.item.path;
-      }
-    });
-  }
-});
-```
-
-**Why this shape:** A cancellable `item-activate` event fires before navigation occurs. Calling `preventDefault()` suppresses the default link behaviour so the application can run custom logic (e.g., unsaved-changes confirmation). The event detail includes the activated item so the application can read its `path` and navigate programmatically after its check completes. This is a router-neutral pattern — it works with any SPA router or with no router at all.
