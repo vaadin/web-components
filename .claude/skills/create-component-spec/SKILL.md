@@ -19,7 +19,7 @@ TASK OVERVIEW:
 
 3. Read `packages/{component-name}/spec/problem-statement.md`. Use it as a scope boundary. If the file does not exist, stop and tell the user to run `create-component-problem-statement` first.
 
-4. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. This defines the mixin pattern, file structure, styling conventions, and implementation standards the spec must follow. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. Do not skip any section that is relevant to the component being specified.
+4. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. This defines the mixin pattern, file structure, styling conventions, implementation standards, and CSS pitfalls the spec must follow. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. Do not skip any section that is relevant to the component being specified. The styling rules in particular contain constraints that must be reflected in the spec (e.g. how cross-shadow-DOM styling works, dropdown positioning, DOM order requirements).
 
 5. Study existing source code. Extract Vaadin component names mentioned in `developer-api.md` rationale sections (e.g., "follows vaadin-side-nav pattern") and use those as starting points. Read their entry files, mixins, and `.d.ts` files. Expand the search to other components with similar concerns (e.g., list-like, selection-like, navigation-like, overlay-like). Use Grep across the monorepo for naming patterns. Check shared base packages (`component-base`, `a11y-base`, `field-base`, `overlay`) for reusable mixins and controllers. For external libraries named in `developer-api.md` (e.g., "Shoelace uses the same separator slot pattern"), fetch their documentation to verify the referenced pattern. See SOURCE CODE ANALYSIS below for what to look for.
 
@@ -77,3 +77,4 @@ IMPORTANT GUIDELINES:
 - Do not perform broad web searches. External library documentation may be fetched only when `developer-api.md` explicitly names a specific component from that library.
 - If a requirement is ambiguous, stop and ask the user for clarification. Do not guess.
 - The output is only the spec file.
+

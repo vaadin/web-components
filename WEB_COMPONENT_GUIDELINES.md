@@ -816,6 +816,54 @@ export const {componentName}Styles = css`
 - Use attributes for state: `disabled`, `focused`, `focus-ring`, `has-value`, `invalid`
 - Always document state attributes
 
+**Decorative element colors:**
+
+- Separators, dividers, and other purely decorative non-interactive elements should use `--vaadin-text-color-secondary` as their color fallback, not `--vaadin-text-color-disabled`. The disabled color token implies the element is functionally unavailable; secondary is correct for lower-emphasis decorative content.
+
+**Inline buttons in a flex row must have zero vertical padding:**
+
+- Buttons rendered inline inside a flex row (e.g. an overflow trigger inside a breadcrumb or toolbar) must use `padding: 0 <horizontal>`. Adding top/bottom padding on an inline flex child inflates the row's height, making the row taller when that button is visible than when it is hidden.
+
+**`::slotted()` cannot reach into a child's shadow DOM:**
+
+- The `::slotted()` pseudo-element can only style the slotted element itself — it cannot reach inside the slotted element's own shadow DOM. For example, applying `text-overflow: ellipsis` via `::slotted(vaadin-foo)` will not clip text rendered inside `vaadin-foo`'s shadow root.
+- **Pattern:** set a boolean attribute on the child from the parent's logic, then handle the styling from within the child's own shadow CSS using `:host([attribute])`:
+
+```js
+child.setAttribute('some-state', '');   // parent sets
+child.removeAttribute('some-state');    // parent clears
+```
+
+```css
+/* Child's shadow CSS: */
+:host([some-state]) [part='inner'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+:host([some-state]) {
+  min-width: 0; /* also let the host shrink */
+}
+```
+
+**Inline dropdown menus must use `position: fixed`:**
+
+- Dropdown panels attached to an inline trigger (overflow buttons, split buttons, etc.) must use `position: fixed` with `getBoundingClientRect()` viewport coordinates. `position: absolute` is clipped by any ancestor with `overflow: hidden`, which is common in constrained layouts, dev pages, and scroll containers.
+
+```js
+const rect = triggerButton.getBoundingClientRect();
+dropdown.style.top = `${rect.bottom}px`;
+dropdown.style.left = `${rect.left}px`;
+```
+
+```css
+[part='dropdown'] {
+  position: fixed;
+  z-index: 1000;
+}
+```
+
 ---
 
 ## Theming
@@ -1622,7 +1670,16 @@ element.addEventListener('value-changed', (event) => {
 });
 ```
 
-### 7. Test Coverage Requirements
+### 7. Avoid vacuous assertions
+
+Test assertions must be specific enough to fail when the behaviour is wrong:
+
+- **Array length only is not enough.** `expect(items.length).to.be.greaterThan(0)` passes even if the wrong items are present. Assert specific membership or values: `expect(collapsedIndices).to.include(1)`.
+- **DOM-order assumptions in index tests.** If a test finds the "first collapsed item" by DOM position, it may pick up a non-item element (e.g. an overflow button injected before items). Use a semantic marker (`data-index`, `data-overflow`, etc.) to locate items precisely.
+- **Conditional assertions that can pass vacuously.** `if (condition) { expect(something) }` — if the branch is never reached the assertion is silently skipped. Make the outer condition an assertion too, or restructure the test to always exercise both paths.
+- **Avoid `> 0` on length when you know the exact expected count or set.** Prefer `expect(el.getAttribute('data-index')).to.equal('1')` over `expect(index).to.be.greaterThan(0)`.
+
+### 8. Test Coverage Requirements
 
 Ensure these aspects are tested:
 
@@ -1793,7 +1850,7 @@ This section covers the implementation mechanics that realise the universal beha
 
 - **Every focusable element, control, and landmark the component contributes to the page has an accessible name.** For icon-only controls, overflow triggers, and landmarks, expose a property (typically an `aria-label`-backed property or an explicit `accessibleName`/`label` property) so the application can supply one and localise it.
 - **Every label the component renders itself is reachable via a property.** Built-in fallback strings ("More", "Clear selection", landmark names, etc.) must be overridable so applications can translate them.
-- **Focus order and DOM order match visual order.** Achieve this by keeping DOM order aligned with rendering order; do not use `tabindex` values above `0` to reorder focus. In RTL layouts, the layout mirror flips the visual order — because DOM order drives tab order, focus automatically mirrors with it.
+- **Focus order and DOM order match visual order.** Achieve this by keeping DOM order aligned with rendering order; do not use `tabindex` values above `0` to reorder focus. In RTL layouts, the layout mirror flips the visual order — because DOM order drives tab order, focus automatically mirrors with it. This applies equally to dynamically inserted elements: an overflow button that appears visually after the first item must also be the second element in the DOM — placing it first for convenience breaks both visual and focus order.
 - **Minimum interactive target size follows WCAG 2.2 target size.** The baseline comes from the theme (Lumo/Aura) — do not hard-code smaller sizes in component styles.
 - **RTL works without per-application intervention.** Use logical CSS properties (`margin-inline-start`, `padding-inline-end`, `inset-inline-start`, etc.) instead of physical ones. Directional icons use mirroring (CSS `transform: scaleX(-1)` or separate RTL glyphs) so they remain directionally meaningful when the layout flips.
 
