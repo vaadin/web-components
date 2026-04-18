@@ -84,12 +84,18 @@ Covers requirement(s): 6, 7, 8
   <vaadin-breadcrumb-item path="/projects/alpha/docs/reports/q4/finance">Finance</vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item>Q4 2025 Marketing Campaign Assets</vaadin-breadcrumb-item>
 </vaadin-breadcrumb>
-<!-- When space is limited, renders as:
-     Home > … > Q4 2025 Marketing Campa…
-     The "…" opens a menu with collapsed items. -->
+
+<!-- Progressive collapse as space decreases:
+     1. Full:     Home > Projects > Alpha > Documents > Reports > Q4 > Finance > Q4 2025 Marketing Campaign Assets
+     2. Collapse: Home > … > Alpha > Documents > Reports > Q4 > Finance > Q4 2025 Marketing Campaign Assets
+     3. More:     Home > … > Reports > Q4 > Finance > Q4 2025 Marketing Campaign Assets
+     4. More:     Home > … > Q4 2025 Marketing Campaign Assets
+     5. Root too: … > Q4 2025 Marketing Campaign Assets
+     6. Truncate: … > Q4 2025 Marketing Campa…
+     The "…" opens a menu with the collapsed items. -->
 ```
 
-**Why this shape:** Overflow is automatic — no property to enable it. When items don't fit, the component collapses middle items into an ellipsis button that opens a menu. The first item and the current page (last item) always remain visible. If space is still insufficient after collapsing all middle items, the current page label truncates with a text ellipsis. This progressive degradation requires zero developer configuration, following the principle of making common cases easy.
+**Why this shape:** Overflow is automatic — no property to enable it. Items collapse one at a time starting from the item closest to the root, preserving the root and the current page's nearest ancestors as long as possible. The rationale: the root and the immediate ancestors of the current page are the ones the user most likely wants to see or jump to. If all intermediate items are collapsed and space is still insufficient, the root collapses too. Only when the current page label alone cannot fit does it truncate with a text ellipsis. This progressive degradation requires zero developer configuration.
 
 ---
 

@@ -40,27 +40,27 @@ For example, in a file manager breadcrumb, the root item shows a home icon follo
 
 ---
 
-## 6. Collapse middle items into an overflow menu when the trail does not fit
+## 6. Collapse items into an overflow menu when the trail does not fit
 
-When the trail is too long to fit in the available horizontal space, the component collapses intermediate items (between the first and last visible items) into an overflow menu represented by an ellipsis. The first item and the last item (current page) always remain visible. Activating the ellipsis reveals the collapsed items so the user can navigate to any ancestor.
+When the trail is too long to fit in the available horizontal space, the component collapses items one at a time into an overflow menu represented by an ellipsis. Items collapse in order of ancestry starting from the item closest to the root (but not the root itself), then proceeding toward the current page. The root item and the current page remain visible as long as possible. If further collapsing is still needed after all intermediate items have been collapsed, the root item collapses as well. The current page never collapses. Activating the ellipsis reveals the collapsed items so the user can navigate to any ancestor.
 
-For example, in a file manager 8 folders deep, the breadcrumb shows "Home > … > Reports > Q4 Summary". Clicking "…" opens a menu listing the collapsed intermediate folders.
+For example, given the trail "Home > Projects > Alpha > Documents > Reports > Q4 Summary", as space decreases the component first collapses "Projects", then "Alpha", then "Documents", producing "Home > … > Reports > Q4 Summary". If space decreases further, "Reports" collapses too, then finally "Home" collapses, leaving "… > Q4 Summary".
 
 ---
 
 ## 7. Truncate the current page label with an ellipsis when space is insufficient
 
-When the available space is not enough to display even the first item, the overflow menu, and the current page label at full width, the current page label (last item) is truncated with a text ellipsis. Ancestor link labels are never truncated — they are collapsed into the overflow menu instead.
+When the available space is not enough to display even the overflow menu and the current page label at full width, the current page label (last item) is truncated with a text ellipsis. Ancestor link labels are never truncated — they are collapsed into the overflow menu instead.
 
-For example, in a narrow panel showing the breadcrumb "Home > … > Q4 2025 Marketing Campaign Ass…", the current page label is truncated because the full text does not fit after the overflow menu has already collapsed all intermediate items.
+For example, in a narrow panel showing the breadcrumb "… > Q4 2025 Marketing Campaign Ass…", the current page label is truncated because the full text does not fit after all ancestor items (including the root) have been collapsed into the overflow menu.
 
 ---
 
 ## 8. Overflow menu and current-page truncation compose predictably
 
-When the trail exceeds available space, the component first collapses intermediate items into the overflow menu (requirement 6). If the trail still does not fit after all collapsible items have been collapsed, the current page label is truncated with an ellipsis (requirement 7). Both behaviors can be active simultaneously: the overflow menu is shown and the current page label is truncated.
+When the trail exceeds available space, the component first collapses intermediate items into the overflow menu in root-outward order (requirement 6). If the trail still does not fit after the root itself has been collapsed, the current page label is truncated with an ellipsis (requirement 7). Both behaviors can be active simultaneously: the overflow menu is shown and the current page label is truncated.
 
-For example, in an extremely narrow container, the breadcrumb shows "Home > … > Q4 2025 Marketi…" — intermediate items are in the overflow menu and the current page label is truncated to fill the remaining space.
+For example, in an extremely narrow container, the breadcrumb shows "… > Q4 2025 Marketi…" — all ancestor items including the root are in the overflow menu and the current page label is truncated to fill the remaining space.
 
 ---
 
