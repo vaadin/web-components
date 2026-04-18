@@ -32,3 +32,11 @@ Clarifying boundaries prevents scope creep in later steps.
 The first use case is the core scenario — the most common, most basic thing users do with this component. If this scenario applies across multiple domains, include them as examples within a single entry. Additional use cases describe situations where the user faces a constraint or context that the core scenario does not cover.
 
 Write in user language ("A user wants to…", "In an admin application…"). Include concrete context so each scenario is specific enough to build a demo from. Order from most common to most specialized.
+
+## Discussion
+
+Questions posed to the user while producing this document, with the user's answers. Each entry captures a decision that shaped the problem statement above. The Discussion is the audit trail of scope and boundary choices — not a summary of the sections above. Omit this section if no questions were asked.
+
+**Q: {Short, focused question — e.g. "Should file-tree navigation be in scope or is that Side Nav territory?"}**
+
+{User's answer, paraphrased as the decision. Keep it short.}

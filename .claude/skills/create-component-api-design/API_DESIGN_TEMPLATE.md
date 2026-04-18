@@ -45,3 +45,13 @@ Covers requirement(s): 3, 4
 ```
 
 **Why this shape:** ...
+
+---
+
+## Discussion
+
+Questions posed to the user while producing this document, with the user's answers. Each entry captures a decision that shaped the API design above. The Discussion is the audit trail of API choices — not a summary of the sections above. Omit this section if no questions were asked.
+
+**Q: {Short, focused question — e.g. "Should the separator be a slot or a CSS concern?"}**
+
+{User's answer, paraphrased as the decision. Keep it short.}

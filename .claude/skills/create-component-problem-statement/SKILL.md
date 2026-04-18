@@ -38,11 +38,13 @@ TASK OVERVIEW:
 
    c. **Scope.** Verify each use case falls within the boundaries established in step 4. If a use case describes a scenario that the Differentiation assigns to an adjacent component, remove it.
 
-7. Read `PROBLEM_STATEMENT_TEMPLATE.md` in this skill's directory. Use it as the starting point for the output file.
+7. **Identify open questions and ask the user.** If the research reveals ambiguities about scope, adjacent-component boundaries, or which variant use cases belong, use AskUserQuestion to resolve them before writing the document. Record every question and answer in a `## Discussion` section at the end of the output document (after Use Cases). If a previous version of `problem-statement.md` exists, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
 
-8. Write the problem statement at `packages/{component-name}/spec/problem-statement.md` (create the directory if needed).
+8. Read `PROBLEM_STATEMENT_TEMPLATE.md` in this skill's directory. Use it as the starting point for the output file.
 
-9. **Commit the result.** After writing the file, commit it with a message following this pattern:
+9. Write the problem statement at `packages/{component-name}/spec/problem-statement.md` (create the directory if needed).
+
+10. **Commit the result.** After writing the file, commit it with a message following this pattern:
    ```
    docs({component-name}): add problem statement for {component-name} component
    ```
@@ -56,6 +58,7 @@ Follow `PROBLEM_STATEMENT_TEMPLATE.md` exactly. The document should be roughly o
 - **Target Users** — Which end users benefit and in what kinds of applications or workflows.
 - **Differentiation** — How this component differs from related or adjacent components/patterns. This section does the most to prevent scope creep in later steps. Be specific: name the adjacent patterns and explain what each does that this component does NOT, and vice versa.
 - **Use Cases** — Product-level scenarios describing what users want to do with the component. Each scenario is concrete enough to build a demo app from. Written in user language, ordered from most common to most specialized.
+- **Discussion** — Questions posed to the user during production of this document, with the user's answers. Captures the decisions that shaped the problem statement — informational, not a summary of the sections above. Omit this section if no questions were asked.
 
 IMPORTANT GUIDELINES:
 
