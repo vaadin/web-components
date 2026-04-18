@@ -80,13 +80,33 @@ For example, in a form editor with unsaved changes, clicking a breadcrumb ancest
 
 ---
 
-## 11. Application controls which item is current
+## 11. Automatic breadcrumb trail from the route hierarchy
 
 **Applies to:** flow
 
-The application can programmatically set which item in the trail represents the current page — typically by updating the breadcrumb items to match the current route. In a Flow application, the breadcrumb integrates with the server-side routing so that when the user navigates to a new view, the breadcrumb trail updates to reflect the new location without the developer manually reconstructing the trail for every route change.
+Adding a breadcrumb component to a layout with no additional configuration automatically produces a trail derived from the current route's URL hierarchy. The trail updates on every navigation without the developer manually constructing or updating items. This is the zero-configuration default.
 
-For example, in a Flow application with routes like "/settings/security/roles", navigating to that URL automatically produces the trail "Settings > Security > Roles" based on the route hierarchy.
+For example, a developer adds a breadcrumb to the main layout. When the user navigates to "/settings/security/roles", the trail automatically reads "Settings > Security > Roles" based on the URL path segments.
+
+---
+
+## 12. Static parent override for non-hierarchical routes
+
+**Applies to:** flow
+
+When a view's URL structure does not reflect the logical hierarchy (e.g., "/user-profile" is logically a child of "/settings" but not nested under it in the URL), the developer can declare a static parent route on the view so the breadcrumb places it under the correct ancestor.
+
+For example, the "User Profile" view lives at "/user-profile" but the developer declares its parent as the Settings view. The breadcrumb then shows "Settings > User Profile" instead of treating "User Profile" as a top-level page.
+
+---
+
+## 13. Dynamic breadcrumb control for context-dependent trails
+
+**Applies to:** flow
+
+A view can take full control of the breadcrumb trail by implementing an interface that receives a context object and updates the breadcrumb dynamically. This supports cases where the trail depends on how the user arrived at the view, on runtime data, or on other conditions that a static hierarchy cannot express.
+
+For example, an "Order Details" view is reachable from both "My Orders" and "Customer Management > Orders". The view implements the breadcrumb interface and, based on the referral context, produces either "My Orders > Order #1234" or "Customer Management > Orders > Order #1234".
 
 ---
 
@@ -113,3 +133,7 @@ Yes, include the current page. It should be visually distinct and marked with `a
 **Q: Should individual breadcrumb item labels be truncated with an ellipsis when too long?**
 
 No truncation for ancestor labels — only the last item (current page) gets truncated with an ellipsis when there is not enough space. This shaped requirements 7 and 8.
+
+**Q: How should the Flow breadcrumb integrate with routing?**
+
+The default case should be zero-configuration: adding a breadcrumb component automatically derives the trail from the route hierarchy based on URL path segments. Two override mechanisms exist: (1) a static parent annotation on a view class for when URLs are not hierarchically structured, and (2) a dynamic interface a view can implement to take full control of the trail based on runtime context (e.g., where the user navigated from). This shaped requirements 11, 12, and 13.
