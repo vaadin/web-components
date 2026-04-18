@@ -5,8 +5,6 @@ description: Implement all tasks from a component's tasks.md, one subagent and o
 
 This skill implements a component by iterating through its `tasks.md` and spawning one subagent per task. Each subagent gets a fresh context with only the information it needs — avoiding context rot across many tasks. After each subagent completes, the orchestrator commits the changes. The result is one commit per task on the current branch, with no push to remote.
 
-This is the final step in the spec-driven development pipeline. Steps 1–6 produced the problem statement, requirements, developer API, specification, optional Figma design, and task breakdown. This step writes actual code.
-
 Arguments: [ComponentName] [StartFromTask?]
 
 `ComponentName` is required. `StartFromTask` is optional (default: 1) — use it to resume after a failure.
