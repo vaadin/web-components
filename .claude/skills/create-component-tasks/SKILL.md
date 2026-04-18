@@ -21,7 +21,7 @@ TASK OVERVIEW:
 
 4. Check if `packages/{component-name}/spec/figma-design.md` exists. If present, read it and reference the Figma design in theme styling tasks as visual guidance. If absent, proceed without it — Figma designs are optional.
 
-5. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. The document defines file structure, naming conventions, mixin patterns, styling architecture, theming, testing, accessibility, and a Checklist. Use the Checklist section as the completeness reference — every checklist item must be covered by at least one task.
+5. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. The document defines file structure, naming conventions, mixin patterns, styling architecture, theming, testing, accessibility, and a Checklist. Use the Checklist section as the completeness reference — every checklist item must be covered by at least one task. The styling rules contain constraints that must be reflected in task descriptions and acceptance criteria. The "Avoid vacuous assertions" section (§7 Testing) defines how test assertions in tasks must be written — assertions must be specific enough to fail when the behaviour is wrong.
 
 6. Parse the spec into implementation units. For each element in the spec, extract:
    - Mixin chain

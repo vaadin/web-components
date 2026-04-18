@@ -41,7 +41,7 @@ Each subagent prompt must be self-contained. Include:
 - Paths to reference files: `packages/{component-name}/spec/spec.md` (with the specific sections to focus on), `packages/{component-name}/spec/developer-api.md`, and `WEB_COMPONENT_GUIDELINES.md`
 - Implementation instructions:
   1. Read the referenced spec sections for implementation details
-  2. Read `WEB_COMPONENT_GUIDELINES.md` in batches (500 lines at a time) for conventions
+  2. Read `WEB_COMPONENT_GUIDELINES.md` in batches (500 lines at a time) for conventions. The styling pitfalls section (cross-shadow-DOM styling, dropdown positioning, inline button padding) and the testing section (vacuous assertions, DOM-order assumptions in index tests) contain constraints that directly affect correctness — pay particular attention to those.
   3. Study existing similar components using Glob and Grep to match patterns
   4. Write tests first — translate every test assertion from the task into a test case
   5. Implement the code to make tests pass
