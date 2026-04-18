@@ -1,9 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Fri Dec 05 16:32:22 EET 2025
-https\://maven.vaadin.com/vaadin-addons/.error=
-https\://maven.vaadin.com/vaadin-addons/.lastUpdated=1764945142034
-https\://maven.vaadin.com/vaadin-prereleases/.error=
-https\://maven.vaadin.com/vaadin-prereleases/.lastUpdated=1764945142161
-https\://oss.sonatype.org/content/repositories/vaadin-snapshots/.error=
-https\://oss.sonatype.org/content/repositories/vaadin-snapshots/.lastUpdated=1764945142288
-https\://repo.maven.apache.org/maven2/.lastUpdated=1764945142339
