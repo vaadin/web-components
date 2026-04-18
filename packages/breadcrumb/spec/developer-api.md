@@ -33,23 +33,16 @@ document.querySelector('vaadin-breadcrumb').items = [
 Covers requirement(s): 3, 4
 
 ```html
-<!-- Default: theme provides a chevron separator that flips in RTL -->
+<!-- Default: theme provides a chevron separator that flips in RTL.
+     No API surface needed — separators are rendered via CSS pseudo-elements. -->
 <vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>Shoes</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
-
-<!-- Custom separator via slot on the container -->
-<vaadin-breadcrumb>
-  <span slot="separator">/</span>
   <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
   <vaadin-breadcrumb-item>Shoes</vaadin-breadcrumb-item>
 </vaadin-breadcrumb>
 ```
 
-**Why this shape:** A `separator` slot on the container sets the separator for all items at once — the slotted content is used as a template and replicated between each pair of items. This avoids the redundancy of setting a separator on every item. The default separator is a directional chevron provided by the theme, which flips automatically in RTL. A slotted icon also flips via the universal RTL rule; a text separator like "/" does not flip, which is correct because it is non-directional. This matches the Shoelace breadcrumb pattern.
+**Why this shape:** Separators are purely decorative and do not require a slot or property. The theme renders them via CSS (e.g., a `::before` pseudo-element on each item after the first). Customizing the separator character or icon is done through CSS custom properties or theme overrides — no JavaScript API needed. The default chevron is directional and flips automatically in RTL via CSS. This keeps the component API minimal and avoids a slot that would add DOM complexity for a purely visual concern.
 
 ---
 
