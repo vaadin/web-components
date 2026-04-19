@@ -42,6 +42,78 @@ describe('vaadin-breadcrumb', () => {
       expect(slot).to.be.ok;
     });
   });
+
+  describe('role and label', () => {
+    it('should have role="navigation" on the host', () => {
+      expect(breadcrumb.getAttribute('role')).to.equal('navigation');
+    });
+
+    it('should have aria-label="Breadcrumb" by default', () => {
+      expect(breadcrumb.getAttribute('aria-label')).to.equal('Breadcrumb');
+    });
+
+    it('should have label property defaulting to "Breadcrumb"', () => {
+      expect(breadcrumb.label).to.equal('Breadcrumb');
+    });
+
+    it('should update aria-label when label property changes', async () => {
+      breadcrumb.label = 'Product navigation';
+      await nextRender();
+      expect(breadcrumb.getAttribute('aria-label')).to.equal('Product navigation');
+    });
+
+    it('should have role="list" on the shadow container div', () => {
+      const container = breadcrumb.shadowRoot!.querySelector('[part="container"]');
+      expect(container!.getAttribute('role')).to.equal('list');
+    });
+  });
+});
+
+describe('vaadin-breadcrumb current item management', () => {
+  let breadcrumb: Breadcrumb;
+
+  beforeEach(async () => {
+    breadcrumb = fixtureSync(`
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item>Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    `);
+    await nextRender();
+  });
+
+  it('should set current on the last slotted item', () => {
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items[2].hasAttribute('current')).to.be.true;
+  });
+
+  it('should not set current on previous items', () => {
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items[0].hasAttribute('current')).to.be.false;
+    expect(items[1].hasAttribute('current')).to.be.false;
+  });
+
+  it('should move current to a newly added last item', async () => {
+    const newItem = document.createElement('vaadin-breadcrumb-item');
+    newItem.textContent = 'New Page';
+    breadcrumb.appendChild(newItem);
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items[2].hasAttribute('current')).to.be.false;
+    expect(items[3].hasAttribute('current')).to.be.true;
+  });
+
+  it('should move current to the new last item when the last item is removed', async () => {
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    breadcrumb.removeChild(items[2]);
+    await nextRender();
+
+    const remainingItems = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(remainingItems[0].hasAttribute('current')).to.be.false;
+    expect(remainingItems[1].hasAttribute('current')).to.be.true;
+  });
 });
 
 describe('vaadin-breadcrumb-item', () => {

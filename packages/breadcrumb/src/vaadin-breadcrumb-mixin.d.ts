@@ -12,4 +12,10 @@ export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<BreadcrumbMixinClass> & T;
 
-export declare class BreadcrumbMixinClass {}
+export declare class BreadcrumbMixinClass {
+  /**
+   * The accessible label for the breadcrumb navigation.
+   * Mapped to `aria-label` on the host element.
+   */
+  label: string;
+}
