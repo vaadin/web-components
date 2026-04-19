@@ -23,4 +23,15 @@ export const breadcrumbItemStyles = css`
   :host([current]) [part='separator'] {
     display: none;
   }
+
+  :host([truncate]) {
+    min-width: 0;
+  }
+
+  :host([truncate]) [part='link'] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
 `;

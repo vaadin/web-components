@@ -302,4 +302,61 @@ describe('vaadin-breadcrumb overflow', () => {
       expect(dropdown.querySelectorAll('a').length).to.equal(0);
     });
   });
+
+  describe('truncation', () => {
+    let truncWrapper: HTMLDivElement;
+    let truncBreadcrumb: Breadcrumb;
+
+    beforeEach(async () => {
+      truncWrapper = fixtureSync(`
+        <div style="width: 50px;">
+          <vaadin-breadcrumb>
+            <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+            <vaadin-breadcrumb-item>This Is A Very Long Current Page Name</vaadin-breadcrumb-item>
+          </vaadin-breadcrumb>
+        </div>
+      `);
+      truncBreadcrumb = truncWrapper.querySelector('vaadin-breadcrumb')!;
+      await nextRender();
+      await aTimeout(0);
+    });
+
+    it('should set truncate attribute on the current item when all items are collapsed and label overflows', () => {
+      const items = truncBreadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const lastItem = items[items.length - 1];
+      expect(lastItem.hasAttribute('truncate')).to.be.true;
+    });
+
+    it('should set title attribute with full label text on the truncated item', () => {
+      const items = truncBreadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const lastItem = items[items.length - 1];
+      expect(lastItem.getAttribute('title')).to.equal('This Is A Very Long Current Page Name');
+    });
+
+    it('should apply text-overflow ellipsis on the truncated item link part', () => {
+      const items = truncBreadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const lastItem = items[items.length - 1];
+      const link = lastItem.shadowRoot!.querySelector('[part="link"]') as HTMLElement;
+      expect(getComputedStyle(link).overflow).to.equal('hidden');
+      expect(getComputedStyle(link).textOverflow).to.equal('ellipsis');
+    });
+
+    it('should remove truncate and title attributes when container expands enough', async () => {
+      const items = truncBreadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const lastItem = items[items.length - 1];
+
+      // Verify truncation is active
+      expect(lastItem.hasAttribute('truncate')).to.be.true;
+      expect(lastItem.hasAttribute('title')).to.be.true;
+
+      // Expand container to fit all items
+      truncWrapper.style.width = '2000px';
+      truncBreadcrumb.dispatchEvent(new Event('resize'));
+      await nextRender();
+      await aTimeout(0);
+
+      expect(lastItem.hasAttribute('truncate')).to.be.false;
+      expect(lastItem.hasAttribute('title')).to.be.false;
+    });
+  });
 });

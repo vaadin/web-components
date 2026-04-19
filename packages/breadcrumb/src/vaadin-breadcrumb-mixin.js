@@ -270,6 +270,8 @@ export const BreadcrumbMixin = (superClass) =>
       items.forEach((item) => {
         item.style.visibility = '';
         item.style.position = '';
+        item.removeAttribute('truncate');
+        item.removeAttribute('title');
       });
     }
 
@@ -353,9 +355,6 @@ export const BreadcrumbMixin = (superClass) =>
       this.__restoreItems(items);
       this.__removeOverflowButton();
 
-      // Remove truncate attribute from all items
-      items.forEach((item) => item.removeAttribute('truncate'));
-
       // Step 2: Check if there's overflow
       if (container.scrollWidth <= container.offsetWidth) {
         // No overflow - all items fit
@@ -398,6 +397,7 @@ export const BreadcrumbMixin = (superClass) =>
       // Step 8: If only current page remains and still overflows, set truncate
       if (container.scrollWidth > container.offsetWidth && items.length > 0) {
         items[lastIndex].setAttribute('truncate', '');
+        items[lastIndex].setAttribute('title', items[lastIndex].textContent.trim());
       }
 
       // If no items were collapsed, we don't need the overflow button
