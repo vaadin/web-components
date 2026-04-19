@@ -3,6 +3,8 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/icon/vaadin-icon.js';
+import { html, render } from 'lit';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
@@ -15,11 +17,17 @@ export const BreadcrumbMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * The accessible label for the breadcrumb navigation.
-         * Mapped to `aria-label` on the host element.
+         * Programmatic item data. When set, renders `<vaadin-breadcrumb-item>`
+         * elements into light DOM. Each object has `text` (label), optional
+         * `path` (navigation target), and optional `prefix` (icon name string).
          *
-         * @type {string}
+         * @type {Array<{text: string, path?: string, prefix?: string}>}
          */
+        items: {
+          type: Array,
+          value: () => [],
+        },
+
         label: {
           type: String,
           value: 'Breadcrumb',
@@ -60,6 +68,30 @@ export const BreadcrumbMixin = (superClass) =>
       if (props.has('label')) {
         this.setAttribute('aria-label', this.label);
       }
+
+      if (props.has('items')) {
+        this.__renderItems(this.items);
+      }
+    }
+
+    /**
+     * Renders `<vaadin-breadcrumb-item>` elements into light DOM
+     * based on the `items` array property.
+     * @param {Array<{text: string, path?: string, prefix?: string}>} items
+     * @private
+     */
+    __renderItems(items = []) {
+      render(
+        html`${items.map(
+          (item) => html`
+            <vaadin-breadcrumb-item .path="${item.path || null}">
+              ${item.prefix ? html`<vaadin-icon icon="${item.prefix}" slot="prefix"></vaadin-icon>` : ''} ${item.text}
+            </vaadin-breadcrumb-item>
+          `,
+        )}`,
+        this,
+        { renderBefore: null },
+      );
     }
 
     /**

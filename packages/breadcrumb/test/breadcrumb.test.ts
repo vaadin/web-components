@@ -116,6 +116,78 @@ describe('vaadin-breadcrumb current item management', () => {
   });
 });
 
+describe('vaadin-breadcrumb items property', () => {
+  let breadcrumb: Breadcrumb;
+
+  beforeEach(async () => {
+    breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>');
+    await nextRender();
+  });
+
+  it('should render items into light DOM when items is set', async () => {
+    breadcrumb.items = [{ text: 'A', path: '/' }, { text: 'B' }];
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items.length).to.equal(2);
+  });
+
+  it('should set path on the first item', async () => {
+    breadcrumb.items = [{ text: 'A', path: '/' }, { text: 'B' }];
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items[0].path).to.equal('/');
+    expect(items[0].textContent!.trim()).to.equal('A');
+  });
+
+  it('should set current on the last rendered item', async () => {
+    breadcrumb.items = [{ text: 'A', path: '/' }, { text: 'B' }];
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items[1].hasAttribute('current')).to.be.true;
+    expect(items[1].path).to.be.null;
+  });
+
+  it('should re-render when items array is updated', async () => {
+    breadcrumb.items = [{ text: 'A', path: '/' }, { text: 'B' }];
+    await nextRender();
+
+    breadcrumb.items = [{ text: 'X', path: '/x' }, { text: 'Y', path: '/y' }, { text: 'Z' }];
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items.length).to.equal(3);
+    expect(items[0].textContent!.trim()).to.equal('X');
+    expect(items[1].textContent!.trim()).to.equal('Y');
+    expect(items[2].textContent!.trim()).to.equal('Z');
+    expect(items[2].hasAttribute('current')).to.be.true;
+  });
+
+  it('should render a prefix icon when prefix is specified', async () => {
+    breadcrumb.items = [{ text: 'Home', path: '/', prefix: 'vaadin:home' }, { text: 'Page' }];
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    const icon = items[0].querySelector('vaadin-icon');
+    expect(icon).to.be.ok;
+    expect(icon!.getAttribute('icon')).to.equal('vaadin:home');
+    expect(icon!.getAttribute('slot')).to.equal('prefix');
+  });
+
+  it('should clear all items when items is set to empty array', async () => {
+    breadcrumb.items = [{ text: 'A', path: '/' }, { text: 'B' }];
+    await nextRender();
+
+    breadcrumb.items = [];
+    await nextRender();
+
+    const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+    expect(items.length).to.equal(0);
+  });
+});
+
 describe('vaadin-breadcrumb-item', () => {
   let item: BreadcrumbItem;
 

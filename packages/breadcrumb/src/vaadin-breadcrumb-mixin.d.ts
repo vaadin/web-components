@@ -14,6 +14,13 @@ export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
 
 export declare class BreadcrumbMixinClass {
   /**
+   * Programmatic item data. When set, renders `<vaadin-breadcrumb-item>`
+   * elements into light DOM. Each object has `text` (label), optional
+   * `path` (navigation target), and optional `prefix` (icon name string).
+   */
+  items: Array<{ text: string; path?: string; prefix?: string }>;
+
+  /**
    * The accessible label for the breadcrumb navigation.
    * Mapped to `aria-label` on the host element.
    */
