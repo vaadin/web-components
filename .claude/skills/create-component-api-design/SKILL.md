@@ -3,7 +3,7 @@ allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoe
 description: Design the developer-facing API for a Vaadin web component based on its requirements, without studying implementation source code
 ---
 
-This skill takes a component's requirements and problem statement and produces concrete HTML/JS code examples showing the most convenient, minimal API a developer would use. The result is a `developer-api.md` file — one section per requirement (or group of related requirements), each with a code example and a short rationale for the chosen API shape.
+This skill takes a component's requirements and problem statement and produces concrete HTML/JS code examples showing the most convenient, minimal API a developer would use. The result is a `web-component-api.md` file — one section per requirement (or group of related requirements), each with a code example and a short rationale for the chosen API shape.
 
 This is an intermediate step between requirements research and full specification. The API is designed from a developer ergonomics perspective, without reading source code or considering implementation feasibility.
 
@@ -30,7 +30,7 @@ TASK OVERVIEW:
 
 5. For each requirement (or group of related requirements), research how other component libraries expose similar functionality. See `research-sources.md` in this skill's directory for the library list and what to look for.
 
-6. **Identify open questions and ask the user.** If research reveals ambiguous API choices that the requirements do not resolve (e.g., whether a feature should be an attribute vs. a slot, how two features interact in developer code), use AskUserQuestion to resolve them before writing the document. Record every question and answer in a `## Discussion` section at the end of the output document. If a previous version of `developer-api.md` exists, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
+6. **Identify open questions and ask the user.** If research reveals ambiguous API choices that the requirements do not resolve (e.g., whether a feature should be an attribute vs. a slot, how two features interact in developer code), use AskUserQuestion to resolve them before writing the document. Record every question and answer in a `## Discussion` section at the end of the output document. If a previous version of `web-component-api.md` exists, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
 
 7. For each requirement (or group of related requirements), write a concrete HTML/JS code example showing how a developer would use the component. For each example, include a brief "Why this shape" note explaining the rationale. Apply these principles:
    - **Make common cases easy.** The most frequent requirement should require the least code.
@@ -39,7 +39,7 @@ TASK OVERVIEW:
    - **No bloat.** Every property or attribute must serve a requirement. Do not invent API surface that no requirement needs.
    - **Informed by Vaadin docs.** Align with conventions and patterns found in step 4.
 
-8. Write the output to `packages/{component-name}/spec/developer-api.md`.
+8. Write the output to `packages/{component-name}/spec/web-component-api.md`.
 
 OUTPUT FORMAT:
 

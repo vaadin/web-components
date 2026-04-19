@@ -74,7 +74,7 @@ Arguments: [ComponentName]
 Read:
 - `packages/{component-name}/spec/problem-statement.md` — use cases
 - `packages/{component-name}/spec/requirements.md` — behavioral requirements
-- `packages/{component-name}/spec/flow-developer-api.md` — Java API examples
+- `packages/{component-name}/spec/flow-api.md` — Java API examples
 
 Plan **one view per use case or requirement group**. Group tightly related requirements when they naturally go together. Use the Vaadin MCP tools to look up API details for components used in the layout.
 
@@ -85,7 +85,7 @@ Structure:
 
 ### Step 4: Implement the demo
 
-Create all views using the Flow developer API from `flow-developer-api.md`. Each view should:
+Create all views using the Flow developer API from `flow-api.md`. Each view should:
 - Have a `@PageTitle` describing the use case
 - Include a visible text description of what it demonstrates
 - Configure the component for the specific requirement(s)

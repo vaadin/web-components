@@ -17,7 +17,7 @@ TASK OVERVIEW:
 
 2. Parse all tasks from the file. For each task, extract: task number, title, spec sections, requirements, dependencies, description, files list, test assertions, and acceptance criteria.
 
-3. Read `packages/{component-name}/spec/flow-spec.md` and `packages/{component-name}/spec/flow-developer-api.md` to understand the component and build informed subagent prompts. Do NOT read source code of other components — codebase research is the subagent's responsibility.
+3. Read `packages/{component-name}/spec/flow-spec.md` and `packages/{component-name}/spec/flow-api.md` to understand the component and build informed subagent prompts. Do NOT read source code of other components — codebase research is the subagent's responsibility.
 
 4. **Locate the flow-components repository.** Run `ls flow-components` first; if that fails, run `ls ../flow-components`. Use the first path that exists. If neither exists, stop and tell the user: "The Flow implementation needs the flow-components repository. Clone it to ./flow-components/ or ../flow-components/ and re-run this skill." The located path is referred to as `{FLOW}` below. All subsequent commits must be made from inside this directory (`cd {FLOW} && git ...`).
 
@@ -65,7 +65,7 @@ Each subagent prompt must be self-contained. Include:
 
 - The full task text from `flow-tasks.md` (title, spec sections, description, files, tests, acceptance criteria)
 - The absolute path of the `flow-components/` repository (`{FLOW}`) and an instruction that ALL paths in the Files list are relative to that directory
-- Paths to reference files (still inside the web-components monorepo): `packages/{component-name}/spec/flow-spec.md` (with the specific sections to focus on), `packages/{component-name}/spec/flow-developer-api.md`, `packages/{component-name}/spec/developer-api.md`, `packages/{component-name}/spec/spec.md` (if it exists), and `{FLOW}/CLAUDE.md`
+- Paths to reference files (still inside the web-components monorepo): `packages/{component-name}/spec/flow-spec.md` (with the specific sections to focus on), `packages/{component-name}/spec/flow-api.md`, `packages/{component-name}/spec/web-component-api.md`, `packages/{component-name}/spec/web-component-spec.md` (if it exists), and `{FLOW}/CLAUDE.md`
 - Implementation instructions:
   1. Read the referenced Flow spec sections for implementation details
   2. Read `{FLOW}/CLAUDE.md` for build/test commands and module conventions
@@ -82,7 +82,7 @@ IMPORTANT GUIDELINES:
 
 - Do not write implementation code directly — delegate to subagents.
 - Do not push to remote — local commits only, inside `{FLOW}/`.
-- Do not modify spec pipeline files (`flow-spec.md`, `flow-tasks.md`, `flow-developer-api.md`, `spec.md`, `developer-api.md`, `requirements.md`, `problem-statement.md`, `figma-design.md`).
+- Do not modify spec pipeline files (`flow-spec.md`, `flow-tasks.md`, `flow-api.md`, `web-component-spec.md`, `web-component-api.md`, `requirements.md`, `problem-statement.md`, `figma-design.md`).
 - If a subagent fails or produces incomplete work, stop and report the issue to the user via AskUserQuestion. Do not skip tasks.
 - If the spec is ambiguous about implementation details, use AskUserQuestion to resolve the ambiguity before passing instructions to the subagent. Do not guess.
 - Commits are made inside `{FLOW}/` (the Flow components repo), not inside the web-components monorepo. Verify with `cd {FLOW} && git status` before each commit.

@@ -3,7 +3,7 @@ allowed-tools: Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),AskUserQue
 description: Break a component specification into ordered, self-contained implementation tasks
 ---
 
-This skill takes a component's `spec.md` and produces an ordered list of implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.
+This skill takes a component's `web-component-spec.md` and produces an ordered list of implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.
 
 This is the last planning step in the spec-driven development pipeline. The next step (`create-component-implementation`) uses these tasks to write actual code. Steps 1–4 defined the problem, researched requirements, designed the developer API, and produced a full implementation specification. Step 5 (Figma design) is optional. This step translates the specification into an actionable implementation plan.
 
@@ -11,13 +11,13 @@ Arguments: [ComponentName]
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/spec.md`. This is the primary input — every task must trace back to content in the spec. If the file does not exist, stop and tell the user to run `create-component-spec` first.
+1. Read `packages/{component-name}/spec/web-component-spec.md`. This is the primary input — every task must trace back to content in the spec. If the file does not exist, stop and tell the user to run `create-component-spec` first.
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 9 — every requirement must be addressed by at least one task. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
    **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). This skill produces web component implementation tasks, so ignore any requirement tagged `**Applies to:** flow` — those are covered by `create-component-flow-tasks`. Coverage verification in step 9 applies only to `universal` and `web` requirements.
 
-3. Read `packages/{component-name}/spec/developer-api.md`. The spec references this document by section number/name in Key Design Decisions and throughout the implementation details. Read it to understand the API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
+3. Read `packages/{component-name}/spec/web-component-api.md`. The spec references this document by section number/name in Key Design Decisions and throughout the implementation details. Read it to understand the API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
 
 4. Check if `packages/{component-name}/spec/figma-design.md` exists. If present, read it and reference the Figma design in theme styling tasks as visual guidance. If absent, proceed without it — Figma designs are optional.
 
@@ -36,12 +36,12 @@ TASK OVERVIEW:
 
 9. Verify coverage:
    - Every requirement number in `requirements.md` must appear in at least one task's Requirements line.
-   - Every element, property, slot, part, event, and CSS custom property in `spec.md` must be addressed by at least one task.
+   - Every element, property, slot, part, event, and CSS custom property in `web-component-spec.md` must be addressed by at least one task.
    - Every item in the `WEB_COMPONENT_GUIDELINES.md` Checklist must be covered by at least one task.
 
    If any item is not covered, add it to an existing task or create a new task for it.
 
-10. Read `TASKS_TEMPLATE.md` in this skill's directory. Write the tasks at `packages/{component-name}/spec/tasks.md`, following the template structure.
+10. Read `TASKS_TEMPLATE.md` in this skill's directory. Write the tasks at `packages/{component-name}/spec/web-component-tasks.md`, following the template structure.
 
 PHASE STRUCTURE:
 
@@ -78,7 +78,7 @@ Tasks are pointers into the spec, not a second copy of it. The description says 
 Each task in the output document must include:
 
 - **Title** — short, descriptive
-- **Spec sections** — which sections of `spec.md` the task addresses (by name). This is how the implementer finds the details.
+- **Spec sections** — which sections of `web-component-spec.md` the task addresses (by name). This is how the implementer finds the details.
 - **Requirements** — which requirement numbers from `requirements.md` the task covers
 - **Depends on** — prerequisite task numbers (see DEPENDENCY RULES)
 - **Description** — what to implement and test, in 2–4 sentences. Name the feature and the spec sections that define it. Do not restate the spec — point to it.
@@ -108,7 +108,7 @@ TASK GRANULARITY:
 IMPORTANT GUIDELINES:
 
 - Do not invent features or tasks that the spec does not support. Every task must trace to spec content.
-- Do not modify `spec.md`, `requirements.md`, `developer-api.md`, or `problem-statement.md`.
+- Do not modify `web-component-spec.md`, `requirements.md`, `web-component-api.md`, or `problem-statement.md`.
 - Do not produce implementation code. The output is a task plan, not source code.
 - If the spec is ambiguous about implementation order or dependencies, use AskUserQuestion to resolve the ambiguity before writing it into the tasks. Do not guess.
 - Include the experimental feature flag setup in the scaffolding task (referencing the pattern from `@vaadin/component-base/src/define.js`).

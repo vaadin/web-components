@@ -15,7 +15,7 @@ Arguments: [ComponentName] [compare <figma-url>]
 
 PREREQUISITE CHECK:
 
-1. Read `packages/{component-name}/spec/spec.md`. This is the primary input.
+1. Read `packages/{component-name}/spec/web-component-spec.md`. This is the primary input.
    If the file does not exist, stop and tell the user to run `create-component-spec` first.
 
 2. If the second argument is "compare", the third argument must be a Figma file URL.
@@ -30,7 +30,7 @@ Otherwise, proceed with CREATE MODE.
 
 TASK OVERVIEW:
 
-1. Parse the spec. Extract from `spec.md`:
+1. Parse the spec. Extract from `web-component-spec.md`:
    a. All elements (`<vaadin-{name}>`, `<vaadin-{name}-item>`, etc.)
    b. For each element: shadow DOM structure, properties table, slots table, parts table, events table, CSS custom properties table
    c. State attributes (disabled, focused, focus-ring, current, selected, etc.)
@@ -100,7 +100,7 @@ TASK OVERVIEW:
       - One variant per theme variant in default state (e.g., default, primary, tertiary)
       - One variant per interactive state in default theme (default, hover, focus, active, disabled)
       - Size variants if the spec supports them (xs through xl)
-      - Key slot combinations from common usage in developer-api.md
+      - Key slot combinations from common usage in web-component-api.md
       Apply Lumo colors, spacing, border-radius, typography. Bind to Figma variables where available.
 
    d. AURA VARIANTS FRAME:
@@ -144,7 +144,7 @@ TASK OVERVIEW:
 
 === COMPARE MODE ===
 
-1. Read `packages/{component-name}/spec/spec.md` (prerequisite already verified).
+1. Read `packages/{component-name}/spec/web-component-spec.md` (prerequisite already verified).
 
 2. Use `get_metadata` on the provided Figma URL to get the full layer structure.
 

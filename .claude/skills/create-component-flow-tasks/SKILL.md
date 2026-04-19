@@ -17,7 +17,7 @@ TASK OVERVIEW:
 
    **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). Ignore requirements tagged `**Applies to:** web` — those are covered by `create-component-tasks` for the web component pipeline. Coverage verification applies only to `universal` and `flow` requirements.
 
-3. Read `packages/{component-name}/spec/flow-developer-api.md`. The spec references this document throughout. Read it to understand the Java API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
+3. Read `packages/{component-name}/spec/flow-api.md`. The spec references this document throughout. Read it to understand the Java API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
 
 4. **Locate the flow-components repository.** Run `ls flow-components` first; if that fails, run `ls ../flow-components`. Use the first path that exists. If neither exists, stop and tell the user: "The Flow tasks planning needs access to the flow-components repository. Clone it to ./flow-components/ or ../flow-components/ and re-run this skill." Read `{FLOW}/CLAUDE.md` to know the build/test commands and module conventions tasks must respect.
 
@@ -125,7 +125,7 @@ TASK GRANULARITY:
 IMPORTANT GUIDELINES:
 
 - Do not invent features or tasks that the spec does not support. Every task must trace to `flow-spec.md` content.
-- Do not modify `flow-spec.md`, `flow-developer-api.md`, `spec.md`, `developer-api.md`, `requirements.md`, or `problem-statement.md`.
+- Do not modify `flow-spec.md`, `flow-api.md`, `web-component-spec.md`, `web-component-api.md`, `requirements.md`, or `problem-statement.md`.
 - Do not produce implementation code. The output is a task plan, not source code.
 - If the spec is ambiguous about implementation order or dependencies, use AskUserQuestion to resolve the ambiguity before writing it into the tasks. Do not guess.
 - When the spec has a Reuse and Proposed Adjustments section, reference the specific shared modules to reuse in the relevant task descriptions. If the spec proposes modifications to shared modules, create explicit tasks for those modifications — they must be completed before the tasks that depend on them.

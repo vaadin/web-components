@@ -1,26 +1,26 @@
 # {ComponentName} Flow Component Specification
 
 <!--
-Full Flow implementation specification derived from flow-developer-api.md, grounded in the actual source of the flow-components repository.
+Full Flow implementation specification derived from flow-api.md, grounded in the actual source of the flow-components repository.
 
 This IS a specification — it includes module layout, class declarations, annotations, shared mixin interfaces, method signatures, @Synchronize properties, events, i18n, theme variants, connector plan, server/client sync concerns, serialisation, and TestBench elements.
 
-Usage examples and API rationale live in flow-developer-api.md. This spec references them by section number/name where relevant (e.g., "see flow-developer-api.md §3 Programmatic items") rather than duplicating them.
+Usage examples and API rationale live in flow-api.md. This spec references them by section number/name where relevant (e.g., "see flow-api.md §3 Programmatic items") rather than duplicating them.
 
-Key design decisions document deviations from flow-developer-api.md with rationale.
+Key design decisions document deviations from flow-api.md with rationale.
 
 Do NOT include features that no universal/flow requirement supports.
 DO study existing flow-components source for reusable shared mixins, naming conventions, and shared modules.
 -->
 
-> Wraps the experimental web component `<vaadin-{name}>`. Flow users enable it via the same feature flag surfaced by the web component (see web component spec / `developer-api.md`).
+> Wraps the experimental web component `<vaadin-{name}>`. Flow users enable it via the same feature flag surfaced by the web component (see web component spec / `web-component-api.md`).
 
 ## Key Design Decisions
 
 <!--
-One entry per significant choice. For any deviation from flow-developer-api.md, state what it proposed, what changed, and why (e.g., existing Flow component uses a different name for the same concept, or a shared mixin already provides equivalent functionality in a different shape).
+One entry per significant choice. For any deviation from flow-api.md, state what it proposed, what changed, and why (e.g., existing Flow component uses a different name for the same concept, or a shared mixin already provides equivalent functionality in a different shape).
 
-Reference flow-developer-api.md sections by number/name when discussing the API feature that motivated the decision.
+Reference flow-api.md sections by number/name when discussing the API feature that motivated the decision.
 
 Also document:
 - Mixin interface selection (which `Has*` interfaces from `vaadin-flow-components-base` are implemented, why)

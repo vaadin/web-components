@@ -85,7 +85,7 @@ document.querySelector('vaadin-menu-bar').items = [
 
 ## Relationship to specs
 
-Spec files (`packages/{name}/spec/spec.md`) and their companion `developer-api.md` MUST show both a declarative usage example and a programmatic usage example whenever both APIs exist. The "Key design decisions" section of the spec should explicitly state whether the component has a declarative API, a programmatic API, or both, and justify the choice against the use cases.
+Spec files (`packages/{name}/spec/web-component-spec.md`) and their companion `web-component-api.md` MUST show both a declarative usage example and a programmatic usage example whenever both APIs exist. The "Key design decisions" section of the spec should explicitly state whether the component has a declarative API, a programmatic API, or both, and justify the choice against the use cases.
 
 ---
 

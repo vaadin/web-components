@@ -4,7 +4,7 @@
 Ordered implementation tasks derived from flow-spec.md. Each task is a self-contained unit of work following test-driven development: define tests first, then implement to make them pass. Each task results in a merge-ready branch in the flow-components repository.
 
 Primary input: packages/{component-name}/spec/flow-spec.md
-API context: packages/{component-name}/spec/flow-developer-api.md
+API context: packages/{component-name}/spec/flow-api.md
 Traceability: packages/{component-name}/spec/requirements.md (universal + flow)
 
 Tasks are pointers into the spec, not a second copy of it. The spec sections field tells the implementer where to find the full details. Do not restate class declarations, method tables, or `@Synchronize` lists here.
@@ -32,10 +32,10 @@ Do NOT add tasks for features not in the spec.
 ## Spec References
 
 - [flow-spec.md](flow-spec.md)
-- [flow-developer-api.md](flow-developer-api.md)
+- [flow-api.md](flow-api.md)
 - [requirements.md](requirements.md) — universal + flow
-- [developer-api.md](developer-api.md) — web component API being wrapped
-- [spec.md](spec.md) — web component spec (if present)
+- [web-component-api.md](web-component-api.md) — web component API being wrapped
+- [web-component-spec.md](web-component-spec.md) — web component spec (if present)
 
 ---
 

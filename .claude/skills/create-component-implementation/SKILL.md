@@ -1,9 +1,9 @@
 ---
 allowed-tools: Read(packages/*/spec/*),Agent,Bash(git add *),Bash(git diff *),Bash(git status),Bash(git commit *),AskUserQuestion
-description: Implement all tasks from a component's tasks.md, one subagent and one commit per task
+description: Implement all tasks from a component's web-component-tasks.md, one subagent and one commit per task
 ---
 
-This skill implements a component by iterating through its `tasks.md` and spawning one subagent per task. Each subagent gets a fresh context with only the information it needs — avoiding context rot across many tasks. After each subagent completes, the orchestrator commits the changes. The result is one commit per task on the current branch, with no push to remote.
+This skill implements a component by iterating through its `web-component-tasks.md` and spawning one subagent per task. Each subagent gets a fresh context with only the information it needs — avoiding context rot across many tasks. After each subagent completes, the orchestrator commits the changes. The result is one commit per task on the current branch, with no push to remote.
 
 Arguments: [ComponentName] [StartFromTask?]
 
@@ -11,11 +11,11 @@ Arguments: [ComponentName] [StartFromTask?]
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/tasks.md`. If the file does not exist, stop and tell the user to run `create-component-tasks` first.
+1. Read `packages/{component-name}/spec/web-component-tasks.md`. If the file does not exist, stop and tell the user to run `create-component-tasks` first.
 
 2. Parse all tasks from the file. For each task, extract: task number, title, spec sections, requirements, dependencies, description, files list, test assertions, and acceptance criteria.
 
-3. Read `packages/{component-name}/spec/spec.md` and `packages/{component-name}/spec/developer-api.md` to understand the component and build informed subagent prompts. Do NOT read source code of other components — codebase research is the subagent's responsibility.
+3. Read `packages/{component-name}/spec/web-component-spec.md` and `packages/{component-name}/spec/web-component-api.md` to understand the component and build informed subagent prompts. Do NOT read source code of other components — codebase research is the subagent's responsibility.
 
 4. Starting from task 1 (or `StartFromTask`), process tasks respecting their dependency graph:
 
@@ -37,8 +37,8 @@ SUBAGENT PROMPT STRUCTURE:
 
 Each subagent prompt must be self-contained. Include:
 
-- The full task text from tasks.md (title, spec sections, description, files, tests, acceptance criteria)
-- Paths to reference files: `packages/{component-name}/spec/spec.md` (with the specific sections to focus on), `packages/{component-name}/spec/developer-api.md`, and `WEB_COMPONENT_GUIDELINES.md`
+- The full task text from web-component-tasks.md (title, spec sections, description, files, tests, acceptance criteria)
+- Paths to reference files: `packages/{component-name}/spec/web-component-spec.md` (with the specific sections to focus on), `packages/{component-name}/spec/web-component-api.md`, and `WEB_COMPONENT_GUIDELINES.md`
 - Implementation instructions:
   1. Read the referenced spec sections for implementation details
   2. Read `WEB_COMPONENT_GUIDELINES.md` in batches (500 lines at a time) for conventions. The styling pitfalls section (cross-shadow-DOM styling, dropdown positioning, inline button padding) and the testing section (vacuous assertions, DOM-order assumptions in index tests) contain constraints that directly affect correctness — pay particular attention to those.
@@ -54,6 +54,6 @@ IMPORTANT GUIDELINES:
 
 - Do not write implementation code directly — delegate to subagents.
 - Do not push to remote — local commits only.
-- Do not modify spec pipeline files (`spec.md`, `tasks.md`, `requirements.md`, `developer-api.md`, `problem-statement.md`, `figma-design.md`).
+- Do not modify spec pipeline files (`web-component-spec.md`, `web-component-tasks.md`, `requirements.md`, `web-component-api.md`, `problem-statement.md`, `figma-design.md`).
 - If a subagent fails or produces incomplete work, stop and report the issue to the user via AskUserQuestion. Do not skip tasks.
 - If the spec is ambiguous about implementation details, use AskUserQuestion to resolve the ambiguity before passing instructions to the subagent. Do not guess.

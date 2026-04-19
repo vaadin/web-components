@@ -1,10 +1,10 @@
 # {ComponentName} Implementation Tasks
 
 <!--
-Ordered implementation tasks derived from spec.md. Each task is a self-contained unit of work following test-driven development: define tests first, then implement to make them pass. Each task results in a merge-ready branch.
+Ordered implementation tasks derived from web-component-spec.md. Each task is a self-contained unit of work following test-driven development: define tests first, then implement to make them pass. Each task results in a merge-ready branch.
 
-Primary input: packages/{component-name}/spec/spec.md
-API context: packages/{component-name}/spec/developer-api.md
+Primary input: packages/{component-name}/spec/web-component-spec.md
+API context: packages/{component-name}/spec/web-component-api.md
 Traceability: packages/{component-name}/spec/requirements.md
 
 Tasks are pointers into the spec, not a second copy of it. The spec sections field tells the implementer where to find the full details. Do not restate shadow DOM structures, property tables, or behavioral logic here.
@@ -30,16 +30,16 @@ Do NOT add tasks for features not in the spec.
 
 ## Spec References
 
-- [spec.md](spec.md)
+- [web-component-spec.md](web-component-spec.md)
 - [requirements.md](requirements.md)
-- [developer-api.md](developer-api.md)
+- [web-component-api.md](web-component-api.md)
 - [figma-design.md](figma-design.md) *(if exists)*
 
 ---
 
 ## Task 1: {Title}
 
-**Spec sections:** {which sections of spec.md this addresses}
+**Spec sections:** {which sections of web-component-spec.md this addresses}
 **Requirements:** {requirement numbers, e.g., "1, 2" or "—" if none}
 **Depends on:** —
 
