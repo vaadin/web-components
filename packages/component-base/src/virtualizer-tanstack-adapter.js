@@ -57,7 +57,7 @@ export class TanStackAdapter {
 
     this.#virtualizer = new Virtualizer({
       count: 0,
-      overscan: 6,
+      overscan: 4,
       observeElementRect,
       observeElementOffset,
       scrollToFn: elementScroll,
@@ -235,7 +235,9 @@ export class TanStackAdapter {
     });
 
     reorderChildren(this.elementsContainer, (a, b) => {
-      return this.#getElementIndex(a) - this.#getElementIndex(b);
+      const aIndex = this.#getElementIndex(a);
+      const bIndex = this.#getElementIndex(b);
+      return aIndex - bIndex;
     });
   }
 
