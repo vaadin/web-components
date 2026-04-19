@@ -118,6 +118,104 @@ describe('vaadin-breadcrumb-item', () => {
     });
   });
 
+  describe('current property', () => {
+    describe('default (current not set)', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/catalog">Label</vaadin-breadcrumb-item>');
+        await nextRender();
+      });
+
+      it('should default current to false', () => {
+        expect(item.current).to.be.false;
+      });
+
+      it('should set aria-current="false" on the <a> when current is false', () => {
+        const link = item.shadowRoot!.querySelector('a')!;
+        expect(link.getAttribute('aria-current')).to.equal('false');
+      });
+    });
+
+    describe('with current set to true', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/catalog" current>Label</vaadin-breadcrumb-item>');
+        await nextRender();
+      });
+
+      it('should set aria-current="page" on the <a> when current is true', () => {
+        const link = item.shadowRoot!.querySelector('a')!;
+        expect(link.getAttribute('aria-current')).to.equal('page');
+      });
+
+      it('should set tabindex="-1" on the <a> when current is true even if path is set', () => {
+        const link = item.shadowRoot!.querySelector('a')!;
+        expect(link.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should remove href from the <a> when current is true even if path is set', () => {
+        const link = item.shadowRoot!.querySelector('a')!;
+        expect(link.hasAttribute('href')).to.be.false;
+      });
+
+      it('should reflect current property to attribute', () => {
+        expect(item.hasAttribute('current')).to.be.true;
+      });
+    });
+  });
+
+  describe('separator', () => {
+    describe('when current is false', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/catalog">Label</vaadin-breadcrumb-item>');
+        await nextRender();
+      });
+
+      it('should have a separator span with aria-hidden="true"', () => {
+        const separator = item.shadowRoot!.querySelector('[part="separator"]')!;
+        expect(separator).to.be.ok;
+        expect(separator.getAttribute('aria-hidden')).to.equal('true');
+      });
+
+      it('should have the separator visible when current is false', () => {
+        const separator = item.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+        expect(getComputedStyle(separator).display).to.not.equal('none');
+      });
+    });
+
+    describe('when current is true', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/catalog" current>Label</vaadin-breadcrumb-item>');
+        await nextRender();
+      });
+
+      it('should hide the separator when current is true', () => {
+        const separator = item.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+        expect(getComputedStyle(separator).display).to.equal('none');
+      });
+    });
+
+    describe('separator content', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/catalog">Label</vaadin-breadcrumb-item>');
+        await nextRender();
+      });
+
+      it('should render default separator character via CSS ::before', () => {
+        const separator = item.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+        const content = getComputedStyle(separator, '::before').content;
+        // Default separator is › (U+203A)
+        expect(content).to.equal('"›"');
+      });
+
+      it('should allow overriding separator content via CSS custom property', async () => {
+        item.style.setProperty('--vaadin-breadcrumb-separator-content', '"/"');
+        await nextRender();
+        const separator = item.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+        const content = getComputedStyle(separator, '::before').content;
+        expect(content).to.equal('"/"');
+      });
+    });
+  });
+
   describe('prefix slot with vaadin-icon', () => {
     beforeEach(async () => {
       item = fixtureSync(`

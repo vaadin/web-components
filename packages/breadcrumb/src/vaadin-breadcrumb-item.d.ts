@@ -31,6 +31,13 @@ declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {
    * When `null` or absent, the link has no `href` and is non-interactive.
    */
   path: string | null;
+
+  /**
+   * Whether this item represents the current page.
+   * When true, `aria-current="page"` is set on the link, `tabindex` is `-1`,
+   * and `href` is not rendered even if `path` is set. The separator is also hidden.
+   */
+  current: boolean;
 }
 
 declare global {

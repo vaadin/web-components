@@ -68,13 +68,31 @@ class BreadcrumbItem extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         value: null,
         reflect: true,
       },
+
+      /**
+       * Whether this item represents the current page.
+       * When true, `aria-current="page"` is set on the link, `tabindex` is `-1`,
+       * and `href` is not rendered even if `path` is set. The separator is also hidden.
+       * @type {boolean}
+       */
+      current: {
+        type: Boolean,
+        value: false,
+        reflect: true,
+      },
     };
   }
 
   /** @protected */
   render() {
     return html`
-      <a id="link" part="link" href="${ifDefined(this.path)}" tabindex="${this.path == null ? '-1' : '0'}">
+      <a
+        id="link"
+        part="link"
+        href="${ifDefined(this.current ? undefined : this.path)}"
+        tabindex="${this.current || this.path == null ? '-1' : '0'}"
+        aria-current="${this.current ? 'page' : 'false'}"
+      >
         <slot name="prefix"></slot>
         <slot></slot>
       </a>

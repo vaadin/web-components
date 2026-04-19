@@ -14,4 +14,13 @@ export const breadcrumbItemStyles = css`
   :host([hidden]) {
     display: none !important;
   }
+
+  [part='separator']::before {
+    content: var(--vaadin-breadcrumb-separator-content, '\\203A');
+    color: var(--vaadin-text-color-secondary, inherit);
+  }
+
+  :host([current]) [part='separator'] {
+    display: none;
+  }
 `;
