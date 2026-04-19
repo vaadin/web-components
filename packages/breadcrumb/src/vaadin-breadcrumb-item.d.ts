@@ -25,7 +25,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {}
+declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {
+  /**
+   * Navigation target URL. Rendered as the `href` attribute on the internal `<a>` element.
+   * When `null` or absent, the link has no `href` and is non-interactive.
+   */
+  path: string | null;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

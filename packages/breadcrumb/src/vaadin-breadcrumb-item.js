@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -55,10 +56,25 @@ class BreadcrumbItem extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     return 'breadcrumbComponent';
   }
 
+  static get properties() {
+    return {
+      /**
+       * Navigation target URL. Rendered as the `href` attribute on the internal `<a>` element.
+       * When `null` or absent, the link has no `href` and is non-interactive.
+       * @type {string | null}
+       */
+      path: {
+        type: String,
+        value: null,
+        reflect: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     return html`
-      <a id="link" part="link">
+      <a id="link" part="link" href="${ifDefined(this.path)}" tabindex="${this.path == null ? '-1' : '0'}">
         <slot name="prefix"></slot>
         <slot></slot>
       </a>
