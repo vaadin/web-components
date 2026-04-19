@@ -1,6 +1,6 @@
 ---
 description: Create or compare Figma component designs from a Vaadin web component spec using the Figma MCP server. Supports both Lumo and Aura themes.
-allowed-tools: Read(packages/*/spec/*),Read(packages/aura/src/*),Read(packages/vaadin-lumo-styles/*),Read(.claude/skills/create-component-figma-design/*),Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__figma
+allowed-tools: Read(packages/*/spec/*),Read(packages/aura/src/*),Read(packages/vaadin-lumo-styles/*),Read(.claude/skills/create-component-web-component-figma-design/*),Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__figma
 user_invocable: true
 arg_description: "ComponentName [compare <figma-url>]"
 ---
@@ -16,7 +16,7 @@ Arguments: [ComponentName] [compare <figma-url>]
 PREREQUISITE CHECK:
 
 1. Read `packages/{component-name}/spec/web-component-spec.md`. This is the primary input.
-   If the file does not exist, stop and tell the user to run `create-component-spec` first.
+   If the file does not exist, stop and tell the user to run `create-component-web-component-spec` first.
 
 2. If the second argument is "compare", the third argument must be a Figma file URL.
    If missing, stop and ask the user for the Figma file URL.

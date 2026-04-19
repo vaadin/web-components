@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read(packages/*/spec/*),Read(flow-components/**),Read(../flow-components/**),Read(.claude/skills/create-component-flow-api-design/*),Glob(flow-components/**),Glob(../flow-components/**),Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(ls flow-components),Bash(ls ../flow-components)
+allowed-tools: Read(packages/*/spec/*),Read(flow-components/**),Read(../flow-components/**),Read(.claude/skills/create-component-flow-api/*),Glob(flow-components/**),Glob(../flow-components/**),Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(ls flow-components),Bash(ls ../flow-components)
 description: Design the developer-facing Flow (Java) API for a Vaadin component based on its requirements and the already-designed web component API
 ---
 
@@ -19,7 +19,7 @@ TASK OVERVIEW:
 
    **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). This skill designs the Flow API, so ignore any requirement tagged `**Applies to:** web` — those are specific to the web component and have no Flow equivalent. Consider only `universal` and `flow` requirements from here on.
 
-2. Read the web component developer API at `packages/{component-name}/spec/web-component-api.md`. If the file does not exist, stop and tell the user to run the `create-component-api-design` skill first. This defines the web component API surface the Flow wrapper must expose. Every attribute, property, slot, event, and CSS custom property developers use from HTML/JS must be reachable from Java.
+2. Read the web component developer API at `packages/{component-name}/spec/web-component-api.md`. If the file does not exist, stop and tell the user to run the `create-component-web-component-api` skill first. This defines the web component API surface the Flow wrapper must expose. Every attribute, property, slot, event, and CSS custom property developers use from HTML/JS must be reachable from Java.
 
 3. Read the problem statement at `packages/{component-name}/spec/problem-statement.md`. Use the Differentiation section to verify that code examples stay within the component's defined scope. If the file does not exist, stop and tell the user to run the `create-component-problem-statement` skill first.
 

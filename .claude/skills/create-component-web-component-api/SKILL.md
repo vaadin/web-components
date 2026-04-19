@@ -1,5 +1,5 @@
 ---
-allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-api-design/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin
+allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-web-component-api/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin
 description: Design the developer-facing API for a Vaadin web component based on its requirements, without studying implementation source code
 ---
 
@@ -17,7 +17,7 @@ TASK OVERVIEW:
 
 1. Read the requirements file at `packages/{component-name}/spec/requirements.md`. This is the primary input — every code example must trace back to at least one requirement. If the file does not exist, stop and tell the user to run the `create-component-requirements` skill first.
 
-   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). This skill designs the web component API, so ignore any requirement tagged `**Applies to:** flow` — those are covered by the Flow-variant pipeline (`create-component-flow-api-design`). Consider only `universal` and `web` requirements from here on.
+   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). This skill designs the web component API, so ignore any requirement tagged `**Applies to:** flow` — those are covered by the Flow-variant pipeline (`create-component-flow-api`). Consider only `universal` and `web` requirements from here on.
 
 2. Read the problem statement at `packages/{component-name}/spec/problem-statement.md`. Use the Differentiation section to verify that code examples stay within the component's defined scope. If the file does not exist, stop and tell the user to run the `create-component-problem-statement` skill first.
 

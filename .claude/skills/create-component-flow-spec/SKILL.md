@@ -5,15 +5,15 @@ description: Reconcile an ideal Flow developer API with existing flow-components
 
 This skill takes a component's `flow-api.md` — an ideal Flow (Java) API designed from pure developer ergonomics — and reconciles it with the actual source of the `flow-components` repository. The output is a full Flow implementation specification: module layout, class declarations, annotations, mixin interfaces, method signatures, `@Synchronize` properties, events, i18n shape, theme-variant enum, connector plan (if needed), server/client sync concerns, serialisation, TestBench elements, and any proposed adjustments to shared `flow-components-base` code.
 
-This is the Flow analogue of `create-component-spec` (step 4 in the spec-driven development pipeline, Flow variant). Previous steps defined the problem, researched requirements, designed an ideal Flow API. This step grounds that API in the Flow codebase: identifying reusable shared interfaces (`HasPrefix`, `HasTooltip`, …), matching naming conventions (`{Name}Variant`, `{Name}I18n`, `Has{Name}Items`), deciding whether a JS connector is needed, and noting where existing shared modules may need adjustment.
+This is the Flow analogue of `create-component-web-component-spec` (step 4 in the spec-driven development pipeline, Flow variant). Previous steps defined the problem, researched requirements, designed an ideal Flow API. This step grounds that API in the Flow codebase: identifying reusable shared interfaces (`HasPrefix`, `HasTooltip`, …), matching naming conventions (`{Name}Variant`, `{Name}I18n`, `Has{Name}Items`), deciding whether a JS connector is needed, and noting where existing shared modules may need adjustment.
 
 Arguments: [ComponentName]
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/flow-api.md`. This is the primary input — the ideal Flow API from `create-component-flow-api-design`. If the file does not exist, stop and tell the user to run `create-component-flow-api-design` first.
+1. Read `packages/{component-name}/spec/flow-api.md`. This is the primary input — the ideal Flow API from `create-component-flow-api`. If the file does not exist, stop and tell the user to run `create-component-flow-api` first.
 
-2. Read `packages/{component-name}/spec/web-component-api.md`. This is the web component API the Flow wrapper exposes from Java. If it does not exist, stop and tell the user to run `create-component-api-design` first.
+2. Read `packages/{component-name}/spec/web-component-api.md`. This is the web component API the Flow wrapper exposes from Java. If it does not exist, stop and tell the user to run `create-component-web-component-api` first.
 
 3. Read `packages/{component-name}/spec/web-component-spec.md` if it exists. The web-component spec lists the internal web API — shadow DOM parts, slots, events, synchronised properties, CSS custom properties — that the Flow wrapper may need to hook into (e.g. via `@Synchronize` or `Element.setPropertyJson`). If it does not exist, note this as a dependency: some Flow spec decisions may need revisiting once the web component spec is written.
 

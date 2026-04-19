@@ -3,7 +3,7 @@
 <!--
 Developer-facing API derived from requirements.md. Shows the most convenient, minimal HTML/JS API for each requirement.
 
-NOT a specification — no shadow DOM, mixins, or implementation details. Those come in the `create-component-spec` step.
+NOT a specification — no shadow DOM, mixins, or implementation details. Those come in the `create-component-web-component-spec` step.
 
 Each section maps to one or more requirements and contains a code example.
 

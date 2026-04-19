@@ -5,13 +5,13 @@ description: Break a component specification into ordered, self-contained implem
 
 This skill takes a component's `web-component-spec.md` and produces an ordered list of implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.
 
-This is the last planning step in the spec-driven development pipeline. The next step (`create-component-implementation`) uses these tasks to write actual code. Steps 1–4 defined the problem, researched requirements, designed the developer API, and produced a full implementation specification. Step 5 (Figma design) is optional. This step translates the specification into an actionable implementation plan.
+This is the last planning step in the spec-driven development pipeline. The next step (`create-component-web-component-implementation`) uses these tasks to write actual code. Steps 1–4 defined the problem, researched requirements, designed the developer API, and produced a full implementation specification. Step 5 (Figma design) is optional. This step translates the specification into an actionable implementation plan.
 
 Arguments: [ComponentName]
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/web-component-spec.md`. This is the primary input — every task must trace back to content in the spec. If the file does not exist, stop and tell the user to run `create-component-spec` first.
+1. Read `packages/{component-name}/spec/web-component-spec.md`. This is the primary input — every task must trace back to content in the spec. If the file does not exist, stop and tell the user to run `create-component-web-component-spec` first.
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 9 — every requirement must be addressed by at least one task. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 

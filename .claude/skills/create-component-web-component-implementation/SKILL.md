@@ -11,7 +11,7 @@ Arguments: [ComponentName] [StartFromTask?]
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/web-component-tasks.md`. If the file does not exist, stop and tell the user to run `create-component-tasks` first.
+1. Read `packages/{component-name}/spec/web-component-tasks.md`. If the file does not exist, stop and tell the user to run `create-component-web-component-tasks` first.
 
 2. Parse all tasks from the file. For each task, extract: task number, title, spec sections, requirements, dependencies, description, files list, test assertions, and acceptance criteria.
 

@@ -5,7 +5,7 @@ description: Break a Flow component specification into ordered, self-contained i
 
 This skill takes a component's `flow-spec.md` and produces an ordered list of Flow (Java) implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.
 
-This is the Flow analogue of `create-component-tasks`. It is the last planning step in the Flow pipeline. The next step (`create-component-flow-implementation`) uses these tasks to write actual Java code under `flow-components/`.
+This is the Flow analogue of `create-component-web-component-tasks`. It is the last planning step in the Flow pipeline. The next step (`create-component-flow-implementation`) uses these tasks to write actual Java code under `flow-components/`.
 
 Arguments: [ComponentName]
 
@@ -15,7 +15,7 @@ TASK OVERVIEW:
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 8 — every universal/flow requirement must be addressed by at least one task. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
-   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). Ignore requirements tagged `**Applies to:** web` — those are covered by `create-component-tasks` for the web component pipeline. Coverage verification applies only to `universal` and `flow` requirements.
+   **Variant filter.** A requirement may carry an optional visible `**Applies to:** universal | web | flow` line directly under its title (default: `universal` when the line is absent). Ignore requirements tagged `**Applies to:** web` — those are covered by `create-component-web-component-tasks` for the web component pipeline. Coverage verification applies only to `universal` and `flow` requirements.
 
 3. Read `packages/{component-name}/spec/flow-api.md`. The spec references this document throughout. Read it to understand the Java API rationale and usage examples behind each spec feature — this context informs how tasks are scoped and described.
 

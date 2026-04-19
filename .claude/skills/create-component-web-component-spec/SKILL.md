@@ -11,7 +11,7 @@ Arguments: [ComponentName]
 
 TASK OVERVIEW:
 
-1. Read `packages/{component-name}/spec/web-component-api.md`. This is the primary input — the ideal developer-facing API from step 3. If the file does not exist, stop and tell the user to run `create-component-api-design` first.
+1. Read `packages/{component-name}/spec/web-component-api.md`. This is the primary input — the ideal developer-facing API from step 3. If the file does not exist, stop and tell the user to run `create-component-web-component-api` first.
 
 2. Read `packages/{component-name}/spec/requirements.md`. Use this for coverage verification in step 8 — every requirement must be addressed in the spec. If the file does not exist, stop and tell the user to run `create-component-requirements` first.
 
