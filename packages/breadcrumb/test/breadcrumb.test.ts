@@ -273,7 +273,7 @@ describe('vaadin-breadcrumb navigation interception', () => {
   });
 
   it('should prevent default when onNavigate is set', () => {
-    breadcrumb.onNavigate = () => {};
+    breadcrumb.onNavigate = () => undefined;
 
     const anchor = items[0].shadowRoot!.querySelector('a')!;
     const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
