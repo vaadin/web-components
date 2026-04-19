@@ -3,13 +3,7 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import {
-  elementScroll,
-  measureElement,
-  observeElementOffset,
-  observeElementRect,
-  Virtualizer,
-} from '@tanstack/virtual-core';
+import { elementScroll, observeElementOffset, observeElementRect, Virtualizer } from '@tanstack/virtual-core';
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
@@ -38,6 +32,7 @@ function mapElementsToItems(elements, items) {
 export class TanStackAdapter {
   #virtualizer;
   #estimatedSize;
+  #resizeObserver;
   #renderDebouncer;
   #reorderElementsDebouncer;
 
@@ -63,7 +58,6 @@ export class TanStackAdapter {
     this.#virtualizer = new Virtualizer({
       count: 0,
       overscan: 6,
-      measureElement,
       observeElementRect,
       observeElementOffset,
       scrollToFn: elementScroll,
@@ -81,6 +75,12 @@ export class TanStackAdapter {
         return this.scrollTarget;
       },
     });
+
+    this.#resizeObserver = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        this.#measureElement(entry.target);
+      });
+    });
   }
 
   get size() {
@@ -90,14 +90,15 @@ export class TanStackAdapter {
   set size(size) {
     this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: size });
     this.#render();
+    this.flush();
   }
 
   get adjustedFirstVisibleIndex() {
-    return this.#virtualizer.getVirtualIndexes().at(0);
+    return this.#virtualizer.calculateRange().startIndex;
   }
 
   get adjustedLastVisibleIndex() {
-    return this.#virtualizer.getVirtualIndexes().at(-1);
+    return this.#virtualizer.calculateRange().endIndex;
   }
 
   scrollToIndex(index) {
@@ -146,7 +147,11 @@ export class TanStackAdapter {
     this.#renderDebouncer?.cancel();
     this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
     this.#createElementsIfNeeded();
-    this.#renderElements();
+
+    const updatedElements = this.#renderElements();
+    updatedElements.forEach((element) => this.#measureElement(element));
+
+    this.#updateEstimatedSize();
     this.#scheduleReorderElements();
   }
 
@@ -170,38 +175,44 @@ export class TanStackAdapter {
       if (!item) {
         el.key = null;
         el.hidden = true;
-        el.dataset.index = null;
+        this.#setElementIndex(el, null);
+        this.#resizeObserver.unobserve(el);
         return;
       }
 
-      const oldIndex = parseInt(el.dataset.index);
+      const oldIndex = this.#getElementIndex(el);
       const newIndex = item.index;
 
       el.hidden = false;
       el.key = item.key;
-      el.dataset.index = newIndex;
       el.style.translate = `0px ${item.start}px`;
+      this.#setElementIndex(el, newIndex);
 
       if (oldIndex !== newIndex) {
         this.updateElement(el, newIndex);
+        this.#resizeObserver.observe(el);
         updatedElements.push(el);
       }
     });
 
-    updatedElements.forEach((el) => {
-      this.#virtualizer.measureElement(el);
-    });
+    return updatedElements;
+  }
 
-    this.#updateEstimatedSize();
+  #measureElement(element) {
+    const index = this.#getElementIndex(element);
+    if (index == null) {
+      return;
+    }
+
+    const { height } = element.getBoundingClientRect();
+    this.#virtualizer.resizeItem(index, height);
   }
 
   #updateEstimatedSize() {
-    const sizes = this.#virtualItems.map((item) => {
-      const { size } = this.#virtualizer.measurementsCache[item.index];
-      return size;
-    });
-
-    this.#estimatedSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
+    const sizes = [...this.#virtualizer.itemSizeCache.values()];
+    if (sizes.length > 0) {
+      this.#estimatedSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
+    }
   }
 
   #scheduleReorderElements() {
@@ -224,7 +235,7 @@ export class TanStackAdapter {
     });
 
     reorderChildren(this.elementsContainer, (a, b) => {
-      return parseInt(a.dataset.index) - parseInt(b.dataset.index);
+      return this.#getElementIndex(a) - this.#getElementIndex(b);
     });
   }
 
@@ -234,5 +245,19 @@ export class TanStackAdapter {
 
   get #elements() {
     return [...this.elementsContainer.children];
+  }
+
+  #getElementIndex(element) {
+    if (element.hasAttribute('data-index')) {
+      return parseInt(element.getAttribute('data-index'));
+    }
+  }
+
+  #setElementIndex(element, index) {
+    if (index !== null) {
+      element.setAttribute('data-index', index);
+    } else {
+      element.removeAttribute('data-index');
+    }
   }
 }
