@@ -54,6 +54,8 @@ export const BreadcrumbMixin = (superClass) =>
     constructor() {
       super();
       this.addEventListener('click', this.__onClick);
+      this.__onDropdownKeydown = this.__onDropdownKeydown.bind(this);
+      this.__onDropdownOutsideClick = this.__onDropdownOutsideClick.bind(this);
     }
 
     /** @protected */
@@ -83,6 +85,7 @@ export const BreadcrumbMixin = (superClass) =>
       this.addController(this._itemsController);
 
       this._container = this.shadowRoot.querySelector('[part="container"]');
+      this._dropdown = this.shadowRoot.querySelector('[part="dropdown"]');
     }
 
     /** @protected */
@@ -92,6 +95,8 @@ export const BreadcrumbMixin = (superClass) =>
       if (this.__overflowDebouncer) {
         this.__overflowDebouncer.flush();
       }
+      // Clean up dropdown listeners
+      this.__removeDropdownListeners();
     }
 
     /** @protected */
@@ -224,6 +229,8 @@ export const BreadcrumbMixin = (superClass) =>
       btn.setAttribute('tabindex', '0');
       btn.textContent = '\u2026';
       this.__updateOverflowButtonLabel(btn);
+      btn.addEventListener('click', () => this.__onOverflowButtonClick());
+      btn.addEventListener('keydown', (e) => this.__onOverflowButtonKeydown(e));
       return btn;
     }
 
@@ -331,6 +338,11 @@ export const BreadcrumbMixin = (superClass) =>
         return;
       }
 
+      // Close dropdown if open before recalculating
+      if (this.__isDropdownOpen()) {
+        this.__closeDropdown(false);
+      }
+
       const items = this.__getBreadcrumbItems();
       if (items.length === 0) {
         this.__removeOverflowButton();
@@ -395,5 +407,206 @@ export const BreadcrumbMixin = (superClass) =>
 
       // Step 10: Unlock container width
       container.style.minWidth = '';
+    }
+
+    /**
+     * Returns the list of currently collapsed breadcrumb items.
+     * @return {HTMLElement[]}
+     * @private
+     */
+    __getCollapsedItems() {
+      return this.__getBreadcrumbItems().filter((item) => item.style.visibility === 'hidden');
+    }
+
+    /**
+     * Opens the dropdown panel showing collapsed items.
+     * @private
+     */
+    __openDropdown() {
+      const dropdown = this._dropdown;
+      const button = this.__overflowButton;
+      if (!dropdown || !button) {
+        return;
+      }
+
+      const collapsedItems = this.__getCollapsedItems();
+      if (collapsedItems.length === 0) {
+        return;
+      }
+
+      // Sort collapsed items in hierarchy order (root first).
+      // Items are already in DOM order from __getBreadcrumbItems(), but
+      // root may have been collapsed last and pushed to end of collapsedItems.
+      const allItems = this.__getBreadcrumbItems();
+      collapsedItems.sort((a, b) => allItems.indexOf(a) - allItems.indexOf(b));
+
+      // Render links inside the dropdown
+      dropdown.innerHTML = '';
+      collapsedItems.forEach((item) => {
+        const link = document.createElement('a');
+        link.setAttribute('role', 'listitem');
+        if (item.path) {
+          link.href = item.path;
+        }
+        link.textContent = item.textContent.trim();
+        link.addEventListener('click', (e) => {
+          this.__onDropdownLinkClick(e, item);
+        });
+        dropdown.appendChild(link);
+      });
+
+      // Position dropdown using getBoundingClientRect of overflow button
+      const rect = button.getBoundingClientRect();
+      dropdown.style.top = `${rect.bottom}px`;
+      dropdown.style.left = `${rect.left}px`;
+
+      // Show dropdown
+      dropdown.removeAttribute('hidden');
+
+      // Sync aria-expanded
+      button.setAttribute('aria-expanded', 'true');
+
+      // Add document-level listeners
+      this.__addDropdownListeners();
+    }
+
+    /**
+     * Closes the dropdown panel.
+     * @param {boolean} [returnFocus=true] - Whether to return focus to the overflow button.
+     * @private
+     */
+    __closeDropdown(returnFocus = true) {
+      const dropdown = this._dropdown;
+      const button = this.__overflowButton;
+
+      if (dropdown) {
+        dropdown.setAttribute('hidden', '');
+        dropdown.innerHTML = '';
+      }
+
+      if (button) {
+        button.setAttribute('aria-expanded', 'false');
+        if (returnFocus) {
+          button.focus();
+        }
+      }
+
+      this.__removeDropdownListeners();
+    }
+
+    /**
+     * Whether the dropdown is currently open.
+     * @return {boolean}
+     * @private
+     */
+    __isDropdownOpen() {
+      return this._dropdown && !this._dropdown.hasAttribute('hidden');
+    }
+
+    /**
+     * Handles click on a dropdown link.
+     * @param {Event} e
+     * @param {HTMLElement} item - The original breadcrumb item
+     * @private
+     */
+    __onDropdownLinkClick(e, item) {
+      this.__closeDropdown();
+
+      if (!this.onNavigate || !item.path) {
+        return;
+      }
+
+      const hasModifier = e.metaKey || e.shiftKey;
+      if (hasModifier) {
+        return;
+      }
+
+      const isRelative = item.path.startsWith('/') || item.path.startsWith(location.origin);
+      if (!isRelative) {
+        return;
+      }
+
+      const result = this.onNavigate({
+        path: item.path,
+        originalEvent: e,
+      });
+
+      if (result !== false) {
+        e.preventDefault();
+      }
+    }
+
+    /**
+     * Handles click on the overflow button.
+     * @private
+     */
+    __onOverflowButtonClick() {
+      if (this.__isDropdownOpen()) {
+        this.__closeDropdown();
+      } else {
+        this.__openDropdown();
+      }
+    }
+
+    /**
+     * Handles keydown on the overflow button.
+     * @param {KeyboardEvent} e
+     * @private
+     */
+    __onOverflowButtonKeydown(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.__onOverflowButtonClick();
+      }
+    }
+
+    /**
+     * Handles Escape key press to close the dropdown.
+     * @param {KeyboardEvent} e
+     * @private
+     */
+    __onDropdownKeydown(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        this.__closeDropdown();
+      }
+    }
+
+    /**
+     * Handles outside clicks to close the dropdown.
+     * @param {Event} e
+     * @private
+     */
+    __onDropdownOutsideClick(e) {
+      const dropdown = this._dropdown;
+      const button = this.__overflowButton;
+
+      // Check if click is inside dropdown or overflow button
+      if (dropdown && dropdown.contains(e.target)) {
+        return;
+      }
+      if (button && button.contains(e.target)) {
+        return;
+      }
+
+      this.__closeDropdown(false);
+    }
+
+    /**
+     * Adds document-level listeners for closing the dropdown.
+     * @private
+     */
+    __addDropdownListeners() {
+      document.addEventListener('keydown', this.__onDropdownKeydown);
+      document.addEventListener('click', this.__onDropdownOutsideClick);
+    }
+
+    /**
+     * Removes document-level listeners for closing the dropdown.
+     * @private
+     */
+    __removeDropdownListeners() {
+      document.removeEventListener('keydown', this.__onDropdownKeydown);
+      document.removeEventListener('click', this.__onDropdownOutsideClick);
     }
   };

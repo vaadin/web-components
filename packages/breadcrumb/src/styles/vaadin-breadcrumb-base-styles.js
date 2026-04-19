@@ -20,6 +20,19 @@ export const breadcrumbStyles = css`
     overflow: hidden;
   }
 
+  [part='dropdown'] {
+    position: fixed;
+    z-index: 1000;
+  }
+
+  [part='dropdown'] a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.25em 0.5em;
+  }
+
   ::slotted([data-overflow]) {
     background: none;
     border: none;

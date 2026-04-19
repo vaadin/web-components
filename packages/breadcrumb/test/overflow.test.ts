@@ -1,5 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-breadcrumb.js';
 import type { Breadcrumb } from '../src/vaadin-breadcrumb.js';
 
@@ -158,5 +160,146 @@ describe('vaadin-breadcrumb overflow', () => {
     const overflowButton = breadcrumb.querySelector('[data-overflow]');
     expect(overflowButton).to.be.ok;
     expect(overflowButton!.getAttribute('aria-label')).to.equal('Vis skjulte elementer');
+  });
+
+  describe('dropdown', () => {
+    let overflowButton: HTMLButtonElement;
+
+    beforeEach(() => {
+      overflowButton = breadcrumb.querySelector('[data-overflow]') as HTMLButtonElement;
+    });
+
+    it('should open the dropdown when clicking the overflow button', () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      expect(dropdown.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should contain links for each collapsed item in hierarchy order', () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      const links = dropdown.querySelectorAll('a');
+      expect(links.length).to.be.greaterThan(0);
+
+      // Verify hierarchy order (root first, most nested last)
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const collapsedItems = Array.from(items).filter((item) => item.style.visibility === 'hidden');
+      // Sort collapsed items by their DOM order
+      const allItems = Array.from(items);
+      collapsedItems.sort((a, b) => allItems.indexOf(a) - allItems.indexOf(b));
+
+      expect(links.length).to.equal(collapsedItems.length);
+      for (let i = 0; i < links.length; i++) {
+        expect(links[i].textContent!.trim()).to.equal(collapsedItems[i].textContent!.trim());
+      }
+    });
+
+    it('should set correct href on each dropdown link matching the original item path', () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      const links = dropdown.querySelectorAll('a');
+
+      const items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+      const collapsedItems = Array.from(items).filter((item) => item.style.visibility === 'hidden');
+      const allItems = Array.from(items);
+      collapsedItems.sort((a, b) => allItems.indexOf(a) - allItems.indexOf(b));
+
+      for (let i = 0; i < links.length; i++) {
+        const expectedPath = collapsedItems[i].getAttribute('path');
+        if (expectedPath) {
+          expect(links[i].getAttribute('href')).to.equal(expectedPath);
+        }
+      }
+    });
+
+    it('should call onNavigate when clicking a dropdown link', () => {
+      const onNavigate = sinon.spy();
+      (breadcrumb as any).onNavigate = onNavigate;
+
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      const links = dropdown.querySelectorAll('a');
+      expect(links.length).to.be.greaterThan(0);
+
+      links[0].click();
+
+      expect(onNavigate.calledOnce).to.be.true;
+      expect(onNavigate.firstCall.args[0]).to.have.property('path');
+      expect(onNavigate.firstCall.args[0]).to.have.property('originalEvent');
+    });
+
+    it('should close the dropdown when pressing Escape', async () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      expect(dropdown.hasAttribute('hidden')).to.be.false;
+
+      await sendKeys({ press: 'Escape' });
+
+      expect(dropdown.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should return focus to overflow button when closing with Escape', async () => {
+      overflowButton.click();
+      overflowButton.focus();
+
+      await sendKeys({ press: 'Escape' });
+
+      expect(document.activeElement).to.equal(overflowButton);
+    });
+
+    it('should close the dropdown when clicking outside', async () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      expect(dropdown.hasAttribute('hidden')).to.be.false;
+
+      // Click outside
+      document.body.click();
+
+      expect(dropdown.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should set aria-expanded to true when dropdown is open', () => {
+      expect(overflowButton.getAttribute('aria-expanded')).to.equal('false');
+
+      overflowButton.click();
+
+      expect(overflowButton.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should set aria-expanded to false when dropdown is closed', () => {
+      overflowButton.click();
+      expect(overflowButton.getAttribute('aria-expanded')).to.equal('true');
+
+      overflowButton.click();
+      expect(overflowButton.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should close the dropdown when clicking the overflow button again', () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      expect(dropdown.hasAttribute('hidden')).to.be.false;
+
+      overflowButton.click();
+
+      expect(dropdown.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should close the dropdown and clear links after closing', () => {
+      overflowButton.click();
+
+      const dropdown = breadcrumb.shadowRoot!.querySelector('[part="dropdown"]') as HTMLElement;
+      expect(dropdown.querySelectorAll('a').length).to.be.greaterThan(0);
+
+      overflowButton.click();
+
+      expect(dropdown.querySelectorAll('a').length).to.equal(0);
+    });
   });
 });
