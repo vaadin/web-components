@@ -17,5 +17,15 @@ export const breadcrumbStyles = css`
   [part='container'] {
     display: flex;
     flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  ::slotted([data-overflow]) {
+    background: none;
+    border: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: pointer;
+    font: inherit;
   }
 `;

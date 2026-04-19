@@ -5,6 +5,8 @@
  */
 import '@vaadin/icon/vaadin-icon.js';
 import { html, render } from 'lit';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
@@ -72,11 +74,24 @@ export const BreadcrumbMixin = (superClass) =>
       });
       this._itemsController.initAddedNode = () => {
         this.__updateCurrentItem();
+        this.__scheduleOverflow();
       };
       this._itemsController.teardownNode = () => {
         this.__updateCurrentItem();
+        this.__scheduleOverflow();
       };
       this.addController(this._itemsController);
+
+      this._container = this.shadowRoot.querySelector('[part="container"]');
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      // Flush the debouncer to avoid memory leaks
+      if (this.__overflowDebouncer) {
+        this.__overflowDebouncer.flush();
+      }
     }
 
     /** @protected */
@@ -90,6 +105,20 @@ export const BreadcrumbMixin = (superClass) =>
       if (props.has('items')) {
         this.__renderItems(this.items);
       }
+
+      if (props.has('__effectiveI18n')) {
+        this.__updateOverflowButtonLabel();
+      }
+    }
+
+    /**
+     * Implement callback from `ResizeMixin` to schedule overflow detection.
+     *
+     * @protected
+     * @override
+     */
+    _onResize() {
+      this.__scheduleOverflow();
     }
 
     /** @private */
@@ -169,5 +198,202 @@ export const BreadcrumbMixin = (superClass) =>
         item.current = false;
       });
       items[items.length - 1].current = true;
+    }
+
+    /**
+     * Schedules overflow detection with microTask debouncing.
+     * @private
+     */
+    __scheduleOverflow() {
+      this.__overflowDebouncer = Debouncer.debounce(this.__overflowDebouncer, microTask, () => {
+        this.__detectOverflow();
+      });
+    }
+
+    /**
+     * Creates and returns the overflow button element.
+     * @return {HTMLButtonElement}
+     * @private
+     */
+    __createOverflowButton() {
+      const btn = document.createElement('button');
+      btn.setAttribute('data-overflow', '');
+      btn.setAttribute('role', 'button');
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('tabindex', '0');
+      btn.textContent = '\u2026';
+      this.__updateOverflowButtonLabel(btn);
+      return btn;
+    }
+
+    /**
+     * Updates the aria-label on the overflow button from i18n.
+     * @param {HTMLButtonElement} [btn]
+     * @private
+     */
+    __updateOverflowButtonLabel(btn) {
+      const button = btn || this.__overflowButton;
+      if (!button) {
+        return;
+      }
+      const label = this.__effectiveI18n && this.__effectiveI18n.moreItems;
+      if (label) {
+        button.setAttribute('aria-label', label);
+      } else {
+        button.removeAttribute('aria-label');
+      }
+    }
+
+    /**
+     * Returns all breadcrumb-item children (excluding the overflow button).
+     * @return {HTMLElement[]}
+     * @private
+     */
+    __getBreadcrumbItems() {
+      return Array.from(this.querySelectorAll('vaadin-breadcrumb-item'));
+    }
+
+    /**
+     * Restores all items to visible state.
+     * @param {HTMLElement[]} items
+     * @private
+     */
+    __restoreItems(items) {
+      items.forEach((item) => {
+        item.style.visibility = '';
+        item.style.position = '';
+      });
+    }
+
+    /**
+     * Hides an item by making it invisible and absolutely positioned.
+     * @param {HTMLElement} item
+     * @private
+     */
+    __collapseItem(item) {
+      item.style.visibility = 'hidden';
+      item.style.position = 'absolute';
+    }
+
+    /**
+     * Removes the overflow button from light DOM if present.
+     * @private
+     */
+    __removeOverflowButton() {
+      if (this.__overflowButton && this.__overflowButton.parentNode === this) {
+        this.removeChild(this.__overflowButton);
+      }
+    }
+
+    /**
+     * Inserts the overflow button at the correct DOM position:
+     * after the last visible item that precedes the collapsed range.
+     * @param {HTMLElement[]} items
+     * @param {HTMLElement[]} collapsedItems
+     * @private
+     */
+    __insertOverflowButton(items, collapsedItems) {
+      if (!this.__overflowButton) {
+        this.__overflowButton = this.__createOverflowButton();
+      }
+
+      // Remove first if already inserted
+      this.__removeOverflowButton();
+
+      // Find the last visible item before the first collapsed item
+      const firstCollapsedIndex = items.indexOf(collapsedItems[0]);
+      let insertAfter = null;
+      for (let i = firstCollapsedIndex - 1; i >= 0; i--) {
+        if (!collapsedItems.includes(items[i])) {
+          insertAfter = items[i];
+          break;
+        }
+      }
+
+      if (insertAfter) {
+        // Insert after the last visible item before collapsed range
+        insertAfter.after(this.__overflowButton);
+      } else {
+        // All items before the collapsed range are also collapsed,
+        // insert at the beginning
+        this.insertBefore(this.__overflowButton, this.firstChild);
+      }
+    }
+
+    /**
+     * Main overflow detection algorithm.
+     * @private
+     */
+    __detectOverflow() {
+      const container = this._container;
+      if (!container) {
+        return;
+      }
+
+      const items = this.__getBreadcrumbItems();
+      if (items.length === 0) {
+        this.__removeOverflowButton();
+        return;
+      }
+
+      // Step 1: Restore all items and remove overflow button
+      this.__restoreItems(items);
+      this.__removeOverflowButton();
+
+      // Remove truncate attribute from all items
+      items.forEach((item) => item.removeAttribute('truncate'));
+
+      // Step 2: Check if there's overflow
+      if (container.scrollWidth <= container.offsetWidth) {
+        // No overflow - all items fit
+        return;
+      }
+
+      // Step 3: Lock container width during measurement
+      container.style.minWidth = `${container.offsetWidth}px`;
+
+      // Ensure the overflow button exists
+      if (!this.__overflowButton) {
+        this.__overflowButton = this.__createOverflowButton();
+      }
+
+      const collapsedItems = [];
+      const lastIndex = items.length - 1;
+
+      // Step 5: Collapse items starting from index 1 toward the current page
+      // (skip root at index 0 and last item which is current page)
+      for (let i = 1; i < lastIndex; i++) {
+        this.__collapseItem(items[i]);
+        collapsedItems.push(items[i]);
+
+        // Insert the overflow button at the correct position
+        this.__insertOverflowButton(items, collapsedItems);
+
+        // Step 6: Re-check fit after each collapse
+        if (container.scrollWidth <= container.offsetWidth) {
+          break;
+        }
+      }
+
+      // Step 7: If all intermediates collapsed and still overflows, collapse root
+      if (container.scrollWidth > container.offsetWidth && lastIndex > 0) {
+        this.__collapseItem(items[0]);
+        collapsedItems.push(items[0]);
+        this.__insertOverflowButton(items, collapsedItems);
+      }
+
+      // Step 8: If only current page remains and still overflows, set truncate
+      if (container.scrollWidth > container.offsetWidth && items.length > 0) {
+        items[lastIndex].setAttribute('truncate', '');
+      }
+
+      // If no items were collapsed, we don't need the overflow button
+      if (collapsedItems.length === 0) {
+        this.__removeOverflowButton();
+      }
+
+      // Step 10: Unlock container width
+      container.style.minWidth = '';
     }
   };
