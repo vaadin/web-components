@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-breadcrumb.js';
 import type { Breadcrumb } from '../src/vaadin-breadcrumb.js';
 import type { BreadcrumbItem } from '../src/vaadin-breadcrumb-item.js';
@@ -220,5 +221,110 @@ describe('vaadin-breadcrumb-item', () => {
       expect(separator).to.be.ok;
       expect(separator!.tagName.toLowerCase()).to.equal('span');
     });
+  });
+});
+
+describe('vaadin-breadcrumb navigation interception', () => {
+  let breadcrumb: Breadcrumb;
+  let items: NodeListOf<BreadcrumbItem>;
+
+  beforeEach(async () => {
+    breadcrumb = fixtureSync(`
+      <vaadin-breadcrumb>
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Current Page</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb>
+    `);
+    await nextRender();
+    items = breadcrumb.querySelectorAll('vaadin-breadcrumb-item');
+  });
+
+  it('should not prevent default when onNavigate is not set', () => {
+    const anchor = items[0].shadowRoot!.querySelector('a')!;
+    let defaultPrevented = false;
+    // Intercept the click at the breadcrumb level to check defaultPrevented
+    // before the browser navigates
+    breadcrumb.addEventListener(
+      'click',
+      (e) => {
+        defaultPrevented = e.defaultPrevented;
+        // Prevent actual navigation in the test
+        e.preventDefault();
+      },
+      { once: true },
+    );
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    anchor.dispatchEvent(event);
+    expect(defaultPrevented).to.be.false;
+  });
+
+  it('should call onNavigate with path and originalEvent when set', () => {
+    const callback = sinon.spy();
+    breadcrumb.onNavigate = callback;
+
+    const anchor = items[0].shadowRoot!.querySelector('a')!;
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    anchor.dispatchEvent(event);
+
+    expect(callback.calledOnce).to.be.true;
+    expect(callback.firstCall.args[0].path).to.equal('/');
+    expect(callback.firstCall.args[0].originalEvent).to.equal(event);
+  });
+
+  it('should prevent default when onNavigate is set', () => {
+    breadcrumb.onNavigate = () => {};
+
+    const anchor = items[0].shadowRoot!.querySelector('a')!;
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    anchor.dispatchEvent(event);
+
+    expect(event.defaultPrevented).to.be.true;
+  });
+
+  it('should not prevent default when onNavigate returns false', () => {
+    breadcrumb.onNavigate = () => false;
+
+    const anchor = items[0].shadowRoot!.querySelector('a')!;
+    let defaultPreventedByOnNavigate = false;
+    // Check defaultPrevented after onNavigate but before browser navigates
+    breadcrumb.addEventListener(
+      'click',
+      (e) => {
+        defaultPreventedByOnNavigate = e.defaultPrevented;
+        // Prevent actual navigation in the test
+        e.preventDefault();
+      },
+      { once: true },
+    );
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    anchor.dispatchEvent(event);
+    expect(defaultPreventedByOnNavigate).to.be.false;
+  });
+
+  it('should bypass onNavigate when metaKey is set', () => {
+    const callback = sinon.spy();
+    breadcrumb.onNavigate = callback;
+
+    const anchor = items[1].shadowRoot!.querySelector('a')!;
+    // Prevent actual navigation in the test
+    breadcrumb.addEventListener('click', (e) => e.preventDefault(), { once: true });
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true, metaKey: true });
+    anchor.dispatchEvent(event);
+
+    expect(callback.called).to.be.false;
+  });
+
+  it('should bypass onNavigate when shiftKey is set', () => {
+    const callback = sinon.spy();
+    breadcrumb.onNavigate = callback;
+
+    const anchor = items[1].shadowRoot!.querySelector('a')!;
+    // Prevent actual navigation in the test
+    breadcrumb.addEventListener('click', (e) => e.preventDefault(), { once: true });
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true, shiftKey: true });
+    anchor.dispatchEvent(event);
+
+    expect(callback.called).to.be.false;
   });
 });

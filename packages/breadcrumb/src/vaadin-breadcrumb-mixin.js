@@ -33,7 +33,25 @@ export const BreadcrumbMixin = (superClass) =>
           value: 'Breadcrumb',
           attribute: false,
         },
+
+        /**
+         * Callback for navigation interception. When set, item link clicks
+         * are intercepted: the callback receives `{ path, originalEvent }`
+         * and default navigation is prevented unless the callback returns `false`.
+         * Clicks with modifier keys, on external links, or with `target="_blank"`
+         * bypass interception.
+         *
+         * @type {function({path: string, originalEvent: Event}): boolean | undefined}
+         */
+        onNavigate: {
+          attribute: false,
+        },
       };
+    }
+
+    constructor() {
+      super();
+      this.addEventListener('click', this.__onClick);
     }
 
     /** @protected */
@@ -71,6 +89,49 @@ export const BreadcrumbMixin = (superClass) =>
 
       if (props.has('items')) {
         this.__renderItems(this.items);
+      }
+    }
+
+    /** @private */
+    __onClick(e) {
+      if (!this.onNavigate) {
+        return;
+      }
+
+      const hasModifier = e.metaKey || e.shiftKey;
+      if (hasModifier) {
+        // Allow default action for clicks with modifiers
+        return;
+      }
+
+      const composedPath = e.composedPath();
+      const item = composedPath.find((el) => el.localName && el.localName.includes('breadcrumb-item'));
+      const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
+      if (!item || !anchor || !item.shadowRoot.contains(anchor)) {
+        // Not a click on a breadcrumb-item anchor
+        return;
+      }
+
+      const isRelative = anchor.href && anchor.href.startsWith(location.origin);
+      if (!isRelative) {
+        // Allow default action for external links
+        return;
+      }
+
+      if (anchor.target === '_blank') {
+        // Allow default action for links with target="_blank"
+        return;
+      }
+
+      // Call the onNavigate callback
+      const result = this.onNavigate({
+        path: item.path,
+        originalEvent: e,
+      });
+
+      if (result !== false) {
+        // Cancel the default action if the callback didn't return false
+        e.preventDefault();
       }
     }
 

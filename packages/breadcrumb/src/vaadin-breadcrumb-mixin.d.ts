@@ -25,4 +25,13 @@ export declare class BreadcrumbMixinClass {
    * Mapped to `aria-label` on the host element.
    */
   label: string;
+
+  /**
+   * Callback for navigation interception. When set, item link clicks
+   * are intercepted: the callback receives `{ path, originalEvent }`
+   * and default navigation is prevented unless the callback returns `false`.
+   * Clicks with modifier keys, on external links, or with `target="_blank"`
+   * bypass interception.
+   */
+  onNavigate: ((context: { path: string; originalEvent: Event }) => boolean | undefined) | undefined;
 }
