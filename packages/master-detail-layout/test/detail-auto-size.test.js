@@ -115,7 +115,7 @@ describe('detail auto size', () => {
 
     beforeEach(() => {
       outer = fixtureSync(`
-        <vaadin-master-detail-layout style="width: 1200px;" master-size="100px" expand="both">
+        <vaadin-master-detail-layout style="width: 1200px;" master-size="100px" expand-master expand-detail>
           <div>Outer Master</div>
 
           <vaadin-master-detail-layout slot="detail" master-size="100px">

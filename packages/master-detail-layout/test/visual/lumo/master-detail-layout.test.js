@@ -15,7 +15,7 @@ describe('master-detail-layout', () => {
 
   beforeEach(async () => {
     element = fixtureSync(`
-      <vaadin-master-detail-layout style="height: 400px">
+      <vaadin-master-detail-layout style="height: 400px" expand-master>
         <div>Master content</div>
         <div slot="detail">Detail content</div>
       </vaadin-master-detail-layout>

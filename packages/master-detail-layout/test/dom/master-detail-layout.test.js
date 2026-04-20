@@ -42,6 +42,18 @@ describe('vaadin-master-detail-layout', () => {
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });
+
+    it('expandMaster', async () => {
+      layout.expandMaster = true;
+      await onceResized(layout);
+      await expect(layout).dom.to.equalSnapshot();
+    });
+
+    it('expandDetail', async () => {
+      layout.expandDetail = true;
+      await onceResized(layout);
+      await expect(layout).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

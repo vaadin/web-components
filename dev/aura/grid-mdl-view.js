@@ -227,7 +227,7 @@ customElements.define(
               class="aura-surface-solid"
               detail-size="25rem"
               overlay-containment="page"
-              expand="master"
+              expand-master
             >
               <div class="aura-view">
                 <header>

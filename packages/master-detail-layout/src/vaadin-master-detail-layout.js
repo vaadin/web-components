@@ -65,7 +65,8 @@ import {
  *
  * Attribute                 | Description
  * --------------------------|----------------------
- * `expand`                  | Set to `master`, `detail`, or `both`.
+ * `expand-master`           | Set when the master area expands to fill available space.
+ * `expand-detail`           | Set when the detail area expands to fill available space.
  * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`              | Set when the detail content is provided and visible.
  * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
@@ -180,13 +181,25 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
-       * Controls which column(s) expand to fill available space.
-       * Possible values: `'master'`, `'detail'`, `'both'`.
-       * Defaults to `'master'`.
+       * When true, the master area expands to fill available space.
+       *
+       * @attr {boolean} expand-master
        */
-      expand: {
-        type: String,
-        value: 'master',
+      expandMaster: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
+       * When true, the detail area expands to fill available space.
+       *
+       * @attr {boolean} expand-detail
+       */
+      expandDetail: {
+        type: Boolean,
+        value: false,
         reflectToAttribute: true,
         sync: true,
       },
