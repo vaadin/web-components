@@ -15,8 +15,8 @@ export const button = css`
     -webkit-user-select: none;
     user-select: none;
     /* Ensure minimum click target (WCAG) */
-    padding: max(0px, (24px - 1lh) / 2);
-    margin: min(0px, (24px - 1lh) / -2);
+    padding: max(0px, (24px - var(--vaadin-icon-size, 1lh)) / 2);
+    margin: min(0px, (24px - var(--vaadin-icon-size, 1lh)) / -2);
   }
 
   /* Icon */
