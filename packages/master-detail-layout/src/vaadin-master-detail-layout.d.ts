@@ -137,14 +137,18 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   overlayContainment: 'layout' | 'page';
 
   /**
-   * When true, the master area expands to fill available space.
+   * When true, the master area grows to fill the available space.
+   * If `expandDetail` is also true, both areas share the available
+   * space equally.
    *
    * @attr {boolean} expand-master
    */
   expandMaster: boolean;
 
   /**
-   * When true, the detail area expands to fill available space.
+   * When true, the detail area grows to fill the available space.
+   * If `expandMaster` is also true, both areas share the available
+   * space equally.
    *
    * @attr {boolean} expand-detail
    */
