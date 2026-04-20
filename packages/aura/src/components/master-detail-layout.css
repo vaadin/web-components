@@ -11,19 +11,19 @@ vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
     --vaadin-master-detail-layout-detail-shadow,
     inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
     -1px 0 0 0 var(--aura-overlay-outline-color),
-    var(--aura-shadow-m)
+    var(--aura-overlay-shadow)
+  );
+  --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
+  margin: var(--_inset);
+  border-radius: clamp(
+    0px,
+    var(--_inset) * 1000,
+    max(var(--vaadin-radius-m), var(--vaadin-radius-l) - round(var(--_inset) / 2, 1px))
   );
 }
 
 vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
-  box-shadow: var(--vaadin-master-detail-layout-detail-shadow, var(--aura-overlay-shadow));
-}
-
-/* TODO could be a built-in variant */
-vaadin-master-detail-layout[theme~='inset-drawer'][has-detail][overlay]::part(detail),
-vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
-  margin: calc(var(--aura-app-layout-inset) / 2);
-  border-radius: var(--_app-layout-radius);
+  border-radius: clamp(0px, var(--_inset) * 1000, var(--vaadin-radius-l));
 }
 
 vaadin-master-detail-layout > vaadin-master-detail-layout,
