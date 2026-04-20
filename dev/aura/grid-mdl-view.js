@@ -226,7 +226,7 @@ customElements.define(
             <vaadin-master-detail-layout
               class="aura-surface-solid"
               detail-size="25rem"
-              overlay-containment="viewport"
+              overlay-containment="page"
               expand="master"
             >
               <div class="aura-view">

@@ -44,10 +44,10 @@ describe('master-detail-layout', () => {
           await visualDiff(element, `${dir}-overlay-default`);
         });
 
-        it('viewport', async () => {
-          element.overlayContainment = 'viewport';
+        it('page', async () => {
+          element.overlayContainment = 'page';
           await onceResized(element);
-          await visualDiff(document.body, `${dir}-overlay-viewport`);
+          await visualDiff(document.body, `${dir}-overlay-page`);
         });
 
         it('no detail', async () => {

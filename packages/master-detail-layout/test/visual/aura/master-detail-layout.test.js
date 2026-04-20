@@ -44,10 +44,10 @@ describe('master-detail-layout', () => {
       await visualDiff(element, 'drawer-default');
     });
 
-    it('viewport', async () => {
-      mdl.overlayContainment = 'viewport';
+    it('page', async () => {
+      mdl.overlayContainment = 'page';
       await onceResized(mdl);
-      await visualDiff(document.body, 'drawer-viewport');
+      await visualDiff(document.body, 'drawer-page');
     });
 
     it('inset-drawer', async () => {

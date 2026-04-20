@@ -70,7 +70,7 @@ import {
  * `has-detail`              | Set when the detail content is provided and visible.
  * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
  * `overlay`                 | Set when columns don't fit and the detail is shown as an overlay.
- * `overlay-containment`     | Set to `layout` or `viewport`.
+ * `overlay-containment`     | Set to `layout` or `page`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -167,7 +167,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       /**
        * Defines the containment of the detail area when the layout is in
        * overlay mode. When set to `layout`, the overlay is confined to the
-       * layout. When set to `viewport`, the overlay is confined to the
+       * layout. When set to `page`, the overlay is confined to the
        * browser's viewport. Defaults to `layout`.
        *
        * @attr {string} overlay-containment
@@ -218,8 +218,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @protected */
   render() {
     const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overlay');
-    const isViewport = isOverlay && this.overlayContainment === 'viewport';
-    const isLayoutContained = isOverlay && !isViewport;
+    const isPage = isOverlay && this.overlayContainment === 'page';
+    const isLayoutContained = isOverlay && !isPage;
 
     return html`
       <div id="backdrop" part="backdrop" @click="${this.__onBackdropClick}"></div>
@@ -233,7 +233,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         id="detail"
         part="detail"
         role="${isOverlay ? 'dialog' : nothing}"
-        aria-modal="${isViewport ? 'true' : nothing}"
+        aria-modal="${isPage ? 'true' : nothing}"
         @keydown="${this.__onDetailKeydown}"
       >
         <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>

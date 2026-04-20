@@ -238,7 +238,7 @@ export const masterDetailLayoutStyles = css`
     max-height: 100%;
   }
 
-  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #detailOutgoing, #backdrop) {
+  :host([has-detail][overlay][overlay-containment='page']) :is(#detail, #detailOutgoing, #backdrop) {
     position: fixed;
   }
 

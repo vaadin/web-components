@@ -15,13 +15,13 @@ vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
   );
 }
 
-vaadin-master-detail-layout[has-detail][overlay][overlay-containment='viewport']::part(detail) {
+vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
   box-shadow: var(--vaadin-master-detail-layout-detail-shadow, var(--aura-overlay-shadow));
 }
 
 /* TODO could be a built-in variant */
 vaadin-master-detail-layout[theme~='inset-drawer'][has-detail][overlay]::part(detail),
-vaadin-master-detail-layout[has-detail][overlay][overlay-containment='viewport']::part(detail) {
+vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
   margin: calc(var(--aura-app-layout-inset) / 2);
   border-radius: var(--_app-layout-radius);
 }
