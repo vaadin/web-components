@@ -122,8 +122,8 @@ describe('master-detail-layout', () => {
             await onceResized(mdl);
           });
 
-          it('basic', async () => {
-            await visualDiff(div, `${dir}-force-overlay-default`);
+          it('default', async () => {
+            await visualDiff(div, `${dir}-force-overlay`);
           });
         });
       });
