@@ -237,16 +237,8 @@
                 </vaadin-radio-group>
                 <div class="expand-group">
                   <label>Expand</label>
-                  <vaadin-checkbox
-                    @change=${this._expandChange}
-                    class="expandMaster"
-                    label="Master"
-                  ></vaadin-checkbox>
-                  <vaadin-checkbox
-                    @change=${this._expandChange}
-                    class="expandDetail"
-                    label="Detail"
-                  ></vaadin-checkbox>
+                  <vaadin-checkbox @change=${this._expandChange} class="expandMaster" label="Master"></vaadin-checkbox>
+                  <vaadin-checkbox @change=${this._expandChange} class="expandDetail" label="Detail"></vaadin-checkbox>
                 </div>
                 <br />
                 <vaadin-radio-group
