@@ -55,6 +55,10 @@ export const appLayoutStyles = css`
     padding-inline: var(--safe-area-inset-inline-start) var(--safe-area-inset-inline-end);
   }
 
+  :host([drawer-opened]:not([overlay])) [part~='content'] {
+    padding-inline-start: 0;
+  }
+
   @media (pointer: coarse) and (max-width: 800px) and (min-height: 500px) {
     :host {
       --vaadin-app-layout-touch-optimized: true;
