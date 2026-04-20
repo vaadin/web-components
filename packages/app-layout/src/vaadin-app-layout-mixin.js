@@ -120,7 +120,6 @@ export const AppLayoutMixin = (superclass) =>
     constructor() {
       super();
       // TODO(jouni): might want to debounce
-      this.__boundResizeListener = this._resize.bind(this);
       this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
       this.__onDrawerKeyDown = this.__onDrawerKeyDown.bind(this);
       this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
@@ -138,34 +137,13 @@ export const AppLayoutMixin = (superclass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      this._blockAnimationUntilAfterNextRender();
+      this.__resizeObserver = new ResizeObserver((entries) => this.__onResize(entries));
+      this.__resizeObserver.observe(this);
+      this.__resizeObserver.observe(this.$.drawer);
+      this.__resizeObserver.observe(this.$.navbarTop);
+      this.__resizeObserver.observe(this.$.navbarBottom);
 
-      window.addEventListener('resize', this.__boundResizeListener);
       this.addEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
-
-      requestAnimationFrame(() => {
-        this._updateOffsetSize();
-      });
-
-      this._updateTouchOptimizedMode();
-      this._updateDrawerSize();
-      this._updateOverlayMode();
-
-      this._navbarSizeObserver = new ResizeObserver(() => {
-        requestAnimationFrame(() => {
-          // Prevent updating offset size multiple times
-          // during the drawer open / close transition.
-          if (this.__isDrawerAnimating) {
-            this.__updateOffsetSizePending = true;
-          } else {
-            this._updateOffsetSize();
-          }
-        });
-      });
-      this._navbarSizeObserver.observe(this.$.navbarTop);
-      this._navbarSizeObserver.observe(this.$.navbarBottom);
-      this._navbarSizeObserver.observe(this.$.drawer);
-
       window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
       window.addEventListener('keydown', this.__onDrawerKeyDown);
     }
@@ -181,25 +159,15 @@ export const AppLayoutMixin = (superclass) =>
       });
 
       this.$.drawer.addEventListener('transitionend', () => {
-        // Update offset size after drawer animation.
-        if (this.__updateOffsetSizePending) {
-          this.__updateOffsetSizePending = false;
-          this._updateOffsetSize();
-        }
-
-        // Delay resetting the flag until animation frame
-        // to avoid updating offset size again on resize.
-        requestAnimationFrame(() => {
-          this.__isDrawerAnimating = false;
-        });
+        this.__isDrawerAnimating = false;
+        this.__scheduleResize(this.$.drawer);
       });
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-
-      window.removeEventListener('resize', this.__boundResizeListener);
+      this.__resizeObserver.disconnect();
       this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
       window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
       window.removeEventListener('keydown', this.__onDrawerKeyDown);
@@ -207,14 +175,52 @@ export const AppLayoutMixin = (superclass) =>
 
     /** @private */
     __onNavbarSlotChange() {
-      this._updateTouchOptimizedMode();
+      this.__scheduleResize(this.$.navbarTop);
+      this.__scheduleResize(this.$.navbarBottom);
       this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
     }
 
     /** @private */
     __onDrawerSlotChange() {
-      this._updateDrawerSize();
+      this.__scheduleResize(this.$.drawer);
+      this.__updateDrawerSize();
       this.toggleAttribute('has-drawer', !!this.querySelector('[slot="drawer"]'));
+    }
+
+    /** @private */
+    __onResize(entries) {
+      cancelAnimationFrame(this.__resizeRaf);
+
+      const isHostResized = entries.some(({ target }) => target === this);
+      const isNavbarResized = entries.some(({ target }) => [this.$.navbarTop, this.$.navbarBottom].includes(target));
+
+      const overlayMode = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
+      const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
+
+      const drawerRect = this.$.drawer.getBoundingClientRect();
+      const navbarTopRect = this.$.navbarTop.getBoundingClientRect();
+      const navbarBottomRect = this.$.navbarBottom.getBoundingClientRect();
+
+      const isDrawerAnimating = this.__isDrawerAnimating;
+
+      this.__resizeRaf = requestAnimationFrame(() => {
+        if (isHostResized) {
+          this._blockAnimationUntilAfterNextRender();
+          this.__setOverlayMode(overlayMode);
+        }
+
+        if (isHostResized || isNavbarResized) {
+          this.__setTouchOptimized(touchOptimized);
+        }
+
+        if (!isDrawerAnimating) {
+          this.__setOffsetSize({
+            drawerRect,
+            navbarTopRect,
+            navbarBottomRect,
+          });
+        }
+      });
     }
 
     /**
@@ -306,48 +312,27 @@ export const AppLayoutMixin = (superclass) =>
       }
     }
 
-    /** @protected */
-    _updateDrawerSize() {
+    /** @private */
+    __updateDrawerSize() {
       const childCount = this.querySelectorAll('[slot=drawer]').length;
-      const drawer = this.$.drawer;
-
       if (childCount === 0) {
-        drawer.setAttribute('hidden', '');
+        this.$.drawer.setAttribute('hidden', '');
         this.style.setProperty('--_vaadin-app-layout-drawer-width', 0);
       } else {
-        drawer.removeAttribute('hidden');
+        this.$.drawer.removeAttribute('hidden');
         this.style.removeProperty('--_vaadin-app-layout-drawer-width');
       }
-      this._updateOffsetSize();
     }
 
     /** @private */
-    _resize() {
-      this._blockAnimationUntilAfterNextRender();
-      this._updateTouchOptimizedMode();
-      this._updateOverlayMode();
-    }
-
-    /** @protected */
-    _updateOffsetSize() {
-      const navbar = this.$.navbarTop;
-      const navbarRect = navbar.getBoundingClientRect();
-
-      const navbarBottom = this.$.navbarBottom;
-      const navbarBottomRect = navbarBottom.getBoundingClientRect();
-
-      const drawer = this.$.drawer;
-      const drawerRect = drawer.getBoundingClientRect();
-
-      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarRect.height}px`);
-      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${navbarBottomRect.height}px`);
+    __setOffsetSize({ drawerRect, navbarTopRect, navbarBottomRect }) {
       this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${drawerRect.width}px`);
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarTopRect.height}px`);
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${navbarBottomRect.height}px`);
     }
 
-    /** @protected */
-    _updateOverlayMode() {
-      const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
-
+    /** @private */
+    __setOverlayMode(overlay) {
       if (!this.overlay && overlay) {
         // Changed from not overlay to overlay
         this._drawerStateSaved = this.drawerOpened;
@@ -487,12 +472,9 @@ export const AppLayoutMixin = (superclass) =>
       return (customPropertyValue || '').trim().toLowerCase();
     }
 
-    /** @protected */
-    _updateTouchOptimizedMode() {
-      const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
-
+    /** @private */
+    __setTouchOptimized(touchOptimized) {
       const navbarItems = this.querySelectorAll('[slot*="navbar"]');
-
       if (navbarItems.length > 0) {
         Array.from(navbarItems).forEach((navbar) => {
           if (navbar.getAttribute('slot').indexOf('touch-optimized') > -1) {
@@ -518,8 +500,6 @@ export const AppLayoutMixin = (superclass) =>
       } else {
         this.$.navbarBottom.removeAttribute('hidden');
       }
-
-      this._updateOffsetSize();
     }
 
     /** @protected */
@@ -531,6 +511,18 @@ export const AppLayoutMixin = (superclass) =>
           this.removeAttribute('no-anim');
         });
       });
+    }
+
+    /**
+     * Forces the ResizeObserver to re-report the size of the given element,
+     * scheduling a new {@link __onResize} callback even if the size hasn't changed.
+     *
+     * @param {Element} element
+     * @private
+     */
+    __scheduleResize(element) {
+      this.__resizeObserver.unobserve(element);
+      this.__resizeObserver.observe(element);
     }
 
     /**

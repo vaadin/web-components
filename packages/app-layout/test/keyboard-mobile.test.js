@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-app-layout.js';
 import '../src/vaadin-drawer-toggle.js';
 import { esc, shiftTab, tab } from './helpers.js';
@@ -29,6 +29,7 @@ describe('mobile navigation', () => {
       </div>
     `);
     [layout, outerInput] = wrapper.children;
+    await nextResize(wrapper);
     await nextRender();
     toggle = layout.querySelector('[slot=navbar]');
     drawer = layout.shadowRoot.querySelector('[part=drawer]');
