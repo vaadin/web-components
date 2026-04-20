@@ -88,10 +88,10 @@ describe('master-detail-layout', () => {
             await visualDiff(div, `${dir}-overlay-default`);
           });
 
-          it('viewport', async () => {
-            mdl.overlayContainment = 'viewport';
+          it('page', async () => {
+            mdl.overlayContainment = 'page';
             await onceResized(mdl);
-            await visualDiff(document.body, `${dir}-overlay-viewport`);
+            await visualDiff(document.body, `${dir}-overlay-page`);
           });
 
           it('overlay size', async () => {

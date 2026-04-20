@@ -64,7 +64,7 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  * `has-detail`              | Set when the detail content is provided and visible.
  * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
  * `overlay`                 | Set when columns don't fit and the detail is shown as an overlay.
- * `overlay-containment`     | Set to `layout` or `viewport`.
+ * `overlay-containment`     | Set to `layout` or `page`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -128,12 +128,12 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   /**
    * Defines the containment of the detail area when the layout is in
    * overlay mode. When set to `layout`, the overlay is confined to the
-   * layout. When set to `viewport`, the overlay is confined to the
+   * layout. When set to `page`, the overlay is confined to the
    * browser's viewport. Defaults to `layout`.
    *
    * @attr {string} overlay-containment
    */
-  overlayContainment: 'layout' | 'viewport';
+  overlayContainment: 'layout' | 'page';
 
   /**
    * Controls which column(s) expand to fill available space.
