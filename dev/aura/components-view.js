@@ -527,7 +527,7 @@ customElements.define(
                       <div style="font-size: var(--aura-font-size-m); line-height: var(--aura-line-height-m)">
                         Heading
                       </div>
-                      <div style="font-size: var(--aura-font-size-s); line-height: var(--aura-line-height-x)">
+                      <div style="font-size: var(--aura-font-size-s); line-height: var(--aura-line-height-s)">
                         Heading
                       </div>
                       <div style="font-size: var(--aura-font-size-xs); line-height: var(--aura-line-height-xs)">
