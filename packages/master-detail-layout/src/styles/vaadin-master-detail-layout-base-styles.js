@@ -20,7 +20,7 @@ export const masterDetailLayoutStyles = css`
     overflow: clip;
   }
 
-  :host:not([overlay-containment='viewport']) {
+  :host:not([overlay-containment='page']) {
     z-index: 0;
   }
 
@@ -254,7 +254,7 @@ export const masterDetailLayoutStyles = css`
     --safe-area-inset-inline-end: 0px;
   }
 
-  :host([dir='rtl'][has-detail][overlay][overlay-containment='viewport']) :is(#detail, #detailOutgoing, #backdrop) {
+  :host([dir='rtl'][has-detail][overlay][overlay-containment='page']) :is(#detail, #detailOutgoing, #backdrop) {
     padding-right: 0;
     padding-left: env(safe-area-inset-left);
   }
