@@ -19,6 +19,7 @@ assertType<boolean>(layout.expandMaster);
 assertType<boolean>(layout.expandDetail);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
 assertType<boolean>(layout.noAnimation);
+assertType<boolean>(layout.forceOverlay);
 
 // Events
 layout.addEventListener('backdrop-click', (event) => {

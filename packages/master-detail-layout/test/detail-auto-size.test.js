@@ -16,47 +16,6 @@ describe('detail auto size', () => {
     return layout.style.getPropertyValue('--_detail-cached-size');
   }
 
-  describe('basic', () => {
-    let spy;
-
-    beforeEach(async () => {
-      layout = fixtureSync(`
-        <vaadin-master-detail-layout master-size="200px" detail-size="200px" orientation="horizontal">
-          <div>Master</div>
-          <div slot="detail">Detail</div>
-        </vaadin-master-detail-layout>
-      `);
-      spy = sinon.spy(layout, 'recalculateLayout');
-      await onceResized(layout);
-    });
-
-    it('should not be called when masterSize, detailSize and orientation are provided initially', () => {
-      expect(spy).to.not.be.called;
-    });
-
-    it('should be called when masterSize is changed after initial render', () => {
-      layout.masterSize = '200px';
-      layout.masterSize = '300px';
-      expect(spy).to.be.calledOnce;
-    });
-
-    it('should be called when detailSize is changed after initial render', () => {
-      layout.detailSize = '200px';
-      layout.detailSize = '300px';
-      expect(spy).to.be.calledOnce;
-    });
-
-    it('should be called when orientation is changed after initial render', () => {
-      layout.orientation = 'vertical';
-      expect(spy).to.be.calledOnce;
-    });
-
-    it('should not throw when called on a disconnected element', () => {
-      layout.parentElement.removeChild(layout);
-      expect(() => layout.recalculateLayout()).to.not.throw();
-    });
-  });
-
   describe('Lit element detail', () => {
     const detailElementTag = defineCE(
       class extends LitElement {

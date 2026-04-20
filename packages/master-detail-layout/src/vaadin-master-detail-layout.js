@@ -229,6 +229,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         value: false,
         reflectToAttribute: true,
         sync: true,
+        observer: '__forceOverlayChanged',
       },
 
       /** @private */
@@ -320,6 +321,13 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   __orientationChanged(_orientation, oldOrientation) {
     if (oldOrientation != null) {
+      this.recalculateLayout();
+    }
+  }
+
+  /** @private */
+  __forceOverlayChanged(_forceOverlay, oldForceOverlay) {
+    if (oldForceOverlay != null) {
       this.recalculateLayout();
     }
   }

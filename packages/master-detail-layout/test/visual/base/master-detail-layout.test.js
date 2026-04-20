@@ -113,6 +113,19 @@ describe('master-detail-layout', () => {
             document.documentElement.style.removeProperty('color-scheme');
           });
         });
+
+        describe('force overlay', () => {
+          beforeEach(async () => {
+            mdl.masterSize = '300px';
+            mdl.detailSize = '300px';
+            mdl.forceOverlay = true;
+            await onceResized(mdl);
+          });
+
+          it('basic', async () => {
+            await visualDiff(div, `${dir}-force-overlay-default`);
+          });
+        });
       });
     });
   });

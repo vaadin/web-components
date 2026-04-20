@@ -382,3 +382,94 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
 `;
 /* end snapshot vaadin-master-detail-layout nested layouts overflow */
 
+snapshots["vaadin-master-detail-layout detail forceOverlay"] = 
+`<vaadin-master-detail-layout
+  force-overlay=""
+  has-detail=""
+  has-master=""
+  master-size="300px"
+  orientation="horizontal"
+  overlay=""
+  overlay-containment="layout"
+  style="--_master-size: 300px;"
+>
+  <div>
+    Master content
+  </div>
+  <div slot="detail">
+    Detail content
+  </div>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout detail forceOverlay */
+
+snapshots["vaadin-master-detail-layout nested layouts forceOverlay on child"] = 
+`<vaadin-master-detail-layout
+  has-detail=""
+  has-master=""
+  master-size="100px"
+  orientation="horizontal"
+  overlay-containment="layout"
+  overlay-size="100px"
+  style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 101px;"
+>
+  <div>
+    Master 0
+  </div>
+  <vaadin-master-detail-layout
+    detail-size="400px"
+    force-overlay=""
+    has-detail=""
+    has-master=""
+    keep-detail-column-offscreen=""
+    master-size="100px"
+    orientation="horizontal"
+    overlay=""
+    overlay-containment="layout"
+    overlay-size="100px"
+    slot="detail"
+    style="--_master-size: 100px; --_detail-size: 400px; --_overlay-size: 100px;"
+  >
+    <div>
+      Master 1
+    </div>
+    <vaadin-master-detail-layout
+      has-detail=""
+      has-master=""
+      keep-detail-column-offscreen=""
+      master-size="100px"
+      orientation="horizontal"
+      overlay=""
+      overlay-containment="layout"
+      overlay-size="100px"
+      slot="detail"
+      style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 201px;"
+    >
+      <div>
+        Master 2
+      </div>
+      <vaadin-master-detail-layout
+        detail-size="100px"
+        has-detail=""
+        has-master=""
+        keep-detail-column-offscreen=""
+        master-size="100px"
+        orientation="horizontal"
+        overlay=""
+        overlay-containment="layout"
+        slot="detail"
+        style="--_master-size: 100px; --_detail-size: 100px;"
+      >
+        <div>
+          Master 3
+        </div>
+        <div slot="detail">
+          Detail
+        </div>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+  </vaadin-master-detail-layout>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout nested layouts forceOverlay on child */
+
