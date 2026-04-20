@@ -21,7 +21,7 @@ TASK OVERVIEW:
 
 5. Write use cases in two phases, excluding any scenario that falls outside the scope boundaries from step 4. Patterns found in research that fall outside scope belong in the Differentiation section, not in the Use Cases list.
 
-   **Core use case.** Start with a single use case for the most basic, most common scenario that defines why this component exists. If the research shows this scenario in multiple domains or contexts, include them as brief examples within this one entry rather than as separate use cases.
+   **Core use case.** Start with a single use case for the most basic, most common scenario that defines why this component exists.
 
    **Variant use cases.** Then look for situations where the user faces a constraint or context that the core scenario alone does not cover. Sources:
    - Edge-case and constrained-context scenarios (e.g., limited space, missing data, restricted permissions)
@@ -29,6 +29,8 @@ TASK OVERVIEW:
    - Scenarios from "When to use" sections that go beyond the core scenario; treat "When not to use" items as scope exclusions
 
    Each variant must name what makes it different from the core.
+
+   **Example format.** Every use case (core and variant) must have a general description first, followed by a specific concrete example in italics. The example should name a specific application domain and walk through the scenario concretely enough to build a demo from.
 
 6. Validate the drafted use cases:
 
@@ -57,7 +59,7 @@ Follow `PROBLEM_STATEMENT_TEMPLATE.md` exactly. The document should be roughly o
 - **Problem** — The core need this component addresses for end users in a web application. Keep it concise.
 - **Target Users** — Which end users benefit and in what kinds of applications or workflows.
 - **Differentiation** — How this component differs from related or adjacent components/patterns. This section does the most to prevent scope creep in later steps. Be specific: name the adjacent patterns and explain what each does that this component does NOT, and vice versa.
-- **Use Cases** — Product-level scenarios describing what users want to do with the component. Each scenario is concrete enough to build a demo app from. Written in user language, ordered from most common to most specialized.
+- **Use Cases** — Product-level scenarios describing what users want to do with the component. Each use case has a general description followed by a specific concrete example in italics. Written in user language, ordered from most common to most specialized.
 - **Discussion** — Questions posed to the user during production of this document, with the user's answers. Captures the decisions that shaped the problem statement — informational, not a summary of the sections above. Omit this section if no questions were asked.
 
 IMPORTANT GUIDELINES:

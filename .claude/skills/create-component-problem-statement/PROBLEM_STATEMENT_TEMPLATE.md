@@ -29,9 +29,9 @@ Clarifying boundaries prevents scope creep in later steps.
 
 ## Use Cases
 
-The first use case is the core scenario — the most common, most basic thing users do with this component. If this scenario applies across multiple domains, include them as examples within a single entry. Additional use cases describe situations where the user faces a constraint or context that the core scenario does not cover.
+The first use case is the core scenario — the most common, most basic thing users do with this component. Additional use cases describe situations where the user faces a constraint or context that the core scenario does not cover.
 
-Write in user language ("A user wants to…", "In an admin application…"). Include concrete context so each scenario is specific enough to build a demo from. Order from most common to most specialized.
+Each use case has a general description first, then ends with a specific concrete example in italics. Write in user language ("A user wants to…"). Order from most common to most specialized.
 
 ## Discussion
 
