@@ -203,9 +203,9 @@ customElements.define(
                   <vaadin-button theme="tertiary" aria-label="Notifications">
                     <vaadin-tooltip slot="tooltip" text="Notifications"></vaadin-tooltip>
                     <vaadin-icon src="./assets/lucide-icons/bell.svg"></vaadin-icon>
-                    <vaadin-badge class="aura-accent-red" theme="dot" style="position: absolute; inset-inline-end: 5px"
-                      >Unread notifications</vaadin-badge
-                    >
+                    <vaadin-badge class="aura-accent-red" theme="dot" style="position: absolute; inset-inline-end: 5px">
+                      Unread notifications
+                    </vaadin-badge>
                   </vaadin-button>
                   <vaadin-button aria-label="New Dashboard">
                     <vaadin-tooltip slot="tooltip" text="New Dashboard"></vaadin-tooltip>
