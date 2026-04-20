@@ -34,10 +34,6 @@ Progress indicators show position in a linear, sequential multi-step process (e.
 
 The back button navigates through session history (temporal). Breadcrumbs navigate the information architecture (structural). Breadcrumbs should not replicate path-based history trails.
 
-### Sibling Navigation
-
-Some breadcrumb implementations include dropdown menus on items to browse sibling pages at the same hierarchy level. This is explicitly out of scope. Sibling browsing is handled by other navigation components. Breadcrumb items link only to ancestors.
-
 ## Use Cases
 
 1. **Navigating up a hierarchy.** A user is viewing a deeply nested page (e.g., a product detail page in an admin panel, a specific document in a knowledge base, or a configuration screen several levels deep) and wants to move up to a parent or grandparent page. The breadcrumb trail shows the full path from the root to the current page, and each ancestor is a link the user can click to jump directly to that level.
@@ -45,10 +41,6 @@ Some breadcrumb implementations include dropdown menus on items to browse siblin
 2. **Orienting after a deep landing.** A user arrives at a page deep in the application via a search result, a bookmarked URL, or a link shared by a colleague. They have no context for where this page sits in the application structure. The breadcrumb trail immediately communicates the page's position in the hierarchy without requiring the user to explore the navigation.
 
 3. **Navigating a dynamic or user-driven hierarchy.** The hierarchy is not a fixed site map but is constructed from application data. For example, a user browses a product catalog filtered by category, or navigates an organizational chart where the path depends on the data rather than a static page structure. The application provides the trail dynamically, and the breadcrumb reflects whatever hierarchy the application defines.
-
-4. **Working within a long trail in limited space.** A user is deep in a hierarchy with many levels (e.g., a file system path six or more folders deep), and the full breadcrumb trail does not fit the available horizontal space. The breadcrumb must handle overflow gracefully so the user can still see the most relevant parts of the trail and access the hidden items.
-
-5. **Viewing the breadcrumb on a small screen.** A user accesses the application on a mobile device or a narrow viewport. The breadcrumb must remain usable without wrapping to multiple lines or consuming excessive vertical space, even when the trail has several items.
 
 ## Discussion
 
