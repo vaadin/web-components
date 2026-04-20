@@ -36,11 +36,17 @@ The back button navigates through session history (temporal). Breadcrumbs naviga
 
 ## Use Cases
 
-1. **Navigating up a hierarchy.** A user is viewing a deeply nested page (e.g., a product detail page in an admin panel, a specific document in a knowledge base, or a configuration screen several levels deep) and wants to move up to a parent or grandparent page. The breadcrumb trail shows the full path from the root to the current page, and each ancestor is a link the user can click to jump directly to that level.
+1. **Navigating up a hierarchy.** A user is viewing a deeply nested page and wants to move up to a parent or grandparent page. The breadcrumb trail shows the full path from the root to the current page, and each ancestor is a link the user can click to jump directly to that level.
+
+   *Example: A user in a documentation portal is reading an article at "Home > Developer Guide > API Reference > Authentication > OAuth2". They click "API Reference" in the breadcrumb to jump back to the API overview page.*
 
 2. **Orienting after a deep landing.** A user arrives at a page deep in the application via a search result, a bookmarked URL, or a link shared by a colleague. They have no context for where this page sits in the application structure. The breadcrumb trail immediately communicates the page's position in the hierarchy without requiring the user to explore the navigation.
 
-3. **Navigating a dynamic or user-driven hierarchy.** The hierarchy is not a fixed site map but is constructed from application data. For example, a user browses a product catalog filtered by category, or navigates an organizational chart where the path depends on the data rather than a static page structure. The application provides the trail dynamically, and the breadcrumb reflects whatever hierarchy the application defines.
+   *Example: A support agent receives a link to a customer's order detail page. The breadcrumb shows "Home > Customers > Acme Corp > Orders > #10432", immediately telling them they are inside the Acme Corp customer record.*
+
+3. **Navigating a dynamic or user-driven hierarchy.** The hierarchy is not a fixed site map but is constructed from application data. The application provides the trail dynamically, and the breadcrumb reflects whatever hierarchy the application defines.
+
+   *Example: A user browses a product catalog filtered by category. The breadcrumb shows "Electronics > Laptops > Gaming" — a path derived from the data model, not a static sitemap. If they switch to browsing by brand instead, the trail changes to "Brands > Asus > Laptops".*
 
 ## Discussion
 
