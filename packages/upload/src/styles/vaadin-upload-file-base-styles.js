@@ -34,7 +34,6 @@ export const uploadFileStyles = [
       grid-column: 1;
     }
 
-    :host([uploading]) [part='loader'],
     [part='done-icon']:not([hidden]),
     [part='warning-icon']:not([hidden]) {
       display: flex;
