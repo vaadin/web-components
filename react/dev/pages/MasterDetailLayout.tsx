@@ -32,8 +32,6 @@ function DetailContent({ id, onClose, onReplace }: { id: number; onClose: () => 
 
 export default function () {
   const [orientation, setOrientation] = useState('horizontal');
-  const [overlayContainment, setOverlayContainment] = useState('layout');
-  const [expand, setExpand] = useState('both');
   const [masterSize, setMasterSize] = useState('auto');
   const [detailSize, setDetailSize] = useState('auto');
   const [overlaySize, setOverlaySize] = useState('auto');
@@ -50,8 +48,6 @@ export default function () {
       <MasterDetailLayout
         style={{ border: '1px solid lightgray', resize: 'both' }}
         orientation={orientation as 'horizontal' | 'vertical'}
-        overlayContainment={overlayContainment as 'layout' | 'viewport'}
-        expand={expand as 'master' | 'detail' | 'both'}
         masterSize={sizeOrUndefined(masterSize)}
         detailSize={sizeOrUndefined(detailSize)}
         overlaySize={sizeOrUndefined(overlaySize)}
@@ -78,27 +74,6 @@ export default function () {
               <RadioButton value="auto" label="Auto" />
               <RadioButton value="300px" label="300px" />
               <RadioButton value="100%" label="100%" />
-            </RadioGroup>
-
-            <RadioGroup
-              label="Overlay Containment"
-              theme="vertical"
-              value={overlayContainment}
-              onValueChanged={(e) => setOverlayContainment(e.detail.value)}
-            >
-              <RadioButton value="layout" label="Layout" />
-              <RadioButton value="viewport" label="Viewport" />
-            </RadioGroup>
-
-            <RadioGroup
-              label="Expand"
-              theme="vertical"
-              value={expand}
-              onValueChanged={(e) => setExpand(e.detail.value)}
-            >
-              <RadioButton value="both" label="Both" />
-              <RadioButton value="master" label="Master" />
-              <RadioButton value="detail" label="Detail" />
             </RadioGroup>
 
             <br />
