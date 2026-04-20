@@ -2,8 +2,8 @@
 :where(:host) {
   --vaadin-overlay-border-width: 0px;
   --vaadin-overlay-backdrop-background: light-dark(
-    oklch(from var(--aura-background-color-light) calc(l * 0.1) c h / 0.15),
-    hsla(0deg, 0%, 0%, 0.3)
+    oklch(from var(--aura-background-color-light) calc(l * 0.5) min(0.05, c * 4) h / 0.3),
+    oklch(from var(--aura-background-color-dark) calc(l * 0.5) min(0.05, c * 4) h / 0.3)
   );
   --aura-overlay-outline-color: light-dark(
     oklch(from var(--aura-background-color-light) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast-level))),
