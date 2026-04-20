@@ -27,6 +27,7 @@ TASK OVERVIEW:
    - Related Vaadin components and how developers use them
    - Naming conventions (tag names, properties, events, slots)
    - Usage patterns and best practices
+Use the project version for the Vaadin version.
 
 5. For each requirement (or group of related requirements), research how other component libraries expose similar functionality. See `research-sources.md` in this skill's directory for the library list and what to look for.
 
