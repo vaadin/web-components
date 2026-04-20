@@ -20,29 +20,31 @@ TASK OVERVIEW:
 1. Read `packages/{component-name}/spec/problem-statement.md`. If the file does not exist, stop and instruct the user to run the `create-component-problem-statement` skill first. Use the problem statement as follows:
 
    - **Differentiation** — filter out scenarios that belong to adjacent components. This is a hard boundary for all subsequent steps.
-   - **Use Cases** — decompose each use case into the behavioral capabilities it implies. These behavioral threads become research targets for steps 3–8. Every use case must be covered by at least one requirement in the final document.
+   - **Use Cases** — decompose each use case into the behavioral capabilities it implies. These behavioral threads become research targets for steps 2–7. Every use case must be covered by at least one requirement in the final document.
 
-2. **Identify open questions and ask the user.** Before doing deep external research, identify the scope and behavioral questions that the problem statement does not already resolve. Typical candidates: whether items should support icons, what happens on mobile (simplify to a back link vs. collapse the middle), whether the Flow API needs a specific integration hook, which edge cases should be in scope, how ambiguous patterns should be resolved. Use AskUserQuestion to pose each one as a focused question. Incorporate the user's answers before continuing. These answers steer the research in steps 3–8 and the detailed requirements in step 9.
+2. Search https://github.com/vaadin/web-components issues (open and closed) that mention the component. Note that users may refer to the component by different names.
+
+3. Search https://github.com/vaadin/flow-components issues for the same component.
+
+4. Search https://github.com/vaadin-component-factory for add-ons related to the component.
+
+5. Search the Vaadin forums using WebSearch with query `site:vaadin.com/forum ComponentName`. Do NOT use WebFetch for the forum — it is a heavy web application and WebFetch will return empty content.
+
+6. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web application and WebFetch will return empty content.
+
+7. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
+
+Research guidance: Steps 2–7 search for real-world evidence and refinement of the behavioral threads identified in step 1. When evaluating an issue, forum post, or design system pattern, check whether it describes a behavior that supports one of the use cases. Behaviors that fall outside the Differentiation boundaries are out of scope.
+
+8. **Identify open questions and ask the user.** After completing the research in steps 2–7, use the research findings to identify the scope and behavioral questions that the problem statement does not already resolve. The research should reveal which questions actually matter — common patterns across design systems, conflicting approaches between libraries, behaviors requested in Vaadin issues, and edge cases surfaced by real-world usage. Typical candidates: whether items should support icons, what happens on mobile (simplify to a back link vs. collapse the middle), whether the Flow API needs a specific integration hook, which edge cases should be in scope, how ambiguous patterns should be resolved. When presenting options, briefly note what the research found (e.g., "Most design systems collapse middle items; SAP UI5 also offers a scrolling mode") so the user can make an informed choice. Use AskUserQuestion to pose each one as a focused question. Incorporate the user's answers before continuing.
 
    Also ask the user **which variants are in scope** — web component only, Flow component only, or both (default: both). Record the answer in the Discussion section. This decides how variant tagging is used later in step 9.
 
    Record every question and answer in a `## Discussion` section that sits at the end of the output document (after all numbered requirements). This becomes the audit trail of decisions that shaped the requirements — informational, not part of the requirements themselves. If a previous version of `requirements.md` exists at `packages/{component-name}/spec/requirements.md`, read its Discussion section first — answers already recorded there are still valid and do not need to be re-asked.
 
-Research guidance: Steps 3–8 search for real-world evidence and refinement of the behavioral threads identified in steps 1 and 2 and the decisions recorded in the Discussion section. When evaluating an issue, forum post, or design system pattern, check whether it describes a behavior that supports one of the use cases or aligns with a recorded decision. Behaviors that fall outside the Differentiation boundaries are out of scope. If research reveals an important behavior that no use case or decision covers but appears to be within scope, flag it via AskUserQuestion before including it — and add the new Q&A to the Discussion section.
+   If research reveals an important behavior that no use case or decision covers but appears to be within scope, include it as an additional question — and add the new Q&A to the Discussion section.
 
-3. Search https://github.com/vaadin/web-components issues (open and closed) that mention the component. Note that users may refer to the component by different names.
-
-4. Search https://github.com/vaadin/flow-components issues for the same component.
-
-5. Search https://github.com/vaadin-component-factory for add-ons related to the component.
-
-6. Search the Vaadin forums using WebSearch with query `site:vaadin.com/forum ComponentName`. Do NOT use WebFetch for the forum — it is a heavy web application and WebFetch will return empty content.
-
-7. Search the Vaadin Directory for similar add-ons using WebSearch with query `site:vaadin.com/directory ComponentName`. Do NOT use WebFetch for the directory — it is a heavy web application and WebFetch will return empty content.
-
-8. Research the component in external design system libraries listed in `research-sources.md` in this skill's directory. Focus on behavioral patterns that support the use cases: how other libraries solve the same scenarios, what additional behaviors they provide for those scenarios, and "when to use" guidance that validates or refines the scope.
-
-9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document opens directly with the numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement). The `## Discussion` section capturing the Q&A from step 2 (plus any additional questions posed during research) comes at the end of the document, after all numbered requirements.
+9. Create the requirements document at `packages/{component-name}/spec/requirements.md`. Read `REQUIREMENTS_TEMPLATE.md` in this skill's directory first and follow it exactly. The document opens directly with the numbered detailed requirements — each with a behavior-focused title, a statement of the required behavior, and a concrete example. Order requirements so that behaviors supporting the core use case come first, followed by behaviors for variant use cases (in the order they appear in the problem statement). The `## Discussion` section capturing the Q&A from step 8 (plus any additional questions posed during research) comes at the end of the document, after all numbered requirements.
 
    **Variant scoping.** Each requirement MAY carry a visible `**Applies to:** universal | web | flow` line directly under the title. Default (omitted) is `universal`, meaning the behavior applies to both the web component and the Flow wrapper. Use `web` when the behavior only has meaning in the web component (e.g. a DOM-level interaction the Flow API does not expose). Use `flow` when the behavior only has meaning in the Flow wrapper (e.g. a server-side integration requirement, a Java-API-only ergonomic expectation, or a Flow-specific data-binding concern). Do NOT tag a requirement as variant-specific just because its wording happens to reference one API — tag it only when the behavior itself is absent from the other variant. The tag MUST be visible markdown (e.g. `**Applies to:** flow`) — not an HTML comment — so readers see the scope at a glance. Omit the line entirely for the default `universal` scope.
 
@@ -98,7 +100,7 @@ Before finalizing, check that:
 4. Requirements are ordered from most common to most specialized.
 5. The first requirement is the simplest, most universal behavior.
 6. The document follows the structure in `REQUIREMENTS_TEMPLATE.md`, including the Discussion section at the end (after all numbered requirements).
-7. The Discussion section records every question posed to the user in step 2 (and any follow-up questions raised during research) together with the user's answer. It does not duplicate the detailed requirements.
+7. The Discussion section records every question posed to the user in step 8 (and any follow-up questions raised during research) together with the user's answer. It does not duplicate the detailed requirements.
 8. Every answer in the Discussion section is reflected in the numbered requirements above — a decision captured there must actually shape at least one requirement.
 9. Concrete examples are included where they make requirements unambiguous.
 10. No requirement violates the problem statement's Differentiation section. Re-read the problem statement and confirm each requirement stays within scope.
