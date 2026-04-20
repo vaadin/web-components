@@ -40,11 +40,13 @@ The application can change the visual appearance of the separator to match its d
 
 ---
 
-## 6. Overflow collapse of middle items
+## 6. Overflow collapse of intermediate items
 
-When the trail contains more items than fit the available horizontal width, the component collapses intermediate items into a single overflow indicator (such as an ellipsis button), always keeping the first item (root) and the last item (current page or last ancestor) visible.
+When the trail contains more items than fit the available horizontal width, intermediate items collapse in order of ancestry — starting from the item closest to the root — until only the root and the current item remain uncollapsed. If further collapsing is still needed, the root item finally collapses as well. The current item never collapses. Collapsed items are replaced by a single overflow indicator (such as an ellipsis button).
 
-*Example: A deeply nested file manager path "Home > Documents > Projects > 2026 > Q1 > Reports > Summary" collapses to "Home > … > Summary" when the container is narrow. The middle items are hidden behind the ellipsis.*
+The rationale: the root and the current item's immediate ancestors are the ones the user is most likely to want to see and navigate to, so they are preserved the longest.
+
+*Example: A file manager path "Home > Documents > Projects > 2026 > Q1 > Reports > Summary" first collapses to "Home > … > Q1 > Reports > Summary" (hiding "Documents" and "Projects"), then to "Home > … > Reports > Summary", then to "Home > … > Summary", and finally — if even that doesn't fit — to "… > Summary".*
 
 ---
 
@@ -72,23 +74,15 @@ The breadcrumb trail can be updated at runtime to reflect a hierarchy that chang
 
 ---
 
-## 10. Truncation of long item labels
+## 10. Navigation landmark
 
-When an individual item's text label is too long to display in full, the label is truncated with an ellipsis rather than causing the entire trail to overflow. The full label remains accessible (e.g., via a tooltip on hover).
+The breadcrumb identifies itself as a navigation landmark so that assistive technology users can locate it among other landmarks on the page.
 
-*Example: A breadcrumb item labeled "Enterprise Resource Planning Configuration" is displayed as "Enterprise Resource Pl…" with a tooltip showing the full text on hover.*
-
----
-
-## 11. Navigation landmark with default label
-
-The breadcrumb identifies itself as a navigation landmark with a default label of "Breadcrumb" so that assistive technology users can locate it among other landmarks on the page.
-
-*Example: A screen reader user pressing a landmark shortcut hears "Breadcrumb navigation" and knows they have reached the breadcrumb trail without having to read through every link.*
+*Example: A screen reader user pressing a landmark shortcut finds the breadcrumb navigation region without having to read through every link on the page.*
 
 ---
 
-## 12. Current page announced as current by assistive technology
+## 11. Current page announced as current by assistive technology
 
 When the current-page item is included in the trail, assistive technology announces it as the current page, distinguishing it from the ancestor links.
 
@@ -96,7 +90,7 @@ When the current-page item is included in the trail, assistive technology announ
 
 ---
 
-## 13. Directional separator flips in right-to-left layouts
+## 12. Directional separator flips in right-to-left layouts
 
 When the component renders in a right-to-left context, directional separators (such as chevrons) flip to point in the reading direction, maintaining the visual indication of hierarchy from right to left.
 
@@ -110,7 +104,7 @@ Questions posed while producing this document, with the user's answers.
 
 **Q: When the breadcrumb trail is too long to fit the available width, how should the component handle overflow?**
 
-Collapse middle items behind an overflow indicator, always showing the first (root) and last (current) items. This is the standard pattern across design systems.
+Collapse intermediate items progressively, starting from the item closest to the root, so the current item's immediate ancestors are preserved the longest. The root collapses only as a last resort; the current item never collapses. The rationale is that the root and the current item's nearby ancestors are the ones the user most likely wants to see or jump to.
 
 **Q: Should breadcrumb items support displaying icons alongside their text label?**
 
@@ -123,3 +117,11 @@ No special mobile behavior — use the same overflow/collapse mechanism as on de
 **Q: Which variants are in scope for this component?**
 
 Both web component and Flow (Java) wrapper — the standard for new Vaadin components.
+
+**Q: Should long item labels be truncated with an ellipsis?**
+
+No. Truncation of individual labels is not a component-level requirement — removed from scope.
+
+**Q: Should the navigation landmark have a default label (e.g., "Breadcrumb")?**
+
+No. The component identifies itself as a navigation landmark but does not provide a component-specific default label.
