@@ -17,8 +17,11 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
     height: 100%;
     position: relative;
-    z-index: 0;
     overflow: clip;
+  }
+
+  :host:not([overlay-containment='page']) {
+    z-index: 0;
   }
 
   :host([dir='rtl']) {
@@ -41,7 +44,7 @@ export const masterDetailLayoutStyles = css`
   /* CSS grid template */
 
   :host {
-    --_master-size: 30rem;
+    --_master-size: min(100%, 30rem);
     --_master-extra: 0px;
     --_detail-size: var(--_detail-cached-size);
     --_detail-extra: 0px;
@@ -240,6 +243,20 @@ export const masterDetailLayoutStyles = css`
 
   :host([has-detail][overlay][overlay-containment='page']) :is(#detail, #detailOutgoing, #backdrop) {
     position: fixed;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-right: env(safe-area-inset-right);
+    --safe-area-inset-top: 0px;
+    --safe-area-inset-bottom: 0px;
+    --safe-area-inset-left: 0px;
+    --safe-area-inset-right: 0px;
+    --safe-area-inset-inline-start: 0px;
+    --safe-area-inset-inline-end: 0px;
+  }
+
+  :host([dir='rtl'][has-detail][overlay][overlay-containment='page']) :is(#detail, #detailOutgoing, #backdrop) {
+    padding-right: 0;
+    padding-left: env(safe-area-inset-left);
   }
 
   /* Transitions */

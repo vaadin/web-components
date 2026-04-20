@@ -3,7 +3,6 @@
   flex-direction: column;
   box-sizing: border-box;
   margin-block: calc(var(--safe-area-inset-top) * -1) calc(var(--safe-area-inset-bottom) * -1);
-  padding-block: var(--safe-area-inset-top) var(--safe-area-inset-bottom);
   height: calc(100% + var(--safe-area-inset-top) + var(--safe-area-inset-bottom));
 }
 
@@ -11,8 +10,8 @@
   flex: 1;
 }
 
-.aura-view > * {
-  --vaadin-scroller-padding-inline: var(--vaadin-padding-l);
+.aura-view > vaadin-scroller {
+  --vaadin-scroller-padding-inline: max(var(--vaadin-padding-l) - var(--safe-area-inset-left), 0px);
 }
 
 .aura-view:not(:has(header, .aura-view-header)) > vaadin-scroller {
@@ -25,7 +24,8 @@
 
 .aura-view > :is(header, footer),
 :is(.aura-view-header, .aura-view-footer) {
-  padding: var(--vaadin-padding-m);
+  padding-block: var(--vaadin-padding-m);
+  padding-inline: max(var(--vaadin-padding-m) - var(--safe-area-inset-left), 0px);
   display: flex;
   align-items: center;
   gap: var(--vaadin-gap-xs);
@@ -43,6 +43,7 @@
 .aura-view[slot='drawer'] > header,
 .aura-view-header[slot='drawer'] {
   margin-top: calc(var(--safe-area-inset-top) * -1);
+  padding-inline-end: var(--vaadin-padding-m);
 }
 
 .aura-view[slot='navbar'] > :is(header, footer),
@@ -92,4 +93,10 @@ vaadin-app-layout:is([drawer-opened]:not([overlay]), :has(> [slot='navbar'] vaad
   & + :is(h1, h2, h3, h4, h5, h6, .aura-view-heading) {
     padding-inline-start: var(--vaadin-padding-s);
   }
+}
+
+/* This is really brittle/hacky. Might benefit from some explicit classname/selector that app-layout can detect. */
+vaadin-app-layout:has(> .aura-surface-solid)::part(content),
+vaadin-app-layout:has(> * > .aura-surface-solid)::part(content) {
+  background: var(--aura-surface-color-solid) padding-box;
 }
