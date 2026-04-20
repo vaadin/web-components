@@ -114,17 +114,12 @@ describe('master-detail-layout', () => {
           });
         });
 
-        describe('force overlay', () => {
-          beforeEach(async () => {
-            mdl.masterSize = '300px';
-            mdl.detailSize = '300px';
-            mdl.forceOverlay = true;
-            await onceResized(mdl);
-          });
-
-          it('default', async () => {
-            await visualDiff(div, `${dir}-force-overlay`);
-          });
+        it('force overlay', async () => {
+          mdl.masterSize = '300px';
+          mdl.detailSize = '300px';
+          mdl.forceOverlay = true;
+          await onceResized(mdl);
+          await visualDiff(div, `${dir}-force-overlay`);
         });
       });
     });
