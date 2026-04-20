@@ -58,16 +58,23 @@ describe('master-detail-layout', () => {
             await visualDiff(div, `${dir}-split-default`);
           });
 
-          it('expand both', async () => {
-            mdl.expand = 'both';
+          it('expand master', async () => {
+            mdl.expandMaster = true;
             await onceResized(mdl);
-            await visualDiff(div, `${dir}-split-expand-both`);
+            await visualDiff(div, `${dir}-split-expand-master`);
           });
 
           it('expand detail', async () => {
-            mdl.expand = 'detail';
+            mdl.expandDetail = true;
             await onceResized(mdl);
             await visualDiff(div, `${dir}-split-expand-detail`);
+          });
+
+          it('expand both', async () => {
+            mdl.expandMaster = true;
+            mdl.expandDetail = true;
+            await onceResized(mdl);
+            await visualDiff(div, `${dir}-split-expand-both`);
           });
 
           it('dark', async () => {
@@ -125,7 +132,6 @@ describe('master-detail-layout', () => {
     });
 
     it('default', async () => {
-      await onceResized(mdl);
       await visualDiff(div, 'detail-placeholder');
     });
 
@@ -135,16 +141,23 @@ describe('master-detail-layout', () => {
       await visualDiff(div, 'detail-placeholder-overflow');
     });
 
-    it('expand both', async () => {
-      mdl.expand = 'both';
+    it('expand master', async () => {
+      mdl.expandMaster = true;
       await onceResized(mdl);
-      await visualDiff(div, `detail-placeholder-expand-both`);
+      await visualDiff(div, `detail-placeholder-expand-master`);
     });
 
     it('expand detail', async () => {
-      mdl.expand = 'detail';
+      mdl.expandDetail = true;
       await onceResized(mdl);
       await visualDiff(div, `detail-placeholder-expand-detail`);
+    });
+
+    it('expand both', async () => {
+      mdl.expandMaster = true;
+      mdl.expandDetail = true;
+      await onceResized(mdl);
+      await visualDiff(div, `detail-placeholder-expand-both`);
     });
   });
 
@@ -159,11 +172,11 @@ describe('master-detail-layout', () => {
     beforeEach(async () => {
       outer = fixtureSync(
         `
-          <vaadin-master-detail-layout master-size="300px" style="height: 400px; border: 1px solid lightgray;">
+          <vaadin-master-detail-layout master-size="300px" expand-master style="height: 400px; border: 1px solid lightgray;">
             <div>
               Outer Master
             </div>
-            <vaadin-master-detail-layout master-size="200px" slot="detail-hidden">
+            <vaadin-master-detail-layout master-size="200px" expand-master slot="detail-hidden">
               <div>
                 Inner Master
               </div>

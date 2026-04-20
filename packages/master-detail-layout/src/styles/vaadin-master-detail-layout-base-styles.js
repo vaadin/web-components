@@ -104,11 +104,11 @@ export const masterDetailLayoutStyles = css`
 
   /* Expand */
 
-  :host(:is([expand='both'], [expand='master'])) {
+  :host([expand-master]) {
     --_master-extra: 1fr;
   }
 
-  :host(:is([expand='both'], [expand='detail'])) {
+  :host([expand-detail]) {
     --_detail-extra: 1fr;
   }
 

@@ -15,7 +15,8 @@ assertType<string | null | undefined>(layout.detailSize);
 assertType<string | null | undefined>(layout.masterSize);
 assertType<string | null | undefined>(layout.overlaySize);
 assertType<'layout' | 'page'>(layout.overlayContainment);
-assertType<'master' | 'detail' | 'both'>(layout.expand);
+assertType<boolean>(layout.expandMaster);
+assertType<boolean>(layout.expandDetail);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
 assertType<boolean>(layout.noAnimation);
 

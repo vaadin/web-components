@@ -59,7 +59,8 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * Attribute                 | Description
  * --------------------------|----------------------
- * `expand`                  | Set to `master`, `detail`, or `both`.
+ * `expand-master`           | Set when the master area expands to fill available space.
+ * `expand-detail`           | Set when the detail area expands to fill available space.
  * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`              | Set when the detail content is provided and visible.
  * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
@@ -136,11 +137,22 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   overlayContainment: 'layout' | 'page';
 
   /**
-   * Controls which column(s) expand to fill available space.
-   * Possible values: `'master'`, `'detail'`, `'both'`.
-   * Defaults to `'master'`.
+   * When true, the master area grows to fill the available space.
+   * If `expandDetail` is also true, both areas share the available
+   * space equally.
+   *
+   * @attr {boolean} expand-master
    */
-  expand: 'master' | 'detail' | 'both';
+  expandMaster: boolean;
+
+  /**
+   * When true, the detail area grows to fill the available space.
+   * If `expandMaster` is also true, both areas share the available
+   * space equally.
+   *
+   * @attr {boolean} expand-detail
+   */
+  expandDetail: boolean;
 
   /**
    * When true, the layout does not use animated transitions for the detail area.

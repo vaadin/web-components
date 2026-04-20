@@ -235,17 +235,11 @@
                   <vaadin-radio-button value="layout" label="Layout"></vaadin-radio-button>
                   <vaadin-radio-button value="page" label="Page"></vaadin-radio-button>
                 </vaadin-radio-group>
-                <vaadin-radio-group
-                  @change=${this._configChange}
-                  class="expand"
-                  label="Expand"
-                  theme="vertical"
-                  value="master"
-                >
-                  <vaadin-radio-button value="both" label="Both"></vaadin-radio-button>
-                  <vaadin-radio-button value="master" label="Master"></vaadin-radio-button>
-                  <vaadin-radio-button value="detail" label="Detail"></vaadin-radio-button>
-                </vaadin-radio-group>
+                <div class="expand-group">
+                  <label>Expand</label>
+                  <vaadin-checkbox @change=${this._expandChange} class="expandMaster" label="Master"></vaadin-checkbox>
+                  <vaadin-checkbox @change=${this._expandChange} class="expandDetail" label="Detail"></vaadin-checkbox>
+                </div>
                 <br />
                 <vaadin-radio-group
                   @change=${this._configChange}
@@ -289,6 +283,10 @@
           } else {
             this._mdl[prop] = value;
           }
+        }
+
+        _expandChange(e) {
+          this._mdl[e.currentTarget.className] = e.target.checked;
         }
       }
 

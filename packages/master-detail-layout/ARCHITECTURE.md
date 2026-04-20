@@ -23,14 +23,14 @@ Parts use **named grid lines** for placement:
 
 ### Expand modes
 
-The `expand` attribute controls which extra track(s) become `1fr`:
+The `expand-master` and `expand-detail` attributes control which extra track(s) become `1fr`:
 
-| `expand` | `--_master-extra` | `--_detail-extra` |
-| -------- | ----------------- | ----------------- |
-| (none)   | `0px`             | `0px`             |
-| `both`   | `1fr`             | `1fr`             |
-| `master` | `1fr`             | `0px`             |
-| `detail` | `0px`             | `1fr`             |
+| Attributes                      | `--_master-extra` | `--_detail-extra` |
+| ------------------------------- | ----------------- | ----------------- |
+| (none)                          | `0px`             | `0px`             |
+| `expand-master`                 | `1fr`             | `0px`             |
+| `expand-detail`                 | `0px`             | `1fr`             |
+| `expand-master` `expand-detail` | `1fr`             | `1fr`             |
 
 ### Vertical orientation
 
