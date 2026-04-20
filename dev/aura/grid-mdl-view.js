@@ -228,7 +228,6 @@ customElements.define(
               detail-size="25rem"
               overlay-containment="viewport"
               expand="master"
-              style="border-radius: calc(var(--_app-layout-radius) - var(--aura-app-layout-border-width))"
             >
               <div class="aura-view">
                 <header>
