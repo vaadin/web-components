@@ -13,7 +13,7 @@ vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
     -1px 0 0 0 var(--aura-overlay-outline-color),
     var(--aura-overlay-shadow)
   );
-  --_inset: var(--aura-mdl-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
+  --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
   margin: var(--_inset);
   border-radius: clamp(
     0px,
