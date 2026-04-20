@@ -173,7 +173,7 @@ Covers requirement(s): 11
 </vaadin-breadcrumb>
 ```
 
-**Why this shape:** The ARIA Authoring Practices Guide specifies `aria-current="page"` for the current breadcrumb item. Since the component already knows which item is current (the one without `path`), it applies this automatically — no developer action required.
+**Why this shape:** The ARIA Authoring Practices Guide specifies `aria-current="page"` for the current breadcrumb item. Since the component already knows which item is current (the last item, if it has no `path`), it applies this automatically — no developer action required.
 
 ---
 
