@@ -50,8 +50,8 @@ describe('master-detail-layout', () => {
       await visualDiff(document.body, 'drawer-page');
     });
 
-    it('inset-drawer', async () => {
-      mdl.setAttribute('theme', 'inset-drawer');
+    it('inset', async () => {
+      mdl.style.setProperty('--aura-master-detail-layout-detail-inset', '0px');
       await visualDiff(element, 'drawer-inset');
     });
   });
