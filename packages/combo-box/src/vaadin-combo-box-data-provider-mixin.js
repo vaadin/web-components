@@ -167,6 +167,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
       this.__synchronizeControllerState();
 
+      this.__scrollToPendingIndexIfNeeded();
+
       if (!this.opened && !this._isInputFocused()) {
         this._commitValue();
       }

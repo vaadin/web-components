@@ -5,6 +5,7 @@
  */
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * Checks if the value is supported as an item value in this control.
@@ -127,6 +128,60 @@ export const ComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Scrolls the dropdown to the item at the given index and sets it as the
+     * focused (highlighted) item. Safe to call before the dropdown is opened
+     * or while the data provider is loading: the call is queued and executed
+     * once the overlay is open and not loading.
+     *
+     * Because this sets the focused item, closing the dropdown without an
+     * explicit selection change (e.g. via outside click or blur) will commit
+     * the focused item as `selectedItem`. In the typical use case (scroll to
+     * the currently selected item) this is a no-op; callers scrolling to a
+     * different index should be aware of this behavior.
+     *
+     * @param {number} index Index of the item to scroll to
+     */
+    scrollToIndex(index) {
+      if (typeof index !== 'number' || isNaN(index) || index < 0) {
+        return;
+      }
+
+      if (!this._overlayOpened || this.loading) {
+        this.__scrollToPendingIndex = index;
+        return;
+      }
+
+      if (!this._dropdownItems || index >= this._dropdownItems.length) {
+        return;
+      }
+
+      if (this._dropdownItems[index] instanceof ComboBoxPlaceholder) {
+        // The target item is on a page that has not been loaded yet. Trigger
+        // a viewport scroll so the data provider requests the containing page,
+        // and queue the actual focus-index update for after the page loads
+        // (see `__onDataProviderPageLoaded` → `__scrollToPendingIndexIfNeeded`).
+        this.__scrollToPendingIndex = index;
+        this._scrollIntoView(index);
+        return;
+      }
+
+      delete this.__scrollToPendingIndex;
+      this._focusedIndex = index;
+      requestAnimationFrame(() => {
+        if (this.isConnected) {
+          this._updateActiveDescendant(index);
+        }
+      });
+    }
+
+    /** @private */
+    __scrollToPendingIndexIfNeeded() {
+      if (this.__scrollToPendingIndex !== undefined && !this.loading) {
+        this.scrollToIndex(this.__scrollToPendingIndex);
+      }
+    }
+
+    /**
      * Requests an update for the content of items.
      * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
      *
@@ -163,6 +218,18 @@ export const ComboBoxMixin = (superClass) =>
       if (opened) {
         this._scroller.style.maxHeight =
           getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
+      } else {
+        // Reset both the DOM scrollTop and the virtualizer adapter's
+        // `_scrollPosition` cache. Without the cache reset, the adapter's
+        // ResizeObserver restores the prior scroll position on next open,
+        // leaving the dropdown stuck at the previous offset. The virtualizer's
+        // own `scrollToIndex` can't help here: by the time this observer runs,
+        // `offsetHeight` is already 0 and its scroll API is a no-op.
+        this._scroller.scrollTop = 0;
+        const adapter = this._scroller.__virtualizer && this._scroller.__virtualizer.__adapter;
+        if (adapter) {
+          adapter._scrollPosition = 0;
+        }
       }
 
       this._scroller.setProperties({
@@ -288,6 +355,8 @@ export const ComboBoxMixin = (superClass) =>
 
       // _detectAndDispatchChange() should not consider value changes done before opening
       this._lastCommittedValue = this.value;
+
+      this.__scrollToPendingIndexIfNeeded();
     }
 
     /**
