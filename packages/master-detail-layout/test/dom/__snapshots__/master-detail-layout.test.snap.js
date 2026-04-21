@@ -277,7 +277,7 @@ snapshots["vaadin-master-detail-layout nested layouts default"] =
   orientation="horizontal"
   overlay-containment="layout"
   overlay-size="100px"
-  style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 501px;"
+  style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 501px;"
 >
   <div>
     Master 0
@@ -291,7 +291,7 @@ snapshots["vaadin-master-detail-layout nested layouts default"] =
     overlay-containment="layout"
     overlay-size="100px"
     slot="detail"
-    style="--_master-size: 100px; --_detail-size: 400px; --_overlay-size: 100px;"
+    style="--_overlay-size: 100px; --_master-size: 100px; --_detail-size: 400px;"
   >
     <div>
       Master 1
@@ -304,7 +304,7 @@ snapshots["vaadin-master-detail-layout nested layouts default"] =
       overlay-containment="layout"
       overlay-size="100px"
       slot="detail"
-      style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 201px;"
+      style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 201px;"
     >
       <div>
         Master 2
@@ -342,7 +342,7 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
   overlay=""
   overlay-containment="layout"
   overlay-size="100px"
-  style="--_master-size: 100px; --_overlay-size: 100px; width: 200px; --_detail-cached-size: 501px;"
+  style="--_overlay-size: 100px; --_master-size: 100px; width: 200px; --_detail-cached-size: 501px;"
 >
   <div>
     Master 0
@@ -358,7 +358,7 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
     overlay-containment="layout"
     overlay-size="100px"
     slot="detail"
-    style="--_master-size: 100px; --_detail-size: 400px; --_overlay-size: 100px;"
+    style="--_overlay-size: 100px; --_master-size: 100px; --_detail-size: 400px;"
   >
     <div>
       Master 1
@@ -373,7 +373,7 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
       overlay-containment="layout"
       overlay-size="100px"
       slot="detail"
-      style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 201px;"
+      style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 201px;"
     >
       <div>
         Master 2
@@ -411,7 +411,7 @@ snapshots["vaadin-master-detail-layout nested layouts forceOverlay on child"] =
   orientation="horizontal"
   overlay-containment="layout"
   overlay-size="100px"
-  style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 101px;"
+  style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 101px;"
 >
   <div>
     Master 0
@@ -428,7 +428,7 @@ snapshots["vaadin-master-detail-layout nested layouts forceOverlay on child"] =
     overlay-containment="layout"
     overlay-size="100px"
     slot="detail"
-    style="--_master-size: 100px; --_detail-size: 400px; --_overlay-size: 100px;"
+    style="--_overlay-size: 100px; --_master-size: 100px; --_detail-size: 400px;"
   >
     <div>
       Master 1
@@ -443,7 +443,7 @@ snapshots["vaadin-master-detail-layout nested layouts forceOverlay on child"] =
       overlay-containment="layout"
       overlay-size="100px"
       slot="detail"
-      style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 201px;"
+      style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 201px;"
     >
       <div>
         Master 2
