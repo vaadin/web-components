@@ -62,9 +62,9 @@
     "@vaadin/virtual-list": "25.2.0-alpha8"
   },
   "devDependencies": {
-    "@rollup-extras/plugin-copy": "^1.11.1",
+    "@rollup-extras/plugin-copy": "^2.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-terser": "^1.0.0",
     "@web/rollup-plugin-html": "^2.3.0",
     "postcss": "^8.1.0",
     "postcss-import": "^16.1.1",
