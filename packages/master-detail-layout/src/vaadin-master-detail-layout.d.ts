@@ -162,7 +162,9 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   noAnimation: boolean;
 
   /**
-   * When true, the layout forces the detail area to be shown as an overlay.
+   * When true, the layout forces the detail area to be shown as an overlay,
+   * even if there is enough space for master and detail to be shown next to
+   * each other using the default (split) mode.
    *
    * @attr {boolean} force-overlay
    */
