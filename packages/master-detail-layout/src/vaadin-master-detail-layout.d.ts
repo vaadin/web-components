@@ -162,6 +162,15 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   noAnimation: boolean;
 
   /**
+   * When true, the layout forces the detail area to be shown as an overlay,
+   * even if there is enough space for master and detail to be shown next to
+   * each other using the default (split) mode.
+   *
+   * @attr {boolean} force-overlay
+   */
+  forceOverlay: boolean;
+
+  /**
    * When `detailSize` is not explicitly set, re-measures the cached intrinsic size of
    * the detail content by placing it in a min-content CSS grid column, then repeats
    * this process for ancestor master-detail layouts without an explicit `detailSize`,

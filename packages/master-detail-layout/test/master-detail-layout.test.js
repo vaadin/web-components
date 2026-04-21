@@ -167,4 +167,86 @@ describe('vaadin-master-detail-layout', () => {
       expect(parseFloat(getComputedStyle(detail).height)).to.equal(500);
     });
   });
+
+  describe('recalculateLayout', () => {
+    let layout, spy;
+
+    beforeEach(() => {
+      layout = document.createElement('vaadin-master-detail-layout');
+      layout.innerHTML = `
+        <div>Master</div>
+        <div slot="detail">Detail</div>
+      `;
+      spy = sinon.spy(layout, 'recalculateLayout');
+    });
+
+    afterEach(() => {
+      layout.remove();
+    });
+
+    describe('initial render', () => {
+      it('should not be called when masterSize is provided initially', async () => {
+        layout.masterSize = '200px';
+        document.body.appendChild(layout);
+        await onceResized(layout);
+        expect(spy).to.not.be.called;
+      });
+
+      it('should not be called when detailSize is provided initially', async () => {
+        layout.detailSize = '200px';
+        document.body.appendChild(layout);
+        await onceResized(layout);
+        expect(spy).to.not.be.called;
+      });
+
+      it('should not be called when orientation is provided initially', async () => {
+        layout.orientation = 'vertical';
+        document.body.appendChild(layout);
+        await onceResized(layout);
+        expect(spy).to.not.be.called;
+      });
+
+      it('should not be called when forceOverlay is provided initially', async () => {
+        layout.forceOverlay = true;
+        document.body.appendChild(layout);
+        await onceResized(layout);
+        expect(spy).to.not.be.called;
+      });
+    });
+
+    describe('after initial render', () => {
+      beforeEach(async () => {
+        layout.masterSize = '200px';
+        layout.detailSize = '200px';
+        document.body.appendChild(layout);
+        await onceResized(layout);
+        spy.resetHistory();
+      });
+
+      it('should be called when masterSize is changed', () => {
+        layout.masterSize = '300px';
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should be called when detailSize is changed', () => {
+        layout.detailSize = '300px';
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should be called when orientation is changed', () => {
+        layout.orientation = 'vertical';
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should be called when forceOverlay is changed', () => {
+        layout.forceOverlay = true;
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should not throw when called on a disconnected element', () => {
+        layout.remove();
+        expect(() => layout.recalculateLayout()).to.not.throw();
+      });
+    });
+  });
 });

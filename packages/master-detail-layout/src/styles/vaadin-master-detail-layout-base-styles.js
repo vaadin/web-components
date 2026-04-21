@@ -49,20 +49,30 @@ export const masterDetailLayoutStyles = css`
     --_detail-size: var(--_detail-cached-size);
     --_detail-extra: 0px;
     --_detail-cached-size: min-content;
+
+    /* prettier-ignore */
+    --_grid-template:
+      [master-start] var(--_master-size) [master-extra] var(--_master-extra)
+      [detail-start] var(--_detail-size) [detail-extra] var(--_detail-extra)
+      [detail-end];
+  }
+
+  :host([force-overlay]) {
+    /* prettier-ignore */
+    --_grid-template:
+      [master-start] var(--_master-size) [master-extra] var(--_master-extra)
+      [detail-start] 0px                 [detail-extra] 0px
+      [detail-end];
   }
 
   :host([orientation='horizontal']) {
-    grid-template-columns:
-      [master-start] var(--_master-size) [master-extra-start] var(--_master-extra)
-      [detail-start] var(--_detail-size) [detail-extra-start] var(--_detail-extra) [detail-end];
+    grid-template-columns: var(--_grid-template);
     grid-template-rows: 100%;
   }
 
   :host([orientation='vertical']) {
     grid-template-columns: 100%;
-    grid-template-rows:
-      [master-start] var(--_master-size) [master-extra-start] var(--_master-extra)
-      [detail-start] var(--_detail-size) [detail-extra-start] var(--_detail-extra) [detail-end];
+    grid-template-rows: var(--_grid-template);
   }
 
   /* CSS grid placement */
@@ -78,7 +88,7 @@ export const masterDetailLayoutStyles = css`
       min-content resolves to 0, making it impossible to measure the detail's intrinsic
       minimum width from JavaScript.
     */
-    --_detail-area: detail-start / detail-extra-start;
+    --_detail-area: detail-start / detail-extra;
   }
 
   :host(:is([has-detail], [has-detail-placeholder]):not([recalculating-detail-size])) {

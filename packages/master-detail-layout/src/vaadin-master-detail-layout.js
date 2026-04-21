@@ -121,7 +121,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       detailSize: {
         type: String,
         sync: true,
-        observer: '__detailSizeChanged',
       },
 
       /**
@@ -135,7 +134,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       masterSize: {
         type: String,
         sync: true,
-        observer: '__masterSizeChanged',
       },
 
       /**
@@ -162,7 +160,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         value: 'horizontal',
         reflectToAttribute: true,
         sync: true,
-        observer: '__orientationChanged',
       },
 
       /**
@@ -217,6 +214,20 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         type: Boolean,
         value: false,
         reflectToAttribute: true,
+      },
+
+      /**
+       * When true, the layout forces the detail area to be shown as an overlay,
+       * even if there is enough space for master and detail to be shown next to
+       * each other using the default (split) mode.
+       *
+       * @attr {boolean} force-overlay
+       */
+      forceOverlay: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
       },
 
       /** @private */
@@ -287,27 +298,24 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     cancelAnimations(this);
   }
 
-  /** @private */
-  __masterSizeChanged(size, oldSize) {
-    this.style.setProperty('--_master-size', size);
+  /** @protected */
+  updated(props) {
+    super.updated(props);
 
-    if (oldSize != null) {
-      this.recalculateLayout();
+    if (props.has('masterSize')) {
+      this.style.setProperty('--_master-size', this.masterSize);
     }
-  }
 
-  /** @private */
-  __detailSizeChanged(size, oldSize) {
-    this.style.setProperty('--_detail-size', size);
-
-    if (oldSize != null) {
-      this.recalculateLayout();
+    if (props.has('detailSize')) {
+      this.style.setProperty('--_detail-size', this.detailSize);
     }
-  }
 
-  /** @private */
-  __orientationChanged(_orientation, oldOrientation) {
-    if (oldOrientation != null) {
+    if (
+      (props.has('masterSize') && props.get('masterSize') != null) ||
+      (props.has('detailSize') && props.get('detailSize') != null) ||
+      (props.has('orientation') && props.get('orientation') != null) ||
+      (props.has('forceOverlay') && props.get('forceOverlay') != null)
+    ) {
       this.recalculateLayout();
     }
   }
@@ -375,7 +383,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const trackSizesProp = isVertical ? 'gridTemplateRows' : 'gridTemplateColumns';
     const trackSizes = parseTrackSizes(computedStyle[trackSizesProp]);
 
-    const hasOverflow = (hasDetail || hasDetailPlaceholder) && detectOverflow(hostSize, trackSizes);
+    const hasOverflow =
+      (hasDetail || hasDetailPlaceholder) && (this.forceOverlay || detectOverflow(hostSize, trackSizes));
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(slottedDetail)[0] : null;
 
     return {
