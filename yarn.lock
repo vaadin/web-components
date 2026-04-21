@@ -893,12 +893,17 @@
     "@emnapi/runtime" "^1.7.1"
     "@tybys/wasm-util" "^0.10.1"
 
-"@niceties/logger@^1.1.4", "@niceties/logger@^1.1.5":
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/@niceties/logger/-/logger-1.1.13.tgz#cdc18b3db436bbbc58c42a8a7d3eadfb41217460"
-  integrity sha512-yorxAcjtpxCgZQy1o4Lq3Umr2rzwHyMN9dZCgZBKXIFkxlhsIH7olQFPSLJdvRmQC+4iaPFcPIq1WvN1ObtPBA==
+"@niceties/ansi@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@niceties/ansi/-/ansi-1.1.2.tgz#9829b288577d45732644602e19f0ed8d92894af9"
+  integrity sha512-4SZgmseZqfGAIrcXmfVes+Uj51KMUQNZ3X31faRB8g2tyebDzW+zlkeg1qmhilrgJOi3nm6EOMlkfJVrgiBzZg==
+
+"@niceties/logger@^2.1.0":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@niceties/logger/-/logger-2.1.1.tgz#103a140c124e9671044a5278bb50053170441b6d"
+  integrity sha512-taqDVn4TRCh3j5QJQNlWKE9MSHxGh7nr9zE8SkdHMvsijp6Vx6qd3XYSV7bF7nnYYC/JYjJILxfqDeEUeEjtfQ==
   dependencies:
-    kleur "^4.1.4"
+    "@niceties/ansi" "^1.1.2"
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -1459,22 +1464,21 @@
     tar-fs "^3.0.8"
     yargs "^17.7.2"
 
-"@rollup-extras/plugin-copy@^1.11.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@rollup-extras/plugin-copy/-/plugin-copy-1.11.1.tgz#e59f74c77d301007a2a156f3533e4612ee7407a5"
-  integrity sha512-2NEwJE+yDjfYFaeG/2AOqDQHNRO5UCo7SysTuBpkn69RGSONa2fSeLRPWENb9Ptuaq54dE8B11HoeFppxbz8Wg==
+"@rollup-extras/plugin-copy@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@rollup-extras/plugin-copy/-/plugin-copy-2.1.0.tgz#bce164d8355b1c8269d3f2c08dc532a6939ae098"
+  integrity sha512-PR53b1TBheVEKH3PTu1aOYritCLdYYi/PwWVe6PlQYVgdRXZ7pRDvSG/s4xmyR5sh7LwYa6N0OcIkOh3IAc5VA==
   dependencies:
-    "@niceties/logger" "^1.1.4"
-    "@rollup-extras/utils" "^1.4.6"
-    glob "^10.0.0"
+    "@niceties/logger" "^2.1.0"
+    "@rollup-extras/utils" "^2.0.0"
     glob-parent "^6.0.2"
 
-"@rollup-extras/utils@^1.4.6":
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/@rollup-extras/utils/-/utils-1.4.6.tgz#7a6bd64c7bd6f9fc2f113466bd4ecd084098879b"
-  integrity sha512-2+mA7lztwWUr2TYjHzT694GKiFEJBuaQbGbqpqFhtlCAvsg6m9dX7FIEzvsgVE7Ih7ecOUNPuSosed1wrcPB3Q==
+"@rollup-extras/utils@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@rollup-extras/utils/-/utils-2.0.0.tgz#7b248a6eb3cefc1f5d5d1216c7bec0e2b7a0f18e"
+  integrity sha512-20/JAVzvQPvuTNIYnvSDq+BIH28iks1VnjT5RPJuI4SXcfSZtruV57Asw3++mjmJbhOihx8UdfFC3QVzuux3rw==
   dependencies:
-    "@niceties/logger" "^1.1.5"
+    "@niceties/logger" "^2.1.0"
 
 "@rollup/plugin-node-resolve@^15.0.1":
   version "15.3.1"
@@ -1498,12 +1502,12 @@
     is-module "^1.0.0"
     resolve "^1.22.1"
 
-"@rollup/plugin-terser@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-terser/-/plugin-terser-0.4.4.tgz#15dffdb3f73f121aa4fbb37e7ca6be9aeea91962"
-  integrity sha512-XHeJC5Bgvs8LfukDwWZp7yeqin6ns8RTl2B9avbejt6tZqsqvVoWI7ZTQrcNsfKEDWBTnTxM8nMDkO2IFFbd0A==
+"@rollup/plugin-terser@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-terser/-/plugin-terser-1.0.0.tgz#dabbc4414d127aa7d43fc5e7ea8699b9c3bc59e5"
+  integrity sha512-FnCxhTBx6bMOYQrar6C8h3scPt8/JwIzw3+AJ2K++6guogH5fYaIFia+zZuhqv0eo1RN7W1Pz630SyvLbDjhtQ==
   dependencies:
-    serialize-javascript "^6.0.1"
+    serialize-javascript "^7.0.3"
     smob "^1.0.0"
     terser "^5.17.4"
 
@@ -6557,7 +6561,7 @@ klaw-sync@^6.0.0:
   dependencies:
     graceful-fs "^4.1.11"
 
-kleur@^4.1.4, kleur@^4.1.5:
+kleur@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.5.tgz#95106101795f7050c6c650f350c683febddb1780"
   integrity sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==
@@ -9032,13 +9036,6 @@ quickselect@^3.0.0:
   resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-3.0.0.tgz#a37fc953867d56f095a20ac71c6d27063d2de603"
   integrity sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g==
 
-randombytes@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
-  integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
-  dependencies:
-    safe-buffer "^5.1.0"
-
 range-parser@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
@@ -9401,7 +9398,7 @@ safe-array-concat@^1.1.3:
     has-symbols "^1.1.0"
     isarray "^2.0.5"
 
-safe-buffer@5.2.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
+safe-buffer@5.2.1, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
@@ -9488,12 +9485,10 @@ send@^1.1.0:
     range-parser "^1.2.1"
     statuses "^2.0.1"
 
-serialize-javascript@^6.0.1:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-6.0.2.tgz#defa1e055c83bf6d59ea805d8da862254eb6a6c2"
-  integrity sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==
-  dependencies:
-    randombytes "^2.1.0"
+serialize-javascript@^7.0.3:
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-7.0.5.tgz#c798cc0552ffbb08981914a42a8756e339d0d5b1"
+  integrity sha512-F4LcB0UqUl1zErq+1nYEEzSHJnIwb3AF2XWB94b+afhrekOUijwooAYqFyRbjYkm2PAKBabx6oYv/xDxNi8IBw==
 
 set-blocking@^2.0.0:
   version "2.0.0"
