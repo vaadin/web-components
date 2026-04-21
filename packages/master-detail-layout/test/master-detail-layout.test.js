@@ -244,7 +244,7 @@ describe('vaadin-master-detail-layout', () => {
       });
 
       it('should not throw when called on a disconnected element', () => {
-        layout.parentElement.removeChild(layout);
+        layout.remove();
         expect(() => layout.recalculateLayout()).to.not.throw();
       });
     });
