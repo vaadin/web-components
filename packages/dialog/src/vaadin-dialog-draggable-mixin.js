@@ -103,9 +103,7 @@ export const DialogDraggableMixin = (superClass) =>
             this.top = top;
             this.left = left;
           }
-          this.dispatchEvent(
-            new CustomEvent('drag-start', { bubbles: true, composed: true, detail: { width, height, top, left } }),
-          );
+          this.dispatchEvent(new CustomEvent('drag-start', { detail: { width, height, top, left } }));
         }
       }
     }
@@ -135,9 +133,7 @@ export const DialogDraggableMixin = (superClass) =>
 
     /** @private */
     _stopDrag() {
-      this.dispatchEvent(
-        new CustomEvent('dragged', { bubbles: true, composed: true, detail: { top: this.top, left: this.left } }),
-      );
+      this.dispatchEvent(new CustomEvent('dragged', { detail: { top: this.top, left: this.left } }));
       window.removeEventListener('mouseup', this._stopDrag);
       window.removeEventListener('touchend', this._stopDrag);
       window.removeEventListener('mousemove', this._drag);
