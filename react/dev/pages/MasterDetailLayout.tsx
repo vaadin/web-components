@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MasterDetailLayout } from '../../packages/react-components/src/MasterDetailLayout.js';
 import { Button } from '../../packages/react-components/src/Button.js';
+import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
 import { RadioButton } from '../../packages/react-components/src/RadioButton.js';
 import { RadioGroup } from '../../packages/react-components/src/RadioGroup.js';
 import { TextField } from '../../packages/react-components/src/TextField.js';
@@ -32,6 +33,10 @@ function DetailContent({ id, onClose, onReplace }: { id: number; onClose: () => 
 
 export default function () {
   const [orientation, setOrientation] = useState('horizontal');
+  const [overlayContainment, setOverlayContainment] = useState<'layout' | 'page'>('layout');
+  const [expandMaster, setExpandMaster] = useState(false);
+  const [expandDetail, setExpandDetail] = useState(false);
+  const [forceOverlay, setForceOverlay] = useState(false);
   const [masterSize, setMasterSize] = useState('auto');
   const [detailSize, setDetailSize] = useState('auto');
   const [overlaySize, setOverlaySize] = useState('auto');
@@ -48,6 +53,10 @@ export default function () {
       <MasterDetailLayout
         style={{ border: '1px solid lightgray', resize: 'both' }}
         orientation={orientation as 'horizontal' | 'vertical'}
+        overlayContainment={overlayContainment}
+        expandMaster={expandMaster}
+        expandDetail={expandDetail}
+        forceOverlay={forceOverlay}
         masterSize={sizeOrUndefined(masterSize)}
         detailSize={sizeOrUndefined(detailSize)}
         overlaySize={sizeOrUndefined(overlaySize)}
@@ -76,6 +85,30 @@ export default function () {
               <RadioButton value="100%" label="100%" />
             </RadioGroup>
 
+            <RadioGroup
+              label="Overlay Containment"
+              theme="vertical"
+              value={overlayContainment}
+              onValueChanged={(e) => setOverlayContainment(e.detail.value as 'layout' | 'page')}
+            >
+              <RadioButton value="layout" label="Layout" />
+              <RadioButton value="page" label="Page" />
+            </RadioGroup>
+
+            <div>
+              <label>Expand</label>
+              <Checkbox
+                label="Master"
+                checked={expandMaster}
+                onCheckedChanged={(e) => setExpandMaster(e.detail.value)}
+              />
+              <Checkbox
+                label="Detail"
+                checked={expandDetail}
+                onCheckedChanged={(e) => setExpandDetail(e.detail.value)}
+              />
+            </div>
+
             <br />
 
             <RadioGroup
@@ -102,6 +135,11 @@ export default function () {
 
             <br />
 
+            <Checkbox
+              label="Force overlay"
+              checked={forceOverlay}
+              onCheckedChanged={(e) => setForceOverlay(e.detail.value)}
+            />
             <Button onClick={openDetail}>Open Detail</Button>
 
             <p>{lorem}</p>
