@@ -56,7 +56,7 @@ snapshots["vaadin-master-detail-layout host masterSize and detailSize"] =
 `;
 /* end snapshot vaadin-master-detail-layout host masterSize and detailSize */
 
-snapshots["vaadin-master-detail-layout host expandMaster"] =
+snapshots["vaadin-master-detail-layout host expandMaster"] = 
 `<vaadin-master-detail-layout
   expand-master=""
   has-master=""
@@ -70,7 +70,7 @@ snapshots["vaadin-master-detail-layout host expandMaster"] =
 `;
 /* end snapshot vaadin-master-detail-layout host expandMaster */
 
-snapshots["vaadin-master-detail-layout host expandDetail"] =
+snapshots["vaadin-master-detail-layout host expandDetail"] = 
 `<vaadin-master-detail-layout
   expand-detail=""
   has-master=""
@@ -84,7 +84,7 @@ snapshots["vaadin-master-detail-layout host expandDetail"] =
 `;
 /* end snapshot vaadin-master-detail-layout host expandDetail */
 
-snapshots["vaadin-master-detail-layout shadow default"] =
+snapshots["vaadin-master-detail-layout shadow default"] = 
 `<div
   id="backdrop"
   part="backdrop"
@@ -194,6 +194,27 @@ snapshots["vaadin-master-detail-layout detail removed"] =
 </vaadin-master-detail-layout>
 `;
 /* end snapshot vaadin-master-detail-layout detail removed */
+
+snapshots["vaadin-master-detail-layout detail forceOverlay"] = 
+`<vaadin-master-detail-layout
+  force-overlay=""
+  has-detail=""
+  has-master=""
+  master-size="300px"
+  orientation="horizontal"
+  overlay=""
+  overlay-containment="layout"
+  style="--_master-size: 300px;"
+>
+  <div>
+    Master content
+  </div>
+  <div slot="detail">
+    Detail content
+  </div>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout detail forceOverlay */
 
 snapshots["vaadin-master-detail-layout detail placeholder default"] = 
 `<vaadin-master-detail-layout
@@ -381,27 +402,6 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
 </vaadin-master-detail-layout>
 `;
 /* end snapshot vaadin-master-detail-layout nested layouts overflow */
-
-snapshots["vaadin-master-detail-layout detail forceOverlay"] = 
-`<vaadin-master-detail-layout
-  force-overlay=""
-  has-detail=""
-  has-master=""
-  master-size="300px"
-  orientation="horizontal"
-  overlay=""
-  overlay-containment="layout"
-  style="--_master-size: 300px;"
->
-  <div>
-    Master content
-  </div>
-  <div slot="detail">
-    Detail content
-  </div>
-</vaadin-master-detail-layout>
-`;
-/* end snapshot vaadin-master-detail-layout detail forceOverlay */
 
 snapshots["vaadin-master-detail-layout nested layouts forceOverlay on child"] = 
 `<vaadin-master-detail-layout
