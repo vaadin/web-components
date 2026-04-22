@@ -740,4 +740,118 @@ describe('vaadin-breadcrumb', () => {
       });
     });
   });
+
+  describe('overflow separator', () => {
+    // Reuse the deterministic-width fixture pattern from the overflow
+    // detection block so we can reliably toggle has-overflow.
+    const ITEM_WIDTH = 100;
+
+    function fixedWidthItem(id: string, label: string, path?: string): string {
+      const pathAttr = path ? ` path="${path}"` : '';
+      return `<vaadin-breadcrumb-item data-test-id="${id}"${pathAttr} style="width: ${ITEM_WIDTH}px; box-sizing: border-box; flex: none;">${label}</vaadin-breadcrumb-item>`;
+    }
+
+    async function buildFixture(width: number, attrs = ''): Promise<{ wrapper: HTMLElement; breadcrumb: Breadcrumb }> {
+      const wrapper = fixtureSync(`
+        <div ${attrs} style="width: ${width}px;">
+          <vaadin-breadcrumb>
+            ${fixedWidthItem('root', 'Root', '/')}
+            ${fixedWidthItem('a', 'A', '/a')}
+            ${fixedWidthItem('b', 'B', '/b')}
+            ${fixedWidthItem('c', 'C', '/c')}
+            ${fixedWidthItem('d', 'D', '/d')}
+            ${fixedWidthItem('e', 'E', '/e')}
+            ${fixedWidthItem('current', 'Current')}
+          </vaadin-breadcrumb>
+        </div>
+      `) as HTMLElement;
+      const breadcrumb = wrapper.querySelector('vaadin-breadcrumb') as Breadcrumb;
+      await nextRender();
+      // Allow the initial ResizeObserver callback to fire.
+      await nextFrame();
+      await nextFrame();
+      return { wrapper, breadcrumb };
+    }
+
+    async function setWrapperWidth(wrapper: HTMLElement, breadcrumb: Breadcrumb, width: number): Promise<void> {
+      wrapper.style.width = `${width}px`;
+      await nextResize(breadcrumb);
+      await nextFrame();
+    }
+
+    // Returns the x-scale of the resolved transform on the overflow's
+    // ::after pseudo-element. Returns null when no transform is applied.
+    function getAfterTransformXScale(el: Element): number | null {
+      const value = getComputedStyle(el, '::after').transform;
+      if (!value || value === 'none') {
+        return null;
+      }
+      const match = /^matrix\(\s*(-?\d+(?:\.\d+)?)/u.exec(value);
+      if (match) {
+        return parseFloat(match[1]);
+      }
+      const scaleMatch = /scaleX\(\s*(-?\d+(?:\.\d+)?)\s*\)/u.exec(value);
+      return scaleMatch ? parseFloat(scaleMatch[1]) : null;
+    }
+
+    it('should render a visible ::after pseudo-element on [part="overflow"] when has-overflow is set', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      const style = getComputedStyle(overflow, '::after');
+      expect(style.display).to.equal('inline-block');
+      expect(style.maskImage).to.not.equal('none');
+      expect(style.maskImage).to.include('url(');
+    });
+
+    it('should hide the overflow element (and therefore its ::after separator) when has-overflow is not set', async () => {
+      const { breadcrumb } = await buildFixture(2000);
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.false;
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      // The parent's `display: none` is what removes the separator from
+      // the layout; assert that explicitly.
+      expect(getComputedStyle(overflow).display).to.equal('none');
+    });
+
+    it('should flip the overflow ::after horizontally inside a dir="rtl" ancestor', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000, 'dir="rtl"');
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      const xScale = getAfterTransformXScale(overflow);
+      expect(xScale).to.equal(-1);
+    });
+
+    it('should not flip the overflow ::after horizontally outside an RTL context', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      const xScale = getAfterTransformXScale(overflow);
+      // Either no transform at all, or an identity matrix (xScale === 1).
+      expect(xScale === null || xScale === 1).to.be.true;
+    });
+
+    it('should reflect a custom --vaadin-breadcrumb-separator URL in the overflow ::after mask-image', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      const customUrl =
+        "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M0 0h24v24H0z'/></svg>\")";
+      breadcrumb.style.setProperty('--vaadin-breadcrumb-separator', customUrl);
+
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      const maskImage = getComputedStyle(overflow, '::after').maskImage;
+      // The browser normalises url(...) values; check that the inner data URI matches.
+      expect(maskImage).to.include('M0 0h24v24H0z');
+      // And that the default chevron token is no longer in effect.
+      expect(maskImage).to.not.include('m9 18 6-6-6-6');
+    });
+  });
 });
