@@ -54,7 +54,15 @@ class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(PolylitMixin
 
   /** @protected */
   render() {
-    return html``;
+    return html`
+      <div role="list" part="list">
+        <slot name="root"></slot>
+        <div role="listitem" part="overflow" hidden>
+          <button part="overflow-button" aria-label="" aria-haspopup="true" aria-expanded="false"></button>
+        </div>
+        <slot></slot>
+      </div>
+    `;
   }
 }
 
