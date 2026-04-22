@@ -227,6 +227,83 @@ describe('vaadin-breadcrumb-item', () => {
     });
   });
 
+  describe('separator', () => {
+    // Helper: returns the x-scale (the `a` component) of the resolved transform
+    // matrix on the ::after pseudo-element. Returns null when there is no
+    // transform applied.
+    function getAfterTransformXScale(el: Element): number | null {
+      const value = getComputedStyle(el, '::after').transform;
+      if (!value || value === 'none') {
+        return null;
+      }
+      // matrix(a, b, c, d, tx, ty)  -- scaleX(-1) resolves to "matrix(-1, 0, 0, 1, 0, 0)"
+      const match = /^matrix\(\s*(-?\d+(?:\.\d+)?)/u.exec(value);
+      if (match) {
+        return parseFloat(match[1]);
+      }
+      // Fallback: the user agent may report scaleX(...) literally.
+      const scaleMatch = /scaleX\(\s*(-?\d+(?:\.\d+)?)\s*\)/u.exec(value);
+      return scaleMatch ? parseFloat(scaleMatch[1]) : null;
+    }
+
+    let firstItem: BreadcrumbItem;
+    let lastItem: BreadcrumbItem;
+
+    beforeEach(async () => {
+      const wrapper = fixtureSync(
+        '<div><vaadin-breadcrumb-item path="/foo">Foo</vaadin-breadcrumb-item><vaadin-breadcrumb-item>Bar</vaadin-breadcrumb-item></div>',
+      ) as HTMLDivElement;
+      await nextRender();
+      [firstItem, lastItem] = wrapper.querySelectorAll('vaadin-breadcrumb-item') as NodeListOf<BreadcrumbItem>;
+    });
+
+    it('should render a visible ::after pseudo-element on a non-last item', () => {
+      const style = getComputedStyle(firstItem, '::after');
+      expect(style.display).to.equal('inline-block');
+      expect(style.maskImage).to.not.equal('none');
+      expect(style.maskImage).to.include('url(');
+    });
+
+    it('should hide the ::after pseudo-element on the :last-of-type item', () => {
+      expect(getComputedStyle(lastItem, '::after').display).to.equal('none');
+    });
+
+    it('should hide the ::after pseudo-element on an item with the current attribute', async () => {
+      firstItem.setAttribute('current', '');
+      await nextUpdate(firstItem);
+      expect(getComputedStyle(firstItem, '::after').display).to.equal('none');
+    });
+
+    it('should reflect a custom --vaadin-breadcrumb-separator URL in the ::after mask-image', () => {
+      const customUrl =
+        "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M0 0h24v24H0z'/></svg>\")";
+      firstItem.style.setProperty('--vaadin-breadcrumb-separator', customUrl);
+      const maskImage = getComputedStyle(firstItem, '::after').maskImage;
+      // The browser normalises url(...) values; check that the inner data URI matches.
+      expect(maskImage).to.include('M0 0h24v24H0z');
+      // And that the default chevron token is no longer in effect.
+      expect(maskImage).to.not.include('m9 18 6-6-6-6');
+    });
+
+    it('should flip the ::after horizontally inside a dir="rtl" ancestor', async () => {
+      const rtlWrapper = fixtureSync(
+        '<div dir="rtl"><vaadin-breadcrumb-item path="/foo">A</vaadin-breadcrumb-item><vaadin-breadcrumb-item>B</vaadin-breadcrumb-item></div>',
+      ) as HTMLDivElement;
+      await nextRender();
+      const rtlFirstItem = rtlWrapper.querySelector('vaadin-breadcrumb-item') as BreadcrumbItem;
+      const xScale = getAfterTransformXScale(rtlFirstItem);
+      expect(xScale).to.equal(-1);
+    });
+
+    it('should not flip the ::after horizontally outside an RTL context', () => {
+      // Sanity check that the RTL flip is scoped — the LTR default item has no
+      // (or an identity) transform on ::after.
+      const xScale = getAfterTransformXScale(firstItem);
+      // Either no transform at all, or an identity matrix (xScale === 1).
+      expect(xScale === null || xScale === 1).to.be.true;
+    });
+  });
+
   describe('accessibility', () => {
     beforeEach(async () => {
       item = fixtureSync('<vaadin-breadcrumb-item path="/foo">Foo</vaadin-breadcrumb-item>');
