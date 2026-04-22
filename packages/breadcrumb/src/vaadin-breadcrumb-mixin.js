@@ -453,18 +453,28 @@ export const BreadcrumbMixin = (superClass) =>
 
     /**
      * Listener for the overlay's `vaadin-overlay-close` event. When the
-     * close was triggered by a click whose path includes the breadcrumb
-     * host (i.e. the user clicked the overflow button), prevent the
+     * close was triggered by a click on the overflow button, prevent the
      * overlay's own close handling — the host's click handler manages the
      * `_overlayOpened` toggle and would otherwise immediately reopen.
      *
-     * Mirrors `<vaadin-avatar-group>._onVaadinOverlayClose`.
+     * The check is intentionally narrow: only `click` events whose target
+     * is the overflow button race with the host's own toggle. Other source
+     * events (keyboard `keydown`/`keyup` for Escape, clicks elsewhere) must
+     * be allowed through so that, e.g., Escape on the focused overflow
+     * button still closes the overlay even though the breadcrumb host is
+     * in the keydown event's composed path.
      *
      * @param {CustomEvent} event
      * @protected
      */
     _onVaadinOverlayClose(event) {
-      if (event.detail.sourceEvent && event.detail.sourceEvent.composedPath().includes(this)) {
+      const sourceEvent = event.detail.sourceEvent;
+      if (
+        sourceEvent &&
+        sourceEvent.type === 'click' &&
+        this._overflowButton &&
+        sourceEvent.composedPath().includes(this._overflowButton)
+      ) {
         event.preventDefault();
       }
     }
