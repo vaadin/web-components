@@ -6,11 +6,48 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-styles.js';
+
+/**
+ * A controller that observes the `prefix` slot and toggles the
+ * `has-prefix` state attribute on the host whenever the slot has
+ * non-whitespace content assigned to it.
+ *
+ * @private
+ */
+class PrefixSlotController extends SlotController {
+  constructor(host) {
+    super(host, 'prefix', null, { multiple: true, observe: true });
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  initCustomNode() {
+    this.__updateHasPrefix();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  teardownNode() {
+    this.__updateHasPrefix();
+  }
+
+  /** @private */
+  __updateHasPrefix() {
+    const hasContent = this.nodes.some((node) => !isEmptyTextNode(node));
+    this.host.toggleAttribute('has-prefix', hasContent);
+  }
+}
 
 /**
  * `<vaadin-breadcrumb-item>` is an individual item used inside `<vaadin-breadcrumb>`.
@@ -108,6 +145,11 @@ class BreadcrumbItem extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'listitem');
     }
+
+    // Observe the prefix slot and toggle the `has-prefix` host attribute
+    // whenever the slot has non-whitespace content assigned to it.
+    this._prefixController = new PrefixSlotController(this);
+    this.addController(this._prefixController);
   }
 
   /** @protected */

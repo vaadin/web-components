@@ -144,6 +144,89 @@ describe('vaadin-breadcrumb-item', () => {
     });
   });
 
+  describe('prefix slot', () => {
+    describe('shadow DOM', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/foo">Foo</vaadin-breadcrumb-item>');
+        await nextRender();
+      });
+
+      it('should render a <slot name="prefix"> inside [part="link"] before [part="label"]', () => {
+        const link = item.shadowRoot!.querySelector('[part="link"]')!;
+        const prefixSlot = link.querySelector('slot[name="prefix"]') as HTMLSlotElement | null;
+        expect(prefixSlot).to.exist;
+
+        const label = link.querySelector('[part="label"]')!;
+        expect(label).to.exist;
+
+        // The prefix slot must come before the label part inside the link.
+        const position = prefixSlot!.compareDocumentPosition(label);
+        expect(position & Node.DOCUMENT_POSITION_FOLLOWING).to.be.greaterThan(0);
+      });
+
+      it('should also render a <slot name="prefix"> inside the <span> link when no path is set', async () => {
+        const noPathItem = fixtureSync('<vaadin-breadcrumb-item>Current</vaadin-breadcrumb-item>') as BreadcrumbItem;
+        await nextRender();
+        const link = noPathItem.shadowRoot!.querySelector('[part="link"]')!;
+        expect(link.tagName).to.equal('SPAN');
+        const prefixSlot = link.querySelector('slot[name="prefix"]');
+        expect(prefixSlot).to.exist;
+      });
+    });
+
+    describe('has-prefix attribute', () => {
+      it('should not have the has-prefix attribute when no prefix content is slotted', async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/foo">Foo</vaadin-breadcrumb-item>');
+        await nextRender();
+        expect(item.hasAttribute('has-prefix')).to.be.false;
+      });
+
+      it('should have the has-prefix attribute when prefix content is slotted at upgrade time', async () => {
+        item = fixtureSync(
+          '<vaadin-breadcrumb-item path="/foo"><span slot="prefix">icon</span>Foo</vaadin-breadcrumb-item>',
+        );
+        await nextRender();
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+      });
+
+      it('should set the has-prefix attribute when a prefix-slotted child is added at runtime', async () => {
+        item = fixtureSync('<vaadin-breadcrumb-item path="/foo">Foo</vaadin-breadcrumb-item>');
+        await nextRender();
+        expect(item.hasAttribute('has-prefix')).to.be.false;
+
+        const prefix = document.createElement('span');
+        prefix.setAttribute('slot', 'prefix');
+        prefix.textContent = 'icon';
+        item.appendChild(prefix);
+        await nextRender();
+
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+      });
+
+      it('should remove the has-prefix attribute when the prefix-slotted child is removed', async () => {
+        item = fixtureSync(
+          '<vaadin-breadcrumb-item path="/foo"><span slot="prefix">icon</span>Foo</vaadin-breadcrumb-item>',
+        );
+        await nextRender();
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+
+        const prefix = item.querySelector('[slot="prefix"]')!;
+        prefix.remove();
+        await nextRender();
+
+        expect(item.hasAttribute('has-prefix')).to.be.false;
+      });
+
+      it('should not set the has-prefix attribute for whitespace-only text children of the prefix slot', async () => {
+        // Text nodes are not assignable to a named slot, so this also serves as
+        // a regression check that whitespace siblings do not affect the state.
+        item = fixtureSync('<vaadin-breadcrumb-item path="/foo">   Foo   </vaadin-breadcrumb-item>');
+        await nextRender();
+        expect(item.hasAttribute('has-prefix')).to.be.false;
+      });
+    });
+  });
+
   describe('accessibility', () => {
     beforeEach(async () => {
       item = fixtureSync('<vaadin-breadcrumb-item path="/foo">Foo</vaadin-breadcrumb-item>');
