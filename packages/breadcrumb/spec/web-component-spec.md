@@ -237,10 +237,6 @@ No — `BreadcrumbItem` is the element class name for `<vaadin-breadcrumb-item>`
 
 No. Vaadin components generally avoid the term "dropdown" — menu-bar, select, combo-box, and AvatarGroup all expose `overlay` and `content` parts. The breadcrumb follows the AvatarGroup pairing: an `overlay` part for the outer panel and a `content` part for the inner wrapper holding the collapsed items.
 
-**Q: What should the item's wrapper part be named?**
-
-`content`. A part named `item` on an element that is itself called `vaadin-breadcrumb-item` is confusing, and "content" is the established name for the wrapper inside an item element in `<vaadin-side-nav-item>` and `<vaadin-item>`.
-
 **Q: Should `SlotChildObserveController` be used to observe item children?**
 
 No. `SlotChildObserveController` bundles two concerns the breadcrumb does not need: observing `id`-attribute mutations for ARIA references (useful to field components) and firing a generic "content changed" event. For breadcrumb's needs — reacting when items are added or removed — subclassing `SlotController` and overriding `initNode`/`initCustomNode` is sufficient and keeps the dependency surface minimal.
