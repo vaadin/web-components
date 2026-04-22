@@ -339,9 +339,7 @@ export const ColumnReorderingMixin = (superClass) =>
 
     /**
      * Resets the visual column order so that cells in every row reflect the
-     * current DOM order of `<vaadin-grid-column>` elements: `_order` is
-     * recomputed from the DOM order and cells in header, footer, body and
-     * sizer rows are physically moved to match.
+     * current DOM order of `<vaadin-grid-column>` elements.
      *
      * Intended to be called by Vaadin Flow's `GridColumnOrderHelper` (via
      * `executeJs`) to realign cell order with the column DOM order after an
@@ -366,28 +364,7 @@ export const ColumnReorderingMixin = (superClass) =>
         return;
       }
 
-      this._updateOrders(this._columnTree);
-
-      // Physically reorder cells in all rows to match the updated column order.
-      [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
-        const cells = getBodyRowCells(row);
-        const sortedCells = [...cells].sort((a, b) => a._column._order - b._column._order);
-        const referenceNode = row.__detailsCell || null;
-        sortedCells.forEach((cell) => {
-          // Only move cells that are already attached to the row — detached body
-          // cells belong to columns hidden by lazy column rendering, and their
-          // attachment state is owned by `__updateColumnsBodyContentHidden`.
-          if (cell.parentNode === row) {
-            row.insertBefore(cell, referenceNode);
-          }
-        });
-        if (row.__cells) {
-          row.__cells = sortedCells;
-        }
-      });
-
-      this._debounceUpdateFrozenColumn();
-      this._updateFirstAndLastColumn();
+      this._columnTree = this._getColumnTree();
     }
 
     /**

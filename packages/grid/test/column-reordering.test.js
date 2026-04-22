@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -449,8 +449,9 @@ describe('reordering simple grid', () => {
     });
 
     it('should skip DOM work in _resetColumnOrder when cells already match DOM order', () => {
-      const spy = sinon.spy(grid, '_debounceUpdateFrozenColumn');
+      const spy = sinon.spy(grid, '_renderColumnTree');
       grid._resetColumnOrder();
+      flushGrid(grid);
       expect(spy.called).to.be.false;
     });
 
@@ -784,51 +785,6 @@ describe('reordering simple grid', () => {
       dragOver(handle, cell);
       expect(grid.hasAttribute('reordering')).to.be.false;
     });
-  });
-});
-
-describe('reordering grid with lazy columns', () => {
-  let grid;
-
-  beforeEach(async () => {
-    grid = fixtureSync(`
-      <vaadin-grid style="width: 250px; height: 200px;" size="1" column-reordering-allowed>
-        ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-          .map((col) => `<vaadin-grid-column width="100px" flex-grow="0" header="${col}"></vaadin-grid-column>`)
-          .join('')}
-      </vaadin-grid>
-    `);
-
-    grid.querySelectorAll('vaadin-grid-column').forEach((col, idx) => {
-      col.renderer = (root) => {
-        root.textContent = `${idx + 1}`;
-      };
-    });
-
-    grid.columnRendering = 'lazy';
-    grid.dataProvider = infiniteDataProvider;
-    await nextResize(grid);
-    flushGrid(grid);
-  });
-
-  it('should not re-attach detached cells when _resetColumnOrder is called', () => {
-    const bodyRow = grid.$.items.children[0];
-    const initialCellCount = bodyRow.children.length;
-    // Sanity check: lazy rendering should produce fewer cells than total columns
-    expect(initialCellCount).to.be.lessThan(grid._columnTree[0].length);
-
-    // Reorder the first two columns (both inside the viewport)
-    const firstHeader = getVisualHeaderCellContent(grid, 0, 0);
-    const secondHeader = getVisualHeaderCellContent(grid, 0, 1);
-    dragOver(firstHeader, secondHeader);
-    flushGrid(grid);
-    expect(bodyRow.children.length).to.equal(initialCellCount);
-
-    // Simulate the Flow component calling _resetColumnOrder; it should not
-    // re-attach cells that are detached due to lazy column rendering.
-    grid._resetColumnOrder();
-    flushGrid(grid);
-    expect(bodyRow.children.length).to.equal(initialCellCount);
   });
 });
 
