@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * Data shape for an entry in the breadcrumb `items` array.
@@ -25,7 +26,7 @@ export interface BreadcrumbItemData {
  */
 export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<BreadcrumbMixinClass> & T;
+): Constructor<BreadcrumbMixinClass> & Constructor<ResizeMixinClass> & T;
 
 export declare class BreadcrumbMixinClass {
   /**

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
@@ -109,11 +109,12 @@ describe('vaadin-breadcrumb', () => {
       expect(descriptors).to.deep.equal(['slot[name=root]', 'div[part=overflow]', 'slot']);
     });
 
-    it('should render [part="overflow"] with the hidden attribute set', () => {
+    it('should hide [part="overflow"] via CSS when has-overflow is not set', () => {
       const overflow = list.querySelector('[part="overflow"]') as HTMLElement;
       expect(overflow).to.exist;
-      expect(overflow.hasAttribute('hidden')).to.be.true;
       expect(overflow.getAttribute('role')).to.equal('listitem');
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.false;
+      expect(getComputedStyle(overflow).display).to.equal('none');
     });
 
     it('should render a button[part="overflow-button"] inside [part="overflow"]', () => {
@@ -553,6 +554,190 @@ describe('vaadin-breadcrumb', () => {
       await nextUpdate(breadcrumb);
 
       expect(getItems(breadcrumb).length).to.equal(2);
+    });
+  });
+
+  describe('overflow detection', () => {
+    // Each item gets a fixed width via inline style so the overflow math is
+    // deterministic. Items are 100px wide; with a 7-item trail (root + 5
+    // middles + current) plus separators, the natural width is well above
+    // 700px. Wrapper widths chosen below are picked so a known number of
+    // items overflow.
+    const ITEM_WIDTH = 100;
+
+    function getItems(breadcrumb: Breadcrumb): BreadcrumbItem[] {
+      return Array.from(breadcrumb.querySelectorAll('vaadin-breadcrumb-item')) as BreadcrumbItem[];
+    }
+
+    function getById(breadcrumb: Breadcrumb, id: string): BreadcrumbItem {
+      return breadcrumb.querySelector(`[data-test-id="${id}"]`) as BreadcrumbItem;
+    }
+
+    function fixedWidthItem(id: string, label: string, path?: string): string {
+      const pathAttr = path ? ` path="${path}"` : '';
+      return `<vaadin-breadcrumb-item data-test-id="${id}"${pathAttr} style="width: ${ITEM_WIDTH}px; box-sizing: border-box; flex: none;">${label}</vaadin-breadcrumb-item>`;
+    }
+
+    async function buildFixture(width: number): Promise<{ wrapper: HTMLElement; breadcrumb: Breadcrumb }> {
+      const wrapper = fixtureSync(`
+        <div style="width: ${width}px;">
+          <vaadin-breadcrumb>
+            ${fixedWidthItem('root', 'Root', '/')}
+            ${fixedWidthItem('a', 'A', '/a')}
+            ${fixedWidthItem('b', 'B', '/b')}
+            ${fixedWidthItem('c', 'C', '/c')}
+            ${fixedWidthItem('d', 'D', '/d')}
+            ${fixedWidthItem('e', 'E', '/e')}
+            ${fixedWidthItem('current', 'Current')}
+          </vaadin-breadcrumb>
+        </div>
+      `) as HTMLElement;
+      const breadcrumb = wrapper.querySelector('vaadin-breadcrumb') as Breadcrumb;
+      await nextRender();
+      // Allow the initial ResizeObserver callback to fire so overflow
+      // detection runs against the actual rendered widths.
+      await nextFrame();
+      await nextFrame();
+      return { wrapper, breadcrumb };
+    }
+
+    async function setWrapperWidth(wrapper: HTMLElement, breadcrumb: Breadcrumb, width: number): Promise<void> {
+      wrapper.style.width = `${width}px`;
+      await nextResize(breadcrumb);
+      // ResizeMixin schedules `_onResize` from a setTimeout inside the
+      // ResizeObserver callback; wait one more frame so __updateOverflow
+      // has run and the attributes are applied.
+      await nextFrame();
+    }
+
+    it('should not set has-overflow when all items fit', async () => {
+      const { breadcrumb } = await buildFixture(2000);
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.false;
+      expect(getComputedStyle(overflow).display).to.equal('none');
+      getItems(breadcrumb).forEach((item) => {
+        expect(item.hasAttribute('data-overflow-hidden')).to.be.false;
+      });
+    });
+
+    it('should make [part="overflow"] visible when has-overflow is set', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      const overflow = breadcrumb.shadowRoot!.querySelector('[part="overflow"]') as HTMLElement;
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      expect(getComputedStyle(overflow).display).to.not.equal('none');
+    });
+
+    it('should hide intermediate items closest to the root first, by identity', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      // Pick a width that leaves room for root + overflow + current + ~one
+      // more middle item. With 100px items + the overflow listitem, 500px
+      // forces several middle items to collapse.
+      await setWrapperWidth(wrapper, breadcrumb, 500);
+
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+
+      // Identify hidden items by data-test-id, not by DOM position.
+      const hiddenIds = getItems(breadcrumb)
+        .filter((item) => item.hasAttribute('data-overflow-hidden'))
+        .map((item) => item.dataset.testId);
+
+      // The first items to collapse are the ones closest to the root, i.e.
+      // 'a' first, then 'b', etc. At this width at least 'a' and 'b' must
+      // be hidden.
+      expect(hiddenIds).to.include('a');
+      expect(hiddenIds).to.include('b');
+      // The current item is never collapsed.
+      expect(hiddenIds).to.not.include('current');
+      // The collapse order means an item closer to the root is hidden
+      // before one further away: if 'b' is hidden, 'a' must also be hidden.
+      const middleOrder = ['a', 'b', 'c', 'd', 'e'];
+      const lastHiddenIndex = middleOrder.reduce((acc, id, i) => (hiddenIds.includes(id) ? i : acc), -1);
+      for (let i = 0; i <= lastHiddenIndex; i += 1) {
+        expect(hiddenIds, `expected ${middleOrder[i]} to be hidden`).to.include(middleOrder[i]);
+      }
+    });
+
+    it('should never set data-overflow-hidden on the current item, even at the smallest width', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 50);
+
+      const current = getById(breadcrumb, 'current');
+      expect(current.hasAttribute('data-overflow-hidden')).to.be.false;
+    });
+
+    it('should keep the root visible while only middle items still need to collapse', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      // Width chosen so that root + overflow + current still fit, but at
+      // least one middle item must collapse. With 100px items, ~350px
+      // accommodates root (100) + overflow (~30-40) + current (100) plus a
+      // bit of slack, and at least some middle items must be hidden.
+      await setWrapperWidth(wrapper, breadcrumb, 350);
+
+      const root = getById(breadcrumb, 'root');
+      const current = getById(breadcrumb, 'current');
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      expect(root.hasAttribute('data-overflow-hidden')).to.be.false;
+      expect(current.hasAttribute('data-overflow-hidden')).to.be.false;
+
+      // Some middle item must be hidden.
+      const middleHiddenCount = ['a', 'b', 'c', 'd', 'e'].filter((id) =>
+        getById(breadcrumb, id).hasAttribute('data-overflow-hidden'),
+      ).length;
+      expect(middleHiddenCount).to.be.greaterThan(0);
+    });
+
+    it('should hide the root as a last resort when even root + overflow + current does not fit', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      // Width too narrow for root + overflow + current (~230px+) — every
+      // middle item is collapsed and the root must collapse too.
+      await setWrapperWidth(wrapper, breadcrumb, 120);
+
+      const root = getById(breadcrumb, 'root');
+      const current = getById(breadcrumb, 'current');
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+      expect(root.hasAttribute('data-overflow-hidden')).to.be.true;
+      expect(current.hasAttribute('data-overflow-hidden')).to.be.false;
+      // Every middle item is hidden too.
+      ['a', 'b', 'c', 'd', 'e'].forEach((id) => {
+        expect(getById(breadcrumb, id).hasAttribute('data-overflow-hidden')).to.be.true;
+      });
+    });
+
+    it('should restore items in reverse order as the container grows back', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+
+      // Shrink so several items overflow.
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+      const hiddenAfterShrink = getItems(breadcrumb)
+        .filter((item) => item.hasAttribute('data-overflow-hidden'))
+        .map((item) => item.dataset.testId);
+      expect(hiddenAfterShrink.length).to.be.greaterThan(0);
+
+      // Grow somewhat — fewer items should be hidden.
+      await setWrapperWidth(wrapper, breadcrumb, 700);
+      const hiddenAfterGrow = getItems(breadcrumb)
+        .filter((item) => item.hasAttribute('data-overflow-hidden'))
+        .map((item) => item.dataset.testId);
+      expect(hiddenAfterGrow.length).to.be.lessThan(hiddenAfterShrink.length);
+
+      // Whichever items remain hidden must be a prefix of the original
+      // hidden set (items closest to the root): if 'b' was hidden before
+      // and is hidden now, 'a' must also be hidden now.
+      const middleOrder = ['a', 'b', 'c', 'd', 'e'];
+      const stillHiddenIndex = middleOrder.reduce((acc, id, i) => (hiddenAfterGrow.includes(id) ? i : acc), -1);
+      for (let i = 0; i <= stillHiddenIndex; i += 1) {
+        expect(hiddenAfterGrow, `expected ${middleOrder[i]} to still be hidden`).to.include(middleOrder[i]);
+      }
+
+      // Grow large enough for everything to fit and has-overflow clears.
+      await setWrapperWidth(wrapper, breadcrumb, 2000);
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.false;
+      getItems(breadcrumb).forEach((item) => {
+        expect(item.hasAttribute('data-overflow-hidden')).to.be.false;
+      });
     });
   });
 });

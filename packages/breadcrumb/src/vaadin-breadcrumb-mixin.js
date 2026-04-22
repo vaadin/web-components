@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, render } from 'lit';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
@@ -50,6 +51,7 @@ class RootItemController extends SlotController {
         rootSlot.addEventListener('slotchange', () => {
           this.__updateRootSlotAssignment();
           this.__updateCurrentItem();
+          this.__updateOverflow();
         });
         this.__rootSlotListenerAttached = true;
       }
@@ -64,6 +66,7 @@ class RootItemController extends SlotController {
     this.__observePath(node);
     this.__updateRootSlotAssignment();
     this.__updateCurrentItem();
+    this.__updateOverflow();
   }
 
   /**
@@ -74,6 +77,7 @@ class RootItemController extends SlotController {
     this.__observePath(node);
     this.__updateRootSlotAssignment();
     this.__updateCurrentItem();
+    this.__updateOverflow();
   }
 
   /**
@@ -84,6 +88,14 @@ class RootItemController extends SlotController {
     this.__unobservePath(node);
     this.__updateRootSlotAssignment();
     this.__updateCurrentItem();
+    this.__updateOverflow();
+  }
+
+  /** @private */
+  __updateOverflow() {
+    if (typeof this.host.__updateOverflow === 'function') {
+      this.host.__updateOverflow();
+    }
   }
 
   /** @private */
@@ -153,9 +165,10 @@ class RootItemController extends SlotController {
  * A mixin providing common `<vaadin-breadcrumb>` functionality.
  *
  * @polymerMixin
+ * @mixes ResizeMixin
  */
 export const BreadcrumbMixin = (superClass) =>
-  class BreadcrumbMixinClass extends superClass {
+  class BreadcrumbMixinClass extends ResizeMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -216,6 +229,97 @@ export const BreadcrumbMixin = (superClass) =>
 
       if (changedProperties.has('items')) {
         this.__renderItems();
+      }
+    }
+
+    /**
+     * Implement callback from `ResizeMixin` to recompute overflow whenever the
+     * host width changes. Delegates to a single helper so slot changes can use
+     * the same code path.
+     *
+     * @protected
+     * @override
+     */
+    _onResize() {
+      this.__updateOverflow();
+    }
+
+    /**
+     * Lazily resolve the shadow `[part="list"]` container used as the
+     * measurement target. Cached on first lookup.
+     *
+     * @return {HTMLElement | null}
+     * @private
+     */
+    get __listElement() {
+      if (!this.__listElementCache && this.shadowRoot) {
+        this.__listElementCache = this.shadowRoot.querySelector('[part="list"]');
+      }
+      return this.__listElementCache;
+    }
+
+    /**
+     * Progressive overflow collapse, per Key Design Decisions §6.
+     *
+     * Algorithm:
+     * 1. Reset: clear `has-overflow` and `data-overflow-hidden` from every item.
+     * 2. If everything fits (`scrollWidth <= clientWidth` on `[part="list"]`),
+     *    we are done.
+     * 3. Otherwise, set `has-overflow` (which reveals the overflow listitem
+     *    via CSS) and progressively hide the "middle" items — those between
+     *    the first item (root) and the last item (current) — left-to-right
+     *    until everything fits.
+     * 4. If items still overflow, hide the root too as a last resort.
+     *
+     * The current item — defined here as the last `<vaadin-breadcrumb-item>`
+     * child regardless of whether it has a `path` — never receives
+     * `data-overflow-hidden`, matching the spec rule "the last item (current
+     * page) never collapses".
+     *
+     * @private
+     */
+    __updateOverflow() {
+      const list = this.__listElement;
+      if (!list) {
+        return;
+      }
+
+      const items = Array.from(this.children).filter((child) => child.localName === 'vaadin-breadcrumb-item');
+
+      // Always start by clearing any previous collapse state so the
+      // measurement reflects the natural width of the trail.
+      items.forEach((item) => item.removeAttribute('data-overflow-hidden'));
+      this.toggleAttribute('has-overflow', false);
+
+      if (items.length < 2) {
+        // Nothing to collapse: zero or one item never overflows.
+        return;
+      }
+
+      // Force a layout read so the measurements below are up to date.
+      if (list.scrollWidth <= list.clientWidth) {
+        return;
+      }
+
+      // Items still overflow: reveal the overflow listitem and start
+      // collapsing the "middle" items closest to the root first.
+      this.toggleAttribute('has-overflow', true);
+
+      const root = items[0];
+      const current = items[items.length - 1];
+      const middle = items.slice(1, -1);
+
+      for (const item of middle) {
+        item.setAttribute('data-overflow-hidden', '');
+        if (list.scrollWidth <= list.clientWidth) {
+          return;
+        }
+      }
+
+      // Last resort: also collapse the root. The current item is never
+      // collapsed by design.
+      if (root !== current) {
+        root.setAttribute('data-overflow-hidden', '');
       }
     }
 
