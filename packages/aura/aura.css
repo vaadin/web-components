@@ -10,6 +10,9 @@
 @import './src/components/app-layout.css';
 @import './src/components/avatar.css';
 @import './src/components/badge.css';
+@import './src/components/breadcrumb.css';
+@import './src/components/breadcrumb-item.css';
+@import './src/components/breadcrumb-overlay.css';
 @import './src/components/button.css';
 @import './src/components/card.css';
 @import './src/components/charts.css';
