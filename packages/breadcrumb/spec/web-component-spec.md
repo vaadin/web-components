@@ -155,7 +155,7 @@ Internal behavior:
 
 **`<vaadin-breadcrumb-overlay>`** — Overflow overlay
 
-Internal element used only by `<vaadin-breadcrumb>`. Not intended for application use. Extends `OverlayMixin`, matching the pattern of `<vaadin-menu-bar-overlay>`, `<vaadin-combo-box-overlay>`, and other Vaadin overlays.
+Internal element used only by `<vaadin-breadcrumb>`. Not intended for application use. Built on `OverlayMixin` plus a new `BreadcrumbOverlayMixin`, matching the pattern used by other Vaadin overlays: `<vaadin-combo-box-overlay>` pairs `OverlayMixin` with `ComboBoxOverlayMixin`, `<vaadin-menu-bar-overlay>` pairs it with `MenuOverlayMixin`, and so on. The component-specific mixin carries any overlay behavior specific to the host component (theme-attribute propagation, position adjustments, close-behavior tweaks).
 
 Shadow DOM:
 ```html
