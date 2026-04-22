@@ -1,6 +1,7 @@
 ---
 allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-web-component-api/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin
 description: Design the developer-facing API for a Vaadin web component based on its requirements, without studying implementation source code
+user-invocable: false
 ---
 
 This skill takes a component's requirements and problem statement and produces concrete HTML/JS code examples showing the most convenient, minimal API a developer would use. The result is a `web-component-api.md` file — one section per requirement (or group of related requirements), each with a code example and a short rationale for the chosen API shape.

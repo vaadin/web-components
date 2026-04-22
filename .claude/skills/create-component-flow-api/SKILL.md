@@ -1,6 +1,7 @@
 ---
 allowed-tools: Read(packages/*/spec/*),Read(flow-components/**),Read(../flow-components/**),Read(.claude/skills/create-component-flow-api/*),Glob(flow-components/**),Glob(../flow-components/**),Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(ls flow-components),Bash(ls ../flow-components)
 description: Design the developer-facing Flow (Java) API for a Vaadin component based on its requirements and the already-designed web component API
+user-invocable: false
 ---
 
 This skill takes a component's requirements plus the web component's `web-component-api.md` and produces a Flow (Java) developer API — Java code examples showing the most idiomatic, minimal API a Vaadin Flow developer would use to wrap and use the web component from server-side Java. The result is a `flow-api.md` file — one section per requirement (or group of related requirements), each with a Java code example and a short rationale for the chosen API shape.

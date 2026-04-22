@@ -1,6 +1,7 @@
 ---
 allowed-tools: Read(packages/*/spec/*),Agent,Bash(git add *),Bash(git diff *),Bash(git status),Bash(git commit *),AskUserQuestion
 description: Implement all tasks from a component's web-component-tasks.md, one subagent and one commit per task
+user-invocable: false
 ---
 
 This skill implements a component by iterating through its `web-component-tasks.md` and spawning one subagent per task. Each subagent gets a fresh context with only the information it needs — avoiding context rot across many tasks. After each subagent completes, the orchestrator commits the changes. The result is one commit per task on the current branch, with no push to remote.

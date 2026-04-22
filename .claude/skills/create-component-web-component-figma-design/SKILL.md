@@ -1,7 +1,7 @@
 ---
 description: Create or compare Figma component designs from a Vaadin web component spec using the Figma MCP server. Supports both Lumo and Aura themes.
 allowed-tools: Read(packages/*/spec/*),Read(packages/aura/src/*),Read(packages/vaadin-lumo-styles/*),Read(.claude/skills/create-component-web-component-figma-design/*),Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__figma
-user_invocable: true
+user-invocable: false
 arg_description: "ComponentName [compare <figma-url>]"
 ---
 

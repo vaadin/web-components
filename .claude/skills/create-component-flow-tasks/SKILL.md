@@ -1,6 +1,7 @@
 ---
 allowed-tools: Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(ls flow-components),Bash(ls ../flow-components),AskUserQuestion
 description: Break a Flow component specification into ordered, self-contained implementation tasks
+user-invocable: false
 ---
 
 This skill takes a component's `flow-spec.md` and produces an ordered list of Flow (Java) implementation tasks. Each task is a self-contained unit of work that includes its own tests, results in a merge-ready branch, and builds on prior tasks. The output follows a test-driven development approach: every task defines the tests first, then the implementation that makes them pass.

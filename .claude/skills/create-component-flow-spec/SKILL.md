@@ -1,6 +1,7 @@
 ---
 allowed-tools: Read,Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(grep *),Bash(find *),Bash(ls flow-components),Bash(ls ../flow-components)
 description: Reconcile an ideal Flow developer API with existing flow-components source to produce a full Flow implementation specification
+user-invocable: false
 ---
 
 This skill takes a component's `flow-api.md` — an ideal Flow (Java) API designed from pure developer ergonomics — and reconciles it with the actual source of the `flow-components` repository. The output is a full Flow implementation specification: module layout, class declarations, annotations, mixin interfaces, method signatures, `@Synchronize` properties, events, i18n shape, theme-variant enum, connector plan (if needed), server/client sync concerns, serialisation, TestBench elements, and any proposed adjustments to shared `flow-components-base` code.

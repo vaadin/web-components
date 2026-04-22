@@ -1,7 +1,7 @@
 ---
 allowed-tools: Agent,Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch,AskUserQuestion,TaskCreate,TaskUpdate,TaskList,mcp__vaadin__*
 description: Create a Flow demo application that exercises every use case and requirement of a component, using local web components and flow-components snapshots
-user-invocable: true
+user-invocable: false
 ---
 
 Create a standalone Vaadin Flow demo application that exercises every use case and requirement of a component. One view per use case / requirement group, with navigation to browse them all.

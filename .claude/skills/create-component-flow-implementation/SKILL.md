@@ -1,6 +1,7 @@
 ---
 allowed-tools: Read(packages/*/spec/*),Read(flow-components/**),Read(../flow-components/**),Agent,Bash(ls flow-components),Bash(ls ../flow-components),Bash(cd flow-components && git *),Bash(cd ../flow-components && git *),AskUserQuestion
 description: Implement all tasks from a component's flow-tasks.md, one subagent and one commit per task, inside the flow-components repository
+user-invocable: false
 ---
 
 This skill implements a Flow component by iterating through its `flow-tasks.md` and spawning one subagent per task. Each subagent gets a fresh context with only the information it needs — avoiding context rot across many tasks. After each subagent completes, the orchestrator commits the changes. The result is one commit per task on the current branch of the `flow-components` repository, with no push to remote.

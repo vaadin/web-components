@@ -1,6 +1,7 @@
 ---
 allowed-tools: Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read,Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(grep *),Bash(find *)
 description: Reconcile an ideal developer API with existing source code to produce a full implementation specification for a Vaadin web component
+user-invocable: false
 ---
 
 This skill takes a component's `web-component-api.md` — an ideal API designed from pure developer ergonomics — and reconciles it with the actual source code of the Vaadin web-components monorepo. The output is a full specification: shadow DOM structure, properties, slots, parts, events, CSS custom properties, and accessibility behavior.
