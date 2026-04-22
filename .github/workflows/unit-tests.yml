@@ -5,20 +5,27 @@ on: pull_request
 permissions:
   contents: read
 
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
 jobs:
   chrome:
     name: Chrome
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Cache node_modules
+        uses: actions/cache@v4
         with:
-          node-version: '24'
-          cache: 'yarn'
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -28,44 +35,46 @@ jobs:
   firefox:
     name: Firefox
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Cache node_modules
+        uses: actions/cache@v4
         with:
-          node-version: '24'
-          cache: 'yarn'
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Install Playwright
-        run: npx playwright install firefox --with-deps
 
       - name: Test
         run: yarn test:firefox
   webkit:
     name: WebKit
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: '0'
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Cache node_modules
+        uses: actions/cache@v4
         with:
-          node-version: '24'
-          cache: 'yarn'
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Install Playwright
-        run: npx playwright install webkit --with-deps
 
       - name: Test
         run: yarn test:webkit
