@@ -144,7 +144,7 @@ vaadin-upload-file,
     in srgb,
     color-mix(
         in srgb,
-        oklch(from var(--aura-accent-color-light) l c h / min(max(c / 0.4, 0), 1))
+        oklch(from var(--aura-accent-color-light) calc(l + c / 2) calc(c - l / 10) h / min(max(c / 0.4, 0), 1))
           calc(23% - 4% * var(--aura-surface-level)),
         var(--aura-surface-color-solid)
       )
@@ -155,7 +155,7 @@ vaadin-upload-file,
     in srgb,
     color-mix(
         in srgb,
-        oklch(from var(--aura-accent-color-dark) l c h / min(max(c / 0.4, 0), 1))
+        oklch(from var(--aura-accent-color-dark) calc(l - c / 4) calc(c + l / 10) h / min(max(c / 0.4, 0), 1))
           calc(23% - 3% * var(--aura-surface-level)),
         var(--aura-surface-color-solid)
       )
