@@ -166,21 +166,12 @@ Shadow DOM:
 </div>
 ```
 
-| Property | Type | Default | Reflected | Description |
-|---|---|---|---|---|
-| `opened` | `boolean` | `false` | Yes | Inherited from `OverlayMixin`. Set by `<vaadin-breadcrumb>` when the overflow button is activated. |
-| `owner` | `HTMLElement` | — | No | Inherited from `OverlayMixin`. Set to the owning `<vaadin-breadcrumb>` element. |
-| `renderer` | `(root, owner, model) => void` | — | No | Inherited from `OverlayMixin`. The breadcrumb assigns a callback that populates `root` with links for the currently hidden items. |
-| `positionTarget` | `HTMLElement` | — | No | The overflow button; the overlay positions relative to it. |
-
-| Slot | Description |
-|---|---|
-| (default) | Overlay content, populated by the breadcrumb's `renderer` with links for hidden items. |
+The element exposes no public properties or slots of its own — it inherits everything it needs from `OverlayMixin`. The breadcrumb binds the inherited `opened`, `owner`, `renderer`, and position-target properties internally; applications do not set them.
 
 | Part | Description |
 |---|---|
 | `overlay` | The outer panel. Inherited `OverlayMixin` part naming. |
-| `content` | The inner wrapper holding the default slot. Inherited `OverlayMixin` part naming. |
+| `content` | The inner wrapper holding the overlay content. Inherited `OverlayMixin` part naming. |
 
 Internal behavior:
 
