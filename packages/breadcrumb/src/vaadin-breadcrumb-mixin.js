@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, render } from 'lit';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
@@ -155,6 +156,46 @@ class RootItemController extends SlotController {
  */
 export const BreadcrumbMixin = (superClass) =>
   class BreadcrumbMixinClass extends superClass {
+    static get properties() {
+      return {
+        /**
+         * @typedef BreadcrumbItemData
+         * @type {object}
+         * @property {string} text - Text content of the breadcrumb item.
+         * @property {string} [path] - URL the item links to. When omitted, the
+         * item renders as a non-interactive `<span>` (used for the current page).
+         */
+
+        /**
+         * Programmatic items array. When set, the breadcrumb generates
+         * `<vaadin-breadcrumb-item>` elements in the light DOM, replacing any
+         * pre-existing slotted children. Each entry has the shape
+         * `{ text: string, path?: string }`. Entries with `path` produce a
+         * linked item; entries without `path` produce a non-interactive item
+         * (typically the current page).
+         *
+         * Setting `items` to `null` or `undefined` removes the generated items
+         * and restores any author-supplied light-DOM children that were present
+         * before `items` was first set.
+         *
+         * #### Example
+         *
+         * ```js
+         * breadcrumb.items = [
+         *   { text: 'Home', path: '/' },
+         *   { text: 'Reports', path: '/reports' },
+         *   { text: 'Quarterly' },
+         * ];
+         * ```
+         *
+         * @type {Array<!BreadcrumbItemData> | null | undefined}
+         */
+        items: {
+          type: Array,
+        },
+      };
+    }
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -167,5 +208,54 @@ export const BreadcrumbMixin = (superClass) =>
       // Observe the default slot and route the first item into slot="root".
       this._rootController = new RootItemController(this);
       this.addController(this._rootController);
+    }
+
+    /** @protected */
+    updated(changedProperties) {
+      super.updated(changedProperties);
+
+      if (changedProperties.has('items')) {
+        this.__renderItems();
+      }
+    }
+
+    /**
+     * Render `<vaadin-breadcrumb-item>` elements into the host's light DOM
+     * from the `items` array. Original author-supplied children are saved on
+     * the first transition from `null`/`undefined` to an array, and restored
+     * when `items` is set back to `null`/`undefined`.
+     *
+     * @private
+     */
+    __renderItems() {
+      if (this.items == null) {
+        // Remove any generated items and restore the originals.
+        render(html``, this);
+        if (this.__originalChildren) {
+          this.__originalChildren.forEach((child) => {
+            this.appendChild(child);
+          });
+          this.__originalChildren = null;
+        }
+        return;
+      }
+
+      // First transition from no-items to items: detach and remember any
+      // existing light-DOM children so they can be restored later.
+      if (!this.__originalChildren) {
+        this.__originalChildren = Array.from(this.children);
+        this.__originalChildren.forEach((child) => {
+          this.removeChild(child);
+        });
+      }
+
+      render(
+        html`${this.items.map((item) =>
+          item.path != null
+            ? html`<vaadin-breadcrumb-item path="${item.path}">${item.text}</vaadin-breadcrumb-item>`
+            : html`<vaadin-breadcrumb-item>${item.text}</vaadin-breadcrumb-item>`,
+        )}`,
+        this,
+      );
     }
   };

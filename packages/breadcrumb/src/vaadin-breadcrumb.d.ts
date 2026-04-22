@@ -7,6 +7,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { BreadcrumbMixin } from './vaadin-breadcrumb-mixin.js';
 
+export type { BreadcrumbItemData } from './vaadin-breadcrumb-mixin.js';
+
 /**
  * `<vaadin-breadcrumb>` is a Web Component for displaying a breadcrumb trail of
  * navigational steps leading to the current page.

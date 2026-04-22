@@ -8,7 +8,7 @@ window.Vaadin.featureFlags ??= {};
 // with the experimental map but must not register them in `customElements`.
 await import('../vaadin-breadcrumb.js');
 
-import type { Breadcrumb } from '../vaadin-breadcrumb.js';
+import type { Breadcrumb, BreadcrumbItemData } from '../vaadin-breadcrumb.js';
 import type { BreadcrumbItem } from '../vaadin-breadcrumb-item.js';
 
 describe('vaadin-breadcrumb', () => {
@@ -372,6 +372,187 @@ describe('vaadin-breadcrumb', () => {
 
       const otherLink = a.shadowRoot!.querySelector('[part="link"]')!;
       expect(otherLink.hasAttribute('aria-current')).to.be.false;
+    });
+  });
+
+  describe('items property', () => {
+    function getItems(breadcrumb: Breadcrumb): BreadcrumbItem[] {
+      return Array.from(breadcrumb.querySelectorAll('vaadin-breadcrumb-item')) as BreadcrumbItem[];
+    }
+
+    it('should render one vaadin-breadcrumb-item light-DOM child per items entry', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Reports', path: '/reports' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items.length).to.equal(3);
+      items.forEach((item) => {
+        expect(item.localName).to.equal('vaadin-breadcrumb-item');
+      });
+    });
+
+    it('should set the text content of each generated item to the entry text', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Reports', path: '/reports' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items[0].textContent).to.equal('Home');
+      expect(items[1].textContent).to.equal('Reports');
+      expect(items[2].textContent).to.equal('Quarterly');
+    });
+
+    it('should set the path attribute on items whose entry has a path', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [
+        { text: 'Home', path: '/' },
+        { text: 'Reports', path: '/reports' },
+      ];
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items[0].getAttribute('path')).to.equal('/');
+      expect(items[1].getAttribute('path')).to.equal('/reports');
+    });
+
+    it('should omit the path attribute on items whose entry has no path', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items[0].hasAttribute('path')).to.be.true;
+      expect(items[1].hasAttribute('path')).to.be.false;
+    });
+
+    it('should assign slot="root" to the first generated item', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Reports', path: '/reports' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+      await nextRender();
+
+      const items = getItems(breadcrumb);
+      expect(items[0].getAttribute('slot')).to.equal('root');
+      expect(items[1].hasAttribute('slot')).to.be.false;
+      expect(items[2].hasAttribute('slot')).to.be.false;
+    });
+
+    it('should set current on the last generated item when it has no path', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Reports', path: '/reports' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+      await nextRender();
+
+      const items = getItems(breadcrumb);
+      expect(items[0].hasAttribute('current')).to.be.false;
+      expect(items[1].hasAttribute('current')).to.be.false;
+      expect(items[2].hasAttribute('current')).to.be.true;
+    });
+
+    it('should replace any pre-existing slotted children when items is set', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="x" path="/x">X</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      expect(breadcrumb.querySelector('[data-test-id="x"]')).to.exist;
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+
+      expect(breadcrumb.querySelector('[data-test-id="x"]')).to.not.exist;
+
+      const items = getItems(breadcrumb);
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('Home');
+      expect(items[1].textContent).to.equal('Quarterly');
+    });
+
+    it('should restore pre-existing slotted children when items is set to null', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="x" path="/x">X</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="y">Y</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Quarterly' }];
+      await nextUpdate(breadcrumb);
+      expect(breadcrumb.querySelector('[data-test-id="x"]')).to.not.exist;
+
+      breadcrumb.items = null;
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items.length).to.equal(2);
+      expect(items[0].dataset.testId).to.equal('x');
+      expect(items[1].dataset.testId).to.equal('y');
+    });
+
+    it('should restore pre-existing slotted children when items is set to undefined', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="x" path="/x">X</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'Home', path: '/' }];
+      await nextUpdate(breadcrumb);
+      expect(breadcrumb.querySelector('[data-test-id="x"]')).to.not.exist;
+
+      breadcrumb.items = undefined;
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items.length).to.equal(1);
+      expect(items[0].dataset.testId).to.equal('x');
+    });
+
+    it('should update generated items when reassigned to a different array', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      breadcrumb.items = [{ text: 'A', path: '/a' }, { text: 'B', path: '/b' }, { text: 'C' }];
+      await nextUpdate(breadcrumb);
+      expect(getItems(breadcrumb).length).to.equal(3);
+
+      breadcrumb.items = [{ text: 'X', path: '/x' }, { text: 'Y' }];
+      await nextUpdate(breadcrumb);
+
+      const items = getItems(breadcrumb);
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('X');
+      expect(items[0].getAttribute('path')).to.equal('/x');
+      expect(items[1].textContent).to.equal('Y');
+      expect(items[1].hasAttribute('path')).to.be.false;
+    });
+
+    it('should accept the BreadcrumbItemData shape', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      const data: BreadcrumbItemData[] = [{ text: 'Home', path: '/' }, { text: 'Quarterly' }];
+      breadcrumb.items = data;
+      await nextUpdate(breadcrumb);
+
+      expect(getItems(breadcrumb).length).to.equal(2);
     });
   });
 });
