@@ -338,6 +338,36 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
+     * Resets the visual column order so that cells in every row reflect the
+     * current DOM order of `<vaadin-grid-column>` elements.
+     *
+     * Intended to be called by Vaadin Flow's `GridColumnOrderHelper` (via
+     * `executeJs`) to realign cell order with the column DOM order after an
+     * earlier drag reorder, even when the column DOM order itself has not
+     * changed (in which case the `_columnTree` observer does not fire and
+     * `_renderColumnTree` does not re-render the rows).
+     *
+     * @private
+     */
+    _resetColumnOrder() {
+      if (this._columnTree === undefined) {
+        return;
+      }
+
+      // Each `_columnTree[level]` array is already in DOM order. If every
+      // level's `_order` values are monotonically non-decreasing along that
+      // array, cells are already in sync with DOM order and no work is needed.
+      const alreadyInDomOrder = this._columnTree.every((level) =>
+        level.every((column, i) => i === 0 || column._order >= level[i - 1]._order),
+      );
+      if (alreadyInDomOrder) {
+        return;
+      }
+
+      this._columnTree = this._getColumnTree();
+    }
+
+    /**
      * @param {!GridColumn} column
      * @param {string} status
      * @protected
