@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import { esc, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
@@ -852,6 +852,217 @@ describe('vaadin-breadcrumb', () => {
       expect(maskImage).to.include('M0 0h24v24H0z');
       // And that the default chevron token is no longer in effect.
       expect(maskImage).to.not.include('m9 18 6-6-6-6');
+    });
+  });
+
+  describe('overlay integration', () => {
+    // Reuse the deterministic-width fixture pattern from the overflow detection
+    // block. Fixed-width items make `has-overflow` toggling reliable across
+    // browsers and themes.
+    const ITEM_WIDTH = 100;
+
+    function getItems(breadcrumb: Breadcrumb): BreadcrumbItem[] {
+      return Array.from(breadcrumb.querySelectorAll('vaadin-breadcrumb-item')) as BreadcrumbItem[];
+    }
+
+    function fixedWidthItem(id: string, label: string, path?: string): string {
+      const pathAttr = path ? ` path="${path}"` : '';
+      return `<vaadin-breadcrumb-item data-test-id="${id}"${pathAttr} style="width: ${ITEM_WIDTH}px; box-sizing: border-box; flex: none;">${label}</vaadin-breadcrumb-item>`;
+    }
+
+    async function buildFixture(width: number): Promise<{ wrapper: HTMLElement; breadcrumb: Breadcrumb }> {
+      const wrapper = fixtureSync(`
+        <div style="width: ${width}px;">
+          <vaadin-breadcrumb>
+            ${fixedWidthItem('root', 'Root', '/')}
+            ${fixedWidthItem('a', 'A', '/a')}
+            ${fixedWidthItem('b', 'B', '/b')}
+            ${fixedWidthItem('c', 'C', '/c')}
+            ${fixedWidthItem('d', 'D', '/d')}
+            ${fixedWidthItem('e', 'E', '/e')}
+            ${fixedWidthItem('current', 'Current')}
+          </vaadin-breadcrumb>
+        </div>
+      `) as HTMLElement;
+      const breadcrumb = wrapper.querySelector('vaadin-breadcrumb') as Breadcrumb;
+      await nextRender();
+      // Allow ResizeObserver / overflow detection to settle.
+      await nextFrame();
+      await nextFrame();
+      return { wrapper, breadcrumb };
+    }
+
+    async function setWrapperWidth(wrapper: HTMLElement, breadcrumb: Breadcrumb, width: number): Promise<void> {
+      wrapper.style.width = `${width}px`;
+      await nextResize(breadcrumb);
+      await nextFrame();
+    }
+
+    function getOverlay(breadcrumb: Breadcrumb): HTMLElement {
+      return breadcrumb.shadowRoot!.querySelector('vaadin-breadcrumb-overlay') as HTMLElement;
+    }
+
+    function getOverflowButton(breadcrumb: Breadcrumb): HTMLButtonElement {
+      return breadcrumb.shadowRoot!.querySelector('[part="overflow-button"]') as HTMLButtonElement;
+    }
+
+    // Open the overlay programmatically via the click handler and wait for it
+    // to be ready so the renderer has populated [part="content"].
+    async function openOverlay(breadcrumb: Breadcrumb): Promise<HTMLElement> {
+      const overlay = getOverlay(breadcrumb);
+      const button = getOverflowButton(breadcrumb);
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      await nextUpdate(breadcrumb);
+      return overlay;
+    }
+
+    it('should render <vaadin-breadcrumb-overlay> in the breadcrumb shadow DOM', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      const overlay = getOverlay(breadcrumb);
+      expect(overlay).to.exist;
+      expect(overlay.localName).to.equal('vaadin-breadcrumb-overlay');
+    });
+
+    it('should start with the overflow button in the closed state', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      const button = getOverflowButton(breadcrumb);
+      const overlay = getOverlay(breadcrumb) as HTMLElement & { opened: boolean };
+
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+      // OverlayMixin leaves `opened` `undefined` until first set; treat that
+      // as "not opened" rather than asserting a strict `false`.
+      expect(Boolean(overlay.opened)).to.be.false;
+    });
+
+    it('should open the overlay and set aria-expanded="true" when the overflow button is clicked', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.true;
+
+      const overlay = (await openOverlay(breadcrumb)) as HTMLElement & { opened: boolean };
+      const button = getOverflowButton(breadcrumb);
+
+      expect(overlay.opened).to.be.true;
+      expect(button.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should close the overlay and restore aria-expanded="false" when the overflow button is clicked again', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      const overlay = (await openOverlay(breadcrumb)) as HTMLElement & { opened: boolean };
+      const button = getOverflowButton(breadcrumb);
+      expect(overlay.opened).to.be.true;
+
+      button.click();
+      await nextUpdate(breadcrumb);
+
+      expect(overlay.opened).to.be.false;
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should not toggle the overlay when the overflow button is clicked while has-overflow is unset', async () => {
+      const { breadcrumb } = await buildFixture(2000);
+      // No setWrapperWidth call: has-overflow stays unset because all items
+      // fit at 2000px.
+      expect(breadcrumb.hasAttribute('has-overflow')).to.be.false;
+
+      const button = getOverflowButton(breadcrumb);
+      button.click();
+      await nextUpdate(breadcrumb);
+
+      const overlay = getOverlay(breadcrumb) as HTMLElement & { opened: boolean };
+      expect(Boolean(overlay.opened)).to.be.false;
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should render exactly one anchor per hidden item with matching href and text into [part="content"]', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      // 400px forces multiple middle items to collapse. Capture which items
+      // are hidden so we can compare against the rendered anchors.
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+      const hiddenItems = getItems(breadcrumb).filter((item) => item.hasAttribute('data-overflow-hidden'));
+      expect(hiddenItems.length).to.be.greaterThan(0);
+
+      const overlay = await openOverlay(breadcrumb);
+      // The renderer writes content into the overlay's light DOM, which is
+      // projected through the <slot> inside [part="content"]. Query the
+      // light-DOM anchors directly, then assert they are all assigned to the
+      // [part="content"] slot in the overlay's shadow DOM.
+      const anchors = Array.from(overlay.querySelectorAll('a')) as HTMLAnchorElement[];
+      const contentSlot = overlay.shadowRoot!.querySelector('[part="content"] slot') as HTMLSlotElement;
+      const assignedAnchors = (contentSlot.assignedElements() as Element[]).filter((el) => el.localName === 'a');
+      expect(assignedAnchors).to.have.lengthOf(anchors.length);
+
+      expect(anchors).to.have.lengthOf(hiddenItems.length);
+
+      const anchorHrefs = anchors.map((a) => a.getAttribute('href'));
+      const anchorTexts = anchors.map((a) => (a.textContent || '').trim());
+      const expectedHrefs = hiddenItems.map((item) => item.getAttribute('path'));
+      const expectedTexts = hiddenItems.map((item) => (item.textContent || '').trim());
+
+      expect(anchorHrefs).to.deep.equal(expectedHrefs);
+      expect(anchorTexts).to.deep.equal(expectedTexts);
+    });
+
+    it('should close the overlay and restore aria-expanded="false" when Escape is pressed', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      const overlay = (await openOverlay(breadcrumb)) as HTMLElement & { opened: boolean };
+      const button = getOverflowButton(breadcrumb);
+      expect(overlay.opened).to.be.true;
+
+      esc(document.body);
+      await nextUpdate(breadcrumb);
+
+      expect(overlay.opened).to.be.false;
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should close the overlay on outside click', async () => {
+      const { wrapper, breadcrumb } = await buildFixture(2000);
+      await setWrapperWidth(wrapper, breadcrumb, 400);
+
+      const overlay = (await openOverlay(breadcrumb)) as HTMLElement & { opened: boolean };
+      const button = getOverflowButton(breadcrumb);
+      expect(overlay.opened).to.be.true;
+
+      // OverlayMixin closes on outside click using a document-level capture
+      // listener. Clicking on document.body simulates a click outside both
+      // the overlay and the breadcrumb host.
+      document.body.click();
+      await nextUpdate(breadcrumb);
+
+      expect(overlay.opened).to.be.false;
+      expect(button.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should default i18n.moreItems to "" and set aria-label="" on the overflow button', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      const button = getOverflowButton(breadcrumb);
+      expect(breadcrumb.i18n).to.deep.equal({ moreItems: '' });
+      expect(button.getAttribute('aria-label')).to.equal('');
+    });
+
+    it('should update the overflow button aria-label when i18n.moreItems is changed', async () => {
+      const breadcrumb = fixtureSync('<vaadin-breadcrumb></vaadin-breadcrumb>') as Breadcrumb;
+      await nextRender();
+
+      const button = getOverflowButton(breadcrumb);
+      expect(button.getAttribute('aria-label')).to.equal('');
+
+      breadcrumb.i18n = { moreItems: 'Show hidden' };
+      await nextUpdate(breadcrumb);
+
+      expect(button.getAttribute('aria-label')).to.equal('Show hidden');
     });
   });
 });

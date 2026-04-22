@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
@@ -22,11 +23,19 @@ export interface BreadcrumbItemData {
 }
 
 /**
+ * I18n shape for `<vaadin-breadcrumb>`. The single `moreItems` key drives the
+ * accessible label of the overflow button that reveals collapsed items.
+ */
+export interface BreadcrumbI18n {
+  moreItems?: string;
+}
+
+/**
  * A mixin providing common `<vaadin-breadcrumb>` functionality.
  */
 export declare function BreadcrumbMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<BreadcrumbMixinClass> & Constructor<ResizeMixinClass> & T;
+): Constructor<BreadcrumbMixinClass> & Constructor<I18nMixinClass<BreadcrumbI18n>> & Constructor<ResizeMixinClass> & T;
 
 export declare class BreadcrumbMixinClass {
   /**

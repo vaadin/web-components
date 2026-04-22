@@ -4,8 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, render } from 'lit';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+
+const DEFAULT_I18N = {
+  moreItems: '',
+};
 
 /**
  * A controller that observes the breadcrumb's default light-DOM slot and:
@@ -165,10 +170,11 @@ class RootItemController extends SlotController {
  * A mixin providing common `<vaadin-breadcrumb>` functionality.
  *
  * @polymerMixin
+ * @mixes I18nMixin
  * @mixes ResizeMixin
  */
 export const BreadcrumbMixin = (superClass) =>
-  class BreadcrumbMixinClass extends ResizeMixin(superClass) {
+  class BreadcrumbMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -206,7 +212,70 @@ export const BreadcrumbMixin = (superClass) =>
         items: {
           type: Array,
         },
+
+        /**
+         * Internal reactive state controlling the overflow overlay's `opened`
+         * state. Bound to `<vaadin-breadcrumb-overlay>.opened` in the render
+         * template; toggled by clicking the overflow button and updated when
+         * the overlay closes itself (Escape, outside click).
+         *
+         * @protected
+         */
+        _overlayOpened: {
+          type: Boolean,
+          state: true,
+        },
+
+        /**
+         * Bound function used as the overflow overlay's `renderer`. The
+         * function is rebuilt eagerly so each invocation has access to the
+         * current host instance via the closure, mirroring the avatar-group
+         * pattern.
+         *
+         * @protected
+         */
+        _overlayRenderer: {
+          type: Object,
+          state: true,
+        },
+
+        /**
+         * Reference to the shadow `[part="overflow-button"]` captured in
+         * `firstUpdated()`. Used as the overlay's `positionTarget` and as the
+         * element receiving aria-state updates (`aria-expanded`, `aria-label`).
+         *
+         * @protected
+         */
+        _overflowButton: {
+          type: Object,
+          state: true,
+        },
       };
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties,
+     * or just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```js
+     * {
+     *   // The accessible label for the overflow button that reveals
+     *   // collapsed items. Empty by default; applications should provide a
+     *   // localized string when the breadcrumb may overflow.
+     *   moreItems: ''
+     * }
+     * ```
+     *
+     * @type {!{ moreItems?: string }}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @protected */
@@ -217,6 +286,24 @@ export const BreadcrumbMixin = (superClass) =>
       if (!this.hasAttribute('role')) {
         this.setAttribute('role', 'navigation');
       }
+
+      // Capture the overflow button so the overlay can position against it
+      // and so we can sync aria-state on it as `_overlayOpened` changes.
+      this._overflowButton = this.shadowRoot.querySelector('[part="overflow-button"]');
+      if (this._overflowButton) {
+        this._overflowButton.addEventListener('click', (event) => this._onOverflowButtonClick(event));
+        // Apply the initial aria-state for the button. Subsequent changes are
+        // handled in `updated()` via the `__effectiveI18n` and
+        // `_overlayOpened` change observers.
+        const label =
+          this.__effectiveI18n && this.__effectiveI18n.moreItems != null ? this.__effectiveI18n.moreItems : '';
+        this._overflowButton.setAttribute('aria-label', label);
+        this._overflowButton.setAttribute('aria-expanded', String(Boolean(this._overlayOpened)));
+      }
+
+      // Bind the renderer once. The function reads `this.children` at render
+      // time, so it always sees the current set of hidden items.
+      this._overlayRenderer = (root, owner) => this.__renderOverlay(root, owner);
 
       // Observe the default slot and route the first item into slot="root".
       this._rootController = new RootItemController(this);
@@ -229,6 +316,16 @@ export const BreadcrumbMixin = (superClass) =>
 
       if (changedProperties.has('items')) {
         this.__renderItems();
+      }
+
+      if (changedProperties.has('_overlayOpened') && this._overflowButton) {
+        this._overflowButton.setAttribute('aria-expanded', String(this._overlayOpened));
+      }
+
+      if (changedProperties.has('__effectiveI18n') && this._overflowButton) {
+        const label =
+          this.__effectiveI18n && this.__effectiveI18n.moreItems != null ? this.__effectiveI18n.moreItems : '';
+        this._overflowButton.setAttribute('aria-label', label);
       }
     }
 
@@ -321,6 +418,78 @@ export const BreadcrumbMixin = (superClass) =>
       if (root !== current) {
         root.setAttribute('data-overflow-hidden', '');
       }
+    }
+
+    /**
+     * Click handler installed on the shadow `[part="overflow-button"]`.
+     * Toggles `_overlayOpened` so that `<vaadin-breadcrumb-overlay>` opens
+     * and closes in response to user clicks on the overflow button. The
+     * handler is a no-op when there are no hidden items, since the overflow
+     * button is not visible in that state.
+     *
+     * @param {Event} _event
+     * @protected
+     */
+    _onOverflowButtonClick(_event) {
+      if (!this.hasAttribute('has-overflow')) {
+        return;
+      }
+      this._overlayOpened = !this._overlayOpened;
+    }
+
+    /**
+     * Listener for the overlay's `opened-changed` event so that when the
+     * overlay closes itself (Escape, outside click), the host's
+     * `_overlayOpened` state stays in sync. Without this, the next click on
+     * the overflow button would think the overlay was still open and
+     * attempt to close it.
+     *
+     * @param {CustomEvent} event
+     * @protected
+     */
+    _onOverlayOpenedChanged(event) {
+      this._overlayOpened = event.detail.value;
+    }
+
+    /**
+     * Listener for the overlay's `vaadin-overlay-close` event. When the
+     * close was triggered by a click whose path includes the breadcrumb
+     * host (i.e. the user clicked the overflow button), prevent the
+     * overlay's own close handling — the host's click handler manages the
+     * `_overlayOpened` toggle and would otherwise immediately reopen.
+     *
+     * Mirrors `<vaadin-avatar-group>._onVaadinOverlayClose`.
+     *
+     * @param {CustomEvent} event
+     * @protected
+     */
+    _onVaadinOverlayClose(event) {
+      if (event.detail.sourceEvent && event.detail.sourceEvent.composedPath().includes(this)) {
+        event.preventDefault();
+      }
+    }
+
+    /**
+     * Renderer bound to `<vaadin-breadcrumb-overlay>.renderer`. Writes one
+     * navigable `<a>` link per currently hidden `<vaadin-breadcrumb-item>`
+     * into the overlay's renderer root, in original DOM order. Each link's
+     * `href` matches the source item's `path` and the link text matches the
+     * item's text content.
+     *
+     * @param {HTMLElement} root
+     * @param {HTMLElement} _owner
+     * @private
+     */
+    __renderOverlay(root, _owner) {
+      const hiddenItems = Array.from(this.children).filter(
+        (child) => child.localName === 'vaadin-breadcrumb-item' && child.hasAttribute('data-overflow-hidden'),
+      );
+      render(
+        html`${hiddenItems.map(
+          (item) => html`<a href="${item.getAttribute('path') || ''}">${(item.textContent || '').trim()}</a>`,
+        )}`,
+        root,
+      );
     }
 
     /**

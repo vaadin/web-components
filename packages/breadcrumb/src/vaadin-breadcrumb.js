@@ -62,6 +62,17 @@ class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(PolylitMixin
         </div>
         <slot></slot>
       </div>
+      <vaadin-breadcrumb-overlay
+        .owner="${this}"
+        .opened="${this._overlayOpened}"
+        .renderer="${this._overlayRenderer}"
+        .positionTarget="${this._overflowButton}"
+        exportparts="overlay, content"
+        @vaadin-overlay-close="${this._onVaadinOverlayClose}"
+        @opened-changed="${this._onOverlayOpenedChanged}"
+      >
+        <slot name="overlay"></slot>
+      </vaadin-breadcrumb-overlay>
     `;
   }
 }
