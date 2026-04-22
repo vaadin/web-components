@@ -15,7 +15,7 @@
 
 5. **Separator via `mask-image` CSS on an `::after` pseudo-element** — A separator pseudo-element is rendered on every element that sits in the list flow: on `<vaadin-breadcrumb-item>` via `:host::after` (in the item's base styles) and on `[part="overflow"]` via `::after` (in the container's base styles). Both use the same `mask-image` pattern from button-base-styles (background: currentColor, shaped by mask-image) and the same `--vaadin-breadcrumb-separator` custom property, which defaults to `--_vaadin-icon-chevron-right`. In RTL, the icon is flipped via `transform: scaleX(-1)`. (See web-component-api.md §3.)
 
-6. **Progressive overflow collapse using `ResizeMixin`** — The container uses `ResizeMixin` to detect when items don't fit. Items collapse from closest-to-root first, replacing collapsed items with an overflow button (`…`). The overflow button opens an overlay listing the hidden items. The `i18n` property (via `I18nMixin`) allows localizing the overflow button's `aria-label`. (See web-component-api.md §4.)
+6. **Progressive overflow collapse using `ResizeMixin`** — The container uses `ResizeMixin` to detect when items don't fit. Items collapse from closest-to-root first, replacing collapsed items with an overflow button (`…`). The overflow button opens a dedicated `<vaadin-breadcrumb-overlay>` element (extending `OverlayMixin`) that lists the hidden items. Using the shared overlay infrastructure — rather than a hand-rolled `position: fixed` panel in shadow DOM — brings focus trapping, stacking-context handling, top-layer rendering via the popover API, and outside-click/Escape handling for free. The `i18n` property (via `I18nMixin`) allows localizing the overflow button's `aria-label`. (See web-component-api.md §4.)
 
 7. **Navigation landmark via `role="navigation"` on the host** — `<vaadin-breadcrumb>` sets `role="navigation"` on itself rather than wrapping its shadow DOM around an inner `<nav>`. The application supplies the accessible name via `aria-label` directly on the host. No default label is provided. (See web-component-api.md §7.)
 
@@ -44,19 +44,15 @@ Shadow DOM:
             aria-expanded="false">
       <!-- ::before pseudo-element renders ellipsis icon via mask-image -->
     </button>
-    <div part="overlay"
-         role="list"
-         hidden>
-      <div part="content">
-        <!-- Collapsed items rendered here as links -->
-      </div>
-    </div>
   </div>
   <slot></slot>
 </div>
+<slot name="overlay"></slot>
 ```
 
 The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts only `<li>` children per HTML spec, and the slotted elements are `<vaadin-breadcrumb-item>`, and (b) `<ol>`/`<ul>` with `list-style: none` has its list role stripped by Safari/VoiceOver, which would suppress "list with N items" announcements. An explicit `role="list"` is immune to both issues.
+
+The `<slot name="overlay">` receives a `<vaadin-breadcrumb-overlay>` instance that the container inserts into its own light DOM. The overlay element is defined separately (see `<vaadin-breadcrumb-overlay>` below) and uses `OverlayMixin`, so the breadcrumb does not embed overlay structure in its own shadow DOM.
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
@@ -67,14 +63,15 @@ The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts onl
 |---|---|
 | `root` | The first `<vaadin-breadcrumb-item>` in the trail. The container assigns `slot="root"` to the first item automatically — the application does not set it. |
 | (default) | All remaining `<vaadin-breadcrumb-item>` elements in the trail. |
+| `overlay` | Holds the `<vaadin-breadcrumb-overlay>` instance. The container inserts the overlay into its own light DOM with `slot="overlay"` — the application does not set this either. |
 
 | Part | Description |
 |---|---|
 | `list` | The element with `role="list"` wrapping all items. |
-| `overflow` | The listitem element containing the overflow button and overlay. |
+| `overflow` | The listitem element containing the overflow button. |
 | `overflow-button` | The button that reveals collapsed items. |
-| `overlay` | The overlay panel that appears when the overflow button is activated. |
-| `content` | The wrapper inside the overlay that holds the collapsed items. |
+
+The `overlay` and `content` parts (the panel that appears when the overflow button is activated, and its inner wrapper) live on `<vaadin-breadcrumb-overlay>` — see the element definition below. Themes target them as `vaadin-breadcrumb-overlay::part(overlay)` and `vaadin-breadcrumb-overlay::part(content)`.
 
 | State attribute | Description |
 |---|---|
@@ -88,7 +85,7 @@ Internal behavior:
 
 - **Slot observation and root assignment.** The breadcrumb subclasses `SlotController` and overrides `initNode`/`initCustomNode` to watch the children. When children change, the controller sets `slot="root"` on the first `<vaadin-breadcrumb-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same controller pass also re-evaluates overflow detection and `current` state on the last item.
 - **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively hides items starting from the one closest to the root (the first default-slot item), setting a `data-overflow-hidden` attribute on each hidden item. If further space is needed, the root item collapses too. The last item (current page) never collapses. Hidden items are listed in the overflow overlay.
-- **Overflow overlay positioning.** The overlay uses `position: fixed` with coordinates from `getBoundingClientRect()` on the overflow button, per WEB_COMPONENT_GUIDELINES. It closes on outside click, Escape key, and item activation.
+- **Overlay management.** On `firstUpdated`, the container creates a `<vaadin-breadcrumb-overlay>` instance and appends it to its own light DOM with `slot="overlay"` — the overlay then lands in the shadow DOM's `<slot name="overlay">`. The container sets the overlay's `owner` to itself, provides a `renderer` callback that populates the overlay's content with links for the hidden items, and toggles the overlay's `opened` property in response to the overflow button's click, Escape key, and outside-click events (the latter two handled by `OverlayMixin` itself). Positioning, top-layer rendering, focus handling, and stacking are all delegated to `OverlayMixin`.
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. The container's base styles render a `[part="overflow"]::after` pseudo-element using the same `mask-image` + `currentColor` pattern as `<vaadin-breadcrumb-item>`, reading the same `--vaadin-breadcrumb-separator` custom property, and applying the same RTL flip (`transform: scaleX(-1)`). When `has-overflow` is not set, the overflow element is hidden, so the separator is not visible either.
 - **`items` property.** When `items` is set, the component renders `<vaadin-breadcrumb-item>` elements into the light DOM using Lit's `render()`, following the `<vaadin-menu-bar>` pattern. The controller assigns `slot="root"` to the first generated item just like it does for user-provided items. Each generated item gets its `path` and text content from the corresponding items entry. When `items` is set to `null`/`undefined`, generated items are removed, and any slotted children take effect again.
 
@@ -149,6 +146,42 @@ Internal behavior:
 
 ---
 
+**`<vaadin-breadcrumb-overlay>`** — Overflow overlay
+
+Internal element used only by `<vaadin-breadcrumb>`. Not intended for application use. Extends `OverlayMixin`, matching the pattern of `<vaadin-menu-bar-overlay>`, `<vaadin-combo-box-overlay>`, and other Vaadin overlays.
+
+Shadow DOM:
+```html
+<div part="overlay">
+  <div part="content">
+    <slot></slot>
+  </div>
+</div>
+```
+
+| Property | Type | Default | Reflected | Description |
+|---|---|---|---|---|
+| `opened` | `boolean` | `false` | Yes | Inherited from `OverlayMixin`. Set by `<vaadin-breadcrumb>` when the overflow button is activated. |
+| `owner` | `HTMLElement` | — | No | Inherited from `OverlayMixin`. Set to the owning `<vaadin-breadcrumb>` element. |
+| `renderer` | `(root, owner, model) => void` | — | No | Inherited from `OverlayMixin`. The breadcrumb assigns a callback that populates `root` with links for the currently hidden items. |
+
+| Slot | Description |
+|---|---|
+| (default) | Overlay content, populated by the breadcrumb's `renderer` with links for hidden items. |
+
+| Part | Description |
+|---|---|
+| `overlay` | The outer panel. Inherited `OverlayMixin` part naming. |
+| `content` | The inner wrapper holding the default slot. Inherited `OverlayMixin` part naming. |
+
+Internal behavior:
+
+- **Top-layer rendering.** `OverlayMixin` sets `popover="manual"` on the host in `firstUpdated()`, promoting the overlay to the browser's top layer when opened. This means the overlay can live anywhere in the DOM (including inside another component's light DOM slotted from shadow DOM) and still render above sibling and ancestor content, immune to `overflow: hidden` clipping and z-index stacking issues.
+- **Close on outside click and Escape.** Provided by `OverlayMixin`. The breadcrumb does not need to re-implement either.
+- **Positioning relative to the overflow button.** The breadcrumb positions the overlay using `setBounds()` (from `OverlayMixin`) after reading `getBoundingClientRect()` on the overflow button.
+
+---
+
 ## Types
 
 ```ts
@@ -187,6 +220,10 @@ Provides `_onResize()` callbacks when the host element's size changes. The bread
 
 The breadcrumb container subclasses `SlotController` and overrides `initNode`/`initCustomNode` to react when `<vaadin-breadcrumb-item>` children are added or removed.
 
+### `packages/overlay/src/vaadin-overlay-mixin.js` — Used as-is
+
+`<vaadin-breadcrumb-overlay>` extends `OverlayMixin` for the overflow overlay. Provides `opened` / `owner` / `renderer`, top-layer rendering via the popover API, outside-click / Escape closing, focus trapping, and stacking via `OverlayStackMixin`. No modification needed — the overlay is structurally identical to `<vaadin-menu-bar-overlay>`.
+
 ---
 
 ## Discussion
@@ -220,3 +257,7 @@ A generic element with explicit `role="list"`. Two reasons: (a) HTML `<ol>` acce
 **Q: How is the overflow element positioned so it appears visually between the root and the rest of the items?**
 
 Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotController` assigns `slot="root"` to the first `<vaadin-breadcrumb-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "focus order matches visual order" rule. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
+
+**Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
+
+`OverlayMixin`, via a dedicated `<vaadin-breadcrumb-overlay>` element. A hand-rolled fixed-positioned `<div>` in shadow DOM was considered but rejected — it would miss focus trapping, stacking-context handling, top-layer rendering via the popover API, and outside-click/Escape handling, all of which `OverlayMixin` provides for free and which other Vaadin overlays (menu-bar, combo-box, dialog, context-menu) already rely on. The overlay element is inserted into the breadcrumb's light DOM with `slot="overlay"` by the component itself; the application neither creates nor touches it.
